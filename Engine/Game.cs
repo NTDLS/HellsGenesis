@@ -18,10 +18,13 @@ namespace AI2D.Engine
         public Display Display { get; private set; }
         public ActorAssets Actors { get; private set; }
 
-        public PointD BackgroundOffset { get; set; } = new PointD();
+        public PointD _backgroundOffset { get; set; } = new PointD();
+        private RectangleD _renderedBackgroundArea { get; set; } = new RectangleD();
 
         public void Start()
         {
+            _renderedBackgroundArea = new RectangleD(0, 0, Display.VisibleSize.Width, Display.VisibleSize.Height);
+
             for (int i = 0; i < 100; i++)
             {
                 Actors.CreateStar();
@@ -190,11 +193,26 @@ namespace AI2D.Engine
                 Actors.ShipEngineRoar.Fade();
             }
 
-            BackgroundOffset.X += bgAppliedOffsetX;
-            BackgroundOffset.Y += bgAppliedOffsetY;
+            //Scroll the background.
+            _backgroundOffset.X += bgAppliedOffsetX;
+            _backgroundOffset.Y += bgAppliedOffsetY;
 
-            Actors.DebugBlock.Text = $"P: {Actors.Player.X.ToString("####.###")},{Actors.Player.Y.ToString("####.###")}"
-                + $" B: {BackgroundOffset.X.ToString("####.###")},{BackgroundOffset.Y.ToString("####.###")}";
+            //Keep track of the areas for which we have rendered background.
+            var bgRange = new RectangleD()
+            {
+                X = _backgroundOffset.X < _renderedBackgroundArea.X ? _backgroundOffset.X : _renderedBackgroundArea.X,
+                Y = _backgroundOffset.Y < _renderedBackgroundArea.Y ? _backgroundOffset.Y : _renderedBackgroundArea.Y,
+                Width = _backgroundOffset.X + Display.VisibleSize.Width > _renderedBackgroundArea.Width ? _backgroundOffset.X + Display.VisibleSize.Width : _renderedBackgroundArea.Width,
+                Height = _backgroundOffset.Y + Display.VisibleSize.Height > _renderedBackgroundArea.Height ? _backgroundOffset.Y + Display.VisibleSize.Height : _renderedBackgroundArea.Width
+            };
+
+            _renderedBackgroundArea = bgRange;
+
+            Actors.DebugBlock.Text = $"{bgRange.X.ToString("####.###")}x,{bgRange.Y.ToString("####.###")}y"
+                + $" x {bgRange.Width.ToString("####.###")}x,{bgRange.Height.ToString("####.###")}y";
+
+            //Actors.DebugBlock.Text = $"P: {Actors.Player.X.ToString("####.###")},{Actors.Player.Y.ToString("####.###")}"
+            //    + $" B: {_backgroundOffset.X.ToString("####.###")},{_backgroundOffset.Y.ToString("####.###")}";
 
             if (Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
             {
