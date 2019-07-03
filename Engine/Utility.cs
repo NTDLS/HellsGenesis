@@ -1,4 +1,5 @@
-﻿using AI2D.Types;
+﻿using AI2D.Objects;
+using AI2D.Types;
 using System;
 
 namespace AI2D.Engine
@@ -24,22 +25,32 @@ namespace AI2D.Engine
             return result;
         }
 
-        public static double CalculeAngle(PointD perspective, PointD pointOfDirection)
+        public static double CalculeAngle(PointD from, PointD to)
         {
-            var radian = Math.Atan2((pointOfDirection.Y - perspective.Y), (pointOfDirection.X - perspective.X));
+            var radian = Math.Atan2((to.Y - from.Y), (to.X - from.X));
             var angle = ((radian * (180 / Math.PI) + 360) + 90) % 360;
 
             return angle;
         }
-
-        public static double CalculeDistance(PointD perspective, PointD pointOfDirection)
+        public static double CalculeAngle(BaseObject from, BaseObject to)
         {
-            var deltaX = Math.Pow((pointOfDirection.X - perspective.X), 2);
-            var deltaY = Math.Pow((pointOfDirection.Y - perspective.Y), 2);
+            return CalculeAngle(from.Location, to.Location);
+        }
+
+        public static double CalculeDistance(PointD from, PointD to)
+        {
+            var deltaX = Math.Pow((to.X - from.X), 2);
+            var deltaY = Math.Pow((to.Y - from.Y), 2);
 
             var distance = Math.Sqrt(deltaY + deltaX);
 
             return distance;
         }
+
+        public static double CalculeDistance(BaseObject from, BaseObject to)
+        {
+            return CalculeDistance(from.Location, to.Location);
+        }
+
     }
 }

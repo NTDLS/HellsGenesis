@@ -45,8 +45,8 @@ namespace AI2D.Engine
         {
             if (key == Keys.D0)
             {
-                _game.Actors.Boulders[0].X = 400;
-                _game.Actors.Boulders[0].Y = 400;
+                _game.Actors.Enemies[0].X = 400;
+                _game.Actors.Enemies[0].Y = 400;
             }
             if (key == Keys.D1)
             {
@@ -90,7 +90,7 @@ namespace AI2D.Engine
             }
             if (key == Keys.D9)
             {
-                _game.Actors.Boulders[0].MoveInDirectionOf(_game.Actors.Player);
+                _game.Actors.Enemies[0].MoveInDirectionOf(_game.Actors.Player);
             }
 
         }

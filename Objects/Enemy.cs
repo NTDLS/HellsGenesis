@@ -5,14 +5,14 @@ using System.Windows.Forms;
 
 namespace AI2D.Objects
 {
-    public class Boulder : BaseObject
+    public class Enemy : BaseObject
     {
 
         private string[] _imagePaths = { @"..\..\Assets\Graphics\hf001.png", @"..\..\Assets\Graphics\hf001.png" };
 
         #region ~/Ctor
 
-        public Boulder(Game game)
+        public Enemy(Game game)
         {
             int imagePathIndex = Utility.FlipCoin() ? 1 : 0;
 

@@ -49,10 +49,7 @@ namespace AI2D.Objects
             {
                 Velocity = new Vector();
                 Velocity.Speed = Utility.Random.Next(Consants.Limits.MinSpeed, Consants.Limits.MaxSpeed);
-                //Velocity.Angle.Degree = Utility.Random.Next(0, 360);
-
-                Velocity.Angle.Degree = 90;
-                Velocity.Speed = 10;
+                Velocity.Angle.Degree = Utility.Random.Next(0, 360);
             }
             else
             {
@@ -66,6 +63,7 @@ namespace AI2D.Objects
         public bool ReadyForDeletion { get; set; }
         public bool IsDead { get; set; }
         public Vector Velocity { get; set; }
+        public double RotationSpeed { get; set; } = 1.0;
 
         public bool CanFire
         {
@@ -240,14 +238,23 @@ namespace AI2D.Objects
             Invalidate();
         }
 
-        public void MoveInDirectionOf(PointD location)
+        public void MoveInDirectionOf(PointD location, double? speed = null)
         {
             this.Velocity.Angle.Degree = Utility.CalculeAngle(this.Location, location);
+            if (speed != null)
+            {
+                this.Velocity.Speed = (double)speed;
+            }
         }
 
-        public void MoveInDirectionOf(BaseObject obj)
+        public void MoveInDirectionOf(BaseObject obj, double? speed = null)
         {
             this.Velocity.Angle.Degree = Utility.CalculeAngle(this.Location, obj.Location);
+
+            if (speed != null)
+            {
+                this.Velocity.Speed = (double)speed;
+            }
         }
 
         public void Explode()

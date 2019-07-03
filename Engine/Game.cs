@@ -14,16 +14,20 @@ namespace AI2D.Engine
     {
         private bool _shutdown = false;
         private System.Threading.Thread _graphicsThread;
-        private UserInput _userInput;
         public UserInput Input { get; private set; }
         public Display Display { get; private set; }
         public ActorAssets Actors { get; private set; }
 
         public void Start()
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 100; i++)
             {
-                Actors.CreateBoulder();
+                Actors.CreateStar();
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                Actors.CreateEnemy();
             }
 
             _shutdown = false;
@@ -62,54 +66,32 @@ namespace AI2D.Engine
 
         void AdvanceFrame()
         {
-            #region Boulders Frame Advancement.
+            #region Enemies Frame Advancement.
 
-            foreach (var boulder in Actors.Boulders)
+            foreach (var enemy in Actors.Enemies)
             {
-                boulder.AdvanceFrame();
+                enemy.AdvanceFrame();
 
-                if (boulder.X < 0)
+                double distanceToPlayer = Utility.CalculeDistance(enemy, Actors.Player);
+                if (distanceToPlayer > 400)
                 {
-
-                    //Program.CalculeAngle(new PointF(boulder.Velocity.Angle.X, boulder.Velocity.Angle.Y), 
-
-
-                    //boulder.Velocity.Angle.X = (0 - boulder.Velocity.Angle.X);
-                }
-                else if (boulder.X >= (Display.VisibleSize.Width - boulder.Size.Width) - 15)
-                {
-                    //boulder.Velocity.Angle.X = (0 - boulder.Velocity.Angle.X);
+                    enemy.MoveInDirectionOf(Actors.Player);
                 }
 
-                if (boulder.Y < 0)
-                {
-                    //boulder.Velocity.Angle.Y = (0-boulder.Velocity.Angle.Y);
-                }
-                else if (boulder.Y >= (Display.VisibleSize.Height - boulder.Size.Height) - 35)
-                {
-                    //boulder.Velocity.Angle.Y = (0-boulder.Velocity.Angle.Y);
-                }
+                enemy.X += (enemy.Velocity.Angle.X * enemy.Velocity.Speed);
+                enemy.Y += (enemy.Velocity.Angle.Y * enemy.Velocity.Speed);
 
-                //boulder.X -= 1;
-
-                /*boulder.Velocity.Speed*/
-
-                boulder.X += (boulder.Velocity.Angle.X);
-                boulder.Y += (boulder.Velocity.Angle.Y);
-
-                if (boulder.Intersects(Actors.Player))
+                if (enemy.Intersects(Actors.Player))
                 {
                     Actors.Player.Hit();
-
-
                 }
 
                 foreach (var bullet in Actors.Bullets)
                 {
-                    if (bullet.Intersects(boulder))
+                    if (bullet.Intersects(enemy))
                     {
                         bullet.ReadyForDeletion = true;
-                        boulder.Explode();
+                        enemy.Explode();
                     }
                 }
             }
@@ -146,11 +128,11 @@ namespace AI2D.Engine
 
             if (Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
             {
-                Actors.Player.Rotate(-1.0f);
+                Actors.Player.Rotate(-Actors.Player.RotationSpeed);
             }
             else if (Input.IsKeyPressed(PlayerKey.RotateClockwise))
             {
-                Actors.Player.Rotate(1.0f);
+                Actors.Player.Rotate(Actors.Player.RotationSpeed);
             }
 
             if (Input.IsKeyPressed(PlayerKey.Escape))
@@ -197,11 +179,11 @@ namespace AI2D.Engine
 
             #region Cleanup (cant be done in a foreach).
 
-            for (int i = 0; i < Actors.Boulders.Count; i++)
+            for (int i = 0; i < Actors.Enemies.Count; i++)
             {
-                if (Actors.Boulders[i].ReadyForDeletion)
+                if (Actors.Enemies[i].ReadyForDeletion)
                 {
-                    Actors.DeleteBoulder(Actors.Boulders[i]);
+                    Actors.DeleteEnemy(Actors.Enemies[i]);
                 }
             }
 
@@ -214,6 +196,9 @@ namespace AI2D.Engine
             }
 
             #endregion
+
+
+            Actors.DebugBlock.Text = $"HP: {Actors.Player.HitPoints}";
         }
 
         public void RenderObjects(Graphics dc)

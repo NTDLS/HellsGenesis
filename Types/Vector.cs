@@ -9,6 +9,6 @@ namespace AI2D.Types
     public class Vector
     {
         public Angle Angle { get; set; } = new Angle();
-        public float Speed { get; set; }
+        public double Speed { get; set; }
     }
 }

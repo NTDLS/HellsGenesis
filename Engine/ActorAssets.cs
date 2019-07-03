@@ -14,7 +14,8 @@ namespace AI2D.Engine
         private Game _game;
 
         public TextBlock DebugBlock { get; set; }
-        public List<Boulder> Boulders { get; set; } = new List<Boulder>();
+        public List<Enemy> Enemies { get; set; } = new List<Enemy>();
+        public List<Star> Stars { get; set; } = new List<Star>();
         public List<Bullet> Bullets { get; set; } = new List<Bullet>();
         public Player Player { get; set; }
         private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
@@ -41,7 +42,8 @@ namespace AI2D.Engine
                 Player = new Player(_game);
             }
 
-            Player.Velocity.Speed = 1;
+            Player.Velocity.Speed = 5;
+            Player.RotationSpeed = 3;
             Player.Visable = true;
             Player.HitPoints = 100;
 
@@ -78,29 +80,48 @@ namespace AI2D.Engine
 
         #region Factories.
 
-        public Boulder CreateBoulder()
+        public Star CreateStar()
         {
-            lock (Boulders)
+            lock (Enemies)
             {
-                Boulder result = new Boulder(_game);
+                Star obj = new Star(_game);
 
-                result.X = 400;
-                result.Y = 400;
+                obj.X = Utility.Random.Next(0, _game.Display.VisibleSize.Width);
+                obj.Y = Utility.Random.Next(0, _game.Display.VisibleSize.Height);
 
-                result.MoveInDirectionOf(new PointD(0, 0));
+                Stars.Add(obj);
 
-                Boulders.Add(result);
-
-                return result;
+                return obj;
             }
         }
 
-        public void DeleteBoulder(Boulder boulder)
+        public void DeleteStar(Star obj)
         {
-            lock (Boulders)
+            lock (Stars)
             {
-                boulder.Cleanup();
-                Boulders.Remove(boulder);
+                obj.Cleanup();
+                Stars.Remove(obj);
+            }
+        }
+
+        public Enemy CreateEnemy()
+        {
+            lock (Enemies)
+            {
+                Enemy obj = new Enemy(_game);
+
+                Enemies.Add(obj);
+
+                return obj;
+            }
+        }
+
+        public void DeleteEnemy(Enemy obj)
+        {
+            lock (Enemies)
+            {
+                obj.Cleanup();
+                Enemies.Remove(obj);
             }
         }
 
@@ -108,18 +129,18 @@ namespace AI2D.Engine
         {
             lock (Bullets)
             {
-                Bullet result = new Bullet(_game, firedFrom);
-                Bullets.Add(result);
-                return result;
+                Bullet obj = new Bullet(_game, firedFrom);
+                Bullets.Add(obj);
+                return obj;
             }
         }
 
-        public void DeleteBullet(Bullet bullet)
+        public void DeleteBullet(Bullet obj)
         {
             lock (Bullets)
             {
-                bullet.Cleanup();
-                Bullets.Remove(bullet);
+                obj.Cleanup();
+                Bullets.Remove(obj);
             }
         }
 
@@ -132,13 +153,13 @@ namespace AI2D.Engine
             DebugBlock.Render(dc);
         }
 
-        void RenderBoulders(Graphics dc)
+        void RenderEnemies(Graphics dc)
         {
-            lock (Boulders)
+            lock (Enemies)
             {
-                foreach (var boulder in Boulders)
+                foreach (var obj in Enemies)
                 {
-                    boulder.Render(dc);
+                    obj.Render(dc);
                 }
             }
         }
@@ -147,9 +168,19 @@ namespace AI2D.Engine
         {
             lock (Bullets)
             {
-                foreach (var bullet in Bullets)
+                foreach (var obj in Bullets)
                 {
-                    bullet.Render(dc);
+                    obj.Render(dc);
+                }
+            }
+        }
+        void RenderStars(Graphics dc)
+        {
+            lock (Stars)
+            {
+                foreach (var obj in Stars)
+                {
+                    obj.Render(dc);
                 }
             }
         }
@@ -164,10 +195,11 @@ namespace AI2D.Engine
 
         public void RenderObjects(Graphics dc)
         {
-            RenderText(dc);
-            RenderBoulders(dc);
+            RenderStars(dc);
             RenderBullets(dc);
+            RenderEnemies(dc);
             RenderPlayer(dc);
+            RenderText(dc);
         }
 
         #endregion
