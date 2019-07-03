@@ -1,7 +1,4 @@
 ﻿using AI2D.Engine;
-using System;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace AI2D.Objects
 {

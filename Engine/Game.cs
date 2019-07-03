@@ -102,8 +102,8 @@ namespace AI2D.Engine
                     {
                         if (bullet.Intersects(enemy))
                         {
+                            enemy.Hit();
                             bullet.ReadyForDeletion = true;
-                            enemy.Explode();
                         }
                     }
                 }
@@ -192,6 +192,7 @@ namespace AI2D.Engine
                     if (bullet.Intersects(Actors.Player))
                     {
                         Actors.Player.Hit();
+                        bullet.ReadyForDeletion = true;
                     }
                 }
             }

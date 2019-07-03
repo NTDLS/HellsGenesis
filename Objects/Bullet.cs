@@ -1,11 +1,5 @@
 ﻿using AI2D.Engine;
 using AI2D.Types;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AI2D.Objects
 {
@@ -19,7 +13,6 @@ namespace AI2D.Objects
 
         public Bullet(Game game, BaseObject firedFrom)
         {
-
             Vector initialVector = new Vector()
             {
                 Angle = new Angle(firedFrom.Velocity.Angle.Degree),
@@ -30,6 +23,15 @@ namespace AI2D.Objects
 
             initialLocation.X = (initialLocation.X + (firedFrom.Size.Width / 2.0));
             initialLocation.Y = (initialLocation.Y + (firedFrom.Size.Height / 2.0));
+
+            if (firedFrom is Enemy)
+            {
+                FiredFromType = FiredFromType.Enemy;
+            }
+            else if (firedFrom is Player)
+            {
+                FiredFromType = FiredFromType.Player;
+            }
 
             Initialize(game, _imagePath, null, initialLocation, initialVector);
         }

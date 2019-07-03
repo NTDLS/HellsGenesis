@@ -1,7 +1,4 @@
 ﻿using AI2D.Engine;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace AI2D.Objects
 {
@@ -15,6 +12,8 @@ namespace AI2D.Objects
         public Enemy(Game game)
         {
             int imagePathIndex = Utility.FlipCoin() ? 1 : 0;
+
+            HitPoints = Utility.Random.Next(Consants.Limits.MinEnemyHealth, Consants.Limits.MaxEnemyHealth);
 
             Initialize(game, _imagePaths[imagePathIndex], null);
         }
