@@ -20,9 +20,8 @@ namespace AI2D.Objects
 
         public Star(Game game)
         {
-            int imagePathIndex = Utility.FlipCoin() ? 1 : 0;
-
-            Initialize(game, _imagePaths[imagePathIndex], null);
+            int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
+            Initialize(game, _imagePaths[imageIndex], null);
         }
 
         #endregion
