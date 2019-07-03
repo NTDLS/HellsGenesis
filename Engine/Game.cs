@@ -25,7 +25,7 @@ namespace AI2D.Engine
                 Actors.CreateStar();
             }
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Actors.CreateEnemy();
             }
@@ -72,26 +72,39 @@ namespace AI2D.Engine
             {
                 enemy.AdvanceFrame();
 
-                double distanceToPlayer = Utility.CalculeDistance(enemy, Actors.Player);
-                if (distanceToPlayer > 400)
+                if (Actors.Player.Visable)
                 {
-                    enemy.MoveInDirectionOf(Actors.Player);
+                    double distanceToPlayer = Utility.CalculeDistance(enemy, Actors.Player);
+                    if (distanceToPlayer < 100)
+                    {
+                        enemy.FireGun();
+                    }
+
+                    if (enemy.X < (0 - (enemy.Size.Width + 40)) || enemy.Y < (0 - (enemy.Size.Height + 40))
+                        || enemy.X >= (Display.VisibleSize.Width + enemy.Size.Width) + 40
+                        || enemy.Y >= (Display.VisibleSize.Height + enemy.Size.Height) + 40)
+                    {
+                        enemy.MoveInDirectionOf(Actors.Player);
+                    }
+
+                    if (enemy.Intersects(Actors.Player))
+                    {
+                        Actors.Player.Hit();
+                    }
                 }
 
                 enemy.X += (enemy.Velocity.Angle.X * enemy.Velocity.Speed);
                 enemy.Y += (enemy.Velocity.Angle.Y * enemy.Velocity.Speed);
 
-                if (enemy.Intersects(Actors.Player))
-                {
-                    Actors.Player.Hit();
-                }
-
                 foreach (var bullet in Actors.Bullets)
                 {
-                    if (bullet.Intersects(enemy))
+                    if (bullet.FiredFromType == FiredFromType.Player)
                     {
-                        bullet.ReadyForDeletion = true;
-                        enemy.Explode();
+                        if (bullet.Intersects(enemy))
+                        {
+                            bullet.ReadyForDeletion = true;
+                            enemy.Explode();
+                        }
                     }
                 }
             }
@@ -173,6 +186,14 @@ namespace AI2D.Engine
 
                 bullet.X += (bullet.Velocity.Angle.X * bullet.Velocity.Speed);
                 bullet.Y += (bullet.Velocity.Angle.Y * bullet.Velocity.Speed);
+
+                if (bullet.FiredFromType == FiredFromType.Enemy)
+                {
+                    if (bullet.Intersects(Actors.Player))
+                    {
+                        Actors.Player.Hit();
+                    }
+                }
             }
 
             #endregion
@@ -196,7 +217,6 @@ namespace AI2D.Engine
             }
 
             #endregion
-
 
             Actors.DebugBlock.Text = $"HP: {Actors.Player.HitPoints}";
         }

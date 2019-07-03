@@ -8,8 +8,14 @@ namespace AI2D.Types
 {
     public enum KeyPressState
     {
-        Up = 0,
-        Down = 1
+        Up,
+        Down
+    }
+    public enum FiredFromType
+    {
+        Unspecified,
+        Player,
+        Enemy
     }
 
     public enum PlayerKey

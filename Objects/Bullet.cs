@@ -11,6 +11,8 @@ namespace AI2D.Objects
 {
     public class Bullet: BaseObject
     {
+        public FiredFromType FiredFromType { get; set; }
+
         #region ~/Ctor
 
         private const string _imagePath = @"..\..\Assets\Graphics\BasicBullet.png";

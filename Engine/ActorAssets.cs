@@ -130,6 +130,16 @@ namespace AI2D.Engine
             lock (Bullets)
             {
                 Bullet obj = new Bullet(_game, firedFrom);
+
+                if (firedFrom is Enemy)
+                {
+                    obj.FiredFromType = FiredFromType.Enemy;
+                }
+                else if (firedFrom is Player)
+                {
+                    obj.FiredFromType = FiredFromType.Player;
+                }
+
                 Bullets.Add(obj);
                 return obj;
             }
