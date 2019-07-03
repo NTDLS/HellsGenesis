@@ -18,6 +18,8 @@ namespace AI2D.Engine
         public Display Display { get; private set; }
         public ActorAssets Actors { get; private set; }
 
+        public PointD BackgroundOffset { get; set; } = new PointD();
+
         public void Start()
         {
             for (int i = 0; i < 100; i++)
@@ -25,7 +27,7 @@ namespace AI2D.Engine
                 Actors.CreateStar();
             }
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 0; i++)
             {
                 Actors.CreateEnemy();
             }
@@ -112,9 +114,7 @@ namespace AI2D.Engine
             #endregion
 
             #region Player Frame Advancement.
-            /*
-                The inverse is A = atan2(V.y, V.x)
-            */
+
             Actors.Player.AdvanceFrame();
 
             if (Input.IsKeyPressed(PlayerKey.Fire))
@@ -122,22 +122,79 @@ namespace AI2D.Engine
                 Actors.Player.FireGun();
             }
 
+            double bgAppliedOffsetX = 0;
+            double bgAppliedOffsetY = 0;
+      
             if (Input.IsKeyPressed(PlayerKey.Forward))
             {
-                Actors.Player.X += (Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed);
-                Actors.Player.Y += (Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed);
+                //Close to the right wall and travelling in that direction.
+                if (Actors.Player.X > Display.VisibleSize.Width - (Actors.Player.Size.Width + 100) && Actors.Player.Velocity.Angle.X > 0)
+                {
+                    bgAppliedOffsetX = (Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed);
+                }
+
+                //Close to the bottom wall and travelling in that direction.
+                if (Actors.Player.Y > Display.VisibleSize.Height - (Actors.Player.Size.Height + 100) && Actors.Player.Velocity.Angle.Y > 0)
+                {
+                    bgAppliedOffsetY = (Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed);
+                }
+
+                //Close to the left wall and travelling in that direction.
+                if (Actors.Player.X < 100 && Actors.Player.Velocity.Angle.X < 0)
+                {
+                    bgAppliedOffsetX = (Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed);
+                }
+
+                //Close to the top wall and travelling in that direction.
+                if (Actors.Player.Y < 100 && Actors.Player.Velocity.Angle.Y < 0)
+                {
+                    bgAppliedOffsetY = (Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed);
+                }
+
+                Actors.Player.X += (Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed) - bgAppliedOffsetX;
+                Actors.Player.Y += (Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed) - bgAppliedOffsetY;
                 Actors.ShipEngineRoar.Play();
             }
             else if (Input.IsKeyPressed(PlayerKey.Reverse))
             {
-                Actors.Player.X -= (Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed);
-                Actors.Player.Y -= (Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed);
+                //Close to the right wall and travelling in that direction.
+                if (Actors.Player.X > Display.VisibleSize.Width - (Actors.Player.Size.Width + 100) && Actors.Player.Velocity.Angle.X < 0)
+                {
+                    bgAppliedOffsetX = -(Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed);
+                }
+
+                //Close to the bottom wall and travelling in that direction.
+                if (Actors.Player.Y > Display.VisibleSize.Height - (Actors.Player.Size.Height + 100) && Actors.Player.Velocity.Angle.Y < 0)
+                {
+                    bgAppliedOffsetY = -(Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed);
+                }
+
+                //Close to the left wall and travelling in that direction.
+                if (Actors.Player.X < 100 && Actors.Player.Velocity.Angle.X > 0)
+                {
+                    bgAppliedOffsetX = -(Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed);
+                }
+
+                //Close to the top wall and travelling in that direction.
+                if (Actors.Player.Y < 100 && Actors.Player.Velocity.Angle.Y > 0)
+                {
+                    bgAppliedOffsetY = -(Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed);
+                }
+
+                Actors.Player.X -= (Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed) + bgAppliedOffsetX;
+                Actors.Player.Y -= (Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed) + bgAppliedOffsetY;
                 Actors.ShipEngineRoar.Play();
             }
             else
             {
                 Actors.ShipEngineRoar.Fade();
             }
+
+            BackgroundOffset.X += bgAppliedOffsetX;
+            BackgroundOffset.Y += bgAppliedOffsetY;
+
+            Actors.DebugBlock.Text = $"P: {Actors.Player.X.ToString("####.###")},{Actors.Player.Y.ToString("####.###")}"
+                + $" B: {BackgroundOffset.X.ToString("####.###")},{BackgroundOffset.Y.ToString("####.###")}";
 
             if (Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
             {
@@ -199,6 +256,21 @@ namespace AI2D.Engine
 
             #endregion
 
+            #region Stars Frame Advancement.
+
+            if (bgAppliedOffsetX != 0 || bgAppliedOffsetY != 0)
+            {
+                foreach (var star in Actors.Stars)
+                {
+                    star.AdvanceFrame();
+
+                    star.X -= bgAppliedOffsetX;
+                    star.Y -= bgAppliedOffsetY;
+                }
+            }
+
+            #endregion
+
             #region Cleanup (cant be done in a foreach).
 
             for (int i = 0; i < Actors.Enemies.Count; i++)
@@ -219,7 +291,7 @@ namespace AI2D.Engine
 
             #endregion
 
-            Actors.DebugBlock.Text = $"HP: {Actors.Player.HitPoints}";
+            //Actors.DebugBlock.Text = $"HP: {Actors.Player.HitPoints}";
         }
 
         public void RenderObjects(Graphics dc)

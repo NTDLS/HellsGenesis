@@ -13,8 +13,6 @@ namespace AI2D.Engine
     {
         private Game _game;
 
-        //public List<BaseObject> Objects { get; set; } = new List<BaseObject>();
-
         public TextBlock DebugBlock { get; set; }
         public List<Enemy> Enemies { get; set; } = new List<Enemy>();
         public List<Star> Stars { get; set; } = new List<Star>();
@@ -48,6 +46,8 @@ namespace AI2D.Engine
             Player.RotationSpeed = 3;
             Player.Visable = true;
             Player.HitPoints = 100;
+            Player.X = _game.Display.VisibleSize.Width / 2;
+            Player.Y = _game.Display.VisibleSize.Height / 2;
 
             ShipEngineIdle.Play();
         }
