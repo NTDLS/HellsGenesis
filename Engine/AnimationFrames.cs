@@ -9,24 +9,51 @@ namespace AI2D.Engine
         private int _frameCount;
         private int _currentFrame;
         private Size _frameSize;
+        private int _rows;
+        private int _columns;
 
         public AnimationFrames(Game game, string image, Size frameSize)
         {
             _game = game;
-            _explodeFrame = new Bitmap(Image.FromFile(image));
+            _explodeFrame = _game.Actors.GetBitmap(image);
             _frameSize = frameSize;
-            _frameCount = _explodeFrame.Width / frameSize.Width;
+            _rows = (_explodeFrame.Height / frameSize.Height);
+            _columns = (_explodeFrame.Width / frameSize.Width);
+            _frameCount = _rows * _columns;
         }
+
+        private int _currentRow = 0;
+        private int _currentColumn = 0;
+ 
+        private Bitmap _previousFrame; //Begin super judicious!
 
         public Bitmap GetReplacmentImage()
         {
+            if (_previousFrame != null)
+            {
+                _previousFrame.Dispose();
+                _previousFrame = null;
+            }
+
             if (_currentFrame == _frameCount)
             {
                 return null;
             }
-            Rectangle cloneRect = new Rectangle(_currentFrame++ * _frameSize.Width, 0, _frameSize.Width, _frameSize.Height);
+
+            Rectangle cloneRect = new Rectangle(_currentColumn * _frameSize.Width, _currentRow * _frameSize.Height, _frameSize.Width, _frameSize.Height);
             System.Drawing.Imaging.PixelFormat format = _explodeFrame.PixelFormat;
-            return _explodeFrame.Clone(cloneRect, format);
+
+            _previousFrame = _explodeFrame.Clone(cloneRect, format);
+
+            if (++_currentColumn == _columns)
+            {
+                _currentColumn = 0;
+                _currentRow++;
+            }
+
+            _currentFrame++;
+
+            return _previousFrame;
         }
     }
 }

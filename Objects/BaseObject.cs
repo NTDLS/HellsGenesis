@@ -22,13 +22,13 @@ namespace AI2D.Objects
         {
             _game = game;
 
-            _bulletSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sound\VulcanCannon.wav", 1.0f);
+            _bulletSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sound\VulcanCannon.wav", 0.3f);
             _hitSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sound\ShipHit.wav", 1.0f);
             _explodeSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sound\Boom.wav", 1.0f);
 
-            _explodeFrames = new AnimationFrames(_game, @"..\..\Assets\Graphics\Frames\Explode.png", new Size(50, 50));
+            _explodeFrames = new AnimationFrames(_game, @"..\..\Assets\Graphics\Frames\Explosion 2.png", new Size(256, 256));
 
-            _defaultImage = Image.FromFile(imagePath);
+            _defaultImage = _game.Actors.GetBitmap(imagePath);
             _size = new Size(_defaultImage.Size.Width, _defaultImage.Size.Height);
 
             if (initialLocation == null)
@@ -119,6 +119,14 @@ namespace AI2D.Objects
             }
         }
 
+        public PointF LocationF
+        {
+            get
+            {
+                return new PointF((float)_x, (float)_y);
+            }
+        }
+
         private Size _size;
         public Size Size
         {
@@ -128,11 +136,11 @@ namespace AI2D.Objects
             }
         }
 
-        public Rectangle Bounds
+        public RectangleF Bounds
         {
             get
             {
-                return new Rectangle((int)_x, (int)_y, Size.Height, Size.Width);
+                return new RectangleF((int)_x, (int)_y, Size.Height, Size.Width);
             }
         }
 

@@ -19,6 +19,7 @@ namespace AI2D.Engine
         public List<Bullet> Bullets { get; set; } = new List<Bullet>();
         public Player Player { get; set; }
         private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
+        private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
 
         public AudioClip ShipEngineRoar { get; set; }
         public AudioClip ShipEngineIdle { get; set; }
@@ -58,6 +59,28 @@ namespace AI2D.Engine
             ShipEngineIdle.Play();
         }
 
+        public Bitmap GetBitmap(string path)
+        {
+            lock (_Bitmaps)
+            {
+                Bitmap result = null;
+
+                path = path.ToLower();
+
+                if (_Bitmaps.ContainsKey(path))
+                {
+                    result = _Bitmaps[path];//.Clone();
+                }
+                else
+                {
+                    result = new Bitmap(Image.FromFile(path));
+                    _Bitmaps.Add(path, result);
+                }
+
+                return result;
+            }
+        }
+
         public AudioClip GetAudioClip(string wavFilePath, float initialVolumne, bool loopForever = false)
         {
             lock (_audioClips)
@@ -82,6 +105,20 @@ namespace AI2D.Engine
 
         #region Factories.
 
+        public Star CreateStar(double x, double y)
+        {
+            lock (Stars)
+            {
+                Star obj = new Star(_game)
+                {
+                    X = x,
+                    Y = y
+                };
+                Stars.Add(obj);
+                return obj;
+            }
+        }
+
         public Star CreateStar()
         {
             lock (Stars)
@@ -91,6 +128,7 @@ namespace AI2D.Engine
                 return obj;
             }
         }
+
 
         public void DeleteStar(Star obj)
         {
@@ -175,7 +213,13 @@ namespace AI2D.Engine
             {
                 foreach (var obj in Stars)
                 {
-                    obj.Render(dc);
+                    if (obj.Bounds.IntersectsWith(_game.CurrentView))
+                    {
+                        obj.Render(dc);
+                    }
+                    else
+                    {
+                    }
                 }
             }
         }

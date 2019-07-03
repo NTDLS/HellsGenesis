@@ -92,6 +92,10 @@ namespace AI2D.Engine
             {
                 _game.Actors.Enemies[0].MoveInDirectionOf(_game.Actors.Player);
             }
+            if (key == Keys.Escape)
+            {
+                _game.Actors.Player.Explode();
+            }
 
         }
     }

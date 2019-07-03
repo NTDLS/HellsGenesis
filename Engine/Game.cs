@@ -17,17 +17,19 @@ namespace AI2D.Engine
         public UserInput Input { get; private set; }
         public Display Display { get; private set; }
         public ActorAssets Actors { get; private set; }
-
         public PointD _backgroundOffset { get; set; } = new PointD();
         private RectangleD _renderedBackgroundArea { get; set; } = new RectangleD();
+        public RectangleF CurrentView { get; private set; }
 
         public void Start()
         {
+            //Actors.BackgroundMusic.Play();
+
             _renderedBackgroundArea = new RectangleD(0, 0, Display.VisibleSize.Width, Display.VisibleSize.Height);
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 1; i++)
             {
-                Actors.CreateStar();
+                Actors.CreateStar(100, 100);
             }
 
             for (int i = 0; i < 0; i++)
@@ -71,51 +73,6 @@ namespace AI2D.Engine
 
         void AdvanceFrame()
         {
-            #region Enemies Frame Advancement.
-
-            foreach (var enemy in Actors.Enemies)
-            {
-                enemy.AdvanceFrame();
-
-                if (Actors.Player.Visable)
-                {
-                    double distanceToPlayer = Utility.CalculeDistance(enemy, Actors.Player);
-                    if (distanceToPlayer < 100)
-                    {
-                        enemy.FireGun();
-                    }
-
-                    if (enemy.X < (0 - (enemy.Size.Width + 40)) || enemy.Y < (0 - (enemy.Size.Height + 40))
-                        || enemy.X >= (Display.VisibleSize.Width + enemy.Size.Width) + 40
-                        || enemy.Y >= (Display.VisibleSize.Height + enemy.Size.Height) + 40)
-                    {
-                        enemy.MoveInDirectionOf(Actors.Player);
-                    }
-
-                    if (enemy.Intersects(Actors.Player))
-                    {
-                        Actors.Player.Hit();
-                    }
-                }
-
-                enemy.X += (enemy.Velocity.Angle.X * enemy.Velocity.Speed);
-                enemy.Y += (enemy.Velocity.Angle.Y * enemy.Velocity.Speed);
-
-                foreach (var bullet in Actors.Bullets)
-                {
-                    if (bullet.FiredFromType == FiredFromType.Player)
-                    {
-                        if (bullet.Intersects(enemy))
-                        {
-                            enemy.Hit();
-                            bullet.ReadyForDeletion = true;
-                        }
-                    }
-                }
-            }
-
-            #endregion
-
             #region Player Frame Advancement.
 
             Actors.Player.AdvanceFrame();
@@ -127,7 +84,7 @@ namespace AI2D.Engine
 
             double bgAppliedOffsetX = 0;
             double bgAppliedOffsetY = 0;
-      
+
             if (Input.IsKeyPressed(PlayerKey.Forward))
             {
                 //Close to the right wall and travelling in that direction.
@@ -198,21 +155,13 @@ namespace AI2D.Engine
             _backgroundOffset.Y += bgAppliedOffsetY;
 
             //Keep track of the areas for which we have rendered background.
-            var bgRange = new RectangleD()
+            var latestBackgroundRange = new RectangleD()
             {
                 X = _backgroundOffset.X < _renderedBackgroundArea.X ? _backgroundOffset.X : _renderedBackgroundArea.X,
                 Y = _backgroundOffset.Y < _renderedBackgroundArea.Y ? _backgroundOffset.Y : _renderedBackgroundArea.Y,
                 Width = _backgroundOffset.X + Display.VisibleSize.Width > _renderedBackgroundArea.Width ? _backgroundOffset.X + Display.VisibleSize.Width : _renderedBackgroundArea.Width,
                 Height = _backgroundOffset.Y + Display.VisibleSize.Height > _renderedBackgroundArea.Height ? _backgroundOffset.Y + Display.VisibleSize.Height : _renderedBackgroundArea.Width
             };
-
-            _renderedBackgroundArea = bgRange;
-
-            Actors.DebugBlock.Text = $"{bgRange.X.ToString("####.###")}x,{bgRange.Y.ToString("####.###")}y"
-                + $" x {bgRange.Width.ToString("####.###")}x,{bgRange.Height.ToString("####.###")}y";
-
-            //Actors.DebugBlock.Text = $"P: {Actors.Player.X.ToString("####.###")},{Actors.Player.Y.ToString("####.###")}"
-            //    + $" B: {_backgroundOffset.X.ToString("####.###")},{_backgroundOffset.Y.ToString("####.###")}";
 
             if (Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
             {
@@ -223,14 +172,49 @@ namespace AI2D.Engine
                 Actors.Player.Rotate(Actors.Player.RotationSpeed);
             }
 
-            if (Input.IsKeyPressed(PlayerKey.Escape))
-            {
-                Actors.Player.Visable = false;
-            }
+            #endregion
 
-            if (Actors.Player.ReadyForDeletion)
+            #region Enemies Frame Advancement.
+
+            foreach (var enemy in Actors.Enemies)
             {
-                Actors.Player.Cleanup();
+                enemy.AdvanceFrame();
+
+                if (Actors.Player.Visable)
+                {
+                    double distanceToPlayer = Utility.CalculeDistance(enemy, Actors.Player);
+                    if (distanceToPlayer < 100)
+                    {
+                        enemy.FireGun();
+                    }
+
+                    if (enemy.X < (0 - (enemy.Size.Width + 40)) || enemy.Y < (0 - (enemy.Size.Height + 40))
+                        || enemy.X >= (Display.VisibleSize.Width + enemy.Size.Width) + 40
+                        || enemy.Y >= (Display.VisibleSize.Height + enemy.Size.Height) + 40)
+                    {
+                        enemy.MoveInDirectionOf(Actors.Player);
+                    }
+
+                    if (enemy.Intersects(Actors.Player))
+                    {
+                        Actors.Player.Hit();
+                    }
+                }
+
+                enemy.X += (enemy.Velocity.Angle.X * enemy.Velocity.Speed) - bgAppliedOffsetX;
+                enemy.Y += (enemy.Velocity.Angle.Y * enemy.Velocity.Speed) - bgAppliedOffsetY;
+
+                foreach (var bullet in Actors.Bullets)
+                {
+                    if (bullet.FiredFromType == FiredFromType.Player)
+                    {
+                        if (bullet.Intersects(enemy))
+                        {
+                            enemy.Hit();
+                            bullet.ReadyForDeletion = true;
+                        }
+                    }
+                }
             }
 
             #endregion
@@ -285,6 +269,44 @@ namespace AI2D.Engine
                     star.X -= bgAppliedOffsetX;
                     star.Y -= bgAppliedOffsetY;
                 }
+
+                double deltaX = _renderedBackgroundArea.X - latestBackgroundRange.X;
+                double deltaY = _renderedBackgroundArea.Y - latestBackgroundRange.Y;
+                double deltaWidth = _renderedBackgroundArea.Width - latestBackgroundRange.Width;
+                double deltaHeight = _renderedBackgroundArea.Height - latestBackgroundRange.Height;
+
+                if (deltaX != 0)
+                {
+                    deltaX -= Display.VisibleSize.Width;
+
+                    double size = Math.Abs(latestBackgroundRange.Height * deltaX);
+
+                    for (int i = 0; i < 100; i++)
+                    {
+                        double x = Utility.Random.Next(0, (int)Math.Abs(deltaX)) + deltaX;
+                        double y = Utility.Random.Next(0, (int)latestBackgroundRange.Height);
+                        //Actors.CreateStar(x, y);
+                    }
+
+                    latestBackgroundRange.X = latestBackgroundRange.X - Display.VisibleSize.Width;
+                }
+
+                if (deltaY != 0)
+                {
+                    deltaY -= Display.VisibleSize.Height;
+
+                    double size = Math.Abs(latestBackgroundRange.Width * deltaY);
+
+                    for (int i = 0; i < 100; i++)
+                    {
+                        double x = Utility.Random.Next(0, (int)latestBackgroundRange.Width);
+                        double y = Utility.Random.Next(0, (int)Math.Abs(deltaY)) + deltaY;
+                        //Actors.CreateStar(x, y);
+                    }
+
+                    latestBackgroundRange.Y = latestBackgroundRange.Y - Display.VisibleSize.Height;
+                }
+
             }
 
             #endregion
@@ -307,7 +329,30 @@ namespace AI2D.Engine
                 }
             }
 
+            if (Actors.Player.ReadyForDeletion)
+            {
+                Actors.Player.Cleanup();
+            }
+
             #endregion
+
+            _renderedBackgroundArea = latestBackgroundRange;
+
+            //Actors.DebugBlock.Text = $"{latestBackgroundRange.X.ToString("####.###")}x,{latestBackgroundRange.Y.ToString("####.###")}y"
+            //    + $" x {latestBackgroundRange.Width.ToString("####.###")}x,{latestBackgroundRange.Height.ToString("####.###")}y";
+
+            //Actors.DebugBlock.Text = $"P: {Actors.Player.X.ToString("####.###")},{Actors.Player.Y.ToString("####.###")}"
+            //    + $" B: {_backgroundOffset.X.ToString("####.###")},{_backgroundOffset.Y.ToString("####.###")}";
+
+            CurrentView = new RectangleF(
+                (float)_backgroundOffset.X,
+                (float)_backgroundOffset.Y,
+                (float)Display.VisibleSize.Width,
+                (float)Display.VisibleSize.Height
+            );                
+
+            Actors.DebugBlock.Text = $"View: {CurrentView.X.ToString("####.###")}x, {CurrentView.Y.ToString("####.###")}y"
+                + $" x {CurrentView.Width.ToString("####.###")}x, {CurrentView.Height.ToString("####.###")}y";
 
             //Actors.DebugBlock.Text = $"HP: {Actors.Player.HitPoints}";
         }
