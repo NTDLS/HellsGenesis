@@ -1,0 +1,6 @@
+﻿Go to the solution explorer.
+Click references.
+Click add reference.
+Click Browse.
+Browse to: C:\WINDOWS\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\
+Select your directX package.
