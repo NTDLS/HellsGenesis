@@ -4,10 +4,9 @@ using System.Drawing;
 
 namespace AI2D.Objects
 {
-    public class Animation : BaseObject
+    public class ObjAnimation : ObjBase
     {
         private Bitmap _explodeFrame;
-        private Game _game;
         private int _frameCount;
         private int _currentFrame = 0;
         private int _currentRow = 0;
@@ -18,11 +17,9 @@ namespace AI2D.Objects
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
         private bool _deleteWhenDonePlaying = false;
 
-        public Animation(Game game, string imageFrames, Size frameSize, bool deleteWhenDonePlaying = true)
+        public ObjAnimation(Game game, string imageFrames, Size frameSize, bool deleteWhenDonePlaying = true)
             : base(game)
         {
-            _game = game;
-
             _deleteWhenDonePlaying = deleteWhenDonePlaying;
             _explodeFrame = _game.Actors.GetBitmapCached(imageFrames);
             _frameSize = frameSize;

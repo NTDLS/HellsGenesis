@@ -6,11 +6,12 @@ using System.Linq;
 
 namespace AI2D.Objects
 {
-    public class BaseObject
+    public class ObjBase
     {
-        private Game _game;
+        protected Game _game;
+
         private Image _image;
-        private Animation _explosionAnimation;
+        private ObjAnimation _explosionAnimation;
         private AudioClip _explodeSound;
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private int _MilisecondsBetweenHits = 100;
@@ -38,7 +39,7 @@ namespace AI2D.Objects
             #endregion
         };
 
-        public BaseObject(Game game)
+        public ObjBase(Game game)
         {
             _game = game;
         }
@@ -52,7 +53,7 @@ namespace AI2D.Objects
             _explodeSound = _game.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
 
             int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
-            _explosionAnimation = new Animation(_game, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
+            _explosionAnimation = new ObjAnimation(_game, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
 
             if (imagePath != null)
             {
@@ -205,9 +206,18 @@ namespace AI2D.Objects
         {
             get
             {
-                return new RectangleF((int)_x, (int)_y, Size.Height, Size.Width);
+                return new RectangleF((float)_x, (float)_y, Size.Height, Size.Width);
             }
         }
+
+        public Rectangle BoundsI
+        {
+            get
+            {
+                return new Rectangle((int)_x, (int)_y, Size.Height, Size.Width);
+            }
+        }
+
 
         private bool _isVisible = true;
         public bool Visable
@@ -232,7 +242,7 @@ namespace AI2D.Objects
             _game.Display.DrawingSurface.Invalidate(invalidRect);
         }
 
-        public bool Intersects(BaseObject otherObject)
+        public bool Intersects(ObjBase otherObject)
         {
             if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
@@ -289,7 +299,7 @@ namespace AI2D.Objects
             }
         }
 
-        public void MoveInDirectionOf(BaseObject obj, double? speed = null)
+        public void MoveInDirectionOf(ObjBase obj, double? speed = null)
         {
             this.Velocity.Angle.Degree = Utility.RequiredAngleTo(this.Location, obj.Location);
 
@@ -299,17 +309,17 @@ namespace AI2D.Objects
             }
         }
 
-        public double GetDeltaAngle(BaseObject atObj)
+        public double GetDeltaAngle(ObjBase atObj)
         {
             return Utility.GetDeltaAngle(this, atObj);
         }
 
-        public double RequiredAngleTo(BaseObject atObj)
+        public double RequiredAngleTo(ObjBase atObj)
         {
             return Utility.RequiredAngleTo(this, atObj);
         }
 
-        public bool IsPointingAt(BaseObject atObj, double toleranceDegrees)
+        public bool IsPointingAt(ObjBase atObj, double toleranceDegrees)
         {
             return Utility.IsPointingAt(this, atObj, toleranceDegrees);
         }
@@ -325,6 +335,7 @@ namespace AI2D.Objects
         public void Cleanup()
         {
             Visable = false;
+            this.Invalidate(); //Don't think this is necessary. Just seems right.
         }
 
         public void Render(Graphics dc)
@@ -333,7 +344,7 @@ namespace AI2D.Objects
             {
                 var bitmap = new Bitmap(_image);
 
-                var image = Visuals.RotateImage(bitmap, Velocity.Angle.Degree);
+                var image = Utility.RotateImage(bitmap, Velocity.Angle.Degree);
                 Rectangle rect = new Rectangle((int)_x, (int)_y, image.Width, image.Height);
                 dc.DrawImage(image, rect);
             }

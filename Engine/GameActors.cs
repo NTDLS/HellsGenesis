@@ -164,8 +164,8 @@ namespace AI2D.Engine
         {
             lock (Stars)
             {
-                int deltaX = createInQuad.Bounds.X - _game.CurrentQuadrant.Bounds.X;
-                int deltaY = createInQuad.Bounds.Y - _game.CurrentQuadrant.Bounds.Y;
+                int deltaX = createInQuad.Bounds.X - _game.Display.CurrentQuadrant.Bounds.X;
+                int deltaY = createInQuad.Bounds.Y - _game.Display.CurrentQuadrant.Bounds.Y;
 
 
 
