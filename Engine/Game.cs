@@ -14,22 +14,19 @@ namespace AI2D.Engine
     {
         private bool _shutdown = false;
         private System.Threading.Thread _graphicsThread;
-        public UserInput Input { get; private set; }
-        public Display Display { get; private set; }
-        public ActorAssets Actors { get; private set; }
-        public PointD _backgroundOffset { get; set; } = new PointD(); //Offset of background, all cals must take into account.
+        public GameInput Input { get; private set; }
+        public GameDisplay Display { get; private set; }
+        public GameActors Actors { get; private set; }
+        public PointD BackgroundOffset { get; private set; } = new PointD(); //Offset of background, all cals must take into account.
         public RectangleF CurrentView { get; private set; } //Rectangle of the currently displayed coords.
+        public Dictionary<Point, Quadrant> Quadrants = new Dictionary<Point, Quadrant>();
+        public Quadrant CurrentQuadrant { get; private set; }
 
         public void Start()
         {
             Actors.BackgroundMusicSound.Play();
 
-            for (int i = 0; i < 100; i++)
-            {
-                Actors.CreateStar(); // (100, 100);
-            }
-
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Actors.CreateEnemy();
             }
@@ -50,9 +47,9 @@ namespace AI2D.Engine
 
         public Game(Control drawingSurface, Size visibleSize)
         {
-            Display = new Display(drawingSurface, visibleSize);
-            Actors = new ActorAssets(this);
-            Input = new UserInput(this);
+            Display = new GameDisplay(drawingSurface, visibleSize);
+            Actors = new GameActors(this);
+            Input = new GameInput(this);
 
             _graphicsThread = new System.Threading.Thread(GraphicsThreadProc);
         }
@@ -150,8 +147,8 @@ namespace AI2D.Engine
             }
 
             //Scroll the background.
-            _backgroundOffset.X += bgAppliedOffsetX;
-            _backgroundOffset.Y += bgAppliedOffsetY;
+            BackgroundOffset.X += bgAppliedOffsetX;
+            BackgroundOffset.Y += bgAppliedOffsetY;
 
             if (Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
             {
@@ -161,6 +158,24 @@ namespace AI2D.Engine
             {
                 Actors.Player.Rotate(Actors.Player.RotationSpeed);
             }
+
+            #endregion
+
+            #region Quadrant Math.
+
+            CurrentView = new RectangleF(
+                (float)BackgroundOffset.X,
+                (float)BackgroundOffset.Y,
+                (float)Display.VisibleSize.Width,
+                (float)Display.VisibleSize.Height
+            );
+
+            CurrentQuadrant = GetQuadrant(Actors.Player.X + BackgroundOffset.X, Actors.Player.Y + BackgroundOffset.Y);
+
+            Actors.QuadrantText.Text =
+                  $"Quad: [Key {CurrentQuadrant.Key.X}x, {CurrentQuadrant.Key.Y}y]"
+                + $" [Location {CurrentQuadrant.Bounds.X}x, {CurrentQuadrant.Bounds.Y}y ->"
+                + $" [Size {CurrentQuadrant.Bounds.Width}x, {CurrentQuadrant.Bounds.Height}y]";
 
             #endregion
 
@@ -265,6 +280,16 @@ namespace AI2D.Engine
 
             #region Stars Frame Advancement.
 
+            if (CurrentQuadrant.IsBackgroundPopulated == false)
+            {
+                CurrentQuadrant.IsBackgroundPopulated = true;
+
+                for (int i = 0; i < 10; i++)
+                {
+                    Actors.CreateStar(CurrentQuadrant);
+                }
+            }
+
             if (bgAppliedOffsetX != 0 || bgAppliedOffsetY != 0)
             {
                 lock (Actors.Stars)
@@ -354,21 +379,17 @@ namespace AI2D.Engine
 
             #endregion
 
-            //Actors.DebugBlock.Text = $"{latestBackgroundRange.X.ToString("####.###")}x,{latestBackgroundRange.Y.ToString("####.###")}y"
-            //    + $" x {latestBackgroundRange.Width.ToString("####.###")}x,{latestBackgroundRange.Height.ToString("####.###")}y";
+            //Actors.DebugText.Text = $"{latestBackgroundRange.X.ToString("####.###")}x,{latestBackgroundRange.Y.ToString("####.###")}y"
+            //    + $" x {latestBackgroundRange.Width.ToString("0000.000")}x,{latestBackgroundRange.Height.ToString("0000.000")}y";
 
-            //Actors.DebugBlock.Text = $"P: {Actors.Player.X.ToString("####.###")},{Actors.Player.Y.ToString("####.###")}"
-            //    + $" B: {_backgroundOffset.X.ToString("####.###")},{_backgroundOffset.Y.ToString("####.###")}";
+            Actors.DebugText.Text = $"P: {Actors.Player.X.ToString("000.00")},{Actors.Player.Y.ToString("000.00")}"
+                + $" B: {BackgroundOffset.X.ToString("000.00")},{BackgroundOffset.Y.ToString("000.00")}";
 
-            CurrentView = new RectangleF(
-                (float)_backgroundOffset.X,
-                (float)_backgroundOffset.Y,
-                (float)Display.VisibleSize.Width,
-                (float)Display.VisibleSize.Height
-            );                
+            //Actors.DebugText.Text = $"View: {CurrentView.X.ToString("0000.000")}x, {CurrentView.Y.ToString("0000.000")}y"
+            //    + $" x {CurrentView.Width.ToString("0000.000")}x, {CurrentView.Height.ToString("0000.000")}y";
 
-            //Actors.DebugText.Text = $"View: {CurrentView.X.ToString("####.###")}x, {CurrentView.Y.ToString("####.###")}y"
-            //    + $" x {CurrentView.Width.ToString("####.###")}x, {CurrentView.Height.ToString("####.###")}y";
+            //Actors.DebugText.Text = $" Q {CurrentQuadrant.Bounds.X}x, {CurrentQuadrant.Bounds.Y}y"
+            //    + $" View: {CurrentView.X.ToString("0000.000")}x, {CurrentView.Y.ToString("0000.000")}y";
 
             Actors.PlayerStatsText.Text = $"HP: {Actors.Player.HitPoints}, Ammo: {Actors.Player.BulletsRemaining}";
         }
@@ -379,5 +400,28 @@ namespace AI2D.Engine
         }
 
         #endregion
+        
+        public Quadrant GetQuadrant(double x, double y)
+        {
+            var coord = new Point(
+                    (int)(x / Display.VisibleSize.Width),
+                    (int)(y / Display.VisibleSize.Height)
+                );
+
+            if (Quadrants.ContainsKey(coord) == false)
+            {
+                var absoluteBounds = new Rectangle(
+                    Display.VisibleSize.Width * coord.X,
+                    Display.VisibleSize.Height * coord.Y,
+                    Display.VisibleSize.Width,
+                    Display.VisibleSize.Height);
+
+                var quad = new Quadrant(coord, absoluteBounds);
+
+                Quadrants.Add(coord, quad);
+            }
+
+            return Quadrants[coord];
+        }
     }
 }

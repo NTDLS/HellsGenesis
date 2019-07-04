@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace AI2D.Objects
 {
-    public class Enemy : BaseObject
+    public class ObjEnemy : ObjBase
     {
         private string _assetPath = @"..\..\Assets\Graphics\Enemy\";
         private string[] _imagePaths = {
@@ -66,7 +66,7 @@ namespace AI2D.Objects
             #endregion
         };
 
-        public Enemy(Game game)
+        public ObjEnemy(Game game)
             : base(game)
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();

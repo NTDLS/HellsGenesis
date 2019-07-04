@@ -4,12 +4,12 @@ using System.Windows.Forms;
 
 namespace AI2D.Engine
 {
-    public class UserInput
+    public class GameInput
     {
         private Game _game;
         private Dictionary<PlayerKey, KeyPressState> _keyStates = new Dictionary<PlayerKey, KeyPressState>();
 
-        public UserInput(Game game)
+        public GameInput(Game game)
         {
             _game = game;
         }

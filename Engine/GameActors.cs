@@ -9,25 +9,29 @@ using System.Threading.Tasks;
 
 namespace AI2D.Engine
 {
-    public class ActorAssets
+    public class GameActors
     {
         private Game _game;
-        public TextBlock DebugText { get; set; }
-        public TextBlock PlayerStatsText { get; set; }
-        public List<Enemy> Enemies { get; set; } = new List<Enemy>();
-        public List<Star> Stars { get; set; } = new List<Star>();
-        public List<Animation> Animations { get; set; } = new List<Animation>();
-        public List<Bullet> Bullets { get; set; } = new List<Bullet>();
-        public Player Player { get; set; }
         private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
         private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
 
-        public AudioClip ShipEngineRoarSound { get; set; }
-        public AudioClip ShipEngineIdleSound { get; set; }
-        public AudioClip AllSystemsGoSound { get; set; }
-        public AudioClip BackgroundMusicSound { get; set; }
+        public List<ObjTextBlock> TextBlocks { get; private set; } = new List<ObjTextBlock>();
+        public List<ObjEnemy> Enemies { get; private set; } = new List<ObjEnemy>();
+        public List<ObjStar> Stars { get; private set; } = new List<ObjStar>();
+        public List<ObjAnimation> Animations { get; private set; } = new List<ObjAnimation>();
+        public List<ObjBullet> Bullets { get; private set; } = new List<ObjBullet>();
+        public ObjPlayer Player { get; private set; }
 
-        public ActorAssets(Game game)
+        public AudioClip ShipEngineRoarSound { get; private set; }
+        public AudioClip ShipEngineIdleSound { get; private set; }
+        public AudioClip AllSystemsGoSound { get; private set; }
+        public AudioClip BackgroundMusicSound { get; private set; }
+
+        public ObjTextBlock PlayerStatsText { get; private set; }
+        public ObjTextBlock QuadrantText { get; private set; }
+        public ObjTextBlock DebugText { get; private set; }
+
+        public GameActors(Game game)
         {
             _game = game;
 
@@ -36,15 +40,16 @@ namespace AI2D.Engine
             ShipEngineIdleSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Idle.wav", 0.5f, true);
             AllSystemsGoSound = GetSoundCached(@"..\..\Assets\Sounds\All Systems Go.wav", 0.5f, false);
 
-            PlayerStatsText = new TextBlock(_game.Display, "ComicSans", 10, 5, 5);
-            DebugText = new TextBlock(_game.Display, "ComicSans", 10, 5, PlayerStatsText.Height + 10);
+            PlayerStatsText = CreateTextBlock("ComicSans", 10, 5, 5);
+            QuadrantText = CreateTextBlock("ComicSans", 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10);
+            DebugText = CreateTextBlock("ComicSans", 10, 5, QuadrantText.Y + QuadrantText.Height + 10);
         }
 
         public void ShowNewPlayer()
         {
             if (Player == null)
             {
-                Player = new Player(_game);
+                Player = new ObjPlayer(_game);
             }
 
             Player.Velocity.Speed = 5;
@@ -111,7 +116,7 @@ namespace AI2D.Engine
 
         #region Factories.
 
-        public void PlaceAnimationOnTopOf(Animation animation, BaseObject defaultPosition)
+        public void PlaceAnimationOnTopOf(ObjAnimation animation, ObjBase defaultPosition)
         {
             lock (Animations)
             {
@@ -122,17 +127,17 @@ namespace AI2D.Engine
             }
         }
 
-        public Animation CreateAnimation(string imageFrames, Size frameSize)
+        public ObjAnimation CreateAnimation(string imageFrames, Size frameSize)
         {
             lock (Animations)
             {
-                Animation obj = new Animation(_game, imageFrames, frameSize);
+                ObjAnimation obj = new ObjAnimation(_game, imageFrames, frameSize);
                 Animations.Add(obj);
                 return obj;
             }
         }
 
-        public void DeleteAnimation(Animation obj)
+        public void DeleteAnimation(ObjAnimation obj)
         {
             lock (Animations)
             {
@@ -141,11 +146,11 @@ namespace AI2D.Engine
             }
         }
 
-        public Star CreateStar(double x, double y)
+        public ObjStar CreateStar(double x, double y)
         {
             lock (Stars)
             {
-                Star obj = new Star(_game)
+                ObjStar obj = new ObjStar(_game)
                 {
                     X = x,
                     Y = y
@@ -155,17 +160,65 @@ namespace AI2D.Engine
             }
         }
 
-        public Star CreateStar()
+        public ObjStar CreateStar(Quadrant createInQuad)
         {
             lock (Stars)
             {
-                Star obj = new Star(_game);
+                int deltaX = createInQuad.Bounds.X - _game.CurrentQuadrant.Bounds.X;
+                int deltaY = createInQuad.Bounds.Y - _game.CurrentQuadrant.Bounds.Y;
+
+
+
+                ObjStar obj = new ObjStar(_game)
+                {
+                    X = Utility.Random.Next(deltaX, createInQuad.Bounds.Width - 100),
+                    Y = Utility.Random.Next(deltaY, createInQuad.Bounds.Height - 100)
+                    //X = createInQuad.Bounds.X - (int)_game.BackgroundOffset.X, //This adds a start to X:0 of the current screen.
+                    //Y = createInQuad.Bounds.Y - (int)_game.BackgroundOffset.Y //This adds a start to Y:0 of the current screen.
+                    //X = 500,
+                    //Y = 500
+
+                    //X = deltaX,
+                    //Y = deltaY
+                };
+
+                Console.WriteLine($"x{obj.X}, y{obj.Y}      {deltaX} - {deltaY}");
+
                 Stars.Add(obj);
                 return obj;
             }
         }
 
-        public void DeleteStar(Star obj)
+        public ObjTextBlock CreateTextBlock(string font, double size, double x, double y)
+        {
+            lock (TextBlocks)
+            {
+                ObjTextBlock obj = new ObjTextBlock(_game, font, size, x, y);
+                TextBlocks.Add(obj);
+                return obj;
+            }
+        }
+
+        public void DeleteTextBlock(ObjTextBlock obj)
+        {
+            lock (TextBlocks)
+            {
+                obj.Cleanup();
+                TextBlocks.Remove(obj);
+            }
+        }
+
+        public ObjStar CreateStar()
+        {
+            lock (Stars)
+            {
+                ObjStar obj = new ObjStar(_game);
+                Stars.Add(obj);
+                return obj;
+            }
+        }
+
+        public void DeleteStar(ObjStar obj)
         {
             lock (Stars)
             {
@@ -174,17 +227,17 @@ namespace AI2D.Engine
             }
         }
 
-        public Enemy CreateEnemy()
+        public ObjEnemy CreateEnemy()
         {
             lock (Enemies)
             {
-                Enemy obj = new Enemy(_game);
+                ObjEnemy obj = new ObjEnemy(_game);
                 Enemies.Add(obj);
                 return obj;
             }
         }
 
-        public void DeleteEnemy(Enemy obj)
+        public void DeleteEnemy(ObjEnemy obj)
         {
             lock (Enemies)
             {
@@ -193,17 +246,17 @@ namespace AI2D.Engine
             }
         }
 
-        public Bullet CreateBullet(BaseObject firedFrom)
+        public ObjBullet CreateBullet(ObjBase firedFrom)
         {
             lock (Bullets)
             {
-                Bullet obj = new Bullet(_game, firedFrom);
+                ObjBullet obj = new ObjBullet(_game, firedFrom);
                 Bullets.Add(obj);
                 return obj;
             }
         }
 
-        public void DeleteBullet(Bullet obj)
+        public void DeleteBullet(ObjBullet obj)
         {
             lock (Bullets)
             {
@@ -218,8 +271,13 @@ namespace AI2D.Engine
 
         private void RenderText(Graphics dc)
         {
-            DebugText.Render(dc);
-            PlayerStatsText.Render(dc);
+            lock (TextBlocks)
+            {
+                foreach (var obj in TextBlocks)
+                {
+                    obj.Render(dc);
+                }
+            }
         }
 
         void RenderAnimations(Graphics dc)
@@ -260,12 +318,9 @@ namespace AI2D.Engine
             {
                 foreach (var obj in Stars)
                 {
-                    if (obj.Bounds.IntersectsWith(_game.CurrentView))
+                    //if (currentQuad.Bounds.IntersectsWith(obj.BoundsI))
                     {
                         obj.Render(dc);
-                    }
-                    else
-                    {
                     }
                 }
             }

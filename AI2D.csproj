@@ -56,14 +56,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Engine\ActorAssets.cs" />
-    <Compile Include="Objects\Animation.cs" />
+    <Compile Include="Engine\GameActors.cs" />
+    <Compile Include="Engine\Quadrant.cs" />
+    <Compile Include="Objects\ObjAnimation.cs" />
     <Compile Include="Engine\Consants.cs" />
-    <Compile Include="Engine\UserInput.cs" />
-    <Compile Include="Engine\Visuals.cs" />
+    <Compile Include="Engine\GameInput.cs" />
     <Compile Include="Engine\Utility.cs" />
-    <Compile Include="Objects\Bullet.cs" />
-    <Compile Include="Objects\Star.cs" />
+    <Compile Include="Objects\ObjBullet.cs" />
+    <Compile Include="Objects\ObjStar.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -72,10 +72,11 @@
     <Compile Include="Types\EngineTypes.cs" />
     <Compile Include="Types\Angle.cs" />
     <Compile Include="Types\PointD.cs" />
+    <Compile Include="Types\PointI.cs" />
     <Compile Include="Types\RectangleD.cs" />
     <Compile Include="Types\SizeD.cs" />
     <Compile Include="Types\Vector.cs" />
-    <Compile Include="Engine\Display.cs" />
+    <Compile Include="Engine\GameDisplay.cs" />
     <Compile Include="Engine\Game.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
@@ -84,10 +85,10 @@
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Engine\AudioClip.cs" />
-    <Compile Include="Objects\BaseObject.cs" />
-    <Compile Include="Objects\Player.cs" />
-    <Compile Include="Objects\Enemy.cs" />
-    <Compile Include="Objects\TextBlock.cs" />
+    <Compile Include="Objects\ObjBase.cs" />
+    <Compile Include="Objects\ObjPlayer.cs" />
+    <Compile Include="Objects\ObjEnemy.cs" />
+    <Compile Include="Objects\ObjTextBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormMain.resx">

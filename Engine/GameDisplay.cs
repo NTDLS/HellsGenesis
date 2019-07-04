@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace AI2D.Engine
 {
-    public class Display
+    public class GameDisplay
     {
         private Size _visibleSize;
         public Size VisibleSize
@@ -28,7 +28,7 @@ namespace AI2D.Engine
             }
         }
 
-        public Display(Control drawingSurface, Size visibleSize)
+        public GameDisplay(Control drawingSurface, Size visibleSize)
         {
             _drawingSurface = drawingSurface;
             _visibleSize = visibleSize;
