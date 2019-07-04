@@ -8,10 +8,52 @@ namespace AI2D.Engine
 {
     public class Utility
     {
+        const double RADIAN_CONV = 0.01745329251994329576923690768; // (PI / 180.0f)
+        const double OFFSET90DEGREES = 1.57079632679489661923132169156; // (180.0f * RADIAN_CONV)						 
+        const double FULLCIRCLE = 6.28318530717958647692528676624; // (360.0f * RADIAN_CONV)
+
+        public static double RequiredAngleTo(BaseObject from, BaseObject to)
+        {
+            return RequiredAngleTo(from.Location, to.Location);
+        }
+
+        public static double RequiredAngleTo(PointD from, PointD to)
+        {
+            var fRadians = Math.Atan2((to.Y - from.Y), (to.X - from.X));
+            var fDegrees = ((fRadians * (180 / Math.PI) + 360) + 90) % 360;
+            return fDegrees;
+        }
+
+        public static bool IsPointingAt(BaseObject fromObj, BaseObject atObj, double toleranceDegrees)
+        {
+            var deltaAngle = Math.Abs(GetDeltaAngle(fromObj, atObj));
+            return deltaAngle < toleranceDegrees;
+        }
+
+        public static double GetDeltaAngle(BaseObject fromObj, BaseObject atObj)
+        {
+            double angleTo = RequiredAngleTo(fromObj, atObj);
+
+            if (fromObj.Velocity.Angle.Degree < 0) fromObj.Velocity.Angle.Degree = (0 - fromObj.Velocity.Angle.Degree);
+            if (angleTo < 0) angleTo = (0 - angleTo);
+
+            return fromObj.Velocity.Angle.Degree - angleTo;
+        }
+
         public static Random Random = new Random();
         public static bool FlipCoin()
         {
             return Random.Next(0, 1000) >= 500;
+        }
+
+        public static Double RandomNumber(double min, double max)
+        {
+            return Random.Next(0, 1000) % max;
+        }
+
+        public static int RandomNumber(int min, int max)
+        {
+            return Random.Next(0, 1000) % max;
         }
 
         public static Image ResizeImage(Image image, int new_height, int new_width)
@@ -34,18 +76,6 @@ namespace AI2D.Engine
             };
 
             return result;
-        }
-
-        public static double CalculeAngle(PointD from, PointD to)
-        {
-            var radian = Math.Atan2((to.Y - from.Y), (to.X - from.X));
-            var angle = ((radian * (180 / Math.PI) + 360) + 90) % 360;
-
-            return angle;
-        }
-        public static double CalculeAngle(BaseObject from, BaseObject to)
-        {
-            return CalculeAngle(from.Location, to.Location);
         }
 
         public static double CalculeDistance(PointD from, PointD to)

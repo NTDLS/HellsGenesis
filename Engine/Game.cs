@@ -23,23 +23,18 @@ namespace AI2D.Engine
 
         public void Start()
         {
-            //Actors.BackgroundMusic.Play();
+            Actors.BackgroundMusicSound.Play();
 
             _renderedBackgroundArea = new RectangleD(0, 0, Display.VisibleSize.Width, Display.VisibleSize.Height);
 
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 100; i++)
             {
-                Actors.CreateStar(100, 100);
+                Actors.CreateStar(); // (100, 100);
             }
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 10; i++)
             {
                 Actors.CreateEnemy();
-            }
-
-            for (int i = 0; i < 1; i++)
-            {
-                //Actors.CreateAnimation(200, 200);
             }
 
             _shutdown = false;
@@ -119,7 +114,7 @@ namespace AI2D.Engine
 
                 Actors.Player.X += (Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed) - bgAppliedOffsetX;
                 Actors.Player.Y += (Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed) - bgAppliedOffsetY;
-                Actors.ShipEngineRoar.Play();
+                Actors.ShipEngineRoarSound.Play();
             }
             else if (Input.IsKeyPressed(PlayerKey.Reverse))
             {
@@ -149,11 +144,11 @@ namespace AI2D.Engine
 
                 Actors.Player.X -= (Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed) + bgAppliedOffsetX;
                 Actors.Player.Y -= (Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed) + bgAppliedOffsetY;
-                Actors.ShipEngineRoar.Play();
+                Actors.ShipEngineRoarSound.Play();
             }
             else
             {
-                Actors.ShipEngineRoar.Fade();
+                Actors.ShipEngineRoarSound.Fade();
             }
 
             //Scroll the background.
@@ -188,10 +183,20 @@ namespace AI2D.Engine
                 {
                     if (Actors.Player.Visable)
                     {
+                        //double requiredAngle = enemy.RequiredAngleTo(Actors.Player);
+                        //Actors.DebugText.Text = $"RA: {requiredAngle.ToString("####.###")}";
+
+                        //double deltaAngle = Utility.GetDeltaAngle(enemy, Actors.Player);
+                        //Actors.DebugText.Text = $"DA: {deltaAngle.ToString("####.###")}";
+
                         double distanceToPlayer = Utility.CalculeDistance(enemy, Actors.Player);
-                        if (distanceToPlayer < 100)
+                        if (distanceToPlayer < 500)
                         {
-                            enemy.FireGun();
+                            bool isPointingAtPlayer = enemy.IsPointingAt(Actors.Player, 8.0);
+                            if (isPointingAtPlayer)
+                            {
+                                enemy.FireGun();
+                            }
                         }
 
                         if (enemy.X < (0 - (enemy.Size.Width + 40)) || enemy.Y < (0 - (enemy.Size.Height + 40))
@@ -412,10 +417,10 @@ namespace AI2D.Engine
                 (float)Display.VisibleSize.Height
             );                
 
-            Actors.DebugBlock.Text = $"View: {CurrentView.X.ToString("####.###")}x, {CurrentView.Y.ToString("####.###")}y"
-                + $" x {CurrentView.Width.ToString("####.###")}x, {CurrentView.Height.ToString("####.###")}y";
+            //Actors.DebugText.Text = $"View: {CurrentView.X.ToString("####.###")}x, {CurrentView.Y.ToString("####.###")}y"
+            //    + $" x {CurrentView.Width.ToString("####.###")}x, {CurrentView.Height.ToString("####.###")}y";
 
-            //Actors.DebugBlock.Text = $"HP: {Actors.Player.HitPoints}";
+            Actors.PlayerStatsText.Text = $"HP: {Actors.Player.HitPoints}, Ammo: {Actors.Player.BulletsRemaining}";
         }
 
         public void RenderObjects(Graphics dc)

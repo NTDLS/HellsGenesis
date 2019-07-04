@@ -13,7 +13,8 @@ namespace AI2D.Engine
     {
         private Game _game;
 
-        public TextBlock DebugBlock { get; set; }
+        public TextBlock DebugText { get; set; }
+        public TextBlock PlayerStatsText { get; set; }
         public List<Enemy> Enemies { get; set; } = new List<Enemy>();
         public List<Star> Stars { get; set; } = new List<Star>();
         public List<Animation> Animations { get; set; } = new List<Animation>();
@@ -22,19 +23,22 @@ namespace AI2D.Engine
         private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
         private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
 
-        public AudioClip ShipEngineRoar { get; set; }
-        public AudioClip ShipEngineIdle { get; set; }
-        public AudioClip BackgroundMusic { get; set; }
+        public AudioClip ShipEngineRoarSound { get; set; }
+        public AudioClip ShipEngineIdleSound { get; set; }
+        public AudioClip AllSystemsGoSound { get; set; }
+        public AudioClip BackgroundMusicSound { get; set; }
 
         public ActorAssets(Game game)
         {
             _game = game;
 
-            BackgroundMusic = GetAudioClip(@"..\..\Assets\Sound\BackgroundMusic.wav", 0.25f);
-            ShipEngineRoar = GetAudioClip(@"..\..\Assets\Sound\EngineRoar.wav", 1.0f, true);
-            ShipEngineIdle = GetAudioClip(@"..\..\Assets\Sound\EngineIdle.wav", 0.5f, true);
+            BackgroundMusicSound = GetAudioClip(@"..\..\Assets\Sounds\Background Music.wav", 0.25f, true);
+            ShipEngineRoarSound = GetAudioClip(@"..\..\Assets\Sounds\Engine Roar.wav", 1.0f, true);
+            ShipEngineIdleSound = GetAudioClip(@"..\..\Assets\Sounds\Engine Idle.wav", 0.5f, true);
+            AllSystemsGoSound = GetAudioClip(@"..\..\Assets\Sounds\All Systems Go.wav", 0.5f, false);
 
-            DebugBlock = new TextBlock(_game.Display, "ComicSans", 10, 5, 5);
+            PlayerStatsText = new TextBlock(_game.Display, "ComicSans", 10, 5, 5);
+            DebugText = new TextBlock(_game.Display, "ComicSans", 10, 5, PlayerStatsText.Height + 10);
         }
 
         public void ShowNewPlayer()
@@ -48,16 +52,18 @@ namespace AI2D.Engine
             Player.RotationSpeed = 3;
             Player.Visable = true;
             Player.HitPoints = 100;
+            Player.BulletsRemaining = 100;
             Player.X = _game.Display.VisibleSize.Width / 2;
             Player.Y = _game.Display.VisibleSize.Height / 2;
 
-            ShipEngineIdle.Play();
+            ShipEngineIdleSound.Play();
+            AllSystemsGoSound.Play();
         }
 
         public void HidePlayer()
         {
             Player.Visable = false;
-            ShipEngineIdle.Play();
+            ShipEngineIdleSound.Play();
         }
 
         public Bitmap GetBitmap(string path)
@@ -213,7 +219,8 @@ namespace AI2D.Engine
 
         private void RenderText(Graphics dc)
         {
-            DebugBlock.Render(dc);
+            DebugText.Render(dc);
+            PlayerStatsText.Render(dc);
         }
 
         void RenderAnimations(Graphics dc)

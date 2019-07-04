@@ -9,18 +9,22 @@ namespace AI2D.Objects
 {
     public class Star : BaseObject
     {
-        private string[] _imagePaths = {
-            @"..\..\Assets\Graphics\Star1.png",
-            @"..\..\Assets\Graphics\Star2.png",
-            @"..\..\Assets\Graphics\Star3.png",
-            @"..\..\Assets\Graphics\Star4.png"
+        private string _assetStarPath = @"..\..\Assets\Graphics\Star\";
+        private string[] _assetStarFiles = {
+            #region images.
+            "Star 1.png",
+            "Star 2.png",
+            "Star 3.png",
+            "Star 4.png",
+            #endregion
         };
 
         public Star(Game game)
             : base(game)
         {
-            int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
-            LoadResources(_imagePaths[imageIndex], null);
+            int _explosionImageIndex = Utility.RandomNumber(0, _assetStarFiles.Count());
+
+            LoadResources(_assetStarPath + _assetStarFiles[_explosionImageIndex]);
 
             X = Utility.Random.Next(0, game.Display.VisibleSize.Width);
             Y = Utility.Random.Next(0, game.Display.VisibleSize.Height);

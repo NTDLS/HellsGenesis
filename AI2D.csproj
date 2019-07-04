@@ -73,6 +73,7 @@
     <Compile Include="Types\Angle.cs" />
     <Compile Include="Types\PointD.cs" />
     <Compile Include="Types\RectangleD.cs" />
+    <Compile Include="Types\SizeD.cs" />
     <Compile Include="Types\Vector.cs" />
     <Compile Include="Engine\Display.cs" />
     <Compile Include="Engine\Game.cs" />

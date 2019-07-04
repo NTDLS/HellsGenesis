@@ -7,7 +7,7 @@ namespace AI2D.Objects
     {
         public FiredFromType FiredFromType { get; set; }
 
-        private const string _imagePath = @"..\..\Assets\Graphics\BasicBullet.png";
+        private const string _imagePath = @"..\..\Assets\Graphics\Bullet\Vulcan.png";
 
         public Bullet(Game game, BaseObject firedFrom)
             : base(game)

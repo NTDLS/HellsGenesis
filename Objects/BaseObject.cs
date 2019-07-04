@@ -19,13 +19,22 @@ namespace AI2D.Objects
         private AudioClip _bulletSound;
         private AudioClip _hitSound;
 
-        private string _assetPathFramePath = @"..\..\Assets\Graphics\Frames\";
-        private string[] _explosionImageNames = {
+        private string _assetExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
+        private string[] _assetExplosionAnimationFiles = {
             #region images.
             "Explosion 256 1.png",
             "Explosion 256 2.png",
             "Explosion 256 3.png",
             "Explosion 256 4.png",
+            #endregion
+        };
+
+        private string _assetExplosionSoundPath = @"..\..\Assets\Sounds\Explode\";
+        private string[] _assetExplosionSoundFiles = {
+            #region images.
+            "Expload 1.wav",
+            "Expload 2.wav",
+            "Expload 3.wav"
             #endregion
         };
 
@@ -36,12 +45,14 @@ namespace AI2D.Objects
 
         public void LoadResources(string imagePath, Size? size = null, PointD initialLocation = null, Vector initialVector = null)
         {
-            _bulletSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sound\VulcanCannon.wav", 0.3f);
-            _hitSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sound\ShipHit.wav", 1.0f);
-            _explodeSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sound\Boom.wav", 1.0f);
+            _bulletSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sounds\Vulcan Cannon.wav", 0.3f);
+            _hitSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sounds\Ship Hit.wav", 1.0f);
 
-            int _explosionImageIndex = Utility.Random.Next(0, 1000) % _explosionImageNames.Count();
-            _explosionAnimation = new Animation(_game, _assetPathFramePath + _explosionImageNames[_explosionImageIndex], new Size(256, 256));
+            int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
+            _explodeSound = _game.Actors.GetAudioClip(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
+
+            int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
+            _explosionAnimation = new Animation(_game, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
 
             if (imagePath != null)
             {
@@ -93,6 +104,7 @@ namespace AI2D.Objects
 
         #region Properties.
 
+        public int BulletsRemaining { get; set; } = int.MaxValue;
         public int HitPoints { get; set; }
         public Vector Velocity { get; set; }
         public double RotationSpeed { get; set; } = 1.0;
@@ -118,10 +130,14 @@ namespace AI2D.Objects
         {
             get
             {
-                bool result = ((DateTime.Now - _lastFired).TotalMilliseconds > _MilisecondsBetweenBullets);
-                if (result)
+                bool result = false;
+                if (BulletsRemaining > 0)
                 {
-                    _lastFired = DateTime.Now;
+                    result = ((DateTime.Now - _lastFired).TotalMilliseconds > _MilisecondsBetweenBullets);
+                    if (result)
+                    {
+                        _lastFired = DateTime.Now;
+                    }
                 }
                 return result;
             }
@@ -252,6 +268,7 @@ namespace AI2D.Objects
         {
             if (CanFire)
             {
+                BulletsRemaining--;
                 _bulletSound.Play();
                 _game.Actors.CreateBullet(this);
             }
@@ -265,7 +282,7 @@ namespace AI2D.Objects
 
         public void MoveInDirectionOf(PointD location, double? speed = null)
         {
-            this.Velocity.Angle.Degree = Utility.CalculeAngle(this.Location, location);
+            this.Velocity.Angle.Degree = Utility.RequiredAngleTo(this.Location, location);
             if (speed != null)
             {
                 this.Velocity.Speed = (double)speed;
@@ -274,12 +291,27 @@ namespace AI2D.Objects
 
         public void MoveInDirectionOf(BaseObject obj, double? speed = null)
         {
-            this.Velocity.Angle.Degree = Utility.CalculeAngle(this.Location, obj.Location);
+            this.Velocity.Angle.Degree = Utility.RequiredAngleTo(this.Location, obj.Location);
 
             if (speed != null)
             {
                 this.Velocity.Speed = (double)speed;
             }
+        }
+
+        public double GetDeltaAngle(BaseObject atObj)
+        {
+            return Utility.GetDeltaAngle(this, atObj);
+        }
+
+        public double RequiredAngleTo(BaseObject atObj)
+        {
+            return Utility.RequiredAngleTo(this, atObj);
+        }
+
+        public bool IsPointingAt(BaseObject atObj, double toleranceDegrees)
+        {
+            return Utility.IsPointingAt(this, atObj, toleranceDegrees);
         }
 
         public void Explode()

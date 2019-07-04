@@ -4,7 +4,7 @@ namespace AI2D.Objects
 {
     public class Player : BaseObject
     {
-        private const string _imagePath = @"..\..\Assets\Graphics\ship6.png";
+        private const string _imagePath = @"..\..\Assets\Graphics\Player\Default.png";
 
 
         public Player(Game game)

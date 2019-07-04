@@ -5,7 +5,7 @@ namespace AI2D.Objects
 {
     public class Enemy : BaseObject
     {
-        private string _assetPath = @"..\..\Assets\Graphics\Enemies\";
+        private string _assetPath = @"..\..\Assets\Graphics\Enemy\";
         private string[] _imagePaths = {
             #region images.
             "xenis-blue-a-1.png",
