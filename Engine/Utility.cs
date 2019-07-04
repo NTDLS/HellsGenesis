@@ -1,6 +1,8 @@
 ﻿using AI2D.Objects;
 using AI2D.Types;
 using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace AI2D.Engine
 {
@@ -10,6 +12,15 @@ namespace AI2D.Engine
         public static bool FlipCoin()
         {
             return Random.Next(0, 1000) >= 500;
+        }
+
+        public static Image ResizeImage(Image image, int new_height, int new_width)
+        {
+            Bitmap new_image = new Bitmap(new_width, new_height);
+            Graphics g = Graphics.FromImage((Image)new_image);
+            g.InterpolationMode = InterpolationMode.High;
+            g.DrawImage(image, 0, 0, new_width, new_height);
+            return new_image;
         }
 
         public static PointD AngleToXY(double angle)
@@ -51,6 +62,5 @@ namespace AI2D.Engine
         {
             return CalculeDistance(from.Location, to.Location);
         }
-
     }
 }

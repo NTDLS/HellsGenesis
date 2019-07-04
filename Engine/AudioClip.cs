@@ -4,7 +4,7 @@ using SharpDX.XAudio2;
 using System;
 using System.Threading;
 
-namespace AI2D.Objects
+namespace AI2D.Engine
 {
     public class AudioClip
     {

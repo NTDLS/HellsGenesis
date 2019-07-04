@@ -94,7 +94,7 @@ namespace AI2D.Engine
             }
             if (key == Keys.Escape)
             {
-                _game.Actors.Player.Explode();
+                _game.Actors.Enemies[0].Explode();
             }
 
         }

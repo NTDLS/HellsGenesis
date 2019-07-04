@@ -32,14 +32,20 @@ namespace AI2D.Engine
                 Actors.CreateStar(100, 100);
             }
 
-            for (int i = 0; i < 0; i++)
+            for (int i = 0; i < 20; i++)
             {
                 Actors.CreateEnemy();
             }
 
+            for (int i = 0; i < 1; i++)
+            {
+                //Actors.CreateAnimation(200, 200);
+            }
+
             _shutdown = false;
-            _graphicsThread.Start();
             Actors.ShowNewPlayer();
+
+            _graphicsThread.Start();
         }
 
         public void Stop()
@@ -75,12 +81,12 @@ namespace AI2D.Engine
         {
             #region Player Frame Advancement.
 
-            Actors.Player.AdvanceFrame();
-
             if (Input.IsKeyPressed(PlayerKey.Fire))
             {
                 Actors.Player.FireGun();
             }
+
+            double wallWidth = 200;
 
             double bgAppliedOffsetX = 0;
             double bgAppliedOffsetY = 0;
@@ -88,25 +94,25 @@ namespace AI2D.Engine
             if (Input.IsKeyPressed(PlayerKey.Forward))
             {
                 //Close to the right wall and travelling in that direction.
-                if (Actors.Player.X > Display.VisibleSize.Width - (Actors.Player.Size.Width + 100) && Actors.Player.Velocity.Angle.X > 0)
+                if (Actors.Player.X > Display.VisibleSize.Width - (Actors.Player.Size.Width + wallWidth) && Actors.Player.Velocity.Angle.X > 0)
                 {
                     bgAppliedOffsetX = (Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed);
                 }
 
                 //Close to the bottom wall and travelling in that direction.
-                if (Actors.Player.Y > Display.VisibleSize.Height - (Actors.Player.Size.Height + 100) && Actors.Player.Velocity.Angle.Y > 0)
+                if (Actors.Player.Y > Display.VisibleSize.Height - (Actors.Player.Size.Height + wallWidth) && Actors.Player.Velocity.Angle.Y > 0)
                 {
                     bgAppliedOffsetY = (Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed);
                 }
 
                 //Close to the left wall and travelling in that direction.
-                if (Actors.Player.X < 100 && Actors.Player.Velocity.Angle.X < 0)
+                if (Actors.Player.X < wallWidth && Actors.Player.Velocity.Angle.X < 0)
                 {
                     bgAppliedOffsetX = (Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed);
                 }
 
                 //Close to the top wall and travelling in that direction.
-                if (Actors.Player.Y < 100 && Actors.Player.Velocity.Angle.Y < 0)
+                if (Actors.Player.Y < wallWidth && Actors.Player.Velocity.Angle.Y < 0)
                 {
                     bgAppliedOffsetY = (Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed);
                 }
@@ -118,25 +124,25 @@ namespace AI2D.Engine
             else if (Input.IsKeyPressed(PlayerKey.Reverse))
             {
                 //Close to the right wall and travelling in that direction.
-                if (Actors.Player.X > Display.VisibleSize.Width - (Actors.Player.Size.Width + 100) && Actors.Player.Velocity.Angle.X < 0)
+                if (Actors.Player.X > Display.VisibleSize.Width - (Actors.Player.Size.Width + wallWidth) && Actors.Player.Velocity.Angle.X < 0)
                 {
                     bgAppliedOffsetX = -(Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed);
                 }
 
                 //Close to the bottom wall and travelling in that direction.
-                if (Actors.Player.Y > Display.VisibleSize.Height - (Actors.Player.Size.Height + 100) && Actors.Player.Velocity.Angle.Y < 0)
+                if (Actors.Player.Y > Display.VisibleSize.Height - (Actors.Player.Size.Height + wallWidth) && Actors.Player.Velocity.Angle.Y < 0)
                 {
                     bgAppliedOffsetY = -(Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed);
                 }
 
                 //Close to the left wall and travelling in that direction.
-                if (Actors.Player.X < 100 && Actors.Player.Velocity.Angle.X > 0)
+                if (Actors.Player.X < wallWidth && Actors.Player.Velocity.Angle.X > 0)
                 {
                     bgAppliedOffsetX = -(Actors.Player.Velocity.Angle.X * Actors.Player.Velocity.Speed);
                 }
 
                 //Close to the top wall and travelling in that direction.
-                if (Actors.Player.Y < 100 && Actors.Player.Velocity.Angle.Y > 0)
+                if (Actors.Player.Y < wallWidth && Actors.Player.Velocity.Angle.Y > 0)
                 {
                     bgAppliedOffsetY = -(Actors.Player.Velocity.Angle.Y * Actors.Player.Velocity.Speed);
                 }
@@ -176,42 +182,46 @@ namespace AI2D.Engine
 
             #region Enemies Frame Advancement.
 
-            foreach (var enemy in Actors.Enemies)
+            lock (Actors.Enemies)
             {
-                enemy.AdvanceFrame();
-
-                if (Actors.Player.Visable)
+                foreach (var enemy in Actors.Enemies)
                 {
-                    double distanceToPlayer = Utility.CalculeDistance(enemy, Actors.Player);
-                    if (distanceToPlayer < 100)
+                    if (Actors.Player.Visable)
                     {
-                        enemy.FireGun();
-                    }
-
-                    if (enemy.X < (0 - (enemy.Size.Width + 40)) || enemy.Y < (0 - (enemy.Size.Height + 40))
-                        || enemy.X >= (Display.VisibleSize.Width + enemy.Size.Width) + 40
-                        || enemy.Y >= (Display.VisibleSize.Height + enemy.Size.Height) + 40)
-                    {
-                        enemy.MoveInDirectionOf(Actors.Player);
-                    }
-
-                    if (enemy.Intersects(Actors.Player))
-                    {
-                        Actors.Player.Hit();
-                    }
-                }
-
-                enemy.X += (enemy.Velocity.Angle.X * enemy.Velocity.Speed) - bgAppliedOffsetX;
-                enemy.Y += (enemy.Velocity.Angle.Y * enemy.Velocity.Speed) - bgAppliedOffsetY;
-
-                foreach (var bullet in Actors.Bullets)
-                {
-                    if (bullet.FiredFromType == FiredFromType.Player)
-                    {
-                        if (bullet.Intersects(enemy))
+                        double distanceToPlayer = Utility.CalculeDistance(enemy, Actors.Player);
+                        if (distanceToPlayer < 100)
                         {
-                            enemy.Hit();
-                            bullet.ReadyForDeletion = true;
+                            enemy.FireGun();
+                        }
+
+                        if (enemy.X < (0 - (enemy.Size.Width + 40)) || enemy.Y < (0 - (enemy.Size.Height + 40))
+                            || enemy.X >= (Display.VisibleSize.Width + enemy.Size.Width) + 40
+                            || enemy.Y >= (Display.VisibleSize.Height + enemy.Size.Height) + 40)
+                        {
+                            enemy.MoveInDirectionOf(Actors.Player);
+                        }
+
+                        if (enemy.Intersects(Actors.Player))
+                        {
+                            Actors.Player.Hit();
+                        }
+                    }
+
+                    enemy.X += (enemy.Velocity.Angle.X * enemy.Velocity.Speed) - bgAppliedOffsetX;
+                    enemy.Y += (enemy.Velocity.Angle.Y * enemy.Velocity.Speed) - bgAppliedOffsetY;
+
+                    lock (Actors.Bullets)
+                    {
+                        foreach (var bullet in Actors.Bullets)
+                        {
+                            if (bullet.FiredFromType == FiredFromType.Player)
+                            {
+                                if (bullet.Intersects(enemy))
+                                {
+                                    enemy.Hit();
+                                    bullet.ReadyForDeletion = true;
+                                }
+                            }
                         }
                     }
                 }
@@ -221,37 +231,38 @@ namespace AI2D.Engine
 
             #region Bullet Frame Advancement.
 
-            foreach (var bullet in Actors.Bullets)
+            lock (Actors.Bullets)
             {
-                bullet.AdvanceFrame();
-
-                if (bullet.X < 0)
+                foreach (var bullet in Actors.Bullets)
                 {
-                    bullet.ReadyForDeletion = true;
-                }
-                else if (bullet.X >= Display.VisibleSize.Width)
-                {
-                    bullet.ReadyForDeletion = true;
-                }
-
-                if (bullet.Y < 0)
-                {
-                    bullet.ReadyForDeletion = true;
-                }
-                else if (bullet.Y >= Display.VisibleSize.Height)
-                {
-                    bullet.ReadyForDeletion = true;
-                }
-
-                bullet.X += (bullet.Velocity.Angle.X * bullet.Velocity.Speed);
-                bullet.Y += (bullet.Velocity.Angle.Y * bullet.Velocity.Speed);
-
-                if (bullet.FiredFromType == FiredFromType.Enemy)
-                {
-                    if (bullet.Intersects(Actors.Player))
+                    if (bullet.X < 0)
                     {
-                        Actors.Player.Hit();
                         bullet.ReadyForDeletion = true;
+                    }
+                    else if (bullet.X >= Display.VisibleSize.Width)
+                    {
+                        bullet.ReadyForDeletion = true;
+                    }
+
+                    if (bullet.Y < 0)
+                    {
+                        bullet.ReadyForDeletion = true;
+                    }
+                    else if (bullet.Y >= Display.VisibleSize.Height)
+                    {
+                        bullet.ReadyForDeletion = true;
+                    }
+
+                    bullet.X += (bullet.Velocity.Angle.X * bullet.Velocity.Speed);
+                    bullet.Y += (bullet.Velocity.Angle.Y * bullet.Velocity.Speed);
+
+                    if (bullet.FiredFromType == FiredFromType.Enemy)
+                    {
+                        if (bullet.Intersects(Actors.Player))
+                        {
+                            Actors.Player.Hit();
+                            bullet.ReadyForDeletion = true;
+                        }
                     }
                 }
             }
@@ -262,12 +273,13 @@ namespace AI2D.Engine
 
             if (bgAppliedOffsetX != 0 || bgAppliedOffsetY != 0)
             {
-                foreach (var star in Actors.Stars)
+                lock (Actors.Stars)
                 {
-                    star.AdvanceFrame();
-
-                    star.X -= bgAppliedOffsetX;
-                    star.Y -= bgAppliedOffsetY;
+                    foreach (var star in Actors.Stars)
+                    {
+                        star.X -= bgAppliedOffsetX;
+                        star.Y -= bgAppliedOffsetY;
+                    }
                 }
 
                 double deltaX = _renderedBackgroundArea.X - latestBackgroundRange.X;
@@ -306,32 +318,81 @@ namespace AI2D.Engine
 
                     latestBackgroundRange.Y = latestBackgroundRange.Y - Display.VisibleSize.Height;
                 }
+            }
 
+            #endregion
+
+            #region Animation Frame Advancement.
+
+            lock (Actors.Animations)
+            {
+                foreach (var animation in Actors.Animations)
+                {
+                    if (animation.Visable)
+                    {
+                        animation.X += (animation.Velocity.Angle.X * animation.Velocity.Speed) - bgAppliedOffsetX;
+                        animation.Y += (animation.Velocity.Angle.Y * animation.Velocity.Speed) - bgAppliedOffsetY;
+                        animation.AdvanceImage();
+                    }
+                }
             }
 
             #endregion
 
             #region Cleanup (cant be done in a foreach).
 
-            for (int i = 0; i < Actors.Enemies.Count; i++)
+            lock (Actors.Enemies)
             {
-                if (Actors.Enemies[i].ReadyForDeletion)
+                for (int i = 0; i < Actors.Enemies.Count; i++)
                 {
-                    Actors.DeleteEnemy(Actors.Enemies[i]);
+                    if (Actors.Enemies[i].ReadyForDeletion)
+                    {
+                        Actors.DeleteEnemy(Actors.Enemies[i]);
+                    }
                 }
             }
 
-            for (int i = 0; i < Actors.Bullets.Count; i++)
+            lock (Actors.Bullets)
             {
-                if (Actors.Bullets[i].ReadyForDeletion)
+                for (int i = 0; i < Actors.Bullets.Count; i++)
                 {
-                    Actors.DeleteBullet(Actors.Bullets[i]);
+                    if (Actors.Bullets[i].ReadyForDeletion)
+                    {
+                        Actors.DeleteBullet(Actors.Bullets[i]);
+                    }
                 }
             }
 
-            if (Actors.Player.ReadyForDeletion)
+            lock (Actors.Animations)
             {
-                Actors.Player.Cleanup();
+                for (int i = 0; i < Actors.Animations.Count; i++)
+                {
+                    if (Actors.Animations[i].ReadyForDeletion)
+                    {
+                        Actors.DeleteAnimation(Actors.Animations[i]);
+                    }
+                }
+            }
+
+            /*
+            lock (Actors.Stars) //Do we really need to delete stars? I mean there are ALOT OF THEM!!!
+            {
+                for (int i = 0; i < Actors.Animations.Count; i++)
+                {
+                    if (Actors.Animations[i].ReadyForDeletion)
+                    {
+                        Actors.DeleteAnimation(Actors.Animations[i]);
+                    }
+                }
+            }
+            */
+
+            lock (Actors.Player)
+            {
+                if (Actors.Player.ReadyForDeletion)
+                {
+                    Actors.Player.Cleanup();
+                }
             }
 
             #endregion

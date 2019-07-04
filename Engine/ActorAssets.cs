@@ -16,6 +16,7 @@ namespace AI2D.Engine
         public TextBlock DebugBlock { get; set; }
         public List<Enemy> Enemies { get; set; } = new List<Enemy>();
         public List<Star> Stars { get; set; } = new List<Star>();
+        public List<Animation> Animations { get; set; } = new List<Animation>();
         public List<Bullet> Bullets { get; set; } = new List<Bullet>();
         public Player Player { get; set; }
         private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
@@ -69,7 +70,7 @@ namespace AI2D.Engine
 
                 if (_Bitmaps.ContainsKey(path))
                 {
-                    result = _Bitmaps[path];//.Clone();
+                    result = _Bitmaps[path].Clone() as Bitmap;
                 }
                 else
                 {
@@ -105,6 +106,36 @@ namespace AI2D.Engine
 
         #region Factories.
 
+        public Animation CreateAnimation(string imageFrames, Size frameSize)
+        {
+            lock (Animations)
+            {
+                Animation obj = new Animation(_game, imageFrames, frameSize);
+                Animations.Add(obj);
+                return obj;
+            }
+        }
+
+        public void PlaceAnimationOnTopOf(Animation animation, BaseObject defaultPosition)
+        {
+            lock (Animations)
+            {
+                animation.X = defaultPosition.X + ((defaultPosition.Size.Width - animation.Size.Width) / 2.0);
+                animation.Y = defaultPosition.Y + ((defaultPosition.Size.Height - animation.Size.Height) / 2.0);
+                animation.Velocity = defaultPosition.Velocity;
+                Animations.Add(animation);
+            }
+        }
+
+        public void DeleteAnimation(Animation obj)
+        {
+            lock (Animations)
+            {
+                obj.Cleanup();
+                Animations.Remove(obj);
+            }
+        }
+
         public Star CreateStar(double x, double y)
         {
             lock (Stars)
@@ -128,7 +159,6 @@ namespace AI2D.Engine
                 return obj;
             }
         }
-
 
         public void DeleteStar(Star obj)
         {
@@ -186,6 +216,17 @@ namespace AI2D.Engine
             DebugBlock.Render(dc);
         }
 
+        void RenderAnimations(Graphics dc)
+        {
+            lock (Animations)
+            {
+                foreach (var obj in Animations)
+                {
+                    obj.Render(dc);
+                }
+            }
+        }
+
         void RenderEnemies(Graphics dc)
         {
             lock (Enemies)
@@ -239,6 +280,7 @@ namespace AI2D.Engine
             RenderEnemies(dc);
             RenderPlayer(dc);
             RenderText(dc);
+            RenderAnimations(dc);
         }
 
         #endregion

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EC831B70-C28C-4D6A-8C16-D3022D19ADF8}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>AI2D</RootNamespace>
     <AssemblyName>AI2D</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -57,7 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine\ActorAssets.cs" />
-    <Compile Include="Engine\AnimationFrames.cs" />
+    <Compile Include="Objects\Animation.cs" />
     <Compile Include="Engine\Consants.cs" />
     <Compile Include="Engine\UserInput.cs" />
     <Compile Include="Engine\Visuals.cs" />
@@ -82,7 +82,7 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Objects\AudioClip.cs" />
+    <Compile Include="Engine\AudioClip.cs" />
     <Compile Include="Objects\BaseObject.cs" />
     <Compile Include="Objects\Player.cs" />
     <Compile Include="Objects\Enemy.cs" />

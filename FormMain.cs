@@ -90,5 +90,10 @@ namespace AI2D
         {
             Cursor.Show();
         }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -10,8 +10,8 @@ namespace AI2D.Engine
     {
         public static class Limits
         {
-            public const int MinSpeed = 3;
-            public const int MaxSpeed = 8;
+            public const int MinSpeed = 1;
+            public const int MaxSpeed = 2;
 
             public const int MinEnemyHealth = 2;
             public const int MaxEnemyHealth = 5;

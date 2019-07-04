@@ -7,11 +7,10 @@ namespace AI2D.Objects
     {
         public FiredFromType FiredFromType { get; set; }
 
-        #region ~/Ctor
-
         private const string _imagePath = @"..\..\Assets\Graphics\BasicBullet.png";
 
         public Bullet(Game game, BaseObject firedFrom)
+            : base(game)
         {
             Vector initialVector = new Vector()
             {
@@ -33,9 +32,7 @@ namespace AI2D.Objects
                 FiredFromType = FiredFromType.Player;
             }
 
-            Initialize(game, _imagePath, null, initialLocation, initialVector);
+            LoadResources(_imagePath, null, initialLocation, initialVector);
         }
-
-        #endregion
     }
 }

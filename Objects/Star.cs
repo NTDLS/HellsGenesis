@@ -16,17 +16,14 @@ namespace AI2D.Objects
             @"..\..\Assets\Graphics\Star4.png"
         };
 
-        #region ~/Ctor
-
         public Star(Game game)
+            : base(game)
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
-            Initialize(game, _imagePaths[imageIndex], null);
+            LoadResources(_imagePaths[imageIndex], null);
 
             X = Utility.Random.Next(0, game.Display.VisibleSize.Width);
             Y = Utility.Random.Next(0, game.Display.VisibleSize.Height);
         }
-
-        #endregion
     }
 }

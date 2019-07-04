@@ -2,14 +2,15 @@
 using AI2D.Types;
 using System;
 using System.Drawing;
+using System.Linq;
 
 namespace AI2D.Objects
 {
     public class BaseObject
     {
         private Game _game;
-        private Image _defaultImage;
-        private AnimationFrames _explodeFrames;
+        private Image _image;
+        private Animation _explosionAnimation;
         private AudioClip _explodeSound;
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private int _MilisecondsBetweenHits = 100;
@@ -18,18 +19,44 @@ namespace AI2D.Objects
         private AudioClip _bulletSound;
         private AudioClip _hitSound;
 
-        public void Initialize(Game game, string imagePath, Size? size = null, PointD initialLocation = null, Vector initialVector = null)
+        private string _assetPathFramePath = @"..\..\Assets\Graphics\Frames\";
+        private string[] _explosionImageNames = {
+            #region images.
+            "Explosion 256 1.png",
+            "Explosion 256 2.png",
+            "Explosion 256 3.png",
+            "Explosion 256 4.png",
+            #endregion
+        };
+
+        public BaseObject(Game game)
         {
             _game = game;
+        }
 
+        public void LoadResources(string imagePath, Size? size = null, PointD initialLocation = null, Vector initialVector = null)
+        {
             _bulletSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sound\VulcanCannon.wav", 0.3f);
             _hitSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sound\ShipHit.wav", 1.0f);
             _explodeSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sound\Boom.wav", 1.0f);
 
-            _explodeFrames = new AnimationFrames(_game, @"..\..\Assets\Graphics\Frames\Explosion 2.png", new Size(256, 256));
+            int _explosionImageIndex = Utility.Random.Next(0, 1000) % _explosionImageNames.Count();
+            _explosionAnimation = new Animation(_game, _assetPathFramePath + _explosionImageNames[_explosionImageIndex], new Size(256, 256));
 
-            _defaultImage = _game.Actors.GetBitmap(imagePath);
-            _size = new Size(_defaultImage.Size.Width, _defaultImage.Size.Height);
+            if (imagePath != null)
+            {
+                _image = _game.Actors.GetBitmap(imagePath);
+                if (size == null)
+                {
+                    _size = new Size(_image.Size.Width, _image.Size.Height);
+                }
+            }
+
+            if (size != null)
+            {
+                _image = Utility.ResizeImage(_image, size.Value.Width, size.Value.Height);
+                _size = (Size)size;
+            }
 
             if (initialLocation == null)
             {
@@ -42,7 +69,6 @@ namespace AI2D.Objects
                 _y = (int)initialLocation?.Y;
             }
 
-            IsDead = false;
             ReadyForDeletion = false;
 
             if (initialVector == null)
@@ -57,13 +83,36 @@ namespace AI2D.Objects
             }
         }
 
+        public void SetImage(Image image)
+        {
+            _image = image;
+            _size.Height = image.Height;
+            _size.Width = image.Width;
+            Invalidate();
+        }
+
         #region Properties.
 
         public int HitPoints { get; set; }
-        public bool ReadyForDeletion { get; set; }
-        public bool IsDead { get; set; }
         public Vector Velocity { get; set; }
         public double RotationSpeed { get; set; } = 1.0;
+
+        private bool _readyForDeletion;
+        public bool ReadyForDeletion
+        {
+            get
+            {
+                return _readyForDeletion;
+            }
+            set
+            {
+                _readyForDeletion = value;
+                if (_readyForDeletion)
+                {
+                    Visable = false;
+                }
+            }
+        }
 
         public bool CanFire
         {
@@ -161,47 +210,15 @@ namespace AI2D.Objects
 
         #endregion
 
-        private Bitmap GetCurrentImage()
-        {
-            if (this.IsDead)
-            {
-                Bitmap replacementImage = _explodeFrames.GetReplacmentImage();
-                if (replacementImage == null)
-                {
-                    this.ReadyForDeletion = true;
-                }
-                return replacementImage;
-            }
-
-            return Visuals.RotateImage(new Bitmap(_defaultImage), Velocity.Angle.Degree);
-        }
-
         public void Invalidate()
         {
             var invalidRect = new Rectangle((int)_x, (int)_y, _size.Width, _size.Height);
             _game.Display.DrawingSurface.Invalidate(invalidRect);
         }
 
-        /// <summary>
-        /// Gives the object the oppratunity to change do anything before the frame advances.
-        /// </summary>
-        public void AdvanceFrame()
-        {
-            if (this.ReadyForDeletion)
-            {
-                return;
-            }
-
-            //If we are dead then we are going to show the explode animation. We'll want to make sure every frame is invalidated on the dc.
-            if (this.IsDead)
-            {
-                Invalidate();
-            }
-        }
-
         public bool Intersects(BaseObject otherObject)
         {
-            if (IsDead == false && otherObject.IsDead == false && ReadyForDeletion == false && otherObject.ReadyForDeletion == false)
+            if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
                 return this.Bounds.IntersectsWith(otherObject.Bounds);
             }
@@ -267,9 +284,10 @@ namespace AI2D.Objects
 
         public void Explode()
         {
-            IsDead = true;
             _explodeSound.Play();
-            //explodeFrameController.Play();
+            _explosionAnimation.Reset();
+            _game.Actors.PlaceAnimationOnTopOf(_explosionAnimation, this);
+            ReadyForDeletion = true;
         }
 
         public void Cleanup()
@@ -279,14 +297,13 @@ namespace AI2D.Objects
 
         public void Render(Graphics dc)
         {
-            if (_isVisible)
+            if (_isVisible && _image != null)
             {
-                var image = GetCurrentImage();
-                if (image != null)
-                {
-                    Rectangle rect = new Rectangle((int)_x, (int)_y, Size.Width, Size.Height);
-                    dc.DrawImage(image, rect);
-                }
+                var bitmap = new Bitmap(_image);
+
+                var image = Visuals.RotateImage(bitmap, Velocity.Angle.Degree);
+                Rectangle rect = new Rectangle((int)_x, (int)_y, image.Width, image.Height);
+                dc.DrawImage(image, rect);
             }
         }
 

@@ -4,16 +4,13 @@ namespace AI2D.Objects
 {
     public class Player : BaseObject
     {
-        #region ~/Ctor
-
-        private const string _imagePath = @"..\..\Assets\Graphics\hf000.png";
+        private const string _imagePath = @"..\..\Assets\Graphics\ship6.png";
 
 
         public Player(Game game)
+            : base(game)
         {
-            Initialize(game, _imagePath, null);
+            LoadResources(_imagePath, new System.Drawing.Size(32, 32));
         }
-
-        #endregion
     }
 }
