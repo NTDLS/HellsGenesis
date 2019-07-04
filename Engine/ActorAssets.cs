@@ -12,7 +12,6 @@ namespace AI2D.Engine
     public class ActorAssets
     {
         private Game _game;
-
         public TextBlock DebugText { get; set; }
         public TextBlock PlayerStatsText { get; set; }
         public List<Enemy> Enemies { get; set; } = new List<Enemy>();
@@ -32,10 +31,10 @@ namespace AI2D.Engine
         {
             _game = game;
 
-            BackgroundMusicSound = GetAudioClip(@"..\..\Assets\Sounds\Background Music.wav", 0.25f, true);
-            ShipEngineRoarSound = GetAudioClip(@"..\..\Assets\Sounds\Engine Roar.wav", 1.0f, true);
-            ShipEngineIdleSound = GetAudioClip(@"..\..\Assets\Sounds\Engine Idle.wav", 0.5f, true);
-            AllSystemsGoSound = GetAudioClip(@"..\..\Assets\Sounds\All Systems Go.wav", 0.5f, false);
+            BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Background Music.wav", 0.25f, true);
+            ShipEngineRoarSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Roar.wav", 1.0f, true);
+            ShipEngineIdleSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Idle.wav", 0.5f, true);
+            AllSystemsGoSound = GetSoundCached(@"..\..\Assets\Sounds\All Systems Go.wav", 0.5f, false);
 
             PlayerStatsText = new TextBlock(_game.Display, "ComicSans", 10, 5, 5);
             DebugText = new TextBlock(_game.Display, "ComicSans", 10, 5, PlayerStatsText.Height + 10);
@@ -66,7 +65,7 @@ namespace AI2D.Engine
             ShipEngineIdleSound.Play();
         }
 
-        public Bitmap GetBitmap(string path)
+        public Bitmap GetBitmapCached(string path)
         {
             lock (_Bitmaps)
             {
@@ -88,7 +87,7 @@ namespace AI2D.Engine
             }
         }
 
-        public AudioClip GetAudioClip(string wavFilePath, float initialVolumne, bool loopForever = false)
+        public AudioClip GetSoundCached(string wavFilePath, float initialVolumne, bool loopForever = false)
         {
             lock (_audioClips)
             {
@@ -112,16 +111,6 @@ namespace AI2D.Engine
 
         #region Factories.
 
-        public Animation CreateAnimation(string imageFrames, Size frameSize)
-        {
-            lock (Animations)
-            {
-                Animation obj = new Animation(_game, imageFrames, frameSize);
-                Animations.Add(obj);
-                return obj;
-            }
-        }
-
         public void PlaceAnimationOnTopOf(Animation animation, BaseObject defaultPosition)
         {
             lock (Animations)
@@ -130,6 +119,16 @@ namespace AI2D.Engine
                 animation.Y = defaultPosition.Y + ((defaultPosition.Size.Height - animation.Size.Height) / 2.0);
                 animation.Velocity = defaultPosition.Velocity;
                 Animations.Add(animation);
+            }
+        }
+
+        public Animation CreateAnimation(string imageFrames, Size frameSize)
+        {
+            lock (Animations)
+            {
+                Animation obj = new Animation(_game, imageFrames, frameSize);
+                Animations.Add(obj);
+                return obj;
             }
         }
 

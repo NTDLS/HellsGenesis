@@ -45,18 +45,18 @@ namespace AI2D.Objects
 
         public void LoadResources(string imagePath, Size? size = null, PointD initialLocation = null, Vector initialVector = null)
         {
-            _bulletSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sounds\Vulcan Cannon.wav", 0.3f);
-            _hitSound = _game.Actors.GetAudioClip(@"..\..\Assets\Sounds\Ship Hit.wav", 1.0f);
+            _bulletSound = _game.Actors.GetSoundCached(@"..\..\Assets\Sounds\Vulcan Cannon.wav", 0.3f);
+            _hitSound = _game.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship Hit.wav", 1.0f);
 
             int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
-            _explodeSound = _game.Actors.GetAudioClip(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
+            _explodeSound = _game.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
 
             int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
             _explosionAnimation = new Animation(_game, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
 
             if (imagePath != null)
             {
-                _image = _game.Actors.GetBitmap(imagePath);
+                _image = _game.Actors.GetBitmapCached(imagePath);
                 if (size == null)
                 {
                     _size = new Size(_image.Size.Width, _image.Size.Height);

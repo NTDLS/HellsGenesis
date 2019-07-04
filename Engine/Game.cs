@@ -17,15 +17,12 @@ namespace AI2D.Engine
         public UserInput Input { get; private set; }
         public Display Display { get; private set; }
         public ActorAssets Actors { get; private set; }
-        public PointD _backgroundOffset { get; set; } = new PointD();
-        private RectangleD _renderedBackgroundArea { get; set; } = new RectangleD();
-        public RectangleF CurrentView { get; private set; }
+        public PointD _backgroundOffset { get; set; } = new PointD(); //Offset of background, all cals must take into account.
+        public RectangleF CurrentView { get; private set; } //Rectangle of the currently displayed coords.
 
         public void Start()
         {
             Actors.BackgroundMusicSound.Play();
-
-            _renderedBackgroundArea = new RectangleD(0, 0, Display.VisibleSize.Width, Display.VisibleSize.Height);
 
             for (int i = 0; i < 100; i++)
             {
@@ -38,6 +35,7 @@ namespace AI2D.Engine
             }
 
             _shutdown = false;
+
             Actors.ShowNewPlayer();
 
             _graphicsThread.Start();
@@ -154,15 +152,6 @@ namespace AI2D.Engine
             //Scroll the background.
             _backgroundOffset.X += bgAppliedOffsetX;
             _backgroundOffset.Y += bgAppliedOffsetY;
-
-            //Keep track of the areas for which we have rendered background.
-            var latestBackgroundRange = new RectangleD()
-            {
-                X = _backgroundOffset.X < _renderedBackgroundArea.X ? _backgroundOffset.X : _renderedBackgroundArea.X,
-                Y = _backgroundOffset.Y < _renderedBackgroundArea.Y ? _backgroundOffset.Y : _renderedBackgroundArea.Y,
-                Width = _backgroundOffset.X + Display.VisibleSize.Width > _renderedBackgroundArea.Width ? _backgroundOffset.X + Display.VisibleSize.Width : _renderedBackgroundArea.Width,
-                Height = _backgroundOffset.Y + Display.VisibleSize.Height > _renderedBackgroundArea.Height ? _backgroundOffset.Y + Display.VisibleSize.Height : _renderedBackgroundArea.Width
-            };
 
             if (Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
             {
@@ -286,43 +275,6 @@ namespace AI2D.Engine
                         star.Y -= bgAppliedOffsetY;
                     }
                 }
-
-                double deltaX = _renderedBackgroundArea.X - latestBackgroundRange.X;
-                double deltaY = _renderedBackgroundArea.Y - latestBackgroundRange.Y;
-                double deltaWidth = _renderedBackgroundArea.Width - latestBackgroundRange.Width;
-                double deltaHeight = _renderedBackgroundArea.Height - latestBackgroundRange.Height;
-
-                if (deltaX != 0)
-                {
-                    deltaX -= Display.VisibleSize.Width;
-
-                    double size = Math.Abs(latestBackgroundRange.Height * deltaX);
-
-                    for (int i = 0; i < 100; i++)
-                    {
-                        double x = Utility.Random.Next(0, (int)Math.Abs(deltaX)) + deltaX;
-                        double y = Utility.Random.Next(0, (int)latestBackgroundRange.Height);
-                        //Actors.CreateStar(x, y);
-                    }
-
-                    latestBackgroundRange.X = latestBackgroundRange.X - Display.VisibleSize.Width;
-                }
-
-                if (deltaY != 0)
-                {
-                    deltaY -= Display.VisibleSize.Height;
-
-                    double size = Math.Abs(latestBackgroundRange.Width * deltaY);
-
-                    for (int i = 0; i < 100; i++)
-                    {
-                        double x = Utility.Random.Next(0, (int)latestBackgroundRange.Width);
-                        double y = Utility.Random.Next(0, (int)Math.Abs(deltaY)) + deltaY;
-                        //Actors.CreateStar(x, y);
-                    }
-
-                    latestBackgroundRange.Y = latestBackgroundRange.Y - Display.VisibleSize.Height;
-                }
             }
 
             #endregion
@@ -401,8 +353,6 @@ namespace AI2D.Engine
             }
 
             #endregion
-
-            _renderedBackgroundArea = latestBackgroundRange;
 
             //Actors.DebugBlock.Text = $"{latestBackgroundRange.X.ToString("####.###")}x,{latestBackgroundRange.Y.ToString("####.###")}y"
             //    + $" x {latestBackgroundRange.Width.ToString("####.###")}x,{latestBackgroundRange.Height.ToString("####.###")}y";

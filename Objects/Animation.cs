@@ -24,7 +24,7 @@ namespace AI2D.Objects
             _game = game;
 
             _deleteWhenDonePlaying = deleteWhenDonePlaying;
-            _explodeFrame = _game.Actors.GetBitmap(imageFrames);
+            _explodeFrame = _game.Actors.GetBitmapCached(imageFrames);
             _frameSize = frameSize;
             _rows = (_explodeFrame.Height / frameSize.Height);
             _columns = (_explodeFrame.Width / frameSize.Width);
