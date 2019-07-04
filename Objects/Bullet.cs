@@ -3,13 +3,13 @@ using AI2D.Types;
 
 namespace AI2D.Objects
 {
-    public class ObjBullet: ObjBase
+    public class Bullet: BaseObject
     {
         public FiredFromType FiredFromType { get; set; }
 
         private const string _imagePath = @"..\..\Assets\Graphics\Bullet\Vulcan.png";
 
-        public ObjBullet(Game game, ObjBase firedFrom)
+        public Bullet(Game game, BaseObject firedFrom)
             : base(game)
         {
             Vector initialVector = new Vector()
@@ -23,11 +23,11 @@ namespace AI2D.Objects
             initialLocation.X = (initialLocation.X + (firedFrom.Size.Width / 2.0));
             initialLocation.Y = (initialLocation.Y + (firedFrom.Size.Height / 2.0));
 
-            if (firedFrom is ObjEnemy)
+            if (firedFrom is Enemy)
             {
                 FiredFromType = FiredFromType.Enemy;
             }
-            else if (firedFrom is ObjPlayer)
+            else if (firedFrom is Player)
             {
                 FiredFromType = FiredFromType.Player;
             }

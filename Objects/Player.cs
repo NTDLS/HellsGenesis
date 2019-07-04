@@ -2,11 +2,12 @@
 
 namespace AI2D.Objects
 {
-    public class ObjPlayer : ObjBase
+    public class Player : BaseObject
     {
         private const string _imagePath = @"..\..\Assets\Graphics\Player\Default.png";
 
-        public ObjPlayer(Game game)
+
+        public Player(Game game)
             : base(game)
         {
             LoadResources(_imagePath, new System.Drawing.Size(32, 32));

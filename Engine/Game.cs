@@ -67,9 +67,39 @@ namespace AI2D.Engine
             }
         }
 
+        private DateTime _lastFrame = DateTime.MinValue;
+        private double _currentFrameRate;
+        private double _totalFrameRate;
+        private double _averageFrameRate = double.PositiveInfinity;
+        private int _frameRateSamples;
+        private double _FrameRateMin = double.PositiveInfinity;
+        private double _FrameRateMax = double.NegativeInfinity;
+
         void AdvanceFrame()
         {
             #region Player Frame Advancement.
+
+            if (_lastFrame != DateTime.MinValue)
+            {
+                if (_frameRateSamples == 0 || _frameRateSamples > 1000)
+                {
+                    _frameRateSamples = 1;
+                    _totalFrameRate = 0;
+                }
+
+                _currentFrameRate = 1000.0 / (DateTime.Now - _lastFrame).TotalMilliseconds;
+                _totalFrameRate += _currentFrameRate;
+
+                if (_frameRateSamples > 100)
+                {
+                    _FrameRateMin = _currentFrameRate < _FrameRateMin ? _currentFrameRate : _FrameRateMin;
+                    _FrameRateMax = _currentFrameRate > _FrameRateMax ? _currentFrameRate : _FrameRateMax;
+                    _averageFrameRate = _totalFrameRate / (double)_frameRateSamples;
+                }
+                _frameRateSamples++;
+            }
+
+            _lastFrame = DateTime.Now;
 
             if (Input.IsKeyPressed(PlayerKey.Fire))
             {
@@ -173,9 +203,13 @@ namespace AI2D.Engine
             CurrentQuadrant = GetQuadrant(Actors.Player.X + BackgroundOffset.X, Actors.Player.Y + BackgroundOffset.Y);
 
             Actors.QuadrantText.Text =
-                  $"Quad: [Key {CurrentQuadrant.Key.X}x, {CurrentQuadrant.Key.Y}y]"
-                + $" [Location {CurrentQuadrant.Bounds.X}x, {CurrentQuadrant.Bounds.Y}y ->"
-                + $" [Size {CurrentQuadrant.Bounds.Width}x, {CurrentQuadrant.Bounds.Height}y]";
+                  $"       Frame Rate: Avg: {_averageFrameRate.ToString("0.0")}, Min: {_FrameRateMin.ToString("0.0")}, Max: {_FrameRateMax.ToString("0.0")}\r\n"
+                + $"Player Display XY: {Actors.Player.X.ToString("#0.00")}x, {Actors.Player.Y.ToString("#0.00")}y\r\n"
+                + $"Player Virtual XY: {(Actors.Player.X + BackgroundOffset.X).ToString("#0.00")}x, {(Actors.Player.Y + BackgroundOffset.Y).ToString("#0.00")}y\r\n"
+                + $"        BG Offset: {BackgroundOffset.X.ToString("#0.00")}x, {BackgroundOffset.Y.ToString("#0.00")}y\r\n"
+                + $"         Quadrant: {CurrentQuadrant.Key.X}x, {CurrentQuadrant.Key.Y}y\r\n"
+                + $"      Quadrant XY: {CurrentQuadrant.Bounds.X}x, {CurrentQuadrant.Bounds.Y}y\r\n"
+                + $"    Quadrant Size: {CurrentQuadrant.Bounds.Width}x, {CurrentQuadrant.Bounds.Height}y";
 
             #endregion
 
@@ -382,8 +416,8 @@ namespace AI2D.Engine
             //Actors.DebugText.Text = $"{latestBackgroundRange.X.ToString("####.###")}x,{latestBackgroundRange.Y.ToString("####.###")}y"
             //    + $" x {latestBackgroundRange.Width.ToString("0000.000")}x,{latestBackgroundRange.Height.ToString("0000.000")}y";
 
-            Actors.DebugText.Text = $"P: {Actors.Player.X.ToString("000.00")},{Actors.Player.Y.ToString("000.00")}"
-                + $" B: {BackgroundOffset.X.ToString("000.00")},{BackgroundOffset.Y.ToString("000.00")}";
+            //Actors.DebugText.Text = $"P: {Actors.Player.X.ToString("000.00")},{Actors.Player.Y.ToString("000.00")}"
+            //    + $" B: {BackgroundOffset.X.ToString("000.00")},{BackgroundOffset.Y.ToString("000.00")}";
 
             //Actors.DebugText.Text = $"View: {CurrentView.X.ToString("0000.000")}x, {CurrentView.Y.ToString("0000.000")}y"
             //    + $" x {CurrentView.Width.ToString("0000.000")}x, {CurrentView.Height.ToString("0000.000")}y";
@@ -391,7 +425,7 @@ namespace AI2D.Engine
             //Actors.DebugText.Text = $" Q {CurrentQuadrant.Bounds.X}x, {CurrentQuadrant.Bounds.Y}y"
             //    + $" View: {CurrentView.X.ToString("0000.000")}x, {CurrentView.Y.ToString("0000.000")}y";
 
-            Actors.PlayerStatsText.Text = $"HP: {Actors.Player.HitPoints}, Ammo: {Actors.Player.BulletsRemaining}";
+            //Actors.PlayerStatsText.Text = $"HP: {Actors.Player.HitPoints}, Ammo: {Actors.Player.BulletsRemaining}";
         }
 
         public void RenderObjects(Graphics dc)

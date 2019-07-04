@@ -5,13 +5,14 @@ using System.Drawing;
 
 namespace AI2D.Objects
 {
-    public class ObjTextBlock: ObjBase
+    public class TextBlock
     {
         private Rectangle _prevRegion;
         private Font _font;
+        private Display _display;
+        private double _x;
+        private double _y;
         private Graphics _genericDC; //Not used for drawing, only measuring.
-
-        #region Properties.
 
         double _height = 0;
         public Double Height
@@ -27,16 +28,16 @@ namespace AI2D.Objects
         }
 
         private string _lastTextSizeCheck;
-        private Size _size = Size.Empty;
-        public new Size Size
+        SizeD _size = null;
+        public SizeD Size
         {
             get
             {
-                if (_size.IsEmpty || _text != _lastTextSizeCheck)
+                if (_size == null || _text != _lastTextSizeCheck)
                 {
                     var fSize = _genericDC.MeasureString(_text, _font);
 
-                    _size = new Size((int)Math.Ceiling(fSize.Width), (int)Math.Ceiling(fSize.Height));
+                    _size = new SizeD(fSize.Width, fSize.Height);
                     _lastTextSizeCheck = _text;
                 }
                 return _size;
@@ -57,31 +58,32 @@ namespace AI2D.Objects
                 //If we have previously drawn text, then we need to invalidate the entire region which it occupied.
                 if (_prevRegion != null)
                 {
-                    _game.Display.DrawingSurface.Invalidate(_prevRegion);
+                    _display.DrawingSurface.Invalidate(_prevRegion);
                 }
 
                 //Now that we have used _prevRegion to invaldate the previous region, set it to the new region coords.
                 //And invalidate them for the new text.
                 var stringSize = _genericDC.MeasureString(_text, _font);
-                _prevRegion = new Rectangle((int)X, (int)Y, (int)stringSize.Width, (int)stringSize.Height);
-                _game.Display.DrawingSurface.Invalidate(_prevRegion);
+                _prevRegion = new Rectangle((int)_x, (int)_y, (int)stringSize.Width, (int)stringSize.Height);
+                _display.DrawingSurface.Invalidate(_prevRegion);
             }
         }
 
-        #endregion
-
-        public ObjTextBlock(Game game, string font, double size, double x, double y)
-            : base(game)
+        public TextBlock(Display display, string font, double size, double x, double y)
         {
-            X = x;
-            Y = y;
+            _x = x;
+            _y = y;
+            _display = display;
             _font = new Font(font, (float)size);
-            _genericDC = _game.Display.DrawingSurface.CreateGraphics();
+            _genericDC = _display.DrawingSurface.CreateGraphics();
         }
 
-        public new void Render(Graphics dc)
+        public void Render(Graphics dc)
         {
-            dc.DrawString(_text, _font, Brushes.Aqua, (float)X, (float)Y);
+            using (Font font = new Font("ComicSans", 15F))
+            {
+                dc.DrawString(_text, font, Brushes.Aqua, (float)_x, (float)_y);
+            }
         }
     }
 }
