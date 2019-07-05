@@ -10,7 +10,6 @@ namespace AI2D.Engine
         public GameActors Actors { get; private set; }
         private GameThread _gameThread;
 
-
         public Game(Control drawingSurface, Size visibleSize)
         {
             Display = new GameDisplay(drawingSurface, visibleSize);
@@ -24,7 +23,7 @@ namespace AI2D.Engine
         {
             Actors.BackgroundMusicSound.Play();
 
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 25; i++)
             {
                 Actors.CreateEnemy();
             }
@@ -36,11 +35,6 @@ namespace AI2D.Engine
         public void Stop()
         {
             _gameThread.Stop();
-        }
-
-        public void RenderObjects(Graphics dc)
-        {
-            Actors.RenderObjects(dc);
         }
     }
 }

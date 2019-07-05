@@ -13,6 +13,7 @@ namespace AI2D.Engine
         private Game _game;
         private bool _shutdown = false;
         private System.Threading.Thread _graphicsThread;
+        private double _ramppedPlayerThrust = 0;
 
         public GameThread(Game game)
         {
@@ -59,67 +60,107 @@ namespace AI2D.Engine
 
             if (_game.Input.IsKeyPressed(PlayerKey.Forward))
             {
+                if (_ramppedPlayerThrust < _game.Actors.Player.Velocity.Speed)
+                {
+                    _ramppedPlayerThrust += Consants.PlayerThrustRampUp;
+                }
+            }
+            else if (_game.Input.IsKeyPressed(PlayerKey.Reverse))
+            {
+                if (_ramppedPlayerThrust > -_game.Actors.Player.Velocity.Speed)
+                {
+                    _ramppedPlayerThrust -= Consants.PlayerThrustRampUp;
+                }
+            }
+            else
+            {
+                if (_ramppedPlayerThrust > 0)
+                {
+                    _ramppedPlayerThrust -= Consants.PlayerThrustRampDown;
+                    if (_ramppedPlayerThrust < 0)
+                    {
+                        _ramppedPlayerThrust = 0;
+                    }
+                }
+                else if (_ramppedPlayerThrust < 0)
+                {
+                    _ramppedPlayerThrust += Consants.PlayerThrustRampDown;
+                    if (_ramppedPlayerThrust > 0)
+                    {
+                        _ramppedPlayerThrust = 0;
+                    }
+                }
+            }
+
+            if (_ramppedPlayerThrust > 0)
+            {
+                double forwardThrust = _ramppedPlayerThrust;
+
                 //Close to the right wall and travelling in that direction.
                 if (_game.Actors.Player.X > _game.Display.VisibleSize.Width - (_game.Actors.Player.Size.Width + wallWidth)
                     && _game.Actors.Player.Velocity.Angle.X > 0)
                 {
-                    bgAppliedOffsetX = (_game.Actors.Player.Velocity.Angle.X * _game.Actors.Player.Velocity.Speed);
+                    bgAppliedOffsetX = (_game.Actors.Player.Velocity.Angle.X * forwardThrust);
                 }
 
                 //Close to the bottom wall and travelling in that direction.
                 if (_game.Actors.Player.Y > _game.Display.VisibleSize.Height - (_game.Actors.Player.Size.Height + wallWidth)
                     && _game.Actors.Player.Velocity.Angle.Y > 0)
                 {
-                    bgAppliedOffsetY = (_game.Actors.Player.Velocity.Angle.Y * _game.Actors.Player.Velocity.Speed);
+                    bgAppliedOffsetY = (_game.Actors.Player.Velocity.Angle.Y * forwardThrust);
                 }
 
                 //Close to the left wall and travelling in that direction.
                 if (_game.Actors.Player.X < wallWidth && _game.Actors.Player.Velocity.Angle.X < 0)
                 {
-                    bgAppliedOffsetX = (_game.Actors.Player.Velocity.Angle.X * _game.Actors.Player.Velocity.Speed);
+                    bgAppliedOffsetX = (_game.Actors.Player.Velocity.Angle.X * forwardThrust);
                 }
 
                 //Close to the top wall and travelling in that direction.
                 if (_game.Actors.Player.Y < wallWidth && _game.Actors.Player.Velocity.Angle.Y < 0)
                 {
-                    bgAppliedOffsetY = (_game.Actors.Player.Velocity.Angle.Y * _game.Actors.Player.Velocity.Speed);
+                    bgAppliedOffsetY = (_game.Actors.Player.Velocity.Angle.Y * forwardThrust);
                 }
 
-                _game.Actors.Player.X += (_game.Actors.Player.Velocity.Angle.X * _game.Actors.Player.Velocity.Speed) - bgAppliedOffsetX;
-                _game.Actors.Player.Y += (_game.Actors.Player.Velocity.Angle.Y * _game.Actors.Player.Velocity.Speed) - bgAppliedOffsetY;
+                _game.Actors.Player.X += (_game.Actors.Player.Velocity.Angle.X * forwardThrust) - bgAppliedOffsetX;
+                _game.Actors.Player.Y += (_game.Actors.Player.Velocity.Angle.Y * forwardThrust) - bgAppliedOffsetY;
 
                 _game.Actors.ShipEngineRoarSound.Play();
             }
-            else if (_game.Input.IsKeyPressed(PlayerKey.Reverse))
+            else if (_ramppedPlayerThrust < 0)
             {
+                //Do we really need to reverse? This is space!
+
+                double reverseThrust = -_ramppedPlayerThrust;
+
                 //Close to the right wall and travelling in that direction.
                 if (_game.Actors.Player.X > _game.Display.VisibleSize.Width - (_game.Actors.Player.Size.Width + wallWidth)
                     && _game.Actors.Player.Velocity.Angle.X < 0)
                 {
-                    bgAppliedOffsetX = -(_game.Actors.Player.Velocity.Angle.X * _game.Actors.Player.Velocity.Speed);
+                    bgAppliedOffsetX = -(_game.Actors.Player.Velocity.Angle.X * reverseThrust);
                 }
 
                 //Close to the bottom wall and travelling in that direction.
                 if (_game.Actors.Player.Y > _game.Display.VisibleSize.Height - (_game.Actors.Player.Size.Height + wallWidth)
                     && _game.Actors.Player.Velocity.Angle.Y < 0)
                 {
-                    bgAppliedOffsetY = -(_game.Actors.Player.Velocity.Angle.Y * _game.Actors.Player.Velocity.Speed);
+                    bgAppliedOffsetY = -(_game.Actors.Player.Velocity.Angle.Y * reverseThrust);
                 }
 
                 //Close to the left wall and travelling in that direction.
                 if (_game.Actors.Player.X < wallWidth && _game.Actors.Player.Velocity.Angle.X > 0)
                 {
-                    bgAppliedOffsetX = -(_game.Actors.Player.Velocity.Angle.X * _game.Actors.Player.Velocity.Speed);
+                    bgAppliedOffsetX = -(_game.Actors.Player.Velocity.Angle.X * reverseThrust);
                 }
 
                 //Close to the top wall and travelling in that direction.
                 if (_game.Actors.Player.Y < wallWidth && _game.Actors.Player.Velocity.Angle.Y > 0)
                 {
-                    bgAppliedOffsetY = -(_game.Actors.Player.Velocity.Angle.Y * _game.Actors.Player.Velocity.Speed);
+                    bgAppliedOffsetY = -(_game.Actors.Player.Velocity.Angle.Y * reverseThrust);
                 }
 
-                _game.Actors.Player.X -= (_game.Actors.Player.Velocity.Angle.X * _game.Actors.Player.Velocity.Speed) + bgAppliedOffsetX;
-                _game.Actors.Player.Y -= (_game.Actors.Player.Velocity.Angle.Y * _game.Actors.Player.Velocity.Speed) + bgAppliedOffsetY;
+                _game.Actors.Player.X -= (_game.Actors.Player.Velocity.Angle.X * reverseThrust) + bgAppliedOffsetX;
+                _game.Actors.Player.Y -= (_game.Actors.Player.Velocity.Angle.Y * reverseThrust) + bgAppliedOffsetY;
 
                 _game.Actors.ShipEngineRoarSound.Play();
             }

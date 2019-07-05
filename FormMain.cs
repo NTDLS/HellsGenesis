@@ -38,9 +38,8 @@ namespace AI2D
                 this.WindowState = FormWindowState.Maximized;
             }
 
-            _game = new Game(pictureBoxScene, new Size(this.Width, this.Height));
-
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            _game = new Game(pictureBoxScene, new Size(this.Width, this.Height));
         }
 
         private void FormMain_Shown(object sender, EventArgs e)
@@ -77,7 +76,16 @@ namespace AI2D
 
         private void PictureBoxScene_Paint(object sender, PaintEventArgs e)
         {
-            _game.RenderObjects(e.Graphics);
+            /*
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+            e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            */
+
+            _game.Actors.Render(e.Graphics);
             base.OnPaint(e);
         }
 
@@ -89,11 +97,6 @@ namespace AI2D
         private void PictureBoxScene_MouseLeave(object sender, EventArgs e)
         {
             Cursor.Show();
-        }
-
-        private void FormMain_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

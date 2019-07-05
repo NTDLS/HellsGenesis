@@ -56,7 +56,7 @@ namespace AI2D.Engine
             Player.RotationSpeed = 3;
             Player.Visable = true;
             Player.HitPoints = 100;
-            Player.BulletsRemaining = 100;
+            Player.BulletsRemaining = 1000;
             Player.X = _game.Display.VisibleSize.Width / 2;
             Player.Y = _game.Display.VisibleSize.Height / 2;
 
@@ -334,7 +334,7 @@ namespace AI2D.Engine
             }
         }
 
-        public void RenderObjects(Graphics dc)
+        public void Render(Graphics dc)
         {
             RenderStars(dc);
             RenderBullets(dc);
