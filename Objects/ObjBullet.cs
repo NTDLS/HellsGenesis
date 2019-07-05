@@ -9,8 +9,8 @@ namespace AI2D.Objects
 
         private const string _imagePath = @"..\..\Assets\Graphics\Bullet\Vulcan.png";
 
-        public ObjBullet(Game game, ObjBase firedFrom)
-            : base(game)
+        public ObjBullet(Core core, ObjBase firedFrom)
+            : base(core)
         {
             Vector initialVector = new Vector()
             {

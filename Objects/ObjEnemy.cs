@@ -66,8 +66,8 @@ namespace AI2D.Objects
             #endregion
         };
 
-        public ObjEnemy(Game game)
-            : base(game)
+        public ObjEnemy(Core core)
+            : base(core)
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
 

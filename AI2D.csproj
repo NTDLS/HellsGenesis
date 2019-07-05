@@ -56,13 +56,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\EngineCallbackEvent.cs" />
     <Compile Include="Engine\FrameCounter.cs" />
-    <Compile Include="Engine\GameActors.cs" />
-    <Compile Include="Engine\GameThread.cs" />
-    <Compile Include="Engine\Quadrant.cs" />
+    <Compile Include="Engine\EngineActors.cs" />
+    <Compile Include="Engine\EngineThread.cs" />
+    <Compile Include="Types\Quadrant.cs" />
     <Compile Include="Objects\ObjAnimation.cs" />
     <Compile Include="Engine\Consants.cs" />
-    <Compile Include="Engine\GameInput.cs" />
+    <Compile Include="Engine\EngineInput.cs" />
     <Compile Include="Engine\Utility.cs" />
     <Compile Include="Objects\ObjBullet.cs" />
     <Compile Include="Objects\ObjStar.cs" />
@@ -78,8 +79,8 @@
     <Compile Include="Types\RectangleD.cs" />
     <Compile Include="Types\SizeD.cs" />
     <Compile Include="Types\Vector.cs" />
-    <Compile Include="Engine\GameDisplay.cs" />
-    <Compile Include="Engine\Game.cs" />
+    <Compile Include="Engine\EngineDisplay.cs" />
+    <Compile Include="Engine\Core.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace AI2D.Engine
 {
-    public class GameDisplay
+    public class EngineDisplay
     {
         public Dictionary<Point, Quadrant> Quadrants = new Dictionary<Point, Quadrant>();
         public PointD BackgroundOffset { get; set; } = new PointD(); //Offset of background, all cals must take into account.
@@ -35,7 +35,7 @@ namespace AI2D.Engine
             }
         }
 
-        public GameDisplay(Control drawingSurface, Size visibleSize)
+        public EngineDisplay(Control drawingSurface, Size visibleSize)
         {
             _drawingSurface = drawingSurface;
             _visibleSize = visibleSize;

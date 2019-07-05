@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 
 namespace AI2D.Engine
 {
-    public class GameActors
+    public class EngineActors
     {
-        private Game _game;
+        private Core _core;
         private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
         private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
+
+        public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
 
         public List<ObjTextBlock> TextBlocks { get; private set; } = new List<ObjTextBlock>();
         public List<ObjEnemy> Enemies { get; private set; } = new List<ObjEnemy>();
@@ -31,9 +33,9 @@ namespace AI2D.Engine
         public ObjTextBlock QuadrantText { get; private set; }
         public ObjTextBlock DebugText { get; private set; }
 
-        public GameActors(Game game)
+        public EngineActors(Core core)
         {
-            _game = game;
+            _core = core;
 
             BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Background Music.wav", 0.25f, true);
             ShipEngineRoarSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Roar.wav", 1.0f, true);
@@ -49,7 +51,7 @@ namespace AI2D.Engine
         {
             if (Player == null)
             {
-                Player = new ObjPlayer(_game);
+                Player = new ObjPlayer(_core);
             }
 
             Player.Velocity.Speed = 5;
@@ -57,8 +59,8 @@ namespace AI2D.Engine
             Player.Visable = true;
             Player.HitPoints = 100;
             Player.BulletsRemaining = 1000;
-            Player.X = _game.Display.VisibleSize.Width / 2;
-            Player.Y = _game.Display.VisibleSize.Height / 2;
+            Player.X = _core.Display.VisibleSize.Width / 2;
+            Player.Y = _core.Display.VisibleSize.Height / 2;
 
             ShipEngineIdleSound.Play();
             AllSystemsGoSound.Play();
@@ -131,7 +133,7 @@ namespace AI2D.Engine
         {
             lock (Animations)
             {
-                ObjAnimation obj = new ObjAnimation(_game, imageFrames, frameSize);
+                ObjAnimation obj = new ObjAnimation(_core, imageFrames, frameSize);
                 Animations.Add(obj);
                 return obj;
             }
@@ -150,7 +152,7 @@ namespace AI2D.Engine
         {
             lock (Stars)
             {
-                ObjStar obj = new ObjStar(_game)
+                ObjStar obj = new ObjStar(_core)
                 {
                     X = x,
                     Y = y
@@ -164,17 +166,17 @@ namespace AI2D.Engine
         {
             lock (Stars)
             {
-                int deltaX = createInQuad.Bounds.X - _game.Display.CurrentQuadrant.Bounds.X;
-                int deltaY = createInQuad.Bounds.Y - _game.Display.CurrentQuadrant.Bounds.Y;
+                int deltaX = createInQuad.Bounds.X - _core.Display.CurrentQuadrant.Bounds.X;
+                int deltaY = createInQuad.Bounds.Y - _core.Display.CurrentQuadrant.Bounds.Y;
 
 
 
-                ObjStar obj = new ObjStar(_game)
+                ObjStar obj = new ObjStar(_core)
                 {
                     X = Utility.Random.Next(deltaX, createInQuad.Bounds.Width - 100),
                     Y = Utility.Random.Next(deltaY, createInQuad.Bounds.Height - 100)
-                    //X = createInQuad.Bounds.X - (int)_game.BackgroundOffset.X, //This adds a start to X:0 of the current screen.
-                    //Y = createInQuad.Bounds.Y - (int)_game.BackgroundOffset.Y //This adds a start to Y:0 of the current screen.
+                    //X = createInQuad.Bounds.X - (int)_core.BackgroundOffset.X, //This adds a start to X:0 of the current screen.
+                    //Y = createInQuad.Bounds.Y - (int)_core.BackgroundOffset.Y //This adds a start to Y:0 of the current screen.
                     //X = 500,
                     //Y = 500
 
@@ -189,11 +191,53 @@ namespace AI2D.Engine
             }
         }
 
+
+        public EngineCallbackEvent CreateEngineCallbackEvent(
+            TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback, object refObj,
+            EngineCallbackEvent.CallbackEventMode callbackEventMode = EngineCallbackEvent.CallbackEventMode.OneTime,
+            EngineCallbackEvent.CallbackEventAsync callbackEventAsync = EngineCallbackEvent.CallbackEventAsync.Synchronous)
+        {
+            lock (EngineEvents)
+            {
+                EngineCallbackEvent obj = new EngineCallbackEvent(_core, countdown, executeCallback, refObj, callbackEventMode, callbackEventAsync);
+                EngineEvents.Add(obj);
+                return obj;
+            }
+        }
+
+        public EngineCallbackEvent CreateEngineCallbackEvent(TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback, object refObj)
+        {
+            lock (EngineEvents)
+            {
+                EngineCallbackEvent obj = new EngineCallbackEvent(_core, countdown, executeCallback, refObj);
+                EngineEvents.Add(obj);
+                return obj;
+            }
+        }
+
+        public EngineCallbackEvent CreateEngineCallbackEvent(TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback)
+        {
+            lock (EngineEvents)
+            {
+                EngineCallbackEvent obj = new EngineCallbackEvent(_core, countdown, executeCallback);
+                EngineEvents.Add(obj);
+                return obj;
+            }
+        }
+
+        public void DeleteEngineCallbackEvent(EngineCallbackEvent obj)
+        {
+            lock (EngineEvents)
+            {
+                EngineEvents.Remove(obj);
+            }
+        }
+
         public ObjTextBlock CreateTextBlock(string font, double size, double x, double y)
         {
             lock (TextBlocks)
             {
-                ObjTextBlock obj = new ObjTextBlock(_game, font, size, x, y);
+                ObjTextBlock obj = new ObjTextBlock(_core, font, size, x, y);
                 TextBlocks.Add(obj);
                 return obj;
             }
@@ -212,7 +256,7 @@ namespace AI2D.Engine
         {
             lock (Stars)
             {
-                ObjStar obj = new ObjStar(_game);
+                ObjStar obj = new ObjStar(_core);
                 Stars.Add(obj);
                 return obj;
             }
@@ -231,7 +275,7 @@ namespace AI2D.Engine
         {
             lock (Enemies)
             {
-                ObjEnemy obj = new ObjEnemy(_game);
+                ObjEnemy obj = new ObjEnemy(_core);
                 Enemies.Add(obj);
                 return obj;
             }
@@ -250,7 +294,7 @@ namespace AI2D.Engine
         {
             lock (Bullets)
             {
-                ObjBullet obj = new ObjBullet(_game, firedFrom);
+                ObjBullet obj = new ObjBullet(_core, firedFrom);
                 Bullets.Add(obj);
                 return obj;
             }

@@ -17,11 +17,11 @@ namespace AI2D.Objects
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
         private bool _deleteWhenDonePlaying = false;
 
-        public ObjAnimation(Game game, string imageFrames, Size frameSize, bool deleteWhenDonePlaying = true)
-            : base(game)
+        public ObjAnimation(Core core, string imageFrames, Size frameSize, bool deleteWhenDonePlaying = true)
+            : base(core)
         {
             _deleteWhenDonePlaying = deleteWhenDonePlaying;
-            _explodeFrame = _game.Actors.GetBitmapCached(imageFrames);
+            _explodeFrame = _core.Actors.GetBitmapCached(imageFrames);
             _frameSize = frameSize;
             _rows = (_explodeFrame.Height / frameSize.Height);
             _columns = (_explodeFrame.Width / frameSize.Width);

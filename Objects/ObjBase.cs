@@ -8,7 +8,7 @@ namespace AI2D.Objects
 {
     public class ObjBase
     {
-        protected Game _game;
+        protected Core _core;
 
         private Image _image;
         private ObjAnimation _explosionAnimation;
@@ -39,25 +39,25 @@ namespace AI2D.Objects
             #endregion
         };
 
-        public ObjBase(Game game)
+        public ObjBase(Core core)
         {
-            _game = game;
+            _core = core;
         }
 
         public void LoadResources(string imagePath, Size? size = null, PointD initialLocation = null, Vector initialVector = null)
         {
-            _bulletSound = _game.Actors.GetSoundCached(@"..\..\Assets\Sounds\Vulcan Cannon.wav", 0.3f);
-            _hitSound = _game.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship Hit.wav", 1.0f);
+            _bulletSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Vulcan Cannon.wav", 0.3f);
+            _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship Hit.wav", 1.0f);
 
             int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
-            _explodeSound = _game.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
+            _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
 
             int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
-            _explosionAnimation = new ObjAnimation(_game, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
+            _explosionAnimation = new ObjAnimation(_core, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
 
             if (imagePath != null)
             {
-                _image = _game.Actors.GetBitmapCached(imagePath);
+                _image = _core.Actors.GetBitmapCached(imagePath);
                 if (size == null)
                 {
                     _size = new Size(_image.Size.Width, _image.Size.Height);
@@ -72,8 +72,8 @@ namespace AI2D.Objects
 
             if (initialLocation == null)
             {
-                _x = Utility.Random.Next(0, _game.Display.VisibleSize.Width - _size.Width);
-                _y = Utility.Random.Next(0, _game.Display.VisibleSize.Height - _size.Height);
+                _x = Utility.Random.Next(0, _core.Display.VisibleSize.Width - _size.Width);
+                _y = Utility.Random.Next(0, _core.Display.VisibleSize.Height - _size.Height);
             }
             else
             {
@@ -230,7 +230,7 @@ namespace AI2D.Objects
             {
                 _isVisible = value;
                 var invalidRect = new Rectangle((int)_x, (int)_y, _size.Width, _size.Height);
-                _game.Display.DrawingSurface.Invalidate(invalidRect);
+                _core.Display.DrawingSurface.Invalidate(invalidRect);
             }
         }
 
@@ -239,7 +239,7 @@ namespace AI2D.Objects
         public void Invalidate()
         {
             var invalidRect = new Rectangle((int)_x, (int)_y, _size.Width, _size.Height);
-            _game.Display.DrawingSurface.Invalidate(invalidRect);
+            _core.Display.DrawingSurface.Invalidate(invalidRect);
         }
 
         public bool Intersects(ObjBase otherObject)
@@ -280,7 +280,7 @@ namespace AI2D.Objects
             {
                 BulletsRemaining--;
                 _bulletSound.Play();
-                _game.Actors.CreateBullet(this);
+                _core.Actors.CreateBullet(this);
             }
         }
 
@@ -328,7 +328,7 @@ namespace AI2D.Objects
         {
             _explodeSound.Play();
             _explosionAnimation.Reset();
-            _game.Actors.PlaceAnimationOnTopOf(_explosionAnimation, this);
+            _core.Actors.PlaceAnimationOnTopOf(_explosionAnimation, this);
             ReadyForDeletion = true;
         }
 

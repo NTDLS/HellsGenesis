@@ -4,14 +4,14 @@ using System.Windows.Forms;
 
 namespace AI2D.Engine
 {
-    public class GameInput
+    public class EngineInput
     {
-        private Game _game;
+        private Core _core;
         private Dictionary<PlayerKey, KeyPressState> _keyStates = new Dictionary<PlayerKey, KeyPressState>();
 
-        public GameInput(Game game)
+        public EngineInput(Core core)
         {
-            _game = game;
+            _core = core;
         }
 
         public bool IsKeyPressed(PlayerKey key)
@@ -45,58 +45,58 @@ namespace AI2D.Engine
         {
             if (key == Keys.D0)
             {
-                _game.Actors.Enemies[0].X = 400;
-                _game.Actors.Enemies[0].Y = 400;
+                _core.Actors.Enemies[0].X = 400;
+                _core.Actors.Enemies[0].Y = 400;
             }
             if (key == Keys.D1)
             {
-                _game.Actors.Player.Velocity.Angle.Degree = 0;
-                _game.Actors.Player.Invalidate();
+                _core.Actors.Player.Velocity.Angle.Degree = 0;
+                _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D2)
             {
-                _game.Actors.Player.Velocity.Angle.Degree = 45;
-                _game.Actors.Player.Invalidate();
+                _core.Actors.Player.Velocity.Angle.Degree = 45;
+                _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D3)
             {
-                _game.Actors.Player.Velocity.Angle.Degree = 90;
-                _game.Actors.Player.Invalidate();
+                _core.Actors.Player.Velocity.Angle.Degree = 90;
+                _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D4)
             {
-                _game.Actors.Player.Velocity.Angle.Degree = 135;
-                _game.Actors.Player.Invalidate();
+                _core.Actors.Player.Velocity.Angle.Degree = 135;
+                _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D5)
             {
-                _game.Actors.Player.Velocity.Angle.Degree = 180;
-                _game.Actors.Player.Invalidate();
+                _core.Actors.Player.Velocity.Angle.Degree = 180;
+                _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D6)
             {
-                _game.Actors.Player.Velocity.Angle.Degree = 225;
-                _game.Actors.Player.Invalidate();
+                _core.Actors.Player.Velocity.Angle.Degree = 225;
+                _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D7)
             {
-                _game.Actors.Player.Velocity.Angle.Degree = 270;
-                _game.Actors.Player.Invalidate();
+                _core.Actors.Player.Velocity.Angle.Degree = 270;
+                _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D8)
             {
-                _game.Actors.Player.Velocity.Angle.Degree = 315;
-                _game.Actors.Player.Invalidate();
+                _core.Actors.Player.Velocity.Angle.Degree = 315;
+                _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D9)
             {
-                _game.Actors.Enemies[0].MoveInDirectionOf(_game.Actors.Player);
+                _core.Actors.Enemies[0].MoveInDirectionOf(_core.Actors.Player);
             }
             if (key == Keys.Escape)
             {
-                if (_game.Actors.Enemies.Count > 0)
+                if (_core.Actors.Enemies.Count > 0)
                 {
-                    _game.Actors.Enemies[0].Explode();
+                    _core.Actors.Enemies[0].Explode();
                 }
             }
 

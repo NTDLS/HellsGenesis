@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace AI2D.Engine
+namespace AI2D.Types
 {
     public class Quadrant
     {

@@ -19,16 +19,16 @@ namespace AI2D.Objects
             #endregion
         };
 
-        public ObjStar(Game game)
-            : base(game)
+        public ObjStar(Core core)
+            : base(core)
         {
             //int _explosionImageIndex = Utility.RandomNumber(0, _assetStarFiles.Count());
             //LoadResources(_assetStarPath + _assetStarFiles[_explosionImageIndex]);
 
             LoadResources(@"..\..\Assets\Graphics\Star\Star 1.png");
 
-            X = Utility.Random.Next(0, game.Display.VisibleSize.Width);
-            Y = Utility.Random.Next(0, game.Display.VisibleSize.Height);
+            X = Utility.Random.Next(0, core.Display.VisibleSize.Width);
+            Y = Utility.Random.Next(0, core.Display.VisibleSize.Height);
         }
     }
 }
