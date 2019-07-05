@@ -46,8 +46,8 @@ namespace AI2D.Objects
 
         public void LoadResources(string imagePath, Size? size = null, PointD initialLocation = null, Vector initialVector = null)
         {
-            _bulletSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Vulcan Cannon.wav", 0.3f);
-            _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship Hit.wav", 1.0f);
+            _bulletSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Vulcan Cannon.wav", 0.4f);
+            _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship Hit.wav", 0.65f);
 
             int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
             _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
@@ -132,7 +132,7 @@ namespace AI2D.Objects
             get
             {
                 bool result = false;
-                if (BulletsRemaining > 0)
+                if (Visable && BulletsRemaining > 0)
                 {
                     result = ((DateTime.Now - _lastFired).TotalMilliseconds > _MilisecondsBetweenBullets);
                     if (result)

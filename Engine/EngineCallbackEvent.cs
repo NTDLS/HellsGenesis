@@ -18,8 +18,10 @@ namespace AI2D.Engine
         private OnExecute _onExecute;
         private CallbackEventMode _callbackEventMode;
         private CallbackEventAsync _callbackEventAsync;
-        public delegate void OnExecute(object refObj);
-        public DateTime _startedTime;
+        private DateTime _startedTime;
+        public bool ReadyForDeletion = false;
+
+        public delegate void OnExecute(Core core, object refObj);
 
         public enum CallbackEventMode
         {
@@ -75,12 +77,12 @@ namespace AI2D.Engine
                     new Thread(() =>
                     {
                         //Thread.CurrentThread.IsBackground = true; Why?
-                        _onExecute(_referenceObject);
+                        _onExecute(_core, _referenceObject);
                     }).Start();
                 }
                 else
                 {
-                    _onExecute(_referenceObject);
+                    _onExecute(_core, _referenceObject);
                 }
 
                 if (_callbackEventMode == CallbackEventMode.Recurring)
@@ -89,7 +91,7 @@ namespace AI2D.Engine
                 }
                 else
                 {
-                    _core.Actors.DeleteEngineCallbackEvent(this);
+                    ReadyForDeletion = true;
                 }
             }
 

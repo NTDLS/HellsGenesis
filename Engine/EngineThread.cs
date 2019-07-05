@@ -48,140 +48,143 @@ namespace AI2D.Engine
 
             #region Player Frame Advancement.
 
-            if (_core.Input.IsKeyPressed(PlayerKey.Fire))
-            {
-                _core.Actors.Player.FireGun();
-            }
-
-            double wallWidth = 200; //Where "infinite scrolling" begins.
-
             double bgAppliedOffsetX = 0;
             double bgAppliedOffsetY = 0;
 
-            //Make player thrust "build up" and fade.
-            if (_core.Input.IsKeyPressed(PlayerKey.Forward))
+            if (_core.Actors.Player.Visable)
             {
-                if (_ramppedPlayerThrust < _core.Actors.Player.Velocity.Speed)
+                if (_core.Input.IsKeyPressed(PlayerKey.Fire))
                 {
-                    _ramppedPlayerThrust += Consants.PlayerThrustRampUp;
+                    _core.Actors.Player.FireGun();
                 }
-            }
-            else if (_core.Input.IsKeyPressed(PlayerKey.Reverse))
-            {
-                if (_ramppedPlayerThrust > -_core.Actors.Player.Velocity.Speed)
+
+                double wallWidth = 200; //Where "infinite scrolling" begins.
+
+                //Make player thrust "build up" and fade.
+                if (_core.Input.IsKeyPressed(PlayerKey.Forward))
                 {
-                    _ramppedPlayerThrust -= Consants.PlayerThrustRampUp;
+                    if (_ramppedPlayerThrust < _core.Actors.Player.Velocity.Speed)
+                    {
+                        _ramppedPlayerThrust += Consants.PlayerThrustRampUp;
+                    }
                 }
-            }
-            else
-            {
-                //If no "forward" or "reverse" user input is received... then fade the thrust.
+                else if (_core.Input.IsKeyPressed(PlayerKey.Reverse))
+                {
+                    if (_ramppedPlayerThrust > -_core.Actors.Player.Velocity.Speed)
+                    {
+                        _ramppedPlayerThrust -= Consants.PlayerThrustRampUp;
+                    }
+                }
+                else
+                {
+                    //If no "forward" or "reverse" user input is received... then fade the thrust.
+                    if (_ramppedPlayerThrust > 0)
+                    {
+                        _ramppedPlayerThrust -= Consants.PlayerThrustRampDown;
+                        if (_ramppedPlayerThrust < 0)
+                        {
+                            _ramppedPlayerThrust = 0; //We we overshot the fade, just stop the player.
+                        }
+                    }
+                    else if (_ramppedPlayerThrust < 0)
+                    {
+                        _ramppedPlayerThrust += Consants.PlayerThrustRampDown;
+                        if (_ramppedPlayerThrust > 0)
+                        {
+                            _ramppedPlayerThrust = 0; //We we overshot the fade, just stop the player.
+                        }
+                    }
+                }
+
                 if (_ramppedPlayerThrust > 0)
                 {
-                    _ramppedPlayerThrust -= Consants.PlayerThrustRampDown;
-                    if (_ramppedPlayerThrust < 0)
+                    double forwardThrust = _ramppedPlayerThrust;
+
+                    //Close to the right wall and travelling in that direction.
+                    if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + wallWidth)
+                        && _core.Actors.Player.Velocity.Angle.X > 0)
                     {
-                        _ramppedPlayerThrust = 0; //We we overshot the fade, just stop the player.
+                        bgAppliedOffsetX = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
+
+                    //Close to the bottom wall and travelling in that direction.
+                    if (_core.Actors.Player.Y > _core.Display.VisibleSize.Height - (_core.Actors.Player.Size.Height + wallWidth)
+                        && _core.Actors.Player.Velocity.Angle.Y > 0)
+                    {
+                        bgAppliedOffsetY = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
+                    }
+
+                    //Close to the left wall and travelling in that direction.
+                    if (_core.Actors.Player.X < wallWidth && _core.Actors.Player.Velocity.Angle.X < 0)
+                    {
+                        bgAppliedOffsetX = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
+                    }
+
+                    //Close to the top wall and travelling in that direction.
+                    if (_core.Actors.Player.Y < wallWidth && _core.Actors.Player.Velocity.Angle.Y < 0)
+                    {
+                        bgAppliedOffsetY = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
+                    }
+
+                    _core.Actors.Player.X += (_core.Actors.Player.Velocity.Angle.X * forwardThrust) - bgAppliedOffsetX;
+                    _core.Actors.Player.Y += (_core.Actors.Player.Velocity.Angle.Y * forwardThrust) - bgAppliedOffsetY;
+
+                    _core.Actors.ShipEngineRoarSound.Play();
                 }
                 else if (_ramppedPlayerThrust < 0)
                 {
-                    _ramppedPlayerThrust += Consants.PlayerThrustRampDown;
-                    if (_ramppedPlayerThrust > 0)
+                    //Do we really need to reverse? This is space!
+
+                    double reverseThrust = -_ramppedPlayerThrust;
+
+                    //Close to the right wall and travelling in that direction.
+                    if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + wallWidth)
+                        && _core.Actors.Player.Velocity.Angle.X < 0)
                     {
-                        _ramppedPlayerThrust = 0; //We we overshot the fade, just stop the player.
+                        bgAppliedOffsetX = -(_core.Actors.Player.Velocity.Angle.X * reverseThrust);
                     }
+
+                    //Close to the bottom wall and travelling in that direction.
+                    if (_core.Actors.Player.Y > _core.Display.VisibleSize.Height - (_core.Actors.Player.Size.Height + wallWidth)
+                        && _core.Actors.Player.Velocity.Angle.Y < 0)
+                    {
+                        bgAppliedOffsetY = -(_core.Actors.Player.Velocity.Angle.Y * reverseThrust);
+                    }
+
+                    //Close to the left wall and travelling in that direction.
+                    if (_core.Actors.Player.X < wallWidth && _core.Actors.Player.Velocity.Angle.X > 0)
+                    {
+                        bgAppliedOffsetX = -(_core.Actors.Player.Velocity.Angle.X * reverseThrust);
+                    }
+
+                    //Close to the top wall and travelling in that direction.
+                    if (_core.Actors.Player.Y < wallWidth && _core.Actors.Player.Velocity.Angle.Y > 0)
+                    {
+                        bgAppliedOffsetY = -(_core.Actors.Player.Velocity.Angle.Y * reverseThrust);
+                    }
+
+                    _core.Actors.Player.X -= (_core.Actors.Player.Velocity.Angle.X * reverseThrust) + bgAppliedOffsetX;
+                    _core.Actors.Player.Y -= (_core.Actors.Player.Velocity.Angle.Y * reverseThrust) + bgAppliedOffsetY;
+
+                    _core.Actors.ShipEngineRoarSound.Play();
                 }
-            }
-
-            if (_ramppedPlayerThrust > 0)
-            {
-                double forwardThrust = _ramppedPlayerThrust;
-
-                //Close to the right wall and travelling in that direction.
-                if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + wallWidth)
-                    && _core.Actors.Player.Velocity.Angle.X > 0)
+                else
                 {
-                    bgAppliedOffsetX = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
+                    _core.Actors.ShipEngineRoarSound.Fade();
                 }
 
-                //Close to the bottom wall and travelling in that direction.
-                if (_core.Actors.Player.Y > _core.Display.VisibleSize.Height - (_core.Actors.Player.Size.Height + wallWidth)
-                    && _core.Actors.Player.Velocity.Angle.Y > 0)
+                //Scroll the background.
+                _core.Display.BackgroundOffset.X += bgAppliedOffsetX;
+                _core.Display.BackgroundOffset.Y += bgAppliedOffsetY;
+
+                if (_core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
                 {
-                    bgAppliedOffsetY = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
+                    _core.Actors.Player.Rotate(-_core.Actors.Player.RotationSpeed);
                 }
-
-                //Close to the left wall and travelling in that direction.
-                if (_core.Actors.Player.X < wallWidth && _core.Actors.Player.Velocity.Angle.X < 0)
+                else if (_core.Input.IsKeyPressed(PlayerKey.RotateClockwise))
                 {
-                    bgAppliedOffsetX = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
+                    _core.Actors.Player.Rotate(_core.Actors.Player.RotationSpeed);
                 }
-
-                //Close to the top wall and travelling in that direction.
-                if (_core.Actors.Player.Y < wallWidth && _core.Actors.Player.Velocity.Angle.Y < 0)
-                {
-                    bgAppliedOffsetY = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
-                }
-
-                _core.Actors.Player.X += (_core.Actors.Player.Velocity.Angle.X * forwardThrust) - bgAppliedOffsetX;
-                _core.Actors.Player.Y += (_core.Actors.Player.Velocity.Angle.Y * forwardThrust) - bgAppliedOffsetY;
-
-                _core.Actors.ShipEngineRoarSound.Play();
-            }
-            else if (_ramppedPlayerThrust < 0)
-            {
-                //Do we really need to reverse? This is space!
-
-                double reverseThrust = -_ramppedPlayerThrust;
-
-                //Close to the right wall and travelling in that direction.
-                if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + wallWidth)
-                    && _core.Actors.Player.Velocity.Angle.X < 0)
-                {
-                    bgAppliedOffsetX = -(_core.Actors.Player.Velocity.Angle.X * reverseThrust);
-                }
-
-                //Close to the bottom wall and travelling in that direction.
-                if (_core.Actors.Player.Y > _core.Display.VisibleSize.Height - (_core.Actors.Player.Size.Height + wallWidth)
-                    && _core.Actors.Player.Velocity.Angle.Y < 0)
-                {
-                    bgAppliedOffsetY = -(_core.Actors.Player.Velocity.Angle.Y * reverseThrust);
-                }
-
-                //Close to the left wall and travelling in that direction.
-                if (_core.Actors.Player.X < wallWidth && _core.Actors.Player.Velocity.Angle.X > 0)
-                {
-                    bgAppliedOffsetX = -(_core.Actors.Player.Velocity.Angle.X * reverseThrust);
-                }
-
-                //Close to the top wall and travelling in that direction.
-                if (_core.Actors.Player.Y < wallWidth && _core.Actors.Player.Velocity.Angle.Y > 0)
-                {
-                    bgAppliedOffsetY = -(_core.Actors.Player.Velocity.Angle.Y * reverseThrust);
-                }
-
-                _core.Actors.Player.X -= (_core.Actors.Player.Velocity.Angle.X * reverseThrust) + bgAppliedOffsetX;
-                _core.Actors.Player.Y -= (_core.Actors.Player.Velocity.Angle.Y * reverseThrust) + bgAppliedOffsetY;
-
-                _core.Actors.ShipEngineRoarSound.Play();
-            }
-            else
-            {
-                _core.Actors.ShipEngineRoarSound.Fade();
-            }
-
-            //Scroll the background.
-            _core.Display.BackgroundOffset.X += bgAppliedOffsetX;
-            _core.Display.BackgroundOffset.Y += bgAppliedOffsetY;
-
-            if (_core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
-            {
-                _core.Actors.Player.Rotate(-_core.Actors.Player.RotationSpeed);
-            }
-            else if (_core.Input.IsKeyPressed(PlayerKey.RotateClockwise))
-            {
-                _core.Actors.Player.Rotate(_core.Actors.Player.RotationSpeed);
             }
 
             #endregion
@@ -200,16 +203,28 @@ namespace AI2D.Engine
                 _core.Actors.Player.Y + _core.Display.BackgroundOffset.Y);
 
             _core.Actors.QuadrantText.Text =
-                  $"       Frame Rate: Avg: {_core.Display.FrameCounter.AverageFrameRate.ToString("0.0")},"
-                                   + $"Min: {_core.Display.FrameCounter.FrameRateMin.ToString("0.0")},"
-                                   + $"Max: {_core.Display.FrameCounter.FrameRateMax.ToString("0.0")}\r\n"
+                    $"       Frame Rate: Avg: {_core.Display.FrameCounter.AverageFrameRate.ToString("0.0")},"
+                                    + $"Min: {_core.Display.FrameCounter.FrameRateMin.ToString("0.0")},"
+                                    + $"Max: {_core.Display.FrameCounter.FrameRateMax.ToString("0.0")}\r\n"
                 + $"Player Display XY: {_core.Actors.Player.X.ToString("#0.00")}x, {_core.Actors.Player.Y.ToString("#0.00")}y\r\n"
                 + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
-                                  + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
+                                    + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
                 + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
                 + $"         Quadrant: {_core.Display.CurrentQuadrant.Key.X}x, {_core.Display.CurrentQuadrant.Key.Y}y\r\n"
                 + $"      Quadrant XY: {_core.Display.CurrentQuadrant.Bounds.X}x, {_core.Display.CurrentQuadrant.Bounds.Y}y\r\n"
                 + $"    Quadrant Size: {_core.Display.CurrentQuadrant.Bounds.Width}x, {_core.Display.CurrentQuadrant.Bounds.Height}y";
+
+            #endregion
+
+            #region Engine Event Callbacks.
+
+            lock (_core.Actors.EngineEvents)
+            {
+                foreach (var engineEvent in _core.Actors.EngineEvents)
+                {
+                    engineEvent.CheckForTrigger();
+                }
+            }
 
             #endregion
 
@@ -228,7 +243,7 @@ namespace AI2D.Engine
                         //_core.Actors.DebugText.Text = $"DA: {deltaAngle.ToString("####.###")}";
 
                         double distanceToPlayer = Utility.CalculeDistance(enemy, _core.Actors.Player);
-                        if (distanceToPlayer < 500)
+                        if (distanceToPlayer < 200)
                         {
                             bool isPointingAtPlayer = enemy.IsPointingAt(_core.Actors.Player, 8.0);
                             if (isPointingAtPlayer)
@@ -356,6 +371,17 @@ namespace AI2D.Engine
             #endregion
 
             #region Cleanup (cant be done in a foreach).
+
+            lock (_core.Actors.EngineEvents)
+            {
+                for (int i = 0; i < _core.Actors.EngineEvents.Count; i++)
+                {
+                    if (_core.Actors.EngineEvents[i].ReadyForDeletion)
+                    {
+                        _core.Actors.DeleteEngineCallbackEvent(_core.Actors.EngineEvents[i]);
+                    }
+                }
+            }
 
             lock (_core.Actors.Enemies)
             {

@@ -39,28 +39,35 @@ namespace AI2D.Engine
 
             BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Background Music.wav", 0.25f, true);
             ShipEngineRoarSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Roar.wav", 1.0f, true);
-            ShipEngineIdleSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Idle.wav", 0.5f, true);
-            AllSystemsGoSound = GetSoundCached(@"..\..\Assets\Sounds\All Systems Go.wav", 0.5f, false);
+            ShipEngineIdleSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Idle.wav", 0.6f, true);
+            AllSystemsGoSound = GetSoundCached(@"..\..\Assets\Sounds\All Systems Go.wav", 0.75f, false);
 
             //PlayerStatsText = CreateTextBlock("ComicSans", 10, 5, 5);
             QuadrantText = CreateTextBlock("Consolas", 10, 5, 5);
             //DebugText = CreateTextBlock("ComicSans", 10, 5, QuadrantText.Y + QuadrantText.Height + 10);
         }
 
-        public void ShowNewPlayer()
+        public void ResetPlayer()
         {
             if (Player == null)
             {
-                Player = new ObjPlayer(_core);
+                //There is a bit of a dependency between Code and Actors, so this can not be done in the constructor.
+                Player = new ObjPlayer(_core) { Visable = false };
             }
 
             Player.Velocity.Speed = 5;
             Player.RotationSpeed = 3;
-            Player.Visable = true;
             Player.HitPoints = 100;
             Player.BulletsRemaining = 1000;
             Player.X = _core.Display.VisibleSize.Width / 2;
             Player.Y = _core.Display.VisibleSize.Height / 2;
+        }
+
+        public void ResetAndShowPlayer()
+        {
+            ResetPlayer();
+
+            Player.Visable = true;
 
             ShipEngineIdleSound.Play();
             AllSystemsGoSound.Play();
@@ -191,7 +198,6 @@ namespace AI2D.Engine
             }
         }
 
-
         public EngineCallbackEvent CreateEngineCallbackEvent(
             TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback, object refObj,
             EngineCallbackEvent.CallbackEventMode callbackEventMode = EngineCallbackEvent.CallbackEventMode.OneTime,
@@ -220,6 +226,15 @@ namespace AI2D.Engine
             lock (EngineEvents)
             {
                 EngineCallbackEvent obj = new EngineCallbackEvent(_core, countdown, executeCallback);
+                EngineEvents.Add(obj);
+                return obj;
+            }
+        }
+
+        public EngineCallbackEvent InjectCallbackEvent(EngineCallbackEvent obj)
+        {
+            lock (EngineEvents)
+            {
                 EngineEvents.Add(obj);
                 return obj;
             }
