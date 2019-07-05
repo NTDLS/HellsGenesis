@@ -1,10 +1,5 @@
 ﻿using AI2D.Types;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AI2D.Engine
 {
@@ -14,6 +9,7 @@ namespace AI2D.Engine
         private bool _shutdown = false;
         private System.Threading.Thread _graphicsThread;
         private double _ramppedPlayerThrust = 0;
+        private double _ramppedPlayerThrustPercentage = 0;
 
         public EngineThread(Core core)
         {
@@ -102,6 +98,8 @@ namespace AI2D.Engine
                     }
                 }
 
+                _ramppedPlayerThrustPercentage = Math.Abs(_ramppedPlayerThrust / _core.Actors.Player.Velocity.Speed);
+
                 if (_ramppedPlayerThrust > 0)
                 {
                     double forwardThrust = _ramppedPlayerThrust;
@@ -183,13 +181,16 @@ namespace AI2D.Engine
                 _core.Display.BackgroundOffset.X += bgAppliedOffsetX;
                 _core.Display.BackgroundOffset.Y += bgAppliedOffsetY;
 
+                //We are going to restrict the rotation speed to a percentage of thrust.
+                double rotationSpeed = _core.Actors.Player.RotationSpeed * _ramppedPlayerThrustPercentage;
+
                 if (_core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
                 {
-                    _core.Actors.Player.Rotate(-_core.Actors.Player.RotationSpeed);
+                    _core.Actors.Player.Rotate(-(rotationSpeed > 0.5 ? rotationSpeed : 0.5));
                 }
                 else if (_core.Input.IsKeyPressed(PlayerKey.RotateClockwise))
                 {
-                    _core.Actors.Player.Rotate(_core.Actors.Player.RotationSpeed);
+                    _core.Actors.Player.Rotate(rotationSpeed > 0.5 ? rotationSpeed : 0.5);
                 }
             }
 
@@ -479,19 +480,11 @@ namespace AI2D.Engine
 
             #endregion
 
-            //_core.Actors.DebugText.Text = $"{latestBackgroundRange.X.ToString("####.###")}x,{latestBackgroundRange.Y.ToString("####.###")}y"
-            //    + $" x {latestBackgroundRange.Width.ToString("0000.000")}x,{latestBackgroundRange.Height.ToString("0000.000")}y";
+            _core.Actors.PlayerStatsText.Text = $"HP: {_core.Actors.Player.HitPoints}, "
+                + $"Ammo: {_core.Actors.Player.BulletsRemaining}, "
+                + $"Location: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("0")}x:"
+                + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("0")}y\r\n";
 
-            //_core.Actors.DebugText.Text = $"P: {_core.Actors.Player.X.ToString("000.00")},{_core.Actors.Player.Y.ToString("000.00")}"
-            //    + $" B: {BackgroundOffset.X.ToString("000.00")},{BackgroundOffset.Y.ToString("000.00")}";
-
-            //_core.Actors.DebugText.Text = $"View: {CurrentView.X.ToString("0000.000")}x, {CurrentView.Y.ToString("0000.000")}y"
-            //    + $" x {CurrentView.Width.ToString("0000.000")}x, {CurrentView.Height.ToString("0000.000")}y";
-
-            //_core.Actors.DebugText.Text = $" Q {CurrentQuadrant.Bounds.X}x, {CurrentQuadrant.Bounds.Y}y"
-            //    + $" View: {CurrentView.X.ToString("0000.000")}x, {CurrentView.Y.ToString("0000.000")}y";
-
-            _core.Actors.PlayerStatsText.Text = $"HP: {_core.Actors.Player.HitPoints}, Ammo: {_core.Actors.Player.BulletsRemaining}";
         }
     }
 }

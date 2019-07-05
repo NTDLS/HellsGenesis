@@ -1,11 +1,7 @@
 ﻿using AI2D.Objects;
-using AI2D.Types;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AI2D.Engine
 {
@@ -40,9 +36,9 @@ namespace AI2D.Engine
             ShipEngineRoarSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Roar.wav", 1.0f, true);
             ShipEngineIdleSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Idle.wav", 0.6f, true);
             AllSystemsGoSound = GetSoundCached(@"..\..\Assets\Sounds\All Systems Go.wav", 0.75f, false);
-
-            PlayerStatsText = CreateTextBlock("Consolas", 10, 5, 5);
-            DebugText = CreateTextBlock("Consolas", 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10);
+            
+            PlayerStatsText = CreateTextBlock("Consolas", Brushes.WhiteSmoke, 10, 5, 5);
+            DebugText = CreateTextBlock("Consolas", Brushes.Aqua, 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10);
         }
 
         public void ResetPlayer()
@@ -217,11 +213,11 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjTextBlock CreateTextBlock(string font, double size, double x, double y)
+        public ObjTextBlock CreateTextBlock(string font, Brush color, double size, double x, double y)
         {
             lock (TextBlocks)
             {
-                ObjTextBlock obj = new ObjTextBlock(_core, font, size, x, y);
+                ObjTextBlock obj = new ObjTextBlock(_core, font, color, size, x, y);
                 TextBlocks.Add(obj);
                 return obj;
             }

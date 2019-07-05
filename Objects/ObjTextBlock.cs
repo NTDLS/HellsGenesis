@@ -1,5 +1,4 @@
 ﻿using AI2D.Engine;
-using AI2D.Types;
 using System;
 using System.Drawing;
 
@@ -10,6 +9,7 @@ namespace AI2D.Objects
         private Rectangle _prevRegion;
         private Font _font;
         private Graphics _genericDC; //Not used for drawing, only measuring.
+        private Brush _color;
 
         #region Properties.
 
@@ -70,18 +70,19 @@ namespace AI2D.Objects
 
         #endregion
 
-        public ObjTextBlock(Core core, string font, double size, double x, double y)
+        public ObjTextBlock(Core core, string font, Brush color, double size, double x, double y)
             : base(core)
         {
             X = x;
             Y = y;
+            _color = color;
             _font = new Font(font, (float)size);
             _genericDC = _core.Display.DrawingSurface.CreateGraphics();
         }
 
         public new void Render(Graphics dc)
         {
-            dc.DrawString(_text, _font, Brushes.Aqua, (float)X, (float)Y);
+            dc.DrawString(_text, _font, _color, (float)X, (float)Y);
         }
     }
 }
