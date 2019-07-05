@@ -30,7 +30,6 @@ namespace AI2D.Engine
         public AudioClip BackgroundMusicSound { get; private set; }
 
         public ObjTextBlock PlayerStatsText { get; private set; }
-        public ObjTextBlock QuadrantText { get; private set; }
         public ObjTextBlock DebugText { get; private set; }
 
         public EngineActors(Core core)
@@ -42,9 +41,8 @@ namespace AI2D.Engine
             ShipEngineIdleSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Idle.wav", 0.6f, true);
             AllSystemsGoSound = GetSoundCached(@"..\..\Assets\Sounds\All Systems Go.wav", 0.75f, false);
 
-            //PlayerStatsText = CreateTextBlock("ComicSans", 10, 5, 5);
-            QuadrantText = CreateTextBlock("Consolas", 10, 5, 5);
-            //DebugText = CreateTextBlock("ComicSans", 10, 5, QuadrantText.Y + QuadrantText.Height + 10);
+            PlayerStatsText = CreateTextBlock("Consolas", 10, 5, 5);
+            DebugText = CreateTextBlock("Consolas", 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10);
         }
 
         public void ResetPlayer()
@@ -164,35 +162,6 @@ namespace AI2D.Engine
                     X = x,
                     Y = y
                 };
-                Stars.Add(obj);
-                return obj;
-            }
-        }
-
-        public ObjStar CreateStar(Quadrant createInQuad)
-        {
-            lock (Stars)
-            {
-                int deltaX = createInQuad.Bounds.X - _core.Display.CurrentQuadrant.Bounds.X;
-                int deltaY = createInQuad.Bounds.Y - _core.Display.CurrentQuadrant.Bounds.Y;
-
-
-
-                ObjStar obj = new ObjStar(_core)
-                {
-                    X = Utility.Random.Next(deltaX, createInQuad.Bounds.Width - 100),
-                    Y = Utility.Random.Next(deltaY, createInQuad.Bounds.Height - 100)
-                    //X = createInQuad.Bounds.X - (int)_core.BackgroundOffset.X, //This adds a start to X:0 of the current screen.
-                    //Y = createInQuad.Bounds.Y - (int)_core.BackgroundOffset.Y //This adds a start to Y:0 of the current screen.
-                    //X = 500,
-                    //Y = 500
-
-                    //X = deltaX,
-                    //Y = deltaY
-                };
-
-                Console.WriteLine($"x{obj.X}, y{obj.Y}      {deltaX} - {deltaY}");
-
                 Stars.Add(obj);
                 return obj;
             }
@@ -345,7 +314,10 @@ namespace AI2D.Engine
             {
                 foreach (var obj in Animations)
                 {
-                    obj.Render(dc);
+                    if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                    {
+                        obj.Render(dc);
+                    }
                 }
             }
         }
@@ -356,7 +328,10 @@ namespace AI2D.Engine
             {
                 foreach (var obj in Enemies)
                 {
-                    obj.Render(dc);
+                    if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                    {
+                        obj.Render(dc);
+                    }
                 }
             }
         }
@@ -367,7 +342,10 @@ namespace AI2D.Engine
             {
                 foreach (var obj in Bullets)
                 {
-                    obj.Render(dc);
+                    if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                    {
+                        obj.Render(dc);
+                    }
                 }
             }
         }
@@ -377,7 +355,7 @@ namespace AI2D.Engine
             {
                 foreach (var obj in Stars)
                 {
-                    //if (currentQuad.Bounds.IntersectsWith(obj.BoundsI))
+                    if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
                     {
                         obj.Render(dc);
                     }

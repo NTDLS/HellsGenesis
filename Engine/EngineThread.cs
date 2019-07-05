@@ -35,12 +35,18 @@ namespace AI2D.Engine
 
         private void GraphicsThreadProc()
         {
+            for (int i = 0; i < 20; i++)
+            {
+                _core.Actors.CreateStar();
+            }
+
             while (_shutdown == false)
             {
                 AdvanceFrame();
                 System.Threading.Thread.Sleep(10);
             }
         }
+
 
         void AdvanceFrame()
         {
@@ -191,18 +197,7 @@ namespace AI2D.Engine
 
             #region Quadrant Math.
 
-            _core.Display.CurrentView = new RectangleF(
-                (float)_core.Display.BackgroundOffset.X,
-                (float)_core.Display.BackgroundOffset.Y,
-                (float)_core.Display.VisibleSize.Width,
-                (float)_core.Display.VisibleSize.Height
-            );
-
-            _core.Display.CurrentQuadrant = _core.Display.GetQuadrant(
-                _core.Actors.Player.X + _core.Display.BackgroundOffset.X,
-                _core.Actors.Player.Y + _core.Display.BackgroundOffset.Y);
-
-            _core.Actors.QuadrantText.Text =
+            _core.Actors.DebugText.Text =
                     $"       Frame Rate: Avg: {_core.Display.FrameCounter.AverageFrameRate.ToString("0.0")},"
                                     + $"Min: {_core.Display.FrameCounter.FrameRateMin.ToString("0.0")},"
                                     + $"Max: {_core.Display.FrameCounter.FrameRateMax.ToString("0.0")}\r\n"
@@ -210,9 +205,8 @@ namespace AI2D.Engine
                 + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
                                     + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
                 + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
-                + $"         Quadrant: {_core.Display.CurrentQuadrant.Key.X}x, {_core.Display.CurrentQuadrant.Key.Y}y\r\n"
-                + $"      Quadrant XY: {_core.Display.CurrentQuadrant.Bounds.X}x, {_core.Display.CurrentQuadrant.Bounds.Y}y\r\n"
-                + $"    Quadrant Size: {_core.Display.CurrentQuadrant.Bounds.Width}x, {_core.Display.CurrentQuadrant.Bounds.Height}y";
+                + $"  Delta BG Offset: {bgAppliedOffsetX.ToString("#0.00")}x, {bgAppliedOffsetY.ToString("#0.00")}y\r\n"
+                + $"            Stars: {_core.Actors.Stars.Count}";
 
             #endregion
 
@@ -329,28 +323,76 @@ namespace AI2D.Engine
 
             #region Stars Frame Advancement.
 
-            if (_core.Display.CurrentQuadrant.IsBackgroundPopulated == false)
-            {
-                _core.Display.CurrentQuadrant.IsBackgroundPopulated = true;
-
-                for (int i = 0; i < 10; i++)
-                {
-                    _core.Actors.CreateStar(_core.Display.CurrentQuadrant);
-                }
-            }
-
             if (bgAppliedOffsetX != 0 || bgAppliedOffsetY != 0)
             {
                 lock (_core.Actors.Stars)
                 {
+                    if (_core.Actors.Stars.Count < 100) //Never wan't more than n stars.
+                    {
+                        if (bgAppliedOffsetX > 0)
+                        {
+                            for (int i = 0; i < 100; i++) //n chances to create a star.
+                            {
+                                if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                                {
+                                    int x = Utility.Random.Next(_core.Display.VisibleSize.Width - (int)bgAppliedOffsetX, _core.Display.VisibleSize.Width);
+                                    int y = Utility.Random.Next(0, _core.Display.VisibleSize.Height);
+                                    _core.Actors.CreateStar(x, y);
+                                }
+                            }
+                        }
+                        else if (bgAppliedOffsetX < 0)
+                        {
+                            for (int i = 0; i < 100; i++) //n chances to create a star.
+                            {
+                                if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                                {
+                                    int x = Utility.Random.Next(0, (int)-bgAppliedOffsetX);
+                                    int y = Utility.Random.Next(0, _core.Display.VisibleSize.Height);
+                                    _core.Actors.CreateStar(x, y);
+                                }
+                            }
+                        }
+
+                        if (bgAppliedOffsetY > 0)
+                        {
+                            for (int i = 0; i < 100; i++) //n chances to create a star.
+                            {
+                                if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                                {
+                                    int x = Utility.Random.Next(0, _core.Display.VisibleSize.Width);
+                                    int y = Utility.Random.Next(_core.Display.VisibleSize.Height - (int)bgAppliedOffsetY, _core.Display.VisibleSize.Height);
+                                    _core.Actors.CreateStar(x, y);
+                                }
+                            }
+                        }
+                        else if (bgAppliedOffsetY < 0)
+                        {
+                            for (int i = 0; i < 100; i++) //n chances to create a star.
+                            {
+                                if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                                {
+                                    int x = Utility.Random.Next(0, _core.Display.VisibleSize.Width);
+                                    int y = Utility.Random.Next(0, (int)-bgAppliedOffsetY);
+                                    _core.Actors.CreateStar(x, y);
+                                }
+                            }
+                        }
+                    }
+
                     foreach (var star in _core.Actors.Stars)
                     {
+                        if (_core.Display.VisibleBounds.IntersectsWith(star.Bounds) == false) //Remove count off-screen stars.
+                        {
+                            star.ReadyForDeletion = true;
+                        }
+
                         star.X -= bgAppliedOffsetX;
                         star.Y -= bgAppliedOffsetY;
                     }
                 }
             }
-
+        
             #endregion
 
             #region Animation Frame Advancement.
@@ -416,18 +458,16 @@ namespace AI2D.Engine
                 }
             }
 
-            /*
-            lock (_core.Actors.Stars) //Do we really need to delete stars? I mean there are ALOT OF THEM!!!
+            lock (_core.Actors.Stars)
             {
-                for (int i = 0; i < _core.Actors.Animations.Count; i++)
+                for (int i = 0; i < _core.Actors.Stars.Count; i++)
                 {
-                    if (_core.Actors.Animations[i].ReadyForDeletion)
+                    if (_core.Actors.Stars[i].ReadyForDeletion)
                     {
-                        _core.Actors.DeleteAnimation(_core.Actors.Animations[i]);
+                        _core.Actors.DeleteStar(_core.Actors.Stars[i]);
                     }
                 }
             }
-            */
 
             lock (_core.Actors.Player)
             {
@@ -451,7 +491,7 @@ namespace AI2D.Engine
             //_core.Actors.DebugText.Text = $" Q {CurrentQuadrant.Bounds.X}x, {CurrentQuadrant.Bounds.Y}y"
             //    + $" View: {CurrentView.X.ToString("0000.000")}x, {CurrentView.Y.ToString("0000.000")}y";
 
-            //_core.Actors.PlayerStatsText.Text = $"HP: {_core.Actors.Player.HitPoints}, Ammo: {_core.Actors.Player.BulletsRemaining}";
+            _core.Actors.PlayerStatsText.Text = $"HP: {_core.Actors.Player.HitPoints}, Ammo: {_core.Actors.Player.BulletsRemaining}";
         }
     }
 }

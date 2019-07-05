@@ -11,11 +11,9 @@ namespace AI2D.Engine
 {
     public class EngineDisplay
     {
-        public Dictionary<Point, Quadrant> Quadrants = new Dictionary<Point, Quadrant>();
         public PointD BackgroundOffset { get; set; } = new PointD(); //Offset of background, all cals must take into account.
-        public RectangleF CurrentView { get; set; } //Rectangle of the currently displayed coords.
-        public Quadrant CurrentQuadrant { get; set; }
         public FrameCounter FrameCounter { get; set; } = new FrameCounter();
+        public RectangleF VisibleBounds { get; private set; }
 
         private Size _visibleSize;
         public Size VisibleSize
@@ -39,29 +37,7 @@ namespace AI2D.Engine
         {
             _drawingSurface = drawingSurface;
             _visibleSize = visibleSize;
-        }
-
-        public Quadrant GetQuadrant(double x, double y)
-        {
-            var coord = new Point(
-                    (int)(x / VisibleSize.Width),
-                    (int)(y / VisibleSize.Height)
-                );
-
-            if (Quadrants.ContainsKey(coord) == false)
-            {
-                var absoluteBounds = new Rectangle(
-                    VisibleSize.Width * coord.X,
-                    VisibleSize.Height * coord.Y,
-                    VisibleSize.Width,
-                    VisibleSize.Height);
-
-                var quad = new Quadrant(coord, absoluteBounds);
-
-                Quadrants.Add(coord, quad);
-            }
-
-            return Quadrants[coord];
+            VisibleBounds = new RectangleF(0, 0, visibleSize.Width, visibleSize.Height);
         }
     }
 }

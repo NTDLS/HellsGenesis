@@ -21,15 +21,15 @@ namespace AI2D.Engine
 
         public void Start()
         {
-            Actors.BackgroundMusicSound.Play();
+            //Actors.BackgroundMusicSound.Play();
 
             Actors.ResetPlayer();
             _engineThread.Start();
 
             Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
 
-            Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 10),
-                AddFreshEnemiesCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring);
+            //Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 10),
+            //    AddFreshEnemiesCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring);
         }
 
         private void FirstShowPlayerCallback(Core core, object refObj)

@@ -60,7 +60,6 @@
     <Compile Include="Engine\FrameCounter.cs" />
     <Compile Include="Engine\EngineActors.cs" />
     <Compile Include="Engine\EngineThread.cs" />
-    <Compile Include="Types\Quadrant.cs" />
     <Compile Include="Objects\ObjAnimation.cs" />
     <Compile Include="Engine\Consants.cs" />
     <Compile Include="Engine\EngineInput.cs" />
