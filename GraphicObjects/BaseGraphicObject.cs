@@ -365,8 +365,8 @@ namespace AI2D.GraphicObjects
             {
                 var bitmap = new Bitmap(_image);
 
-                var image = Utility.RotateImage(bitmap, Velocity.Angle.Degree);
-                Rectangle rect = new Rectangle((int)_x, (int)_y, _image.Width, _image.Height);
+                var image = Utility.RotateImageWithClipping(bitmap, Velocity.Angle.Degree);
+                Rectangle rect = new Rectangle((int)_x, (int)_y, image.Width, image.Height);
                 dc.DrawImage(image, rect);
             }
         }
