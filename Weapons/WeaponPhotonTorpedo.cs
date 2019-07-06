@@ -15,7 +15,7 @@ namespace AI2D.Weapons
         private const float soundVolumne = 0.4f;
 
         public WeaponPhotonTorpedo(Core core)
-            : base(core, imagePath, soundPath, soundVolumne)
+            : base(core, "Photon Torpedo", imagePath, soundPath, soundVolumne)
         {
             RoundQuantity = 10;
             Damage = 5;

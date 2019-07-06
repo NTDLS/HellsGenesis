@@ -10,21 +10,21 @@ namespace AI2D.GraphicObjects
 
         public int Damage { get; set; }
 
-        public ObjBullet(Core core, string imagePath, int damage, BaseGraphicObject firedFrom)
+        public ObjBullet(Core core, string imagePath, int damage, BaseGraphicObject firedFrom, PointD xyOffset = null)
             : base(core)
         {
             Damage = damage;
 
-            Vector initialVector = new Vector()
+            VelocityD initialVector = new VelocityD()
             {
-                Angle = new Angle(firedFrom.Velocity.Angle.Degree),
+                Angle = new AngleD(firedFrom.Velocity.Angle.Degree),
                 Speed = 25
             };
 
             var initialLocation = firedFrom.Location;
 
-            initialLocation.X = initialLocation.X;
-            initialLocation.Y = initialLocation.Y;
+            initialLocation.X = initialLocation.X + (xyOffset == null ? 0 : xyOffset.X);
+            initialLocation.Y = initialLocation.Y + (xyOffset == null ? 0 : xyOffset.Y);
 
             //initialLocation.X = (initialLocation.X + (firedFrom.Size.Width / 2.0));
             //initialLocation.Y = (initialLocation.Y + (firedFrom.Size.Height / 2.0));
@@ -41,7 +41,7 @@ namespace AI2D.GraphicObjects
             LoadResources(imagePath, null, null, null, initialLocation, initialVector);
         }
 
-        public ObjBullet(Core core, string imagePath, int damage, Vector initialVector, PointD initialLocation)
+        public ObjBullet(Core core, string imagePath, int damage, VelocityD initialVector, PointD initialLocation)
             : base(core)
         {
             Damage = damage;

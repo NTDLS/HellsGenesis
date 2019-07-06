@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EC831B70-C28C-4D6A-8C16-D3022D19ADF8}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>AI2D</RootNamespace>
     <AssemblyName>AI2D</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -74,6 +74,7 @@
     <Compile Include="Engine\EngineInput.cs" />
     <Compile Include="Engine\Utility.cs" />
     <Compile Include="GraphicObjects\ObjBullet.cs" />
+    <Compile Include="GraphicObjects\ObjDebug.cs" />
     <Compile Include="GraphicObjects\ObjStar.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -81,12 +82,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Types\EngineTypes.cs" />
-    <Compile Include="Types\Angle.cs" />
+    <Compile Include="Types\AngleD.cs" />
     <Compile Include="Types\PointD.cs" />
     <Compile Include="Types\PointI.cs" />
     <Compile Include="Types\RectangleD.cs" />
     <Compile Include="Types\SizeD.cs" />
-    <Compile Include="Types\Vector.cs" />
+    <Compile Include="Types\VelocityD.cs" />
     <Compile Include="Engine\EngineDisplay.cs" />
     <Compile Include="Engine\Core.cs" />
     <Compile Include="FormMain.cs">
@@ -102,7 +103,9 @@
     <Compile Include="GraphicObjects\ObjTextBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Weapons\IWeapon.cs" />
     <Compile Include="Weapons\WeaponPhotonTorpedo.cs" />
+    <Compile Include="Weapons\WeaponDualVulcanCannon.cs" />
     <Compile Include="Weapons\WeaponVulcanCannon.cs" />
     <Compile Include="Weapons\WeaponBase.cs" />
     <EmbeddedResource Include="FormMain.resx">

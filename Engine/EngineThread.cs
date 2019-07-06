@@ -81,7 +81,7 @@ namespace AI2D.Engine
                         if (_core.Actors.Player.CurrentWeapon?.RoundQuantity == 0)
                         {
                             _core.Actors.Player.AmmoEmptySound.Play();
-                            _core.Actors.Player.SelectNextAvailableUsableWeapon();
+                            _core.Actors.Player.SelectFirstAvailableUsableWeapon();
                         }
                     }
                 }
@@ -237,6 +237,21 @@ namespace AI2D.Engine
 
             #endregion
 
+#if DEBUG
+            if (_core.Actors.Debugs.Count > 0)
+            {
+                double X = -Math.Cos(_core.Actors.Player.Velocity.Angle.Radian + (90 * (Math.PI / 180))) * 100;
+                double Y = Math.Sin(_core.Actors.Player.Velocity.Angle.Radian + (90 * (Math.PI / 180)));
+
+                X = _core.Actors.Player.Location.X + 100;// + (xyOffset == null ? 0 : xyOffset.X);
+                Y = _core.Actors.Player.Location.Y;// + (xyOffset == null ? 0 : xyOffset.Y);
+
+                _core.Actors.Debugs[0].X = X;
+                _core.Actors.Debugs[0].Y = Y;
+                _core.Actors.Debugs[0].Velocity.Angle.Degree = _core.Actors.Player.Velocity.Angle.Degree;
+            }
+#endif
+
             #region Engine Event Callbacks.
 
             lock (_core.Actors.EngineEvents)
@@ -273,7 +288,7 @@ namespace AI2D.Engine
                             {
                                 if (enemy.CurrentWeapon?.RoundQuantity == 0)
                                 {
-                                    enemy.SelectNextAvailableUsableWeapon();
+                                    enemy.SelectFirstAvailableUsableWeapon();
                                 }
 
                                 enemy.CurrentWeapon?.Fire();
@@ -439,7 +454,7 @@ namespace AI2D.Engine
                     }
                 }
             }
-        
+
             #endregion
 
             #region Animation Frame Advancement.
@@ -527,11 +542,10 @@ namespace AI2D.Engine
             #endregion
 
             _core.Actors.PlayerStatsText.Text = $"HP: {_core.Actors.Player.HitPoints}, "
-                + $"Ammo: {_core.Actors.Player.CurrentWeapon?.RoundQuantity}, "
+                + $"Weapon: {_core.Actors.Player.CurrentWeapon?.Name} X{_core.Actors.Player.CurrentWeapon?.RoundQuantity}, "
                 + $"Location: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("0")}x:"
                 + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("0")}y\r\n";
 
         }
     }
 }
-

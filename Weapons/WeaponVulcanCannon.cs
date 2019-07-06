@@ -15,7 +15,7 @@ namespace AI2D.Weapons
         private const float soundVolumne = 0.4f;
 
         public WeaponVulcanCannon(Core core)
-            : base(core, imagePath, soundPath, soundVolumne)
+            : base(core, "Vulcan Cannon", imagePath, soundPath, soundVolumne)
         {
             RoundQuantity = 500;
             Damage = 1;

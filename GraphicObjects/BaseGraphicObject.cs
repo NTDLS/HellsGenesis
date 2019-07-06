@@ -18,7 +18,7 @@ namespace AI2D.GraphicObjects
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private int _MilisecondsBetweenHits = 100;
         private AudioClip _hitSound;
-        private List<WeaponBase> _weapons = new List<WeaponBase>();
+        private List<IWeapon> _weapons = new List<IWeapon>();
 
         private string _assetExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
         private string[] _assetExplosionAnimationFiles = {
@@ -43,9 +43,9 @@ namespace AI2D.GraphicObjects
         #region Properties.
 
         public RotationMode RotationMode { get; set; }
-        public WeaponBase CurrentWeapon { get; private set; }
+        public IWeapon CurrentWeapon { get; private set; }
         public int HitPoints { get; set; }
-        public Vector Velocity { get; set; }
+        public VelocityD Velocity { get; set; }
         public double RotationSpeed { get; set; } = 1.0;
 
         private bool _readyForDeletion;
@@ -163,7 +163,7 @@ namespace AI2D.GraphicObjects
         }
 
         public void LoadResources(string imagePath, Size? size = null, string hitSoundPath = null,
-            string explodeSoundPath = null, PointD initialLocation = null, Vector initialVector = null)
+            string explodeSoundPath = null, PointD initialLocation = null, VelocityD initialVector = null)
         {
             if (hitSoundPath == null)
             {
@@ -217,7 +217,7 @@ namespace AI2D.GraphicObjects
 
             if (initialVector == null)
             {
-                Velocity = new Vector();
+                Velocity = new VelocityD();
                 Velocity.Speed = Utility.Random.Next(Consants.Limits.MinSpeed, Consants.Limits.MaxSpeed);
                 Velocity.Angle.Degree = Utility.Random.Next(0, 360);
             }
@@ -232,13 +232,24 @@ namespace AI2D.GraphicObjects
             _weapons.Clear();
         }
 
-        public void AddWeapon(WeaponBase weapon)
+        public void AddWeapon(IWeapon weapon)
         {
             weapon.SetOwner(this);
             _weapons.Add(weapon);
         }
 
         public bool SelectNextAvailableUsableWeapon()
+        {
+            var existingWeapon = (from o in _weapons where o.RoundQuantity > 0 && o != CurrentWeapon select o).FirstOrDefault();
+            if (existingWeapon != null)
+            {
+                CurrentWeapon = existingWeapon;
+                return true;
+            }
+            CurrentWeapon = null;
+            return false;
+        }
+        public bool SelectFirstAvailableUsableWeapon()
         {
             var existingWeapon = (from o in _weapons where o.RoundQuantity > 0 select o).FirstOrDefault();
             if (existingWeapon != null)
@@ -250,7 +261,7 @@ namespace AI2D.GraphicObjects
             return false;
         }
 
-        public WeaponBase SelectWeapon(Type weaponType)
+        public IWeapon SelectWeapon(Type weaponType)
         {
             var existingWeapon = (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
             CurrentWeapon = existingWeapon;

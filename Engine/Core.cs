@@ -50,6 +50,10 @@ namespace AI2D.Engine
                 Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 1000),
                     AddFreshEnemiesCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring);
 
+                //This is debug stuff. Will be moved to a logic engine.
+                Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 0),
+                    AddDebugObjectsCallback, null, EngineCallbackEvent.CallbackEventMode.OneTime);
+
                 OnStart?.Invoke(this);
             }
         }
@@ -74,6 +78,17 @@ namespace AI2D.Engine
             _engineThread.Resume();
         }
 
+
+        /// <summary>
+        /// This is debug stuff. Will be moved to a logic engine.
+        /// </summary>
+        /// <param name="core"></param>
+        /// <param name="refObj"></param>
+        private void AddDebugObjectsCallback(Core core, object refObj)
+        {
+            Actors.CreateDebug();
+        }
+
         /// <summary>
         /// This is debug stuff. Will be moved to a logic engine.
         /// </summary>
@@ -91,7 +106,7 @@ namespace AI2D.Engine
         /// <param name="refObj"></param>
         private void AddFreshEnemiesCallback(Core core, object refObj)
         {
-            if (Actors.Enemies.Count < 5)
+            if (Actors.Enemies.Count < -1)
             {
                 for (int i = 0; i < 2; i++)
                 {

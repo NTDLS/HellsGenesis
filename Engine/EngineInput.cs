@@ -90,6 +90,10 @@ namespace AI2D.Engine
                 _core.Actors.Player.Velocity.Angle.Degree = 315;
                 _core.Actors.Player.Invalidate();
             }
+            if (key == Keys.Tab)
+            {
+                _core.Actors.Player.SelectNextAvailableUsableWeapon();
+            }
             if (key == Keys.D9)
             {
                 if (_core.Actors.Enemies.Count > 0)

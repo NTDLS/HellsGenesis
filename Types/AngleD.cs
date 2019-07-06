@@ -1,14 +1,23 @@
 ﻿using System;
+using System.Windows;
 
 namespace AI2D.Types
 {
-    public class Angle
+    public class AngleD
     {
-        public Angle()
+        public AngleD()
         {
         }
 
-        public Angle(double angleDegree)
+        public Vector Vector
+        {
+            get
+            {
+                return new Vector(X, Y);
+            }
+        }
+
+        public AngleD(double angleDegree)
         {
             _degree = angleDegree;
         }

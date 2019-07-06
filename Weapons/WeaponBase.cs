@@ -1,5 +1,6 @@
 ﻿using AI2D.Engine;
 using AI2D.GraphicObjects;
+using AI2D.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,27 +9,29 @@ using System.Threading.Tasks;
 
 namespace AI2D.Weapons
 {
-    public class WeaponBase
+    public class WeaponBase : IWeapon
     {
-        private Core _core;
-        private BaseGraphicObject _owner;
+        protected Core _core;
+        protected BaseGraphicObject _owner;
 
-        private DateTime _lastFired = DateTime.Now.AddMinutes(-5);
-        private AudioClip _bulletSound;
-        private string _imagePath;
+        protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
+        protected AudioClip _bulletSound;
+        protected string _imagePath;
+        public string Name { get; private set; }
 
         public int RoundQuantity { get; set; } = int.MaxValue;
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
 
-        public WeaponBase(Core core, string imagePath, string soundPath, float soundVolume)
+        public WeaponBase(Core core, string name, string imagePath, string soundPath, float soundVolume)
         {
             _core = core;
             _imagePath = imagePath;
             _bulletSound = _core.Actors.GetSoundCached(soundPath, soundVolume);
+            Name = name;
         }
 
-        public bool Fire()
+        public virtual bool Fire()
         {
             if (CanFire)
             {

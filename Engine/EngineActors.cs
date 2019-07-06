@@ -1,5 +1,6 @@
 ﻿using AI2D.GraphicObjects;
 using AI2D.GraphicObjects.Enemies;
+using AI2D.Types;
 using AI2D.Weapons;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace AI2D.Engine
         public List<ObjTextBlock> TextBlocks { get; private set; } = new List<ObjTextBlock>();
         public List<BaseEnemy> Enemies { get; private set; } = new List<BaseEnemy>();
         public List<ObjStar> Stars { get; private set; } = new List<ObjStar>();
+        public List<ObjDebug> Debugs { get; private set; } = new List<ObjDebug>();
         public List<ObjAnimation> Animations { get; private set; } = new List<ObjAnimation>();
         public List<ObjBullet> Bullets { get; private set; } = new List<ObjBullet>();
         public ObjPlayer Player { get; private set; }
@@ -60,12 +62,9 @@ namespace AI2D.Engine
             Player.X = _core.Display.VisibleSize.Width / 2;
             Player.Y = _core.Display.VisibleSize.Height / 2;
 
-            var cannon = new WeaponVulcanCannon(_core)
-            {
-                RoundQuantity = 500
-            };
-
-            Player.AddWeapon(cannon);
+            Player.AddWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 500 });
+            Player.AddWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = int.MaxValue });
+            Player.AddWeapon(new WeaponPhotonTorpedo(_core) { RoundQuantity = 500 });
 
             Player.SelectWeapon(typeof(WeaponVulcanCannon));
         }
@@ -251,6 +250,25 @@ namespace AI2D.Engine
             }
         }
 
+        public ObjDebug CreateDebug()
+        {
+            lock (Debugs)
+            {
+                ObjDebug obj = new ObjDebug(_core);
+                Debugs.Add(obj);
+                return obj;
+            }
+        }
+
+        public void DeleteDebug(ObjDebug obj)
+        {
+            lock (Debugs)
+            {
+                obj.Cleanup();
+                Debugs.Remove(obj);
+            }
+        }
+
         public ObjStar CreateStar()
         {
             lock (Stars)
@@ -298,11 +316,11 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjBullet CreateBullet(string imagePath, int damage, BaseGraphicObject firedFrom)
+        public ObjBullet CreateBullet(string imagePath, int damage, BaseGraphicObject firedFrom, PointD xyOffset = null)
         {
             lock (Bullets)
             {
-                ObjBullet obj = new ObjBullet(_core, imagePath, damage, firedFrom);
+                ObjBullet obj = new ObjBullet(_core, imagePath, damage, firedFrom, xyOffset);
                 Bullets.Add(obj);
                 return obj;
             }
@@ -387,6 +405,17 @@ namespace AI2D.Engine
             }
         }
 
+        void RenderDebugs(Graphics dc)
+        {
+            lock (Debugs)
+            {
+                foreach (var obj in Debugs)
+                {
+                    obj.Render(dc);
+                }
+            }
+        }
+
         void RenderPlayer(Graphics dc)
         {
             if (Player != null)
@@ -403,6 +432,7 @@ namespace AI2D.Engine
             RenderPlayer(dc);
             RenderText(dc);
             RenderAnimations(dc);
+            RenderDebugs(dc);
         }
 
         #endregion
