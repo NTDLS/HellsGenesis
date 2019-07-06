@@ -31,7 +31,7 @@ namespace AI2D.Types
             }
             set
             {
-                _degree = value % 360;
+                _degree = (value % 360);
             }
         }
 
@@ -39,7 +39,8 @@ namespace AI2D.Types
         {
             get
             {
-                return (Math.PI / 180) * _degree;
+                //Rotate the radian counter-clockwise by 90 degrees. All of our graphics math should assume this.
+                return (Math.PI / 180) * (_degree - 90);
             }
         }
 
@@ -47,8 +48,7 @@ namespace AI2D.Types
         {
             get
             {
-                //Rotate the radian by 90 degrees.
-                return Math.Cos(Radian - (90 * (Math.PI / 180)));
+                return Math.Cos(Radian);
             }
         }
 
@@ -56,8 +56,7 @@ namespace AI2D.Types
         {
             get
             {
-                //Rotate the radian by 90 degrees.
-                return Math.Sin(Radian - (90 * (Math.PI / 180)));
+                return Math.Sin(Radian);
             }
         }
     }
