@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace AI2D.Weapons
 {
-    public class WeaponCannon : WeaponBase
+    public class WeaponVulcanCannon : WeaponBase
     {
-        private const string imagePath = @"..\..\Assets\Graphics\Bullet\Vulcan.png";
+        private const string imagePath = @"..\..\Assets\Graphics\Bullet\Vulcan Cannon.png";
         private const string soundPath = @"..\..\Assets\Sounds\Weapons\Vulcan Cannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponCannon(Core core)
+        public WeaponVulcanCannon(Core core)
             : base(core, imagePath, soundPath, soundVolumne)
         {
             RoundQuantity = 500;

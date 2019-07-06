@@ -9,7 +9,7 @@ namespace AI2D.GraphicObjects.Enemies
 {
     public class BaseEnemy : BaseGraphicObject
     {
-        public int CollisionDamage { get; set; } = 50;
+        public int CollisionDamage { get; set; } = 25;
 
         public BaseEnemy(Core core)
             : base(core)

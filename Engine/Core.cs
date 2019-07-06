@@ -97,14 +97,19 @@ namespace AI2D.Engine
                 {
                     var enemy = Actors.CreateEnemy<EnemyScinzad>();
 
-                    var weapon = new WeaponCannon(this)
+                    enemy.AddWeapon(new WeaponPhotonTorpedo(this)
                     {
+                        RoundQuantity = 10, //Could make the enemy retreat after running out of ammo?
                         FireDelayMilliseconds = 500,
-                        //RoundQuantity = 100 //Could make the enemy retreat after running out of ammo?
-                    };
+                    });
 
-                    enemy.AddWeapon(weapon);
-                    enemy.SelectWeapon(typeof(WeaponCannon));
+                    enemy.AddWeapon(new WeaponVulcanCannon(this)
+                    {
+                        FireDelayMilliseconds = 250,
+                        //RoundQuantity = 100 //Could make the enemy retreat after running out of ammo?
+                    });
+
+                    enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
                 }
             }
         }

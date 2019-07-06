@@ -72,7 +72,18 @@ namespace AI2D.Engine
             {
                 if (_core.Input.IsKeyPressed(PlayerKey.Fire))
                 {
-                    _core.Actors.Player.CurrentWeapon?.Fire();
+                    if (_core.Actors.Player.CurrentWeapon != null && _core.Actors.Player.CurrentWeapon.Fire())
+                    {
+                        if (_core.Actors.Player.CurrentWeapon?.RoundQuantity == 25)
+                        {
+                            _core.Actors.Player.AmmoLowSound.Play();
+                        }
+                        if (_core.Actors.Player.CurrentWeapon?.RoundQuantity == 0)
+                        {
+                            _core.Actors.Player.AmmoEmptySound.Play();
+                            _core.Actors.Player.SelectNextAvailableUsableWeapon();
+                        }
+                    }
                 }
 
                 double wallWidth = 200; //Where "infinite scrolling" begins.
@@ -260,6 +271,11 @@ namespace AI2D.Engine
                             bool isPointingAtPlayer = enemy.IsPointingAt(_core.Actors.Player, 8.0);
                             if (isPointingAtPlayer)
                             {
+                                if (enemy.CurrentWeapon?.RoundQuantity == 0)
+                                {
+                                    enemy.SelectNextAvailableUsableWeapon();
+                                }
+
                                 enemy.CurrentWeapon?.Fire();
                             }
                         }

@@ -28,14 +28,16 @@ namespace AI2D.Weapons
             _bulletSound = _core.Actors.GetSoundCached(soundPath, soundVolume);
         }
 
-        public void Fire()
+        public bool Fire()
         {
             if (CanFire)
             {
                 RoundQuantity--;
                 _bulletSound.Play();
                 _core.Actors.CreateBullet(_imagePath, Damage, _owner);
+                return true;
             }
+            return false;
         }
 
         public void SetOwner(BaseGraphicObject owner)

@@ -238,12 +238,22 @@ namespace AI2D.GraphicObjects
             _weapons.Add(weapon);
         }
 
+        public bool SelectNextAvailableUsableWeapon()
+        {
+            var existingWeapon = (from o in _weapons where o.RoundQuantity > 0 select o).FirstOrDefault();
+            if (existingWeapon != null)
+            {
+                CurrentWeapon = existingWeapon;
+                return true;
+            }
+            CurrentWeapon = null;
+            return false;
+        }
+
         public WeaponBase SelectWeapon(Type weaponType)
         {
             var existingWeapon = (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
-
             CurrentWeapon = existingWeapon;
-
             return existingWeapon;
         }
 

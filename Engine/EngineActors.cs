@@ -55,19 +55,19 @@ namespace AI2D.Engine
 
             Player.Velocity.Speed = 5;
             Player.RotationSpeed = 3;
-            Player.HitPoints = 100;
+            Player.HitPoints = 500;
 
             Player.X = _core.Display.VisibleSize.Width / 2;
             Player.Y = _core.Display.VisibleSize.Height / 2;
 
-            var cannon = new WeaponCannon(_core)
+            var cannon = new WeaponVulcanCannon(_core)
             {
-                RoundQuantity = 1000
+                RoundQuantity = 500
             };
 
             Player.AddWeapon(cannon);
 
-            Player.SelectWeapon(typeof(WeaponCannon));
+            Player.SelectWeapon(typeof(WeaponVulcanCannon));
         }
 
         public void ResetAndShowPlayer()
