@@ -1,12 +1,14 @@
 ﻿using AI2D.Engine;
 using AI2D.Types;
+using AI2D.Weapons;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace AI2D.Objects
+namespace AI2D.GraphicObjects
 {
-    public class ObjBase
+    public class BaseGraphicObject
     {
         protected Core _core;
 
@@ -15,14 +17,12 @@ namespace AI2D.Objects
         private AudioClip _explodeSound;
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private int _MilisecondsBetweenHits = 100;
-        private DateTime _lastFired = DateTime.Now.AddMinutes(-5);
-        private int _MilisecondsBetweenBullets = 100;
-        private AudioClip _bulletSound;
         private AudioClip _hitSound;
+        private List<WeaponBase> _weapons = new List<WeaponBase>();
 
         private string _assetExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
         private string[] _assetExplosionAnimationFiles = {
-            #region images.
+            #region Image Paths.
             "Explosion 256 1.png",
             "Explosion 256 2.png",
             "Explosion 256 3.png",
@@ -32,80 +32,19 @@ namespace AI2D.Objects
 
         private string _assetExplosionSoundPath = @"..\..\Assets\Sounds\Explode\";
         private string[] _assetExplosionSoundFiles = {
-            #region images.
+            #region Sound Paths.
             "Expload 1.wav",
             "Expload 2.wav",
-            "Expload 3.wav"
+            "Expload 3.wav",
+            "Expload 4.wav",
+            "Expload 5.wav"
             #endregion
         };
 
-        public ObjBase(Core core)
-        {
-            _core = core;
-        }
-
-        public void LoadResources(string imagePath, Size? size = null, PointD initialLocation = null, Vector initialVector = null)
-        {
-            _bulletSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Vulcan Cannon.wav", 0.4f);
-            _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship Hit.wav", 0.65f);
-
-            int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
-            _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
-
-            int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
-            _explosionAnimation = new ObjAnimation(_core, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
-
-            if (imagePath != null)
-            {
-                _image = _core.Actors.GetBitmapCached(imagePath);
-                if (size == null)
-                {
-                    _size = new Size(_image.Size.Width, _image.Size.Height);
-                }
-            }
-
-            if (size != null)
-            {
-                _image = Utility.ResizeImage(_image, size.Value.Width, size.Value.Height);
-                _size = (Size)size;
-            }
-
-            if (initialLocation == null)
-            {
-                _x = Utility.Random.Next(0, _core.Display.VisibleSize.Width - _size.Width);
-                _y = Utility.Random.Next(0, _core.Display.VisibleSize.Height - _size.Height);
-            }
-            else
-            {
-                _x = (int)initialLocation?.X;
-                _y = (int)initialLocation?.Y;
-            }
-
-            ReadyForDeletion = false;
-
-            if (initialVector == null)
-            {
-                Velocity = new Vector();
-                Velocity.Speed = Utility.Random.Next(Consants.Limits.MinSpeed, Consants.Limits.MaxSpeed);
-                Velocity.Angle.Degree = Utility.Random.Next(0, 360);
-            }
-            else
-            {
-                Velocity = initialVector;
-            }
-        }
-
-        public void SetImage(Image image)
-        {
-            _image = image;
-            _size.Height = image.Height;
-            _size.Width = image.Width;
-            Invalidate();
-        }
-
         #region Properties.
 
-        public int BulletsRemaining { get; set; } = int.MaxValue;
+        public WeaponBase CurrentWeapon { get; private set; }
+
         public int HitPoints { get; set; }
         public Vector Velocity { get; set; }
         public double RotationSpeed { get; set; } = 1.0;
@@ -124,23 +63,6 @@ namespace AI2D.Objects
                 {
                     Visable = false;
                 }
-            }
-        }
-
-        public bool CanFire
-        {
-            get
-            {
-                bool result = false;
-                if (Visable && BulletsRemaining > 0)
-                {
-                    result = ((DateTime.Now - _lastFired).TotalMilliseconds > _MilisecondsBetweenBullets);
-                    if (result)
-                    {
-                        _lastFired = DateTime.Now;
-                    }
-                }
-                return result;
             }
         }
 
@@ -236,13 +158,112 @@ namespace AI2D.Objects
 
         #endregion
 
+        public BaseGraphicObject(Core core)
+        {
+            _core = core;
+        }
+
+
+        public void LoadResources(string imagePath, Size? size = null, string hitSoundPath = null,
+            string explodeSoundPath = null, PointD initialLocation = null, Vector initialVector = null)
+        {
+            if (hitSoundPath == null)
+            {
+                _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship Hit.wav", 0.65f);
+            }
+            else
+            {
+                _hitSound = _core.Actors.GetSoundCached(hitSoundPath, 0.65f);
+            }
+
+            if (explodeSoundPath == null)
+            {
+                int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
+                _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
+            }
+            else
+            {
+                _explodeSound = _core.Actors.GetSoundCached(explodeSoundPath, 1.0f);
+            }
+
+            int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
+            _explosionAnimation = new ObjAnimation(_core, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
+
+            if (imagePath != null)
+            {
+                _image = _core.Actors.GetBitmapCached(imagePath);
+                if (size == null)
+                {
+                    _size = new Size(_image.Size.Width, _image.Size.Height);
+                }
+            }
+
+            if (size != null)
+            {
+                _image = Utility.ResizeImage(_image, size.Value.Width, size.Value.Height);
+                _size = (Size)size;
+            }
+
+            if (initialLocation == null)
+            {
+                _x = Utility.Random.Next(0, _core.Display.VisibleSize.Width - _size.Width);
+                _y = Utility.Random.Next(0, _core.Display.VisibleSize.Height - _size.Height);
+            }
+            else
+            {
+                _x = (int)initialLocation?.X;
+                _y = (int)initialLocation?.Y;
+            }
+
+            ReadyForDeletion = false;
+
+            if (initialVector == null)
+            {
+                Velocity = new Vector();
+                Velocity.Speed = Utility.Random.Next(Consants.Limits.MinSpeed, Consants.Limits.MaxSpeed);
+                Velocity.Angle.Degree = Utility.Random.Next(0, 360);
+            }
+            else
+            {
+                Velocity = initialVector;
+            }
+        }
+
+        public void ClearWeapons()
+        {
+            _weapons.Clear();
+        }
+
+        public void AddWeapon(WeaponBase weapon)
+        {
+            weapon.SetOwner(this);
+            _weapons.Add(weapon);
+        }
+
+        public WeaponBase SelectWeapon(Type weaponType)
+        {
+            var existingWeapon = (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
+
+            CurrentWeapon = existingWeapon;
+
+            return existingWeapon;
+        }
+
+        public void SetImage(Image image)
+        {
+            _image = image;
+            _size.Height = image.Height;
+            _size.Width = image.Width;
+            Invalidate();
+        }
+
         public void Invalidate()
         {
             var invalidRect = new Rectangle((int)_x, (int)_y, _size.Width, _size.Height);
             _core.Display.DrawingSurface.Invalidate(invalidRect);
         }
 
-        public bool Intersects(ObjBase otherObject)
+        public bool Intersects(BaseGraphicObject otherObject)
         {
             if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
@@ -257,14 +278,15 @@ namespace AI2D.Objects
         /// Subtract from the objects hitpoints.
         /// </summary>
         /// <returns></returns>
-        public bool Hit()
+        public bool Hit(int damage)
         {
             bool result = ((DateTime.Now - _lastHit).TotalMilliseconds > _MilisecondsBetweenHits);
             if (result)
             {
                 _hitSound.Play();
                 _lastHit = DateTime.Now;
-                HitPoints--;
+
+                HitPoints -= damage > HitPoints ? HitPoints : damage; //No need to go negative with the damage.
 
                 if (HitPoints <= 0)
                 {
@@ -274,14 +296,13 @@ namespace AI2D.Objects
             return result;
         }
 
-        public void FireGun()
+        public bool Hit(ObjBullet bullet)
         {
-            if (CanFire)
+            if (bullet != null)
             {
-                BulletsRemaining--;
-                _bulletSound.Play();
-                _core.Actors.CreateBullet(this);
+                return Hit(bullet.Damage);
             }
+            return false;
         }
 
         public void Rotate(double degrees)
@@ -299,7 +320,7 @@ namespace AI2D.Objects
             }
         }
 
-        public void MoveInDirectionOf(ObjBase obj, double? speed = null)
+        public void MoveInDirectionOf(BaseGraphicObject obj, double? speed = null)
         {
             this.Velocity.Angle.Degree = Utility.RequiredAngleTo(this.Location, obj.Location);
 
@@ -309,17 +330,17 @@ namespace AI2D.Objects
             }
         }
 
-        public double GetDeltaAngle(ObjBase atObj)
+        public double GetDeltaAngle(BaseGraphicObject atObj)
         {
             return Utility.GetDeltaAngle(this, atObj);
         }
 
-        public double RequiredAngleTo(ObjBase atObj)
+        public double RequiredAngleTo(BaseGraphicObject atObj)
         {
             return Utility.RequiredAngleTo(this, atObj);
         }
 
-        public bool IsPointingAt(ObjBase atObj, double toleranceDegrees)
+        public bool IsPointingAt(BaseGraphicObject atObj, double toleranceDegrees)
         {
             return Utility.IsPointingAt(this, atObj, toleranceDegrees);
         }
@@ -345,7 +366,7 @@ namespace AI2D.Objects
                 var bitmap = new Bitmap(_image);
 
                 var image = Utility.RotateImage(bitmap, Velocity.Angle.Degree);
-                Rectangle rect = new Rectangle((int)_x, (int)_y, image.Width, image.Height);
+                Rectangle rect = new Rectangle((int)_x, (int)_y, _image.Width, _image.Height);
                 dc.DrawImage(image, rect);
             }
         }

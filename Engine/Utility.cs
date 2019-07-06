@@ -1,4 +1,4 @@
-﻿using AI2D.Objects;
+﻿using AI2D.GraphicObjects;
 using AI2D.Types;
 using System;
 using System.Drawing;
@@ -14,7 +14,7 @@ namespace AI2D.Engine
 
         #region Graphics.
 
-        public static Bitmap RotateImage(Bitmap bmp, double angle)
+        public static Bitmap RotateImageWithClipping(Bitmap bmp, double angle)
         {
             Bitmap rotatedImage = new Bitmap(bmp.Width, bmp.Height);
             using (Graphics g = Graphics.FromImage(rotatedImage))
@@ -31,6 +31,29 @@ namespace AI2D.Engine
 
             return rotatedImage;
         }
+        public static Bitmap RotateImage(Bitmap b, double angle)
+        {
+            if (angle > 0)
+            {
+                int l = b.Width;
+                int h = b.Height;
+                double an = angle * Math.PI / 180;
+                double cos = Math.Abs(Math.Cos(an));
+                double sin = Math.Abs(Math.Sin(an));
+                int nl = (int)(l * cos + h * sin);
+                int nh = (int)(l * sin + h * cos);
+                Bitmap returnBitmap = new Bitmap(nl, nh);
+                Graphics g = Graphics.FromImage(returnBitmap);
+                g.TranslateTransform((float)(nl - l) / 2, (float)(nh - h) / 2);
+                g.TranslateTransform((float)b.Width / 2, (float)b.Height / 2);
+                g.RotateTransform((float)angle);
+                g.TranslateTransform(-(float)b.Width / 2, -(float)b.Height / 2);
+                g.DrawImage(b, new Point(0, 0));
+                return returnBitmap;
+            }
+            else return b;
+        }
+
 
         public static Image ResizeImage(Image image, int new_height, int new_width)
         {
@@ -45,7 +68,7 @@ namespace AI2D.Engine
 
         #region Math.
 
-        public static double RequiredAngleTo(ObjBase from, ObjBase to)
+        public static double RequiredAngleTo(BaseGraphicObject from, BaseGraphicObject to)
         {
             return RequiredAngleTo(from.Location, to.Location);
         }
@@ -57,13 +80,13 @@ namespace AI2D.Engine
             return fDegrees;
         }
 
-        public static bool IsPointingAt(ObjBase fromObj, ObjBase atObj, double toleranceDegrees)
+        public static bool IsPointingAt(BaseGraphicObject fromObj, BaseGraphicObject atObj, double toleranceDegrees)
         {
             var deltaAngle = Math.Abs(GetDeltaAngle(fromObj, atObj));
             return deltaAngle < toleranceDegrees;
         }
 
-        public static double GetDeltaAngle(ObjBase fromObj, ObjBase atObj)
+        public static double GetDeltaAngle(BaseGraphicObject fromObj, BaseGraphicObject atObj)
         {
             double angleTo = RequiredAngleTo(fromObj, atObj);
 
@@ -96,7 +119,7 @@ namespace AI2D.Engine
             return distance;
         }
 
-        public static double CalculeDistance(ObjBase from, ObjBase to)
+        public static double CalculeDistance(BaseGraphicObject from, BaseGraphicObject to)
         {
             return CalculeDistance(from.Location, to.Location);
         }

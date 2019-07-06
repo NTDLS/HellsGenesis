@@ -45,8 +45,10 @@ namespace AI2D.Engine
         {
             if (key == Keys.D0)
             {
-                _core.Actors.Enemies[0].X = 400;
-                _core.Actors.Enemies[0].Y = 400;
+                if (_core.Actors.Enemies.Count > 0)
+                {
+                    _core.Actors.Enemies[0].Explode();
+                }
             }
             if (key == Keys.D1)
             {
@@ -97,12 +99,8 @@ namespace AI2D.Engine
             }
             if (key == Keys.Escape)
             {
-                if (_core.Actors.Enemies.Count > 0)
-                {
-                    _core.Actors.Enemies[0].Explode();
-                }
+                //_core.Stop();
             }
-
         }
     }
 }

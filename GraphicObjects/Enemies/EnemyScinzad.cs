@@ -1,9 +1,20 @@
 ﻿using AI2D.Engine;
 using System.Linq;
 
-namespace AI2D.Objects
+namespace AI2D.GraphicObjects.Enemies
 {
-    public class ObjEnemy : ObjBase
+
+    /*
+Scinzad
+Eqrox
+Theda
+Irlen
+Uves
+Xuqan
+Aavvol
+     * */
+
+    public class EnemyScinzad : BaseEnemy
     {
         private string _assetPath = @"..\..\Assets\Graphics\Enemy\";
         private string[] _imagePaths = {
@@ -66,7 +77,7 @@ namespace AI2D.Objects
             #endregion
         };
 
-        public ObjEnemy(Core core)
+        public EnemyScinzad(Core core)
             : base(core)
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();

@@ -1,4 +1,6 @@
-﻿using AI2D.Objects;
+﻿using AI2D.GraphicObjects;
+using AI2D.GraphicObjects.Enemies;
+using AI2D.Weapons;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,7 +16,7 @@ namespace AI2D.Engine
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
 
         public List<ObjTextBlock> TextBlocks { get; private set; } = new List<ObjTextBlock>();
-        public List<ObjEnemy> Enemies { get; private set; } = new List<ObjEnemy>();
+        public List<BaseEnemy> Enemies { get; private set; } = new List<BaseEnemy>();
         public List<ObjStar> Stars { get; private set; } = new List<ObjStar>();
         public List<ObjAnimation> Animations { get; private set; } = new List<ObjAnimation>();
         public List<ObjBullet> Bullets { get; private set; } = new List<ObjBullet>();
@@ -49,12 +51,23 @@ namespace AI2D.Engine
                 Player = new ObjPlayer(_core) { Visable = false };
             }
 
+            Player.ClearWeapons();
+
             Player.Velocity.Speed = 5;
             Player.RotationSpeed = 3;
             Player.HitPoints = 100;
-            Player.BulletsRemaining = 1000;
+
             Player.X = _core.Display.VisibleSize.Width / 2;
             Player.Y = _core.Display.VisibleSize.Height / 2;
+
+            var cannon = new WeaponCannon(_core)
+            {
+                RoundQuantity = 1000
+            };
+
+            Player.AddWeapon(cannon);
+
+            Player.SelectWeapon(typeof(WeaponCannon));
         }
 
         public void ResetAndShowPlayer()
@@ -119,7 +132,7 @@ namespace AI2D.Engine
 
         #region Factories.
 
-        public void PlaceAnimationOnTopOf(ObjAnimation animation, ObjBase defaultPosition)
+        public void PlaceAnimationOnTopOf(ObjAnimation animation, BaseGraphicObject defaultPosition)
         {
             lock (Animations)
             {
@@ -251,17 +264,26 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjEnemy CreateEnemy()
+        public void InjectEnemy(BaseEnemy obj)
         {
             lock (Enemies)
             {
-                ObjEnemy obj = new ObjEnemy(_core);
                 Enemies.Add(obj);
-                return obj;
             }
         }
 
-        public void DeleteEnemy(ObjEnemy obj)
+        public T CreateEnemy<T>() where T : BaseEnemy
+        {
+            lock (Enemies)
+            {
+                object[] param = { _core };
+                BaseEnemy obj = (BaseEnemy)Activator.CreateInstance(typeof(T), param);
+                Enemies.Add(obj);
+                return (T)obj;
+            }
+        }
+
+        public void DeleteEnemy(BaseEnemy obj)
         {
             lock (Enemies)
             {
@@ -270,11 +292,11 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjBullet CreateBullet(ObjBase firedFrom)
+        public ObjBullet CreateBullet(string imagePath, int damage, BaseGraphicObject firedFrom)
         {
             lock (Bullets)
             {
-                ObjBullet obj = new ObjBullet(_core, firedFrom);
+                ObjBullet obj = new ObjBullet(_core, imagePath, damage, firedFrom);
                 Bullets.Add(obj);
                 return obj;
             }

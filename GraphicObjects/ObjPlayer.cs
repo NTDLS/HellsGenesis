@@ -1,8 +1,8 @@
 ﻿using AI2D.Engine;
 
-namespace AI2D.Objects
+namespace AI2D.GraphicObjects
 {
-    public class ObjPlayer : ObjBase
+    public class ObjPlayer : BaseGraphicObject
     {
         private const string _imagePath = @"..\..\Assets\Graphics\Player\Default.png";
 
@@ -10,6 +10,7 @@ namespace AI2D.Objects
             : base(core)
         {
             LoadResources(_imagePath, new System.Drawing.Size(32, 32));
+
         }
     }
 }

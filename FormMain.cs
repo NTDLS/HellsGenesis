@@ -40,6 +40,13 @@ namespace AI2D
 
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             _core = new Core(pictureBoxScene, new Size(this.Width, this.Height));
+
+            _core.OnStop += _core_OnStop;
+        }
+
+        private void _core_OnStop(Core sender)
+        {
+            this.Close();
         }
 
         private void FormMain_Shown(object sender, EventArgs e)
@@ -66,6 +73,20 @@ namespace AI2D
 
         private void FormMain_KeyUp(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Escape)
+            {
+                _core.Pause();
+
+                if (MessageBox.Show("Are you sure you want to quit?", "Afraid to go on?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                {
+                    this.Close();
+                }
+                else
+                {
+                    _core.Resume();
+                }
+            }
+
             if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(Types.PlayerKey.Forward, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(Types.PlayerKey.RotateCounterClockwise, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(Types.PlayerKey.Reverse, Types.KeyPressState.Up);
@@ -89,12 +110,18 @@ namespace AI2D
 
         private void PictureBoxScene_MouseEnter(object sender, EventArgs e)
         {
-            Cursor.Hide();
+            if (_fullScreen)
+            {
+                Cursor.Hide();
+            }
         }
 
         private void PictureBoxScene_MouseLeave(object sender, EventArgs e)
         {
-            Cursor.Show();
+            if (_fullScreen)
+            {
+                Cursor.Show();
+            }
         }
     }
 }

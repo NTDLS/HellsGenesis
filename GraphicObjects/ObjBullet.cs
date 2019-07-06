@@ -1,17 +1,20 @@
 ﻿using AI2D.Engine;
+using AI2D.GraphicObjects.Enemies;
 using AI2D.Types;
 
-namespace AI2D.Objects
+namespace AI2D.GraphicObjects
 {
-    public class ObjBullet: ObjBase
+    public class ObjBullet: BaseGraphicObject
     {
         public FiredFromType FiredFromType { get; set; }
 
-        private const string _imagePath = @"..\..\Assets\Graphics\Bullet\Vulcan.png";
+        public int Damage { get; set; }
 
-        public ObjBullet(Core core, ObjBase firedFrom)
+        public ObjBullet(Core core, string imagePath, int damage, BaseGraphicObject firedFrom)
             : base(core)
         {
+            Damage = damage;
+
             Vector initialVector = new Vector()
             {
                 Angle = new Angle(firedFrom.Velocity.Angle.Degree),
@@ -23,7 +26,7 @@ namespace AI2D.Objects
             initialLocation.X = (initialLocation.X + (firedFrom.Size.Width / 2.0));
             initialLocation.Y = (initialLocation.Y + (firedFrom.Size.Height / 2.0));
 
-            if (firedFrom is ObjEnemy)
+            if (firedFrom is BaseEnemy)
             {
                 FiredFromType = FiredFromType.Enemy;
             }
@@ -32,7 +35,15 @@ namespace AI2D.Objects
                 FiredFromType = FiredFromType.Player;
             }
 
-            LoadResources(_imagePath, null, initialLocation, initialVector);
+            LoadResources(imagePath, null, null, null, initialLocation, initialVector);
+        }
+
+        public ObjBullet(Core core, string imagePath, int damage, Vector initialVector, PointD initialLocation)
+            : base(core)
+        {
+            Damage = damage;
+
+            LoadResources(imagePath, null, null, null, initialLocation, initialVector);
         }
     }
 }

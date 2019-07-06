@@ -2,9 +2,9 @@
 using System;
 using System.Drawing;
 
-namespace AI2D.Objects
+namespace AI2D.GraphicObjects
 {
-    public class ObjAnimation : ObjBase
+    public class ObjAnimation : BaseGraphicObject
     {
         private Bitmap _explodeFrame;
         private int _frameCount;

@@ -2,9 +2,9 @@
 using System;
 using System.Drawing;
 
-namespace AI2D.Objects
+namespace AI2D.GraphicObjects
 {
-    public class ObjTextBlock: ObjBase
+    public class ObjTextBlock: BaseGraphicObject
     {
         private Rectangle _prevRegion;
         private Font _font;

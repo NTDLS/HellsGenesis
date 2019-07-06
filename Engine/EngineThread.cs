@@ -7,6 +7,7 @@ namespace AI2D.Engine
     {
         private Core _core;
         private bool _shutdown = false;
+        private bool _pause = false;
         private System.Threading.Thread _graphicsThread;
         private double _ramppedPlayerThrust = 0;
         private double _ramppedPlayerThrustPercentage = 0;
@@ -29,6 +30,16 @@ namespace AI2D.Engine
             _shutdown = true;
         }
 
+        public void Pause()
+        {
+            _pause = true;
+        }
+
+        public void Resume()
+        {
+            _pause = false;
+        }
+
         private void GraphicsThreadProc()
         {
             for (int i = 0; i < 20; i++)
@@ -40,9 +51,13 @@ namespace AI2D.Engine
             {
                 AdvanceFrame();
                 System.Threading.Thread.Sleep(10);
+
+                while (_pause && _shutdown == false)
+                {
+                    System.Threading.Thread.Sleep(10);
+                }
             }
         }
-
 
         void AdvanceFrame()
         {
@@ -57,7 +72,7 @@ namespace AI2D.Engine
             {
                 if (_core.Input.IsKeyPressed(PlayerKey.Fire))
                 {
-                    _core.Actors.Player.FireGun();
+                    _core.Actors.Player.CurrentWeapon?.Fire();
                 }
 
                 double wallWidth = 200; //Where "infinite scrolling" begins.
@@ -186,11 +201,11 @@ namespace AI2D.Engine
 
                 if (_core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
                 {
-                    _core.Actors.Player.Rotate(-(rotationSpeed > 0.5 ? rotationSpeed : 0.5));
+                    _core.Actors.Player.Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0));
                 }
                 else if (_core.Input.IsKeyPressed(PlayerKey.RotateClockwise))
                 {
-                    _core.Actors.Player.Rotate(rotationSpeed > 0.5 ? rotationSpeed : 0.5);
+                    _core.Actors.Player.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
                 }
             }
 
@@ -237,16 +252,19 @@ namespace AI2D.Engine
                         //double deltaAngle = Utility.GetDeltaAngle(enemy, _core.Actors.Player);
                         //_core.Actors.DebugText.Text = $"DA: {deltaAngle.ToString("####.###")}";
 
+                        //If we are close to the player.
                         double distanceToPlayer = Utility.CalculeDistance(enemy, _core.Actors.Player);
-                        if (distanceToPlayer < 200)
+                        if (distanceToPlayer < 400)
                         {
+                            //If we are pointing at the player.
                             bool isPointingAtPlayer = enemy.IsPointingAt(_core.Actors.Player, 8.0);
                             if (isPointingAtPlayer)
                             {
-                                enemy.FireGun();
+                                enemy.CurrentWeapon?.Fire();
                             }
                         }
 
+                        //If the enemy is off the screen, point at the player and come back into view.
                         if (enemy.X < (0 - (enemy.Size.Width + 40)) || enemy.Y < (0 - (enemy.Size.Height + 40))
                             || enemy.X >= (_core.Display.VisibleSize.Width + enemy.Size.Width) + 40
                             || enemy.Y >= (_core.Display.VisibleSize.Height + enemy.Size.Height) + 40)
@@ -254,9 +272,21 @@ namespace AI2D.Engine
                             enemy.MoveInDirectionOf(_core.Actors.Player);
                         }
 
+                        //Player collides with enemy.
                         if (enemy.Intersects(_core.Actors.Player))
                         {
-                            _core.Actors.Player.Hit();
+                            _core.Actors.Player.Hit(enemy.CollisionDamage);
+                            enemy.Hit(enemy.CollisionDamage);
+                        }
+
+                        // Enemies collides with another enemy.
+                        foreach (var friendlyCollision in _core.Actors.Enemies)
+                        {
+                            if (enemy != friendlyCollision && enemy.Intersects(friendlyCollision))
+                            {
+                                friendlyCollision.Hit(enemy.CollisionDamage);
+                                enemy.Hit(enemy.CollisionDamage);
+                            }
                         }
                     }
 
@@ -271,7 +301,7 @@ namespace AI2D.Engine
                             {
                                 if (bullet.Intersects(enemy))
                                 {
-                                    enemy.Hit();
+                                    enemy.Hit(bullet);
                                     bullet.ReadyForDeletion = true;
                                 }
                             }
@@ -313,7 +343,7 @@ namespace AI2D.Engine
                     {
                         if (bullet.Intersects(_core.Actors.Player))
                         {
-                            _core.Actors.Player.Hit();
+                            _core.Actors.Player.Hit(bullet);
                             bullet.ReadyForDeletion = true;
                         }
                     }
@@ -481,7 +511,7 @@ namespace AI2D.Engine
             #endregion
 
             _core.Actors.PlayerStatsText.Text = $"HP: {_core.Actors.Player.HitPoints}, "
-                + $"Ammo: {_core.Actors.Player.BulletsRemaining}, "
+                + $"Ammo: {_core.Actors.Player.CurrentWeapon?.RoundQuantity}, "
                 + $"Location: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("0")}x:"
                 + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("0")}y\r\n";
 

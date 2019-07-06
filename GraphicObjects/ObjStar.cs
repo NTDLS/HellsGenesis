@@ -1,9 +1,9 @@
 ﻿using AI2D.Engine;
 using System.Linq;
 
-namespace AI2D.Objects
+namespace AI2D.GraphicObjects
 {
-    public class ObjStar : ObjBase
+    public class ObjStar : BaseGraphicObject
     {
         private string _assetStarPath = @"..\..\Assets\Graphics\Star\";
         private string[] _assetStarFiles = {

@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EC831B70-C28C-4D6A-8C16-D3022D19ADF8}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>AI2D</RootNamespace>
     <AssemblyName>AI2D</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -35,6 +35,9 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>AI2D.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
@@ -60,12 +63,13 @@
     <Compile Include="Engine\FrameCounter.cs" />
     <Compile Include="Engine\EngineActors.cs" />
     <Compile Include="Engine\EngineThread.cs" />
-    <Compile Include="Objects\ObjAnimation.cs" />
+    <Compile Include="GraphicObjects\Enemies\BaseEnemy.cs" />
+    <Compile Include="GraphicObjects\ObjAnimation.cs" />
     <Compile Include="Engine\Consants.cs" />
     <Compile Include="Engine\EngineInput.cs" />
     <Compile Include="Engine\Utility.cs" />
-    <Compile Include="Objects\ObjBullet.cs" />
-    <Compile Include="Objects\ObjStar.cs" />
+    <Compile Include="GraphicObjects\ObjBullet.cs" />
+    <Compile Include="GraphicObjects\ObjStar.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -87,12 +91,14 @@
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Engine\AudioClip.cs" />
-    <Compile Include="Objects\ObjBase.cs" />
-    <Compile Include="Objects\ObjPlayer.cs" />
-    <Compile Include="Objects\ObjEnemy.cs" />
-    <Compile Include="Objects\ObjTextBlock.cs" />
+    <Compile Include="GraphicObjects\BaseGraphicObject.cs" />
+    <Compile Include="GraphicObjects\ObjPlayer.cs" />
+    <Compile Include="GraphicObjects\Enemies\EnemyScinzad.cs" />
+    <Compile Include="GraphicObjects\ObjTextBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Weapons\WeaponCannon.cs" />
+    <Compile Include="Weapons\WeaponBase.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -116,6 +122,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AI2D.ico" />
     <Content Include="DirectX Notes.txt" />
   </ItemGroup>
   <ItemGroup>
