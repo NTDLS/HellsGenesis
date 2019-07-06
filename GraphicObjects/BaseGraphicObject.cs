@@ -26,7 +26,6 @@ namespace AI2D.GraphicObjects
             "Explosion 256 1.png",
             "Explosion 256 2.png",
             "Explosion 256 3.png",
-            "Explosion 256 4.png",
             #endregion
         };
 
@@ -43,8 +42,8 @@ namespace AI2D.GraphicObjects
 
         #region Properties.
 
+        public RotationMode RotationMode { get; set; }
         public WeaponBase CurrentWeapon { get; private set; }
-
         public int HitPoints { get; set; }
         public Vector Velocity { get; set; }
         public double RotationSpeed { get; set; } = 1.0;
@@ -107,11 +106,11 @@ namespace AI2D.GraphicObjects
             }
         }
 
-        public PointF LocationF
+        public PointD LocationCenter
         {
             get
             {
-                return new PointF((float)_x, (float)_y);
+                return new PointD(_x - (Size.Width / 2.0), _y - (Size.Height / 2.0));
             }
         }
 
@@ -128,18 +127,12 @@ namespace AI2D.GraphicObjects
         {
             get
             {
-                return new RectangleF((float)_x, (float)_y, Size.Height, Size.Width);
+                return new RectangleF(
+                    (float)(_x - (Size.Width / 2.0)),
+                    (float)(_y - (Size.Height / 2.0)),
+                    Size.Height, Size.Width);
             }
         }
-
-        public Rectangle BoundsI
-        {
-            get
-            {
-                return new Rectangle((int)_x, (int)_y, Size.Height, Size.Width);
-            }
-        }
-
 
         private bool _isVisible = true;
         public bool Visable
@@ -151,7 +144,12 @@ namespace AI2D.GraphicObjects
             set
             {
                 _isVisible = value;
-                var invalidRect = new Rectangle((int)_x, (int)_y, _size.Width, _size.Height);
+
+                var invalidRect = new Rectangle(
+                    (int)(_x - (_size.Width / 2.0)),
+                    (int)(_y - (_size.Height / 2.0)),
+                    _size.Width, _size.Height);
+
                 _core.Display.DrawingSurface.Invalidate(invalidRect);
             }
         }
@@ -161,8 +159,8 @@ namespace AI2D.GraphicObjects
         public BaseGraphicObject(Core core)
         {
             _core = core;
+            RotationMode = RotationMode.Upsize;
         }
-
 
         public void LoadResources(string imagePath, Size? size = null, string hitSoundPath = null,
             string explodeSoundPath = null, PointD initialLocation = null, Vector initialVector = null)
@@ -259,7 +257,10 @@ namespace AI2D.GraphicObjects
 
         public void Invalidate()
         {
-            var invalidRect = new Rectangle((int)_x, (int)_y, _size.Width, _size.Height);
+            var invalidRect = new Rectangle(
+                (int)(_x - (_size.Width / 2.0)),
+                (int)(_y - (_size.Height / 2.0)),
+                _size.Width, _size.Height);
             _core.Display.DrawingSurface.Invalidate(invalidRect);
         }
 
@@ -363,11 +364,35 @@ namespace AI2D.GraphicObjects
         {
             if (_isVisible && _image != null)
             {
-                var bitmap = new Bitmap(_image);
+                if (Velocity.Angle.Degree != 0 && RotationMode != RotationMode.None)
+                {
+                    if (RotationMode == RotationMode.Upsize) //Very expensize
+                    {
+                        var bitmap = new Bitmap(_image);
+                        var image = Utility.RotateImageWithUpsize(bitmap, Velocity.Angle.Degree, Color.Transparent);
+                        Rectangle rect = new Rectangle((int)(_x - (image.Width / 2.0)), (int)(_y - (image.Height / 2.0)), image.Width, image.Height);
+                        dc.DrawImage(image, rect);
 
-                var image = Utility.RotateImageWithClipping(bitmap, Velocity.Angle.Degree);
-                Rectangle rect = new Rectangle((int)_x, (int)_y, image.Width, image.Height);
-                dc.DrawImage(image, rect);
+                        _size.Height = image.Height;
+                        _size.Width = image.Width;
+                    }
+                    else if (RotationMode == RotationMode.Clip) //Much less expensive.
+                    {
+                            var bitmap = new Bitmap(_image);
+                        var image = Utility.RotateImageWithClipping(bitmap, Velocity.Angle.Degree, Color.Transparent);
+                        Rectangle rect = new Rectangle((int)(_x - (image.Width / 2.0)), (int)(_y - (image.Height / 2.0)), image.Width, image.Height);
+                        dc.DrawImage(image, rect);
+
+                        _size.Height = image.Height;
+                        _size.Width = image.Width;
+                    }
+                }
+                else //Almost free.
+                {
+                    Rectangle rect = new Rectangle((int)(_x - (_image.Width / 2.0)), (int)(_y - (_image.Height / 2.0)), _image.Width, _image.Height);
+                    dc.DrawImage(_image, rect);
+                    dc.DrawImage(_image, rect);
+                }
             }
         }
 

@@ -23,8 +23,11 @@ namespace AI2D.GraphicObjects
 
             var initialLocation = firedFrom.Location;
 
-            initialLocation.X = (initialLocation.X + (firedFrom.Size.Width / 2.0));
-            initialLocation.Y = (initialLocation.Y + (firedFrom.Size.Height / 2.0));
+            initialLocation.X = initialLocation.X;
+            initialLocation.Y = initialLocation.Y;
+
+            //initialLocation.X = (initialLocation.X + (firedFrom.Size.Width / 2.0));
+            //initialLocation.Y = (initialLocation.Y + (firedFrom.Size.Height / 2.0));
 
             if (firedFrom is BaseEnemy)
             {

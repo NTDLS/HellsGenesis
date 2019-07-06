@@ -24,7 +24,7 @@ namespace AI2D.GraphicObjects.Enemies
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
 
-            HitPoints = Utility.Random.Next(Consants.Limits.MinEnemyHealth, Consants.Limits.MaxEnemyHealth);
+            HitPoints = 1000; // Utility.Random.Next(Consants.Limits.MinEnemyHealth, Consants.Limits.MaxEnemyHealth);
 
             LoadResources(_assetPath +_imagePaths[imageIndex], new System.Drawing.Size(32, 32));
         }

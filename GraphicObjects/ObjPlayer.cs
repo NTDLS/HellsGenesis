@@ -4,7 +4,7 @@ namespace AI2D.GraphicObjects
 {
     public class ObjPlayer : BaseGraphicObject
     {
-        private const string _imagePath = @"..\..\Assets\Graphics\Player\Default.png";
+        private const string _imagePath = @"..\..\Assets\Graphics\Player\Player (1).png";
 
         public ObjPlayer(Core core)
             : base(core)

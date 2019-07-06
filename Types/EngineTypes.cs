@@ -12,6 +12,13 @@
         Enemy
     }
 
+    public enum RotationMode
+    {
+        None, //Almost free.
+        Clip, //Expensive...
+        Upsize //Hella expensive!
+    }
+
     public enum PlayerKey
     {
         Forward,

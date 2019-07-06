@@ -136,9 +136,15 @@ namespace AI2D.Engine
         {
             lock (Animations)
             {
-                animation.X = defaultPosition.X + ((defaultPosition.Size.Width - animation.Size.Width) / 2.0);
-                animation.Y = defaultPosition.Y + ((defaultPosition.Size.Height - animation.Size.Height) / 2.0);
+                //animation.X = defaultPosition.X + ((defaultPosition.Size.Width - animation.Size.Width) / 2.0);
+                //animation.Y = defaultPosition.Y + ((defaultPosition.Size.Height - animation.Size.Height) / 2.0);
+
+                animation.X = defaultPosition.X;
+                animation.Y = defaultPosition.Y;
+
                 animation.Velocity = defaultPosition.Velocity;
+                animation.RotationMode = Types.RotationMode.Clip; //Much less expensive. Use this or NONE if you can.
+
                 Animations.Add(animation);
             }
         }
