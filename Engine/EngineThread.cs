@@ -220,6 +220,11 @@ namespace AI2D.Engine
 
             #region Quadrant Math.
 
+            _core.Display.CurrentQuadrant = _core.Display.GetQuadrant(
+                _core.Actors.Player.X + _core.Display.BackgroundOffset.X,
+                _core.Actors.Player.Y + _core.Display.BackgroundOffset.Y);
+
+
             _core.Actors.DebugText.Text =
                     $"       Frame Rate: Avg: {_core.Display.FrameCounter.AverageFrameRate.ToString("0.0")},"
                                     + $"Min: {_core.Display.FrameCounter.FrameRateMin.ToString("0.0")},"
@@ -227,12 +232,14 @@ namespace AI2D.Engine
                 + $"Player Display XY: {_core.Actors.Player.X.ToString("#0.00")}x, {_core.Actors.Player.Y.ToString("#0.00")}y\r\n"
                 + $"     Player Angle: {_core.Actors.Player.Velocity.Angle.X.ToString("#0.00")}x, {_core.Actors.Player.Velocity.Angle.Y.ToString("#0.00")}y, "
                                     + $"{_core.Actors.Player.Velocity.Angle.Degree.ToString("#0.00")}deg, "
-                                    + $" {_core.Actors.Player.Velocity.Angle.Radian.ToString("#0.00")}rad\r\n"
+                                    + $" {_core.Actors.Player.Velocity.Angle.Radian.ToString("#0.00")}rad, "
+                                    + $" {_core.Actors.Player.Velocity.Angle.RadianUnadjusted.ToString("#0.00")}rad unadjusted\r\n"
                 + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
                                     + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
                 + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
                 + $"  Delta BG Offset: {bgAppliedOffsetX.ToString("#0.00")}x, {bgAppliedOffsetY.ToString("#0.00")}y\r\n"
-                + $"            Stars: {_core.Actors.Stars.Count}";
+                + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}r\n"
+                + $"          Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}";
 
             #endregion
 

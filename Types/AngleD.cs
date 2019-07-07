@@ -47,6 +47,14 @@ namespace AI2D.Types
             }
         }
 
+        public double RadianUnadjusted
+        {
+            get
+            {
+                return ((Math.PI / 180) * _degree);
+            }
+        }
+
         public double X
         {
             get

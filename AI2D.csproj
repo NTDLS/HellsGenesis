@@ -85,6 +85,7 @@
     <Compile Include="Types\AngleD.cs" />
     <Compile Include="Types\PointD.cs" />
     <Compile Include="Types\PointI.cs" />
+    <Compile Include="Types\Quadrant.cs" />
     <Compile Include="Types\RectangleD.cs" />
     <Compile Include="Types\SizeD.cs" />
     <Compile Include="Types\VelocityD.cs" />

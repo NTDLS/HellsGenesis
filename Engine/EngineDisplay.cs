@@ -1,4 +1,5 @@
 ﻿using AI2D.Types;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,6 +7,9 @@ namespace AI2D.Engine
 {
     public class EngineDisplay
     {
+        public Dictionary<Point, Quadrant> Quadrants = new Dictionary<Point, Quadrant>();
+        public Quadrant CurrentQuadrant { get; set; }
+
         public PointD BackgroundOffset { get; set; } = new PointD(); //Offset of background, all cals must take into account.
         public FrameCounter FrameCounter { get; set; } = new FrameCounter();
         public RectangleF VisibleBounds { get; private set; }
@@ -33,6 +37,29 @@ namespace AI2D.Engine
             _drawingSurface = drawingSurface;
             _visibleSize = visibleSize;
             VisibleBounds = new RectangleF(0, 0, visibleSize.Width, visibleSize.Height);
+        }
+
+        public Quadrant GetQuadrant(double x, double y)
+        {
+            var coord = new Point(
+                    (int)(x / VisibleSize.Width),
+                    (int)(y / VisibleSize.Height)
+                );
+
+            if (Quadrants.ContainsKey(coord) == false)
+            {
+                var absoluteBounds = new Rectangle(
+                    VisibleSize.Width * coord.X,
+                    VisibleSize.Height * coord.Y,
+                    VisibleSize.Width,
+                    VisibleSize.Height);
+
+                var quad = new Quadrant(coord, absoluteBounds);
+
+                Quadrants.Add(coord, quad);
+            }
+
+            return Quadrants[coord];
         }
     }
 }
