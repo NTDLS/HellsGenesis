@@ -1,4 +1,6 @@
-﻿using AI2D.Types;
+﻿using AI2D.GraphicObjects.Enemies;
+using AI2D.Types;
+using AI2D.Weapons;
 using System;
 
 namespace AI2D.Engine
@@ -224,7 +226,6 @@ namespace AI2D.Engine
                 _core.Actors.Player.X + _core.Display.BackgroundOffset.X,
                 _core.Actors.Player.Y + _core.Display.BackgroundOffset.Y);
 
-
             _core.Actors.DebugText.Text =
                     $"       Frame Rate: Avg: {_core.Display.FrameCounter.AverageFrameRate.ToString("0.0")},"
                                     + $"Min: {_core.Display.FrameCounter.FrameRateMin.ToString("0.0")},"
@@ -240,6 +241,38 @@ namespace AI2D.Engine
                 + $"  Delta BG Offset: {bgAppliedOffsetX.ToString("#0.00")}x, {bgAppliedOffsetY.ToString("#0.00")}y\r\n"
                 + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}r\n"
                 + $"          Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}";
+
+
+            if (_core.Display.CurrentQuadrant.Key.X == -5
+                && _core.Display.CurrentQuadrant.Key.Y == -5)
+            {
+                if (_core.Actors.Enemies.Count < 10)
+                {
+                    _core.Actors.CreateEnemy<EnemyScinzad>();
+                }
+            }
+            if (_core.Display.CurrentQuadrant.Key.X == 5
+                && _core.Display.CurrentQuadrant.Key.Y == 5)
+            {
+                if (_core.Actors.Enemies.Count < 10)
+                {
+                    var enemy = _core.Actors.CreateEnemy<EnemyScinzad>();
+
+                    enemy.AddWeapon(new WeaponPhotonTorpedo(_core)
+                    {
+                        RoundQuantity = 10, //Could make the enemy retreat after running out of ammo?
+                        FireDelayMilliseconds = 500,
+                    });
+
+                    enemy.AddWeapon(new WeaponVulcanCannon(_core)
+                    {
+                        FireDelayMilliseconds = 250,
+                        //RoundQuantity = 100 //Could make the enemy retreat after running out of ammo?
+                    });
+
+                    enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
+                }
+            }
 
             #endregion
 
