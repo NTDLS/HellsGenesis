@@ -46,7 +46,6 @@ namespace AI2D.GraphicObjects
         public IWeapon CurrentWeapon { get; private set; }
         public int HitPoints { get; set; }
         public VelocityD Velocity { get; set; }
-        public double RotationSpeed { get; set; } = 1.0;
 
         private bool _readyForDeletion;
         public bool ReadyForDeletion
@@ -218,7 +217,7 @@ namespace AI2D.GraphicObjects
             if (initialVector == null)
             {
                 Velocity = new VelocityD();
-                Velocity.Speed = Utility.Random.Next(Consants.Limits.MinSpeed, Consants.Limits.MaxSpeed);
+                Velocity.MaxSpeed = Utility.Random.Next(Consants.Limits.MinSpeed, Consants.Limits.MaxSpeed);
                 Velocity.Angle.Degree = Utility.Random.Next(0, 360);
             }
             else
@@ -338,7 +337,7 @@ namespace AI2D.GraphicObjects
             this.Velocity.Angle.Degree = Utility.RequiredAngleTo(this.Location, location);
             if (speed != null)
             {
-                this.Velocity.Speed = (double)speed;
+                this.Velocity.MaxSpeed = (double)speed;
             }
         }
 
@@ -348,7 +347,7 @@ namespace AI2D.GraphicObjects
 
             if (speed != null)
             {
-                this.Velocity.Speed = (double)speed;
+                this.Velocity.MaxSpeed = (double)speed;
             }
         }
 

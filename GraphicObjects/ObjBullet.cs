@@ -18,7 +18,8 @@ namespace AI2D.GraphicObjects
             VelocityD initialVector = new VelocityD()
             {
                 Angle = new AngleD(firedFrom.Velocity.Angle.Degree),
-                Speed = 25
+                MaxSpeed = 25,
+                ThrottlePercentage = 100
             };
 
             var initialLocation = firedFrom.Location;

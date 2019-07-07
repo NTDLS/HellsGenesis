@@ -2,8 +2,8 @@
 {
     public static class Consants
     {
-        public const double PlayerThrustRampUp = 0.1;
-        public const double PlayerThrustRampDown = 0.05;
+        public const double PlayerThrustRampUp = 0.05;
+        public const double PlayerThrustRampDown = 0.01;
 
         public static class Limits
         {

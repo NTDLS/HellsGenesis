@@ -55,8 +55,8 @@ namespace AI2D.Engine
 
             Player.ClearWeapons();
 
-            Player.Velocity.Speed = 5;
-            Player.RotationSpeed = 3;
+            Player.Velocity.MaxSpeed = 5;
+            Player.Velocity.MaxRotationSpeed = 3;
             Player.HitPoints = 500;
 
             Player.X = _core.Display.VisibleSize.Width / 2;

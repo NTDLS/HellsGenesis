@@ -45,10 +45,10 @@ namespace AI2D.Engine
         {
             if (key == Keys.D0)
             {
-                if (_core.Actors.Enemies.Count > 0)
-                {
-                    _core.Actors.Enemies[0].Explode();
-                }
+                _core.Actors.Player.X = _core.Display.VisibleSize.Width / 2;
+                _core.Actors.Player.Y = _core.Display.VisibleSize.Height / 2;
+                _core.Actors.Player.Velocity.Angle.Degree = 0;
+                _core.Actors.Player.Velocity.ThrottlePercentage = 0;
             }
             if (key == Keys.D1)
             {
@@ -100,6 +100,10 @@ namespace AI2D.Engine
                 {
                     _core.Actors.Enemies[0].MoveInDirectionOf(_core.Actors.Player);
                 }
+                //if (_core.Actors.Enemies.Count > 0)
+                //{
+                //    _core.Actors.Enemies[0].Explode();
+                //}
             }
             if (key == Keys.Escape)
             {

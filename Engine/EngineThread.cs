@@ -9,8 +9,6 @@ namespace AI2D.Engine
         private bool _shutdown = false;
         private bool _pause = false;
         private System.Threading.Thread _graphicsThread;
-        private double _ramppedPlayerThrust = 0;
-        private double _ramppedPlayerThrustPercentage = 0;
 
         public EngineThread(Core core)
         {
@@ -91,44 +89,42 @@ namespace AI2D.Engine
                 //Make player thrust "build up" and fade.
                 if (_core.Input.IsKeyPressed(PlayerKey.Forward))
                 {
-                    if (_ramppedPlayerThrust < _core.Actors.Player.Velocity.Speed)
+                    if (_core.Actors.Player.Velocity.ThrottlePercentage < 100)
                     {
-                        _ramppedPlayerThrust += Consants.PlayerThrustRampUp;
+                        _core.Actors.Player.Velocity.ThrottlePercentage += Consants.PlayerThrustRampUp;
                     }
                 }
                 else if (_core.Input.IsKeyPressed(PlayerKey.Reverse))
                 {
-                    if (_ramppedPlayerThrust > -_core.Actors.Player.Velocity.Speed)
+                    if (_core.Actors.Player.Velocity.ThrottlePercentage > -0.5)
                     {
-                        _ramppedPlayerThrust -= Consants.PlayerThrustRampUp;
+                        _core.Actors.Player.Velocity.ThrottlePercentage -= Consants.PlayerThrustRampUp;
                     }
                 }
                 else
                 {
                     //If no "forward" or "reverse" user input is received... then fade the thrust.
-                    if (_ramppedPlayerThrust > 0)
+                    if (_core.Actors.Player.Velocity.ThrottlePercentage > 0)
                     {
-                        _ramppedPlayerThrust -= Consants.PlayerThrustRampDown;
-                        if (_ramppedPlayerThrust < 0)
+                        _core.Actors.Player.Velocity.ThrottlePercentage -= Consants.PlayerThrustRampDown;
+                        if (_core.Actors.Player.Velocity.ThrottlePercentage < 0)
                         {
-                            _ramppedPlayerThrust = 0; //We we overshot the fade, just stop the player.
+                            _core.Actors.Player.Velocity.ThrottlePercentage = 0;
                         }
                     }
-                    else if (_ramppedPlayerThrust < 0)
+                    else if (_core.Actors.Player.Velocity.ThrottlePercentage < 0)
                     {
-                        _ramppedPlayerThrust += Consants.PlayerThrustRampDown;
-                        if (_ramppedPlayerThrust > 0)
+                        _core.Actors.Player.Velocity.ThrottlePercentage += Consants.PlayerThrustRampDown;
+                        if (_core.Actors.Player.Velocity.ThrottlePercentage > 0)
                         {
-                            _ramppedPlayerThrust = 0; //We we overshot the fade, just stop the player.
+                            _core.Actors.Player.Velocity.ThrottlePercentage = 0;
                         }
                     }
                 }
 
-                _ramppedPlayerThrustPercentage = Math.Abs(_ramppedPlayerThrust / _core.Actors.Player.Velocity.Speed);
-
-                if (_ramppedPlayerThrust > 0)
+                if (_core.Actors.Player.Velocity.ThrottlePercentage > 0)
                 {
-                    double forwardThrust = _ramppedPlayerThrust;
+                    double forwardThrust = (_core.Actors.Player.Velocity.MaxSpeed * _core.Actors.Player.Velocity.ThrottlePercentage);
 
                     //Close to the right wall and travelling in that direction.
                     if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + wallWidth)
@@ -161,11 +157,11 @@ namespace AI2D.Engine
 
                     _core.Actors.ShipEngineRoarSound.Play();
                 }
-                else if (_ramppedPlayerThrust < 0)
+                else if (_core.Actors.Player.Velocity.ThrottlePercentage < 0)
                 {
                     //Do we really need to reverse? This is space!
 
-                    double reverseThrust = -_ramppedPlayerThrust;
+                    double reverseThrust = -(_core.Actors.Player.Velocity.MaxSpeed * _core.Actors.Player.Velocity.ThrottlePercentage);
 
                     //Close to the right wall and travelling in that direction.
                     if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + wallWidth)
@@ -208,7 +204,7 @@ namespace AI2D.Engine
                 _core.Display.BackgroundOffset.Y += bgAppliedOffsetY;
 
                 //We are going to restrict the rotation speed to a percentage of thrust.
-                double rotationSpeed = _core.Actors.Player.RotationSpeed * _ramppedPlayerThrustPercentage;
+                double rotationSpeed = _core.Actors.Player.Velocity.MaxRotationSpeed * _core.Actors.Player.Velocity.ThrottlePercentage;
 
                 if (_core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
                 {
@@ -229,6 +225,9 @@ namespace AI2D.Engine
                                     + $"Min: {_core.Display.FrameCounter.FrameRateMin.ToString("0.0")},"
                                     + $"Max: {_core.Display.FrameCounter.FrameRateMax.ToString("0.0")}\r\n"
                 + $"Player Display XY: {_core.Actors.Player.X.ToString("#0.00")}x, {_core.Actors.Player.Y.ToString("#0.00")}y\r\n"
+                + $"     Player Angle: {_core.Actors.Player.Velocity.Angle.X.ToString("#0.00")}x, {_core.Actors.Player.Velocity.Angle.Y.ToString("#0.00")}y, "
+                                    + $"{_core.Actors.Player.Velocity.Angle.Degree.ToString("#0.00")}deg, "
+                                    + $" {_core.Actors.Player.Velocity.Angle.Radian.ToString("#0.00")}rad\r\n"
                 + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
                                     + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
                 + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
@@ -321,8 +320,8 @@ namespace AI2D.Engine
                         }
                     }
 
-                    enemy.X += (enemy.Velocity.Angle.X * enemy.Velocity.Speed) - bgAppliedOffsetX;
-                    enemy.Y += (enemy.Velocity.Angle.Y * enemy.Velocity.Speed) - bgAppliedOffsetY;
+                    enemy.X += (enemy.Velocity.Angle.X * enemy.Velocity.MaxSpeed) - bgAppliedOffsetX;
+                    enemy.Y += (enemy.Velocity.Angle.Y * enemy.Velocity.MaxSpeed) - bgAppliedOffsetY;
 
                     lock (_core.Actors.Bullets)
                     {
@@ -367,8 +366,8 @@ namespace AI2D.Engine
                         bullet.ReadyForDeletion = true;
                     }
 
-                    bullet.X += (bullet.Velocity.Angle.X * bullet.Velocity.Speed);
-                    bullet.Y += (bullet.Velocity.Angle.Y * bullet.Velocity.Speed);
+                    bullet.X += (bullet.Velocity.Angle.X * bullet.Velocity.MaxSpeed);
+                    bullet.Y += (bullet.Velocity.Angle.Y * bullet.Velocity.MaxSpeed);
 
                     if (bullet.FiredFromType == FiredFromType.Enemy)
                     {
@@ -465,8 +464,8 @@ namespace AI2D.Engine
                 {
                     if (animation.Visable)
                     {
-                        animation.X += (animation.Velocity.Angle.X * animation.Velocity.Speed) - bgAppliedOffsetX;
-                        animation.Y += (animation.Velocity.Angle.Y * animation.Velocity.Speed) - bgAppliedOffsetY;
+                        animation.X += (animation.Velocity.Angle.X * animation.Velocity.MaxSpeed) - bgAppliedOffsetX;
+                        animation.Y += (animation.Velocity.Angle.Y * animation.Velocity.MaxSpeed) - bgAppliedOffsetY;
                         animation.AdvanceImage();
                     }
                 }

@@ -5,8 +5,16 @@ namespace AI2D.Types
 {
     public class AngleD
     {
+        public static double DegreeOffset = 90;
+        public static double RadianOffset = (Math.PI / 180) * DegreeOffset; //1.5707963267948966
+
         public AngleD()
         {
+        }
+
+        public AngleD(double angleDegree)
+        {
+            _degree = angleDegree;
         }
 
         public Vector Vector
@@ -15,11 +23,6 @@ namespace AI2D.Types
             {
                 return new Vector(X, Y);
             }
-        }
-
-        public AngleD(double angleDegree)
-        {
-            _degree = angleDegree;
         }
 
         public double _degree = 0;
@@ -39,8 +42,8 @@ namespace AI2D.Types
         {
             get
             {
-                //Rotate the radian counter-clockwise by 90 degrees. All of our graphics math should assume this.
-                return (Math.PI / 180) * (_degree - 90);
+                //Rotate the angle counter-clockwise by 90 degrees. All of our graphics math should assume this.
+                return ((Math.PI / 180) * _degree) - RadianOffset;
             }
         }
 

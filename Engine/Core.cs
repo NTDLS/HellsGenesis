@@ -106,7 +106,7 @@ namespace AI2D.Engine
         /// <param name="refObj"></param>
         private void AddFreshEnemiesCallback(Core core, object refObj)
         {
-            if (Actors.Enemies.Count < -1)
+            if (Actors.Enemies.Count < 5)
             {
                 for (int i = 0; i < 2; i++)
                 {
