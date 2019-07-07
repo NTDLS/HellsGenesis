@@ -5,8 +5,8 @@ namespace AI2D.GraphicObjects.Enemies
 {
     public class EnemyIrlen : BaseEnemy
     {
-        private string _assetPath = @"..\..\Assets\Graphics\Enemy\";
-        private string[] _imagePaths = {
+        private const string _assetPath = @"..\..\Assets\Graphics\Enemy\";
+        private readonly string[] _imagePaths = {
             #region images.
             "Irle (1).png",
             "Irle (2).png",

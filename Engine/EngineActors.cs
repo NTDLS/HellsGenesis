@@ -426,13 +426,13 @@ namespace AI2D.Engine
 
         public void Render(Graphics dc)
         {
+            RenderDebugs(dc);
             RenderStars(dc);
             RenderBullets(dc);
             RenderEnemies(dc);
             RenderPlayer(dc);
             RenderText(dc);
             RenderAnimations(dc);
-            RenderDebugs(dc);
         }
 
         #endregion

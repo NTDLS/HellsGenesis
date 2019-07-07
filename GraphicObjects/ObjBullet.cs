@@ -17,7 +17,7 @@ namespace AI2D.GraphicObjects
 
             VelocityD initialVector = new VelocityD()
             {
-                Angle = new AngleD(firedFrom.Velocity.Angle.Degree),
+                Angle = new AngleD(firedFrom.Velocity.Angle.Degrees),
                 MaxSpeed = 25,
                 ThrottlePercentage = 100
             };
@@ -26,9 +26,6 @@ namespace AI2D.GraphicObjects
 
             initialLocation.X = initialLocation.X + (xyOffset == null ? 0 : xyOffset.X);
             initialLocation.Y = initialLocation.Y + (xyOffset == null ? 0 : xyOffset.Y);
-
-            //initialLocation.X = (initialLocation.X + (firedFrom.Size.Width / 2.0));
-            //initialLocation.Y = (initialLocation.Y + (firedFrom.Size.Height / 2.0));
 
             if (firedFrom is BaseEnemy)
             {

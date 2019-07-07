@@ -6,8 +6,8 @@ namespace AI2D.GraphicObjects
 {
     public class ObjDebug : BaseGraphicObject
     {
-        private string _assetStarPath = @"..\..\Assets\Graphics\";
-        private string[] _assetStarFiles = {
+        private const string _assetStarPath = @"..\..\Assets\Graphics\";
+        private readonly string[] _assetStarFiles = {
             #region images.
             "Debug (1).png"
             #endregion

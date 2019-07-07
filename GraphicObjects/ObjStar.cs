@@ -5,8 +5,8 @@ namespace AI2D.GraphicObjects
 {
     public class ObjStar : BaseGraphicObject
     {
-        private string _assetStarPath = @"..\..\Assets\Graphics\Star\";
-        private string[] _assetStarFiles = {
+        private const string _assetStarPath = @"..\..\Assets\Graphics\Star\";
+        private readonly string[] _assetStarFiles = {
             #region images.
             "Star 1.png",
             "Star 2.png",
@@ -20,8 +20,6 @@ namespace AI2D.GraphicObjects
         {
             int _explosionImageIndex = Utility.RandomNumber(0, _assetStarFiles.Count());
             LoadResources(_assetStarPath + _assetStarFiles[_explosionImageIndex]);
-
-            //LoadResources(@"..\..\Assets\Graphics\Star\Star 1.png");
 
             X = Utility.Random.Next(0, core.Display.VisibleSize.Width);
             Y = Utility.Random.Next(0, core.Display.VisibleSize.Height);

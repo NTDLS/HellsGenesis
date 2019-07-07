@@ -9,10 +9,6 @@ namespace AI2D.Engine
 {
     public class Utility
     {
-        const double RADIAN_CONV = Math.PI / 180.0;
-        const double OFFSET90DEGREES = 180.0 * RADIAN_CONV;
-        const double FULLCIRCLE = 360.0 * RADIAN_CONV;
-
         #region Graphics.
 
         public static Bitmap RotateImageWithClipping(Bitmap bmp, double angle, Color backgroundColor)
@@ -104,14 +100,7 @@ namespace AI2D.Engine
 
         public static double RequiredAngleTo(BaseGraphicObject from, BaseGraphicObject to)
         {
-            return RequiredAngleTo(from.Location, to.Location);
-        }
-
-        public static double RequiredAngleTo(PointD from, PointD to)
-        {
-            var fRadians = Math.Atan2((to.Y - from.Y), (to.X - from.X));
-            var fDegrees = ((fRadians * (180 / Math.PI) + 360) + 90) % 360;
-            return fDegrees;
+            return AngleD.AngleTo(from.Location, to.Location);
         }
 
         public static bool IsPointingAt(BaseGraphicObject fromObj, BaseGraphicObject atObj, double toleranceDegrees)
@@ -124,38 +113,15 @@ namespace AI2D.Engine
         {
             double angleTo = RequiredAngleTo(fromObj, atObj);
 
-            if (fromObj.Velocity.Angle.Degree < 0) fromObj.Velocity.Angle.Degree = (0 - fromObj.Velocity.Angle.Degree);
+            if (fromObj.Velocity.Angle.Degrees < 0) fromObj.Velocity.Angle.Degrees = (0 - fromObj.Velocity.Angle.Degrees);
             if (angleTo < 0) angleTo = (0 - angleTo);
 
-            return fromObj.Velocity.Angle.Degree - angleTo;
+            return fromObj.Velocity.Angle.Degrees - angleTo;
         }
 
-        public static PointD AngleToXY(double angle)
+        public static double DistanceTo(BaseGraphicObject from, BaseGraphicObject to)
         {
-            double radians = (Math.PI / 180) * (angle - 90);
-
-            PointD result = new PointD()
-            {
-                X = Math.Cos(radians),
-                Y = Math.Sin(-radians)
-            };
-
-            return result;
-        }
-
-        public static double CalculeDistance(PointD from, PointD to)
-        {
-            var deltaX = Math.Pow((to.X - from.X), 2);
-            var deltaY = Math.Pow((to.Y - from.Y), 2);
-
-            var distance = Math.Sqrt(deltaY + deltaX);
-
-            return distance;
-        }
-
-        public static double CalculeDistance(BaseGraphicObject from, BaseGraphicObject to)
-        {
-            return CalculeDistance(from.Location, to.Location);
+            return AngleD.DistanceTo(from.Location, to.Location);
         }
 
         #endregion

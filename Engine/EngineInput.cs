@@ -47,47 +47,47 @@ namespace AI2D.Engine
             {
                 _core.Actors.Player.X = _core.Display.VisibleSize.Width / 2;
                 _core.Actors.Player.Y = _core.Display.VisibleSize.Height / 2;
-                _core.Actors.Player.Velocity.Angle.Degree = 0;
+                _core.Actors.Player.Velocity.Angle.Degrees = 0;
                 _core.Actors.Player.Velocity.ThrottlePercentage = 0;
             }
             if (key == Keys.D1)
             {
-                _core.Actors.Player.Velocity.Angle.Degree = 0;
+                _core.Actors.Player.Velocity.Angle.Degrees = 0;
                 _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D2)
             {
-                _core.Actors.Player.Velocity.Angle.Degree = 45;
+                _core.Actors.Player.Velocity.Angle.Degrees = 45;
                 _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D3)
             {
-                _core.Actors.Player.Velocity.Angle.Degree = 90;
+                _core.Actors.Player.Velocity.Angle.Degrees = 90;
                 _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D4)
             {
-                _core.Actors.Player.Velocity.Angle.Degree = 135;
+                _core.Actors.Player.Velocity.Angle.Degrees = 135;
                 _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D5)
             {
-                _core.Actors.Player.Velocity.Angle.Degree = 180;
+                _core.Actors.Player.Velocity.Angle.Degrees = 180;
                 _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D6)
             {
-                _core.Actors.Player.Velocity.Angle.Degree = 225;
+                _core.Actors.Player.Velocity.Angle.Degrees = 225;
                 _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D7)
             {
-                _core.Actors.Player.Velocity.Angle.Degree = 270;
+                _core.Actors.Player.Velocity.Angle.Degrees = 270;
                 _core.Actors.Player.Invalidate();
             }
             if (key == Keys.D8)
             {
-                _core.Actors.Player.Velocity.Angle.Degree = 315;
+                _core.Actors.Player.Velocity.Angle.Degrees = 315;
                 _core.Actors.Player.Invalidate();
             }
             if (key == Keys.Tab)

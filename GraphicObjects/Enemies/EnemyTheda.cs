@@ -5,8 +5,8 @@ namespace AI2D.GraphicObjects.Enemies
 {
     public class EnemyTheda : BaseEnemy
     {
-        private string _assetPath = @"..\..\Assets\Graphics\Enemy\";
-        private string[] _imagePaths = {
+        private const string _assetPath = @"..\..\Assets\Graphics\Enemy\";
+        private readonly string[] _imagePaths = {
             #region images.
             "Theda (1).png",
             "Theda (2).png",

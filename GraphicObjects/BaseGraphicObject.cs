@@ -18,10 +18,10 @@ namespace AI2D.GraphicObjects
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private int _MilisecondsBetweenHits = 100;
         private AudioClip _hitSound;
-        private List<IWeapon> _weapons = new List<IWeapon>();
+        private readonly List<IWeapon> _weapons = new List<IWeapon>();
 
-        private string _assetExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
-        private string[] _assetExplosionAnimationFiles = {
+        private const string _assetExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
+        private readonly string[] _assetExplosionAnimationFiles = {
             #region Image Paths.
             "Explosion 256 1.png",
             "Explosion 256 2.png",
@@ -29,8 +29,8 @@ namespace AI2D.GraphicObjects
             #endregion
         };
 
-        private string _assetExplosionSoundPath = @"..\..\Assets\Sounds\Explode\";
-        private string[] _assetExplosionSoundFiles = {
+        private const string _assetExplosionSoundPath = @"..\..\Assets\Sounds\Explode\";
+        private readonly string[] _assetExplosionSoundFiles = {
             #region Sound Paths.
             "Expload 1.wav",
             "Expload 2.wav",
@@ -64,35 +64,7 @@ namespace AI2D.GraphicObjects
             }
         }
 
-        double _x = 0;
-        public double X
-        {
-            get
-            {
-                return _x;
-            }
-            set
-            {
-                Invalidate();
-                _x = value;
-                Invalidate();
-            }
-        }
-
-        double _y = 0;
-        public double Y
-        {
-            get
-            {
-                return _y;
-            }
-            set
-            {
-                Invalidate();
-                _y = value;
-                Invalidate();
-            }
-        }
+        private PointD _location = new PointD();
 
         /// <summary>
         /// Do not modify this location, it will not have any affect.
@@ -101,7 +73,41 @@ namespace AI2D.GraphicObjects
         {
             get
             {
-                return new PointD(_x, _y);
+                return new PointD(_location);
+            }
+            set
+            {
+                Invalidate();
+                _location = value;
+                Invalidate();
+            }
+        }
+
+        public double X
+        {
+            get
+            {
+                return _location.X;
+            }
+            set
+            {
+                Invalidate();
+                _location.X = value;
+                Invalidate();
+            }
+        }
+
+        public double Y
+        {
+            get
+            {
+                return _location.Y;
+            }
+            set
+            {
+                Invalidate();
+                _location.Y = value;
+                Invalidate();
             }
         }
 
@@ -109,7 +115,7 @@ namespace AI2D.GraphicObjects
         {
             get
             {
-                return new PointD(_x - (Size.Width / 2.0), _y - (Size.Height / 2.0));
+                return new PointD(_location.X - (Size.Width / 2.0), _location.Y - (Size.Height / 2.0));
             }
         }
 
@@ -127,8 +133,8 @@ namespace AI2D.GraphicObjects
             get
             {
                 return new RectangleF(
-                    (float)(_x - (Size.Width / 2.0)),
-                    (float)(_y - (Size.Height / 2.0)),
+                    (float)(_location.X - (Size.Width / 2.0)),
+                    (float)(_location.Y - (Size.Height / 2.0)),
                     Size.Height, Size.Width);
             }
         }
@@ -145,8 +151,8 @@ namespace AI2D.GraphicObjects
                 _isVisible = value;
 
                 var invalidRect = new Rectangle(
-                    (int)(_x - (_size.Width / 2.0)),
-                    (int)(_y - (_size.Height / 2.0)),
+                    (int)(_location.X - (_size.Width / 2.0)),
+                    (int)(_location.Y - (_size.Height / 2.0)),
                     _size.Width, _size.Height);
 
                 _core.Display.DrawingSurface.Invalidate(invalidRect);
@@ -203,13 +209,13 @@ namespace AI2D.GraphicObjects
 
             if (initialLocation == null)
             {
-                _x = Utility.Random.Next(0, _core.Display.VisibleSize.Width - _size.Width);
-                _y = Utility.Random.Next(0, _core.Display.VisibleSize.Height - _size.Height);
+                _location.X = Utility.Random.Next(0, _core.Display.VisibleSize.Width - _size.Width);
+                _location.Y = Utility.Random.Next(0, _core.Display.VisibleSize.Height - _size.Height);
             }
             else
             {
-                _x = (int)initialLocation?.X;
-                _y = (int)initialLocation?.Y;
+                _location.X = (int)initialLocation?.X;
+                _location.Y = (int)initialLocation?.Y;
             }
 
             ReadyForDeletion = false;
@@ -218,7 +224,7 @@ namespace AI2D.GraphicObjects
             {
                 Velocity = new VelocityD();
                 Velocity.MaxSpeed = Utility.Random.Next(Consants.Limits.MinSpeed, Consants.Limits.MaxSpeed);
-                Velocity.Angle.Degree = Utility.Random.Next(0, 360);
+                Velocity.Angle.Degrees = Utility.Random.Next(0, 360);
             }
             else
             {
@@ -278,8 +284,8 @@ namespace AI2D.GraphicObjects
         public void Invalidate()
         {
             var invalidRect = new Rectangle(
-                (int)(_x - (_size.Width / 2.0)),
-                (int)(_y - (_size.Height / 2.0)),
+                (int)(_location.X - (_size.Width / 2.0)),
+                (int)(_location.Y - (_size.Height / 2.0)),
                 _size.Width, _size.Height);
             _core.Display.DrawingSurface.Invalidate(invalidRect);
         }
@@ -328,13 +334,13 @@ namespace AI2D.GraphicObjects
 
         public void Rotate(double degrees)
         {
-            Velocity.Angle.Degree += degrees;
+            Velocity.Angle.Degrees += degrees;
             Invalidate();
         }
 
         public void MoveInDirectionOf(PointD location, double? speed = null)
         {
-            this.Velocity.Angle.Degree = Utility.RequiredAngleTo(this.Location, location);
+            this.Velocity.Angle.Degrees = AngleD.AngleTo(this.Location, location);
             if (speed != null)
             {
                 this.Velocity.MaxSpeed = (double)speed;
@@ -343,7 +349,7 @@ namespace AI2D.GraphicObjects
 
         public void MoveInDirectionOf(BaseGraphicObject obj, double? speed = null)
         {
-            this.Velocity.Angle.Degree = Utility.RequiredAngleTo(this.Location, obj.Location);
+            this.Velocity.Angle.Degrees = AngleD.AngleTo(this.Location, obj.Location);
 
             if (speed != null)
             {
@@ -384,13 +390,13 @@ namespace AI2D.GraphicObjects
         {
             if (_isVisible && _image != null)
             {
-                if (Velocity.Angle.Degree != 0 && RotationMode != RotationMode.None)
+                if (Velocity.Angle.Degrees != 0 && RotationMode != RotationMode.None)
                 {
                     if (RotationMode == RotationMode.Upsize) //Very expensize
                     {
                         var bitmap = new Bitmap(_image);
-                        var image = Utility.RotateImageWithUpsize(bitmap, Velocity.Angle.Degree, Color.Transparent);
-                        Rectangle rect = new Rectangle((int)(_x - (image.Width / 2.0)), (int)(_y - (image.Height / 2.0)), image.Width, image.Height);
+                        var image = Utility.RotateImageWithUpsize(bitmap, Velocity.Angle.Degrees, Color.Transparent);
+                        Rectangle rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
                         dc.DrawImage(image, rect);
 
                         _size.Height = image.Height;
@@ -399,8 +405,8 @@ namespace AI2D.GraphicObjects
                     else if (RotationMode == RotationMode.Clip) //Much less expensive.
                     {
                             var bitmap = new Bitmap(_image);
-                        var image = Utility.RotateImageWithClipping(bitmap, Velocity.Angle.Degree, Color.Transparent);
-                        Rectangle rect = new Rectangle((int)(_x - (image.Width / 2.0)), (int)(_y - (image.Height / 2.0)), image.Width, image.Height);
+                        var image = Utility.RotateImageWithClipping(bitmap, Velocity.Angle.Degrees, Color.Transparent);
+                        Rectangle rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
                         dc.DrawImage(image, rect);
 
                         _size.Height = image.Height;
@@ -409,7 +415,7 @@ namespace AI2D.GraphicObjects
                 }
                 else //Almost free.
                 {
-                    Rectangle rect = new Rectangle((int)(_x - (_image.Width / 2.0)), (int)(_y - (_image.Height / 2.0)), _image.Width, _image.Height);
+                    Rectangle rect = new Rectangle((int)(_location.X - (_image.Width / 2.0)), (int)(_location.Y - (_image.Height / 2.0)), _image.Width, _image.Height);
                     dc.DrawImage(_image, rect);
                     dc.DrawImage(_image, rect);
                 }

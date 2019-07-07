@@ -232,9 +232,9 @@ namespace AI2D.Engine
                                     + $"Max: {_core.Display.FrameCounter.FrameRateMax.ToString("0.0")}\r\n"
                 + $"Player Display XY: {_core.Actors.Player.X.ToString("#0.00")}x, {_core.Actors.Player.Y.ToString("#0.00")}y\r\n"
                 + $"     Player Angle: {_core.Actors.Player.Velocity.Angle.X.ToString("#0.00")}x, {_core.Actors.Player.Velocity.Angle.Y.ToString("#0.00")}y, "
-                                    + $"{_core.Actors.Player.Velocity.Angle.Degree.ToString("#0.00")}deg, "
-                                    + $" {_core.Actors.Player.Velocity.Angle.Radian.ToString("#0.00")}rad, "
-                                    + $" {_core.Actors.Player.Velocity.Angle.RadianUnadjusted.ToString("#0.00")}rad unadjusted\r\n"
+                                    + $"{_core.Actors.Player.Velocity.Angle.Degrees.ToString("#0.00")}deg, "
+                                    + $" {_core.Actors.Player.Velocity.Angle.Radians.ToString("#0.00")}rad, "
+                                    + $" {_core.Actors.Player.Velocity.Angle.RadiansUnadjusted.ToString("#0.00")}rad unadjusted\r\n"
                 + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
                                     + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
                 + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
@@ -279,15 +279,28 @@ namespace AI2D.Engine
 #if DEBUG
             if (_core.Actors.Debugs.Count > 0)
             {
-                double X = -Math.Cos(_core.Actors.Player.Velocity.Angle.Radian + (90 * (Math.PI / 180))) * 100;
-                double Y = Math.Sin(_core.Actors.Player.Velocity.Angle.Radian + (90 * (Math.PI / 180)));
+                double X = _core.Actors.Player.X;
+                double Y = _core.Actors.Player.Y;
 
-                X = _core.Actors.Player.Location.X + 100;// + (xyOffset == null ? 0 : xyOffset.X);
-                Y = _core.Actors.Player.Location.Y;// + (xyOffset == null ? 0 : xyOffset.Y);
+                //Behind player:
+                //X = _core.Actors.Player.Location.X + -Math.Cos(_core.Actors.Player.Velocity.Angle.Radian) * 100;
+                //Y = _core.Actors.Player.Location.Y + -Math.Sin(_core.Actors.Player.Velocity.Angle.Radian) * 100;
+
+                //Front of player:
+                //X = _core.Actors.Player.Location.X + Math.Cos(_core.Actors.Player.Velocity.Angle.Radian) * 100;
+                //Y = _core.Actors.Player.Location.Y + Math.Sin(_core.Actors.Player.Velocity.Angle.Radian) * 100;
+
+
+                //X = _core.Actors.Player.Location.X + Math.Sin(_core.Actors.Player.Velocity.Angle.Radian) * 100;
+                //Y = _core.Actors.Player.Location.Y + Math.Cos(_core.Actors.Player.Velocity.Angle.Radian) * 100;
+                //Y = _core.Actors.Player.Location.Y;
+
+
+                _core.Actors.Player.Location.X = 10;
 
                 _core.Actors.Debugs[0].X = X;
                 _core.Actors.Debugs[0].Y = Y;
-                _core.Actors.Debugs[0].Velocity.Angle.Degree = _core.Actors.Player.Velocity.Angle.Degree;
+                _core.Actors.Debugs[0].Velocity.Angle = new AngleD(0.71, -0.71);
             }
 #endif
 
@@ -318,7 +331,7 @@ namespace AI2D.Engine
                         //_core.Actors.DebugText.Text = $"DA: {deltaAngle.ToString("####.###")}";
 
                         //If we are close to the player.
-                        double distanceToPlayer = Utility.CalculeDistance(enemy, _core.Actors.Player);
+                        double distanceToPlayer = Utility.DistanceTo(enemy, _core.Actors.Player);
                         if (distanceToPlayer < 400)
                         {
                             //If we are pointing at the player.
