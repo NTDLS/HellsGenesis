@@ -18,7 +18,7 @@ namespace AI2D.GraphicObjects
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private int _MilisecondsBetweenHits = 100;
         private AudioClip _hitSound;
-        private readonly List<IWeapon> _weapons = new List<IWeapon>();
+        private readonly List<WeaponBase> _weapons = new List<WeaponBase>();
 
         private const string _assetExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
         private readonly string[] _assetExplosionAnimationFiles = {
@@ -43,7 +43,7 @@ namespace AI2D.GraphicObjects
         #region Properties.
 
         public RotationMode RotationMode { get; set; }
-        public IWeapon CurrentWeapon { get; private set; }
+        public WeaponBase CurrentWeapon { get; private set; }
         public int HitPoints { get; set; }
         public VelocityD Velocity { get; set; }
 
@@ -237,13 +237,13 @@ namespace AI2D.GraphicObjects
             _weapons.Clear();
         }
 
-        public void AddWeapon(IWeapon weapon)
+        public void AddWeapon(WeaponBase weapon)
         {
             weapon.SetOwner(this);
             _weapons.Add(weapon);
         }
 
-        public IWeapon SelectNextAvailableUsableWeapon()
+        public WeaponBase SelectNextAvailableUsableWeapon()
         {
             bool selectNextWeapon = false;
 
@@ -264,7 +264,7 @@ namespace AI2D.GraphicObjects
             return SelectFirstAvailableUsableWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
 
-        public IWeapon SelectFirstAvailableUsableWeapon()
+        public WeaponBase SelectFirstAvailableUsableWeapon()
         {
             var existingWeapon = (from o in _weapons where o.RoundQuantity > 0 select o).FirstOrDefault();
             if (existingWeapon != null)
@@ -278,7 +278,7 @@ namespace AI2D.GraphicObjects
             return CurrentWeapon;
         }
 
-        public IWeapon SelectWeapon(Type weaponType)
+        public WeaponBase SelectWeapon(Type weaponType)
         {
             var existingWeapon = (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
             CurrentWeapon = existingWeapon;

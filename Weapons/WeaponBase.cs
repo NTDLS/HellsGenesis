@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AI2D.Weapons
 {
-    public class WeaponBase : IWeapon
+    public class WeaponBase
     {
         protected Core _core;
         protected BaseGraphicObject _owner;
