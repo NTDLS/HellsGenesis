@@ -10,5 +10,9 @@ namespace AI2D.GraphicObjects.Enemies
             : base(core)
         {
         }
+
+        public virtual void ApplyIntelligence()
+        {
+        }
     }
 }

@@ -63,8 +63,9 @@ namespace AI2D.Engine
             Player.Y = _core.Display.VisibleSize.Height / 2;
 
             Player.AddWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 500 });
-            Player.AddWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = int.MaxValue });
+            Player.AddWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 100 });
             Player.AddWeapon(new WeaponPhotonTorpedo(_core) { RoundQuantity = 500 });
+            Player.AddWeapon(new WeaponPulseMeson(_core) { RoundQuantity = 500 });
 
             Player.SelectWeapon(typeof(WeaponVulcanCannon));
         }

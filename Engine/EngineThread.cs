@@ -59,6 +59,9 @@ namespace AI2D.Engine
             }
         }
 
+
+
+
         void AdvanceFrame()
         {
             _core.Display.FrameCounter.Calculate();
@@ -279,28 +282,13 @@ namespace AI2D.Engine
 #if DEBUG
             if (_core.Actors.Debugs.Count > 0)
             {
-                double X = _core.Actors.Player.X;
-                double Y = _core.Actors.Player.Y;
+                var pointRight = Utility.AngleFromPointAtDistance(_core.Actors.Player.Velocity.Angle + AngleD.Degrees90, new PointD(50, 50));
+                _core.Actors.Debugs[0].Location = _core.Actors.Player.Location + pointRight;
+                _core.Actors.Debugs[0].Velocity.Angle = _core.Actors.Player.Velocity.Angle;
 
-                //Behind player:
-                //X = _core.Actors.Player.Location.X + -Math.Cos(_core.Actors.Player.Velocity.Angle.Radian) * 100;
-                //Y = _core.Actors.Player.Location.Y + -Math.Sin(_core.Actors.Player.Velocity.Angle.Radian) * 100;
-
-                //Front of player:
-                //X = _core.Actors.Player.Location.X + Math.Cos(_core.Actors.Player.Velocity.Angle.Radian) * 100;
-                //Y = _core.Actors.Player.Location.Y + Math.Sin(_core.Actors.Player.Velocity.Angle.Radian) * 100;
-
-
-                //X = _core.Actors.Player.Location.X + Math.Sin(_core.Actors.Player.Velocity.Angle.Radian) * 100;
-                //Y = _core.Actors.Player.Location.Y + Math.Cos(_core.Actors.Player.Velocity.Angle.Radian) * 100;
-                //Y = _core.Actors.Player.Location.Y;
-
-
-                _core.Actors.Player.Location.X = 10;
-
-                _core.Actors.Debugs[0].X = X;
-                _core.Actors.Debugs[0].Y = Y;
-                _core.Actors.Debugs[0].Velocity.Angle = new AngleD(0.71, -0.71);
+                var pointLeft = Utility.AngleFromPointAtDistance(_core.Actors.Player.Velocity.Angle - AngleD.Degrees90, new PointD(50, 50));
+                _core.Actors.Debugs[1].Location = _core.Actors.Player.Location + pointLeft;
+                _core.Actors.Debugs[1].Velocity.Angle = _core.Actors.Player.Velocity.Angle;
             }
 #endif
 
@@ -330,30 +318,7 @@ namespace AI2D.Engine
                         //double deltaAngle = Utility.GetDeltaAngle(enemy, _core.Actors.Player);
                         //_core.Actors.DebugText.Text = $"DA: {deltaAngle.ToString("####.###")}";
 
-                        //If we are close to the player.
-                        double distanceToPlayer = Utility.DistanceTo(enemy, _core.Actors.Player);
-                        if (distanceToPlayer < 400)
-                        {
-                            //If we are pointing at the player.
-                            bool isPointingAtPlayer = enemy.IsPointingAt(_core.Actors.Player, 8.0);
-                            if (isPointingAtPlayer)
-                            {
-                                if (enemy.CurrentWeapon?.RoundQuantity == 0)
-                                {
-                                    enemy.SelectFirstAvailableUsableWeapon();
-                                }
-
-                                enemy.CurrentWeapon?.Fire();
-                            }
-                        }
-
-                        //If the enemy is off the screen, point at the player and come back into view.
-                        if (enemy.X < (0 - (enemy.Size.Width + 40)) || enemy.Y < (0 - (enemy.Size.Height + 40))
-                            || enemy.X >= (_core.Display.VisibleSize.Width + enemy.Size.Width) + 40
-                            || enemy.Y >= (_core.Display.VisibleSize.Height + enemy.Size.Height) + 40)
-                        {
-                            enemy.MoveInDirectionOf(_core.Actors.Player);
-                        }
+                        enemy.ApplyIntelligence();
 
                         //Player collides with enemy.
                         if (enemy.Intersects(_core.Actors.Player))

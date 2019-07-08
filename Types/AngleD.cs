@@ -16,6 +16,13 @@ namespace AI2D.Types
         const double DEG_TO_RAD = Math.PI / 180.0;
         const double RAD_TO_DEG = 180.0 / Math.PI;
 
+        public static AngleD Degrees0 = new AngleD(0);
+        public static AngleD Degrees45 = new AngleD(45.0);
+        public static AngleD Degrees90 = new AngleD(90.0);
+        public static AngleD Degrees180 = new AngleD(180.0);
+        public static AngleD Degrees135 = new AngleD(135);
+        public static AngleD Degrees225 = new AngleD(225);
+
         public static double RadiansToDegrees(double rad)
         {
             return rad * RAD_TO_DEG;
@@ -26,24 +33,17 @@ namespace AI2D.Types
             return deg * DEG_TO_RAD;
         }
 
-        public static double DistanceTo(PointD from, PointD to)
-        {
-            var deltaX = Math.Pow((to.X - from.X), 2);
-            var deltaY = Math.Pow((to.Y - from.Y), 2);
-            return Math.Sqrt(deltaY + deltaX);
-        }
-
-        public static double AngleTo(PointD from, PointD to)
-        {
-            var fRadians = Math.Atan2((to.Y - from.Y), (to.X - from.X));
-            var fDegrees = ((RadiansToDegrees(fRadians) + 360.0) + DegreeOffset) % 360.0;
-            return fDegrees;
-        }
-
         #endregion
+
+        #region ~/CTor.
 
         public AngleD()
         {
+        }
+
+        public AngleD(AngleD angle)
+        {
+            Degrees = angle.Degrees;
         }
 
         public AngleD(double degrees)
@@ -56,14 +56,62 @@ namespace AI2D.Types
             Degrees = AngleD.RadiansToDegrees(Math.Atan2(y, x)) + DegreeOffset;
         }
 
-        public Vector Vector
+        #endregion
+
+        #region  Unary Operator Overloading.
+
+        public static AngleD operator -(AngleD original, AngleD modifier)
         {
-            get
-            {
-                return new Vector(X, Y);
-            }
+            return new AngleD(original.Degrees - modifier.Degrees);
         }
 
+        public static AngleD operator -(AngleD original, double degrees)
+        {
+            return new AngleD(original.Degrees - degrees);
+        }
+
+        public static AngleD operator +(AngleD original, AngleD modifier)
+        {
+            return new AngleD(original.Degrees + modifier.Degrees);
+        }
+
+        public static AngleD operator +(AngleD original, double degrees)
+        {
+            return new AngleD(original.Degrees + degrees);
+        }
+
+        public static AngleD operator *(AngleD original, AngleD modifier)
+        {
+            return new AngleD(original.Degrees * modifier.Degrees);
+        }
+
+        public static AngleD operator *(AngleD original, double degrees)
+        {
+            return new AngleD(original.Degrees * degrees);
+        }
+
+        public override bool Equals(object o)
+        {
+            return (Math.Round(((AngleD)o).X, 4) == this.X && Math.Round(((AngleD)o).Y, 4) == this.Y);
+        }
+
+        #endregion
+
+        public override int GetHashCode()
+        {
+            return this.ToString().GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return $"{{{Math.Round(X, 4).ToString("#.####")},{Math.Round(Y, 4).ToString("#.####")}}}";
+        }
+
+        public Vector ToVector()
+        {
+            return new Vector(X, Y);
+        }
+        
         public double _degrees = 0;
         public double Degrees
         {

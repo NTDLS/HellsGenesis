@@ -51,8 +51,8 @@ namespace AI2D.Engine
                     AddFreshEnemiesCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring);
 
                 //This is debug stuff. Will be moved to a logic engine.
-                Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 0),
-                    AddDebugObjectsCallback, null, EngineCallbackEvent.CallbackEventMode.OneTime);
+                //Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 0),
+                //    AddDebugObjectsCallback, null, EngineCallbackEvent.CallbackEventMode.OneTime);
 
                 OnStart?.Invoke(this);
             }
@@ -87,6 +87,7 @@ namespace AI2D.Engine
         private void AddDebugObjectsCallback(Core core, object refObj)
         {
             Actors.CreateDebug();
+            Actors.CreateDebug();
         }
 
         /// <summary>
@@ -110,7 +111,7 @@ namespace AI2D.Engine
             {
                 for (int i = 0; i < 2; i++)
                 {
-                    var enemy = Actors.CreateEnemy<EnemyScinzad>();
+                    var enemy = Actors.CreateEnemy<EnemyAvvol>();
 
                     enemy.AddWeapon(new WeaponPhotonTorpedo(this)
                     {
@@ -126,6 +127,21 @@ namespace AI2D.Engine
 
                     enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
                 }
+
+                for (int i = 0; i < 2; i++)
+                {
+                    var enemy = Actors.CreateEnemy<EnemyScinzad>();
+
+                    enemy.AddWeapon(new WeaponVulcanCannon(this)
+                    {
+                        FireDelayMilliseconds = 250,
+                        //RoundQuantity = 100 //Could make the enemy retreat after running out of ammo?
+                    });
+
+                    enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
+                }
+
+
             }
         }
     }

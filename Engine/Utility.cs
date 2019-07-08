@@ -98,9 +98,22 @@ namespace AI2D.Engine
 
         #region Math.
 
+        /// <summary>
+        /// Calculates a point at a given angle and a given distance.
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <param name="distance"></param>
+        /// <returns></returns>
+        public static PointD AngleFromPointAtDistance(AngleD angle, PointD distance)
+        {
+            return new PointD(
+                (Math.Cos(angle.Radians) * distance.X),
+                (Math.Sin(angle.Radians) * distance.Y));
+        }
+
         public static double RequiredAngleTo(BaseGraphicObject from, BaseGraphicObject to)
         {
-            return AngleD.AngleTo(from.Location, to.Location);
+            return PointD.AngleTo(from.Location, to.Location);
         }
 
         public static bool IsPointingAt(BaseGraphicObject fromObj, BaseGraphicObject atObj, double toleranceDegrees)
@@ -121,7 +134,7 @@ namespace AI2D.Engine
 
         public static double DistanceTo(BaseGraphicObject from, BaseGraphicObject to)
         {
-            return AngleD.DistanceTo(from.Location, to.Location);
+            return PointD.DistanceTo(from.Location, to.Location);
         }
 
         #endregion

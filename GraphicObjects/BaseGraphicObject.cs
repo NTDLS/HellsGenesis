@@ -243,27 +243,39 @@ namespace AI2D.GraphicObjects
             _weapons.Add(weapon);
         }
 
-        public bool SelectNextAvailableUsableWeapon()
+        public IWeapon SelectNextAvailableUsableWeapon()
         {
-            var existingWeapon = (from o in _weapons where o.RoundQuantity > 0 && o != CurrentWeapon select o).FirstOrDefault();
-            if (existingWeapon != null)
+            bool selectNextWeapon = false;
+
+            foreach (var weapon in _weapons)
             {
-                CurrentWeapon = existingWeapon;
-                return true;
+                if (selectNextWeapon)
+                {
+                    CurrentWeapon = weapon;
+                    return weapon;
+                }
+
+                if (weapon == CurrentWeapon) //Find the current weapon in the collection;
+                {
+                    selectNextWeapon = true;
+                }
             }
-            CurrentWeapon = null;
-            return false;
+
+            return SelectFirstAvailableUsableWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
-        public bool SelectFirstAvailableUsableWeapon()
+
+        public IWeapon SelectFirstAvailableUsableWeapon()
         {
             var existingWeapon = (from o in _weapons where o.RoundQuantity > 0 select o).FirstOrDefault();
             if (existingWeapon != null)
             {
                 CurrentWeapon = existingWeapon;
-                return true;
             }
-            CurrentWeapon = null;
-            return false;
+            else
+            {
+                CurrentWeapon = null;
+            }
+            return CurrentWeapon;
         }
 
         public IWeapon SelectWeapon(Type weaponType)
@@ -340,7 +352,7 @@ namespace AI2D.GraphicObjects
 
         public void MoveInDirectionOf(PointD location, double? speed = null)
         {
-            this.Velocity.Angle.Degrees = AngleD.AngleTo(this.Location, location);
+            this.Velocity.Angle.Degrees = PointD.AngleTo(this.Location, location);
             if (speed != null)
             {
                 this.Velocity.MaxSpeed = (double)speed;
@@ -349,7 +361,7 @@ namespace AI2D.GraphicObjects
 
         public void MoveInDirectionOf(BaseGraphicObject obj, double? speed = null)
         {
-            this.Velocity.Angle.Degrees = AngleD.AngleTo(this.Location, obj.Location);
+            this.Velocity.Angle.Degrees = PointD.AngleTo(this.Location, obj.Location);
 
             if (speed != null)
             {
