@@ -149,11 +149,11 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjAnimation CreateAnimation(string imageFrames, Size frameSize)
+        public ObjAnimation CreateAnimation(string imageFrames, Size frameSize, int _frameDelayMiliseconds = 10, ObjAnimation.PlayMode playMode = null)
         {
             lock (Animations)
             {
-                ObjAnimation obj = new ObjAnimation(_core, imageFrames, frameSize);
+                ObjAnimation obj = new ObjAnimation(_core, imageFrames, frameSize, _frameDelayMiliseconds, playMode);
                 Animations.Add(obj);
                 return obj;
             }

@@ -1,4 +1,5 @@
-﻿using AI2D.GraphicObjects.Enemies;
+﻿using AI2D.GraphicObjects;
+using AI2D.GraphicObjects.Enemies;
 using AI2D.Weapons;
 using System.Drawing;
 using System.Windows.Forms;
@@ -107,8 +108,30 @@ namespace AI2D.Engine
         /// <param name="refObj"></param>
         private void AddFreshEnemiesCallback(Core core, object refObj)
         {
-            if (Actors.Enemies.Count < -1)
+            if (Actors.Animations.Count < 1)
             {
+
+                //var _explosionAnimation = new ObjAnimation(this, @"..\..\Assets\Graphics\Animation\Coin.png", new Size(32, 23), false);
+
+                var playMode = new ObjAnimation.PlayMode()
+                {
+                    Replay = ObjAnimation.ReplayMode.LoopedPlay,
+                    ReplayDelay = new System.TimeSpan(0, 0, 0, 1)
+                };
+
+                var animation = Actors.CreateAnimation(@"..\..\Assets\Graphics\Animation\Coin.png", new Size(32, 32), 50, playMode);
+
+                //Actors.PlaceAnimationOnTopOf(_explosionAnimation, Actors.Player);
+
+            }
+
+            if (Actors.Enemies.Count < 2)
+            {
+
+                for (int i = 0; i < 2; i++)
+                {
+                }
+
                 for (int i = 0; i < 2; i++)
                 {
                     var enemy = Actors.CreateEnemy<EnemyAvvol>();
@@ -128,7 +151,7 @@ namespace AI2D.Engine
                     enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
                 }
 
-                for (int i = 0; i < 2; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     var enemy = Actors.CreateEnemy<EnemyScinzad>();
 
@@ -140,8 +163,6 @@ namespace AI2D.Engine
 
                     enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
                 }
-
-
             }
         }
     }
