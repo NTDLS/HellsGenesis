@@ -24,9 +24,6 @@ namespace AI2D.Engine
         public List<ObjBullet> Bullets { get; private set; } = new List<ObjBullet>();
         public ObjPlayer Player { get; private set; }
 
-        public AudioClip ShipEngineRoarSound { get; private set; }
-        public AudioClip ShipEngineIdleSound { get; private set; }
-        public AudioClip AllSystemsGoSound { get; private set; }
         public AudioClip BackgroundMusicSound { get; private set; }
 
         public ObjTextBlock PlayerStatsText { get; private set; }
@@ -36,10 +33,7 @@ namespace AI2D.Engine
         {
             _core = core;
 
-            BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Background Music.wav", 0.25f, true);
-            ShipEngineRoarSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Roar.wav", 1.0f, true);
-            ShipEngineIdleSound = GetSoundCached(@"..\..\Assets\Sounds\Engine Idle.wav", 0.6f, true);
-            AllSystemsGoSound = GetSoundCached(@"..\..\Assets\Sounds\All Systems Go.wav", 0.75f, false);
+            BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
             
             PlayerStatsText = CreateTextBlock("Consolas", Brushes.WhiteSmoke, 10, 5, 5);
             DebugText = CreateTextBlock("Consolas", Brushes.Aqua, 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10);
@@ -58,6 +52,7 @@ namespace AI2D.Engine
             Player.Velocity.MaxSpeed = 5;
             Player.Velocity.MaxRotationSpeed = 3;
             Player.HitPoints = 500;
+            Player.Velocity.Angle = new AngleD(90);
 
             Player.X = _core.Display.VisibleSize.Width / 2;
             Player.Y = _core.Display.VisibleSize.Height / 2;
@@ -66,6 +61,7 @@ namespace AI2D.Engine
             Player.AddWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 100 });
             Player.AddWeapon(new WeaponPhotonTorpedo(_core) { RoundQuantity = 500 });
             Player.AddWeapon(new WeaponPulseMeson(_core) { RoundQuantity = 500 });
+            Player.AddWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 500 });
 
             Player.SelectWeapon(typeof(WeaponVulcanCannon));
         }
@@ -76,14 +72,14 @@ namespace AI2D.Engine
 
             Player.Visable = true;
 
-            ShipEngineIdleSound.Play();
-            AllSystemsGoSound.Play();
+            Player.ShipEngineIdleSound.Play();
+            Player.AllSystemsGoSound.Play();
         }
 
         public void HidePlayer()
         {
             Player.Visable = false;
-            ShipEngineIdleSound.Play();
+            Player.ShipEngineIdleSound.Play();
         }
 
         public Bitmap GetBitmapCached(string path)
@@ -317,11 +313,33 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjBullet CreateBullet(string imagePath, int damage, BaseGraphicObject firedFrom, PointD xyOffset = null)
+        public ObjBullet CreateBullet(string imagePath, WeaponBase weapon, BaseGraphicObject firedFrom, PointD xyOffset = null)
         {
             lock (Bullets)
             {
-                ObjBullet obj = new ObjBullet(_core, imagePath, damage, firedFrom, xyOffset);
+                ObjAnimation.PlayMode playMode = new ObjAnimation.PlayMode()
+                {
+                    DeleteActorAfterPlay = false,
+                    Replay = ObjAnimation.ReplayMode.StillFrame
+                };
+
+                ObjBullet obj = new ObjBullet(_core, weapon, firedFrom, imagePath, null, xyOffset);
+                Bullets.Add(obj);
+                return obj;
+            }
+        }
+
+        public ObjBullet CreateLockedBullet(string imagePath, WeaponBase weapon, BaseGraphicObject firedFrom, BaseGraphicObject lockedTarget, PointD xyOffset = null)
+        {
+            lock (Bullets)
+            {
+                ObjAnimation.PlayMode playMode = new ObjAnimation.PlayMode()
+                {
+                    DeleteActorAfterPlay = false,
+                    Replay = ObjAnimation.ReplayMode.StillFrame
+                };
+
+                ObjBullet obj = new ObjBullet(_core, weapon, firedFrom, imagePath, lockedTarget, xyOffset);
                 Bullets.Add(obj);
                 return obj;
             }

@@ -6,7 +6,7 @@ namespace AI2D.Weapons
     public class WeaponDualVulcanCannon : WeaponBase
     {
 
-        private const string imagePath = @"..\..\Assets\Graphics\Bullet\Vulcan Cannon.png";
+        private const string imagePath = @"..\..\Assets\Graphics\Weapon\Vulcan Cannon.png";
         private const string soundPath = @"..\..\Assets\Sounds\Weapons\Vulcan Cannon.wav";
         private const float soundVolumne = 0.4f;
 
@@ -26,15 +26,15 @@ namespace AI2D.Weapons
 
                 if (RoundQuantity > 0)
                 {
-                    var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + AngleD.Degrees90, new PointD(5, 5));
-                    _core.Actors.CreateBullet(_imagePath, Damage, _owner, pointRight);
+                    var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new PointD(5, 5));
+                    _core.Actors.CreateBullet(_imagePath, this, _owner, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0)
                 {
-                    var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - AngleD.Degrees90, new PointD(5, 5));
-                    _core.Actors.CreateBullet(_imagePath, Damage, _owner, pointLeft);
+                    var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new PointD(5, 5));
+                    _core.Actors.CreateBullet(_imagePath, this, _owner, pointLeft);
                     RoundQuantity--;
                 }
 

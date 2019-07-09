@@ -13,10 +13,16 @@ namespace AI2D.Weapons
         protected AudioClip _bulletSound;
         protected string _imagePath;
         public string Name { get; private set; }
-
+        public int Speed { get; set; } = 25;
         public int RoundQuantity { get; set; } = int.MaxValue;
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
+
+        public bool CanLockOn { get; set; } = false;
+        public double MaxLockOnAngle { get; set; } = 20;
+        public double MaxLocks { get; set; } = 2;
+        public double MinLockDistance { get; set; } = 50;
+        public double MaxLockDistance { get; set; } = 400;
 
         public WeaponBase(Core core, string name, string imagePath, string soundPath, float soundVolume)
         {
@@ -32,7 +38,7 @@ namespace AI2D.Weapons
             {
                 RoundQuantity--;
                 _bulletSound.Play();
-                _core.Actors.CreateBullet(_imagePath, Damage, _owner);
+                _core.Actors.CreateBullet(_imagePath, this, _owner);
                 return true;
             }
             return false;

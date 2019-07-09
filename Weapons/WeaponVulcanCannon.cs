@@ -10,7 +10,7 @@ namespace AI2D.Weapons
 {
     public class WeaponVulcanCannon : WeaponBase
     {
-        private const string imagePath = @"..\..\Assets\Graphics\Bullet\Vulcan Cannon.png";
+        private const string imagePath = @"..\..\Assets\Graphics\Weapon\Vulcan Cannon.png";
         private const string soundPath = @"..\..\Assets\Sounds\Weapons\Vulcan Cannon.wav";
         private const float soundVolumne = 0.4f;
 

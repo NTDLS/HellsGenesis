@@ -10,7 +10,7 @@ namespace AI2D.Weapons
 {
     public class WeaponPhotonTorpedo : WeaponBase
     {
-        private const string imagePath = @"..\..\Assets\Graphics\Bullet\Photon Torpedo.png";
+        private const string imagePath = @"..\..\Assets\Graphics\Weapon\Photon Torpedo.png";
         private const string soundPath = @"..\..\Assets\Sounds\Weapons\Photon Torpedo.wav";
         private const float soundVolumne = 0.4f;
 

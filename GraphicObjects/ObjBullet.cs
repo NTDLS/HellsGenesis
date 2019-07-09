@@ -1,24 +1,31 @@
 ﻿using AI2D.Engine;
 using AI2D.GraphicObjects.Enemies;
 using AI2D.Types;
+using AI2D.Weapons;
+using System.Drawing;
 
 namespace AI2D.GraphicObjects
 {
-    public class ObjBullet: BaseGraphicObject
+    public class ObjBullet : BaseGraphicObject
     {
         public FiredFromType FiredFromType { get; set; }
 
-        public int Damage { get; set; }
+        public WeaponBase Weapon { get; private set; }
 
-        public ObjBullet(Core core, string imagePath, int damage, BaseGraphicObject firedFrom, PointD xyOffset = null)
+        public BaseGraphicObject LockedTarget { get; private set; }
+
+        public ObjBullet(Core core, WeaponBase weapon, BaseGraphicObject firedFrom, string imagePath,
+             BaseGraphicObject lockedTarget = null, PointD xyOffset = null)
             : base(core)
         {
-            Damage = damage;
+            Weapon = weapon;
+            LockedTarget = lockedTarget;
+            IsLockedOn = LockedTarget != null;
 
             VelocityD initialVector = new VelocityD()
             {
                 Angle = new AngleD(firedFrom.Velocity.Angle.Degrees),
-                MaxSpeed = 25,
+                MaxSpeed = weapon.Speed,
                 ThrottlePercentage = 100
             };
 
@@ -35,14 +42,6 @@ namespace AI2D.GraphicObjects
             {
                 FiredFromType = FiredFromType.Player;
             }
-
-            LoadResources(imagePath, null, null, null, initialLocation, initialVector);
-        }
-
-        public ObjBullet(Core core, string imagePath, int damage, VelocityD initialVector, PointD initialLocation)
-            : base(core)
-        {
-            Damage = damage;
 
             LoadResources(imagePath, null, null, null, initialLocation, initialVector);
         }

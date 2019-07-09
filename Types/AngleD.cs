@@ -16,13 +16,6 @@ namespace AI2D.Types
         const double DEG_TO_RAD = Math.PI / 180.0;
         const double RAD_TO_DEG = 180.0 / Math.PI;
 
-        public static AngleD Degrees0 = new AngleD(0);
-        public static AngleD Degrees45 = new AngleD(45.0);
-        public static AngleD Degrees90 = new AngleD(90.0);
-        public static AngleD Degrees180 = new AngleD(180.0);
-        public static AngleD Degrees135 = new AngleD(135);
-        public static AngleD Degrees225 = new AngleD(225);
-
         public static double RadiansToDegrees(double rad)
         {
             return rad * RAD_TO_DEG;
@@ -31,6 +24,33 @@ namespace AI2D.Types
         public static double DegreesToRadians(double deg)
         {
             return deg * DEG_TO_RAD;
+        }
+
+        public static double XYToRadians(double x, double y)
+        {
+            return Math.Atan2(y, x) + RadianOffset;
+        }
+
+        public static double XYToDegrees(double x, double y)
+        {
+            return AngleD.RadiansToDegrees(Math.Atan2(y, x)) + DegreeOffset;
+        }
+
+        public static PointD ToXY(AngleD angle)
+        {
+            return new PointD(angle.X, angle.Y);
+        }
+
+        public static PointD DegreesToXY(double degrees)
+        {
+            double radians = AngleD.DegreesToRadians(degrees) - RadianOffset;
+            return new PointD(Math.Cos(radians), Math.Sin(radians));
+        }
+
+        public static PointD RadiansToXY(double radians)
+        {
+            radians -= RadianOffset;
+            return new PointD(Math.Cos(radians), Math.Sin(radians));
         }
 
         #endregion
@@ -48,7 +68,7 @@ namespace AI2D.Types
 
         public AngleD(double degrees)
         {
-            _degrees = degrees;
+            Degrees = degrees;
         }
 
         public AngleD(double x, double y)
@@ -104,7 +124,7 @@ namespace AI2D.Types
 
         public override string ToString()
         {
-            return $"{{{Math.Round(X, 4).ToString("#.####")},{Math.Round(Y, 4).ToString("#.####")}}}";
+            return $"{{{Math.Round(X, 4).ToString("#.####")}x,{Math.Round(Y, 4).ToString("#.####")}y}}";
         }
 
         public Vector ToVector()
@@ -121,7 +141,14 @@ namespace AI2D.Types
             }
             set
             {
-                _degrees = (value % 360.0);
+                if (value < 0)
+                {
+                    _degrees = (360 - (Math.Abs(value) % 360.0));
+                }
+                else
+                {
+                    _degrees = value % 360;
+                }
             }
         }
 

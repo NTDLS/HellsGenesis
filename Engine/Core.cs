@@ -125,13 +125,9 @@ namespace AI2D.Engine
 
             }
 
-            if (Actors.Enemies.Count < 2)
+            if (Actors.Enemies.Count == 0)
             {
-
-                for (int i = 0; i < 2; i++)
-                {
-                }
-
+                /*
                 for (int i = 0; i < 2; i++)
                 {
                     var enemy = Actors.CreateEnemy<EnemyAvvol>();
@@ -150,11 +146,13 @@ namespace AI2D.Engine
 
                     enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
                 }
+                */
 
                 for (int i = 0; i < 1; i++)
                 {
                     var enemy = Actors.CreateEnemy<EnemyScinzad>();
 
+                    /*
                     enemy.AddWeapon(new WeaponVulcanCannon(this)
                     {
                         FireDelayMilliseconds = 250,
@@ -162,6 +160,7 @@ namespace AI2D.Engine
                     });
 
                     enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
+                    */
                 }
             }
         }

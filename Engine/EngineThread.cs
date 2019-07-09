@@ -160,7 +160,7 @@ namespace AI2D.Engine
                     _core.Actors.Player.X += (_core.Actors.Player.Velocity.Angle.X * forwardThrust) - bgAppliedOffsetX;
                     _core.Actors.Player.Y += (_core.Actors.Player.Velocity.Angle.Y * forwardThrust) - bgAppliedOffsetY;
 
-                    _core.Actors.ShipEngineRoarSound.Play();
+                    _core.Actors.Player.ShipEngineRoarSound.Play();
                 }
                 else if (_core.Actors.Player.Velocity.ThrottlePercentage < 0)
                 {
@@ -197,11 +197,11 @@ namespace AI2D.Engine
                     _core.Actors.Player.X -= (_core.Actors.Player.Velocity.Angle.X * reverseThrust) + bgAppliedOffsetX;
                     _core.Actors.Player.Y -= (_core.Actors.Player.Velocity.Angle.Y * reverseThrust) + bgAppliedOffsetY;
 
-                    _core.Actors.ShipEngineRoarSound.Play();
+                    _core.Actors.Player.ShipEngineRoarSound.Play();
                 }
                 else
                 {
-                    _core.Actors.ShipEngineRoarSound.Fade();
+                    _core.Actors.Player.ShipEngineRoarSound.Fade();
                 }
 
                 //Scroll the background.
@@ -282,11 +282,11 @@ namespace AI2D.Engine
 #if DEBUG
             if (_core.Actors.Debugs.Count > 0)
             {
-                var pointRight = Utility.AngleFromPointAtDistance(_core.Actors.Player.Velocity.Angle + AngleD.Degrees90, new PointD(50, 50));
+                var pointRight = Utility.AngleFromPointAtDistance(_core.Actors.Player.Velocity.Angle + 90, new PointD(50, 50));
                 _core.Actors.Debugs[0].Location = _core.Actors.Player.Location + pointRight;
                 _core.Actors.Debugs[0].Velocity.Angle = _core.Actors.Player.Velocity.Angle;
 
-                var pointLeft = Utility.AngleFromPointAtDistance(_core.Actors.Player.Velocity.Angle - AngleD.Degrees90, new PointD(50, 50));
+                var pointLeft = Utility.AngleFromPointAtDistance(_core.Actors.Player.Velocity.Angle - 90, new PointD(50, 50));
                 _core.Actors.Debugs[1].Location = _core.Actors.Player.Location + pointLeft;
                 _core.Actors.Debugs[1].Velocity.Angle = _core.Actors.Player.Velocity.Angle;
             }
@@ -312,7 +312,7 @@ namespace AI2D.Engine
                 {
                     if (_core.Actors.Player.Visable)
                     {
-                        //double requiredAngle = enemy.RequiredAngleTo(_core.Actors.Player);
+                        //double requiredAngle = enemy.AngleTo(_core.Actors.Player);
                         //_core.Actors.DebugText.Text = $"RA: {requiredAngle.ToString("####.###")}";
 
                         //double deltaAngle = Utility.GetDeltaAngle(enemy, _core.Actors.Player);
@@ -338,8 +338,35 @@ namespace AI2D.Engine
                         }
                     }
 
-                    enemy.X += (enemy.Velocity.Angle.X * enemy.Velocity.MaxSpeed) - bgAppliedOffsetX;
-                    enemy.Y += (enemy.Velocity.Angle.Y * enemy.Velocity.MaxSpeed) - bgAppliedOffsetY;
+                    //enemy.X += (enemy.Velocity.Angle.X * (enemy.Velocity.MaxSpeed * enemy.Velocity.ThrottlePercentage)) - bgAppliedOffsetX;
+                    //enemy.Y += (enemy.Velocity.Angle.Y * (enemy.Velocity.MaxSpeed * enemy.Velocity.ThrottlePercentage)) - bgAppliedOffsetY;
+
+                    enemy.X = (_core.Display.VisibleSize.Width / 2) + 150;
+                    enemy.Y = (_core.Display.VisibleSize.Height / 2);
+
+                    enemy.IsLockedOn = false;
+
+                    enemy.IsLockedOn = true; //debug.
+
+                    if (_core.Actors.Player.CurrentWeapon.CanLockOn)
+                    {
+                        int locks = 0;
+
+                        if (_core.Actors.Player.IsPointingAt(enemy, _core.Actors.Player.CurrentWeapon.MaxLockOnAngle))
+                        {
+                            var distance = _core.Actors.Player.DistanceTo(enemy);
+                            if (distance >= _core.Actors.Player.CurrentWeapon.MinLockDistance && distance <= _core.Actors.Player.CurrentWeapon.MaxLockDistance)
+                            {
+                                enemy.IsLockedOn = true;
+                                locks++;
+                            }
+
+                            if (locks >= _core.Actors.Player.CurrentWeapon.MaxLocks)
+                            {
+                                break;
+                            }
+                        }
+                    }
 
                     lock (_core.Actors.Bullets)
                     {
@@ -366,33 +393,59 @@ namespace AI2D.Engine
             {
                 foreach (var bullet in _core.Actors.Bullets)
                 {
-                    if (bullet.X < 0)
+                    if (bullet.Visable)
                     {
-                        bullet.ReadyForDeletion = true;
-                    }
-                    else if (bullet.X >= _core.Display.VisibleSize.Width)
-                    {
-                        bullet.ReadyForDeletion = true;
-                    }
-
-                    if (bullet.Y < 0)
-                    {
-                        bullet.ReadyForDeletion = true;
-                    }
-                    else if (bullet.Y >= _core.Display.VisibleSize.Height)
-                    {
-                        bullet.ReadyForDeletion = true;
-                    }
-
-                    bullet.X += (bullet.Velocity.Angle.X * bullet.Velocity.MaxSpeed);
-                    bullet.Y += (bullet.Velocity.Angle.Y * bullet.Velocity.MaxSpeed);
-
-                    if (bullet.FiredFromType == FiredFromType.Enemy)
-                    {
-                        if (bullet.Intersects(_core.Actors.Player))
+                        if (bullet.X < 0)
                         {
-                            _core.Actors.Player.Hit(bullet);
                             bullet.ReadyForDeletion = true;
+                        }
+                        else if (bullet.X >= _core.Display.VisibleSize.Width)
+                        {
+                            bullet.ReadyForDeletion = true;
+                        }
+
+                        if (bullet.Y < 0)
+                        {
+                            bullet.ReadyForDeletion = true;
+                        }
+                        else if (bullet.Y >= _core.Display.VisibleSize.Height)
+                        {
+                            bullet.ReadyForDeletion = true;
+                        }
+
+                        if (bullet.IsLockedOn)
+                        {
+                            //AngleD deltaAngle = new AngleD(bullet.GetDeltaAngle(bullet.LockedTarget));
+                            var pointTo = AngleD.DegreesToXY(bullet.AngleTo(bullet.LockedTarget));
+
+                            AngleD angleTo = new AngleD(pointTo.Y, pointTo.X);
+
+                            double X = bullet.X;
+                            double Y = bullet.Y;
+
+                            bullet.X += (bullet.Velocity.Angle.X * (bullet.Velocity.MaxSpeed * angleTo.X * bullet.Velocity.ThrottlePercentage)) - bgAppliedOffsetX;
+                            bullet.Y += (bullet.Velocity.Angle.Y * (bullet.Velocity.MaxSpeed * angleTo.Y * bullet.Velocity.ThrottlePercentage)) - bgAppliedOffsetY;
+
+                            X = X - bullet.X;
+                            Y = Y - bullet.Y;
+
+                            Console.WriteLine($"Angle to [{angleTo.Degrees.ToString("#,##")}/{angleTo.ToString()}] Moved: {X.ToString("#,##")}x,{Y.ToString("#,##")}y");
+
+                            //bullet.ReadyForDeletion = true;
+                        }
+                        else
+                        {
+                            bullet.X += (bullet.Velocity.Angle.X * (bullet.Velocity.MaxSpeed * bullet.Velocity.ThrottlePercentage)) - bgAppliedOffsetX;
+                            bullet.Y += (bullet.Velocity.Angle.Y * (bullet.Velocity.MaxSpeed * bullet.Velocity.ThrottlePercentage)) - bgAppliedOffsetY;
+                        }
+
+                        if (bullet.FiredFromType == FiredFromType.Enemy)
+                        {
+                            if (bullet.Intersects(_core.Actors.Player))
+                            {
+                                _core.Actors.Player.Hit(bullet);
+                                bullet.ReadyForDeletion = true;
+                            }
                         }
                     }
                 }

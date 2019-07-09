@@ -6,7 +6,7 @@ namespace AI2D.Weapons
     public class WeaponPulseMeson : WeaponBase
     {
 
-        private const string imagePath = @"..\..\Assets\Graphics\Bullet\Pulse Meson.png";
+        private const string imagePath = @"..\..\Assets\Graphics\Weapon\Pulse Meson.png";
         private const string soundPath = @"..\..\Assets\Sounds\Weapons\Pulse Meson.wav";
         private const float soundVolumne = 0.4f;
 
@@ -29,13 +29,13 @@ namespace AI2D.Weapons
 
                 if (_toggle)
                 {
-                    var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + AngleD.Degrees90, new PointD(10, 10));
-                    _core.Actors.CreateBullet(_imagePath, Damage, _owner, pointRight);
+                    var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new PointD(10, 10));
+                    _core.Actors.CreateBullet(_imagePath, this, _owner, pointRight);
                 }
                 else
                 {
-                    var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - AngleD.Degrees90, new PointD(10, 10));
-                    _core.Actors.CreateBullet(_imagePath, Damage, _owner, pointLeft);
+                    var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new PointD(10, 10));
+                    _core.Actors.CreateBullet(_imagePath, this, _owner, pointLeft);
                 }
 
                 _toggle = !_toggle;

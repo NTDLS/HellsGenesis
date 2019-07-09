@@ -13,12 +13,15 @@ namespace AI2D.GraphicObjects
         protected Core _core;
 
         private Image _image;
+        private Image _lockedOnImage;
         private ObjAnimation _explosionAnimation;
         private AudioClip _explodeSound;
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private int _MilisecondsBetweenHits = 100;
         private AudioClip _hitSound;
         private readonly List<WeaponBase> _weapons = new List<WeaponBase>();
+
+        public bool IsLockedOn { get; set; }
 
         private const string _assetExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
         private readonly string[] _assetExplosionAnimationFiles = {
@@ -172,12 +175,13 @@ namespace AI2D.GraphicObjects
         {
             if (hitSoundPath == null)
             {
-                _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship Hit.wav", 0.65f);
+                _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Object Hit.wav", 0.65f);
             }
             else
             {
                 _hitSound = _core.Actors.GetSoundCached(hitSoundPath, 0.65f);
             }
+
 
             if (explodeSoundPath == null)
             {
@@ -191,6 +195,8 @@ namespace AI2D.GraphicObjects
 
             int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
             _explosionAnimation = new ObjAnimation(_core, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
+
+            _lockedOnImage = _core.Actors.GetBitmapCached(@"..\..\Assets\Graphics\Weapon\Locked On.png");
 
             if (imagePath != null)
             {
@@ -206,6 +212,7 @@ namespace AI2D.GraphicObjects
                 _image = Utility.ResizeImage(_image, size.Value.Width, size.Value.Height);
                 _size = (Size)size;
             }
+
 
             if (initialLocation == null)
             {
@@ -293,6 +300,11 @@ namespace AI2D.GraphicObjects
             Invalidate();
         }
 
+        public Image GetImage()
+        {
+            return _image;
+        }
+
         public void Invalidate()
         {
             var invalidRect = new Rectangle(
@@ -339,7 +351,7 @@ namespace AI2D.GraphicObjects
         {
             if (bullet != null)
             {
-                return Hit(bullet.Damage);
+                return Hit(bullet.Weapon.Damage);
             }
             return false;
         }
@@ -374,14 +386,24 @@ namespace AI2D.GraphicObjects
             return Utility.GetDeltaAngle(this, atObj);
         }
 
-        public double RequiredAngleTo(BaseGraphicObject atObj)
+        /// <summary>
+        /// Calculates the angle of one objects location to another location.
+        /// </summary>
+        /// <param name="atObj"></param>
+        /// <returns></returns>
+        public double AngleTo(BaseGraphicObject atObj)
         {
-            return Utility.RequiredAngleTo(this, atObj);
+            return Utility.AngleTo(this, atObj);
         }
 
         public bool IsPointingAt(BaseGraphicObject atObj, double toleranceDegrees)
         {
             return Utility.IsPointingAt(this, atObj, toleranceDegrees);
+        }
+
+        public double DistanceTo(BaseGraphicObject to)
+        {
+            return PointD.DistanceTo(this.Location, to.Location);
         }
 
         public void Explode()
@@ -402,35 +424,44 @@ namespace AI2D.GraphicObjects
         {
             if (_isVisible && _image != null)
             {
-                if (Velocity.Angle.Degrees != 0 && RotationMode != RotationMode.None)
+                DrawImage(dc, _image);
+                if (_lockedOnImage != null && IsLockedOn)
                 {
-                    if (RotationMode == RotationMode.Upsize) //Very expensize
-                    {
-                        var bitmap = new Bitmap(_image);
-                        var image = Utility.RotateImageWithUpsize(bitmap, Velocity.Angle.Degrees, Color.Transparent);
-                        Rectangle rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
-                        dc.DrawImage(image, rect);
-
-                        _size.Height = image.Height;
-                        _size.Width = image.Width;
-                    }
-                    else if (RotationMode == RotationMode.Clip) //Much less expensive.
-                    {
-                            var bitmap = new Bitmap(_image);
-                        var image = Utility.RotateImageWithClipping(bitmap, Velocity.Angle.Degrees, Color.Transparent);
-                        Rectangle rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
-                        dc.DrawImage(image, rect);
-
-                        _size.Height = image.Height;
-                        _size.Width = image.Width;
-                    }
+                    DrawImage(dc, _lockedOnImage, 0);
                 }
-                else //Almost free.
+            }
+        }
+
+        private void DrawImage(Graphics dc, Image rawImage, double? angleInDegrees = null)
+        {
+            double angle = (double) (angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
+
+            if (angle != 0 && RotationMode != RotationMode.None)
+            {
+                if (RotationMode == RotationMode.Upsize) //Very expensize
                 {
-                    Rectangle rect = new Rectangle((int)(_location.X - (_image.Width / 2.0)), (int)(_location.Y - (_image.Height / 2.0)), _image.Width, _image.Height);
-                    dc.DrawImage(_image, rect);
-                    dc.DrawImage(_image, rect);
+                    var bitmap = new Bitmap(rawImage);
+                    var image = Utility.RotateImageWithUpsize(bitmap, angle, Color.Transparent);
+                    Rectangle rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
+                    dc.DrawImage(image, rect);
+                    _size.Height = image.Height;
+                    _size.Width = image.Width;
                 }
+                else if (RotationMode == RotationMode.Clip) //Much less expensive.
+                {
+                    var bitmap = new Bitmap(rawImage);
+                    var image = Utility.RotateImageWithClipping(bitmap, angle, Color.Transparent);
+                    Rectangle rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
+                    dc.DrawImage(image, rect);
+
+                    _size.Height = image.Height;
+                    _size.Width = image.Width;
+                }
+            }
+            else //Almost free.
+            {
+                Rectangle rect = new Rectangle((int)(_location.X - (rawImage.Width / 2.0)), (int)(_location.Y - (rawImage.Height / 2.0)), rawImage.Width, rawImage.Height);
+                dc.DrawImage(rawImage, rect);
             }
         }
 

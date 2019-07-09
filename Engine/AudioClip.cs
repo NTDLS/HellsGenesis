@@ -25,7 +25,7 @@ namespace AI2D.Engine
             _wavFilePath = wavFilePath;
             _initialVolumne = initialVolumne;
 
-            var masteringsound = new MasteringVoice(_xaudio);
+            var masteringsound = new MasteringVoice(_xaudio); //Yes, this is required.
             var nativefilestream = new NativeFileStream(wavFilePath,
                 NativeFileMode.Open, NativeFileAccess.Read, NativeFileShare.Read);
 

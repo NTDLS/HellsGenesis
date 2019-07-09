@@ -111,7 +111,13 @@ namespace AI2D.Engine
                 (Math.Sin(angle.Radians) * distance.Y));
         }
 
-        public static double RequiredAngleTo(BaseGraphicObject from, BaseGraphicObject to)
+        /// <summary>
+        /// Calculates the angle of one objects location to another location.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public static double AngleTo(BaseGraphicObject from, BaseGraphicObject to)
         {
             return PointD.AngleTo(from.Location, to.Location);
         }
@@ -119,12 +125,12 @@ namespace AI2D.Engine
         public static bool IsPointingAt(BaseGraphicObject fromObj, BaseGraphicObject atObj, double toleranceDegrees)
         {
             var deltaAngle = Math.Abs(GetDeltaAngle(fromObj, atObj));
-            return deltaAngle < toleranceDegrees;
+            return deltaAngle < toleranceDegrees || deltaAngle > (360 - toleranceDegrees);
         }
 
         public static double GetDeltaAngle(BaseGraphicObject fromObj, BaseGraphicObject atObj)
         {
-            double angleTo = RequiredAngleTo(fromObj, atObj);
+            double angleTo = AngleTo(fromObj, atObj);
 
             if (fromObj.Velocity.Angle.Degrees < 0) fromObj.Velocity.Angle.Degrees = (0 - fromObj.Velocity.Angle.Degrees);
             if (angleTo < 0) angleTo = (0 - angleTo);
@@ -161,4 +167,3 @@ namespace AI2D.Engine
 
     }
 }
-

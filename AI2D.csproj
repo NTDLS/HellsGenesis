@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EC831B70-C28C-4D6A-8C16-D3022D19ADF8}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>AI2D</RootNamespace>
     <AssemblyName>AI2D</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -104,6 +104,7 @@
     <Compile Include="GraphicObjects\ObjTextBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Weapons\WeaponGuidedFragMissile.cs" />
     <Compile Include="Weapons\WeaponPulseMeson.cs" />
     <Compile Include="Weapons\WeaponPhotonTorpedo.cs" />
     <Compile Include="Weapons\WeaponDualVulcanCannon.cs" />
