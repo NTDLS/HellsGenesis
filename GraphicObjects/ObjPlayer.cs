@@ -1,4 +1,5 @@
 ﻿using AI2D.Engine;
+using System.Drawing;
 
 namespace AI2D.GraphicObjects
 {
@@ -15,7 +16,7 @@ namespace AI2D.GraphicObjects
         public ObjPlayer(Core core)
             : base(core)
         {
-            LoadResources(_imagePath, new System.Drawing.Size(32, 32));
+            Initialize(_imagePath, new Size(32, 32));
 
             AmmoLowSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Ammo Low.wav", 0.75f);
             AmmoEmptySound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Ammo Empty.wav", 0.75f);

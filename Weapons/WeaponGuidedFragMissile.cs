@@ -23,7 +23,12 @@ namespace AI2D.Weapons
             Damage = 25;
             FireDelayMilliseconds = 1000;
             Speed = 6;
+
             CanLockOn = true;
+            MinLockDistance = 50;
+            MaxLockDistance = 600;
+            MaxLocks = 4;
+            MaxLockOnAngle = 40;
         }
 
         public override bool Fire()

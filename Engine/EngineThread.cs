@@ -229,6 +229,7 @@ namespace AI2D.Engine
                 _core.Actors.Player.X + _core.Display.BackgroundOffset.X,
                 _core.Actors.Player.Y + _core.Display.BackgroundOffset.Y);
 
+            /*
             _core.Actors.DebugText.Text =
                     $"       Frame Rate: Avg: {_core.Display.FrameCounter.AverageFrameRate.ToString("0.0")},"
                                     + $"Min: {_core.Display.FrameCounter.FrameRateMin.ToString("0.0")},"
@@ -244,7 +245,18 @@ namespace AI2D.Engine
                 + $"  Delta BG Offset: {bgAppliedOffsetX.ToString("#0.00")}x, {bgAppliedOffsetY.ToString("#0.00")}y\r\n"
                 + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}r\n"
                 + $"          Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}";
+            */
 
+            if (_core.Actors.Debugs.Count > 0)
+            {
+                var angleTo = _core.Actors.Player.AngleTo(_core.Actors.Debugs[0]);
+                var deltaAngle = _core.Actors.Player.DeltaAngle(_core.Actors.Debugs[0]);
+
+                var angleToXY = AngleD.DegreesToXY(angleTo);
+
+                _core.Actors.DebugText.Text = $"angleTo: {angleTo.ToString("#,##")} ( {angleToXY.X.ToString("#,##")}x,{angleToXY.Y.ToString("#,##")}y ) "
+                    + $"deltaAngle: {deltaAngle.ToString("#,##")}";
+            }
 
             if (_core.Display.CurrentQuadrant.Key.X == -5
                 && _core.Display.CurrentQuadrant.Key.Y == -5)
@@ -280,7 +292,7 @@ namespace AI2D.Engine
             #endregion
 
 #if DEBUG
-            if (_core.Actors.Debugs.Count > 0)
+            if (_core.Actors.Debugs.Count > 0 && false)
             {
                 var pointRight = Utility.AngleFromPointAtDistance(_core.Actors.Player.Velocity.Angle + 90, new PointD(50, 50));
                 _core.Actors.Debugs[0].Location = _core.Actors.Player.Location + pointRight;
@@ -312,12 +324,6 @@ namespace AI2D.Engine
                 {
                     if (_core.Actors.Player.Visable)
                     {
-                        //double requiredAngle = enemy.AngleTo(_core.Actors.Player);
-                        //_core.Actors.DebugText.Text = $"RA: {requiredAngle.ToString("####.###")}";
-
-                        //double deltaAngle = Utility.GetDeltaAngle(enemy, _core.Actors.Player);
-                        //_core.Actors.DebugText.Text = $"DA: {deltaAngle.ToString("####.###")}";
-
                         enemy.ApplyIntelligence();
 
                         //Player collides with enemy.
@@ -338,15 +344,10 @@ namespace AI2D.Engine
                         }
                     }
 
-                    //enemy.X += (enemy.Velocity.Angle.X * (enemy.Velocity.MaxSpeed * enemy.Velocity.ThrottlePercentage)) - bgAppliedOffsetX;
-                    //enemy.Y += (enemy.Velocity.Angle.Y * (enemy.Velocity.MaxSpeed * enemy.Velocity.ThrottlePercentage)) - bgAppliedOffsetY;
-
-                    enemy.X = (_core.Display.VisibleSize.Width / 2) + 150;
-                    enemy.Y = (_core.Display.VisibleSize.Height / 2);
+                    enemy.X += (enemy.Velocity.Angle.X * (enemy.Velocity.MaxSpeed * enemy.Velocity.ThrottlePercentage)) - bgAppliedOffsetX;
+                    enemy.Y += (enemy.Velocity.Angle.Y * (enemy.Velocity.MaxSpeed * enemy.Velocity.ThrottlePercentage)) - bgAppliedOffsetY;
 
                     enemy.IsLockedOn = false;
-
-                    enemy.IsLockedOn = true; //debug.
 
                     if (_core.Actors.Player.CurrentWeapon.CanLockOn)
                     {
@@ -413,25 +414,26 @@ namespace AI2D.Engine
                             bullet.ReadyForDeletion = true;
                         }
 
-                        if (bullet.IsLockedOn)
+                        if (bullet.ReadyForDeletion == false)
                         {
-                            //AngleD deltaAngle = new AngleD(bullet.GetDeltaAngle(bullet.LockedTarget));
-                            var pointTo = AngleD.DegreesToXY(bullet.AngleTo(bullet.LockedTarget));
+                            bullet.ApplyIntelligence();
+                        }
 
-                            AngleD angleTo = new AngleD(pointTo.Y, pointTo.X);
+                        if (bullet.LockedTarget != null)
+                        {
+                            var deltaAngle = bullet.DeltaAngle(bullet.LockedTarget);
+                            
+                            if (deltaAngle >= 180.0) //We might as well turn around clock-wise
+                            {
+                                bullet.Velocity.Angle += 0.5;
+                            }
+                            else if (deltaAngle < 180.0) //We might as well turn around counter clock-wise
+                            {
+                                bullet.Velocity.Angle -= 0.5;
+                            }
 
-                            double X = bullet.X;
-                            double Y = bullet.Y;
-
-                            bullet.X += (bullet.Velocity.Angle.X * (bullet.Velocity.MaxSpeed * angleTo.X * bullet.Velocity.ThrottlePercentage)) - bgAppliedOffsetX;
-                            bullet.Y += (bullet.Velocity.Angle.Y * (bullet.Velocity.MaxSpeed * angleTo.Y * bullet.Velocity.ThrottlePercentage)) - bgAppliedOffsetY;
-
-                            X = X - bullet.X;
-                            Y = Y - bullet.Y;
-
-                            Console.WriteLine($"Angle to [{angleTo.Degrees.ToString("#,##")}/{angleTo.ToString()}] Moved: {X.ToString("#,##")}x,{Y.ToString("#,##")}y");
-
-                            //bullet.ReadyForDeletion = true;
+                            bullet.X += (bullet.Velocity.Angle.X * (bullet.Velocity.MaxSpeed * bullet.Velocity.ThrottlePercentage)) - bgAppliedOffsetX;
+                            bullet.Y += (bullet.Velocity.Angle.Y * (bullet.Velocity.MaxSpeed * bullet.Velocity.ThrottlePercentage)) - bgAppliedOffsetY;
                         }
                         else
                         {

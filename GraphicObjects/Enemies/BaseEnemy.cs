@@ -9,6 +9,8 @@ namespace AI2D.GraphicObjects.Enemies
         public BaseEnemy(Core core)
             : base(core)
         {
+            Velocity.ThrottlePercentage = 1;
+            Initialize();
         }
 
         public virtual void ApplyIntelligence()

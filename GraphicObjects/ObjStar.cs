@@ -19,7 +19,7 @@ namespace AI2D.GraphicObjects
             : base(core)
         {
             int _explosionImageIndex = Utility.RandomNumber(0, _assetStarFiles.Count());
-            LoadResources(_assetStarPath + _assetStarFiles[_explosionImageIndex]);
+            Initialize(_assetStarPath + _assetStarFiles[_explosionImageIndex]);
 
             X = Utility.Random.Next(0, core.Display.VisibleSize.Width);
             Y = Utility.Random.Next(0, core.Display.VisibleSize.Height);

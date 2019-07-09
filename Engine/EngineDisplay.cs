@@ -61,5 +61,10 @@ namespace AI2D.Engine
 
             return Quadrants[coord];
         }
+        public PointD RandomOnscreenLocation()
+        {
+            return new PointD(Utility.Random.Next(0, VisibleSize.Width), Utility.Random.Next(0, VisibleSize.Height));
+        }
+
     }
 }

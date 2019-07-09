@@ -1,4 +1,5 @@
 ﻿using AI2D.Engine;
+using System.Drawing;
 using System.Linq;
 
 namespace AI2D.GraphicObjects.Enemies
@@ -26,7 +27,7 @@ namespace AI2D.GraphicObjects.Enemies
 
             HitPoints = Utility.Random.Next(Consants.Limits.MinEnemyHealth, Consants.Limits.MaxEnemyHealth);
 
-            LoadResources(_assetPath +_imagePaths[imageIndex], new System.Drawing.Size(32, 32));
+            SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
         }
 
         public override void ApplyIntelligence()

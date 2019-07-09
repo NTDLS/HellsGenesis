@@ -48,7 +48,7 @@ namespace AI2D.GraphicObjects
         public RotationMode RotationMode { get; set; }
         public WeaponBase CurrentWeapon { get; private set; }
         public int HitPoints { get; set; }
-        public VelocityD Velocity { get; set; }
+        public VelocityD Velocity { get; set; } = new VelocityD();
 
         private bool _readyForDeletion;
         public bool ReadyForDeletion
@@ -170,28 +170,12 @@ namespace AI2D.GraphicObjects
             RotationMode = RotationMode.Upsize;
         }
 
-        public void LoadResources(string imagePath, Size? size = null, string hitSoundPath = null,
-            string explodeSoundPath = null, PointD initialLocation = null, VelocityD initialVector = null)
+        public void Initialize(string imagePath = null, Size? size = null)
         {
-            if (hitSoundPath == null)
-            {
-                _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Object Hit.wav", 0.65f);
-            }
-            else
-            {
-                _hitSound = _core.Actors.GetSoundCached(hitSoundPath, 0.65f);
-            }
+            _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Object Hit.wav", 0.65f);
 
-
-            if (explodeSoundPath == null)
-            {
-                int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
-                _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
-            }
-            else
-            {
-                _explodeSound = _core.Actors.GetSoundCached(explodeSoundPath, 1.0f);
-            }
+            int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
+            _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
 
             int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
             _explosionAnimation = new ObjAnimation(_core, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
@@ -200,42 +184,7 @@ namespace AI2D.GraphicObjects
 
             if (imagePath != null)
             {
-                _image = _core.Actors.GetBitmapCached(imagePath);
-                if (size == null)
-                {
-                    _size = new Size(_image.Size.Width, _image.Size.Height);
-                }
-            }
-
-            if (size != null)
-            {
-                _image = Utility.ResizeImage(_image, size.Value.Width, size.Value.Height);
-                _size = (Size)size;
-            }
-
-
-            if (initialLocation == null)
-            {
-                _location.X = Utility.Random.Next(0, _core.Display.VisibleSize.Width - _size.Width);
-                _location.Y = Utility.Random.Next(0, _core.Display.VisibleSize.Height - _size.Height);
-            }
-            else
-            {
-                _location.X = (int)initialLocation?.X;
-                _location.Y = (int)initialLocation?.Y;
-            }
-
-            ReadyForDeletion = false;
-
-            if (initialVector == null)
-            {
-                Velocity = new VelocityD();
-                Velocity.MaxSpeed = Utility.Random.Next(Consants.Limits.MinSpeed, Consants.Limits.MaxSpeed);
-                Velocity.Angle.Degrees = Utility.Random.Next(0, 360);
-            }
-            else
-            {
-                Velocity = initialVector;
+                SetImage(imagePath, size);
             }
         }
 
@@ -292,12 +241,28 @@ namespace AI2D.GraphicObjects
             return existingWeapon;
         }
 
-        public void SetImage(Image image)
+        public void SetImage(Image image, Size? size = null)
         {
             _image = image;
-            _size.Height = image.Height;
-            _size.Width = image.Width;
+
+            if (size != null)
+            {
+                _image = Utility.ResizeImage(_image, ((Size)size).Width, ((Size)size).Height);
+            }
+            _size = new Size(_image.Size.Width, _image.Size.Height);
             Invalidate();
+        }
+
+        public void SetImage(string imagePath, Size? size = null)
+        {
+            _image = _core.Actors.GetBitmapCached(imagePath);
+
+            if (size != null)
+            {
+                _image = Utility.ResizeImage(_image, ((Size)size).Width, ((Size)size).Height);
+            }
+
+            _size = new Size(_image.Size.Width, _image.Size.Height);
         }
 
         public Image GetImage()
@@ -381,9 +346,14 @@ namespace AI2D.GraphicObjects
             }
         }
 
-        public double GetDeltaAngle(BaseGraphicObject atObj)
+        /// <summary>
+        /// Calculated the difference in heading angle from one object to get to another.
+        /// </summary>
+        /// <param name="atObj"></param>
+        /// <returns></returns>
+        public double DeltaAngle(BaseGraphicObject atObj)
         {
-            return Utility.GetDeltaAngle(this, atObj);
+            return Utility.DeltaAngle(this, atObj);
         }
 
         /// <summary>

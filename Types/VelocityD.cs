@@ -6,7 +6,7 @@
         public double MaxSpeed { get; set; }
         public double MaxRotationSpeed { get; set; }
 
-        public double _throttlePercentage = 0;
+        public double _throttlePercentage;
         public double ThrottlePercentage
         {
             get

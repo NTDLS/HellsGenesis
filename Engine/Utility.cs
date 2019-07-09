@@ -124,18 +124,28 @@ namespace AI2D.Engine
 
         public static bool IsPointingAt(BaseGraphicObject fromObj, BaseGraphicObject atObj, double toleranceDegrees)
         {
-            var deltaAngle = Math.Abs(GetDeltaAngle(fromObj, atObj));
+            var deltaAngle = Math.Abs(DeltaAngle(fromObj, atObj));
             return deltaAngle < toleranceDegrees || deltaAngle > (360 - toleranceDegrees);
         }
 
-        public static double GetDeltaAngle(BaseGraphicObject fromObj, BaseGraphicObject atObj)
+        public static double DeltaAngle(BaseGraphicObject fromObj, BaseGraphicObject atObj)
         {
             double angleTo = AngleTo(fromObj, atObj);
 
             if (fromObj.Velocity.Angle.Degrees < 0) fromObj.Velocity.Angle.Degrees = (0 - fromObj.Velocity.Angle.Degrees);
-            if (angleTo < 0) angleTo = (0 - angleTo);
+            if (angleTo < 0)
+            {
+                angleTo = (0 - angleTo);
+            }
 
-            return fromObj.Velocity.Angle.Degrees - angleTo;
+            angleTo = fromObj.Velocity.Angle.Degrees - angleTo;
+
+            if (angleTo < 0)
+            {
+                angleTo = 360.0 - (Math.Abs(angleTo) % 360.0);
+            }
+
+            return angleTo;
         }
 
         public static double DistanceTo(BaseGraphicObject from, BaseGraphicObject to)
@@ -164,6 +174,5 @@ namespace AI2D.Engine
         }
 
         #endregion
-
     }
 }

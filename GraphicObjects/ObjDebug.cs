@@ -1,5 +1,6 @@
 ﻿using AI2D.Engine;
 using AI2D.Types;
+using System.Drawing;
 using System.Linq;
 
 namespace AI2D.GraphicObjects
@@ -17,7 +18,7 @@ namespace AI2D.GraphicObjects
             : base(core)
         {
             int _explosionImageIndex = Utility.RandomNumber(0, _assetStarFiles.Count());
-            LoadResources(_assetStarPath + _assetStarFiles[_explosionImageIndex]);
+            Initialize(_assetStarPath + _assetStarFiles[_explosionImageIndex], new Size(32, 32));
 
             X = 0;
             Y = 0;

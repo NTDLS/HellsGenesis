@@ -32,11 +32,21 @@ namespace AI2D.Engine
         public EngineActors(Core core)
         {
             _core = core;
+        }
 
+        public void Start()
+        {
             BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
-            
+
             PlayerStatsText = CreateTextBlock("Consolas", Brushes.WhiteSmoke, 10, 5, 5);
             DebugText = CreateTextBlock("Consolas", Brushes.Aqua, 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10);
+
+            BackgroundMusicSound.Play();
+        }
+
+        public void Stop()
+        {
+
         }
 
         public void ResetPlayer()
@@ -299,6 +309,11 @@ namespace AI2D.Engine
             {
                 object[] param = { _core };
                 BaseEnemy obj = (BaseEnemy)Activator.CreateInstance(typeof(T), param);
+
+                obj.Location = _core.Display.RandomOnscreenLocation();
+                obj.Velocity.MaxSpeed = Utility.Random.Next(Consants.Limits.MinSpeed, Consants.Limits.MaxSpeed);
+                obj.Velocity.Angle.Degrees = Utility.Random.Next(0, 360);
+
                 Enemies.Add(obj);
                 return (T)obj;
             }

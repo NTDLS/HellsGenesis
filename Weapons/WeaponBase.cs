@@ -19,10 +19,10 @@ namespace AI2D.Weapons
         public int Damage { get; set; } = 1;
 
         public bool CanLockOn { get; set; } = false;
-        public double MaxLockOnAngle { get; set; } = 20;
-        public double MaxLocks { get; set; } = 2;
+        public double MaxLockOnAngle { get; set; } = 10;
+        public double MaxLocks { get; set; } = 1;
         public double MinLockDistance { get; set; } = 50;
-        public double MaxLockDistance { get; set; } = 400;
+        public double MaxLockDistance { get; set; } = 100;
 
         public WeaponBase(Core core, string name, string imagePath, string soundPath, float soundVolume)
         {
@@ -42,6 +42,10 @@ namespace AI2D.Weapons
                 return true;
             }
             return false;
+        }
+
+        public virtual void ApplyIntelligence(ref ObjBullet bullet)
+        {
         }
 
         public void SetOwner(BaseGraphicObject owner)

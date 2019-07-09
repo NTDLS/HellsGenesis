@@ -73,7 +73,7 @@
     <Compile Include="Engine\Consants.cs" />
     <Compile Include="Engine\EngineInput.cs" />
     <Compile Include="Engine\Utility.cs" />
-    <Compile Include="GraphicObjects\ObjBullet.cs" />
+    <Compile Include="GraphicObjects\Bullets\ObjBullet.cs" />
     <Compile Include="GraphicObjects\ObjDebug.cs" />
     <Compile Include="GraphicObjects\ObjStar.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

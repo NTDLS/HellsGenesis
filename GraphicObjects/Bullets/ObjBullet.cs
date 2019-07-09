@@ -18,11 +18,13 @@ namespace AI2D.GraphicObjects
              BaseGraphicObject lockedTarget = null, PointD xyOffset = null)
             : base(core)
         {
+            Initialize(imagePath);
+
             Weapon = weapon;
             LockedTarget = lockedTarget;
-            IsLockedOn = LockedTarget != null;
+            Velocity.ThrottlePercentage = 100;
 
-            VelocityD initialVector = new VelocityD()
+            VelocityD initialVelocity = new VelocityD()
             {
                 Angle = new AngleD(firedFrom.Velocity.Angle.Degrees),
                 MaxSpeed = weapon.Speed,
@@ -30,9 +32,9 @@ namespace AI2D.GraphicObjects
             };
 
             var initialLocation = firedFrom.Location;
-
             initialLocation.X = initialLocation.X + (xyOffset == null ? 0 : xyOffset.X);
             initialLocation.Y = initialLocation.Y + (xyOffset == null ? 0 : xyOffset.Y);
+            Location = initialLocation;
 
             if (firedFrom is BaseEnemy)
             {
@@ -43,7 +45,11 @@ namespace AI2D.GraphicObjects
                 FiredFromType = FiredFromType.Player;
             }
 
-            LoadResources(imagePath, null, null, null, initialLocation, initialVector);
+            Velocity = initialVelocity;
+        }
+
+        public virtual void ApplyIntelligence()
+        {
         }
     }
 }
