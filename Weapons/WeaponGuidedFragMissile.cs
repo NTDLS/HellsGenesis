@@ -25,10 +25,11 @@ namespace AI2D.Weapons
             Speed = 6;
 
             CanLockOn = true;
-            MinLockDistance = 50;
+            MinLockDistance = 100;
             MaxLockDistance = 600;
-            MaxLocks = 4;
+            MaxLocks = 2;
             MaxLockOnAngle = 40;
+            ExplodesOnImpact = true;
         }
 
         public override bool Fire()
@@ -38,9 +39,6 @@ namespace AI2D.Weapons
                 _bulletSound.Play();
                 RoundQuantity--;
 
-                //Animated bullet
-                //_core.Actors.CreateAnimatedBullet(_imagePath, Damage, _owner, new Size(32, 32), 10, pointRight);
-
                 List<BaseEnemy> lockedTargets = (from o in _core.Actors.Enemies where o.IsLockedOn == true select o).ToList();
 
                 if (lockedTargets == null || lockedTargets.Count == 0)
@@ -48,32 +46,34 @@ namespace AI2D.Weapons
                     if (_toggle)
                     {
                         var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new PointD(10, 10));
-                        _core.Actors.CreateBullet(_imagePath, this, _owner, pointRight);
+                        _core.Actors.CreateBullet(this, _owner, pointRight);
                     }
                     else
                     {
                         var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new PointD(10, 10));
-                        _core.Actors.CreateBullet(_imagePath, this, _owner, pointLeft);
+                        _core.Actors.CreateBullet(this, _owner, pointLeft);
                     }
+
+                    _toggle = !_toggle;
                 }
                 else
                 {
                     foreach (var enemy in lockedTargets)
                     {
-                        //if (_toggle)
-                        //{
-                            //var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new PointD(10, 10));
-                            _core.Actors.CreateLockedBullet(_imagePath, this, _owner, enemy);
-                        //}
-                        //else
-                        //{
-                            //var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new PointD(10, 10));
-                            //_core.Actors.CreateLockedBullet(_imagePath, this, _owner, enemy, pointLeft);
-                        //}
+                        if (_toggle)
+                        {
+                            var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new PointD(10, 10));
+                            _core.Actors.CreateLockedBullet(this, _owner, enemy, pointRight);
+                        }
+                        else
+                        {
+                            var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new PointD(10, 10));
+                            _core.Actors.CreateLockedBullet(this, _owner, enemy, pointLeft);
+                        }
+                        _toggle = !_toggle;
                     }
                 }
 
-                _toggle = !_toggle;
 
                 return true;
             }

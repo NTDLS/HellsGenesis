@@ -3,6 +3,7 @@ using AI2D.GraphicObjects.Enemies;
 using AI2D.Weapons;
 using System.Drawing;
 using System.Windows.Forms;
+using static AI2D.GraphicObjects.ObjAnimation;
 
 namespace AI2D.Engine
 {
@@ -114,7 +115,14 @@ namespace AI2D.Engine
         {
             if (Actors.Animations.Count < 1)
             {
-                //var _explosionAnimation = new ObjAnimation(this, @"..\..\Assets\Graphics\Animation\Coin.png", new Size(32, 23), false);
+                PlayMode mode = new PlayMode()
+                {
+                    Replay = ReplayMode.LoopedPlay,
+                    ReplayDelay = new System.TimeSpan(0, 0, 0, 1),
+                    DeleteActorAfterPlay = false
+                };
+
+                var _explosionAnimation = new ObjAnimation(this, @"..\..\Assets\Graphics\Animation\Coin.png", new Size(32, 23), 20, mode);
 
                 var playMode = new ObjAnimation.PlayMode()
                 {
@@ -122,7 +130,7 @@ namespace AI2D.Engine
                     ReplayDelay = new System.TimeSpan(0, 0, 0, 1)
                 };
 
-                //var animation = Actors.CreateAnimation(@"..\..\Assets\Graphics\Animation\Coin.png", new Size(32, 32), 50, playMode);
+                var animation = Actors.CreateAnimation(@"..\..\Assets\Graphics\Animation\Coin.png", new Size(32, 32), 50, playMode);
 
                 //Actors.PlaceAnimationOnTopOf(_explosionAnimation, Actors.Player);
             }

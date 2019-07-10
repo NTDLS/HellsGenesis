@@ -9,9 +9,8 @@ namespace AI2D.Engine
     {
         public Dictionary<Point, Quadrant> Quadrants = new Dictionary<Point, Quadrant>();
         public Quadrant CurrentQuadrant { get; set; }
-
         public PointD BackgroundOffset { get; set; } = new PointD(); //Offset of background, all cals must take into account.
-        public FrameCounter FrameCounter { get; set; } = new FrameCounter();
+        public FrameCounter GameLoopCounter { get; set; } = new FrameCounter();
         public RectangleF VisibleBounds { get; private set; }
 
         private Size _visibleSize;
@@ -65,6 +64,5 @@ namespace AI2D.Engine
         {
             return new PointD(Utility.Random.Next(0, VisibleSize.Width), Utility.Random.Next(0, VisibleSize.Height));
         }
-
     }
 }

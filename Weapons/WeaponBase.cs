@@ -1,6 +1,10 @@
 ﻿using AI2D.Engine;
 using AI2D.GraphicObjects;
+using AI2D.GraphicObjects.Bullets;
+using AI2D.Types;
 using System;
+using System.Drawing;
+using System.Linq;
 
 namespace AI2D.Weapons
 {
@@ -17,12 +21,12 @@ namespace AI2D.Weapons
         public int RoundQuantity { get; set; } = int.MaxValue;
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
-
         public bool CanLockOn { get; set; } = false;
         public double MaxLockOnAngle { get; set; } = 10;
         public double MaxLocks { get; set; } = 1;
         public double MinLockDistance { get; set; } = 50;
         public double MaxLockDistance { get; set; } = 100;
+        public bool ExplodesOnImpact { get; set; } = false;
 
         public WeaponBase(Core core, string name, string imagePath, string soundPath, float soundVolume)
         {
@@ -32,19 +36,24 @@ namespace AI2D.Weapons
             Name = name;
         }
 
+        public virtual BaseBullet CreateBullet(BaseGraphicObject lockedTarget, PointD xyOffset = null)
+        {
+            return new BulletGeneric(_core, this, _owner, _imagePath, lockedTarget, xyOffset);
+        }
+
         public virtual bool Fire()
         {
             if (CanFire)
             {
                 RoundQuantity--;
                 _bulletSound.Play();
-                _core.Actors.CreateBullet(_imagePath, this, _owner);
+                _core.Actors.CreateBullet(this, _owner);
                 return true;
             }
             return false;
         }
 
-        public virtual void ApplyIntelligence(ref ObjBullet bullet)
+        public virtual void Hit()
         {
         }
 

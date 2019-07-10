@@ -1,4 +1,5 @@
 ﻿using AI2D.Engine;
+using AI2D.GraphicObjects;
 using AI2D.Types;
 
 namespace AI2D.Weapons
@@ -27,14 +28,14 @@ namespace AI2D.Weapons
                 if (RoundQuantity > 0)
                 {
                     var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new PointD(5, 5));
-                    _core.Actors.CreateBullet(_imagePath, this, _owner, pointRight);
+                    _core.Actors.CreateBullet(this, _owner, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0)
                 {
                     var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new PointD(5, 5));
-                    _core.Actors.CreateBullet(_imagePath, this, _owner, pointLeft);
+                    _core.Actors.CreateBullet(this, _owner, pointLeft);
                     RoundQuantity--;
                 }
 

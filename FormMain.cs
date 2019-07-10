@@ -8,21 +8,21 @@ namespace AI2D
     public partial class FormMain : Form
     {
         private Core _core;
-        private bool _fullScreen = true;
+        private bool _fullScreen = false;
 
+        /*
         protected override CreateParams CreateParams
         {
             get
             {
-                /*
-                    Paints all descendants of a window in bottom-to-top painting order using double-buffering.
-                    For more information, see Remarks. This cannot be used if the window has a class style of either CS_OWNDC or CS_CLASSDC. 
-                */
+                //    Paints all descendants of a window in bottom-to-top painting order using double-buffering.
+                //    For more information, see Remarks. This cannot be used if the window has a class style of either CS_OWNDC or CS_CLASSDC. 
                 CreateParams handleParam = base.CreateParams;
                 handleParam.ExStyle |= 0x02000000; //WS_EX_COMPOSITED       
                 return handleParam;
             }
         }
+        */
 
         public FormMain()
         {
@@ -97,12 +97,12 @@ namespace AI2D
 
         private void PictureBoxScene_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-            e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            //e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            //e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+            //e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            //e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            //e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            //e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 
             _core.Actors.Render(e.Graphics);
             base.OnPaint(e);

@@ -1,4 +1,5 @@
 ﻿using AI2D.Engine;
+using AI2D.GraphicObjects.Bullets;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
@@ -14,14 +15,15 @@ namespace AI2D.GraphicObjects
 
         private Image _image;
         private Image _lockedOnImage;
+        private Image _lockedOnSoftImage;
         private ObjAnimation _explosionAnimation;
         private AudioClip _explodeSound;
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private int _MilisecondsBetweenHits = 100;
         private AudioClip _hitSound;
         private readonly List<WeaponBase> _weapons = new List<WeaponBase>();
-
         public bool IsLockedOn { get; set; }
+        public bool IsLockedOnSoft { get; set; }
 
         private const string _assetExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
         private readonly string[] _assetExplosionAnimationFiles = {
@@ -181,6 +183,7 @@ namespace AI2D.GraphicObjects
             _explosionAnimation = new ObjAnimation(_core, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
 
             _lockedOnImage = _core.Actors.GetBitmapCached(@"..\..\Assets\Graphics\Weapon\Locked On.png");
+            _lockedOnSoftImage = _core.Actors.GetBitmapCached(@"..\..\Assets\Graphics\Weapon\Locked Soft.png");
 
             if (imagePath != null)
             {
@@ -312,7 +315,7 @@ namespace AI2D.GraphicObjects
             return result;
         }
 
-        public bool Hit(ObjBullet bullet)
+        public bool Hit(BaseBullet bullet)
         {
             if (bullet != null)
             {
@@ -395,9 +398,14 @@ namespace AI2D.GraphicObjects
             if (_isVisible && _image != null)
             {
                 DrawImage(dc, _image);
+
                 if (_lockedOnImage != null && IsLockedOn)
                 {
                     DrawImage(dc, _lockedOnImage, 0);
+                }
+                else if (_lockedOnImage != null && IsLockedOnSoft)
+                {
+                    DrawImage(dc, _lockedOnSoftImage, 0);
                 }
             }
         }

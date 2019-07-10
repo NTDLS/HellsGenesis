@@ -63,6 +63,7 @@
     <Compile Include="Engine\FrameCounter.cs" />
     <Compile Include="Engine\EngineActors.cs" />
     <Compile Include="Engine\EngineThread.cs" />
+    <Compile Include="GraphicObjects\Bullets\BulletGeneric.cs" />
     <Compile Include="GraphicObjects\Enemies\BaseEnemy.cs" />
     <Compile Include="GraphicObjects\Enemies\EnemyUves.cs" />
     <Compile Include="GraphicObjects\Enemies\EnemyTheda.cs" />
@@ -70,10 +71,10 @@
     <Compile Include="GraphicObjects\Enemies\EnemyIrlen.cs" />
     <Compile Include="GraphicObjects\Enemies\EnemyAvvol.cs" />
     <Compile Include="GraphicObjects\ObjAnimation.cs" />
-    <Compile Include="Engine\Consants.cs" />
+    <Compile Include="Engine\Constants.cs" />
     <Compile Include="Engine\EngineInput.cs" />
     <Compile Include="Engine\Utility.cs" />
-    <Compile Include="GraphicObjects\Bullets\ObjBullet.cs" />
+    <Compile Include="GraphicObjects\Bullets\BaseBullet.cs" />
     <Compile Include="GraphicObjects\ObjDebug.cs" />
     <Compile Include="GraphicObjects\ObjStar.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

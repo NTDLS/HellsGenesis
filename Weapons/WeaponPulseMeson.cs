@@ -30,12 +30,12 @@ namespace AI2D.Weapons
                 if (_toggle)
                 {
                     var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new PointD(10, 10));
-                    _core.Actors.CreateBullet(_imagePath, this, _owner, pointRight);
+                    _core.Actors.CreateBullet(this, _owner, pointRight);
                 }
                 else
                 {
                     var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new PointD(10, 10));
-                    _core.Actors.CreateBullet(_imagePath, this, _owner, pointLeft);
+                    _core.Actors.CreateBullet(this, _owner, pointLeft);
                 }
 
                 _toggle = !_toggle;

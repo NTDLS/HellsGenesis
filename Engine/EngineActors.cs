@@ -1,4 +1,5 @@
 ﻿using AI2D.GraphicObjects;
+using AI2D.GraphicObjects.Bullets;
 using AI2D.GraphicObjects.Enemies;
 using AI2D.Types;
 using AI2D.Weapons;
@@ -21,7 +22,7 @@ namespace AI2D.Engine
         public List<ObjStar> Stars { get; private set; } = new List<ObjStar>();
         public List<ObjDebug> Debugs { get; private set; } = new List<ObjDebug>();
         public List<ObjAnimation> Animations { get; private set; } = new List<ObjAnimation>();
-        public List<ObjBullet> Bullets { get; private set; } = new List<ObjBullet>();
+        public List<BaseBullet> Bullets { get; private set; } = new List<BaseBullet>();
         public ObjPlayer Player { get; private set; }
 
         public AudioClip BackgroundMusicSound { get; private set; }
@@ -148,7 +149,7 @@ namespace AI2D.Engine
                 animation.X = defaultPosition.X;
                 animation.Y = defaultPosition.Y;
 
-                animation.Velocity = defaultPosition.Velocity;
+                //animation.Velocity = defaultPosition.Velocity;
                 animation.RotationMode = Types.RotationMode.Clip; //Much less expensive. Use this or NONE if you can.
 
                 Animations.Add(animation);
@@ -311,7 +312,7 @@ namespace AI2D.Engine
                 BaseEnemy obj = (BaseEnemy)Activator.CreateInstance(typeof(T), param);
 
                 obj.Location = _core.Display.RandomOnscreenLocation();
-                obj.Velocity.MaxSpeed = Utility.Random.Next(Consants.Limits.MinSpeed, Consants.Limits.MaxSpeed);
+                obj.Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MinSpeed, Constants.Limits.MaxSpeed);
                 obj.Velocity.Angle.Degrees = Utility.Random.Next(0, 360);
 
                 Enemies.Add(obj);
@@ -328,39 +329,29 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjBullet CreateBullet(string imagePath, WeaponBase weapon, BaseGraphicObject firedFrom, PointD xyOffset = null)
+        //TODO: Rename all these CREATES to PUBLISH.
+
+        public BaseBullet CreateBullet(WeaponBase weapon, BaseGraphicObject firedFrom, PointD xyOffset = null)
         {
             lock (Bullets)
             {
-                ObjAnimation.PlayMode playMode = new ObjAnimation.PlayMode()
-                {
-                    DeleteActorAfterPlay = false,
-                    Replay = ObjAnimation.ReplayMode.StillFrame
-                };
-
-                ObjBullet obj = new ObjBullet(_core, weapon, firedFrom, imagePath, null, xyOffset);
+                BaseBullet obj = weapon.CreateBullet(null, xyOffset);
                 Bullets.Add(obj);
                 return obj;
             }
         }
 
-        public ObjBullet CreateLockedBullet(string imagePath, WeaponBase weapon, BaseGraphicObject firedFrom, BaseGraphicObject lockedTarget, PointD xyOffset = null)
+        public BaseBullet CreateLockedBullet(WeaponBase weapon, BaseGraphicObject firedFrom, BaseGraphicObject lockedTarget, PointD xyOffset = null)
         {
             lock (Bullets)
             {
-                ObjAnimation.PlayMode playMode = new ObjAnimation.PlayMode()
-                {
-                    DeleteActorAfterPlay = false,
-                    Replay = ObjAnimation.ReplayMode.StillFrame
-                };
-
-                ObjBullet obj = new ObjBullet(_core, weapon, firedFrom, imagePath, lockedTarget, xyOffset);
+                BaseBullet obj = weapon.CreateBullet(lockedTarget, xyOffset);
                 Bullets.Add(obj);
                 return obj;
             }
         }
 
-        public void DeleteBullet(ObjBullet obj)
+        public void DeleteBullet(BaseBullet obj)
         {
             lock (Bullets)
             {
