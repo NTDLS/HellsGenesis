@@ -1,4 +1,5 @@
 ﻿using AI2D.Engine;
+using AI2D.Types;
 
 namespace AI2D.GraphicObjects.Enemies
 {
@@ -13,8 +14,18 @@ namespace AI2D.GraphicObjects.Enemies
             Initialize();
         }
 
-        public virtual void ApplyIntelligence()
+        public virtual void ApplyMotion(PointD frameAppliedOffset)
         {
+            X += (Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage)) - frameAppliedOffset.X;
+            Y += (Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage)) - frameAppliedOffset.Y;
+        }
+
+        public virtual void ApplyIntelligence(PointD frameAppliedOffset)
+        {
+            if (CurrentWeapon != null && _core.Actors.Player != null)
+            {
+                CurrentWeapon.ApplyIntelligence(frameAppliedOffset, _core.Actors.Player); //Enemy lock-on to Player. :O
+            }
         }
     }
 }

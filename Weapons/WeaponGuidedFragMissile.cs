@@ -1,23 +1,22 @@
 ﻿using AI2D.Engine;
 using AI2D.GraphicObjects;
+using AI2D.GraphicObjects.Bullets;
 using AI2D.GraphicObjects.Enemies;
 using AI2D.Types;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace AI2D.Weapons
 {
     public class WeaponGuidedFragMissile : WeaponBase
     {
-        private const string imagePath = @"..\..\Assets\Graphics\Weapon\Missiles\Missile 05 (3).png";
         private const string soundPath = @"..\..\Assets\Sounds\Weapons\Guided Frag Missile.wav";
         private const float soundVolumne = 0.4f;
 
         private bool _toggle = false;
 
         public WeaponGuidedFragMissile(Core core)
-            : base(core, "Guided Frag Missile", imagePath, soundPath, soundVolumne)
+            : base(core, "Guided Frag Missile", soundPath, soundVolumne)
         {
             RoundQuantity = 500;
             Damage = 25;
@@ -32,16 +31,19 @@ namespace AI2D.Weapons
             ExplodesOnImpact = true;
         }
 
+        public override BaseBullet CreateBullet(BaseGraphicObject lockedTarget, PointD xyOffset = null)
+        {
+            return new BulletGuidedFragMissile(_core, this, _owner, lockedTarget, xyOffset);
+        }
+
         public override bool Fire()
         {
             if (CanFire)
             {
-                _bulletSound.Play();
+                _fireSound.Play();
                 RoundQuantity--;
 
-                List<BaseEnemy> lockedTargets = (from o in _core.Actors.Enemies where o.IsLockedOn == true select o).ToList();
-
-                if (lockedTargets == null || lockedTargets.Count == 0)
+                if (LockedOnObjects == null || LockedOnObjects.Count == 0)
                 {
                     if (_toggle)
                     {
@@ -58,17 +60,17 @@ namespace AI2D.Weapons
                 }
                 else
                 {
-                    foreach (var enemy in lockedTargets)
+                    foreach (var lockedOn in LockedOnObjects)
                     {
                         if (_toggle)
                         {
                             var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new PointD(10, 10));
-                            _core.Actors.CreateLockedBullet(this, _owner, enemy, pointRight);
+                            _core.Actors.CreateLockedBullet(this, _owner, lockedOn, pointRight);
                         }
                         else
                         {
                             var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new PointD(10, 10));
-                            _core.Actors.CreateLockedBullet(this, _owner, enemy, pointLeft);
+                            _core.Actors.CreateLockedBullet(this, _owner, lockedOn, pointLeft);
                         }
                         _toggle = !_toggle;
                     }

@@ -12,8 +12,8 @@ namespace AI2D.Engine
         public EngineInput Input { get; private set; }
         public EngineDisplay Display { get; private set; }
         public EngineActors Actors { get; private set; }
-
         public bool IsRunning { get; private set; } = false;
+
         private EngineThread _engineThread;
 
         #region Events.
@@ -137,26 +137,38 @@ namespace AI2D.Engine
 
             if (Actors.Enemies.Count == 0)
             {
-                for (int i = 0; i < 1; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     var enemy = Actors.CreateEnemy<EnemyAvvol>();
 
                     enemy.AddWeapon(new WeaponPhotonTorpedo(this)
                     {
-                        RoundQuantity = 10, //Could make the enemy retreat after running out of ammo?
+                        RoundQuantity = 10,
                         FireDelayMilliseconds = 500,
                     });
 
                     enemy.AddWeapon(new WeaponVulcanCannon(this)
                     {
-                        FireDelayMilliseconds = 250,
-                        //RoundQuantity = 100 //Could make the enemy retreat after running out of ammo?
+                        RoundQuantity = 100,
+                        FireDelayMilliseconds = 250
+                    });
+
+                    enemy.AddWeapon(new WeaponDualVulcanCannon(this)
+                    {
+                        RoundQuantity = 100,
+                        FireDelayMilliseconds = 250
+                    });
+
+                    enemy.AddWeapon(new WeaponGuidedFragMissile(this)
+                    {
+                        RoundQuantity = 10,
+                        FireDelayMilliseconds = 2000
                     });
 
                     enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
                 }
 
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     var enemy = Actors.CreateEnemy<EnemyScinzad>();
 

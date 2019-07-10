@@ -63,6 +63,10 @@
     <Compile Include="Engine\FrameCounter.cs" />
     <Compile Include="Engine\EngineActors.cs" />
     <Compile Include="Engine\EngineThread.cs" />
+    <Compile Include="GraphicObjects\Bullets\BulletPhotonTorpedo.cs" />
+    <Compile Include="GraphicObjects\Bullets\BulletPulseMeson.cs" />
+    <Compile Include="GraphicObjects\Bullets\BulletVulcanCannon.cs" />
+    <Compile Include="GraphicObjects\Bullets\BulletGuidedFragMissile.cs" />
     <Compile Include="GraphicObjects\Bullets\BulletGeneric.cs" />
     <Compile Include="GraphicObjects\Enemies\BaseEnemy.cs" />
     <Compile Include="GraphicObjects\Enemies\EnemyUves.cs" />

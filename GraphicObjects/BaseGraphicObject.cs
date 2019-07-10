@@ -22,8 +22,8 @@ namespace AI2D.GraphicObjects
         private int _MilisecondsBetweenHits = 100;
         private AudioClip _hitSound;
         private readonly List<WeaponBase> _weapons = new List<WeaponBase>();
-        public bool IsLockedOn { get; set; }
-        public bool IsLockedOnSoft { get; set; }
+        public bool IsLockedOn { get; set; } //The object is the subject of a foreign weapons lock.
+        public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
 
         private const string _assetExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
         private readonly string[] _assetExplosionAnimationFiles = {
@@ -223,6 +223,18 @@ namespace AI2D.GraphicObjects
             return SelectFirstAvailableUsableWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
 
+        public bool HasWeapon(Type weaponType)
+        {
+            var existingWeapon = (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
+            return existingWeapon != null;
+        }
+
+        public bool HasWeaponAndAmmo(Type weaponType)
+        {
+            var existingWeapon = (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
+            return existingWeapon != null && existingWeapon.RoundQuantity > 0;
+        }
+
         public WeaponBase SelectFirstAvailableUsableWeapon()
         {
             var existingWeapon = (from o in _weapons where o.RoundQuantity > 0 select o).FirstOrDefault();
@@ -414,11 +426,12 @@ namespace AI2D.GraphicObjects
         {
             double angle = (double) (angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
 
+            Bitmap bitmap = new Bitmap(rawImage);
+
             if (angle != 0 && RotationMode != RotationMode.None)
             {
                 if (RotationMode == RotationMode.Upsize) //Very expensize
                 {
-                    var bitmap = new Bitmap(rawImage);
                     var image = Utility.RotateImageWithUpsize(bitmap, angle, Color.Transparent);
                     Rectangle rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
                     dc.DrawImage(image, rect);
@@ -427,7 +440,6 @@ namespace AI2D.GraphicObjects
                 }
                 else if (RotationMode == RotationMode.Clip) //Much less expensive.
                 {
-                    var bitmap = new Bitmap(rawImage);
                     var image = Utility.RotateImageWithClipping(bitmap, angle, Color.Transparent);
                     Rectangle rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
                     dc.DrawImage(image, rect);
@@ -438,8 +450,8 @@ namespace AI2D.GraphicObjects
             }
             else //Almost free.
             {
-                Rectangle rect = new Rectangle((int)(_location.X - (rawImage.Width / 2.0)), (int)(_location.Y - (rawImage.Height / 2.0)), rawImage.Width, rawImage.Height);
-                dc.DrawImage(rawImage, rect);
+                Rectangle rect = new Rectangle((int)(_location.X - (bitmap.Width / 2.0)), (int)(_location.Y - (bitmap.Height / 2.0)), bitmap.Width, bitmap.Height);
+                dc.DrawImage(bitmap, rect);
             }
         }
 

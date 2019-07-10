@@ -1,4 +1,6 @@
 ﻿using AI2D.Engine;
+using AI2D.Types;
+using AI2D.Weapons;
 using System.Drawing;
 using System.Linq;
 
@@ -30,24 +32,46 @@ namespace AI2D.GraphicObjects.Enemies
             SetImage(_assetPath + _imagePaths[imageIndex], new Size(32,32));
         }
 
-        public override void ApplyIntelligence()
+        public override void ApplyIntelligence(PointD frameAppliedOffset)
         {
+            base.ApplyIntelligence(frameAppliedOffset);
+
             MoveInDirectionOf(_core.Actors.Player);
 
-            //If we are close to the player.
             double distanceToPlayer = Utility.DistanceTo(this, _core.Actors.Player);
-            if (distanceToPlayer > 400)
+            if (distanceToPlayer > 500 && HasWeaponAndAmmo(typeof(WeaponGuidedFragMissile)))
             {
-
-                //If we are pointing at the player.
                 bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                 if (isPointingAtPlayer)
                 {
-                    if (CurrentWeapon?.RoundQuantity == 0)
-                    {
-                        SelectFirstAvailableUsableWeapon();
-                    }
-
+                    SelectWeapon(typeof(WeaponGuidedFragMissile));
+                    CurrentWeapon?.Fire();
+                }
+            }
+            else if (distanceToPlayer > 300 && HasWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
+            {
+                bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                if (isPointingAtPlayer)
+                {
+                    SelectWeapon(typeof(WeaponPhotonTorpedo));
+                    CurrentWeapon?.Fire();
+                }
+            }
+            else if (distanceToPlayer > 200 && HasWeaponAndAmmo(typeof(WeaponVulcanCannon)))
+            {
+                bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                if (isPointingAtPlayer)
+                {
+                    SelectWeapon(typeof(WeaponVulcanCannon));
+                    CurrentWeapon?.Fire();
+                }
+            }
+            else if (distanceToPlayer > 100 && HasWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
+            {
+                bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                if (isPointingAtPlayer)
+                {
+                    SelectWeapon(typeof(WeaponDualVulcanCannon));
                     CurrentWeapon?.Fire();
                 }
             }

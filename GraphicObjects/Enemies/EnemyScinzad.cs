@@ -1,4 +1,5 @@
 ﻿using AI2D.Engine;
+using AI2D.Types;
 using System.Drawing;
 using System.Linq;
 
@@ -30,11 +31,13 @@ namespace AI2D.GraphicObjects.Enemies
             SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
         }
 
-        public override void ApplyIntelligence()
+        public override void ApplyIntelligence(PointD frameAppliedOffset)
         {
+            base.ApplyIntelligence(frameAppliedOffset);
+
             //If we are close to the player.
             double distanceToPlayer = Utility.DistanceTo(this, _core.Actors.Player);
-            if (distanceToPlayer < 400)
+            if (distanceToPlayer < 400 )
             {
                 //If we are pointing at the player.
                 bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);

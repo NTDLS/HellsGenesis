@@ -1,10 +1,7 @@
 ﻿using AI2D.GraphicObjects.Enemies;
 using AI2D.Types;
 using AI2D.Weapons;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace AI2D.Engine
 {
@@ -99,11 +96,13 @@ namespace AI2D.Engine
         {
             #region Player Frame Advancement.
 
-            double bgAppliedOffsetX = 0;
-            double bgAppliedOffsetY = 0;
+            PointD appliedOffset = new PointD();
 
             if (_core.Actors.Player.Visable)
             {
+                _core.Actors.Player.IsLockedOn = false;
+                _core.Actors.Player.IsLockedOnSoft = false;
+
                 if (_core.Input.IsKeyPressed(PlayerKey.Fire))
                 {
                     if (_core.Actors.Player.CurrentWeapon != null && _core.Actors.Player.CurrentWeapon.Fire())
@@ -119,7 +118,6 @@ namespace AI2D.Engine
                         }
                     }
                 }
-
 
                 //Make player thrust "build up" and fade.
                 if (_core.Input.IsKeyPressed(PlayerKey.Forward))
@@ -165,30 +163,30 @@ namespace AI2D.Engine
                     if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + Constants.Limits.InfiniteScrollWall)
                         && _core.Actors.Player.Velocity.Angle.X > 0)
                     {
-                        bgAppliedOffsetX = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
+                        appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the bottom wall and travelling in that direction.
                     if (_core.Actors.Player.Y > _core.Display.VisibleSize.Height - (_core.Actors.Player.Size.Height + Constants.Limits.InfiniteScrollWall)
                         && _core.Actors.Player.Velocity.Angle.Y > 0)
                     {
-                        bgAppliedOffsetY = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
+                        appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
                     }
 
                     //Close to the left wall and travelling in that direction.
                     if (_core.Actors.Player.X < Constants.Limits.InfiniteScrollWall && _core.Actors.Player.Velocity.Angle.X < 0)
                     {
-                        bgAppliedOffsetX = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
+                        appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the top wall and travelling in that direction.
                     if (_core.Actors.Player.Y < Constants.Limits.InfiniteScrollWall && _core.Actors.Player.Velocity.Angle.Y < 0)
                     {
-                        bgAppliedOffsetY = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
+                        appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
                     }
 
-                    _core.Actors.Player.X += (_core.Actors.Player.Velocity.Angle.X * forwardThrust) - bgAppliedOffsetX;
-                    _core.Actors.Player.Y += (_core.Actors.Player.Velocity.Angle.Y * forwardThrust) - bgAppliedOffsetY;
+                    _core.Actors.Player.X += (_core.Actors.Player.Velocity.Angle.X * forwardThrust) - appliedOffset.X;
+                    _core.Actors.Player.Y += (_core.Actors.Player.Velocity.Angle.Y * forwardThrust) - appliedOffset.Y;
 
                     _core.Actors.Player.ShipEngineRoarSound.Play();
                 }
@@ -202,30 +200,30 @@ namespace AI2D.Engine
                     if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + Constants.Limits.InfiniteScrollWall)
                         && _core.Actors.Player.Velocity.Angle.X < 0)
                     {
-                        bgAppliedOffsetX = -(_core.Actors.Player.Velocity.Angle.X * reverseThrust);
+                        appliedOffset.X = -(_core.Actors.Player.Velocity.Angle.X * reverseThrust);
                     }
 
                     //Close to the bottom wall and travelling in that direction.
                     if (_core.Actors.Player.Y > _core.Display.VisibleSize.Height - (_core.Actors.Player.Size.Height + Constants.Limits.InfiniteScrollWall)
                         && _core.Actors.Player.Velocity.Angle.Y < 0)
                     {
-                        bgAppliedOffsetY = -(_core.Actors.Player.Velocity.Angle.Y * reverseThrust);
+                        appliedOffset.Y = -(_core.Actors.Player.Velocity.Angle.Y * reverseThrust);
                     }
 
                     //Close to the left wall and travelling in that direction.
                     if (_core.Actors.Player.X < Constants.Limits.InfiniteScrollWall && _core.Actors.Player.Velocity.Angle.X > 0)
                     {
-                        bgAppliedOffsetX = -(_core.Actors.Player.Velocity.Angle.X * reverseThrust);
+                        appliedOffset.X = -(_core.Actors.Player.Velocity.Angle.X * reverseThrust);
                     }
 
                     //Close to the top wall and travelling in that direction.
                     if (_core.Actors.Player.Y < Constants.Limits.InfiniteScrollWall && _core.Actors.Player.Velocity.Angle.Y > 0)
                     {
-                        bgAppliedOffsetY = -(_core.Actors.Player.Velocity.Angle.Y * reverseThrust);
+                        appliedOffset.Y = -(_core.Actors.Player.Velocity.Angle.Y * reverseThrust);
                     }
 
-                    _core.Actors.Player.X -= (_core.Actors.Player.Velocity.Angle.X * reverseThrust) + bgAppliedOffsetX;
-                    _core.Actors.Player.Y -= (_core.Actors.Player.Velocity.Angle.Y * reverseThrust) + bgAppliedOffsetY;
+                    _core.Actors.Player.X -= (_core.Actors.Player.Velocity.Angle.X * reverseThrust) + appliedOffset.X;
+                    _core.Actors.Player.Y -= (_core.Actors.Player.Velocity.Angle.Y * reverseThrust) + appliedOffset.Y;
 
                     _core.Actors.Player.ShipEngineRoarSound.Play();
                 }
@@ -235,8 +233,8 @@ namespace AI2D.Engine
                 }
 
                 //Scroll the background.
-                _core.Display.BackgroundOffset.X += bgAppliedOffsetX;
-                _core.Display.BackgroundOffset.Y += bgAppliedOffsetY;
+                _core.Display.BackgroundOffset.X += appliedOffset.X;
+                _core.Display.BackgroundOffset.Y += appliedOffset.Y;
 
                 //We are going to restrict the rotation speed to a percentage of thrust.
                 double rotationSpeed = _core.Actors.Player.Velocity.MaxRotationSpeed * _core.Actors.Player.Velocity.ThrottlePercentage;
@@ -259,6 +257,7 @@ namespace AI2D.Engine
                 _core.Actors.Player.X + _core.Display.BackgroundOffset.X,
                 _core.Actors.Player.Y + _core.Display.BackgroundOffset.Y);
 
+            /*
             _core.Actors.DebugText.Text =
                     $"       Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")},"
                                     + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")},"
@@ -271,9 +270,10 @@ namespace AI2D.Engine
                 + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
                                     + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
                 + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
-                + $"  Delta BG Offset: {bgAppliedOffsetX.ToString("#0.00")}x, {bgAppliedOffsetY.ToString("#0.00")}y\r\n"
+                + $"  Delta BG Offset: {appliedOffset.X.ToString("#0.00")}x, {appliedOffset.Y.ToString("#0.00")}y\r\n"
                 + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}r\n"
                 + $"          Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}";
+            */
 
             if (_core.Actors.Debugs.Count > 0)
             {
@@ -335,61 +335,50 @@ namespace AI2D.Engine
 
             lock (_core.Actors.Enemies)
             {
-                int weaponLocks = 0;
+                if (_core.Actors.Player.CurrentWeapon != null)
+                {
+                    _core.Actors.Player.CurrentWeapon.LockedOnObjects.Clear();
+                }
 
                 foreach (var enemy in _core.Actors.Enemies)
                 {
-                    if (_core.Actors.Player.Visable)
+                    if (enemy.CurrentWeapon != null)
                     {
-                        enemy.ApplyIntelligence();
-
-                        //Player collides with enemy.
-                        if (enemy.Intersects(_core.Actors.Player))
-                        {
-                            _core.Actors.Player.Hit(enemy.CollisionDamage);
-                            enemy.Hit(enemy.CollisionDamage);
-                        }
+                        enemy.CurrentWeapon.LockedOnObjects.Clear();
                     }
-
-                    enemy.X += (enemy.Velocity.Angle.X * (enemy.Velocity.MaxSpeed * enemy.Velocity.ThrottlePercentage)) - bgAppliedOffsetX;
-                    enemy.Y += (enemy.Velocity.Angle.Y * (enemy.Velocity.MaxSpeed * enemy.Velocity.ThrottlePercentage)) - bgAppliedOffsetY;
 
                     enemy.IsLockedOn = false;
                     enemy.IsLockedOnSoft = false;
-                    if (_core.Actors.Player.CurrentWeapon.CanLockOn)
-                    {
-                        if (_core.Actors.Player.IsPointingAt(enemy, _core.Actors.Player.CurrentWeapon.MaxLockOnAngle))
-                        {
-                            var distance = _core.Actors.Player.DistanceTo(enemy);
-                            if (distance >= _core.Actors.Player.CurrentWeapon.MinLockDistance && distance <= _core.Actors.Player.CurrentWeapon.MaxLockDistance)
-                            {
-                                if (weaponLocks < _core.Actors.Player.CurrentWeapon.MaxLocks)
-                                {
-                                    enemy.IsLockedOn = true;
-                                }
-                                else
-                                {
-                                    enemy.IsLockedOnSoft = true;
-                                }
 
-                                weaponLocks++;
+                    if (enemy.Visable && enemy.ReadyForDeletion == false)
+                    {
+
+                        if (_core.Actors.Player.Visable && _core.Actors.Player.ReadyForDeletion == false)
+                        {
+                            enemy.ApplyIntelligence(appliedOffset);
+
+                            //Player collides with enemy.
+                            if (enemy.Intersects(_core.Actors.Player))
+                            {
+                                _core.Actors.Player.Hit(enemy.CollisionDamage);
+                                enemy.Hit(enemy.CollisionDamage);
                             }
-                        }
-                    }
 
-                    lock (_core.Actors.Bullets)
-                    {
-                        foreach (var bullet in _core.Actors.Bullets)
-                        {
-                            if (bullet.FiredFromType == FiredFromType.Player)
+                            if (_core.Actors.Player.CurrentWeapon != null)
                             {
-                                if (bullet.Intersects(enemy))
+                                _core.Actors.Player.CurrentWeapon.ApplyIntelligence(appliedOffset, enemy); //Player lock-on to enemy. :D
+                            }
+
+                            lock (_core.Actors.Bullets)
+                            {
+                                foreach (var bullet in _core.Actors.Bullets)
                                 {
-                                    enemy.Hit(bullet);
-                                    bullet.Explode();
+                                    bullet.ApplyIntelligence(appliedOffset, enemy);
                                 }
                             }
                         }
+
+                        enemy.ApplyMotion(appliedOffset);
                     }
                 }
             }
@@ -402,56 +391,10 @@ namespace AI2D.Engine
             {
                 foreach (var bullet in _core.Actors.Bullets)
                 {
-                    if (bullet.Visable)
+                    if (bullet.Visable && bullet.ReadyForDeletion == false)
                     {
-                        if (bullet.AgeInMilliseconds > bullet.MaxAgeInMilliseconds)
-                        {
-                            bullet.Explode();
-                            continue;
-                        }
-
-                        if (bullet.X < -Constants.Limits.BulletSceneDistanceLimit
-                            || bullet.X >= _core.Display.VisibleSize.Width + Constants.Limits.BulletSceneDistanceLimit
-                            || bullet.Y < -Constants.Limits.BulletSceneDistanceLimit
-                            || bullet.Y >= _core.Display.VisibleSize.Height + Constants.Limits.BulletSceneDistanceLimit)
-                        {
-                            bullet.ReadyForDeletion = true;
-                            continue;
-                        }
-
-                        if (bullet.ReadyForDeletion == false)
-                        {
-                            bullet.ApplyIntelligence();
-                        }
-
-                        if (bullet.LockedTarget != null) //TODO: Move this to bullet.ApplyIntelligence();
-                        {
-                            if (bullet.LockedTarget.Visable)
-                            {
-                                var deltaAngle = bullet.DeltaAngle(bullet.LockedTarget);
-
-                                if (deltaAngle >= 180.0) //We might as well turn around clock-wise
-                                {
-                                    bullet.Velocity.Angle += 0.5;
-                                }
-                                else if (deltaAngle < 180.0) //We might as well turn around counter clock-wise
-                                {
-                                    bullet.Velocity.Angle -= 0.5;
-                                }
-                            }
-                        }
-
-                        bullet.X += (bullet.Velocity.Angle.X * (bullet.Velocity.MaxSpeed * bullet.Velocity.ThrottlePercentage)) - bgAppliedOffsetX;
-                        bullet.Y += (bullet.Velocity.Angle.Y * (bullet.Velocity.MaxSpeed * bullet.Velocity.ThrottlePercentage)) - bgAppliedOffsetY;
-
-                        if (bullet.FiredFromType == FiredFromType.Enemy)
-                        {
-                            if (bullet.Intersects(_core.Actors.Player))
-                            {
-                                _core.Actors.Player.Hit(bullet);
-                                bullet.ReadyForDeletion = true;
-                            }
-                        }
+                        bullet.ApplyIntelligence(appliedOffset, _core.Actors.Player);
+                        bullet.ApplyMotion(appliedOffset);
                     }
                 }
             }
@@ -460,57 +403,57 @@ namespace AI2D.Engine
 
             #region Stars Frame Advancement.
 
-            if (bgAppliedOffsetX != 0 || bgAppliedOffsetY != 0)
+            if (appliedOffset.X != 0 || appliedOffset.Y != 0)
             {
                 lock (_core.Actors.Stars)
                 {
                     if (_core.Actors.Stars.Count < 100) //Never wan't more than n stars.
                     {
-                        if (bgAppliedOffsetX > 0)
+                        if (appliedOffset.X > 0)
                         {
                             for (int i = 0; i < 100; i++) //n chances to create a star.
                             {
                                 if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
                                 {
-                                    int x = Utility.Random.Next(_core.Display.VisibleSize.Width - (int)bgAppliedOffsetX, _core.Display.VisibleSize.Width);
+                                    int x = Utility.Random.Next(_core.Display.VisibleSize.Width - (int)appliedOffset.X, _core.Display.VisibleSize.Width);
                                     int y = Utility.Random.Next(0, _core.Display.VisibleSize.Height);
                                     _core.Actors.CreateStar(x, y);
                                 }
                             }
                         }
-                        else if (bgAppliedOffsetX < 0)
+                        else if (appliedOffset.X < 0)
                         {
                             for (int i = 0; i < 100; i++) //n chances to create a star.
                             {
                                 if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
                                 {
-                                    int x = Utility.Random.Next(0, (int)-bgAppliedOffsetX);
+                                    int x = Utility.Random.Next(0, (int)-appliedOffset.X);
                                     int y = Utility.Random.Next(0, _core.Display.VisibleSize.Height);
                                     _core.Actors.CreateStar(x, y);
                                 }
                             }
                         }
 
-                        if (bgAppliedOffsetY > 0)
+                        if (appliedOffset.Y > 0)
                         {
                             for (int i = 0; i < 100; i++) //n chances to create a star.
                             {
                                 if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
                                 {
                                     int x = Utility.Random.Next(0, _core.Display.VisibleSize.Width);
-                                    int y = Utility.Random.Next(_core.Display.VisibleSize.Height - (int)bgAppliedOffsetY, _core.Display.VisibleSize.Height);
+                                    int y = Utility.Random.Next(_core.Display.VisibleSize.Height - (int)appliedOffset.Y, _core.Display.VisibleSize.Height);
                                     _core.Actors.CreateStar(x, y);
                                 }
                             }
                         }
-                        else if (bgAppliedOffsetY < 0)
+                        else if (appliedOffset.Y < 0)
                         {
                             for (int i = 0; i < 100; i++) //n chances to create a star.
                             {
                                 if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
                                 {
                                     int x = Utility.Random.Next(0, _core.Display.VisibleSize.Width);
-                                    int y = Utility.Random.Next(0, (int)-bgAppliedOffsetY);
+                                    int y = Utility.Random.Next(0, (int)-appliedOffset.Y);
                                     _core.Actors.CreateStar(x, y);
                                 }
                             }
@@ -524,8 +467,8 @@ namespace AI2D.Engine
                             star.ReadyForDeletion = true;
                         }
 
-                        star.X -= bgAppliedOffsetX;
-                        star.Y -= bgAppliedOffsetY;
+                        star.X -= appliedOffset.X;
+                        star.Y -= appliedOffset.Y;
                     }
                 }
             }
@@ -540,8 +483,8 @@ namespace AI2D.Engine
                 {
                     if (animation.Visable)
                     {
-                        animation.X += (animation.Velocity.Angle.X * (animation.Velocity.MaxSpeed * animation.Velocity.ThrottlePercentage)) - bgAppliedOffsetX;
-                        animation.Y += (animation.Velocity.Angle.Y * (animation.Velocity.MaxSpeed * animation.Velocity.ThrottlePercentage)) - bgAppliedOffsetY;
+                        animation.X += (animation.Velocity.Angle.X * (animation.Velocity.MaxSpeed * animation.Velocity.ThrottlePercentage)) - appliedOffset.X;
+                        animation.Y += (animation.Velocity.Angle.Y * (animation.Velocity.MaxSpeed * animation.Velocity.ThrottlePercentage)) - appliedOffset.Y;
                         animation.AdvanceImage();
                     }
                 }
@@ -618,8 +561,7 @@ namespace AI2D.Engine
 
             _core.Actors.PlayerStatsText.Text = $"HP: {_core.Actors.Player.HitPoints}, "
                 + $"Weapon: {_core.Actors.Player.CurrentWeapon?.Name} X{_core.Actors.Player.CurrentWeapon?.RoundQuantity}, "
-                + $"Location: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("0")}x:"
-                + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("0")}y\r\n";
+                + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}";
 
 #if DEBUG
             if (_core.Actors.Debugs.Count > 0 && false)

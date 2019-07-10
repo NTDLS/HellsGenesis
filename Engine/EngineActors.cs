@@ -16,7 +16,6 @@ namespace AI2D.Engine
         private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
 
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
-
         public List<ObjTextBlock> TextBlocks { get; private set; } = new List<ObjTextBlock>();
         public List<BaseEnemy> Enemies { get; private set; } = new List<BaseEnemy>();
         public List<ObjStar> Stars { get; private set; } = new List<ObjStar>();
@@ -24,9 +23,7 @@ namespace AI2D.Engine
         public List<ObjAnimation> Animations { get; private set; } = new List<ObjAnimation>();
         public List<BaseBullet> Bullets { get; private set; } = new List<BaseBullet>();
         public ObjPlayer Player { get; private set; }
-
         public AudioClip BackgroundMusicSound { get; private set; }
-
         public ObjTextBlock PlayerStatsText { get; private set; }
         public ObjTextBlock DebugText { get; private set; }
 
@@ -77,6 +74,8 @@ namespace AI2D.Engine
             Player.SelectWeapon(typeof(WeaponVulcanCannon));
         }
 
+        object ThingToLock = new object();
+
         public void ResetAndShowPlayer()
         {
             ResetPlayer();
@@ -95,12 +94,12 @@ namespace AI2D.Engine
 
         public Bitmap GetBitmapCached(string path)
         {
+            Bitmap result = null;
+
+            path = path.ToLower();
+
             lock (_Bitmaps)
             {
-                Bitmap result = null;
-
-                path = path.ToLower();
-
                 if (_Bitmaps.ContainsKey(path))
                 {
                     result = _Bitmaps[path].Clone() as Bitmap;
@@ -110,9 +109,9 @@ namespace AI2D.Engine
                     result = new Bitmap(Image.FromFile(path));
                     _Bitmaps.Add(path, result);
                 }
-
-                return result;
             }
+
+            return result;
         }
 
         public AudioClip GetSoundCached(string wavFilePath, float initialVolumne, bool loopForever = false)
@@ -143,15 +142,9 @@ namespace AI2D.Engine
         {
             lock (Animations)
             {
-                //animation.X = defaultPosition.X + ((defaultPosition.Size.Width - animation.Size.Width) / 2.0);
-                //animation.Y = defaultPosition.Y + ((defaultPosition.Size.Height - animation.Size.Height) / 2.0);
-
                 animation.X = defaultPosition.X;
                 animation.Y = defaultPosition.Y;
-
-                //animation.Velocity = defaultPosition.Velocity;
                 animation.RotationMode = Types.RotationMode.Clip; //Much less expensive. Use this or NONE if you can.
-
                 Animations.Add(animation);
             }
         }
@@ -443,9 +436,9 @@ namespace AI2D.Engine
 
         void RenderPlayer(Graphics dc)
         {
-            if (Player != null)
+            if (ThingToLock != null)
             {
-                Player.Render(dc);
+                Player?.Render(dc);
             }
         }
 

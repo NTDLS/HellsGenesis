@@ -1,18 +1,15 @@
 ﻿using AI2D.Engine;
-using AI2D.GraphicObjects;
 using AI2D.Types;
 
 namespace AI2D.Weapons
 {
     public class WeaponDualVulcanCannon : WeaponBase
     {
-
-        private const string imagePath = @"..\..\Assets\Graphics\Weapon\Vulcan Cannon.png";
         private const string soundPath = @"..\..\Assets\Sounds\Weapons\Vulcan Cannon.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponDualVulcanCannon(Core core)
-            : base(core, "Dual Vulcan", imagePath, soundPath, soundVolumne)
+            : base(core, "Dual Vulcan", soundPath, soundVolumne)
         {
             RoundQuantity = 500;
             Damage = 1;
@@ -23,7 +20,7 @@ namespace AI2D.Weapons
         {
             if (CanFire)
             {
-                _bulletSound.Play();
+                _fireSound.Play();
 
                 if (RoundQuantity > 0)
                 {

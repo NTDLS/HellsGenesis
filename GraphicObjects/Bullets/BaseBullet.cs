@@ -73,8 +73,45 @@ namespace AI2D.GraphicObjects.Bullets
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence()
+        public virtual void ApplyIntelligence(PointD frameAppliedOffset, BaseGraphicObject testHit)
         {
+            if (AgeInMilliseconds > MaxAgeInMilliseconds)
+            {
+                Explode();
+                return;
+            }
+
+            if (FiredFromType == FiredFromType.Enemy && !(testHit is BaseEnemy))
+            {
+                if (Intersects(_core.Actors.Player))
+                {
+                    testHit.Hit(this);
+                    Explode();
+                }
+            }
+            else if (FiredFromType == FiredFromType.Player && !(testHit is ObjPlayer))
+            {
+                if (Intersects(testHit))
+                {
+                    testHit.Hit(this);
+                    Explode();
+                }
+            }
+        }
+
+        public virtual void ApplyMotion(PointD frameAppliedOffset)
+        {
+            if (X < -Constants.Limits.BulletSceneDistanceLimit
+                || X >= _core.Display.VisibleSize.Width + Constants.Limits.BulletSceneDistanceLimit
+                || Y < -Constants.Limits.BulletSceneDistanceLimit
+                || Y >= _core.Display.VisibleSize.Height + Constants.Limits.BulletSceneDistanceLimit)
+            {
+                ReadyForDeletion = true;
+                return;
+            }
+
+            X += (Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage)) - frameAppliedOffset.X;
+            Y += (Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage)) - frameAppliedOffset.Y;
         }
 
         public virtual new void Explode()
