@@ -31,6 +31,37 @@ namespace AI2D.Engine
             }
         }
 
+        public PointD RandomOnScreenLocation()
+        {
+            return new PointD(Utility.Random.Next(0, VisibleSize.Width), Utility.Random.Next(0, VisibleSize.Height));
+        }
+
+        public PointD RandomOffScreenLocation(int min = 100, int max = 500)
+        {
+            double x;
+            double y;
+
+            if (Utility.FlipCoin())
+            {
+                x = -Utility.RandomNumber(100, 500);
+            }
+            else
+            {
+                x = VisibleSize.Width + Utility.RandomNumber(100, 500);
+            }
+
+
+            if (Utility.FlipCoin())
+            {
+                y = -Utility.RandomNumber(100, 500);
+            }
+            else
+            {
+                y = VisibleSize.Height + Utility.RandomNumber(100, 500);
+            }
+            return new PointD(x, y);
+        }
+
         public EngineDisplay(Control drawingSurface, Size visibleSize)
         {
             _drawingSurface = drawingSurface;
@@ -59,10 +90,6 @@ namespace AI2D.Engine
             }
 
             return Quadrants[coord];
-        }
-        public PointD RandomOnscreenLocation()
-        {
-            return new PointD(Utility.Random.Next(0, VisibleSize.Width), Utility.Random.Next(0, VisibleSize.Height));
         }
     }
 }

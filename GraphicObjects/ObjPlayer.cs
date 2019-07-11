@@ -13,6 +13,8 @@ namespace AI2D.GraphicObjects
         public AudioClip ShipEngineIdleSound { get; private set; }
         public AudioClip AllSystemsGoSound { get; private set; }
 
+        public int Score { get; set; }
+
         public ObjPlayer(Core core)
             : base(core)
         {

@@ -7,6 +7,8 @@ namespace AI2D.GraphicObjects.Enemies
 {
     public class EnemyScinzad : BaseEnemy
     {
+        public const int ScoreMultiplier = 1;
+
         private const string _assetPath = @"..\..\Assets\Graphics\Enemy\";
         private readonly string[] _imagePaths = {
             #region images.
@@ -22,7 +24,7 @@ namespace AI2D.GraphicObjects.Enemies
         };
 
         public EnemyScinzad(Core core)
-            : base(core)
+            : base(core, BaseEnemy.GetGenericHP(), ScoreMultiplier)
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
 

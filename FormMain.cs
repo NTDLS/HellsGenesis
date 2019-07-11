@@ -8,7 +8,7 @@ namespace AI2D
     public partial class FormMain : Form
     {
         private Core _core;
-        private bool _fullScreen = false;
+        private bool _fullScreen = true;
 
         /*
         protected override CreateParams CreateParams
@@ -34,7 +34,7 @@ namespace AI2D
                 this.Width = Screen.PrimaryScreen.Bounds.Width;
                 this.Height = Screen.PrimaryScreen.Bounds.Height;
                 this.ShowInTaskbar = true;
-                this.TopMost = true;
+                //this.TopMost = true;
                 this.WindowState = FormWindowState.Maximized;
             }
 
@@ -100,7 +100,7 @@ namespace AI2D
             if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(Types.PlayerKey.Escape, Types.KeyPressState.Up);
         }
 
-        private void PictureBoxScene_MouseEnter(object sender, EventArgs e)
+        private void FormMain_MouseEnter(object sender, EventArgs e)
         {
             if (_fullScreen)
             {
@@ -108,7 +108,7 @@ namespace AI2D
             }
         }
 
-        private void PictureBoxScene_MouseLeave(object sender, EventArgs e)
+        private void FormMain_MouseLeave(object sender, EventArgs e)
         {
             if (_fullScreen)
             {

@@ -1,5 +1,6 @@
 ﻿using AI2D.Engine;
 using AI2D.GraphicObjects.Bullets;
+using AI2D.GraphicObjects.Enemies;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
@@ -198,8 +199,16 @@ namespace AI2D.GraphicObjects
 
         public void AddWeapon(WeaponBase weapon)
         {
-            weapon.SetOwner(this);
-            _weapons.Add(weapon);
+            var existing = GetWeaponOfType(weapon.GetType());
+            if (existing == null)
+            {
+                weapon.SetOwner(this);
+                _weapons.Add(weapon);
+            }
+            else
+            {
+                existing.RoundQuantity += weapon.RoundQuantity;
+            }
         }
 
         public WeaponBase SelectNextAvailableUsableWeapon()
@@ -249,11 +258,15 @@ namespace AI2D.GraphicObjects
             return CurrentWeapon;
         }
 
+        public WeaponBase GetWeaponOfType(Type weaponType)
+        {
+            return (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
+        }
+
         public WeaponBase SelectWeapon(Type weaponType)
         {
-            var existingWeapon = (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
-            CurrentWeapon = existingWeapon;
-            return existingWeapon;
+            CurrentWeapon = GetWeaponOfType(weaponType);
+            return CurrentWeapon;
         }
 
         public void SetImage(Image image, Size? size = null)
@@ -393,6 +406,11 @@ namespace AI2D.GraphicObjects
 
         public void Explode()
         {
+            if (this is BaseEnemy)
+            {
+                _core.Actors.Player.Score += (this as BaseEnemy).ScorePoints;
+            }
+
             _explodeSound.Play();
             _explosionAnimation.Reset();
             _core.Actors.PlaceAnimationOnTopOf(_explosionAnimation, this);

@@ -44,7 +44,7 @@ namespace AI2D.Engine
         {
             for (int i = 0; i < 20; i++)
             {
-                _core.Actors.CreateStar();
+                _core.Actors.AddNewStar();
             }
 
             Stopwatch timer = new Stopwatch();
@@ -59,7 +59,12 @@ namespace AI2D.Engine
                 _core.Display.GameLoopCounter.Calculate();
 
                 timer.Restart();
-                AdvanceFrame();
+
+                lock (_core.DrawingSemaphore)
+                {
+                    AdvanceFrame();
+                }
+
                 if (sleep)
                 {
                     System.Threading.Thread.Sleep(1);
@@ -77,7 +82,7 @@ namespace AI2D.Engine
                         sleep = false; //Unleash the thread!
                     }
                 }
-                               
+
                 while ((((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000 < deltaframeTime)
                 {
                     System.Threading.Thread.Yield();
@@ -94,6 +99,15 @@ namespace AI2D.Engine
 
         void AdvanceFrame()
         {
+            #region Scenario Advancement.
+
+            if (_core.CurrentScenario?.State == Scenarios.BaseScenario.ScenarioState.Ended)
+            {
+                _core.AdvanceScenario();
+            }
+
+            #endregion
+
             #region Player Frame Advancement.
 
             PointD appliedOffset = new PointD();
@@ -257,23 +271,30 @@ namespace AI2D.Engine
                 _core.Actors.Player.X + _core.Display.BackgroundOffset.X,
                 _core.Actors.Player.Y + _core.Display.BackgroundOffset.Y);
 
-            /*
-            _core.Actors.DebugText.Text =
-                    $"       Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")},"
-                                    + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")},"
-                                    + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n"
-                + $"Player Display XY: {_core.Actors.Player.X.ToString("#0.00")}x, {_core.Actors.Player.Y.ToString("#0.00")}y\r\n"
-                + $"     Player Angle: {_core.Actors.Player.Velocity.Angle.X.ToString("#0.00")}x, {_core.Actors.Player.Velocity.Angle.Y.ToString("#0.00")}y, "
-                                    + $"{_core.Actors.Player.Velocity.Angle.Degrees.ToString("#0.00")}deg, "
-                                    + $" {_core.Actors.Player.Velocity.Angle.Radians.ToString("#0.00")}rad, "
-                                    + $" {_core.Actors.Player.Velocity.Angle.RadiansUnadjusted.ToString("#0.00")}rad unadjusted\r\n"
-                + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
-                                    + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
-                + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
-                + $"  Delta BG Offset: {appliedOffset.X.ToString("#0.00")}x, {appliedOffset.Y.ToString("#0.00")}y\r\n"
-                + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}r\n"
-                + $"          Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}";
-            */
+            if (_core.ShowDebug)
+            {
+                _core.Actors.DebugText.Text =
+                        $"       Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")},"
+                                        + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")},"
+                                        + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n"
+                    + $"Player Display XY: {_core.Actors.Player.X.ToString("#0.00")}x, {_core.Actors.Player.Y.ToString("#0.00")}y\r\n"
+                    + $"     Player Angle: {_core.Actors.Player.Velocity.Angle.X.ToString("#0.00")}x, {_core.Actors.Player.Velocity.Angle.Y.ToString("#0.00")}y, "
+                                        + $"{_core.Actors.Player.Velocity.Angle.Degrees.ToString("#0.00")}deg, "
+                                        + $" {_core.Actors.Player.Velocity.Angle.Radians.ToString("#0.00")}rad, "
+                                        + $" {_core.Actors.Player.Velocity.Angle.RadiansUnadjusted.ToString("#0.00")}rad unadjusted\r\n"
+                    + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
+                                        + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
+                    + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
+                    + $"  Delta BG Offset: {appliedOffset.X.ToString("#0.00")}x, {appliedOffset.Y.ToString("#0.00")}y\r\n"
+                    + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}";
+            }
+            else
+            {
+                if (_core.Actors.DebugText.Text != string.Empty)
+                {
+                    _core.Actors.DebugText.Text = string.Empty;
+                }
+            }
 
             if (_core.Actors.Debugs.Count > 0)
             {
@@ -291,7 +312,7 @@ namespace AI2D.Engine
             {
                 if (_core.Actors.Enemies.Count < 10)
                 {
-                    _core.Actors.CreateEnemy<EnemyScinzad>();
+                    _core.Actors.AddNewEnemy<EnemyScinzad>();
                 }
             }
             if (_core.Display.CurrentQuadrant.Key.X == 5
@@ -299,7 +320,7 @@ namespace AI2D.Engine
             {
                 if (_core.Actors.Enemies.Count < 10)
                 {
-                    var enemy = _core.Actors.CreateEnemy<EnemyScinzad>();
+                    var enemy = _core.Actors.AddNewEnemy<EnemyScinzad>();
 
                     enemy.AddWeapon(new WeaponPhotonTorpedo(_core)
                     {
@@ -325,7 +346,10 @@ namespace AI2D.Engine
             {
                 foreach (var engineEvent in _core.Actors.EngineEvents)
                 {
-                    engineEvent.CheckForTrigger();
+                    if (engineEvent.ReadyForDeletion == false)
+                    {
+                        engineEvent.CheckForTrigger();
+                    }
                 }
             }
 
@@ -395,6 +419,12 @@ namespace AI2D.Engine
                     {
                         bullet.ApplyIntelligence(appliedOffset, _core.Actors.Player);
                         bullet.ApplyMotion(appliedOffset);
+
+                        if (_core.Actors.Player.Visable == false)
+                        {
+                            _core.Actors.Player.ShipEngineIdleSound.Stop();
+                            _core.Actors.Player.ShipEngineRoarSound.Stop();
+                        }
                     }
                 }
             }
@@ -417,7 +447,7 @@ namespace AI2D.Engine
                                 {
                                     int x = Utility.Random.Next(_core.Display.VisibleSize.Width - (int)appliedOffset.X, _core.Display.VisibleSize.Width);
                                     int y = Utility.Random.Next(0, _core.Display.VisibleSize.Height);
-                                    _core.Actors.CreateStar(x, y);
+                                    _core.Actors.AddNewStar(x, y);
                                 }
                             }
                         }
@@ -429,7 +459,7 @@ namespace AI2D.Engine
                                 {
                                     int x = Utility.Random.Next(0, (int)-appliedOffset.X);
                                     int y = Utility.Random.Next(0, _core.Display.VisibleSize.Height);
-                                    _core.Actors.CreateStar(x, y);
+                                    _core.Actors.AddNewStar(x, y);
                                 }
                             }
                         }
@@ -442,7 +472,7 @@ namespace AI2D.Engine
                                 {
                                     int x = Utility.Random.Next(0, _core.Display.VisibleSize.Width);
                                     int y = Utility.Random.Next(_core.Display.VisibleSize.Height - (int)appliedOffset.Y, _core.Display.VisibleSize.Height);
-                                    _core.Actors.CreateStar(x, y);
+                                    _core.Actors.AddNewStar(x, y);
                                 }
                             }
                         }
@@ -454,7 +484,7 @@ namespace AI2D.Engine
                                 {
                                     int x = Utility.Random.Next(0, _core.Display.VisibleSize.Width);
                                     int y = Utility.Random.Next(0, (int)-appliedOffset.Y);
-                                    _core.Actors.CreateStar(x, y);
+                                    _core.Actors.AddNewStar(x, y);
                                 }
                             }
                         }
@@ -559,9 +589,14 @@ namespace AI2D.Engine
 
             #endregion
 
-            _core.Actors.PlayerStatsText.Text = $"HP: {_core.Actors.Player.HitPoints}, "
+            string scenarioName = _core.CurrentScenario == null ? "<none>" : _core.CurrentScenario.Name;
+
+            _core.Actors.PlayerStatsText.Text =
+                $"Scenario: {scenarioName}, "
+                + $"HP: {_core.Actors.Player.HitPoints}, "
                 + $"Weapon: {_core.Actors.Player.CurrentWeapon?.Name} X{_core.Actors.Player.CurrentWeapon?.RoundQuantity}, "
-                + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}";
+                + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "
+                + $"Score: {_core.Actors.Player.Score.ToString("#,0")}";
 
 #if DEBUG
             if (_core.Actors.Debugs.Count > 0 && false)

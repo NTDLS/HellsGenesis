@@ -1,9 +1,7 @@
-﻿using AI2D.GraphicObjects;
-using AI2D.GraphicObjects.Enemies;
-using AI2D.Weapons;
+﻿using AI2D.Engine.Scenarios;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using static AI2D.GraphicObjects.ObjAnimation;
 
 namespace AI2D.Engine
 {
@@ -12,9 +10,14 @@ namespace AI2D.Engine
         public EngineInput Input { get; private set; }
         public EngineDisplay Display { get; private set; }
         public EngineActors Actors { get; private set; }
+        public List<BaseScenario> Scenarios = new List<BaseScenario>();
         public bool IsRunning { get; private set; } = false;
+        public bool ShowDebug { get; set; } = false;
+
+        public object DrawingSemaphore { get; set; } = new object();
 
         private EngineThread _engineThread;
+        public int _currentScenarioIndex = -1;
 
         #region Events.
 
@@ -32,6 +35,8 @@ namespace AI2D.Engine
             Actors = new EngineActors(this);
             Input = new EngineInput(this);
             _engineThread = new EngineThread(this);
+
+            Scenarios.Add(new ScenarioAvvolAmbush(this));
         }
 
         public void Start()
@@ -39,22 +44,34 @@ namespace AI2D.Engine
             if (IsRunning == false)
             {
                 IsRunning = true;
-
                 Actors.Start();
-
                 Actors.ResetPlayer();
+
                 _engineThread.Start();
 
-                //This is debug stuff. Will be moved to a logic engine.
-                Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
+                AdvanceScenario();
 
                 //This is debug stuff. Will be moved to a logic engine.
-                Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 5000),
-                    AddFreshEnemiesCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring);
-
-                //This is debug stuff. Will be moved to a logic engine.
-                //Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 0),
+                //_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 0),
                 //    AddDebugObjectsCallback, null, EngineCallbackEvent.CallbackEventMode.OneTime);
+
+                /*
+                var debug = _core.Actors.AddNewDebug();
+                debug.X = _core.Display.VisibleSize.Width / 2;
+                debug.Y = _core.Display.VisibleSize.Height / 2;
+
+                if (_core.Actors.Animations.Count < 1)
+                {
+                    PlayMode mode = new PlayMode()
+                    {
+                        Replay = ReplayMode.LoopedPlay,
+                        ReplayDelay = new System.TimeSpan(0, 0, 0, 1),
+                        DeleteActorAfterPlay = false
+                    };
+
+                    var coinAnimation = new ObjAnimation(_core, @"..\..\Assets\Graphics\Animation\Coin.png", new Size(32, 23), 20, mode);
+                }
+                */
 
                 OnStart?.Invoke(this);
             }
@@ -81,119 +98,29 @@ namespace AI2D.Engine
             _engineThread.Resume();
         }
 
-
-        /// <summary>
-        /// This is debug stuff. Will be moved to a logic engine.
-        /// </summary>
-        /// <param name="core"></param>
-        /// <param name="refObj"></param>
-        private void AddDebugObjectsCallback(Core core, object refObj)
+        public void AdvanceScenario()
         {
-            var debug = Actors.CreateDebug();
-            debug.X = Display.VisibleSize.Width / 2;
-            debug.Y = Display.VisibleSize.Height / 2;
-
-            //Actors.CreateDebug();
-        }
-
-        /// <summary>
-        /// This is debug stuff. Will be moved to a logic engine.
-        /// </summary>
-        /// <param name="core"></param>
-        /// <param name="refObj"></param>
-        private void FirstShowPlayerCallback(Core core, object refObj)
-        {
-            Actors.ResetAndShowPlayer();
-        }
-
-        /// <summary>
-        /// This is debug stuff. Will be moved to a logic engine.
-        /// </summary>
-        /// <param name="core"></param>
-        /// <param name="refObj"></param>
-        private void AddFreshEnemiesCallback(Core core, object refObj)
-        {
-            if (Actors.Animations.Count < 1)
+            if (_currentScenarioIndex > Scenarios.Count)
             {
-                PlayMode mode = new PlayMode()
-                {
-                    Replay = ReplayMode.LoopedPlay,
-                    ReplayDelay = new System.TimeSpan(0, 0, 0, 1),
-                    DeleteActorAfterPlay = false
-                };
-
-                var _explosionAnimation = new ObjAnimation(this, @"..\..\Assets\Graphics\Animation\Coin.png", new Size(32, 23), 20, mode);
-
-                var playMode = new ObjAnimation.PlayMode()
-                {
-                    Replay = ObjAnimation.ReplayMode.LoopedPlay,
-                    ReplayDelay = new System.TimeSpan(0, 0, 0, 1)
-                };
-
-                var animation = Actors.CreateAnimation(@"..\..\Assets\Graphics\Animation\Coin.png", new Size(32, 32), 50, playMode);
-
-                //Actors.PlaceAnimationOnTopOf(_explosionAnimation, Actors.Player);
+                _currentScenarioIndex = -1;
             }
-
-            if (Actors.Enemies.Count == 0)
+            else
             {
-                int enemyCount = Utility.Random.Next(2, 5);
-
-                for (int i = 0; i < enemyCount; i++)
-                {
-                    var enemy = Actors.CreateEnemy<EnemyAvvol>();
-
-                    if (Utility.FlipCoin())
-                    {
-                        enemy.Location = new Types.PointD(-Utility.RandomNumber(100, 500), -Utility.RandomNumber(100, 500));
-                    }
-                    else
-                    {
-                        enemy.Location = new Types.PointD(
-                            Display.VisibleSize.Width + Utility.RandomNumber(100, 500),
-                            Display.VisibleSize.Height + Utility.RandomNumber(100, 500));
-                    }
-
-                    enemy.AddWeapon(new WeaponPhotonTorpedo(this)
-                    {
-                        RoundQuantity = 5,
-                        FireDelayMilliseconds = 1000,
-                    });
-
-                    enemy.AddWeapon(new WeaponVulcanCannon(this)
-                    {
-                        RoundQuantity = 100,
-                        FireDelayMilliseconds = 500
-                    });
-
-                    enemy.AddWeapon(new WeaponDualVulcanCannon(this)
-                    {
-                        RoundQuantity = 100,
-                        FireDelayMilliseconds = 500
-                    });
-
-                    enemy.AddWeapon(new WeaponGuidedFragMissile(this)
-                    {
-                        RoundQuantity = 10,
-                        FireDelayMilliseconds = 2000
-                    });
-
-                    enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
-                }
-
-                for (int i = 0; i < 0; i++)
-                {
-                    var enemy = Actors.CreateEnemy<EnemyScinzad>();
-
-                    enemy.AddWeapon(new WeaponVulcanCannon(this)
-                    {
-                        FireDelayMilliseconds = 250,
-                        //RoundQuantity = 100 //Could make the enemy retreat after running out of ammo?
-                    });
-
-                    enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
-                }
+                Scenarios[++_currentScenarioIndex].Execute();
             }
         }
+
+        public BaseScenario CurrentScenario
+        {
+            get
+            {
+                if (_currentScenarioIndex >= 0 && _currentScenarioIndex < Scenarios.Count)
+                {
+                    return Scenarios[_currentScenarioIndex];
+                }
+                return null;
+            }
+        }
+
     }
 }

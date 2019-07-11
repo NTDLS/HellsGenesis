@@ -34,10 +34,12 @@ namespace AI2D.Engine
 
         public void Start()
         {
+            Player = new ObjPlayer(_core) { Visable = false };
+
             BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
 
-            PlayerStatsText = CreateTextBlock("Consolas", Brushes.WhiteSmoke, 10, 5, 5);
-            DebugText = CreateTextBlock("Consolas", Brushes.Aqua, 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10);
+            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 10, 5, 5);
+            DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10);
 
             BackgroundMusicSound.Play();
         }
@@ -49,18 +51,15 @@ namespace AI2D.Engine
 
         public void ResetPlayer()
         {
-            if (Player == null)
-            {
-                //There is a bit of a dependency between Code and Actors, so this can not be done in the constructor.
-                Player = new ObjPlayer(_core) { Visable = false };
-            }
-
             Player.ClearWeapons();
+
+            Player.ReadyForDeletion = false;
 
             Player.Velocity.MaxSpeed = 5;
             Player.Velocity.MaxRotationSpeed = 3;
             Player.HitPoints = 500;
-            Player.Velocity.Angle = new AngleD(90);
+            Player.Velocity.Angle = new AngleD(45);
+            Player.Velocity.ThrottlePercentage = 0;
 
             Player.X = _core.Display.VisibleSize.Width / 2;
             Player.Y = _core.Display.VisibleSize.Height / 2;
@@ -74,7 +73,12 @@ namespace AI2D.Engine
             Player.SelectWeapon(typeof(WeaponVulcanCannon));
         }
 
-        object ThingToLock = new object();
+        public void CleanupActors()
+        {
+            CleanupEnemies();
+            CleanupBullets();
+            CleanupAnimations();
+        }
 
         public void ResetAndShowPlayer()
         {
@@ -89,7 +93,39 @@ namespace AI2D.Engine
         public void HidePlayer()
         {
             Player.Visable = false;
-            Player.ShipEngineIdleSound.Play();
+            Player.ShipEngineIdleSound.Stop();
+            Player.ShipEngineRoarSound.Stop();
+        }
+
+        public void CleanupEnemies()
+        {
+            lock (Enemies)
+            {
+                foreach (var obj in Enemies)
+                {
+                    obj.ReadyForDeletion = true;
+                }
+            }
+        }
+        public void CleanupBullets()
+        {
+            lock (Bullets)
+            {
+                foreach (var obj in Bullets)
+                {
+                    obj.ReadyForDeletion = true;
+                }
+            }
+        }
+        public void CleanupAnimations()
+        {
+            lock (Animations)
+            {
+                foreach (var obj in Animations)
+                {
+                    obj.ReadyForDeletion = true;
+                }
+            }
         }
 
         public Bitmap GetBitmapCached(string path)
@@ -149,7 +185,7 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjAnimation CreateAnimation(string imageFrames, Size frameSize, int _frameDelayMiliseconds = 10, ObjAnimation.PlayMode playMode = null)
+        public ObjAnimation AddNewAnimation(string imageFrames, Size frameSize, int _frameDelayMiliseconds = 10, ObjAnimation.PlayMode playMode = null)
         {
             lock (Animations)
             {
@@ -168,7 +204,7 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjStar CreateStar(double x, double y)
+        public ObjStar AddNewStar(double x, double y)
         {
             lock (Stars)
             {
@@ -182,7 +218,7 @@ namespace AI2D.Engine
             }
         }
 
-        public EngineCallbackEvent CreateEngineCallbackEvent(
+        public EngineCallbackEvent AddNewEngineCallbackEvent(
             TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback, object refObj,
             EngineCallbackEvent.CallbackEventMode callbackEventMode = EngineCallbackEvent.CallbackEventMode.OneTime,
             EngineCallbackEvent.CallbackEventAsync callbackEventAsync = EngineCallbackEvent.CallbackEventAsync.Synchronous)
@@ -195,7 +231,7 @@ namespace AI2D.Engine
             }
         }
 
-        public EngineCallbackEvent CreateEngineCallbackEvent(TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback, object refObj)
+        public EngineCallbackEvent AddNewEngineCallbackEvent(TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback, object refObj)
         {
             lock (EngineEvents)
             {
@@ -205,7 +241,7 @@ namespace AI2D.Engine
             }
         }
 
-        public EngineCallbackEvent CreateEngineCallbackEvent(TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback)
+        public EngineCallbackEvent AddNewEngineCallbackEvent(TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback)
         {
             lock (EngineEvents)
             {
@@ -232,7 +268,7 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjTextBlock CreateTextBlock(string font, Brush color, double size, double x, double y)
+        public ObjTextBlock AddNewTextBlock(string font, Brush color, double size, double x, double y)
         {
             lock (TextBlocks)
             {
@@ -251,7 +287,7 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjDebug CreateDebug()
+        public ObjDebug AddNewDebug()
         {
             lock (Debugs)
             {
@@ -270,7 +306,7 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjStar CreateStar()
+        public ObjStar AddNewStar()
         {
             lock (Stars)
             {
@@ -297,14 +333,14 @@ namespace AI2D.Engine
             }
         }
 
-        public T CreateEnemy<T>() where T : BaseEnemy
+        public T AddNewEnemy<T>() where T : BaseEnemy
         {
             lock (Enemies)
             {
                 object[] param = { _core };
                 BaseEnemy obj = (BaseEnemy)Activator.CreateInstance(typeof(T), param);
 
-                obj.Location = _core.Display.RandomOnscreenLocation();
+                obj.Location = _core.Display.RandomOffScreenLocation();
                 obj.Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MinSpeed, Constants.Limits.MaxSpeed);
                 obj.Velocity.Angle.Degrees = Utility.Random.Next(0, 360);
 
@@ -322,9 +358,7 @@ namespace AI2D.Engine
             }
         }
 
-        //TODO: Rename all these CREATES to PUBLISH.
-
-        public BaseBullet CreateBullet(WeaponBase weapon, BaseGraphicObject firedFrom, PointD xyOffset = null)
+        public BaseBullet AddNewBullet(WeaponBase weapon, BaseGraphicObject firedFrom, PointD xyOffset = null)
         {
             lock (Bullets)
             {
@@ -334,7 +368,7 @@ namespace AI2D.Engine
             }
         }
 
-        public BaseBullet CreateLockedBullet(WeaponBase weapon, BaseGraphicObject firedFrom, BaseGraphicObject lockedTarget, PointD xyOffset = null)
+        public BaseBullet AddNewLockedBullet(WeaponBase weapon, BaseGraphicObject firedFrom, BaseGraphicObject lockedTarget, PointD xyOffset = null)
         {
             lock (Bullets)
             {
@@ -436,21 +470,21 @@ namespace AI2D.Engine
 
         void RenderPlayer(Graphics dc)
         {
-            if (ThingToLock != null)
-            {
-                Player?.Render(dc);
-            }
+            Player?.Render(dc);
         }
 
         public void Render(Graphics dc)
         {
-            RenderDebugs(dc);
-            RenderStars(dc);
-            RenderBullets(dc);
-            RenderEnemies(dc);
-            RenderPlayer(dc);
-            RenderText(dc);
-            RenderAnimations(dc);
+            lock (_core.DrawingSemaphore)
+            {
+                RenderDebugs(dc);
+                RenderStars(dc);
+                RenderBullets(dc);
+                RenderEnemies(dc);
+                RenderPlayer(dc);
+                RenderText(dc);
+                RenderAnimations(dc);
+            }
         }
 
         #endregion

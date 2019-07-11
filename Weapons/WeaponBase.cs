@@ -69,7 +69,7 @@ namespace AI2D.Weapons
             {
                 RoundQuantity--;
                 _fireSound.Play();
-                _core.Actors.CreateBullet(this, _owner);
+                _core.Actors.AddNewBullet(this, _owner);
                 return true;
             }
             return false;

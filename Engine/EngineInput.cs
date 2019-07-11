@@ -105,6 +105,16 @@ namespace AI2D.Engine
                 //    _core.Actors.Enemies[0].Explode();
                 //}
             }
+
+            if (key == Keys.F1)
+            {
+                _core.Actors.CleanupActors();
+                _core.Actors.ResetAndShowPlayer();
+            }
+            if (key == Keys.F12)
+            {
+                _core.ShowDebug = !_core.ShowDebug;
+            }
             if (key == Keys.Escape)
             {
                 //_core.Stop();

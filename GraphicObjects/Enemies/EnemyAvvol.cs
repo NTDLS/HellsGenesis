@@ -1,7 +1,6 @@
 ﻿using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
-using System;
 using System.Drawing;
 using System.Linq;
 
@@ -9,28 +8,58 @@ namespace AI2D.GraphicObjects.Enemies
 {
     public class EnemyAvvol : BaseEnemy
     {
+        public const int ScoreMultiplier = 25;
+
         private const string _assetPath = @"..\..\Assets\Graphics\Enemy\";
         private readonly string[] _imagePaths = {
             #region images.
             "Avvol (1).png",
-            "Avvol (2).png",
+            "Avvol (2).png", //Guided missiles.
             "Avvol (3).png",
             "Avvol (4).png",
-            "Avvol (5).png",
+            "Avvol (5).png", //Guided missiles.
             "Avvol (6).png",
             "Avvol (7).png",
-            "Avvol (8).png"
+            "Avvol (8).png"  //Guided missiles.
             #endregion
         };
 
         public EnemyAvvol(Core core)
-            : base(core)
+            : base(core, BaseEnemy.GetGenericHP(), ScoreMultiplier)
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
-
             HitPoints = Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth);
+            SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
+           
 
-            SetImage(_assetPath + _imagePaths[imageIndex], new Size(32,32));
+            AddWeapon(new WeaponPhotonTorpedo(_core)
+            {
+                RoundQuantity = 5,
+                FireDelayMilliseconds = 1000,
+            });
+
+            AddWeapon(new WeaponVulcanCannon(_core)
+            {
+                RoundQuantity = 100,
+                FireDelayMilliseconds = 500
+            });
+
+            AddWeapon(new WeaponDualVulcanCannon(_core)
+            {
+                RoundQuantity = 100,
+                FireDelayMilliseconds = 500
+            });
+
+            if (imageIndex == 1 || imageIndex == 4 || imageIndex == 7)
+            {
+                AddWeapon(new WeaponGuidedFragMissile(_core)
+                {
+                    RoundQuantity = 10,
+                    FireDelayMilliseconds = 2000
+                });
+            }
+
+            SelectWeapon(typeof(WeaponVulcanCannon));
         }
 
         enum AIMode
@@ -95,11 +124,11 @@ namespace AI2D.GraphicObjects.Enemies
 
                 if (deltaAngle > 10)
                 {
-                    if (deltaAngle >= 180.0) //We might as well turn around clock-wise
+                    if (deltaAngle >= 180.0)
                     {
                         Velocity.Angle += 1;
                     }
-                    else if (deltaAngle < 180.0) //We might as well turn around counter clock-wise
+                    else if (deltaAngle < 180.0)
                     {
                         Velocity.Angle -= 1;
                     }
@@ -150,17 +179,6 @@ namespace AI2D.GraphicObjects.Enemies
                     }
                 }
             }
-
-            /*
-            //If the enemy is off the screen, point at the player and come back into view.
-            if (X < (0 - (Size.Width + 40)) || Y < (0 - (Size.Height + 40))
-                || X >= (_core.Display.VisibleSize.Width + Size.Width) + 40
-                || Y >= (_core.Display.VisibleSize.Height + Size.Height) + 40)
-            {
-                MoveInDirectionOf(_core.Actors.Player);
-            }
-            */
         }
-
     }
 }
