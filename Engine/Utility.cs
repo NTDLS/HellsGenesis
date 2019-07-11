@@ -165,11 +165,26 @@ namespace AI2D.Engine
 
         public static Double RandomNumber(double min, double max)
         {
-            return Random.Next(0, 1000) % max;
+            return Random.NextDouble() * (max - min) + min;
         }
 
         public static int RandomNumber(int min, int max)
         {
+            return Random.Next(0, 1000) % max;
+        }
+
+        /// <summary>
+        /// This POS is just awful. It doesnt even accept negative input. Or respect it
+        /// </summary>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static int RandomNumberNegative(int min, int max)
+        {
+            if (FlipCoin())
+            {
+                return -(Random.Next(0, 1000) % max);
+            }
             return Random.Next(0, 1000) % max;
         }
 

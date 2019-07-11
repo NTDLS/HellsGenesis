@@ -15,7 +15,7 @@ namespace AI2D.GraphicObjects.Bullets
         public BaseGraphicObject LockedTarget { get; private set; }
         public ObjAnimation _hitExplosionAnimation { get; set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
-        public double MaxAgeInMilliseconds { get; set; } = 5000;
+        public double MaxAgeInMilliseconds { get; set; } = 4000;
 
         public double AgeInMilliseconds
         {
@@ -43,9 +43,19 @@ namespace AI2D.GraphicObjects.Bullets
             LockedTarget = lockedTarget;
             Velocity.ThrottlePercentage = 100;
 
+
+            double headingDegrees = firedFrom.Velocity.Angle.Degrees;
+
+            if (firedFrom is BaseEnemy)
+            {
+                double slop = (Utility.FlipCoin() ? 1 : -1) * (Utility.Random.NextDouble() * 2);
+
+                headingDegrees = firedFrom.Velocity.Angle.Degrees + slop;
+            }
+
             VelocityD initialVelocity = new VelocityD()
             {
-                Angle = new AngleD(firedFrom.Velocity.Angle.Degrees),
+                Angle = new AngleD(headingDegrees),
                 MaxSpeed = weapon.Speed,
                 ThrottlePercentage = 100
             };

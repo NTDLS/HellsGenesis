@@ -1,6 +1,7 @@
 ﻿using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
+using System;
 using System.Drawing;
 using System.Linq;
 
@@ -32,50 +33,125 @@ namespace AI2D.GraphicObjects.Enemies
             SetImage(_assetPath + _imagePaths[imageIndex], new Size(32,32));
         }
 
+        enum AIMode
+        {
+            Approaching,
+            MovingToFallback,
+            MovingToApproach,
+        }
+
+        const double baseDistanceToKeep = 100;
+        double distanceToKeep = baseDistanceToKeep * (Utility.Random.NextDouble() + 1);
+        const double baseFallbackDistance = 400;
+        double fallbackDistance;
+        AngleD fallToAngle;
+        AIMode mode = AIMode.Approaching;
+
         public override void ApplyIntelligence(PointD frameAppliedOffset)
         {
             base.ApplyIntelligence(frameAppliedOffset);
 
-            MoveInDirectionOf(_core.Actors.Player);
-
             double distanceToPlayer = Utility.DistanceTo(this, _core.Actors.Player);
-            if (distanceToPlayer > 500 && HasWeaponAndAmmo(typeof(WeaponGuidedFragMissile)))
+
+            if (mode == AIMode.Approaching)
             {
-                bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
-                if (isPointingAtPlayer)
+                if (distanceToPlayer > distanceToKeep)
                 {
-                    SelectWeapon(typeof(WeaponGuidedFragMissile));
-                    CurrentWeapon?.Fire();
+                    MoveInDirectionOf(_core.Actors.Player);
                 }
-            }
-            else if (distanceToPlayer > 300 && HasWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
-            {
-                bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
-                if (isPointingAtPlayer)
+                else
                 {
-                    SelectWeapon(typeof(WeaponPhotonTorpedo));
-                    CurrentWeapon?.Fire();
-                }
-            }
-            else if (distanceToPlayer > 200 && HasWeaponAndAmmo(typeof(WeaponVulcanCannon)))
-            {
-                bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
-                if (isPointingAtPlayer)
-                {
-                    SelectWeapon(typeof(WeaponVulcanCannon));
-                    CurrentWeapon?.Fire();
-                }
-            }
-            else if (distanceToPlayer > 100 && HasWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
-            {
-                bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
-                if (isPointingAtPlayer)
-                {
-                    SelectWeapon(typeof(WeaponDualVulcanCannon));
-                    CurrentWeapon?.Fire();
+                    mode = AIMode.MovingToFallback;
+                    fallToAngle = Velocity.Angle + (180.0 + Utility.RandomNumberNegative(0, 10));
+                    fallbackDistance = baseFallbackDistance * (Utility.Random.NextDouble() + 1);
                 }
             }
 
+            if (mode == AIMode.MovingToFallback)
+            {
+                var deltaAngle = Velocity.Angle - fallToAngle;
+
+                if (deltaAngle.Degrees > 10)
+                {
+                    if (deltaAngle.Degrees >= 180.0) //We might as well turn around clock-wise
+                    {
+                        Velocity.Angle += 1;
+                    }
+                    else if (deltaAngle.Degrees < 180.0) //We might as well turn around counter clock-wise
+                    {
+                        Velocity.Angle -= 1;
+                    }
+                }
+
+                if (distanceToPlayer > fallbackDistance)
+                {
+                    mode = AIMode.MovingToApproach;
+                }
+            }
+
+            if (mode == AIMode.MovingToApproach)
+            {
+                var deltaAngle = DeltaAngle(_core.Actors.Player);
+
+                if (deltaAngle > 10)
+                {
+                    if (deltaAngle >= 180.0) //We might as well turn around clock-wise
+                    {
+                        Velocity.Angle += 1;
+                    }
+                    else if (deltaAngle < 180.0) //We might as well turn around counter clock-wise
+                    {
+                        Velocity.Angle -= 1;
+                    }
+                }
+                else
+                {
+                    mode = AIMode.Approaching;
+                    distanceToKeep = baseDistanceToKeep * (Utility.Random.NextDouble() + 1);
+                }
+            }
+
+            if (distanceToPlayer < 700)
+            {
+                if (distanceToPlayer > 500 && HasWeaponAndAmmo(typeof(WeaponGuidedFragMissile)))
+                {
+                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    if (isPointingAtPlayer)
+                    {
+                        SelectWeapon(typeof(WeaponGuidedFragMissile));
+                        CurrentWeapon?.Fire();
+                    }
+                }
+                else if (distanceToPlayer > 300 && HasWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
+                {
+                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    if (isPointingAtPlayer)
+                    {
+                        SelectWeapon(typeof(WeaponPhotonTorpedo));
+                        CurrentWeapon?.Fire();
+                    }
+                }
+                else if (distanceToPlayer > 200 && HasWeaponAndAmmo(typeof(WeaponVulcanCannon)))
+                {
+                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    if (isPointingAtPlayer)
+                    {
+                        SelectWeapon(typeof(WeaponVulcanCannon));
+                        CurrentWeapon?.Fire();
+                    }
+                }
+                else if (distanceToPlayer > 100 && HasWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
+                {
+                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    if (isPointingAtPlayer)
+                    {
+                        SelectWeapon(typeof(WeaponDualVulcanCannon));
+                        CurrentWeapon?.Fire();
+                    }
+                }
+            }
+
+            /*
             //If the enemy is off the screen, point at the player and come back into view.
             if (X < (0 - (Size.Width + 40)) || Y < (0 - (Size.Height + 40))
                 || X >= (_core.Display.VisibleSize.Width + Size.Width) + 40
@@ -83,6 +159,7 @@ namespace AI2D.GraphicObjects.Enemies
             {
                 MoveInDirectionOf(_core.Actors.Player);
             }
+            */
         }
 
     }

@@ -49,7 +49,7 @@ namespace AI2D.Engine
                 Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
 
                 //This is debug stuff. Will be moved to a logic engine.
-                Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 1000),
+                Actors.CreateEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 5000),
                     AddFreshEnemiesCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring);
 
                 //This is debug stuff. Will be moved to a logic engine.
@@ -137,26 +137,39 @@ namespace AI2D.Engine
 
             if (Actors.Enemies.Count == 0)
             {
-                for (int i = 0; i < 10; i++)
+                int enemyCount = Utility.Random.Next(2, 5);
+
+                for (int i = 0; i < enemyCount; i++)
                 {
                     var enemy = Actors.CreateEnemy<EnemyAvvol>();
 
+                    if (Utility.FlipCoin())
+                    {
+                        enemy.Location = new Types.PointD(-Utility.RandomNumber(100, 500), -Utility.RandomNumber(100, 500));
+                    }
+                    else
+                    {
+                        enemy.Location = new Types.PointD(
+                            Display.VisibleSize.Width + Utility.RandomNumber(100, 500),
+                            Display.VisibleSize.Height + Utility.RandomNumber(100, 500));
+                    }
+
                     enemy.AddWeapon(new WeaponPhotonTorpedo(this)
                     {
-                        RoundQuantity = 10,
-                        FireDelayMilliseconds = 500,
+                        RoundQuantity = 5,
+                        FireDelayMilliseconds = 1000,
                     });
 
                     enemy.AddWeapon(new WeaponVulcanCannon(this)
                     {
                         RoundQuantity = 100,
-                        FireDelayMilliseconds = 250
+                        FireDelayMilliseconds = 500
                     });
 
                     enemy.AddWeapon(new WeaponDualVulcanCannon(this)
                     {
                         RoundQuantity = 100,
-                        FireDelayMilliseconds = 250
+                        FireDelayMilliseconds = 500
                     });
 
                     enemy.AddWeapon(new WeaponGuidedFragMissile(this)
@@ -168,7 +181,7 @@ namespace AI2D.Engine
                     enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
                 }
 
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 0; i++)
                 {
                     var enemy = Actors.CreateEnemy<EnemyScinzad>();
 

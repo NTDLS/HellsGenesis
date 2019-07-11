@@ -361,7 +361,7 @@ namespace AI2D.Engine
                             if (enemy.Intersects(_core.Actors.Player))
                             {
                                 _core.Actors.Player.Hit(enemy.CollisionDamage);
-                                enemy.Hit(enemy.CollisionDamage);
+                                //enemy.Hit(enemy.CollisionDamage);
                             }
 
                             if (_core.Actors.Player.CurrentWeapon != null)

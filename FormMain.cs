@@ -39,7 +39,12 @@ namespace AI2D
             }
 
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            _core = new Core(pictureBoxScene, new Size(this.Width, this.Height));
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.UserPaint, true);
+
+            this.BackColor = Color.FromArgb(1, 1, 10);
+
+            _core = new Core(this, new Size(this.Width, this.Height));
 
             _core.OnStop += _core_OnStop;
         }
@@ -95,19 +100,6 @@ namespace AI2D
             if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(Types.PlayerKey.Escape, Types.KeyPressState.Up);
         }
 
-        private void PictureBoxScene_Paint(object sender, PaintEventArgs e)
-        {
-            //e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            //e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-            //e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-            //e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            //e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            //e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
-            _core.Actors.Render(e.Graphics);
-            base.OnPaint(e);
-        }
-
         private void PictureBoxScene_MouseEnter(object sender, EventArgs e)
         {
             if (_fullScreen)
@@ -122,6 +114,18 @@ namespace AI2D
             {
                 Cursor.Show();
             }
+        }
+
+        private void FormMain_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+            e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+            _core.Actors.Render(e.Graphics);
         }
     }
 }

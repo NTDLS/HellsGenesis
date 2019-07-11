@@ -29,22 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.pictureBoxScene = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxScene)).BeginInit();
             this.SuspendLayout();
-            // 
-            // pictureBoxScene
-            // 
-            this.pictureBoxScene.BackColor = System.Drawing.Color.Black;
-            this.pictureBoxScene.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBoxScene.Location = new System.Drawing.Point(0, 0);
-            this.pictureBoxScene.Name = "pictureBoxScene";
-            this.pictureBoxScene.Size = new System.Drawing.Size(1008, 729);
-            this.pictureBoxScene.TabIndex = 0;
-            this.pictureBoxScene.TabStop = false;
-            this.pictureBoxScene.Paint += new System.Windows.Forms.PaintEventHandler(this.PictureBoxScene_Paint);
-            this.pictureBoxScene.MouseEnter += new System.EventHandler(this.PictureBoxScene_MouseEnter);
-            this.pictureBoxScene.MouseLeave += new System.EventHandler(this.PictureBoxScene_MouseLeave);
             // 
             // FormMain
             // 
@@ -52,7 +37,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.ClientSize = new System.Drawing.Size(1008, 729);
-            this.Controls.Add(this.pictureBoxScene);
             this.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -62,16 +46,14 @@
             this.Text = "AI2D";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Shown += new System.EventHandler(this.FormMain_Shown);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.FormMain_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormMain_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormMain_KeyUp);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxScene)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureBoxScene;
     }
 }
 
