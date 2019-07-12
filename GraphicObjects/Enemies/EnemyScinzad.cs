@@ -9,17 +9,15 @@ namespace AI2D.GraphicObjects.Enemies
     {
         public const int ScoreMultiplier = 1;
 
-        private const string _assetPath = @"..\..\Assets\Graphics\Enemy\";
+        private const string _assetPath = @"..\..\Assets\Graphics\Enemy\Scinzad\";
         private readonly string[] _imagePaths = {
             #region images.
-            "Scinzad (1).png",
-            "Scinzad (2).png",
-            "Scinzad (3).png",
-            "Scinzad (4).png",
-            "Scinzad (5).png",
-            "Scinzad (6).png",
-            "Scinzad (7).png",
-            "Scinzad (8).png"
+            "1.png",
+            "2.png",
+            "3.png",
+            "4.png",
+            "5.png",
+            "6.png"
             #endregion
         };
 

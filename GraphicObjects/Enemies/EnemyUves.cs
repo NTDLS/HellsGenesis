@@ -8,17 +8,15 @@ namespace AI2D.GraphicObjects.Enemies
     {
         public const int ScoreMultiplier = 1;
 
-        private const string _assetPath = @"..\..\Assets\Graphics\Enemy\";
+        private const string _assetPath = @"..\..\Assets\Graphics\Enemy\Uves\";
         private readonly string[] _imagePaths = {
             #region images.
-            "Uves (1).png",
-            "Uves (2).png",
-            "Uves (3).png",
-            "Uves (4).png",
-            "Uves (5).png",
-            "Uves (6).png",
-            "Uves (7).png",
-            "Uves (8).png"
+            "1.png",
+            "2.png",
+            "3.png",
+            "4.png",
+            "5.png",
+            "6.png"
             #endregion
         };
 

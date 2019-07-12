@@ -100,13 +100,13 @@ namespace AI2D.Engine
 
         public void AdvanceScenario()
         {
-            if (_currentScenarioIndex > Scenarios.Count)
+            if (_currentScenarioIndex >= Scenarios.Count)
             {
                 _currentScenarioIndex = -1;
             }
             else
             {
-                Scenarios[++_currentScenarioIndex].Execute();
+                Scenarios[_currentScenarioIndex++].Execute();
             }
         }
 

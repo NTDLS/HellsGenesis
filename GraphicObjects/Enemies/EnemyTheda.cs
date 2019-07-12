@@ -8,17 +8,15 @@ namespace AI2D.GraphicObjects.Enemies
     {
         public const int ScoreMultiplier = 1;
 
-        private const string _assetPath = @"..\..\Assets\Graphics\Enemy\";
+        private const string _assetPath = @"..\..\Assets\Graphics\Enemy\Theda\";
         private readonly string[] _imagePaths = {
             #region images.
-            "Theda (1).png",
-            "Theda (2).png",
-            "Theda (3).png",
-            "Theda (4).png",
-            "Theda (5).png",
-            "Theda (6).png",
-            "Theda (7).png",
-            "Theda (8).png"
+            "1.png",
+            "2.png",
+            "3.png",
+            "4.png",
+            "5.png",
+            "6.png"
             #endregion
         };
 

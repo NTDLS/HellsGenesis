@@ -10,17 +10,15 @@ namespace AI2D.GraphicObjects.Enemies
     {
         public const int ScoreMultiplier = 25;
 
-        private const string _assetPath = @"..\..\Assets\Graphics\Enemy\";
+        private const string _assetPath = @"..\..\Assets\Graphics\Enemy\Avvol\";
         private readonly string[] _imagePaths = {
             #region images.
-            "Avvol (1).png",
-            "Avvol (2).png", //Guided missiles.
-            "Avvol (3).png",
-            "Avvol (4).png",
-            "Avvol (5).png", //Guided missiles.
-            "Avvol (6).png",
-            "Avvol (7).png",
-            "Avvol (8).png"  //Guided missiles.
+            "1.png",
+            "2.png",
+            "3.png",
+            "4.png",
+            "5.png",
+            "6.png"
             #endregion
         };
 
@@ -50,7 +48,7 @@ namespace AI2D.GraphicObjects.Enemies
                 FireDelayMilliseconds = 500
             });
 
-            if (imageIndex == 1 || imageIndex == 4 || imageIndex == 7)
+            if (imageIndex == 0 || imageIndex == 2 || imageIndex == 5)
             {
                 AddWeapon(new WeaponGuidedFragMissile(_core)
                 {

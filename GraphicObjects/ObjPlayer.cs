@@ -5,7 +5,7 @@ namespace AI2D.GraphicObjects
 {
     public class ObjPlayer : BaseGraphicObject
     {
-        private const string _imagePath = @"..\..\Assets\Graphics\Player\Player (1).png";
+        private const string _imagePath = @"..\..\Assets\Graphics\Player\Alien\1.png";
 
         public AudioClip AmmoLowSound { get; private set; }
         public AudioClip AmmoEmptySound { get; private set; }

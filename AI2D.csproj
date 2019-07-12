@@ -73,7 +73,6 @@
     <Compile Include="GraphicObjects\Enemies\BaseEnemy.cs" />
     <Compile Include="GraphicObjects\Enemies\EnemyUves.cs" />
     <Compile Include="GraphicObjects\Enemies\EnemyTheda.cs" />
-    <Compile Include="GraphicObjects\Enemies\EnemyEqrox.cs" />
     <Compile Include="GraphicObjects\Enemies\EnemyIrlen.cs" />
     <Compile Include="GraphicObjects\Enemies\EnemyAvvol.cs" />
     <Compile Include="GraphicObjects\ObjAnimation.cs" />
