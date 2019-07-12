@@ -7,11 +7,14 @@
 
         public static class Limits
         {
+            public const int BasePlayerHitpoints = 500;
+            public const double MinPlayerThrust = 0; //0.25;
+
             public const int MinSpeed = 3;
-            public const int MaxSpeed = 6;
+            public const int MaxSpeed = 7;
 
             public const int MinEnemyHealth = 2;
-            public const int MaxEnemyHealth = 10;
+            public const int MaxEnemyHealth = 20;
 
             public const double FrameLimiter = 80.0; //80.0 seems to be a good rate.
 

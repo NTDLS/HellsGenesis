@@ -10,19 +10,18 @@ namespace AI2D
         private Core _core;
         private bool _fullScreen = true;
 
-        /*
+        //This really shouldn't be necessary! :(
         protected override CreateParams CreateParams
         {
             get
             {
-                //    Paints all descendants of a window in bottom-to-top painting order using double-buffering.
-                //    For more information, see Remarks. This cannot be used if the window has a class style of either CS_OWNDC or CS_CLASSDC. 
+                //Paints all descendants of a window in bottom-to-top painting order using double-buffering.
+                // For more information, see Remarks. This cannot be used if the window has a class style of either CS_OWNDC or CS_CLASSDC. 
                 CreateParams handleParam = base.CreateParams;
                 handleParam.ExStyle |= 0x02000000; //WS_EX_COMPOSITED       
                 return handleParam;
             }
         }
-        */
 
         public FormMain()
         {

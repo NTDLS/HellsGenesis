@@ -13,7 +13,6 @@ namespace AI2D.Engine
         public List<BaseScenario> Scenarios = new List<BaseScenario>();
         public bool IsRunning { get; private set; } = false;
         public bool ShowDebug { get; set; } = false;
-
         public object DrawingSemaphore { get; set; } = new object();
 
         private EngineThread _engineThread;
@@ -36,6 +35,8 @@ namespace AI2D.Engine
             Input = new EngineInput(this);
             _engineThread = new EngineThread(this);
 
+            Scenarios.Add(new ScenarioIrlenFormations(this));
+            Scenarios.Add(new ScenarioScinzadSkirmish(this));
             Scenarios.Add(new ScenarioAvvolAmbush(this));
         }
 
@@ -100,13 +101,14 @@ namespace AI2D.Engine
 
         public void AdvanceScenario()
         {
+            _currentScenarioIndex++;
             if (_currentScenarioIndex >= Scenarios.Count)
             {
                 _currentScenarioIndex = -1;
             }
             else
             {
-                Scenarios[_currentScenarioIndex++].Execute();
+                Scenarios[_currentScenarioIndex].Execute();
             }
         }
 

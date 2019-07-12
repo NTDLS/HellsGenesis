@@ -18,6 +18,7 @@ namespace AI2D.Weapons
         public string Name { get; private set; }
         public int Speed { get; set; } = 25;
         public int RoundQuantity { get; set; } = int.MaxValue;
+        public int RoundsFired { get; set; }
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
         public bool CanLockOn { get; set; } = false;
@@ -67,6 +68,7 @@ namespace AI2D.Weapons
         {
             if (CanFire)
             {
+                RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
                 _core.Actors.AddNewBullet(this, _owner);

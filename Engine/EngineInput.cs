@@ -90,7 +90,7 @@ namespace AI2D.Engine
                 _core.Actors.Player.Velocity.Angle.Degrees = 315;
                 _core.Actors.Player.Invalidate();
             }
-            if (key == Keys.ShiftKey)
+            if (key == Keys.ControlKey)
             {
                 _core.Actors.Player.SelectNextAvailableUsableWeapon();
             }

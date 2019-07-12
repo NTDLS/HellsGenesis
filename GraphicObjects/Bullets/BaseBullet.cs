@@ -96,7 +96,10 @@ namespace AI2D.GraphicObjects.Bullets
                 if (Intersects(_core.Actors.Player))
                 {
                     testHit.Hit(this);
-                    Explode();
+                    if ((this is BulletPulseMeson) == false)
+                    {
+                        Explode();
+                    }
                 }
             }
             else if (FiredFromType == FiredFromType.Player && !(testHit is ObjPlayer))
@@ -104,7 +107,11 @@ namespace AI2D.GraphicObjects.Bullets
                 if (Intersects(testHit))
                 {
                     testHit.Hit(this);
-                    Explode();
+
+                    if ((this is BulletPulseMeson) == false)
+                    {
+                        Explode();
+                    }
                 }
             }
         }

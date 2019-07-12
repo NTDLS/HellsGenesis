@@ -1,4 +1,6 @@
 ﻿using AI2D.Engine;
+using AI2D.Types;
+using AI2D.Weapons;
 using System.Drawing;
 using System.Linq;
 
@@ -24,9 +26,7 @@ namespace AI2D.GraphicObjects.Enemies
             : base(core, BaseEnemy.GetGenericHP(), ScoreMultiplier)
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
-
             HitPoints = Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth);
-
             SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
         }
     }

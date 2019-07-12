@@ -5,6 +5,7 @@ namespace AI2D.Engine
 {
     /// <summary>
     /// Allows for deferred events to be injected into the engine.
+    /// We use this so that we can defer things without sleeping and so we can inject into the actors durring the frame logic.
     /// </summary>
     public class EngineCallbackEvent
     {
@@ -15,6 +16,7 @@ namespace AI2D.Engine
         private CallbackEventMode _callbackEventMode;
         private CallbackEventAsync _callbackEventAsync;
         private DateTime _startedTime;
+
         public bool ReadyForDeletion = false;
 
         public delegate void OnExecute(Core core, object refObj);
@@ -64,6 +66,11 @@ namespace AI2D.Engine
         {
             bool result = false;
 
+            if (ReadyForDeletion)
+            {
+                return false;
+            }
+
             if ((DateTime.UtcNow - _startedTime).TotalMilliseconds > _countdown.TotalMilliseconds)
             {
                 result = true;
@@ -72,7 +79,6 @@ namespace AI2D.Engine
                 {
                     new Thread(() =>
                     {
-                        //Thread.CurrentThread.IsBackground = true; Why?
                         _onExecute(_core, _referenceObject);
                     }).Start();
                 }

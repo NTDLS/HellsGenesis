@@ -4,6 +4,7 @@ using AI2D.GraphicObjects.Enemies;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -14,13 +15,13 @@ namespace AI2D.Engine
         private Core _core;
         private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
         private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
-
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
         public List<ObjTextBlock> TextBlocks { get; private set; } = new List<ObjTextBlock>();
         public List<BaseEnemy> Enemies { get; private set; } = new List<BaseEnemy>();
         public List<ObjStar> Stars { get; private set; } = new List<ObjStar>();
         public List<ObjDebug> Debugs { get; private set; } = new List<ObjDebug>();
         public List<ObjAnimation> Animations { get; private set; } = new List<ObjAnimation>();
+        public List<ObjRadarPositionIndicator> RadarPositionIndicators { get; set; } = new List<ObjRadarPositionIndicator>();
         public List<BaseBullet> Bullets { get; private set; } = new List<BaseBullet>();
         public ObjPlayer Player { get; private set; }
         public AudioClip BackgroundMusicSound { get; private set; }
@@ -38,8 +39,8 @@ namespace AI2D.Engine
 
             BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
 
-            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 10, 5, 5);
-            DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10);
+            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 10, 5, 5, true);
+            DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10, true);
 
             BackgroundMusicSound.Play();
         }
@@ -57,9 +58,9 @@ namespace AI2D.Engine
 
             Player.Velocity.MaxSpeed = 5;
             Player.Velocity.MaxRotationSpeed = 3;
-            Player.HitPoints = 500;
+            Player.HitPoints = Constants.Limits.BasePlayerHitpoints;
             Player.Velocity.Angle = new AngleD(45);
-            Player.Velocity.ThrottlePercentage = 0;
+            Player.Velocity.ThrottlePercentage = Constants.Limits.MinPlayerThrust;
 
             Player.X = _core.Display.VisibleSize.Width / 2;
             Player.Y = _core.Display.VisibleSize.Height / 2;
@@ -95,6 +96,23 @@ namespace AI2D.Engine
             Player.Visable = false;
             Player.ShipEngineIdleSound.Stop();
             Player.ShipEngineRoarSound.Stop();
+        }
+
+
+        public List<T> VisibleTextBlocksOfType<T>() where T : class
+        {
+            return (from o in _core.Actors.TextBlocks
+                    where o is T
+                    && o.Visable == true
+                    select o as T).ToList();
+        }
+
+        public List<T> VisibleEnemiesOfType<T>() where T : class
+        {
+            return (from o in _core.Actors.Enemies
+                    where o is T
+                    && o.Visable == true
+                    select o as T).ToList();
         }
 
         public void CleanupEnemies()
@@ -174,6 +192,26 @@ namespace AI2D.Engine
 
         #region Factories.
 
+        public ObjRadarPositionIndicator AddNewRadarPositionIndicator()
+        {
+            lock (RadarPositionIndicators)
+            {
+                var obj = new ObjRadarPositionIndicator(_core);
+                RadarPositionIndicators.Add(obj);
+                return obj;
+            }
+        }
+
+        public void DeleteRadarPositionIndicator(ObjRadarPositionIndicator obj)
+        {
+            lock (RadarPositionIndicators)
+            {
+                obj.Cleanup();
+                obj.Visable = false;
+                RadarPositionIndicators.Remove(obj);
+            }
+        }
+
         public void PlaceAnimationOnTopOf(ObjAnimation animation, BaseGraphicObject defaultPosition)
         {
             lock (Animations)
@@ -201,20 +239,6 @@ namespace AI2D.Engine
             {
                 obj.Cleanup();
                 Animations.Remove(obj);
-            }
-        }
-
-        public ObjStar AddNewStar(double x, double y)
-        {
-            lock (Stars)
-            {
-                ObjStar obj = new ObjStar(_core)
-                {
-                    X = x,
-                    Y = y
-                };
-                Stars.Add(obj);
-                return obj;
             }
         }
 
@@ -268,11 +292,21 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjTextBlock AddNewTextBlock(string font, Brush color, double size, double x, double y)
+        public ObjRadarPositionTextBlock AddNewRadarPositionTextBlock(string font, Brush color, double size, double x, double y)
         {
             lock (TextBlocks)
             {
-                ObjTextBlock obj = new ObjTextBlock(_core, font, color, size, x, y);
+                var obj = new ObjRadarPositionTextBlock(_core, font, color, size, x, y);
+                TextBlocks.Add(obj);
+                return obj;
+            }
+        }
+
+        public ObjTextBlock AddNewTextBlock(string font, Brush color, double size, double x, double y, bool isPositionStatic)
+        {
+            lock (TextBlocks)
+            {
+                var obj = new ObjTextBlock(_core, font, color, size, x, y, isPositionStatic);
                 TextBlocks.Add(obj);
                 return obj;
             }
@@ -291,7 +325,7 @@ namespace AI2D.Engine
         {
             lock (Debugs)
             {
-                ObjDebug obj = new ObjDebug(_core);
+                var obj = new ObjDebug(_core);
                 Debugs.Add(obj);
                 return obj;
             }
@@ -306,11 +340,25 @@ namespace AI2D.Engine
             }
         }
 
+        public ObjStar AddNewStar(double x, double y)
+        {
+            lock (Stars)
+            {
+                var obj = new ObjStar(_core)
+                {
+                    X = x,
+                    Y = y
+                };
+                Stars.Add(obj);
+                return obj;
+            }
+        }
+
         public ObjStar AddNewStar()
         {
             lock (Stars)
             {
-                ObjStar obj = new ObjStar(_core);
+                var obj = new ObjStar(_core);
                 Stars.Add(obj);
                 return obj;
             }
@@ -362,7 +410,7 @@ namespace AI2D.Engine
         {
             lock (Bullets)
             {
-                BaseBullet obj = weapon.CreateBullet(null, xyOffset);
+                var obj = weapon.CreateBullet(null, xyOffset);
                 Bullets.Add(obj);
                 return obj;
             }
@@ -372,7 +420,7 @@ namespace AI2D.Engine
         {
             lock (Bullets)
             {
-                BaseBullet obj = weapon.CreateBullet(lockedTarget, xyOffset);
+                var obj = weapon.CreateBullet(lockedTarget, xyOffset);
                 Bullets.Add(obj);
                 return obj;
             }
@@ -391,99 +439,73 @@ namespace AI2D.Engine
 
         #region Rendering.
 
-        private void RenderText(Graphics dc)
-        {
-            lock (TextBlocks)
-            {
-                foreach (var obj in TextBlocks)
-                {
-                    obj.Render(dc);
-                }
-            }
-        }
-
-        void RenderAnimations(Graphics dc)
-        {
-            lock (Animations)
-            {
-                foreach (var obj in Animations)
-                {
-                    if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                    {
-                        obj.Render(dc);
-                    }
-                }
-            }
-        }
-
-        void RenderEnemies(Graphics dc)
-        {
-            lock (Enemies)
-            {
-                foreach (var obj in Enemies)
-                {
-                    if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                    {
-                        obj.Render(dc);
-                    }
-                }
-            }
-        }
-
-        void RenderBullets(Graphics dc)
-        {
-            lock (Bullets)
-            {
-                foreach (var obj in Bullets)
-                {
-                    if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                    {
-                        obj.Render(dc);
-                    }
-                }
-            }
-        }
-        void RenderStars(Graphics dc)
-        {
-            lock (Stars)
-            {
-                foreach (var obj in Stars)
-                {
-                    if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                    {
-                        obj.Render(dc);
-                    }
-                }
-            }
-        }
-
-        void RenderDebugs(Graphics dc)
-        {
-            lock (Debugs)
-            {
-                foreach (var obj in Debugs)
-                {
-                    obj.Render(dc);
-                }
-            }
-        }
-
-        void RenderPlayer(Graphics dc)
-        {
-            Player?.Render(dc);
-        }
-
         public void Render(Graphics dc)
         {
             lock (_core.DrawingSemaphore)
             {
-                RenderDebugs(dc);
-                RenderStars(dc);
-                RenderBullets(dc);
-                RenderEnemies(dc);
-                RenderPlayer(dc);
-                RenderText(dc);
-                RenderAnimations(dc);
+                lock (TextBlocks)
+                {
+                    foreach (var obj in TextBlocks)
+                    {
+                        obj.Render(dc);
+                    }
+                }
+                lock (Animations)
+                {
+                    foreach (var obj in Animations)
+                    {
+                        if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                        {
+                            obj.Render(dc);
+                        }
+                    }
+                }
+                lock (Enemies)
+                {
+                    foreach (var obj in Enemies)
+                    {
+                        if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                        {
+                            obj.Render(dc);
+                        }
+                    }
+                }
+                lock (Bullets)
+                {
+                    foreach (var obj in Bullets)
+                    {
+                        if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                        {
+                            obj.Render(dc);
+                        }
+                    }
+                }
+                lock (Stars)
+                {
+                    foreach (var obj in Stars)
+                    {
+                        if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                        {
+                            obj.Render(dc);
+                        }
+                    }
+                }
+                lock (Debugs)
+                {
+                    foreach (var obj in Debugs)
+                    {
+                        obj.Render(dc);
+                    }
+                }
+                lock (RadarPositionIndicators)
+                {
+                    foreach (var obj in RadarPositionIndicators)
+                    {
+                        obj.Render(dc);
+                    }
+                }
+
+                Player?.Render(dc);
             }
         }
 

@@ -1,7 +1,12 @@
-﻿using AI2D.GraphicObjects.Enemies;
+﻿using AI2D.GraphicObjects;
+using AI2D.GraphicObjects.Enemies;
 using AI2D.Types;
 using AI2D.Weapons;
+using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace AI2D.Engine
 {
@@ -133,36 +138,21 @@ namespace AI2D.Engine
                     }
                 }
 
-                //Make player thrust "build up" and fade.
+                //Make player thrust "build up" and fade-in.
                 if (_core.Input.IsKeyPressed(PlayerKey.Forward))
                 {
-                    if (_core.Actors.Player.Velocity.ThrottlePercentage < 100)
+                    if (_core.Actors.Player.Velocity.ThrottlePercentage < 1.0)
                     {
                         _core.Actors.Player.Velocity.ThrottlePercentage += Constants.PlayerThrustRampUp;
-                    }
-                }
-                else if (_core.Input.IsKeyPressed(PlayerKey.Reverse))
-                {
-                    if (_core.Actors.Player.Velocity.ThrottlePercentage > -0.5)
-                    {
-                        _core.Actors.Player.Velocity.ThrottlePercentage -= Constants.PlayerThrustRampUp;
                     }
                 }
                 else
                 {
                     //If no "forward" or "reverse" user input is received... then fade the thrust.
-                    if (_core.Actors.Player.Velocity.ThrottlePercentage > 0)
+                    if (_core.Actors.Player.Velocity.ThrottlePercentage > Constants.Limits.MinPlayerThrust)
                     {
                         _core.Actors.Player.Velocity.ThrottlePercentage -= Constants.PlayerThrustRampDown;
                         if (_core.Actors.Player.Velocity.ThrottlePercentage < 0)
-                        {
-                            _core.Actors.Player.Velocity.ThrottlePercentage = 0;
-                        }
-                    }
-                    else if (_core.Actors.Player.Velocity.ThrottlePercentage < 0)
-                    {
-                        _core.Actors.Player.Velocity.ThrottlePercentage += Constants.PlayerThrustRampDown;
-                        if (_core.Actors.Player.Velocity.ThrottlePercentage > 0)
                         {
                             _core.Actors.Player.Velocity.ThrottlePercentage = 0;
                         }
@@ -201,44 +191,10 @@ namespace AI2D.Engine
 
                     _core.Actors.Player.X += (_core.Actors.Player.Velocity.Angle.X * forwardThrust) - appliedOffset.X;
                     _core.Actors.Player.Y += (_core.Actors.Player.Velocity.Angle.Y * forwardThrust) - appliedOffset.Y;
-
-                    _core.Actors.Player.ShipEngineRoarSound.Play();
                 }
-                else if (_core.Actors.Player.Velocity.ThrottlePercentage < 0)
+
+                if (_core.Actors.Player.Velocity.ThrottlePercentage > Constants.Limits.MinPlayerThrust)
                 {
-                    //Do we really need to reverse? This is space!
-
-                    double reverseThrust = -(_core.Actors.Player.Velocity.MaxSpeed * _core.Actors.Player.Velocity.ThrottlePercentage);
-
-                    //Close to the right wall and travelling in that direction.
-                    if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + Constants.Limits.InfiniteScrollWall)
-                        && _core.Actors.Player.Velocity.Angle.X < 0)
-                    {
-                        appliedOffset.X = -(_core.Actors.Player.Velocity.Angle.X * reverseThrust);
-                    }
-
-                    //Close to the bottom wall and travelling in that direction.
-                    if (_core.Actors.Player.Y > _core.Display.VisibleSize.Height - (_core.Actors.Player.Size.Height + Constants.Limits.InfiniteScrollWall)
-                        && _core.Actors.Player.Velocity.Angle.Y < 0)
-                    {
-                        appliedOffset.Y = -(_core.Actors.Player.Velocity.Angle.Y * reverseThrust);
-                    }
-
-                    //Close to the left wall and travelling in that direction.
-                    if (_core.Actors.Player.X < Constants.Limits.InfiniteScrollWall && _core.Actors.Player.Velocity.Angle.X > 0)
-                    {
-                        appliedOffset.X = -(_core.Actors.Player.Velocity.Angle.X * reverseThrust);
-                    }
-
-                    //Close to the top wall and travelling in that direction.
-                    if (_core.Actors.Player.Y < Constants.Limits.InfiniteScrollWall && _core.Actors.Player.Velocity.Angle.Y > 0)
-                    {
-                        appliedOffset.Y = -(_core.Actors.Player.Velocity.Angle.Y * reverseThrust);
-                    }
-
-                    _core.Actors.Player.X -= (_core.Actors.Player.Velocity.Angle.X * reverseThrust) + appliedOffset.X;
-                    _core.Actors.Player.Y -= (_core.Actors.Player.Velocity.Angle.Y * reverseThrust) + appliedOffset.Y;
-
                     _core.Actors.Player.ShipEngineRoarSound.Play();
                 }
                 else
@@ -263,80 +219,9 @@ namespace AI2D.Engine
                 }
             }
 
-            #endregion
-
-            #region Quadrant Math.
-
             _core.Display.CurrentQuadrant = _core.Display.GetQuadrant(
                 _core.Actors.Player.X + _core.Display.BackgroundOffset.X,
                 _core.Actors.Player.Y + _core.Display.BackgroundOffset.Y);
-
-            if (_core.ShowDebug)
-            {
-                _core.Actors.DebugText.Text =
-                        $"       Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")},"
-                                        + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")},"
-                                        + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n"
-                    + $"Player Display XY: {_core.Actors.Player.X.ToString("#0.00")}x, {_core.Actors.Player.Y.ToString("#0.00")}y\r\n"
-                    + $"     Player Angle: {_core.Actors.Player.Velocity.Angle.X.ToString("#0.00")}x, {_core.Actors.Player.Velocity.Angle.Y.ToString("#0.00")}y, "
-                                        + $"{_core.Actors.Player.Velocity.Angle.Degrees.ToString("#0.00")}deg, "
-                                        + $" {_core.Actors.Player.Velocity.Angle.Radians.ToString("#0.00")}rad, "
-                                        + $" {_core.Actors.Player.Velocity.Angle.RadiansUnadjusted.ToString("#0.00")}rad unadjusted\r\n"
-                    + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
-                                        + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
-                    + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
-                    + $"  Delta BG Offset: {appliedOffset.X.ToString("#0.00")}x, {appliedOffset.Y.ToString("#0.00")}y\r\n"
-                    + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}";
-            }
-            else
-            {
-                if (_core.Actors.DebugText.Text != string.Empty)
-                {
-                    _core.Actors.DebugText.Text = string.Empty;
-                }
-            }
-
-            if (_core.Actors.Debugs.Count > 0)
-            {
-                var angleTo = _core.Actors.Player.AngleTo(_core.Actors.Debugs[0]);
-                var deltaAngle = _core.Actors.Player.DeltaAngle(_core.Actors.Debugs[0]);
-
-                var angleToXY = AngleD.DegreesToXY(angleTo);
-
-                _core.Actors.DebugText.Text = $"angleTo: {angleTo.ToString("#,##")} ( {angleToXY.X.ToString("#,##")}x,{angleToXY.Y.ToString("#,##")}y ) "
-                    + $"deltaAngle: {deltaAngle.ToString("#,##")}";
-            }
-
-            if (_core.Display.CurrentQuadrant.Key.X == -5
-                && _core.Display.CurrentQuadrant.Key.Y == -5)
-            {
-                if (_core.Actors.Enemies.Count < 10)
-                {
-                    _core.Actors.AddNewEnemy<EnemyScinzad>();
-                }
-            }
-            if (_core.Display.CurrentQuadrant.Key.X == 5
-                && _core.Display.CurrentQuadrant.Key.Y == 5)
-            {
-                if (_core.Actors.Enemies.Count < 10)
-                {
-                    var enemy = _core.Actors.AddNewEnemy<EnemyScinzad>();
-
-                    enemy.AddWeapon(new WeaponPhotonTorpedo(_core)
-                    {
-                        RoundQuantity = 10, //Could make the enemy retreat after running out of ammo?
-                        FireDelayMilliseconds = 500,
-                    });
-
-                    enemy.AddWeapon(new WeaponVulcanCannon(_core)
-                    {
-                        FireDelayMilliseconds = 250,
-                        //RoundQuantity = 100 //Could make the enemy retreat after running out of ammo?
-                    });
-
-                    enemy.SelectWeapon(typeof(WeaponPhotonTorpedo));
-                }
-            }
 
             #endregion
 
@@ -344,8 +229,9 @@ namespace AI2D.Engine
 
             lock (_core.Actors.EngineEvents)
             {
-                foreach (var engineEvent in _core.Actors.EngineEvents)
+                for(int i = 0; i < _core.Actors.EngineEvents.Count; i++)
                 {
+                    var engineEvent = _core.Actors.EngineEvents[i];
                     if (engineEvent.ReadyForDeletion == false)
                     {
                         engineEvent.CheckForTrigger();
@@ -376,7 +262,6 @@ namespace AI2D.Engine
 
                     if (enemy.Visable && enemy.ReadyForDeletion == false)
                     {
-
                         if (_core.Actors.Player.Visable && _core.Actors.Player.ReadyForDeletion == false)
                         {
                             enemy.ApplyIntelligence(appliedOffset);
@@ -404,6 +289,65 @@ namespace AI2D.Engine
 
                         enemy.ApplyMotion(appliedOffset);
                     }
+                }
+            }
+
+            #endregion
+
+            #region Radar Indicator Logic.
+
+            lock (_core.Actors.TextBlocks)
+            {
+                var overlappingIndicators = new Func<List<List<ObjRadarPositionTextBlock>>>(() =>
+                {
+                    var accountedFor = new HashSet<ObjRadarPositionTextBlock>();
+                    var groups = new List<List<ObjRadarPositionTextBlock>>();
+                    var radarTexts = _core.Actors.VisibleTextBlocksOfType<ObjRadarPositionTextBlock>();
+
+                    foreach (var parent in radarTexts)
+                    {
+                        if (accountedFor.Contains(parent) == false)
+                        {
+                            var group = new List<ObjRadarPositionTextBlock>();
+                            foreach (var child in radarTexts)
+                            {
+                                if (accountedFor.Contains(child) == false)
+                                {
+                                    if (parent != child && parent.Intersects(child, new PointD(100, 100)))
+                                    {
+                                        group.Add(child);
+                                        accountedFor.Add(child);
+                                    }
+                                }
+                            }
+                            if (group.Count > 0)
+                            {
+                                group.Add(parent);
+                                accountedFor.Add(parent);
+                                groups.Add(group);
+                            }
+                        }
+                    }
+                    return groups;
+                })();
+
+                if (overlappingIndicators.Count > 0)
+                {
+                    foreach (var group in overlappingIndicators)
+                    {
+                        var min = group.Min(o => o.DistanceValue);
+                        var max = group.Min(o => o.DistanceValue);
+
+                        foreach (var member in group)
+                        {
+                            member.Visable = false;
+                        }
+
+                        group[0].Text = min.ToString("#,#") + "-" + max.ToString("#,#");
+                        group[0].Visable = true;
+                    }
+
+                    Console.WriteLine(";");
                 }
             }
 
@@ -437,7 +381,7 @@ namespace AI2D.Engine
             {
                 lock (_core.Actors.Stars)
                 {
-                    if (_core.Actors.Stars.Count < 100) //Never wan't more than n stars.
+                    if (_core.Actors.Stars.Count < 30) //Never wan't more than n stars.
                     {
                         if (appliedOffset.X > 0)
                         {
@@ -497,8 +441,8 @@ namespace AI2D.Engine
                             star.ReadyForDeletion = true;
                         }
 
-                        star.X -= appliedOffset.X;
-                        star.Y -= appliedOffset.Y;
+                        star.X -= appliedOffset.X * star.Velocity.ThrottlePercentage;
+                        star.Y -= appliedOffset.Y * star.Velocity.ThrottlePercentage;
                     }
                 }
             }
@@ -518,6 +462,31 @@ namespace AI2D.Engine
                         animation.AdvanceImage();
                     }
                 }
+            }
+
+            #endregion
+
+            #region Text Block Frame Advancement.
+
+            lock (_core.Actors.TextBlocks)
+            {
+                foreach (var textBlock in _core.Actors.TextBlocks)
+                {
+                    if (textBlock.Visable && textBlock.IsPositionStatic == false)
+                    {
+                        textBlock.X += (textBlock.Velocity.Angle.X * (textBlock.Velocity.MaxSpeed * textBlock.Velocity.ThrottlePercentage)) - appliedOffset.X;
+                        textBlock.Y += (textBlock.Velocity.Angle.Y * (textBlock.Velocity.MaxSpeed * textBlock.Velocity.ThrottlePercentage)) - appliedOffset.Y;
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Offscreen Radar Indicator.
+
+            if (_core.Actors.RadarPositionIndicators.Count < 1)
+            {
+                _core.Actors.AddNewRadarPositionIndicator();
             }
 
             #endregion
@@ -589,27 +558,47 @@ namespace AI2D.Engine
 
             #endregion
 
-            string scenarioName = _core.CurrentScenario == null ? "<none>" : _core.CurrentScenario.Name;
+            string scenario = _core.CurrentScenario == null ? "<none>" : _core.CurrentScenario.Name;
+
+            if (scenario != "<none>")
+            {
+                scenario += $" (Wave {_core.CurrentScenario.CurrentWave} of {_core.CurrentScenario.TotalWaves})";
+            }
 
             _core.Actors.PlayerStatsText.Text =
-                $"Scenario: {scenarioName}, "
+                $"Scenario: {scenario}, "
                 + $"HP: {_core.Actors.Player.HitPoints}, "
                 + $"Weapon: {_core.Actors.Player.CurrentWeapon?.Name} X{_core.Actors.Player.CurrentWeapon?.RoundQuantity}, "
                 + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "
                 + $"Score: {_core.Actors.Player.Score.ToString("#,0")}";
 
 #if DEBUG
-            if (_core.Actors.Debugs.Count > 0 && false)
+            if (_core.ShowDebug)
             {
-                var pointRight = Utility.AngleFromPointAtDistance(_core.Actors.Player.Velocity.Angle + 90, new PointD(50, 50));
-                _core.Actors.Debugs[0].Location = _core.Actors.Player.Location + pointRight;
-                _core.Actors.Debugs[0].Velocity.Angle = _core.Actors.Player.Velocity.Angle;
-
-                var pointLeft = Utility.AngleFromPointAtDistance(_core.Actors.Player.Velocity.Angle - 90, new PointD(50, 50));
-                _core.Actors.Debugs[1].Location = _core.Actors.Player.Location + pointLeft;
-                _core.Actors.Debugs[1].Velocity.Angle = _core.Actors.Player.Velocity.Angle;
+                _core.Actors.DebugText.Text =
+                        $"       Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")},"
+                                        + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")},"
+                                        + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n"
+                    + $"Player Display XY: {_core.Actors.Player.X.ToString("#0.00")}x, {_core.Actors.Player.Y.ToString("#0.00")}y\r\n"
+                    + $"     Player Angle: {_core.Actors.Player.Velocity.Angle.X.ToString("#0.00")}x, {_core.Actors.Player.Velocity.Angle.Y.ToString("#0.00")}y, "
+                                        + $"{_core.Actors.Player.Velocity.Angle.Degrees.ToString("#0.00")}deg, "
+                                        + $" {_core.Actors.Player.Velocity.Angle.Radians.ToString("#0.00")}rad, "
+                                        + $" {_core.Actors.Player.Velocity.Angle.RadiansUnadjusted.ToString("#0.00")}rad unadjusted\r\n"
+                    + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
+                                        + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
+                    + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
+                    + $"  Delta BG Offset: {appliedOffset.X.ToString("#0.00")}x, {appliedOffset.Y.ToString("#0.00")}y\r\n"
+                    + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}";
+            }
+            else
+            {
+                if (_core.Actors.DebugText.Text != string.Empty)
+                {
+                    _core.Actors.DebugText.Text = string.Empty;
+                }
             }
 #endif
+
         }
     }
 }

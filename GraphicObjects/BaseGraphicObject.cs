@@ -70,6 +70,14 @@ namespace AI2D.GraphicObjects
             }
         }
 
+        public bool IsOnScreen
+        {
+            get
+            {
+                return _core.Display.VisibleBounds.IntersectsWith(Bounds);
+            }
+        }
+
         private PointD _location = new PointD();
 
         /// <summary>
@@ -126,7 +134,7 @@ namespace AI2D.GraphicObjects
         }
 
         private Size _size;
-        public Size Size
+        public virtual Size Size
         {
             get
             {
@@ -150,7 +158,7 @@ namespace AI2D.GraphicObjects
         {
             get
             {
-                return _isVisible;
+                return _isVisible && !_readyForDeletion;
             }
             set
             {
@@ -209,6 +217,16 @@ namespace AI2D.GraphicObjects
             {
                 existing.RoundQuantity += weapon.RoundQuantity;
             }
+        }
+
+        public int TotalAvailableRounds()
+        {
+            return (from o in _weapons select o.RoundQuantity).Sum();
+        }
+
+        public int TotalFiresRounds()
+        {
+            return (from o in _weapons select o.RoundsFired).Sum();
         }
 
         public WeaponBase SelectNextAvailableUsableWeapon()
@@ -316,6 +334,27 @@ namespace AI2D.GraphicObjects
             return false;
         }
 
+        /// <summary>
+        /// Allows for intersect detection with larger/smaller "hit box".
+        /// </summary>
+        /// <param name="otherObject"></param>
+        /// <param name="sizeAdjust"></param>
+        /// <returns></returns>
+        public bool Intersects(BaseGraphicObject otherObject, PointD sizeAdjust)
+        {
+            if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
+            {
+                var alteredHitBox = new RectangleF(
+                    otherObject.Bounds.X - (float)(sizeAdjust.X / 2),
+                    otherObject.Bounds.Y - (float)(sizeAdjust.Y / 2),
+                    otherObject.Bounds.Width + (float)(sizeAdjust.X / 2),
+                    otherObject.Bounds.Height + (float)(sizeAdjust.Y / 2));
+
+                return this.Bounds.IntersectsWith(alteredHitBox);
+            }
+            return false;
+        }
+
         #region Actions.
 
         /// <summary>
@@ -385,7 +424,7 @@ namespace AI2D.GraphicObjects
         }
 
         /// <summary>
-        /// Calculates the angle of one objects location to another location.
+        /// Calculates the angle in degrees of one objects location to another location.
         /// </summary>
         /// <param name="atObj"></param>
         /// <returns></returns>
@@ -403,6 +442,10 @@ namespace AI2D.GraphicObjects
         {
             return PointD.DistanceTo(this.Location, to.Location);
         }
+        public double DistanceTo(PointD to)
+        {
+            return PointD.DistanceTo(this.Location, to);
+        }
 
         public void Explode()
         {
@@ -417,7 +460,7 @@ namespace AI2D.GraphicObjects
             ReadyForDeletion = true;
         }
 
-        public void Cleanup()
+        public virtual void Cleanup()
         {
             Visable = false;
             this.Invalidate(); //Don't think this is necessary. Just seems right.

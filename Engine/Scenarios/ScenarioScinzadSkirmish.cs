@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace AI2D.Engine.Scenarios
 {
-    public class ScenarioAvvolAmbush : BaseScenario
+    public class ScenarioScinzadSkirmish : BaseScenario
     {
-        public ScenarioAvvolAmbush(Core core)
-            : base(core, "Avvol Ambush")
+        public ScenarioScinzadSkirmish(Core core)
+            : base(core, "Scinzad Skirmish")
         {
             TotalWaves = 5;
         }
@@ -66,7 +66,7 @@ namespace AI2D.Engine.Scenarios
 
         private void AddEnemyCallback(Core core, object refObj)
         {
-            _core.Actors.AddNewEnemy<EnemyAvvol>();
+            _core.Actors.AddNewEnemy<EnemyScinzad>();
         }
     }
 }

@@ -122,6 +122,17 @@ namespace AI2D.Engine
             return PointD.AngleTo(from.Location, to.Location);
         }
 
+        public static double AngleTo(PointD from, BaseGraphicObject to)
+        {
+            return PointD.AngleTo(from, to.Location);
+        }
+
+        public static double AngleTo(BaseGraphicObject from, PointD to)
+        {
+            return PointD.AngleTo(from.Location, to);
+        }
+
+
         public static bool IsPointingAt(BaseGraphicObject fromObj, BaseGraphicObject atObj, double toleranceDegrees)
         {
             var deltaAngle = Math.Abs(DeltaAngle(fromObj, atObj));
@@ -156,6 +167,13 @@ namespace AI2D.Engine
         #endregion
 
         #region Random.
+
+
+        public static bool ChanceIn(int n)
+        {
+            return (Random.Next(0, n * 10) % n) == n/2;
+        }
+
 
         public static Random Random = new Random();
         public static bool FlipCoin()

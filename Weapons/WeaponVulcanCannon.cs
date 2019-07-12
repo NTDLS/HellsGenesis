@@ -11,7 +11,7 @@ namespace AI2D.Weapons
             : base(core, "Vulcan Cannon", soundPath, soundVolumne)
         {
             RoundQuantity = 500;
-            Damage = 1;
+            Damage = 2;
             FireDelayMilliseconds = 100;
         }
     }

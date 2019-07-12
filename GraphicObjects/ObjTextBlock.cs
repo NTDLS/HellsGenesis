@@ -11,6 +11,8 @@ namespace AI2D.GraphicObjects
         private Graphics _genericDC; //Not used for drawing, only measuring.
         private Brush _color;
 
+        public bool IsPositionStatic { get; set; }
+
         #region Properties.
 
         double _height = 0;
@@ -28,7 +30,7 @@ namespace AI2D.GraphicObjects
 
         private string _lastTextSizeCheck;
         private Size _size = Size.Empty;
-        public new Size Size
+        public override Size Size
         {
             get
             {
@@ -70,9 +72,10 @@ namespace AI2D.GraphicObjects
 
         #endregion
 
-        public ObjTextBlock(Core core, string font, Brush color, double size, double x, double y)
+        public ObjTextBlock(Core core, string font, Brush color, double size, double x, double y, bool isPositionStatic)
             : base(core)
         {
+            IsPositionStatic = isPositionStatic;
             X = x;
             Y = y;
             _color = color;
@@ -82,7 +85,12 @@ namespace AI2D.GraphicObjects
 
         public new void Render(Graphics dc)
         {
-            dc.DrawString(_text, _font, _color, (float)X, (float)Y);
+            if (Visable)
+            {
+                dc.DrawString(_text, _font, _color, (float)X, (float)Y);
+
+                //TODO: Rotate text is required.
+            }
         }
     }
 }

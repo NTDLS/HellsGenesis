@@ -12,7 +12,7 @@
 
         protected Core _core;
         public int CurrentWave { get; set; } = 0;
-        public int Waves { get; set; } = 1;
+        public int TotalWaves { get; set; } = 1;
         public ScenarioState State { get; protected set; } = ScenarioState.NotStarted;
 
         public BaseScenario(Core core, string name)

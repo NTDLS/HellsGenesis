@@ -19,7 +19,7 @@ namespace AI2D.Weapons
             : base(core, "Guided Frag Missile", soundPath, soundVolumne)
         {
             RoundQuantity = 500;
-            Damage = 25;
+            Damage = 10;
             FireDelayMilliseconds = 1000;
             Speed = 6;
 

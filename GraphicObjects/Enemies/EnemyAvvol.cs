@@ -6,6 +6,10 @@ using System.Linq;
 
 namespace AI2D.GraphicObjects.Enemies
 {
+    /// <summary>
+    /// These are a heavy fighting unit, employing various types of weapons and seemingly various stratigies.
+    /// They like to stay at a medium range. Some units have seeking-missiles.
+    /// </summary>
     public class EnemyAvvol : BaseEnemy
     {
         public const int ScoreMultiplier = 25;
@@ -28,7 +32,7 @@ namespace AI2D.GraphicObjects.Enemies
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
             HitPoints = Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth);
             SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
-           
+            Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 4, Constants.Limits.MaxSpeed - 2); //Upper end of the speed spectrum.
 
             AddWeapon(new WeaponPhotonTorpedo(_core)
             {
@@ -59,6 +63,8 @@ namespace AI2D.GraphicObjects.Enemies
 
             SelectWeapon(typeof(WeaponVulcanCannon));
         }
+
+        #region Artificial Intelligence.
 
         enum AIMode
         {
@@ -178,5 +184,7 @@ namespace AI2D.GraphicObjects.Enemies
                 }
             }
         }
+
+        #endregion
     }
 }

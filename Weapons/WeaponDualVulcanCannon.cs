@@ -12,7 +12,7 @@ namespace AI2D.Weapons
             : base(core, "Dual Vulcan", soundPath, soundVolumne)
         {
             RoundQuantity = 500;
-            Damage = 1;
+            Damage = 2;
             FireDelayMilliseconds = 150;
         }
 

@@ -14,7 +14,7 @@ namespace AI2D.Weapons
             : base(core, "Photon Torpedo", soundPath, soundVolumne)
         {
             RoundQuantity = 10;
-            Damage = 5;
+            Damage = 15;
             FireDelayMilliseconds = 500;
         }
 
