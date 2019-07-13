@@ -24,8 +24,8 @@ namespace AI2D.Engine.Scenarios
             _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
 
             //Keep track of recurring events to we can delete them when we are done.
-            events.Add(_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 0),
-                AddFreshEnemiesCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring));
+            _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 1),
+                AdvanceWaveCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring);
 
             events.Add(_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5),
                 RedirectFormationCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring));
@@ -65,9 +65,11 @@ namespace AI2D.Engine.Scenarios
             _core.Actors.ResetAndShowPlayer();
         }
 
-        private void AddFreshEnemiesCallback(Core core, object refObj)
+        bool waitingOnPopulation = false;
+
+        private void AdvanceWaveCallback(Core core, object refObj)
         {
-            if (_core.Actors.Enemies.Count == 0)
+            if (_core.Actors.Enemies.Count == 0 && !waitingOnPopulation)
             {
                 if (CurrentWave == TotalWaves)
                 {
@@ -75,10 +77,17 @@ namespace AI2D.Engine.Scenarios
                     return;
                 }
 
-                PointD baseLocation = _core.Display.RandomOffScreenLocation();
-                CreateTriangleFormation(baseLocation, 40);
+                waitingOnPopulation = true;
+                _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
                 CurrentWave++;
             }
+        }
+
+        private void AddFreshEnemiesCallback(Core core, object refObj)
+        {
+            PointD baseLocation = _core.Display.RandomOffScreenLocation();
+            CreateTriangleFormation(baseLocation, 100 - ((CurrentWave + 1) * 10), (int)((CurrentWave + 1) * 1.5));
+            waitingOnPopulation = false;
         }
 
         private EnemyIrlen AddOneEnemyAt(double x, double y, double angle)
@@ -92,13 +101,13 @@ namespace AI2D.Engine.Scenarios
             return enemy;
         }
 
-        private void CreateTriangleFormation(PointD baseLocation, double spacing)
+        private void CreateTriangleFormation(PointD baseLocation, double spacing, int depth)
         {
             double angle = Utility.AngleTo(baseLocation, _core.Actors.Player);
 
-            for (int col = 0; col < 8; col++)
+            for (int col = 0; col < depth; col++)
             {
-                for (int row = 0; row < (8 - col); row++)
+                for (int row = 0; row < (depth - col); row++)
                 {
                     AddOneEnemyAt(baseLocation.X + (col * spacing),
                         baseLocation.Y + (row * spacing) + (col * spacing / 2),

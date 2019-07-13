@@ -75,14 +75,11 @@ namespace AI2D.GraphicObjects.Enemies
             {
                 //Since we need to handle the entire "platoon" of formation ships all at once, a good
                 //  deal of this AI is handled by the Scenerio engine(s). (see: ScenarioIrlenFormations).
-                if (distanceToPlayer < 500 && Utility.ChanceIn(10000))
+                if (distanceToPlayer < 500 && Utility.ChanceIn(10000) || HitPoints != initialHitPoints)
                 {
-                    Mode = AIMode.Approaching;
-                }
-
-                if (HitPoints != initialHitPoints)
-                {
-                    Mode = AIMode.Approaching;
+                    Mode = AIMode.MovingToFallback;
+                    fallToAngle = Velocity.Angle + (180.0 + Utility.RandomNumberNegative(0, 10));
+                    fallbackDistance = baseFallbackDistance * (Utility.Random.NextDouble() + 1);
                 }
             }
 

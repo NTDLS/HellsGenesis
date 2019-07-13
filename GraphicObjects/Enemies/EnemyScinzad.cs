@@ -108,7 +108,6 @@ namespace AI2D.GraphicObjects.Enemies
                 }
 
                 //We we get too close, do too much damage or they fire at us enough, they fall back and come in again
-
                 if (distanceToPlayer < (distanceToKeep / 2.0)
                     || (hpRemainingBeforeTailing - this.HitPoints) > 2
                     || (bulletsRemainingBeforeTailing - this.TotalAvailableRounds()) > 15)
