@@ -119,9 +119,6 @@ namespace AI2D.Engine
 
             if (_core.Actors.Player.Visable)
             {
-                _core.Actors.Player.IsLockedOn = false;
-                _core.Actors.Player.IsLockedOnSoft = false;
-
                 if (_core.Input.IsKeyPressed(PlayerKey.Fire))
                 {
                     if (_core.Actors.Player.CurrentWeapon != null && _core.Actors.Player.CurrentWeapon.Fire())
@@ -256,9 +253,6 @@ namespace AI2D.Engine
                     {
                         enemy.CurrentWeapon.LockedOnObjects.Clear();
                     }
-
-                    enemy.IsLockedOn = false;
-                    enemy.IsLockedOnSoft = false;
 
                     if (enemy.Visable && enemy.ReadyForDeletion == false)
                     {

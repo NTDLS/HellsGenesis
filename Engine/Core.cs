@@ -1,4 +1,5 @@
 ﻿using AI2D.Engine.Scenarios;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -105,11 +106,17 @@ namespace AI2D.Engine
             if (_currentScenarioIndex >= Scenarios.Count)
             {
                 _currentScenarioIndex = -1;
+                Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5), TheDoorIsAjarCallback);
             }
             else
             {
                 Scenarios[_currentScenarioIndex].Execute();
             }
+        }
+
+        private void TheDoorIsAjarCallback(Core core, object refObj)
+        {
+            Actors.DoorIsAjarSound.Play();
         }
 
         public BaseScenario CurrentScenario

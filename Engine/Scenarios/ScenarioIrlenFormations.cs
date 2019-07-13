@@ -87,6 +87,7 @@ namespace AI2D.Engine.Scenarios
         {
             PointD baseLocation = _core.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - ((CurrentWave + 1) * 10), (int)((CurrentWave + 1) * 1.5));
+            _core.Actors.RadarBlipsSound.Play();
             waitingOnPopulation = false;
         }
 

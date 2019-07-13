@@ -23,7 +23,7 @@ namespace AI2D.GraphicObjects
         private int _MilisecondsBetweenHits = 100;
         private AudioClip _hitSound;
         private readonly List<WeaponBase> _weapons = new List<WeaponBase>();
-        public bool IsLockedOn { get; set; } //The object is the subject of a foreign weapons lock.
+
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
 
         private const string _assetExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
@@ -52,6 +52,23 @@ namespace AI2D.GraphicObjects
         public WeaponBase CurrentWeapon { get; private set; }
         public int HitPoints { get; set; }
         public VelocityD Velocity { get; set; } = new VelocityD();
+
+        bool _isLockedOn = false;
+        public bool IsLockedOn //The object is the subject of a foreign weapons lock.
+        {
+            get
+            {
+                return _isLockedOn;
+            }
+            set
+            {
+                if (_isLockedOn == false && value == true)
+                {
+                    _core.Actors.LockedOnBlip.Play();
+                }
+                _isLockedOn = value;
+            }
+        }
 
         private bool _readyForDeletion;
         public bool ReadyForDeletion

@@ -43,6 +43,9 @@ namespace AI2D.Weapons
 
         public virtual void ApplyIntelligence(PointD frameAppliedOffset, BaseGraphicObject wouldFireAt)
         {
+            bool lockOn = false;
+            bool softLockOn = false;
+
             if (this.CanLockOn)
             {
                 if (this._owner.IsPointingAt(wouldFireAt, this.MaxLockOnAngle))
@@ -52,16 +55,20 @@ namespace AI2D.Weapons
                     {
                         if (this.LockedOnObjects.Count < this.MaxLocks)
                         {
-                            wouldFireAt.IsLockedOn = true;
+                            lockOn = true;
                             this.LockedOnObjects.Add(wouldFireAt);
                         }
                         else
                         {
+                            softLockOn = true;
                             wouldFireAt.IsLockedOnSoft = true;
                         }
                     }
                 }
             }
+
+            wouldFireAt.IsLockedOn = lockOn;
+            wouldFireAt.IsLockedOnSoft = softLockOn;
         }
 
         public virtual bool Fire()

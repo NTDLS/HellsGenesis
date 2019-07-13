@@ -60,6 +60,8 @@ namespace AI2D.Engine.Scenarios
                     _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, Utility.RandomNumber(0, 800)), AddEnemyCallback);
                 }
 
+                _core.Actors.RadarBlipsSound.Play();
+
                 CurrentWave++;
             }
         }

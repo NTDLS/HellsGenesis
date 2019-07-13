@@ -25,8 +25,11 @@ namespace AI2D.Engine
         public List<BaseBullet> Bullets { get; private set; } = new List<BaseBullet>();
         public ObjPlayer Player { get; private set; }
         public AudioClip BackgroundMusicSound { get; private set; }
+        public AudioClip RadarBlipsSound { get; private set; }
+        public AudioClip DoorIsAjarSound { get; private set; }
         public ObjTextBlock PlayerStatsText { get; private set; }
         public ObjTextBlock DebugText { get; private set; }
+        public AudioClip LockedOnBlip { get; private set; }
 
         public EngineActors(Core core)
         {
@@ -36,6 +39,10 @@ namespace AI2D.Engine
         public void Start()
         {
             Player = new ObjPlayer(_core) { Visable = false };
+
+            DoorIsAjarSound = GetSoundCached(@"..\..\Assets\Sounds\Door Is Ajar.wav", 0.50f, false);
+            RadarBlipsSound = GetSoundCached(@"..\..\Assets\Sounds\Radar Blips.wav", 0.20f, false);
+            LockedOnBlip = GetSoundCached(@"..\..\Assets\Sounds\Locked On.wav", 0.20f, false);
 
             BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
 
