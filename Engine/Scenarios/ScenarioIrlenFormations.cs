@@ -13,8 +13,6 @@ namespace AI2D.Engine.Scenarios
             TotalWaves = 5;
         }
 
-        List<EngineCallbackEvent> events = new List<EngineCallbackEvent>();
-
         public override void Execute()
         {
             State = ScenarioState.Running;
@@ -27,19 +25,10 @@ namespace AI2D.Engine.Scenarios
             _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 1),
                 AdvanceWaveCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring);
 
-            events.Add(_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5),
+            Events.Add(_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5),
                 RedirectFormationCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring));
         }
 
-        private void Stop()
-        {
-            foreach (var obj in events)
-            {
-                obj.ReadyForDeletion = true;
-            }
-
-            State = ScenarioState.Ended;
-        }
 
         private void RedirectFormationCallback(Core core, object refObj)
         {
@@ -73,7 +62,7 @@ namespace AI2D.Engine.Scenarios
             {
                 if (CurrentWave == TotalWaves)
                 {
-                    Stop();
+                    Cleanup();
                     return;
                 }
 

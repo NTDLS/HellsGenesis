@@ -1,4 +1,5 @@
-﻿using AI2D.Engine.Scenarios;
+﻿using AI2D.Engine.Menus;
+using AI2D.Engine.Scenarios;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,9 +16,9 @@ namespace AI2D.Engine
         public bool IsRunning { get; private set; } = false;
         public bool ShowDebug { get; set; } = false;
         public object DrawingSemaphore { get; set; } = new object();
+        public BaseScenario CurrentScenario { get; private set; }
 
         private EngineThread _engineThread;
-        public int _currentScenarioIndex = -1;
 
         #region Events.
 
@@ -36,9 +37,26 @@ namespace AI2D.Engine
             Input = new EngineInput(this);
             _engineThread = new EngineThread(this);
 
+            Actors.InsertMenu(new MenuStartNewGame(this));
+        }
+
+        public void ClearScenarios()
+        {
+            CurrentScenario = null;
+            Scenarios.Clear();
+        }
+
+        public void NewGame()
+        {
+            ClearScenarios();
+
             Scenarios.Add(new ScenarioIrlenFormations(this));
             Scenarios.Add(new ScenarioScinzadSkirmish(this));
             Scenarios.Add(new ScenarioAvvolAmbush(this));
+
+            Actors.DeletaAllActors();
+
+            AdvanceScenario();
         }
 
         public void Start()
@@ -50,8 +68,6 @@ namespace AI2D.Engine
                 Actors.ResetPlayer();
 
                 _engineThread.Start();
-
-                AdvanceScenario();
 
                 //This is debug stuff. Will be moved to a logic engine.
                 //_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 0),
@@ -102,34 +118,26 @@ namespace AI2D.Engine
 
         public void AdvanceScenario()
         {
-            _currentScenarioIndex++;
-            if (_currentScenarioIndex >= Scenarios.Count)
+            if (CurrentScenario != null)
             {
-                _currentScenarioIndex = -1;
-                Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5), TheDoorIsAjarCallback);
+                Scenarios.Remove(CurrentScenario);
+            }
+
+            if (Scenarios.Count > 0)
+            {
+                CurrentScenario = Scenarios[0];
+                CurrentScenario.Execute();
             }
             else
             {
-                Scenarios[_currentScenarioIndex].Execute();
+                Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5), TheDoorIsAjarCallback);
             }
         }
 
         private void TheDoorIsAjarCallback(Core core, object refObj)
         {
             Actors.DoorIsAjarSound.Play();
+            Actors.InsertMenu(new MenuStartNewGame(this));
         }
-
-        public BaseScenario CurrentScenario
-        {
-            get
-            {
-                if (_currentScenarioIndex >= 0 && _currentScenarioIndex < Scenarios.Count)
-                {
-                    return Scenarios[_currentScenarioIndex];
-                }
-                return null;
-            }
-        }
-
     }
 }

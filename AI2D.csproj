@@ -63,6 +63,7 @@
     <Compile Include="Engine\FrameCounter.cs" />
     <Compile Include="Engine\EngineActors.cs" />
     <Compile Include="Engine\EngineThread.cs" />
+    <Compile Include="Engine\Menus\MenuStartNewGame.cs" />
     <Compile Include="Engine\Scenarios\BaseScenario.cs" />
     <Compile Include="Engine\Scenarios\ScenarioScinzadSkirmish.cs" />
     <Compile Include="Engine\Scenarios\ScenarioIrlenFormations.cs" />
@@ -83,7 +84,9 @@
     <Compile Include="Engine\Utility.cs" />
     <Compile Include="GraphicObjects\Bullets\BaseBullet.cs" />
     <Compile Include="GraphicObjects\ObjDebug.cs" />
+    <Compile Include="Engine\Menus\BaseMenu.cs" />
     <Compile Include="GraphicObjects\ObjRadarPositionIndicator.cs" />
+    <Compile Include="GraphicObjects\ObjMenuItem.cs" />
     <Compile Include="GraphicObjects\ObjRadarPositionTextBlock.cs" />
     <Compile Include="GraphicObjects\ObjStar.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

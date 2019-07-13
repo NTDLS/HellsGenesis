@@ -1,4 +1,5 @@
 ﻿using AI2D.Engine;
+using AI2D.Types;
 using System;
 using System.Drawing;
 
@@ -72,12 +73,11 @@ namespace AI2D.GraphicObjects
 
         #endregion
 
-        public ObjTextBlock(Core core, string font, Brush color, double size, double x, double y, bool isPositionStatic)
+        public ObjTextBlock(Core core, string font, Brush color, double size, PointD location, bool isPositionStatic)
             : base(core)
         {
             IsPositionStatic = isPositionStatic;
-            X = x;
-            Y = y;
+            Location = new PointD(location);
             _color = color;
             _font = new Font(font, (float)size);
             _genericDC = _core.Display.DrawingSurface.CreateGraphics();

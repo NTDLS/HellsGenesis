@@ -1,12 +1,13 @@
 ﻿using AI2D.Engine;
+using AI2D.Types;
 using System.Drawing;
 
 namespace AI2D.GraphicObjects
 {
     public class ObjRadarPositionTextBlock: ObjTextBlock
     {
-        public ObjRadarPositionTextBlock(Core core, string font, Brush color, double size, double x, double y)
-            : base(core, font, color, size, x, y, false)
+        public ObjRadarPositionTextBlock(Core core, string font, Brush color, double size, PointD location)
+            : base(core, font, color, size, location, false)
         {
             Visable = false;
             Velocity = new Types.VelocityD();

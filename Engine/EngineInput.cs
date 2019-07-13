@@ -108,7 +108,7 @@ namespace AI2D.Engine
 
             if (key == Keys.F1)
             {
-                _core.Actors.CleanupActors();
+                _core.Actors.DeletaAllActors();
                 _core.Actors.ResetAndShowPlayer();
             }
             if (key == Keys.F12)

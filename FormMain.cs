@@ -8,7 +8,7 @@ namespace AI2D
     public partial class FormMain : Form
     {
         private Core _core;
-        private bool _fullScreen = true;
+        private bool _fullScreen = false;
 
         //This really shouldn't be necessary! :(
         protected override CreateParams CreateParams
@@ -50,7 +50,10 @@ namespace AI2D
 
         private void _core_OnStop(Core sender)
         {
-            this.Close();
+            this.Invoke((MethodInvoker)delegate
+            {
+                this.Close();
+            });
         }
 
         private void FormMain_Shown(object sender, EventArgs e)
@@ -71,6 +74,11 @@ namespace AI2D
             if (e.KeyCode == Keys.D) _core.Input.KeyStateChanged(Types.PlayerKey.RotateClockwise, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(Types.PlayerKey.Fire, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(Types.PlayerKey.Escape, Types.KeyPressState.Down);
+            if (e.KeyCode == Keys.Left) _core.Input.KeyStateChanged(Types.PlayerKey.Left, Types.KeyPressState.Down);
+            if (e.KeyCode == Keys.Right) _core.Input.KeyStateChanged(Types.PlayerKey.Right, Types.KeyPressState.Down);
+            if (e.KeyCode == Keys.Up) _core.Input.KeyStateChanged(Types.PlayerKey.Up, Types.KeyPressState.Down);
+            if (e.KeyCode == Keys.Down) _core.Input.KeyStateChanged(Types.PlayerKey.Down, Types.KeyPressState.Down);
+            if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(Types.PlayerKey.Enter, Types.KeyPressState.Down);
 
             _core.Input.DebugKeyPress(e.KeyCode);
         }
@@ -97,6 +105,11 @@ namespace AI2D
             if (e.KeyCode == Keys.D) _core.Input.KeyStateChanged(Types.PlayerKey.RotateClockwise, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(Types.PlayerKey.Fire, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(Types.PlayerKey.Escape, Types.KeyPressState.Up);
+            if (e.KeyCode == Keys.Left) _core.Input.KeyStateChanged(Types.PlayerKey.Left, Types.KeyPressState.Up);
+            if (e.KeyCode == Keys.Right) _core.Input.KeyStateChanged(Types.PlayerKey.Right, Types.KeyPressState.Up);
+            if (e.KeyCode == Keys.Up) _core.Input.KeyStateChanged(Types.PlayerKey.Up, Types.KeyPressState.Up);
+            if (e.KeyCode == Keys.Down) _core.Input.KeyStateChanged(Types.PlayerKey.Down, Types.KeyPressState.Up);
+            if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(Types.PlayerKey.Enter, Types.KeyPressState.Up);
         }
 
         private void FormMain_MouseEnter(object sender, EventArgs e)

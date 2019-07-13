@@ -7,14 +7,16 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
+using AI2D.Engine.Menus;
 
 namespace AI2D.Engine
 {
     public class EngineActors
     {
         private Core _core;
-        private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
-        private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
+
+        #region Actors.
+
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
         public List<ObjTextBlock> TextBlocks { get; private set; } = new List<ObjTextBlock>();
         public List<BaseEnemy> Enemies { get; private set; } = new List<BaseEnemy>();
@@ -23,13 +25,25 @@ namespace AI2D.Engine
         public List<ObjAnimation> Animations { get; private set; } = new List<ObjAnimation>();
         public List<ObjRadarPositionIndicator> RadarPositionIndicators { get; set; } = new List<ObjRadarPositionIndicator>();
         public List<BaseBullet> Bullets { get; private set; } = new List<BaseBullet>();
+        public List<BaseMenu> Menus { get; private set; } = new List<BaseMenu>();
         public ObjPlayer Player { get; private set; }
+        public ObjTextBlock PlayerStatsText { get; private set; }
+        public ObjTextBlock DebugText { get; private set; }
+
+        #endregion
+
+        #region Resources.
+
         public AudioClip BackgroundMusicSound { get; private set; }
         public AudioClip RadarBlipsSound { get; private set; }
         public AudioClip DoorIsAjarSound { get; private set; }
-        public ObjTextBlock PlayerStatsText { get; private set; }
-        public ObjTextBlock DebugText { get; private set; }
         public AudioClip LockedOnBlip { get; private set; }
+
+        private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
+        private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
+
+
+        #endregion
 
         public EngineActors(Core core)
         {
@@ -46,8 +60,8 @@ namespace AI2D.Engine
 
             BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
 
-            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 10, 5, 5, true);
-            DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, 5, PlayerStatsText.Y + PlayerStatsText.Height + 10, true);
+            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 10, new PointD(5,5), true);
+            DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, new PointD(5, PlayerStatsText.Y + PlayerStatsText.Height + 10), true);
 
             BackgroundMusicSound.Play();
         }
@@ -81,11 +95,11 @@ namespace AI2D.Engine
             Player.SelectWeapon(typeof(WeaponVulcanCannon));
         }
 
-        public void CleanupActors()
+        public void DeletaAllActors()
         {
-            CleanupEnemies();
-            CleanupBullets();
-            CleanupAnimations();
+            DeletaAllEnemies();
+            DeletaAllBullets();
+            DeletaAllAnimations();
         }
 
         public void ResetAndShowPlayer()
@@ -122,7 +136,7 @@ namespace AI2D.Engine
                     select o as T).ToList();
         }
 
-        public void CleanupEnemies()
+        public void DeletaAllEnemies()
         {
             lock (Enemies)
             {
@@ -132,7 +146,7 @@ namespace AI2D.Engine
                 }
             }
         }
-        public void CleanupBullets()
+        public void DeletaAllBullets()
         {
             lock (Bullets)
             {
@@ -142,7 +156,7 @@ namespace AI2D.Engine
                 }
             }
         }
-        public void CleanupAnimations()
+        public void DeletaAllAnimations()
         {
             lock (Animations)
             {
@@ -299,21 +313,21 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjRadarPositionTextBlock AddNewRadarPositionTextBlock(string font, Brush color, double size, double x, double y)
+        public ObjRadarPositionTextBlock AddNewRadarPositionTextBlock(string font, Brush color, double size, PointD location)
         {
             lock (TextBlocks)
             {
-                var obj = new ObjRadarPositionTextBlock(_core, font, color, size, x, y);
+                var obj = new ObjRadarPositionTextBlock(_core, font, color, size, location);
                 TextBlocks.Add(obj);
                 return obj;
             }
         }
 
-        public ObjTextBlock AddNewTextBlock(string font, Brush color, double size, double x, double y, bool isPositionStatic)
+        public ObjTextBlock AddNewTextBlock(string font, Brush color, double size, PointD location, bool isPositionStatic)
         {
             lock (TextBlocks)
             {
-                var obj = new ObjTextBlock(_core, font, color, size, x, y, isPositionStatic);
+                var obj = new ObjTextBlock(_core, font, color, size, location, isPositionStatic);
                 TextBlocks.Add(obj);
                 return obj;
             }
@@ -413,21 +427,21 @@ namespace AI2D.Engine
             }
         }
 
-        public BaseBullet AddNewBullet(WeaponBase weapon, BaseGraphicObject firedFrom, PointD xyOffset = null)
-        {
-            lock (Bullets)
-            {
-                var obj = weapon.CreateBullet(null, xyOffset);
-                Bullets.Add(obj);
-                return obj;
-            }
-        }
-
         public BaseBullet AddNewLockedBullet(WeaponBase weapon, BaseGraphicObject firedFrom, BaseGraphicObject lockedTarget, PointD xyOffset = null)
         {
             lock (Bullets)
             {
                 var obj = weapon.CreateBullet(lockedTarget, xyOffset);
+                Bullets.Add(obj);
+                return obj;
+            }
+        }
+
+        public BaseBullet AddNewBullet(WeaponBase weapon, BaseGraphicObject firedFrom, PointD xyOffset = null)
+        {
+            lock (Bullets)
+            {
+                var obj = weapon.CreateBullet(null, xyOffset);
                 Bullets.Add(obj);
                 return obj;
             }
@@ -442,6 +456,23 @@ namespace AI2D.Engine
             }
         }
 
+        public void InsertMenu(BaseMenu menu)
+        {
+            lock (Menus)
+            {
+                Menus.Add(menu);
+            }
+        }
+
+        public void DeleteMenu(BaseMenu menu)
+        {
+            lock (Menus)
+            {
+                menu.Cleanup();
+                Menus.Remove(menu);
+            }
+        }
+
         #endregion
 
         #region Rendering.
@@ -450,6 +481,13 @@ namespace AI2D.Engine
         {
             lock (_core.DrawingSemaphore)
             {
+                lock (Menus)
+                {
+                    foreach (var obj in Menus)
+                    {
+                        obj.Render(dc);
+                    }
+                }
                 lock (TextBlocks)
                 {
                     foreach (var obj in TextBlocks)

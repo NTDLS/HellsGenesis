@@ -163,10 +163,15 @@ namespace AI2D.GraphicObjects
         {
             get
             {
-                return new RectangleF(
-                    (float)(_location.X - (Size.Width / 2.0)),
-                    (float)(_location.Y - (Size.Height / 2.0)),
-                    Size.Height, Size.Width);
+                return new RectangleF((float)(_location.X), (float)(_location.Y), Size.Width, Size.Height);
+            }
+        }
+
+        public Rectangle BoundsI
+        {
+            get
+            {
+                return new Rectangle((int)(_location.X), (int)(_location.Y), Size.Width, Size.Height);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using AI2D.GraphicObjects.Enemies;
-using System.Collections.Generic;
 
 namespace AI2D.Engine.Scenarios
 {
@@ -11,8 +10,6 @@ namespace AI2D.Engine.Scenarios
             TotalWaves = 5;
         }
 
-        List<EngineCallbackEvent> events = new List<EngineCallbackEvent>();
-
         public override void Execute()
         {
             State = ScenarioState.Running;
@@ -22,18 +19,8 @@ namespace AI2D.Engine.Scenarios
             _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
 
             //Keep track of recurring events to we can delete them when we are done.
-            events.Add(_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 5000),
+            Events.Add(_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 5000),
                 AddFreshEnemiesCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring));
-        }
-
-        private void Stop()
-        {
-            foreach (var obj in events)
-            {
-                obj.ReadyForDeletion = true;
-            }
-
-            State = ScenarioState.Ended;
         }
 
         private void FirstShowPlayerCallback(Core core, object refObj)
@@ -47,7 +34,7 @@ namespace AI2D.Engine.Scenarios
             {
                 if (CurrentWave == TotalWaves)
                 {
-                    Stop();
+                    Cleanup();
                     return;
                 }
 

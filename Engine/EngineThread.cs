@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using AI2D.Engine.Menus;
 
 namespace AI2D.Engine
 {
@@ -74,6 +75,12 @@ namespace AI2D.Engine
                 {
                     System.Threading.Thread.Sleep(1);
                 }
+
+                if (_core.Actors.Menus.Count > 0)
+                {
+                    System.Threading.Thread.Sleep(20);
+                }
+
                 timer.Stop();
 
                 double frameTime = (((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000;
@@ -104,6 +111,19 @@ namespace AI2D.Engine
 
         void AdvanceFrame()
         {
+            #region Menu Management.
+
+            lock (_core.Actors.Menus)
+            {
+                for (int i = 0; i < _core.Actors.Menus.Count; i++)
+                {
+                    var menu = _core.Actors.Menus[i];
+                    menu.HandleInput();
+                }
+            }
+
+            #endregion
+
             #region Scenario Advancement.
 
             if (_core.CurrentScenario?.State == Scenarios.BaseScenario.ScenarioState.Ended)
@@ -498,6 +518,17 @@ namespace AI2D.Engine
                 }
             }
 
+            lock (_core.Actors.Menus)
+            {
+                for (int i = 0; i < _core.Actors.Menus.Count; i++)
+                {
+                    if (_core.Actors.Menus[i].ReadyForDeletion)
+                    {
+                        _core.Actors.DeleteMenu(_core.Actors.Menus[i]);
+                    }
+                }
+            }
+
             lock (_core.Actors.Enemies)
             {
                 for (int i = 0; i < _core.Actors.Enemies.Count; i++)
@@ -546,7 +577,9 @@ namespace AI2D.Engine
             {
                 if (_core.Actors.Player.ReadyForDeletion)
                 {
-                    _core.Actors.Player.Cleanup();
+                    _core.Actors.Player.Visable = false;
+                    _core.Actors.Player.ReadyForDeletion = false;
+                    _core.Actors.InsertMenu(new MenuStartNewGame(_core));
                 }
             }
 
@@ -566,7 +599,7 @@ namespace AI2D.Engine
                 + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "
                 + $"Score: {_core.Actors.Player.Score.ToString("#,0")}";
 
-#if DEBUG
+            #if DEBUG
             if (_core.ShowDebug)
             {
                 _core.Actors.DebugText.Text =
@@ -591,8 +624,7 @@ namespace AI2D.Engine
                     _core.Actors.DebugText.Text = string.Empty;
                 }
             }
-#endif
-
+            #endif
         }
     }
 }

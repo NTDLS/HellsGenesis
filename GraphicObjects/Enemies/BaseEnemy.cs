@@ -23,7 +23,7 @@ namespace AI2D.GraphicObjects.Enemies
 
             RadarPositionIndicator = _core.Actors.AddNewRadarPositionIndicator();
             RadarPositionIndicator.Visable = false;
-            RadarPositionText = _core.Actors.AddNewRadarPositionTextBlock("Consolas", Brushes.Red, 8, 0, 0);
+            RadarPositionText = _core.Actors.AddNewRadarPositionTextBlock("Consolas", Brushes.Red, 8, new PointD());
         }
 
         public static int GetGenericHP()

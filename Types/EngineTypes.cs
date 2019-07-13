@@ -26,6 +26,11 @@
         Fire,
         RotateClockwise,
         RotateCounterClockwise,
-        Escape
+        Escape,
+        Left,
+        Right,
+        Up,
+        Down,
+        Enter
     }
 }
