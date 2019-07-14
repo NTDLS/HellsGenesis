@@ -11,6 +11,7 @@ namespace AI2D.Engine.Menus
 {
     public class BaseMenu
     {
+        public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;
 
         private List<ObjMenuItem> _menuItems { get; set; } = new List<ObjMenuItem>();

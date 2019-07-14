@@ -12,6 +12,7 @@ namespace AI2D.GraphicObjects
 {
     public class BaseGraphicObject
     {
+        public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;
 
         private Image _image;
@@ -20,9 +21,10 @@ namespace AI2D.GraphicObjects
         private ObjAnimation _explosionAnimation;
         private AudioClip _explodeSound;
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
-        private int _MilisecondsBetweenHits = 100;
+        private int _MilisecondsBetweenHits = 200;
         private AudioClip _hitSound;
         private readonly List<WeaponBase> _weapons = new List<WeaponBase>();
+        private ObjAnimation _hitExplosionAnimation { get; set; }
 
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
 
@@ -43,6 +45,14 @@ namespace AI2D.GraphicObjects
             "Expload 3.wav",
             "Expload 4.wav",
             "Expload 5.wav"
+            #endregion
+        };
+
+        private const string _assetHitExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
+        private readonly string[] _assetHitExplosionAnimationFiles = {
+            #region Image Paths.
+            "Hit Explosion 22 (1).png",
+            "Hit Explosion 22 (2).png"
             #endregion
         };
 
@@ -215,6 +225,10 @@ namespace AI2D.GraphicObjects
 
             _lockedOnImage = _core.Actors.GetBitmapCached(@"..\..\Assets\Graphics\Weapon\Locked On.png");
             _lockedOnSoftImage = _core.Actors.GetBitmapCached(@"..\..\Assets\Graphics\Weapon\Locked Soft.png");
+
+            int _hitExplosionImageIndex = Utility.RandomNumber(0, _assetHitExplosionAnimationFiles.Count());
+            _hitExplosionAnimation = new ObjAnimation(_core, _assetHitExplosionAnimationPath + _assetHitExplosionAnimationFiles[_hitExplosionImageIndex], new Size(22, 22));
+
 
             if (imagePath != null)
             {
@@ -480,6 +494,12 @@ namespace AI2D.GraphicObjects
             _explosionAnimation.Reset();
             _core.Actors.PlaceAnimationOnTopOf(_explosionAnimation, this);
             ReadyForDeletion = true;
+        }
+
+        public void HitExplosion()
+        {
+            _hitExplosionAnimation.Reset();
+            _core.Actors.PlaceAnimationOnTopOf(_hitExplosionAnimation, this);
         }
 
         public virtual void Cleanup()

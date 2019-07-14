@@ -19,11 +19,8 @@ namespace AI2D.Engine.Scenarios
 
             _core.Actors.HidePlayer();
 
-            _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
-
-            //Keep track of recurring events to we can delete them when we are done.
-            Events.Add(_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 5000),
-                AddFreshEnemiesCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring));
+            AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
+            AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 0, 5000), AddFreshEnemiesCallback);
         }
 
         private void FirstShowPlayerCallback(Core core, object refObj)

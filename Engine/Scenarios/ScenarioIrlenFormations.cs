@@ -19,16 +19,10 @@ namespace AI2D.Engine.Scenarios
 
             _core.Actors.HidePlayer();
 
-            _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
-
-            //Keep track of recurring events to we can delete them when we are done.
-            _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 1),
-                AdvanceWaveCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring);
-
-            Events.Add(_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5),
-                RedirectFormationCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring));
+            AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
+            AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 1), AdvanceWaveCallback);
+            AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 5), RedirectFormationCallback);
         }
-
 
         private void RedirectFormationCallback(Core core, object refObj)
         {
@@ -60,7 +54,7 @@ namespace AI2D.Engine.Scenarios
         {
             if (_core.Actors.Enemies.Count == 0 && !waitingOnPopulation)
             {
-                if (CurrentWave == TotalWaves)
+                if (CurrentWave == TotalWaves && waitingOnPopulation != true)
                 {
                     Cleanup();
                     return;

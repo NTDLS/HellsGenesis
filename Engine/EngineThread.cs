@@ -126,9 +126,9 @@ namespace AI2D.Engine
 
             #region Scenario Advancement.
 
-            if (_core.CurrentScenario?.State == Scenarios.BaseScenario.ScenarioState.Ended)
+            if (_core.Actors.CurrentScenario?.State == Scenarios.BaseScenario.ScenarioState.Ended)
             {
-                _core.AdvanceScenario();
+                _core.Actors.AdvanceScenario();
             }
 
             #endregion
@@ -283,8 +283,11 @@ namespace AI2D.Engine
                             //Player collides with enemy.
                             if (enemy.Intersects(_core.Actors.Player))
                             {
-                                _core.Actors.Player.Hit(enemy.CollisionDamage);
-                                //enemy.Hit(enemy.CollisionDamage);
+                                if (_core.Actors.Player.Hit(enemy.CollisionDamage))
+                                {
+                                    _core.Actors.Player.HitExplosion();
+                                    //enemy.Hit(enemy.CollisionDamage);
+                                }
                             }
 
                             if (_core.Actors.Player.CurrentWeapon != null)
@@ -360,8 +363,6 @@ namespace AI2D.Engine
                         group[0].Text = min.ToString("#,#") + "-" + max.ToString("#,#");
                         group[0].Visable = true;
                     }
-
-                    Console.WriteLine(";");
                 }
             }
 
@@ -585,11 +586,11 @@ namespace AI2D.Engine
 
             #endregion
 
-            string scenario = _core.CurrentScenario == null ? "<none>" : _core.CurrentScenario.Name;
+            string scenario = "<peaceful>";
 
-            if (scenario != "<none>")
+            if (_core.Actors.CurrentScenario != null)
             {
-                scenario += $" (Wave {_core.CurrentScenario.CurrentWave} of {_core.CurrentScenario.TotalWaves})";
+                scenario = $"{_core.Actors.CurrentScenario.Name} (Wave {_core.Actors.CurrentScenario.CurrentWave} of {_core.Actors.CurrentScenario.TotalWaves})";
             }
 
             _core.Actors.PlayerStatsText.Text =

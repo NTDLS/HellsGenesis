@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using static AI2D.Engine.EngineCallbackEvent;
 
 namespace AI2D.Engine.Scenarios
 {
     public class BaseScenario
     {
+        public Guid UID { get; private set; } = Guid.NewGuid();
         public string Name { get; set; }
         public enum ScenarioState
         {
@@ -38,6 +41,22 @@ namespace AI2D.Engine.Scenarios
 
         public virtual void Execute()
         {
+        }
+
+
+        protected EngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, OnExecute executeCallback)
+        {
+            //Keep track of recurring events to we can delete them when we are done.
+            var obj = _core.Actors.AddNewEngineCallbackEvent(timeout,
+                executeCallback, null, EngineCallbackEvent.CallbackEventMode.Recurring);
+
+            Events.Add(obj);
+            return obj;
+        }
+
+        protected EngineCallbackEvent AddSingleFireEvent(TimeSpan timeout, OnExecute executeCallback)
+        {
+            return _core.Actors.AddNewEngineCallbackEvent(timeout, executeCallback);
         }
     }
 }

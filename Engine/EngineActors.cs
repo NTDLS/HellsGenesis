@@ -8,6 +8,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using AI2D.Engine.Menus;
+using AI2D.Engine.Scenarios;
 
 namespace AI2D.Engine
 {
@@ -16,7 +17,8 @@ namespace AI2D.Engine
         private Core _core;
 
         #region Actors.
-
+        public BaseScenario CurrentScenario { get; private set; }
+        public List<BaseScenario> Scenarios = new List<BaseScenario>();
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
         public List<ObjTextBlock> TextBlocks { get; private set; } = new List<ObjTextBlock>();
         public List<BaseEnemy> Enemies { get; private set; } = new List<BaseEnemy>();
@@ -95,6 +97,36 @@ namespace AI2D.Engine
             Player.SelectWeapon(typeof(WeaponVulcanCannon));
         }
 
+        public void ClearScenarios()
+        {
+            lock (Scenarios)
+            {
+                foreach (var obj in Scenarios)
+                {
+                    obj.Cleanup();
+                }
+            }
+
+            CurrentScenario = null;
+            Scenarios.Clear();
+        }
+
+        public void NewGame()
+        {
+            lock (Scenarios)
+            {
+                ClearScenarios();
+
+                Scenarios.Add(new ScenarioScinzadSkirmish(_core));
+                Scenarios.Add(new ScenarioIrlenFormations(_core));
+                Scenarios.Add(new ScenarioAvvolAmbush(_core));
+            }
+
+            DeletaAllActors();
+
+            AdvanceScenario();
+        }
+
         public void DeletaAllActors()
         {
             DeletaAllEnemies();
@@ -120,6 +152,33 @@ namespace AI2D.Engine
         }
 
 
+        public void AdvanceScenario()
+        {
+            lock (Scenarios)
+            {
+                if (CurrentScenario != null)
+                {
+                    Scenarios.Remove(CurrentScenario);
+                }
+
+                if (Scenarios.Count > 0)
+                {
+                    CurrentScenario = Scenarios[0];
+                    CurrentScenario.Execute();
+                }
+                else
+                {
+                    AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5), TheDoorIsAjarCallback);
+                }
+            }
+        }
+
+        private void TheDoorIsAjarCallback(Core core, object refObj)
+        {
+            DoorIsAjarSound.Play();
+            InsertMenu(new MenuStartNewGame(_core));
+        }
+
         public List<T> VisibleTextBlocksOfType<T>() where T : class
         {
             return (from o in _core.Actors.TextBlocks
@@ -138,31 +197,41 @@ namespace AI2D.Engine
 
         public void DeletaAllEnemies()
         {
-            lock (Enemies)
+            while (Enemies.Count > 0)
             {
-                foreach (var obj in Enemies)
+                lock (Enemies)
                 {
-                    obj.ReadyForDeletion = true;
+                    foreach (var obj in Enemies)
+                    {
+                        obj.ReadyForDeletion = true;
+                    }
                 }
             }
         }
+
         public void DeletaAllBullets()
         {
-            lock (Bullets)
+            while (Enemies.Count > 0)
             {
-                foreach (var obj in Bullets)
+                lock (Bullets)
                 {
-                    obj.ReadyForDeletion = true;
+                    foreach (var obj in Bullets)
+                    {
+                        obj.ReadyForDeletion = true;
+                    }
                 }
             }
         }
         public void DeletaAllAnimations()
         {
-            lock (Animations)
+            while (Enemies.Count > 0)
             {
-                foreach (var obj in Animations)
+                lock (Animations)
                 {
-                    obj.ReadyForDeletion = true;
+                    foreach (var obj in Animations)
+                    {
+                        obj.ReadyForDeletion = true;
+                    }
                 }
             }
         }

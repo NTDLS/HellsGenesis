@@ -12,11 +12,9 @@ namespace AI2D.Engine
         public EngineInput Input { get; private set; }
         public EngineDisplay Display { get; private set; }
         public EngineActors Actors { get; private set; }
-        public List<BaseScenario> Scenarios = new List<BaseScenario>();
         public bool IsRunning { get; private set; } = false;
         public bool ShowDebug { get; set; } = false;
         public object DrawingSemaphore { get; set; } = new object();
-        public BaseScenario CurrentScenario { get; private set; }
 
         private EngineThread _engineThread;
 
@@ -37,26 +35,12 @@ namespace AI2D.Engine
             Input = new EngineInput(this);
             _engineThread = new EngineThread(this);
 
+            Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
+        }
+
+        private void NewGameMenuCallback(Core core, object refObj)
+        {
             Actors.InsertMenu(new MenuStartNewGame(this));
-        }
-
-        public void ClearScenarios()
-        {
-            CurrentScenario = null;
-            Scenarios.Clear();
-        }
-
-        public void NewGame()
-        {
-            ClearScenarios();
-
-            Scenarios.Add(new ScenarioIrlenFormations(this));
-            Scenarios.Add(new ScenarioScinzadSkirmish(this));
-            Scenarios.Add(new ScenarioAvvolAmbush(this));
-
-            Actors.DeletaAllActors();
-
-            AdvanceScenario();
         }
 
         public void Start()
@@ -114,30 +98,6 @@ namespace AI2D.Engine
         public void Resume()
         {
             _engineThread.Resume();
-        }
-
-        public void AdvanceScenario()
-        {
-            if (CurrentScenario != null)
-            {
-                Scenarios.Remove(CurrentScenario);
-            }
-
-            if (Scenarios.Count > 0)
-            {
-                CurrentScenario = Scenarios[0];
-                CurrentScenario.Execute();
-            }
-            else
-            {
-                Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5), TheDoorIsAjarCallback);
-            }
-        }
-
-        private void TheDoorIsAjarCallback(Core core, object refObj)
-        {
-            Actors.DoorIsAjarSound.Play();
-            Actors.InsertMenu(new MenuStartNewGame(this));
         }
     }
 }

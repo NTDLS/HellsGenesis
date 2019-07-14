@@ -9,6 +9,7 @@ namespace AI2D.Weapons
 {
     public class WeaponBase
     {
+        public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;
         protected BaseGraphicObject _owner;
 

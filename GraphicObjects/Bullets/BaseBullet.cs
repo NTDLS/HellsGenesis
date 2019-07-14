@@ -13,7 +13,6 @@ namespace AI2D.GraphicObjects.Bullets
         public FiredFromType FiredFromType { get; set; }
         public WeaponBase Weapon { get; private set; }
         public BaseGraphicObject LockedTarget { get; private set; }
-        public ObjAnimation _hitExplosionAnimation { get; set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
         public double MaxAgeInMilliseconds { get; set; } = 4000;
 
@@ -25,14 +24,6 @@ namespace AI2D.GraphicObjects.Bullets
             }
         }
 
-        private const string _assetHitExplosionAnimationPath = @"..\..\Assets\Graphics\Animation\Explode\";
-        private readonly string[] _assetHitExplosionAnimationFiles = {
-            #region Image Paths.
-            "Hit Explosion 22 (1).png",
-            "Hit Explosion 22 (2).png"
-            #endregion
-        };
-
         public BaseBullet(Core core, WeaponBase weapon, BaseGraphicObject firedFrom, string imagePath,
              BaseGraphicObject lockedTarget = null, PointD xyOffset = null)
             : base(core)
@@ -43,13 +34,11 @@ namespace AI2D.GraphicObjects.Bullets
             LockedTarget = lockedTarget;
             Velocity.ThrottlePercentage = 100;
 
-
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
 
             if (firedFrom is BaseEnemy)
             {
                 double slop = (Utility.FlipCoin() ? 1 : -1) * (Utility.Random.NextDouble() * 2);
-
                 headingDegrees = firedFrom.Velocity.Angle.Degrees + slop;
             }
 
@@ -59,12 +48,6 @@ namespace AI2D.GraphicObjects.Bullets
                 MaxSpeed = weapon.Speed,
                 ThrottlePercentage = 100
             };
-
-            if (weapon != null && weapon.ExplodesOnImpact)
-            {
-                int _hitExplosionImageIndex = Utility.RandomNumber(0, _assetHitExplosionAnimationFiles.Count());
-                _hitExplosionAnimation = new ObjAnimation(_core, _assetHitExplosionAnimationPath + _assetHitExplosionAnimationFiles[_hitExplosionImageIndex], new Size(22, 22));
-            }
 
             var initialLocation = firedFrom.Location;
             initialLocation.X = initialLocation.X + (xyOffset == null ? 0 : xyOffset.X);
@@ -133,10 +116,10 @@ namespace AI2D.GraphicObjects.Bullets
 
         public virtual new void Explode()
         {
-            if (Weapon.ExplodesOnImpact)
+            if (Weapon != null && Weapon.ExplodesOnImpact)
             {
-                _hitExplosionAnimation.Reset();
-                _core.Actors.PlaceAnimationOnTopOf(_hitExplosionAnimation, this);
+                HitExplosion();
+
             }
             ReadyForDeletion = true;
         }
