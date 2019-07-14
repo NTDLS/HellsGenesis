@@ -1,5 +1,6 @@
 # 2DAI
-2D DGI+ game/simulation engine written in C#
+2D GDI+ space fighter game engine written in C#.
+Infinite space, AI, multiple scenario, event driven, locking/seeking weapons, etc.
 
-
-https://www.youtube.com/watch?v=6ce4_U9ImzE
+Version 0.0.1.0 Gameplay:
+https://www.youtube.com/watch?v=Kd-aEshWiNg
