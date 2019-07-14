@@ -1,14 +1,14 @@
-﻿using AI2D.GraphicObjects;
+﻿using AI2D.Engine.Menus;
+using AI2D.Engine.Scenarios;
+using AI2D.GraphicObjects;
 using AI2D.GraphicObjects.Bullets;
 using AI2D.GraphicObjects.Enemies;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
-using AI2D.Engine.Menus;
-using AI2D.Engine.Scenarios;
+using System.Linq;
 
 namespace AI2D.Engine
 {
@@ -168,6 +168,7 @@ namespace AI2D.Engine
                 }
                 else
                 {
+                    CurrentScenario = null;
                     AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5), TheDoorIsAjarCallback);
                 }
             }
