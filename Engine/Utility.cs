@@ -85,7 +85,7 @@ namespace AI2D.Engine
             return newBitmap;
         }
 
-        public static Image ResizeImage(Image image, int new_height, int new_width)
+        public static Image ResizeImage(Image image, int new_width, int new_height)
         {
             Bitmap new_image = new Bitmap(new_width, new_height);
             Graphics g = Graphics.FromImage((Image)new_image);

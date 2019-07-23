@@ -117,6 +117,7 @@ namespace AI2D.Engine
             {
                 ClearScenarios();
 
+                Scenarios.Add(new ScenarioFreeFlight(_core));
                 Scenarios.Add(new ScenarioScinzadSkirmish(_core));
                 Scenarios.Add(new ScenarioIrlenFormations(_core));
                 Scenarios.Add(new ScenarioAvvolAmbush(_core));
@@ -551,13 +552,6 @@ namespace AI2D.Engine
         {
             lock (_core.DrawingSemaphore)
             {
-                lock (Menus)
-                {
-                    foreach (var obj in Menus)
-                    {
-                        obj.Render(dc);
-                    }
-                }
                 lock (TextBlocks)
                 {
                     foreach (var obj in TextBlocks)
@@ -565,6 +559,7 @@ namespace AI2D.Engine
                         obj.Render(dc);
                     }
                 }
+
                 lock (Animations)
                 {
                     foreach (var obj in Animations)
@@ -575,6 +570,7 @@ namespace AI2D.Engine
                         }
                     }
                 }
+
                 lock (Enemies)
                 {
                     foreach (var obj in Enemies)
@@ -621,6 +617,14 @@ namespace AI2D.Engine
                 }
 
                 Player?.Render(dc);
+
+                lock (Menus)
+                {
+                    foreach (var obj in Menus)
+                    {
+                        obj.Render(dc);
+                    }
+                }
             }
         }
 
