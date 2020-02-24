@@ -10,6 +10,7 @@ namespace AI2D.GraphicObjects
         public enum MenuItemType
         {
             Title,
+            Text,
             Item
         }
 

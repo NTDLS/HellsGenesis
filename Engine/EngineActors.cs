@@ -117,7 +117,6 @@ namespace AI2D.Engine
             {
                 ClearScenarios();
 
-                Scenarios.Add(new ScenarioFreeFlight(_core));
                 Scenarios.Add(new ScenarioScinzadSkirmish(_core));
                 Scenarios.Add(new ScenarioIrlenFormations(_core));
                 Scenarios.Add(new ScenarioAvvolAmbush(_core));

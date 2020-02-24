@@ -27,9 +27,9 @@ namespace AI2D.Engine.Menus
 
         }
 
-        public ObjMenuItem NewTitleItem(PointD location, string text)
+        public ObjMenuItem NewTitleItem(PointD location, string text, Brush brush, int size = 24)
         {
-            var item = new ObjMenuItem(_core, "Consolas", Brushes.OrangeRed, 24, location)
+            var item = new ObjMenuItem(_core, "Consolas", brush, size, location)
             {
                 Text = text,
                 ItemType = ObjMenuItem.MenuItemType.Title
@@ -38,9 +38,20 @@ namespace AI2D.Engine.Menus
             return item;
         }
 
-        public ObjMenuItem NewMenuItem(PointD location, string name, string text)
+        public ObjMenuItem NewTextItem(PointD location, string text, Brush brush, int size = 16)
         {
-            var item = new ObjMenuItem(_core, "Consolas", Brushes.OrangeRed, 14, location)
+            var item = new ObjMenuItem(_core, "Consolas", brush, size, location)
+            {
+                Text = text,
+                ItemType = ObjMenuItem.MenuItemType.Text
+            };
+            AddMenuItem(item);
+            return item;
+        }
+
+        public ObjMenuItem NewMenuItem(PointD location, string name, string text, Brush brush, int size = 14)
+        {
+            var item = new ObjMenuItem(_core, "Consolas", brush, size, location)
             {
                 Name = name,
                 Text = text,
@@ -69,7 +80,7 @@ namespace AI2D.Engine.Menus
                 }
             }
 
-            if (_core.Input.IsKeyPressed(PlayerKey.Right))
+            if (_core.Input.IsKeyPressed(PlayerKey.Right) || _core.Input.IsKeyPressed(PlayerKey.RotateClockwise))
             {
                 int selectIndex = 0;
 
@@ -99,7 +110,7 @@ namespace AI2D.Engine.Menus
                 }
             }
 
-            if (_core.Input.IsKeyPressed(PlayerKey.Left))
+            if (_core.Input.IsKeyPressed(PlayerKey.Left) || _core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
             {
                 int selectIndex = 0;
 

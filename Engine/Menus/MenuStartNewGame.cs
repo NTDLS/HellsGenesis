@@ -1,5 +1,6 @@
 ﻿using AI2D.GraphicObjects;
 using AI2D.Types;
+using System.Drawing;
 
 namespace AI2D.Engine.Menus
 {
@@ -9,17 +10,25 @@ namespace AI2D.Engine.Menus
             : base(core)
         {
             double baseX = _core.Display.VisibleSize.Width / 2;
-            double baseY = _core.Display.VisibleSize.Height / 2; ;
+            double baseY = _core.Display.VisibleSize.Height / 4;
 
-            var itemTitle = NewTitleItem(new PointD(baseX, baseY), "Start a new game?");
+            var itemTitle = NewTitleItem(new PointD(baseX, baseY), "Start a new game?", Brushes.OrangeRed);
+            itemTitle.X -= itemTitle.Size.Width / 2;
+            baseY += itemTitle.Size.Height + 10;
 
-            baseX -= itemTitle.Size.Width / 2;
-            baseY -= itemTitle.Size.Height;
-            itemTitle.X = baseX;
-            itemTitle.Y = baseX;
+            var itemYes = NewMenuItem(new PointD(baseX, baseY), "YES", "Yes", Brushes.OrangeRed);
+            var itemNo = NewMenuItem(new PointD(baseX + itemYes.Size.Width + 10, baseY), "NO", "No", Brushes.OrangeRed);
+            baseY += itemNo.Size.Height + 20;
+            itemYes.X -= (itemYes.Size.Width + itemNo.Size.Width) / 2;
+            itemNo.X -= (itemYes.Size.Width + itemNo.Size.Width) / 2;
 
-            var itemYes = NewMenuItem(new PointD(baseX, baseY + itemTitle.Size.Height + 10), "YES", "Yes.");
-            var itemNo = NewMenuItem(new PointD(baseX + itemYes.Size.Width + 10, baseY + itemTitle.Size.Height + 10), "NO", "No.");
+            var help1 = NewTextItem(new PointD(baseX, baseY), "Move with <W>, <A>, <S>, <D>.", Brushes.LawnGreen);
+            help1.X -= help1.Size.Width / 2;
+            baseY += itemTitle.Size.Height + 5;
+
+            var help2 = NewTextItem(new PointD(baseX, baseY), "Fire with <space> and change weapons with <Ctrl>.", Brushes.LawnGreen);
+            help2.X -= help2.Size.Width / 2;
+            baseY += itemTitle.Size.Height + 10;
 
             itemYes.Selected = true;
         }
