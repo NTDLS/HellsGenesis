@@ -1,4 +1,5 @@
 ﻿using AI2D.GraphicObjects.Enemies;
+using AI2D.GraphicObjects.PowerUp;
 
 namespace AI2D.Engine.Scenarios
 {
@@ -33,6 +34,15 @@ namespace AI2D.Engine.Scenarios
                 {
                     Cleanup();
                     return;
+                }
+
+                if (_core.Actors.PowerUps.Count < 100)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        _core.Actors.AddNewPowerUp<PowerUpRepair>();
+                        _core.Actors.AddNewPowerUp<PowerUpSheild>();
+                    }
                 }
 
                 _core.Actors.Player.HitPoints += 100;

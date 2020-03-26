@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using AI2D.Engine.Menus;
+using AI2D.GraphicObjects.PowerUp;
 
 namespace AI2D.Engine
 {
@@ -497,6 +498,35 @@ namespace AI2D.Engine
 
             #endregion
 
+            #region Power-Up Frame Advancement.
+
+            lock (_core.Actors.PowerUps)
+            {
+                foreach (var powerUp in _core.Actors.PowerUps)
+                {
+                    if (powerUp.Visable)
+                    {
+                        if (powerUp is PowerUpRepair)
+                        {
+                            ((PowerUpRepair)powerUp).ApplyIntelligence(appliedOffset);
+                        }
+                        else if (powerUp is PowerUpSheild)
+                        {
+                            ((PowerUpSheild)powerUp).ApplyIntelligence(appliedOffset);
+                        }
+                        else
+                        {
+                            powerUp.ApplyIntelligence(appliedOffset);
+                        }
+
+                        powerUp.X += (powerUp.Velocity.Angle.X * (powerUp.Velocity.MaxSpeed * powerUp.Velocity.ThrottlePercentage)) - appliedOffset.X;
+                        powerUp.Y += (powerUp.Velocity.Angle.Y * (powerUp.Velocity.MaxSpeed * powerUp.Velocity.ThrottlePercentage)) - appliedOffset.Y;
+                    }
+                }
+            }
+
+            #endregion
+
             #region Offscreen Radar Indicator.
 
             if (_core.Actors.RadarPositionIndicators.Count < 1)
@@ -595,8 +625,9 @@ namespace AI2D.Engine
 
             _core.Actors.PlayerStatsText.Text =
                 $"Scenario: {scenario}, "
-                + $"HP: {_core.Actors.Player.HitPoints}, "
-                + $"Weapon: {_core.Actors.Player.CurrentWeapon?.Name} X{_core.Actors.Player.CurrentWeapon?.RoundQuantity}, "
+                + $"Shield: {_core.Actors.Player.ShieldPoints}, "
+                + $"Hull: {_core.Actors.Player.HitPoints}, "
+                + $"Weapon: {_core.Actors.Player.CurrentWeapon?.Name} x{_core.Actors.Player.CurrentWeapon?.RoundQuantity}, "
                 + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "
                 + $"Score: {_core.Actors.Player.Score.ToString("#,0")}";
 

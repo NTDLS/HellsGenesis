@@ -3,6 +3,7 @@ using AI2D.Engine.Scenarios;
 using AI2D.GraphicObjects;
 using AI2D.GraphicObjects.Bullets;
 using AI2D.GraphicObjects.Enemies;
+using AI2D.GraphicObjects.PowerUp;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
@@ -22,6 +23,7 @@ namespace AI2D.Engine
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
         public List<ObjTextBlock> TextBlocks { get; private set; } = new List<ObjTextBlock>();
         public List<BaseEnemy> Enemies { get; private set; } = new List<BaseEnemy>();
+        public List<BasePowerUp> PowerUps { get; private set; } = new List<BasePowerUp>();
         public List<ObjStar> Stars { get; private set; } = new List<ObjStar>();
         public List<ObjDebug> Debugs { get; private set; } = new List<ObjDebug>();
         public List<ObjAnimation> Animations { get; private set; } = new List<ObjAnimation>();
@@ -82,6 +84,7 @@ namespace AI2D.Engine
             Player.Velocity.MaxSpeed = 5;
             Player.Velocity.MaxRotationSpeed = 3;
             Player.HitPoints = Constants.Limits.BasePlayerHitpoints;
+            Player.ShieldPoints = Constants.Limits.BasePlayerShieldPoints;
             Player.Velocity.Angle = new AngleD(45);
             Player.Velocity.ThrottlePercentage = Constants.Limits.MinPlayerThrust;
 
@@ -129,6 +132,7 @@ namespace AI2D.Engine
 
         public void DeletaAllActors()
         {
+            DeletaAllPowerUps();
             DeletaAllEnemies();
             DeletaAllBullets();
             DeletaAllAnimations();
@@ -188,12 +192,34 @@ namespace AI2D.Engine
                     select o as T).ToList();
         }
 
+        public List<T> VisiblePowerUpsOfType<T>() where T : class
+        {
+            return (from o in _core.Actors.PowerUps
+                    where o is T
+                    && o.Visable == true
+                    select o as T).ToList();
+        }
+
         public List<T> VisibleEnemiesOfType<T>() where T : class
         {
             return (from o in _core.Actors.Enemies
                     where o is T
                     && o.Visable == true
                     select o as T).ToList();
+        }
+
+        public void DeletaAllPowerUps()
+        {
+            while (PowerUps.Count > 0)
+            {
+                lock (PowerUps)
+                {
+                    foreach (var obj in PowerUps)
+                    {
+                        obj.ReadyForDeletion = true;
+                    }
+                }
+            }
         }
 
         public void DeletaAllEnemies()
@@ -225,7 +251,7 @@ namespace AI2D.Engine
         }
         public void DeletaAllAnimations()
         {
-            while (Enemies.Count > 0)
+            while (Animations.Count > 0)
             {
                 lock (Animations)
                 {
@@ -314,11 +340,11 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjAnimation AddNewAnimation(string imageFrames, Size frameSize, int _frameDelayMiliseconds = 10, ObjAnimation.PlayMode playMode = null)
+        public ObjAnimation AddNewAnimation(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, ObjAnimation.PlayMode playMode = null)
         {
             lock (Animations)
             {
-                ObjAnimation obj = new ObjAnimation(_core, imageFrames, frameSize, _frameDelayMiliseconds, playMode);
+                ObjAnimation obj = new ObjAnimation(_core, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
                 Animations.Add(obj);
                 return obj;
             }
@@ -472,6 +498,37 @@ namespace AI2D.Engine
             }
         }
 
+        public void InjectPowerUp(BasePowerUp obj)
+        {
+            lock (PowerUps)
+            {
+                PowerUps.Add(obj);
+            }
+        }
+
+        public void DeletePowerUp(BasePowerUp obj)
+        {
+            lock (PowerUps)
+            {
+                obj.Cleanup();
+                PowerUps.Remove(obj);
+            }
+        }
+
+        public T AddNewPowerUp<T>() where T : BasePowerUp
+        {
+            lock (PowerUps)
+            {
+                object[] param = { _core };
+                BasePowerUp obj = (BasePowerUp)Activator.CreateInstance(typeof(T), param);
+
+                obj.Location = _core.Display.RandomOffScreenLocation(100, 1000);
+
+                PowerUps.Add(obj);
+                return (T)obj;
+            }
+        }
+
         public T AddNewEnemy<T>() where T : BaseEnemy
         {
             lock (Enemies)
@@ -559,6 +616,17 @@ namespace AI2D.Engine
                     }
                 }
 
+                lock (PowerUps)
+                {
+                    foreach (var obj in PowerUps)
+                    {
+                        if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                        {
+                            obj.Render(dc);
+                        }
+                    }
+                }
+
                 lock (Animations)
                 {
                     foreach (var obj in Animations)
@@ -580,6 +648,7 @@ namespace AI2D.Engine
                         }
                     }
                 }
+
                 lock (Bullets)
                 {
                     foreach (var obj in Bullets)
@@ -590,6 +659,7 @@ namespace AI2D.Engine
                         }
                     }
                 }
+
                 lock (Stars)
                 {
                     foreach (var obj in Stars)
@@ -600,6 +670,7 @@ namespace AI2D.Engine
                         }
                     }
                 }
+
                 lock (Debugs)
                 {
                     foreach (var obj in Debugs)
@@ -607,6 +678,7 @@ namespace AI2D.Engine
                         obj.Render(dc);
                     }
                 }
+
                 lock (RadarPositionIndicators)
                 {
                     foreach (var obj in RadarPositionIndicators)

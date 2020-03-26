@@ -43,22 +43,32 @@ namespace AI2D.Engine
 
             if (Utility.FlipCoin())
             {
-                x = -Utility.RandomNumber(100, 500);
+                if (Utility.FlipCoin())
+                {
+                    x = -Utility.RandomNumber(min, max);
+                    y = Utility.RandomNumber(0, VisibleSize.Height);
+                }
+                else
+                {
+                    y = -Utility.RandomNumber(min, max);
+                    x = Utility.RandomNumber(0, VisibleSize.Width);
+                }
             }
             else
             {
-                x = VisibleSize.Width + Utility.RandomNumber(100, 500);
+                if (Utility.FlipCoin())
+                {
+                    x = VisibleSize.Width + Utility.RandomNumber(min, max);
+                    y = Utility.RandomNumber(0, VisibleSize.Height);
+                }
+                else
+                {
+                    y = VisibleSize.Height + Utility.RandomNumber(min, max);
+                    x = Utility.RandomNumber(0, VisibleSize.Width);
+                }
+
             }
 
-
-            if (Utility.FlipCoin())
-            {
-                y = -Utility.RandomNumber(100, 500);
-            }
-            else
-            {
-                y = VisibleSize.Height + Utility.RandomNumber(100, 500);
-            }
             return new PointD(x, y);
         }
 

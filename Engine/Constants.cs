@@ -7,7 +7,8 @@
 
         public static class Limits
         {
-            public const int BasePlayerHitpoints = 500;
+            public const int BasePlayerShieldPoints = 10;
+            public const int BasePlayerHitpoints = 100;
             public const double MinPlayerThrust = 0; //0.25;
 
             public const int MinSpeed = 3;

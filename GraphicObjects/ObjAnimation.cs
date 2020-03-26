@@ -14,7 +14,7 @@ namespace AI2D.GraphicObjects
         private Size _frameSize;
         private int _rows;
         private int _columns;
-        private int _frameDelayMiliseconds = 10;
+        private int _frameDelayMilliseconds = 10;
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
         private string _imageName; //Debugging.
         private PlayMode _playMode;
@@ -51,7 +51,7 @@ namespace AI2D.GraphicObjects
             public bool DeleteActorAfterPlay;
         }
 
-        public ObjAnimation(Core core, string imageFrames, Size? frameSize,  int frameDelayMiliseconds = 10, PlayMode playMode = null)
+        public ObjAnimation(Core core, string imageFrames, Size? frameSize,  int frameDelayMilliseconds = 10, PlayMode playMode = null)
             : base(core)
         {
             _playMode = playMode;
@@ -62,12 +62,12 @@ namespace AI2D.GraphicObjects
                 {
                     DeleteActorAfterPlay = true,
                     Replay = ReplayMode.SinglePlay,
-                    ReplayDelay = new TimeSpan(0, 0, 0, 0, frameDelayMiliseconds)
+                    ReplayDelay = new TimeSpan(0, 0, 0, 0, frameDelayMilliseconds)
                 };
             }
 
             _imageName = imageFrames;
-            _frameDelayMiliseconds = frameDelayMiliseconds;
+            _frameDelayMilliseconds = frameDelayMilliseconds;
             _frameImage = _core.Actors.GetBitmapCached(imageFrames);
 
             if (frameSize == null)
@@ -118,7 +118,7 @@ namespace AI2D.GraphicObjects
                 return;
             }
 
-            if ((DateTime.Now - _lastFrameChange).TotalMilliseconds > _frameDelayMiliseconds)
+            if ((DateTime.Now - _lastFrameChange).TotalMilliseconds > _frameDelayMilliseconds)
             {
                 _lastFrameChange = DateTime.Now;
 

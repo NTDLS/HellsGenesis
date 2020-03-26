@@ -73,6 +73,9 @@
     <Compile Include="GraphicObjects\Bullets\BulletVulcanCannon.cs" />
     <Compile Include="GraphicObjects\Bullets\BulletGuidedFragMissile.cs" />
     <Compile Include="GraphicObjects\Bullets\BulletGeneric.cs" />
+    <Compile Include="GraphicObjects\PowerUp\BasePowerUp.cs" />
+    <Compile Include="GraphicObjects\PowerUp\PowerUpRepair.cs" />
+    <Compile Include="GraphicObjects\PowerUp\PowerUpSheild.cs" />
     <Compile Include="GraphicObjects\Enemies\BaseEnemy.cs" />
     <Compile Include="GraphicObjects\Enemies\EnemyUves.cs" />
     <Compile Include="GraphicObjects\Enemies\EnemyTheda.cs" />

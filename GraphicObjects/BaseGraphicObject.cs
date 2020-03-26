@@ -21,7 +21,7 @@ namespace AI2D.GraphicObjects
         private ObjAnimation _explosionAnimation;
         private AudioClip _explodeSound;
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
-        private int _MilisecondsBetweenHits = 200;
+        private int _MillisecondsBetweenHits = 200;
         private AudioClip _hitSound;
         private readonly List<WeaponBase> _weapons = new List<WeaponBase>();
         private ObjAnimation _hitExplosionAnimation { get; set; }
@@ -61,6 +61,7 @@ namespace AI2D.GraphicObjects
         public RotationMode RotationMode { get; set; }
         public WeaponBase CurrentWeapon { get; private set; }
         public int HitPoints { get; set; }
+        public int ShieldPoints { get; set; }
         public VelocityD Velocity { get; set; } = new VelocityD();
 
         bool _isLockedOn = false;
@@ -228,7 +229,6 @@ namespace AI2D.GraphicObjects
 
             int _hitExplosionImageIndex = Utility.RandomNumber(0, _assetHitExplosionAnimationFiles.Count());
             _hitExplosionAnimation = new ObjAnimation(_core, _assetHitExplosionAnimationPath + _assetHitExplosionAnimationFiles[_hitExplosionImageIndex], new Size(22, 22));
-
 
             if (imagePath != null)
             {
@@ -399,17 +399,27 @@ namespace AI2D.GraphicObjects
         /// <returns></returns>
         public bool Hit(int damage)
         {
-            bool result = ((DateTime.Now - _lastHit).TotalMilliseconds > _MilisecondsBetweenHits);
+            bool result = ((DateTime.Now - _lastHit).TotalMilliseconds > _MillisecondsBetweenHits);
             if (result)
             {
                 _hitSound.Play();
                 _lastHit = DateTime.Now;
 
-                HitPoints -= damage > HitPoints ? HitPoints : damage; //No need to go negative with the damage.
-
-                if (HitPoints <= 0)
+                if (ShieldPoints > 0)
                 {
-                    Explode();
+                    damage /= 2; //Weapons do less damage to Shields. They are designed to take hits.
+
+                    damage = damage < 1 ? 1 : damage;
+
+                    ShieldPoints -= damage > ShieldPoints ? ShieldPoints : damage; //No need to go negative with the damage.
+                }
+                else
+                {
+                    HitPoints -= damage > HitPoints ? HitPoints : damage; //No need to go negative with the damage.
+                    if (HitPoints <= 0)
+                    {
+                        Explode();
+                    }
                 }
             }
             return result;
