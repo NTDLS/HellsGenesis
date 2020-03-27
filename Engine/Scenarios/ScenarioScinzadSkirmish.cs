@@ -36,16 +36,7 @@ namespace AI2D.Engine.Scenarios
                     return;
                 }
 
-                if (_core.Actors.PowerUps.Count < 100)
-                {
-                    for (int i = 0; i < 5; i++)
-                    {
-                        _core.Actors.AddNewPowerUp<PowerUpRepair>();
-                        _core.Actors.AddNewPowerUp<PowerUpSheild>();
-                    }
-                }
-
-                _core.Actors.Player.HitPoints += 100;
+                _core.Actors.Player.AddShieldPoints(100);
 
                 int enemyCount = Utility.Random.Next(CurrentWave + 1, CurrentWave + 5);
 

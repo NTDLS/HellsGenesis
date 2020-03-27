@@ -30,7 +30,7 @@ namespace AI2D.GraphicObjects.PowerUp
         {
             if (Intersects(_core.Actors.Player))
             {
-                _core.Actors.Player.HitPoints += _repairPoints;
+                _core.Actors.Player.AddHitPoints(_repairPoints);
                 Explode();
             }
         }

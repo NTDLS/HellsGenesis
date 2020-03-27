@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AI2D.Engine.Menus
@@ -76,7 +77,11 @@ namespace AI2D.Engine.Menus
                 var selectedItem = (from o in _menuItems where o.ItemType == ObjMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
                 if (selectedItem != null)
                 {
-                    this.ExecuteSelection(selectedItem);
+                    //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
+                    //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
+                    //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
+                    //  
+                    Task.Run(() => ExecuteSelection(selectedItem));
                 }
             }
 

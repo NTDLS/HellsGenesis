@@ -38,7 +38,7 @@ namespace AI2D.Engine.Scenarios
                     return;
                 }
 
-                _core.Actors.Player.HitPoints += 100;
+                _core.Actors.Player.AddHitPoints(100);
 
                 int enemyCount = Utility.Random.Next(CurrentWave + 1, CurrentWave + 5);
 

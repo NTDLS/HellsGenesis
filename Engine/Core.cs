@@ -1,7 +1,5 @@
 ﻿using AI2D.Engine.Menus;
-using AI2D.Engine.Scenarios;
-using System;
-using System.Collections.Generic;
+using AI2D.Types;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -13,6 +11,7 @@ namespace AI2D.Engine
         public EngineDisplay Display { get; private set; }
         public EngineActors Actors { get; private set; }
         public bool IsRunning { get; private set; } = false;
+        public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
         public object DrawingSemaphore { get; set; } = new object();
 

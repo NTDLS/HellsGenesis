@@ -7,8 +7,12 @@
 
         public static class Limits
         {
-            public const int BasePlayerShieldPoints = 10;
-            public const int BasePlayerHitpoints = 100;
+            public const int MaxHitpoints = 1000;
+            public const int MaxShieldPoints = 100;
+
+            public const int StartingPlayerHitpoints = 250;
+            public const int StartingPlayerShieldPoints = 25;
+
             public const double MinPlayerThrust = 0; //0.25;
 
             public const int MinSpeed = 3;

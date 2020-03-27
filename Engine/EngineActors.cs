@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 
 namespace AI2D.Engine
 {
@@ -58,9 +59,9 @@ namespace AI2D.Engine
         {
             Player = new ObjPlayer(_core) { Visable = false };
 
-            DoorIsAjarSound = GetSoundCached(@"..\..\Assets\Sounds\Door Is Ajar.wav", 0.50f, false);
-            RadarBlipsSound = GetSoundCached(@"..\..\Assets\Sounds\Radar Blips.wav", 0.20f, false);
-            LockedOnBlip = GetSoundCached(@"..\..\Assets\Sounds\Locked On.wav", 0.20f, false);
+            DoorIsAjarSound = GetSoundCached(@"..\..\Assets\Sounds\Ship\Door Is Ajar.wav", 0.50f, false);
+            RadarBlipsSound = GetSoundCached(@"..\..\Assets\Sounds\Ship\Radar Blips.wav", 0.20f, false);
+            LockedOnBlip = GetSoundCached(@"..\..\Assets\Sounds\Ship\Locked On.wav", 0.20f, false);
 
             BackgroundMusicSound = GetSoundCached(@"..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
 
@@ -83,8 +84,8 @@ namespace AI2D.Engine
 
             Player.Velocity.MaxSpeed = 5;
             Player.Velocity.MaxRotationSpeed = 3;
-            Player.HitPoints = Constants.Limits.BasePlayerHitpoints;
-            Player.ShieldPoints = Constants.Limits.BasePlayerShieldPoints;
+            Player.SetHitPoints(Constants.Limits.StartingPlayerHitpoints);
+            Player.SetShieldPoints(Constants.Limits.StartingPlayerShieldPoints);
             Player.Velocity.Angle = new AngleD(45);
             Player.Velocity.ThrottlePercentage = Constants.Limits.MinPlayerThrust;
 
@@ -125,17 +126,17 @@ namespace AI2D.Engine
                 Scenarios.Add(new ScenarioAvvolAmbush(_core));
             }
 
-            DeletaAllActors();
+            DeleteAllActors();
 
             AdvanceScenario();
         }
 
-        public void DeletaAllActors()
+        public void DeleteAllActors()
         {
-            DeletaAllPowerUps();
-            DeletaAllEnemies();
-            DeletaAllBullets();
-            DeletaAllAnimations();
+            DeleteAllPowerUps();
+            DeleteAllEnemies();
+            DeleteAllBullets();
+            DeleteAllAnimations();
         }
 
         public void ResetAndShowPlayer()
@@ -154,7 +155,6 @@ namespace AI2D.Engine
             Player.ShipEngineIdleSound.Stop();
             Player.ShipEngineRoarSound.Stop();
         }
-
 
         public void AdvanceScenario()
         {
@@ -208,7 +208,7 @@ namespace AI2D.Engine
                     select o as T).ToList();
         }
 
-        public void DeletaAllPowerUps()
+        public void DeleteAllPowerUps()
         {
             while (PowerUps.Count > 0)
             {
@@ -222,7 +222,7 @@ namespace AI2D.Engine
             }
         }
 
-        public void DeletaAllEnemies()
+        public void DeleteAllEnemies()
         {
             while (Enemies.Count > 0)
             {
@@ -236,7 +236,7 @@ namespace AI2D.Engine
             }
         }
 
-        public void DeletaAllBullets()
+        public void DeleteAllBullets()
         {
             while (Enemies.Count > 0)
             {
@@ -249,7 +249,7 @@ namespace AI2D.Engine
                 }
             }
         }
-        public void DeletaAllAnimations()
+        public void DeleteAllAnimations()
         {
             while (Animations.Count > 0)
             {
@@ -606,97 +606,120 @@ namespace AI2D.Engine
 
         public void Render(Graphics dc)
         {
-            lock (_core.DrawingSemaphore)
+            _core.IsRendering = true;
+
+            var timeout = TimeSpan.FromMilliseconds(1);
+            bool lockTaken = false;
+
+            try
             {
-                lock (TextBlocks)
+                Monitor.TryEnter(_core.DrawingSemaphore, timeout, ref lockTaken);
+                if (lockTaken)
                 {
-                    foreach (var obj in TextBlocks)
+                    lock (TextBlocks)
                     {
-                        obj.Render(dc);
+                        foreach (var obj in TextBlocks)
+                        {
+                            obj.Render(dc);
+                        }
                     }
-                }
 
-                lock (PowerUps)
-                {
-                    foreach (var obj in PowerUps)
+                    lock (PowerUps)
                     {
-                        if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                        foreach (var obj in PowerUps)
+                        {
+                            if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                            {
+                                obj.Render(dc);
+                            }
+                        }
+                    }
+
+                    lock (Animations)
+                    {
+                        foreach (var obj in Animations)
+                        {
+                            if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                            {
+                                obj.Render(dc);
+                            }
+                        }
+                    }
+
+                    lock (Enemies)
+                    {
+                        foreach (var obj in Enemies)
+                        {
+                            if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                            {
+                                obj.Render(dc);
+                            }
+                        }
+                    }
+
+                    lock (Bullets)
+                    {
+                        foreach (var obj in Bullets)
+                        {
+                            if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                            {
+                                obj.Render(dc);
+                            }
+                        }
+                    }
+
+                    lock (Stars)
+                    {
+                        foreach (var obj in Stars)
+                        {
+                            if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                            {
+                                obj.Render(dc);
+                            }
+                        }
+                    }
+
+                    lock (Debugs)
+                    {
+                        foreach (var obj in Debugs)
+                        {
+                            obj.Render(dc);
+                        }
+                    }
+
+                    lock (RadarPositionIndicators)
+                    {
+                        foreach (var obj in RadarPositionIndicators)
+                        {
+                            obj.Render(dc);
+                        }
+                    }
+
+                    Player?.Render(dc);
+
+                    lock (Menus)
+                    {
+                        foreach (var obj in Menus)
                         {
                             obj.Render(dc);
                         }
                     }
                 }
-
-                lock (Animations)
+                else
                 {
-                    foreach (var obj in Animations)
-                    {
-                        if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                        {
-                            obj.Render(dc);
-                        }
-                    }
-                }
-
-                lock (Enemies)
-                {
-                    foreach (var obj in Enemies)
-                    {
-                        if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                        {
-                            obj.Render(dc);
-                        }
-                    }
-                }
-
-                lock (Bullets)
-                {
-                    foreach (var obj in Bullets)
-                    {
-                        if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                        {
-                            obj.Render(dc);
-                        }
-                    }
-                }
-
-                lock (Stars)
-                {
-                    foreach (var obj in Stars)
-                    {
-                        if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                        {
-                            obj.Render(dc);
-                        }
-                    }
-                }
-
-                lock (Debugs)
-                {
-                    foreach (var obj in Debugs)
-                    {
-                        obj.Render(dc);
-                    }
-                }
-
-                lock (RadarPositionIndicators)
-                {
-                    foreach (var obj in RadarPositionIndicators)
-                    {
-                        obj.Render(dc);
-                    }
-                }
-
-                Player?.Render(dc);
-
-                lock (Menus)
-                {
-                    foreach (var obj in Menus)
-                    {
-                        obj.Render(dc);
-                    }
                 }
             }
+            finally
+            {
+                // Ensure that the lock is released.
+                if (lockTaken)
+                {
+                    Monitor.Exit(_core.DrawingSemaphore);
+                }
+            }
+
+            _core.IsRendering = false;
+
         }
 
         #endregion

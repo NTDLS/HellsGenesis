@@ -1,6 +1,7 @@
 ﻿using AI2D.Engine;
 using AI2D.GraphicObjects.Bullets;
 using AI2D.GraphicObjects.Enemies;
+using AI2D.GraphicObjects.PowerUp;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
@@ -23,6 +24,7 @@ namespace AI2D.GraphicObjects
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private int _MillisecondsBetweenHits = 200;
         private AudioClip _hitSound;
+        private AudioClip _shieldHit;
         private readonly List<WeaponBase> _weapons = new List<WeaponBase>();
         private ObjAnimation _hitExplosionAnimation { get; set; }
 
@@ -60,9 +62,61 @@ namespace AI2D.GraphicObjects
 
         public RotationMode RotationMode { get; set; }
         public WeaponBase CurrentWeapon { get; private set; }
-        public int HitPoints { get; set; }
-        public int ShieldPoints { get; set; }
+        public int HitPoints { get; private set; } = 0;
+        public int ShieldPoints { get; private set; } = 0;
         public VelocityD Velocity { get; set; } = new VelocityD();
+
+        public void SetHitPoints(int points)
+        {
+            HitPoints = 0;
+            AddHitPoints(points);
+        }
+
+        public void AddHitPoints(int pointsToAdd)
+        {
+            if (HitPoints + pointsToAdd > Constants.Limits.MaxHitpoints)
+            {
+                pointsToAdd = Constants.Limits.MaxHitpoints - (HitPoints + pointsToAdd);
+            }
+
+            if (this is ObjPlayer)
+            {
+                var player = this as ObjPlayer;
+
+                if (HitPoints < Constants.Limits.MaxShieldPoints && HitPoints + pointsToAdd >= Constants.Limits.MaxShieldPoints)
+                {
+                    player.AllSystemsGoSound.Play();
+                }
+            }
+
+            HitPoints += pointsToAdd;
+        }
+
+        public void SetShieldPoints(int points)
+        {
+            ShieldPoints = 0;
+            AddShieldPoints(points);
+        }
+
+        public void AddShieldPoints(int pointsToAdd)
+        {
+            if (ShieldPoints + pointsToAdd > Constants.Limits.MaxShieldPoints)
+            {
+                pointsToAdd = Constants.Limits.MaxShieldPoints - (ShieldPoints + pointsToAdd);
+            }
+
+            if (this is ObjPlayer)
+            {
+                var player = this as ObjPlayer;
+
+                if (ShieldPoints < Constants.Limits.MaxShieldPoints && ShieldPoints + pointsToAdd >= Constants.Limits.MaxShieldPoints)
+                {
+                    player.ShieldMaxSound.Play();
+                }
+            }
+
+            ShieldPoints += pointsToAdd;
+        }
 
         bool _isLockedOn = false;
         public bool IsLockedOn //The object is the subject of a foreign weapons lock.
@@ -216,7 +270,8 @@ namespace AI2D.GraphicObjects
 
         public void Initialize(string imagePath = null, Size? size = null)
         {
-            _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Object Hit.wav", 0.65f);
+            _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Object Hit.wav", 0.65f);
+            _shieldHit = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Shield Hit.wav", 0.65f);
 
             int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
             _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
@@ -402,20 +457,43 @@ namespace AI2D.GraphicObjects
             bool result = ((DateTime.Now - _lastHit).TotalMilliseconds > _MillisecondsBetweenHits);
             if (result)
             {
-                _hitSound.Play();
                 _lastHit = DateTime.Now;
 
                 if (ShieldPoints > 0)
                 {
+                    _shieldHit.Play();
                     damage /= 2; //Weapons do less damage to Shields. They are designed to take hits.
-
                     damage = damage < 1 ? 1 : damage;
-
                     ShieldPoints -= damage > ShieldPoints ? ShieldPoints : damage; //No need to go negative with the damage.
+
+                    if (this is ObjPlayer)
+                    {
+                        var player = this as ObjPlayer;
+                        if (ShieldPoints == 0)
+                        {
+                            player.ShieldDownSound.Play();
+                        }
+                    }
                 }
                 else
                 {
+                    _hitSound.Play();
                     HitPoints -= damage > HitPoints ? HitPoints : damage; //No need to go negative with the damage.
+
+                    if (this is ObjPlayer)
+                    {
+                        var player = this as ObjPlayer;
+                        //This is the hit that took us under the treshold.
+                        if (HitPoints < 100 && HitPoints + damage > 100)
+                        {
+                            player.IntegrityLowSound.Play();
+                        }
+                        else if (HitPoints < 50 && HitPoints + damage > 50)
+                        {
+                            player.SystemsFailingSound.Play();
+                        }
+                    }
+
                     if (HitPoints <= 0)
                     {
                         Explode();
@@ -488,6 +566,7 @@ namespace AI2D.GraphicObjects
         {
             return PointD.DistanceTo(this.Location, to.Location);
         }
+
         public double DistanceTo(PointD to)
         {
             return PointD.DistanceTo(this.Location, to);
@@ -498,6 +577,14 @@ namespace AI2D.GraphicObjects
             if (this is BaseEnemy)
             {
                 _core.Actors.Player.Score += (this as BaseEnemy).ScorePoints;
+
+                //If the type of explosion is an enemy then maybe spawn a powerup.
+                if (Utility.ChanceIn(25))
+                {
+                    BasePowerUp powerUp = Utility.FlipCoin() ? (BasePowerUp)new PowerUpRepair(_core) : (BasePowerUp)new PowerUpSheild(_core);
+                    powerUp.Location = this.Location;
+                    _core.Actors.InjectPowerUp(powerUp);
+                }
             }
 
             _explodeSound.Play();

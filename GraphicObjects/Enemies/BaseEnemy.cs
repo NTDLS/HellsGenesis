@@ -18,7 +18,7 @@ namespace AI2D.GraphicObjects.Enemies
             Velocity.ThrottlePercentage = 1;
             Initialize();
 
-            HitPoints = hitPoints;
+            base.SetHitPoints(hitPoints);
             ScorePoints = HitPoints * scoreMultiplier;
 
             RadarPositionIndicator = _core.Actors.AddNewRadarPositionIndicator();
