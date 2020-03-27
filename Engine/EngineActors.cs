@@ -83,7 +83,8 @@ namespace AI2D.Engine
             Player.ReadyForDeletion = false;
 
             Player.Velocity.MaxSpeed = Constants.Limits.MaxPlayerSpeed;
-            Player.Velocity.MaxBoost = Constants.Limits.MaxPlayerBoost;
+            Player.Velocity.MaxBoost = Constants.Limits.MaxPlayerBoostSpeed;
+            Player.Velocity.AvailableBoost = Constants.Limits.MaxPlayerBoost;
             Player.Velocity.MaxRotationSpeed = Constants.Limits.MaxRotationSpeed;
             Player.SetHitPoints(Constants.Limits.StartingPlayerHitpoints);
             Player.SetShieldPoints(Constants.Limits.StartingPlayerShieldPoints);

@@ -151,29 +151,28 @@ namespace AI2D.Engine
                         if (_core.Actors.Player.CurrentWeapon?.RoundQuantity == 0)
                         {
                             _core.Actors.Player.AmmoEmptySound.Play();
-                            _co
-                                wre.Actors.Player.SelectFirstAvailableUsableWeapon();
+                            _core.Actors.Player.SelectFirstAvailableUsableWeapon();
                         }
                     }
                 }
 
                 //Make player boost "build up" and fade-in.
-                if (_core.Input.IsKeyPressed(PlayerKey.SpeedBoost) && _core.Actors.Player.BoostAvailable > 0)
+                if (_core.Input.IsKeyPressed(PlayerKey.SpeedBoost) && _core.Actors.Player.Velocity.AvailableBoost > 0)
                 {
                     if (_core.Actors.Player.Velocity.BoostPercentage < 1.0)
                     {
                         _core.Actors.Player.Velocity.BoostPercentage += Constants.PlayerThrustRampUp;
                     }
 
-                    _core.Actors.Player.BoostAvailable -= _core.Actors.Player.Velocity.MaxBoost * _core.Actors.Player.Velocity.BoostPercentage;
-                    if (_core.Actors.Player.BoostAvailable < 0)
+                    _core.Actors.Player.Velocity.AvailableBoost -= _core.Actors.Player.Velocity.MaxBoost * _core.Actors.Player.Velocity.BoostPercentage;
+                    if (_core.Actors.Player.Velocity.AvailableBoost < 0)
                     {
-                        _core.Actors.Player.BoostAvailable = 0;
+                        _core.Actors.Player.Velocity.AvailableBoost = 0;
                     }
                 }
                 else
                 {
-                    //If no "forward" or "reverse" user input is received... then fade the thrust.
+                    //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
                     if (_core.Actors.Player.Velocity.BoostPercentage > Constants.Limits.MinPlayerThrust)
                     {
                         _core.Actors.Player.Velocity.BoostPercentage -= Constants.PlayerThrustRampDown;
@@ -182,6 +181,12 @@ namespace AI2D.Engine
                             _core.Actors.Player.Velocity.BoostPercentage = 0;
                         }
                     }
+
+                    if (_core.Actors.Player.Velocity.AvailableBoost < Constants.Limits.MaxPlayerBoost)
+                    {
+                        _core.Actors.Player.Velocity.AvailableBoost += 1 - _core.Actors.Player.Velocity.BoostPercentage;
+                    }
+
                 }
 
                 //Make player thrust "build up" and fade-in.
@@ -659,11 +664,11 @@ namespace AI2D.Engine
             _core.Actors.PlayerStatsText.Text =
                 $"Scenario: {scenario}, "
                 + $"Shield: {_core.Actors.Player.ShieldPoints}, "
-                + $"Boost: {_core.Actors.Player.BoostAvailable.ToString("#,0")}, "
                 + $"Hull: {_core.Actors.Player.HitPoints}, "
-                + $"Weapon: {_core.Actors.Player.CurrentWeapon?.Name} x{_core.Actors.Player.CurrentWeapon?.RoundQuantity}, "
-                + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "
-                + $"Score: {_core.Actors.Player.Score.ToString("#,0")}";
+                + $"Boost: {_core.Actors.Player.Velocity.AvailableBoost.ToString("#,0")}, "
+                + $"Weapon: {_core.Actors.Player.CurrentWeapon?.Name} x{_core.Actors.Player.CurrentWeapon?.RoundQuantity}";
+                //+ $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "
+                //+ $"Score: {_core.Actors.Player.Score.ToString("#,0")}";
 
             #if DEBUG
             if (_core.ShowDebug)

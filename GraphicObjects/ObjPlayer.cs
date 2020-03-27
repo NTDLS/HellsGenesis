@@ -19,8 +19,6 @@ namespace AI2D.GraphicObjects
         public AudioClip SystemsFailingSound { get; private set; }
         public AudioClip HullBreachedSound { get; private set; }
         public AudioClip IntegrityLowSound { get; private set; }
-        public double BoostAvailable { get; set; } = 1000;
-        public bool ApplySpeedBoost { get; set; } = false;
         public int Score { get; set; }
         public int MaxHitPoints { get; set; }
         public int MaxShieldPoints { get; set; }

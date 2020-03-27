@@ -11,7 +11,9 @@
             public const int MaxShieldPoints = 100;
 
             public const double MaxPlayerSpeed = 5.0;
-            public const double MaxPlayerBoost = 2.5;
+            public const double MaxPlayerBoostSpeed = 2.5;
+            public const double MaxPlayerBoost = 1000;
+
             public const double MaxRotationSpeed = 3.0;
 
             public const int StartingPlayerHitpoints = 250;

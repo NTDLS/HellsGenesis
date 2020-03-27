@@ -8,7 +8,7 @@ namespace AI2D
     public partial class FormMain : Form
     {
         private Core _core;
-        private bool _fullScreen = false;
+        private bool _fullScreen = true;
 
         //This really shouldn't be necessary! :(
         protected override CreateParams CreateParams
