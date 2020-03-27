@@ -17,8 +17,10 @@ namespace AI2D.GraphicObjects
         public AudioClip ShieldMaxSound { get; private set; }
         public AudioClip ShieldNominalSound { get; private set; }
         public AudioClip SystemsFailingSound { get; private set; }
+        public AudioClip HullBreachedSound { get; private set; }
         public AudioClip IntegrityLowSound { get; private set; }
-
+        public double BoostAvailable { get; set; } = 1000;
+        public bool ApplySpeedBoost { get; set; } = false;
         public int Score { get; set; }
         public int MaxHitPoints { get; set; }
         public int MaxShieldPoints { get; set; }
@@ -30,6 +32,7 @@ namespace AI2D.GraphicObjects
 
             AmmoLowSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Ammo Low.wav", 0.75f);
             SystemsFailingSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Systems Failing.wav", 0.75f);
+            HullBreachedSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Hull Breached.wav", 0.75f);
             IntegrityLowSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Integrity Low.wav", 0.75f);
             ShieldFailSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Shield Fail.wav", 0.75f);
             ShieldDownSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Shield Down.wav", 0.75f);

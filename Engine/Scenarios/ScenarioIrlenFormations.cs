@@ -22,6 +22,10 @@ namespace AI2D.Engine.Scenarios
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 1), AdvanceWaveCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 5), RedirectFormationCallback);
+
+            _core.Actors.Player.AddHitPoints(100);
+            _core.Actors.Player.AddShieldPoints(10);
+
         }
 
         private void RedirectFormationCallback(Core core, object refObj)

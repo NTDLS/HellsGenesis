@@ -79,6 +79,7 @@ namespace AI2D.GraphicObjects
                 pointsToAdd = Constants.Limits.MaxHitpoints - (HitPoints + pointsToAdd);
             }
 
+            /*
             if (this is ObjPlayer)
             {
                 var player = this as ObjPlayer;
@@ -88,6 +89,7 @@ namespace AI2D.GraphicObjects
                     player.AllSystemsGoSound.Play();
                 }
             }
+            */
 
             HitPoints += pointsToAdd;
         }
@@ -270,8 +272,8 @@ namespace AI2D.GraphicObjects
 
         public void Initialize(string imagePath = null, Size? size = null)
         {
-            _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Object Hit.wav", 0.65f);
-            _shieldHit = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Shield Hit.wav", 0.65f);
+            _hitSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Object Hit.wav", 0.5f);
+            _shieldHit = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Shield Hit.wav", 0.5f);
 
             int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
             _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
@@ -492,6 +494,10 @@ namespace AI2D.GraphicObjects
                         {
                             player.SystemsFailingSound.Play();
                         }
+                        else if (HitPoints < 20 && HitPoints + damage > 20)
+                        {
+                            player.HullBreachedSound.Play();
+                        }                     
                     }
 
                     if (HitPoints <= 0)

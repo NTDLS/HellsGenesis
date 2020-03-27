@@ -19,6 +19,9 @@ namespace AI2D.Engine.Scenarios
 
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 0, 5000), AddFreshEnemiesCallback);
+
+            _core.Actors.Player.AddHitPoints(100);
+            _core.Actors.Player.AddShieldPoints(10);
         }
 
         private void FirstShowPlayerCallback(Core core, object refObj)
@@ -35,8 +38,6 @@ namespace AI2D.Engine.Scenarios
                     Cleanup();
                     return;
                 }
-
-                _core.Actors.Player.AddShieldPoints(100);
 
                 int enemyCount = Utility.Random.Next(CurrentWave + 1, CurrentWave + 5);
 

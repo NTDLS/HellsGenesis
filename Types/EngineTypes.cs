@@ -21,6 +21,7 @@
 
     public enum PlayerKey
     {
+        SpeedBoost,
         Forward,
         Reverse,
         Fire,

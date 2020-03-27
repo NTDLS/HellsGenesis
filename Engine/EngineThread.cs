@@ -151,7 +151,35 @@ namespace AI2D.Engine
                         if (_core.Actors.Player.CurrentWeapon?.RoundQuantity == 0)
                         {
                             _core.Actors.Player.AmmoEmptySound.Play();
-                            _core.Actors.Player.SelectFirstAvailableUsableWeapon();
+                            _co
+                                wre.Actors.Player.SelectFirstAvailableUsableWeapon();
+                        }
+                    }
+                }
+
+                //Make player boost "build up" and fade-in.
+                if (_core.Input.IsKeyPressed(PlayerKey.SpeedBoost) && _core.Actors.Player.BoostAvailable > 0)
+                {
+                    if (_core.Actors.Player.Velocity.BoostPercentage < 1.0)
+                    {
+                        _core.Actors.Player.Velocity.BoostPercentage += Constants.PlayerThrustRampUp;
+                    }
+
+                    _core.Actors.Player.BoostAvailable -= _core.Actors.Player.Velocity.MaxBoost * _core.Actors.Player.Velocity.BoostPercentage;
+                    if (_core.Actors.Player.BoostAvailable < 0)
+                    {
+                        _core.Actors.Player.BoostAvailable = 0;
+                    }
+                }
+                else
+                {
+                    //If no "forward" or "reverse" user input is received... then fade the thrust.
+                    if (_core.Actors.Player.Velocity.BoostPercentage > Constants.Limits.MinPlayerThrust)
+                    {
+                        _core.Actors.Player.Velocity.BoostPercentage -= Constants.PlayerThrustRampDown;
+                        if (_core.Actors.Player.Velocity.BoostPercentage < 0)
+                        {
+                            _core.Actors.Player.Velocity.BoostPercentage = 0;
                         }
                     }
                 }
@@ -180,6 +208,11 @@ namespace AI2D.Engine
                 if (_core.Actors.Player.Velocity.ThrottlePercentage > 0)
                 {
                     double forwardThrust = (_core.Actors.Player.Velocity.MaxSpeed * _core.Actors.Player.Velocity.ThrottlePercentage);
+
+                    if (_core.Actors.Player.Velocity.BoostPercentage > 0)
+                    {
+                        forwardThrust += _core.Actors.Player.Velocity.MaxBoost * _core.Actors.Player.Velocity.BoostPercentage;
+                    }
 
                     //Close to the right wall and travelling in that direction.
                     if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + Constants.Limits.InfiniteScrollWall)
@@ -626,6 +659,7 @@ namespace AI2D.Engine
             _core.Actors.PlayerStatsText.Text =
                 $"Scenario: {scenario}, "
                 + $"Shield: {_core.Actors.Player.ShieldPoints}, "
+                + $"Boost: {_core.Actors.Player.BoostAvailable.ToString("#,0")}, "
                 + $"Hull: {_core.Actors.Player.HitPoints}, "
                 + $"Weapon: {_core.Actors.Player.CurrentWeapon?.Name} x{_core.Actors.Player.CurrentWeapon?.RoundQuantity}, "
                 + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "

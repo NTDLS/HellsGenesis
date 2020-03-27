@@ -68,6 +68,7 @@ namespace AI2D
 
         private void FormMain_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(Types.PlayerKey.SpeedBoost, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(Types.PlayerKey.Forward, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(Types.PlayerKey.RotateCounterClockwise, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(Types.PlayerKey.Reverse, Types.KeyPressState.Down);
@@ -80,7 +81,7 @@ namespace AI2D
             if (e.KeyCode == Keys.Down) _core.Input.KeyStateChanged(Types.PlayerKey.Down, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(Types.PlayerKey.Enter, Types.KeyPressState.Down);
 
-            _core.Input.DebugKeyPress(e.KeyCode);
+            _core.Input.HandleSingleKeyPress(e.KeyCode);
         }
 
         private void FormMain_KeyUp(object sender, KeyEventArgs e)
@@ -99,6 +100,7 @@ namespace AI2D
                 }
             }
 
+            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(Types.PlayerKey.SpeedBoost, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(Types.PlayerKey.Forward, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(Types.PlayerKey.RotateCounterClockwise, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(Types.PlayerKey.Reverse, Types.KeyPressState.Up);

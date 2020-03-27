@@ -4,6 +4,7 @@
     {
         public AngleD Angle { get; set; } = new AngleD();
         public double MaxSpeed { get; set; }
+        public double MaxBoost { get; set; }
         public double MaxRotationSpeed { get; set; }
 
         public double _throttlePercentage;
@@ -18,6 +19,21 @@
                 _throttlePercentage = value;
                 _throttlePercentage = _throttlePercentage > 1 ? 1 : _throttlePercentage;
                 _throttlePercentage = _throttlePercentage < -1 ? -1 : _throttlePercentage;
+            }
+        }
+
+        public double _boostPercentage;
+        public double BoostPercentage
+        {
+            get
+            {
+                return _boostPercentage;
+            }
+            set
+            {
+                _boostPercentage = value;
+                _boostPercentage = _boostPercentage > 1 ? 1 : _boostPercentage;
+                _boostPercentage = _boostPercentage < -1 ? -1 : _boostPercentage;
             }
         }
     }
