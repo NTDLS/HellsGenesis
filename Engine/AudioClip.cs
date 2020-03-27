@@ -19,6 +19,19 @@ namespace AI2D.Engine
         private string _wavFilePath; //For debugging.
         private float _initialVolumne;
 
+        public float InitialVolumne
+        {
+            get
+            {
+                return _initialVolumne;
+            }
+        }
+
+        public void SetVolume(float volumne)
+        {
+            _singleSourceVoice.SetVolume(volumne);
+        }
+
         public AudioClip(string wavFilePath, float initialVolumne = 1, bool loopForever = false)
         {
             _loopForever = loopForever;

@@ -19,6 +19,7 @@ namespace AI2D.GraphicObjects
         public AudioClip SystemsFailingSound { get; private set; }
         public AudioClip HullBreachedSound { get; private set; }
         public AudioClip IntegrityLowSound { get; private set; }
+        public AudioClip ShipEngineBoostSound { get; private set; }
         public int Score { get; set; }
         public int MaxHitPoints { get; set; }
         public int MaxShieldPoints { get; set; }
@@ -36,12 +37,13 @@ namespace AI2D.GraphicObjects
             ShieldDownSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Shield Down.wav", 0.75f);
             ShieldMaxSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Shield Max.wav", 0.75f);
             ShieldNominalSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Shield Nominal.wav", 0.75f);
-
+            AllSystemsGoSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\All Systems Go.wav", 0.75f);
             AmmoLowSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Ammo Low.wav", 0.75f);
             AmmoEmptySound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Ammo Empty.wav", 0.75f);
+
             ShipEngineRoarSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Engine Roar.wav", 1.0f, true);
             ShipEngineIdleSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Engine Idle.wav", 0.6f, true);
-            AllSystemsGoSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\All Systems Go.wav", 0.75f, false);
+            ShipEngineBoostSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Engine Boost.wav", 1.0f, true);
         }
     }
 }

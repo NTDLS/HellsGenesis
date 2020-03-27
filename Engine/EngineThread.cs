@@ -110,6 +110,8 @@ namespace AI2D.Engine
             }
         }
 
+        bool boostFading = false;
+
         void AdvanceFrame()
         {
             #region Menu Management.
@@ -157,7 +159,8 @@ namespace AI2D.Engine
                 }
 
                 //Make player boost "build up" and fade-in.
-                if (_core.Input.IsKeyPressed(PlayerKey.SpeedBoost) && _core.Actors.Player.Velocity.AvailableBoost > 0)
+                if (_core.Input.IsKeyPressed(PlayerKey.SpeedBoost) && _core.Input.IsKeyPressed(PlayerKey.Forward)
+                    && _core.Actors.Player.Velocity.AvailableBoost > 0 && boostFading == false)
                 {
                     if (_core.Actors.Player.Velocity.BoostPercentage < 1.0)
                     {
@@ -172,6 +175,12 @@ namespace AI2D.Engine
                 }
                 else
                 {
+                    if (_core.Actors.Player.Velocity.AvailableBoost == 0)
+                    {
+                        //The boost was all used up, now we have to wait on it to cool down.
+                        boostFading = true;
+                    }
+
                     //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
                     if (_core.Actors.Player.Velocity.BoostPercentage > Constants.Limits.MinPlayerThrust)
                     {
@@ -186,8 +195,12 @@ namespace AI2D.Engine
                     {
                         _core.Actors.Player.Velocity.AvailableBoost += 1 - _core.Actors.Player.Velocity.BoostPercentage;
                     }
-
+                    else
+                    {
+                        boostFading = false;
+                    }
                 }
+                
 
                 //Make player thrust "build up" and fade-in.
                 if (_core.Input.IsKeyPressed(PlayerKey.Forward))
@@ -247,6 +260,15 @@ namespace AI2D.Engine
 
                     _core.Actors.Player.X += (_core.Actors.Player.Velocity.Angle.X * forwardThrust) - appliedOffset.X;
                     _core.Actors.Player.Y += (_core.Actors.Player.Velocity.Angle.Y * forwardThrust) - appliedOffset.Y;
+                }
+
+                if (_core.Actors.Player.Velocity.BoostPercentage > 0)
+                {
+                    _core.Actors.Player.ShipEngineBoostSound.Play();
+                }
+                else
+                {
+                    _core.Actors.Player.ShipEngineBoostSound.Fade();
                 }
 
                 if (_core.Actors.Player.Velocity.ThrottlePercentage > Constants.Limits.MinPlayerThrust)
@@ -686,7 +708,9 @@ namespace AI2D.Engine
                                         + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
                     + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
                     + $"  Delta BG Offset: {appliedOffset.X.ToString("#0.00")}x, {appliedOffset.Y.ToString("#0.00")}y\r\n"
-                    + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}";
+                    + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}\r\n"
+                    +$"              Boost: {(_core.Actors.Player.Velocity.BoostPercentage * 100).ToString("#0.00")}";
+               
             }
             else
             {
