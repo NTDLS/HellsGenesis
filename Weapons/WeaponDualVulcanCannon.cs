@@ -5,7 +5,7 @@ namespace AI2D.Weapons
 {
     public class WeaponDualVulcanCannon : WeaponBase
     {
-        private const string soundPath = @"..\..\Assets\Sounds\Weapons\Vulcan Cannon.wav";
+        private const string soundPath = @"..\..\Assets\Sounds\Weapons\WeaponDualVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponDualVulcanCannon(Core core)

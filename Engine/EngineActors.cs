@@ -98,6 +98,7 @@ namespace AI2D.Engine
             Player.AddWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 100 });
             Player.AddWeapon(new WeaponPhotonTorpedo(_core) { RoundQuantity = 500 });
             Player.AddWeapon(new WeaponPulseMeson(_core) { RoundQuantity = 500 });
+            Player.AddWeapon(new WeaponFragMissile(_core) { RoundQuantity = 500 });
             Player.AddWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 500 });
 
             Player.SelectWeapon(typeof(WeaponVulcanCannon));

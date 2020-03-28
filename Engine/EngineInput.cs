@@ -95,7 +95,7 @@ namespace AI2D.Engine
             {
                 if (_core.Actors.Enemies.Count > 0)
                 {
-                    //_core.Actors.Enemies[0].MoveInDirectionOf(_core.Actors.Player);
+                    _core.Actors.Enemies[0].MoveInDirectionOf(_core.Actors.Player);
                 }
                 //if (_core.Actors.Enemies.Count > 0)
                 //{

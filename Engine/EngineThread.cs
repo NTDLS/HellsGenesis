@@ -692,24 +692,23 @@ namespace AI2D.Engine
                 //+ $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "
                 //+ $"Score: {_core.Actors.Player.Score.ToString("#,0")}";
 
-            #if DEBUG
             if (_core.ShowDebug)
             {
                 _core.Actors.DebugText.Text =
                         $"       Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")},"
                                         + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")},"
                                         + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n"
-                    + $"Player Display XY: {_core.Actors.Player.X.ToString("#0.00")}x, {_core.Actors.Player.Y.ToString("#0.00")}y\r\n"
-                    + $"     Player Angle: {_core.Actors.Player.Velocity.Angle.X.ToString("#0.00")}x, {_core.Actors.Player.Velocity.Angle.Y.ToString("#0.00")}y, "
-                                        + $"{_core.Actors.Player.Velocity.Angle.Degrees.ToString("#0.00")}deg, "
-                                        + $" {_core.Actors.Player.Velocity.Angle.Radians.ToString("#0.00")}rad, "
-                                        + $" {_core.Actors.Player.Velocity.Angle.RadiansUnadjusted.ToString("#0.00")}rad unadjusted\r\n"
-                    + $"Player Virtual XY: {(_core.Actors.Player.X + _core.Display.BackgroundOffset.X).ToString("#0.00")}x,"
-                                        + $" {(_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y).ToString("#0.00")}y\r\n"
-                    + $"        BG Offset: {_core.Display.BackgroundOffset.X.ToString("#0.00")}x, {_core.Display.BackgroundOffset.Y.ToString("#0.00")}y\r\n"
-                    + $"  Delta BG Offset: {appliedOffset.X.ToString("#0.00")}x, {appliedOffset.Y.ToString("#0.00")}y\r\n"
-                    + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100).ToString("#0.00")}\r\n"
-                    +$"              Boost: {(_core.Actors.Player.Velocity.BoostPercentage * 100).ToString("#0.00")}";
+                    + $"Player Display XY: {_core.Actors.Player.X:#0.00}x, {_core.Actors.Player.Y:#0.00}y\r\n"
+                    + $"     Player Angle: {_core.Actors.Player.Velocity.Angle.X:#0.00}x, {_core.Actors.Player.Velocity.Angle.Y:#0.00}y, "
+                                        + $"{_core.Actors.Player.Velocity.Angle.Degrees:#0.00}deg, "
+                                        + $" {_core.Actors.Player.Velocity.Angle.Radians:#0.00}rad, "
+                                        + $" {_core.Actors.Player.Velocity.Angle.RadiansUnadjusted:#0.00}rad unadjusted\r\n"
+                    + $"Player Virtual XY: {_core.Actors.Player.X + _core.Display.BackgroundOffset.X:#0.00}x,"
+                                        + $" {_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y:#0.00}y\r\n"
+                    + $"        BG Offset: {_core.Display.BackgroundOffset.X:#0.00}x, {_core.Display.BackgroundOffset.Y:#0.00}y\r\n"
+                    + $"  Delta BG Offset: {appliedOffset.X:#0.00}x, {appliedOffset.Y:#0.00}y\r\n"
+                    + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100):#0.00}\r\n"
+                    + $"             Boost: {(_core.Actors.Player.Velocity.BoostPercentage * 100):#0.00}";
                
             }
             else
@@ -719,7 +718,6 @@ namespace AI2D.Engine
                     _core.Actors.DebugText.Text = string.Empty;
                 }
             }
-            #endif
         }
     }
 }

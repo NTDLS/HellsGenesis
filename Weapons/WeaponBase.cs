@@ -39,7 +39,7 @@ namespace AI2D.Weapons
 
         public virtual BaseBullet CreateBullet(BaseGraphicObject lockedTarget, PointD xyOffset = null)
         {
-            return new BulletGeneric(_core, this, _owner, @"..\..\Assets\Graphics\Weapon\Generic.png", lockedTarget, xyOffset);
+            return new BulletGeneric(_core, this, _owner, @"..\..\Assets\Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
         }
 
         public virtual void ApplyIntelligence(PointD frameAppliedOffset, BaseGraphicObject wouldFireAt)

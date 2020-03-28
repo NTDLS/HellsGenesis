@@ -68,6 +68,7 @@
     <Compile Include="Engine\Scenarios\ScenarioScinzadSkirmish.cs" />
     <Compile Include="Engine\Scenarios\ScenarioIrlenFormations.cs" />
     <Compile Include="Engine\Scenarios\ScenarioAvvolAmbush.cs" />
+    <Compile Include="GraphicObjects\Bullets\BulletFragMissile.cs" />
     <Compile Include="GraphicObjects\Bullets\BulletPhotonTorpedo.cs" />
     <Compile Include="GraphicObjects\Bullets\BulletPulseMeson.cs" />
     <Compile Include="GraphicObjects\Bullets\BulletVulcanCannon.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="GraphicObjects\ObjTextBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Weapons\WeaponFragMissile.cs" />
     <Compile Include="Weapons\WeaponGuidedFragMissile.cs" />
     <Compile Include="Weapons\WeaponPulseMeson.cs" />
     <Compile Include="Weapons\WeaponPhotonTorpedo.cs" />

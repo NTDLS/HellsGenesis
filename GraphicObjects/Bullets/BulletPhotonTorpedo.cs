@@ -6,7 +6,7 @@ namespace AI2D.GraphicObjects.Bullets
 {
     public class BulletPhotonTorpedo : BaseBullet
     {
-        private const string imagePath = @"..\..\Assets\Graphics\Weapon\Photon Torpedo.png";
+        private const string imagePath = @"..\..\Assets\Graphics\Weapon\BulletPhotonTorpedo.png";
 
         public BulletPhotonTorpedo(Core core, WeaponBase weapon, BaseGraphicObject firedFrom,
              BaseGraphicObject lockedTarget = null, PointD xyOffset = null)

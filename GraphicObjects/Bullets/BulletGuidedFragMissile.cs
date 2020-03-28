@@ -6,7 +6,7 @@ namespace AI2D.GraphicObjects.Bullets
 {
     public class BulletGuidedFragMissile : BaseBullet
     {
-        private const string imagePath = @"..\..\Assets\Graphics\Weapon\Missiles\Missile 05 (3).png";
+        private const string imagePath = @"..\..\Assets\Graphics\Weapon\Missiles\BulletGuidedFragMissile.png";
 
         public BulletGuidedFragMissile(Core core, WeaponBase weapon, BaseGraphicObject firedFrom,
              BaseGraphicObject lockedTarget = null, PointD xyOffset = null)
