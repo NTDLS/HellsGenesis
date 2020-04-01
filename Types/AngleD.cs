@@ -124,7 +124,7 @@ namespace AI2D.Types
 
         public override string ToString()
         {
-            return $"{{{Math.Round(X, 4).ToString("#.####")}x,{Math.Round(Y, 4).ToString("#.####")}y}}";
+            return $"{{{Math.Round(X, 4):#.####}x,{Math.Round(Y, 4):#.####}y}}";
         }
 
         public Vector ToVector()

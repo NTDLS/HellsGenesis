@@ -1,4 +1,6 @@
 ﻿using AI2D.Engine;
+using AI2D.Types;
+using System;
 using System.Drawing;
 
 namespace AI2D.GraphicObjects
@@ -23,6 +25,8 @@ namespace AI2D.GraphicObjects
         public int Score { get; set; }
         public int MaxHitPoints { get; set; }
         public int MaxShieldPoints { get; set; }
+        public ObjAnimation ThrustAnimation { get; private set; }
+        public ObjAnimation BoostAnimation { get; private set; }
 
         public ObjPlayer(Core core)
             : base(core)
@@ -44,6 +48,77 @@ namespace AI2D.GraphicObjects
             ShipEngineRoarSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Engine Roar.wav", 1.0f, true);
             ShipEngineIdleSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Engine Idle.wav", 0.6f, true);
             ShipEngineBoostSound = _core.Actors.GetSoundCached(@"..\..\Assets\Sounds\Ship\Engine Boost.wav", 1.0f, true);
+
+            this.OnPositionChanged += ObjPlayer_OnPositionChanged;
+            this.OnRotated += ObjPlayer_OnPositionChanged;
+            this.OnVisibilityChange += ObjPlayer_OnVisibilityChange;
+        }
+
+        private void ObjPlayer_OnVisibilityChange(BaseGraphicObject obj)
+        {
+            if (Visable == true)
+            {
+                if (ThrustAnimation == null || ThrustAnimation.ReadyForDeletion == true)
+                {
+                    string _debugAniPath = @"..\..\Assets\Graphics\Animation\AirThrust32x32.png";
+                    var playMode = new ObjAnimation.PlayMode()
+                    {
+                        Replay = ObjAnimation.ReplayMode.LoopedPlay,
+                        DeleteActorAfterPlay = false,
+                        ReplayDelay = new TimeSpan(0)
+                    };
+                    ThrustAnimation = new ObjAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
+
+                    ThrustAnimation.Reset();
+
+                    _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);
+
+                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+                    ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
+                    ThrustAnimation.X = this.X + pointRight.X;
+                    ThrustAnimation.Y = this.Y + pointRight.Y;
+                }
+
+                if (BoostAnimation == null || BoostAnimation.ReadyForDeletion == true)
+                {
+                    string _debugAniPath = @"..\..\Assets\Graphics\Animation\FireThrust32x32.png";
+                    var playMode = new ObjAnimation.PlayMode()
+                    {
+                        Replay = ObjAnimation.ReplayMode.LoopedPlay,
+                        DeleteActorAfterPlay = false,
+                        ReplayDelay = new TimeSpan(0)
+                    };
+                    BoostAnimation = new ObjAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
+
+                    BoostAnimation.Reset();
+
+                    _core.Actors.PlaceAnimationOnTopOf(BoostAnimation, this);
+
+                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+                    BoostAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
+                    BoostAnimation.X = this.X + pointRight.X;
+                    BoostAnimation.Y = this.Y + pointRight.Y;
+                }
+            }
+        }
+
+        private void ObjPlayer_OnPositionChanged(BaseGraphicObject obj)
+        {
+            if (ThrustAnimation != null && ThrustAnimation.Visable)
+            {
+                var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+                ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
+                ThrustAnimation.X = this.X + pointRight.X;
+                ThrustAnimation.Y = this.Y + pointRight.Y;
+            }
+
+            if (BoostAnimation != null && BoostAnimation.Visable)
+            {
+                var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+                BoostAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
+                BoostAnimation.X = this.X + pointRight.X;
+                BoostAnimation.Y = this.Y + pointRight.Y;
+            }
         }
     }
 }

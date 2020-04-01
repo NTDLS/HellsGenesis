@@ -200,7 +200,17 @@ namespace AI2D.Engine
                         boostFading = false;
                     }
                 }
-                
+
+                if (_core.Actors.Player.BoostAnimation != null)
+                {
+                    _core.Actors.Player.BoostAnimation.Visable = (_core.Input.IsKeyPressed(PlayerKey.SpeedBoost) && _core.Input.IsKeyPressed(PlayerKey.Forward)
+                                                                    && _core.Actors.Player.Velocity.AvailableBoost > 0 && boostFading == false);
+                }
+
+                if (_core.Actors.Player.ThrustAnimation != null)
+                {
+                    _core.Actors.Player.ThrustAnimation.Visable = _core.Actors.Player.Velocity.ThrottlePercentage > 0;
+                }
 
                 //Make player thrust "build up" and fade-in.
                 if (_core.Input.IsKeyPressed(PlayerKey.Forward))
@@ -366,6 +376,11 @@ namespace AI2D.Engine
                         }
 
                         enemy.ApplyMotion(appliedOffset);
+
+                        if (enemy.ThrustAnimation != null)
+                        {
+                            enemy.ThrustAnimation.Visable = enemy.Velocity.ThrottlePercentage > 0;
+                        }
                     }
                 }
             }

@@ -46,7 +46,6 @@ namespace AI2D.GraphicObjects
                 }
             }
 
-
             public TimeSpan ReplayDelay;
             public bool DeleteActorAfterPlay;
         }

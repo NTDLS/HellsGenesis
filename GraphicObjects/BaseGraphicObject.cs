@@ -13,6 +13,16 @@ namespace AI2D.GraphicObjects
 {
     public class BaseGraphicObject
     {
+        public delegate void PositionChanged(BaseGraphicObject obj);
+        public event PositionChanged OnPositionChanged;
+
+        public delegate void Rotated(BaseGraphicObject obj);
+        public event Rotated OnRotated;
+
+        public delegate void VisibilityChange(BaseGraphicObject obj);
+        public event VisibilityChange OnVisibilityChange;
+
+
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;
 
@@ -151,6 +161,8 @@ namespace AI2D.GraphicObjects
                 {
                     Visable = false;
                 }
+
+                OnVisibilityChange?.Invoke(this);
             }
         }
 
@@ -181,6 +193,7 @@ namespace AI2D.GraphicObjects
             }
         }
 
+
         public double X
         {
             get
@@ -191,6 +204,7 @@ namespace AI2D.GraphicObjects
             {
                 Invalidate();
                 _location.X = value;
+                OnPositionChanged?.Invoke(this);
                 Invalidate();
             }
         }
@@ -205,6 +219,7 @@ namespace AI2D.GraphicObjects
             {
                 Invalidate();
                 _location.Y = value;
+                OnPositionChanged?.Invoke(this);
                 Invalidate();
             }
         }
@@ -259,6 +274,8 @@ namespace AI2D.GraphicObjects
                     _size.Width, _size.Height);
 
                 _core.Display.DrawingSurface.Invalidate(invalidRect);
+
+                OnVisibilityChange?.Invoke(this);
             }
         }
 
@@ -291,6 +308,8 @@ namespace AI2D.GraphicObjects
             {
                 SetImage(imagePath, size);
             }
+
+            OnVisibilityChange?.Invoke(this);
         }
 
         public void ClearWeapons()
@@ -522,6 +541,7 @@ namespace AI2D.GraphicObjects
         {
             Velocity.Angle.Degrees += degrees;
             Invalidate();
+            OnRotated?.Invoke(this);
         }
 
         public void MoveInDirectionOf(PointD location, double? speed = null)

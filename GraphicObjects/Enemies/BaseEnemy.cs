@@ -11,6 +11,7 @@ namespace AI2D.GraphicObjects.Enemies
         public int ScorePoints { get; private set; } = 25;
         public ObjRadarPositionIndicator RadarPositionIndicator { get; set; }
         public ObjRadarPositionTextBlock RadarPositionText { get; set; }
+        public ObjAnimation ThrustAnimation { get; private set; }
 
         public BaseEnemy(Core core, int hitPoints, int scoreMultiplier)
             : base(core)
@@ -24,6 +25,37 @@ namespace AI2D.GraphicObjects.Enemies
             RadarPositionIndicator = _core.Actors.AddNewRadarPositionIndicator();
             RadarPositionIndicator.Visable = false;
             RadarPositionText = _core.Actors.AddNewRadarPositionTextBlock("Consolas", Brushes.Red, 8, new PointD());
+
+            string _debugAniPath = @"..\..\Assets\Graphics\Animation\AirThrust32x32.png";
+            var playMode = new ObjAnimation.PlayMode()
+            {
+                Replay = ObjAnimation.ReplayMode.LoopedPlay,
+                DeleteActorAfterPlay = false,
+                ReplayDelay = new TimeSpan(0)
+            };
+            ThrustAnimation = new ObjAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
+
+            ThrustAnimation.Reset();
+            _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);
+
+            var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+            ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
+            ThrustAnimation.X = this.X + pointRight.X;
+            ThrustAnimation.Y = this.Y + pointRight.Y;
+
+            this.OnPositionChanged += BaseEnemy_OnPositionChanged;
+            this.OnRotated += BaseEnemy_OnPositionChanged;
+        }
+
+        private void BaseEnemy_OnPositionChanged(BaseGraphicObject obj)
+        {
+            if (ThrustAnimation != null && ThrustAnimation.Visable)
+            {
+                var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+                ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
+                ThrustAnimation.X = this.X + pointRight.X;
+                ThrustAnimation.Y = this.Y + pointRight.Y;
+            }
         }
 
         public static int GetGenericHP()
@@ -86,6 +118,10 @@ namespace AI2D.GraphicObjects.Enemies
             {
                 RadarPositionIndicator.ReadyForDeletion = true;
                 RadarPositionText.ReadyForDeletion = true;
+            }
+            if (ThrustAnimation != null)
+            {
+                ThrustAnimation.ReadyForDeletion = true;
             }
             base.Cleanup();
         }

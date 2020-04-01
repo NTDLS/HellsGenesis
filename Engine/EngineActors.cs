@@ -76,6 +76,9 @@ namespace AI2D.Engine
 
         }
 
+
+
+
         public void ResetPlayer()
         {
             Player.ClearWeapons();
@@ -252,6 +255,7 @@ namespace AI2D.Engine
                 }
             }
         }
+
         public void DeleteAllAnimations()
         {
             while (Animations.Count > 0)
