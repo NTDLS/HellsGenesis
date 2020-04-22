@@ -605,7 +605,7 @@ namespace AI2D.GraphicObjects
                 _core.Actors.Player.Score += (this as BaseEnemy).ScorePoints;
 
                 //If the type of explosion is an enemy then maybe spawn a powerup.
-                if (Utility.ChanceIn(25))
+                if (Utility.ChanceIn(5))
                 {
                     BasePowerUp powerUp = Utility.FlipCoin() ? (BasePowerUp)new PowerUpRepair(_core) : (BasePowerUp)new PowerUpSheild(_core);
                     powerUp.Location = this.Location;
