@@ -285,6 +285,7 @@ namespace AI2D.GraphicObjects
         {
             _core = core;
             RotationMode = RotationMode.Upsize;
+            Velocity.MaxRotationSpeed = Constants.Limits.MaxRotationSpeed;
         }
 
         public void Initialize(string imagePath = null, Size? size = null)

@@ -284,8 +284,12 @@ namespace AI2D.Engine
                 }
                 else
                 {
-                    result = new Bitmap(Image.FromFile(path));
-                    _Bitmaps.Add(path, result);
+                    using (var image = Image.FromFile(path))
+                    using (var newbitmap = new Bitmap(image))
+                    {
+                        result = newbitmap.Clone() as Bitmap;
+                        _Bitmaps.Add(path, result);
+                    }
                 }
             }
 
