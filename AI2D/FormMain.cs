@@ -1,12 +1,6 @@
 ﻿using AI2D.Engine;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AI2D
@@ -32,6 +26,10 @@ namespace AI2D
         public FormMain()
         {
             InitializeComponent();
+
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+            this.UpdateStyles();
 
             if (_fullScreen)
             {
@@ -147,6 +145,9 @@ namespace AI2D
 
             _core.Actors.Render(e.Graphics);
         }
-    }
 
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+        }
+    }
 }

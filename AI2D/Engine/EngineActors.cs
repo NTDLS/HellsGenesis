@@ -143,18 +143,21 @@ namespace AI2D.Engine
 
         public void NewGame()
         {
-            lock (Scenarios)
+            lock (Collection)
             {
-                ClearScenarios();
+                lock (Scenarios)
+                {
+                    ClearScenarios();
 
-                Scenarios.Add(new ScenarioScinzadSkirmish(_core));
-                Scenarios.Add(new ScenarioIrlenFormations(_core));
-                Scenarios.Add(new ScenarioAvvolAmbush(_core));
+                    Scenarios.Add(new ScenarioScinzadSkirmish(_core));
+                    Scenarios.Add(new ScenarioIrlenFormations(_core));
+                    Scenarios.Add(new ScenarioAvvolAmbush(_core));
+                }
+
+                DeleteAllActors();
+
+                AdvanceScenario();
             }
-
-            DeleteAllActors();
-
-            AdvanceScenario();
         }
 
         public void DeleteAllActors()
