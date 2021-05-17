@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.28917.181
+VisualStudioVersion = 16.0.31025.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI2D", "AI2D.csproj", "{EC831B70-C28C-4D6A-8C16-D3022D19ADF8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AI2D", "AI2D\AI2D.csproj", "{59524E56-C07D-4239-A325-A75E4A0F79D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EC831B70-C28C-4D6A-8C16-D3022D19ADF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC831B70-C28C-4D6A-8C16-D3022D19ADF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC831B70-C28C-4D6A-8C16-D3022D19ADF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC831B70-C28C-4D6A-8C16-D3022D19ADF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59524E56-C07D-4239-A325-A75E4A0F79D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59524E56-C07D-4239-A325-A75E4A0F79D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59524E56-C07D-4239-A325-A75E4A0F79D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59524E56-C07D-4239-A325-A75E4A0F79D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0A28BC6A-4DF1-4422-8482-E3762B9DBF17}
+		SolutionGuid = {99D468A4-85E5-41AA-912F-A2435A154952}
 	EndGlobalSection
 EndGlobal
