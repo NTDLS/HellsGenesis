@@ -22,15 +22,11 @@ namespace AI2D.Engine
         public BaseScenario CurrentScenario { get; private set; }
         public List<BaseScenario> Scenarios = new List<BaseScenario>();
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
-        public List<ObjTextBlock> TextBlocks { get; private set; } = new List<ObjTextBlock>();
-        public List<BaseEnemy> Enemies { get; private set; } = new List<BaseEnemy>();
-        public List<BasePowerUp> PowerUps { get; private set; } = new List<BasePowerUp>();
-        public List<ObjStar> Stars { get; private set; } = new List<ObjStar>();
-        public List<ObjDebug> Debugs { get; private set; } = new List<ObjDebug>();
-        public List<ObjAnimation> Animations { get; private set; } = new List<ObjAnimation>();
-        public List<ObjRadarPositionIndicator> RadarPositionIndicators { get; set; } = new List<ObjRadarPositionIndicator>();
-        public List<BaseBullet> Bullets { get; private set; } = new List<BaseBullet>();
+
+        public List<BaseGraphicObject> Collection { get; private set; } = new List<BaseGraphicObject>();
+
         public List<BaseMenu> Menus { get; private set; } = new List<BaseMenu>();
+
         public ObjPlayer Player { get; private set; }
         public ObjTextBlock PlayerStatsText { get; private set; }
         public ObjTextBlock DebugText { get; private set; }
@@ -76,15 +72,39 @@ namespace AI2D.Engine
 
         }
 
+        public void CleanupDeletedObjects()
+        {
+            _core.Actors.Collection.Where(o => o.ReadyForDeletion).ToList().ForEach(p => p.Cleanup());
+            _core.Actors.Collection.RemoveAll(o => o.ReadyForDeletion);
 
+            for (int i = 0; i < _core.Actors.EngineEvents.Count; i++)
+            {
+                if (_core.Actors.EngineEvents[i].ReadyForDeletion)
+                {
+                    _core.Actors.DeleteEngineCallbackEvent(_core.Actors.EngineEvents[i]);
+                }
+            }
 
+            for (int i = 0; i < _core.Actors.Menus.Count; i++)
+            {
+                if (_core.Actors.Menus[i].ReadyForDeletion)
+                {
+                    _core.Actors.DeleteMenu(_core.Actors.Menus[i]);
+                }
+            }
+
+            if (_core.Actors.Player.IsDead)
+            {
+                _core.Actors.Player.Visable = false;
+                _core.Actors.InsertMenu(new MenuStartNewGame(_core));
+            }
+        }
 
         public void ResetPlayer()
         {
             Player.ClearWeapons();
 
-            Player.ReadyForDeletion = false;
-
+            Player.IsDead = false;
             Player.Velocity.MaxSpeed = Constants.Limits.MaxPlayerSpeed;
             Player.Velocity.MaxBoost = Constants.Limits.MaxPlayerBoostSpeed;
             Player.Velocity.AvailableBoost = Constants.Limits.MaxPlayerBoost;
@@ -184,31 +204,30 @@ namespace AI2D.Engine
             }
         }
 
+        public List<T> VisibleOfType<T>() where T : class
+        {
+            return (from o in _core.Actors.Collection
+                    where o is T
+                    && o.Visable == true
+                    select o as T).ToList();
+        }
+
+        public List<T> OfType<T>() where T : class
+        {
+            return (from o in _core.Actors.Collection
+                    where o is T
+                    select o as T).ToList();
+        }
+
         private void TheDoorIsAjarCallback(Core core, object refObj)
         {
             DoorIsAjarSound.Play();
             InsertMenu(new MenuStartNewGame(_core));
         }
 
-        public List<T> VisibleTextBlocksOfType<T>() where T : class
-        {
-            return (from o in _core.Actors.TextBlocks
-                    where o is T
-                    && o.Visable == true
-                    select o as T).ToList();
-        }
-
-        public List<T> VisiblePowerUpsOfType<T>() where T : class
-        {
-            return (from o in _core.Actors.PowerUps
-                    where o is T
-                    && o.Visable == true
-                    select o as T).ToList();
-        }
-
         public List<T> VisibleEnemiesOfType<T>() where T : class
         {
-            return (from o in _core.Actors.Enemies
+            return (from o in _core.Actors.OfType<BaseEnemy>()
                     where o is T
                     && o.Visable == true
                     select o as T).ToList();
@@ -216,57 +235,33 @@ namespace AI2D.Engine
 
         public void DeleteAllPowerUps()
         {
-            while (PowerUps.Count > 0)
+            lock (Collection)
             {
-                lock (PowerUps)
-                {
-                    foreach (var obj in PowerUps)
-                    {
-                        obj.ReadyForDeletion = true;
-                    }
-                }
+                OfType<BasePowerUp>().ForEach(c => c.QueueForDelete());
             }
         }
 
         public void DeleteAllEnemies()
         {
-            while (Enemies.Count > 0)
+            lock (Collection)
             {
-                lock (Enemies)
-                {
-                    foreach (var obj in Enemies)
-                    {
-                        obj.ReadyForDeletion = true;
-                    }
-                }
+                OfType<BaseEnemy>().ForEach(c => c.QueueForDelete());
             }
         }
 
         public void DeleteAllBullets()
         {
-            while (Enemies.Count > 0)
+            lock (Collection)
             {
-                lock (Bullets)
-                {
-                    foreach (var obj in Bullets)
-                    {
-                        obj.ReadyForDeletion = true;
-                    }
-                }
+                OfType<BaseBullet>().ForEach(c => c.QueueForDelete());
             }
         }
 
         public void DeleteAllAnimations()
         {
-            while (Animations.Count > 0)
+            lock (Collection)
             {
-                lock (Animations)
-                {
-                    foreach (var obj in Animations)
-                    {
-                        obj.ReadyForDeletion = true;
-                    }
-                }
+                OfType<ObjAnimation>().ForEach(c => c.QueueForDelete());
             }
         }
 
@@ -322,51 +317,51 @@ namespace AI2D.Engine
 
         public ObjRadarPositionIndicator AddNewRadarPositionIndicator()
         {
-            lock (RadarPositionIndicators)
+            lock (Collection)
             {
                 var obj = new ObjRadarPositionIndicator(_core);
-                RadarPositionIndicators.Add(obj);
+                Collection.Add(obj);
                 return obj;
             }
         }
 
         public void DeleteRadarPositionIndicator(ObjRadarPositionIndicator obj)
         {
-            lock (RadarPositionIndicators)
+            lock (Collection)
             {
                 obj.Cleanup();
                 obj.Visable = false;
-                RadarPositionIndicators.Remove(obj);
+                Collection.Remove(obj);
             }
         }
 
         public void PlaceAnimationOnTopOf(ObjAnimation animation, BaseGraphicObject defaultPosition)
         {
-            lock (Animations)
+            lock (Collection)
             {
                 animation.X = defaultPosition.X;
                 animation.Y = defaultPosition.Y;
                 animation.RotationMode = Types.RotationMode.Clip; //Much less expensive. Use this or NONE if you can.
-                Animations.Add(animation);
+                Collection.Add(animation);
             }
         }
 
         public ObjAnimation AddNewAnimation(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, ObjAnimation.PlayMode playMode = null)
         {
-            lock (Animations)
+            lock (Collection)
             {
                 ObjAnimation obj = new ObjAnimation(_core, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
-                Animations.Add(obj);
+                Collection.Add(obj);
                 return obj;
             }
         }
 
         public void DeleteAnimation(ObjAnimation obj)
         {
-            lock (Animations)
+            lock (Collection)
             {
                 obj.Cleanup();
-                Animations.Remove(obj);
+                Collection.Remove(obj);
             }
         }
 
@@ -422,127 +417,127 @@ namespace AI2D.Engine
 
         public ObjRadarPositionTextBlock AddNewRadarPositionTextBlock(string font, Brush color, double size, PointD location)
         {
-            lock (TextBlocks)
+            lock (Collection)
             {
                 var obj = new ObjRadarPositionTextBlock(_core, font, color, size, location);
-                TextBlocks.Add(obj);
+                Collection.Add(obj);
                 return obj;
             }
         }
 
         public ObjTextBlock AddNewTextBlock(string font, Brush color, double size, PointD location, bool isPositionStatic)
         {
-            lock (TextBlocks)
+            lock (Collection)
             {
                 var obj = new ObjTextBlock(_core, font, color, size, location, isPositionStatic);
-                TextBlocks.Add(obj);
+                Collection.Add(obj);
                 return obj;
             }
         }
 
         public void DeleteTextBlock(ObjTextBlock obj)
         {
-            lock (TextBlocks)
+            lock (Collection)
             {
                 obj.Cleanup();
-                TextBlocks.Remove(obj);
+                Collection.Remove(obj);
             }
         }
 
         public ObjDebug AddNewDebug()
         {
-            lock (Debugs)
+            lock (Collection)
             {
                 var obj = new ObjDebug(_core);
-                Debugs.Add(obj);
+                Collection.Add(obj);
                 return obj;
             }
         }
 
         public void DeleteDebug(ObjDebug obj)
         {
-            lock (Debugs)
+            lock (Collection)
             {
                 obj.Cleanup();
-                Debugs.Remove(obj);
+                Collection.Remove(obj);
             }
         }
 
         public ObjStar AddNewStar(double x, double y)
         {
-            lock (Stars)
+            lock (Collection)
             {
                 var obj = new ObjStar(_core)
                 {
                     X = x,
                     Y = y
                 };
-                Stars.Add(obj);
+                Collection.Add(obj);
                 return obj;
             }
         }
 
         public ObjStar AddNewStar()
         {
-            lock (Stars)
+            lock (Collection)
             {
                 var obj = new ObjStar(_core);
-                Stars.Add(obj);
+                Collection.Add(obj);
                 return obj;
             }
         }
 
         public void DeleteStar(ObjStar obj)
         {
-            lock (Stars)
+            lock (Collection)
             {
                 obj.Cleanup();
-                Stars.Remove(obj);
+                Collection.Remove(obj);
             }
         }
 
         public void InjectEnemy(BaseEnemy obj)
         {
-            lock (Enemies)
+            lock (Collection)
             {
-                Enemies.Add(obj);
+                Collection.Add(obj);
             }
         }
 
         public void InjectPowerUp(BasePowerUp obj)
         {
-            lock (PowerUps)
+            lock (Collection)
             {
-                PowerUps.Add(obj);
+                Collection.Add(obj);
             }
         }
 
         public void DeletePowerUp(BasePowerUp obj)
         {
-            lock (PowerUps)
+            lock (Collection)
             {
                 obj.Cleanup();
-                PowerUps.Remove(obj);
+                Collection.Remove(obj);
             }
         }
 
         public T AddNewPowerUp<T>() where T : BasePowerUp
         {
-            lock (PowerUps)
+            lock (Collection)
             {
                 object[] param = { _core };
                 BasePowerUp obj = (BasePowerUp)Activator.CreateInstance(typeof(T), param);
 
                 obj.Location = _core.Display.RandomOffScreenLocation(100, 1000);
 
-                PowerUps.Add(obj);
+                Collection.Add(obj);
                 return (T)obj;
             }
         }
 
         public T AddNewEnemy<T>() where T : BaseEnemy
         {
-            lock (Enemies)
+            lock (Collection)
             {
                 object[] param = { _core };
                 BaseEnemy obj = (BaseEnemy)Activator.CreateInstance(typeof(T), param);
@@ -551,46 +546,46 @@ namespace AI2D.Engine
                 obj.Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MinSpeed, Constants.Limits.MaxSpeed);
                 obj.Velocity.Angle.Degrees = Utility.Random.Next(0, 360);
 
-                Enemies.Add(obj);
+                Collection.Add(obj);
                 return (T)obj;
             }
         }
 
         public void DeleteEnemy(BaseEnemy obj)
         {
-            lock (Enemies)
+            lock (Collection)
             {
                 obj.Cleanup();
-                Enemies.Remove(obj);
+                Collection.Remove(obj);
             }
         }
 
         public BaseBullet AddNewLockedBullet(WeaponBase weapon, BaseGraphicObject firedFrom, BaseGraphicObject lockedTarget, PointD xyOffset = null)
         {
-            lock (Bullets)
+            lock (Collection)
             {
                 var obj = weapon.CreateBullet(lockedTarget, xyOffset);
-                Bullets.Add(obj);
+                Collection.Add(obj);
                 return obj;
             }
         }
 
         public BaseBullet AddNewBullet(WeaponBase weapon, BaseGraphicObject firedFrom, PointD xyOffset = null)
         {
-            lock (Bullets)
+            lock (Collection)
             {
                 var obj = weapon.CreateBullet(null, xyOffset);
-                Bullets.Add(obj);
+                Collection.Add(obj);
                 return obj;
             }
         }
 
         public void DeleteBullet(BaseBullet obj)
         {
-            lock (Bullets)
+            lock (Collection)
             {
                 obj.Cleanup();
-                Bullets.Remove(obj);
+                Collection.Remove(obj);
             }
         }
 
@@ -615,6 +610,8 @@ namespace AI2D.Engine
 
         #region Rendering.
 
+        private static dynamic DynamicCast(dynamic source, Type dest) => Convert.ChangeType(source, dest);
+
         public void Render(Graphics dc)
         {
             _core.IsRendering = true;
@@ -627,82 +624,18 @@ namespace AI2D.Engine
                 Monitor.TryEnter(_core.DrawingSemaphore, timeout, ref lockTaken);
                 if (lockTaken)
                 {
-                    lock (TextBlocks)
+                    lock (Collection)
                     {
-                        foreach (var obj in TextBlocks)
+                        foreach (var actor in Collection.Where(o=>o.Visable == true))
                         {
-                            obj.Render(dc);
-                        }
-                    }
-
-                    lock (PowerUps)
-                    {
-                        foreach (var obj in PowerUps)
-                        {
-                            if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                            if (actor is ObjTextBlock) //These never intersect.
                             {
-                                obj.Render(dc);
+                                DynamicCast(actor, actor.GetType()).Render(dc);
                             }
-                        }
-                    }
-
-                    lock (Animations)
-                    {
-                        foreach (var obj in Animations)
-                        {
-                            if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
+                            else if (_core.Display.VisibleBounds.IntersectsWith(actor.Bounds))
                             {
-                                obj.Render(dc);
+                                actor.Render(dc);
                             }
-                        }
-                    }
-
-                    lock (Enemies)
-                    {
-                        foreach (var obj in Enemies)
-                        {
-                            if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                            {
-                                obj.Render(dc);
-                            }
-                        }
-                    }
-
-                    lock (Bullets)
-                    {
-                        foreach (var obj in Bullets)
-                        {
-                            if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                            {
-                                obj.Render(dc);
-                            }
-                        }
-                    }
-
-                    lock (Stars)
-                    {
-                        foreach (var obj in Stars)
-                        {
-                            if (_core.Display.VisibleBounds.IntersectsWith(obj.Bounds))
-                            {
-                                obj.Render(dc);
-                            }
-                        }
-                    }
-
-                    lock (Debugs)
-                    {
-                        foreach (var obj in Debugs)
-                        {
-                            obj.Render(dc);
-                        }
-                    }
-
-                    lock (RadarPositionIndicators)
-                    {
-                        foreach (var obj in RadarPositionIndicators)
-                        {
-                            obj.Render(dc);
                         }
                     }
 

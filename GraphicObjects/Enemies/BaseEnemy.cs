@@ -70,7 +70,7 @@ namespace AI2D.GraphicObjects.Enemies
                 || Y < -Constants.Limits.EnemySceneDistanceLimit
                 || Y >= _core.Display.VisibleSize.Height + Constants.Limits.EnemySceneDistanceLimit)
             {
-                ReadyForDeletion = true;
+                QueueForDelete();;
                 return;
             }
 
@@ -116,12 +116,12 @@ namespace AI2D.GraphicObjects.Enemies
         {
             if (RadarPositionIndicator != null)
             {
-                RadarPositionIndicator.ReadyForDeletion = true;
-                RadarPositionText.ReadyForDeletion = true;
+                RadarPositionIndicator.QueueForDelete();;
+                RadarPositionText.QueueForDelete();;
             }
             if (ThrustAnimation != null)
             {
-                ThrustAnimation.ReadyForDeletion = true;
+                ThrustAnimation.QueueForDelete();;
             }
             base.Cleanup();
         }

@@ -1,4 +1,5 @@
-﻿using AI2D.Types;
+﻿using AI2D.GraphicObjects.Enemies;
+using AI2D.Types;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -93,14 +94,10 @@ namespace AI2D.Engine
             }
             else if (key == Keys.D9)
             {
-                if (_core.Actors.Enemies.Count > 0)
+                if (_core.Actors.OfType<BaseEnemy>().Count > 0)
                 {
-                    _core.Actors.Enemies[0].MoveInDirectionOf(_core.Actors.Player);
+                    _core.Actors.OfType<BaseEnemy>()[0].Explode();
                 }
-                //if (_core.Actors.Enemies.Count > 0)
-                //{
-                //    _core.Actors.Enemies[0].Explode();
-                //}
             }
             else if (key == Keys.F1)
             {

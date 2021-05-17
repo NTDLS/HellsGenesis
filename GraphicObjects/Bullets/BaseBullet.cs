@@ -106,7 +106,7 @@ namespace AI2D.GraphicObjects.Bullets
                 || Y < -Constants.Limits.BulletSceneDistanceLimit
                 || Y >= _core.Display.VisibleSize.Height + Constants.Limits.BulletSceneDistanceLimit)
             {
-                ReadyForDeletion = true;
+                QueueForDelete();;
                 return;
             }
 
@@ -121,7 +121,7 @@ namespace AI2D.GraphicObjects.Bullets
                 HitExplosion();
 
             }
-            ReadyForDeletion = true;
+            QueueForDelete();;
         }
     }
 }

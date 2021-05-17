@@ -31,7 +31,7 @@ namespace AI2D.Engine.Scenarios
 
         private void AddFreshEnemiesCallback(Core core, object refObj)
         {
-            if (_core.Actors.Enemies.Count == 0)
+            if (_core.Actors.OfType<BaseEnemy>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {

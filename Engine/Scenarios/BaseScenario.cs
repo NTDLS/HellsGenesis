@@ -17,7 +17,6 @@ namespace AI2D.Engine.Scenarios
 
         protected List<EngineCallbackEvent> Events = new List<EngineCallbackEvent>();
 
-
         protected Core _core;
         public int CurrentWave { get; set; } = 0;
         public int TotalWaves { get; set; } = 1;

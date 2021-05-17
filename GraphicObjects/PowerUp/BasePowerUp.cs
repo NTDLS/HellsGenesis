@@ -47,7 +47,7 @@ namespace AI2D.GraphicObjects.PowerUp
             _explodeSound.Play();
             _hitAnimation.Reset();
             _core.Actors.PlaceAnimationOnTopOf(_hitAnimation, this);
-            ReadyForDeletion = true;
+            QueueForDelete();;
         }
 
         public virtual void ApplyIntelligence(PointD frameAppliedOffset)

@@ -99,7 +99,6 @@ namespace AI2D.GraphicObjects
             _currentColumn = 0;
             _lastFrameChange = DateTime.Now.AddSeconds(-60);
             Visable = true;
-            ReadyForDeletion = false;
         }
 
         public void AdvanceImage()
@@ -125,7 +124,7 @@ namespace AI2D.GraphicObjects
                 {
                     if (_playMode.DeleteActorAfterPlay)
                     {
-                        this.ReadyForDeletion = true;
+                        this.QueueForDelete();;
                         return;
                     }
 

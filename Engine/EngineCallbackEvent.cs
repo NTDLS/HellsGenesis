@@ -17,7 +17,7 @@ namespace AI2D.Engine
         private CallbackEventAsync _callbackEventAsync;
         private DateTime _startedTime;
 
-        public bool ReadyForDeletion = false;
+        public bool ReadyForDeletion { get; set; } = false;
 
         public delegate void OnExecute(Core core, object refObj);
 

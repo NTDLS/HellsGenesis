@@ -120,5 +120,10 @@ namespace AI2D.GraphicObjects
                 BoostAnimation.Y = this.Y + pointRight.Y;
             }
         }
+
+        public new void Explode(bool autoKill = true, bool autoDelete = true)
+        {
+            base.Explode(true, false);
+        }
     }
 }

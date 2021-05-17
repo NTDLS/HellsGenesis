@@ -75,6 +75,7 @@ namespace AI2D.GraphicObjects
         public int HitPoints { get; private set; } = 0;
         public int ShieldPoints { get; private set; } = 0;
         public VelocityD Velocity { get; set; } = new VelocityD();
+        public bool IsDead { get; set; } = false;
 
         public void SetHitPoints(int points)
         {
@@ -147,22 +148,22 @@ namespace AI2D.GraphicObjects
             }
         }
 
+        public void QueueForDelete()
+        {
+            Visable = false;
+            if (_readyForDeletion == false)
+            {
+                OnVisibilityChange?.Invoke(this);
+            }
+            _readyForDeletion = true;
+        }
+
         private bool _readyForDeletion;
         public bool ReadyForDeletion
         {
             get
             {
                 return _readyForDeletion;
-            }
-            set
-            {
-                _readyForDeletion = value;
-                if (_readyForDeletion)
-                {
-                    Visable = false;
-                }
-
-                OnVisibilityChange?.Invoke(this);
             }
         }
 
@@ -266,16 +267,19 @@ namespace AI2D.GraphicObjects
             }
             set
             {
-                _isVisible = value;
+                if (_isVisible != value)
+                {
+                    _isVisible = value;
 
-                var invalidRect = new Rectangle(
-                    (int)(_location.X - (_size.Width / 2.0)),
-                    (int)(_location.Y - (_size.Height / 2.0)),
-                    _size.Width, _size.Height);
+                    var invalidRect = new Rectangle(
+                        (int)(_location.X - (_size.Width / 2.0)),
+                        (int)(_location.Y - (_size.Height / 2.0)),
+                        _size.Width, _size.Height);
 
-                _core.Display.DrawingSurface.Invalidate(invalidRect);
+                    _core.Display.DrawingSurface.Invalidate(invalidRect);
 
-                OnVisibilityChange?.Invoke(this);
+                    OnVisibilityChange?.Invoke(this);
+                }
             }
         }
 
@@ -526,6 +530,7 @@ namespace AI2D.GraphicObjects
                     }
                 }
             }
+
             return result;
         }
 
@@ -599,7 +604,7 @@ namespace AI2D.GraphicObjects
             return PointD.DistanceTo(this.Location, to);
         }
 
-        public void Explode()
+        public void Explode(bool autoKill = true, bool autoDelete = true)
         {
             if (this is BaseEnemy)
             {
@@ -617,7 +622,16 @@ namespace AI2D.GraphicObjects
             _explodeSound.Play();
             _explosionAnimation.Reset();
             _core.Actors.PlaceAnimationOnTopOf(_explosionAnimation, this);
-            ReadyForDeletion = true;
+
+            if (autoKill)
+            {
+                IsDead = true;
+            }
+
+            if (autoDelete)
+            {
+                QueueForDelete();
+            }
         }
 
         public void HitExplosion()
