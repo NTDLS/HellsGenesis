@@ -6,11 +6,11 @@ namespace AI2D.Actors
 {
     public class ActorRadarPositionTextBlock: ActorTextBlock
     {
-        public ActorRadarPositionTextBlock(Core core, string font, Brush color, double size, PointD location)
+        public ActorRadarPositionTextBlock(Core core, string font, Brush color, double size, Point<double> location)
             : base(core, font, color, size, location, false)
         {
             Visable = false;
-            Velocity = new Types.VelocityD();
+            Velocity = new Velocity<double>();
         }
 
         private double _distanceValue;

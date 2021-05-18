@@ -74,7 +74,7 @@ namespace AI2D.Actors
         public WeaponBase CurrentWeapon { get; private set; }
         public int HitPoints { get; private set; } = 0;
         public int ShieldPoints { get; private set; } = 0;
-        public VelocityD Velocity { get; set; } = new VelocityD();
+        public Velocity<double> Velocity { get; set; } = new Velocity<double>();
         public bool IsDead { get; set; } = false;
 
         public void SetHitPoints(int points)
@@ -175,16 +175,16 @@ namespace AI2D.Actors
             }
         }
 
-        private PointD _location = new PointD();
+        private Point<double> _location = new Point<double>();
 
         /// <summary>
         /// Do not modify this location, it will not have any affect.
         /// </summary>
-        public PointD Location
+        public Point<double> Location
         {
             get
             {
-                return new PointD(_location);
+                return new Point<double>(_location);
             }
             set
             {
@@ -225,11 +225,11 @@ namespace AI2D.Actors
             }
         }
 
-        public PointD LocationCenter
+        public Point<double> LocationCenter
         {
             get
             {
-                return new PointD(_location.X - (Size.Width / 2.0), _location.Y - (Size.Height / 2.0));
+                return new Point<double>(_location.X - (Size.Width / 2.0), _location.Y - (Size.Height / 2.0));
             }
         }
 
@@ -457,7 +457,7 @@ namespace AI2D.Actors
         /// <param name="otherObject"></param>
         /// <param name="sizeAdjust"></param>
         /// <returns></returns>
-        public bool Intersects(ActorBase otherObject, PointD sizeAdjust)
+        public bool Intersects(ActorBase otherObject, Point<double> sizeAdjust)
         {
             if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
@@ -550,9 +550,9 @@ namespace AI2D.Actors
             OnRotated?.Invoke(this);
         }
 
-        public void MoveInDirectionOf(PointD location, double? speed = null)
+        public void MoveInDirectionOf(Point<double> location, double? speed = null)
         {
-            this.Velocity.Angle.Degrees = PointD.AngleTo(this.Location, location);
+            this.Velocity.Angle.Degrees = Point<double>.AngleTo(this.Location, location);
             if (speed != null)
             {
                 this.Velocity.MaxSpeed = (double)speed;
@@ -561,7 +561,7 @@ namespace AI2D.Actors
 
         public void MoveInDirectionOf(ActorBase obj, double? speed = null)
         {
-            this.Velocity.Angle.Degrees = PointD.AngleTo(this.Location, obj.Location);
+            this.Velocity.Angle.Degrees = Point<double>.AngleTo(this.Location, obj.Location);
 
             if (speed != null)
             {
@@ -606,12 +606,12 @@ namespace AI2D.Actors
 
         public double DistanceTo(ActorBase to)
         {
-            return PointD.DistanceTo(this.Location, to.Location);
+            return Point<double>.DistanceTo(this.Location, to.Location);
         }
 
-        public double DistanceTo(PointD to)
+        public double DistanceTo(Point<double> to)
         {
-            return PointD.DistanceTo(this.Location, to);
+            return Point<double>.DistanceTo(this.Location, to);
         }
 
         public void Explode(bool autoKill = true, bool autoDelete = true)

@@ -24,14 +24,14 @@ namespace AI2D.Weapons
 
                 if (RoundQuantity > 0)
                 {
-                    var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new PointD(5, 5));
+                    var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new Point<double>(5, 5));
                     _core.Actors.AddNewBullet(this, _owner, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0)
                 {
-                    var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new PointD(5, 5));
+                    var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new Point<double>(5, 5));
                     _core.Actors.AddNewBullet(this, _owner, pointLeft);
                     RoundQuantity--;
                 }

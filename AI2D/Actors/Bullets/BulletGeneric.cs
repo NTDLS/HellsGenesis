@@ -8,7 +8,7 @@ namespace AI2D.Actors.Bullets
     {
 
         public BulletGeneric(Core core, WeaponBase weapon, ActorBase firedFrom, string imagePath,
-             ActorBase lockedTarget = null, PointD xyOffset = null)
+             ActorBase lockedTarget = null, Point<double> xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             Initialize(imagePath);

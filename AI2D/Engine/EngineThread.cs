@@ -141,7 +141,7 @@ namespace AI2D.Engine
 
                             #region Player Frame Advancement.
 
-                            PointD appliedOffset = new PointD();
+                            Point<double> appliedOffset = new Point<double>();
 
                             if (_core.Actors.Player.Visable)
                             {
@@ -397,7 +397,7 @@ namespace AI2D.Engine
                                         {
                                             if (accountedFor.Contains(child) == false)
                                             {
-                                                if (parent != child && parent.Intersects(child, new PointD(100, 100)))
+                                                if (parent != child && parent.Intersects(child, new Point<double>(100, 100)))
                                                 {
                                                     group.Add(child);
                                                     accountedFor.Add(child);

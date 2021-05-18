@@ -25,7 +25,7 @@ namespace AI2D.Actors.Bullets
         }
 
         public BulletBase(Core core, WeaponBase weapon, ActorBase firedFrom, string imagePath,
-             ActorBase lockedTarget = null, PointD xyOffset = null)
+             ActorBase lockedTarget = null, Point<double> xyOffset = null)
             : base(core)
         {
             Initialize(imagePath);
@@ -42,9 +42,9 @@ namespace AI2D.Actors.Bullets
                 headingDegrees = firedFrom.Velocity.Angle.Degrees + slop;
             }
 
-            VelocityD initialVelocity = new VelocityD()
+            Velocity<double> initialVelocity = new Velocity<double>()
             {
-                Angle = new AngleD(headingDegrees),
+                Angle = new Angle<double>(headingDegrees),
                 MaxSpeed = weapon.Speed,
                 ThrottlePercentage = 100
             };
@@ -66,7 +66,7 @@ namespace AI2D.Actors.Bullets
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(PointD frameAppliedOffset, ActorBase testHit)
+        public virtual void ApplyIntelligence(Point<double> frameAppliedOffset, ActorBase testHit)
         {
             if (AgeInMilliseconds > MaxAgeInMilliseconds)
             {
@@ -99,7 +99,7 @@ namespace AI2D.Actors.Bullets
             }
         }
 
-        public virtual void ApplyMotion(PointD frameAppliedOffset)
+        public virtual void ApplyMotion(Point<double> frameAppliedOffset)
         {
             if (X < -Constants.Limits.BulletSceneDistanceLimit
                 || X >= _core.Display.VisibleSize.Width + Constants.Limits.BulletSceneDistanceLimit

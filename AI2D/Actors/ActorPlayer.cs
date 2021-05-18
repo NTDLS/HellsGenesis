@@ -73,7 +73,7 @@ namespace AI2D.Actors
 
                     _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);
 
-                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
                     ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
                     ThrustAnimation.X = this.X + pointRight.X;
                     ThrustAnimation.Y = this.Y + pointRight.Y;
@@ -94,7 +94,7 @@ namespace AI2D.Actors
 
                     _core.Actors.PlaceAnimationOnTopOf(BoostAnimation, this);
 
-                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
                     BoostAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
                     BoostAnimation.X = this.X + pointRight.X;
                     BoostAnimation.Y = this.Y + pointRight.Y;
@@ -106,7 +106,7 @@ namespace AI2D.Actors
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+                var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
                 ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
                 ThrustAnimation.X = this.X + pointRight.X;
                 ThrustAnimation.Y = this.Y + pointRight.Y;
@@ -114,7 +114,7 @@ namespace AI2D.Actors
 
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+                var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
                 BoostAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
                 BoostAnimation.X = this.X + pointRight.X;
                 BoostAnimation.Y = this.Y + pointRight.Y;

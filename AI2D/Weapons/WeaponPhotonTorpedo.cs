@@ -18,7 +18,7 @@ namespace AI2D.Weapons
             FireDelayMilliseconds = 500;
         }
 
-        public override BulletBase CreateBullet(ActorBase lockedTarget, PointD xyOffset = null)
+        public override BulletBase CreateBullet(ActorBase lockedTarget, Point<double> xyOffset = null)
         {
             return new BulletPhotonTorpedo(_core, this, _owner, lockedTarget, xyOffset);
         }

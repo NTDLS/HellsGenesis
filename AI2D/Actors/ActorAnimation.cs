@@ -1,4 +1,5 @@
 ﻿using AI2D.Engine;
+using AI2D.Types;
 using System;
 using System.Drawing;
 
@@ -86,8 +87,8 @@ namespace AI2D.Actors
             _columns = (_frameImage.Width / ((Size)frameSize).Width);
             _frameCount = _rows * _columns;
 
-            Location = new Types.PointD(0, 0);
-            Velocity = new Types.VelocityD();
+            Location = new Point<double>(0, 0);
+            Velocity = new Velocity<double>();
 
             AdvanceImage();
         }

@@ -18,11 +18,11 @@ namespace AI2D.Actors
 
         public MenuItemType ItemType { get; set; }
 
-        public ActorMenuItem(Core core, string font, Brush color, double size, PointD location)
+        public ActorMenuItem(Core core, string font, Brush color, double size, Point<double> location)
             : base(core, font, color, size, location, true)
         {
             Visable = true;
-            Velocity = new Types.VelocityD();
+            Velocity = new Velocity<double>();
         }
     }
 }

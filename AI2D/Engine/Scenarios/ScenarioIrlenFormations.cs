@@ -72,7 +72,7 @@ namespace AI2D.Engine.Scenarios
 
         private void AddFreshEnemiesCallback(Core core, object refObj)
         {
-            PointD baseLocation = _core.Display.RandomOffScreenLocation();
+            Point<double> baseLocation = _core.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - ((CurrentWave + 1) * 10), (int)((CurrentWave + 1) * 1.5));
             _core.Actors.RadarBlipsSound.Play();
             waitingOnPopulation = false;
@@ -89,7 +89,7 @@ namespace AI2D.Engine.Scenarios
             return enemy;
         }
 
-        private void CreateTriangleFormation(PointD baseLocation, double spacing, int depth)
+        private void CreateTriangleFormation(Point<double> baseLocation, double spacing, int depth)
         {
             double angle = Utility.AngleTo(baseLocation, _core.Actors.Player);
 

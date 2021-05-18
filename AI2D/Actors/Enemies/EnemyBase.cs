@@ -24,7 +24,7 @@ namespace AI2D.Actors.Enemies
 
             RadarPositionIndicator = _core.Actors.AddNewRadarPositionIndicator();
             RadarPositionIndicator.Visable = false;
-            RadarPositionText = _core.Actors.AddNewRadarPositionTextBlock("Consolas", Brushes.Red, 8, new PointD());
+            RadarPositionText = _core.Actors.AddNewRadarPositionTextBlock("Consolas", Brushes.Red, 8, new Point<double>());
 
             string _debugAniPath = @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png";
             var playMode = new ActorAnimation.PlayMode()
@@ -38,7 +38,7 @@ namespace AI2D.Actors.Enemies
             ThrustAnimation.Reset();
             _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);
 
-            var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+            var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
             ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
             ThrustAnimation.X = this.X + pointRight.X;
             ThrustAnimation.Y = this.Y + pointRight.Y;
@@ -51,7 +51,7 @@ namespace AI2D.Actors.Enemies
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new PointD(20, 20));
+                var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
                 ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
                 ThrustAnimation.X = this.X + pointRight.X;
                 ThrustAnimation.Y = this.Y + pointRight.Y;
@@ -63,7 +63,7 @@ namespace AI2D.Actors.Enemies
             return Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth);
         }
 
-        public virtual void ApplyMotion(PointD frameAppliedOffset)
+        public virtual void ApplyMotion(Point<double> frameAppliedOffset)
         {
             if (X < -Constants.Limits.EnemySceneDistanceLimit
                 || X >= _core.Display.VisibleSize.Width + Constants.Limits.EnemySceneDistanceLimit
@@ -88,9 +88,9 @@ namespace AI2D.Actors.Enemies
 
                     double requiredAngle = _core.Actors.Player.AngleTo(this);
 
-                    var offset = Utility.AngleFromPointAtDistance(new AngleD(requiredAngle), new PointD(200, 200));
+                    var offset = Utility.AngleFromPointAtDistance(new Angle<double>(requiredAngle), new Point<double>(200, 200));
 
-                    RadarPositionText.Location = _core.Actors.Player.Location + offset + new PointD(25, 25);
+                    RadarPositionText.Location = _core.Actors.Player.Location + offset + new Point<double>(25, 25);
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
 
                     RadarPositionIndicator.Location = _core.Actors.Player.Location + offset;
@@ -104,7 +104,7 @@ namespace AI2D.Actors.Enemies
             }
         }
 
-        public virtual void ApplyIntelligence(PointD frameAppliedOffset)
+        public virtual void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
             if (CurrentWeapon != null && _core.Actors.Player != null)
             {

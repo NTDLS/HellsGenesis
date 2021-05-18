@@ -9,7 +9,7 @@ namespace AI2D.Engine
     {
         public Dictionary<Point, Quadrant> Quadrants = new Dictionary<Point, Quadrant>();
         public Quadrant CurrentQuadrant { get; set; }
-        public PointD BackgroundOffset { get; set; } = new PointD(); //Offset of background, all cals must take into account.
+        public Point<double> BackgroundOffset { get; set; } = new Point<double>(); //Offset of background, all cals must take into account.
         public FrameCounter GameLoopCounter { get; set; } = new FrameCounter();
         public RectangleF VisibleBounds { get; private set; }
 
@@ -31,12 +31,12 @@ namespace AI2D.Engine
             }
         }
 
-        public PointD RandomOnScreenLocation()
+        public Point<double> RandomOnScreenLocation()
         {
-            return new PointD(Utility.Random.Next(0, VisibleSize.Width), Utility.Random.Next(0, VisibleSize.Height));
+            return new Point<double>(Utility.Random.Next(0, VisibleSize.Width), Utility.Random.Next(0, VisibleSize.Height));
         }
 
-        public PointD RandomOffScreenLocation(int min = 100, int max = 500)
+        public Point<double> RandomOffScreenLocation(int min = 100, int max = 500)
         {
             double x;
             double y;
@@ -69,7 +69,7 @@ namespace AI2D.Engine
 
             }
 
-            return new PointD(x, y);
+            return new Point<double>(x, y);
         }
 
         public EngineDisplay(Control drawingSurface, Size visibleSize)

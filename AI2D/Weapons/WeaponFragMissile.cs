@@ -27,7 +27,7 @@ namespace AI2D.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override BulletBase CreateBullet(ActorBase lockedTarget, PointD xyOffset = null)
+        public override BulletBase CreateBullet(ActorBase lockedTarget, Point<double> xyOffset = null)
         {
             return new BulletFragMissile(_core, this, _owner, lockedTarget, xyOffset);
         }
@@ -43,12 +43,12 @@ namespace AI2D.Weapons
                 {
                     if (_toggle)
                     {
-                        var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new PointD(10, 10));
+                        var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new Point<double>(10, 10));
                         _core.Actors.AddNewBullet(this, _owner, pointRight);
                     }
                     else
                     {
-                        var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new PointD(10, 10));
+                        var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new Point<double>(10, 10));
                         _core.Actors.AddNewBullet(this, _owner, pointLeft);
                     }
 

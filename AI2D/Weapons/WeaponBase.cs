@@ -37,12 +37,12 @@ namespace AI2D.Weapons
             Name = name;
         }
 
-        public virtual BulletBase CreateBullet(ActorBase lockedTarget, PointD xyOffset = null)
+        public virtual BulletBase CreateBullet(ActorBase lockedTarget, Point<double> xyOffset = null)
         {
             return new BulletGeneric(_core, this, _owner, @"..\..\..\Assets\Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
         }
 
-        public virtual void ApplyIntelligence(PointD frameAppliedOffset, ActorBase wouldFireAt)
+        public virtual void ApplyIntelligence(Point<double> frameAppliedOffset, ActorBase wouldFireAt)
         {
             bool lockOn = false;
             bool softLockOn = false;

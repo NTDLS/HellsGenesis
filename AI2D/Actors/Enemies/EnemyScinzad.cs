@@ -65,12 +65,12 @@ namespace AI2D.Actors.Enemies
         double distanceToKeep = baseDistanceToKeep * (Utility.Random.NextDouble() + 1);
         const double baseFallbackDistance = 800;
         double fallbackDistance;
-        AngleD fallToAngle;
+        Angle<double> fallToAngle;
         AIMode mode = AIMode.Approaching;
         int bulletsRemainingBeforeTailing = 0;
         int hpRemainingBeforeTailing = 0;
 
-        public override void ApplyIntelligence(PointD frameAppliedOffset)
+        public override void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
             base.ApplyIntelligence(frameAppliedOffset);
 

@@ -61,8 +61,8 @@ namespace AI2D.Engine
 
             BackgroundMusicSound = GetSoundCached(@"..\..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
 
-            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 10, new PointD(5,5), true);
-            DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, new PointD(5, PlayerStatsText.Y + PlayerStatsText.Height + 10), true);
+            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 10, new Point<double>(5,5), true);
+            DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, new Point<double>(5, PlayerStatsText.Y + PlayerStatsText.Height + 10), true);
 
             BackgroundMusicSound.Play();
         }
@@ -111,7 +111,7 @@ namespace AI2D.Engine
             Player.Velocity.MaxRotationSpeed = Constants.Limits.MaxRotationSpeed;
             Player.SetHitPoints(Constants.Limits.StartingPlayerHitpoints);
             Player.SetShieldPoints(Constants.Limits.StartingPlayerShieldPoints);
-            Player.Velocity.Angle = new AngleD(45);
+            Player.Velocity.Angle = new Angle<double>(45);
             Player.Velocity.ThrottlePercentage = Constants.Limits.MinPlayerThrust;
 
             Player.X = _core.Display.VisibleSize.Width / 2;
@@ -418,7 +418,7 @@ namespace AI2D.Engine
             }
         }
 
-        public ActorRadarPositionTextBlock AddNewRadarPositionTextBlock(string font, Brush color, double size, PointD location)
+        public ActorRadarPositionTextBlock AddNewRadarPositionTextBlock(string font, Brush color, double size, Point<double> location)
         {
             lock (Collection)
             {
@@ -428,7 +428,7 @@ namespace AI2D.Engine
             }
         }
 
-        public ActorTextBlock AddNewTextBlock(string font, Brush color, double size, PointD location, bool isPositionStatic)
+        public ActorTextBlock AddNewTextBlock(string font, Brush color, double size, Point<double> location, bool isPositionStatic)
         {
             lock (Collection)
             {
@@ -563,7 +563,7 @@ namespace AI2D.Engine
             }
         }
 
-        public BulletBase AddNewLockedBullet(WeaponBase weapon, ActorBase firedFrom, ActorBase lockedTarget, PointD xyOffset = null)
+        public BulletBase AddNewLockedBullet(WeaponBase weapon, ActorBase firedFrom, ActorBase lockedTarget, Point<double> xyOffset = null)
         {
             lock (Collection)
             {
@@ -573,7 +573,7 @@ namespace AI2D.Engine
             }
         }
 
-        public BulletBase AddNewBullet(WeaponBase weapon, ActorBase firedFrom, PointD xyOffset = null)
+        public BulletBase AddNewBullet(WeaponBase weapon, ActorBase firedFrom, Point<double> xyOffset = null)
         {
             lock (Collection)
             {

@@ -73,11 +73,11 @@ namespace AI2D.Actors
 
         #endregion
 
-        public ActorTextBlock(Core core, string font, Brush color, double size, PointD location, bool isPositionStatic)
+        public ActorTextBlock(Core core, string font, Brush color, double size, Point<double> location, bool isPositionStatic)
             : base(core)
         {
             IsPositionStatic = isPositionStatic;
-            Location = new PointD(location);
+            Location = new Point<double>(location);
             _color = color;
             _font = new Font(font, (float)size);
             _genericDC = _core.Display.DrawingSurface.CreateGraphics();

@@ -28,7 +28,7 @@ namespace AI2D.Engine.Menus
 
         }
 
-        public ActorMenuItem NewTitleItem(PointD location, string text, Brush brush, int size = 24)
+        public ActorMenuItem NewTitleItem(Point<double> location, string text, Brush brush, int size = 24)
         {
             var item = new ActorMenuItem(_core, "Consolas", brush, size, location)
             {
@@ -39,7 +39,7 @@ namespace AI2D.Engine.Menus
             return item;
         }
 
-        public ActorMenuItem NewTextItem(PointD location, string text, Brush brush, int size = 16)
+        public ActorMenuItem NewTextItem(Point<double> location, string text, Brush brush, int size = 16)
         {
             var item = new ActorMenuItem(_core, "Consolas", brush, size, location)
             {
@@ -50,7 +50,7 @@ namespace AI2D.Engine.Menus
             return item;
         }
 
-        public ActorMenuItem NewMenuItem(PointD location, string name, string text, Brush brush, int size = 14)
+        public ActorMenuItem NewMenuItem(Point<double> location, string name, string text, Brush brush, int size = 14)
         {
             var item = new ActorMenuItem(_core, "Consolas", brush, size, location)
             {

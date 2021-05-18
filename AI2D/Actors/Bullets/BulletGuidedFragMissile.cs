@@ -9,13 +9,13 @@ namespace AI2D.Actors.Bullets
         private const string imagePath = @"..\..\..\Assets\Graphics\Weapon\Missiles\BulletGuidedFragMissile.png";
 
         public BulletGuidedFragMissile(Core core, WeaponBase weapon, ActorBase firedFrom,
-             ActorBase lockedTarget = null, PointD xyOffset = null)
+             ActorBase lockedTarget = null, Point<double> xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             Initialize(imagePath);
         }
 
-        public override void ApplyIntelligence(PointD frameAppliedOffset, ActorBase testHit)
+        public override void ApplyIntelligence(Point<double> frameAppliedOffset, ActorBase testHit)
         {
             if (LockedTarget != null)
             {

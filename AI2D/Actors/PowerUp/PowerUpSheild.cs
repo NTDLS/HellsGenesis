@@ -28,7 +28,7 @@ namespace AI2D.Actors.PowerUp
             _repairPoints *= (imageIndex + 1);
         }
 
-        public new void ApplyIntelligence(PointD frameAppliedOffset)
+        public new void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
             if (Intersects(_core.Actors.Player))
             {

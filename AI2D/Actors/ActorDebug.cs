@@ -22,8 +22,7 @@ namespace AI2D.Actors
 
             X = 0;
             Y = 0;
-            Velocity = new VelocityD();
-
+            Velocity = new Velocity<double>();
         }
     }
 }

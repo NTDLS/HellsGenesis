@@ -65,7 +65,7 @@ namespace AI2D.Actors.PowerUp
             QueueForDelete();;
         }
 
-        public virtual void ApplyIntelligence(PointD frameAppliedOffset)
+        public virtual void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
             if (Intersects(_core.Actors.Player))
             {

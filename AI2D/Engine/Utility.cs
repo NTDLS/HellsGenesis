@@ -106,9 +106,9 @@ namespace AI2D.Engine
         /// <param name="angle"></param>
         /// <param name="distance"></param>
         /// <returns></returns>
-        public static PointD AngleFromPointAtDistance(AngleD angle, PointD distance)
+        public static Point<double> AngleFromPointAtDistance(Angle<double> angle, Point<double> distance)
         {
-            return new PointD(
+            return new Point<double>(
                 (Math.Cos(angle.Radians) * distance.X),
                 (Math.Sin(angle.Radians) * distance.Y));
         }
@@ -121,17 +121,17 @@ namespace AI2D.Engine
         /// <returns></returns>
         public static double AngleTo(ActorBase from, ActorBase to)
         {
-            return PointD.AngleTo(from.Location, to.Location);
+            return Point<double>.AngleTo(from.Location, to.Location);
         }
 
-        public static double AngleTo(PointD from, ActorBase to)
+        public static double AngleTo(Point<double> from, ActorBase to)
         {
-            return PointD.AngleTo(from, to.Location);
+            return Point<double>.AngleTo(from, to.Location);
         }
 
-        public static double AngleTo(ActorBase from, PointD to)
+        public static double AngleTo(ActorBase from, Point<double> to)
         {
-            return PointD.AngleTo(from.Location, to);
+            return Point<double>.AngleTo(from.Location, to);
         }
 
         public static bool IsPointingAt(ActorBase fromObj, ActorBase atObj, double toleranceDegrees)
@@ -184,7 +184,7 @@ namespace AI2D.Engine
 
         public static double DistanceTo(ActorBase from, ActorBase to)
         {
-            return PointD.DistanceTo(from.Location, to.Location);
+            return Point<double>.DistanceTo(from.Location, to.Location);
         }
 
         #endregion
