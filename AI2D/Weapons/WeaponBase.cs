@@ -1,6 +1,6 @@
 ﻿using AI2D.Engine;
-using AI2D.GraphicObjects;
-using AI2D.GraphicObjects.Bullets;
+using AI2D.Actors;
+using AI2D.Actors.Bullets;
 using AI2D.Types;
 using System;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ namespace AI2D.Weapons
             Name = name;
         }
 
-        public virtual BaseBullet CreateBullet(ActorBase lockedTarget, PointD xyOffset = null)
+        public virtual BulletBase CreateBullet(ActorBase lockedTarget, PointD xyOffset = null)
         {
             return new BulletGeneric(_core, this, _owner, @"..\..\..\Assets\Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
         }

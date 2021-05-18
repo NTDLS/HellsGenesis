@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AI2D.GraphicObjects
+namespace AI2D.Actors
 {
-    public class ObjRadarPositionIndicator: ActorBase
+    public class ActorRadarPositionIndicator: ActorBase
     {
         private const string _assetPath = @"..\..\..\Assets\Graphics\";
         private readonly string _assetFile = "Radar Indicator 8.png";
 
-        public ObjRadarPositionIndicator(Core core)
+        public ActorRadarPositionIndicator(Core core)
             : base(core)
         {
             Initialize(_assetPath + _assetFile, new Size(8, 8));

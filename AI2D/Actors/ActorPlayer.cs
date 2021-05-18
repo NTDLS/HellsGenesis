@@ -3,9 +3,9 @@ using AI2D.Types;
 using System;
 using System.Drawing;
 
-namespace AI2D.GraphicObjects
+namespace AI2D.Actors
 {
-    public class ObjPlayer : ActorBase
+    public class ActorPlayer : ActorBase
     {
         private const string _imagePath = @"..\..\..\Assets\Graphics\Player\Alien\1.png";
 
@@ -25,10 +25,10 @@ namespace AI2D.GraphicObjects
         public int Score { get; set; }
         public int MaxHitPoints { get; set; }
         public int MaxShieldPoints { get; set; }
-        public ObjAnimation ThrustAnimation { get; private set; }
-        public ObjAnimation BoostAnimation { get; private set; }
+        public ActorAnimation ThrustAnimation { get; private set; }
+        public ActorAnimation BoostAnimation { get; private set; }
 
-        public ObjPlayer(Core core)
+        public ActorPlayer(Core core)
             : base(core)
         {
             Initialize(_imagePath, new Size(32, 32));
@@ -61,13 +61,13 @@ namespace AI2D.GraphicObjects
                 if (ThrustAnimation == null || ThrustAnimation.ReadyForDeletion == true)
                 {
                     string _debugAniPath = @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png";
-                    var playMode = new ObjAnimation.PlayMode()
+                    var playMode = new ActorAnimation.PlayMode()
                     {
-                        Replay = ObjAnimation.ReplayMode.LoopedPlay,
+                        Replay = ActorAnimation.ReplayMode.LoopedPlay,
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    ThrustAnimation = new ObjAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
+                    ThrustAnimation = new ActorAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
 
                     ThrustAnimation.Reset();
 
@@ -82,13 +82,13 @@ namespace AI2D.GraphicObjects
                 if (BoostAnimation == null || BoostAnimation.ReadyForDeletion == true)
                 {
                     string _debugAniPath = @"..\..\..\Assets\Graphics\Animation\FireThrust32x32.png";
-                    var playMode = new ObjAnimation.PlayMode()
+                    var playMode = new ActorAnimation.PlayMode()
                     {
-                        Replay = ObjAnimation.ReplayMode.LoopedPlay,
+                        Replay = ActorAnimation.ReplayMode.LoopedPlay,
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    BoostAnimation = new ObjAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
+                    BoostAnimation = new ActorAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
 
                     BoostAnimation.Reset();
 

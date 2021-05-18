@@ -4,9 +4,9 @@ using AI2D.Weapons;
 using System.Drawing;
 using System.Linq;
 
-namespace AI2D.GraphicObjects.Enemies
+namespace AI2D.Actors.Enemies
 {
-    public class EnemyIrlen : BaseEnemy
+    public class EnemyIrlen : EnemyBase
     {
         public const int ScoreMultiplier = 1;
 
@@ -23,7 +23,7 @@ namespace AI2D.GraphicObjects.Enemies
         };
 
         public EnemyIrlen(Core core)
-            : base(core, BaseEnemy.GetGenericHP(), ScoreMultiplier)
+            : base(core, EnemyBase.GetGenericHP(), ScoreMultiplier)
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
 

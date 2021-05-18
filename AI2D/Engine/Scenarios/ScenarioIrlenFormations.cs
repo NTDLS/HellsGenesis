@@ -1,4 +1,4 @@
-﻿using AI2D.GraphicObjects.Enemies;
+﻿using AI2D.Actors.Enemies;
 using AI2D.Types;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +56,7 @@ namespace AI2D.Engine.Scenarios
 
         private void AdvanceWaveCallback(Core core, object refObj)
         {
-            if (_core.Actors.OfType<BaseEnemy>().Count == 0 && !waitingOnPopulation)
+            if (_core.Actors.OfType<EnemyBase>().Count == 0 && !waitingOnPopulation)
             {
                 if (CurrentWave == TotalWaves && waitingOnPopulation != true)
                 {

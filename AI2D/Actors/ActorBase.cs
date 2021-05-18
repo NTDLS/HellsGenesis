@@ -1,7 +1,7 @@
 ﻿using AI2D.Engine;
-using AI2D.GraphicObjects.Bullets;
-using AI2D.GraphicObjects.Enemies;
-using AI2D.GraphicObjects.PowerUp;
+using AI2D.Actors.Bullets;
+using AI2D.Actors.Enemies;
+using AI2D.Actors.PowerUp;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace AI2D.GraphicObjects
+namespace AI2D.Actors
 {
     public class ActorBase
     {
@@ -29,14 +29,14 @@ namespace AI2D.GraphicObjects
         private Image _image;
         private Image _lockedOnImage;
         private Image _lockedOnSoftImage;
-        private ObjAnimation _explosionAnimation;
+        private ActorAnimation _explosionAnimation;
         private AudioClip _explodeSound;
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private int _MillisecondsBetweenHits = 200;
         private AudioClip _hitSound;
         private AudioClip _shieldHit;
         private readonly List<WeaponBase> _weapons = new List<WeaponBase>();
-        private ObjAnimation _hitExplosionAnimation { get; set; }
+        private ActorAnimation _hitExplosionAnimation { get; set; }
 
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
 
@@ -118,9 +118,9 @@ namespace AI2D.GraphicObjects
                 pointsToAdd = Constants.Limits.MaxShieldPoints - (ShieldPoints + pointsToAdd);
             }
 
-            if (this is ObjPlayer)
+            if (this is ActorPlayer)
             {
-                var player = this as ObjPlayer;
+                var player = this as ActorPlayer;
 
                 if (ShieldPoints < Constants.Limits.MaxShieldPoints && ShieldPoints + pointsToAdd >= Constants.Limits.MaxShieldPoints)
                 {
@@ -301,13 +301,13 @@ namespace AI2D.GraphicObjects
             _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
 
             int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
-            _explosionAnimation = new ObjAnimation(_core, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
+            _explosionAnimation = new ActorAnimation(_core, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
 
             _lockedOnImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Weapon\Locked On.png");
             _lockedOnSoftImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Weapon\Locked Soft.png");
 
             int _hitExplosionImageIndex = Utility.RandomNumber(0, _assetHitExplosionAnimationFiles.Count());
-            _hitExplosionAnimation = new ObjAnimation(_core, _assetHitExplosionAnimationPath + _assetHitExplosionAnimationFiles[_hitExplosionImageIndex], new Size(22, 22));
+            _hitExplosionAnimation = new ActorAnimation(_core, _assetHitExplosionAnimationPath + _assetHitExplosionAnimationFiles[_hitExplosionImageIndex], new Size(22, 22));
 
             if (imagePath != null)
             {
@@ -492,9 +492,9 @@ namespace AI2D.GraphicObjects
                     damage = damage < 1 ? 1 : damage;
                     ShieldPoints -= damage > ShieldPoints ? ShieldPoints : damage; //No need to go negative with the damage.
 
-                    if (this is ObjPlayer)
+                    if (this is ActorPlayer)
                     {
-                        var player = this as ObjPlayer;
+                        var player = this as ActorPlayer;
                         if (ShieldPoints == 0)
                         {
                             player.ShieldDownSound.Play();
@@ -506,9 +506,9 @@ namespace AI2D.GraphicObjects
                     _hitSound.Play();
                     HitPoints -= damage > HitPoints ? HitPoints : damage; //No need to go negative with the damage.
 
-                    if (this is ObjPlayer)
+                    if (this is ActorPlayer)
                     {
-                        var player = this as ObjPlayer;
+                        var player = this as ActorPlayer;
                         //This is the hit that took us under the treshold.
                         if (HitPoints < 100 && HitPoints + damage > 100)
                         {
@@ -534,7 +534,7 @@ namespace AI2D.GraphicObjects
             return result;
         }
 
-        public bool Hit(BaseBullet bullet)
+        public bool Hit(BulletBase bullet)
         {
             if (bullet != null)
             {
@@ -616,14 +616,14 @@ namespace AI2D.GraphicObjects
 
         public void Explode(bool autoKill = true, bool autoDelete = true)
         {
-            if (this is BaseEnemy)
+            if (this is EnemyBase)
             {
-                _core.Actors.Player.Score += (this as BaseEnemy).ScorePoints;
+                _core.Actors.Player.Score += (this as EnemyBase).ScorePoints;
 
                 //If the type of explosion is an enemy then maybe spawn a powerup.
                 if (Utility.ChanceIn(5))
                 {
-                    BasePowerUp powerUp = Utility.FlipCoin() ? (BasePowerUp)new PowerUpRepair(_core) : (BasePowerUp)new PowerUpSheild(_core);
+                    PowerUpBase powerUp = Utility.FlipCoin() ? (PowerUpBase)new PowerUpRepair(_core) : (PowerUpBase)new PowerUpSheild(_core);
                     powerUp.Location = this.Location;
                     _core.Actors.InjectPowerUp(powerUp);
                 }
@@ -656,7 +656,7 @@ namespace AI2D.GraphicObjects
 
             foreach (var intersection in _core.Actors.Collection)
             {
-                if (intersection != this && intersection.Visable && intersection is not ObjTextBlock)
+                if (intersection != this && intersection.Visable && intersection is not ActorTextBlock)
                 {
                     if (this.Intersects(intersection))
                     {

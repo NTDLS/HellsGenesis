@@ -1,6 +1,6 @@
 ﻿using AI2D.Engine;
-using AI2D.GraphicObjects;
-using AI2D.GraphicObjects.Bullets;
+using AI2D.Actors;
+using AI2D.Actors.Bullets;
 using AI2D.Types;
 
 namespace AI2D.Weapons
@@ -20,7 +20,7 @@ namespace AI2D.Weapons
             FireDelayMilliseconds = 1000;
         }
 
-        public override BaseBullet CreateBullet(ActorBase lockedTarget, PointD xyOffset = null)
+        public override BulletBase CreateBullet(ActorBase lockedTarget, PointD xyOffset = null)
         {
             return new BulletPulseMeson(_core, this, _owner, lockedTarget, xyOffset);
         }

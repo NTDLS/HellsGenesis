@@ -2,9 +2,9 @@
 using AI2D.Types;
 using AI2D.Weapons;
 
-namespace AI2D.GraphicObjects.Bullets
+namespace AI2D.Actors.Bullets
 {
-    public class BulletVulcanCannon : BaseBullet
+    public class BulletVulcanCannon : BulletBase
     {
         private const string imagePath = @"..\..\..\Assets\Graphics\Weapon\BulletVulcanCannon.png";
 

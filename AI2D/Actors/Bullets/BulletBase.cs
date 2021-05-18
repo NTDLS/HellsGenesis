@@ -1,14 +1,14 @@
 ﻿using AI2D.Engine;
-using AI2D.GraphicObjects.Enemies;
+using AI2D.Actors.Enemies;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
 using System.Drawing;
 using System.Linq;
 
-namespace AI2D.GraphicObjects.Bullets
+namespace AI2D.Actors.Bullets
 {
-    public class BaseBullet : ActorBase
+    public class BulletBase : ActorBase
     {
         public FiredFromType FiredFromType { get; set; }
         public WeaponBase Weapon { get; private set; }
@@ -24,7 +24,7 @@ namespace AI2D.GraphicObjects.Bullets
             }
         }
 
-        public BaseBullet(Core core, WeaponBase weapon, ActorBase firedFrom, string imagePath,
+        public BulletBase(Core core, WeaponBase weapon, ActorBase firedFrom, string imagePath,
              ActorBase lockedTarget = null, PointD xyOffset = null)
             : base(core)
         {
@@ -36,7 +36,7 @@ namespace AI2D.GraphicObjects.Bullets
 
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
 
-            if (firedFrom is BaseEnemy)
+            if (firedFrom is EnemyBase)
             {
                 double slop = (Utility.FlipCoin() ? 1 : -1) * (Utility.Random.NextDouble() * 2);
                 headingDegrees = firedFrom.Velocity.Angle.Degrees + slop;
@@ -54,11 +54,11 @@ namespace AI2D.GraphicObjects.Bullets
             initialLocation.Y = initialLocation.Y + (xyOffset == null ? 0 : xyOffset.Y);
             Location = initialLocation;
 
-            if (firedFrom is BaseEnemy)
+            if (firedFrom is EnemyBase)
             {
                 FiredFromType = FiredFromType.Enemy;
             }
-            else if (firedFrom is ObjPlayer)
+            else if (firedFrom is ActorPlayer)
             {
                 FiredFromType = FiredFromType.Player;
             }
@@ -74,7 +74,7 @@ namespace AI2D.GraphicObjects.Bullets
                 return;
             }
 
-            if (FiredFromType == FiredFromType.Enemy && !(testHit is BaseEnemy))
+            if (FiredFromType == FiredFromType.Enemy && !(testHit is EnemyBase))
             {
                 if (Intersects(_core.Actors.Player))
                 {
@@ -85,7 +85,7 @@ namespace AI2D.GraphicObjects.Bullets
                     }
                 }
             }
-            else if (FiredFromType == FiredFromType.Player && !(testHit is ObjPlayer))
+            else if (FiredFromType == FiredFromType.Player && !(testHit is ActorPlayer))
             {
                 if (Intersects(testHit))
                 {

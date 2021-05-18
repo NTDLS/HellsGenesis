@@ -1,9 +1,9 @@
 ﻿using AI2D.Engine.Menus;
 using AI2D.Engine.Scenarios;
-using AI2D.GraphicObjects;
-using AI2D.GraphicObjects.Bullets;
-using AI2D.GraphicObjects.Enemies;
-using AI2D.GraphicObjects.PowerUp;
+using AI2D.Actors;
+using AI2D.Actors.Bullets;
+using AI2D.Actors.Enemies;
+using AI2D.Actors.PowerUp;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
@@ -27,9 +27,9 @@ namespace AI2D.Engine
 
         public List<BaseMenu> Menus { get; private set; } = new List<BaseMenu>();
 
-        public ObjPlayer Player { get; private set; }
-        public ObjTextBlock PlayerStatsText { get; private set; }
-        public ObjTextBlock DebugText { get; private set; }
+        public ActorPlayer Player { get; private set; }
+        public ActorTextBlock PlayerStatsText { get; private set; }
+        public ActorTextBlock DebugText { get; private set; }
 
         #endregion
 
@@ -53,7 +53,7 @@ namespace AI2D.Engine
 
         public void Start()
         {
-            Player = new ObjPlayer(_core) { Visable = false };
+            Player = new ActorPlayer(_core) { Visable = false };
 
             DoorIsAjarSound = GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Door Is Ajar.wav", 0.50f, false);
             RadarBlipsSound = GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Radar Blips.wav", 0.20f, false);
@@ -230,7 +230,7 @@ namespace AI2D.Engine
 
         public List<T> VisibleEnemiesOfType<T>() where T : class
         {
-            return (from o in _core.Actors.OfType<BaseEnemy>()
+            return (from o in _core.Actors.OfType<EnemyBase>()
                     where o is T
                     && o.Visable == true
                     select o as T).ToList();
@@ -240,7 +240,7 @@ namespace AI2D.Engine
         {
             lock (Collection)
             {
-                OfType<BasePowerUp>().ForEach(c => c.QueueForDelete());
+                OfType<PowerUpBase>().ForEach(c => c.QueueForDelete());
             }
         }
 
@@ -248,7 +248,7 @@ namespace AI2D.Engine
         {
             lock (Collection)
             {
-                OfType<BaseEnemy>().ForEach(c => c.QueueForDelete());
+                OfType<EnemyBase>().ForEach(c => c.QueueForDelete());
             }
         }
 
@@ -256,7 +256,7 @@ namespace AI2D.Engine
         {
             lock (Collection)
             {
-                OfType<BaseBullet>().ForEach(c => c.QueueForDelete());
+                OfType<BulletBase>().ForEach(c => c.QueueForDelete());
             }
         }
 
@@ -264,7 +264,7 @@ namespace AI2D.Engine
         {
             lock (Collection)
             {
-                OfType<ObjAnimation>().ForEach(c => c.QueueForDelete());
+                OfType<ActorAnimation>().ForEach(c => c.QueueForDelete());
             }
         }
 
@@ -318,17 +318,17 @@ namespace AI2D.Engine
 
         #region Factories.
 
-        public ObjRadarPositionIndicator AddNewRadarPositionIndicator()
+        public ActorRadarPositionIndicator AddNewRadarPositionIndicator()
         {
             lock (Collection)
             {
-                var obj = new ObjRadarPositionIndicator(_core);
+                var obj = new ActorRadarPositionIndicator(_core);
                 Collection.Add(obj);
                 return obj;
             }
         }
 
-        public void DeleteRadarPositionIndicator(ObjRadarPositionIndicator obj)
+        public void DeleteRadarPositionIndicator(ActorRadarPositionIndicator obj)
         {
             lock (Collection)
             {
@@ -338,7 +338,7 @@ namespace AI2D.Engine
             }
         }
 
-        public void PlaceAnimationOnTopOf(ObjAnimation animation, ActorBase defaultPosition)
+        public void PlaceAnimationOnTopOf(ActorAnimation animation, ActorBase defaultPosition)
         {
             lock (Collection)
             {
@@ -349,17 +349,17 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjAnimation AddNewAnimation(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, ObjAnimation.PlayMode playMode = null)
+        public ActorAnimation AddNewAnimation(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, ActorAnimation.PlayMode playMode = null)
         {
             lock (Collection)
             {
-                ObjAnimation obj = new ObjAnimation(_core, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
+                ActorAnimation obj = new ActorAnimation(_core, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
                 Collection.Add(obj);
                 return obj;
             }
         }
 
-        public void DeleteAnimation(ObjAnimation obj)
+        public void DeleteAnimation(ActorAnimation obj)
         {
             lock (Collection)
             {
@@ -418,27 +418,27 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjRadarPositionTextBlock AddNewRadarPositionTextBlock(string font, Brush color, double size, PointD location)
+        public ActorRadarPositionTextBlock AddNewRadarPositionTextBlock(string font, Brush color, double size, PointD location)
         {
             lock (Collection)
             {
-                var obj = new ObjRadarPositionTextBlock(_core, font, color, size, location);
+                var obj = new ActorRadarPositionTextBlock(_core, font, color, size, location);
                 Collection.Add(obj);
                 return obj;
             }
         }
 
-        public ObjTextBlock AddNewTextBlock(string font, Brush color, double size, PointD location, bool isPositionStatic)
+        public ActorTextBlock AddNewTextBlock(string font, Brush color, double size, PointD location, bool isPositionStatic)
         {
             lock (Collection)
             {
-                var obj = new ObjTextBlock(_core, font, color, size, location, isPositionStatic);
+                var obj = new ActorTextBlock(_core, font, color, size, location, isPositionStatic);
                 Collection.Add(obj);
                 return obj;
             }
         }
 
-        public void DeleteTextBlock(ObjTextBlock obj)
+        public void DeleteTextBlock(ActorTextBlock obj)
         {
             lock (Collection)
             {
@@ -447,17 +447,17 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjDebug AddNewDebug()
+        public ActorDebug AddNewDebug()
         {
             lock (Collection)
             {
-                var obj = new ObjDebug(_core);
+                var obj = new ActorDebug(_core);
                 Collection.Add(obj);
                 return obj;
             }
         }
 
-        public void DeleteDebug(ObjDebug obj)
+        public void DeleteDebug(ActorDebug obj)
         {
             lock (Collection)
             {
@@ -466,11 +466,11 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjStar AddNewStar(double x, double y)
+        public ActorStar AddNewStar(double x, double y)
         {
             lock (Collection)
             {
-                var obj = new ObjStar(_core)
+                var obj = new ActorStar(_core)
                 {
                     X = x,
                     Y = y
@@ -480,17 +480,17 @@ namespace AI2D.Engine
             }
         }
 
-        public ObjStar AddNewStar()
+        public ActorStar AddNewStar()
         {
             lock (Collection)
             {
-                var obj = new ObjStar(_core);
+                var obj = new ActorStar(_core);
                 Collection.Add(obj);
                 return obj;
             }
         }
 
-        public void DeleteStar(ObjStar obj)
+        public void DeleteStar(ActorStar obj)
         {
             lock (Collection)
             {
@@ -499,7 +499,7 @@ namespace AI2D.Engine
             }
         }
 
-        public void InjectEnemy(BaseEnemy obj)
+        public void InjectEnemy(EnemyBase obj)
         {
             lock (Collection)
             {
@@ -507,7 +507,7 @@ namespace AI2D.Engine
             }
         }
 
-        public void InjectPowerUp(BasePowerUp obj)
+        public void InjectPowerUp(PowerUpBase obj)
         {
             lock (Collection)
             {
@@ -515,7 +515,7 @@ namespace AI2D.Engine
             }
         }
 
-        public void DeletePowerUp(BasePowerUp obj)
+        public void DeletePowerUp(PowerUpBase obj)
         {
             lock (Collection)
             {
@@ -524,12 +524,12 @@ namespace AI2D.Engine
             }
         }
 
-        public T AddNewPowerUp<T>() where T : BasePowerUp
+        public T AddNewPowerUp<T>() where T : PowerUpBase
         {
             lock (Collection)
             {
                 object[] param = { _core };
-                BasePowerUp obj = (BasePowerUp)Activator.CreateInstance(typeof(T), param);
+                PowerUpBase obj = (PowerUpBase)Activator.CreateInstance(typeof(T), param);
 
                 obj.Location = _core.Display.RandomOffScreenLocation(100, 1000);
 
@@ -538,12 +538,12 @@ namespace AI2D.Engine
             }
         }
 
-        public T AddNewEnemy<T>() where T : BaseEnemy
+        public T AddNewEnemy<T>() where T : EnemyBase
         {
             lock (Collection)
             {
                 object[] param = { _core };
-                BaseEnemy obj = (BaseEnemy)Activator.CreateInstance(typeof(T), param);
+                EnemyBase obj = (EnemyBase)Activator.CreateInstance(typeof(T), param);
 
                 obj.Location = _core.Display.RandomOffScreenLocation();
                 obj.Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MinSpeed, Constants.Limits.MaxSpeed);
@@ -554,7 +554,7 @@ namespace AI2D.Engine
             }
         }
 
-        public void DeleteEnemy(BaseEnemy obj)
+        public void DeleteEnemy(EnemyBase obj)
         {
             lock (Collection)
             {
@@ -563,7 +563,7 @@ namespace AI2D.Engine
             }
         }
 
-        public BaseBullet AddNewLockedBullet(WeaponBase weapon, ActorBase firedFrom, ActorBase lockedTarget, PointD xyOffset = null)
+        public BulletBase AddNewLockedBullet(WeaponBase weapon, ActorBase firedFrom, ActorBase lockedTarget, PointD xyOffset = null)
         {
             lock (Collection)
             {
@@ -573,7 +573,7 @@ namespace AI2D.Engine
             }
         }
 
-        public BaseBullet AddNewBullet(WeaponBase weapon, ActorBase firedFrom, PointD xyOffset = null)
+        public BulletBase AddNewBullet(WeaponBase weapon, ActorBase firedFrom, PointD xyOffset = null)
         {
             lock (Collection)
             {
@@ -583,7 +583,7 @@ namespace AI2D.Engine
             }
         }
 
-        public void DeleteBullet(BaseBullet obj)
+        public void DeleteBullet(BulletBase obj)
         {
             lock (Collection)
             {
@@ -630,7 +630,7 @@ namespace AI2D.Engine
                     {
                         foreach (var actor in Collection.Where(o=>o.Visable == true))
                         {
-                            if (actor is ObjTextBlock) //These never intersect.
+                            if (actor is ActorTextBlock) //These never intersect.
                             {
                                 Utility.DynamicCast(actor, actor.GetType()).Render(dc);
                             }

@@ -1,7 +1,7 @@
-﻿using AI2D.GraphicObjects;
-using AI2D.GraphicObjects.Bullets;
-using AI2D.GraphicObjects.Enemies;
-using AI2D.GraphicObjects.PowerUp;
+﻿using AI2D.Actors;
+using AI2D.Actors.Bullets;
+using AI2D.Actors.Enemies;
+using AI2D.Actors.PowerUp;
 using AI2D.Types;
 using System;
 using System.Collections.Generic;
@@ -338,7 +338,7 @@ namespace AI2D.Engine
                                 _core.Actors.Player.CurrentWeapon.LockedOnObjects.Clear();
                             }
 
-                            foreach (var enemy in _core.Actors.VisibleOfType<BaseEnemy>())
+                            foreach (var enemy in _core.Actors.VisibleOfType<EnemyBase>())
                             {
                                 if (enemy.CurrentWeapon != null)
                                 {
@@ -364,7 +364,7 @@ namespace AI2D.Engine
                                         _core.Actors.Player.CurrentWeapon.ApplyIntelligence(appliedOffset, enemy); //Player lock-on to enemy. :D
                                     }
 
-                                    foreach (var bullet in _core.Actors.VisibleOfType<BaseBullet>())
+                                    foreach (var bullet in _core.Actors.VisibleOfType<BulletBase>())
                                     {
                                         bullet.ApplyIntelligence(appliedOffset, enemy);
                                     }
@@ -382,17 +382,17 @@ namespace AI2D.Engine
 
                             #region Radar Indicator Logic.
 
-                            var overlappingIndicators = new Func<List<List<ObjRadarPositionTextBlock>>>(() =>
+                            var overlappingIndicators = new Func<List<List<ActorRadarPositionTextBlock>>>(() =>
                             {
-                                var accountedFor = new HashSet<ObjRadarPositionTextBlock>();
-                                var groups = new List<List<ObjRadarPositionTextBlock>>();
-                                var radarTexts = _core.Actors.VisibleOfType<ObjRadarPositionTextBlock>();
+                                var accountedFor = new HashSet<ActorRadarPositionTextBlock>();
+                                var groups = new List<List<ActorRadarPositionTextBlock>>();
+                                var radarTexts = _core.Actors.VisibleOfType<ActorRadarPositionTextBlock>();
 
                                 foreach (var parent in radarTexts)
                                 {
                                     if (accountedFor.Contains(parent) == false)
                                     {
-                                        var group = new List<ObjRadarPositionTextBlock>();
+                                        var group = new List<ActorRadarPositionTextBlock>();
                                         foreach (var child in radarTexts)
                                         {
                                             if (accountedFor.Contains(child) == false)
@@ -436,7 +436,7 @@ namespace AI2D.Engine
 
                             #region Bullet Frame Advancement.
 
-                            foreach (var bullet in _core.Actors.VisibleOfType<BaseBullet>())
+                            foreach (var bullet in _core.Actors.VisibleOfType<BulletBase>())
                             {
                                 if (bullet.Visable && bullet.ReadyForDeletion == false)
                                 {
@@ -457,7 +457,7 @@ namespace AI2D.Engine
 
                             if (appliedOffset.X != 0 || appliedOffset.Y != 0)
                             {
-                                if (_core.Actors.VisibleOfType<ObjStar>().Count < 30) //Never wan't more than n stars.
+                                if (_core.Actors.VisibleOfType<ActorStar>().Count < 30) //Never wan't more than n stars.
                                 {
                                     if (appliedOffset.X > 0)
                                     {
@@ -510,7 +510,7 @@ namespace AI2D.Engine
                                     }
                                 }
 
-                                foreach (var star in _core.Actors.VisibleOfType<ObjStar>())
+                                foreach (var star in _core.Actors.VisibleOfType<ActorStar>())
                                 {
                                     if (_core.Display.VisibleBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
                                     {
@@ -526,7 +526,7 @@ namespace AI2D.Engine
 
                             #region Animation Frame Advancement.
 
-                            foreach (var animation in _core.Actors.VisibleOfType<ObjAnimation>())
+                            foreach (var animation in _core.Actors.VisibleOfType<ActorAnimation>())
                             {
                                 animation.X += (animation.Velocity.Angle.X * (animation.Velocity.MaxSpeed * animation.Velocity.ThrottlePercentage)) - appliedOffset.X;
                                 animation.Y += (animation.Velocity.Angle.Y * (animation.Velocity.MaxSpeed * animation.Velocity.ThrottlePercentage)) - appliedOffset.Y;
@@ -537,7 +537,7 @@ namespace AI2D.Engine
 
                             #region Text Block Frame Advancement.
 
-                            foreach (var textBlock in _core.Actors.VisibleOfType<ObjTextBlock>().Where(o => o.IsPositionStatic == false))
+                            foreach (var textBlock in _core.Actors.VisibleOfType<ActorTextBlock>().Where(o => o.IsPositionStatic == false))
                             {
                                 textBlock.X += (textBlock.Velocity.Angle.X * (textBlock.Velocity.MaxSpeed * textBlock.Velocity.ThrottlePercentage)) - appliedOffset.X;
                                 textBlock.Y += (textBlock.Velocity.Angle.Y * (textBlock.Velocity.MaxSpeed * textBlock.Velocity.ThrottlePercentage)) - appliedOffset.Y;
@@ -547,7 +547,7 @@ namespace AI2D.Engine
 
                             #region Power-Up Frame Advancement.
 
-                            foreach (var powerUp in _core.Actors.VisibleOfType<BasePowerUp>())
+                            foreach (var powerUp in _core.Actors.VisibleOfType<PowerUpBase>())
                             {
                                 Utility.DynamicCast(powerUp, powerUp.GetType()).ApplyIntelligence(appliedOffset);
 
@@ -559,7 +559,7 @@ namespace AI2D.Engine
 
                             #region Offscreen Radar Indicator.
 
-                            if (_core.Actors.OfType<ObjRadarPositionIndicator>().Count < 1)
+                            if (_core.Actors.OfType<ActorRadarPositionIndicator>().Count < 1)
                             {
                                 _core.Actors.AddNewRadarPositionIndicator();
                             }

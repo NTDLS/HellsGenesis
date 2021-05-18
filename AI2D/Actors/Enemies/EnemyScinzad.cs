@@ -4,17 +4,16 @@ using AI2D.Weapons;
 using System.Drawing;
 using System.Linq;
 
-namespace AI2D.GraphicObjects.Enemies
+namespace AI2D.Actors.Enemies
 {
     /// <summary>
-    /// These are a heavy fighting unit, employing various types of weapons and seemingly various stratigies.
-    /// They like to stay at a medium range. Some units have seeking-missiles.
+    /// 100% traditional weapons, they enforce their distance and are are moddled to provoke dog fighting. These are fast units.
     /// </summary>
-    public class EnemyAvvol : BaseEnemy
+    public class EnemyScinzad : EnemyBase
     {
-        public const int ScoreMultiplier = 25;
+        public const int ScoreMultiplier = 15;
 
-        private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Avvol\";
+        private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Scinzad\";
         private readonly string[] _imagePaths = {
             #region images.
             "1.png",
@@ -26,42 +25,28 @@ namespace AI2D.GraphicObjects.Enemies
             #endregion
         };
 
-        public EnemyAvvol(Core core)
-            : base(core, BaseEnemy.GetGenericHP(), ScoreMultiplier)
+        public EnemyScinzad(Core core)
+            : base(core, EnemyBase.GetGenericHP(), ScoreMultiplier)
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
 
             base.SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
 
-            SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
-            Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 4, Constants.Limits.MaxSpeed - 2); //Upper end of the speed spectrum.
+            Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 2, Constants.Limits.MaxSpeed); //Upper end of the speed spectrum
 
-            AddWeapon(new WeaponPhotonTorpedo(_core)
-            {
-                RoundQuantity = 5,
-                FireDelayMilliseconds = 1000,
-            });
+            SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
 
             AddWeapon(new WeaponVulcanCannon(_core)
             {
-                RoundQuantity = 100,
-                FireDelayMilliseconds = 500
+                RoundQuantity = 1000,
+                FireDelayMilliseconds = 250
             });
 
             AddWeapon(new WeaponDualVulcanCannon(_core)
             {
-                RoundQuantity = 100,
+                RoundQuantity = 500,
                 FireDelayMilliseconds = 500
             });
-
-            if (imageIndex == 0 || imageIndex == 2 || imageIndex == 5)
-            {
-                AddWeapon(new WeaponGuidedFragMissile(_core)
-                {
-                    RoundQuantity = 10,
-                    FireDelayMilliseconds = 2000
-                });
-            }
 
             SelectWeapon(typeof(WeaponVulcanCannon));
         }
@@ -71,16 +56,19 @@ namespace AI2D.GraphicObjects.Enemies
         enum AIMode
         {
             Approaching,
+            Tailing,
             MovingToFallback,
             MovingToApproach,
         }
 
-        const double baseDistanceToKeep = 100;
+        const double baseDistanceToKeep = 200;
         double distanceToKeep = baseDistanceToKeep * (Utility.Random.NextDouble() + 1);
-        const double baseFallbackDistance = 400;
+        const double baseFallbackDistance = 800;
         double fallbackDistance;
         AngleD fallToAngle;
         AIMode mode = AIMode.Approaching;
+        int bulletsRemainingBeforeTailing = 0;
+        int hpRemainingBeforeTailing = 0;
 
         public override void ApplyIntelligence(PointD frameAppliedOffset)
         {
@@ -96,6 +84,37 @@ namespace AI2D.GraphicObjects.Enemies
                 }
                 else
                 {
+                    mode = AIMode.Tailing;
+                    bulletsRemainingBeforeTailing = this.TotalAvailableRounds();
+                    hpRemainingBeforeTailing = this.HitPoints;
+                }
+            }
+
+            if (mode == AIMode.Tailing)
+            {
+                MoveInDirectionOf(_core.Actors.Player);
+
+                //Stay on the players tail.
+                if (distanceToPlayer > distanceToKeep + 300)
+                {
+                    Velocity.ThrottlePercentage = 1;
+                    mode = AIMode.Approaching;
+                }
+                else
+                {
+                    Velocity.ThrottlePercentage -= 0.05;
+                    if (Velocity.ThrottlePercentage < 0)
+                    {
+                        Velocity.ThrottlePercentage = 0;
+                    }
+                }
+
+                //We we get too close, do too much damage or they fire at us enough, they fall back and come in again
+                if (distanceToPlayer < (distanceToKeep / 2.0)
+                    || (hpRemainingBeforeTailing - this.HitPoints) > 2
+                    || (bulletsRemainingBeforeTailing - this.TotalAvailableRounds()) > 15)
+                {
+                    Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;
                     fallToAngle = Velocity.Angle + (180.0 + Utility.RandomNumberNegative(0, 10));
                     fallbackDistance = baseFallbackDistance * (Utility.Random.NextDouble() + 1);
@@ -148,25 +167,7 @@ namespace AI2D.GraphicObjects.Enemies
 
             if (distanceToPlayer < 700)
             {
-                if (distanceToPlayer > 500 && HasWeaponAndAmmo(typeof(WeaponGuidedFragMissile)))
-                {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
-                    if (isPointingAtPlayer)
-                    {
-                        SelectWeapon(typeof(WeaponGuidedFragMissile));
-                        CurrentWeapon?.Fire();
-                    }
-                }
-                else if (distanceToPlayer > 300 && HasWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
-                {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
-                    if (isPointingAtPlayer)
-                    {
-                        SelectWeapon(typeof(WeaponPhotonTorpedo));
-                        CurrentWeapon?.Fire();
-                    }
-                }
-                else if (distanceToPlayer > 200 && HasWeaponAndAmmo(typeof(WeaponVulcanCannon)))
+                if (distanceToPlayer > 200 && HasWeaponAndAmmo(typeof(WeaponVulcanCannon)))
                 {
                     bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                     if (isPointingAtPlayer)
@@ -175,7 +176,7 @@ namespace AI2D.GraphicObjects.Enemies
                         CurrentWeapon?.Fire();
                     }
                 }
-                else if (distanceToPlayer > 100 && HasWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
+                else if (distanceToPlayer > 0 && HasWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
                 {
                     bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                     if (isPointingAtPlayer)

@@ -1,9 +1,9 @@
 ﻿using AI2D.Engine;
 using System.Linq;
 
-namespace AI2D.GraphicObjects
+namespace AI2D.Actors
 {
-    public class ObjStar : ActorBase
+    public class ActorStar : ActorBase
     {
         private const string _assetStarPath = @"..\..\..\Assets\Graphics\Star\";
         private readonly string[] _assetStarFiles = {
@@ -15,7 +15,7 @@ namespace AI2D.GraphicObjects
             #endregion
         };
 
-        public ObjStar(Core core)
+        public ActorStar(Core core)
             : base(core)
         {
             int _ImageIndex = Utility.RandomNumber(0, _assetStarFiles.Count());

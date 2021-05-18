@@ -3,9 +3,9 @@ using AI2D.Types;
 using System.Drawing;
 using System.Linq;
 
-namespace AI2D.GraphicObjects.PowerUp
+namespace AI2D.Actors.PowerUp
 {
-    public class PowerUpRepair : BasePowerUp
+    public class PowerUpRepair : PowerUpBase
     {
         private const string _assetPath = @"..\..\..\Assets\Graphics\PowerUp\Repair\";
         private readonly string[] _imagePaths = {

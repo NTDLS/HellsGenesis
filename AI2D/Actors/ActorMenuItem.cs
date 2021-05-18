@@ -2,9 +2,9 @@
 using AI2D.Types;
 using System.Drawing;
 
-namespace AI2D.GraphicObjects
+namespace AI2D.Actors
 {
-    public class ObjMenuItem : ObjTextBlock
+    public class ActorMenuItem : ActorTextBlock
     {
         public bool Selected { get; set; }
         public enum MenuItemType
@@ -18,7 +18,7 @@ namespace AI2D.GraphicObjects
 
         public MenuItemType ItemType { get; set; }
 
-        public ObjMenuItem(Core core, string font, Brush color, double size, PointD location)
+        public ActorMenuItem(Core core, string font, Brush color, double size, PointD location)
             : base(core, font, color, size, location, true)
         {
             Visable = true;

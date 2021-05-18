@@ -1,4 +1,4 @@
-﻿using AI2D.GraphicObjects.Enemies;
+﻿using AI2D.Actors.Enemies;
 using System.Collections.Generic;
 
 namespace AI2D.Engine.Scenarios

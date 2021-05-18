@@ -2,11 +2,11 @@
 using AI2D.Types;
 using System.Drawing;
 
-namespace AI2D.GraphicObjects
+namespace AI2D.Actors
 {
-    public class ObjRadarPositionTextBlock: ObjTextBlock
+    public class ActorRadarPositionTextBlock: ActorTextBlock
     {
-        public ObjRadarPositionTextBlock(Core core, string font, Brush color, double size, PointD location)
+        public ActorRadarPositionTextBlock(Core core, string font, Brush color, double size, PointD location)
             : base(core, font, color, size, location, false)
         {
             Visable = false;

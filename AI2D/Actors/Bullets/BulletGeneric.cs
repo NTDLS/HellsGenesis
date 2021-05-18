@@ -2,9 +2,9 @@
 using AI2D.Types;
 using AI2D.Weapons;
 
-namespace AI2D.GraphicObjects.Bullets
+namespace AI2D.Actors.Bullets
 {
-    public class BulletGeneric : BaseBullet
+    public class BulletGeneric : BulletBase
     {
 
         public BulletGeneric(Core core, WeaponBase weapon, ActorBase firedFrom, string imagePath,

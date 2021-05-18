@@ -1,4 +1,4 @@
-﻿using AI2D.GraphicObjects;
+﻿using AI2D.Actors;
 using AI2D.Types;
 using System;
 using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace AI2D.Engine.Menus
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;
 
-        private List<ObjMenuItem> _menuItems { get; set; } = new List<ObjMenuItem>();
+        private List<ActorMenuItem> _menuItems { get; set; } = new List<ActorMenuItem>();
         public bool ReadyForDeletion { get; set; }
 
         public BaseMenu(Core core)
@@ -23,46 +23,46 @@ namespace AI2D.Engine.Menus
             _core = core;
         }
 
-        public virtual void ExecuteSelection(ObjMenuItem item)
+        public virtual void ExecuteSelection(ActorMenuItem item)
         {
 
         }
 
-        public ObjMenuItem NewTitleItem(PointD location, string text, Brush brush, int size = 24)
+        public ActorMenuItem NewTitleItem(PointD location, string text, Brush brush, int size = 24)
         {
-            var item = new ObjMenuItem(_core, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, "Consolas", brush, size, location)
             {
                 Text = text,
-                ItemType = ObjMenuItem.MenuItemType.Title
+                ItemType = ActorMenuItem.MenuItemType.Title
             };
             AddMenuItem(item);
             return item;
         }
 
-        public ObjMenuItem NewTextItem(PointD location, string text, Brush brush, int size = 16)
+        public ActorMenuItem NewTextItem(PointD location, string text, Brush brush, int size = 16)
         {
-            var item = new ObjMenuItem(_core, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, "Consolas", brush, size, location)
             {
                 Text = text,
-                ItemType = ObjMenuItem.MenuItemType.Text
+                ItemType = ActorMenuItem.MenuItemType.Text
             };
             AddMenuItem(item);
             return item;
         }
 
-        public ObjMenuItem NewMenuItem(PointD location, string name, string text, Brush brush, int size = 14)
+        public ActorMenuItem NewMenuItem(PointD location, string name, string text, Brush brush, int size = 14)
         {
-            var item = new ObjMenuItem(_core, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, "Consolas", brush, size, location)
             {
                 Name = name,
                 Text = text,
-                ItemType = ObjMenuItem.MenuItemType.Item
+                ItemType = ActorMenuItem.MenuItemType.Item
             };
             AddMenuItem(item);
             return item;
         }
 
-        public void AddMenuItem(ObjMenuItem item)
+        public void AddMenuItem(ActorMenuItem item)
         {
             lock (_core.Actors.Menus)
             {
@@ -74,7 +74,7 @@ namespace AI2D.Engine.Menus
         {
             if (_core.Input.IsKeyPressed(PlayerKey.Enter))
             {
-                var selectedItem = (from o in _menuItems where o.ItemType == ObjMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
+                var selectedItem = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
                 if (selectedItem != null)
                 {
                     //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
@@ -89,14 +89,14 @@ namespace AI2D.Engine.Menus
             {
                 int selectIndex = 0;
 
-                var items = (from o in _menuItems where o.ItemType == ObjMenuItem.MenuItemType.Item select o).ToList();
+                var items = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item select o).ToList();
                 if (items != null && items.Count > 0)
                 {
 
                     for (int i = 0; i < items.Count; i++)
                     {
                         var item = items[i];
-                        if (item.ItemType == ObjMenuItem.MenuItemType.Item)
+                        if (item.ItemType == ActorMenuItem.MenuItemType.Item)
                         {
                             if (item.Selected)
                             {
@@ -119,14 +119,14 @@ namespace AI2D.Engine.Menus
             {
                 int selectIndex = 0;
 
-                var items = (from o in _menuItems where o.ItemType == ObjMenuItem.MenuItemType.Item select o).ToList();
+                var items = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item select o).ToList();
                 if (items != null && items.Count > 0)
                 {
 
                     for (int i = 0; i < items.Count; i++)
                     {
                         var item = items[i];
-                        if (item.ItemType == ObjMenuItem.MenuItemType.Item)
+                        if (item.ItemType == ActorMenuItem.MenuItemType.Item)
                         {
                             if (item.Selected)
                             {

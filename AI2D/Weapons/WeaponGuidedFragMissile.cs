@@ -1,7 +1,7 @@
 ﻿using AI2D.Engine;
-using AI2D.GraphicObjects;
-using AI2D.GraphicObjects.Bullets;
-using AI2D.GraphicObjects.Enemies;
+using AI2D.Actors;
+using AI2D.Actors.Bullets;
+using AI2D.Actors.Enemies;
 using AI2D.Types;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +31,7 @@ namespace AI2D.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override BaseBullet CreateBullet(ActorBase lockedTarget, PointD xyOffset = null)
+        public override BulletBase CreateBullet(ActorBase lockedTarget, PointD xyOffset = null)
         {
             return new BulletGuidedFragMissile(_core, this, _owner, lockedTarget, xyOffset);
         }

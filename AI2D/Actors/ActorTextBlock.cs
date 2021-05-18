@@ -3,9 +3,9 @@ using AI2D.Types;
 using System;
 using System.Drawing;
 
-namespace AI2D.GraphicObjects
+namespace AI2D.Actors
 {
-    public class ObjTextBlock : ActorBase
+    public class ActorTextBlock : ActorBase
     {
         private Rectangle? _prevRegion;
         private Font _font;
@@ -73,7 +73,7 @@ namespace AI2D.GraphicObjects
 
         #endregion
 
-        public ObjTextBlock(Core core, string font, Brush color, double size, PointD location, bool isPositionStatic)
+        public ActorTextBlock(Core core, string font, Brush color, double size, PointD location, bool isPositionStatic)
             : base(core)
         {
             IsPositionStatic = isPositionStatic;

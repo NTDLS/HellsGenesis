@@ -3,9 +3,9 @@ using AI2D.Types;
 using System.Drawing;
 using System.Linq;
 
-namespace AI2D.GraphicObjects.PowerUp
+namespace AI2D.Actors.PowerUp
 {
-    public class PowerUpSheild : BasePowerUp
+    public class PowerUpSheild : PowerUpBase
     {
         public const int ScoreMultiplier = 1;
 

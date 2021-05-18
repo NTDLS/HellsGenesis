@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 
 namespace AI2D.Types
 {
@@ -127,7 +126,7 @@ namespace AI2D.Types
             return $"{{{Math.Round(X, 4):#.####}x,{Math.Round(Y, 4):#.####}y}}";
         }
 
-        
+
         public double _degrees = 0;
         public double Degrees
         {

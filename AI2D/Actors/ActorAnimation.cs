@@ -2,9 +2,9 @@
 using System;
 using System.Drawing;
 
-namespace AI2D.GraphicObjects
+namespace AI2D.Actors
 {
-    public class ObjAnimation : ActorBase
+    public class ActorAnimation : ActorBase
     {
         private Bitmap _frameImage;
         private int _frameCount;
@@ -50,7 +50,7 @@ namespace AI2D.GraphicObjects
             public bool DeleteActorAfterPlay;
         }
 
-        public ObjAnimation(Core core, string imageFrames, Size? frameSize,  int frameDelayMilliseconds = 10, PlayMode playMode = null)
+        public ActorAnimation(Core core, string imageFrames, Size? frameSize,  int frameDelayMilliseconds = 10, PlayMode playMode = null)
             : base(core)
         {
             _playMode = playMode;

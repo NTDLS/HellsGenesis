@@ -1,16 +1,14 @@
 ﻿using AI2D.Engine;
-using AI2D.Types;
-using AI2D.Weapons;
 using System.Drawing;
 using System.Linq;
 
-namespace AI2D.GraphicObjects.Enemies
+namespace AI2D.Actors.Enemies
 {
-    public class EnemyTheda : BaseEnemy
+    public class EnemyUves : EnemyBase
     {
         public const int ScoreMultiplier = 1;
 
-        private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Theda\";
+        private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Uves\";
         private readonly string[] _imagePaths = {
             #region images.
             "1.png",
@@ -22,8 +20,8 @@ namespace AI2D.GraphicObjects.Enemies
             #endregion
         };
 
-        public EnemyTheda(Core core)
-            : base(core, BaseEnemy.GetGenericHP(), ScoreMultiplier)
+        public EnemyUves(Core core)
+            : base(core, EnemyBase.GetGenericHP(), ScoreMultiplier)
         {
             int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
 

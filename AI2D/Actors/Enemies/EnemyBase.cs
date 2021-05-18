@@ -3,17 +3,17 @@ using AI2D.Types;
 using System;
 using System.Drawing;
 
-namespace AI2D.GraphicObjects.Enemies
+namespace AI2D.Actors.Enemies
 {
-    public class BaseEnemy : ActorBase
+    public class EnemyBase : ActorBase
     {
         public int CollisionDamage { get; set; } = 25;
         public int ScorePoints { get; private set; } = 25;
-        public ObjRadarPositionIndicator RadarPositionIndicator { get; set; }
-        public ObjRadarPositionTextBlock RadarPositionText { get; set; }
-        public ObjAnimation ThrustAnimation { get; private set; }
+        public ActorRadarPositionIndicator RadarPositionIndicator { get; set; }
+        public ActorRadarPositionTextBlock RadarPositionText { get; set; }
+        public ActorAnimation ThrustAnimation { get; private set; }
 
-        public BaseEnemy(Core core, int hitPoints, int scoreMultiplier)
+        public EnemyBase(Core core, int hitPoints, int scoreMultiplier)
             : base(core)
         {
             Velocity.ThrottlePercentage = 1;
@@ -27,13 +27,13 @@ namespace AI2D.GraphicObjects.Enemies
             RadarPositionText = _core.Actors.AddNewRadarPositionTextBlock("Consolas", Brushes.Red, 8, new PointD());
 
             string _debugAniPath = @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png";
-            var playMode = new ObjAnimation.PlayMode()
+            var playMode = new ActorAnimation.PlayMode()
             {
-                Replay = ObjAnimation.ReplayMode.LoopedPlay,
+                Replay = ActorAnimation.ReplayMode.LoopedPlay,
                 DeleteActorAfterPlay = false,
                 ReplayDelay = new TimeSpan(0)
             };
-            ThrustAnimation = new ObjAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
+            ThrustAnimation = new ActorAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
 
             ThrustAnimation.Reset();
             _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);

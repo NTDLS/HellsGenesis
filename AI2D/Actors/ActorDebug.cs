@@ -3,9 +3,9 @@ using AI2D.Types;
 using System.Drawing;
 using System.Linq;
 
-namespace AI2D.GraphicObjects
+namespace AI2D.Actors
 {
-    public class ObjDebug : ActorBase
+    public class ActorDebug : ActorBase
     {
         private const string _assetStarPath = @"..\..\..\Assets\Graphics\";
         private readonly string[] _assetStarFiles = {
@@ -14,7 +14,7 @@ namespace AI2D.GraphicObjects
             #endregion
         };
 
-        public ObjDebug(Core core)
+        public ActorDebug(Core core)
             : base(core)
         {
             int _explosionImageIndex = Utility.RandomNumber(0, _assetStarFiles.Count());

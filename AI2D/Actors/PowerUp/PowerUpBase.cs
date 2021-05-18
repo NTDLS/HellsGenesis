@@ -4,9 +4,9 @@ using System;
 using System.Drawing;
 using System.Linq;
 
-namespace AI2D.GraphicObjects.PowerUp
+namespace AI2D.Actors.PowerUp
 {
-    public class BasePowerUp : ActorBase
+    public class PowerUpBase : ActorBase
     {
         private const string _assetHitAnimationPath = @"..\..\..\Assets\Graphics\Animation\PowerUp\";
         private readonly string[] _assetHitAnimationFiles = {
@@ -38,15 +38,15 @@ namespace AI2D.GraphicObjects.PowerUp
 
         private AudioClip _explodeSound;
 
-        private ObjAnimation _hitAnimation { get; set; }
+        private ActorAnimation _hitAnimation { get; set; }
 
-        public BasePowerUp(Core core)
+        public PowerUpBase(Core core)
             : base(core)
         {
             Initialize();
 
             int _hitImageIndex = Utility.RandomNumber(0, _assetHitAnimationFiles.Count());
-            _hitAnimation = new ObjAnimation(_core, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(111, 109), 50);
+            _hitAnimation = new ActorAnimation(_core, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(111, 109), 50);
 
             int _soundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
             _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);

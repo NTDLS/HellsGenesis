@@ -1,5 +1,5 @@
-﻿using AI2D.GraphicObjects.Enemies;
-using AI2D.GraphicObjects.PowerUp;
+﻿using AI2D.Actors.Enemies;
+using AI2D.Actors.PowerUp;
 
 namespace AI2D.Engine.Scenarios
 {
@@ -31,7 +31,7 @@ namespace AI2D.Engine.Scenarios
 
         private void AddFreshEnemiesCallback(Core core, object refObj)
         {
-            if (_core.Actors.OfType<BaseEnemy>().Count == 0)
+            if (_core.Actors.OfType<EnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {

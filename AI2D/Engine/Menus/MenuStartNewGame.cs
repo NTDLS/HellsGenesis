@@ -1,4 +1,4 @@
-﻿using AI2D.GraphicObjects;
+﻿using AI2D.Actors;
 using AI2D.Types;
 using System.Drawing;
 
@@ -37,7 +37,7 @@ namespace AI2D.Engine.Menus
             itemYes.Selected = true;
         }
 
-        public override void ExecuteSelection(ObjMenuItem item)
+        public override void ExecuteSelection(ActorMenuItem item)
         {
             if (item.Name == "NO")
             {
