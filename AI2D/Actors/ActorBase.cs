@@ -22,7 +22,10 @@ namespace AI2D.Actors
         public delegate void VisibilityChange(ActorBase obj);
         public event VisibilityChange OnVisibilityChange;
 
-
+        /// <summary>
+        /// A user defined name for the actor - basically for debugging.
+        /// </summary>
+        public string Tag { get; set; }
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;
 
@@ -285,9 +288,10 @@ namespace AI2D.Actors
 
         #endregion
 
-        public ActorBase(Core core)
+        public ActorBase(Core core, string tag = "")
         {
             _core = core;
+            Tag = tag;
             RotationMode = RotationMode.Upsize;
             Velocity.MaxRotationSpeed = Constants.Limits.MaxRotationSpeed;
         }

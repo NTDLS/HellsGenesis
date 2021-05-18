@@ -51,7 +51,7 @@ namespace AI2D.Actors
             public bool DeleteActorAfterPlay;
         }
 
-        public ActorAnimation(Core core, string imageFrames, Size? frameSize,  int frameDelayMilliseconds = 10, PlayMode playMode = null)
+        public ActorAnimation(Core core, string imageFrames, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
             : base(core)
         {
             _playMode = playMode;

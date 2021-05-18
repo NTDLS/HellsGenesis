@@ -25,7 +25,6 @@ namespace AI2D.Engine.Scenarios
 
             _core.Actors.Player.AddHitPoints(100);
             _core.Actors.Player.AddShieldPoints(10);
-
         }
 
         private void RedirectFormationCallback(Core core, object refObj)
@@ -73,7 +72,7 @@ namespace AI2D.Engine.Scenarios
         private void AddFreshEnemiesCallback(Core core, object refObj)
         {
             Point<double> baseLocation = _core.Display.RandomOffScreenLocation();
-            CreateTriangleFormation(baseLocation, 100 - ((CurrentWave + 1) * 10), (int)((CurrentWave + 1) * 1.5));
+            CreateTriangleFormation(baseLocation, 100 - ((CurrentWave + 1) * 10), (int)(CurrentWave));
             _core.Actors.RadarBlipsSound.Play();
             waitingOnPopulation = false;
         }
