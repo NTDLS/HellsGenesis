@@ -30,8 +30,12 @@ namespace AI2D.Engine.Menus
             help2.X -= help2.Size.Width / 2;
             baseY += itemTitle.Size.Height + 5;
 
-            var help3 = NewTextItem(new Point<double>(baseX, baseY), "Fire with <space> and change weapons with <Shift>.", Brushes.LawnGreen);
+            var help3 = NewTextItem(new Point<double>(baseX, baseY), "Fire with <space>.", Brushes.LawnGreen);
             help3.X -= help3.Size.Width / 2;
+            baseY += itemTitle.Size.Height + 10;
+
+            var help4 = NewTextItem(new Point<double>(baseX, baseY), "Change weapons with <left> and <right> arrows.", Brushes.LawnGreen);
+            help4.X -= help4.Size.Width / 2;
             baseY += itemTitle.Size.Height + 10;
 
             itemYes.Selected = true;

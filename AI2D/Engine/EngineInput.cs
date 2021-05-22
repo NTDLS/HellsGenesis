@@ -114,7 +114,11 @@ namespace AI2D.Engine
             }
             #endregion
 
-            if (key == Keys.ShiftKey)
+            if (key == Keys.Left)
+            {
+                _core.Actors.Player.SelectPreviousAvailableUsableWeapon();
+            }
+            else if (key == Keys.Right)
             {
                 _core.Actors.Player.SelectNextAvailableUsableWeapon();
             }

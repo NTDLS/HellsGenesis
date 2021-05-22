@@ -279,7 +279,7 @@ namespace AI2D.Actors
                         (int)(_location.Y - (_size.Height / 2.0)),
                         _size.Width, _size.Height);
 
-                    _core.Display.DrawingSurface.Invalidate(invalidRect);
+                    //_core.Display.DrawingSurface.Invalidate(invalidRect);
 
                     OnVisibilityChange?.Invoke(this);
                 }
@@ -350,6 +350,28 @@ namespace AI2D.Actors
             return (from o in _weapons select o.RoundsFired).Sum();
         }
 
+        public WeaponBase SelectPreviousAvailableUsableWeapon()
+        {
+            WeaponBase previousWeapon = null;
+
+            foreach (var weapon in _weapons)
+            {
+                if (weapon == CurrentWeapon)
+                {
+                    if (previousWeapon == null)
+                    {
+                        return SelectLastAvailableUsableWeapon(); //No sutible weapon found after the current one. Go back to the end.
+                    }
+                    CurrentWeapon = previousWeapon;
+                    return previousWeapon;
+                }
+
+                previousWeapon = weapon;
+            }
+
+            return SelectFirstAvailableUsableWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
+        }
+
         public WeaponBase SelectNextAvailableUsableWeapon()
         {
             bool selectNextWeapon = false;
@@ -381,6 +403,20 @@ namespace AI2D.Actors
         {
             var existingWeapon = (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
             return existingWeapon != null && existingWeapon.RoundQuantity > 0;
+        }
+
+        public WeaponBase SelectLastAvailableUsableWeapon()
+        {
+            var existingWeapon = (from o in _weapons where o.RoundQuantity > 0 select o).LastOrDefault();
+            if (existingWeapon != null)
+            {
+                CurrentWeapon = existingWeapon;
+            }
+            else
+            {
+                CurrentWeapon = null;
+            }
+            return CurrentWeapon;
         }
 
         public WeaponBase SelectFirstAvailableUsableWeapon()
@@ -443,7 +479,7 @@ namespace AI2D.Actors
                 (int)(_location.X - (_size.Width / 2.0)),
                 (int)(_location.Y - (_size.Height / 2.0)),
                 _size.Width, _size.Height);
-            _core.Display.DrawingSurface.Invalidate(invalidRect);
+            //_core.Display.DrawingSurface.Invalidate(invalidRect);
         }
 
         public bool Intersects(ActorBase otherObject)
@@ -675,7 +711,7 @@ namespace AI2D.Actors
         public virtual void Cleanup()
         {
             Visable = false;
-            this.Invalidate(); //Don't think this is necessary. Just seems right.
+            this.Invalidate();
         }
 
         public void Render(Graphics dc)

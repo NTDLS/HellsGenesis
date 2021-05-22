@@ -123,6 +123,8 @@ namespace AI2D.Engine
             Player.AddWeapon(new WeaponPulseMeson(_core) { RoundQuantity = 500 });
             Player.AddWeapon(new WeaponFragMissile(_core) { RoundQuantity = 500 });
             Player.AddWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 500 });
+            Player.AddWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 500 });
+            Player.AddWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 500 });
 
             Player.SelectWeapon(typeof(WeaponVulcanCannon));
         }
@@ -613,7 +615,6 @@ namespace AI2D.Engine
 
         #region Rendering.
 
-
         public void Render(Graphics dc)
         {
             _core.IsRendering = true;
@@ -630,13 +631,9 @@ namespace AI2D.Engine
                     {
                         foreach (var actor in Collection.Where(o=>o.Visable == true))
                         {
-                            if (actor is ActorTextBlock) //These never intersect.
+                            if (_core.Display.VisibleBounds.IntersectsWith(actor.Bounds))
                             {
                                 Utility.DynamicCast(actor, actor.GetType()).Render(dc);
-                            }
-                            else if (_core.Display.VisibleBounds.IntersectsWith(actor.Bounds))
-                            {
-                                actor.Render(dc);
                             }
                         }
                     }

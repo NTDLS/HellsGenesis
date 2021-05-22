@@ -162,7 +162,6 @@ namespace AI2D.Engine.Menus
                 
                 dc.DrawRectangle(blackPen, selectedItem.BoundsI);
             }
-
         }
 
         public virtual void Cleanup()
