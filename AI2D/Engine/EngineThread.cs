@@ -145,18 +145,34 @@ namespace AI2D.Engine
 
                             if (_core.Actors.Player.Visable)
                             {
-                                if (_core.Input.IsKeyPressed(PlayerKey.Fire))
+                                if (_core.Input.IsKeyPressed(PlayerKey.PrimaryFire))
                                 {
-                                    if (_core.Actors.Player.CurrentWeapon != null && _core.Actors.Player.CurrentWeapon.Fire())
+                                    if (_core.Actors.Player.SelectedPrimaryWeapon != null && _core.Actors.Player.SelectedPrimaryWeapon.Fire())
                                     {
-                                        if (_core.Actors.Player.CurrentWeapon?.RoundQuantity == 25)
+                                        if (_core.Actors.Player.SelectedPrimaryWeapon?.RoundQuantity == 25)
                                         {
                                             _core.Actors.Player.AmmoLowSound.Play();
                                         }
-                                        if (_core.Actors.Player.CurrentWeapon?.RoundQuantity == 0)
+                                        if (_core.Actors.Player.SelectedPrimaryWeapon?.RoundQuantity == 0)
                                         {
                                             _core.Actors.Player.AmmoEmptySound.Play();
-                                            _core.Actors.Player.SelectFirstAvailableUsableWeapon();
+                                            _core.Actors.Player.SelectFirstAvailableUsablePrimaryWeapon();
+                                        }
+                                    }
+                                }
+
+                                if (_core.Input.IsKeyPressed(PlayerKey.SecondaryFire))
+                                {
+                                    if (_core.Actors.Player.SelectedSecondaryWeapon != null && _core.Actors.Player.SelectedSecondaryWeapon.Fire())
+                                    {
+                                        if (_core.Actors.Player.SelectedSecondaryWeapon?.RoundQuantity == 25)
+                                        {
+                                            _core.Actors.Player.AmmoLowSound.Play();
+                                        }
+                                        if (_core.Actors.Player.SelectedSecondaryWeapon?.RoundQuantity == 0)
+                                        {
+                                            _core.Actors.Player.AmmoEmptySound.Play();
+                                            _core.Actors.Player.SelectFirstAvailableUsableSecondaryWeapon();
                                         }
                                     }
                                 }
@@ -333,16 +349,16 @@ namespace AI2D.Engine
 
                             #region Enemies Frame Advancement.
 
-                            if (_core.Actors.Player.CurrentWeapon != null)
+                            if (_core.Actors.Player.SelectedSecondaryWeapon != null)
                             {
-                                _core.Actors.Player.CurrentWeapon.LockedOnObjects.Clear();
+                                _core.Actors.Player.SelectedSecondaryWeapon.LockedOnObjects.Clear();
                             }
 
                             foreach (var enemy in _core.Actors.VisibleOfType<EnemyBase>())
                             {
-                                if (enemy.CurrentWeapon != null)
+                                if (enemy.SelectedSecondaryWeapon != null)
                                 {
-                                    enemy.CurrentWeapon.LockedOnObjects.Clear();
+                                    enemy.SelectedSecondaryWeapon.LockedOnObjects.Clear();
                                 }
 
                                 if (_core.Actors.Player.Visable && _core.Actors.Player.ReadyForDeletion == false)
@@ -359,9 +375,9 @@ namespace AI2D.Engine
                                         }
                                     }
 
-                                    if (_core.Actors.Player.CurrentWeapon != null)
+                                    if (_core.Actors.Player.SelectedSecondaryWeapon != null)
                                     {
-                                        _core.Actors.Player.CurrentWeapon.ApplyIntelligence(appliedOffset, enemy); //Player lock-on to enemy. :D
+                                        _core.Actors.Player.SelectedSecondaryWeapon.ApplyIntelligence(appliedOffset, enemy); //Player lock-on to enemy. :D
                                     }
 
                                     foreach (var bullet in _core.Actors.VisibleOfType<BulletBase>())
@@ -580,7 +596,7 @@ namespace AI2D.Engine
                                 + $"Shield: {_core.Actors.Player.ShieldPoints}, "
                                 + $"Hull: {_core.Actors.Player.HitPoints}, "
                                 + $"Boost: {_core.Actors.Player.Velocity.AvailableBoost.ToString("#,0")}, "
-                                + $"Weapon: {_core.Actors.Player.CurrentWeapon?.Name} x{_core.Actors.Player.CurrentWeapon?.RoundQuantity}";
+                                + $"Weapon: {_core.Actors.Player.SelectedSecondaryWeapon?.Name} x{_core.Actors.Player.SelectedSecondaryWeapon?.RoundQuantity}";
                             //+ $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "
                             //+ $"Score: {_core.Actors.Player.Score.ToString("#,0")}";
 

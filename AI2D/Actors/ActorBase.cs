@@ -38,7 +38,8 @@ namespace AI2D.Actors
         private int _MillisecondsBetweenHits = 200;
         private AudioClip _hitSound;
         private AudioClip _shieldHit;
-        private readonly List<WeaponBase> _weapons = new List<WeaponBase>();
+        private readonly List<WeaponBase> _secondaryWeapons = new List<WeaponBase>();
+        private readonly List<WeaponBase> _primaryWeapons = new List<WeaponBase>();
         private ActorAnimation _hitExplosionAnimation { get; set; }
 
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
@@ -74,7 +75,8 @@ namespace AI2D.Actors
         #region Properties.
 
         public RotationMode RotationMode { get; set; }
-        public WeaponBase CurrentWeapon { get; private set; }
+        public WeaponBase SelectedPrimaryWeapon { get; private set; }
+        public WeaponBase SelectedSecondaryWeapon { get; private set; }
         public int HitPoints { get; private set; } = 0;
         public int ShieldPoints { get; private set; } = 0;
         public Velocity<double> Velocity { get; set; } = new Velocity<double>();
@@ -321,18 +323,23 @@ namespace AI2D.Actors
             OnVisibilityChange?.Invoke(this);
         }
 
-        public void ClearWeapons()
+        public void ClearPrimaryWeapons()
         {
-            _weapons.Clear();
+            _primaryWeapons.Clear();
         }
 
-        public void AddWeapon(WeaponBase weapon)
+        public void ClearSecondaryWeapons()
         {
-            var existing = GetWeaponOfType(weapon.GetType());
+            _secondaryWeapons.Clear();
+        }
+
+        public void AddPrimaryWeapon(WeaponBase weapon)
+        {
+            var existing = GetPrimaryWeaponOfType(weapon.GetType());
             if (existing == null)
             {
                 weapon.SetOwner(this);
-                _weapons.Add(weapon);
+                _primaryWeapons.Add(weapon);
             }
             else
             {
@@ -340,108 +347,147 @@ namespace AI2D.Actors
             }
         }
 
-        public int TotalAvailableRounds()
+        public void AddSecondaryWeapon(WeaponBase weapon)
         {
-            return (from o in _weapons select o.RoundQuantity).Sum();
+            var existing = GetSecondaryWeaponOfType(weapon.GetType());
+            if (existing == null)
+            {
+                weapon.SetOwner(this);
+                _secondaryWeapons.Add(weapon);
+            }
+            else
+            {
+                existing.RoundQuantity += weapon.RoundQuantity;
+            }
         }
 
-        public int TotalFiresRounds()
+        public int TotalAvailableSecondaryWeaponRounds()
         {
-            return (from o in _weapons select o.RoundsFired).Sum();
+            return (from o in _secondaryWeapons select o.RoundQuantity).Sum();
         }
 
-        public WeaponBase SelectPreviousAvailableUsableWeapon()
+        public int TotalSecondaryWeaponFiredRounds()
+        {
+            return (from o in _secondaryWeapons select o.RoundsFired).Sum();
+        }
+
+        public WeaponBase SelectPreviousAvailableUsableSecondaryWeapon()
         {
             WeaponBase previousWeapon = null;
 
-            foreach (var weapon in _weapons)
+            foreach (var weapon in _secondaryWeapons)
             {
-                if (weapon == CurrentWeapon)
+                if (weapon == SelectedSecondaryWeapon)
                 {
                     if (previousWeapon == null)
                     {
-                        return SelectLastAvailableUsableWeapon(); //No sutible weapon found after the current one. Go back to the end.
+                        return SelectLastAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the end.
                     }
-                    CurrentWeapon = previousWeapon;
+                    SelectedSecondaryWeapon = previousWeapon;
                     return previousWeapon;
                 }
 
                 previousWeapon = weapon;
             }
 
-            return SelectFirstAvailableUsableWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
+            return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
 
-        public WeaponBase SelectNextAvailableUsableWeapon()
+        public WeaponBase SelectNextAvailableUsableSecondaryWeapon()
         {
             bool selectNextWeapon = false;
 
-            foreach (var weapon in _weapons)
+            foreach (var weapon in _secondaryWeapons)
             {
                 if (selectNextWeapon)
                 {
-                    CurrentWeapon = weapon;
+                    SelectedSecondaryWeapon = weapon;
                     return weapon;
                 }
 
-                if (weapon == CurrentWeapon) //Find the current weapon in the collection;
+                if (weapon == SelectedSecondaryWeapon) //Find the current weapon in the collection;
                 {
                     selectNextWeapon = true;
                 }
             }
 
-            return SelectFirstAvailableUsableWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
+            return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
 
-        public bool HasWeapon(Type weaponType)
+        public bool HasSecondaryWeapon(Type weaponType)
         {
-            var existingWeapon = (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
+            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
             return existingWeapon != null;
         }
 
-        public bool HasWeaponAndAmmo(Type weaponType)
+        public bool HasSecondaryWeaponAndAmmo(Type weaponType)
         {
-            var existingWeapon = (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
+            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
             return existingWeapon != null && existingWeapon.RoundQuantity > 0;
         }
 
-        public WeaponBase SelectLastAvailableUsableWeapon()
+        public WeaponBase SelectLastAvailableUsableSecondaryWeapon()
         {
-            var existingWeapon = (from o in _weapons where o.RoundQuantity > 0 select o).LastOrDefault();
+            var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).LastOrDefault();
             if (existingWeapon != null)
             {
-                CurrentWeapon = existingWeapon;
+                SelectedSecondaryWeapon = existingWeapon;
             }
             else
             {
-                CurrentWeapon = null;
+                SelectedSecondaryWeapon = null;
             }
-            return CurrentWeapon;
+            return SelectedSecondaryWeapon;
         }
 
-        public WeaponBase SelectFirstAvailableUsableWeapon()
+        public WeaponBase SelectFirstAvailableUsablePrimaryWeapon()
         {
-            var existingWeapon = (from o in _weapons where o.RoundQuantity > 0 select o).FirstOrDefault();
+            var existingWeapon = (from o in _primaryWeapons where o.RoundQuantity > 0 select o).FirstOrDefault();
             if (existingWeapon != null)
             {
-                CurrentWeapon = existingWeapon;
+                SelectedPrimaryWeapon = existingWeapon;
             }
             else
             {
-                CurrentWeapon = null;
+                SelectedPrimaryWeapon = null;
             }
-            return CurrentWeapon;
+            return SelectedSecondaryWeapon;
         }
 
-        public WeaponBase GetWeaponOfType(Type weaponType)
+        public WeaponBase SelectFirstAvailableUsableSecondaryWeapon()
         {
-            return (from o in _weapons where o.GetType() == weaponType select o).FirstOrDefault();
+            var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).FirstOrDefault();
+            if (existingWeapon != null)
+            {
+                SelectedSecondaryWeapon = existingWeapon;
+            }
+            else
+            {
+                SelectedSecondaryWeapon = null;
+            }
+            return SelectedSecondaryWeapon;
         }
 
-        public WeaponBase SelectWeapon(Type weaponType)
+        public WeaponBase GetPrimaryWeaponOfType(Type weaponType)
         {
-            CurrentWeapon = GetWeaponOfType(weaponType);
-            return CurrentWeapon;
+            return (from o in _primaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
+        }
+
+        public WeaponBase GetSecondaryWeaponOfType(Type weaponType)
+        {
+            return (from o in _secondaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
+        }
+
+        public WeaponBase SelectPrimaryWeapon(Type weaponType)
+        {
+            SelectedPrimaryWeapon = GetPrimaryWeaponOfType(weaponType);
+            return SelectedPrimaryWeapon;
+        }
+
+        public WeaponBase SelectSecondaryWeapon(Type weaponType)
+        {
+            SelectedSecondaryWeapon = GetSecondaryWeaponOfType(weaponType);
+            return SelectedSecondaryWeapon;
         }
 
         public void SetImage(Image image, Size? size = null)

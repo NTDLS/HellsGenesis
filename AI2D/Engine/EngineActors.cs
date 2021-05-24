@@ -102,7 +102,8 @@ namespace AI2D.Engine
 
         public void ResetPlayer()
         {
-            Player.ClearWeapons();
+            Player.ClearPrimaryWeapons();
+            Player.ClearSecondaryWeapons();
 
             Player.IsDead = false;
             Player.Velocity.MaxSpeed = Constants.Limits.MaxPlayerSpeed;
@@ -117,16 +118,19 @@ namespace AI2D.Engine
             Player.X = _core.Display.VisibleSize.Width / 2;
             Player.Y = _core.Display.VisibleSize.Height / 2;
 
-            Player.AddWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 500 });
-            Player.AddWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 100 });
-            Player.AddWeapon(new WeaponPhotonTorpedo(_core) { RoundQuantity = 500 });
-            Player.AddWeapon(new WeaponPulseMeson(_core) { RoundQuantity = 500 });
-            Player.AddWeapon(new WeaponFragMissile(_core) { RoundQuantity = 500 });
-            Player.AddWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 500 });
-            Player.AddWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 500 });
-            Player.AddWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 500 });
+            Player.AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 1000 });
 
-            Player.SelectWeapon(typeof(WeaponVulcanCannon));
+            //Player.AddSecondaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 500 });
+            //Player.AddSecondaryWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 100 });
+            Player.AddSecondaryWeapon(new WeaponPhotonTorpedo(_core) { RoundQuantity = 500 });
+            Player.AddSecondaryWeapon(new WeaponPulseMeson(_core) { RoundQuantity = 500 });
+            Player.AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 500 });
+            Player.AddSecondaryWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 500 });
+            Player.AddSecondaryWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 500 });
+            Player.AddSecondaryWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 500 });
+
+            Player.SelectPrimaryWeapon(typeof(WeaponVulcanCannon));
+            Player.SelectSecondaryWeapon(typeof(WeaponGuidedFragMissile));
         }
 
         public void ClearScenarios()

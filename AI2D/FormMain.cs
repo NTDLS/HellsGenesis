@@ -72,12 +72,13 @@ namespace AI2D
 
         private void FormMain_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(Types.PlayerKey.SpeedBoost, Types.KeyPressState.Down);
+            if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(Types.PlayerKey.SpeedBoost, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(Types.PlayerKey.Forward, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(Types.PlayerKey.RotateCounterClockwise, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(Types.PlayerKey.Reverse, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.D) _core.Input.KeyStateChanged(Types.PlayerKey.RotateClockwise, Types.KeyPressState.Down);
-            if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(Types.PlayerKey.Fire, Types.KeyPressState.Down);
+            if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(Types.PlayerKey.PrimaryFire, Types.KeyPressState.Down);
+            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(Types.PlayerKey.SecondaryFire, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(Types.PlayerKey.Escape, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.Left) _core.Input.KeyStateChanged(Types.PlayerKey.Left, Types.KeyPressState.Down);
             if (e.KeyCode == Keys.Right) _core.Input.KeyStateChanged(Types.PlayerKey.Right, Types.KeyPressState.Down);
@@ -104,12 +105,13 @@ namespace AI2D
                 }
             }
 
-            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(Types.PlayerKey.SpeedBoost, Types.KeyPressState.Up);
+            if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(Types.PlayerKey.SpeedBoost, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(Types.PlayerKey.Forward, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(Types.PlayerKey.RotateCounterClockwise, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(Types.PlayerKey.Reverse, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.D) _core.Input.KeyStateChanged(Types.PlayerKey.RotateClockwise, Types.KeyPressState.Up);
-            if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(Types.PlayerKey.Fire, Types.KeyPressState.Up);
+            if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(Types.PlayerKey.PrimaryFire, Types.KeyPressState.Up);
+            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(Types.PlayerKey.SecondaryFire, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(Types.PlayerKey.Escape, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.Left) _core.Input.KeyStateChanged(Types.PlayerKey.Left, Types.KeyPressState.Up);
             if (e.KeyCode == Keys.Right) _core.Input.KeyStateChanged(Types.PlayerKey.Right, Types.KeyPressState.Up);

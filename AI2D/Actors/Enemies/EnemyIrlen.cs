@@ -31,13 +31,13 @@ namespace AI2D.Actors.Enemies
 
             SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
 
-            AddWeapon(new WeaponPhotonTorpedo(_core)
+            AddSecondaryWeapon(new WeaponPhotonTorpedo(_core)
             {
                 RoundQuantity = 5,
                 FireDelayMilliseconds = 1000,
             });
 
-            AddWeapon(new WeaponVulcanCannon(_core)
+            AddSecondaryWeapon(new WeaponVulcanCannon(_core)
             {
                 RoundQuantity = 500,
                 FireDelayMilliseconds = 250
@@ -145,22 +145,22 @@ namespace AI2D.Actors.Enemies
 
             if (distanceToPlayer < 700)
             {
-                if (distanceToPlayer > 400 && HasWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
+                if (distanceToPlayer > 400 && HasSecondaryWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
                 {
                     bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                     if (isPointingAtPlayer)
                     {
-                        SelectWeapon(typeof(WeaponPhotonTorpedo));
-                        CurrentWeapon?.Fire();
+                        SelectSecondaryWeapon(typeof(WeaponPhotonTorpedo));
+                        SelectedSecondaryWeapon?.Fire();
                     }
                 }
-                else if (HasWeaponAndAmmo(typeof(WeaponVulcanCannon)))
+                else if (HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
                 {
                     bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                     if (isPointingAtPlayer)
                     {
-                        SelectWeapon(typeof(WeaponVulcanCannon));
-                        CurrentWeapon?.Fire();
+                        SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
+                        SelectedSecondaryWeapon?.Fire();
                     }
                 }
             }

@@ -36,19 +36,19 @@ namespace AI2D.Actors.Enemies
             SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
             Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 4, Constants.Limits.MaxSpeed - 2); //Upper end of the speed spectrum.
 
-            AddWeapon(new WeaponPhotonTorpedo(_core)
+            AddSecondaryWeapon(new WeaponPhotonTorpedo(_core)
             {
                 RoundQuantity = 5,
                 FireDelayMilliseconds = 1000,
             });
 
-            AddWeapon(new WeaponVulcanCannon(_core)
+            AddSecondaryWeapon(new WeaponVulcanCannon(_core)
             {
                 RoundQuantity = 100,
                 FireDelayMilliseconds = 500
             });
 
-            AddWeapon(new WeaponDualVulcanCannon(_core)
+            AddSecondaryWeapon(new WeaponDualVulcanCannon(_core)
             {
                 RoundQuantity = 100,
                 FireDelayMilliseconds = 500
@@ -56,14 +56,14 @@ namespace AI2D.Actors.Enemies
 
             if (imageIndex == 0 || imageIndex == 2 || imageIndex == 5)
             {
-                AddWeapon(new WeaponGuidedFragMissile(_core)
+                AddSecondaryWeapon(new WeaponGuidedFragMissile(_core)
                 {
                     RoundQuantity = 10,
                     FireDelayMilliseconds = 2000
                 });
             }
 
-            SelectWeapon(typeof(WeaponVulcanCannon));
+            SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
         }
 
         #region Artificial Intelligence.
@@ -148,40 +148,40 @@ namespace AI2D.Actors.Enemies
 
             if (distanceToPlayer < 700)
             {
-                if (distanceToPlayer > 500 && HasWeaponAndAmmo(typeof(WeaponGuidedFragMissile)))
+                if (distanceToPlayer > 500 && HasSecondaryWeaponAndAmmo(typeof(WeaponGuidedFragMissile)))
                 {
                     bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                     if (isPointingAtPlayer)
                     {
-                        SelectWeapon(typeof(WeaponGuidedFragMissile));
-                        CurrentWeapon?.Fire();
+                        SelectSecondaryWeapon(typeof(WeaponGuidedFragMissile));
+                        SelectedSecondaryWeapon?.Fire();
                     }
                 }
-                else if (distanceToPlayer > 300 && HasWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
+                else if (distanceToPlayer > 300 && HasSecondaryWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
                 {
                     bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                     if (isPointingAtPlayer)
                     {
-                        SelectWeapon(typeof(WeaponPhotonTorpedo));
-                        CurrentWeapon?.Fire();
+                        SelectSecondaryWeapon(typeof(WeaponPhotonTorpedo));
+                        SelectedSecondaryWeapon?.Fire();
                     }
                 }
-                else if (distanceToPlayer > 200 && HasWeaponAndAmmo(typeof(WeaponVulcanCannon)))
+                else if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
                 {
                     bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                     if (isPointingAtPlayer)
                     {
-                        SelectWeapon(typeof(WeaponVulcanCannon));
-                        CurrentWeapon?.Fire();
+                        SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
+                        SelectedSecondaryWeapon?.Fire();
                     }
                 }
-                else if (distanceToPlayer > 100 && HasWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
+                else if (distanceToPlayer > 100 && HasSecondaryWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
                 {
                     bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                     if (isPointingAtPlayer)
                     {
-                        SelectWeapon(typeof(WeaponDualVulcanCannon));
-                        CurrentWeapon?.Fire();
+                        SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));
+                        SelectedSecondaryWeapon?.Fire();
                     }
                 }
             }

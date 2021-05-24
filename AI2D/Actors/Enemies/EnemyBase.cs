@@ -106,9 +106,9 @@ namespace AI2D.Actors.Enemies
 
         public virtual void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
-            if (CurrentWeapon != null && _core.Actors.Player != null)
+            if (SelectedSecondaryWeapon != null && _core.Actors.Player != null)
             {
-                CurrentWeapon.ApplyIntelligence(frameAppliedOffset, _core.Actors.Player); //Enemy lock-on to Player. :O
+                SelectedSecondaryWeapon.ApplyIntelligence(frameAppliedOffset, _core.Actors.Player); //Enemy lock-on to Player. :O
             }
         }
 

@@ -36,19 +36,19 @@ namespace AI2D.Actors.Enemies
 
             SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
 
-            AddWeapon(new WeaponVulcanCannon(_core)
+            AddSecondaryWeapon(new WeaponVulcanCannon(_core)
             {
                 RoundQuantity = 1000,
                 FireDelayMilliseconds = 250
             });
 
-            AddWeapon(new WeaponDualVulcanCannon(_core)
+            AddSecondaryWeapon(new WeaponDualVulcanCannon(_core)
             {
                 RoundQuantity = 500,
                 FireDelayMilliseconds = 500
             });
 
-            SelectWeapon(typeof(WeaponVulcanCannon));
+            SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
         }
 
         #region Artificial Intelligence.
@@ -85,7 +85,7 @@ namespace AI2D.Actors.Enemies
                 else
                 {
                     mode = AIMode.Tailing;
-                    bulletsRemainingBeforeTailing = this.TotalAvailableRounds();
+                    bulletsRemainingBeforeTailing = this.TotalAvailableSecondaryWeaponRounds();
                     hpRemainingBeforeTailing = this.HitPoints;
                 }
             }
@@ -112,7 +112,7 @@ namespace AI2D.Actors.Enemies
                 //We we get too close, do too much damage or they fire at us enough, they fall back and come in again
                 if (distanceToPlayer < (distanceToKeep / 2.0)
                     || (hpRemainingBeforeTailing - this.HitPoints) > 2
-                    || (bulletsRemainingBeforeTailing - this.TotalAvailableRounds()) > 15)
+                    || (bulletsRemainingBeforeTailing - this.TotalAvailableSecondaryWeaponRounds()) > 15)
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;
@@ -167,22 +167,22 @@ namespace AI2D.Actors.Enemies
 
             if (distanceToPlayer < 700)
             {
-                if (distanceToPlayer > 200 && HasWeaponAndAmmo(typeof(WeaponVulcanCannon)))
+                if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
                 {
                     bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                     if (isPointingAtPlayer)
                     {
-                        SelectWeapon(typeof(WeaponVulcanCannon));
-                        CurrentWeapon?.Fire();
+                        SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
+                        SelectedSecondaryWeapon?.Fire();
                     }
                 }
-                else if (distanceToPlayer > 0 && HasWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
+                else if (distanceToPlayer > 0 && HasSecondaryWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
                 {
                     bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
                     if (isPointingAtPlayer)
                     {
-                        SelectWeapon(typeof(WeaponDualVulcanCannon));
-                        CurrentWeapon?.Fire();
+                        SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));
+                        SelectedSecondaryWeapon?.Fire();
                     }
                 }
             }

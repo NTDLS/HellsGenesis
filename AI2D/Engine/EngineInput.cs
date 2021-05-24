@@ -114,13 +114,13 @@ namespace AI2D.Engine
             }
             #endregion
 
-            if (key == Keys.Left)
+            if (key == Keys.Q)
             {
-                _core.Actors.Player.SelectPreviousAvailableUsableWeapon();
+                _core.Actors.Player.SelectPreviousAvailableUsableSecondaryWeapon();
             }
-            else if (key == Keys.Right)
+            else if (key == Keys.E)
             {
-                _core.Actors.Player.SelectNextAvailableUsableWeapon();
+                _core.Actors.Player.SelectNextAvailableUsableSecondaryWeapon();
             }
         }
     }
