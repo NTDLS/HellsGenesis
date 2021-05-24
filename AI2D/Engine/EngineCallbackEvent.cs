@@ -17,9 +17,17 @@ namespace AI2D.Engine
         private CallbackEventAsync _callbackEventAsync;
         private DateTime _startedTime;
 
+        public Guid UID { get; private set; }
+
         public bool ReadyForDeletion { get; set; } = false;
 
-        public delegate void OnExecute(Core core, object refObj);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="core">Engine core</param>
+        /// <param name="sender">The event that is being triggered</param>
+        /// <param name="refObj">An optional object passed by the user code</param>
+        public delegate void OnExecute(Core core, EngineCallbackEvent sender, object refObj);
 
         public enum CallbackEventMode
         {
@@ -44,6 +52,7 @@ namespace AI2D.Engine
             _callbackEventMode = callbackEventMode;
             _callbackEventAsync = callbackEventAsync;
             _startedTime = DateTime.UtcNow;
+            UID = Guid.NewGuid();
         }
 
         public EngineCallbackEvent(Core core, TimeSpan countdown, OnExecute executeCallback, object refObj)
@@ -52,6 +61,7 @@ namespace AI2D.Engine
             _countdown = countdown;
             _onExecute = executeCallback;
             _startedTime = DateTime.UtcNow;
+            UID = Guid.NewGuid();
         }
 
         public EngineCallbackEvent(Core core, TimeSpan countdown, OnExecute executeCallback)
@@ -60,44 +70,48 @@ namespace AI2D.Engine
             _countdown = countdown;
             _onExecute = executeCallback;
             _startedTime = DateTime.UtcNow;
+            UID = Guid.NewGuid();
         }
 
         public bool CheckForTrigger()
         {
-            bool result = false;
-
-            if (ReadyForDeletion)
+            lock (this)
             {
-                return false;
-            }
+                bool result = false;
 
-            if ((DateTime.UtcNow - _startedTime).TotalMilliseconds > _countdown.TotalMilliseconds)
-            {
-                result = true;
-
-                if (_callbackEventAsync == CallbackEventAsync.Asynchronous)
+                if (ReadyForDeletion)
                 {
-                    new Thread(() =>
+                    return false;
+                }
+
+                if ((DateTime.UtcNow - _startedTime).TotalMilliseconds > _countdown.TotalMilliseconds)
+                {
+                    result = true;
+
+                    if (_callbackEventMode == CallbackEventMode.OneTime)
                     {
-                        _onExecute(_core, _referenceObject);
-                    }).Start();
-                }
-                else
-                {
-                    _onExecute(_core, _referenceObject);
-                }
+                        ReadyForDeletion = true;
+                    }
 
-                if (_callbackEventMode == CallbackEventMode.Recurring)
-                {
-                    _startedTime = DateTime.UtcNow;
+                    if (_callbackEventAsync == CallbackEventAsync.Asynchronous)
+                    {
+                        new Thread(() =>
+                        {
+                            _onExecute(_core, this, _referenceObject);
+                        }).Start();
+                    }
+                    else
+                    {
+                        _onExecute(_core, this, _referenceObject);
+                    }
+
+                    if (_callbackEventMode == CallbackEventMode.Recurring)
+                    {
+                        _startedTime = DateTime.UtcNow;
+                    }
                 }
-                else
-                {
-                    ReadyForDeletion = true;
-                }
+                return result;
             }
-
-            return result;
         }
     }
 }

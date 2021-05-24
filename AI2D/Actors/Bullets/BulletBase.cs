@@ -78,7 +78,8 @@ namespace AI2D.Actors.Bullets
             {
                 if (Intersects(_core.Actors.Player))
                 {
-                    testHit.Hit(this);
+                    //We don't auto delete the player because there is only one instance, the engine always assumes its valid.
+                    testHit.Hit(this, true, false);
                     if ((this is BulletPulseMeson) == false)
                     {
                         Explode();

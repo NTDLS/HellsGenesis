@@ -27,7 +27,7 @@ namespace AI2D.Engine.Scenarios
             _core.Actors.Player.AddShieldPoints(10);
         }
 
-        private void RedirectFormationCallback(Core core, object refObj)
+        private void RedirectFormationCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             List<EnemyIrlen> formationIrlens = _core.Actors.VisibleEnemiesOfType<EnemyIrlen>()
                 .Where(o => o.Mode == EnemyIrlen.AIMode.InFormation).ToList();
@@ -46,14 +46,14 @@ namespace AI2D.Engine.Scenarios
             }
         }
 
-        private void FirstShowPlayerCallback(Core core, object refObj)
+        private void FirstShowPlayerCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             _core.Actors.ResetAndShowPlayer();
         }
 
         bool waitingOnPopulation = false;
 
-        private void AdvanceWaveCallback(Core core, object refObj)
+        private void AdvanceWaveCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             if (_core.Actors.OfType<EnemyBase>().Count == 0 && !waitingOnPopulation)
             {
@@ -69,7 +69,7 @@ namespace AI2D.Engine.Scenarios
             }
         }
 
-        private void AddFreshEnemiesCallback(Core core, object refObj)
+        private void AddFreshEnemiesCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             Point<double> baseLocation = _core.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - ((CurrentWave + 1) * 10), (int)(CurrentWave));

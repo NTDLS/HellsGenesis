@@ -37,7 +37,7 @@ namespace AI2D.Engine
             Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
 
-        private void NewGameMenuCallback(Core core, object refObj)
+        private void NewGameMenuCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             Actors.InsertMenu(new MenuStartNewGame(this));
         }

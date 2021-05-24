@@ -70,10 +70,20 @@ namespace AI2D.Engine.Menus
             }
         }
 
+
+        DateTime lastInputHandled = DateTime.UtcNow;
+
         public void HandleInput()
         {
+            if ((DateTime.UtcNow - lastInputHandled).TotalMilliseconds < 100)
+            {
+                return; //We have to keep the menues from going crazy.
+            }
+
             if (_core.Input.IsKeyPressed(PlayerKey.Enter))
             {
+                lastInputHandled = DateTime.UtcNow;
+
                 var selectedItem = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
                 if (selectedItem != null)
                 {
@@ -87,6 +97,8 @@ namespace AI2D.Engine.Menus
 
             if (_core.Input.IsKeyPressed(PlayerKey.Right) || _core.Input.IsKeyPressed(PlayerKey.RotateClockwise))
             {
+                lastInputHandled = DateTime.UtcNow;
+
                 int selectIndex = 0;
 
                 var items = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item select o).ToList();
@@ -117,6 +129,8 @@ namespace AI2D.Engine.Menus
 
             if (_core.Input.IsKeyPressed(PlayerKey.Left) || _core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
             {
+                lastInputHandled = DateTime.UtcNow;
+
                 int selectIndex = 0;
 
                 var items = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item select o).ToList();

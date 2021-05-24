@@ -564,7 +564,7 @@ namespace AI2D.Actors
         /// Subtract from the objects hitpoints.
         /// </summary>
         /// <returns></returns>
-        public bool Hit(int damage)
+        public bool Hit(int damage, bool autoKill = true, bool autoDelete = true)
         {
             bool result = ((DateTime.Now - _lastHit).TotalMilliseconds > _MillisecondsBetweenHits);
             if (result)
@@ -612,7 +612,7 @@ namespace AI2D.Actors
 
                     if (HitPoints <= 0)
                     {
-                        Explode();
+                        Explode(autoKill, autoDelete);
                     }
                 }
             }
@@ -620,11 +620,11 @@ namespace AI2D.Actors
             return result;
         }
 
-        public bool Hit(BulletBase bullet)
+        public bool Hit(BulletBase bullet, bool autoKill = true, bool autoDelete = true)
         {
             if (bullet != null)
             {
-                return Hit(bullet.Weapon.Damage);
+                return Hit(bullet.Weapon.Damage, autoKill, autoDelete);
             }
             return false;
         }

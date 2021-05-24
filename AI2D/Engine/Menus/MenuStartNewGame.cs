@@ -12,7 +12,7 @@ namespace AI2D.Engine.Menus
             double baseX = _core.Display.VisibleSize.Width / 2;
             double baseY = _core.Display.VisibleSize.Height / 4;
 
-            var itemTitle = NewTitleItem(new Point<double>(baseX, baseY), "Start a new game?", Brushes.OrangeRed);
+            var itemTitle = NewTitleItem(new Point<double>(baseX, baseY), "Start new game?", Brushes.OrangeRed);
             itemTitle.X -= itemTitle.Size.Width / 2;
             baseY += itemTitle.Size.Height + 10;
 

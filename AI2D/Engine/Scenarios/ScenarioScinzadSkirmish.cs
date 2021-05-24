@@ -24,12 +24,12 @@ namespace AI2D.Engine.Scenarios
             _core.Actors.Player.AddShieldPoints(10);
         }
 
-        private void FirstShowPlayerCallback(Core core, object refObj)
+        private void FirstShowPlayerCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             _core.Actors.ResetAndShowPlayer();
         }
 
-        private void AddFreshEnemiesCallback(Core core, object refObj)
+        private void AddFreshEnemiesCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             if (_core.Actors.OfType<EnemyBase>().Count == 0)
             {
@@ -52,7 +52,7 @@ namespace AI2D.Engine.Scenarios
             }
         }
 
-        private void AddEnemyCallback(Core core, object refObj)
+        private void AddEnemyCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             _core.Actors.AddNewEnemy<EnemyScinzad>();
         }

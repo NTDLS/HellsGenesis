@@ -96,6 +96,7 @@ namespace AI2D.Engine
             if (_core.Actors.Player.IsDead)
             {
                 _core.Actors.Player.Visable = false;
+                _core.Actors.Player.IsDead = false;
                 _core.Actors.InsertMenu(new MenuStartNewGame(_core));
             }
         }
@@ -228,7 +229,7 @@ namespace AI2D.Engine
                     select o as T).ToList();
         }
 
-        private void TheDoorIsAjarCallback(Core core, object refObj)
+        private void TheDoorIsAjarCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             DoorIsAjarSound.Play();
             InsertMenu(new MenuStartNewGame(_core));

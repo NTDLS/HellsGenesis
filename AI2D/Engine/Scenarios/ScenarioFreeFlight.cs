@@ -22,7 +22,7 @@ namespace AI2D.Engine.Scenarios
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
         }
 
-        private void FirstShowPlayerCallback(Core core, object refObj)
+        private void FirstShowPlayerCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             _core.Actors.ResetAndShowPlayer();
         }
