@@ -16,7 +16,21 @@ namespace AI2D.Engine.Menus
         protected Core _core;
 
         private List<ActorMenuItem> _menuItems { get; set; } = new List<ActorMenuItem>();
-        public bool ReadyForDeletion { get; set; }
+
+        public void QueueForDelete()
+        {
+            _readyForDeletion = true;
+        }
+
+        private bool _readyForDeletion;
+        public bool ReadyForDeletion
+        {
+            get
+            {
+                return _readyForDeletion;
+            }
+        }
+
 
         public BaseMenu(Core core)
         {
@@ -28,9 +42,14 @@ namespace AI2D.Engine.Menus
 
         }
 
+        public virtual void SelectionChanged(ActorMenuItem item)
+        {
+
+        }
+
         public ActorMenuItem NewTitleItem(Point<double> location, string text, Brush brush, int size = 24)
         {
-            var item = new ActorMenuItem(_core, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
             {
                 Text = text,
                 ItemType = ActorMenuItem.MenuItemType.Title
@@ -41,7 +60,7 @@ namespace AI2D.Engine.Menus
 
         public ActorMenuItem NewTextItem(Point<double> location, string text, Brush brush, int size = 16)
         {
-            var item = new ActorMenuItem(_core, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
             {
                 Text = text,
                 ItemType = ActorMenuItem.MenuItemType.Text
@@ -52,7 +71,7 @@ namespace AI2D.Engine.Menus
 
         public ActorMenuItem NewMenuItem(Point<double> location, string name, string text, Brush brush, int size = 14)
         {
-            var item = new ActorMenuItem(_core, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
             {
                 Name = name,
                 Text = text,
@@ -75,7 +94,7 @@ namespace AI2D.Engine.Menus
 
         public void HandleInput()
         {
-            if ((DateTime.UtcNow - lastInputHandled).TotalMilliseconds < 100)
+            if ((DateTime.UtcNow - lastInputHandled).TotalMilliseconds < 250)
             {
                 return; //We have to keep the menues from going crazy.
             }
@@ -95,7 +114,7 @@ namespace AI2D.Engine.Menus
                 }
             }
 
-            if (_core.Input.IsKeyPressed(PlayerKey.Right) || _core.Input.IsKeyPressed(PlayerKey.RotateClockwise))
+            if (_core.Input.IsKeyPressed(PlayerKey.Right) || _core.Input.IsKeyPressed(PlayerKey.Down) || _core.Input.IsKeyPressed(PlayerKey.RotateClockwise))
             {
                 lastInputHandled = DateTime.UtcNow;
 
@@ -104,6 +123,7 @@ namespace AI2D.Engine.Menus
                 var items = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item select o).ToList();
                 if (items != null && items.Count > 0)
                 {
+                    int previouslySelectedIndex = -1;
 
                     for (int i = 0; i < items.Count; i++)
                     {
@@ -114,6 +134,7 @@ namespace AI2D.Engine.Menus
                             {
                                 selectIndex = i + 1;
                                 item.Selected = false;
+                                previouslySelectedIndex = i;
                             }
                         }
                     }
@@ -124,10 +145,23 @@ namespace AI2D.Engine.Menus
                     }
 
                     items[selectIndex].Selected = true;
+
+                    if (selectIndex != previouslySelectedIndex)
+                    {
+                        var selectedItem = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
+                        if (selectedItem != null)
+                        {
+                            //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
+                            //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
+                            //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
+                            //  
+                            Task.Run(() => SelectionChanged(selectedItem));
+                        }
+                    }
                 }
             }
 
-            if (_core.Input.IsKeyPressed(PlayerKey.Left) || _core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
+            if (_core.Input.IsKeyPressed(PlayerKey.Left) || _core.Input.IsKeyPressed(PlayerKey.Up) || _core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
             {
                 lastInputHandled = DateTime.UtcNow;
 
@@ -136,6 +170,7 @@ namespace AI2D.Engine.Menus
                 var items = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item select o).ToList();
                 if (items != null && items.Count > 0)
                 {
+                    int previouslySelectedIndex = -1;
 
                     for (int i = 0; i < items.Count; i++)
                     {
@@ -145,6 +180,7 @@ namespace AI2D.Engine.Menus
                             if (item.Selected)
                             {
                                 selectIndex = i - 1;
+                                previouslySelectedIndex = i;
                                 item.Selected = false;
                             }
                         }
@@ -156,6 +192,19 @@ namespace AI2D.Engine.Menus
                     }
 
                     items[selectIndex].Selected = true;
+
+                    if (selectIndex != previouslySelectedIndex)
+                    {
+                        var selectedItem = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
+                        if (selectedItem != null)
+                        {
+                            //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
+                            //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
+                            //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
+                            //  
+                            Task.Run(() => SelectionChanged(selectedItem));
+                        }
+                    }
                 }
             }
         }

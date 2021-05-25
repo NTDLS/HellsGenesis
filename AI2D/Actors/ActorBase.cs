@@ -29,6 +29,7 @@ namespace AI2D.Actors
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;
 
+        private SolidBrush _radarDotBrush = new SolidBrush(Color.FromArgb(255, 255, 0, 0));
         private Image _image;
         private Image _lockedOnImage;
         private Image _lockedOnSoftImage;
@@ -41,7 +42,7 @@ namespace AI2D.Actors
         private readonly List<WeaponBase> _secondaryWeapons = new List<WeaponBase>();
         private readonly List<WeaponBase> _primaryWeapons = new List<WeaponBase>();
         private ActorAnimation _hitExplosionAnimation { get; set; }
-
+        public Point<int> RadarDotSize { get; set; } = new Point<int>(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
 
         private const string _assetExplosionAnimationPath = @"..\..\..\Assets\Graphics\Animation\Explode\";
@@ -774,6 +775,25 @@ namespace AI2D.Actors
                 {
                     DrawImage(dc, _lockedOnSoftImage, 0);
                 }
+            }
+        }
+
+        public Color RadarDotColor
+        {
+            set
+            {
+                _radarDotBrush = new SolidBrush(value);
+            }
+        }
+
+        public void RenderRadar(Graphics dc, Point<double> scale, Point<double> offset)
+        {
+            if (_isVisible && _image != null)
+            {
+                double x = (int)((this.X * scale.X) + offset.X - ((double)RadarDotSize.X / 2.0));
+                double y = (int)((this.Y * scale.Y) + offset.Y - ((double)RadarDotSize.Y / 2.0));
+
+                dc.FillEllipse(_radarDotBrush, (int)x, (int)y, RadarDotSize.X, RadarDotSize.Y);
             }
         }
 

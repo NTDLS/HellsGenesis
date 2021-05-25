@@ -19,6 +19,9 @@ namespace AI2D.Actors.Enemies
             Velocity.ThrottlePercentage = 1;
             Initialize();
 
+            this.RadarDotSize = new Point<int>(4, 4);
+            this.RadarDotColor = Color.FromArgb(200, 100, 100);
+
             base.SetHitPoints(hitPoints);
             ScorePoints = HitPoints * scoreMultiplier;
 

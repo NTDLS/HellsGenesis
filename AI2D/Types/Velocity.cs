@@ -23,6 +23,7 @@
             }
         }
 
+
         public T _boostPercentage;
         public T BoostPercentage
         {

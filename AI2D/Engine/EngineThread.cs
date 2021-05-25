@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 
 namespace AI2D.Engine
 {
@@ -65,22 +66,23 @@ namespace AI2D.Engine
 
                 timer.Restart();
 
-                lock (_core.DrawingSemaphore)
+                Monitor.Enter(_core.DrawingSemaphore);
+  
+                lock (_core.Actors.Menus)
                 {
-                    lock (_core.Actors.Menus)
+                    //lock (_core.Actors.EngineEvents)
                     {
-                        lock (_core.Actors.EngineEvents)
+                        lock (_core.Actors.Player)
                         {
-                            lock (_core.Actors.Player)
+                            lock (_core.Actors.Collection)
                             {
-                                lock (_core.Actors.Collection)
-                                {
-                                    AdvanceFrame();
-                                }
+                                AdvanceFrame();
                             }
                         }
                     }
                 }
+
+                Monitor.Exit(_core.DrawingSemaphore);
 
                 if (sleep)
                 {
@@ -597,10 +599,11 @@ namespace AI2D.Engine
 
             _core.Actors.PlayerStatsText.Text =
                 $"Scenario: {scenario}, "
-                + $"Shield: {_core.Actors.Player.ShieldPoints}, "
-                + $"Hull: {_core.Actors.Player.HitPoints}, "
-                + $"Boost: {_core.Actors.Player.Velocity.AvailableBoost.ToString("#,0")}, "
-                + $"Weapon: {_core.Actors.Player.SelectedSecondaryWeapon?.Name} x{_core.Actors.Player.SelectedSecondaryWeapon?.RoundQuantity}";
+                + $"Shield: {_core.Actors.Player.ShieldPoints}\r\n "
+                + $"Hull: {_core.Actors.Player.HitPoints}\r\n"
+                + $"Boost: {_core.Actors.Player.Velocity.AvailableBoost.ToString("#,0")}\r\n"
+                + $"Pri-Weapon: {_core.Actors.Player.SelectedPrimaryWeapon?.Name} x{_core.Actors.Player.SelectedPrimaryWeapon?.RoundQuantity}\r\n"
+                + $"Sec-Weapon: {_core.Actors.Player.SelectedSecondaryWeapon?.Name} x{_core.Actors.Player.SelectedSecondaryWeapon?.RoundQuantity}\r\n";
             //+ $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "
             //+ $"Score: {_core.Actors.Player.Score.ToString("#,0")}";
 

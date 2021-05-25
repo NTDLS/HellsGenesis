@@ -53,7 +53,7 @@ namespace AI2D.Engine
 
         public void Start()
         {
-            Player = new ActorPlayer(_core) { Visable = false };
+            Player = new ActorPlayer(_core, Constants.PlayerClass.Atlant) { Visable = false };
 
             DoorIsAjarSound = GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Door Is Ajar.wav", 0.50f, false);
             RadarBlipsSound = GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Radar Blips.wav", 0.20f, false);
@@ -61,7 +61,8 @@ namespace AI2D.Engine
 
             BackgroundMusicSound = GetSoundCached(@"..\..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
 
-            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 10, new Point<double>(5,5), true);
+            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.Gray, 9, new Point<double>(5, 5), true);
+            PlayerStatsText.Visable = false;
             DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, new Point<double>(5, PlayerStatsText.Y + PlayerStatsText.Height + 10), true);
 
             BackgroundMusicSound.Play();
@@ -101,38 +102,6 @@ namespace AI2D.Engine
             }
         }
 
-        public void ResetPlayer()
-        {
-            Player.ClearPrimaryWeapons();
-            Player.ClearSecondaryWeapons();
-
-            Player.IsDead = false;
-            Player.Velocity.MaxSpeed = Constants.Limits.MaxPlayerSpeed;
-            Player.Velocity.MaxBoost = Constants.Limits.MaxPlayerBoostSpeed;
-            Player.Velocity.AvailableBoost = Constants.Limits.MaxPlayerBoost;
-            Player.Velocity.MaxRotationSpeed = Constants.Limits.MaxRotationSpeed;
-            Player.SetHitPoints(Constants.Limits.StartingPlayerHitpoints);
-            Player.SetShieldPoints(Constants.Limits.StartingPlayerShieldPoints);
-            Player.Velocity.Angle = new Angle<double>(45);
-            Player.Velocity.ThrottlePercentage = Constants.Limits.MinPlayerThrust;
-
-            Player.X = _core.Display.VisibleSize.Width / 2;
-            Player.Y = _core.Display.VisibleSize.Height / 2;
-
-            Player.AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 1000 });
-
-            //Player.AddSecondaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 500 });
-            //Player.AddSecondaryWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 100 });
-            Player.AddSecondaryWeapon(new WeaponPhotonTorpedo(_core) { RoundQuantity = 500 });
-            Player.AddSecondaryWeapon(new WeaponPulseMeson(_core) { RoundQuantity = 500 });
-            Player.AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 500 });
-            Player.AddSecondaryWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 500 });
-            Player.AddSecondaryWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 500 });
-            Player.AddSecondaryWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 500 });
-
-            Player.SelectPrimaryWeapon(typeof(WeaponVulcanCannon));
-            Player.SelectSecondaryWeapon(typeof(WeaponGuidedFragMissile));
-        }
 
         public void ClearScenarios()
         {
@@ -159,6 +128,8 @@ namespace AI2D.Engine
                     Scenarios.Add(new ScenarioScinzadSkirmish(_core));
                     Scenarios.Add(new ScenarioIrlenFormations(_core));
                     Scenarios.Add(new ScenarioAvvolAmbush(_core));
+
+                    PlayerStatsText.Visable = true;
                 }
 
                 DeleteAllActors();
@@ -175,12 +146,25 @@ namespace AI2D.Engine
             DeleteAllAnimations();
         }
 
+        public void DeleteAllActorsByTag(string tag)
+        {
+            lock (Collection)
+            {
+                foreach (var actor in Collection)
+                {
+                    if (actor.Tag == tag)
+                    {
+                        actor.QueueForDelete();
+                    }
+                }
+            }
+        }
+
         public void ResetAndShowPlayer()
         {
-            ResetPlayer();
+            Player.Reset();
 
             Player.Visable = true;
-
             Player.ShipEngineIdleSound.Play();
             Player.AllSystemsGoSound.Play();
         }
@@ -320,6 +304,15 @@ namespace AI2D.Engine
                 }
 
                 return result;
+            }
+        }
+
+        public ActorBase Add(ActorBase actor)
+        {
+            lock (Collection)
+            {
+                Collection.Add(actor);
+                return actor;
             }
         }
 
@@ -620,12 +613,41 @@ namespace AI2D.Engine
 
         #region Rendering.
 
-        public void Render(Graphics dc)
+        private Bitmap _radarBitmap = null;
+        private Graphics _radarDC = null;
+        private Point<double> _radarScale;
+        private Point<double> _radarOffset;
+        private Bitmap _RadarBackgroundImage = null;
+
+        public void Render(Graphics displayDC)
         {
             _core.IsRendering = true;
 
             var timeout = TimeSpan.FromMilliseconds(1);
             bool lockTaken = false;
+
+            //Radar.png
+
+            if (_radarBitmap == null)
+            {
+                _RadarBackgroundImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Radar.png");
+
+                double radarDistance = 4.5;
+                double radarWidth = _RadarBackgroundImage.Width;
+                double radarHeight = _RadarBackgroundImage.Height;
+
+                double radarVisionWidth = _core.Display.VisibleSize.Width * radarDistance;
+                double radarVisionHeight = _core.Display.VisibleSize.Height * radarDistance;
+
+                _radarBitmap = new Bitmap((int)radarWidth, (int)radarHeight);
+                _radarScale = new Point<double>((double)_radarBitmap.Width / radarVisionWidth, (double)_radarBitmap.Height / radarVisionHeight);
+                _radarOffset = new Point<double>(((radarDistance / _radarScale.X) / 2.0), ((radarDistance / _radarScale.Y) / 2.0));
+                _radarDC = Graphics.FromImage(_radarBitmap);
+            }
+
+            _radarDC.DrawImage(_RadarBackgroundImage, new Point(0, 0));
+
+            //_radarDC.Clear(Color.Aqua);
 
             try
             {
@@ -634,22 +656,40 @@ namespace AI2D.Engine
                 {
                     lock (Collection)
                     {
-                        foreach (var actor in Collection.Where(o=>o.Visable == true))
+                        //Render radar:
+                        foreach (var actor in Collection.Where(o => o.Visable == true))
+                        {
+                            if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
+                            {
+                                Utility.DynamicCast(actor, actor.GetType()).RenderRadar(_radarDC, _radarScale, _radarOffset);
+                            }
+                        }
+
+                        Player?.RenderRadar(_radarDC, _radarScale, _radarOffset);
+
+                        //Render to display:
+                        foreach (var actor in Collection.Where(o => o.Visable == true))
                         {
                             if (_core.Display.VisibleBounds.IntersectsWith(actor.Bounds))
                             {
-                                Utility.DynamicCast(actor, actor.GetType()).Render(dc);
+                                Utility.DynamicCast(actor, actor.GetType()).Render(displayDC);
                             }
                         }
-                    }
+                        Player?.Render(displayDC);
 
-                    Player?.Render(dc);
+                        //Render radar to display:
+                        Rectangle rect = new Rectangle((int)(_core.Display.VisibleSize.Width - (_radarBitmap.Width + 25)),
+                            (int)(_core.Display.VisibleSize.Height - (_radarBitmap.Height + 50)),
+                            _radarBitmap.Width, _radarBitmap.Height);
+
+                        displayDC.DrawImage(_radarBitmap, rect);
+                    }
 
                     lock (Menus)
                     {
                         foreach (var obj in Menus)
                         {
-                            obj.Render(dc);
+                            obj.Render(displayDC);
                         }
                     }
                 }

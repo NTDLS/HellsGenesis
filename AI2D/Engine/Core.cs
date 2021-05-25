@@ -48,7 +48,7 @@ namespace AI2D.Engine
             {
                 IsRunning = true;
                 Actors.Start();
-                Actors.ResetPlayer();
+                //Actors.ResetPlayer();
 
                 _engineThread.Start();
 

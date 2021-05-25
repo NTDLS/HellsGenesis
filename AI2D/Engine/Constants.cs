@@ -2,17 +2,27 @@
 {
     public static class Constants
     {
+        public enum PlayerClass
+        {
+            Nimitz = 1,
+            Knox = 2,
+            Luhu = 3,
+            Atlant = 4,
+            Ticonderoga = 5,
+            Kirov = 6
+        }
+
         public const double PlayerThrustRampUp = 0.05;
         public const double PlayerThrustRampDown = 0.01;
 
         public static class Limits
         {
-            public const int MaxHitpoints = 1000;
-            public const int MaxShieldPoints = 100;
+            public const int MaxHitpoints = 100000;
+            public const int MaxShieldPoints = 100000;
 
-            public const double MaxPlayerSpeed = 5.0;
-            public const double MaxPlayerBoostSpeed = 2.5;
-            public const double MaxPlayerBoost = 1000;
+            public const double MaxPlayerSpeed = 10;
+            public const double MaxPlayerBoostSpeed = 5;
+            public const double MaxPlayerBoost = 2500;
 
             public const double MaxRotationSpeed = 3.0;
 

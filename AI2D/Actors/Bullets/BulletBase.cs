@@ -34,6 +34,9 @@ namespace AI2D.Actors.Bullets
             LockedTarget = lockedTarget;
             Velocity.ThrottlePercentage = 100;
 
+            this.RadarDotSize = new Point<int>(2, 2);
+            this.RadarDotColor = Color.FromArgb(255, 0, 0);
+
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
 
             if (firedFrom is EnemyBase)

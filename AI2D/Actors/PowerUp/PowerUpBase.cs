@@ -50,6 +50,9 @@ namespace AI2D.Actors.PowerUp
 
             int _soundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
             _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
+
+            this.RadarDotSize = new Point<int>(4, 4);
+            this.RadarDotColor = Color.FromArgb(255, 255, 0);
         }
 
         public override void Cleanup()
