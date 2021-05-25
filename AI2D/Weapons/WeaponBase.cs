@@ -16,6 +16,8 @@ namespace AI2D.Weapons
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected AudioClip _fireSound;
 
+        public double? AngleSlop { get; set; } = null;
+        public double? SpeedSlop { get; set; } = null;
         public string Name { get; private set; }
         public int Speed { get; set; } = 25;
         public int RoundQuantity { get; set; } = int.MaxValue;

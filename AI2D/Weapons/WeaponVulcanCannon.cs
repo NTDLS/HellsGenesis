@@ -13,6 +13,9 @@ namespace AI2D.Weapons
             RoundQuantity = 500;
             Damage = 2;
             FireDelayMilliseconds = 100;
+            AngleSlop = 1;
+            Speed = 20;
+            SpeedSlop = 10;
         }
     }
 }

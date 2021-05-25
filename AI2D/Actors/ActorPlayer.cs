@@ -101,7 +101,7 @@ namespace AI2D.Actors
                 SetHitPoints(500);
                 SetShieldPoints(100);
 
-                AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 5000 });
+                AddPrimaryWeapon(new WeaponHotPepper(_core) { RoundQuantity = 10000 });
                 AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 16 });
                 //AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 500 }); //I dont have a second non guided missile.
             }

@@ -15,7 +15,6 @@ namespace AI2D.Actors.Bullets
         public ActorBase LockedTarget { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
         public double MaxAgeInMilliseconds { get; set; } = 4000;
-
         public double AgeInMilliseconds
         {
             get
@@ -39,11 +38,15 @@ namespace AI2D.Actors.Bullets
 
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
 
+            if (weapon.AngleSlop != null)
+            {
+                headingDegrees = firedFrom.Velocity.Angle.Degrees + (Utility.FlipCoin() ? 1 : -1) * (Utility.Random.NextDouble() * (double)weapon.AngleSlop);
+            }
+
             if (firedFrom is EnemyBase)
             {
-                double slop = (Utility.FlipCoin() ? 1 : -1) * (Utility.Random.NextDouble() * 2);
-                headingDegrees = firedFrom.Velocity.Angle.Degrees + slop;
-            }
+                headingDegrees = firedFrom.Velocity.Angle.Degrees + (Utility.FlipCoin() ? 1 : -1) * (Utility.Random.NextDouble() * 2);
+            } 
 
             Velocity<double> initialVelocity = new Velocity<double>()
             {
@@ -51,6 +54,11 @@ namespace AI2D.Actors.Bullets
                 MaxSpeed = weapon.Speed,
                 ThrottlePercentage = 100
             };
+
+            if (Weapon.SpeedSlop != null)
+            {
+                initialVelocity.MaxSpeed += (Utility.FlipCoin() ? 1 : -1) * (Utility.Random.NextDouble() * (double)weapon.AngleSlop);
+            }
 
             var initialLocation = firedFrom.Location;
             initialLocation.X = initialLocation.X + (xyOffset == null ? 0 : xyOffset.X);
@@ -110,7 +118,7 @@ namespace AI2D.Actors.Bullets
                 || Y < -Constants.Limits.BulletSceneDistanceLimit
                 || Y >= _core.Display.VisibleSize.Height + Constants.Limits.BulletSceneDistanceLimit)
             {
-                QueueForDelete();;
+                QueueForDelete();
                 return;
             }
 
