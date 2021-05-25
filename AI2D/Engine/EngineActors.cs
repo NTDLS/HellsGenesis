@@ -618,6 +618,7 @@ namespace AI2D.Engine
         private Point<double> _radarScale;
         private Point<double> _radarOffset;
         private Bitmap _RadarBackgroundImage = null;
+        private SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
 
         public void Render(Graphics displayDC)
         {
@@ -626,13 +627,11 @@ namespace AI2D.Engine
             var timeout = TimeSpan.FromMilliseconds(1);
             bool lockTaken = false;
 
-            //Radar.png
-
             if (_radarBitmap == null)
             {
                 _RadarBackgroundImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Radar.png");
 
-                double radarDistance = 4.5;
+                double radarDistance = 5;
                 double radarWidth = _RadarBackgroundImage.Width;
                 double radarHeight = _RadarBackgroundImage.Height;
 
@@ -641,13 +640,23 @@ namespace AI2D.Engine
 
                 _radarBitmap = new Bitmap((int)radarWidth, (int)radarHeight);
                 _radarScale = new Point<double>((double)_radarBitmap.Width / radarVisionWidth, (double)_radarBitmap.Height / radarVisionHeight);
-                _radarOffset = new Point<double>(((radarDistance / _radarScale.X) / 2.0), ((radarDistance / _radarScale.Y) / 2.0));
+
+                _radarOffset = new Point<double>(radarWidth / 2.0, radarHeight / 2.0); //Best guess until player is visible.
+
                 _radarDC = Graphics.FromImage(_radarBitmap);
             }
 
-            _radarDC.DrawImage(_RadarBackgroundImage, new Point(0, 0));
+            if (Player is not null && Player.Visable)
+            {
+                double centerOfRadarX = (int)(_radarBitmap.Width / 2.0) - 2.0; //Subtract half the dot size.
+                double centerOfRadarY = (int)(_radarBitmap.Height / 2.0) - 2.0; //Subtract half the dot size.
 
-            //_radarDC.Clear(Color.Aqua);
+                _radarOffset = new Point<double>(
+                    centerOfRadarX - (Player.X * _radarScale.X),
+                    centerOfRadarY - (Player.Y * _radarScale.Y));
+            }
+
+            _radarDC.DrawImage(_RadarBackgroundImage, new Point(0, 0));
 
             try
             {
@@ -665,7 +674,10 @@ namespace AI2D.Engine
                             }
                         }
 
-                        Player?.RenderRadar(_radarDC, _radarScale, _radarOffset);
+                        //Render player blip:
+                        _radarDC.FillEllipse(_playerRadarDotBrush,
+                            (int)(_radarBitmap.Width / 2.0) - 2,
+                            (int)(_radarBitmap.Height / 2.0) - 2, 4, 4);
 
                         //Render to display:
                         foreach (var actor in Collection.Where(o => o.Visable == true))

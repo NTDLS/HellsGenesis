@@ -31,15 +31,13 @@ namespace AI2D
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.SuspendLayout();
-
-            // 
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.ClientSize = new System.Drawing.Size(1008, 729);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -57,7 +55,6 @@ namespace AI2D
             this.MouseEnter += new System.EventHandler(this.FormMain_MouseEnter);
             this.MouseLeave += new System.EventHandler(this.FormMain_MouseLeave);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
