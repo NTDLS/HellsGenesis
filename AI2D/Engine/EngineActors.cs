@@ -30,6 +30,7 @@ namespace AI2D.Engine
         public ActorPlayer Player { get; private set; }
         public ActorTextBlock PlayerStatsText { get; private set; }
         public ActorTextBlock DebugText { get; private set; }
+        public bool RenderRadar { get; set; } = false;
 
         #endregion
 
@@ -164,6 +165,7 @@ namespace AI2D.Engine
         {
             Player.Reset();
 
+            RenderRadar = true;
             Player.Visable = true;
             Player.ShipEngineIdleSound.Play();
             Player.AllSystemsGoSound.Play();
@@ -172,6 +174,7 @@ namespace AI2D.Engine
         public void HidePlayer()
         {
             Player.Visable = false;
+            RenderRadar = false;
             Player.ShipEngineIdleSound.Stop();
             Player.ShipEngineRoarSound.Stop();
         }
@@ -646,17 +649,20 @@ namespace AI2D.Engine
                 _radarDC = Graphics.FromImage(_radarBitmap);
             }
 
-            if (Player is not null && Player.Visable)
+            if (this.RenderRadar)
             {
-                double centerOfRadarX = (int)(_radarBitmap.Width / 2.0) - 2.0; //Subtract half the dot size.
-                double centerOfRadarY = (int)(_radarBitmap.Height / 2.0) - 2.0; //Subtract half the dot size.
+                if (Player is not null && Player.Visable)
+                {
+                    double centerOfRadarX = (int)(_radarBitmap.Width / 2.0) - 2.0; //Subtract half the dot size.
+                    double centerOfRadarY = (int)(_radarBitmap.Height / 2.0) - 2.0; //Subtract half the dot size.
 
-                _radarOffset = new Point<double>(
-                    centerOfRadarX - (Player.X * _radarScale.X),
-                    centerOfRadarY - (Player.Y * _radarScale.Y));
+                    _radarOffset = new Point<double>(
+                        centerOfRadarX - (Player.X * _radarScale.X),
+                        centerOfRadarY - (Player.Y * _radarScale.Y));
+                }
+
+                _radarDC.DrawImage(_RadarBackgroundImage, new Point(0, 0));
             }
-
-            _radarDC.DrawImage(_RadarBackgroundImage, new Point(0, 0));
 
             try
             {
@@ -665,19 +671,22 @@ namespace AI2D.Engine
                 {
                     lock (Collection)
                     {
-                        //Render radar:
-                        foreach (var actor in Collection.Where(o => o.Visable == true))
+                        if (this.RenderRadar)
                         {
-                            if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
+                            //Render radar:
+                            foreach (var actor in Collection.Where(o => o.Visable == true))
                             {
-                                Utility.DynamicCast(actor, actor.GetType()).RenderRadar(_radarDC, _radarScale, _radarOffset);
+                                if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
+                                {
+                                    Utility.DynamicCast(actor, actor.GetType()).RenderRadar(_radarDC, _radarScale, _radarOffset);
+                                }
                             }
-                        }
 
-                        //Render player blip:
-                        _radarDC.FillEllipse(_playerRadarDotBrush,
-                            (int)(_radarBitmap.Width / 2.0) - 2,
-                            (int)(_radarBitmap.Height / 2.0) - 2, 4, 4);
+                            //Render player blip:
+                            _radarDC.FillEllipse(_playerRadarDotBrush,
+                                (int)(_radarBitmap.Width / 2.0) - 2,
+                                (int)(_radarBitmap.Height / 2.0) - 2, 4, 4);
+                        }
 
                         //Render to display:
                         foreach (var actor in Collection.Where(o => o.Visable == true))
@@ -689,12 +698,15 @@ namespace AI2D.Engine
                         }
                         Player?.Render(displayDC);
 
-                        //Render radar to display:
-                        Rectangle rect = new Rectangle((int)(_core.Display.VisibleSize.Width - (_radarBitmap.Width + 25)),
+                        if (this.RenderRadar)
+                        {
+                            //Render radar to display:
+                            Rectangle rect = new Rectangle((int)(_core.Display.VisibleSize.Width - (_radarBitmap.Width + 25)),
                             (int)(_core.Display.VisibleSize.Height - (_radarBitmap.Height + 50)),
                             _radarBitmap.Width, _radarBitmap.Height);
 
-                        displayDC.DrawImage(_radarBitmap, rect);
+                            displayDC.DrawImage(_radarBitmap, rect);
+                        }
                     }
 
                     lock (Menus)
