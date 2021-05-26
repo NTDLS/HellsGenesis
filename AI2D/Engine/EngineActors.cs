@@ -44,6 +44,8 @@ namespace AI2D.Engine
         private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
         private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
 
+        Thread _renderThread = null;
+
 
         #endregion
 
@@ -67,6 +69,9 @@ namespace AI2D.Engine
             DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, new Point<double>(5, PlayerStatsText.Y + PlayerStatsText.Height + 10), true);
 
             BackgroundMusicSound.Play();
+
+            //_renderThread = new Thread(RenderThreadProc);
+            //_renderThread.Start();
         }
 
         public void Stop()
@@ -653,12 +658,70 @@ namespace AI2D.Engine
         private Bitmap _RadarBackgroundImage = null;
         private SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
 
-        public void Render(Graphics displayDC)
+        private Bitmap _ScreenBitmap = null;
+        private Graphics _ScreenDC = null;
+
+        private Bitmap _latestFrame = null;
+        private Object _LatestFrameLock = new Object();
+
+        /// <summary>
+        /// Using the render thread, we can always have a frame ready, but that really means we render even when we dont need to.
+        /// </summary>
+        private void RenderThreadProc()
+        {
+            while (_core.IsRunning)
+            {
+                var frame = Render();
+
+                lock (_LatestFrameLock)
+                {
+                    if (_latestFrame != null)
+                    {
+                        _latestFrame.Dispose();
+                        _latestFrame = null;
+                    }
+                    _latestFrame = (Bitmap)frame.Clone();
+                }
+                Thread.Sleep(10);
+            }
+        }
+
+        public Bitmap GetLatestFrame()
+        {
+            lock (_LatestFrameLock)
+            {
+                if (_latestFrame == null)
+                {
+                    return null;
+                }
+
+                return (Bitmap)_latestFrame.Clone();
+            }
+        }
+
+        /// <summary>
+        /// Will render the current game state to a single bitmap. If a lock cannot be acquired
+        /// for drawing then the previous frame will be returned.
+        /// </summary>
+        /// <returns></returns>
+        public Bitmap Render()
         {
             _core.IsRendering = true;
 
             var timeout = TimeSpan.FromMilliseconds(1);
             bool lockTaken = false;
+
+            if (_ScreenBitmap == null)
+            {
+                _ScreenBitmap = new Bitmap(_core.Display.DrawingSurface.Width, _core.Display.DrawingSurface.Height);
+
+                _ScreenDC = Graphics.FromImage(_ScreenBitmap);
+                _ScreenDC.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                _ScreenDC.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                _ScreenDC.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                _ScreenDC.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                _ScreenDC.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            }
 
             if (_radarBitmap == null)
             {
@@ -677,6 +740,11 @@ namespace AI2D.Engine
                 _radarOffset = new Point<double>(radarWidth / 2.0, radarHeight / 2.0); //Best guess until player is visible.
 
                 _radarDC = Graphics.FromImage(_radarBitmap);
+                _radarDC.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                _radarDC.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                _radarDC.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                _radarDC.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                _radarDC.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
             }
 
             if (this.RenderRadar)
@@ -697,10 +765,15 @@ namespace AI2D.Engine
             try
             {
                 Monitor.TryEnter(_core.DrawingSemaphore, timeout, ref lockTaken);
+
+                //_ScreenDC.Clear(Color.Red);
+
                 if (lockTaken)
                 {
                     lock (Collection)
                     {
+                        _ScreenDC.Clear(Color.Black);
+
                         if (this.RenderRadar)
                         {
                             //Render radar:
@@ -723,10 +796,10 @@ namespace AI2D.Engine
                         {
                             if (_core.Display.VisibleBounds.IntersectsWith(actor.Bounds))
                             {
-                                Utility.DynamicCast(actor, actor.GetType()).Render(displayDC);
+                                Utility.DynamicCast(actor, actor.GetType()).Render(_ScreenDC);
                             }
                         }
-                        Player?.Render(displayDC);
+                        Player?.Render(_ScreenDC);
 
                         if (this.RenderRadar)
                         {
@@ -735,7 +808,7 @@ namespace AI2D.Engine
                             (int)(_core.Display.VisibleSize.Height - (_radarBitmap.Height + 50)),
                             _radarBitmap.Width, _radarBitmap.Height);
 
-                            displayDC.DrawImage(_radarBitmap, rect);
+                            _ScreenDC.DrawImage(_radarBitmap, rect);
                         }
                     }
 
@@ -743,13 +816,12 @@ namespace AI2D.Engine
                     {
                         foreach (var obj in Menus)
                         {
-                            obj.Render(displayDC);
+                            obj.Render(_ScreenDC);
                         }
                     }
                 }
-                else
-                {
-                }
+
+                //displayDC.DrawImage(_ScreenBitmap, 0, 0);
             }
             finally
             {
@@ -762,6 +834,7 @@ namespace AI2D.Engine
 
             _core.IsRendering = false;
 
+            return _ScreenBitmap;
         }
 
         #endregion

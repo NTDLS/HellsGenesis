@@ -138,18 +138,17 @@ namespace AI2D
 
         private void FormMain_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            e.Graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-            e.Graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-            e.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            e.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            /*
+            Bitmap frame = _core.Actors.GetLatestFrame();
+            if (frame != null)
+            {
+                e.Graphics.DrawImage(frame, 0, 0);
+                frame.Dispose();
+                frame = null;
+            }
+            */
 
-            _core.Actors.Render(e.Graphics);
-        }
-
-        private void FormMain_Load(object sender, EventArgs e)
-        {
+            e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
         }
     }
 }
