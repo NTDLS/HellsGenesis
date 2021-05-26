@@ -2,6 +2,9 @@
 {
     public class Velocity<T>
     {
+        public delegate void ThrottleChange(Velocity<T> sender);
+        public event ThrottleChange OnThrottleChange;
+
         public Angle<T> Angle { get; set; } = new Angle<T>();
         public T MaxSpeed { get; set; }
         public T MaxBoost { get; set; }
@@ -20,6 +23,8 @@
                 _throttlePercentage = value;
                 _throttlePercentage = (dynamic)_throttlePercentage > 1 ? 1 : (dynamic)_throttlePercentage;
                 _throttlePercentage = (dynamic)_throttlePercentage < -1 ? -1 : (dynamic)_throttlePercentage;
+
+                OnThrottleChange?.Invoke(this);
             }
         }
 

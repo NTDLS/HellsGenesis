@@ -463,6 +463,15 @@ namespace AI2D.Engine
                 if (bullet.Visable && bullet.ReadyForDeletion == false)
                 {
                     bullet.ApplyIntelligence(appliedOffset, _core.Actors.Player);
+
+                    foreach (var shipAttachment in _core.Actors.VisibleOfType<ActorShipAttachment>())
+                    {
+                        if (shipAttachment.TakesDamage)
+                        {
+                            bullet.ApplyIntelligence(appliedOffset, shipAttachment);
+                        }
+                    }
+
                     bullet.ApplyMotion(appliedOffset);
 
                     if (_core.Actors.Player.Visable == false)

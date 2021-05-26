@@ -310,6 +310,23 @@ namespace AI2D.Engine
             }
         }
 
+        public ActorBase Add(string imagePath = null, Size? size = null, string tag = "")
+        {
+            lock (Collection)
+            {
+                var actor = new ActorBase(_core, tag)
+                {
+                    Visable = true
+                };
+
+                actor.Initialize(imagePath, size);
+
+                Collection.Add(actor);
+                return actor;
+            }
+        }
+
+
         public ActorBase Add(ActorBase actor)
         {
             lock (Collection)
@@ -349,6 +366,19 @@ namespace AI2D.Engine
                 animation.Y = defaultPosition.Y;
                 animation.RotationMode = Types.RotationMode.Clip; //Much less expensive. Use this or NONE if you can.
                 Collection.Add(animation);
+            }
+        }
+
+        public ActorShipAttachment AddNewActorShipAttachment(string imagePath = null, Size? size = null, string tag = "")
+        {
+            lock (Collection)
+            {
+                ActorShipAttachment obj = new ActorShipAttachment(_core, imagePath, size)
+                {
+                    Tag = tag
+                };
+                Collection.Add(obj);
+                return obj;
             }
         }
 

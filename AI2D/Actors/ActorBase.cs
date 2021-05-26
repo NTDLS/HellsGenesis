@@ -13,15 +13,6 @@ namespace AI2D.Actors
 {
     public class ActorBase
     {
-        public delegate void PositionChanged(ActorBase obj);
-        public event PositionChanged OnPositionChanged;
-
-        public delegate void Rotated(ActorBase obj);
-        public event Rotated OnRotated;
-
-        public delegate void VisibilityChange(ActorBase obj);
-        public event VisibilityChange OnVisibilityChange;
-
         /// <summary>
         /// A user defined name for the actor - basically for debugging.
         /// </summary>
@@ -80,7 +71,26 @@ namespace AI2D.Actors
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
         public int HitPoints { get; private set; } = 0;
         public int ShieldPoints { get; private set; } = 0;
-        public Velocity<double> Velocity { get; set; } = new Velocity<double>();
+
+        private Velocity<double> _velocity;
+        public Velocity<double> Velocity
+        {
+            get
+            {
+                return _velocity;
+            }
+            set
+            {
+                _velocity = value;
+                _velocity.OnThrottleChange += _velocity_OnThrottleChange;
+            }
+        }
+
+        private void _velocity_OnThrottleChange(Velocity<double> sender)
+        {
+            VelocityChanged();
+        }
+
         public bool IsDead { get; set; } = false;
 
         public void SetHitPoints(int points)
@@ -159,7 +169,7 @@ namespace AI2D.Actors
             Visable = false;
             if (_readyForDeletion == false)
             {
-                OnVisibilityChange?.Invoke(this);
+                VisibilityChanged();
             }
             _readyForDeletion = true;
         }
@@ -200,7 +210,6 @@ namespace AI2D.Actors
             }
         }
 
-
         public double X
         {
             get
@@ -211,7 +220,7 @@ namespace AI2D.Actors
             {
                 Invalidate();
                 _location.X = value;
-                OnPositionChanged?.Invoke(this);
+                PositionChanged();
                 Invalidate();
             }
         }
@@ -226,7 +235,7 @@ namespace AI2D.Actors
             {
                 Invalidate();
                 _location.Y = value;
-                OnPositionChanged?.Invoke(this);
+                PositionChanged();
                 Invalidate();
             }
         }
@@ -284,7 +293,7 @@ namespace AI2D.Actors
 
                     //_core.Display.DrawingSurface.Invalidate(invalidRect);
 
-                    OnVisibilityChange?.Invoke(this);
+                    VisibilityChanged();
                 }
             }
         }
@@ -296,32 +305,71 @@ namespace AI2D.Actors
             _core = core;
             Tag = tag;
             RotationMode = RotationMode.Upsize;
+            Velocity = new Velocity<double>();
             Velocity.MaxRotationSpeed = Constants.Limits.MaxRotationSpeed;
         }
 
-        public void Initialize(string imagePath = null, Size? size = null)
+        public void Initialize(string imagePath = null, Size? size = null,
+            string explosionAnimationFile = null, Size? explosionAnimationDimensions = null, string explosionSoundFile = null,
+            string hitAnimationFile = null, Size? hitAnimationFileDimensions = null, string hitSoundFile = null, string shieldHitSoundFile = null)
         {
-            _hitSound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Object Hit.wav", 0.5f);
-            _shieldHit = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Shield Hit.wav", 0.5f);
+            if (hitSoundFile == null)
+            {
+                _hitSound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Object Hit.wav", 0.5f);
+            }
+            else
+            {
+                _hitSound = _core.Actors.GetSoundCached(hitSoundFile, 0.5f);
+            }
 
-            int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
-            _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
+            if (shieldHitSoundFile == null)
+            {
+                _shieldHit = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Shield Hit.wav", 0.5f);
+            }
+            else
+            {
+                _shieldHit = _core.Actors.GetSoundCached(shieldHitSoundFile, 0.5f);
+            }
 
-            int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
-            _explosionAnimation = new ActorAnimation(_core, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
+            if (explosionSoundFile == null)
+            {
+                int _explosionSoundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
+                _explodeSound = _core.Actors.GetSoundCached(_assetExplosionSoundPath + _assetExplosionSoundFiles[_explosionSoundIndex], 1.0f);
+            }
+            else
+            {
+                _explodeSound = _core.Actors.GetSoundCached(explosionSoundFile, 1.0f);
+            }
+
+            if (explosionAnimationFile == null)
+            {
+                int _explosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationFiles.Count());
+                _explosionAnimation = new ActorAnimation(_core, _assetExplosionAnimationPath + _assetExplosionAnimationFiles[_explosionImageIndex], new Size(256, 256));
+            }
+            else
+            {
+                _explosionAnimation = new ActorAnimation(_core, explosionAnimationFile, (Size)explosionAnimationDimensions);
+            }
 
             _lockedOnImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Weapon\Locked On.png");
             _lockedOnSoftImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Weapon\Locked Soft.png");
 
-            int _hitExplosionImageIndex = Utility.RandomNumber(0, _assetHitExplosionAnimationFiles.Count());
-            _hitExplosionAnimation = new ActorAnimation(_core, _assetHitExplosionAnimationPath + _assetHitExplosionAnimationFiles[_hitExplosionImageIndex], new Size(22, 22));
+            if (hitAnimationFile == null)
+            {
+                int _hitExplosionImageIndex = Utility.RandomNumber(0, _assetHitExplosionAnimationFiles.Count());
+                _hitExplosionAnimation = new ActorAnimation(_core, _assetHitExplosionAnimationPath + _assetHitExplosionAnimationFiles[_hitExplosionImageIndex], new Size(22, 22));
+            }
+            else
+            {
+                _hitExplosionAnimation = new ActorAnimation(_core, hitAnimationFile, (Size)hitAnimationFileDimensions);
+            }
 
             if (imagePath != null)
             {
                 SetImage(imagePath, size);
             }
 
-            OnVisibilityChange?.Invoke(this);
+            VisibilityChanged();
         }
 
         public void ClearPrimaryWeapons()
@@ -634,7 +682,7 @@ namespace AI2D.Actors
         {
             Velocity.Angle.Degrees += degrees;
             Invalidate();
-            OnRotated?.Invoke(this);
+            RotationChanged();
         }
 
         public void MoveInDirectionOf(Point<double> location, double? speed = null)
@@ -759,6 +807,22 @@ namespace AI2D.Actors
         {
             Visable = false;
             this.Invalidate();
+        }
+
+        public virtual void VelocityChanged()
+        {
+        }
+
+        public virtual void VisibilityChanged()
+        {
+        }
+
+        public virtual void PositionChanged()
+        {
+        }
+
+        public virtual void RotationChanged()
+        {
         }
 
         public void Render(Graphics dc)

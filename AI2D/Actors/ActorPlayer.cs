@@ -53,10 +53,6 @@ namespace AI2D.Actors
             ShipEngineRoarSound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Engine Roar.wav", 1.0f, true);
             ShipEngineIdleSound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Engine Idle.wav", 0.6f, true);
             ShipEngineBoostSound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Engine Boost.wav", 1.0f, true);
-
-            this.OnPositionChanged += ObjPlayer_OnPositionChanged;
-            this.OnRotated += ObjPlayer_OnPositionChanged;
-            this.OnVisibilityChange += ObjPlayer_OnVisibilityChange;
         }
 
 
@@ -166,7 +162,7 @@ namespace AI2D.Actors
             SelectFirstAvailableUsableSecondaryWeapon();
         }
 
-        private void ObjPlayer_OnVisibilityChange(ActorBase obj)
+        public override void VisibilityChanged()
         {
             if (Visable == true)
             {
@@ -214,7 +210,12 @@ namespace AI2D.Actors
             }
         }
 
-        private void ObjPlayer_OnPositionChanged(ActorBase obj)
+        public override void RotationChanged()
+        {
+            PositionChanged();
+        }
+
+        public override void PositionChanged()
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {

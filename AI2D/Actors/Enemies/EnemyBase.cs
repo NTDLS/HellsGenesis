@@ -29,14 +29,14 @@ namespace AI2D.Actors.Enemies
             RadarPositionIndicator.Visable = false;
             RadarPositionText = _core.Actors.AddNewRadarPositionTextBlock("Consolas", Brushes.Red, 8, new Point<double>());
 
-            string _debugAniPath = @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png";
+            string _thrustAniPath = @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png";
             var playMode = new ActorAnimation.PlayMode()
             {
                 Replay = ActorAnimation.ReplayMode.LoopedPlay,
                 DeleteActorAfterPlay = false,
                 ReplayDelay = new TimeSpan(0)
             };
-            ThrustAnimation = new ActorAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
+            ThrustAnimation = new ActorAnimation(_core, _thrustAniPath, new Size(32, 32), 10, playMode);
 
             ThrustAnimation.Reset();
             _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);
@@ -45,12 +45,14 @@ namespace AI2D.Actors.Enemies
             ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
             ThrustAnimation.X = this.X + pointRight.X;
             ThrustAnimation.Y = this.Y + pointRight.Y;
-
-            this.OnPositionChanged += BaseEnemy_OnPositionChanged;
-            this.OnRotated += BaseEnemy_OnPositionChanged;
         }
 
-        private void BaseEnemy_OnPositionChanged(ActorBase obj)
+        public override void RotationChanged()
+        {
+            PositionChanged();
+        }
+
+        public override void PositionChanged()
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
