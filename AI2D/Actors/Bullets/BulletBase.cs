@@ -131,7 +131,6 @@ namespace AI2D.Actors.Bullets
             if (Weapon != null && Weapon.ExplodesOnImpact)
             {
                 HitExplosion();
-
             }
             QueueForDelete();;
         }

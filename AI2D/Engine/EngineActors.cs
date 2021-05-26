@@ -46,7 +46,6 @@ namespace AI2D.Engine
 
         Thread _renderThread = null;
 
-
         #endregion
 
         public EngineActors(Core core)
@@ -671,18 +670,23 @@ namespace AI2D.Engine
         {
             while (_core.IsRunning)
             {
-                var frame = Render();
-
-                lock (_LatestFrameLock)
-                {
-                    if (_latestFrame != null)
-                    {
-                        _latestFrame.Dispose();
-                        _latestFrame = null;
-                    }
-                    _latestFrame = (Bitmap)frame.Clone();
-                }
+                RefreshLatestFrame();
                 Thread.Sleep(10);
+            }
+        }
+
+        public void RefreshLatestFrame()
+        {
+            var frame = Render();
+
+            lock (_LatestFrameLock)
+            {
+                if (_latestFrame != null)
+                {
+                    _latestFrame.Dispose();
+                    _latestFrame = null;
+                }
+                _latestFrame = (Bitmap)frame.Clone();
             }
         }
 

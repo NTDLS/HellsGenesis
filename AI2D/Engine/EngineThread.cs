@@ -56,68 +56,45 @@ namespace AI2D.Engine
             Stopwatch timer = new Stopwatch();
 
             double targetFrameDuration = 1000000 / Constants.Limits.FrameLimiter; //1000000 / n-frames/second.
-            bool sleep = true;
-
-            int numberOfTimesLagged = 0;
 
             while (_shutdown == false)
             {
                 _core.Display.GameLoopCounter.Calculate();
 
-                timer.Restart();
-
                 Monitor.Enter(_core.DrawingSemaphore);
-  
+
                 lock (_core.Actors.Menus)
                 {
-                    //lock (_core.Actors.EngineEvents)
+                    lock (_core.Actors.Player)
                     {
-                        lock (_core.Actors.Player)
+                        lock (_core.Actors.Collection)
                         {
-                            lock (_core.Actors.Collection)
-                            {
-                                AdvanceFrame();
-                            }
+                            timer.Restart();
+                            AdvanceFrame();
+                            timer.Stop();
                         }
                     }
                 }
 
                 Monitor.Exit(_core.DrawingSemaphore);
 
-                if (sleep)
-                {
-                    System.Threading.Thread.Sleep(1);
-                }
-
                 if (_core.Actors.Menus.Count > 0)
                 {
-                    System.Threading.Thread.Sleep(20);
+                    Thread.Sleep(20);
                 }
-
-                timer.Stop();
 
                 double frameTime = (((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000;
                 double deltaframeTime = targetFrameDuration - frameTime;
                 timer.Restart();
 
-                if (deltaframeTime < 0)
-                {
-                    if (++numberOfTimesLagged > 10)
-                    {
-                        sleep = false; //Unleash the thread!
-                    }
-                }
-
                 while ((((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000 < deltaframeTime)
                 {
-                    System.Threading.Thread.Yield();
+                    Thread.Yield();
                 }
-
-                timer.Stop();
 
                 while (_pause && _shutdown == false)
                 {
-                    System.Threading.Thread.Sleep(10);
+                    Thread.Sleep(10);
                 }
             }
         }
@@ -385,11 +362,6 @@ namespace AI2D.Engine
                     {
                         _core.Actors.Player.SelectedSecondaryWeapon.ApplyIntelligence(appliedOffset, enemy); //Player lock-on to enemy. :D
                     }
-
-                    foreach (var bullet in _core.Actors.VisibleOfType<BulletBase>())
-                    {
-                        bullet.ApplyIntelligence(appliedOffset, enemy);
-                    }
                 }
 
                 enemy.ApplyMotion(appliedOffset);
@@ -462,23 +434,16 @@ namespace AI2D.Engine
             {
                 if (bullet.Visable && bullet.ReadyForDeletion == false)
                 {
+                    //Check to see if the bullet hit the player:
                     bullet.ApplyIntelligence(appliedOffset, _core.Actors.Player);
 
-                    foreach (var shipAttachment in _core.Actors.VisibleOfType<ActorShipAttachment>())
+                    //Check to see if the bullet hit an enemy.
+                    foreach (var enemy in _core.Actors.VisibleOfType<EnemyBase>())
                     {
-                        if (shipAttachment.TakesDamage)
-                        {
-                            bullet.ApplyIntelligence(appliedOffset, shipAttachment);
-                        }
+                        bullet.ApplyIntelligence(appliedOffset, enemy);
                     }
 
-                    bullet.ApplyMotion(appliedOffset);
-
-                    if (_core.Actors.Player.Visable == false)
-                    {
-                        _core.Actors.Player.ShipEngineIdleSound.Stop();
-                        _core.Actors.Player.ShipEngineRoarSound.Stop();
-                    }
+                     bullet.ApplyMotion(appliedOffset);
                 }
             }
 
@@ -596,6 +561,12 @@ namespace AI2D.Engine
             }
 
             #endregion
+
+            if (_core.Actors.Player.Visable == false)
+            {
+                _core.Actors.Player.ShipEngineIdleSound.Stop();
+                _core.Actors.Player.ShipEngineRoarSound.Stop();
+            }
 
             _core.Actors.CleanupDeletedObjects();
 

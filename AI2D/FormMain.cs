@@ -138,16 +138,6 @@ namespace AI2D
 
         private void FormMain_Paint(object sender, PaintEventArgs e)
         {
-            /*
-            Bitmap frame = _core.Actors.GetLatestFrame();
-            if (frame != null)
-            {
-                e.Graphics.DrawImage(frame, 0, 0);
-                frame.Dispose();
-                frame = null;
-            }
-            */
-
             e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
         }
     }
