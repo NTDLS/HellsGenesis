@@ -12,4 +12,8 @@
     <PackageReference Include="SharpDX.XAudio2" Version="4.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Algorithms\Algorithms.csproj" />
+  </ItemGroup>
+
 </Project>

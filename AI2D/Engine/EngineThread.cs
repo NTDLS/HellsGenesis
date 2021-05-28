@@ -59,6 +59,8 @@ namespace AI2D.Engine
 
             while (_shutdown == false)
             {
+                timer.Restart();
+
                 _core.Display.GameLoopCounter.Calculate();
 
                 Monitor.Enter(_core.DrawingSemaphore);
@@ -69,8 +71,7 @@ namespace AI2D.Engine
                     {
                         lock (_core.Actors.Collection)
                         {
-                            timer.Restart();
-                            AdvanceFrame();
+                            AdvanceWorldClock();
                             timer.Stop();
                         }
                     }
@@ -83,11 +84,11 @@ namespace AI2D.Engine
                     Thread.Sleep(20);
                 }
 
-                double frameTime = (((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000;
-                double deltaframeTime = targetFrameDuration - frameTime;
+                double clockTime = (((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000;
+                double deltaClockTime = targetFrameDuration - clockTime;
                 timer.Restart();
 
-                while ((((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000 < deltaframeTime)
+                while ((((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000 < deltaClockTime)
                 {
                     Thread.Yield();
                 }
@@ -101,7 +102,7 @@ namespace AI2D.Engine
 
         bool boostFading = false;
 
-        void AdvanceFrame()
+        void AdvanceWorldClock()
         {
             #region Menu Management.
 
@@ -434,6 +435,8 @@ namespace AI2D.Engine
             {
                 if (bullet.Visable && bullet.ReadyForDeletion == false)
                 {
+                    bullet.ApplyMotion(appliedOffset);
+
                     //Check to see if the bullet hit the player:
                     bullet.ApplyIntelligence(appliedOffset, _core.Actors.Player);
 
@@ -443,7 +446,10 @@ namespace AI2D.Engine
                         bullet.ApplyIntelligence(appliedOffset, enemy);
                     }
 
-                     bullet.ApplyMotion(appliedOffset);
+                    foreach (var enemy in _core.Actors.VisibleOfType<ActorShipAttachment>())
+                    {
+                        bullet.ApplyIntelligence(appliedOffset, enemy);
+                    }
                 }
             }
 

@@ -1,6 +1,8 @@
-﻿using AI2D.Engine;
+﻿using AI2D.Actors.Enemies.AI;
+using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
+using Algorithms;
 using System.Drawing;
 using System.Linq;
 
@@ -29,11 +31,11 @@ namespace AI2D.Actors.Enemies
 
             _leftGun = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Ship.Flea.Gun.Left.png", null, this.UID.ToString());
             _leftGun.TakesDamage = true;
-            _leftGun.SetHitPoints(5);
+            _leftGun.SetHitPoints(3);
 
             _rightGun = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Ship.Flea.Gun.Right.png", null, this.UID.ToString());
             _rightGun.TakesDamage = true;
-            _rightGun.SetHitPoints(5);
+            _rightGun.SetHitPoints(3);
 
             _leftThrust = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Ship.Flea.Engine.Flare.png", null, this.UID.ToString());
             _leftThrust.TakesDamage = true;

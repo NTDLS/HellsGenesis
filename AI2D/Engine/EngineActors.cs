@@ -22,11 +22,8 @@ namespace AI2D.Engine
         public BaseScenario CurrentScenario { get; private set; }
         public List<BaseScenario> Scenarios = new List<BaseScenario>();
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
-
         public List<ActorBase> Collection { get; private set; } = new List<ActorBase>();
-
         public List<BaseMenu> Menus { get; private set; } = new List<BaseMenu>();
-
         public ActorPlayer Player { get; private set; }
         public ActorTextBlock PlayerStatsText { get; private set; }
         public ActorTextBlock DebugText { get; private set; }
@@ -44,7 +41,7 @@ namespace AI2D.Engine
         private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
         private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
 
-        Thread _renderThread = null;
+        //Thread _renderThread = null;
 
         #endregion
 

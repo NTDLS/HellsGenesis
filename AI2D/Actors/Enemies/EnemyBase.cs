@@ -1,7 +1,9 @@
 ﻿using AI2D.Engine;
 using AI2D.Types;
+using Algorithms;
 using System;
 using System.Drawing;
+using System.Linq;
 
 namespace AI2D.Actors.Enemies
 {
@@ -18,6 +20,8 @@ namespace AI2D.Actors.Enemies
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
+
+            //Brain = BrainBase.GetBrain();
 
             this.RadarDotSize = new Point<int>(4, 4);
             this.RadarDotColor = Color.FromArgb(200, 100, 100);
@@ -130,5 +134,136 @@ namespace AI2D.Actors.Enemies
             }
             base.Cleanup();
         }
+
+        #region AI
+
+        private DateTime? _lastDecisionTime = null;
+        public NeuralNetwork Brain { get; private set; }
+        public double MinimumTravelDistanceBeforeDamage { get; set; } = 20;
+        public double MaxObserveDistance { get; set; } = 100;
+        public double VisionToleranceDegrees { get; set; } = 25;
+        public int MillisecondsBetweenDecisions { get; set; } = 50;
+        public float DecisionSensitivity { get; set; } = (float)Utility.RandomNumber(0.25, 0.55);
+
+        /// <summary>
+        /// This is not currently used. Can be applied to perform AI logistics.
+        /// </summary>
+        public void ApplyAIIntelligence()
+        {
+            DateTime now = DateTime.UtcNow;
+
+            if (_lastDecisionTime == null || (now - (DateTime)_lastDecisionTime).TotalMilliseconds >= MillisecondsBetweenDecisions)
+            {
+                var decidingFactors = GetVisionInputs();
+
+                var decisions = this.Brain.FeedForward(decidingFactors);
+
+                if (decisions[AI.BrainBase.Outputs.ShouldRotate] >= DecisionSensitivity)
+                {
+                    var rotateAmount = decisions[AI.BrainBase.Outputs.RotateLeftOrRightAmount];
+
+                    if (decisions[AI.BrainBase.Outputs.RotateLeftOrRight] >= DecisionSensitivity)
+                    {
+                        this.Rotate(45 * rotateAmount);
+                    }
+                    else
+                    {
+                        this.Rotate(-45 * rotateAmount);
+                    }
+                }
+
+                if (decisions[AI.BrainBase.Outputs.ShouldSpeedUpOrDown] >= DecisionSensitivity)
+                {
+                    double speedFactor = decisions[AI.BrainBase.Outputs.SpeedUpOrDownAmount];
+                    this.Velocity.ThrottlePercentage += (speedFactor / 5.0);
+                }
+                else
+                {
+                    double speedFactor = decisions[AI.BrainBase.Outputs.SpeedUpOrDownAmount];
+                    this.Velocity.ThrottlePercentage += -(speedFactor / 5.0);
+                }
+
+                if (this.Velocity.ThrottlePercentage < 0)
+                {
+                    this.Velocity.ThrottlePercentage = 0;
+                }
+                if (this.Velocity.ThrottlePercentage == 0)
+                {
+                    this.Velocity.ThrottlePercentage = 0.10;
+                }
+
+                _lastDecisionTime = now;
+            }
+
+            if (this.IsOnScreen == false)
+            {
+                //Kill this bug:
+                this.Visable = false;
+            }
+
+            var intersections = Intersections();
+
+            if (intersections.Any())
+            {
+                this.QueueForDelete();
+            }
+        }
+
+
+        /// <summary>
+        /// Looks around and gets neuralnetwork inputs for visible proximity objects.
+        /// </summary>
+        /// <returns></returns>
+        private float[] GetVisionInputs()
+        {
+            var scenerio = new float[5];
+
+            //The closeness is expressed as a percentage of how close to the other object they are. 100% being touching 0% being 1 pixel from out of range.
+            foreach (var other in _core.Actors.Collection.Where(o=> o is EnemyBase))
+            {
+                if (other == this)
+                {
+                    continue;
+                }
+
+                double distance = this.DistanceTo(other);
+                double percentageOfCloseness = 1 - (distance / MaxObserveDistance);
+
+                if (this.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -90))
+                {
+                    scenerio[AI.BrainBase.Inputs.ObjTo90Left] = (float)
+                        (percentageOfCloseness > scenerio[AI.BrainBase.Inputs.ObjTo90Left] ? percentageOfCloseness : scenerio[AI.BrainBase.Inputs.ObjTo90Left]);
+                }
+
+                if (this.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -45))
+                {
+                    scenerio[AI.BrainBase.Inputs.ObjTo45Left] = (float)
+                        (percentageOfCloseness > scenerio[AI.BrainBase.Inputs.ObjTo45Left] ? percentageOfCloseness : scenerio[AI.BrainBase.Inputs.ObjTo45Left]);
+                }
+
+                if (this.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, 0))
+                {
+                    scenerio[AI.BrainBase.Inputs.ObjAhead] = (float)
+                        (percentageOfCloseness > scenerio[AI.BrainBase.Inputs.ObjAhead] ? percentageOfCloseness : scenerio[AI.BrainBase.Inputs.ObjAhead]);
+                }
+
+                if (this.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +45))
+                {
+                    scenerio[AI.BrainBase.Inputs.ObjTo45Right] = (float)
+                        (percentageOfCloseness > scenerio[AI.BrainBase.Inputs.ObjTo45Right] ? percentageOfCloseness : scenerio[AI.BrainBase.Inputs.ObjTo45Right]);
+                }
+
+                if (this.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +90))
+                {
+                    scenerio[AI.BrainBase.Inputs.ObjTo90Right] = (float)
+                        (percentageOfCloseness > scenerio[AI.BrainBase.Inputs.ObjTo90Right] ? percentageOfCloseness : scenerio[AI.BrainBase.Inputs.ObjTo90Right]);
+                }
+            }
+
+            return scenerio;
+        }
+
+        #endregion
+
     }
 }
