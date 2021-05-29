@@ -446,7 +446,7 @@ namespace AI2D.Engine
                         bullet.ApplyIntelligence(appliedOffset, enemy);
                     }
 
-                    foreach (var enemy in _core.Actors.VisibleOfType<ActorShipAttachment>())
+                    foreach (var enemy in _core.Actors.VisibleOfType<ActorAttachment>())
                     {
                         bullet.ApplyIntelligence(appliedOffset, enemy);
                     }

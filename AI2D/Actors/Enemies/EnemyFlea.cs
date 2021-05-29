@@ -15,10 +15,10 @@ namespace AI2D.Actors.Enemies
     {
         public const int ScoreMultiplier = 15;
 
-        private ActorShipAttachment _leftGun;
-        private ActorShipAttachment _rightGun;
-        private ActorShipAttachment _rightThrust;
-        private ActorShipAttachment _leftThrust;
+        private ActorAttachment _leftGun;
+        private ActorAttachment _rightGun;
+        private ActorAttachment _rightThrust;
+        private ActorAttachment _leftThrust;
 
         private double _initialMaxpeed;
 
@@ -29,21 +29,10 @@ namespace AI2D.Actors.Enemies
         {
             this.ThrustAnimation.QueueForDelete();
 
-            _leftGun = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Flea.Gun.Left.png", null, this.UID.ToString());
-            _leftGun.TakesDamage = true;
-            _leftGun.SetHitPoints(3);
-
-            _rightGun = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Flea.Gun.Right.png", null, this.UID.ToString());
-            _rightGun.TakesDamage = true;
-            _rightGun.SetHitPoints(3);
-
-            _leftThrust = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Flea.Jet.png", null, this.UID.ToString());
-            _leftThrust.TakesDamage = true;
-            _leftThrust.SetHitPoints(2);
-
-            _rightThrust = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Flea.Jet.png", null, this.UID.ToString());
-            _rightThrust.TakesDamage = true;
-            _rightThrust.SetHitPoints(2);
+            _leftGun = this.Attach(_imagesPath + "Flea.Gun.Left.png", true, 3);
+            _rightGun = this.Attach(_imagesPath + "Flea.Gun.Right.png", true, 3);
+            _leftThrust = this.Attach(_imagesPath + "Flea.Jet.png", true, 3);
+            _rightThrust = this.Attach(_imagesPath + "Flea.Jet.png", true, 3);
 
             base.SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
 
@@ -83,12 +72,6 @@ namespace AI2D.Actors.Enemies
                     _rightThrust.Visable = visibleThrust;
                 }
             }
-        }
-
-        public override void Cleanup()
-        {
-            _core.Actors.DeleteAllActorsByTag(this.UID.ToString());
-            base.Cleanup();
         }
 
         public override void PositionChanged()

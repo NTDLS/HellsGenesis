@@ -54,8 +54,8 @@ namespace AI2D.Engine.Scenarios
 
         private void AddEnemyCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.AddNewEnemy<EnemyLouse>();
-            _core.Actors.AddNewEnemy<EnemyFlea>();
+            _core.Actors.AddNewEnemy<EnemyScarab>();
+            //_core.Actors.AddNewEnemy<EnemyFlea>();
         }
     }
 }

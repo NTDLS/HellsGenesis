@@ -20,6 +20,8 @@ namespace AI2D.Actors
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;
 
+        public List<ActorAttachment> Attachments { get; private set; } = new List<ActorAttachment>();
+
         private SolidBrush _radarDotBrush = new SolidBrush(Color.FromArgb(255, 255, 0, 0));
         private Image _image;
         private Image _lockedOnImage;
@@ -97,6 +99,20 @@ namespace AI2D.Actors
         {
             HitPoints = 0;
             AddHitPoints(points);
+        }
+
+        /// <summary>
+        /// Creates a new actor, adds it to the actor collection but also adds it to the collection of another actors children for automatic cleanup when parent is destroyed. 
+        /// </summary>
+        /// <param name="imagePath"></param>
+        /// <returns></returns>
+        public ActorAttachment Attach(string imagePath, bool takesDamage = false, int hitPoints = 1)
+        {
+            var attachment = _core.Actors.AddNewActorAttachment(imagePath, null, this.UID.ToString() + $"_Attachment_{Attachments.Count}");
+            attachment.TakesDamage = takesDamage;
+            attachment.SetHitPoints(hitPoints);
+            this.Attachments.Add(attachment);
+            return attachment;
         }
 
         public void AddHitPoints(int pointsToAdd)
@@ -807,6 +823,11 @@ namespace AI2D.Actors
         {
             Visable = false;
             this.Invalidate();
+
+            foreach (var attachments in this.Attachments)
+            {
+                attachments.QueueForDelete();
+            }
         }
 
         public virtual void VelocityChanged()

@@ -51,6 +51,13 @@ namespace AI2D.Actors.Enemies
             ThrustAnimation.Y = this.Y + pointRight.Y;
         }
 
+        public virtual void BeforeCreate()
+        {
+        }
+        public virtual void AfterCreate()
+        {
+        }
+
         public override void RotationChanged()
         {
             PositionChanged();

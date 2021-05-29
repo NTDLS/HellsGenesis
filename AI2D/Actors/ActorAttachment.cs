@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AI2D.Actors
 {
-    public class ActorShipAttachment : ActorBase
+    public class ActorAttachment : ActorBase
     {
         public bool TakesDamage { get; set; }
 
@@ -17,7 +17,7 @@ namespace AI2D.Actors
             #endregion
         };
 
-        public ActorShipAttachment(Core core, string imagePath, Size? size = null)
+        public ActorAttachment(Core core, string imagePath, Size? size = null)
             : base(core)
         {
             int _hitExplosionImageIndex = Utility.RandomNumber(0, _assetExplosionAnimationPathFiles.Count());

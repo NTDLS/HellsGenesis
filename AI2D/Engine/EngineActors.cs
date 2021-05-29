@@ -370,11 +370,11 @@ namespace AI2D.Engine
             }
         }
 
-        public ActorShipAttachment AddNewActorShipAttachment(string imagePath = null, Size? size = null, string tag = "")
+        public ActorAttachment AddNewActorAttachment(string imagePath = null, Size? size = null, string tag = "")
         {
             lock (Collection)
             {
-                ActorShipAttachment obj = new ActorShipAttachment(_core, imagePath, size)
+                ActorAttachment obj = new ActorAttachment(_core, imagePath, size)
                 {
                     Tag = tag
                 };
@@ -583,7 +583,10 @@ namespace AI2D.Engine
                 obj.Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MinSpeed, Constants.Limits.MaxSpeed);
                 obj.Velocity.Angle.Degrees = Utility.Random.Next(0, 360);
 
+                obj.BeforeCreate();
                 Collection.Add(obj);
+                obj.AfterCreate();
+
                 return (T)obj;
             }
         }
