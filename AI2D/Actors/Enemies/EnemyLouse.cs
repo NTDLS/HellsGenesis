@@ -11,39 +11,34 @@ namespace AI2D.Actors.Enemies
     /// <summary>
     /// 100% Experimental
     /// </summary>
-    public class EnemyFlea : EnemyBase
+    public class EnemyLouse : EnemyBase
     {
         public const int ScoreMultiplier = 15;
 
         private ActorShipAttachment _leftGun;
         private ActorShipAttachment _rightGun;
-        private ActorShipAttachment _rightThrust;
-        private ActorShipAttachment _leftThrust;
+        private ActorShipAttachment _thrust;
 
         private double _initialMaxpeed;
 
-        string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Flea\";
+        string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Louse\";
 
-        public EnemyFlea(Core core)
+        public EnemyLouse(Core core)
             : base(core, EnemyBase.GetGenericHP(), ScoreMultiplier)
         {
             this.ThrustAnimation.QueueForDelete();
 
-            _leftGun = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Flea.Gun.Left.png", null, this.UID.ToString());
+            _leftGun = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Louse.Gun.Left.png", null, this.UID.ToString());
             _leftGun.TakesDamage = true;
             _leftGun.SetHitPoints(3);
 
-            _rightGun = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Flea.Gun.Right.png", null, this.UID.ToString());
+            _rightGun = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Louse.Gun.Right.png", null, this.UID.ToString());
             _rightGun.TakesDamage = true;
             _rightGun.SetHitPoints(3);
 
-            _leftThrust = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Flea.Jet.png", null, this.UID.ToString());
-            _leftThrust.TakesDamage = true;
-            _leftThrust.SetHitPoints(2);
-
-            _rightThrust = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Flea.Jet.png", null, this.UID.ToString());
-            _rightThrust.TakesDamage = true;
-            _rightThrust.SetHitPoints(2);
+            _thrust = _core.Actors.AddNewActorShipAttachment(_imagesPath + "Louse.Jet.png", null, this.UID.ToString());
+            _thrust.TakesDamage = true;
+            _thrust.SetHitPoints(2);
 
             base.SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
 
@@ -51,7 +46,7 @@ namespace AI2D.Actors.Enemies
 
             Velocity.MaxSpeed = _initialMaxpeed;
 
-            SetImage(_imagesPath + "Flea.Hull.png");
+            SetImage(_imagesPath + "Louse.Hull.png");
 
             AddSecondaryWeapon(new WeaponVulcanCannon(_core)
             {
@@ -70,17 +65,13 @@ namespace AI2D.Actors.Enemies
 
         public override void VelocityChanged()
         {
-            if (_leftThrust != null && _rightThrust != null)
+            if (_thrust != null)
             {
                 bool visibleThrust = (Velocity.ThrottlePercentage > 0);
 
-                if (_leftThrust.IsDead == false)
+                if (_thrust.IsDead == false)
                 {
-                    _leftThrust.Visable = visibleThrust;
-                }
-                if (_rightThrust.IsDead == false)
-                {
-                    _rightThrust.Visable = visibleThrust;
+                    _thrust.Visable = visibleThrust;
                 }
             }
         }
@@ -111,20 +102,12 @@ namespace AI2D.Actors.Enemies
                     _rightGun.Y = this.Y + pointRight.Y;
                 }
 
-                if (_leftThrust.IsDead == false)
+                if (_thrust.IsDead == false)
                 {
-                    var pointLeft = Utility.AngleFromPointAtDistance(base.Velocity.Angle - 135, new Point<double>(35, 35));
-                    _leftThrust.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees;
-                    _leftThrust.X = this.X + pointLeft.X;
-                    _leftThrust.Y = this.Y + pointLeft.Y;
-                }
-
-                if (_rightThrust.IsDead == false)
-                {
-                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 135, new Point<double>(35, 35));
-                    _rightThrust.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees;
-                    _rightThrust.X = this.X + pointRight.X;
-                    _rightThrust.Y = this.Y + pointRight.Y;
+                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(35, 35));
+                    _thrust.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees;
+                    _thrust.X = this.X + pointRight.X;
+                    _thrust.Y = this.Y + pointRight.Y;
                 }
             }
         }
@@ -156,18 +139,13 @@ namespace AI2D.Actors.Enemies
             double distanceToPlayer = Utility.DistanceTo(this, _core.Actors.Player);
 
             //We have no engines. :(
-            if (_leftThrust.IsDead && _rightThrust.IsDead)
+            if (_thrust.IsDead)
             {
                 mode = AIMode.LameDuck;
             }
 
             //If we get down to one engine, slowly cut the max thrust to half of what it originally was. If we lose both, reduce it to 1.
-            int thrustHandicap = (_leftThrust.IsDead ? 0 : 1) + (_rightThrust.IsDead ? 0 : 1);
-            if (thrustHandicap == 1 && Velocity.MaxSpeed > _initialMaxpeed / 2)
-            {
-                Velocity.MaxSpeed -= 0.5;
-            }
-            if (thrustHandicap == 0 && Velocity.MaxSpeed > 1)
+            if (_thrust.IsDead)
             {
                 Velocity.MaxSpeed -= 0.5;
                 if (Velocity.MaxSpeed < 1)
