@@ -74,6 +74,9 @@ namespace AI2D.Actors.Enemies
         {
             base.ApplyIntelligence(frameAppliedOffset);
 
+            #region Hard coded AI (Working alternative to AI).
+
+            /*
             double distanceToPlayer = Utility.DistanceTo(this, _core.Actors.Player);
 
             if (mode == AIMode.Approaching)
@@ -186,6 +189,8 @@ namespace AI2D.Actors.Enemies
                     }
                 }
             }
+            */
+            #endregion
         }
 
         #endregion

@@ -15,7 +15,7 @@ namespace AI2D.Engine.Scenarios
             Ended
         }
 
-        protected List<EngineCallbackEvent> Events = new List<EngineCallbackEvent>();
+        protected List<EngineCallbackEvent> Events = new();
 
         protected Core _core;
         public int CurrentWave { get; set; } = 0;
@@ -41,7 +41,6 @@ namespace AI2D.Engine.Scenarios
         public virtual void Execute()
         {
         }
-
 
         protected EngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, OnExecute executeCallback)
         {

@@ -2,49 +2,41 @@
 using AI2D.Types;
 using AI2D.Weapons;
 
-namespace AI2D.Actors.Enemies
+namespace AI2D.Actors.Enemies.Bosses
 {
     /// <summary>
     /// 100% Experimental
     /// </summary>
-    public class EnemyScarab : EnemyBase
+    public class EnemyFlea : EnemyBase
     {
         public const int ScoreMultiplier = 15;
 
-        private ActorAttachment _leftCannon;
-        private ActorAttachment _rightCannon;
-
-        private ActorAttachment _turret;
-
         private ActorAttachment _leftGun;
         private ActorAttachment _rightGun;
-
         private ActorAttachment _rightThrust;
         private ActorAttachment _leftThrust;
 
         private double _initialMaxpeed;
 
-        string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Scarab\";
+        string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Flea\";
 
-        public EnemyScarab(Core core)
-            : base(core, EnemyBase.GetGenericHP(), ScoreMultiplier)
+        public EnemyFlea(Core core)
+            : base(core, GetGenericHP(), ScoreMultiplier)
         {
-            this.ThrustAnimation.QueueForDelete();
+            ThrustAnimation.QueueForDelete();
 
-            _leftCannon = this.Attach(_imagesPath + "Scarab.Gun.Cannon.Left.png", true, 3);
-            _rightCannon = this.Attach(_imagesPath + "Scarab.Gun.Cannon.Right.png", true, 3);
-            _leftGun = this.Attach(_imagesPath + "Scarab.Gun.Left.png", true, 3);
-            _rightGun = this.Attach(_imagesPath + "Scarab.Gun.Right.png", true, 3);
-            _leftThrust = this.Attach(_imagesPath + "Scarab.Jet.Left.png", true, 3);
-            _rightThrust = this.Attach(_imagesPath + "Scarab.Jet.Right.png", true, 3);
+            _leftGun = Attach(_imagesPath + "Flea.Gun.Left.png", true, 3);
+            _rightGun = Attach(_imagesPath + "Flea.Gun.Right.png", true, 3);
+            _leftThrust = Attach(_imagesPath + "Flea.Jet.png", true, 3);
+            _rightThrust = Attach(_imagesPath + "Flea.Jet.png", true, 3);
 
-            base.SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
+            SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
 
             _initialMaxpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 2, Constants.Limits.MaxSpeed); //Upper end of the speed spectrum
 
             Velocity.MaxSpeed = _initialMaxpeed;
 
-            SetImage(_imagesPath + "Scarab.Hull.png");
+            SetImage(_imagesPath + "Flea.Hull.png");
 
             AddSecondaryWeapon(new WeaponVulcanCannon(_core)
             {
@@ -61,22 +53,11 @@ namespace AI2D.Actors.Enemies
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
         }
 
-        public override void BeforeCreate()
-        {
-            base.BeforeCreate();
-        }
-
-        public override void AfterCreate()
-        {
-            _turret = this.Attach(_imagesPath + "Scarab.Gun.Turret.png", true, 3);
-            base.AfterCreate();
-        }
-
         public override void VelocityChanged()
         {
             if (_leftThrust != null && _rightThrust != null)
             {
-                bool visibleThrust = (Velocity.ThrottlePercentage > 0);
+                bool visibleThrust = Velocity.ThrottlePercentage > 0;
 
                 if (_leftThrust.IsDead == false)
                 {
@@ -95,42 +76,34 @@ namespace AI2D.Actors.Enemies
             {
                 if (_leftGun.IsDead == false)
                 {
-                    var pointLeft = Utility.AngleFromPointAtDistance(base.Velocity.Angle - 90, new Point<double>(25, 25));
-                    _leftGun.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees;
-                    _leftGun.X = this.X + pointLeft.X;
-                    _leftGun.Y = this.Y + pointLeft.Y;
+                    var pointLeft = Utility.AngleFromPointAtDistance(Velocity.Angle - 90, new Point<double>(25, 25));
+                    _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    _leftGun.X = X + pointLeft.X;
+                    _leftGun.Y = Y + pointLeft.Y;
                 }
 
                 if (_rightGun.IsDead == false)
                 {
-                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 90, new Point<double>(25, 25));
-                    _rightGun.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees;
-                    _rightGun.X = this.X + pointRight.X;
-                    _rightGun.Y = this.Y + pointRight.Y;
+                    var pointRight = Utility.AngleFromPointAtDistance(Velocity.Angle + 90, new Point<double>(25, 25));
+                    _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    _rightGun.X = X + pointRight.X;
+                    _rightGun.Y = Y + pointRight.Y;
                 }
 
                 if (_leftThrust.IsDead == false)
                 {
-                    var pointLeft = Utility.AngleFromPointAtDistance(base.Velocity.Angle - 135, new Point<double>(35, 35));
-                    _leftThrust.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees;
-                    _leftThrust.X = this.X + pointLeft.X;
-                    _leftThrust.Y = this.Y + pointLeft.Y;
+                    var pointLeft = Utility.AngleFromPointAtDistance(Velocity.Angle - 135, new Point<double>(35, 35));
+                    _leftThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    _leftThrust.X = X + pointLeft.X;
+                    _leftThrust.Y = Y + pointLeft.Y;
                 }
 
                 if (_rightThrust.IsDead == false)
                 {
-                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 135, new Point<double>(35, 35));
-                    _rightThrust.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees;
-                    _rightThrust.X = this.X + pointRight.X;
-                    _rightThrust.Y = this.Y + pointRight.Y;
-                }
-
-                if (_turret.IsDead == false)
-                {
-                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle, new Point<double>(0, 0));
-                    _turret.Velocity.Angle.Degrees = this.AngleTo(_core.Actors.Player);
-                    _turret.X = this.X + pointRight.X;
-                    _turret.Y = this.Y + pointRight.Y;
+                    var pointRight = Utility.AngleFromPointAtDistance(Velocity.Angle + 135, new Point<double>(35, 35));
+                    _rightThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    _rightThrust.X = X + pointRight.X;
+                    _rightThrust.Y = Y + pointRight.Y;
                 }
             }
         }
@@ -232,8 +205,8 @@ namespace AI2D.Actors.Enemies
                 else
                 {
                     mode = AIMode.Tailing;
-                    bulletsRemainingBeforeTailing = this.TotalAvailableSecondaryWeaponRounds();
-                    hpRemainingBeforeTailing = this.HitPoints;
+                    bulletsRemainingBeforeTailing = TotalAvailableSecondaryWeaponRounds();
+                    hpRemainingBeforeTailing = HitPoints;
                 }
             }
 
@@ -257,9 +230,9 @@ namespace AI2D.Actors.Enemies
                 }
 
                 //We we get too close, do too much damage or they fire at us enough, they fall back and come in again
-                if (distanceToPlayer < (distanceToKeep / 2.0)
-                    || (hpRemainingBeforeTailing - this.HitPoints) > 2
-                    || (bulletsRemainingBeforeTailing - this.TotalAvailableSecondaryWeaponRounds()) > 15)
+                if (distanceToPlayer < distanceToKeep / 2.0
+                    || hpRemainingBeforeTailing - HitPoints > 2
+                    || bulletsRemainingBeforeTailing - TotalAvailableSecondaryWeaponRounds() > 15)
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;

@@ -2,10 +2,10 @@
 
 namespace AI2D.Engine.Scenarios
 {
-    public class ScenarioScinzadSkirmish : BaseScenario
+    public class ScenarioDebuggingGalore : BaseScenario
     {
-        public ScenarioScinzadSkirmish(Core core)
-            : base(core, "Scinzad Skirmish")
+        public ScenarioDebuggingGalore(Core core)
+            : base(core, "Debugging Galore")
         {
             TotalWaves = 5;
         }
@@ -53,7 +53,7 @@ namespace AI2D.Engine.Scenarios
 
         private void AddEnemyCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.AddNewEnemy<EnemyScinzad>();
+            _core.Actors.AddNewEnemy<EnemyDebug>();
         }
     }
 }
