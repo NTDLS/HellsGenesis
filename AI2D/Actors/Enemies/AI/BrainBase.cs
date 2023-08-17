@@ -9,6 +9,12 @@ namespace AI2D.Actors.Enemies.AI
     /// </summary>
     public static class BrainBase
     {
+        public enum AIBrainTypes
+        {
+            Logistics,
+            WeaponSystems
+        }
+
         public static class AIInputs
         {
             public const string In0Degrees = "In0Degrees";
@@ -27,77 +33,79 @@ namespace AI2D.Actors.Enemies.AI
             public const string OutChangeSpeedAmount = "OutChangeSpeedAmount";
         }
 
-        private static DniNeuralNetwork _brain = null;
+        private static DniNeuralNetwork _trainedLogisticsBrain = null;
 
-        public static DniNeuralNetwork GetBrain(string initialBrainFile = null)
+        public static DniNeuralNetwork GetLogisticsNoColisionBrain(string initialBrainFile = null)
         {
-            if (_brain == null)
+            if (_trainedLogisticsBrain != null)
             {
-                if (string.IsNullOrEmpty(initialBrainFile) == false && File.Exists(initialBrainFile))
-                {
-                    _brain = DniNeuralNetwork.Load(initialBrainFile);
-                    if (_brain != null)
-                    {
-                        return _brain;
-                    }
-                }
+                return _trainedLogisticsBrain.Clone();
+            }
 
-                if (_brain == null)
+            if (string.IsNullOrEmpty(initialBrainFile) == false && File.Exists(initialBrainFile))
+            {
+                _trainedLogisticsBrain = DniNeuralNetwork.Load(initialBrainFile);
+                if (_trainedLogisticsBrain != null)
                 {
-                    _brain = new DniNeuralNetwork()
-                    {
-                        LearningRate = 0.01
-                    };
+                    return _trainedLogisticsBrain;
                 }
+            }
 
-                //Vision inputs.
-                _brain.Layers.AddInput(ActivationType.LeakyReLU,
-                    new string[] {
+            if (_trainedLogisticsBrain == null)
+            {
+                _trainedLogisticsBrain = new DniNeuralNetwork()
+                {
+                    LearningRate = 0.01
+                };
+            }
+
+            //Vision inputs.
+            _trainedLogisticsBrain.Layers.AddInput(ActivationType.LeakyReLU,
+                new string[] {
                         AIInputs.In0Degrees,
                         AIInputs.In45Degrees,
                         AIInputs.In90Degrees,
                         AIInputs.In270Degrees,
                         AIInputs.In315Degrees
-                    });
+                });
 
-                //Where the magic happens.
-                _brain.Layers.AddIntermediate(ActivationType.Sigmoid, 8);
+            //Where the magic happens.
+            _trainedLogisticsBrain.Layers.AddIntermediate(ActivationType.Sigmoid, 8);
 
-                //Decision outputs
-                _brain.Layers.AddOutput(
-                    new string[] {
+            //Decision outputs
+            _trainedLogisticsBrain.Layers.AddOutput(
+                new string[] {
                         AIOutputs.OutChangeDirection,
                         AIOutputs.OutRotateDirection,
                         AIOutputs.OutRotationAmount,
                         AIOutputs.OutChangeSpeed,
                         AIOutputs.OutChangeSpeedAmount
-                    });
+                });
 
-                for (int i = 0; i < 5000; i++)
-                {
-                    //Left side detection, go right.
-                    _brain.BackPropagate(TrainingScenerio(0, 0, 0, 2, 0), TrainingDecision(2, 2, 2, 2, 0));
-                    _brain.BackPropagate(TrainingScenerio(0, 0, 0, 0, 2), TrainingDecision(2, 2, 2, 2, 0));
-                    _brain.BackPropagate(TrainingScenerio(0, 0, 0, 2, 2), TrainingDecision(2, 2, 2, 2, 0));
+            for (int i = 0; i < 5000; i++)
+            {
+                //Left side detection, go right.
+                _trainedLogisticsBrain.BackPropagate(TrainingScenerio(0, 0, 0, 2, 0), TrainingDecision(2, 2, 2, 2, 0));
+                _trainedLogisticsBrain.BackPropagate(TrainingScenerio(0, 0, 0, 0, 2), TrainingDecision(2, 2, 2, 2, 0));
+                _trainedLogisticsBrain.BackPropagate(TrainingScenerio(0, 0, 0, 2, 2), TrainingDecision(2, 2, 2, 2, 0));
 
-                    //Right side detection, go left.
-                    _brain.BackPropagate(TrainingScenerio(0, 0, 2, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
-                    _brain.BackPropagate(TrainingScenerio(0, 2, 0, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
-                    _brain.BackPropagate(TrainingScenerio(0, 2, 2, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
+                //Right side detection, go left.
+                _trainedLogisticsBrain.BackPropagate(TrainingScenerio(0, 0, 2, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
+                _trainedLogisticsBrain.BackPropagate(TrainingScenerio(0, 2, 0, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
+                _trainedLogisticsBrain.BackPropagate(TrainingScenerio(0, 2, 2, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
 
-                    //Front side detection, so left or right.
-                    _brain.BackPropagate(TrainingScenerio(2, 0, 0, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
-                    _brain.BackPropagate(TrainingScenerio(2, 2, 0, 0, 2), TrainingDecision(2, 2, 2, 2, 0));
-                    _brain.BackPropagate(TrainingScenerio(2, 2, 2, 2, 2), TrainingDecision(2, 2, 2, 2, 0));
+                //Front side detection, so left or right.
+                _trainedLogisticsBrain.BackPropagate(TrainingScenerio(2, 0, 0, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
+                _trainedLogisticsBrain.BackPropagate(TrainingScenerio(2, 2, 0, 0, 2), TrainingDecision(2, 2, 2, 2, 0));
+                _trainedLogisticsBrain.BackPropagate(TrainingScenerio(2, 2, 2, 2, 2), TrainingDecision(2, 2, 2, 2, 0));
 
-                    //No objects dection, speed up and cruise.
-                    _brain.BackPropagate(TrainingScenerio(0, 0, 0, 0, 0), TrainingDecision(0.4f, 0.4f, 0.4f, 0.9f, 0.9f));
-                }
-
-                //_brain.Save(fileName);
+                //No objects dection, speed up and cruise.
+                _trainedLogisticsBrain.BackPropagate(TrainingScenerio(0, 0, 0, 0, 0), TrainingDecision(0.4f, 0.4f, 0.4f, 0.9f, 0.9f));
             }
 
-            return _brain.Clone();
+            //_trainedLogisticsBrain.Save(fileName);
+
+            return _trainedLogisticsBrain.Clone();
         }
 
         private static DniNamedInterfaceParameters TrainingScenerio(double in0Degrees, double in45Degrees, double in90Degrees, double in270Degrees, double in315Degrees)

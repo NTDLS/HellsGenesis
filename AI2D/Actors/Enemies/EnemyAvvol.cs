@@ -2,7 +2,7 @@
 using AI2D.Types;
 using AI2D.Weapons;
 using System.Drawing;
-using System.Linq;
+using System.IO;
 
 namespace AI2D.Actors.Enemies
 {
@@ -13,27 +13,18 @@ namespace AI2D.Actors.Enemies
     public class EnemyAvvol : EnemyBase
     {
         public const int ScoreMultiplier = 25;
-
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Avvol\";
-        private readonly string[] _imagePaths = {
-            #region images.
-            "1.png",
-            "2.png",
-            "3.png",
-            "4.png",
-            "5.png",
-            "6.png"
-            #endregion
-        };
+        private readonly int imageCount = 6;
+        private readonly int selectedImageIndex = 0;
 
         public EnemyAvvol(Core core)
             : base(core, EnemyBase.GetGenericHP(), ScoreMultiplier)
         {
-            int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
+            selectedImageIndex = Utility.Random.Next(0, 1000) % imageCount;
+            SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
             base.SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
 
-            SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
             Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 4, Constants.Limits.MaxSpeed - 2); //Upper end of the speed spectrum.
 
             AddSecondaryWeapon(new WeaponPhotonTorpedo(_core)
@@ -54,7 +45,7 @@ namespace AI2D.Actors.Enemies
                 FireDelayMilliseconds = 500
             });
 
-            if (imageIndex == 0 || imageIndex == 2 || imageIndex == 5)
+            if (selectedImageIndex == 0 || selectedImageIndex == 2 || selectedImageIndex == 5)
             {
                 AddSecondaryWeapon(new WeaponGuidedFragMissile(_core)
                 {

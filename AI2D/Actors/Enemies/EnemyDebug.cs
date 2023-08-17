@@ -1,8 +1,13 @@
-﻿using AI2D.Engine;
+﻿using AI2D.Actors.Enemies.AI;
+using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
+using Determinet.Types;
+using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using static AI2D.Actors.Enemies.AI.BrainBase;
 
 namespace AI2D.Actors.Enemies
 {
@@ -12,29 +17,19 @@ namespace AI2D.Actors.Enemies
     public class EnemyDebug : EnemyBase
     {
         public const int ScoreMultiplier = 15;
-
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Debug\";
-        private readonly string[] _imagePaths = {
-            #region images.
-            "1.png",
-            "2.png",
-            "3.png",
-            "4.png",
-            "5.png",
-            "6.png"
-            #endregion
-        };
+        private readonly int imageCount = 6;
+        private readonly int selectedImageIndex = 0;
 
         public EnemyDebug(Core core)
             : base(core, EnemyBase.GetGenericHP(), ScoreMultiplier)
         {
-            int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
+            selectedImageIndex = Utility.Random.Next(0, 1000) % imageCount;
+            SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
             base.SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
 
             Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 2, Constants.Limits.MaxSpeed); //Upper end of the speed spectrum
-
-            SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
 
             AddSecondaryWeapon(new WeaponVulcanCannon(_core)
             {
@@ -49,148 +44,114 @@ namespace AI2D.Actors.Enemies
             });
 
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
+
+            Brains.Add(AIBrainTypes.Logistics, BrainBase.GetLogisticsNoColisionBrain());
         }
 
         #region Artificial Intelligence.
 
-        enum AIMode
-        {
-            Approaching,
-            Tailing,
-            MovingToFallback,
-            MovingToApproach,
-        }
-
-        const double baseDistanceToKeep = 200;
-        double distanceToKeep = baseDistanceToKeep * (Utility.Random.NextDouble() + 1);
-        const double baseFallbackDistance = 800;
-        double fallbackDistance;
-        Angle<double> fallToAngle;
-        AIMode mode = AIMode.Approaching;
-        int bulletsRemainingBeforeTailing = 0;
-        int hpRemainingBeforeTailing = 0;
+        private double _maxObserveDistance { get; set; } = 100;
+        private double _visionToleranceDegrees { get; set; } = 25;
+        private DateTime? _lastDecisionTime = null;
+        private int _millisecondsBetweenDecisions { get; set; } = 50;
+        private float _decisionSensitivity { get; set; } = (float)Utility.RandomNumber(0.25, 0.55);
 
         public override void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
             base.ApplyIntelligence(frameAppliedOffset);
 
-            #region Hard coded AI (Working alternative to AI).
+            DateTime now = DateTime.UtcNow;
 
-            /*
-            double distanceToPlayer = Utility.DistanceTo(this, _core.Actors.Player);
-
-            if (mode == AIMode.Approaching)
+            if (_lastDecisionTime == null || (now - (DateTime)_lastDecisionTime).TotalMilliseconds >= _millisecondsBetweenDecisions)
             {
-                if (distanceToPlayer > distanceToKeep)
+                var decidingFactors = GetVisionInputs();
+
+                var decisions = Brains[BrainBase.AIBrainTypes.Logistics].FeedForward(decidingFactors);
+
+                if (decisions.Get(BrainBase.AIOutputs.OutChangeDirection) >= _decisionSensitivity)
                 {
-                    MoveInDirectionOf(_core.Actors.Player);
+                    var rotateAmount = decisions.Get(BrainBase.AIOutputs.OutRotationAmount);
+
+                    if (decisions.Get(BrainBase.AIOutputs.OutRotateDirection) >= _decisionSensitivity)
+                    {
+                        Rotate(45 * rotateAmount);
+                    }
+                    else
+                    {
+                        Rotate(-45 * rotateAmount);
+                    }
+                }
+
+                if (decisions.Get(BrainBase.AIOutputs.OutChangeSpeed) >= _decisionSensitivity)
+                {
+                    double speedFactor = decisions.Get(BrainBase.AIOutputs.OutChangeSpeedAmount, 0);
+                    Velocity.ThrottlePercentage += (speedFactor / 5.0);
                 }
                 else
                 {
-                    mode = AIMode.Tailing;
-                    bulletsRemainingBeforeTailing = this.TotalAvailableSecondaryWeaponRounds();
-                    hpRemainingBeforeTailing = this.HitPoints;
+                    double speedFactor = decisions.Get(BrainBase.AIOutputs.OutChangeSpeedAmount, 0);
+                    Velocity.ThrottlePercentage += -(speedFactor / 5.0);
                 }
-            }
 
-            if (mode == AIMode.Tailing)
+                if (Velocity.ThrottlePercentage < 0)
+                {
+                    Velocity.ThrottlePercentage = 0;
+                }
+                if (Velocity.ThrottlePercentage == 0)
+                {
+                    Velocity.ThrottlePercentage = 0.10;
+                }
+
+                _lastDecisionTime = now;
+            }
+        }
+
+        /// <summary>
+        /// Looks around and gets neuralnetwork inputs for visible proximity objects.
+        /// </summary>
+        /// <returns></returns>
+        private DniNamedInterfaceParameters GetVisionInputs()
+        {
+            var aiParams = new DniNamedInterfaceParameters();
+
+            //The closeness is expressed as a percentage of how close to the other object they are. 100% being touching 0% being 1 pixel from out of range.
+            foreach (var other in _core.Actors.Collection.Where(o => o is EnemyBase))
             {
-                MoveInDirectionOf(_core.Actors.Player);
-
-                //Stay on the players tail.
-                if (distanceToPlayer > distanceToKeep + 300)
+                if (other == this)
                 {
-                    Velocity.ThrottlePercentage = 1;
-                    mode = AIMode.Approaching;
-                }
-                else
-                {
-                    Velocity.ThrottlePercentage -= 0.05;
-                    if (Velocity.ThrottlePercentage < 0)
-                    {
-                        Velocity.ThrottlePercentage = 0;
-                    }
+                    continue;
                 }
 
-                //We we get too close, do too much damage or they fire at us enough, they fall back and come in again
-                if (distanceToPlayer < (distanceToKeep / 2.0)
-                    || (hpRemainingBeforeTailing - this.HitPoints) > 2
-                    || (bulletsRemainingBeforeTailing - this.TotalAvailableSecondaryWeaponRounds()) > 15)
+                double distance = DistanceTo(other);
+                double percentageOfCloseness = 1 - (distance / _maxObserveDistance);
+
+                if (IsPointingAt(other, _visionToleranceDegrees, _maxObserveDistance, -90))
                 {
-                    Velocity.ThrottlePercentage = 1;
-                    mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + Utility.RandomNumberNegative(0, 10));
-                    fallbackDistance = baseFallbackDistance * (Utility.Random.NextDouble() + 1);
+                    aiParams.SetIfLess(AIInputs.In270Degrees, percentageOfCloseness);
+                }
+
+                if (IsPointingAt(other, _visionToleranceDegrees, _maxObserveDistance, -45))
+                {
+                    aiParams.SetIfLess(AIInputs.In315Degrees, percentageOfCloseness);
+                }
+
+                if (IsPointingAt(other, _visionToleranceDegrees, _maxObserveDistance, 0))
+                {
+                    aiParams.SetIfLess(AIInputs.In0Degrees, percentageOfCloseness);
+                }
+
+                if (IsPointingAt(other, _visionToleranceDegrees, _maxObserveDistance, +45))
+                {
+                    aiParams.SetIfLess(AIInputs.In45Degrees, percentageOfCloseness);
+                }
+
+                if (IsPointingAt(other, _visionToleranceDegrees, _maxObserveDistance, +90))
+                {
+                    aiParams.SetIfLess(AIInputs.In90Degrees, percentageOfCloseness);
                 }
             }
 
-            if (mode == AIMode.MovingToFallback)
-            {
-                var deltaAngle = Velocity.Angle - fallToAngle;
-
-                if (deltaAngle.Degrees > 10)
-                {
-                    if (deltaAngle.Degrees >= 180.0) //We might as well turn around clock-wise
-                    {
-                        Velocity.Angle += 1;
-                    }
-                    else if (deltaAngle.Degrees < 180.0) //We might as well turn around counter clock-wise
-                    {
-                        Velocity.Angle -= 1;
-                    }
-                }
-
-                if (distanceToPlayer > fallbackDistance)
-                {
-                    mode = AIMode.MovingToApproach;
-                }
-            }
-
-            if (mode == AIMode.MovingToApproach)
-            {
-                var deltaAngle = DeltaAngle(_core.Actors.Player);
-
-                if (deltaAngle > 10)
-                {
-                    if (deltaAngle >= 180.0)
-                    {
-                        Velocity.Angle += 1;
-                    }
-                    else if (deltaAngle < 180.0)
-                    {
-                        Velocity.Angle -= 1;
-                    }
-                }
-                else
-                {
-                    mode = AIMode.Approaching;
-                    distanceToKeep = baseDistanceToKeep * (Utility.Random.NextDouble() + 1);
-                }
-            }
-
-            if (distanceToPlayer < 700)
-            {
-                if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
-                {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
-                    if (isPointingAtPlayer)
-                    {
-                        SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
-                        SelectedSecondaryWeapon?.Fire();
-                    }
-                }
-                else if (distanceToPlayer > 0 && HasSecondaryWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
-                {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
-                    if (isPointingAtPlayer)
-                    {
-                        SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));
-                        SelectedSecondaryWeapon?.Fire();
-                    }
-                }
-            }
-            */
-            #endregion
+            return aiParams;
         }
 
         #endregion

@@ -2,34 +2,24 @@
 using AI2D.Types;
 using AI2D.Weapons;
 using System.Drawing;
-using System.Linq;
+using System.IO;
 
 namespace AI2D.Actors.Enemies
 {
     public class EnemyIrlen : EnemyBase
     {
         public const int ScoreMultiplier = 1;
-
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Irlen\";
-        private readonly string[] _imagePaths = {
-            #region images.
-            "1.png",
-            "2.png",
-            "3.png",
-            "4.png",
-            "5.png",
-            "6.png"
-            #endregion
-        };
+        private readonly int imageCount = 6;
+        private readonly int selectedImageIndex = 0;
 
         public EnemyIrlen(Core core)
             : base(core, EnemyBase.GetGenericHP(), ScoreMultiplier)
         {
-            int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
+            selectedImageIndex = Utility.Random.Next(0, 1000) % imageCount;
+            SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
             base.SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
-
-            SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
 
             AddSecondaryWeapon(new WeaponPhotonTorpedo(_core)
             {

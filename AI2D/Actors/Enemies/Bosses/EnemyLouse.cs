@@ -2,7 +2,7 @@
 using AI2D.Types;
 using AI2D.Weapons;
 
-namespace AI2D.Actors.Enemies
+namespace AI2D.Actors.Enemies.Bosses
 {
     /// <summary>
     /// 100% Experimental
@@ -20,15 +20,15 @@ namespace AI2D.Actors.Enemies
         string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Louse\";
 
         public EnemyLouse(Core core)
-            : base(core, EnemyBase.GetGenericHP(), ScoreMultiplier)
+            : base(core, GetGenericHP(), ScoreMultiplier)
         {
-            this.ThrustAnimation.QueueForDelete();
+            ThrustAnimation.QueueForDelete();
 
-            _leftGun = this.Attach(_imagesPath + "Louse.Gun.Left.png", true, 3);
-            _rightGun = this.Attach(_imagesPath + "Louse.Gun.Right.png", true, 3);
-            _thrust = this.Attach(_imagesPath + "Louse.Jet.png", true, 3);
+            _leftGun = Attach(_imagesPath + "Louse.Gun.Left.png", true, 3);
+            _rightGun = Attach(_imagesPath + "Louse.Gun.Right.png", true, 3);
+            _thrust = Attach(_imagesPath + "Louse.Jet.png", true, 3);
 
-            base.SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
+            SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
 
             _initialMaxpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 2, Constants.Limits.MaxSpeed); //Upper end of the speed spectrum
 
@@ -55,7 +55,7 @@ namespace AI2D.Actors.Enemies
         {
             if (_thrust != null)
             {
-                bool visibleThrust = (Velocity.ThrottlePercentage > 0);
+                bool visibleThrust = Velocity.ThrottlePercentage > 0;
 
                 if (_thrust.IsDead == false)
                 {
@@ -70,26 +70,26 @@ namespace AI2D.Actors.Enemies
             {
                 if (_leftGun.IsDead == false)
                 {
-                    var pointLeft = Utility.AngleFromPointAtDistance(base.Velocity.Angle - 90, new Point<double>(25, 25));
-                    _leftGun.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees;
-                    _leftGun.X = this.X + pointLeft.X;
-                    _leftGun.Y = this.Y + pointLeft.Y;
+                    var pointLeft = Utility.AngleFromPointAtDistance(Velocity.Angle - 90, new Point<double>(25, 25));
+                    _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    _leftGun.X = X + pointLeft.X;
+                    _leftGun.Y = Y + pointLeft.Y;
                 }
 
                 if (_rightGun.IsDead == false)
                 {
-                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 90, new Point<double>(25, 25));
-                    _rightGun.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees;
-                    _rightGun.X = this.X + pointRight.X;
-                    _rightGun.Y = this.Y + pointRight.Y;
+                    var pointRight = Utility.AngleFromPointAtDistance(Velocity.Angle + 90, new Point<double>(25, 25));
+                    _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    _rightGun.X = X + pointRight.X;
+                    _rightGun.Y = Y + pointRight.Y;
                 }
 
                 if (_thrust.IsDead == false)
                 {
-                    var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(35, 35));
-                    _thrust.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees;
-                    _thrust.X = this.X + pointRight.X;
-                    _thrust.Y = this.Y + pointRight.Y;
+                    var pointRight = Utility.AngleFromPointAtDistance(Velocity.Angle + 180, new Point<double>(35, 35));
+                    _thrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    _thrust.X = X + pointRight.X;
+                    _thrust.Y = Y + pointRight.Y;
                 }
             }
         }
@@ -186,8 +186,8 @@ namespace AI2D.Actors.Enemies
                 else
                 {
                     mode = AIMode.Tailing;
-                    bulletsRemainingBeforeTailing = this.TotalAvailableSecondaryWeaponRounds();
-                    hpRemainingBeforeTailing = this.HitPoints;
+                    bulletsRemainingBeforeTailing = TotalAvailableSecondaryWeaponRounds();
+                    hpRemainingBeforeTailing = HitPoints;
                 }
             }
 
@@ -211,9 +211,9 @@ namespace AI2D.Actors.Enemies
                 }
 
                 //We we get too close, do too much damage or they fire at us enough, they fall back and come in again
-                if (distanceToPlayer < (distanceToKeep / 2.0)
-                    || (hpRemainingBeforeTailing - this.HitPoints) > 2
-                    || (bulletsRemainingBeforeTailing - this.TotalAvailableSecondaryWeaponRounds()) > 15)
+                if (distanceToPlayer < distanceToKeep / 2.0
+                    || hpRemainingBeforeTailing - HitPoints > 2
+                    || bulletsRemainingBeforeTailing - TotalAvailableSecondaryWeaponRounds() > 15)
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;

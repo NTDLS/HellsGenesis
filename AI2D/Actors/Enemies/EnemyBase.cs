@@ -1,11 +1,10 @@
-﻿using AI2D.Actors.Enemies.AI;
-using AI2D.Engine;
+﻿using AI2D.Engine;
 using AI2D.Types;
 using Determinet;
-using Determinet.Types;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
+using static AI2D.Actors.Enemies.AI.BrainBase;
 
 namespace AI2D.Actors.Enemies
 {
@@ -22,8 +21,6 @@ namespace AI2D.Actors.Enemies
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
-
-            Brain = BrainBase.GetBrain();
 
             RadarDotSize = new Point<int>(4, 4);
             RadarDotColor = Color.FromArgb(200, 100, 100);
@@ -88,7 +85,7 @@ namespace AI2D.Actors.Enemies
                 || Y < -Constants.Limits.EnemySceneDistanceLimit
                 || Y >= _core.Display.VisibleSize.Height + Constants.Limits.EnemySceneDistanceLimit)
             {
-                QueueForDelete(); ;
+                QueueForDelete();
                 return;
             }
 
@@ -134,139 +131,16 @@ namespace AI2D.Actors.Enemies
         {
             if (RadarPositionIndicator != null)
             {
-                RadarPositionIndicator.QueueForDelete(); ;
-                RadarPositionText.QueueForDelete(); ;
+                RadarPositionIndicator.QueueForDelete();
+                RadarPositionText.QueueForDelete();
             }
             if (ThrustAnimation != null)
             {
-                ThrustAnimation.QueueForDelete(); ;
+                ThrustAnimation.QueueForDelete();
             }
             base.Cleanup();
         }
 
-        #region AI
-
-        private DateTime? _lastDecisionTime = null;
-        public DniNeuralNetwork Brain { get; private set; }
-        public double MinimumTravelDistanceBeforeDamage { get; set; } = 20;
-        public double MaxObserveDistance { get; set; } = 100;
-        public double VisionToleranceDegrees { get; set; } = 25;
-        public int MillisecondsBetweenDecisions { get; set; } = 50;
-        public float DecisionSensitivity { get; set; } = (float)Utility.RandomNumber(0.25, 0.55);
-
-        /// <summary>
-        /// This is not currently used. Can be applied to perform AI logistics.
-        /// </summary>
-        public void ApplyAIIntelligence()
-        {
-            DateTime now = DateTime.UtcNow;
-
-            if (_lastDecisionTime == null || (now - (DateTime)_lastDecisionTime).TotalMilliseconds >= MillisecondsBetweenDecisions)
-            {
-                var decidingFactors = GetVisionInputs();
-
-                var decisions = Brain.FeedForward(decidingFactors);
-
-
-                if (decisions.Get(BrainBase.AIOutputs.OutChangeDirection) >= DecisionSensitivity)
-                {
-                    var rotateAmount = decisions.Get(BrainBase.AIOutputs.OutRotationAmount);
-
-                    if (decisions.Get(BrainBase.AIOutputs.OutRotateDirection) >= DecisionSensitivity)
-                    {
-                        Rotate(45 * rotateAmount);
-                    }
-                    else
-                    {
-                        Rotate(-45 * rotateAmount);
-                    }
-                }
-
-                if (decisions.Get(BrainBase.AIOutputs.OutChangeSpeed) >= DecisionSensitivity)
-                {
-                    double speedFactor = decisions.Get(BrainBase.AIOutputs.OutChangeSpeedAmount, 0);
-                    Velocity.ThrottlePercentage += (speedFactor / 5.0);
-                }
-                else
-                {
-                    double speedFactor = decisions.Get(BrainBase.AIOutputs.OutChangeSpeedAmount, 0);
-                    Velocity.ThrottlePercentage += -(speedFactor / 5.0);
-                }
-
-                if (Velocity.ThrottlePercentage < 0)
-                {
-                    Velocity.ThrottlePercentage = 0;
-                }
-                if (Velocity.ThrottlePercentage == 0)
-                {
-                    Velocity.ThrottlePercentage = 0.10;
-                }
-
-                _lastDecisionTime = now;
-            }
-
-            if (IsOnScreen == false)
-            {
-                //Kill this bug:
-                Visable = false;
-            }
-
-            var intersections = Intersections();
-
-            if (intersections.Any())
-            {
-                QueueForDelete();
-            }
-        }
-
-        /// <summary>
-        /// Looks around and gets neuralnetwork inputs for visible proximity objects.
-        /// </summary>
-        /// <returns></returns>
-        private DniNamedInterfaceParameters GetVisionInputs()
-        {
-            var aiParams = new DniNamedInterfaceParameters();
-
-            //The closeness is expressed as a percentage of how close to the other object they are. 100% being touching 0% being 1 pixel from out of range.
-            foreach (var other in _core.Actors.Collection.Where(o => o is EnemyBase))
-            {
-                if (other == this)
-                {
-                    continue;
-                }
-
-                double distance = DistanceTo(other);
-                double percentageOfCloseness = 1 - (distance / MaxObserveDistance);
-
-                if (IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -90))
-                {
-                    aiParams.SetIfLess(BrainBase.AIInputs.In270Degrees, percentageOfCloseness);
-                }
-
-                if (IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -45))
-                {
-                    aiParams.SetIfLess(BrainBase.AIInputs.In315Degrees, percentageOfCloseness);
-                }
-
-                if (IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, 0))
-                {
-                    aiParams.SetIfLess(BrainBase.AIInputs.In0Degrees, percentageOfCloseness);
-                }
-
-                if (IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +45))
-                {
-                    aiParams.SetIfLess(BrainBase.AIInputs.In45Degrees, percentageOfCloseness);
-                }
-
-                if (IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +90))
-                {
-                    aiParams.SetIfLess(BrainBase.AIInputs.In90Degrees, percentageOfCloseness);
-                }
-            }
-
-            return aiParams;
-        }
-
-        #endregion
+        public Dictionary<AIBrainTypes, DniNeuralNetwork> Brains { get; private set; } = new();
     }
 }

@@ -2,7 +2,7 @@
 using AI2D.Types;
 using AI2D.Weapons;
 using System.Drawing;
-using System.Linq;
+using System.IO;
 
 namespace AI2D.Actors.Enemies
 {
@@ -12,29 +12,20 @@ namespace AI2D.Actors.Enemies
     public class EnemyScinzad : EnemyBase
     {
         public const int ScoreMultiplier = 15;
-
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Scinzad\";
-        private readonly string[] _imagePaths = {
-            #region images.
-            "1.png",
-            "2.png",
-            "3.png",
-            "4.png",
-            "5.png",
-            "6.png"
-            #endregion
-        };
+        private readonly int imageCount = 6;
+        private readonly int selectedImageIndex = 0;
+
 
         public EnemyScinzad(Core core)
             : base(core, EnemyBase.GetGenericHP(), ScoreMultiplier)
         {
-            int imageIndex = Utility.Random.Next(0, 1000) % _imagePaths.Count();
+            selectedImageIndex = Utility.Random.Next(0, 1000) % imageCount;
+            SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
             base.SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
 
             Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 2, Constants.Limits.MaxSpeed); //Upper end of the speed spectrum
-
-            SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
 
             AddSecondaryWeapon(new WeaponVulcanCannon(_core)
             {
@@ -61,22 +52,19 @@ namespace AI2D.Actors.Enemies
             MovingToApproach,
         }
 
-        const double baseDistanceToKeep = 200;
-        double distanceToKeep = baseDistanceToKeep * (Utility.Random.NextDouble() + 1);
-        const double baseFallbackDistance = 800;
-        double fallbackDistance;
-        Angle<double> fallToAngle;
-        AIMode mode = AIMode.Approaching;
-        int bulletsRemainingBeforeTailing = 0;
-        int hpRemainingBeforeTailing = 0;
+        private const double baseDistanceToKeep = 200;
+        private double distanceToKeep = baseDistanceToKeep * (Utility.Random.NextDouble() + 1);
+        private const double baseFallbackDistance = 800;
+        private double fallbackDistance;
+        private Angle<double> fallToAngle;
+        private AIMode mode = AIMode.Approaching;
+        private int bulletsRemainingBeforeTailing = 0;
+        private int hpRemainingBeforeTailing = 0;
 
         public override void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
             base.ApplyIntelligence(frameAppliedOffset);
 
-            #region Hard coded AI (Working alternative to AI).
-
-            /*
             double distanceToPlayer = Utility.DistanceTo(this, _core.Actors.Player);
 
             if (mode == AIMode.Approaching)
@@ -189,8 +177,6 @@ namespace AI2D.Actors.Enemies
                     }
                 }
             }
-            */
-            #endregion
         }
 
         #endregion
