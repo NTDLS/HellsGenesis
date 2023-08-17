@@ -39,7 +39,11 @@ namespace AI2D.Actors.Enemies.AI
         {
             if (_trainedLogisticsBrain != null)
             {
-                return _trainedLogisticsBrain.Clone();
+                var clone = _trainedLogisticsBrain.Clone();
+
+                clone.Mutate(0.2, 0.1);
+
+                return clone;
             }
 
             if (string.IsNullOrEmpty(initialBrainFile) == false && File.Exists(initialBrainFile))

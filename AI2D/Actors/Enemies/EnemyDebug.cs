@@ -45,12 +45,12 @@ namespace AI2D.Actors.Enemies
 
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
 
-            Brains.Add(AIBrainTypes.Logistics, BrainBase.GetLogisticsNoColisionBrain());
+            Brains.Add(AIBrainTypes.Logistics, GetLogisticsNoColisionBrain());
         }
 
         #region Artificial Intelligence.
 
-        private double _maxObserveDistance { get; set; } = 100;
+        private double _maxObserveDistance { get; set; } = 500;
         private double _visionToleranceDegrees { get; set; } = 25;
         private DateTime? _lastDecisionTime = null;
         private int _millisecondsBetweenDecisions { get; set; } = 50;
@@ -60,19 +60,19 @@ namespace AI2D.Actors.Enemies
         {
             base.ApplyIntelligence(frameAppliedOffset);
 
-            DateTime now = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
 
             if (_lastDecisionTime == null || (now - (DateTime)_lastDecisionTime).TotalMilliseconds >= _millisecondsBetweenDecisions)
             {
                 var decidingFactors = GetVisionInputs();
 
-                var decisions = Brains[BrainBase.AIBrainTypes.Logistics].FeedForward(decidingFactors);
+                var decisions = Brains[AIBrainTypes.Logistics].FeedForward(decidingFactors);
 
-                if (decisions.Get(BrainBase.AIOutputs.OutChangeDirection) >= _decisionSensitivity)
+                if (decisions.Get(AIOutputs.OutChangeDirection) >= _decisionSensitivity)
                 {
-                    var rotateAmount = decisions.Get(BrainBase.AIOutputs.OutRotationAmount);
+                    var rotateAmount = decisions.Get(AIOutputs.OutRotationAmount);
 
-                    if (decisions.Get(BrainBase.AIOutputs.OutRotateDirection) >= _decisionSensitivity)
+                    if (decisions.Get(AIOutputs.OutRotateDirection) >= _decisionSensitivity)
                     {
                         Rotate(45 * rotateAmount);
                     }
@@ -82,14 +82,14 @@ namespace AI2D.Actors.Enemies
                     }
                 }
 
-                if (decisions.Get(BrainBase.AIOutputs.OutChangeSpeed) >= _decisionSensitivity)
+                if (decisions.Get(AIOutputs.OutChangeSpeed) >= _decisionSensitivity)
                 {
-                    double speedFactor = decisions.Get(BrainBase.AIOutputs.OutChangeSpeedAmount, 0);
+                    var speedFactor = decisions.Get(AIOutputs.OutChangeSpeedAmount, 0);
                     Velocity.ThrottlePercentage += (speedFactor / 5.0);
                 }
                 else
                 {
-                    double speedFactor = decisions.Get(BrainBase.AIOutputs.OutChangeSpeedAmount, 0);
+                    var speedFactor = decisions.Get(AIOutputs.OutChangeSpeedAmount, 0);
                     Velocity.ThrottlePercentage += -(speedFactor / 5.0);
                 }
 
@@ -107,7 +107,7 @@ namespace AI2D.Actors.Enemies
         }
 
         /// <summary>
-        /// Looks around and gets neuralnetwork inputs for visible proximity objects.
+        /// Looks around and gets inputs for visible proximity objects.
         /// </summary>
         /// <returns></returns>
         private DniNamedInterfaceParameters GetVisionInputs()
