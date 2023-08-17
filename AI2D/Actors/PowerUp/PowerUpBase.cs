@@ -65,7 +65,7 @@ namespace AI2D.Actors.PowerUp
             _explodeSound.Play();
             _hitAnimation.Reset();
             _core.Actors.PlaceAnimationOnTopOf(_hitAnimation, this);
-            QueueForDelete();;
+            QueueForDelete(); ;
         }
 
         public virtual void ApplyIntelligence(Point<double> frameAppliedOffset)

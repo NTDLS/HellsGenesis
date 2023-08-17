@@ -1,10 +1,9 @@
-﻿using AI2D.Engine;
-using AI2D.Actors.Enemies;
+﻿using AI2D.Actors.Enemies;
+using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
 using System.Drawing;
-using System.Linq;
 
 namespace AI2D.Actors.Bullets
 {
@@ -46,7 +45,7 @@ namespace AI2D.Actors.Bullets
             if (firedFrom is EnemyBase)
             {
                 headingDegrees = firedFrom.Velocity.Angle.Degrees + (Utility.FlipCoin() ? 1 : -1) * (Utility.Random.NextDouble() * 2);
-            } 
+            }
 
             Velocity<double> initialVelocity = new Velocity<double>()
             {
@@ -132,7 +131,7 @@ namespace AI2D.Actors.Bullets
             {
                 HitExplosion();
             }
-            QueueForDelete();;
+            QueueForDelete(); ;
         }
     }
 }

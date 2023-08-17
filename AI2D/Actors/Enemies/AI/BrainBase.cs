@@ -1,9 +1,6 @@
-﻿using Algorithms;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Determinet;
+using Determinet.Types;
+using System.IO;
 
 namespace AI2D.Actors.Enemies.AI
 {
@@ -12,85 +9,117 @@ namespace AI2D.Actors.Enemies.AI
     /// </summary>
     public static class BrainBase
     {
-        public static class Inputs
+        public static class AIInputs
         {
-            public const int ObjTo90Left = 0;
-            public const int ObjTo45Left = 1;
-            public const int ObjAhead = 2;
-            public const int ObjTo45Right = 3;
-            public const int ObjTo90Right = 4;
+            public const string In0Degrees = "In0Degrees";
+            public const string In45Degrees = "In45Degrees";
+            public const string In90Degrees = "In90Degrees";
+            public const string In270Degrees = "In270Degrees";
+            public const string In315Degrees = "In315Degrees";
         }
 
-        public static class Outputs
+        public static class AIOutputs
         {
-            public const int ShouldRotate = 0;
-            public const int RotateLeftOrRight = 1;
-            public const int RotateLeftOrRightAmount = 2;
-            public const int ShouldSpeedUpOrDown = 3;
-            public const int SpeedUpOrDownAmount = 4;
+            public const string OutChangeDirection = "OutChangeDirection";
+            public const string OutRotateDirection = "OutRotateDirection";
+            public const string OutRotationAmount = "OutRotationAmount";
+            public const string OutChangeSpeed = "OutChangeSpeed";
+            public const string OutChangeSpeedAmount = "OutChangeSpeedAmount";
         }
 
-        private static NeuralNetwork _brain = null;
+        private static DniNeuralNetwork _brain = null;
 
-        public static NeuralNetwork GetBrain()
+        public static DniNeuralNetwork GetBrain(string initialBrainFile = null)
         {
             if (_brain == null)
             {
-                NeuralNetworkConfig nnConfig = new NeuralNetworkConfig();
-                nnConfig.AddLayer(LayerType.Input, 5); //Vision inouts
-                nnConfig.AddLayer(LayerType.Intermediate, 12, ActivationType.LeakyRelu);
-                nnConfig.AddLayer(LayerType.Output, 5, ActivationType.LeakyRelu); //Movement decisions.
-                _brain = new NeuralNetwork(nnConfig, 0.02f);
+                if (string.IsNullOrEmpty(initialBrainFile) == false && File.Exists(initialBrainFile))
+                {
+                    _brain = DniNeuralNetwork.Load(initialBrainFile);
+                    if (_brain != null)
+                    {
+                        return _brain;
+                    }
+                }
 
-                for (int i = 0; i < 10000; i++)
+                if (_brain == null)
+                {
+                    _brain = new DniNeuralNetwork()
+                    {
+                        LearningRate = 0.01
+                    };
+                }
+
+                //Vision inputs.
+                _brain.Layers.AddInput(ActivationType.LeakyReLU,
+                    new string[] {
+                        AIInputs.In0Degrees,
+                        AIInputs.In45Degrees,
+                        AIInputs.In90Degrees,
+                        AIInputs.In270Degrees,
+                        AIInputs.In315Degrees
+                    });
+
+                //Where the magic happens.
+                _brain.Layers.AddIntermediate(ActivationType.Sigmoid, 8);
+
+                //Decision outputs
+                _brain.Layers.AddOutput(
+                    new string[] {
+                        AIOutputs.OutChangeDirection,
+                        AIOutputs.OutRotateDirection,
+                        AIOutputs.OutRotationAmount,
+                        AIOutputs.OutChangeSpeed,
+                        AIOutputs.OutChangeSpeedAmount
+                    });
+
+                for (int i = 0; i < 5000; i++)
                 {
                     //Left side detection, go right.
-                    _brain.BackPropagate(TrainingScenerio(1, 0, 0, 0, 0), TrainingDecision(1, 1, 1, 1, 0));
-                    _brain.BackPropagate(TrainingScenerio(0, 1, 0, 0, 0), TrainingDecision(1, 1, 1, 1, 0));
-                    _brain.BackPropagate(TrainingScenerio(1, 1, 0, 0, 0), TrainingDecision(1, 1, 1, 1, 0));
+                    _brain.BackPropagate(TrainingScenerio(0, 0, 0, 2, 0), TrainingDecision(2, 2, 2, 2, 0));
+                    _brain.BackPropagate(TrainingScenerio(0, 0, 0, 0, 2), TrainingDecision(2, 2, 2, 2, 0));
+                    _brain.BackPropagate(TrainingScenerio(0, 0, 0, 2, 2), TrainingDecision(2, 2, 2, 2, 0));
 
                     //Right side detection, go left.
-                    _brain.BackPropagate(TrainingScenerio(0, 0, 0, 0, 1), TrainingDecision(1, 0, 1, 1, 0));
-                    _brain.BackPropagate(TrainingScenerio(0, 0, 0, 1, 0), TrainingDecision(1, 0, 1, 1, 0));
-                    _brain.BackPropagate(TrainingScenerio(0, 0, 0, 1, 1), TrainingDecision(1, 0, 1, 1, 0));
+                    _brain.BackPropagate(TrainingScenerio(0, 0, 2, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
+                    _brain.BackPropagate(TrainingScenerio(0, 2, 0, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
+                    _brain.BackPropagate(TrainingScenerio(0, 2, 2, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
 
                     //Front side detection, so left or right.
-                    _brain.BackPropagate(TrainingScenerio(0, 0, 1, 0, 0), TrainingDecision(1, 0, 1, 1, 0));
-                    _brain.BackPropagate(TrainingScenerio(0, 1, 1, 1, 0), TrainingDecision(1, 1, 1, 1, 0));
-                    _brain.BackPropagate(TrainingScenerio(1, 1, 1, 1, 1), TrainingDecision(1, 1, 1, 1, 0));
+                    _brain.BackPropagate(TrainingScenerio(2, 0, 0, 0, 0), TrainingDecision(2, 0, 2, 2, 0));
+                    _brain.BackPropagate(TrainingScenerio(2, 2, 0, 0, 2), TrainingDecision(2, 2, 2, 2, 0));
+                    _brain.BackPropagate(TrainingScenerio(2, 2, 2, 2, 2), TrainingDecision(2, 2, 2, 2, 0));
 
                     //No objects dection, speed up and cruise.
                     _brain.BackPropagate(TrainingScenerio(0, 0, 0, 0, 0), TrainingDecision(0.4f, 0.4f, 0.4f, 0.9f, 0.9f));
                 }
+
+                //_brain.Save(fileName);
             }
 
             return _brain.Clone();
         }
 
-        private static float[] TrainingScenerio(float objectTo90LeftCloseness, float objectTo45LeftCloseness, float objectAheadCloseness, float objectTo45RightCloseness, float objectTo90RightCloseness)
+        private static DniNamedInterfaceParameters TrainingScenerio(double in0Degrees, double in45Degrees, double in90Degrees, double in270Degrees, double in315Degrees)
         {
-            var scenerio = new float[5];
-
-            scenerio[Inputs.ObjTo90Left] = objectTo90LeftCloseness;
-            scenerio[Inputs.ObjTo45Left] = objectTo45LeftCloseness;
-            scenerio[Inputs.ObjAhead] = objectAheadCloseness;
-            scenerio[Inputs.ObjTo45Right] = objectTo45RightCloseness;
-            scenerio[Inputs.ObjTo90Right] = objectTo90RightCloseness;
-
-            return scenerio;
+            var param = new DniNamedInterfaceParameters();
+            param.Set(AIInputs.In0Degrees, in0Degrees);
+            param.Set(AIInputs.In45Degrees, in45Degrees);
+            param.Set(AIInputs.In90Degrees, in90Degrees);
+            param.Set(AIInputs.In270Degrees, in270Degrees);
+            param.Set(AIInputs.In315Degrees, in315Degrees);
+            return param;
         }
 
-        private static float[] TrainingDecision(float shouldRotate, float rotateLeftOrRight, float rotateLeftOrRightAmount, float shouldSpeedUpOrDown, float speedUpOrDownAmount)
+        private static DniNamedInterfaceParameters TrainingDecision(double outChangeDirection, double outRotateDirection, double outRotationAmount, double outChangeSpeed, double outChangeSpeedAmount)
         {
-            var decision = new float[5];
-
-            decision[Outputs.ShouldRotate] = shouldRotate;
-            decision[Outputs.RotateLeftOrRight] = rotateLeftOrRight;
-            decision[Outputs.RotateLeftOrRightAmount] = rotateLeftOrRightAmount;
-            decision[Outputs.ShouldSpeedUpOrDown] = shouldSpeedUpOrDown;
-            decision[Outputs.SpeedUpOrDownAmount] = speedUpOrDownAmount;
-
-            return decision;
+            var param = new DniNamedInterfaceParameters();
+            param.Set(AIOutputs.OutChangeDirection, outChangeDirection);
+            param.Set(AIOutputs.OutRotateDirection, outRotateDirection);
+            param.Set(AIOutputs.OutRotationAmount, outRotationAmount);
+            param.Set(AIOutputs.OutChangeSpeed, outChangeSpeed);
+            param.Set(AIOutputs.OutChangeSpeedAmount, outChangeSpeedAmount);
+            return param;
         }
     }
 }

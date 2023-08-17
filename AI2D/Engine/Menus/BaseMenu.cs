@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AI2D.Engine.Menus
@@ -208,7 +206,7 @@ namespace AI2D.Engine.Menus
                 }
             }
         }
-        
+
         public void Render(Graphics dc)
         {
             foreach (var item in _menuItems)
@@ -222,7 +220,7 @@ namespace AI2D.Engine.Menus
             {
                 Pen blackPen = new Pen(Color.Red, 3);
                 //Rectangle rect = new Rectangle(0, 0, 200, 200);
-                
+
                 dc.DrawRectangle(blackPen, selectedItem.BoundsI);
             }
         }

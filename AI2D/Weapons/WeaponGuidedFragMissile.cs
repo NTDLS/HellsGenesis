@@ -1,10 +1,7 @@
-﻿using AI2D.Engine;
-using AI2D.Actors;
+﻿using AI2D.Actors;
 using AI2D.Actors.Bullets;
-using AI2D.Actors.Enemies;
+using AI2D.Engine;
 using AI2D.Types;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AI2D.Weapons
 {

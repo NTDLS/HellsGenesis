@@ -1,10 +1,6 @@
-﻿using AI2D.Actors.Enemies.AI;
-using AI2D.Engine;
+﻿using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
-using Algorithms;
-using System.Drawing;
-using System.Linq;
 
 namespace AI2D.Actors.Enemies
 {
@@ -35,7 +31,7 @@ namespace AI2D.Actors.Enemies
         {
             this.ThrustAnimation.QueueForDelete();
 
-            _leftCannon  = this.Attach(_imagesPath + "Scarab.Gun.Cannon.Left.png", true, 3);
+            _leftCannon = this.Attach(_imagesPath + "Scarab.Gun.Cannon.Left.png", true, 3);
             _rightCannon = this.Attach(_imagesPath + "Scarab.Gun.Cannon.Right.png", true, 3);
             _leftGun = this.Attach(_imagesPath + "Scarab.Gun.Left.png", true, 3);
             _rightGun = this.Attach(_imagesPath + "Scarab.Gun.Right.png", true, 3);

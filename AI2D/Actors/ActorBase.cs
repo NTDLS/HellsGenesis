@@ -1,7 +1,7 @@
-﻿using AI2D.Engine;
-using AI2D.Actors.Bullets;
+﻿using AI2D.Actors.Bullets;
 using AI2D.Actors.Enemies;
 using AI2D.Actors.PowerUp;
+using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
@@ -672,7 +672,7 @@ namespace AI2D.Actors
                         else if (HitPoints < 20 && HitPoints + damage > 20)
                         {
                             player.HullBreachedSound.Play();
-                        }                     
+                        }
                     }
 
                     if (HitPoints <= 0)
@@ -884,7 +884,7 @@ namespace AI2D.Actors
 
         private void DrawImage(Graphics dc, Image rawImage, double? angleInDegrees = null)
         {
-            double angle = (double) (angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
+            double angle = (double)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
 
             Bitmap bitmap = new Bitmap(rawImage);
 

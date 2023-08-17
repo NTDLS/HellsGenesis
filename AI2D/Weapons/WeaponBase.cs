@@ -1,6 +1,6 @@
-﻿using AI2D.Engine;
-using AI2D.Actors;
+﻿using AI2D.Actors;
 using AI2D.Actors.Bullets;
+using AI2D.Engine;
 using AI2D.Types;
 using System;
 using System.Collections.Generic;

@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace AI2D.Engine.Menus
 {
-    public class MenuStartNewGame: BaseMenu
+    public class MenuStartNewGame : BaseMenu
     {
         public MenuStartNewGame(Core core)
             : base(core)

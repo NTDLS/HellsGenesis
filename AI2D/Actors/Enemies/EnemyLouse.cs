@@ -1,10 +1,6 @@
-﻿using AI2D.Actors.Enemies.AI;
-using AI2D.Engine;
+﻿using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
-using Algorithms;
-using System.Drawing;
-using System.Linq;
 
 namespace AI2D.Actors.Enemies
 {

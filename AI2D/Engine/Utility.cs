@@ -194,7 +194,7 @@ namespace AI2D.Engine
 
         public static bool ChanceIn(int n)
         {
-            return (Random.Next(0, n * 10) % n) == n/2;
+            return (Random.Next(0, n * 10) % n) == n / 2;
         }
 
 

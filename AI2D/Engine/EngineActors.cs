@@ -1,9 +1,9 @@
-﻿using AI2D.Engine.Menus;
-using AI2D.Engine.Scenarios;
-using AI2D.Actors;
+﻿using AI2D.Actors;
 using AI2D.Actors.Bullets;
 using AI2D.Actors.Enemies;
 using AI2D.Actors.PowerUp;
+using AI2D.Engine.Menus;
+using AI2D.Engine.Scenarios;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;

@@ -22,9 +22,9 @@ namespace AI2D.Actors
 
         public enum ReplayMode
         {
-             SinglePlay,
-             LoopedPlay,
-             StillFrame
+            SinglePlay,
+            LoopedPlay,
+            StillFrame
         };
 
         public class PlayMode
@@ -125,7 +125,7 @@ namespace AI2D.Actors
                 {
                     if (_playMode.DeleteActorAfterPlay)
                     {
-                        this.QueueForDelete();;
+                        this.QueueForDelete(); ;
                         return;
                     }
 

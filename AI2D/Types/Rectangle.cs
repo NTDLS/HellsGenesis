@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AI2D.Types
+﻿namespace AI2D.Types
 {
     public class Rectangle<T>
     {

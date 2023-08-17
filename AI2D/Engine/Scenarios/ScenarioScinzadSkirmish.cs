@@ -1,5 +1,4 @@
 ﻿using AI2D.Actors.Enemies;
-using AI2D.Actors.PowerUp;
 
 namespace AI2D.Engine.Scenarios
 {

@@ -1,6 +1,8 @@
-﻿using AI2D.Engine;
+﻿using AI2D.Actors.Enemies.AI;
+using AI2D.Engine;
 using AI2D.Types;
-using Algorithms;
+using Determinet;
+using Determinet.Types;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -21,10 +23,10 @@ namespace AI2D.Actors.Enemies
             Velocity.ThrottlePercentage = 1;
             Initialize();
 
-            //Brain = BrainBase.GetBrain();
+            Brain = BrainBase.GetBrain();
 
-            this.RadarDotSize = new Point<int>(4, 4);
-            this.RadarDotColor = Color.FromArgb(200, 100, 100);
+            RadarDotSize = new Point<int>(4, 4);
+            RadarDotColor = Color.FromArgb(200, 100, 100);
 
             base.SetHitPoints(hitPoints);
             ScorePoints = HitPoints * scoreMultiplier;
@@ -46,9 +48,9 @@ namespace AI2D.Actors.Enemies
             _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);
 
             var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
-            ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
-            ThrustAnimation.X = this.X + pointRight.X;
-            ThrustAnimation.Y = this.Y + pointRight.Y;
+            ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
+            ThrustAnimation.X = X + pointRight.X;
+            ThrustAnimation.Y = Y + pointRight.Y;
         }
 
         public virtual void BeforeCreate()
@@ -68,9 +70,9 @@ namespace AI2D.Actors.Enemies
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
                 var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
-                ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
-                ThrustAnimation.X = this.X + pointRight.X;
-                ThrustAnimation.Y = this.Y + pointRight.Y;
+                ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
+                ThrustAnimation.X = X + pointRight.X;
+                ThrustAnimation.Y = Y + pointRight.Y;
             }
         }
 
@@ -86,7 +88,7 @@ namespace AI2D.Actors.Enemies
                 || Y < -Constants.Limits.EnemySceneDistanceLimit
                 || Y >= _core.Display.VisibleSize.Height + Constants.Limits.EnemySceneDistanceLimit)
             {
-                QueueForDelete();;
+                QueueForDelete(); ;
                 return;
             }
 
@@ -132,12 +134,12 @@ namespace AI2D.Actors.Enemies
         {
             if (RadarPositionIndicator != null)
             {
-                RadarPositionIndicator.QueueForDelete();;
-                RadarPositionText.QueueForDelete();;
+                RadarPositionIndicator.QueueForDelete(); ;
+                RadarPositionText.QueueForDelete(); ;
             }
             if (ThrustAnimation != null)
             {
-                ThrustAnimation.QueueForDelete();;
+                ThrustAnimation.QueueForDelete(); ;
             }
             base.Cleanup();
         }
@@ -145,7 +147,7 @@ namespace AI2D.Actors.Enemies
         #region AI
 
         private DateTime? _lastDecisionTime = null;
-        public NeuralNetwork Brain { get; private set; }
+        public DniNeuralNetwork Brain { get; private set; }
         public double MinimumTravelDistanceBeforeDamage { get; set; } = 20;
         public double MaxObserveDistance { get; set; } = 100;
         public double VisionToleranceDegrees { get; set; } = 25;
@@ -163,114 +165,108 @@ namespace AI2D.Actors.Enemies
             {
                 var decidingFactors = GetVisionInputs();
 
-                var decisions = this.Brain.FeedForward(decidingFactors);
+                var decisions = Brain.FeedForward(decidingFactors);
 
-                if (decisions[AI.BrainBase.Outputs.ShouldRotate] >= DecisionSensitivity)
+
+                if (decisions.Get(BrainBase.AIOutputs.OutChangeDirection) >= DecisionSensitivity)
                 {
-                    var rotateAmount = decisions[AI.BrainBase.Outputs.RotateLeftOrRightAmount];
+                    var rotateAmount = decisions.Get(BrainBase.AIOutputs.OutRotationAmount);
 
-                    if (decisions[AI.BrainBase.Outputs.RotateLeftOrRight] >= DecisionSensitivity)
+                    if (decisions.Get(BrainBase.AIOutputs.OutRotateDirection) >= DecisionSensitivity)
                     {
-                        this.Rotate(45 * rotateAmount);
+                        Rotate(45 * rotateAmount);
                     }
                     else
                     {
-                        this.Rotate(-45 * rotateAmount);
+                        Rotate(-45 * rotateAmount);
                     }
                 }
 
-                if (decisions[AI.BrainBase.Outputs.ShouldSpeedUpOrDown] >= DecisionSensitivity)
+                if (decisions.Get(BrainBase.AIOutputs.OutChangeSpeed) >= DecisionSensitivity)
                 {
-                    double speedFactor = decisions[AI.BrainBase.Outputs.SpeedUpOrDownAmount];
-                    this.Velocity.ThrottlePercentage += (speedFactor / 5.0);
+                    double speedFactor = decisions.Get(BrainBase.AIOutputs.OutChangeSpeedAmount, 0);
+                    Velocity.ThrottlePercentage += (speedFactor / 5.0);
                 }
                 else
                 {
-                    double speedFactor = decisions[AI.BrainBase.Outputs.SpeedUpOrDownAmount];
-                    this.Velocity.ThrottlePercentage += -(speedFactor / 5.0);
+                    double speedFactor = decisions.Get(BrainBase.AIOutputs.OutChangeSpeedAmount, 0);
+                    Velocity.ThrottlePercentage += -(speedFactor / 5.0);
                 }
 
-                if (this.Velocity.ThrottlePercentage < 0)
+                if (Velocity.ThrottlePercentage < 0)
                 {
-                    this.Velocity.ThrottlePercentage = 0;
+                    Velocity.ThrottlePercentage = 0;
                 }
-                if (this.Velocity.ThrottlePercentage == 0)
+                if (Velocity.ThrottlePercentage == 0)
                 {
-                    this.Velocity.ThrottlePercentage = 0.10;
+                    Velocity.ThrottlePercentage = 0.10;
                 }
 
                 _lastDecisionTime = now;
             }
 
-            if (this.IsOnScreen == false)
+            if (IsOnScreen == false)
             {
                 //Kill this bug:
-                this.Visable = false;
+                Visable = false;
             }
 
             var intersections = Intersections();
 
             if (intersections.Any())
             {
-                this.QueueForDelete();
+                QueueForDelete();
             }
         }
-
 
         /// <summary>
         /// Looks around and gets neuralnetwork inputs for visible proximity objects.
         /// </summary>
         /// <returns></returns>
-        private float[] GetVisionInputs()
+        private DniNamedInterfaceParameters GetVisionInputs()
         {
-            var scenerio = new float[5];
+            var aiParams = new DniNamedInterfaceParameters();
 
             //The closeness is expressed as a percentage of how close to the other object they are. 100% being touching 0% being 1 pixel from out of range.
-            foreach (var other in _core.Actors.Collection.Where(o=> o is EnemyBase))
+            foreach (var other in _core.Actors.Collection.Where(o => o is EnemyBase))
             {
                 if (other == this)
                 {
                     continue;
                 }
 
-                double distance = this.DistanceTo(other);
+                double distance = DistanceTo(other);
                 double percentageOfCloseness = 1 - (distance / MaxObserveDistance);
 
-                if (this.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -90))
+                if (IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -90))
                 {
-                    scenerio[AI.BrainBase.Inputs.ObjTo90Left] = (float)
-                        (percentageOfCloseness > scenerio[AI.BrainBase.Inputs.ObjTo90Left] ? percentageOfCloseness : scenerio[AI.BrainBase.Inputs.ObjTo90Left]);
+                    aiParams.SetIfLess(BrainBase.AIInputs.In270Degrees, percentageOfCloseness);
                 }
 
-                if (this.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -45))
+                if (IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -45))
                 {
-                    scenerio[AI.BrainBase.Inputs.ObjTo45Left] = (float)
-                        (percentageOfCloseness > scenerio[AI.BrainBase.Inputs.ObjTo45Left] ? percentageOfCloseness : scenerio[AI.BrainBase.Inputs.ObjTo45Left]);
+                    aiParams.SetIfLess(BrainBase.AIInputs.In315Degrees, percentageOfCloseness);
                 }
 
-                if (this.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, 0))
+                if (IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, 0))
                 {
-                    scenerio[AI.BrainBase.Inputs.ObjAhead] = (float)
-                        (percentageOfCloseness > scenerio[AI.BrainBase.Inputs.ObjAhead] ? percentageOfCloseness : scenerio[AI.BrainBase.Inputs.ObjAhead]);
+                    aiParams.SetIfLess(BrainBase.AIInputs.In0Degrees, percentageOfCloseness);
                 }
 
-                if (this.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +45))
+                if (IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +45))
                 {
-                    scenerio[AI.BrainBase.Inputs.ObjTo45Right] = (float)
-                        (percentageOfCloseness > scenerio[AI.BrainBase.Inputs.ObjTo45Right] ? percentageOfCloseness : scenerio[AI.BrainBase.Inputs.ObjTo45Right]);
+                    aiParams.SetIfLess(BrainBase.AIInputs.In45Degrees, percentageOfCloseness);
                 }
 
-                if (this.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +90))
+                if (IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +90))
                 {
-                    scenerio[AI.BrainBase.Inputs.ObjTo90Right] = (float)
-                        (percentageOfCloseness > scenerio[AI.BrainBase.Inputs.ObjTo90Right] ? percentageOfCloseness : scenerio[AI.BrainBase.Inputs.ObjTo90Right]);
+                    aiParams.SetIfLess(BrainBase.AIInputs.In90Degrees, percentageOfCloseness);
                 }
             }
 
-            return scenerio;
+            return aiParams;
         }
 
         #endregion
-
     }
 }

@@ -34,7 +34,7 @@ namespace AI2D.Engine.Scenarios
 
             if (formationIrlens.Count > 0)
             {
-                if(formationIrlens.Exists(o=>o.IsOnScreen == true) == false)
+                if (formationIrlens.Exists(o => o.IsOnScreen == true) == false)
                 {
                     double angleToPlayer = formationIrlens.First().AngleTo(_core.Actors.Player);
 

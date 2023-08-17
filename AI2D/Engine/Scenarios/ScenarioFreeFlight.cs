@@ -1,5 +1,4 @@
-﻿using AI2D.Actors.Enemies;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace AI2D.Engine.Scenarios
 {
