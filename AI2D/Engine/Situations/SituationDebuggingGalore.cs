@@ -1,5 +1,4 @@
 ﻿using AI2D.Actors.Enemies;
-using AI2D.Actors.Enemies.Bosses;
 
 namespace AI2D.Engine.Situations
 {

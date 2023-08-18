@@ -272,7 +272,7 @@ namespace AI2D.AI.Logistics
                     CurrentAction = ActionState.Approaching;
                 }
             }
-            else if (CurrentAction ==  ActionState.MovingToDepart)
+            else if (CurrentAction == ActionState.MovingToDepart)
             {
                 var distanceToObservedObject = _owner.DistanceTo(_observedObject);
 
