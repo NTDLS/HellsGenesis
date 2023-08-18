@@ -755,6 +755,16 @@ namespace AI2D.Actors
             return Utility.IsPointingAt(this, atObj, toleranceDegrees);
         }
 
+        public bool IsPointingAway(ActorBase atObj, double toleranceDegrees)
+        {
+            return Utility.IsPointingAway(this, atObj, toleranceDegrees);
+        }
+
+        public bool IsPointingAway(ActorBase atObj, double toleranceDegrees, double maxDistance)
+        {
+            return Utility.IsPointingAway(this, atObj, toleranceDegrees);
+        }
+
         public double DistanceTo(ActorBase to)
         {
             return Point<double>.DistanceTo(this.Location, to.Location);

@@ -3,7 +3,9 @@ using AI2D.AI.Logistics;
 using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 
@@ -59,6 +61,10 @@ namespace AI2D.Actors.Enemies
             base.ApplyIntelligence(frameAppliedOffset);
 
             IAControllers[typeof(FlyBy)].ApplyIntelligence(frameAppliedOffset);
+
+            //Debug.Print($"ThrottlePercentage: {Velocity.ThrottlePercentage}");
+
+            //Velocity.ThrottlePercentage = 0.5;
 
             /*
             var timeSinceLastDispositionChange = (DateTime.Now - lastDispositionChange).TotalMilliseconds;

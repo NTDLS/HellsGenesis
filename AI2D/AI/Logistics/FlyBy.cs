@@ -198,10 +198,12 @@ namespace AI2D.AI.Logistics
             get { return _currentAction; }
             set
             {
+                /*
                 if (_currentAction != value)
                 {
                     Debug.Print($"{value}");
                 }
+                */
                 _currentAction = value;
             }
         }
@@ -228,6 +230,8 @@ namespace AI2D.AI.Logistics
                 var speedAdjust = decisions.Get(Outputs.SpeedAdjust);
 
                 _owner.Velocity.ThrottlePercentage += (speedAdjust / 5.0);
+
+                Debug.Print(_owner.Velocity.ThrottlePercentage.ToString());
 
                 bool transitionToObservationObject = decisions.Get(Outputs.TransitionToObservationObject) > 0.9;
                 bool transitionFromObservationObject = decisions.Get(Outputs.TransitionFromObservationObject) > 0.9;
@@ -276,45 +280,20 @@ namespace AI2D.AI.Logistics
             {
                 var distanceToObservedObject = _owner.DistanceTo(_observedObject);
 
-                /*
-                var deltaAngle = _owner.Velocity.Angle - fallToAngle;
-
-                if (deltaAngle.Degrees > 10)
+                if (_owner.Velocity.Angle.Degrees <= 180.0)
                 {
-                    if (deltaAngle.Degrees >= 180.0) //We might as well turn around clock-wise
-                    {
-                        _owner.Velocity.Angle += 1;
-                    }
-                    else if (deltaAngle.Degrees < 180.0) //We might as well turn around counter clock-wise
-                    {
-                        _owner.Velocity.Angle -= 1;
-                    }
+                    _owner.Velocity.Angle += 0.8;
                 }
-                */
+                else if (_owner.Velocity.Angle.Degrees > 180.0)
+                {
+                    _owner.Velocity.Angle -= 0.8;
+                }
 
                 if (distanceToObservedObject > DistanceToKeep)
                 {
                     CurrentAction = ActionState.None;
                 }
             }
-
-            /*
-            if (CurrentAction == ActionState.MoveTowardsObject)
-            {
-                _owner.Rotate((45 * 0.05) * (FavorateDirection == RelativeDirection.Left ? 1 : -1));
-            }
-            if (CurrentAction == ActionState.MoveTowardsObject)
-            {
-                _owner.Rotate((-45 * 0.05) * (FavorateDirection == RelativeDirection.Left ? 1 : -1));
-            }
-            else
-            {
-                //Just cruise!!
-            }
-            */
-
-
-
         }
 
         private DniNamedInterfaceParameters GatherInputs()

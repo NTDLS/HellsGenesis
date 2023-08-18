@@ -134,6 +134,17 @@ namespace AI2D.Engine
             return Point<double>.AngleTo(from.Location, to);
         }
 
+        public static bool IsPointingAway(ActorBase fromObj, ActorBase atObj, double toleranceDegrees)
+        {
+            var deltaAngle = Math.Abs(DeltaAngle(fromObj, atObj));
+            return deltaAngle < 180 + toleranceDegrees && deltaAngle > 180 - toleranceDegrees;
+        }
+
+        public static bool IsPointingAway(ActorBase fromObj, ActorBase atObj, double toleranceDegrees, double maxDistance)
+        {
+            return IsPointingAway(fromObj, atObj, toleranceDegrees) && DistanceTo(fromObj, atObj) <= maxDistance;
+        }
+
         public static bool IsPointingAt(ActorBase fromObj, ActorBase atObj, double toleranceDegrees)
         {
             var deltaAngle = Math.Abs(DeltaAngle(fromObj, atObj));
@@ -145,9 +156,7 @@ namespace AI2D.Engine
             var deltaAngle = Math.Abs(DeltaAngle(fromObj, atObj, offsetAngle));
             if (deltaAngle < toleranceDegrees || deltaAngle > (360 - toleranceDegrees))
             {
-                double distance = DistanceTo(fromObj, atObj);
-
-                return distance <= maxDistance;
+                return DistanceTo(fromObj, atObj) <= maxDistance;
             }
 
             return false;
