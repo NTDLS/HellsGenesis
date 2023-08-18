@@ -14,6 +14,7 @@ namespace AI2D.AI.Logistics
     {
         private Core _core;
         private ActorBase _owner;
+        private ActorBase _observedObject;
 
         #region I/O Enumerations.
 
@@ -52,10 +53,18 @@ namespace AI2D.AI.Logistics
 
         private static DniNeuralNetwork _singletonNetwork = null;
 
-        public HostileEngagement(Core core, ActorBase owner, string pretrainedModelFile = null)
+        /// <summary>
+        /// Creates a new instance of the intelligence object.
+        /// </summary>
+        /// <param name="core">Engine core instance.</param>
+        /// <param name="owner">The object which is intelligent.</param>
+        /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
+        /// <param name="pretrainedModelFile">If there is a pre-trained model, this would be the file.</param>
+        public HostileEngagement(Core core, ActorBase owner, ActorBase observedObject, string pretrainedModelFile = null)
         {
             _core = core;
             _owner = owner;
+            _observedObject = observedObject;
 
             if (_singletonNetwork != null)
             {

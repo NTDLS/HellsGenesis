@@ -41,8 +41,8 @@ namespace AI2D.Actors.Enemies
 
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
 
-            //Brains.Add(AIBrainTypes.HostileEngagement, new HostileEngagement(_core, this));
-            Brains.Add(AIBrainTypes.KeepSafeDistance, new KeepSafeDistance(_core, this));
+            //Brains.Add(AIBrainTypes.HostileEngagement, new HostileEngagement(_core, this, _core.Actors.Player));
+            Brains.Add(AIBrainTypes.KeepSafeDistance, new KeepSafeDistance(_core, this, _core.Actors.Player));
         }
 
         #region Artificial Intelligence.
@@ -60,6 +60,8 @@ namespace AI2D.Actors.Enemies
 
             //var hostileEngagement = Brains[AIBrainTypes.KeepSafeDistance];
             //hostileEngagement.ApplyIntelligence(frameAppliedOffset);
+
+            this.Velocity.ThrottlePercentage = 0;
 
             var KeepSafeDistance = Brains[AIBrainTypes.KeepSafeDistance];
             KeepSafeDistance.ApplyIntelligence(frameAppliedOffset);

@@ -1,10 +1,12 @@
 ﻿using AI2D.Actors;
+using AI2D.Actors.Enemies;
 using AI2D.Engine;
 using AI2D.Types;
 using Determinet;
 using Determinet.Types;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace AI2D.AI.Logistics
 {
@@ -12,23 +14,24 @@ namespace AI2D.AI.Logistics
     {
         private Core _core;
         private ActorBase _owner;
+        private ActorBase _observedObject;
 
         #region I/O Enumerations.
 
         public enum Inputs
         {
-            DistanceFromPlayer,
+            DistanceFromObservationObject,
             /// <summary>
-            /// This should be the angle to the player in relation to the nose of the enemy ship expressed in 1/6th radians split in half.
+            /// This should be the angle to the ObservationObject (likely the player) in relation to the nose of the enemy ship expressed in 1/6th radians split in half.
             /// 0 is pointing at the player, ~0.26 is 90° to the right, ~0.523 is 180° and -0.26 is 270° to the left.
             /// </summary>
-            AngleFromPlayerIn6thRadians
+            AngleFromObservationObjectIn6thRadians
         }
 
         public enum Outputs
         {
-            TransitionToPlayer,
-            TransitionFromPlayer,
+            TransitionToObservationObject,
+            TransitionFromObservationObject,
             Cruise,
             IncreaseSpeed,
             DecreaseSpeed
@@ -50,10 +53,18 @@ namespace AI2D.AI.Logistics
 
         private static DniNeuralNetwork _singletonNetwork = null;
 
-        public KeepSafeDistance(Core core, ActorBase owner, string pretrainedModelFile = null)
+        /// <summary>
+        /// Creates a new instance of the intelligence object.
+        /// </summary>
+        /// <param name="core">Engine core instance.</param>
+        /// <param name="owner">The object which is intelligent.</param>
+        /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
+        /// <param name="pretrainedModelFile">If there is a pre-trained model, this would be the file.</param>
+        public KeepSafeDistance(Core core, ActorBase owner, ActorBase observedObject, string pretrainedModelFile = null)
         {
             _core = core;
             _owner = owner;
+            _observedObject = observedObject;
 
             if (_singletonNetwork != null)
             {
@@ -82,8 +93,8 @@ namespace AI2D.AI.Logistics
             //Vision inputs.
             newNetwork.Layers.AddInput(ActivationType.LeakyReLU,
                 new object[] {
-                        Inputs.DistanceFromPlayer,
-                        Inputs.AngleFromPlayerIn6thRadians
+                        Inputs.DistanceFromObservationObject,
+                        Inputs.AngleFromObservationObjectIn6thRadians
                 });
 
             //Where the magic happens.
@@ -92,8 +103,8 @@ namespace AI2D.AI.Logistics
             //Decision outputs
             newNetwork.Layers.AddOutput(
                 new object[] {
-                        Outputs.TransitionToPlayer,
-                        Outputs.TransitionFromPlayer,
+                        Outputs.TransitionToObservationObject,
+                        Outputs.TransitionFromObservationObject,
                         Outputs.Cruise,
                         Outputs.IncreaseSpeed,
                         Outputs.DecreaseSpeed
@@ -107,19 +118,19 @@ namespace AI2D.AI.Logistics
                 //newNetwork.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0.4f, 0.4f, 0.4f, 0.9f, 0.9f));
             }
 
-            static DniNamedInterfaceParameters TrainingScenerio(double distanceFromPlayer, double angleToPlayerIn10thRadians)
+            static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservationObject, double angleToObservationObjectIn10thRadians)
             {
                 var param = new DniNamedInterfaceParameters();
-                param.Set(Inputs.DistanceFromPlayer, distanceFromPlayer);
-                param.Set(Inputs.AngleFromPlayerIn6thRadians, angleToPlayerIn10thRadians);
+                param.Set(Inputs.DistanceFromObservationObject, distanceFromObservationObject);
+                param.Set(Inputs.AngleFromObservationObjectIn6thRadians, angleToObservationObjectIn10thRadians);
                 return param;
             }
 
-            static DniNamedInterfaceParameters TrainingDecision(double transitionToPlayer, double transitionFromPlayer, double cruise, double increaseSpeed, double decreaseSpeed)
+            static DniNamedInterfaceParameters TrainingDecision(double transitionToObservationObject, double transitionFromObservationObject, double cruise, double increaseSpeed, double decreaseSpeed)
             {
                 var param = new DniNamedInterfaceParameters();
-                param.Set(Outputs.TransitionToPlayer, transitionToPlayer);
-                param.Set(Outputs.TransitionFromPlayer, transitionFromPlayer);
+                param.Set(Outputs.TransitionToObservationObject, transitionToObservationObject);
+                param.Set(Outputs.TransitionFromObservationObject, transitionFromObservationObject);
                 param.Set(Outputs.Cruise, cruise);
                 param.Set(Outputs.IncreaseSpeed, increaseSpeed);
                 param.Set(Outputs.DecreaseSpeed, decreaseSpeed);
@@ -136,7 +147,6 @@ namespace AI2D.AI.Logistics
 
         public void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
-            /*
             var now = DateTime.UtcNow;
 
             if (LastDecisionTime == null || (now - (DateTime)LastDecisionTime).TotalMilliseconds >= MillisecondsBetweenDecisions)
@@ -145,6 +155,7 @@ namespace AI2D.AI.Logistics
 
                 var decisions = Network.FeedForward(decidingFactors);
 
+                /*
                 if (decisions.Get(Outputs.ChangeDirection) >= DecisionSensitivity)
                 {
                     var rotateAmount = decisions.Get(Outputs.RotationAmount);
@@ -177,11 +188,10 @@ namespace AI2D.AI.Logistics
                 if (_owner.Velocity.ThrottlePercentage == 0)
                 {
                     _owner.Velocity.ThrottlePercentage = 0.10;
-                }
+                }*/
 
                 LastDecisionTime = now;
             }
-            */
         }
 
         /// <summary>
@@ -192,7 +202,6 @@ namespace AI2D.AI.Logistics
         {
             var aiParams = new DniNamedInterfaceParameters();
 
-            /*
             //The closeness is expressed as a percentage of how close to the other object they are. 100% being touching 0% being 1 pixel from out of range.
             foreach (var other in _core.Actors.Collection.Where(o => o is EnemyBase))
             {
@@ -206,30 +215,14 @@ namespace AI2D.AI.Logistics
 
                 if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -90))
                 {
-                    aiParams.SetIfLess(Inputs.At270Degrees, percentageOfCloseness);
+                    aiParams.SetIfLess(Inputs.DistanceFromObservationObject, percentageOfCloseness);
                 }
 
                 if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -45))
                 {
-                    aiParams.SetIfLess(Inputs.At315Degrees, percentageOfCloseness);
-                }
-
-                if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, 0))
-                {
-                    aiParams.SetIfLess(Inputs.At0Degrees, percentageOfCloseness);
-                }
-
-                if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +45))
-                {
-                    aiParams.SetIfLess(Inputs.At45Degrees, percentageOfCloseness);
-                }
-
-                if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +90))
-                {
-                    aiParams.SetIfLess(Inputs.At90Degrees, percentageOfCloseness);
+                    aiParams.SetIfLess(Inputs.AngleFromObservationObjectIn6thRadians, percentageOfCloseness);
                 }
             }
-            */
 
             return aiParams;
         }
