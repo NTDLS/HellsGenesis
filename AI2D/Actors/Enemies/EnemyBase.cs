@@ -9,6 +9,7 @@ namespace AI2D.Actors.Enemies
 {
     public class EnemyBase : ActorBase
     {
+        public Dictionary<Type, IAIController> IAControllers { get; private set; } = new();
         public int CollisionDamage { get; set; } = 25;
         public int ScorePoints { get; private set; } = 25;
         public ActorRadarPositionIndicator RadarPositionIndicator { get; set; }
@@ -31,14 +32,13 @@ namespace AI2D.Actors.Enemies
             RadarPositionIndicator.Visable = false;
             RadarPositionText = _core.Actors.AddNewRadarPositionTextBlock("Consolas", Brushes.Red, 8, new Point<double>());
 
-            string _thrustAniPath = @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png";
             var playMode = new ActorAnimation.PlayMode()
             {
                 Replay = ActorAnimation.ReplayMode.LoopedPlay,
                 DeleteActorAfterPlay = false,
                 ReplayDelay = new TimeSpan(0)
             };
-            ThrustAnimation = new ActorAnimation(_core, _thrustAniPath, new Size(32, 32), 10, playMode);
+            ThrustAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
 
             ThrustAnimation.Reset();
             _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);
@@ -140,6 +140,9 @@ namespace AI2D.Actors.Enemies
             base.Cleanup();
         }
 
-        internal Dictionary<object, IIntelligenceObject> Brains { get; private set; } = new();
+        internal void AddAIController(IAIController controller)
+        {
+            IAControllers.Add(controller.GetType(), controller);
+        }
     }
 }

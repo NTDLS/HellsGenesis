@@ -1,4 +1,5 @@
 ﻿using AI2D.Actors.Enemies;
+using AI2D.Actors.Enemies.Bosses;
 
 namespace AI2D.Engine.Situations
 {
@@ -54,6 +55,7 @@ namespace AI2D.Engine.Situations
 
         private void AddEnemyCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
+            //_core.Actors.AddNewEnemy<EnemyAvvol>();
             _core.Actors.AddNewEnemy<EnemyDebug>();
         }
     }

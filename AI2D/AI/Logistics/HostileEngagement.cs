@@ -1,16 +1,14 @@
 ﻿using AI2D.Actors;
-using AI2D.Actors.Enemies;
 using AI2D.Engine;
 using AI2D.Types;
 using Determinet;
 using Determinet.Types;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace AI2D.AI.Logistics
 {
-    public class HostileEngagement : IIntelligenceObject
+    public class HostileEngagement : IAIController
     {
         private Core _core;
         private ActorBase _owner;
@@ -169,7 +167,7 @@ namespace AI2D.AI.Logistics
 
             if (LastDecisionTime == null || (now - (DateTime)LastDecisionTime).TotalMilliseconds >= MillisecondsBetweenDecisions)
             {
-                var decidingFactors = GetVisionInputs();
+                var decidingFactors = GatherInputs();
 
                 var decisions = Network.FeedForward(decidingFactors);
 
@@ -211,49 +209,36 @@ namespace AI2D.AI.Logistics
             }
         }
 
-        /// <summary>
-        /// Looks around and gets inputs for visible proximity objects.
-        /// </summary>
-        /// <returns></returns>
-        private DniNamedInterfaceParameters GetVisionInputs()
+        private DniNamedInterfaceParameters GatherInputs()
         {
             var aiParams = new DniNamedInterfaceParameters();
 
-            //The closeness is expressed as a percentage of how close to the other object they are. 100% being touching 0% being 1 pixel from out of range.
-            foreach (var other in _core.Actors.Collection.Where(o => o is EnemyBase))
+            double distance = _owner.DistanceTo(_observedObject);
+            double percentageOfCloseness = 1 - distance / MaxObserveDistance;
+
+            if (_owner.IsPointingAt(_observedObject, VisionToleranceDegrees, MaxObserveDistance, -90))
             {
-                if (other == _owner)
-                {
-                    continue;
-                }
+                aiParams.SetIfLess(Inputs.At270Degrees, percentageOfCloseness);
+            }
 
-                double distance = _owner.DistanceTo(other);
-                double percentageOfCloseness = 1 - distance / MaxObserveDistance;
+            if (_owner.IsPointingAt(_observedObject, VisionToleranceDegrees, MaxObserveDistance, -45))
+            {
+                aiParams.SetIfLess(Inputs.At315Degrees, percentageOfCloseness);
+            }
 
-                if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -90))
-                {
-                    aiParams.SetIfLess(Inputs.At270Degrees, percentageOfCloseness);
-                }
+            if (_owner.IsPointingAt(_observedObject, VisionToleranceDegrees, MaxObserveDistance, 0))
+            {
+                aiParams.SetIfLess(Inputs.At0Degrees, percentageOfCloseness);
+            }
 
-                if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -45))
-                {
-                    aiParams.SetIfLess(Inputs.At315Degrees, percentageOfCloseness);
-                }
+            if (_owner.IsPointingAt(_observedObject, VisionToleranceDegrees, MaxObserveDistance, +45))
+            {
+                aiParams.SetIfLess(Inputs.At45Degrees, percentageOfCloseness);
+            }
 
-                if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, 0))
-                {
-                    aiParams.SetIfLess(Inputs.At0Degrees, percentageOfCloseness);
-                }
-
-                if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +45))
-                {
-                    aiParams.SetIfLess(Inputs.At45Degrees, percentageOfCloseness);
-                }
-
-                if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, +90))
-                {
-                    aiParams.SetIfLess(Inputs.At90Degrees, percentageOfCloseness);
-                }
+            if (_owner.IsPointingAt(_observedObject, VisionToleranceDegrees, MaxObserveDistance, +90))
+            {
+                aiParams.SetIfLess(Inputs.At90Degrees, percentageOfCloseness);
             }
 
             return aiParams;

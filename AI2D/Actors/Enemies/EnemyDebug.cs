@@ -41,18 +41,12 @@ namespace AI2D.Actors.Enemies
 
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
 
-            //Brains.Add(AIBrainTypes.HostileEngagement, new HostileEngagement(_core, this, _core.Actors.Player));
-            Brains.Add(AIBrainTypes.KeepSafeDistance, new KeepSafeDistance(_core, this, _core.Actors.Player));
+            //AddAIController(new HostileEngagement(_core, this, _core.Actors.Player));
+            //AddAIController(new FlyBy(_core, this, _core.Actors.Player));
+            AddAIController(new Meander(_core, this, _core.Actors.Player));
         }
 
         #region Artificial Intelligence.
-
-        private enum AIBrainTypes
-        {
-            HostileEngagement,
-            KeepSafeDistance,
-            WeaponSystems,
-        }
 
         public override void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
@@ -61,8 +55,8 @@ namespace AI2D.Actors.Enemies
             //var hostileEngagement = Brains[AIBrainTypes.KeepSafeDistance];
             //hostileEngagement.ApplyIntelligence(frameAppliedOffset);
 
-            var KeepSafeDistance = Brains[AIBrainTypes.KeepSafeDistance];
-            KeepSafeDistance.ApplyIntelligence(frameAppliedOffset);
+            var meander = IAControllers[typeof(Meander)];
+            meander.ApplyIntelligence(frameAppliedOffset);
         }
 
         #endregion
