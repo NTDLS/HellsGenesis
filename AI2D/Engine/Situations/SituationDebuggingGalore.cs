@@ -1,10 +1,10 @@
 ﻿using AI2D.Actors.Enemies;
 
-namespace AI2D.Engine.Scenarios
+namespace AI2D.Engine.Situations
 {
-    public class ScenarioDebuggingGalore : BaseScenario
+    public class SituationDebuggingGalore : BaseSituation
     {
-        public ScenarioDebuggingGalore(Core core)
+        public SituationDebuggingGalore(Core core)
             : base(core, "Debugging Galore")
         {
             TotalWaves = 5;

@@ -1,11 +1,11 @@
 ﻿using AI2D.Actors.Enemies;
 using System.Collections.Generic;
 
-namespace AI2D.Engine.Scenarios
+namespace AI2D.Engine.Situations
 {
-    public class ScenarioAvvolAmbush : BaseScenario
+    public class SituationAvvolAmbush : BaseSituation
     {
-        public ScenarioAvvolAmbush(Core core)
+        public SituationAvvolAmbush(Core core)
             : base(core, "Avvol Ambush")
         {
             TotalWaves = 5;

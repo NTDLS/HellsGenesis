@@ -104,7 +104,7 @@ namespace AI2D.Engine
                 _core.Actors.NewGame();
                 //_core.Actors.ResetAndShowPlayer();
             }
-            else if (key == Keys.F12)
+            else if (key == Keys.Oem3) //~
             {
                 _core.ShowDebug = !_core.ShowDebug;
             }

@@ -1,10 +1,10 @@
 ﻿using AI2D.Actors.Enemies;
 
-namespace AI2D.Engine.Scenarios
+namespace AI2D.Engine.Situations
 {
-    public class ScenarioScinzadSkirmish : BaseScenario
+    public class SituationScinzadSkirmish : BaseSituation
     {
-        public ScenarioScinzadSkirmish(Core core)
+        public SituationScinzadSkirmish(Core core)
             : base(core, "Scinzad Skirmish")
         {
             TotalWaves = 5;

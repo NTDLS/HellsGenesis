@@ -1,4 +1,4 @@
-﻿using AI2D.Actors.Enemies.AI;
+﻿using AI2D.Actors.Enemies.AI.Logistics;
 using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
@@ -7,7 +7,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using static AI2D.Actors.Enemies.AI.BrainBase;
 
 namespace AI2D.Actors.Enemies
 {
@@ -45,10 +44,16 @@ namespace AI2D.Actors.Enemies
 
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
 
-            Brains.Add(AIBrainTypes.Logistics, GetLogisticsNoColisionBrain());
+            Brains.Add(AIBrainTypes.Logistics_Hostile_Engagement, HostileEngagement.Build());
         }
 
         #region Artificial Intelligence.
+
+        private enum AIBrainTypes
+        {
+            Logistics_Hostile_Engagement,
+            WeaponSystems,
+        }
 
         private double _maxObserveDistance { get; set; } = 500;
         private double _visionToleranceDegrees { get; set; } = 25;
@@ -66,13 +71,13 @@ namespace AI2D.Actors.Enemies
             {
                 var decidingFactors = GetVisionInputs();
 
-                var decisions = Brains[AIBrainTypes.Logistics].FeedForward(decidingFactors);
+                var decisions = Brains[AIBrainTypes.Logistics_Hostile_Engagement].FeedForward(decidingFactors);
 
-                if (decisions.Get(AIOutputs.OutChangeDirection) >= _decisionSensitivity)
+                if (decisions.Get(HostileEngagement.AIOutputs.OutChangeDirection) >= _decisionSensitivity)
                 {
-                    var rotateAmount = decisions.Get(AIOutputs.OutRotationAmount);
+                    var rotateAmount = decisions.Get(HostileEngagement.AIOutputs.OutRotationAmount);
 
-                    if (decisions.Get(AIOutputs.OutRotateDirection) >= _decisionSensitivity)
+                    if (decisions.Get(HostileEngagement.AIOutputs.OutRotateDirection) >= _decisionSensitivity)
                     {
                         Rotate(45 * rotateAmount);
                     }
@@ -82,14 +87,14 @@ namespace AI2D.Actors.Enemies
                     }
                 }
 
-                if (decisions.Get(AIOutputs.OutChangeSpeed) >= _decisionSensitivity)
+                if (decisions.Get(HostileEngagement.AIOutputs.OutChangeSpeed) >= _decisionSensitivity)
                 {
-                    var speedFactor = decisions.Get(AIOutputs.OutChangeSpeedAmount, 0);
+                    var speedFactor = decisions.Get(HostileEngagement.AIOutputs.OutChangeSpeedAmount, 0);
                     Velocity.ThrottlePercentage += (speedFactor / 5.0);
                 }
                 else
                 {
-                    var speedFactor = decisions.Get(AIOutputs.OutChangeSpeedAmount, 0);
+                    var speedFactor = decisions.Get(HostileEngagement.AIOutputs.OutChangeSpeedAmount, 0);
                     Velocity.ThrottlePercentage += -(speedFactor / 5.0);
                 }
 
@@ -127,27 +132,27 @@ namespace AI2D.Actors.Enemies
 
                 if (IsPointingAt(other, _visionToleranceDegrees, _maxObserveDistance, -90))
                 {
-                    aiParams.SetIfLess(AIInputs.In270Degrees, percentageOfCloseness);
+                    aiParams.SetIfLess(HostileEngagement.AIInputs.In270Degrees, percentageOfCloseness);
                 }
 
                 if (IsPointingAt(other, _visionToleranceDegrees, _maxObserveDistance, -45))
                 {
-                    aiParams.SetIfLess(AIInputs.In315Degrees, percentageOfCloseness);
+                    aiParams.SetIfLess(HostileEngagement.AIInputs.In315Degrees, percentageOfCloseness);
                 }
 
                 if (IsPointingAt(other, _visionToleranceDegrees, _maxObserveDistance, 0))
                 {
-                    aiParams.SetIfLess(AIInputs.In0Degrees, percentageOfCloseness);
+                    aiParams.SetIfLess(HostileEngagement.AIInputs.In0Degrees, percentageOfCloseness);
                 }
 
                 if (IsPointingAt(other, _visionToleranceDegrees, _maxObserveDistance, +45))
                 {
-                    aiParams.SetIfLess(AIInputs.In45Degrees, percentageOfCloseness);
+                    aiParams.SetIfLess(HostileEngagement.AIInputs.In45Degrees, percentageOfCloseness);
                 }
 
                 if (IsPointingAt(other, _visionToleranceDegrees, _maxObserveDistance, +90))
                 {
-                    aiParams.SetIfLess(AIInputs.In90Degrees, percentageOfCloseness);
+                    aiParams.SetIfLess(HostileEngagement.AIInputs.In90Degrees, percentageOfCloseness);
                 }
             }
 

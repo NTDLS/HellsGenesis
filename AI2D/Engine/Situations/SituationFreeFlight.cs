@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace AI2D.Engine.Scenarios
+namespace AI2D.Engine.Situations
 {
-    public class ScenarioFreeFlight : BaseScenario
+    public class SituationFreeFlight : BaseSituation
     {
-        public ScenarioFreeFlight(Core core)
+        public SituationFreeFlight(Core core)
             : base(core, "Free Flight")
         {
             TotalWaves = 5;

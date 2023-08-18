@@ -2,19 +2,10 @@
 using Determinet.Types;
 using System.IO;
 
-namespace AI2D.Actors.Enemies.AI
+namespace AI2D.Actors.Enemies.AI.Logistics
 {
-    /// <summary>
-    /// This is a pre-trained bug brain with some basic intelligence on obstacle avoidance.
-    /// </summary>
-    public static class BrainBase
+    public static class HostileEngagement
     {
-        public enum AIBrainTypes
-        {
-            Logistics,
-            WeaponSystems
-        }
-
         public static class AIInputs
         {
             public const string In0Degrees = "In0Degrees";
@@ -35,7 +26,7 @@ namespace AI2D.Actors.Enemies.AI
 
         private static DniNeuralNetwork _trainedLogisticsBrain = null;
 
-        public static DniNeuralNetwork GetLogisticsNoColisionBrain(string initialBrainFile = null)
+        public static DniNeuralNetwork Build(string initialBrainFile = null)
         {
             if (_trainedLogisticsBrain != null)
             {

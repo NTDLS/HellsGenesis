@@ -2,6 +2,7 @@
 using AI2D.Actors.Bullets;
 using AI2D.Actors.Enemies;
 using AI2D.Actors.PowerUp;
+using AI2D.Engine.Situations;
 using AI2D.Types;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,12 @@ namespace AI2D.Engine
         private Core _core;
         private bool _shutdown = false;
         private bool _pause = false;
-        private System.Threading.Thread _graphicsThread;
+        private Thread _graphicsThread;
 
         public EngineThread(Core core)
         {
             _core = core;
-
-            _graphicsThread = new System.Threading.Thread(GraphicsThreadProc);
+            _graphicsThread = new Thread(GraphicsThreadProc);
         }
 
         public void Start()
@@ -53,7 +53,7 @@ namespace AI2D.Engine
                 _core.Actors.AddNewStar();
             }
 
-            Stopwatch timer = new Stopwatch();
+            var timer = new Stopwatch();
 
             double targetFrameDuration = 1000000 / Constants.Limits.FrameLimiter; //1000000 / n-frames/second.
 
@@ -114,9 +114,9 @@ namespace AI2D.Engine
 
             #endregion
 
-            #region Scenario Advancement.
+            #region Situation Advancement.
 
-            if (_core.Actors.CurrentScenario?.State == Scenarios.BaseScenario.ScenarioState.Ended)
+            if (_core.Actors.CurrentScenario?.State == BaseSituation.ScenarioState.Ended)
             {
                 _core.Actors.AdvanceScenario();
             }
@@ -576,28 +576,25 @@ namespace AI2D.Engine
 
             _core.Actors.CleanupDeletedObjects();
 
-            string scenario = "<peaceful>";
+            string situation = "<peaceful>";
 
             if (_core.Actors.CurrentScenario != null)
             {
-                scenario = $"{_core.Actors.CurrentScenario.Name} (Wave {_core.Actors.CurrentScenario.CurrentWave} of {_core.Actors.CurrentScenario.TotalWaves})";
+                situation = $"{_core.Actors.CurrentScenario.Name} (Wave {_core.Actors.CurrentScenario.CurrentWave} of {_core.Actors.CurrentScenario.TotalWaves})";
             }
 
             _core.Actors.PlayerStatsText.Text =
-                $"Scenario: {scenario}, "
-                + $"Shield: {_core.Actors.Player.ShieldPoints}\r\n "
-                + $"Hull: {_core.Actors.Player.HitPoints}\r\n"
-                + $"Boost: {_core.Actors.Player.Velocity.AvailableBoost.ToString("#,0")}\r\n"
+                  $" Situation: {situation}\r\n"
+                + $"      Hull: {_core.Actors.Player.HitPoints} (Shields: {_core.Actors.Player.ShieldPoints})\r\n"
+                + $"     Boost: {_core.Actors.Player.Velocity.AvailableBoost.ToString("#,0")}\r\n"
                 + $"Pri-Weapon: {_core.Actors.Player.SelectedPrimaryWeapon?.Name} x{_core.Actors.Player.SelectedPrimaryWeapon?.RoundQuantity}\r\n"
                 + $"Sec-Weapon: {_core.Actors.Player.SelectedSecondaryWeapon?.Name} x{_core.Actors.Player.SelectedSecondaryWeapon?.RoundQuantity}\r\n";
-            //+ $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}, "
-            //+ $"Score: {_core.Actors.Player.Score.ToString("#,0")}";
 
             if (_core.ShowDebug)
             {
                 _core.Actors.DebugText.Text =
-                        $"       Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")},"
-                                        + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")},"
+                      $"       Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")}, "
+                                        + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")}, "
                                         + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n"
                     + $"Player Display XY: {_core.Actors.Player.X:#0.00}x, {_core.Actors.Player.Y:#0.00}y\r\n"
                     + $"     Player Angle: {_core.Actors.Player.Velocity.Angle.X:#0.00}x, {_core.Actors.Player.Velocity.Angle.Y:#0.00}y, "
@@ -608,9 +605,10 @@ namespace AI2D.Engine
                                         + $" {_core.Actors.Player.Y + _core.Display.BackgroundOffset.Y:#0.00}y\r\n"
                     + $"        BG Offset: {_core.Display.BackgroundOffset.X:#0.00}x, {_core.Display.BackgroundOffset.Y:#0.00}y\r\n"
                     + $"  Delta BG Offset: {appliedOffset.X:#0.00}x, {appliedOffset.Y:#0.00}y\r\n"
-                    + $"            Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100):#0.00}\r\n"
-                    + $"             Boost: {(_core.Actors.Player.Velocity.BoostPercentage * 100):#0.00}";
-
+                    + $"           Thrust: {(_core.Actors.Player.Velocity.ThrottlePercentage * 100):#0.00}\r\n"
+                    + $"            Boost: {(_core.Actors.Player.Velocity.BoostPercentage * 100):#0.00}\r\n"
+                    + $"         Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}\r\n"
+                    + $"            Score: {_core.Actors.Player.Score.ToString("#,0")}";
             }
             else
             {

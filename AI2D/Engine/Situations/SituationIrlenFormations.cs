@@ -3,11 +3,11 @@ using AI2D.Types;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace AI2D.Engine.Scenarios
+namespace AI2D.Engine.Situations
 {
-    public class ScenarioIrlenFormations : BaseScenario
+    public class SituationIrlenFormations : BaseSituation
     {
-        public ScenarioIrlenFormations(Core core)
+        public SituationIrlenFormations(Core core)
             : base(core, "Irlen Formations")
         {
             TotalWaves = 5;
@@ -72,7 +72,7 @@ namespace AI2D.Engine.Scenarios
         private void AddFreshEnemiesCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             Point<double> baseLocation = _core.Display.RandomOffScreenLocation();
-            CreateTriangleFormation(baseLocation, 100 - ((CurrentWave + 1) * 10), (int)(CurrentWave));
+            CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave);
             _core.Actors.RadarBlipsSound.Play();
             waitingOnPopulation = false;
         }
@@ -94,10 +94,10 @@ namespace AI2D.Engine.Scenarios
 
             for (int col = 0; col < depth; col++)
             {
-                for (int row = 0; row < (depth - col); row++)
+                for (int row = 0; row < depth - col; row++)
                 {
-                    AddOneEnemyAt(baseLocation.X + (col * spacing),
-                        baseLocation.Y + (row * spacing) + (col * spacing / 2),
+                    AddOneEnemyAt(baseLocation.X + col * spacing,
+                        baseLocation.Y + row * spacing + col * spacing / 2,
                         angle);
                 }
             }

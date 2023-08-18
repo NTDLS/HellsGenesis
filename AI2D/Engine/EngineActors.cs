@@ -3,7 +3,7 @@ using AI2D.Actors.Bullets;
 using AI2D.Actors.Enemies;
 using AI2D.Actors.PowerUp;
 using AI2D.Engine.Menus;
-using AI2D.Engine.Scenarios;
+using AI2D.Engine.Situations;
 using AI2D.Types;
 using AI2D.Weapons;
 using System;
@@ -19,8 +19,8 @@ namespace AI2D.Engine
         private Core _core;
 
         #region Actors.
-        public BaseScenario CurrentScenario { get; private set; }
-        public List<BaseScenario> Scenarios = new List<BaseScenario>();
+        public BaseSituation CurrentScenario { get; private set; }
+        public List<BaseSituation> Situations = new List<BaseSituation>();
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
         public List<ActorBase> Collection { get; private set; } = new List<ActorBase>();
         public List<BaseMenu> Menus { get; private set; } = new List<BaseMenu>();
@@ -60,9 +60,9 @@ namespace AI2D.Engine
 
             BackgroundMusicSound = GetSoundCached(@"..\..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
 
-            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.Gray, 9, new Point<double>(5, 5), true);
+            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 9, new Point<double>(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, new Point<double>(5, PlayerStatsText.Y + PlayerStatsText.Height + 10), true);
+            DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, new Point<double>(5, PlayerStatsText.Y + 80), true);
 
             BackgroundMusicSound.Play();
 
@@ -107,30 +107,30 @@ namespace AI2D.Engine
 
         public void ClearScenarios()
         {
-            lock (Scenarios)
+            lock (Situations)
             {
-                foreach (var obj in Scenarios)
+                foreach (var obj in Situations)
                 {
                     obj.Cleanup();
                 }
             }
 
             CurrentScenario = null;
-            Scenarios.Clear();
+            Situations.Clear();
         }
 
         public void NewGame()
         {
             lock (Collection)
             {
-                lock (Scenarios)
+                lock (Situations)
                 {
                     ClearScenarios();
 
-                    Scenarios.Add(new ScenarioDebuggingGalore(_core));
-                    Scenarios.Add(new ScenarioScinzadSkirmish(_core));
-                    Scenarios.Add(new ScenarioIrlenFormations(_core));
-                    Scenarios.Add(new ScenarioAvvolAmbush(_core));
+                    Situations.Add(new SituationDebuggingGalore(_core));
+                    Situations.Add(new SituationScinzadSkirmish(_core));
+                    Situations.Add(new SituationIrlenFormations(_core));
+                    Situations.Add(new SituationAvvolAmbush(_core));
 
                     PlayerStatsText.Visable = true;
                 }
@@ -183,16 +183,16 @@ namespace AI2D.Engine
 
         public void AdvanceScenario()
         {
-            lock (Scenarios)
+            lock (Situations)
             {
                 if (CurrentScenario != null)
                 {
-                    Scenarios.Remove(CurrentScenario);
+                    Situations.Remove(CurrentScenario);
                 }
 
-                if (Scenarios.Count > 0)
+                if (Situations.Count > 0)
                 {
-                    CurrentScenario = Scenarios[0];
+                    CurrentScenario = Situations[0];
                     CurrentScenario.Execute();
                 }
                 else

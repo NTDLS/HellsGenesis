@@ -49,7 +49,6 @@ namespace AI2D.Actors
             AllSystemsGoSound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\All Systems Go.wav", 0.75f);
             AmmoLowSound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Ammo Low.wav", 0.75f);
             AmmoEmptySound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Ammo Empty.wav", 0.75f);
-
             ShipEngineRoarSound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Engine Roar.wav", 1.0f, true);
             ShipEngineIdleSound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Engine Idle.wav", 0.6f, true);
             ShipEngineBoostSound = _core.Actors.GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Engine Boost.wav", 1.0f, true);
@@ -86,9 +85,9 @@ namespace AI2D.Actors
 
             Velocity.Angle = new Angle<double>(45);
 
-            Velocity.ThrottlePercentage = Constants.Limits.MinPlayerThrust;
-            Velocity.AvailableBoost = Constants.Limits.MaxPlayerBoost;
-            Velocity.MaxRotationSpeed = Constants.Limits.MaxRotationSpeed;
+            Velocity.ThrottlePercentage = Limits.MinPlayerThrust;
+            Velocity.AvailableBoost = Limits.MaxPlayerBoost;
+            Velocity.MaxRotationSpeed = Limits.MaxRotationSpeed;
 
             if (Class == PlayerClass.Nimitz)
             {
@@ -157,7 +156,6 @@ namespace AI2D.Actors
                 AddSecondaryWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 2500 });
             }
 
-
             SelectFirstAvailableUsablePrimaryWeapon();
             SelectFirstAvailableUsableSecondaryWeapon();
         }
@@ -168,14 +166,13 @@ namespace AI2D.Actors
             {
                 if (ThrustAnimation == null || ThrustAnimation.ReadyForDeletion == true)
                 {
-                    string _debugAniPath = @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png";
                     var playMode = new ActorAnimation.PlayMode()
                     {
                         Replay = ActorAnimation.ReplayMode.LoopedPlay,
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    ThrustAnimation = new ActorAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
+                    ThrustAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
 
                     ThrustAnimation.Reset();
 
@@ -189,16 +186,17 @@ namespace AI2D.Actors
 
                 if (BoostAnimation == null || BoostAnimation.ReadyForDeletion == true)
                 {
-                    string _debugAniPath = @"..\..\..\Assets\Graphics\Animation\FireThrust32x32.png";
                     var playMode = new ActorAnimation.PlayMode()
                     {
                         Replay = ActorAnimation.ReplayMode.LoopedPlay,
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    BoostAnimation = new ActorAnimation(_core, _debugAniPath, new Size(32, 32), 10, playMode);
+                    BoostAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
 
                     BoostAnimation.Reset();
+
+                    BoostAnimation.Visable = false;
 
                     _core.Actors.PlaceAnimationOnTopOf(BoostAnimation, this);
 

@@ -4,7 +4,6 @@ using Determinet;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using static AI2D.Actors.Enemies.AI.BrainBase;
 
 namespace AI2D.Actors.Enemies
 {
@@ -141,6 +140,6 @@ namespace AI2D.Actors.Enemies
             base.Cleanup();
         }
 
-        public Dictionary<AIBrainTypes, DniNeuralNetwork> Brains { get; private set; } = new();
+        public Dictionary<object, DniNeuralNetwork> Brains { get; private set; } = new();
     }
 }
