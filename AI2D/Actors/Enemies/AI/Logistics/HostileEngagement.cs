@@ -6,22 +6,22 @@ namespace AI2D.Actors.Enemies.AI.Logistics
 {
     public static class HostileEngagement
     {
-        public static class AIInputs
+        public enum AIInputs
         {
-            public const string In0Degrees = "In0Degrees";
-            public const string In45Degrees = "In45Degrees";
-            public const string In90Degrees = "In90Degrees";
-            public const string In270Degrees = "In270Degrees";
-            public const string In315Degrees = "In315Degrees";
+            In0Degrees,
+            In45Degrees,
+            In90Degrees,
+            In270Degrees,
+            In315Degrees
         }
 
-        public static class AIOutputs
+        public enum AIOutputs
         {
-            public const string OutChangeDirection = "OutChangeDirection";
-            public const string OutRotateDirection = "OutRotateDirection";
-            public const string OutRotationAmount = "OutRotationAmount";
-            public const string OutChangeSpeed = "OutChangeSpeed";
-            public const string OutChangeSpeedAmount = "OutChangeSpeedAmount";
+            OutChangeDirection,
+            OutRotateDirection,
+            OutRotationAmount,
+            OutChangeSpeed,
+            OutChangeSpeedAmount
         }
 
         private static DniNeuralNetwork _trainedLogisticsBrain = null;
@@ -31,9 +31,7 @@ namespace AI2D.Actors.Enemies.AI.Logistics
             if (_trainedLogisticsBrain != null)
             {
                 var clone = _trainedLogisticsBrain.Clone();
-
-                clone.Mutate(0.2, 0.1);
-
+                //clone.Mutate(0.2, 0.1);
                 return clone;
             }
 
@@ -56,7 +54,7 @@ namespace AI2D.Actors.Enemies.AI.Logistics
 
             //Vision inputs.
             _trainedLogisticsBrain.Layers.AddInput(ActivationType.LeakyReLU,
-                new string[] {
+                new object[] {
                         AIInputs.In0Degrees,
                         AIInputs.In45Degrees,
                         AIInputs.In90Degrees,
@@ -69,7 +67,7 @@ namespace AI2D.Actors.Enemies.AI.Logistics
 
             //Decision outputs
             _trainedLogisticsBrain.Layers.AddOutput(
-                new string[] {
+                new object[] {
                         AIOutputs.OutChangeDirection,
                         AIOutputs.OutRotateDirection,
                         AIOutputs.OutRotationAmount,
