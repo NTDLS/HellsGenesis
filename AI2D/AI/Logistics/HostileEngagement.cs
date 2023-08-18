@@ -48,7 +48,6 @@ namespace AI2D.AI.Logistics
 
         #endregion
 
-
         public DniNeuralNetwork Network { get; set; }
 
         private static DniNeuralNetwork _singletonNetwork = null;

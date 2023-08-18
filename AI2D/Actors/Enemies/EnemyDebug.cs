@@ -61,8 +61,6 @@ namespace AI2D.Actors.Enemies
             //var hostileEngagement = Brains[AIBrainTypes.KeepSafeDistance];
             //hostileEngagement.ApplyIntelligence(frameAppliedOffset);
 
-            this.Velocity.ThrottlePercentage = 0;
-
             var KeepSafeDistance = Brains[AIBrainTypes.KeepSafeDistance];
             KeepSafeDistance.ApplyIntelligence(frameAppliedOffset);
         }

@@ -1,12 +1,12 @@
 ﻿using AI2D.Actors;
-using AI2D.Actors.Enemies;
 using AI2D.Engine;
 using AI2D.Types;
+using AI2D.Types.ExtensionMethods;
 using Determinet;
 using Determinet.Types;
 using System;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 
 namespace AI2D.AI.Logistics
 {
@@ -25,23 +25,21 @@ namespace AI2D.AI.Logistics
             /// This should be the angle to the ObservationObject (likely the player) in relation to the nose of the enemy ship expressed in 1/6th radians split in half.
             /// 0 is pointing at the player, ~0.26 is 90° to the right, ~0.523 is 180° and -0.26 is 270° to the left.
             /// </summary>
-            AngleFromObservationObjectIn6thRadians
+            AngleToObservationObjectIn6thRadians
         }
 
         public enum Outputs
         {
             TransitionToObservationObject,
             TransitionFromObservationObject,
-            Cruise,
-            IncreaseSpeed,
-            DecreaseSpeed
+            SpeedAdjust
         }
 
         #endregion
 
         #region Instance parameters.
 
-        public double MaxObserveDistance { get; set; } = 500;
+        public double DistanceToKeep { get; set; } = 500;
         public double VisionToleranceDegrees { get; set; } = 25;
         public DateTime? LastDecisionTime { get; set; }
         public int MillisecondsBetweenDecisions { get; set; } = 50;
@@ -94,7 +92,7 @@ namespace AI2D.AI.Logistics
             newNetwork.Layers.AddInput(ActivationType.LeakyReLU,
                 new object[] {
                         Inputs.DistanceFromObservationObject,
-                        Inputs.AngleFromObservationObjectIn6thRadians
+                        Inputs.AngleToObservationObjectIn6thRadians
                 });
 
             //Where the magic happens.
@@ -105,14 +103,39 @@ namespace AI2D.AI.Logistics
                 new object[] {
                         Outputs.TransitionToObservationObject,
                         Outputs.TransitionFromObservationObject,
-                        Outputs.Cruise,
-                        Outputs.IncreaseSpeed,
-                        Outputs.DecreaseSpeed
+                        Outputs.SpeedAdjust
                 });
 
             for (int i = 0; i < 5000; i++)
             {
-                newNetwork.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(2, 2, 2, 2, 0));
+                //Very close to observed object, get away.
+                newNetwork.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0, 2, 2));
+                newNetwork.BackPropagate(TrainingScenerio(0, -1), TrainingDecision(0, 2, 2));
+                newNetwork.BackPropagate(TrainingScenerio(0, 1), TrainingDecision(0, 2, 2));
+                newNetwork.BackPropagate(TrainingScenerio(0, 0.5), TrainingDecision(0, 2, 2));
+                newNetwork.BackPropagate(TrainingScenerio(0, -0.5), TrainingDecision(0, 2, 2));
+
+                //Pretty close to observed object, get away.
+                newNetwork.BackPropagate(TrainingScenerio(0.25, 0), TrainingDecision(0, 2, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.25, -1), TrainingDecision(0, 2, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.25, 1), TrainingDecision(0, 2, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.25, 0.5), TrainingDecision(0, 2, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.25, -0.5), TrainingDecision(0, 2, 0.5));
+
+
+                //Very far from observed object, get closer.
+                newNetwork.BackPropagate(TrainingScenerio(1, 0), TrainingDecision(2, 0, 2));
+                newNetwork.BackPropagate(TrainingScenerio(1, -1), TrainingDecision(2, 0, 2));
+                newNetwork.BackPropagate(TrainingScenerio(1, 1), TrainingDecision(2, 0, 2));
+                newNetwork.BackPropagate(TrainingScenerio(1, 0.5), TrainingDecision(2, 0, 2));
+                newNetwork.BackPropagate(TrainingScenerio(1, -0.5), TrainingDecision(2, 0, 2));
+
+                //Pretty far from observed object, get closer.
+                newNetwork.BackPropagate(TrainingScenerio(0.75, 0), TrainingDecision(2, 0, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.75, -1), TrainingDecision(2, 0, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.75, 1), TrainingDecision(2, 0, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.75, 0.5), TrainingDecision(2, 0, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.75, -0.5), TrainingDecision(2, 0, 0.5));
 
                 //No objects dection, speed up and cruise.
                 //newNetwork.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0.4f, 0.4f, 0.4f, 0.9f, 0.9f));
@@ -122,18 +145,16 @@ namespace AI2D.AI.Logistics
             {
                 var param = new DniNamedInterfaceParameters();
                 param.Set(Inputs.DistanceFromObservationObject, distanceFromObservationObject);
-                param.Set(Inputs.AngleFromObservationObjectIn6thRadians, angleToObservationObjectIn10thRadians);
+                param.Set(Inputs.AngleToObservationObjectIn6thRadians, angleToObservationObjectIn10thRadians);
                 return param;
             }
 
-            static DniNamedInterfaceParameters TrainingDecision(double transitionToObservationObject, double transitionFromObservationObject, double cruise, double increaseSpeed, double decreaseSpeed)
+            static DniNamedInterfaceParameters TrainingDecision(double transitionToObservationObject, double transitionFromObservationObject, double speedAdjust)
             {
                 var param = new DniNamedInterfaceParameters();
                 param.Set(Outputs.TransitionToObservationObject, transitionToObservationObject);
                 param.Set(Outputs.TransitionFromObservationObject, transitionFromObservationObject);
-                param.Set(Outputs.Cruise, cruise);
-                param.Set(Outputs.IncreaseSpeed, increaseSpeed);
-                param.Set(Outputs.DecreaseSpeed, decreaseSpeed);
+                param.Set(Outputs.SpeedAdjust, speedAdjust);
                 return param;
             }
 
@@ -153,7 +174,23 @@ namespace AI2D.AI.Logistics
             {
                 var decidingFactors = GetVisionInputs();
 
+                Debug.Print($"Distance: {decidingFactors.Get(Inputs.DistanceFromObservationObject)}, AngleTo: {decidingFactors.Get(Inputs.AngleToObservationObjectIn6thRadians)}");
+
+
                 var decisions = Network.FeedForward(decidingFactors);
+
+                var speedAdjust = decisions.Get(Outputs.SpeedAdjust);
+
+                _owner.Velocity.ThrottlePercentage += (speedAdjust / 5.0);
+
+                if (decisions.Get(Outputs.TransitionToObservationObject) > 0.8)
+                {
+                    _owner.Rotate(45 * 0.5);
+                }
+                else if (decisions.Get(Outputs.TransitionFromObservationObject) > 0.8)
+                {
+                    _owner.Rotate(-45 * 0.5);
+                }
 
                 /*
                 if (decisions.Get(Outputs.ChangeDirection) >= DecisionSensitivity)
@@ -203,26 +240,22 @@ namespace AI2D.AI.Logistics
             var aiParams = new DniNamedInterfaceParameters();
 
             //The closeness is expressed as a percentage of how close to the other object they are. 100% being touching 0% being 1 pixel from out of range.
-            foreach (var other in _core.Actors.Collection.Where(o => o is EnemyBase))
-            {
-                if (other == _owner)
-                {
-                    continue;
-                }
 
-                double distance = _owner.DistanceTo(other);
-                double percentageOfCloseness = 1 - (distance / MaxObserveDistance);
+            double distance = _owner.DistanceTo(_observedObject);
+            double percentageOfCloseness = ((100 - ((distance / DistanceToKeep) * 100.0)) / 100.0).Box(0, 1);
 
-                if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -90))
-                {
-                    aiParams.SetIfLess(Inputs.DistanceFromObservationObject, percentageOfCloseness);
-                }
+            aiParams.SetIfLess(Inputs.DistanceFromObservationObject, percentageOfCloseness);
 
-                if (_owner.IsPointingAt(other, VisionToleranceDegrees, MaxObserveDistance, -45))
-                {
-                    aiParams.SetIfLess(Inputs.AngleFromObservationObjectIn6thRadians, percentageOfCloseness);
-                }
-            }
+            //if (_owner.IsPointingAt(other, VisionToleranceDegrees, DistanceToKeep, -45))
+
+            var deltaAngle = _owner.DeltaAngle(_observedObject);
+
+            var angleTo = Angle<double>.DegreesToRadians(deltaAngle);
+
+            //{
+            aiParams.SetIfLess(Inputs.AngleToObservationObjectIn6thRadians, angleTo);
+            //}
+
 
             return aiParams;
         }
