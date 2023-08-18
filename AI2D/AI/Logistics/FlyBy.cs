@@ -140,11 +140,11 @@ namespace AI2D.AI.Logistics
                 newNetwork.BackPropagate(TrainingScenerio(0, 0.25, -0.5), TrainingDecision(0, 1, 0.5));
 
                 //Very far from observed object, get closer.
-                newNetwork.BackPropagate(TrainingScenerio(0, 1, 0), TrainingDecision(1, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 1, -1), TrainingDecision(1, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 1, 1), TrainingDecision(1, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 1, 0.5), TrainingDecision(1, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 1, -0.5), TrainingDecision(1, 0, 1));
+                newNetwork.BackPropagate(TrainingScenerio(0, 1, 0), TrainingDecision(2, 0, 2));
+                newNetwork.BackPropagate(TrainingScenerio(0, 1, -1), TrainingDecision(2, 0, 2));
+                newNetwork.BackPropagate(TrainingScenerio(0, 1, 1), TrainingDecision(2, 0, 2));
+                newNetwork.BackPropagate(TrainingScenerio(0, 1, 0.5), TrainingDecision(2, 0, 2));
+                newNetwork.BackPropagate(TrainingScenerio(0, 1, -0.5), TrainingDecision(2, 0, 2));
 
                 //Pretty far from observed object, get closer.
                 newNetwork.BackPropagate(TrainingScenerio(0, 0.75, 0), TrainingDecision(1, 0, 0.5));

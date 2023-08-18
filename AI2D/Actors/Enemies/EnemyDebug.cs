@@ -1,7 +1,9 @@
-﻿using AI2D.AI.Logistics;
+﻿using AI2D.AI;
+using AI2D.AI.Logistics;
 using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
+using System;
 using System.Drawing;
 using System.IO;
 
@@ -42,21 +44,39 @@ namespace AI2D.Actors.Enemies
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
 
             //AddAIController(new HostileEngagement(_core, this, _core.Actors.Player));
-            //AddAIController(new FlyBy(_core, this, _core.Actors.Player));
-            AddAIController(new Meander(_core, this, _core.Actors.Player));
+            AddAIController(new FlyBy(_core, this, _core.Actors.Player));
+            //AddAIController(new Meander(_core, this, _core.Actors.Player));
         }
 
         #region Artificial Intelligence.
+
+        DateTime lastDispositionChange = DateTime.Now.AddHours(-1);
+
+        IAIController _currentAIController = null;
 
         public override void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
             base.ApplyIntelligence(frameAppliedOffset);
 
-            //var hostileEngagement = Brains[AIBrainTypes.KeepSafeDistance];
-            //hostileEngagement.ApplyIntelligence(frameAppliedOffset);
+            IAControllers[typeof(FlyBy)].ApplyIntelligence(frameAppliedOffset);
 
-            var meander = IAControllers[typeof(Meander)];
-            meander.ApplyIntelligence(frameAppliedOffset);
+            /*
+            var timeSinceLastDispositionChange = (DateTime.Now - lastDispositionChange).TotalMilliseconds;
+
+            if (_currentAIController == null || timeSinceLastDispositionChange > 10000)
+            {
+                if (Utility.FlipCoin())
+                {
+                    _currentAIController = IAControllers[typeof(FlyBy)];
+                }
+                else
+                {
+                    _currentAIController = IAControllers[typeof(Meander)];
+                }
+            }
+
+            _currentAIController.ApplyIntelligence(frameAppliedOffset);
+            */
         }
 
         #endregion
