@@ -1,6 +1,6 @@
-﻿using AI2D.Engine;
+﻿using AI2D.AI;
+using AI2D.Engine;
 using AI2D.Types;
-using Determinet;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -140,6 +140,6 @@ namespace AI2D.Actors.Enemies
             base.Cleanup();
         }
 
-        public Dictionary<object, DniNeuralNetwork> Brains { get; private set; } = new();
+        internal Dictionary<object, IIntelligenceObject> Brains { get; private set; } = new();
     }
 }
