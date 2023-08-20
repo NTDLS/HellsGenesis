@@ -59,15 +59,15 @@ namespace AI2D
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.UserPaint, true);
 
-            _core = new Core(drawingSurface, new Size(Width, Height));
+            _core = new Core(drawingSurface, new Size(this.Width - 70, this.Height - 90));
 
             drawingSurface.Paint += FormMain_Paint;
             drawingSurface.KeyDown += FormMain_KeyDown;
             drawingSurface.KeyUp += FormMain_KeyUp;
             drawingSurface.MouseEnter += FormMain_MouseEnter;
             drawingSurface.MouseLeave += FormMain_MouseLeave;
-            drawingSurface.Location = new Point(100, 100);
-            drawingSurface.Size = new Size(Width, Height);
+            drawingSurface.Location = new Point(25, 25);
+            drawingSurface.Size = new Size(_core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height);
             drawingSurface.Visible = true;
 
             _core.OnStop += _core_OnStop;
