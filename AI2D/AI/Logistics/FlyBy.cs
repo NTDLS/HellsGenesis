@@ -16,6 +16,8 @@ namespace AI2D.AI.Logistics
     /// </summary>
     public class FlyBy : IAIController
     {
+        private const string _assetPath = @"..\..\..\Assets\AI\Logistics\FlyBy.txt";
+
         private Core _core;
         private ActorBase _owner;
         private ActorBase _observedObject;
@@ -24,10 +26,6 @@ namespace AI2D.AI.Logistics
 
         public enum Inputs
         {
-            /// <summary>
-            /// This is likely a being chased scenerio.
-            /// </summary>
-            IsObservationObjectCloseAndBehind,
             DistanceFromObservationObject,
             /// <summary>
             /// This should be the angle to the ObservationObject (likely the player) in relation to the nose of the enemy ship expressed in 1/6th radians split in half.
@@ -47,10 +45,9 @@ namespace AI2D.AI.Logistics
 
         #region Instance parameters.
 
-        public double DistanceToKeep { get; set; } = 500;
+        public double DistanceToKeep { get; set; } = 1000;
         public DateTime? LastDecisionTime { get; set; } = DateTime.Now.AddHours(-1);
         public int MillisecondsBetweenDecisions { get; set; } = 50;
-        public RelativeDirection FavorateDirection = RelativeDirection.None;
 
         #endregion
 
@@ -64,13 +61,11 @@ namespace AI2D.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        /// <param name="pretrainedModelFile">If there is a pre-trained model, this would be the file.</param>
-        public FlyBy(Core core, ActorBase owner, ActorBase observedObject, string pretrainedModelFile = null)
+        public FlyBy(Core core, ActorBase owner, ActorBase observedObject)
         {
             _core = core;
             _owner = owner;
             _observedObject = observedObject;
-            FavorateDirection = Utility.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
 
             if (_singletonNetwork != null)
             {
@@ -78,9 +73,9 @@ namespace AI2D.AI.Logistics
                 return;
             }
 
-            if (string.IsNullOrEmpty(pretrainedModelFile) == false && File.Exists(pretrainedModelFile))
+            if (string.IsNullOrEmpty(_assetPath) == false && File.Exists(_assetPath))
             {
-                var loadedNetwork = DniNeuralNetwork.Load(pretrainedModelFile);
+                var loadedNetwork = DniNeuralNetwork.Load(_assetPath);
                 if (loadedNetwork != null)
                 {
                     _singletonNetwork = loadedNetwork;
@@ -99,7 +94,6 @@ namespace AI2D.AI.Logistics
             //Vision inputs.
             newNetwork.Layers.AddInput(ActivationType.LeakyReLU,
                 new object[] {
-                        Inputs.IsObservationObjectCloseAndBehind,
                         Inputs.DistanceFromObservationObject,
                         Inputs.AngleToObservationObjectIn6thRadians
                 });
@@ -117,49 +111,39 @@ namespace AI2D.AI.Logistics
 
             for (int epoch = 0; epoch < 5000; epoch++)
             {
-                //Is object likely to be being chased?
-                newNetwork.BackPropagate(TrainingScenerio(1, 0, -0.5), TrainingDecision(0, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(1, 0, -0.5), TrainingDecision(0, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(1, 0, -0.5), TrainingDecision(0, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(1, 0, 0.5), TrainingDecision(0, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(1, 0, 0.5), TrainingDecision(0, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(1, 0, 0.5), TrainingDecision(0, 0, 1));
-
                 //Very close to observed object, get away.
-                newNetwork.BackPropagate(TrainingScenerio(0, 0, 0), TrainingDecision(0, 1, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0, -1), TrainingDecision(0, 1, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0, 1), TrainingDecision(0, 1, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0, 0.5), TrainingDecision(0, 1, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0, -0.5), TrainingDecision(0, 1, 1));
+                newNetwork.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0, 1, 1));
+                newNetwork.BackPropagate(TrainingScenerio(0, -1), TrainingDecision(0, 1, 1));
+                newNetwork.BackPropagate(TrainingScenerio(0, 1), TrainingDecision(0, 1, 1));
+                newNetwork.BackPropagate(TrainingScenerio(0, 0.5), TrainingDecision(0, 1, 1));
+                newNetwork.BackPropagate(TrainingScenerio(0, -0.5), TrainingDecision(0, 1, 1));
 
                 //Pretty close to observed object, get away.
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.25, 0), TrainingDecision(0, 1, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.25, -1), TrainingDecision(0, 1, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.25, 1), TrainingDecision(0, 1, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.25, 0.5), TrainingDecision(0, 1, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.25, -0.5), TrainingDecision(0, 1, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.25, 0), TrainingDecision(0, 1, 0.6));
+                newNetwork.BackPropagate(TrainingScenerio(0.25, -1), TrainingDecision(0, 1, 0.6));
+                newNetwork.BackPropagate(TrainingScenerio(0.25, 1), TrainingDecision(0, 1, 0.6));
+                newNetwork.BackPropagate(TrainingScenerio(0.25, 0.5), TrainingDecision(0, 1, 0.6));
+                newNetwork.BackPropagate(TrainingScenerio(0.25, -0.5), TrainingDecision(0, 1, 0.6));
 
                 //Very far from observed object, get closer.
-                newNetwork.BackPropagate(TrainingScenerio(0, 1, 0), TrainingDecision(2, 0, 2));
-                newNetwork.BackPropagate(TrainingScenerio(0, 1, -1), TrainingDecision(2, 0, 2));
-                newNetwork.BackPropagate(TrainingScenerio(0, 1, 1), TrainingDecision(2, 0, 2));
-                newNetwork.BackPropagate(TrainingScenerio(0, 1, 0.5), TrainingDecision(2, 0, 2));
-                newNetwork.BackPropagate(TrainingScenerio(0, 1, -0.5), TrainingDecision(2, 0, 2));
+                newNetwork.BackPropagate(TrainingScenerio(1, 0), TrainingDecision(2, 0, 0));
+                newNetwork.BackPropagate(TrainingScenerio(1, -1), TrainingDecision(2, 0, 0));
+                newNetwork.BackPropagate(TrainingScenerio(1, 1), TrainingDecision(2, 0, 0));
+                newNetwork.BackPropagate(TrainingScenerio(1, 0.5), TrainingDecision(2, 0, 0));
+                newNetwork.BackPropagate(TrainingScenerio(1, -0.5), TrainingDecision(2, 0, 0));
 
                 //Pretty far from observed object, get closer.
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.75, 0), TrainingDecision(1, 0, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.75, -1), TrainingDecision(1, 0, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.75, 1), TrainingDecision(1, 0, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.75, 0.5), TrainingDecision(1, 0, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.75, -0.5), TrainingDecision(1, 0, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.75, 0), TrainingDecision(1, 0, 0));
+                newNetwork.BackPropagate(TrainingScenerio(0.75, -1), TrainingDecision(1, 0, 0));
+                newNetwork.BackPropagate(TrainingScenerio(0.75, 1), TrainingDecision(1, 0, 0));
+                newNetwork.BackPropagate(TrainingScenerio(0.75, 0.5), TrainingDecision(1, 0, 0));
+                newNetwork.BackPropagate(TrainingScenerio(0.75, -0.5), TrainingDecision(1, 0, 0));
             }
 
-            static DniNamedInterfaceParameters TrainingScenerio(double IsObservationObjectCloseAndBehind,
-                double distanceFromObservationObject, double angleToObservationObjectIn10thRadians)
+            static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservationObject, double angleToObservationObjectIn10thRadians)
             {
                 var param = new DniNamedInterfaceParameters();
 
-                param.Set(Inputs.IsObservationObjectCloseAndBehind, IsObservationObjectCloseAndBehind);
                 param.Set(Inputs.DistanceFromObservationObject, distanceFromObservationObject);
                 param.Set(Inputs.AngleToObservationObjectIn6thRadians, angleToObservationObjectIn10thRadians);
                 return param;
@@ -198,12 +182,10 @@ namespace AI2D.AI.Logistics
             get { return _currentAction; }
             set
             {
-                /*
                 if (_currentAction != value)
                 {
                     Debug.Print($"{value}");
                 }
-                */
                 _currentAction = value;
             }
         }
@@ -216,22 +198,19 @@ namespace AI2D.AI.Logistics
 
             if (elapsedTimeSinceLastDecision >= MillisecondsBetweenDecisions)
             {
-                if (elapsedTimeSinceLastDecision > 1000)
-                {
-                    FavorateDirection = Utility.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
-                }
-
                 var decidingFactors = GatherInputs();
-
-                //Debug.Print($"Distance: {decidingFactors.Get(Inputs.DistanceFromObservationObject)}, AngleTo: {decidingFactors.Get(Inputs.AngleToObservationObjectIn6thRadians)}");
-
                 var decisions = Network.FeedForward(decidingFactors);
 
                 var speedAdjust = decisions.Get(Outputs.SpeedAdjust);
 
-                _owner.Velocity.ThrottlePercentage += (speedAdjust / 5.0);
-
-                Debug.Print(_owner.Velocity.ThrottlePercentage.ToString());
+                if (speedAdjust >= 0.5)
+                {
+                    _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage + 0.01).Box(0.5, 1);
+                }
+                else  if (speedAdjust < 0.5)
+                {
+                    _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
+                }
 
                 bool transitionToObservationObject = decisions.Get(Outputs.TransitionToObservationObject) > 0.9;
                 bool transitionFromObservationObject = decisions.Get(Outputs.TransitionFromObservationObject) > 0.9;
@@ -301,7 +280,7 @@ namespace AI2D.AI.Logistics
             var aiParams = new DniNamedInterfaceParameters();
 
             var distance = _owner.DistanceTo(_observedObject);
-            var percentageOfCloseness = distance > DistanceToKeep ? 1 : ((100 - ((distance / DistanceToKeep) * 100.0)) / 100.0).Box(0, 1);
+            var percentageOfCloseness = (distance / DistanceToKeep).Box(0, 1);
 
             aiParams.Set(Inputs.DistanceFromObservationObject, percentageOfCloseness);
 

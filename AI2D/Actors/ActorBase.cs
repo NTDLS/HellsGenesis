@@ -6,6 +6,7 @@ using AI2D.Types;
 using AI2D.Weapons;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
@@ -14,7 +15,7 @@ namespace AI2D.Actors
     public class ActorBase
     {
         /// <summary>
-        /// A user defined name for the actor - basically for debugging.
+        /// A user defined name for the actor.
         /// </summary>
         public string Tag { get; set; }
         public Guid UID { get; private set; } = Guid.NewGuid();
@@ -68,6 +69,7 @@ namespace AI2D.Actors
 
         #region Properties.
 
+        public bool Highlight { get; set; } = false;
         public RotationMode RotationMode { get; set; }
         public WeaponBase SelectedPrimaryWeapon { get; private set; }
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
@@ -270,6 +272,14 @@ namespace AI2D.Actors
             get
             {
                 return _size;
+            }
+        }
+
+        public RectangleF VisibleBounds
+        {
+            get
+            {
+               return new Rectangle((int)(_location.X - (Size.Width / 2.0)), (int)(_location.Y - (Size.Height / 2.0)), Size.Width, Size.Height);
             }
         }
 
@@ -623,6 +633,28 @@ namespace AI2D.Actors
             return false;
         }
 
+        public bool Intersects(Point<double> location, Point<double> size)
+        {
+            var alteredHitBox = new RectangleF(
+                (float)(location.X),
+                (float)(location.Y),
+                (float)(size.X),
+                (float)(size.Y)
+                );
+
+            return VisibleBounds.IntersectsWith(alteredHitBox);
+        }
+
+        public bool Intersects(ActorBase with, int slop = 0)
+        {
+            var alteredHitBox = new RectangleF(
+                (float)(with.Bounds.X - slop),
+                (float)(with.Bounds.Y - slop),
+                (float)(with.Size.Width + (slop * 2)), (float)(with.Size.Height + (slop * 2)));
+
+            return this.Bounds.IntersectsWith(alteredHitBox);
+        }
+
         #region Actions.
 
         /// <summary>
@@ -870,6 +902,15 @@ namespace AI2D.Actors
                 {
                     DrawImage(dc, _lockedOnSoftImage, 0);
                 }
+
+                if (Highlight)
+                {
+                    using (var pen = new Pen(Color.Red, 3))
+                    {
+                        var rect = new Rectangle((int)(_location.X - (Size.Width / 2.0)), (int)(_location.Y - (Size.Height / 2.0)), Size.Width, Size.Height);
+                        dc.DrawRectangle(pen, rect);
+                    }
+                }
             }
         }
 
@@ -896,14 +937,14 @@ namespace AI2D.Actors
         {
             double angle = (double)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
 
-            Bitmap bitmap = new Bitmap(rawImage);
+            var bitmap = new Bitmap(rawImage);
 
             if (angle != 0 && RotationMode != RotationMode.None)
             {
                 if (RotationMode == RotationMode.Upsize) //Very expensize
                 {
                     var image = Utility.RotateImageWithUpsize(bitmap, angle, Color.Transparent);
-                    Rectangle rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
+                    var rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
                     dc.DrawImage(image, rect);
                     _size.Height = image.Height;
                     _size.Width = image.Width;
@@ -911,7 +952,7 @@ namespace AI2D.Actors
                 else if (RotationMode == RotationMode.Clip) //Much less expensive.
                 {
                     var image = Utility.RotateImageWithClipping(bitmap, angle, Color.Transparent);
-                    Rectangle rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
+                    var rect = new Rectangle((int)(_location.X - (image.Width / 2.0)), (int)(_location.Y - (image.Height / 2.0)), image.Width, image.Height);
                     dc.DrawImage(image, rect);
 
                     _size.Height = image.Height;

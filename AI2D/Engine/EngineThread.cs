@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace AI2D.Engine
@@ -34,6 +35,16 @@ namespace AI2D.Engine
         public void Stop()
         {
             _shutdown = true;
+        }
+
+        public bool IsPaused()
+        {
+            return _pause;
+        }
+
+        public void TogglePause()
+        {
+            _pause = !_pause;
         }
 
         public void Pause()
@@ -63,21 +74,24 @@ namespace AI2D.Engine
 
                 _core.Display.GameLoopCounter.Calculate();
 
-                Monitor.Enter(_core.DrawingSemaphore);
-
-                lock (_core.Actors.Menus)
+                if (_pause == false)
                 {
-                    lock (_core.Actors.Player)
+                    Monitor.Enter(_core.DrawingSemaphore);
+
+                    lock (_core.Actors.Menus)
                     {
-                        lock (_core.Actors.Collection)
+                        lock (_core.Actors.Player)
                         {
-                            AdvanceWorldClock();
-                            timer.Stop();
+                            lock (_core.Actors.Collection)
+                            {
+                                AdvanceWorldClock();
+                                timer.Stop();
+                            }
                         }
                     }
-                }
 
-                Monitor.Exit(_core.DrawingSemaphore);
+                    Monitor.Exit(_core.DrawingSemaphore);
+                }
 
                 if (_core.Actors.Menus.Count > 0)
                 {
@@ -93,9 +107,10 @@ namespace AI2D.Engine
                     Thread.Yield();
                 }
 
-                while (_pause && _shutdown == false)
+                if (_pause)
                 {
-                    Thread.Sleep(10);
+                    _core.Display.DrawingSurface.Invalidate();
+                    Thread.Sleep(5);
                 }
             }
         }
@@ -300,7 +315,7 @@ namespace AI2D.Engine
                 _core.Display.BackgroundOffset.Y += appliedOffset.Y;
 
                 //We are going to restrict the rotation speed to a percentage of thrust.
-                double rotationSpeed = _core.Actors.Player.Velocity.MaxRotationSpeed * _core.Actors.Player.Velocity.ThrottlePercentage;
+                double rotationSpeed = (_core.Actors.Player.Velocity.MaxRotationSpeed * _core.Actors.Player.Velocity.ThrottlePercentage);
 
                 if (_core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
                 {

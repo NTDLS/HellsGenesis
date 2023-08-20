@@ -1,6 +1,8 @@
-﻿using AI2D.Actors.Enemies;
+﻿using AI2D.Actors;
+using AI2D.Actors.Enemies;
 using AI2D.Types;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace AI2D.Engine
@@ -44,75 +46,39 @@ namespace AI2D.Engine
 
         public void HandleSingleKeyPress(Keys key)
         {
-            #region Debug.
-            if (key == Keys.D0)
-            {
-                _core.Actors.Player.X = _core.Display.VisibleSize.Width / 2;
-                _core.Actors.Player.Y = _core.Display.VisibleSize.Height / 2;
-                _core.Actors.Player.Velocity.Angle.Degrees = 0;
-                _core.Actors.Player.Velocity.ThrottlePercentage = 0;
-            }
-            else if (key == Keys.D1)
-            {
-                _core.Actors.Player.Velocity.Angle.Degrees = 0;
-                _core.Actors.Player.Invalidate();
-            }
-            else if (key == Keys.D2)
-            {
-                _core.Actors.Player.Velocity.Angle.Degrees = 45;
-                _core.Actors.Player.Invalidate();
-            }
-            else if (key == Keys.D3)
-            {
-                _core.Actors.Player.Velocity.Angle.Degrees = 90;
-                _core.Actors.Player.Invalidate();
-            }
-            else if (key == Keys.D4)
-            {
-                _core.Actors.Player.Velocity.Angle.Degrees = 135;
-                _core.Actors.Player.Invalidate();
-            }
-            else if (key == Keys.D5)
-            {
-                _core.Actors.Player.Velocity.Angle.Degrees = 180;
-                _core.Actors.Player.Invalidate();
-            }
-            else if (key == Keys.D6)
-            {
-                _core.Actors.Player.Velocity.Angle.Degrees = 225;
-                _core.Actors.Player.Invalidate();
-            }
-            else if (key == Keys.D7)
-            {
-                _core.Actors.Player.Velocity.Angle.Degrees = 270;
-                _core.Actors.Player.Invalidate();
-            }
-            else if (key == Keys.D8)
-            {
-                _core.Actors.Player.Velocity.Angle.Degrees = 315;
-                _core.Actors.Player.Invalidate();
-            }
-            else if (key == Keys.D9)
+
+            #region Debug stuff.
+            if (key == Keys.Delete)
             {
                 if (_core.Actors.OfType<EnemyBase>().Count > 0)
                 {
                     _core.Actors.OfType<EnemyBase>()[0].Explode();
                 }
             }
+            else if (key == Keys.Oem3) //~
+            {
+                _core.ShowDebug = !_core.ShowDebug;
+            }
+            #endregion
             else if (key == Keys.F1)
             {
                 _core.Actors.NewGame();
                 //_core.Actors.ResetAndShowPlayer();
             }
-            else if (key == Keys.Oem3) //~
+            else if (key == Keys.P)
             {
-                _core.ShowDebug = !_core.ShowDebug;
+                var textBlock = _core.Actors.GetActorByTag<ActorTextBlock>("PausedText");
+                if (textBlock == null)
+                {
+                    textBlock = _core.Actors.AddNewTextBlock("Consolas", Brushes.Red, 50, new Point<double>(100, 100), true, "PausedText");
+                    textBlock.Text = "Paused...";
+                    textBlock.X = (_core.Display.VisibleSize.Width) / 2 - (textBlock.Size.Width / 2);
+                    textBlock.Y = (_core.Display.VisibleSize.Height) / 2 - (textBlock.Size.Height / 2);
+                }
+
+                _core.TogglePause();
+                textBlock.Visable = _core.IsPaused();
             }
-            else if (key == Keys.Escape)
-            {
-                //_core.Stop();
-            }
-            #endregion
 
             if (key == Keys.Q)
             {

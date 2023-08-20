@@ -149,6 +149,14 @@ namespace AI2D.Engine
             DeleteAllAnimations();
         }
 
+        public T GetActorByTag<T>(string tag) where T : ActorBase
+        {
+            lock (Collection)
+            {
+                return Collection.Where(o => o.Tag == tag).FirstOrDefault() as T;
+            }
+        }
+
         public void DeleteAllActorsByTag(string tag)
         {
             lock (Collection)
@@ -216,6 +224,45 @@ namespace AI2D.Engine
             return (from o in _core.Actors.Collection
                     where o is T
                     select o as T).ToList();
+        }
+
+        public List<ActorBase> Intersections(ActorBase with)
+        {
+            var objs = new List<ActorBase>();
+
+            foreach (var obj in Collection.Where(o => o.Visable == true))
+            {
+                if (obj != with)
+                {
+                    if (obj.Intersects(with.Location, new Point<double>(with.Size.Width, with.Size.Height)))
+                    {
+                        objs.Add(obj);
+                    }
+                }
+            }
+            return objs;
+        }
+
+        public List<ActorBase> Intersections(double x, double y, double width, double height)
+        {
+            return Intersections(new Point<double>(x, y), new Point<double>(width, height));
+        }
+
+        public List<ActorBase> Intersections(Point<double> location, Point<double> size)
+        {
+            lock (Collection)
+            {
+                var objs = new List<ActorBase>();
+
+                foreach (var obj in Collection.Where(o => o.Visable == true))
+                {
+                    if (obj.Intersects(location, size))
+                    {
+                        objs.Add(obj);
+                    }
+                }
+                return objs;
+            }
         }
 
         private void TheDoorIsAjarCallback(Core core, EngineCallbackEvent sender, object refObj)
@@ -468,6 +515,17 @@ namespace AI2D.Engine
             lock (Collection)
             {
                 var obj = new ActorTextBlock(_core, font, color, size, location, isPositionStatic);
+                Collection.Add(obj);
+                return obj;
+            }
+        }
+
+        public ActorTextBlock AddNewTextBlock(string font, Brush color, double size, Point<double> location, bool isPositionStatic, string tag)
+        {
+            lock (Collection)
+            {
+                var obj = new ActorTextBlock(_core, font, color, size, location, isPositionStatic);
+                obj.Tag = tag;
                 Collection.Add(obj);
                 return obj;
             }

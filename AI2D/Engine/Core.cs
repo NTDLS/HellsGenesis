@@ -88,6 +88,16 @@ namespace AI2D.Engine
             }
         }
 
+        public bool IsPaused()
+        {
+            return _engineThread.IsPaused();
+        }
+
+        public void TogglePause()
+        {
+            _engineThread.TogglePause();
+        }
+
         public void Pause()
         {
             _engineThread.Pause();

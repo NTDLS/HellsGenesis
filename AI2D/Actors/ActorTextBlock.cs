@@ -17,7 +17,7 @@ namespace AI2D.Actors
         #region Properties.
 
         double _height = 0;
-        public Double Height
+        public double Height
         {
             get
             {

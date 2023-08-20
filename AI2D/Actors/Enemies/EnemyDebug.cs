@@ -48,41 +48,23 @@ namespace AI2D.Actors.Enemies
             //AddAIController(new HostileEngagement(_core, this, _core.Actors.Player));
             AddAIController(new FlyBy(_core, this, _core.Actors.Player));
             //AddAIController(new Meander(_core, this, _core.Actors.Player));
+
+            SetCurrentAIController(AIControllers[typeof(FlyBy)]);
+
         }
 
         #region Artificial Intelligence.
 
-        DateTime lastDispositionChange = DateTime.Now.AddHours(-1);
 
-        IAIController _currentAIController = null;
 
         public override void ApplyIntelligence(Point<double> frameAppliedOffset)
         {
             base.ApplyIntelligence(frameAppliedOffset);
 
-            IAControllers[typeof(FlyBy)].ApplyIntelligence(frameAppliedOffset);
-
-            //Debug.Print($"ThrottlePercentage: {Velocity.ThrottlePercentage}");
-
-            //Velocity.ThrottlePercentage = 0.5;
-
-            /*
-            var timeSinceLastDispositionChange = (DateTime.Now - lastDispositionChange).TotalMilliseconds;
-
-            if (_currentAIController == null || timeSinceLastDispositionChange > 10000)
+            if (CurrentAIController != null)
             {
-                if (Utility.FlipCoin())
-                {
-                    _currentAIController = IAControllers[typeof(FlyBy)];
-                }
-                else
-                {
-                    _currentAIController = IAControllers[typeof(Meander)];
-                }
+                CurrentAIController.ApplyIntelligence(frameAppliedOffset);
             }
-
-            _currentAIController.ApplyIntelligence(frameAppliedOffset);
-            */
         }
 
         #endregion

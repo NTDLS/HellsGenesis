@@ -179,9 +179,6 @@ namespace AI2D.AI.Logistics
                 }
 
                 var decidingFactors = GatherInputs();
-
-                //Debug.Print($"Distance: {decidingFactors.Get(Inputs.DistanceFromObservationObject)}, AngleTo: {decidingFactors.Get(Inputs.AngleToObservationObjectIn6thRadians)}");
-
                 var decisions = Network.FeedForward(decidingFactors);
 
                 var speedAdjust = decisions.Get(Outputs.SpeedAdjust);

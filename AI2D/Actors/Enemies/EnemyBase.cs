@@ -1,6 +1,7 @@
 ﻿using AI2D.AI;
 using AI2D.Engine;
 using AI2D.Types;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,7 +10,8 @@ namespace AI2D.Actors.Enemies
 {
     public class EnemyBase : ActorBase
     {
-        public Dictionary<Type, IAIController> IAControllers { get; private set; } = new();
+        public IAIController CurrentAIController { get; set; }
+        public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
         public int CollisionDamage { get; set; } = 25;
         public int ScorePoints { get; private set; } = 25;
         public ActorRadarPositionIndicator RadarPositionIndicator { get; set; }
@@ -142,7 +144,12 @@ namespace AI2D.Actors.Enemies
 
         internal void AddAIController(IAIController controller)
         {
-            IAControllers.Add(controller.GetType(), controller);
+            AIControllers.Add(controller.GetType(), controller);
+        }
+
+        internal void SetCurrentAIController(IAIController value)
+        {
+            CurrentAIController = value;
         }
     }
 }
