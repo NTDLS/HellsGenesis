@@ -7,29 +7,15 @@ namespace AI2D.Engine
 {
     public class EngineDisplay
     {
-        public Dictionary<Point, Quadrant> Quadrants = new Dictionary<Point, Quadrant>();
+        public Dictionary<Point, Quadrant> Quadrants { get; private set; } = new Dictionary<Point, Quadrant>();
         public Quadrant CurrentQuadrant { get; set; }
-        public Point<double> BackgroundOffset { get; set; } = new Point<double>(); //Offset of background, all cals must take into account.
-        public FrameCounter GameLoopCounter { get; set; } = new FrameCounter();
+        public Point<double> BackgroundOffset { get; private set; } = new Point<double>(); //Offset of background, all cals must take into account.
+        public FrameCounter GameLoopCounter { get; private set; } = new FrameCounter();
         public RectangleF VisibleBounds { get; private set; }
-
-        private Size _visibleSize;
-        public Size VisibleSize
-        {
-            get
-            {
-                return _visibleSize;
-            }
-        }
-
-        private Control _drawingSurface;
-        public Control DrawingSurface
-        {
-            get
-            {
-                return _drawingSurface;
-            }
-        }
+        public Size OverDraw { get; private set; }
+        public Size DrawSize { get; private set; }
+        public Size VisibleSize { get; private set; }
+        public Control DrawingSurface { get; private set; }
 
         public Point<double> RandomOnScreenLocation()
         {
@@ -74,8 +60,16 @@ namespace AI2D.Engine
 
         public EngineDisplay(Control drawingSurface, Size visibleSize)
         {
-            _drawingSurface = drawingSurface;
-            _visibleSize = visibleSize;
+            DrawingSurface = drawingSurface;
+            VisibleSize = visibleSize;
+
+            int overdrawHeight = (int)(visibleSize.Height * 0.30);
+            int overdrawWidth = (int)(visibleSize.Width * 0.30);
+            if (overdrawHeight % 2 != 0) overdrawHeight++;
+            if (overdrawWidth % 2 != 0) overdrawWidth++;
+            OverDraw = new Size(overdrawHeight, overdrawWidth);
+
+            DrawSize = new Size(visibleSize.Width + OverDraw.Width, visibleSize.Height + OverDraw.Height);
             VisibleBounds = new RectangleF(0, 0, visibleSize.Width, visibleSize.Height);
         }
 

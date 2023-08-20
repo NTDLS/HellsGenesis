@@ -8,6 +8,7 @@ using AI2D.Types;
 using AI2D.Weapons;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -776,7 +777,7 @@ namespace AI2D.Engine
 
             if (_ScreenBitmap == null)
             {
-                _ScreenBitmap = new Bitmap(_core.Display.DrawingSurface.Width, _core.Display.DrawingSurface.Height);
+                _ScreenBitmap = new Bitmap(_core.Display.DrawSize.Width, _core.Display.DrawSize.Height);
 
                 _ScreenDC = Graphics.FromImage(_ScreenBitmap);
                 _ScreenDC.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -897,7 +898,40 @@ namespace AI2D.Engine
 
             _core.IsRendering = false;
 
+            //var cropRect = new Rectangle(new Point(100, 100), new Size(400,300));
+            //_ScreenBitmap.Save("./before.bmp");
+            //var cropped = CropBitmap(_ScreenBitmap, cropRect);
+            //_cropped.Save("./test.bmp");
+            //_ScreenBitmap.Dispose();
+            //_ScreenBitmap = croppedBitmap;
+
             return _ScreenBitmap;
+        }
+
+        public Bitmap ZoomBitmap(Bitmap originalBitmap)
+        {
+            var workingBitmap = (Bitmap)originalBitmap.Clone();
+            var tmpImage1 = new Bitmap(workingBitmap.Width, workingBitmap.Height);
+            var g = Graphics.FromImage(tmpImage1);
+            int left = workingBitmap.Width / 4;
+            int top = workingBitmap.Height / 4;
+            int width = workingBitmap.Width / 2;
+            int height = workingBitmap.Height / 2;
+            var srcRect = new Rectangle(left, top, width, height);
+            var dstRect = new Rectangle(0, 0, tmpImage1.Width, tmpImage1.Height);
+            g.DrawImage(workingBitmap, dstRect, srcRect, GraphicsUnit.Pixel);
+            return workingBitmap;
+        }
+
+        public Bitmap CropBitmap(Bitmap src, Rectangle cropRect)
+        {
+            var target = new Bitmap(cropRect.Width, cropRect.Height);
+            using (var g = Graphics.FromImage(target))
+            {
+                g.DrawImage(src, new Rectangle(0, 0, target.Width, target.Height), cropRect, GraphicsUnit.Pixel);
+
+                return target;
+            }
         }
 
         #endregion

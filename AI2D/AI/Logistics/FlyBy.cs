@@ -184,7 +184,7 @@ namespace AI2D.AI.Logistics
             {
                 if (_currentAction != value)
                 {
-                    Debug.Print($"{value}");
+                    //Debug.Print($"{value}");
                 }
                 _currentAction = value;
             }
