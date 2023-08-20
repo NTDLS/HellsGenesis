@@ -858,7 +858,7 @@ namespace AI2D.Engine
                         //Render to display:
                         foreach (var actor in Collection.Where(o => o.Visable == true))
                         {
-                            if (_core.Display.VisibleBounds.IntersectsWith(actor.Bounds))
+                            if (_core.Display.DrawBounds.IntersectsWith(actor.Bounds))
                             {
                                 Utility.DynamicCast(actor, actor.GetType()).Render(_ScreenDC);
                             }
@@ -901,37 +901,32 @@ namespace AI2D.Engine
             //var cropRect = new Rectangle(new Point(100, 100), new Size(400,300));
             //_ScreenBitmap.Save("./before.bmp");
             //var cropped = CropBitmap(_ScreenBitmap, cropRect);
-            //_cropped.Save("./test.bmp");
+            _ScreenBitmap.Save("./test.bmp");
             //_ScreenBitmap.Dispose();
             //_ScreenBitmap = croppedBitmap;
+
+            //return ZoomBitmap(_ScreenBitmap, 0.5);
 
             return _ScreenBitmap;
         }
 
-        public Bitmap ZoomBitmap(Bitmap originalBitmap)
-        {
-            var workingBitmap = (Bitmap)originalBitmap.Clone();
-            var tmpImage1 = new Bitmap(workingBitmap.Width, workingBitmap.Height);
-            var g = Graphics.FromImage(tmpImage1);
-            int left = workingBitmap.Width / 4;
-            int top = workingBitmap.Height / 4;
-            int width = workingBitmap.Width / 2;
-            int height = workingBitmap.Height / 2;
-            var srcRect = new Rectangle(left, top, width, height);
-            var dstRect = new Rectangle(0, 0, tmpImage1.Width, tmpImage1.Height);
-            g.DrawImage(workingBitmap, dstRect, srcRect, GraphicsUnit.Pixel);
-            return workingBitmap;
-        }
 
-        public Bitmap CropBitmap(Bitmap src, Rectangle cropRect)
+        public Bitmap ZoomBitmap(Bitmap originalBitmap, float zoomFactor)
         {
-            var target = new Bitmap(cropRect.Width, cropRect.Height);
-            using (var g = Graphics.FromImage(target))
+            int newWidth = (int)(originalBitmap.Width * zoomFactor);
+            int newHeight = (int)(originalBitmap.Height * zoomFactor);
+
+            Bitmap zoomedBitmap = new Bitmap(newWidth, newHeight);
+
+            using (Graphics graphics = Graphics.FromImage(zoomedBitmap))
             {
-                g.DrawImage(src, new Rectangle(0, 0, target.Width, target.Height), cropRect, GraphicsUnit.Pixel);
-
-                return target;
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
+                graphics.DrawImage(originalBitmap, new Rectangle(0, 0, newWidth, newHeight), new RectangleF(originalBitmap.Width / 2 - (newWidth / (2 * zoomFactor)),
+                    originalBitmap.Height / 2 - (newHeight / (2 * zoomFactor)),
+                    newWidth / zoomFactor, newHeight / zoomFactor), GraphicsUnit.Pixel);
             }
+
+            return zoomedBitmap;
         }
 
         #endregion

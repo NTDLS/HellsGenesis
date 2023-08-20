@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace AI2D.Engine
@@ -263,14 +262,14 @@ namespace AI2D.Engine
                     }
 
                     //Close to the right wall and travelling in that direction.
-                    if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + Constants.Limits.InfiniteScrollWall)
+                    if (_core.Actors.Player.X > _core.Display.DrawSize.Width - (_core.Actors.Player.Size.Width + Constants.Limits.InfiniteScrollWall)
                         && _core.Actors.Player.Velocity.Angle.X > 0)
                     {
                         appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the bottom wall and travelling in that direction.
-                    if (_core.Actors.Player.Y > _core.Display.VisibleSize.Height - (_core.Actors.Player.Size.Height + Constants.Limits.InfiniteScrollWall)
+                    if (_core.Actors.Player.Y > _core.Display.DrawSize.Height - (_core.Actors.Player.Size.Height + Constants.Limits.InfiniteScrollWall)
                         && _core.Actors.Player.Velocity.Angle.Y > 0)
                     {
                         appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
@@ -482,8 +481,8 @@ namespace AI2D.Engine
                         {
                             if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
                             {
-                                int x = Utility.Random.Next(_core.Display.VisibleSize.Width - (int)appliedOffset.X, _core.Display.VisibleSize.Width);
-                                int y = Utility.Random.Next(0, _core.Display.VisibleSize.Height);
+                                int x = Utility.Random.Next(_core.Display.DrawSize.Width - (int)appliedOffset.X, _core.Display.DrawSize.Width);
+                                int y = Utility.Random.Next(0, _core.Display.DrawSize.Height);
                                 _core.Actors.AddNewStar(x, y);
                             }
                         }
@@ -495,7 +494,7 @@ namespace AI2D.Engine
                             if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
                             {
                                 int x = Utility.Random.Next(0, (int)-appliedOffset.X);
-                                int y = Utility.Random.Next(0, _core.Display.VisibleSize.Height);
+                                int y = Utility.Random.Next(0, _core.Display.DrawSize.Height);
                                 _core.Actors.AddNewStar(x, y);
                             }
                         }
@@ -507,8 +506,8 @@ namespace AI2D.Engine
                         {
                             if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
                             {
-                                int x = Utility.Random.Next(0, _core.Display.VisibleSize.Width);
-                                int y = Utility.Random.Next(_core.Display.VisibleSize.Height - (int)appliedOffset.Y, _core.Display.VisibleSize.Height);
+                                int x = Utility.Random.Next(0, _core.Display.DrawSize.Width);
+                                int y = Utility.Random.Next(_core.Display.DrawSize.Height - (int)appliedOffset.Y, _core.Display.DrawSize.Height);
                                 _core.Actors.AddNewStar(x, y);
                             }
                         }
@@ -519,7 +518,7 @@ namespace AI2D.Engine
                         {
                             if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
                             {
-                                int x = Utility.Random.Next(0, _core.Display.VisibleSize.Width);
+                                int x = Utility.Random.Next(0, _core.Display.DrawSize.Width);
                                 int y = Utility.Random.Next(0, (int)-appliedOffset.Y);
                                 _core.Actors.AddNewStar(x, y);
                             }
@@ -529,7 +528,7 @@ namespace AI2D.Engine
 
                 foreach (var star in _core.Actors.VisibleOfType<ActorStar>())
                 {
-                    if (_core.Display.VisibleBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
+                    if (_core.Display.DrawBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
                     {
                         star.QueueForDelete();
                     }

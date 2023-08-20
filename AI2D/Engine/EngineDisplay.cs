@@ -12,6 +12,7 @@ namespace AI2D.Engine
         public Point<double> BackgroundOffset { get; private set; } = new Point<double>(); //Offset of background, all cals must take into account.
         public FrameCounter GameLoopCounter { get; private set; } = new FrameCounter();
         public RectangleF VisibleBounds { get; private set; }
+        public RectangleF DrawBounds { get; private set; }
         public Size OverDraw { get; private set; }
         public Size DrawSize { get; private set; }
         public Size VisibleSize { get; private set; }
@@ -67,9 +68,10 @@ namespace AI2D.Engine
             int overdrawWidth = (int)(visibleSize.Width * 0.30);
             if (overdrawHeight % 2 != 0) overdrawHeight++;
             if (overdrawWidth % 2 != 0) overdrawWidth++;
-            OverDraw = new Size(overdrawHeight, overdrawWidth);
+            OverDraw = new Size(overdrawWidth, overdrawHeight);
 
             DrawSize = new Size(visibleSize.Width + OverDraw.Width, visibleSize.Height + OverDraw.Height);
+            DrawBounds = new RectangleF(0, 0, DrawSize.Width, DrawSize.Height);
             VisibleBounds = new RectangleF(0, 0, visibleSize.Width, visibleSize.Height);
         }
 
