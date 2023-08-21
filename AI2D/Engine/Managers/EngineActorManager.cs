@@ -839,14 +839,9 @@ namespace AI2D.Engine.Managers
             if (_core.Settings.HighlightNatrualBounds)
             {
                 //Highlight the 1:1 frame
-                using (var pen = new Pen(Color.Red, 3))
+                using (var pen = new Pen(Color.Gray, 1))
                 {
-                    var bounds = _core.Display.NatrualScreenBounds.Clone();
-
-                    bounds.Height -= 40;
-                    bounds.Width -= 16;
-
-                    screenDrawing.Graphics.DrawRectangle(pen, bounds);
+                    screenDrawing.Graphics.DrawRectangle(pen, _core.Display.NatrualScreenBounds);
                 }
             }
 

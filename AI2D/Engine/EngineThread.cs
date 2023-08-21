@@ -264,28 +264,29 @@ namespace AI2D.Engine
                         forwardThrust += _core.Actors.Player.Velocity.MaxBoost * _core.Actors.Player.Velocity.BoostPercentage;
                     }
 
+
                     //Close to the right wall and travelling in that direction.
-                    if (_core.Actors.Player.X > (_core.Display.NatrualScreenBounds.Width / 2) + Constants.Limits.InfiniteScrollWallX
+                    if (_core.Actors.Player.X > _core.Display.NatrualScreenBounds.X + _core.Display.NatrualScreenBounds.Width - Constants.Limits.InfiniteScrollWallX
                         && _core.Actors.Player.Velocity.Angle.X > 0)
                     {
                         appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the bottom wall and travelling in that direction.
-                    if (_core.Actors.Player.Y > (_core.Display.NatrualScreenBounds.Height / 2) + Constants.Limits.InfiniteScrollWallY
+                    if (_core.Actors.Player.Y > _core.Display.NatrualScreenBounds.Y + _core.Display.NatrualScreenBounds.Height - Constants.Limits.InfiniteScrollWallY
                         && _core.Actors.Player.Velocity.Angle.Y > 0)
                     {
                         appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
                     }
 
                     //Close to the left wall and travelling in that direction.
-                    if (_core.Actors.Player.X < (_core.Display.NatrualScreenBounds.Width / 2) - Constants.Limits.InfiniteScrollWallX && _core.Actors.Player.Velocity.Angle.X < 0)
+                    if (_core.Actors.Player.X < _core.Display.NatrualScreenBounds.X + Constants.Limits.InfiniteScrollWallX && _core.Actors.Player.Velocity.Angle.X < 0)
                     {
                         appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the top wall and travelling in that direction.
-                    if (_core.Actors.Player.Y < (_core.Display.NatrualScreenBounds.Height / 2) - Constants.Limits.InfiniteScrollWallY && _core.Actors.Player.Velocity.Angle.Y < 0)
+                    if (_core.Actors.Player.Y < _core.Display.NatrualScreenBounds.Y + Constants.Limits.InfiniteScrollWallY && _core.Actors.Player.Velocity.Angle.Y < 0)
                     {
                         appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
                     }

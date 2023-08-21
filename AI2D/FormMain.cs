@@ -50,21 +50,25 @@ namespace AI2D
                 WindowState = FormWindowState.Maximized;
             }
 
+            var drawingSurface = new Control();
+            Controls.Add(drawingSurface);
+            drawingSurface.Dock = DockStyle.Fill;
 
-            typeof(Control).GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(this, true, null);
+            typeof(Control).GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(drawingSurface, true, null);
 
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.UserPaint, true);
 
+            _core = new Core(drawingSurface);
 
-            _core = new Core(this, new Size(this.Width, this.Height));
-
-            this.Paint += FormMain_Paint;
-            this.KeyDown += FormMain_KeyDown;
-            this.KeyUp += FormMain_KeyUp;
-            this.MouseEnter += FormMain_MouseEnter;
-            this.MouseLeave += FormMain_MouseLeave;
+            drawingSurface.Paint += FormMain_Paint;
+            drawingSurface.KeyDown += FormMain_KeyDown;
+            drawingSurface.KeyUp += FormMain_KeyUp;
+            drawingSurface.MouseEnter += FormMain_MouseEnter;
+            drawingSurface.MouseLeave += FormMain_MouseLeave;
+            drawingSurface.Location = new Point(25, 25);
+            drawingSurface.Visible = true;
 
             _core.OnStop += _core_OnStop;
 

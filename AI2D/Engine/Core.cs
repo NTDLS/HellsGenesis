@@ -30,9 +30,9 @@ namespace AI2D.Engine
 
         #endregion
 
-        public Core(Control drawingSurface, Size visibleSize)
+        public Core(Control drawingSurface)
         {
-            Display = new EngineDisplayManager(drawingSurface, visibleSize);
+            Display = new EngineDisplayManager(drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
             Actors = new EngineActorManager(this);
             Input = new EngineInputManager(this);
             Situations = new SituationManager(this);
