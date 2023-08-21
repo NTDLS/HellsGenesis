@@ -863,32 +863,24 @@ namespace AI2D.Engine.Managers
 
             if (_core.Actors.Player != null)
             {
+                //Scale the screen based on the player throttle.
                 if (_core.Actors.Player.Velocity.ThrottlePercentage > 0.5)
-                {
                     _core.Display.ThrottleFrameScaleFactor += 2;
-                }
                 else if (_core.Actors.Player.Velocity.ThrottlePercentage < 1)
-                {
                     _core.Display.ThrottleFrameScaleFactor -= 2;
-                }
 
+                //Scale the screen based on the player boost.
                 _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 40);
-
                 if (_core.Actors.Player.Velocity.BoostPercentage > 0.5)
-                {
                     _core.Display.BoostFrameScaleFactor += 1;
-                }
                 else if (_core.Actors.Player.Velocity.BoostPercentage < 1)
-                {
                     _core.Display.BoostFrameScaleFactor -= 1;
-                }
 
                 _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 20);
-
             }
 
+            //Select the bitmap from the large screen bitmap and copy it to the "scaling drawing".
             int scaleSubtraction = (int)(_core.Display.OverdrawSize.Width / 4 * (_core.Display.TotalFrameScaleFactor / 100));
-
             scalingDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
                     new RectangleF(0, 0, _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height),
                     new Rectangle(
@@ -899,6 +891,7 @@ namespace AI2D.Engine.Managers
                     ),
                 GraphicsUnit.Pixel);
 
+            //Resize whatever we ended up with to the exact screen size.
             return ResizeBitmapTo(scalingDrawing.Bitmap, _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height);
         }
 
