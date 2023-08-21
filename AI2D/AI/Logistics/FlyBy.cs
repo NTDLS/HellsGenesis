@@ -1,7 +1,6 @@
 ﻿using AI2D.Actors;
 using AI2D.Engine;
 using AI2D.Types;
-using AI2D.Types.ExtensionMethods;
 using Determinet;
 using Determinet.Types;
 using System;

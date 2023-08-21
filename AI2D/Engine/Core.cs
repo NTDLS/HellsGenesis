@@ -7,6 +7,7 @@ namespace AI2D.Engine
 {
     public class Core
     {
+        public EngineSettings Settings { get; set; } = new();
         public EngineInputManager Input { get; private set; }
         public EngineDisplayManager Display { get; private set; }
         public EngineActorManager Actors { get; private set; }

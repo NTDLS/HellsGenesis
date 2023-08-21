@@ -7,43 +7,67 @@ namespace AI2D.Engine.Managers
 {
     public class EngineDisplayManager
     {
-        public const double OverdrawScale = 1;
-        public Dictionary<Point, Quadrant> Quadrants { get; private set; } = new Dictionary<Point, Quadrant>();
+        public Dictionary<Point, Quadrant> Quadrants { get; private set; } = new();
         public Quadrant CurrentQuadrant { get; set; }
         public Point<double> BackgroundOffset { get; private set; } = new Point<double>(); //Offset of background, all cals must take into account.
         public FrameCounter GameLoopCounter { get; private set; } = new FrameCounter();
-        public RectangleF VisibleBounds { get; private set; }
-        //public RectangleF DrawBounds { get; private set; }
+
+        public Control DrawingSurface { get; private set; }
+
+        /// <summary>
+        /// How much larger then the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out.
+        /// </summary>
+        public const double OverdrawScale = 1;
+
+        /// <summary>
+        /// The scaling factor to apply based on the current player speed.
+        /// </summary>
+        public double ThrottleFrameScaleFactor { get; set; }
+
+        /// The scaling factor to apply based on the current player boost.
+        public double BoostFrameScaleFactor { get; set; }
+
+        /// <summary>
+        /// The number of pixles to remove from the length and width to perform the scaling at the current speed.
+        /// </summary>
+        /// <returns></returns>
+        public int SpeedOrientedFrameScalingSubtraction() => (int)(OverdrawSize.Width / 4.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0));
+
+        /// <summary>
+        /// The number of extra pixles to draw beyond the NatrualScreenSize.
+        /// </summary>
         public Size OverdrawSize { get; private set; }
-        public Size DrawSize { get; private set; }
+
+        /// <summary>
+        /// The total size of the rendering surface (no scaling).
+        /// </summary>
+        public Size TotalCanvasSize { get; private set; }
 
         /// <summary>
         /// The size of the screen with no scaling.
         /// </summary>
         public Size NatrualScreenSize { get; private set; }
-        public Control DrawingSurface { get; private set; }
-        public double ThrottleFrameScaleFactor { get; set; }
-        public double BoostFrameScaleFactor { get; set; }
-        public double TotalFrameScaleFactor => ThrottleFrameScaleFactor + BoostFrameScaleFactor;
-        public int TotalFrameScaleSubtraction() => (int)(OverdrawSize.Width / 4 * (TotalFrameScaleFactor / 100));
 
-        public RectangleF DrawBounds
+        /// <summary>
+        /// The bounds of the screen with no scaling.
+        /// </summary>
+        public RectangleF NatrualScreenBounds
         {
             get
             {
                 return new RectangleF(OverdrawSize.Width / 2.0f, OverdrawSize.Height / 2.0f,
-                        NatrualScreenSize.Width * 2f, NatrualScreenSize.Height * 2f
+                        NatrualScreenSize.Width, NatrualScreenSize.Height
                 );
             }
         }
 
-        public Rectangle CurrentScreenBounds
+        public RectangleF CurrentScaledScreenBounds
         {
             get
             {
-                int scaleSubtraction = TotalFrameScaleSubtraction();
-                return new Rectangle(OverdrawSize.Width / 2 - scaleSubtraction, OverdrawSize.Height / 2 - scaleSubtraction,
-                        NatrualScreenSize.Width + scaleSubtraction * 2, NatrualScreenSize.Height + scaleSubtraction * 2
+                int scaleSubtraction = SpeedOrientedFrameScalingSubtraction();
+                return new RectangleF(OverdrawSize.Width / 2.0f - scaleSubtraction, OverdrawSize.Height / 2.0f - scaleSubtraction,
+                        NatrualScreenSize.Width + scaleSubtraction * 2.0f, NatrualScreenSize.Height + scaleSubtraction * 2.0f
                 );
             }
         }
@@ -52,7 +76,7 @@ namespace AI2D.Engine.Managers
         {
             get
             {
-                int scaleSubtraction = TotalFrameScaleSubtraction();
+                int scaleSubtraction = SpeedOrientedFrameScalingSubtraction();
                 return new Size(NatrualScreenSize.Width + scaleSubtraction * 2, NatrualScreenSize.Height + scaleSubtraction * 2);
             }
         }
@@ -109,9 +133,7 @@ namespace AI2D.Engine.Managers
             if (overdrawWidth % 2 != 0) overdrawWidth++;
             OverdrawSize = new Size(overdrawWidth, overdrawHeight);
 
-            DrawSize = new Size(visibleSize.Width + OverdrawSize.Width, visibleSize.Height + OverdrawSize.Height);
-            //DrawBounds = new RectangleF(0, 0, DrawSize.Width, DrawSize.Height);
-            VisibleBounds = new RectangleF(0, 0, visibleSize.Width, visibleSize.Height);
+            TotalCanvasSize = new Size(visibleSize.Width + OverdrawSize.Width, visibleSize.Height + OverdrawSize.Height);
         }
 
         public Quadrant GetQuadrant(double x, double y)

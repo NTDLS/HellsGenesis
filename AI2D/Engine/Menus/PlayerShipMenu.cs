@@ -20,8 +20,8 @@ namespace AI2D.Engine.Menus
             var player5 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Ticonderoga) { Tag = "MENU_SHIP_SELECT" });
             var player6 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Kirov) { Tag = "MENU_SHIP_SELECT" });
 
-            double baseX = _core.Display.CurrentScreenBounds.X + 40;
-            double baseY = _core.Display.CurrentScreenBounds.Y + 100;
+            double baseX = _core.Display.CurrentScaledScreenBounds.X + 40;
+            double baseY = _core.Display.CurrentScaledScreenBounds.Y + 100;
 
             var itemTitle = NewTitleItem(new Point<double>(baseX, baseY), "Select a Ship Class:", Brushes.OrangeRed);
             itemTitle.X = baseX + 200;

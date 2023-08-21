@@ -204,7 +204,7 @@ namespace AI2D.Actors
         {
             get
             {
-                return _core.Display.VisibleBounds.IntersectsWith(Bounds);
+                return _core.Display.CurrentScaledScreenBounds.IntersectsWith(Bounds);
             }
         }
 

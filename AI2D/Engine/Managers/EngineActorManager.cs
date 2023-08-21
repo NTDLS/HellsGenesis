@@ -4,7 +4,6 @@ using AI2D.Actors.Enemies;
 using AI2D.Actors.PowerUp;
 using AI2D.Engine.Menus;
 using AI2D.Types;
-using AI2D.Types.ExtensionMethods;
 using AI2D.Weapons;
 using System;
 using System.Collections.Generic;
@@ -731,7 +730,7 @@ namespace AI2D.Engine.Managers
             var timeout = TimeSpan.FromMilliseconds(1);
             bool lockTaken = false;
 
-            var screenDrawing = _core.DrawingCache.Get(DrawingCacheType.Screen, _core.Display.DrawSize);
+            var screenDrawing = _core.DrawingCache.Get(DrawingCacheType.Screen, _core.Display.TotalCanvasSize);
             DrawingCacheItem radarDrawing = null;
 
             if (_core.DrawingCache.Exists(DrawingCacheType.Radar) == false)
@@ -809,7 +808,7 @@ namespace AI2D.Engine.Managers
                                 }
                             }
 
-                            if (_core.Display.DrawBounds.IntersectsWith(actor.Bounds))
+                            if (_core.Display.NatrualScreenBounds.IntersectsWith(actor.Bounds))
                             {
                                 Utility.DynamicCast(actor, actor.GetType()).Render(screenDrawing.Graphics);
                             }
@@ -837,39 +836,45 @@ namespace AI2D.Engine.Managers
                 }
             }
 
-            /*
-            //Highlight the 1:1 frame
-            using (var pen = new Pen(Color.Gray, 1))
+            if (_core.Settings.HighlightNatrualBounds)
             {
-                var rect = new Rectangle(
-                        (int)(_core.Display.OverdrawSize.Width / 2), (int)(_core.Display.OverdrawSize.Height / 2),
-                        _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height
-                    );
-                screenDrawing.Graphics.DrawRectangle(pen, rect);
+                //Highlight the 1:1 frame
+                using (var pen = new Pen(Color.Red, 3))
+                {
+                    var bounds = _core.Display.NatrualScreenBounds.Clone();
+
+                    bounds.Height -= 40;
+                    bounds.Width -= 16;
+
+                    screenDrawing.Graphics.DrawRectangle(pen, bounds);
+                }
             }
-            */
 
             var scaledDrawing = _core.DrawingCache.Get(DrawingCacheType.Scaling, _core.Display.NatrualScreenSize);
-            if (_core.Actors.Player != null)
+
+            if (_core.Settings.AutoZoomWhenMoving)
             {
-                //Scale the screen based on the player throttle.
-                if (_core.Actors.Player.Velocity.ThrottlePercentage > 0.5)
-                    _core.Display.ThrottleFrameScaleFactor += 2;
-                else if (_core.Actors.Player.Velocity.ThrottlePercentage < 1)
-                    _core.Display.ThrottleFrameScaleFactor -= 2;
+                if (_core.Actors.Player != null)
+                {
+                    //Scale the screen based on the player throttle.
+                    if (_core.Actors.Player.Velocity.ThrottlePercentage > 0.5)
+                        _core.Display.ThrottleFrameScaleFactor += 2;
+                    else if (_core.Actors.Player.Velocity.ThrottlePercentage < 1)
+                        _core.Display.ThrottleFrameScaleFactor -= 2;
 
-                //Scale the screen based on the player boost.
-                _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 40);
-                if (_core.Actors.Player.Velocity.BoostPercentage > 0.5)
-                    _core.Display.BoostFrameScaleFactor += 1;
-                else if (_core.Actors.Player.Velocity.BoostPercentage < 1)
-                    _core.Display.BoostFrameScaleFactor -= 1;
+                    //Scale the screen based on the player boost.
+                    _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 40);
+                    if (_core.Actors.Player.Velocity.BoostPercentage > 0.5)
+                        _core.Display.BoostFrameScaleFactor += 1;
+                    else if (_core.Actors.Player.Velocity.BoostPercentage < 1)
+                        _core.Display.BoostFrameScaleFactor -= 1;
 
-                _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 20);
+                    _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 20);
+                }
             }
 
             //Select the bitmap from the large screen bitmap and copy it to the "scaling drawing".
-            int scaleSubtraction = _core.Display.TotalFrameScaleSubtraction();
+            int scaleSubtraction = _core.Display.SpeedOrientedFrameScalingSubtraction();
 
             scaledDrawing.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             scaledDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
@@ -891,8 +896,8 @@ namespace AI2D.Engine.Managers
                         radarDrawing.Bitmap.Width, radarDrawing.Bitmap.Height
                     );
                 scaledDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
-            }
 
+            }
             try
             {
                 lockTaken = false;
@@ -905,10 +910,7 @@ namespace AI2D.Engine.Managers
                         //Render to display:
                         foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
                         {
-                            //if (_core.Display.DrawBounds.IntersectsWith(actor.Bounds))
-                            //{
-                                Utility.DynamicCast(actor, actor.GetType()).Render(scaledDrawing.Graphics);
-                            //}
+                            Utility.DynamicCast(actor, actor.GetType()).Render(scaledDrawing.Graphics);
                         }
                     }
                 }

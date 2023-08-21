@@ -94,7 +94,7 @@ namespace AI2D.Actors.Enemies
 
             if (RadarPositionIndicator != null)
             {
-                var currentScreenBounds = _core.Display.CurrentScreenBounds;
+                var currentScreenBounds = _core.Display.CurrentScaledScreenBounds;
 
                 int radarSlop = 50;
 

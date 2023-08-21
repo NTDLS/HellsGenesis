@@ -29,22 +29,8 @@ namespace AI2D.Actors
             }
         }
 
-        private string _lastTextSizeCheck;
         private Size _size = Size.Empty;
-        public override Size Size
-        {
-            get
-            {
-                if (_size.IsEmpty || _text != _lastTextSizeCheck)
-                {
-                    var fSize = _genericDC.MeasureString(_text, _font);
-
-                    _size = new Size((int)Math.Ceiling(fSize.Width), (int)Math.Ceiling(fSize.Height));
-                    _lastTextSizeCheck = _text;
-                }
-                return _size;
-            }
-        }
+        public override Size Size => _size;
 
         private string _text;
         public string Text
@@ -66,7 +52,10 @@ namespace AI2D.Actors
                 //Now that we have used _prevRegion to invaldate the previous region, set it to the new region coords.
                 //And invalidate them for the new text.
                 var stringSize = _genericDC.MeasureString(_text, _font);
-                _prevRegion = new Rectangle((int)X, (int)Y, (int)stringSize.Width, (int)stringSize.Height);
+
+                _size = new Size((int)Math.Ceiling(stringSize.Width), (int)Math.Ceiling(stringSize.Height));
+
+                _prevRegion = new Rectangle((int)X, (int)Y, _size.Width, _size.Height);
                 _core.Display.DrawingSurface.Invalidate((Rectangle)_prevRegion);
             }
         }
@@ -88,8 +77,6 @@ namespace AI2D.Actors
             if (Visable)
             {
                 dc.DrawString(_text, _font, _color, (float)X, (float)Y);
-
-                //TODO: Rotate text is required.
             }
         }
     }

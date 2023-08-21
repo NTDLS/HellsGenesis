@@ -1,7 +1,14 @@
-﻿namespace AI2D.Types.ExtensionMethods
+﻿using System.Drawing;
+
+namespace AI2D.Types
 {
-    public static class DoubleExtensions
+    public static class ExtensionsMethods
     {
+        public static RectangleF Clone(this RectangleF rectangle)
+        {
+            return new RectangleF(rectangle.Location, rectangle.Size);
+        }
+
         public static double Box(this double value, double minValue, double maxValue)
         {
             if (value > maxValue) return maxValue;
