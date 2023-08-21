@@ -5,6 +5,7 @@ using AI2D.Actors.PowerUp;
 using AI2D.Engine.Menus;
 using AI2D.Engine.Situations;
 using AI2D.Types;
+using AI2D.Types.ExtensionMethods;
 using AI2D.Weapons;
 using System;
 using System.Collections.Generic;
@@ -856,32 +857,37 @@ namespace AI2D.Engine.Managers
 
             var scalingDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Scaling, _core.Display.VisibleSize);
 
+            //public double ThrottleFrameScaleFactor { get; set; }
+            //public double BoostFrameScaleFactor { get; set; }
+            //public double TotalFrameScaleFactor => ThrottleFrameScaleFactor + BoostFrameScaleFactor;
+
             if (_core.Actors.Player != null)
             {
                 if (_core.Actors.Player.Velocity.ThrottlePercentage > 0.5)
                 {
-                    _core.Display.CurrentFrameScaleFactor += 5;
+                    _core.Display.ThrottleFrameScaleFactor += 2;
                 }
-                else if (_core.Actors.Player.Velocity.ThrottlePercentage < 100)
+                else if (_core.Actors.Player.Velocity.ThrottlePercentage < 1)
                 {
-                    _core.Display.CurrentFrameScaleFactor -= 5;
+                    _core.Display.ThrottleFrameScaleFactor -= 2;
                 }
 
-                if (_core.Display.CurrentFrameScaleFactor <= 0)
+                _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 40);
+
+                if (_core.Actors.Player.Velocity.BoostPercentage > 0.5)
                 {
-                    _core.Display.CurrentFrameScaleFactor = 0;
+                    _core.Display.BoostFrameScaleFactor += 1;
                 }
-                else if (_core.Display.CurrentFrameScaleFactor > 50)
+                else if (_core.Actors.Player.Velocity.BoostPercentage < 1)
                 {
-                    _core.Display.CurrentFrameScaleFactor = 50;
+                    _core.Display.BoostFrameScaleFactor -= 1;
                 }
-            }
-            else
-            {
-                _core.Display.CurrentFrameScaleFactor = 0;
+
+                _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 20);
+
             }
 
-            int scaleSubtraction = (int)(_core.Display.OverdrawSize.Width / 4 * (_core.Display.CurrentFrameScaleFactor / 100));
+            int scaleSubtraction = (int)(_core.Display.OverdrawSize.Width / 4 * (_core.Display.TotalFrameScaleFactor / 100));
 
             scalingDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
                     new RectangleF(0, 0, _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height),

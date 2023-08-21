@@ -18,8 +18,9 @@ namespace AI2D.Engine.Managers
         public Size DrawSize { get; private set; }
         public Size VisibleSize { get; private set; }
         public Control DrawingSurface { get; private set; }
-
-        public double CurrentFrameScaleFactor { get; set; }
+        public double ThrottleFrameScaleFactor { get; set; }
+        public double BoostFrameScaleFactor { get; set; }
+        public double TotalFrameScaleFactor => ThrottleFrameScaleFactor + BoostFrameScaleFactor;
 
         public Point<double> RandomOnScreenLocation()
         {
