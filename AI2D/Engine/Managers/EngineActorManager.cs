@@ -8,21 +8,19 @@ using AI2D.Types;
 using AI2D.Weapons;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Tracing;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
 
-namespace AI2D.Engine
+namespace AI2D.Engine.Managers
 {
-    public class EngineActors
+    public class EngineActorManager
     {
         private Core _core;
 
         #region Actors.
-        public BaseSituation CurrentScenario { get; private set; }
+        public BaseSituation CurrentSituation { get; private set; }
         public List<BaseSituation> Situations = new List<BaseSituation>();
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
         public List<ActorBase> Collection { get; private set; } = new List<ActorBase>();
@@ -48,7 +46,7 @@ namespace AI2D.Engine
 
         #endregion
 
-        public EngineActors(Core core)
+        public EngineActorManager(Core core)
         {
             _core = core;
         }
@@ -118,7 +116,7 @@ namespace AI2D.Engine
                 }
             }
 
-            CurrentScenario = null;
+            CurrentSituation = null;
             Situations.Clear();
         }
 
@@ -140,7 +138,7 @@ namespace AI2D.Engine
 
                 DeleteAllActors();
 
-                AdvanceScenario();
+                AdvanceSituation();
             }
         }
 
@@ -192,24 +190,24 @@ namespace AI2D.Engine
             Player.ShipEngineRoarSound.Stop();
         }
 
-        public void AdvanceScenario()
+        public void AdvanceSituation()
         {
             lock (Situations)
             {
-                if (CurrentScenario != null)
+                if (CurrentSituation != null)
                 {
-                    Situations.Remove(CurrentScenario);
+                    Situations.Remove(CurrentSituation);
                 }
 
                 if (Situations.Count > 0)
                 {
-                    CurrentScenario = Situations[0];
-                    CurrentScenario.Execute();
+                    CurrentSituation = Situations[0];
+                    CurrentSituation.Execute();
                 }
                 else
                 {
-                    CurrentScenario = null;
-                    AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5), TheDoorIsAjarCallback);
+                    CurrentSituation = null;
+                    AddNewEngineCallbackEvent(new TimeSpan(0, 0, 0, 5), TheDoorIsAjarCallback);
                 }
             }
         }
@@ -416,7 +414,7 @@ namespace AI2D.Engine
             {
                 animation.X = defaultPosition.X;
                 animation.Y = defaultPosition.Y;
-                animation.RotationMode = Types.RotationMode.Clip; //Much less expensive. Use this or NONE if you can.
+                animation.RotationMode = RotationMode.Clip; //Much less expensive. Use this or NONE if you can.
                 Collection.Add(animation);
             }
         }
@@ -712,18 +710,13 @@ namespace AI2D.Engine
 
         #region Rendering.
 
-        private Bitmap _radarBitmap = null;
-        private Graphics _radarDC = null;
         private Point<double> _radarScale;
         private Point<double> _radarOffset;
         private Bitmap _RadarBackgroundImage = null;
         private SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
 
-        private Bitmap _ScreenBitmap = null;
-        private Graphics _ScreenDC = null;
-
         private Bitmap _latestFrame = null;
-        private Object _LatestFrameLock = new Object();
+        private object _LatestFrameLock = new object();
 
         /// <summary>
         /// Using the render thread, we can always have a frame ready, but that really means we render even when we dont need to.
@@ -777,19 +770,10 @@ namespace AI2D.Engine
             var timeout = TimeSpan.FromMilliseconds(1);
             bool lockTaken = false;
 
-            if (_ScreenBitmap == null)
-            {
-                _ScreenBitmap = new Bitmap(_core.Display.DrawSize.Width, _core.Display.DrawSize.Height);
+            var screenDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Screen, _core.Display.DrawSize);
+            EngineDrawingCacheManager.DrawingCacheItem radarDrawing = null;
 
-                _ScreenDC = Graphics.FromImage(_ScreenBitmap);
-                _ScreenDC.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                _ScreenDC.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-                _ScreenDC.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-                _ScreenDC.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                _ScreenDC.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
-            }
-
-            if (_radarBitmap == null)
+            if (_core.DrawingCache.Exists(EngineDrawingCacheManager.DrawingCacheType.Radar) == false)
             {
                 _RadarBackgroundImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Radar.png");
 
@@ -800,61 +784,59 @@ namespace AI2D.Engine
                 double radarVisionWidth = _core.Display.VisibleSize.Width * radarDistance;
                 double radarVisionHeight = _core.Display.VisibleSize.Height * radarDistance;
 
-                _radarBitmap = new Bitmap((int)radarWidth, (int)radarHeight);
-                _radarScale = new Point<double>((double)_radarBitmap.Width / radarVisionWidth, (double)_radarBitmap.Height / radarVisionHeight);
+                radarDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Radar, new Size((int)radarWidth, (int)radarHeight));
+
+                _radarScale = new Point<double>((double)radarDrawing.Bitmap.Width / radarVisionWidth, (double)radarDrawing.Bitmap.Height / radarVisionHeight);
 
                 _radarOffset = new Point<double>(radarWidth / 2.0, radarHeight / 2.0); //Best guess until player is visible.
-
-                _radarDC = Graphics.FromImage(_radarBitmap);
-                _radarDC.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                _radarDC.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-                _radarDC.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-                _radarDC.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                _radarDC.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            }
+            else
+            {
+                radarDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Radar);
             }
 
-            if (this.RenderRadar)
+            if (RenderRadar)
             {
                 if (Player is not null && Player.Visable)
                 {
-                    double centerOfRadarX = (int)(_radarBitmap.Width / 2.0) - 2.0; //Subtract half the dot size.
-                    double centerOfRadarY = (int)(_radarBitmap.Height / 2.0) - 2.0; //Subtract half the dot size.
+                    double centerOfRadarX = (int)(radarDrawing.Bitmap.Width / 2.0) - 2.0; //Subtract half the dot size.
+                    double centerOfRadarY = (int)(radarDrawing.Bitmap.Height / 2.0) - 2.0; //Subtract half the dot size.
 
                     _radarOffset = new Point<double>(
-                        centerOfRadarX - (Player.X * _radarScale.X),
-                        centerOfRadarY - (Player.Y * _radarScale.Y));
+                        centerOfRadarX - Player.X * _radarScale.X,
+                        centerOfRadarY - Player.Y * _radarScale.Y);
                 }
 
-                _radarDC.DrawImage(_RadarBackgroundImage, new Point(0, 0));
+                radarDrawing.Graphics.DrawImage(_RadarBackgroundImage, new Point(0, 0));
             }
 
             try
             {
                 Monitor.TryEnter(_core.DrawingSemaphore, timeout, ref lockTaken);
 
-                //_ScreenDC.Clear(Color.Red);
+                //screenDrawing.Graphics.Clear(Color.Red);
 
                 if (lockTaken)
                 {
                     lock (Collection)
                     {
-                        _ScreenDC.Clear(Color.Black);
+                        screenDrawing.Graphics.Clear(Color.Black);
 
-                        if (this.RenderRadar)
+                        if (RenderRadar)
                         {
                             //Render radar:
                             foreach (var actor in Collection.Where(o => o.Visable == true))
                             {
                                 if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
                                 {
-                                    Utility.DynamicCast(actor, actor.GetType()).RenderRadar(_radarDC, _radarScale, _radarOffset);
+                                    Utility.DynamicCast(actor, actor.GetType()).RenderRadar(radarDrawing.Graphics, _radarScale, _radarOffset);
                                 }
                             }
 
                             //Render player blip:
-                            _radarDC.FillEllipse(_playerRadarDotBrush,
-                                (int)(_radarBitmap.Width / 2.0) - 2,
-                                (int)(_radarBitmap.Height / 2.0) - 2, 4, 4);
+                            radarDrawing.Graphics.FillEllipse(_playerRadarDotBrush,
+                                (int)(radarDrawing.Bitmap.Width / 2.0) - 2,
+                                (int)(radarDrawing.Bitmap.Height / 2.0) - 2, 4, 4);
                         }
 
                         //Render to display:
@@ -862,19 +844,19 @@ namespace AI2D.Engine
                         {
                             if (_core.Display.DrawBounds.IntersectsWith(actor.Bounds))
                             {
-                                Utility.DynamicCast(actor, actor.GetType()).Render(_ScreenDC);
+                                Utility.DynamicCast(actor, actor.GetType()).Render(screenDrawing.Graphics);
                             }
                         }
-                        Player?.Render(_ScreenDC);
+                        Player?.Render(screenDrawing.Graphics);
 
-                        if (this.RenderRadar)
+                        if (RenderRadar)
                         {
                             //Render radar to display:
-                            Rectangle rect = new Rectangle((int)(_core.Display.VisibleSize.Width - (_radarBitmap.Width + 25)),
-                            (int)(_core.Display.VisibleSize.Height - (_radarBitmap.Height + 50)),
-                            _radarBitmap.Width, _radarBitmap.Height);
+                            Rectangle rect = new Rectangle((int)(_core.Display.VisibleSize.Width - (radarDrawing.Bitmap.Width + 25)),
+                            (int)(_core.Display.VisibleSize.Height - (radarDrawing.Bitmap.Height + 50)),
+                            radarDrawing.Bitmap.Width, radarDrawing.Bitmap.Height);
 
-                            _ScreenDC.DrawImage(_radarBitmap, rect);
+                            screenDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
                         }
                     }
 
@@ -882,12 +864,12 @@ namespace AI2D.Engine
                     {
                         foreach (var obj in Menus)
                         {
-                            obj.Render(_ScreenDC);
+                            obj.Render(screenDrawing.Graphics);
                         }
                     }
                 }
 
-                //displayDC.DrawImage(_ScreenBitmap, 0, 0);
+                //displayDC.DrawImage(screenDrawing.Bitmap, 0, 0);
             }
             finally
             {
@@ -900,88 +882,66 @@ namespace AI2D.Engine
 
             _core.IsRendering = false;
 
-            using (var pen = new Pen(Color.Red, 3))
+            /*
+            //Highlight the 1:1 frame
+            using (var pen = new Pen(Color.Gray, 1))
             {
                 var rect = new Rectangle(
-                        (int)(_core.Display.OverdrawSize.Width / 2),
-                        (int)(_core.Display.OverdrawSize.Height / 2),
-                        _core.Display.VisibleSize.Width ,
-                        _core.Display.VisibleSize.Height 
+                        (int)(_core.Display.OverdrawSize.Width / 2), (int)(_core.Display.OverdrawSize.Height / 2),
+                        _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height
                     );
-                _ScreenDC.DrawRectangle(pen, rect);
+                screenDrawing.Graphics.DrawRectangle(pen, rect);
             }
+            */
 
-            //var cropRect = new Rectangle(new Point(100, 100), new Size(400,300));
-            //var cropped = CropBitmap(_ScreenBitmap, cropRect);
-            //_ScreenBitmap
-            //("./test.bmp");
-            //_ScreenBitmap.Dispose();
-            //_ScreenBitmap = croppedBitmap;
+            var scalingDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Scaling, _core.Display.VisibleSize);
 
-            //return ZoomBitmap(_ScreenBitmap, 0.5);
-
-            var finalBitmap = new Bitmap(_core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height);
             if (_core.Actors.Player != null)
             {
-                if (scaleFactor < _core.Actors.Player.Velocity.ThrottlePercentage * 100)
+                if (_core.Actors.Player.Velocity.ThrottlePercentage > 0.5)
                 {
-                    scaleFactor += 5;
+                    _core.Display.CurrentFrameScaleFactor += 5;
                 }
-                else if (scaleFactor > _core.Actors.Player.Velocity.ThrottlePercentage * 100)
+                else if (_core.Actors.Player.Velocity.ThrottlePercentage < 100)
                 {
-                    scaleFactor -= 5;
+                    _core.Display.CurrentFrameScaleFactor -= 5;
                 }
 
-                if (scaleFactor <= 0)
+                if (_core.Display.CurrentFrameScaleFactor <= 0)
                 {
-                    scaleFactor = 0;
+                    _core.Display.CurrentFrameScaleFactor = 0;
                 }
-                else if (scaleFactor > 50)
+                else if (_core.Display.CurrentFrameScaleFactor > 50)
                 {
-                    scaleFactor = 50;
+                    _core.Display.CurrentFrameScaleFactor = 50;
                 }
             }
             else
             {
-                scaleFactor = 0;
+                _core.Display.CurrentFrameScaleFactor = 0;
             }
 
-            int scaleSubtraction = (int)(_core.Display.OverdrawSize.Width / 4 * (scaleFactor / 100));
+            int scaleSubtraction = (int)(_core.Display.OverdrawSize.Width / 4 * (_core.Display.CurrentFrameScaleFactor / 100));
 
-            Debug.Print($"{scaleSubtraction:n2}");
-
-            using (Graphics framedDc = Graphics.FromImage(finalBitmap))
-            {
-                framedDc.DrawImage(_ScreenBitmap,
+            scalingDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
                     new RectangleF(0, 0, _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height),
                     new Rectangle(
-                        (int)(_core.Display.OverdrawSize.Width / 2) - scaleSubtraction,
-                        (int)(_core.Display.OverdrawSize.Height / 2) - scaleSubtraction,
-                        _core.Display.VisibleSize.Width + (scaleSubtraction * 2),
-                        _core.Display.VisibleSize.Height + (scaleSubtraction * 2)
+                        _core.Display.OverdrawSize.Width / 2 - scaleSubtraction,
+                        _core.Display.OverdrawSize.Height / 2 - scaleSubtraction,
+                        _core.Display.VisibleSize.Width + scaleSubtraction * 2,
+                        _core.Display.VisibleSize.Height + scaleSubtraction * 2
                     ),
                 GraphicsUnit.Pixel);
-            }
 
-            var zoomed = ResizeBitmap(finalBitmap, _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height);
-
-
-            return zoomed;
+            return ResizeBitmapTo(scalingDrawing.Bitmap, _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height);
         }
 
-        float scaleFactor = 0;
-
-        private Bitmap ResizeBitmap(Bitmap originalBitmap, int newWidth, int newHeight)
+        private Bitmap ResizeBitmapTo(Bitmap originalBitmap, int newWidth, int newHeight)
         {
-            Bitmap resizedBitmap = new Bitmap(newWidth, newHeight);
-
-            using (Graphics graphics = Graphics.FromImage(resizedBitmap))
-            {
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.DrawImage(originalBitmap, new Rectangle(0, 0, newWidth, newHeight));
-            }
-
-            return resizedBitmap;
+            var resizeDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Resize, new Size(newWidth, newHeight));
+            resizeDrawing.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            resizeDrawing.Graphics.DrawImage(originalBitmap, new Rectangle(0, 0, newWidth, newHeight));
+            return resizeDrawing.Bitmap;
         }
 
         #endregion

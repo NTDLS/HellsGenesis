@@ -1,4 +1,5 @@
-﻿using AI2D.Engine.Menus;
+﻿using AI2D.Engine.Managers;
+using AI2D.Engine.Menus;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -6,9 +7,10 @@ namespace AI2D.Engine
 {
     public class Core
     {
-        public EngineInput Input { get; private set; }
-        public EngineDisplay Display { get; private set; }
-        public EngineActors Actors { get; private set; }
+        public EngineInputManager Input { get; private set; }
+        public EngineDisplayManager Display { get; private set; }
+        public EngineActorManager Actors { get; private set; }
+        public EngineDrawingCacheManager DrawingCache { get; set; } = new();
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
@@ -28,9 +30,9 @@ namespace AI2D.Engine
 
         public Core(Control drawingSurface, Size visibleSize)
         {
-            Display = new EngineDisplay(drawingSurface, visibleSize);
-            Actors = new EngineActors(this);
-            Input = new EngineInput(this);
+            Display = new EngineDisplayManager(drawingSurface, visibleSize);
+            Actors = new EngineActorManager(this);
+            Input = new EngineInputManager(this);
             _engineThread = new EngineThread(this);
 
             Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);

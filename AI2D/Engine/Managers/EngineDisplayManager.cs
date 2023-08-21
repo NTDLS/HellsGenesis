@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace AI2D.Engine
+namespace AI2D.Engine.Managers
 {
-    public class EngineDisplay
+    public class EngineDisplayManager
     {
         public const double OverdrawScale = 1;
         public Dictionary<Point, Quadrant> Quadrants { get; private set; } = new Dictionary<Point, Quadrant>();
@@ -18,6 +18,8 @@ namespace AI2D.Engine
         public Size DrawSize { get; private set; }
         public Size VisibleSize { get; private set; }
         public Control DrawingSurface { get; private set; }
+
+        public double CurrentFrameScaleFactor { get; set; }
 
         public Point<double> RandomOnScreenLocation()
         {
@@ -60,7 +62,7 @@ namespace AI2D.Engine
             return new Point<double>(x, y);
         }
 
-        public EngineDisplay(Control drawingSurface, Size visibleSize)
+        public EngineDisplayManager(Control drawingSurface, Size visibleSize)
         {
             DrawingSurface = drawingSurface;
             VisibleSize = visibleSize;

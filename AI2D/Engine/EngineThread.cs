@@ -130,9 +130,9 @@ namespace AI2D.Engine
 
             #region Situation Advancement.
 
-            if (_core.Actors.CurrentScenario?.State == BaseSituation.ScenarioState.Ended)
+            if (_core.Actors.CurrentSituation?.State == BaseSituation.ScenarioState.Ended)
             {
-                _core.Actors.AdvanceScenario();
+                _core.Actors.AdvanceSituation();
             }
 
             #endregion
@@ -592,9 +592,9 @@ namespace AI2D.Engine
 
             string situation = "<peaceful>";
 
-            if (_core.Actors.CurrentScenario != null)
+            if (_core.Actors.CurrentSituation != null)
             {
-                situation = $"{_core.Actors.CurrentScenario.Name} (Wave {_core.Actors.CurrentScenario.CurrentWave} of {_core.Actors.CurrentScenario.TotalWaves})";
+                situation = $"{_core.Actors.CurrentSituation.Name} (Wave {_core.Actors.CurrentSituation.CurrentWave} of {_core.Actors.CurrentSituation.TotalWaves})";
             }
 
             _core.Actors.PlayerStatsText.Text =

@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace AI2D.Engine
+namespace AI2D.Engine.Managers
 {
-    public class EngineInput
+    public class EngineInputManager
     {
         private Core _core;
         private Dictionary<PlayerKey, KeyPressState> _keyStates = new Dictionary<PlayerKey, KeyPressState>();
 
-        public EngineInput(Core core)
+        public EngineInputManager(Core core)
         {
             _core = core;
         }
@@ -21,7 +21,7 @@ namespace AI2D.Engine
         {
             if (_keyStates.ContainsKey(key))
             {
-                return (_keyStates[key] == KeyPressState.Down);
+                return _keyStates[key] == KeyPressState.Down;
             }
 
             return false;
@@ -72,8 +72,8 @@ namespace AI2D.Engine
                 {
                     textBlock = _core.Actors.AddNewTextBlock("Consolas", Brushes.Red, 50, new Point<double>(100, 100), true, "PausedText");
                     textBlock.Text = "Paused...";
-                    textBlock.X = (_core.Display.VisibleSize.Width) / 2 - (textBlock.Size.Width / 2);
-                    textBlock.Y = (_core.Display.VisibleSize.Height) / 2 - (textBlock.Size.Height / 2);
+                    textBlock.X = _core.Display.VisibleSize.Width / 2 - textBlock.Size.Width / 2;
+                    textBlock.Y = _core.Display.VisibleSize.Height / 2 - textBlock.Size.Height / 2;
                 }
 
                 _core.TogglePause();
