@@ -9,8 +9,8 @@ namespace AI2D.Engine.Menus
         public MenuStartNewGame(Core core)
             : base(core)
         {
-            double baseX = _core.Display.NatrualScreenSize.Width / 2;
-            double baseY = _core.Display.NatrualScreenSize.Height / 4;
+            double baseX = _core.Display.DrawSize.Width / 2;
+            double baseY = (_core.Display.DrawSize.Height / 4) + 100;
 
             var itemTitle = NewTitleItem(new Point<double>(baseX, baseY), "Start new game?", Brushes.OrangeRed);
             itemTitle.X -= itemTitle.Size.Width / 2;
