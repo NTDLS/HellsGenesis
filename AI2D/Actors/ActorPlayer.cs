@@ -80,8 +80,8 @@ namespace AI2D.Actors
 
             IsDead = false;
 
-            X = _core.Display.VisibleSize.Width / 2;
-            Y = _core.Display.VisibleSize.Height / 2;
+            X = _core.Display.DrawSize.Width / 2;
+            Y = _core.Display.DrawSize.Height / 2;
 
             Velocity.Angle = new Angle<double>(45);
 

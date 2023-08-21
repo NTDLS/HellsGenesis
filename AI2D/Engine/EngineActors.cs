@@ -8,8 +8,10 @@ using AI2D.Types;
 using AI2D.Weapons;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Tracing;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
 
@@ -898,35 +900,88 @@ namespace AI2D.Engine
 
             _core.IsRendering = false;
 
+            using (var pen = new Pen(Color.Red, 3))
+            {
+                var rect = new Rectangle(
+                        (int)(_core.Display.OverdrawSize.Width / 2),
+                        (int)(_core.Display.OverdrawSize.Height / 2),
+                        _core.Display.VisibleSize.Width ,
+                        _core.Display.VisibleSize.Height 
+                    );
+                _ScreenDC.DrawRectangle(pen, rect);
+            }
+
             //var cropRect = new Rectangle(new Point(100, 100), new Size(400,300));
-            //_ScreenBitmap.Save("./before.bmp");
             //var cropped = CropBitmap(_ScreenBitmap, cropRect);
-            _ScreenBitmap.Save("./test.bmp");
+            //_ScreenBitmap
+            //("./test.bmp");
             //_ScreenBitmap.Dispose();
             //_ScreenBitmap = croppedBitmap;
 
             //return ZoomBitmap(_ScreenBitmap, 0.5);
 
-            return _ScreenBitmap;
-        }
-
-
-        public Bitmap ZoomBitmap(Bitmap originalBitmap, float zoomFactor)
-        {
-            int newWidth = (int)(originalBitmap.Width * zoomFactor);
-            int newHeight = (int)(originalBitmap.Height * zoomFactor);
-
-            Bitmap zoomedBitmap = new Bitmap(newWidth, newHeight);
-
-            using (Graphics graphics = Graphics.FromImage(zoomedBitmap))
+            var finalBitmap = new Bitmap(_core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height);
+            if (_core.Actors.Player != null)
             {
-                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-                graphics.DrawImage(originalBitmap, new Rectangle(0, 0, newWidth, newHeight), new RectangleF(originalBitmap.Width / 2 - (newWidth / (2 * zoomFactor)),
-                    originalBitmap.Height / 2 - (newHeight / (2 * zoomFactor)),
-                    newWidth / zoomFactor, newHeight / zoomFactor), GraphicsUnit.Pixel);
+                if (scaleFactor < _core.Actors.Player.Velocity.ThrottlePercentage * 100)
+                {
+                    scaleFactor += 5;
+                }
+                else if (scaleFactor > _core.Actors.Player.Velocity.ThrottlePercentage * 100)
+                {
+                    scaleFactor -= 5;
+                }
+
+                if (scaleFactor <= 0)
+                {
+                    scaleFactor = 0;
+                }
+                else if (scaleFactor > 50)
+                {
+                    scaleFactor = 50;
+                }
+            }
+            else
+            {
+                scaleFactor = 0;
             }
 
-            return zoomedBitmap;
+            int scaleSubtraction = (int)(_core.Display.OverdrawSize.Width / 4 * (scaleFactor / 100));
+
+            Debug.Print($"{scaleSubtraction:n2}");
+
+            using (Graphics framedDc = Graphics.FromImage(finalBitmap))
+            {
+                framedDc.DrawImage(_ScreenBitmap,
+                    new RectangleF(0, 0, _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height),
+                    new Rectangle(
+                        (int)(_core.Display.OverdrawSize.Width / 2) - scaleSubtraction,
+                        (int)(_core.Display.OverdrawSize.Height / 2) - scaleSubtraction,
+                        _core.Display.VisibleSize.Width + (scaleSubtraction * 2),
+                        _core.Display.VisibleSize.Height + (scaleSubtraction * 2)
+                    ),
+                GraphicsUnit.Pixel);
+            }
+
+            var zoomed = ResizeBitmap(finalBitmap, _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height);
+
+
+            return zoomed;
+        }
+
+        float scaleFactor = 0;
+
+        private Bitmap ResizeBitmap(Bitmap originalBitmap, int newWidth, int newHeight)
+        {
+            Bitmap resizedBitmap = new Bitmap(newWidth, newHeight);
+
+            using (Graphics graphics = Graphics.FromImage(resizedBitmap))
+            {
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.DrawImage(originalBitmap, new Rectangle(0, 0, newWidth, newHeight));
+            }
+
+            return resizedBitmap;
         }
 
         #endregion

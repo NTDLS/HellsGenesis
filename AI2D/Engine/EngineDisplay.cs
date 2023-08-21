@@ -7,13 +7,14 @@ namespace AI2D.Engine
 {
     public class EngineDisplay
     {
+        public const double OverdrawScale = 1;
         public Dictionary<Point, Quadrant> Quadrants { get; private set; } = new Dictionary<Point, Quadrant>();
         public Quadrant CurrentQuadrant { get; set; }
         public Point<double> BackgroundOffset { get; private set; } = new Point<double>(); //Offset of background, all cals must take into account.
         public FrameCounter GameLoopCounter { get; private set; } = new FrameCounter();
         public RectangleF VisibleBounds { get; private set; }
         public RectangleF DrawBounds { get; private set; }
-        public Size OverDraw { get; private set; }
+        public Size OverdrawSize { get; private set; }
         public Size DrawSize { get; private set; }
         public Size VisibleSize { get; private set; }
         public Control DrawingSurface { get; private set; }
@@ -64,13 +65,13 @@ namespace AI2D.Engine
             DrawingSurface = drawingSurface;
             VisibleSize = visibleSize;
 
-            int overdrawHeight = (int)(visibleSize.Height * 0.30);
-            int overdrawWidth = (int)(visibleSize.Width * 0.30);
+            int overdrawHeight = (int)(visibleSize.Height * OverdrawScale);
+            int overdrawWidth = (int)(visibleSize.Width * OverdrawScale);
             if (overdrawHeight % 2 != 0) overdrawHeight++;
             if (overdrawWidth % 2 != 0) overdrawWidth++;
-            OverDraw = new Size(overdrawWidth, overdrawHeight);
+            OverdrawSize = new Size(overdrawWidth, overdrawHeight);
 
-            DrawSize = new Size(visibleSize.Width + OverDraw.Width, visibleSize.Height + OverDraw.Height);
+            DrawSize = new Size(visibleSize.Width + OverdrawSize.Width, visibleSize.Height + OverdrawSize.Height);
             DrawBounds = new RectangleF(0, 0, DrawSize.Width, DrawSize.Height);
             VisibleBounds = new RectangleF(0, 0, visibleSize.Width, visibleSize.Height);
         }

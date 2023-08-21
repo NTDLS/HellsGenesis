@@ -262,27 +262,27 @@ namespace AI2D.Engine
                     }
 
                     //Close to the right wall and travelling in that direction.
-                    if (_core.Actors.Player.X > _core.Display.DrawSize.Width - (_core.Actors.Player.Size.Width + Constants.Limits.InfiniteScrollWall)
+                    if (_core.Actors.Player.X > _core.Display.DrawSize.Width - (_core.Actors.Player.Size.Width + Constants.Limits.InfiniteScrollWallX)
                         && _core.Actors.Player.Velocity.Angle.X > 0)
                     {
                         appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the bottom wall and travelling in that direction.
-                    if (_core.Actors.Player.Y > _core.Display.DrawSize.Height - (_core.Actors.Player.Size.Height + Constants.Limits.InfiniteScrollWall)
+                    if (_core.Actors.Player.Y > _core.Display.DrawSize.Height - (_core.Actors.Player.Size.Height + Constants.Limits.InfiniteScrollWallY)
                         && _core.Actors.Player.Velocity.Angle.Y > 0)
                     {
                         appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
                     }
 
                     //Close to the left wall and travelling in that direction.
-                    if (_core.Actors.Player.X < Constants.Limits.InfiniteScrollWall && _core.Actors.Player.Velocity.Angle.X < 0)
+                    if (_core.Actors.Player.X < Constants.Limits.InfiniteScrollWallX && _core.Actors.Player.Velocity.Angle.X < 0)
                     {
                         appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the top wall and travelling in that direction.
-                    if (_core.Actors.Player.Y < Constants.Limits.InfiniteScrollWall && _core.Actors.Player.Velocity.Angle.Y < 0)
+                    if (_core.Actors.Player.Y < Constants.Limits.InfiniteScrollWallY && _core.Actors.Player.Velocity.Angle.Y < 0)
                     {
                         appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
                     }
