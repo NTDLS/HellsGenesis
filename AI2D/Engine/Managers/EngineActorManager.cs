@@ -3,7 +3,6 @@ using AI2D.Actors.Bullets;
 using AI2D.Actors.Enemies;
 using AI2D.Actors.PowerUp;
 using AI2D.Engine.Menus;
-using AI2D.Engine.Situations;
 using AI2D.Types;
 using AI2D.Types.ExtensionMethods;
 using AI2D.Weapons;
@@ -13,6 +12,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
+using static AI2D.Engine.Managers.EngineDrawingCacheManager;
 
 namespace AI2D.Engine.Managers
 {
@@ -60,7 +60,9 @@ namespace AI2D.Engine.Managers
 
             BackgroundMusicSound = GetSoundCached(@"..\..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
 
-            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 9, new Point<double>(5, 5), true);
+            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 9,
+                //new Point<double>((_core.Display.OverdrawSize.Width) / 2 + 5, (_core.Display.OverdrawSize.Height / 2) + 5), true);
+                new Point<double>(5, 5), true);
             PlayerStatsText.Visable = false;
             DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, new Point<double>(5, PlayerStatsText.Y + 80), true);
 
@@ -104,14 +106,12 @@ namespace AI2D.Engine.Managers
             }
         }
 
-
-
         public void NewGame()
         {
             lock (Collection)
             {
                 _core.Situations.Reset();
-                    PlayerStatsText.Visable = true;
+                PlayerStatsText.Visable = true;
                 DeleteAllActors();
 
                 _core.Situations.AdvanceSituation();
@@ -731,10 +731,10 @@ namespace AI2D.Engine.Managers
             var timeout = TimeSpan.FromMilliseconds(1);
             bool lockTaken = false;
 
-            var screenDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Screen, _core.Display.DrawSize);
-            EngineDrawingCacheManager.DrawingCacheItem radarDrawing = null;
+            var screenDrawing = _core.DrawingCache.Get(DrawingCacheType.Screen, _core.Display.DrawSize);
+            DrawingCacheItem radarDrawing = null;
 
-            if (_core.DrawingCache.Exists(EngineDrawingCacheManager.DrawingCacheType.Radar) == false)
+            if (_core.DrawingCache.Exists(DrawingCacheType.Radar) == false)
             {
                 _RadarBackgroundImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Radar.png");
 
@@ -742,18 +742,17 @@ namespace AI2D.Engine.Managers
                 double radarWidth = _RadarBackgroundImage.Width;
                 double radarHeight = _RadarBackgroundImage.Height;
 
-                double radarVisionWidth = _core.Display.VisibleSize.Width * radarDistance;
-                double radarVisionHeight = _core.Display.VisibleSize.Height * radarDistance;
+                double radarVisionWidth = _core.Display.NatrualScreenSize.Width * radarDistance;
+                double radarVisionHeight = _core.Display.NatrualScreenSize.Height * radarDistance;
 
-                radarDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Radar, new Size((int)radarWidth, (int)radarHeight));
+                radarDrawing = _core.DrawingCache.Get(DrawingCacheType.Radar, new Size((int)radarWidth, (int)radarHeight));
 
                 _radarScale = new Point<double>((double)radarDrawing.Bitmap.Width / radarVisionWidth, (double)radarDrawing.Bitmap.Height / radarVisionHeight);
-
                 _radarOffset = new Point<double>(radarWidth / 2.0, radarHeight / 2.0); //Best guess until player is visible.
             }
             else
             {
-                radarDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Radar);
+                radarDrawing = _core.DrawingCache.Get(DrawingCacheType.Radar);
             }
 
             if (RenderRadar)
@@ -773,9 +772,8 @@ namespace AI2D.Engine.Managers
 
             try
             {
+                lockTaken = false;
                 Monitor.TryEnter(_core.DrawingSemaphore, timeout, ref lockTaken);
-
-                //screenDrawing.Graphics.Clear(Color.Red);
 
                 if (lockTaken)
                 {
@@ -803,22 +801,20 @@ namespace AI2D.Engine.Managers
                         //Render to display:
                         foreach (var actor in Collection.Where(o => o.Visable == true))
                         {
+                            if (actor is ActorTextBlock actorTextBlock)
+                            {
+                                if (actorTextBlock.IsPositionStatic == true)
+                                {
+                                    continue; //We want to add these later so they are not scaled.
+                                }
+                            }
+
                             if (_core.Display.DrawBounds.IntersectsWith(actor.Bounds))
                             {
                                 Utility.DynamicCast(actor, actor.GetType()).Render(screenDrawing.Graphics);
                             }
                         }
                         Player?.Render(screenDrawing.Graphics);
-
-                        if (RenderRadar)
-                        {
-                            //Render radar to display:
-                            Rectangle rect = new Rectangle((int)(_core.Display.VisibleSize.Width - (radarDrawing.Bitmap.Width + 25)),
-                            (int)(_core.Display.VisibleSize.Height - (radarDrawing.Bitmap.Height + 50)),
-                            radarDrawing.Bitmap.Width, radarDrawing.Bitmap.Height);
-
-                            screenDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
-                        }
                     }
 
                     lock (Menus)
@@ -855,12 +851,7 @@ namespace AI2D.Engine.Managers
             }
             */
 
-            var scalingDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Scaling, _core.Display.VisibleSize);
-
-            //public double ThrottleFrameScaleFactor { get; set; }
-            //public double BoostFrameScaleFactor { get; set; }
-            //public double TotalFrameScaleFactor => ThrottleFrameScaleFactor + BoostFrameScaleFactor;
-
+            var scaledDrawing = _core.DrawingCache.Get(DrawingCacheType.Scaling, _core.Display.NatrualScreenSize);
             if (_core.Actors.Player != null)
             {
                 //Scale the screen based on the player throttle.
@@ -880,27 +871,71 @@ namespace AI2D.Engine.Managers
             }
 
             //Select the bitmap from the large screen bitmap and copy it to the "scaling drawing".
-            int scaleSubtraction = (int)(_core.Display.OverdrawSize.Width / 4 * (_core.Display.TotalFrameScaleFactor / 100));
-            scalingDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
-                    new RectangleF(0, 0, _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height),
+            int scaleSubtraction = _core.Display.TotalFrameScaleSubtraction();
+            scaledDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
+                    new RectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height),
                     new Rectangle(
                         _core.Display.OverdrawSize.Width / 2 - scaleSubtraction,
                         _core.Display.OverdrawSize.Height / 2 - scaleSubtraction,
-                        _core.Display.VisibleSize.Width + scaleSubtraction * 2,
-                        _core.Display.VisibleSize.Height + scaleSubtraction * 2
+                        _core.Display.NatrualScreenSize.Width + scaleSubtraction * 2,
+                        _core.Display.NatrualScreenSize.Height + scaleSubtraction * 2
                     ),
                 GraphicsUnit.Pixel);
 
             //Resize whatever we ended up with to the exact screen size.
-            return ResizeBitmapTo(scalingDrawing.Bitmap, _core.Display.VisibleSize.Width, _core.Display.VisibleSize.Height);
+            var resizedDrawing = ResizeBitmapTo(scaledDrawing.Bitmap, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height);
+
+            //We add the radar last so that it does not get scaled down.
+            if (RenderRadar)
+            {
+                //Render radar to display:
+                Rectangle rect = new Rectangle((int)(_core.Display.NatrualScreenSize.Width - (radarDrawing.Bitmap.Width + 25)),
+                (int)(_core.Display.NatrualScreenSize.Height - (radarDrawing.Bitmap.Height + 50)),
+                radarDrawing.Bitmap.Width, radarDrawing.Bitmap.Height);
+
+                resizedDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
+            }
+
+            try
+            {
+                lockTaken = false;
+                Monitor.TryEnter(_core.DrawingSemaphore, timeout, ref lockTaken);
+
+                if (lockTaken)
+                {
+                    lock (Collection)
+                    {
+                        //Render to display:
+                        foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
+                        {
+                            if (_core.Display.DrawBounds.IntersectsWith(actor.Bounds))
+                            {
+                                Utility.DynamicCast(actor, actor.GetType()).Render(resizedDrawing.Graphics);
+                            }
+                        }
+                    }
+                }
+            }
+            finally
+            {
+                // Ensure that the lock is released.
+                if (lockTaken)
+                {
+                    Monitor.Exit(_core.DrawingSemaphore);
+                }
+            }
+
+            _core.IsRendering = false;
+
+            return resizedDrawing.Bitmap;
         }
 
-        private Bitmap ResizeBitmapTo(Bitmap originalBitmap, int newWidth, int newHeight)
+        private DrawingCacheItem ResizeBitmapTo(Bitmap originalBitmap, int newWidth, int newHeight)
         {
-            var resizeDrawing = _core.DrawingCache.Get(EngineDrawingCacheManager.DrawingCacheType.Resize, new Size(newWidth, newHeight));
+            var resizeDrawing = _core.DrawingCache.Get(DrawingCacheType.Resize, new Size(newWidth, newHeight));
             resizeDrawing.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
             resizeDrawing.Graphics.DrawImage(originalBitmap, new Rectangle(0, 0, newWidth, newHeight));
-            return resizeDrawing.Bitmap;
+            return resizeDrawing;
         }
 
         #endregion

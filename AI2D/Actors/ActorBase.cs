@@ -6,7 +6,6 @@ using AI2D.Types;
 using AI2D.Weapons;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
@@ -279,7 +278,7 @@ namespace AI2D.Actors
         {
             get
             {
-               return new Rectangle((int)(_location.X - (Size.Width / 2.0)), (int)(_location.Y - (Size.Height / 2.0)), Size.Width, Size.Height);
+                return new Rectangle((int)(_location.X - (Size.Width / 2.0)), (int)(_location.Y - (Size.Height / 2.0)), Size.Width, Size.Height);
             }
         }
 

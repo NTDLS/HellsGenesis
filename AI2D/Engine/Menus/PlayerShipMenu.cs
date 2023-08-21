@@ -23,7 +23,7 @@ namespace AI2D.Engine.Menus
             double baseX = 40;
             double baseY = 100;
 
-            var itemTitle = NewTitleItem(new Point<double>(_core.Display.VisibleSize.Width / 2, 20), "Select a Ship Class:", Brushes.OrangeRed);
+            var itemTitle = NewTitleItem(new Point<double>(_core.Display.NatrualScreenSize.Width / 2, 20), "Select a Ship Class:", Brushes.OrangeRed);
             itemTitle.X -= itemTitle.Size.Width / 2;
 
             _shipBlurb = NewTextItem(new Point<double>(baseX, baseY), "", Brushes.LawnGreen, 10);

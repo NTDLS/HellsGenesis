@@ -1,7 +1,6 @@
 ﻿using AI2D.AI;
 using AI2D.Engine;
 using AI2D.Types;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -82,9 +81,9 @@ namespace AI2D.Actors.Enemies
         public virtual void ApplyMotion(Point<double> frameAppliedOffset)
         {
             if (X < -Constants.Limits.EnemySceneDistanceLimit
-                || X >= _core.Display.VisibleSize.Width + Constants.Limits.EnemySceneDistanceLimit
+                || X >= _core.Display.NatrualScreenSize.Width + Constants.Limits.EnemySceneDistanceLimit
                 || Y < -Constants.Limits.EnemySceneDistanceLimit
-                || Y >= _core.Display.VisibleSize.Height + Constants.Limits.EnemySceneDistanceLimit)
+                || Y >= _core.Display.NatrualScreenSize.Height + Constants.Limits.EnemySceneDistanceLimit)
             {
                 QueueForDelete();
                 return;
@@ -95,7 +94,12 @@ namespace AI2D.Actors.Enemies
 
             if (RadarPositionIndicator != null)
             {
-                if (X < 0 || X >= _core.Display.VisibleSize.Width || Y < 0 || Y >= _core.Display.VisibleSize.Height)
+                var currentScreenBounds = _core.Display.CurrentScreenBounds;
+
+                int radarSlop = 50;
+
+                if (X + radarSlop < currentScreenBounds.X || (X - currentScreenBounds.X) + radarSlop >= currentScreenBounds.Width
+                    || currentScreenBounds.Y + radarSlop < 0 || (Y - currentScreenBounds.Y) + radarSlop >= currentScreenBounds.Height)
                 {
                     RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_core.Actors.Player));
 

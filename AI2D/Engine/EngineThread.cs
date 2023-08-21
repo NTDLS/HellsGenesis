@@ -476,13 +476,13 @@ namespace AI2D.Engine
 
             if (appliedOffset.X != 0 || appliedOffset.Y != 0)
             {
-                if (_core.Actors.VisibleOfType<ActorStar>().Count < 30) //Never wan't more than n stars.
+                if (_core.Actors.VisibleOfType<ActorStar>().Count < 50) //Never wan't more than n stars.
                 {
                     if (appliedOffset.X > 0)
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                            if (Utility.ChanceIn(1000)) //1 in n chance to create a star.
                             {
                                 int x = Utility.Random.Next(_core.Display.DrawSize.Width - (int)appliedOffset.X, _core.Display.DrawSize.Width);
                                 int y = Utility.Random.Next(0, _core.Display.DrawSize.Height);
@@ -494,7 +494,7 @@ namespace AI2D.Engine
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                            if (Utility.ChanceIn(1000)) //1 in n chance to create a star.
                             {
                                 int x = Utility.Random.Next(0, (int)-appliedOffset.X);
                                 int y = Utility.Random.Next(0, _core.Display.DrawSize.Height);
@@ -507,7 +507,7 @@ namespace AI2D.Engine
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                            if (Utility.ChanceIn(1000)) //1 in n chance to create a star.
                             {
                                 int x = Utility.Random.Next(0, _core.Display.DrawSize.Width);
                                 int y = Utility.Random.Next(_core.Display.DrawSize.Height - (int)appliedOffset.Y, _core.Display.DrawSize.Height);
@@ -519,7 +519,7 @@ namespace AI2D.Engine
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                            if (Utility.ChanceIn(1000)) //1 in n chance to create a star.
                             {
                                 int x = Utility.Random.Next(0, _core.Display.DrawSize.Width);
                                 int y = Utility.Random.Next(0, (int)-appliedOffset.Y);

@@ -16,15 +16,40 @@ namespace AI2D.Engine.Managers
         public RectangleF DrawBounds { get; private set; }
         public Size OverdrawSize { get; private set; }
         public Size DrawSize { get; private set; }
-        public Size VisibleSize { get; private set; }
+
+        /// <summary>
+        /// The size of the screen with no scaling.
+        /// </summary>
+        public Size NatrualScreenSize { get; private set; }
         public Control DrawingSurface { get; private set; }
         public double ThrottleFrameScaleFactor { get; set; }
         public double BoostFrameScaleFactor { get; set; }
         public double TotalFrameScaleFactor => ThrottleFrameScaleFactor + BoostFrameScaleFactor;
+        public int TotalFrameScaleSubtraction() => (int)(OverdrawSize.Width / 4 * (TotalFrameScaleFactor / 100));
+
+        public Rectangle CurrentScreenBounds
+        {
+            get
+            {
+                int scaleSubtraction = TotalFrameScaleSubtraction();
+                return new Rectangle(OverdrawSize.Width / 2 - scaleSubtraction, OverdrawSize.Height / 2 - scaleSubtraction,
+                        NatrualScreenSize.Width + scaleSubtraction * 2, NatrualScreenSize.Height + scaleSubtraction * 2
+                );
+            }
+        }
+
+        public Size CurrentScreenSize
+        {
+            get
+            {
+                int scaleSubtraction = TotalFrameScaleSubtraction();
+                return new Size(NatrualScreenSize.Width + scaleSubtraction * 2, NatrualScreenSize.Height + scaleSubtraction * 2);
+            }
+        }
 
         public Point<double> RandomOnScreenLocation()
         {
-            return new Point<double>(Utility.Random.Next(0, VisibleSize.Width), Utility.Random.Next(0, VisibleSize.Height));
+            return new Point<double>(Utility.Random.Next(0, NatrualScreenSize.Width), Utility.Random.Next(0, NatrualScreenSize.Height));
         }
 
         public Point<double> RandomOffScreenLocation(int min = 100, int max = 500)
@@ -37,25 +62,25 @@ namespace AI2D.Engine.Managers
                 if (Utility.FlipCoin())
                 {
                     x = -Utility.RandomNumber(min, max);
-                    y = Utility.RandomNumber(0, VisibleSize.Height);
+                    y = Utility.RandomNumber(0, NatrualScreenSize.Height);
                 }
                 else
                 {
                     y = -Utility.RandomNumber(min, max);
-                    x = Utility.RandomNumber(0, VisibleSize.Width);
+                    x = Utility.RandomNumber(0, NatrualScreenSize.Width);
                 }
             }
             else
             {
                 if (Utility.FlipCoin())
                 {
-                    x = VisibleSize.Width + Utility.RandomNumber(min, max);
-                    y = Utility.RandomNumber(0, VisibleSize.Height);
+                    x = NatrualScreenSize.Width + Utility.RandomNumber(min, max);
+                    y = Utility.RandomNumber(0, NatrualScreenSize.Height);
                 }
                 else
                 {
-                    y = VisibleSize.Height + Utility.RandomNumber(min, max);
-                    x = Utility.RandomNumber(0, VisibleSize.Width);
+                    y = NatrualScreenSize.Height + Utility.RandomNumber(min, max);
+                    x = Utility.RandomNumber(0, NatrualScreenSize.Width);
                 }
 
             }
@@ -66,7 +91,7 @@ namespace AI2D.Engine.Managers
         public EngineDisplayManager(Control drawingSurface, Size visibleSize)
         {
             DrawingSurface = drawingSurface;
-            VisibleSize = visibleSize;
+            NatrualScreenSize = visibleSize;
 
             int overdrawHeight = (int)(visibleSize.Height * OverdrawScale);
             int overdrawWidth = (int)(visibleSize.Width * OverdrawScale);
@@ -82,17 +107,17 @@ namespace AI2D.Engine.Managers
         public Quadrant GetQuadrant(double x, double y)
         {
             var coord = new Point(
-                    (int)(x / VisibleSize.Width),
-                    (int)(y / VisibleSize.Height)
+                    (int)(x / NatrualScreenSize.Width),
+                    (int)(y / NatrualScreenSize.Height)
                 );
 
             if (Quadrants.ContainsKey(coord) == false)
             {
                 var absoluteBounds = new Rectangle(
-                    VisibleSize.Width * coord.X,
-                    VisibleSize.Height * coord.Y,
-                    VisibleSize.Width,
-                    VisibleSize.Height);
+                    NatrualScreenSize.Width * coord.X,
+                    NatrualScreenSize.Height * coord.Y,
+                    NatrualScreenSize.Width,
+                    NatrualScreenSize.Height);
 
                 var quad = new Quadrant(coord, absoluteBounds);
 

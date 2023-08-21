@@ -1,11 +1,7 @@
-﻿using AI2D.AI;
-using AI2D.AI.Logistics;
+﻿using AI2D.AI.Logistics;
 using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 
