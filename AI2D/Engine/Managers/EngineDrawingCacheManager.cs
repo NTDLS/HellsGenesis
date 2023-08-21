@@ -8,7 +8,6 @@ namespace AI2D.Engine.Managers
     {
         public enum DrawingCacheType
         {
-            Resize,
             Scaling,
             Screen,
             Radar

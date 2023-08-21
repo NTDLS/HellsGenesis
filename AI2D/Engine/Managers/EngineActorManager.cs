@@ -837,8 +837,6 @@ namespace AI2D.Engine.Managers
                 }
             }
 
-            _core.IsRendering = false;
-
             /*
             //Highlight the 1:1 frame
             using (var pen = new Pen(Color.Gray, 1))
@@ -872,6 +870,8 @@ namespace AI2D.Engine.Managers
 
             //Select the bitmap from the large screen bitmap and copy it to the "scaling drawing".
             int scaleSubtraction = _core.Display.TotalFrameScaleSubtraction();
+
+            scaledDrawing.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             scaledDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
                     new RectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height),
                     new Rectangle(
@@ -882,18 +882,15 @@ namespace AI2D.Engine.Managers
                     ),
                 GraphicsUnit.Pixel);
 
-            //Resize whatever we ended up with to the exact screen size.
-            var resizedDrawing = ResizeBitmapTo(scaledDrawing.Bitmap, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height);
-
-            //We add the radar last so that it does not get scaled down.
             if (RenderRadar)
             {
-                //Render radar to display:
-                Rectangle rect = new Rectangle((int)(_core.Display.NatrualScreenSize.Width - (radarDrawing.Bitmap.Width + 25)),
-                (int)(_core.Display.NatrualScreenSize.Height - (radarDrawing.Bitmap.Height + 50)),
-                radarDrawing.Bitmap.Width, radarDrawing.Bitmap.Height);
-
-                resizedDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
+                //We add the radar last so that it does not get scaled down.
+                var rect = new Rectangle(
+                        (_core.Display.NatrualScreenSize.Width - (radarDrawing.Bitmap.Width + 25)),
+                        (_core.Display.NatrualScreenSize.Height - (radarDrawing.Bitmap.Height + 50)),
+                        radarDrawing.Bitmap.Width, radarDrawing.Bitmap.Height
+                    );
+                scaledDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
             }
 
             try
@@ -908,10 +905,10 @@ namespace AI2D.Engine.Managers
                         //Render to display:
                         foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
                         {
-                            if (_core.Display.DrawBounds.IntersectsWith(actor.Bounds))
-                            {
-                                Utility.DynamicCast(actor, actor.GetType()).Render(resizedDrawing.Graphics);
-                            }
+                            //if (_core.Display.DrawBounds.IntersectsWith(actor.Bounds))
+                            //{
+                                Utility.DynamicCast(actor, actor.GetType()).Render(scaledDrawing.Graphics);
+                            //}
                         }
                     }
                 }
@@ -927,16 +924,9 @@ namespace AI2D.Engine.Managers
 
             _core.IsRendering = false;
 
-            return resizedDrawing.Bitmap;
+            return scaledDrawing.Bitmap;
         }
 
-        private DrawingCacheItem ResizeBitmapTo(Bitmap originalBitmap, int newWidth, int newHeight)
-        {
-            var resizeDrawing = _core.DrawingCache.Get(DrawingCacheType.Resize, new Size(newWidth, newHeight));
-            resizeDrawing.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            resizeDrawing.Graphics.DrawImage(originalBitmap, new Rectangle(0, 0, newWidth, newHeight));
-            return resizeDrawing;
-        }
 
         #endregion
     }

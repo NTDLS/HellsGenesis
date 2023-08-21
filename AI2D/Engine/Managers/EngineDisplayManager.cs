@@ -13,7 +13,7 @@ namespace AI2D.Engine.Managers
         public Point<double> BackgroundOffset { get; private set; } = new Point<double>(); //Offset of background, all cals must take into account.
         public FrameCounter GameLoopCounter { get; private set; } = new FrameCounter();
         public RectangleF VisibleBounds { get; private set; }
-        public RectangleF DrawBounds { get; private set; }
+        //public RectangleF DrawBounds { get; private set; }
         public Size OverdrawSize { get; private set; }
         public Size DrawSize { get; private set; }
 
@@ -26,6 +26,16 @@ namespace AI2D.Engine.Managers
         public double BoostFrameScaleFactor { get; set; }
         public double TotalFrameScaleFactor => ThrottleFrameScaleFactor + BoostFrameScaleFactor;
         public int TotalFrameScaleSubtraction() => (int)(OverdrawSize.Width / 4 * (TotalFrameScaleFactor / 100));
+
+        public RectangleF DrawBounds
+        {
+            get
+            {
+                return new RectangleF(OverdrawSize.Width / 2.0f, OverdrawSize.Height / 2.0f,
+                        NatrualScreenSize.Width * 2f, NatrualScreenSize.Height * 2f
+                );
+            }
+        }
 
         public Rectangle CurrentScreenBounds
         {
@@ -100,7 +110,7 @@ namespace AI2D.Engine.Managers
             OverdrawSize = new Size(overdrawWidth, overdrawHeight);
 
             DrawSize = new Size(visibleSize.Width + OverdrawSize.Width, visibleSize.Height + OverdrawSize.Height);
-            DrawBounds = new RectangleF(0, 0, DrawSize.Width, DrawSize.Height);
+            //DrawBounds = new RectangleF(0, 0, DrawSize.Width, DrawSize.Height);
             VisibleBounds = new RectangleF(0, 0, visibleSize.Width, visibleSize.Height);
         }
 

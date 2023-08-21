@@ -215,19 +215,14 @@ namespace AI2D.Engine.Menus
             }
 
             var selectedItem = (from o in _menuItems where o.Selected == true select o).FirstOrDefault();
-
             if (selectedItem != null)
             {
-                Pen blackPen = new Pen(Color.Red, 3);
-                //Rectangle rect = new Rectangle(0, 0, 200, 200);
-
-                dc.DrawRectangle(blackPen, selectedItem.BoundsI);
+                dc.DrawRectangle(new Pen(Color.Red, 1), selectedItem.BoundsI);
             }
         }
 
         public virtual void Cleanup()
         {
-
         }
     }
 }
