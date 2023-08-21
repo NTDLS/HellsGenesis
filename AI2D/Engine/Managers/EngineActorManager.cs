@@ -20,8 +20,6 @@ namespace AI2D.Engine.Managers
         private Core _core;
 
         #region Actors.
-        public BaseSituation CurrentSituation { get; private set; }
-        public List<BaseSituation> Situations = new List<BaseSituation>();
         public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
         public List<ActorBase> Collection { get; private set; } = new List<ActorBase>();
         public List<BaseMenu> Menus { get; private set; } = new List<BaseMenu>();
@@ -106,39 +104,16 @@ namespace AI2D.Engine.Managers
         }
 
 
-        public void ClearScenarios()
-        {
-            lock (Situations)
-            {
-                foreach (var obj in Situations)
-                {
-                    obj.Cleanup();
-                }
-            }
-
-            CurrentSituation = null;
-            Situations.Clear();
-        }
 
         public void NewGame()
         {
             lock (Collection)
             {
-                lock (Situations)
-                {
-                    ClearScenarios();
-
-                    Situations.Add(new SituationDebuggingGalore(_core));
-                    Situations.Add(new SituationScinzadSkirmish(_core));
-                    Situations.Add(new SituationIrlenFormations(_core));
-                    Situations.Add(new SituationAvvolAmbush(_core));
-
+                _core.Situations.Reset();
                     PlayerStatsText.Visable = true;
-                }
-
                 DeleteAllActors();
 
-                AdvanceSituation();
+                _core.Situations.AdvanceSituation();
             }
         }
 
@@ -188,28 +163,6 @@ namespace AI2D.Engine.Managers
             RenderRadar = false;
             Player.ShipEngineIdleSound.Stop();
             Player.ShipEngineRoarSound.Stop();
-        }
-
-        public void AdvanceSituation()
-        {
-            lock (Situations)
-            {
-                if (CurrentSituation != null)
-                {
-                    Situations.Remove(CurrentSituation);
-                }
-
-                if (Situations.Count > 0)
-                {
-                    CurrentSituation = Situations[0];
-                    CurrentSituation.Execute();
-                }
-                else
-                {
-                    CurrentSituation = null;
-                    AddNewEngineCallbackEvent(new TimeSpan(0, 0, 0, 5), TheDoorIsAjarCallback);
-                }
-            }
         }
 
         public List<T> VisibleOfType<T>() where T : class
@@ -450,6 +403,13 @@ namespace AI2D.Engine.Managers
                 Collection.Remove(obj);
             }
         }
+
+        public void QueueTheDoorIsAjar()
+        {
+
+            AddNewEngineCallbackEvent(new TimeSpan(0, 0, 0, 5), _core.Actors.TheDoorIsAjarCallback);
+        }
+
 
         public EngineCallbackEvent AddNewEngineCallbackEvent(
             TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback, object refObj,

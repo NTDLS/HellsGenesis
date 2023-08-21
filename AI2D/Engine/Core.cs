@@ -10,6 +10,7 @@ namespace AI2D.Engine
         public EngineInputManager Input { get; private set; }
         public EngineDisplayManager Display { get; private set; }
         public EngineActorManager Actors { get; private set; }
+        public SituationManager Situations { get; set; }
         public EngineDrawingCacheManager DrawingCache { get; set; } = new();
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
@@ -33,6 +34,7 @@ namespace AI2D.Engine
             Display = new EngineDisplayManager(drawingSurface, visibleSize);
             Actors = new EngineActorManager(this);
             Input = new EngineInputManager(this);
+            Situations = new SituationManager(this);
             _engineThread = new EngineThread(this);
 
             Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
