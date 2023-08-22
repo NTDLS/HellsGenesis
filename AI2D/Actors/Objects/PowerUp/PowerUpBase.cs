@@ -11,7 +11,7 @@ namespace AI2D.Actors.Objects.PowerUp
         private const string _assetHitAnimationPath = @"..\..\..\Assets\Graphics\Animation\PowerUp\";
         private readonly string[] _assetHitAnimationFiles = {
             #region Image Paths.
-            "PowerUp1.png",
+            "PowerUpShort128x128.png",
             #endregion
         };
 
@@ -46,7 +46,7 @@ namespace AI2D.Actors.Objects.PowerUp
             Initialize();
 
             int _hitImageIndex = Utility.RandomNumber(0, _assetHitAnimationFiles.Count());
-            _hitAnimation = new ActorAnimation(_core, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(111, 109), 50);
+            _hitAnimation = new ActorAnimation(_core, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
 
             int _soundIndex = Utility.RandomNumber(0, _assetExplosionSoundFiles.Count());
             _explodeSound = _core.Audio.Get(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);

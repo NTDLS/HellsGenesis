@@ -1,4 +1,5 @@
-﻿using AI2D.Actors.Objects.Weapons;
+﻿using AI2D.Actors.Objects.PowerUp;
+using AI2D.Actors.Objects.Weapons;
 using AI2D.Engine;
 using AI2D.Types;
 using System;
@@ -89,6 +90,10 @@ namespace AI2D.Actors.Objects
             Velocity.ThrottlePercentage = Limits.MinPlayerThrust;
             Velocity.AvailableBoost = Limits.MaxPlayerBoost;
             Velocity.MaxRotationSpeed = Limits.MaxRotationSpeed;
+
+            _core.Actors.Powerups.Create<PowerUpRepair>(
+                (_core.Display.TotalCanvasSize.Width / 2) - 200,
+                (_core.Display.TotalCanvasSize.Height / 2) - 200);
 
             if (Class == PlayerClass.Nimitz)
             {

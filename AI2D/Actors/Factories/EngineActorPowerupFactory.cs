@@ -54,5 +54,17 @@ namespace AI2D.Actors.Factories
                 return (T)obj;
             }
         }
+
+        public T Create<T>(double x, double y) where T : PowerUpBase
+        {
+            lock (_manager.Collection)
+            {
+                object[] param = { _core };
+                var obj = (PowerUpBase)Activator.CreateInstance(typeof(T), param);
+                obj.Location = new Types.Point<double>(x, y);
+                _manager.Collection.Add(obj);
+                return (T)obj;
+            }
+        }
     }
 }

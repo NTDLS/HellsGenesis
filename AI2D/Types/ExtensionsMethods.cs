@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Security.Cryptography.Xml;
 
 namespace AI2D.Types
 {
@@ -8,6 +9,15 @@ namespace AI2D.Types
         {
             return new RectangleF(rectangle.Location, rectangle.Size);
         }
+
+        public static bool IntersectsWith(this RectangleF reference, RectangleF with, float tolerance)
+        {
+            return (with.X < reference.X + reference.Width + tolerance)
+                && (reference.X < with.X + with.Width + tolerance)
+                && (with.Y < reference.Y + reference.Height + tolerance)
+                && (reference.Y < with.Y + with.Height + tolerance);
+        }
+
 
         public static double Box(this double value, double minValue, double maxValue)
         {

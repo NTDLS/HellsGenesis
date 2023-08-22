@@ -71,6 +71,7 @@ namespace AI2D.Engine
 
             #endregion
 
+
             var timer = new Stopwatch();
             var targetFrameDuration = 1000000 / Constants.Limits.FrameLimiter; //1000000 / n-frames/second.
 
@@ -562,18 +563,6 @@ namespace AI2D.Engine
                 powerUp.X += (powerUp.Velocity.Angle.X * (powerUp.Velocity.MaxSpeed * powerUp.Velocity.ThrottlePercentage)) - appliedOffset.X;
                 powerUp.Y += (powerUp.Velocity.Angle.Y * (powerUp.Velocity.MaxSpeed * powerUp.Velocity.ThrottlePercentage)) - appliedOffset.Y;
             }
-
-            #endregion
-
-            #region Offscreen Radar Indicator.
-
-            /*
-             * Why would we be adding one that we dont need? Surely this was debug code...
-            if (_core.Actors.OfType<ActorRadarPositionIndicator>().Count < 1)
-            {
-                _core.Actors.AddNewRadarPositionIndicator();
-            }
-            */
 
             #endregion
 

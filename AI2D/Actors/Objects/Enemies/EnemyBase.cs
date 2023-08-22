@@ -94,12 +94,7 @@ namespace AI2D.Actors.Objects.Enemies
 
             if (RadarPositionIndicator != null)
             {
-                var currentScreenBounds = _core.Display.CurrentScaledScreenBounds;
-
-                int radarSlop = 50;
-
-                if (X + radarSlop < currentScreenBounds.X || X - currentScreenBounds.X + radarSlop >= currentScreenBounds.Width
-                    || currentScreenBounds.Y + radarSlop < 0 || Y - currentScreenBounds.Y + radarSlop >= currentScreenBounds.Height)
+                if(_core.Display.CurrentScaledScreenBounds.IntersectsWith(this.Bounds, -50) == false)
                 {
                     RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_core.Actors.Player));
 

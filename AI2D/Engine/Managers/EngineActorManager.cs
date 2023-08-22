@@ -329,7 +329,7 @@ namespace AI2D.Engine.Managers
 
             if (_core.DrawingCache.Exists(DrawingCacheType.Radar) == false)
             {
-                _RadarBackgroundImage = _core.Imaging.Get(@"..\..\..\Assets\Graphics\Radar.png");
+                _RadarBackgroundImage = _core.Imaging.Get(@"..\..\..\Assets\Graphics\RadarTransparent.png");
 
                 double radarDistance = 5;
                 double radarWidth = _RadarBackgroundImage.Width;
