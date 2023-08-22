@@ -9,7 +9,7 @@ namespace AI2D.Actors.Enemies
     /// <summary>
     /// 100% traditional weapons, they enforce their distance and are are moddled to provoke dog fighting. These are fast units.
     /// </summary>
-    public class EnemyScinzad : EnemyBase
+    internal class EnemyScinzad : EnemyBase
     {
         public const int ScoreMultiplier = 15;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Scinzad\";

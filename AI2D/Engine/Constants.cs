@@ -1,6 +1,6 @@
 ﻿namespace AI2D.Engine
 {
-    public static class Constants
+    internal static class Constants
     {
         public enum RelativeDirection
         {
@@ -30,7 +30,7 @@
         public const double PlayerThrustRampUp = 0.05;
         public const double PlayerThrustRampDown = 0.01;
 
-        public static class Limits
+        internal static class Limits
         {
             public const int MaxHitpoints = 100000;
             public const int MaxShieldPoints = 100000;

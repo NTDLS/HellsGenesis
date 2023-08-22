@@ -2,7 +2,7 @@
 
 namespace AI2D.Engine.Managers.EngineActorFactories
 {
-    public class EngineActorStarFactory
+    internal class EngineActorStarFactory
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;

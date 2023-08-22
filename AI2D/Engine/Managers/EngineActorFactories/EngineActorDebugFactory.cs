@@ -2,7 +2,7 @@
 
 namespace AI2D.Engine.Managers.EngineActorFactories
 {
-    public class EngineActorDebugFactory
+    internal class EngineActorDebugFactory
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;

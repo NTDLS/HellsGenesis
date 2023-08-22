@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace AI2D.Actors
 {
-    public class ActorDebug : ActorBase
+    internal class ActorDebug : ActorBase
     {
         public ActorDebug(Core core)
             : base(core)

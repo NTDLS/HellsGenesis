@@ -2,7 +2,7 @@
 
 namespace AI2D.Engine.Situations
 {
-    public class SituationFreeFlight : BaseSituation
+    internal class SituationFreeFlight : BaseSituation
     {
         public SituationFreeFlight(Core core)
             : base(core, "Free Flight")

@@ -5,7 +5,7 @@ using AI2D.Types;
 
 namespace AI2D.Weapons
 {
-    public class WeaponFragMissile : WeaponBase
+    internal class WeaponFragMissile : WeaponBase
     {
         private const string soundPath = @"..\..\..\Assets\Sounds\Weapons\WeaponFragMissile.wav";
         private const float soundVolumne = 0.4f;

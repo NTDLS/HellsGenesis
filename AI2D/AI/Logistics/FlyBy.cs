@@ -11,7 +11,7 @@ namespace AI2D.AI.Logistics
     /// <summary>
     /// AI brain to keep an object swooping in and out. Very near and somewhat agressively.
     /// </summary>
-    public class FlyBy : IAIController
+    internal class FlyBy : IAIController
     {
         private const string _assetPath = @"..\..\..\Assets\AI\Logistics\FlyBy.txt";
 

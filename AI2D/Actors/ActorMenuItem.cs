@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace AI2D.Actors
 {
-    public class ActorMenuItem : ActorTextBlock
+    internal class ActorMenuItem : ActorTextBlock
     {
         public BaseMenu Menu { get; private set; }
 

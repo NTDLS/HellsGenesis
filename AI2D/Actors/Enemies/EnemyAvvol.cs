@@ -10,7 +10,7 @@ namespace AI2D.Actors.Enemies
     /// These are a heavy fighting unit, employing various types of weapons and seemingly various stratigies.
     /// They like to stay at a medium range. Some units have seeking-missiles.
     /// </summary>
-    public class EnemyAvvol : EnemyBase
+    internal class EnemyAvvol : EnemyBase
     {
         public const int ScoreMultiplier = 25;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Avvol\";

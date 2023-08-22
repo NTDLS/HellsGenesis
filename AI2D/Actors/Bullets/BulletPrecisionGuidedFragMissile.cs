@@ -4,7 +4,7 @@ using AI2D.Weapons;
 
 namespace AI2D.Actors.Bullets
 {
-    public class BulletPrecisionGuidedFragMissile : BulletBase
+    internal class BulletPrecisionGuidedFragMissile : BulletBase
     {
         private const string imagePath = @"..\..\..\Assets\Graphics\Weapon\Missiles\BulletPrecisionGuidedFragMissile.png";
 

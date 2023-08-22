@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace AI2D.Engine
 {
-    public class EngineThread
+    internal class EngineThread
     {
         private readonly Core _core;
         private bool _shutdown = false;

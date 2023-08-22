@@ -4,7 +4,7 @@ using AI2D.Weapons;
 
 namespace AI2D.Actors.Bullets
 {
-    public class BulletHotPepper : BulletBase
+    internal class BulletHotPepper : BulletBase
     {
         private const string imagePath = @"..\..\..\Assets\Graphics\Weapon\BulletHotPepper.png";
 

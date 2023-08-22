@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace AI2D.Actors.Enemies
 {
-    public class EnemyBase : ActorBase
+    internal class EnemyBase : ActorBase
     {
         public IAIController CurrentAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();

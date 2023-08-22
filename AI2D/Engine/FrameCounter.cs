@@ -2,7 +2,7 @@
 
 namespace AI2D.Engine
 {
-    public class FrameCounter
+    internal class FrameCounter
     {
         public DateTime _lastFrame;
         public int _frameRateSamples;

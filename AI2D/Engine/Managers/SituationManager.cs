@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AI2D.Engine.Managers
 {
-    public class SituationManager
+    internal class SituationManager
     {
         public Core _core { get; private set; }
         public BaseSituation CurrentSituation { get; private set; }

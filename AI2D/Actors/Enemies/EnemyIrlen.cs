@@ -6,7 +6,7 @@ using System.IO;
 
 namespace AI2D.Actors.Enemies
 {
-    public class EnemyIrlen : EnemyBase
+    internal class EnemyIrlen : EnemyBase
     {
         public const int ScoreMultiplier = 1;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Irlen\";

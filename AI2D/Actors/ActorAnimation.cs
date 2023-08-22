@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace AI2D.Actors
 {
-    public class ActorAnimation : ActorBase
+    internal class ActorAnimation : ActorBase
     {
         private readonly Bitmap _frameImage;
         private readonly int _frameCount;
@@ -27,7 +27,7 @@ namespace AI2D.Actors
             StillFrame
         };
 
-        public class PlayMode
+        internal class PlayMode
         {
             private ReplayMode _replay;
 

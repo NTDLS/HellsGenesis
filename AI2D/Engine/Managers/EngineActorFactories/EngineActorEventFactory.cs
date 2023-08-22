@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace AI2D.Engine.Managers.EngineActorFactories
 {
-    public class EngineActorEventFactory
+    internal class EngineActorEventFactory
     {
         public List<EngineCallbackEvent> Collection { get; private set; } = new();
 

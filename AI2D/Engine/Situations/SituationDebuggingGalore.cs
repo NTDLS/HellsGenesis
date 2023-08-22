@@ -2,7 +2,7 @@
 
 namespace AI2D.Engine.Situations
 {
-    public class SituationDebuggingGalore : BaseSituation
+    internal class SituationDebuggingGalore : BaseSituation
     {
         public SituationDebuggingGalore(Core core)
             : base(core, "Debugging Galore")

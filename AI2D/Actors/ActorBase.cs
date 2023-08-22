@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace AI2D.Actors
 {
-    public class ActorBase
+    internal class ActorBase
     {
         /// <summary>
         /// A user defined name for the actor.

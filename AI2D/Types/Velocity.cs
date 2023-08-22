@@ -1,6 +1,6 @@
 ﻿namespace AI2D.Types
 {
-    public class Velocity<T>
+    internal class Velocity<T>
     {
         public delegate void ThrottleChange(Velocity<T> sender);
         public event ThrottleChange OnThrottleChange;

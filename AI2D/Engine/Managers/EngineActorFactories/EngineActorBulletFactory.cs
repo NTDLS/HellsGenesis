@@ -7,7 +7,7 @@ using System;
 
 namespace AI2D.Engine.Managers.EngineActorFactories
 {
-    public class EngineActorBulletFactory
+    internal class EngineActorBulletFactory
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;

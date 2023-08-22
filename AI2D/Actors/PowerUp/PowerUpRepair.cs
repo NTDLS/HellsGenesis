@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AI2D.Actors.PowerUp
 {
-    public class PowerUpRepair : PowerUpBase
+    internal class PowerUpRepair : PowerUpBase
     {
         private const string _assetPath = @"..\..\..\Assets\Graphics\PowerUp\Repair\";
         private readonly string[] _imagePaths = {

@@ -2,7 +2,7 @@
 
 namespace AI2D.Engine
 {
-    public class Quadrant
+    internal class Quadrant
     {
         public Point Key { get; private set; }
         public Rectangle Bounds { get; private set; }

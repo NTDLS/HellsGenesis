@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AI2D.Actors.PowerUp
 {
-    public class PowerUpSheild : PowerUpBase
+    internal class PowerUpSheild : PowerUpBase
     {
         public const int ScoreMultiplier = 1;
 

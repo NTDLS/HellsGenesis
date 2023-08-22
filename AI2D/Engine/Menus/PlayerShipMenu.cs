@@ -6,7 +6,7 @@ using static AI2D.Engine.Constants;
 
 namespace AI2D.Engine.Menus
 {
-    public class PlayerShipMenu : BaseMenu
+    internal class PlayerShipMenu : BaseMenu
     {
         private readonly ActorMenuItem _shipBlurb;
 

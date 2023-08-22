@@ -5,7 +5,7 @@ using System;
 
 namespace AI2D.Engine.Managers.EngineActorFactories
 {
-    public class EngineActorPowerupFactory
+    internal class EngineActorPowerupFactory
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;

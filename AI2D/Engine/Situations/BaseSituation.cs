@@ -4,7 +4,7 @@ using static AI2D.Engine.EngineCallbackEvent;
 
 namespace AI2D.Engine.Situations
 {
-    public class BaseSituation
+    internal class BaseSituation
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
         public string Name { get; set; }

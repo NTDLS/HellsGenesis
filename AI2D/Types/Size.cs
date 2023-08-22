@@ -1,6 +1,6 @@
 ﻿namespace AI2D.Types
 {
-    public class Size<T>
+    internal class Size<T>
     {
         public T Width { get; set; }
         public T Height { get; set; }

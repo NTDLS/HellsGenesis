@@ -10,7 +10,7 @@ namespace AI2D.Actors.Enemies
     /// <summary>
     /// Debugging enemy uint.
     /// </summary>
-    public class EnemyDebug : EnemyBase
+    internal class EnemyDebug : EnemyBase
     {
         public const int ScoreMultiplier = 15;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Debug\";

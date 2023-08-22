@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace AI2D.Engine.Managers
 {
-    public class EngineInputManager
+    internal class EngineInputManager
     {
         private readonly Core _core;
         private readonly Dictionary<PlayerKey, KeyPressState> _keyStates = new Dictionary<PlayerKey, KeyPressState>();

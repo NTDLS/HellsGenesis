@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AI2D.Actors
 {
-    public class ActorAttachment : ActorBase
+    internal class ActorAttachment : ActorBase
     {
         public bool TakesDamage { get; set; }
 

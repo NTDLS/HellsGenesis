@@ -2,7 +2,7 @@
 
 namespace AI2D.Types
 {
-    public class Point<T>
+    internal class Point<T>
     {
         public T X { get; set; }
         public T Y { get; set; }

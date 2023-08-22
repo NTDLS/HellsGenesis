@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace AI2D.Engine.Managers
 {
-    public class EngineDisplayManager
+    internal class EngineDisplayManager
     {
         private readonly Core _core;
 

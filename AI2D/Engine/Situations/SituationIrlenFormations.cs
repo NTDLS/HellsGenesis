@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AI2D.Engine.Situations
 {
-    public class SituationIrlenFormations : BaseSituation
+    internal class SituationIrlenFormations : BaseSituation
     {
         public SituationIrlenFormations(Core core)
             : base(core, "Irlen Formations")

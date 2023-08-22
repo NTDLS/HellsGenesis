@@ -2,7 +2,7 @@
 
 namespace AI2D.Types
 {
-    public static class ExtensionsMethods
+    internal static class ExtensionsMethods
     {
         public static RectangleF Clone(this RectangleF rectangle)
         {

@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace AI2D.Engine.Managers.EngineActorFactories
 {
-    public class EngineActorAnimationFactory
+    internal class EngineActorAnimationFactory
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;

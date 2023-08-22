@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace AI2D.Actors.PowerUp
 {
-    public class PowerUpBase : ActorBase
+    internal class PowerUpBase : ActorBase
     {
         private const string _assetHitAnimationPath = @"..\..\..\Assets\Graphics\Animation\PowerUp\";
         private readonly string[] _assetHitAnimationFiles = {

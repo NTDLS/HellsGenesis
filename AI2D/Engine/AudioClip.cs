@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace AI2D.Engine
 {
-    public class AudioClip
+    internal class AudioClip
     {
         private readonly XAudio2 _xaudio = new XAudio2();
         private readonly WaveFormat _waveFormat;

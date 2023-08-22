@@ -1,6 +1,6 @@
 ﻿namespace AI2D.Engine
 {
-    public class EngineSettings
+    internal class EngineSettings
     {
         #region Debug settings.
         public bool HighlightNatrualBounds { get; set; } = false;

@@ -7,7 +7,7 @@ using System.Drawing.Imaging;
 
 namespace AI2D.Engine
 {
-    public class Utility
+    internal class Utility
     {
         #region Graphics.
 

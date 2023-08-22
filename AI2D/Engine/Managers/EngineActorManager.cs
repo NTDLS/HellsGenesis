@@ -16,7 +16,7 @@ using static AI2D.Engine.Managers.EngineDrawingCacheManager;
 
 namespace AI2D.Engine.Managers
 {
-    public class EngineActorManager
+    internal class EngineActorManager
     {
         private readonly Core _core;
 

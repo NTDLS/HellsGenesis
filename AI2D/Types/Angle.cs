@@ -2,7 +2,7 @@
 
 namespace AI2D.Types
 {
-    public class Angle<T>
+    internal class Angle<T>
     {
         #region Static Utilities.
 

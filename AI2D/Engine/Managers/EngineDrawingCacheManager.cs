@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 
 namespace AI2D.Engine.Managers
 {
-    public class EngineDrawingCacheManager
+    internal class EngineDrawingCacheManager
     {
         public enum DrawingCacheType
         {
@@ -15,7 +15,7 @@ namespace AI2D.Engine.Managers
 
         private readonly Dictionary<DrawingCacheType, DrawingCacheItem> _graphicsCache = new();
 
-        public class DrawingCacheItem
+        internal class DrawingCacheItem
         {
             public Graphics Graphics { get; private set; }
             public Bitmap Bitmap { get; private set; }

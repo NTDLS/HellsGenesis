@@ -7,7 +7,7 @@ namespace AI2D.Engine
     /// Allows for deferred events to be injected into the engine. We use this so that we can
     /// defer things without sleeping and so we can inject into the actors durring the frame logic.
     /// </summary>
-    public class EngineCallbackEvent
+    internal class EngineCallbackEvent
     {
         private readonly Core _core;
         private readonly object _referenceObject = null;

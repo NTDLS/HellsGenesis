@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace AI2D.Engine.Managers.EngineActorFactories
 {
-    public class EngineActorMenuFactory
+    internal class EngineActorMenuFactory
     {
         public List<BaseMenu> Collection { get; private set; } = new();
 

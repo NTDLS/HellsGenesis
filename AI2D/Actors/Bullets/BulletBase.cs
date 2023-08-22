@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace AI2D.Actors.Bullets
 {
-    public class BulletBase : ActorBase
+    internal class BulletBase : ActorBase
     {
         public FiredFromType FiredFromType { get; set; }
         public WeaponBase Weapon { get; private set; }

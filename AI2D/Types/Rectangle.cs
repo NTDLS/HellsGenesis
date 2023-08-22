@@ -1,6 +1,6 @@
 ﻿namespace AI2D.Types
 {
-    public class Rectangle<T>
+    internal class Rectangle<T>
     {
         public T X { get; set; }
         public T Y { get; set; }

@@ -12,7 +12,7 @@ namespace AI2D.AI.Logistics
     /// <summary>
     /// AI brain to keep an object close to another object, but at a generally safe distance.
     /// </summary>
-    public class Meander : IAIController
+    internal class Meander : IAIController
     {
         private readonly Core _core;
         private readonly ActorBase _owner;

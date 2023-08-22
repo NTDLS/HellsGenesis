@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace AI2D.Actors
 {
-    public class ActorTextBlock : ActorBase
+    internal class ActorTextBlock : ActorBase
     {
         private Rectangle? _prevRegion;
         private readonly Font _font;

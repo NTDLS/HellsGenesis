@@ -8,7 +8,7 @@ using System.IO;
 
 namespace AI2D.AI.Logistics
 {
-    public class HostileEngagement : IAIController
+    internal class HostileEngagement : IAIController
     {
         private readonly Core _core;
         private readonly ActorBase _owner;

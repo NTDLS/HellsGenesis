@@ -4,7 +4,7 @@ using System;
 
 namespace AI2D.Engine.Managers.EngineActorFactories
 {
-    public class EngineActorEnemyFactory
+    internal class EngineActorEnemyFactory
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;

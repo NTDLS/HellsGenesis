@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace AI2D.Weapons
 {
-    public class WeaponBase
+    internal class WeaponBase
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;

@@ -7,7 +7,7 @@ namespace AI2D.Actors.Enemies.Bosses
     /// <summary>
     /// 100% Experimental
     /// </summary>
-    public class EnemyFlea : EnemyBase
+    internal class EnemyFlea : EnemyBase
     {
         public const int ScoreMultiplier = 15;
 

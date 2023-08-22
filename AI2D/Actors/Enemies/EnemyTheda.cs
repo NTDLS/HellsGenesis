@@ -4,7 +4,7 @@ using System.IO;
 
 namespace AI2D.Actors.Enemies
 {
-    public class EnemyTheda : EnemyBase
+    internal class EnemyTheda : EnemyBase
     {
         public const int ScoreMultiplier = 1;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Theda\";

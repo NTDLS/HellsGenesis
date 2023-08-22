@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace AI2D.Engine
 {
-    public class Core
+    internal class Core
     {
         public EngineSettings Settings { get; set; } = new();
         public EngineInputManager Input { get; private set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace AI2D.Engine.Situations
 {
-    public class SituationAvvolAmbush : BaseSituation
+    internal class SituationAvvolAmbush : BaseSituation
     {
         public SituationAvvolAmbush(Core core)
             : base(core, "Avvol Ambush")

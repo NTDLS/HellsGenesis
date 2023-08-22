@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace AI2D.Actors
 {
-    public class ActorRadarPositionTextBlock : ActorTextBlock
+    internal class ActorRadarPositionTextBlock : ActorTextBlock
     {
         public ActorRadarPositionTextBlock(Core core, string font, Brush color, double size, Point<double> location)
             : base(core, font, color, size, location, false)

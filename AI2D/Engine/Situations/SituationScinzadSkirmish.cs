@@ -2,7 +2,7 @@
 
 namespace AI2D.Engine.Situations
 {
-    public class SituationScinzadSkirmish : BaseSituation
+    internal class SituationScinzadSkirmish : BaseSituation
     {
         public SituationScinzadSkirmish(Core core)
             : base(core, "Scinzad Skirmish")

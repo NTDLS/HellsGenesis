@@ -4,7 +4,7 @@ using AI2D.Weapons;
 
 namespace AI2D.Actors.Bullets
 {
-    public class BulletGeneric : BulletBase
+    internal class BulletGeneric : BulletBase
     {
 
         public BulletGeneric(Core core, WeaponBase weapon, ActorBase firedFrom, string imagePath,

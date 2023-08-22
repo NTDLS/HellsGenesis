@@ -7,7 +7,7 @@ using static AI2D.Engine.Constants;
 
 namespace AI2D.Actors
 {
-    public class ActorPlayer : ActorBase
+    internal class ActorPlayer : ActorBase
     {
         public PlayerClass Class { get; private set; }
         public AudioClip AmmoLowSound { get; private set; }

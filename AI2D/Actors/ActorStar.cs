@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace AI2D.Actors
 {
-    public class ActorStar : ActorBase
+    internal class ActorStar : ActorBase
     {
         private const string _assetStarPath = @"..\..\..\Assets\Graphics\Star\";
         private readonly string[] _assetStarFiles = {
