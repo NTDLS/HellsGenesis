@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -34,37 +35,51 @@ namespace AI2D
         {
             InitializeComponent();
 
-            this.DoubleBuffered = true;
-            this.SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            this.UpdateStyles();
+            DoubleBuffered = true;
+            SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
+            UpdateStyles();
+            BackColor = Color.FromArgb(100, 100, 100);
 
             if (_fullScreen)
             {
-                this.FormBorderStyle = FormBorderStyle.None;
-                this.Width = Screen.PrimaryScreen.Bounds.Width;
-                this.Height = Screen.PrimaryScreen.Bounds.Height;
-                this.ShowInTaskbar = true;
-                //this.TopMost = true;
-                this.WindowState = FormWindowState.Maximized;
+                FormBorderStyle = FormBorderStyle.None;
+                Width = Screen.PrimaryScreen.Bounds.Width;
+                Height = Screen.PrimaryScreen.Bounds.Height;
+                ShowInTaskbar = true;
+                //TopMost = true;
+                WindowState = FormWindowState.Maximized;
             }
+
+            var drawingSurface = new Control();
+            Controls.Add(drawingSurface);
+            drawingSurface.Dock = DockStyle.Fill;
+
+            typeof(Control).GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(drawingSurface, true, null);
 
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.UserPaint, true);
 
-            this.BackColor = Color.FromArgb(1, 1, 10);
+            _core = new Core(drawingSurface);
 
-            _core = new Core(this, new Size(this.Width, this.Height));
+            drawingSurface.Paint += FormMain_Paint;
+            drawingSurface.KeyDown += FormMain_KeyDown;
+            drawingSurface.KeyUp += FormMain_KeyUp;
+            drawingSurface.MouseEnter += FormMain_MouseEnter;
+            drawingSurface.MouseLeave += FormMain_MouseLeave;
+            drawingSurface.Location = new Point(25, 25);
+            drawingSurface.Visible = true;
+
             _core.OnStop += _core_OnStop;
 
 #if DEBUG
-            _core.Display.DrawingSurface.MouseDown += DrawingSurface_MouseDown;
-            _core.Display.DrawingSurface.MouseMove += DrawingSurface_MouseMove;
+            MouseDown += DrawingSurface_MouseDown;
+            MouseMove += DrawingSurface_MouseMove;
 #endif
         }
 
 #if DEBUG
-        List<ActorBase> highlightedActors = new();
+        readonly List<ActorBase> highlightedActors = new();
 
         private void DrawingSurface_MouseMove(object sender, MouseEventArgs e)
         {
@@ -241,9 +256,9 @@ namespace AI2D
 
         private void _core_OnStop(Core sender)
         {
-            this.Invoke((MethodInvoker)delegate
+            Invoke((MethodInvoker)delegate
             {
-                this.Close();
+                Close();
             });
         }
 
@@ -284,7 +299,7 @@ namespace AI2D
 
                 if (MessageBox.Show("Are you sure you want to quit?", "Afraid to go on?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                 {
-                    this.Close();
+                    Close();
                 }
                 else
                 {

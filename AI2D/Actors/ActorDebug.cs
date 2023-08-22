@@ -1,27 +1,25 @@
 ﻿using AI2D.Engine;
 using AI2D.Types;
 using System.Drawing;
-using System.Linq;
 
 namespace AI2D.Actors
 {
     public class ActorDebug : ActorBase
     {
-        private const string _assetStarPath = @"..\..\..\Assets\Graphics\";
-        private readonly string[] _assetStarFiles = {
-            #region images.
-            "Debug (1).png"
-            #endregion
-        };
-
         public ActorDebug(Core core)
             : base(core)
         {
-            int _explosionImageIndex = Utility.RandomNumber(0, _assetStarFiles.Count());
-            Initialize(_assetStarPath + _assetStarFiles[_explosionImageIndex], new Size(32, 32));
-
+            Initialize(@"..\..\..\Assets\Graphics\Debug.png", new Size(64, 64));
             X = 0;
             Y = 0;
+            Velocity = new Velocity<double>();
+        }
+        public ActorDebug(Core core, double x, double y)
+            : base(core)
+        {
+            Initialize(@"..\..\..\Assets\Graphics\Debug.png", new Size(64, 64));
+            X = x;
+            Y = y;
             Velocity = new Velocity<double>();
         }
     }

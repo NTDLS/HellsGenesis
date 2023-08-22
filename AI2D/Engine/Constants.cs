@@ -57,7 +57,8 @@
             public const double BulletSceneDistanceLimit = 500; //The distance from the scene that a bullet can travel before it is cleaned up.
             public const double EnemySceneDistanceLimit = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
 
-            public const double InfiniteScrollWall = 400; //Where "infinite scrolling" begins.
+            public const double InfiniteScrollWallX = 200; //Where "infinite scrolling" begins.
+            public const double InfiniteScrollWallY = 200; //Where "infinite scrolling" begins.
         }
     }
 }

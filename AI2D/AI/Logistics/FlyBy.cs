@@ -1,13 +1,10 @@
 ﻿using AI2D.Actors;
 using AI2D.Engine;
 using AI2D.Types;
-using AI2D.Types.ExtensionMethods;
 using Determinet;
 using Determinet.Types;
 using System;
-using System.Diagnostics;
 using System.IO;
-using static AI2D.Engine.Constants;
 
 namespace AI2D.AI.Logistics
 {
@@ -184,7 +181,7 @@ namespace AI2D.AI.Logistics
             {
                 if (_currentAction != value)
                 {
-                    Debug.Print($"{value}");
+                    //Debug.Print($"{value}");
                 }
                 _currentAction = value;
             }
@@ -207,7 +204,7 @@ namespace AI2D.AI.Logistics
                 {
                     _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage + 0.01).Box(0.5, 1);
                 }
-                else  if (speedAdjust < 0.5)
+                else if (speedAdjust < 0.5)
                 {
                     _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
                 }

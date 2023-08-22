@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace AI2D.Engine
@@ -59,13 +58,12 @@ namespace AI2D.Engine
 
         private void GraphicsThreadProc()
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 60; i++)
             {
                 _core.Actors.AddNewStar();
             }
 
             var timer = new Stopwatch();
-
             double targetFrameDuration = 1000000 / Constants.Limits.FrameLimiter; //1000000 / n-frames/second.
 
             while (_shutdown == false)
@@ -131,9 +129,12 @@ namespace AI2D.Engine
 
             #region Situation Advancement.
 
-            if (_core.Actors.CurrentScenario?.State == BaseSituation.ScenarioState.Ended)
+            if (_core.Situations.CurrentSituation?.State == BaseSituation.ScenarioState.Ended)
             {
-                _core.Actors.AdvanceScenario();
+                if (_core.Situations.AdvanceSituation() == false)
+                {
+                    _core.Actors.QueueTheDoorIsAjar();
+                }
             }
 
             #endregion
@@ -263,27 +264,29 @@ namespace AI2D.Engine
                     }
 
                     //Close to the right wall and travelling in that direction.
-                    if (_core.Actors.Player.X > _core.Display.VisibleSize.Width - (_core.Actors.Player.Size.Width + Constants.Limits.InfiniteScrollWall)
+                    if (_core.Actors.Player.X > _core.Display.NatrualScreenBounds.X + _core.Display.NatrualScreenBounds.Width - Constants.Limits.InfiniteScrollWallX
                         && _core.Actors.Player.Velocity.Angle.X > 0)
                     {
                         appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the bottom wall and travelling in that direction.
-                    if (_core.Actors.Player.Y > _core.Display.VisibleSize.Height - (_core.Actors.Player.Size.Height + Constants.Limits.InfiniteScrollWall)
+                    if (_core.Actors.Player.Y > _core.Display.NatrualScreenBounds.Y + _core.Display.NatrualScreenBounds.Height - Constants.Limits.InfiniteScrollWallY
                         && _core.Actors.Player.Velocity.Angle.Y > 0)
                     {
                         appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
                     }
 
                     //Close to the left wall and travelling in that direction.
-                    if (_core.Actors.Player.X < Constants.Limits.InfiniteScrollWall && _core.Actors.Player.Velocity.Angle.X < 0)
+                    if (_core.Actors.Player.X < _core.Display.NatrualScreenBounds.X + Constants.Limits.InfiniteScrollWallX
+                        && _core.Actors.Player.Velocity.Angle.X < 0)
                     {
                         appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the top wall and travelling in that direction.
-                    if (_core.Actors.Player.Y < Constants.Limits.InfiniteScrollWall && _core.Actors.Player.Velocity.Angle.Y < 0)
+                    if (_core.Actors.Player.Y < _core.Display.NatrualScreenBounds.Y + Constants.Limits.InfiniteScrollWallY
+                        && _core.Actors.Player.Velocity.Angle.Y < 0)
                     {
                         appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
                     }
@@ -474,16 +477,16 @@ namespace AI2D.Engine
 
             if (appliedOffset.X != 0 || appliedOffset.Y != 0)
             {
-                if (_core.Actors.VisibleOfType<ActorStar>().Count < 30) //Never wan't more than n stars.
+                if (_core.Actors.VisibleOfType<ActorStar>().Count < 100) //Never wan't more than n stars.
                 {
                     if (appliedOffset.X > 0)
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                            if (Utility.ChanceIn(1000)) //1 in n chance to create a star.
                             {
-                                int x = Utility.Random.Next(_core.Display.VisibleSize.Width - (int)appliedOffset.X, _core.Display.VisibleSize.Width);
-                                int y = Utility.Random.Next(0, _core.Display.VisibleSize.Height);
+                                int x = Utility.Random.Next(_core.Display.TotalCanvasSize.Width - (int)appliedOffset.X, _core.Display.TotalCanvasSize.Width);
+                                int y = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Height);
                                 _core.Actors.AddNewStar(x, y);
                             }
                         }
@@ -492,23 +495,22 @@ namespace AI2D.Engine
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                            if (Utility.ChanceIn(1000)) //1 in n chance to create a star.
                             {
                                 int x = Utility.Random.Next(0, (int)-appliedOffset.X);
-                                int y = Utility.Random.Next(0, _core.Display.VisibleSize.Height);
+                                int y = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Height);
                                 _core.Actors.AddNewStar(x, y);
                             }
                         }
                     }
-
                     if (appliedOffset.Y > 0)
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                            if (Utility.ChanceIn(1000)) //1 in n chance to create a star.
                             {
-                                int x = Utility.Random.Next(0, _core.Display.VisibleSize.Width);
-                                int y = Utility.Random.Next(_core.Display.VisibleSize.Height - (int)appliedOffset.Y, _core.Display.VisibleSize.Height);
+                                int x = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Width);
+                                int y = Utility.Random.Next(_core.Display.TotalCanvasSize.Height - (int)appliedOffset.Y, _core.Display.TotalCanvasSize.Height);
                                 _core.Actors.AddNewStar(x, y);
                             }
                         }
@@ -517,19 +519,20 @@ namespace AI2D.Engine
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (Utility.Random.Next(0, 1000) == 500) //1 in n chance to create a star.
+                            if (Utility.ChanceIn(1000)) //1 in n chance to create a star.
                             {
-                                int x = Utility.Random.Next(0, _core.Display.VisibleSize.Width);
+                                int x = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Width);
                                 int y = Utility.Random.Next(0, (int)-appliedOffset.Y);
                                 _core.Actors.AddNewStar(x, y);
                             }
                         }
                     }
+
                 }
 
                 foreach (var star in _core.Actors.VisibleOfType<ActorStar>())
                 {
-                    if (_core.Display.VisibleBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
+                    if (_core.Display.TotalScreenBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
                     {
                         star.QueueForDelete();
                     }
@@ -576,10 +579,13 @@ namespace AI2D.Engine
 
             #region Offscreen Radar Indicator.
 
+            /*
+             * Why would we be adding one that we dont need? Surely this was debug code...
             if (_core.Actors.OfType<ActorRadarPositionIndicator>().Count < 1)
             {
                 _core.Actors.AddNewRadarPositionIndicator();
             }
+            */
 
             #endregion
 
@@ -593,9 +599,9 @@ namespace AI2D.Engine
 
             string situation = "<peaceful>";
 
-            if (_core.Actors.CurrentScenario != null)
+            if (_core.Situations.CurrentSituation != null)
             {
-                situation = $"{_core.Actors.CurrentScenario.Name} (Wave {_core.Actors.CurrentScenario.CurrentWave} of {_core.Actors.CurrentScenario.TotalWaves})";
+                situation = $"{_core.Situations.CurrentSituation.Name} (Wave {_core.Situations.CurrentSituation.CurrentWave} of {_core.Situations.CurrentSituation.TotalWaves})";
             }
 
             _core.Actors.PlayerStatsText.Text =

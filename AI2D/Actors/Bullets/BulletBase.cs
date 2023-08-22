@@ -113,9 +113,9 @@ namespace AI2D.Actors.Bullets
         public virtual void ApplyMotion(Point<double> frameAppliedOffset)
         {
             if (X < -Constants.Limits.BulletSceneDistanceLimit
-                || X >= _core.Display.VisibleSize.Width + Constants.Limits.BulletSceneDistanceLimit
+                || X >= _core.Display.TotalCanvasSize.Width + Constants.Limits.BulletSceneDistanceLimit
                 || Y < -Constants.Limits.BulletSceneDistanceLimit
-                || Y >= _core.Display.VisibleSize.Height + Constants.Limits.BulletSceneDistanceLimit)
+                || Y >= _core.Display.TotalCanvasSize.Height + Constants.Limits.BulletSceneDistanceLimit)
             {
                 QueueForDelete();
                 return;
