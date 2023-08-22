@@ -58,13 +58,12 @@ namespace AI2D.Engine
 
         private void GraphicsThreadProc()
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 60; i++)
             {
                 _core.Actors.AddNewStar();
             }
 
             var timer = new Stopwatch();
-
             double targetFrameDuration = 1000000 / Constants.Limits.FrameLimiter; //1000000 / n-frames/second.
 
             while (_shutdown == false)
@@ -264,7 +263,6 @@ namespace AI2D.Engine
                         forwardThrust += _core.Actors.Player.Velocity.MaxBoost * _core.Actors.Player.Velocity.BoostPercentage;
                     }
 
-
                     //Close to the right wall and travelling in that direction.
                     if (_core.Actors.Player.X > _core.Display.NatrualScreenBounds.X + _core.Display.NatrualScreenBounds.Width - Constants.Limits.InfiniteScrollWallX
                         && _core.Actors.Player.Velocity.Angle.X > 0)
@@ -280,13 +278,15 @@ namespace AI2D.Engine
                     }
 
                     //Close to the left wall and travelling in that direction.
-                    if (_core.Actors.Player.X < _core.Display.NatrualScreenBounds.X + Constants.Limits.InfiniteScrollWallX && _core.Actors.Player.Velocity.Angle.X < 0)
+                    if (_core.Actors.Player.X < _core.Display.NatrualScreenBounds.X + Constants.Limits.InfiniteScrollWallX
+                        && _core.Actors.Player.Velocity.Angle.X < 0)
                     {
                         appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the top wall and travelling in that direction.
-                    if (_core.Actors.Player.Y < _core.Display.NatrualScreenBounds.Y + Constants.Limits.InfiniteScrollWallY && _core.Actors.Player.Velocity.Angle.Y < 0)
+                    if (_core.Actors.Player.Y < _core.Display.NatrualScreenBounds.Y + Constants.Limits.InfiniteScrollWallY
+                        && _core.Actors.Player.Velocity.Angle.Y < 0)
                     {
                         appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
                     }
@@ -477,7 +477,7 @@ namespace AI2D.Engine
 
             if (appliedOffset.X != 0 || appliedOffset.Y != 0)
             {
-                if (_core.Actors.VisibleOfType<ActorStar>().Count < 50) //Never wan't more than n stars.
+                if (_core.Actors.VisibleOfType<ActorStar>().Count < 100) //Never wan't more than n stars.
                 {
                     if (appliedOffset.X > 0)
                     {
@@ -503,7 +503,6 @@ namespace AI2D.Engine
                             }
                         }
                     }
-
                     if (appliedOffset.Y > 0)
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
@@ -528,11 +527,12 @@ namespace AI2D.Engine
                             }
                         }
                     }
+
                 }
 
                 foreach (var star in _core.Actors.VisibleOfType<ActorStar>())
                 {
-                    if (_core.Display.NatrualScreenBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
+                    if (_core.Display.TotalScreenBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
                     {
                         star.QueueForDelete();
                     }
@@ -579,10 +579,13 @@ namespace AI2D.Engine
 
             #region Offscreen Radar Indicator.
 
+            /*
+             * Why would we be adding one that we dont need? Surely this was debug code...
             if (_core.Actors.OfType<ActorRadarPositionIndicator>().Count < 1)
             {
                 _core.Actors.AddNewRadarPositionIndicator();
             }
+            */
 
             #endregion
 

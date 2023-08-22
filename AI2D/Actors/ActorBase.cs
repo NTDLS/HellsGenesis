@@ -332,6 +332,7 @@ namespace AI2D.Actors
             RotationMode = RotationMode.Upsize;
             Velocity = new Velocity<double>();
             Velocity.MaxRotationSpeed = Constants.Limits.MaxRotationSpeed;
+            Highlight = _core.Settings.HighlightAllActors;
         }
 
         public void Initialize(string imagePath = null, Size? size = null,

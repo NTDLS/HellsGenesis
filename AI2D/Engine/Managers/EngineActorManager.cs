@@ -501,6 +501,16 @@ namespace AI2D.Engine.Managers
             }
         }
 
+        public ActorDebug AddNewDebug(double x, double y)
+        {
+            lock (Collection)
+            {
+                var obj = new ActorDebug(_core, x, y);
+                Collection.Add(obj);
+                return obj;
+            }
+        }
+
         public ActorDebug AddNewDebug()
         {
             lock (Collection)
@@ -808,7 +818,7 @@ namespace AI2D.Engine.Managers
                                 }
                             }
 
-                            if (_core.Display.NatrualScreenBounds.IntersectsWith(actor.Bounds))
+                            if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(actor.Bounds))
                             {
                                 Utility.DynamicCast(actor, actor.GetType()).Render(screenDrawing.Graphics);
                             }
@@ -842,6 +852,13 @@ namespace AI2D.Engine.Managers
                 using (var pen = new Pen(Color.Gray, 1))
                 {
                     screenDrawing.Graphics.DrawRectangle(pen, _core.Display.NatrualScreenBounds);
+                }
+
+
+                //Highlight the 1:1 frame
+                using (var pen = new Pen(Color.Red, 5))
+                {
+                    screenDrawing.Graphics.DrawRectangle(pen, _core.Display.CurrentScaledScreenBounds);
                 }
             }
 
@@ -891,7 +908,6 @@ namespace AI2D.Engine.Managers
                         radarDrawing.Bitmap.Width, radarDrawing.Bitmap.Height
                     );
                 scaledDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
-
             }
             try
             {
@@ -923,7 +939,6 @@ namespace AI2D.Engine.Managers
 
             return scaledDrawing.Bitmap;
         }
-
 
         #endregion
     }

@@ -32,7 +32,7 @@ namespace AI2D.Engine
 
         public Core(Control drawingSurface)
         {
-            Display = new EngineDisplayManager(drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
+            Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
             Actors = new EngineActorManager(this);
             Input = new EngineInputManager(this);
             Situations = new SituationManager(this);

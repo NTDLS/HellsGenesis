@@ -173,9 +173,8 @@ namespace AI2D.Actors
                         ReplayDelay = new TimeSpan(0)
                     };
                     ThrustAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
-
                     ThrustAnimation.Reset();
-
+                    ThrustAnimation.Visable = false;
                     _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);
 
                     var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
@@ -193,11 +192,8 @@ namespace AI2D.Actors
                         ReplayDelay = new TimeSpan(0)
                     };
                     BoostAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
-
                     BoostAnimation.Reset();
-
                     BoostAnimation.Visable = false;
-
                     _core.Actors.PlaceAnimationOnTopOf(BoostAnimation, this);
 
                     var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));

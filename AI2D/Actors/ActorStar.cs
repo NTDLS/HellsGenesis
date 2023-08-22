@@ -21,8 +21,8 @@ namespace AI2D.Actors
             int _ImageIndex = Utility.RandomNumber(0, _assetStarFiles.Count());
             Initialize(_assetStarPath + _assetStarFiles[_ImageIndex]);
 
-            X = Utility.Random.Next(0, core.Display.NatrualScreenSize.Width);
-            Y = Utility.Random.Next(0, core.Display.NatrualScreenSize.Height);
+            X = Utility.Random.Next(0, core.Display.TotalCanvasSize.Width);
+            Y = Utility.Random.Next(0, core.Display.TotalCanvasSize.Height);
 
             //Velocity.ThrottlePercentage = 1;
 

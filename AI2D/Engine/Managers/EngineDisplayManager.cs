@@ -7,6 +7,8 @@ namespace AI2D.Engine.Managers
 {
     public class EngineDisplayManager
     {
+        private Core _core;
+
         public Dictionary<Point, Quadrant> Quadrants { get; private set; } = new();
         public Quadrant CurrentQuadrant { get; set; }
         public Point<double> BackgroundOffset { get; private set; } = new Point<double>(); //Offset of background, all cals must take into account.
@@ -57,6 +59,29 @@ namespace AI2D.Engine.Managers
             {
                 return new RectangleF(OverdrawSize.Width / 2.0f, OverdrawSize.Height / 2.0f,
                         NatrualScreenSize.Width, NatrualScreenSize.Height
+                );
+            }
+        }
+
+        /// <summary>
+        /// The total bounds of the drawing surface (canvas) natrual + overdraw (with no scaling) with respect to the infinite scrolling background,
+        /// </summary>
+        public RectangleF VirtualTotalScreenBounds
+        {
+            get
+            {
+                return new RectangleF((float)_core.Display.BackgroundOffset.X, (float)_core.Display.BackgroundOffset.Y, TotalCanvasSize.Width, TotalCanvasSize.Height);
+            }
+        }
+
+        /// <summary>
+        /// The total bounds of the drawing surface (canvas) natrual + overdraw (with no scaling).
+        /// </summary>
+        public RectangleF TotalScreenBounds
+        {
+            get
+            {
+                return new RectangleF(0,0,TotalCanvasSize.Width, TotalCanvasSize.Height
                 );
             }
         }
@@ -122,8 +147,9 @@ namespace AI2D.Engine.Managers
             return new Point<double>(x, y);
         }
 
-        public EngineDisplayManager(Control drawingSurface, Size visibleSize)
+        public EngineDisplayManager(Core core, Control drawingSurface, Size visibleSize)
         {
+            _core = core;
             DrawingSurface = drawingSurface;
             NatrualScreenSize = visibleSize;
 
