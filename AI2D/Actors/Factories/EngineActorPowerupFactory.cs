@@ -16,6 +16,14 @@ namespace AI2D.Actors.Factories
             _manager = manager;
         }
 
+        public void DeleteAll()
+        {
+            lock (_manager.Collection)
+            {
+                _manager.OfType<PowerUpBase>().ForEach(c => c.QueueForDelete());
+            }
+        }
+
         public void Insert(PowerUpBase obj)
         {
             lock (_manager.Collection)

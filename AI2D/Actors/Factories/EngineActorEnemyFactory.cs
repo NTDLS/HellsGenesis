@@ -2,6 +2,8 @@
 using AI2D.Engine;
 using AI2D.Engine.Managers;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AI2D.Actors.Factories
 {
@@ -14,6 +16,22 @@ namespace AI2D.Actors.Factories
         {
             _core = core;
             _manager = manager;
+        }
+
+        public void DeleteAll()
+        {
+            lock (_manager.Collection)
+            {
+                _manager.OfType<EnemyBase>().ForEach(c => c.QueueForDelete());
+            }
+        }
+
+        public List<T> VisibleOfType<T>() where T : class
+        {
+            return (from o in _manager.OfType<EnemyBase>()
+                    where o is T
+                    && o.Visable == true
+                    select o as T).ToList();
         }
 
         public void Insert(EnemyBase obj)

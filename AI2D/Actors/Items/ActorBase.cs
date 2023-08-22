@@ -377,8 +377,8 @@ namespace AI2D.Actors.Items
                 _explosionAnimation = new ActorAnimation(_core, explosionAnimationFile, (Size)explosionAnimationDimensions);
             }
 
-            _lockedOnImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Weapon\Locked On.png");
-            _lockedOnSoftImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Weapon\Locked Soft.png");
+            _lockedOnImage = _core.Imaging.Get(@"..\..\..\Assets\Graphics\Weapon\Locked On.png");
+            _lockedOnSoftImage = _core.Imaging.Get(@"..\..\..\Assets\Graphics\Weapon\Locked Soft.png");
 
             if (hitAnimationFile == null)
             {
@@ -579,7 +579,7 @@ namespace AI2D.Actors.Items
 
         public void SetImage(string imagePath, Size? size = null)
         {
-            _image = _core.Actors.GetBitmapCached(imagePath);
+            _image = _core.Imaging.Get(imagePath);
 
             if (size != null)
             {

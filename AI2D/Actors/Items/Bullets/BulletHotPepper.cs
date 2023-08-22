@@ -1,7 +1,6 @@
 ﻿using AI2D.Engine;
 using AI2D.Types;
 using AI2D.Weapons;
-using System.Drawing;
 using System.IO;
 
 

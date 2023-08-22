@@ -1,5 +1,4 @@
 ﻿using AI2D.Actors.Items.Enemies;
-using AI2D.Events;
 
 namespace AI2D.Engine.Situations
 {

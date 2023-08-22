@@ -18,6 +18,14 @@ namespace AI2D.Actors.Factories
             _manager = manager;
         }
 
+        public void DeleteAll()
+        {
+            lock (_manager.Collection)
+            {
+                _manager.OfType<BulletBase>().ForEach(c => c.QueueForDelete());
+            }
+        }
+
         public BulletBase CreateLocked(WeaponBase weapon, ActorBase firedFrom, ActorBase lockedTarget, Point<double> xyOffset = null)
         {
             lock (_manager.Collection)

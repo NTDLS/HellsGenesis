@@ -38,15 +38,6 @@ namespace AI2D.Engine.Managers
 
         #endregion
 
-        #region Resources.
-
-
-        private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
-
-        //Thread _renderThread = null;
-
-        #endregion
-
         public EngineActorManager(Core core)
         {
             _core = core;
@@ -126,10 +117,10 @@ namespace AI2D.Engine.Managers
 
         public void DeleteAllActors()
         {
-            DeleteAllPowerUps();
-            DeleteAllEnemies();
-            DeleteAllBullets();
-            DeleteAllAnimations();
+            Powerups.DeleteAll();
+            Enemies.DeleteAll();
+            Bullets.DeleteAll();
+            Animations.DeleteAll();
         }
 
         public T GetActorByTag<T>(string tag) where T : ActorBase
@@ -227,74 +218,6 @@ namespace AI2D.Engine.Managers
         }
 
 
-
-        public List<T> VisibleEnemiesOfType<T>() where T : class
-        {
-            return (from o in _core.Actors.OfType<EnemyBase>()
-                    where o is T
-                    && o.Visable == true
-                    select o as T).ToList();
-        }
-
-        public void DeleteAllPowerUps()
-        {
-            lock (Collection)
-            {
-                OfType<PowerUpBase>().ForEach(c => c.QueueForDelete());
-            }
-        }
-
-        public void DeleteAllEnemies()
-        {
-            lock (Collection)
-            {
-                OfType<EnemyBase>().ForEach(c => c.QueueForDelete());
-            }
-        }
-
-        public void DeleteAllBullets()
-        {
-            lock (Collection)
-            {
-                OfType<BulletBase>().ForEach(c => c.QueueForDelete());
-            }
-        }
-
-        public void DeleteAllAnimations()
-        {
-            lock (Collection)
-            {
-                OfType<ActorAnimation>().ForEach(c => c.QueueForDelete());
-            }
-        }
-
-        public Bitmap GetBitmapCached(string path)
-        {
-            Bitmap result = null;
-
-            path = path.ToLower();
-
-            lock (_Bitmaps)
-            {
-                if (_Bitmaps.ContainsKey(path))
-                {
-                    result = _Bitmaps[path].Clone() as Bitmap;
-                }
-                else
-                {
-                    using (var image = Image.FromFile(path))
-                    using (var newbitmap = new Bitmap(image))
-                    {
-                        result = newbitmap.Clone() as Bitmap;
-                        _Bitmaps.Add(path, result);
-                    }
-                }
-            }
-
-            return result;
-        }
-
-
         public ActorBase Add(string imagePath = null, Size? size = null, string tag = "")
         {
             lock (Collection)
@@ -310,7 +233,6 @@ namespace AI2D.Engine.Managers
                 return actor;
             }
         }
-
 
         public ActorBase Add(ActorBase actor)
         {
@@ -407,7 +329,7 @@ namespace AI2D.Engine.Managers
 
             if (_core.DrawingCache.Exists(DrawingCacheType.Radar) == false)
             {
-                _RadarBackgroundImage = _core.Actors.GetBitmapCached(@"..\..\..\Assets\Graphics\Radar.png");
+                _RadarBackgroundImage = _core.Imaging.Get(@"..\..\..\Assets\Graphics\Radar.png");
 
                 double radarDistance = 5;
                 double radarWidth = _RadarBackgroundImage.Width;

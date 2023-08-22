@@ -1,7 +1,6 @@
-﻿using AI2D.Engine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace AI2D.Audio
+namespace AI2D.Engine.Managers
 {
     internal class AudioManager
     {

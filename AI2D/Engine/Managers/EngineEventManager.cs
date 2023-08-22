@@ -1,10 +1,9 @@
-﻿using AI2D.Engine;
-using AI2D.Engine.Menus;
+﻿using AI2D.Engine.Menus;
 using System;
 using System.Collections.Generic;
-using static AI2D.Events.EngineCallbackEvent;
+using static AI2D.Engine.EngineCallbackEvent;
 
-namespace AI2D.Events
+namespace AI2D.Engine.Managers
 {
     internal class EngineEventManager
     {

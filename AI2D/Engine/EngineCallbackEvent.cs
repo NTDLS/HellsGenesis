@@ -1,8 +1,7 @@
-﻿using AI2D.Engine;
-using System;
+﻿using System;
 using System.Threading;
 
-namespace AI2D.Events
+namespace AI2D.Engine
 {
     /// <summary>
     /// Allows for deferred events to be injected into the engine. We use this so that we can

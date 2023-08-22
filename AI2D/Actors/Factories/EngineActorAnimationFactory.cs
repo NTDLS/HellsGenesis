@@ -17,6 +17,14 @@ namespace AI2D.Actors.Factories
             _manager = manager;
         }
 
+        public void DeleteAll()
+        {
+            lock (_manager.Collection)
+            {
+                _manager.OfType<ActorAnimation>().ForEach(c => c.QueueForDelete());
+            }
+        }
+
         /// <summary>
         /// Creates an animation on top of another actor.
         /// </summary>

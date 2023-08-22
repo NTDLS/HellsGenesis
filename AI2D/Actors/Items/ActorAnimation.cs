@@ -68,7 +68,7 @@ namespace AI2D.Actors.Items
 
             _imageName = imageFrames;
             _frameDelayMilliseconds = frameDelayMilliseconds;
-            _frameImage = _core.Actors.GetBitmapCached(imageFrames);
+            _frameImage = _core.Imaging.Get(imageFrames);
 
             if (frameSize == null)
             {

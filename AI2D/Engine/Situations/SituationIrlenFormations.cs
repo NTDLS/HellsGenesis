@@ -1,5 +1,4 @@
 ﻿using AI2D.Actors.Items.Enemies;
-using AI2D.Events;
 using AI2D.Types;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +29,7 @@ namespace AI2D.Engine.Situations
 
         private void RedirectFormationCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
-            List<EnemyIrlen> formationIrlens = _core.Actors.VisibleEnemiesOfType<EnemyIrlen>()
+            List<EnemyIrlen> formationIrlens = _core.Actors.Enemies.VisibleOfType<EnemyIrlen>()
                 .Where(o => o.Mode == EnemyIrlen.AIMode.InFormation).ToList();
 
             if (formationIrlens.Count > 0)

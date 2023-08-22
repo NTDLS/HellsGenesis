@@ -1,7 +1,5 @@
-﻿using AI2D.Audio;
-using AI2D.Engine.Managers;
+﻿using AI2D.Engine.Managers;
 using AI2D.Engine.Menus;
-using AI2D.Events;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -16,6 +14,7 @@ namespace AI2D.Engine
         public SituationManager Situations { get; set; }
         public EngineEventManager Events { get; set; }
         public AudioManager Audio { get; set; }
+        public ImageManager Imaging { get; set; }
 
         public EngineDrawingCacheManager DrawingCache { get; set; } = new();
         public bool IsRunning { get; private set; } = false;
@@ -43,6 +42,7 @@ namespace AI2D.Engine
             Situations = new SituationManager(this);
             Events = new EngineEventManager(this);
             Audio = new AudioManager(this);
+            Imaging = new ImageManager(this);
 
             _engineThread = new EngineThread(this);
 
