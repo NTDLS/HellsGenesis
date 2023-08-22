@@ -22,7 +22,7 @@ namespace AI2D.Engine
         public bool ShowDebug { get; set; } = false;
         public object DrawingSemaphore { get; set; } = new();
 
-        private readonly EngineThread _engineThread;
+        private readonly GameLoop _gameLoop;
 
         #region Events.
 
@@ -44,7 +44,7 @@ namespace AI2D.Engine
             Audio = new AudioManager(this);
             Imaging = new ImageManager(this);
 
-            _engineThread = new EngineThread(this);
+            _gameLoop = new GameLoop(this);
 
             Events.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
@@ -62,7 +62,7 @@ namespace AI2D.Engine
                 Actors.Start();
                 //Actors.ResetPlayer();
 
-                _engineThread.Start();
+                _gameLoop.Start();
 
                 //This is debug stuff. Will be moved to a logic engine.
                 //_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 0),
@@ -95,7 +95,7 @@ namespace AI2D.Engine
             if (IsRunning)
             {
                 IsRunning = false;
-                _engineThread.Stop();
+                _gameLoop.Stop();
                 Actors.Stop();
                 OnStop?.Invoke(this);
             }
@@ -103,22 +103,22 @@ namespace AI2D.Engine
 
         public bool IsPaused()
         {
-            return _engineThread.IsPaused();
+            return _gameLoop.IsPaused();
         }
 
         public void TogglePause()
         {
-            _engineThread.TogglePause();
+            _gameLoop.TogglePause();
         }
 
         public void Pause()
         {
-            _engineThread.Pause();
+            _gameLoop.Pause();
         }
 
         public void Resume()
         {
-            _engineThread.Resume();
+            _gameLoop.Resume();
         }
     }
 }

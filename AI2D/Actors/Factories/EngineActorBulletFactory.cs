@@ -1,9 +1,9 @@
-﻿using AI2D.Actors.Items;
-using AI2D.Actors.Items.Bullets;
+﻿using AI2D.Actors.Objects;
+using AI2D.Actors.Objects.Weapons;
+using AI2D.Actors.Objects.Weapons.Bullets;
 using AI2D.Engine;
 using AI2D.Engine.Managers;
 using AI2D.Types;
-using AI2D.Weapons;
 
 namespace AI2D.Actors.Factories
 {

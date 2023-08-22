@@ -1,4 +1,4 @@
-﻿using AI2D.Actors.Items.Enemies;
+﻿using AI2D.Actors.Objects.Enemies;
 using AI2D.Types;
 using System.Collections.Generic;
 using System.Linq;

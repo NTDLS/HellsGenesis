@@ -1,4 +1,4 @@
-﻿using AI2D.Actors.Items.Enemies;
+﻿using AI2D.Actors.Objects.Enemies;
 
 namespace AI2D.Engine.Situations
 {

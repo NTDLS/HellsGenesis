@@ -1,8 +1,8 @@
 ﻿using AI2D.Actors.Factories;
-using AI2D.Actors.Items;
-using AI2D.Actors.Items.Bullets;
-using AI2D.Actors.Items.Enemies;
-using AI2D.Actors.Items.PowerUp;
+using AI2D.Actors.Objects;
+using AI2D.Actors.Objects.Enemies;
+using AI2D.Actors.Objects.PowerUp;
+using AI2D.Actors.Objects.Weapons.Bullets;
 using AI2D.Engine.Menus;
 using AI2D.Types;
 using System;

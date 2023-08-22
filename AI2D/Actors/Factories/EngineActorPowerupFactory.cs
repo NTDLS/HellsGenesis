@@ -1,4 +1,4 @@
-﻿using AI2D.Actors.Items.PowerUp;
+﻿using AI2D.Actors.Objects.PowerUp;
 using AI2D.Engine;
 using AI2D.Engine.Managers;
 using System;
