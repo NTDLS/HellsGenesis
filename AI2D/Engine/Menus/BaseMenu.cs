@@ -1,4 +1,4 @@
-﻿using AI2D.Actors;
+﻿using AI2D.Actors.Items;
 using AI2D.Types;
 using System;
 using System.Collections.Generic;
@@ -81,7 +81,7 @@ namespace AI2D.Engine.Menus
 
         public void AddMenuItem(ActorMenuItem item)
         {
-            lock (_core.Actors.MenuFactory.Collection)
+            lock (_core.Actors.Menus.Collection)
             {
                 _menuItems.Add(item);
             }

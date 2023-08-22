@@ -1,5 +1,5 @@
-﻿using AI2D.Actors;
-using AI2D.Actors.Enemies;
+﻿using AI2D.Actors.Items;
+using AI2D.Actors.Items.Enemies;
 using AI2D.Types;
 using System.Collections.Generic;
 using System.Drawing;
@@ -70,7 +70,7 @@ namespace AI2D.Engine.Managers
                 var textBlock = _core.Actors.GetActorByTag<ActorTextBlock>("PausedText");
                 if (textBlock == null)
                 {
-                    textBlock = _core.Actors.TextBlockFactory.Create("Consolas", Brushes.Red, 50, new Point<double>(100, 100), true, "PausedText");
+                    textBlock = _core.Actors.TextBlocks.Create("Consolas", Brushes.Red, 50, new Point<double>(100, 100), true, "PausedText");
                     textBlock.Text = "Paused...";
                     textBlock.X = _core.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
                     textBlock.Y = _core.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;

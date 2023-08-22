@@ -1,5 +1,5 @@
-﻿using AI2D.Actors;
-using AI2D.Actors.Bullets;
+﻿using AI2D.Actors.Items;
+using AI2D.Actors.Items.Bullets;
 using AI2D.Engine;
 using AI2D.Types;
 
@@ -45,12 +45,12 @@ namespace AI2D.Weapons
                     if (_toggle)
                     {
                         var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new Point<double>(10, 10));
-                        _core.Actors.BulletFactory.Create(this, _owner, pointRight);
+                        _core.Actors.Bullets.Create(this, _owner, pointRight);
                     }
                     else
                     {
                         var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new Point<double>(10, 10));
-                        _core.Actors.BulletFactory.Create(this, _owner, pointLeft);
+                        _core.Actors.Bullets.Create(this, _owner, pointLeft);
                     }
 
                     _toggle = !_toggle;
@@ -62,12 +62,12 @@ namespace AI2D.Weapons
                         if (_toggle)
                         {
                             var pointRight = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new Point<double>(10, 10));
-                            _core.Actors.BulletFactory.CreateLocked(this, _owner, lockedOn, pointRight);
+                            _core.Actors.Bullets.CreateLocked(this, _owner, lockedOn, pointRight);
                         }
                         else
                         {
                             var pointLeft = Utility.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new Point<double>(10, 10));
-                            _core.Actors.BulletFactory.CreateLocked(this, _owner, lockedOn, pointLeft);
+                            _core.Actors.Bullets.CreateLocked(this, _owner, lockedOn, pointLeft);
                         }
                         _toggle = !_toggle;
                     }

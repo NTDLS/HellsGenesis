@@ -8,6 +8,7 @@
             Left,
             Right
         }
+
         public enum CardinalDirection
         {
             None,

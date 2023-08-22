@@ -1,6 +1,7 @@
-﻿using System;
+﻿using AI2D.Events;
+using System;
 using System.Collections.Generic;
-using static AI2D.Engine.EngineCallbackEvent;
+using static AI2D.Events.EngineCallbackEvent;
 
 namespace AI2D.Engine.Situations
 {
@@ -45,7 +46,7 @@ namespace AI2D.Engine.Situations
         protected EngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, OnExecute executeCallback)
         {
             //Keep track of recurring events to we can delete them when we are done.
-            var obj = _core.Actors.EventFactory.Create(timeout,
+            var obj = _core.Events.Create(timeout,
                 executeCallback, null, CallbackEventMode.Recurring);
 
             Events.Add(obj);
@@ -54,7 +55,7 @@ namespace AI2D.Engine.Situations
 
         protected EngineCallbackEvent AddSingleFireEvent(TimeSpan timeout, OnExecute executeCallback)
         {
-            return _core.Actors.EventFactory.Create(timeout, executeCallback);
+            return _core.Events.Create(timeout, executeCallback);
         }
     }
 }

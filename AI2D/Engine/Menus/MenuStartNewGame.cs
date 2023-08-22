@@ -1,4 +1,4 @@
-﻿using AI2D.Actors;
+﻿using AI2D.Actors.Items;
 using AI2D.Types;
 using System.Drawing;
 
@@ -53,7 +53,7 @@ namespace AI2D.Engine.Menus
             }
             else if (item.Name == "YES")
             {
-                _core.Actors.MenuFactory.Insert(new PlayerShipMenu(_core));
+                _core.Actors.Menus.Insert(new PlayerShipMenu(_core));
             }
 
             QueueForDelete();

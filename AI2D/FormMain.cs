@@ -1,5 +1,5 @@
-﻿using AI2D.Actors;
-using AI2D.Actors.Enemies;
+﻿using AI2D.Actors.Items;
+using AI2D.Actors.Items.Enemies;
 using AI2D.Engine;
 using AI2D.Types;
 using System;

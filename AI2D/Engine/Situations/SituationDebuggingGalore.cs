@@ -1,4 +1,5 @@
-﻿using AI2D.Actors.Enemies;
+﻿using AI2D.Actors.Items.Enemies;
+using AI2D.Events;
 
 namespace AI2D.Engine.Situations
 {
@@ -43,10 +44,10 @@ namespace AI2D.Engine.Situations
 
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    _core.Actors.EventFactory.Create(new System.TimeSpan(0, 0, 0, 0, Utility.RandomNumber(0, 800)), AddEnemyCallback);
+                    _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, Utility.RandomNumber(0, 800)), AddEnemyCallback);
                 }
 
-                _core.Actors.RadarBlipsSound.Play();
+                _core.Audio.RadarBlipsSound.Play();
 
                 CurrentWave++;
             }
@@ -55,7 +56,7 @@ namespace AI2D.Engine.Situations
         private void AddEnemyCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
             //_core.Actors.AddNewEnemy<EnemyAvvol>();
-            _core.Actors.EnemyFactory.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
         }
     }
 }

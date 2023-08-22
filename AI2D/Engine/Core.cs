@@ -1,5 +1,7 @@
-﻿using AI2D.Engine.Managers;
+﻿using AI2D.Audio;
+using AI2D.Engine.Managers;
 using AI2D.Engine.Menus;
+using AI2D.Events;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,6 +14,9 @@ namespace AI2D.Engine
         public EngineDisplayManager Display { get; private set; }
         public EngineActorManager Actors { get; private set; }
         public SituationManager Situations { get; set; }
+        public EngineEventManager Events { get; set; }
+        public AudioManager Audio { get; set; }
+
         public EngineDrawingCacheManager DrawingCache { get; set; } = new();
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
@@ -36,14 +41,17 @@ namespace AI2D.Engine
             Actors = new EngineActorManager(this);
             Input = new EngineInputManager(this);
             Situations = new SituationManager(this);
+            Events = new EngineEventManager(this);
+            Audio = new AudioManager(this);
+
             _engineThread = new EngineThread(this);
 
-            Actors.EventFactory.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
+            Events.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
 
         private void NewGameMenuCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
-            Actors.MenuFactory.Insert(new MenuStartNewGame(this));
+            Actors.Menus.Insert(new MenuStartNewGame(this));
         }
 
         public void Start()

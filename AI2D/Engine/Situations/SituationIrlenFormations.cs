@@ -1,4 +1,5 @@
-﻿using AI2D.Actors.Enemies;
+﻿using AI2D.Actors.Items.Enemies;
+using AI2D.Events;
 using AI2D.Types;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,7 +65,7 @@ namespace AI2D.Engine.Situations
                 }
 
                 waitingOnPopulation = true;
-                _core.Actors.EventFactory.Create(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
+                _core.Events.Create(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
                 CurrentWave++;
             }
         }
@@ -73,13 +74,13 @@ namespace AI2D.Engine.Situations
         {
             Point<double> baseLocation = _core.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave);
-            _core.Actors.RadarBlipsSound.Play();
+            _core.Audio.RadarBlipsSound.Play();
             waitingOnPopulation = false;
         }
 
         private EnemyIrlen AddOneEnemyAt(double x, double y, double angle)
         {
-            var enemy = _core.Actors.EnemyFactory.Create<EnemyIrlen>();
+            var enemy = _core.Actors.Enemies.Create<EnemyIrlen>();
             enemy.X = x;
             enemy.Y = y;
             enemy.Velocity.ThrottlePercentage = 0.8;

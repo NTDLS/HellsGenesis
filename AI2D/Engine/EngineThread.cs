@@ -1,7 +1,7 @@
-﻿using AI2D.Actors;
-using AI2D.Actors.Bullets;
-using AI2D.Actors.Enemies;
-using AI2D.Actors.PowerUp;
+﻿using AI2D.Actors.Items;
+using AI2D.Actors.Items.Bullets;
+using AI2D.Actors.Items.Enemies;
+using AI2D.Actors.Items.PowerUp;
 using AI2D.Engine.Situations;
 using AI2D.Types;
 using System;
@@ -62,7 +62,7 @@ namespace AI2D.Engine
 
             for (int i = 0; i < 60; i++)
             {
-                _core.Actors.StarFactory.Create();
+                _core.Actors.Stars.Create();
             }
 
             #endregion
@@ -80,7 +80,7 @@ namespace AI2D.Engine
                 {
                     Monitor.Enter(_core.DrawingSemaphore);
 
-                    lock (_core.Actors.MenuFactory.Collection)
+                    lock (_core.Actors.Menus.Collection)
                         lock (_core.Actors.Player)
                             lock (_core.Actors.Collection)
                             {
@@ -92,7 +92,7 @@ namespace AI2D.Engine
                     Monitor.Exit(_core.DrawingSemaphore);
                 }
 
-                if (_core.Actors.MenuFactory.Collection.Count > 0)
+                if (_core.Actors.Menus.Collection.Count > 0)
                 {
                     Thread.Sleep(20);
                 }
@@ -120,9 +120,9 @@ namespace AI2D.Engine
         {
             #region Menu Management.
 
-            for (int i = 0; i < _core.Actors.MenuFactory.Collection.Count; i++)
+            for (int i = 0; i < _core.Actors.Menus.Collection.Count; i++)
             {
-                var menu = _core.Actors.MenuFactory.Collection[i];
+                var menu = _core.Actors.Menus.Collection[i];
                 menu.HandleInput();
             }
 
@@ -134,7 +134,7 @@ namespace AI2D.Engine
             {
                 if (_core.Situations.AdvanceSituation() == false)
                 {
-                    _core.Actors.EventFactory.QueueTheDoorIsAjar();
+                    _core.Events.QueueTheDoorIsAjar();
                 }
             }
 
@@ -142,7 +142,7 @@ namespace AI2D.Engine
 
             #region Player Frame Advancement.
 
-            Point<double> appliedOffset = new Point<double>();
+            var appliedOffset = new Point<double>();
 
             if (_core.Actors.Player.Visable)
             {
@@ -319,7 +319,7 @@ namespace AI2D.Engine
                 _core.Display.BackgroundOffset.Y += appliedOffset.Y;
 
                 //We are going to restrict the rotation speed to a percentage of thrust.
-                double rotationSpeed = (_core.Actors.Player.Velocity.MaxRotationSpeed * _core.Actors.Player.Velocity.ThrottlePercentage);
+                var rotationSpeed = (_core.Actors.Player.Velocity.MaxRotationSpeed * _core.Actors.Player.Velocity.ThrottlePercentage);
 
                 if (_core.Input.IsKeyPressed(PlayerKey.RotateCounterClockwise))
                 {
@@ -338,16 +338,7 @@ namespace AI2D.Engine
             #endregion
 
             #region Engine Event Callbacks.
-
-            for (int i = 0; i < _core.Actors.EventFactory.Collection.Count; i++)
-            {
-                var engineEvent = _core.Actors.EventFactory.Collection[i];
-                if (engineEvent.ReadyForDeletion == false)
-                {
-                    engineEvent.CheckForTrigger();
-                }
-            }
-
+            _core.Events.Execute();
             #endregion
 
             #region Enemies Frame Advancement.
@@ -359,12 +350,9 @@ namespace AI2D.Engine
 
             foreach (var enemy in _core.Actors.VisibleOfType<EnemyBase>())
             {
-                if (enemy.SelectedSecondaryWeapon != null)
-                {
-                    enemy.SelectedSecondaryWeapon.LockedOnObjects.Clear();
-                }
+                enemy.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
 
-                if (_core.Actors.Player.Visable && _core.Actors.Player.ReadyForDeletion == false)
+                if (_core.Actors.Player.Visable)
                 {
                     enemy.ApplyIntelligence(appliedOffset);
 
@@ -452,23 +440,20 @@ namespace AI2D.Engine
 
             foreach (var bullet in _core.Actors.VisibleOfType<BulletBase>())
             {
-                if (bullet.Visable && bullet.ReadyForDeletion == false)
+                bullet.ApplyMotion(appliedOffset);
+
+                //Check to see if the bullet hit the player:
+                bullet.ApplyIntelligence(appliedOffset, _core.Actors.Player);
+
+                //Check to see if the bullet hit an enemy.
+                foreach (var enemy in _core.Actors.VisibleOfType<EnemyBase>())
                 {
-                    bullet.ApplyMotion(appliedOffset);
+                    bullet.ApplyIntelligence(appliedOffset, enemy);
+                }
 
-                    //Check to see if the bullet hit the player:
-                    bullet.ApplyIntelligence(appliedOffset, _core.Actors.Player);
-
-                    //Check to see if the bullet hit an enemy.
-                    foreach (var enemy in _core.Actors.VisibleOfType<EnemyBase>())
-                    {
-                        bullet.ApplyIntelligence(appliedOffset, enemy);
-                    }
-
-                    foreach (var enemy in _core.Actors.VisibleOfType<ActorAttachment>())
-                    {
-                        bullet.ApplyIntelligence(appliedOffset, enemy);
-                    }
+                foreach (var enemy in _core.Actors.VisibleOfType<ActorAttachment>())
+                {
+                    bullet.ApplyIntelligence(appliedOffset, enemy);
                 }
             }
 
@@ -488,7 +473,7 @@ namespace AI2D.Engine
                             {
                                 int x = Utility.Random.Next(_core.Display.TotalCanvasSize.Width - (int)appliedOffset.X, _core.Display.TotalCanvasSize.Width);
                                 int y = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Height);
-                                _core.Actors.StarFactory.Create(x, y);
+                                _core.Actors.Stars.Create(x, y);
                             }
                         }
                     }
@@ -500,7 +485,7 @@ namespace AI2D.Engine
                             {
                                 int x = Utility.Random.Next(0, (int)-appliedOffset.X);
                                 int y = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Height);
-                                _core.Actors.StarFactory.Create(x, y);
+                                _core.Actors.Stars.Create(x, y);
                             }
                         }
                     }
@@ -512,7 +497,7 @@ namespace AI2D.Engine
                             {
                                 int x = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Width);
                                 int y = Utility.Random.Next(_core.Display.TotalCanvasSize.Height - (int)appliedOffset.Y, _core.Display.TotalCanvasSize.Height);
-                                _core.Actors.StarFactory.Create(x, y);
+                                _core.Actors.Stars.Create(x, y);
                             }
                         }
                     }
@@ -524,7 +509,7 @@ namespace AI2D.Engine
                             {
                                 int x = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Width);
                                 int y = Utility.Random.Next(0, (int)-appliedOffset.Y);
-                                _core.Actors.StarFactory.Create(x, y);
+                                _core.Actors.Stars.Create(x, y);
                             }
                         }
                     }

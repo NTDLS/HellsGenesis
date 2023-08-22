@@ -1,11 +1,10 @@
-﻿using AI2D.Actors;
-using AI2D.Actors.Bullets;
-using AI2D.Actors.Enemies;
-using AI2D.Actors.PowerUp;
-using AI2D.Engine.Managers.EngineActorFactories;
+﻿using AI2D.Actors.Factories;
+using AI2D.Actors.Items;
+using AI2D.Actors.Items.Bullets;
+using AI2D.Actors.Items.Enemies;
+using AI2D.Actors.Items.PowerUp;
 using AI2D.Engine.Menus;
 using AI2D.Types;
-using AI2D.Weapons;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -20,34 +19,28 @@ namespace AI2D.Engine.Managers
     {
         private readonly Core _core;
 
-        #region Actors.
-        internal List<ActorBase> Collection { get; private set; } = new List<ActorBase>();
         public ActorPlayer Player { get; private set; }
         public ActorTextBlock PlayerStatsText { get; private set; }
         public ActorTextBlock DebugText { get; private set; }
         public bool RenderRadar { get; set; } = false;
 
-        public EngineActorAnimationFactory AnimationFactory { get; set; }
-        public EngineActorBulletFactory BulletFactory { get; set; }
-        public EngineActorEventFactory EventFactory { get; set; }
-        public EngineActorDebugFactory DebugFactory { get; set; }
-        public EngineActorEnemyFactory EnemyFactory { get; set; }
-        public EngineActorMenuFactory MenuFactory { get; set; }
-        public EngineActorPowerupFactory PowerupFactory { get; set; }
-        public EngineActorRadarPositionFactory RadarPositionFactory { get; set; }
-        public EngineActorStarFactory StarFactory { get; set; }
-        public EngineActorTextBlockFactory TextBlockFactory { get; set; }
+        #region Actors and their factories.
+        internal List<ActorBase> Collection { get; private set; } = new();
+        public EngineActorAnimationFactory Animations { get; set; }
+        public EngineActorBulletFactory Bullets { get; set; }
+        public EngineActorDebugFactory Debugs { get; set; }
+        public EngineActorEnemyFactory Enemies { get; set; }
+        public EngineActorMenuFactory Menus { get; set; }
+        public EngineActorPowerupFactory Powerups { get; set; }
+        public EngineActorRadarPositionFactory RadarPositions { get; set; }
+        public EngineActorStarFactory Stars { get; set; }
+        public EngineActorTextBlockFactory TextBlocks { get; set; }
 
         #endregion
 
         #region Resources.
 
-        public AudioClip BackgroundMusicSound { get; private set; }
-        public AudioClip RadarBlipsSound { get; private set; }
-        public AudioClip DoorIsAjarSound { get; private set; }
-        public AudioClip LockedOnBlip { get; private set; }
 
-        private Dictionary<string, AudioClip> _audioClips { get; set; } = new Dictionary<string, AudioClip>();
         private Dictionary<string, Bitmap> _Bitmaps { get; set; } = new Dictionary<string, Bitmap>();
 
         //Thread _renderThread = null;
@@ -58,35 +51,28 @@ namespace AI2D.Engine.Managers
         {
             _core = core;
 
-            AnimationFactory = new EngineActorAnimationFactory(_core, this);
-            BulletFactory = new EngineActorBulletFactory(_core, this);
-            EventFactory = new EngineActorEventFactory(_core, this);
-            DebugFactory = new EngineActorDebugFactory(_core, this);
-            EnemyFactory = new EngineActorEnemyFactory(_core, this);
-            MenuFactory = new EngineActorMenuFactory(_core, this);
-            PowerupFactory = new EngineActorPowerupFactory(_core, this);
-            RadarPositionFactory = new EngineActorRadarPositionFactory(_core, this);
-            StarFactory = new EngineActorStarFactory(_core, this);
-            TextBlockFactory = new EngineActorTextBlockFactory(_core, this);
+            Animations = new EngineActorAnimationFactory(_core, this);
+            Bullets = new EngineActorBulletFactory(_core, this);
+            Debugs = new EngineActorDebugFactory(_core, this);
+            Enemies = new EngineActorEnemyFactory(_core, this);
+            Menus = new EngineActorMenuFactory(_core, this);
+            Powerups = new EngineActorPowerupFactory(_core, this);
+            RadarPositions = new EngineActorRadarPositionFactory(_core, this);
+            Stars = new EngineActorStarFactory(_core, this);
+            TextBlocks = new EngineActorTextBlockFactory(_core, this);
         }
 
         public void Start()
         {
             Player = new ActorPlayer(_core, Constants.PlayerClass.Atlant) { Visable = false };
 
-            DoorIsAjarSound = GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Door Is Ajar.wav", 0.50f, false);
-            RadarBlipsSound = GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Radar Blips.wav", 0.20f, false);
-            LockedOnBlip = GetSoundCached(@"..\..\..\Assets\Sounds\Ship\Locked On.wav", 0.20f, false);
-
-            BackgroundMusicSound = GetSoundCached(@"..\..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
-
-            PlayerStatsText = TextBlockFactory.Create("Consolas", Brushes.WhiteSmoke, 9,
+            PlayerStatsText = TextBlocks.Create("Consolas", Brushes.WhiteSmoke, 9,
                 //new Point<double>((_core.Display.OverdrawSize.Width) / 2 + 5, (_core.Display.OverdrawSize.Height / 2) + 5), true);
                 new Point<double>(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlockFactory.Create("Consolas", Brushes.Aqua, 10, new Point<double>(5, PlayerStatsText.Y + 80), true);
+            DebugText = TextBlocks.Create("Consolas", Brushes.Aqua, 10, new Point<double>(5, PlayerStatsText.Y + 80), true);
 
-            BackgroundMusicSound.Play();
+            _core.Audio.BackgroundMusicSound.Play();
 
             //_renderThread = new Thread(RenderThreadProc);
             //_renderThread.Start();
@@ -102,19 +88,19 @@ namespace AI2D.Engine.Managers
             _core.Actors.Collection.Where(o => o.ReadyForDeletion).ToList().ForEach(p => p.Cleanup());
             _core.Actors.Collection.RemoveAll(o => o.ReadyForDeletion);
 
-            for (int i = 0; i < EventFactory.Collection.Count; i++)
+            for (int i = 0; i < _core.Events.Collection.Count; i++)
             {
-                if (EventFactory.Collection[i].ReadyForDeletion)
+                if (_core.Events.Collection[i].ReadyForDeletion)
                 {
-                    EventFactory.Delete(EventFactory.Collection[i]);
+                    _core.Events.Delete(_core.Events.Collection[i]);
                 }
             }
 
-            for (int i = 0; i < MenuFactory.Collection.Count; i++)
+            for (int i = 0; i < Menus.Collection.Count; i++)
             {
-                if (MenuFactory.Collection[i].ReadyForDeletion)
+                if (Menus.Collection[i].ReadyForDeletion)
                 {
-                    MenuFactory.Delete(MenuFactory.Collection[i]);
+                    Menus.Delete(Menus.Collection[i]);
                 }
             }
 
@@ -122,7 +108,7 @@ namespace AI2D.Engine.Managers
             {
                 _core.Actors.Player.Visable = false;
                 _core.Actors.Player.IsDead = false;
-                MenuFactory.Insert(new MenuStartNewGame(_core));
+                Menus.Insert(new MenuStartNewGame(_core));
             }
         }
 
@@ -308,27 +294,6 @@ namespace AI2D.Engine.Managers
             return result;
         }
 
-        public AudioClip GetSoundCached(string wavFilePath, float initialVolumne, bool loopForever = false)
-        {
-            lock (_audioClips)
-            {
-                AudioClip result = null;
-
-                wavFilePath = wavFilePath.ToLower();
-
-                if (_audioClips.ContainsKey(wavFilePath))
-                {
-                    result = _audioClips[wavFilePath];
-                }
-                else
-                {
-                    result = new AudioClip(wavFilePath, initialVolumne, loopForever);
-                    _audioClips.Add(wavFilePath, result);
-                }
-
-                return result;
-            }
-        }
 
         public ActorBase Add(string imagePath = null, Size? size = null, string tag = "")
         {
@@ -523,7 +488,7 @@ namespace AI2D.Engine.Managers
                         Player?.Render(screenDrawing.Graphics);
                     }
 
-                    MenuFactory.Render(screenDrawing.Graphics);
+                    Menus.Render(screenDrawing.Graphics);
                 }
 
                 //displayDC.DrawImage(screenDrawing.Bitmap, 0, 0);

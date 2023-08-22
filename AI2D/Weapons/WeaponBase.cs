@@ -1,5 +1,5 @@
-﻿using AI2D.Actors;
-using AI2D.Actors.Bullets;
+﻿using AI2D.Actors.Items;
+using AI2D.Actors.Items.Bullets;
 using AI2D.Engine;
 using AI2D.Types;
 using System;
@@ -35,7 +35,7 @@ namespace AI2D.Weapons
         public WeaponBase(Core core, string name, string soundPath, float soundVolume)
         {
             _core = core;
-            _fireSound = _core.Actors.GetSoundCached(soundPath, soundVolume);
+            _fireSound = _core.Audio.Get(soundPath, soundVolume);
             Name = name;
         }
 
@@ -81,7 +81,7 @@ namespace AI2D.Weapons
                 RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
-                _core.Actors.BulletFactory.Create(this, _owner);
+                _core.Actors.Bullets.Create(this, _owner);
                 return true;
             }
             return false;
