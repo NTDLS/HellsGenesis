@@ -175,7 +175,7 @@ namespace AI2D.Actors
                     ThrustAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
                     ThrustAnimation.Reset();
                     ThrustAnimation.Visable = false;
-                    _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);
+                    _core.Actors.AnimationFactory.CreateAt(ThrustAnimation, this);
 
                     var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
                     ThrustAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;
@@ -194,7 +194,7 @@ namespace AI2D.Actors
                     BoostAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
                     BoostAnimation.Reset();
                     BoostAnimation.Visable = false;
-                    _core.Actors.PlaceAnimationOnTopOf(BoostAnimation, this);
+                    _core.Actors.AnimationFactory.CreateAt(BoostAnimation, this);
 
                     var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
                     BoostAnimation.Velocity.Angle.Degrees = this.Velocity.Angle.Degrees - 180;

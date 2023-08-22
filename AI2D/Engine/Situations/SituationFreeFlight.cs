@@ -10,7 +10,7 @@ namespace AI2D.Engine.Situations
             TotalWaves = 5;
         }
 
-        List<EngineCallbackEvent> events = new List<EngineCallbackEvent>();
+        readonly List<EngineCallbackEvent> events = new List<EngineCallbackEvent>();
 
         public override void Execute()
         {

@@ -2,6 +2,7 @@
 using AI2D.Actors.Bullets;
 using AI2D.Actors.Enemies;
 using AI2D.Actors.PowerUp;
+using AI2D.Engine.Managers.EngineActorFactories;
 using AI2D.Engine.Menus;
 using AI2D.Types;
 using AI2D.Weapons;
@@ -17,16 +18,25 @@ namespace AI2D.Engine.Managers
 {
     public class EngineActorManager
     {
-        private Core _core;
+        private readonly Core _core;
 
         #region Actors.
-        public List<EngineCallbackEvent> EngineEvents { get; private set; } = new List<EngineCallbackEvent>();
-        public List<ActorBase> Collection { get; private set; } = new List<ActorBase>();
-        public List<BaseMenu> Menus { get; private set; } = new List<BaseMenu>();
+        internal List<ActorBase> Collection { get; private set; } = new List<ActorBase>();
         public ActorPlayer Player { get; private set; }
         public ActorTextBlock PlayerStatsText { get; private set; }
         public ActorTextBlock DebugText { get; private set; }
         public bool RenderRadar { get; set; } = false;
+
+        public EngineActorAnimationFactory AnimationFactory { get; set; }
+        public EngineActorBulletFactory BulletFactory { get; set; }
+        public EngineActorEventFactory EventFactory { get; set; }
+        public EngineActorDebugFactory DebugFactory { get; set; }
+        public EngineActorEnemyFactory EnemyFactory { get; set; }
+        public EngineActorMenuFactory MenuFactory { get; set; }
+        public EngineActorPowerupFactory PowerupFactory { get; set; }
+        public EngineActorRadarPositionFactory RadarPositionFactory { get; set; }
+        public EngineActorStarFactory StarFactory { get; set; }
+        public EngineActorTextBlockFactory TextBlockFactory { get; set; }
 
         #endregion
 
@@ -47,6 +57,17 @@ namespace AI2D.Engine.Managers
         public EngineActorManager(Core core)
         {
             _core = core;
+
+            AnimationFactory = new EngineActorAnimationFactory(_core, this);
+            BulletFactory = new EngineActorBulletFactory(_core, this);
+            EventFactory = new EngineActorEventFactory(_core, this);
+            DebugFactory = new EngineActorDebugFactory(_core, this);
+            EnemyFactory = new EngineActorEnemyFactory(_core, this);
+            MenuFactory = new EngineActorMenuFactory(_core, this);
+            PowerupFactory = new EngineActorPowerupFactory(_core, this);
+            RadarPositionFactory = new EngineActorRadarPositionFactory(_core, this);
+            StarFactory = new EngineActorStarFactory(_core, this);
+            TextBlockFactory = new EngineActorTextBlockFactory(_core, this);
         }
 
         public void Start()
@@ -59,11 +80,11 @@ namespace AI2D.Engine.Managers
 
             BackgroundMusicSound = GetSoundCached(@"..\..\..\Assets\Sounds\Music\Background.wav", 0.25f, true);
 
-            PlayerStatsText = AddNewTextBlock("Consolas", Brushes.WhiteSmoke, 9,
+            PlayerStatsText = TextBlockFactory.Create("Consolas", Brushes.WhiteSmoke, 9,
                 //new Point<double>((_core.Display.OverdrawSize.Width) / 2 + 5, (_core.Display.OverdrawSize.Height / 2) + 5), true);
                 new Point<double>(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = AddNewTextBlock("Consolas", Brushes.Aqua, 10, new Point<double>(5, PlayerStatsText.Y + 80), true);
+            DebugText = TextBlockFactory.Create("Consolas", Brushes.Aqua, 10, new Point<double>(5, PlayerStatsText.Y + 80), true);
 
             BackgroundMusicSound.Play();
 
@@ -81,19 +102,19 @@ namespace AI2D.Engine.Managers
             _core.Actors.Collection.Where(o => o.ReadyForDeletion).ToList().ForEach(p => p.Cleanup());
             _core.Actors.Collection.RemoveAll(o => o.ReadyForDeletion);
 
-            for (int i = 0; i < _core.Actors.EngineEvents.Count; i++)
+            for (int i = 0; i < EventFactory.Collection.Count; i++)
             {
-                if (_core.Actors.EngineEvents[i].ReadyForDeletion)
+                if (EventFactory.Collection[i].ReadyForDeletion)
                 {
-                    _core.Actors.DeleteEngineCallbackEvent(_core.Actors.EngineEvents[i]);
+                    EventFactory.Delete(EventFactory.Collection[i]);
                 }
             }
 
-            for (int i = 0; i < _core.Actors.Menus.Count; i++)
+            for (int i = 0; i < MenuFactory.Collection.Count; i++)
             {
-                if (_core.Actors.Menus[i].ReadyForDeletion)
+                if (MenuFactory.Collection[i].ReadyForDeletion)
                 {
-                    _core.Actors.DeleteMenu(_core.Actors.Menus[i]);
+                    MenuFactory.Delete(MenuFactory.Collection[i]);
                 }
             }
 
@@ -101,7 +122,7 @@ namespace AI2D.Engine.Managers
             {
                 _core.Actors.Player.Visable = false;
                 _core.Actors.Player.IsDead = false;
-                _core.Actors.InsertMenu(new MenuStartNewGame(_core));
+                MenuFactory.Insert(new MenuStartNewGame(_core));
             }
         }
 
@@ -219,11 +240,7 @@ namespace AI2D.Engine.Managers
             }
         }
 
-        private void TheDoorIsAjarCallback(Core core, EngineCallbackEvent sender, object refObj)
-        {
-            DoorIsAjarSound.Play();
-            InsertMenu(new MenuStartNewGame(_core));
-        }
+
 
         public List<T> VisibleEnemiesOfType<T>() where T : class
         {
@@ -341,36 +358,6 @@ namespace AI2D.Engine.Managers
 
         #region Factories.
 
-        public ActorRadarPositionIndicator AddNewRadarPositionIndicator()
-        {
-            lock (Collection)
-            {
-                var obj = new ActorRadarPositionIndicator(_core);
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public void DeleteRadarPositionIndicator(ActorRadarPositionIndicator obj)
-        {
-            lock (Collection)
-            {
-                obj.Cleanup();
-                obj.Visable = false;
-                Collection.Remove(obj);
-            }
-        }
-
-        public void PlaceAnimationOnTopOf(ActorAnimation animation, ActorBase defaultPosition)
-        {
-            lock (Collection)
-            {
-                animation.X = defaultPosition.X;
-                animation.Y = defaultPosition.Y;
-                animation.RotationMode = RotationMode.Clip; //Much less expensive. Use this or NONE if you can.
-                Collection.Add(animation);
-            }
-        }
 
         public ActorAttachment AddNewActorAttachment(string imagePath = null, Size? size = null, string tag = "")
         {
@@ -385,296 +372,6 @@ namespace AI2D.Engine.Managers
             }
         }
 
-        public ActorAnimation AddNewAnimation(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, ActorAnimation.PlayMode playMode = null)
-        {
-            lock (Collection)
-            {
-                ActorAnimation obj = new ActorAnimation(_core, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public void DeleteAnimation(ActorAnimation obj)
-        {
-            lock (Collection)
-            {
-                obj.Cleanup();
-                Collection.Remove(obj);
-            }
-        }
-
-        public void QueueTheDoorIsAjar()
-        {
-
-            AddNewEngineCallbackEvent(new TimeSpan(0, 0, 0, 5), _core.Actors.TheDoorIsAjarCallback);
-        }
-
-
-        public EngineCallbackEvent AddNewEngineCallbackEvent(
-            TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback, object refObj,
-            EngineCallbackEvent.CallbackEventMode callbackEventMode = EngineCallbackEvent.CallbackEventMode.OneTime,
-            EngineCallbackEvent.CallbackEventAsync callbackEventAsync = EngineCallbackEvent.CallbackEventAsync.Synchronous)
-        {
-            lock (EngineEvents)
-            {
-                EngineCallbackEvent obj = new EngineCallbackEvent(_core, countdown, executeCallback, refObj, callbackEventMode, callbackEventAsync);
-                EngineEvents.Add(obj);
-                return obj;
-            }
-        }
-
-        public EngineCallbackEvent AddNewEngineCallbackEvent(TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback, object refObj)
-        {
-            lock (EngineEvents)
-            {
-                EngineCallbackEvent obj = new EngineCallbackEvent(_core, countdown, executeCallback, refObj);
-                EngineEvents.Add(obj);
-                return obj;
-            }
-        }
-
-        public EngineCallbackEvent AddNewEngineCallbackEvent(TimeSpan countdown, EngineCallbackEvent.OnExecute executeCallback)
-        {
-            lock (EngineEvents)
-            {
-                EngineCallbackEvent obj = new EngineCallbackEvent(_core, countdown, executeCallback);
-                EngineEvents.Add(obj);
-                return obj;
-            }
-        }
-
-        public EngineCallbackEvent InjectCallbackEvent(EngineCallbackEvent obj)
-        {
-            lock (EngineEvents)
-            {
-                EngineEvents.Add(obj);
-                return obj;
-            }
-        }
-
-        public void DeleteEngineCallbackEvent(EngineCallbackEvent obj)
-        {
-            lock (EngineEvents)
-            {
-                EngineEvents.Remove(obj);
-            }
-        }
-
-        public ActorRadarPositionTextBlock AddNewRadarPositionTextBlock(string font, Brush color, double size, Point<double> location)
-        {
-            lock (Collection)
-            {
-                var obj = new ActorRadarPositionTextBlock(_core, font, color, size, location);
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public ActorTextBlock AddNewTextBlock(string font, Brush color, double size, Point<double> location, bool isPositionStatic)
-        {
-            lock (Collection)
-            {
-                var obj = new ActorTextBlock(_core, font, color, size, location, isPositionStatic);
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public ActorTextBlock AddNewTextBlock(string font, Brush color, double size, Point<double> location, bool isPositionStatic, string tag)
-        {
-            lock (Collection)
-            {
-                var obj = new ActorTextBlock(_core, font, color, size, location, isPositionStatic);
-                obj.Tag = tag;
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public void DeleteTextBlock(ActorTextBlock obj)
-        {
-            lock (Collection)
-            {
-                obj.Cleanup();
-                Collection.Remove(obj);
-            }
-        }
-
-        public ActorDebug AddNewDebug(double x, double y)
-        {
-            lock (Collection)
-            {
-                var obj = new ActorDebug(_core, x, y);
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public ActorDebug AddNewDebug()
-        {
-            lock (Collection)
-            {
-                var obj = new ActorDebug(_core);
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public void DeleteDebug(ActorDebug obj)
-        {
-            lock (Collection)
-            {
-                obj.Cleanup();
-                Collection.Remove(obj);
-            }
-        }
-
-        public ActorStar AddNewStar(double x, double y)
-        {
-            lock (Collection)
-            {
-                var obj = new ActorStar(_core)
-                {
-                    X = x,
-                    Y = y
-                };
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public ActorStar AddNewStar()
-        {
-            lock (Collection)
-            {
-                var obj = new ActorStar(_core);
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public void DeleteStar(ActorStar obj)
-        {
-            lock (Collection)
-            {
-                obj.Cleanup();
-                Collection.Remove(obj);
-            }
-        }
-
-        public void InjectEnemy(EnemyBase obj)
-        {
-            lock (Collection)
-            {
-                Collection.Add(obj);
-            }
-        }
-
-        public void InjectPowerUp(PowerUpBase obj)
-        {
-            lock (Collection)
-            {
-                Collection.Add(obj);
-            }
-        }
-
-        public void DeletePowerUp(PowerUpBase obj)
-        {
-            lock (Collection)
-            {
-                obj.Cleanup();
-                Collection.Remove(obj);
-            }
-        }
-
-        public T AddNewPowerUp<T>() where T : PowerUpBase
-        {
-            lock (Collection)
-            {
-                object[] param = { _core };
-                PowerUpBase obj = (PowerUpBase)Activator.CreateInstance(typeof(T), param);
-
-                obj.Location = _core.Display.RandomOffScreenLocation(100, 1000);
-
-                Collection.Add(obj);
-                return (T)obj;
-            }
-        }
-
-        public T AddNewEnemy<T>() where T : EnemyBase
-        {
-            lock (Collection)
-            {
-                object[] param = { _core };
-                EnemyBase obj = (EnemyBase)Activator.CreateInstance(typeof(T), param);
-
-                obj.Location = _core.Display.RandomOffScreenLocation();
-                obj.Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MinSpeed, Constants.Limits.MaxSpeed);
-                obj.Velocity.Angle.Degrees = Utility.Random.Next(0, 360);
-
-                obj.BeforeCreate();
-                Collection.Add(obj);
-                obj.AfterCreate();
-
-                return (T)obj;
-            }
-        }
-
-        public void DeleteEnemy(EnemyBase obj)
-        {
-            lock (Collection)
-            {
-                obj.Cleanup();
-                Collection.Remove(obj);
-            }
-        }
-
-        public BulletBase AddNewLockedBullet(WeaponBase weapon, ActorBase firedFrom, ActorBase lockedTarget, Point<double> xyOffset = null)
-        {
-            lock (Collection)
-            {
-                var obj = weapon.CreateBullet(lockedTarget, xyOffset);
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public BulletBase AddNewBullet(WeaponBase weapon, ActorBase firedFrom, Point<double> xyOffset = null)
-        {
-            lock (Collection)
-            {
-                var obj = weapon.CreateBullet(null, xyOffset);
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public void DeleteBullet(BulletBase obj)
-        {
-            lock (Collection)
-            {
-                obj.Cleanup();
-                Collection.Remove(obj);
-            }
-        }
-
-        public void InsertMenu(BaseMenu menu)
-        {
-            lock (Menus)
-            {
-                Menus.Add(menu);
-            }
-        }
-
-        public void DeleteMenu(BaseMenu menu)
-        {
-            lock (Menus)
-            {
-                menu.Cleanup();
-                Menus.Remove(menu);
-            }
-        }
 
         #endregion
 
@@ -683,10 +380,10 @@ namespace AI2D.Engine.Managers
         private Point<double> _radarScale;
         private Point<double> _radarOffset;
         private Bitmap _RadarBackgroundImage = null;
-        private SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
+        private readonly SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
 
         private Bitmap _latestFrame = null;
-        private object _LatestFrameLock = new object();
+        private readonly object _LatestFrameLock = new object();
 
         /// <summary>
         /// Using the render thread, we can always have a frame ready, but that really means we render even when we dont need to.
@@ -826,13 +523,7 @@ namespace AI2D.Engine.Managers
                         Player?.Render(screenDrawing.Graphics);
                     }
 
-                    lock (Menus)
-                    {
-                        foreach (var obj in Menus)
-                        {
-                            obj.Render(screenDrawing.Graphics);
-                        }
-                    }
+                    MenuFactory.Render(screenDrawing.Graphics);
                 }
 
                 //displayDC.DrawImage(screenDrawing.Bitmap, 0, 0);

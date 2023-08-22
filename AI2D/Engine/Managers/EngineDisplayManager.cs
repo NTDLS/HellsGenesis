@@ -7,7 +7,7 @@ namespace AI2D.Engine.Managers
 {
     public class EngineDisplayManager
     {
-        private Core _core;
+        private readonly Core _core;
 
         public Dictionary<Point, Quadrant> Quadrants { get; private set; } = new();
         public Quadrant CurrentQuadrant { get; set; }
@@ -81,7 +81,7 @@ namespace AI2D.Engine.Managers
         {
             get
             {
-                return new RectangleF(0,0,TotalCanvasSize.Width, TotalCanvasSize.Height
+                return new RectangleF(0, 0, TotalCanvasSize.Width, TotalCanvasSize.Height
                 );
             }
         }

@@ -64,7 +64,7 @@ namespace AI2D.Engine.Situations
                 }
 
                 waitingOnPopulation = true;
-                _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
+                _core.Actors.EventFactory.Create(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
                 CurrentWave++;
             }
         }
@@ -79,7 +79,7 @@ namespace AI2D.Engine.Situations
 
         private EnemyIrlen AddOneEnemyAt(double x, double y, double angle)
         {
-            var enemy = _core.Actors.AddNewEnemy<EnemyIrlen>();
+            var enemy = _core.Actors.EnemyFactory.Create<EnemyIrlen>();
             enemy.X = x;
             enemy.Y = y;
             enemy.Velocity.ThrottlePercentage = 0.8;

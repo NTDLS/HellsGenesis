@@ -8,7 +8,7 @@ namespace AI2D.Engine.Menus
 {
     public class PlayerShipMenu : BaseMenu
     {
-        private ActorMenuItem _shipBlurb;
+        private readonly ActorMenuItem _shipBlurb;
 
         public PlayerShipMenu(Core core)
             : base(core)

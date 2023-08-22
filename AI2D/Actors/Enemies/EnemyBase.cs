@@ -29,9 +29,9 @@ namespace AI2D.Actors.Enemies
             base.SetHitPoints(hitPoints);
             ScorePoints = HitPoints * scoreMultiplier;
 
-            RadarPositionIndicator = _core.Actors.AddNewRadarPositionIndicator();
+            RadarPositionIndicator = _core.Actors.RadarPositionFactory.Create();
             RadarPositionIndicator.Visable = false;
-            RadarPositionText = _core.Actors.AddNewRadarPositionTextBlock("Consolas", Brushes.Red, 8, new Point<double>());
+            RadarPositionText = _core.Actors.TextBlockFactory.CreateRadarPosition("Consolas", Brushes.Red, 8, new Point<double>());
 
             var playMode = new ActorAnimation.PlayMode()
             {
@@ -42,7 +42,7 @@ namespace AI2D.Actors.Enemies
             ThrustAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
 
             ThrustAnimation.Reset();
-            _core.Actors.PlaceAnimationOnTopOf(ThrustAnimation, this);
+            _core.Actors.AnimationFactory.CreateAt(ThrustAnimation, this);
 
             var pointRight = Utility.AngleFromPointAtDistance(base.Velocity.Angle + 180, new Point<double>(20, 20));
             ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;

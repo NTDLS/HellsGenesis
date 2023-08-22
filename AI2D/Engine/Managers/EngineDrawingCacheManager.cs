@@ -13,7 +13,7 @@ namespace AI2D.Engine.Managers
             Radar
         }
 
-        private Dictionary<DrawingCacheType, DrawingCacheItem> _graphicsCache = new();
+        private readonly Dictionary<DrawingCacheType, DrawingCacheItem> _graphicsCache = new();
 
         public class DrawingCacheItem
         {

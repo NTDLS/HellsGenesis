@@ -29,7 +29,7 @@ namespace AI2D.Actors
         private ActorAnimation _explosionAnimation;
         private AudioClip _explodeSound;
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
-        private int _MillisecondsBetweenHits = 200;
+        private readonly int _MillisecondsBetweenHits = 200;
         private AudioClip _hitSound;
         private AudioClip _shieldHit;
         private readonly List<WeaponBase> _secondaryWeapons = new List<WeaponBase>();
@@ -818,13 +818,13 @@ namespace AI2D.Actors
                 {
                     PowerUpBase powerUp = Utility.FlipCoin() ? (PowerUpBase)new PowerUpRepair(_core) : (PowerUpBase)new PowerUpSheild(_core);
                     powerUp.Location = this.Location;
-                    _core.Actors.InjectPowerUp(powerUp);
+                    _core.Actors.PowerupFactory.Insert(powerUp);
                 }
             }
 
             _explodeSound.Play();
             _explosionAnimation.Reset();
-            _core.Actors.PlaceAnimationOnTopOf(_explosionAnimation, this);
+            _core.Actors.AnimationFactory.CreateAt(_explosionAnimation, this);
 
             if (autoKill)
             {
@@ -840,7 +840,7 @@ namespace AI2D.Actors
         public void HitExplosion()
         {
             _hitExplosionAnimation.Reset();
-            _core.Actors.PlaceAnimationOnTopOf(_hitExplosionAnimation, this);
+            _core.Actors.AnimationFactory.CreateAt(_hitExplosionAnimation, this);
         }
 
         public List<ActorBase> Intersections()

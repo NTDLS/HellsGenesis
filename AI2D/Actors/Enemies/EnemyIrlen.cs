@@ -49,7 +49,7 @@ namespace AI2D.Actors.Enemies
             MovingToApproach,
         }
 
-        int initialHitPoints = 0;
+        readonly int initialHitPoints = 0;
         const double baseDistanceToKeep = 100;
         double distanceToKeep = baseDistanceToKeep * (Utility.Random.NextDouble() + 1);
         const double baseFallbackDistance = 400;

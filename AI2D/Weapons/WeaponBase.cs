@@ -81,7 +81,7 @@ namespace AI2D.Weapons
                 RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
-                _core.Actors.AddNewBullet(this, _owner);
+                _core.Actors.BulletFactory.Create(this, _owner);
                 return true;
             }
             return false;

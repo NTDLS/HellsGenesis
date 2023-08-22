@@ -18,7 +18,7 @@ namespace AI2D.Actors.PowerUp
             #endregion
         };
 
-        private int _repairPoints = 25;
+        private readonly int _repairPoints = 25;
 
         public PowerUpSheild(Core core)
             : base(core)

@@ -7,18 +7,18 @@ namespace AI2D.Actors
 {
     public class ActorAnimation : ActorBase
     {
-        private Bitmap _frameImage;
-        private int _frameCount;
+        private readonly Bitmap _frameImage;
+        private readonly int _frameCount;
         private int _currentFrame = 0;
         private int _currentRow = 0;
         private int _currentColumn = 0;
         private Size _frameSize;
-        private int _rows;
-        private int _columns;
-        private int _frameDelayMilliseconds = 10;
+        private readonly int _rows;
+        private readonly int _columns;
+        private readonly int _frameDelayMilliseconds = 10;
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
-        private string _imageName; //Debugging.
-        private PlayMode _playMode;
+        private readonly string _imageName; //Debugging.
+        private readonly PlayMode _playMode;
 
         public enum ReplayMode
         {

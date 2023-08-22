@@ -53,7 +53,7 @@ namespace AI2D.Engine.Menus
             }
             else if (item.Name == "YES")
             {
-                _core.Actors.InsertMenu(new PlayerShipMenu(_core));
+                _core.Actors.MenuFactory.Insert(new PlayerShipMenu(_core));
             }
 
             QueueForDelete();

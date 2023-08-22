@@ -42,7 +42,7 @@ namespace AI2D.Engine.Situations
 
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    _core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, Utility.RandomNumber(0, 800)), AddEnemyCallback);
+                    _core.Actors.EventFactory.Create(new System.TimeSpan(0, 0, 0, 0, Utility.RandomNumber(0, 800)), AddEnemyCallback);
                 }
 
                 _core.Actors.RadarBlipsSound.Play();
@@ -53,7 +53,7 @@ namespace AI2D.Engine.Situations
 
         private void AddEnemyCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.AddNewEnemy<EnemyScinzad>();
+            _core.Actors.EnemyFactory.Create<EnemyScinzad>();
         }
     }
 }

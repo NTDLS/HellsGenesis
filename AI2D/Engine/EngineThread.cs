@@ -14,10 +14,10 @@ namespace AI2D.Engine
 {
     public class EngineThread
     {
-        private Core _core;
+        private readonly Core _core;
         private bool _shutdown = false;
         private bool _pause = false;
-        private Thread _graphicsThread;
+        private readonly Thread _graphicsThread;
 
         public EngineThread(Core core)
         {
@@ -58,10 +58,14 @@ namespace AI2D.Engine
 
         private void GraphicsThreadProc()
         {
+            #region Add initial stars.
+
             for (int i = 0; i < 60; i++)
             {
-                _core.Actors.AddNewStar();
+                _core.Actors.StarFactory.Create();
             }
+
+            #endregion
 
             var timer = new Stopwatch();
             double targetFrameDuration = 1000000 / Constants.Limits.FrameLimiter; //1000000 / n-frames/second.
@@ -76,22 +80,19 @@ namespace AI2D.Engine
                 {
                     Monitor.Enter(_core.DrawingSemaphore);
 
-                    lock (_core.Actors.Menus)
-                    {
+                    lock (_core.Actors.MenuFactory.Collection)
                         lock (_core.Actors.Player)
-                        {
                             lock (_core.Actors.Collection)
                             {
                                 AdvanceWorldClock();
                                 timer.Stop();
+
                             }
-                        }
-                    }
 
                     Monitor.Exit(_core.DrawingSemaphore);
                 }
 
-                if (_core.Actors.Menus.Count > 0)
+                if (_core.Actors.MenuFactory.Collection.Count > 0)
                 {
                     Thread.Sleep(20);
                 }
@@ -100,7 +101,7 @@ namespace AI2D.Engine
                 double deltaClockTime = targetFrameDuration - clockTime;
                 timer.Restart();
 
-                while ((((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000 < deltaClockTime)
+                while (((double)timer.ElapsedTicks) / Stopwatch.Frequency * 1000000 < deltaClockTime)
                 {
                     Thread.Yield();
                 }
@@ -119,9 +120,9 @@ namespace AI2D.Engine
         {
             #region Menu Management.
 
-            for (int i = 0; i < _core.Actors.Menus.Count; i++)
+            for (int i = 0; i < _core.Actors.MenuFactory.Collection.Count; i++)
             {
-                var menu = _core.Actors.Menus[i];
+                var menu = _core.Actors.MenuFactory.Collection[i];
                 menu.HandleInput();
             }
 
@@ -133,7 +134,7 @@ namespace AI2D.Engine
             {
                 if (_core.Situations.AdvanceSituation() == false)
                 {
-                    _core.Actors.QueueTheDoorIsAjar();
+                    _core.Actors.EventFactory.QueueTheDoorIsAjar();
                 }
             }
 
@@ -338,9 +339,9 @@ namespace AI2D.Engine
 
             #region Engine Event Callbacks.
 
-            for (int i = 0; i < _core.Actors.EngineEvents.Count; i++)
+            for (int i = 0; i < _core.Actors.EventFactory.Collection.Count; i++)
             {
-                var engineEvent = _core.Actors.EngineEvents[i];
+                var engineEvent = _core.Actors.EventFactory.Collection[i];
                 if (engineEvent.ReadyForDeletion == false)
                 {
                     engineEvent.CheckForTrigger();
@@ -487,7 +488,7 @@ namespace AI2D.Engine
                             {
                                 int x = Utility.Random.Next(_core.Display.TotalCanvasSize.Width - (int)appliedOffset.X, _core.Display.TotalCanvasSize.Width);
                                 int y = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Height);
-                                _core.Actors.AddNewStar(x, y);
+                                _core.Actors.StarFactory.Create(x, y);
                             }
                         }
                     }
@@ -499,7 +500,7 @@ namespace AI2D.Engine
                             {
                                 int x = Utility.Random.Next(0, (int)-appliedOffset.X);
                                 int y = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Height);
-                                _core.Actors.AddNewStar(x, y);
+                                _core.Actors.StarFactory.Create(x, y);
                             }
                         }
                     }
@@ -511,7 +512,7 @@ namespace AI2D.Engine
                             {
                                 int x = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Width);
                                 int y = Utility.Random.Next(_core.Display.TotalCanvasSize.Height - (int)appliedOffset.Y, _core.Display.TotalCanvasSize.Height);
-                                _core.Actors.AddNewStar(x, y);
+                                _core.Actors.StarFactory.Create(x, y);
                             }
                         }
                     }
@@ -523,7 +524,7 @@ namespace AI2D.Engine
                             {
                                 int x = Utility.Random.Next(0, _core.Display.TotalCanvasSize.Width);
                                 int y = Utility.Random.Next(0, (int)-appliedOffset.Y);
-                                _core.Actors.AddNewStar(x, y);
+                                _core.Actors.StarFactory.Create(x, y);
                             }
                         }
                     }

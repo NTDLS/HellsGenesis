@@ -8,16 +8,16 @@ namespace AI2D.Engine
 {
     public class AudioClip
     {
-        private XAudio2 _xaudio = new XAudio2();
-        private WaveFormat _waveFormat;
-        private AudioBuffer _buffer;
-        private SoundStream _soundstream;
+        private readonly XAudio2 _xaudio = new XAudio2();
+        private readonly WaveFormat _waveFormat;
+        private readonly AudioBuffer _buffer;
+        private readonly SoundStream _soundstream;
         private SourceVoice _singleSourceVoice;
-        private bool _loopForever;
+        private readonly bool _loopForever;
         private bool _isPlaying = false; //Only applicable when _loopForever == false;
         private bool _isFading;
-        private string _wavFilePath; //For debugging.
-        private float _initialVolumne;
+        private readonly string _wavFilePath; //For debugging.
+        private readonly float _initialVolumne;
 
         public float InitialVolumne
         {

@@ -11,14 +11,14 @@ namespace AI2D.Actors.Enemies.Bosses
     {
         public const int ScoreMultiplier = 15;
 
-        private ActorAttachment _leftGun;
-        private ActorAttachment _rightGun;
-        private ActorAttachment _rightThrust;
-        private ActorAttachment _leftThrust;
+        private readonly ActorAttachment _leftGun;
+        private readonly ActorAttachment _rightGun;
+        private readonly ActorAttachment _rightThrust;
+        private readonly ActorAttachment _leftThrust;
 
-        private double _initialMaxpeed;
+        private readonly double _initialMaxpeed;
 
-        string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Flea\";
+        readonly string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Flea\";
 
         public EnemyFlea(Core core)
             : base(core, GetGenericHP(), ScoreMultiplier)

@@ -81,7 +81,7 @@ namespace AI2D.Engine.Menus
 
         public void AddMenuItem(ActorMenuItem item)
         {
-            lock (_core.Actors.Menus)
+            lock (_core.Actors.MenuFactory.Collection)
             {
                 _menuItems.Add(item);
             }

@@ -4,17 +4,17 @@ using System.Threading;
 namespace AI2D.Engine
 {
     /// <summary>
-    /// Allows for deferred events to be injected into the engine.
-    /// We use this so that we can defer things without sleeping and so we can inject into the actors durring the frame logic.
+    /// Allows for deferred events to be injected into the engine. We use this so that we can
+    /// defer things without sleeping and so we can inject into the actors durring the frame logic.
     /// </summary>
     public class EngineCallbackEvent
     {
-        private Core _core;
-        private object _referenceObject = null;
-        private TimeSpan _countdown;
-        private OnExecute _onExecute;
-        private CallbackEventMode _callbackEventMode;
-        private CallbackEventAsync _callbackEventAsync;
+        private readonly Core _core;
+        private readonly object _referenceObject = null;
+        private readonly TimeSpan _countdown;
+        private readonly OnExecute _onExecute;
+        private readonly CallbackEventMode _callbackEventMode;
+        private readonly CallbackEventAsync _callbackEventAsync;
         private DateTime _startedTime;
 
         public Guid UID { get; private set; }

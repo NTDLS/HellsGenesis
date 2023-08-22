@@ -10,9 +10,9 @@ namespace AI2D.AI.Logistics
 {
     public class HostileEngagement : IAIController
     {
-        private Core _core;
-        private ActorBase _owner;
-        private ActorBase _observedObject;
+        private readonly Core _core;
+        private readonly ActorBase _owner;
+        private readonly ActorBase _observedObject;
 
         #region I/O Enumerations.
 

@@ -15,8 +15,8 @@ namespace AI2D
 {
     public partial class FormMain : Form
     {
-        private Core _core;
-        private bool _fullScreen = false;
+        private readonly Core _core;
+        private readonly bool _fullScreen = false;
 
         //This really shouldn't be necessary! :(
         protected override CreateParams CreateParams
@@ -106,7 +106,7 @@ namespace AI2D
             }
         }
 
-        private ToolTip _interrogationTip = new ToolTip();
+        private readonly ToolTip _interrogationTip = new ToolTip();
 
         private void DrawingSurface_MouseDown(object sender, MouseEventArgs e)
         {

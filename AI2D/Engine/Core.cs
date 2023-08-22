@@ -16,9 +16,9 @@ namespace AI2D.Engine
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
-        public object DrawingSemaphore { get; set; } = new object();
+        public object DrawingSemaphore { get; set; } = new();
 
-        private EngineThread _engineThread;
+        private readonly EngineThread _engineThread;
 
         #region Events.
 
@@ -38,12 +38,12 @@ namespace AI2D.Engine
             Situations = new SituationManager(this);
             _engineThread = new EngineThread(this);
 
-            Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
+            Actors.EventFactory.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
 
         private void NewGameMenuCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
-            Actors.InsertMenu(new MenuStartNewGame(this));
+            Actors.MenuFactory.Insert(new MenuStartNewGame(this));
         }
 
         public void Start()

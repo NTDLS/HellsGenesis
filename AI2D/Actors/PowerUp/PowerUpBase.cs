@@ -36,7 +36,7 @@ namespace AI2D.Actors.PowerUp
             }
         }
 
-        private AudioClip _explodeSound;
+        private readonly AudioClip _explodeSound;
 
         private ActorAnimation _hitAnimation { get; set; }
 
@@ -64,7 +64,7 @@ namespace AI2D.Actors.PowerUp
         {
             _explodeSound.Play();
             _hitAnimation.Reset();
-            _core.Actors.PlaceAnimationOnTopOf(_hitAnimation, this);
+            _core.Actors.AnimationFactory.CreateAt(_hitAnimation, this);
             QueueForDelete(); ;
         }
 

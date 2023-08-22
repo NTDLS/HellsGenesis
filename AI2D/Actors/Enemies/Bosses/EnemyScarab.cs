@@ -11,20 +11,20 @@ namespace AI2D.Actors.Enemies.Bosses
     {
         public const int ScoreMultiplier = 15;
 
-        private ActorAttachment _leftCannon;
-        private ActorAttachment _rightCannon;
+        private readonly ActorAttachment _leftCannon;
+        private readonly ActorAttachment _rightCannon;
 
         private ActorAttachment _turret;
 
-        private ActorAttachment _leftGun;
-        private ActorAttachment _rightGun;
+        private readonly ActorAttachment _leftGun;
+        private readonly ActorAttachment _rightGun;
 
-        private ActorAttachment _rightThrust;
-        private ActorAttachment _leftThrust;
+        private readonly ActorAttachment _rightThrust;
+        private readonly ActorAttachment _leftThrust;
 
-        private double _initialMaxpeed;
+        private readonly double _initialMaxpeed;
 
-        string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Scarab\";
+        readonly string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Scarab\";
 
         public EnemyScarab(Core core)
             : base(core, GetGenericHP(), ScoreMultiplier)

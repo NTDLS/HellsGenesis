@@ -8,9 +8,9 @@ namespace AI2D.Actors
     public class ActorTextBlock : ActorBase
     {
         private Rectangle? _prevRegion;
-        private Font _font;
-        private Graphics _genericDC; //Not used for drawing, only measuring.
-        private Brush _color;
+        private readonly Font _font;
+        private readonly Graphics _genericDC; //Not used for drawing, only measuring.
+        private readonly Brush _color;
 
         public bool IsPositionStatic { get; set; }
 

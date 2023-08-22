@@ -11,13 +11,13 @@ namespace AI2D.Actors.Enemies.Bosses
     {
         public const int ScoreMultiplier = 15;
 
-        private ActorAttachment _leftGun;
-        private ActorAttachment _rightGun;
-        private ActorAttachment _thrust;
+        private readonly ActorAttachment _leftGun;
+        private readonly ActorAttachment _rightGun;
+        private readonly ActorAttachment _thrust;
 
-        private double _initialMaxpeed;
+        private readonly double _initialMaxpeed;
 
-        string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Louse\";
+        readonly string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Louse\";
 
         public EnemyLouse(Core core)
             : base(core, GetGenericHP(), ScoreMultiplier)
