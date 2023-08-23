@@ -140,7 +140,7 @@ namespace AI2D.Actors.Objects
                 AddSecondaryWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 6 });
                 AddSecondaryWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 32 });
             }
-            else if (Class == PlayerClass.Ticonderoga)
+            else if (Class == PlayerClass.Whidbey )
             {
                 Velocity.MaxSpeed = 6.0;
                 Velocity.MaxBoost = 3.5;

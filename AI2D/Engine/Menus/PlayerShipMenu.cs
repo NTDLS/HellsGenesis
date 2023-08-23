@@ -17,7 +17,7 @@ namespace AI2D.Engine.Menus
             var player2 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Knox) { Tag = "MENU_SHIP_SELECT" });
             var player3 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Luhu) { Tag = "MENU_SHIP_SELECT" });
             var player4 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Atlant) { Tag = "MENU_SHIP_SELECT" });
-            var player5 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Ticonderoga) { Tag = "MENU_SHIP_SELECT" });
+            var player5 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Whidbey) { Tag = "MENU_SHIP_SELECT" });
             var player6 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Kirov) { Tag = "MENU_SHIP_SELECT" });
 
             double baseX = _core.Display.CurrentScaledScreenBounds.X + 40;
@@ -31,38 +31,38 @@ namespace AI2D.Engine.Menus
             _shipBlurb.X = baseX + 200;
             _shipBlurb.Y = baseY - _shipBlurb.Size.Height;
 
-            var player1Select = NewMenuItem(new Point<double>(baseX + 25, baseY), PlayerClass.Nimitz.ToString(), PlayerClass.Nimitz.ToString(), Brushes.OrangeRed);
+            var player1Select = NewMenuItem(new Point<double>(baseX + 25, baseY), $"{PlayerClass.Nimitz}", $"{PlayerClass.Nimitz}", Brushes.OrangeRed);
             player1Select.Y -= player1Select.Size.Height / 2;
             player1Select.Selected = true;
             player1.X = baseX;
             player1.Y = baseY;
             baseY += 50;
 
-            var player2Select = NewMenuItem(new Point<double>(baseX + 25, baseY), PlayerClass.Knox.ToString(), PlayerClass.Knox.ToString(), Brushes.OrangeRed);
+            var player2Select = NewMenuItem(new Point<double>(baseX + 25, baseY), $"{PlayerClass.Knox}", $"{PlayerClass.Knox}", Brushes.OrangeRed);
             player2Select.Y -= player2Select.Size.Height / 2;
             player2.X = baseX;
             player2.Y = baseY;
             baseY += 50;
 
-            var player3Select = NewMenuItem(new Point<double>(baseX + 25, baseY), PlayerClass.Luhu.ToString(), PlayerClass.Luhu.ToString(), Brushes.OrangeRed);
+            var player3Select = NewMenuItem(new Point<double>(baseX + 25, baseY), $"{PlayerClass.Luhu}", $"{PlayerClass.Luhu}", Brushes.OrangeRed);
             player3Select.Y -= player3Select.Size.Height / 2;
             player3.X = baseX;
             player3.Y = baseY;
             baseY += 50;
 
-            var player4Select = NewMenuItem(new Point<double>(baseX + 25, baseY), PlayerClass.Atlant.ToString(), PlayerClass.Atlant.ToString(), Brushes.OrangeRed);
+            var player4Select = NewMenuItem(new Point<double>(baseX + 25, baseY), $"{PlayerClass.Atlant}", $"{PlayerClass.Atlant}", Brushes.OrangeRed);
             player4Select.Y -= player4Select.Size.Height / 2;
             player4.X = baseX;
             player4.Y = baseY;
             baseY += 50;
 
-            var player5Select = NewMenuItem(new Point<double>(baseX + 25, baseY), PlayerClass.Ticonderoga.ToString(), PlayerClass.Ticonderoga.ToString(), Brushes.OrangeRed);
+            var player5Select = NewMenuItem(new Point<double>(baseX + 25, baseY), $"{PlayerClass.Whidbey }", $"{PlayerClass.Whidbey }", Brushes.OrangeRed);
             player5Select.Y -= player5Select.Size.Height / 2;
             player5.X = baseX;
             player5.Y = baseY;
             baseY += 50;
 
-            var player6Select = NewMenuItem(new Point<double>(baseX + 25, baseY), PlayerClass.Kirov.ToString(), PlayerClass.Kirov.ToString(), Brushes.OrangeRed);
+            var player6Select = NewMenuItem(new Point<double>(baseX + 25, baseY), $"{PlayerClass.Kirov}", $"{PlayerClass.Kirov}", Brushes.OrangeRed);
             player6Select.Y -= player6Select.Size.Height / 2;
             player6.X = baseX;
             player6.Y = baseY;
@@ -137,17 +137,17 @@ namespace AI2D.Engine.Menus
                     "\r\n The Atlant is a well rounded heavily armed and armored agile \r\n fighter for heavy enemies."
                   );
             }
-            else if (item.Name == PlayerClass.Ticonderoga.ToString())
+            else if (item.Name == PlayerClass.Whidbey .ToString())
             {
                 _shipBlurb.Text = GetHelpText(
-                    "Ticonderoga", //Name
+                    "Whidbey ", //Name
                     "Dual-Vulcan Cannon", //Primary Weapon
                     "Energy non-Guided x2", //Secondary Weapon
                     "1,000", //Sheilds
                     "500", //Hull
                     "6.0", //Speed
                     "3.5", //Warp
-                    "\r\n The Ticonderoga is just fast and packs an intense punch with \r\n near-light-speed energy weapons."
+                    "\r\n The Whidbey  is just fast and packs an intense punch with \r\n near-light-speed energy weapons."
                   );
             }
             else if (item.Name == PlayerClass.Kirov.ToString())

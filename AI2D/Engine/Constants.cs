@@ -24,7 +24,7 @@
             Knox = 2,
             Luhu = 3,
             Atlant = 4,
-            Ticonderoga = 5,
+            Whidbey  = 5,
             Kirov = 6
         }
     }
