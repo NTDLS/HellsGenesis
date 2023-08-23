@@ -18,14 +18,14 @@ namespace AI2D.Actors.Objects.Enemies
         private readonly int selectedImageIndex = 0;
 
         public EnemyAvvol(Core core)
-            : base(core, GetGenericHP(), ScoreMultiplier)
+            : base(core, GetGenericHP(core), ScoreMultiplier)
         {
             selectedImageIndex = Utility.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
+            SetHitPoints(Utility.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
-            Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 4, Constants.Limits.MaxSpeed - 2); //Upper end of the speed spectrum.
+            Velocity.MaxSpeed = Utility.Random.Next(_core.Settings.MaxSpeed - 4, _core.Settings.MaxSpeed - 2); //Upper end of the speed spectrum.
 
             AddSecondaryWeapon(new WeaponPhotonTorpedo(_core)
             {

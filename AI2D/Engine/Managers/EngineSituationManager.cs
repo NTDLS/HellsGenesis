@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace AI2D.Engine.Managers
 {
-    internal class SituationManager
+    internal class EngineSituationManager
     {
         public Core _core { get; private set; }
         public BaseSituation CurrentSituation { get; private set; }
 
         public List<BaseSituation> Situations = new();
 
-        public SituationManager(Core core)
+        public EngineSituationManager(Core core)
         {
             _core = core;
         }

@@ -73,17 +73,17 @@ namespace AI2D.Actors.Objects.Enemies
             }
         }
 
-        public static int GetGenericHP()
+        public static int GetGenericHP(Core core)
         {
-            return Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth);
+            return Utility.Random.Next(core.Settings.MinEnemyHealth, core.Settings.MaxEnemyHealth);
         }
 
         public virtual void ApplyMotion(Point<double> frameAppliedOffset)
         {
-            if (X < -Constants.Limits.EnemySceneDistanceLimit
-                || X >= _core.Display.NatrualScreenSize.Width + Constants.Limits.EnemySceneDistanceLimit
-                || Y < -Constants.Limits.EnemySceneDistanceLimit
-                || Y >= _core.Display.NatrualScreenSize.Height + Constants.Limits.EnemySceneDistanceLimit)
+            if (X < -_core.Settings.EnemySceneDistanceLimit
+                || X >= _core.Display.NatrualScreenSize.Width + _core.Settings.EnemySceneDistanceLimit
+                || Y < -_core.Settings.EnemySceneDistanceLimit
+                || Y >= _core.Display.NatrualScreenSize.Height + _core.Settings.EnemySceneDistanceLimit)
             {
                 QueueForDelete();
                 return;

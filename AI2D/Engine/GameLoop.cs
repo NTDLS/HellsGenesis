@@ -73,7 +73,7 @@ namespace AI2D.Engine
 
 
             var timer = new Stopwatch();
-            var targetFrameDuration = 1000000 / Constants.Limits.FrameLimiter; //1000000 / n-frames/second.
+            var targetFrameDuration = 1000000 / _core.Settings.FrameLimiter; //1000000 / n-frames/second.
 
             while (_shutdown == false)
             {
@@ -187,7 +187,7 @@ namespace AI2D.Engine
                 {
                     if (_core.Actors.Player.Velocity.BoostPercentage < 1.0)
                     {
-                        _core.Actors.Player.Velocity.BoostPercentage += Constants.PlayerThrustRampUp;
+                        _core.Actors.Player.Velocity.BoostPercentage += _core.Settings.PlayerThrustRampUp;
                     }
 
                     _core.Actors.Player.Velocity.AvailableBoost -= _core.Actors.Player.Velocity.MaxBoost * _core.Actors.Player.Velocity.BoostPercentage;
@@ -205,16 +205,16 @@ namespace AI2D.Engine
                     }
 
                     //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
-                    if (_core.Actors.Player.Velocity.BoostPercentage > Constants.Limits.MinPlayerThrust)
+                    if (_core.Actors.Player.Velocity.BoostPercentage > _core.Settings.MinPlayerThrust)
                     {
-                        _core.Actors.Player.Velocity.BoostPercentage -= Constants.PlayerThrustRampDown;
+                        _core.Actors.Player.Velocity.BoostPercentage -= _core.Settings.PlayerThrustRampDown;
                         if (_core.Actors.Player.Velocity.BoostPercentage < 0)
                         {
                             _core.Actors.Player.Velocity.BoostPercentage = 0;
                         }
                     }
 
-                    if (_core.Actors.Player.Velocity.AvailableBoost < Constants.Limits.MaxPlayerBoost)
+                    if (_core.Actors.Player.Velocity.AvailableBoost < _core.Settings.MaxPlayerBoost)
                     {
                         _core.Actors.Player.Velocity.AvailableBoost += 1 - _core.Actors.Player.Velocity.BoostPercentage;
                     }
@@ -242,15 +242,15 @@ namespace AI2D.Engine
                 {
                     if (_core.Actors.Player.Velocity.ThrottlePercentage < 1.0)
                     {
-                        _core.Actors.Player.Velocity.ThrottlePercentage += Constants.PlayerThrustRampUp;
+                        _core.Actors.Player.Velocity.ThrottlePercentage += _core.Settings.PlayerThrustRampUp;
                     }
                 }
                 else
                 {
                     //If no "forward" or "reverse" user input is received... then fade the thrust.
-                    if (_core.Actors.Player.Velocity.ThrottlePercentage > Constants.Limits.MinPlayerThrust)
+                    if (_core.Actors.Player.Velocity.ThrottlePercentage > _core.Settings.MinPlayerThrust)
                     {
-                        _core.Actors.Player.Velocity.ThrottlePercentage -= Constants.PlayerThrustRampDown;
+                        _core.Actors.Player.Velocity.ThrottlePercentage -= _core.Settings.PlayerThrustRampDown;
                         if (_core.Actors.Player.Velocity.ThrottlePercentage < 0)
                         {
                             _core.Actors.Player.Velocity.ThrottlePercentage = 0;
@@ -268,28 +268,28 @@ namespace AI2D.Engine
                     }
 
                     //Close to the right wall and travelling in that direction.
-                    if (_core.Actors.Player.X > _core.Display.NatrualScreenBounds.X + _core.Display.NatrualScreenBounds.Width - Constants.Limits.InfiniteScrollWallX
+                    if (_core.Actors.Player.X > _core.Display.NatrualScreenBounds.X + _core.Display.NatrualScreenBounds.Width - _core.Settings.InfiniteScrollWallX
                         && _core.Actors.Player.Velocity.Angle.X > 0)
                     {
                         appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the bottom wall and travelling in that direction.
-                    if (_core.Actors.Player.Y > _core.Display.NatrualScreenBounds.Y + _core.Display.NatrualScreenBounds.Height - Constants.Limits.InfiniteScrollWallY
+                    if (_core.Actors.Player.Y > _core.Display.NatrualScreenBounds.Y + _core.Display.NatrualScreenBounds.Height - _core.Settings.InfiniteScrollWallY
                         && _core.Actors.Player.Velocity.Angle.Y > 0)
                     {
                         appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
                     }
 
                     //Close to the left wall and travelling in that direction.
-                    if (_core.Actors.Player.X < _core.Display.NatrualScreenBounds.X + Constants.Limits.InfiniteScrollWallX
+                    if (_core.Actors.Player.X < _core.Display.NatrualScreenBounds.X + _core.Settings.InfiniteScrollWallX
                         && _core.Actors.Player.Velocity.Angle.X < 0)
                     {
                         appliedOffset.X = (_core.Actors.Player.Velocity.Angle.X * forwardThrust);
                     }
 
                     //Close to the top wall and travelling in that direction.
-                    if (_core.Actors.Player.Y < _core.Display.NatrualScreenBounds.Y + Constants.Limits.InfiniteScrollWallY
+                    if (_core.Actors.Player.Y < _core.Display.NatrualScreenBounds.Y + _core.Settings.InfiniteScrollWallY
                         && _core.Actors.Player.Velocity.Angle.Y < 0)
                     {
                         appliedOffset.Y = (_core.Actors.Player.Velocity.Angle.Y * forwardThrust);
@@ -308,7 +308,7 @@ namespace AI2D.Engine
                     _core.Actors.Player.ShipEngineBoostSound.Fade();
                 }
 
-                if (_core.Actors.Player.Velocity.ThrottlePercentage > Constants.Limits.MinPlayerThrust)
+                if (_core.Actors.Player.Velocity.ThrottlePercentage > _core.Settings.MinPlayerThrust)
                 {
                     _core.Actors.Player.ShipEngineRoarSound.Play();
                 }

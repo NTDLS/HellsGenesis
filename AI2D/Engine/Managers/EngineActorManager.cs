@@ -489,10 +489,10 @@ namespace AI2D.Engine.Managers
             }
             try
             {
-                lockTaken = false;
-                Monitor.TryEnter(_core.DrawingSemaphore, timeout, ref lockTaken);
+                //lockTaken = false;
+                //Monitor.TryEnter(_core.DrawingSemaphore, timeout, ref lockTaken);
 
-                if (lockTaken)
+                //if (lockTaken)
                 {
                     lock (Collection)
                     {
@@ -509,7 +509,7 @@ namespace AI2D.Engine.Managers
                 // Ensure that the lock is released.
                 if (lockTaken)
                 {
-                    Monitor.Exit(_core.DrawingSemaphore);
+                    //Monitor.Exit(_core.DrawingSemaphore);
                 }
             }
 

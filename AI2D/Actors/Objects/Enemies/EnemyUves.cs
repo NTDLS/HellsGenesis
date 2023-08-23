@@ -12,12 +12,12 @@ namespace AI2D.Actors.Objects.Enemies
         private readonly int selectedImageIndex = 0;
 
         public EnemyUves(Core core)
-            : base(core, GetGenericHP(), ScoreMultiplier)
+            : base(core, GetGenericHP(core), ScoreMultiplier)
         {
             selectedImageIndex = Utility.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            AddHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
+            AddHitPoints(Utility.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
         }
     }
 }

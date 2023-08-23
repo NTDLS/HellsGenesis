@@ -3,13 +3,13 @@ using System.Drawing;
 
 namespace AI2D.Engine.Managers
 {
-    internal class ImageManager
+    internal class EngineImageManager
     {
         private Dictionary<string, Bitmap> _collection { get; set; } = new();
 
         private readonly Core _core;
 
-        public ImageManager(Core core)
+        public EngineImageManager(Core core)
         {
             _core = core;
 

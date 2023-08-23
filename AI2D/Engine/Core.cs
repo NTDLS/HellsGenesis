@@ -11,10 +11,10 @@ namespace AI2D.Engine
         public EngineInputManager Input { get; private set; }
         public EngineDisplayManager Display { get; private set; }
         public EngineActorManager Actors { get; private set; }
-        public SituationManager Situations { get; set; }
+        public EngineSituationManager Situations { get; set; }
         public EngineEventManager Events { get; set; }
-        public AudioManager Audio { get; set; }
-        public ImageManager Imaging { get; set; }
+        public EngineAudioManager Audio { get; set; }
+        public EngineImageManager Imaging { get; set; }
 
         public EngineDrawingCacheManager DrawingCache { get; set; } = new();
         public bool IsRunning { get; private set; } = false;
@@ -39,10 +39,10 @@ namespace AI2D.Engine
             Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
             Actors = new EngineActorManager(this);
             Input = new EngineInputManager(this);
-            Situations = new SituationManager(this);
+            Situations = new EngineSituationManager(this);
             Events = new EngineEventManager(this);
-            Audio = new AudioManager(this);
-            Imaging = new ImageManager(this);
+            Audio = new EngineAudioManager(this);
+            Imaging = new EngineImageManager(this);
 
             _gameLoop = new GameLoop(this);
 

@@ -50,7 +50,7 @@ namespace AI2D.Actors.Factories
                 EnemyBase obj = (EnemyBase)Activator.CreateInstance(typeof(T), param);
 
                 obj.Location = _core.Display.RandomOffScreenLocation();
-                obj.Velocity.MaxSpeed = Utility.Random.Next(Constants.Limits.MinSpeed, Constants.Limits.MaxSpeed);
+                obj.Velocity.MaxSpeed = Utility.Random.Next(_core.Settings.MinSpeed, _core.Settings.MaxSpeed);
                 obj.Velocity.Angle.Degrees = Utility.Random.Next(0, 360);
 
                 obj.BeforeCreate();

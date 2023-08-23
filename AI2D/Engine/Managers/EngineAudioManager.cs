@@ -2,7 +2,7 @@
 
 namespace AI2D.Engine.Managers
 {
-    internal class AudioManager
+    internal class EngineAudioManager
     {
         private Dictionary<string, AudioClip> _collection { get; set; } = new();
 
@@ -13,7 +13,7 @@ namespace AI2D.Engine.Managers
         public AudioClip DoorIsAjarSound { get; private set; }
         public AudioClip LockedOnBlip { get; private set; }
 
-        public AudioManager(Core core)
+        public EngineAudioManager(Core core)
         {
             _core = core;
 

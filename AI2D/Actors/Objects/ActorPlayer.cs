@@ -87,9 +87,9 @@ namespace AI2D.Actors.Objects
 
             Velocity.Angle = new Angle<double>(45);
 
-            Velocity.ThrottlePercentage = Limits.MinPlayerThrust;
-            Velocity.AvailableBoost = Limits.MaxPlayerBoost;
-            Velocity.MaxRotationSpeed = Limits.MaxRotationSpeed;
+            Velocity.ThrottlePercentage = _core.Settings.MinPlayerThrust;
+            Velocity.AvailableBoost = _core.Settings.MaxPlayerBoost;
+            Velocity.MaxRotationSpeed = _core.Settings.MaxRotationSpeed;
 
             _core.Actors.Powerups.Create<PowerUpRepair>(
                 (_core.Display.TotalCanvasSize.Width / 2) - 200,

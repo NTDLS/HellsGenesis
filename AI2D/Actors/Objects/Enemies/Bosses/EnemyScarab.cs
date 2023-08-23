@@ -27,7 +27,7 @@ namespace AI2D.Actors.Objects.Enemies.Bosses
         readonly string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Scarab\";
 
         public EnemyScarab(Core core)
-            : base(core, GetGenericHP(), ScoreMultiplier)
+            : base(core, GetGenericHP(core), ScoreMultiplier)
         {
             ThrustAnimation.QueueForDelete();
 
@@ -38,9 +38,9 @@ namespace AI2D.Actors.Objects.Enemies.Bosses
             _leftThrust = Attach(_imagesPath + "Scarab.Jet.Left.png", true, 3);
             _rightThrust = Attach(_imagesPath + "Scarab.Jet.Right.png", true, 3);
 
-            SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
+            SetHitPoints(Utility.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
-            _initialMaxpeed = Utility.Random.Next(Constants.Limits.MaxSpeed - 2, Constants.Limits.MaxSpeed); //Upper end of the speed spectrum
+            _initialMaxpeed = Utility.Random.Next(_core.Settings.MaxSpeed - 2, _core.Settings.MaxSpeed); //Upper end of the speed spectrum
 
             Velocity.MaxSpeed = _initialMaxpeed;
 

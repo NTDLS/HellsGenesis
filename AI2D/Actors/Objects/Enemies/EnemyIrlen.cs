@@ -14,12 +14,12 @@ namespace AI2D.Actors.Objects.Enemies
         private readonly int selectedImageIndex = 0;
 
         public EnemyIrlen(Core core)
-            : base(core, GetGenericHP(), ScoreMultiplier)
+            : base(core, GetGenericHP(core), ScoreMultiplier)
         {
             selectedImageIndex = Utility.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            SetHitPoints(Utility.Random.Next(Constants.Limits.MinEnemyHealth, Constants.Limits.MaxEnemyHealth));
+            SetHitPoints(Utility.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
             AddSecondaryWeapon(new WeaponPhotonTorpedo(_core)
             {

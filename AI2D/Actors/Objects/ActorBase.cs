@@ -118,9 +118,9 @@ namespace AI2D.Actors.Objects
 
         public void AddHitPoints(int pointsToAdd)
         {
-            if (HitPoints + pointsToAdd > Constants.Limits.MaxHitpoints)
+            if (HitPoints + pointsToAdd > _core.Settings.MaxHitpoints)
             {
-                pointsToAdd = Constants.Limits.MaxHitpoints - (HitPoints + pointsToAdd);
+                pointsToAdd = _core.Settings.MaxHitpoints - (HitPoints + pointsToAdd);
             }
 
             /*
@@ -128,7 +128,7 @@ namespace AI2D.Actors.Objects
             {
                 var player = this as ObjPlayer;
 
-                if (HitPoints < Constants.Limits.MaxShieldPoints && HitPoints + pointsToAdd >= Constants.Limits.MaxShieldPoints)
+                if (HitPoints < _core.Settings.MaxShieldPoints && HitPoints + pointsToAdd >= _core.Settings.MaxShieldPoints)
                 {
                     player.AllSystemsGoSound.Play();
                 }
@@ -146,16 +146,16 @@ namespace AI2D.Actors.Objects
 
         public void AddShieldPoints(int pointsToAdd)
         {
-            if (ShieldPoints + pointsToAdd > Constants.Limits.MaxShieldPoints)
+            if (ShieldPoints + pointsToAdd > _core.Settings.MaxShieldPoints)
             {
-                pointsToAdd = Constants.Limits.MaxShieldPoints - (ShieldPoints + pointsToAdd);
+                pointsToAdd = _core.Settings.MaxShieldPoints - (ShieldPoints + pointsToAdd);
             }
 
             if (this is ActorPlayer)
             {
                 var player = this as ActorPlayer;
 
-                if (ShieldPoints < Constants.Limits.MaxShieldPoints && ShieldPoints + pointsToAdd >= Constants.Limits.MaxShieldPoints)
+                if (ShieldPoints < _core.Settings.MaxShieldPoints && ShieldPoints + pointsToAdd >= _core.Settings.MaxShieldPoints)
                 {
                     player.ShieldMaxSound.Play();
                 }
@@ -331,7 +331,7 @@ namespace AI2D.Actors.Objects
             Tag = tag;
             RotationMode = RotationMode.Upsize;
             Velocity = new Velocity<double>();
-            Velocity.MaxRotationSpeed = Constants.Limits.MaxRotationSpeed;
+            Velocity.MaxRotationSpeed = _core.Settings.MaxRotationSpeed;
             Highlight = _core.Settings.HighlightAllActors;
         }
 
