@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>HG.ico</ApplicationIcon>
+    <AssemblyName>HG</AssemblyName>
+    <RootNamespace>HG</RootNamespace>
+    <StartupObject>HG.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="HG.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SharpDX" Version="4.2.0" />
+    <PackageReference Include="SharpDX.XAudio2" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Determinet\Determinet.csproj" />
+  </ItemGroup>
+
+</Project>
