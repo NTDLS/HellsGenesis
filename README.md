@@ -1,8 +1,9 @@
-# 2DAI
-2D GDI+ space fighter game engine written in C# (NETCOREnetcore).
-Infinite space, AI, multiple scenario, event driven, locking/seeking weapons, etc.
+# Hells Genesis
+Hells Genesis is a 2D space fighter (Hell Fighter Tribute) game engine written in C# (currently .net7) using GDI+
 
-Yea, you read that right GDI. :D
+Infinite space, neural network AI, multiple scenario, event driven, locking/seeking weapons, etc.
+
+And yea, you read that right GDI+. I wanted to see if it could be done. Apparently it can. :D
 
 Version 0.0.1.0 Gameplay: (I've made progress since this video)
 https://www.youtube.com/watch?v=Kd-aEshWiNg
