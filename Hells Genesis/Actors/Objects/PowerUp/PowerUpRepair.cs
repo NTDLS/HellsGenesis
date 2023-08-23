@@ -26,7 +26,7 @@ namespace HG.Actors.Objects.PowerUp
             _repairPoints *= imageIndex + 1;
         }
 
-        public new void ApplyIntelligence(HGPoint<double> frameAppliedOffset)
+        public new void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
             if (Intersects(_core.Actors.Player))
             {

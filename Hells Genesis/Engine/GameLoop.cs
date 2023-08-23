@@ -62,6 +62,10 @@ namespace HG.Engine
 
         private void GraphicsThreadProc()
         {
+            var debug = _core.Actors.Debugs.CreateCenterScreen(@"..\..\..\Assets\Graphics\Bases\8.png");
+
+            debug.Velocity.ThrottlePercentage = 1;
+
             #region Add initial stars.
 
             for (int i = 0; i < 60; i++)
@@ -340,7 +344,9 @@ namespace HG.Engine
             #endregion
 
             #region Engine Event Callbacks.
+
             _core.Events.Execute();
+
             #endregion
 
             #region Enemies Frame Advancement.
@@ -465,6 +471,8 @@ namespace HG.Engine
 
             if (appliedOffset.X != 0 || appliedOffset.Y != 0)
             {
+                #region Add new stars...
+
                 if (_core.Actors.VisibleOfType<ActorStar>().Count < 100) //Never wan't more than n stars.
                 {
                     if (appliedOffset.X > 0)
@@ -515,18 +523,13 @@ namespace HG.Engine
                             }
                         }
                     }
-
                 }
+
+                #endregion
 
                 foreach (var star in _core.Actors.VisibleOfType<ActorStar>())
                 {
-                    if (_core.Display.TotalScreenBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
-                    {
-                        star.QueueForDelete();
-                    }
-
-                    star.X -= appliedOffset.X * star.Velocity.ThrottlePercentage;
-                    star.Y -= appliedOffset.Y * star.Velocity.ThrottlePercentage;
+                    star.ApplyMotion(appliedOffset);
                 }
             }
 
@@ -536,8 +539,7 @@ namespace HG.Engine
 
             foreach (var animation in _core.Actors.VisibleOfType<ActorAnimation>())
             {
-                animation.X += (animation.Velocity.Angle.X * (animation.Velocity.MaxSpeed * animation.Velocity.ThrottlePercentage)) - appliedOffset.X;
-                animation.Y += (animation.Velocity.Angle.Y * (animation.Velocity.MaxSpeed * animation.Velocity.ThrottlePercentage)) - appliedOffset.Y;
+                animation.ApplyMotion(appliedOffset);
                 animation.AdvanceImage();
             }
 
@@ -547,8 +549,7 @@ namespace HG.Engine
 
             foreach (var textBlock in _core.Actors.VisibleOfType<ActorTextBlock>().Where(o => o.IsPositionStatic == false))
             {
-                textBlock.X += (textBlock.Velocity.Angle.X * (textBlock.Velocity.MaxSpeed * textBlock.Velocity.ThrottlePercentage)) - appliedOffset.X;
-                textBlock.Y += (textBlock.Velocity.Angle.Y * (textBlock.Velocity.MaxSpeed * textBlock.Velocity.ThrottlePercentage)) - appliedOffset.Y;
+                textBlock.ApplyMotion(appliedOffset);
             }
 
             #endregion
@@ -559,8 +560,16 @@ namespace HG.Engine
             {
                 HGConversion.DynamicCast(powerUp, powerUp.GetType()).ApplyIntelligence(appliedOffset);
 
-                powerUp.X += (powerUp.Velocity.Angle.X * (powerUp.Velocity.MaxSpeed * powerUp.Velocity.ThrottlePercentage)) - appliedOffset.X;
-                powerUp.Y += (powerUp.Velocity.Angle.Y * (powerUp.Velocity.MaxSpeed * powerUp.Velocity.ThrottlePercentage)) - appliedOffset.Y;
+                powerUp.ApplyMotion(appliedOffset);
+            }
+
+            #endregion
+
+            #region Debug Frame Advancement.
+
+            foreach (var debug in _core.Actors.VisibleOfType<ActorDebug>())
+            {
+                debug.ApplyMotion(appliedOffset);
             }
 
             #endregion

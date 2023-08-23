@@ -374,6 +374,12 @@ namespace HG.Actors.Objects
             VisibilityChanged();
         }
 
+        public void ApplyMotion(HGPoint<double> appliedOffset)
+        {
+            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - appliedOffset.X;
+            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - appliedOffset.Y;
+        }
+
         public void ClearPrimaryWeapons()
         {
             _primaryWeapons.Clear();

@@ -43,7 +43,7 @@ namespace HG.Actors.Objects.Weapons
             return new BulletGeneric(_core, this, _owner, @"..\..\..\Assets\Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
         }
 
-        public virtual void ApplyIntelligence(HGPoint<double> frameAppliedOffset, ActorBase wouldFireAt)
+        public virtual void ApplyIntelligence(HGPoint<double> appliedOffset, ActorBase wouldFireAt)
         {
             bool lockOn = false;
             bool softLockOn = false;

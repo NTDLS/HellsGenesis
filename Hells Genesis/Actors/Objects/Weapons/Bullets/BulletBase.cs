@@ -75,7 +75,7 @@ namespace HG.Actors.Objects.Weapons.Bullets
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(HGPoint<double> frameAppliedOffset, ActorBase testHit)
+        public virtual void ApplyIntelligence(HGPoint<double> appliedOffset, ActorBase testHit)
         {
             if (AgeInMilliseconds > MaxAgeInMilliseconds)
             {
@@ -109,7 +109,7 @@ namespace HG.Actors.Objects.Weapons.Bullets
             }
         }
 
-        public virtual void ApplyMotion(HGPoint<double> frameAppliedOffset)
+        public new void ApplyMotion(HGPoint<double> appliedOffset)
         {
             if (X < -_core.Settings.BulletSceneDistanceLimit
                 || X >= _core.Display.TotalCanvasSize.Width + _core.Settings.BulletSceneDistanceLimit
@@ -120,8 +120,8 @@ namespace HG.Actors.Objects.Weapons.Bullets
                 return;
             }
 
-            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - frameAppliedOffset.X;
-            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - frameAppliedOffset.Y;
+            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - appliedOffset.X;
+            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - appliedOffset.Y;
         }
 
         public virtual void Explode()

@@ -161,7 +161,7 @@ namespace HG.AI.Logistics
             Network = newNetwork.Clone();//.Mutate(0.2, 0.1)
         }
 
-        public void ApplyIntelligence(HGPoint<double> frameAppliedOffset)
+        public void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
             var now = DateTime.UtcNow;
 

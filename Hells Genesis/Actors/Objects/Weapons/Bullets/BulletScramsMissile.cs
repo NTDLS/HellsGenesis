@@ -14,7 +14,7 @@ namespace HG.Actors.Objects.Weapons.Bullets
             Initialize(imagePath);
         }
 
-        public override void ApplyIntelligence(HGPoint<double> frameAppliedOffset, ActorBase testHit)
+        public override void ApplyIntelligence(HGPoint<double> appliedOffset, ActorBase testHit)
         {
             if (LockedTarget != null)
             {
@@ -33,7 +33,7 @@ namespace HG.Actors.Objects.Weapons.Bullets
                 }
             }
 
-            base.ApplyIntelligence(frameAppliedOffset, testHit);
+            base.ApplyIntelligence(appliedOffset, testHit);
         }
     }
 }

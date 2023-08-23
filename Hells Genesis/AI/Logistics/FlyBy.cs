@@ -188,7 +188,7 @@ namespace HG.AI.Logistics
             }
         }
 
-        public void ApplyIntelligence(HGPoint<double> frameAppliedOffset)
+        public void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
             var now = DateTime.UtcNow;
 

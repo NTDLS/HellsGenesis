@@ -79,7 +79,7 @@ namespace HG.Actors.Objects.Enemies
             return HGRandom.Random.Next(core.Settings.MinEnemyHealth, core.Settings.MaxEnemyHealth);
         }
 
-        public virtual void ApplyMotion(HGPoint<double> frameAppliedOffset)
+        public new void ApplyMotion(HGPoint<double> appliedOffset)
         {
             if (X < -_core.Settings.EnemySceneDistanceLimit
                 || X >= _core.Display.NatrualScreenSize.Width + _core.Settings.EnemySceneDistanceLimit
@@ -90,8 +90,7 @@ namespace HG.Actors.Objects.Enemies
                 return;
             }
 
-            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - frameAppliedOffset.X;
-            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - frameAppliedOffset.Y;
+            base.ApplyMotion(appliedOffset);
 
             if (RadarPositionIndicator != null)
             {
@@ -120,11 +119,11 @@ namespace HG.Actors.Objects.Enemies
             }
         }
 
-        public virtual void ApplyIntelligence(HGPoint<double> frameAppliedOffset)
+        public virtual void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
             if (SelectedSecondaryWeapon != null && _core.Actors.Player != null)
             {
-                SelectedSecondaryWeapon.ApplyIntelligence(frameAppliedOffset, _core.Actors.Player); //Enemy lock-on to Player. :O
+                SelectedSecondaryWeapon.ApplyIntelligence(appliedOffset, _core.Actors.Player); //Enemy lock-on to Player. :O
             }
         }
 

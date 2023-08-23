@@ -1,4 +1,5 @@
 ﻿using HG.Engine;
+using HG.Types;
 using System.IO;
 
 namespace HG.Actors.Objects
@@ -25,6 +26,17 @@ namespace HG.Actors.Objects
             else
             {
                 Velocity.ThrottlePercentage = HGRandom.Random.Next(4, 8) / 10.0;
+            }
+        }
+
+        public new void ApplyMotion(HGPoint<double> appliedOffset)
+        {
+            X -= appliedOffset.X * Velocity.ThrottlePercentage;
+            Y -= appliedOffset.Y * Velocity.ThrottlePercentage;
+
+            if (_core.Display.TotalScreenBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
+            {
+                QueueForDelete();
             }
         }
     }

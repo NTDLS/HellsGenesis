@@ -25,6 +25,42 @@ namespace HG.Actors.Factories
             }
         }
 
+        public ActorDebug CreateCenterScreen(string imagePath)
+        {
+            lock (_manager.Collection)
+            {
+                double x = _core.Display.TotalCanvasSize.Width / 2;
+                double y = _core.Display.TotalCanvasSize.Height / 2;
+
+                var obj = new ActorDebug(_core, x, y, imagePath);
+                _manager.Collection.Add(obj);
+                return obj;
+            }
+        }
+
+        public ActorDebug CreateCenterScreen()
+        {
+            lock (_manager.Collection)
+            {
+                double x = _core.Display.TotalCanvasSize.Width / 2;
+                double y = _core.Display.TotalCanvasSize.Height / 2;
+
+                var obj = new ActorDebug(_core, x, y);
+                _manager.Collection.Add(obj);
+                return obj;
+            }
+        }
+
+        public ActorDebug Create(double x, double y, string imagePath)
+        {
+            lock (_manager.Collection)
+            {
+                var obj = new ActorDebug(_core, x, y, imagePath);
+                _manager.Collection.Add(obj);
+                return obj;
+            }
+        }
+
         public ActorDebug Create()
         {
             lock (_manager.Collection)

@@ -68,7 +68,7 @@ namespace HG.Actors.Objects.PowerUp
             QueueForDelete(); ;
         }
 
-        public virtual void ApplyIntelligence(HGPoint<double> frameAppliedOffset)
+        public virtual void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
             if (Intersects(_core.Actors.Player))
             {

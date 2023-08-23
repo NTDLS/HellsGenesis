@@ -155,9 +155,9 @@ namespace HG.Actors.Objects.Enemies.Bosses
         private int bulletsRemainingBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
-        public override void ApplyIntelligence(HGPoint<double> frameAppliedOffset)
+        public override void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
-            base.ApplyIntelligence(frameAppliedOffset);
+            base.ApplyIntelligence(appliedOffset);
 
             double distanceToPlayer = HGMath.DistanceTo(this, _core.Actors.Player);
 

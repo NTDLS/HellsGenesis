@@ -73,9 +73,9 @@ namespace HG.Actors.Objects.Enemies
         HGAngle<double> fallToAngle;
         AIMode mode = AIMode.Approaching;
 
-        public override void ApplyIntelligence(HGPoint<double> frameAppliedOffset)
+        public override void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
-            base.ApplyIntelligence(frameAppliedOffset);
+            base.ApplyIntelligence(appliedOffset);
 
             double distanceToPlayer = HGMath.DistanceTo(this, _core.Actors.Player);
 

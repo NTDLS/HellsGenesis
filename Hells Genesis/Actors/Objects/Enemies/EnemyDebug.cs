@@ -53,13 +53,13 @@ namespace HG.Actors.Objects.Enemies
 
 
 
-        public override void ApplyIntelligence(HGPoint<double> frameAppliedOffset)
+        public override void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
-            base.ApplyIntelligence(frameAppliedOffset);
+            base.ApplyIntelligence(appliedOffset);
 
             if (CurrentAIController != null)
             {
-                CurrentAIController.ApplyIntelligence(frameAppliedOffset);
+                CurrentAIController.ApplyIntelligence(appliedOffset);
             }
         }
 
