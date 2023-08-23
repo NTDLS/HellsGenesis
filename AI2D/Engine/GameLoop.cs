@@ -71,7 +71,6 @@ namespace AI2D.Engine
 
             #endregion
 
-
             var timer = new Stopwatch();
             var targetFrameDuration = 1000000 / _core.Settings.FrameLimiter; //1000000 / n-frames/second.
 

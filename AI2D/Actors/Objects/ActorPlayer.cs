@@ -91,10 +91,6 @@ namespace AI2D.Actors.Objects
             Velocity.AvailableBoost = _core.Settings.MaxPlayerBoost;
             Velocity.MaxRotationSpeed = _core.Settings.MaxRotationSpeed;
 
-            _core.Actors.Powerups.Create<PowerUpRepair>(
-                (_core.Display.TotalCanvasSize.Width / 2) - 200,
-                (_core.Display.TotalCanvasSize.Height / 2) - 200);
-
             if (Class == PlayerClass.Nimitz)
             {
                 Velocity.MaxSpeed = 3.0;
