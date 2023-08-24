@@ -2,12 +2,12 @@
 
 namespace HG.Engine
 {
-    internal class HGQuadrant
+    internal class HgQuadrant
     {
         public Point Key { get; private set; }
         public Rectangle Bounds { get; private set; }
 
-        public HGQuadrant(Point key, Rectangle bounds)
+        public HgQuadrant(Point key, Rectangle bounds)
         {
             Key = key;
             Bounds = bounds;

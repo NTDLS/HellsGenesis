@@ -1,7 +1,7 @@
 ﻿using Determinet;
 using Determinet.Types;
 using Hells_Genesis.ExtensionMethods;
-using HG.Actors.Objects;
+using HG.Actors;
 using HG.Engine;
 using HG.Types;
 using System;
@@ -188,7 +188,7 @@ namespace HG.AI.Logistics
             }
         }
 
-        public void ApplyIntelligence(HGPoint<double> appliedOffset)
+        public void ApplyIntelligence(HgPoint<double> displacementVector)
         {
             var now = DateTime.UtcNow;
 
@@ -284,7 +284,7 @@ namespace HG.AI.Logistics
 
             var deltaAngle = _owner.DeltaAngle(_observedObject);
 
-            var angleToIn6thRadians = HGAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
+            var angleToIn6thRadians = HgAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
 
             aiParams.Set(Inputs.AngleToObservationObjectIn6thRadians,
                 angleToIn6thRadians.SplitToNegative(Math.PI / 6));

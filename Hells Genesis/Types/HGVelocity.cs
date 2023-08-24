@@ -1,11 +1,11 @@
 ﻿namespace HG.Types
 {
-    internal class HGVelocity<T>
+    internal class HgVelocity<T>
     {
-        public delegate void ThrottleChange(HGVelocity<T> sender);
+        public delegate void ThrottleChange(HgVelocity<T> sender);
         public event ThrottleChange OnThrottleChange;
 
-        public HGAngle<T> Angle { get; set; } = new HGAngle<T>();
+        public HgAngle<T> Angle { get; set; } = new HgAngle<T>();
         public T MaxSpeed { get; set; }
         public T MaxBoost { get; set; }
         public T AvailableBoost { get; set; }

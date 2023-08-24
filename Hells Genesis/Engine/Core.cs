@@ -1,5 +1,6 @@
 ﻿using HG.Engine.Managers;
 using HG.Engine.Menus;
+using HG.TickManagers;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -11,12 +12,12 @@ namespace HG.Engine
         public EngineInputManager Input { get; private set; }
         public EngineDisplayManager Display { get; private set; }
         public EngineActorManager Actors { get; private set; }
-        public EngineSituationManager Situations { get; set; }
-        public EngineEventManager Events { get; set; }
+        public SituationManager Situations { get; set; }
+        public EventManager Events { get; set; }
         public EngineAudioManager Audio { get; set; }
         public EngineImageManager Imaging { get; set; }
-        public EngineMenuManager Menus { get; set; }
-        public EnginePlayerManager Player { get; set; }
+        public MenuManager Menus { get; set; }
+        public PlayerManager Player { get; set; }
         public EngineDrawingCacheManager DrawingCache { get; set; } = new();
 
         public bool IsRunning { get; private set; } = false;
@@ -41,19 +42,19 @@ namespace HG.Engine
             Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
             Actors = new EngineActorManager(this);
             Input = new EngineInputManager(this);
-            Situations = new EngineSituationManager(this);
-            Events = new EngineEventManager(this);
+            Situations = new SituationManager(this);
+            Events = new EventManager(this);
             Audio = new EngineAudioManager(this);
             Imaging = new EngineImageManager(this);
-            Menus = new EngineMenuManager(this);
-            Player = new EnginePlayerManager(this);
+            Menus = new MenuManager(this);
+            Player = new PlayerManager(this);
 
             _gameLoop = new GameLoop(this);
 
             Events.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
 
-        private void NewGameMenuCallback(Core core, EngineCallbackEvent sender, object refObj)
+        private void NewGameMenuCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
             Menus.Insert(new MenuStartNewGame(this));
         }

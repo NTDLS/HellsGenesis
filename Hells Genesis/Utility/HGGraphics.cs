@@ -5,7 +5,7 @@ using System.Drawing.Imaging;
 
 namespace HG.Engine
 {
-    internal class HGGraphics
+    internal class HgGraphics
     {
         public static Bitmap RotateImageWithClipping(Bitmap bmp, double angle, Color backgroundColor)
         {

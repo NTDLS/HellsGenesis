@@ -1,5 +1,5 @@
-﻿using HG.Actors.Objects;
-using HG.Actors.Objects.Enemies;
+﻿using HG.Actors;
+using HG.Actors.Enemies;
 using HG.Engine;
 using HG.Types;
 using System;
@@ -93,8 +93,8 @@ namespace HG
 
             highlightedActors.Clear();
 
-            var actors = _core.Actors.Intersections(new HGPoint<double>(x, y), new HGPoint<double>(1, 1));
-            if (_core.Player.Actor.Intersects(new HGPoint<double>(x, y), new HGPoint<double>(1, 1)))
+            var actors = _core.Actors.Intersections(new HgPoint<double>(x, y), new HgPoint<double>(1, 1));
+            if (_core.Player.Actor.Intersects(new HgPoint<double>(x, y), new HgPoint<double>(1, 1)))
             {
                 actors.Add(_core.Player.Actor);
             }
@@ -113,8 +113,8 @@ namespace HG
             double x = e.X;
             double y = e.Y;
 
-            var actors = _core.Actors.Intersections(new HGPoint<double>(x, y), new HGPoint<double>(1, 1));
-            if (_core.Player.Actor.Intersects(new HGPoint<double>(x, y), new HGPoint<double>(1, 1)))
+            var actors = _core.Actors.Intersections(new HgPoint<double>(x, y), new HgPoint<double>(1, 1));
+            if (_core.Player.Actor.Intersects(new HgPoint<double>(x, y), new HgPoint<double>(1, 1)))
             {
                 actors.Add(_core.Player.Actor);
             }
@@ -274,19 +274,19 @@ namespace HG
 
         private void FormMain_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(Types.HGPlayerKey.SpeedBoost, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(Types.HGPlayerKey.Forward, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(Types.HGPlayerKey.RotateCounterClockwise, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(Types.HGPlayerKey.Reverse, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.D) _core.Input.KeyStateChanged(Types.HGPlayerKey.RotateClockwise, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(Types.HGPlayerKey.PrimaryFire, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(Types.HGPlayerKey.SecondaryFire, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(Types.HGPlayerKey.Escape, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.Left) _core.Input.KeyStateChanged(Types.HGPlayerKey.Left, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.Right) _core.Input.KeyStateChanged(Types.HGPlayerKey.Right, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.Up) _core.Input.KeyStateChanged(Types.HGPlayerKey.Up, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.Down) _core.Input.KeyStateChanged(Types.HGPlayerKey.Down, Types.HGKeyPressState.Down);
-            if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(Types.HGPlayerKey.Enter, Types.HGKeyPressState.Down);
+            if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(Types.HgPlayerKey.SpeedBoost, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(Types.HgPlayerKey.Forward, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(Types.HgPlayerKey.RotateCounterClockwise, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(Types.HgPlayerKey.Reverse, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.D) _core.Input.KeyStateChanged(Types.HgPlayerKey.RotateClockwise, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(Types.HgPlayerKey.PrimaryFire, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(Types.HgPlayerKey.SecondaryFire, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(Types.HgPlayerKey.Escape, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.Left) _core.Input.KeyStateChanged(Types.HgPlayerKey.Left, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.Right) _core.Input.KeyStateChanged(Types.HgPlayerKey.Right, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.Up) _core.Input.KeyStateChanged(Types.HgPlayerKey.Up, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.Down) _core.Input.KeyStateChanged(Types.HgPlayerKey.Down, Types.HgKeyPressState.Down);
+            if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(Types.HgPlayerKey.Enter, Types.HgKeyPressState.Down);
 
             _core.Input.HandleSingleKeyPress(e.KeyCode);
         }
@@ -307,19 +307,19 @@ namespace HG
                 }
             }
 
-            if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(Types.HGPlayerKey.SpeedBoost, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(Types.HGPlayerKey.Forward, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(Types.HGPlayerKey.RotateCounterClockwise, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(Types.HGPlayerKey.Reverse, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.D) _core.Input.KeyStateChanged(Types.HGPlayerKey.RotateClockwise, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(Types.HGPlayerKey.PrimaryFire, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(Types.HGPlayerKey.SecondaryFire, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(Types.HGPlayerKey.Escape, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.Left) _core.Input.KeyStateChanged(Types.HGPlayerKey.Left, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.Right) _core.Input.KeyStateChanged(Types.HGPlayerKey.Right, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.Up) _core.Input.KeyStateChanged(Types.HGPlayerKey.Up, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.Down) _core.Input.KeyStateChanged(Types.HGPlayerKey.Down, Types.HGKeyPressState.Up);
-            if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(Types.HGPlayerKey.Enter, Types.HGKeyPressState.Up);
+            if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(Types.HgPlayerKey.SpeedBoost, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(Types.HgPlayerKey.Forward, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(Types.HgPlayerKey.RotateCounterClockwise, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(Types.HgPlayerKey.Reverse, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.D) _core.Input.KeyStateChanged(Types.HgPlayerKey.RotateClockwise, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(Types.HgPlayerKey.PrimaryFire, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(Types.HgPlayerKey.SecondaryFire, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(Types.HgPlayerKey.Escape, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.Left) _core.Input.KeyStateChanged(Types.HgPlayerKey.Left, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.Right) _core.Input.KeyStateChanged(Types.HgPlayerKey.Right, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.Up) _core.Input.KeyStateChanged(Types.HgPlayerKey.Up, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.Down) _core.Input.KeyStateChanged(Types.HgPlayerKey.Down, Types.HgKeyPressState.Up);
+            if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(Types.HgPlayerKey.Enter, Types.HgKeyPressState.Up);
         }
 
         private void FormMain_MouseEnter(object sender, EventArgs e)

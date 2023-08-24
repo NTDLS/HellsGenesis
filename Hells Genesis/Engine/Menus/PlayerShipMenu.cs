@@ -1,4 +1,4 @@
-﻿using HG.Actors.Objects;
+﻿using HG.Actors;
 using HG.Types;
 using System;
 using System.Drawing;
@@ -13,56 +13,56 @@ namespace HG.Engine.Menus
         public PlayerShipMenu(Core core)
             : base(core)
         {
-            var player1 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Nimitz) { AssetTag = "MENU_SHIP_SELECT" });
-            var player2 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Knox) { AssetTag = "MENU_SHIP_SELECT" });
-            var player3 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Luhu) { AssetTag = "MENU_SHIP_SELECT" });
-            var player4 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Atlant) { AssetTag = "MENU_SHIP_SELECT" });
-            var player5 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Whidbey) { AssetTag = "MENU_SHIP_SELECT" });
-            var player6 = _core.Actors.Add(new ActorPlayer(_core, PlayerClass.Kirov) { AssetTag = "MENU_SHIP_SELECT" });
+            var player1 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Nimitz) { AssetTag = "MENU_SHIP_SELECT" });
+            var player2 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Knox) { AssetTag = "MENU_SHIP_SELECT" });
+            var player3 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Luhu) { AssetTag = "MENU_SHIP_SELECT" });
+            var player4 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Atlant) { AssetTag = "MENU_SHIP_SELECT" });
+            var player5 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Whidbey) { AssetTag = "MENU_SHIP_SELECT" });
+            var player6 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Kirov) { AssetTag = "MENU_SHIP_SELECT" });
 
             double baseX = _core.Display.CurrentScaledScreenBounds.X + 40;
             double baseY = _core.Display.CurrentScaledScreenBounds.Y + 100;
 
-            var itemTitle = NewTitleItem(new HGPoint<double>(baseX, baseY), "Select a Ship Class:", Brushes.OrangeRed);
+            var itemTitle = NewTitleItem(new HgPoint<double>(baseX, baseY), "Select a Ship Class:", Brushes.OrangeRed);
             itemTitle.X = baseX + 200;
             itemTitle.Y = baseY - itemTitle.Size.Height;
 
-            _shipBlurb = NewTextItem(new HGPoint<double>(baseX, baseY), "", Brushes.LawnGreen, 10);
+            _shipBlurb = NewTextItem(new HgPoint<double>(baseX, baseY), "", Brushes.LawnGreen, 10);
             _shipBlurb.X = baseX + 200;
             _shipBlurb.Y = baseY - _shipBlurb.Size.Height;
 
-            var player1Select = NewMenuItem(new HGPoint<double>(baseX + 25, baseY), $"{PlayerClass.Nimitz}", $"{PlayerClass.Nimitz}", Brushes.OrangeRed);
+            var player1Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Nimitz}", $"{PlayerClass.Nimitz}", Brushes.OrangeRed);
             player1Select.Y -= player1Select.Size.Height / 2;
             player1Select.Selected = true;
             player1.X = baseX;
             player1.Y = baseY;
             baseY += 50;
 
-            var player2Select = NewMenuItem(new HGPoint<double>(baseX + 25, baseY), $"{PlayerClass.Knox}", $"{PlayerClass.Knox}", Brushes.OrangeRed);
+            var player2Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Knox}", $"{PlayerClass.Knox}", Brushes.OrangeRed);
             player2Select.Y -= player2Select.Size.Height / 2;
             player2.X = baseX;
             player2.Y = baseY;
             baseY += 50;
 
-            var player3Select = NewMenuItem(new HGPoint<double>(baseX + 25, baseY), $"{PlayerClass.Luhu}", $"{PlayerClass.Luhu}", Brushes.OrangeRed);
+            var player3Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Luhu}", $"{PlayerClass.Luhu}", Brushes.OrangeRed);
             player3Select.Y -= player3Select.Size.Height / 2;
             player3.X = baseX;
             player3.Y = baseY;
             baseY += 50;
 
-            var player4Select = NewMenuItem(new HGPoint<double>(baseX + 25, baseY), $"{PlayerClass.Atlant}", $"{PlayerClass.Atlant}", Brushes.OrangeRed);
+            var player4Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Atlant}", $"{PlayerClass.Atlant}", Brushes.OrangeRed);
             player4Select.Y -= player4Select.Size.Height / 2;
             player4.X = baseX;
             player4.Y = baseY;
             baseY += 50;
 
-            var player5Select = NewMenuItem(new HGPoint<double>(baseX + 25, baseY), $"{PlayerClass.Whidbey}", $"{PlayerClass.Whidbey}", Brushes.OrangeRed);
+            var player5Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Whidbey}", $"{PlayerClass.Whidbey}", Brushes.OrangeRed);
             player5Select.Y -= player5Select.Size.Height / 2;
             player5.X = baseX;
             player5.Y = baseY;
             baseY += 50;
 
-            var player6Select = NewMenuItem(new HGPoint<double>(baseX + 25, baseY), $"{PlayerClass.Kirov}", $"{PlayerClass.Kirov}", Brushes.OrangeRed);
+            var player6Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Kirov}", $"{PlayerClass.Kirov}", Brushes.OrangeRed);
             player6Select.Y -= player6Select.Size.Height / 2;
             player6.X = baseX;
             player6.Y = baseY;
@@ -185,7 +185,7 @@ namespace HG.Engine.Menus
             _core.Player.Actor.Reset(playerClass);
 
             this.QueueForDelete();
-            _core.Actors.DeleteAllActorsByTag("MENU_SHIP_SELECT");
+            _core.Actors.DeleteAllActorsByAssetTag("MENU_SHIP_SELECT");
 
             _core.Actors.NewGame();
         }

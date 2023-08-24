@@ -1,25 +1,25 @@
 ﻿namespace HG.Types
 {
-    public enum HGKeyPressState
+    public enum HgKeyPressState
     {
         Up,
         Down
     }
-    public enum HGFiredFromType
+    public enum HgFiredFromType
     {
         Unspecified,
         Player,
         Enemy
     }
 
-    public enum HGRotationMode
+    public enum HgRotationMode
     {
         None, //Almost free.
         Clip, //Expensive...
         Upsize //Hella expensive!
     }
 
-    public enum HGPlayerKey
+    public enum HgPlayerKey
     {
         SpeedBoost,
         Forward,

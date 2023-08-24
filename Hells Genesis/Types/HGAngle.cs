@@ -2,7 +2,7 @@
 
 namespace HG.Types
 {
-    internal class HGAngle<T>
+    internal class HgAngle<T>
     {
         #region Static Utilities.
 
@@ -35,42 +35,42 @@ namespace HG.Types
             return RadiansToDegrees(Math.Atan2((dynamic)y, (dynamic)x)) + DegreeOffset;
         }
 
-        public static HGPoint<T> ToXY(HGAngle<T> angle)
+        public static HgPoint<T> ToXY(HgAngle<T> angle)
         {
-            return new HGPoint<T>(angle.X, angle.Y);
+            return new HgPoint<T>(angle.X, angle.Y);
         }
 
-        public static HGPoint<T> DegreesToXY(T degrees)
+        public static HgPoint<T> DegreesToXY(T degrees)
         {
             T radians = DegreesToRadians(degrees) - (dynamic)RadianOffset;
-            return new HGPoint<T>(Math.Cos((dynamic)radians), Math.Sin((dynamic)radians));
+            return new HgPoint<T>(Math.Cos((dynamic)radians), Math.Sin((dynamic)radians));
         }
 
-        public static HGPoint<T> RadiansToXY(T radians)
+        public static HgPoint<T> RadiansToXY(T radians)
         {
             radians -= (dynamic)RadianOffset;
-            return new HGPoint<T>(Math.Cos((dynamic)radians), Math.Sin((dynamic)radians));
+            return new HgPoint<T>(Math.Cos((dynamic)radians), Math.Sin((dynamic)radians));
         }
 
         #endregion
 
         #region ~/CTor.
 
-        public HGAngle()
+        public HgAngle()
         {
         }
 
-        public HGAngle(HGAngle<T> angle)
+        public HgAngle(HgAngle<T> angle)
         {
             Degrees = angle.Degrees;
         }
 
-        public HGAngle(T degrees)
+        public HgAngle(T degrees)
         {
             Degrees = degrees;
         }
 
-        public HGAngle(T x, T y)
+        public HgAngle(T x, T y)
         {
             Degrees = RadiansToDegrees(Math.Atan2((dynamic)y, (dynamic)x)) + DegreeOffset;
         }
@@ -79,39 +79,39 @@ namespace HG.Types
 
         #region  Unary Operator Overloading.
 
-        public static HGAngle<T> operator -(HGAngle<T> original, HGAngle<T> modifier)
+        public static HgAngle<T> operator -(HgAngle<T> original, HgAngle<T> modifier)
         {
-            return new HGAngle<T>(original.Degrees - (dynamic)modifier.Degrees);
+            return new HgAngle<T>(original.Degrees - (dynamic)modifier.Degrees);
         }
 
-        public static HGAngle<T> operator -(HGAngle<T> original, T degrees)
+        public static HgAngle<T> operator -(HgAngle<T> original, T degrees)
         {
-            return new HGAngle<T>(original.Degrees - (dynamic)degrees);
+            return new HgAngle<T>(original.Degrees - (dynamic)degrees);
         }
 
-        public static HGAngle<T> operator +(HGAngle<T> original, HGAngle<T> modifier)
+        public static HgAngle<T> operator +(HgAngle<T> original, HgAngle<T> modifier)
         {
-            return new HGAngle<T>(original.Degrees + (dynamic)modifier.Degrees);
+            return new HgAngle<T>(original.Degrees + (dynamic)modifier.Degrees);
         }
 
-        public static HGAngle<T> operator +(HGAngle<T> original, T degrees)
+        public static HgAngle<T> operator +(HgAngle<T> original, T degrees)
         {
-            return new HGAngle<T>(original.Degrees + (dynamic)degrees);
+            return new HgAngle<T>(original.Degrees + (dynamic)degrees);
         }
 
-        public static HGAngle<T> operator *(HGAngle<T> original, HGAngle<T> modifier)
+        public static HgAngle<T> operator *(HgAngle<T> original, HgAngle<T> modifier)
         {
-            return new HGAngle<T>(original.Degrees * (dynamic)modifier.Degrees);
+            return new HgAngle<T>(original.Degrees * (dynamic)modifier.Degrees);
         }
 
-        public static HGAngle<T> operator *(HGAngle<T> original, T degrees)
+        public static HgAngle<T> operator *(HgAngle<T> original, T degrees)
         {
-            return new HGAngle<T>(original.Degrees * (dynamic)degrees);
+            return new HgAngle<T>(original.Degrees * (dynamic)degrees);
         }
 
         public override bool Equals(object o)
         {
-            return (Math.Round((dynamic)((HGAngle<T>)o).X, 4) == this.X && Math.Round((dynamic)((HGAngle<T>)o).Y, 4) == this.Y);
+            return (Math.Round((dynamic)((HgAngle<T>)o).X, 4) == this.X && Math.Round((dynamic)((HgAngle<T>)o).Y, 4) == this.Y);
         }
 
         #endregion

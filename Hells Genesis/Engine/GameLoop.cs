@@ -113,18 +113,18 @@ namespace HG.Engine
         {
             _core.Menus.ExecuteWorldClockTick();
             _core.Situations.ExecuteWorldClockTick();
-
-            var appliedOffset = _core.Player.ExecuteWorldClockTick();
-
             _core.Events.ExecuteWorldClockTick();
-            _core.Actors.Enemies.ExecuteWorldClockTick(appliedOffset);
-            _core.Actors.RadarPositions.ExecuteWorldClockTick(appliedOffset);
-            _core.Actors.Bullets.ExecuteWorldClockTick(appliedOffset);
-            _core.Actors.Stars.ExecuteWorldClockTick(appliedOffset);
-            _core.Actors.Animations.ExecuteWorldClockTick(appliedOffset);
-            _core.Actors.TextBlocks.ExecuteWorldClockTick(appliedOffset);
-            _core.Actors.Powerups.ExecuteWorldClockTick(appliedOffset);
-            _core.Actors.Debugs.ExecuteWorldClockTick(appliedOffset);
+
+            var displacementVector = _core.Player.ExecuteWorldClockTick();
+
+            _core.Actors.Enemies.ExecuteWorldClockTick(displacementVector);
+            _core.Actors.RadarPositions.ExecuteWorldClockTick();
+            _core.Actors.Bullets.ExecuteWorldClockTick(displacementVector);
+            _core.Actors.Stars.ExecuteWorldClockTick(displacementVector);
+            _core.Actors.Animations.ExecuteWorldClockTick(displacementVector);
+            _core.Actors.TextBlocks.ExecuteWorldClockTick(displacementVector);
+            _core.Actors.Powerups.ExecuteWorldClockTick(displacementVector);
+            _core.Actors.Debugs.ExecuteWorldClockTick(displacementVector);
 
             _core.Actors.CleanupDeletedObjects();
 
@@ -162,7 +162,7 @@ namespace HG.Engine
                     + $"Player Virtual XY: {_core.Player.Actor.X + _core.Display.BackgroundOffset.X:#0.00}x,"
                                         + $" {_core.Player.Actor.Y + _core.Display.BackgroundOffset.Y:#0.00}y\r\n"
                     + $"        BG Offset: {_core.Display.BackgroundOffset.X:#0.00}x, {_core.Display.BackgroundOffset.Y:#0.00}y\r\n"
-                    + $"  Delta BG Offset: {appliedOffset.X:#0.00}x, {appliedOffset.Y:#0.00}y\r\n"
+                    + $"  Delta BG Offset: {displacementVector.X:#0.00}x, {displacementVector.Y:#0.00}y\r\n"
                     + $"           Thrust: {(_core.Player.Actor.Velocity.ThrottlePercentage * 100):#0.00}\r\n"
                     + $"            Boost: {(_core.Player.Actor.Velocity.BoostPercentage * 100):#0.00}\r\n"
                     + $"         Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}\r\n"

@@ -1,10 +1,10 @@
 ﻿using Hells_Genesis.ExtensionMethods;
-using HG.Actors.Factories;
-using HG.Actors.Objects;
-using HG.Actors.Objects.Enemies;
-using HG.Actors.Objects.PowerUp;
-using HG.Actors.Objects.Weapons.Bullets;
+using HG.Actors;
+using HG.Actors.Enemies;
+using HG.Actors.PowerUp;
+using HG.Actors.Weapons.Bullets;
 using HG.Engine.Menus;
+using HG.TickManagers;
 using HG.Types;
 using System;
 using System.Collections.Generic;
@@ -23,17 +23,20 @@ namespace HG.Engine.Managers
         public ActorTextBlock PlayerStatsText { get; private set; }
         public ActorTextBlock DebugText { get; private set; }
         public bool RenderRadar { get; set; } = false;
+        public List<T> OfType<T>() where T : class => _core.Actors.Collection.Where(o => o is T).Select(o => o as T).ToList();
+        public List<T> VisibleOfType<T>() where T : class =>
+            _core.Actors.Collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList();
 
         #region Actors and their factories.
         internal List<ActorBase> Collection { get; private set; } = new();
-        public EngineActorAnimationManager Animations { get; set; }
-        public EngineActorBulletManager Bullets { get; set; }
-        public EngineActorDebugManager Debugs { get; set; }
-        public EngineActorEnemyManager Enemies { get; set; }
-        public EngineActorPowerupManager Powerups { get; set; }
-        public EngineActorRadarPositionManager RadarPositions { get; set; }
-        public EngineActorStarManager Stars { get; set; }
-        public EngineActorTextBlockManager TextBlocks { get; set; }
+        public ActorAnimationManager Animations { get; set; }
+        public ActorBulletManager Bullets { get; set; }
+        public ActorDebugManager Debugs { get; set; }
+        public ActorEnemyManager Enemies { get; set; }
+        public ActorPowerupManager Powerups { get; set; }
+        public ActorRadarPositionManager RadarPositions { get; set; }
+        public ActorStarManager Stars { get; set; }
+        public ActorTextBlockManager TextBlocks { get; set; }
 
         #endregion
 
@@ -41,35 +44,29 @@ namespace HG.Engine.Managers
         {
             _core = core;
 
-            Animations = new EngineActorAnimationManager(_core, this);
-            Bullets = new EngineActorBulletManager(_core, this);
-            Debugs = new EngineActorDebugManager(_core, this);
-            Enemies = new EngineActorEnemyManager(_core, this);
-            Powerups = new EngineActorPowerupManager(_core, this);
-            RadarPositions = new EngineActorRadarPositionManager(_core, this);
-            Stars = new EngineActorStarManager(_core, this);
-            TextBlocks = new EngineActorTextBlockManager(_core, this);
+            Animations = new ActorAnimationManager(_core, this);
+            Bullets = new ActorBulletManager(_core, this);
+            Debugs = new ActorDebugManager(_core, this);
+            Enemies = new ActorEnemyManager(_core, this);
+            Powerups = new ActorPowerupManager(_core, this);
+            RadarPositions = new ActorRadarPositionManager(_core, this);
+            Stars = new ActorStarManager(_core, this);
+            TextBlocks = new ActorTextBlockManager(_core, this);
         }
 
         public void Start()
         {
             _core.Player.Actor = new ActorPlayer(_core, Constants.PlayerClass.Atlant) { Visable = false };
 
-            PlayerStatsText = TextBlocks.Create("Consolas", Brushes.WhiteSmoke, 9,
-                //new Point<double>((_core.Display.OverdrawSize.Width) / 2 + 5, (_core.Display.OverdrawSize.Height / 2) + 5), true);
-                new HGPoint<double>(5, 5), true);
+            PlayerStatsText = TextBlocks.Create("Consolas", Brushes.WhiteSmoke, 9, new HgPoint<double>(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create("Consolas", Brushes.Aqua, 10, new HGPoint<double>(5, PlayerStatsText.Y + 80), true);
+            DebugText = TextBlocks.Create("Consolas", Brushes.Aqua, 10, new HgPoint<double>(5, PlayerStatsText.Y + 80), true);
 
             _core.Audio.BackgroundMusicSound.Play();
-
-            //_renderThread = new Thread(RenderThreadProc);
-            //_renderThread.Start();
         }
 
         public void Stop()
         {
-
         }
 
         public void CleanupDeletedObjects()
@@ -101,13 +98,13 @@ namespace HG.Engine.Managers
             {
                 _core.Situations.Reset();
                 PlayerStatsText.Visable = true;
-                DeleteAllActors();
+                DeleteAll();
 
                 _core.Situations.AdvanceSituation();
             }
         }
 
-        public void DeleteAllActors()
+        public void DeleteAll()
         {
             Powerups.DeleteAll();
             Enemies.DeleteAll();
@@ -115,15 +112,15 @@ namespace HG.Engine.Managers
             Animations.DeleteAll();
         }
 
-        public T GetActorByTag<T>(string assetTag) where T : ActorBase
+        public T GetActorByAssetTag<T>(string assetTag) where T : ActorBase
         {
             lock (Collection)
             {
-                return Collection.Where(o => o.AssetTag == assetTag).FirstOrDefault() as T;
+                return Collection.Where(o => o.AssetTag == assetTag).SingleOrDefault() as T;
             }
         }
 
-        public void DeleteAllActorsByTag(string assetTag)
+        public void DeleteAllActorsByAssetTag(string assetTag)
         {
             lock (Collection)
             {
@@ -137,39 +134,6 @@ namespace HG.Engine.Managers
             }
         }
 
-        public void ResetAndShowPlayer()
-        {
-            _core.Player.Actor.Reset();
-
-            RenderRadar = true;
-            _core.Player.Actor.Visable = true;
-            _core.Player.Actor.ShipEngineIdleSound.Play();
-            _core.Player.Actor.AllSystemsGoSound.Play();
-        }
-
-        public void HidePlayer()
-        {
-            _core.Player.Actor.Visable = false;
-            RenderRadar = false;
-            _core.Player.Actor.ShipEngineIdleSound.Stop();
-            _core.Player.Actor.ShipEngineRoarSound.Stop();
-        }
-
-        public List<T> VisibleOfType<T>() where T : class
-        {
-            return (from o in _core.Actors.Collection
-                    where o is T
-                    && o.Visable == true
-                    select o as T).ToList();
-        }
-
-        public List<T> OfType<T>() where T : class
-        {
-            return (from o in _core.Actors.Collection
-                    where o is T
-                    select o as T).ToList();
-        }
-
         public List<ActorBase> Intersections(ActorBase with)
         {
             var objs = new List<ActorBase>();
@@ -178,7 +142,7 @@ namespace HG.Engine.Managers
             {
                 if (obj != with)
                 {
-                    if (obj.Intersects(with.Location, new HGPoint<double>(with.Size.Width, with.Size.Height)))
+                    if (obj.Intersects(with.Location, new HgPoint<double>(with.Size.Width, with.Size.Height)))
                     {
                         objs.Add(obj);
                     }
@@ -189,10 +153,10 @@ namespace HG.Engine.Managers
 
         public List<ActorBase> Intersections(double x, double y, double width, double height)
         {
-            return Intersections(new HGPoint<double>(x, y), new HGPoint<double>(width, height));
+            return Intersections(new HgPoint<double>(x, y), new HgPoint<double>(width, height));
         }
 
-        public List<ActorBase> Intersections(HGPoint<double> location, HGPoint<double> size)
+        public List<ActorBase> Intersections(HgPoint<double> location, HgPoint<double> size)
         {
             lock (Collection)
             {
@@ -209,7 +173,7 @@ namespace HG.Engine.Managers
             }
         }
 
-        public ActorBase Add(string imagePath = null, Size? size = null, string assetTag = "")
+        public ActorBase Insert(string imagePath = null, Size? size = null, string assetTag = "")
         {
             lock (Collection)
             {
@@ -225,7 +189,7 @@ namespace HG.Engine.Managers
             }
         }
 
-        public ActorBase Add(ActorBase actor)
+        public ActorBase Insert(ActorBase actor)
         {
             lock (Collection)
             {
@@ -253,8 +217,8 @@ namespace HG.Engine.Managers
 
         #region Rendering.
 
-        private HGPoint<double> _radarScale;
-        private HGPoint<double> _radarOffset;
+        private HgPoint<double> _radarScale;
+        private HgPoint<double> _radarOffset;
         private Bitmap _RadarBackgroundImage = null;
         private readonly SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
 
@@ -286,8 +250,8 @@ namespace HG.Engine.Managers
 
                 radarDrawing = _core.DrawingCache.Get(DrawingCacheType.Radar, new Size((int)radarWidth, (int)radarHeight));
 
-                _radarScale = new HGPoint<double>((double)radarDrawing.Bitmap.Width / radarVisionWidth, (double)radarDrawing.Bitmap.Height / radarVisionHeight);
-                _radarOffset = new HGPoint<double>(radarWidth / 2.0, radarHeight / 2.0); //Best guess until player is visible.
+                _radarScale = new HgPoint<double>((double)radarDrawing.Bitmap.Width / radarVisionWidth, (double)radarDrawing.Bitmap.Height / radarVisionHeight);
+                _radarOffset = new HgPoint<double>(radarWidth / 2.0, radarHeight / 2.0); //Best guess until player is visible.
             }
             else
             {
@@ -301,7 +265,7 @@ namespace HG.Engine.Managers
                     double centerOfRadarX = (int)(radarDrawing.Bitmap.Width / 2.0) - 2.0; //Subtract half the dot size.
                     double centerOfRadarY = (int)(radarDrawing.Bitmap.Height / 2.0) - 2.0; //Subtract half the dot size.
 
-                    _radarOffset = new HGPoint<double>(
+                    _radarOffset = new HgPoint<double>(
                         centerOfRadarX - _core.Player.Actor.X * _radarScale.X,
                         centerOfRadarY - _core.Player.Actor.Y * _radarScale.Y);
                 }
@@ -327,7 +291,7 @@ namespace HG.Engine.Managers
                             {
                                 if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
                                 {
-                                    HGConversion.DynamicCast(actor, actor.GetType()).RenderRadar(radarDrawing.Graphics, _radarScale, _radarOffset);
+                                    HgConversion.DynamicCast(actor, actor.GetType()).RenderRadar(radarDrawing.Graphics, _radarScale, _radarOffset);
                                 }
                             }
 
@@ -350,7 +314,7 @@ namespace HG.Engine.Managers
 
                             if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(actor.Bounds))
                             {
-                                HGConversion.DynamicCast(actor, actor.GetType()).Render(screenDrawing.Graphics);
+                                HgConversion.DynamicCast(actor, actor.GetType()).Render(screenDrawing.Graphics);
                             }
                         }
                         _core.Player.Actor?.Render(screenDrawing.Graphics);
@@ -445,7 +409,7 @@ namespace HG.Engine.Managers
                         //Render to display:
                         foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
                         {
-                            HGConversion.DynamicCast(actor, actor.GetType()).Render(scaledDrawing.Graphics);
+                            HgConversion.DynamicCast(actor, actor.GetType()).Render(scaledDrawing.Graphics);
                         }
                     }
                 }

@@ -10,7 +10,7 @@ namespace HG.Engine.Situations
             TotalWaves = 5;
         }
 
-        readonly List<EngineCallbackEvent> events = new List<EngineCallbackEvent>();
+        readonly List<HgEngineCallbackEvent> events = new List<HgEngineCallbackEvent>();
 
         public override void BeginSituation()
         {
@@ -19,9 +19,9 @@ namespace HG.Engine.Situations
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
         }
 
-        private void FirstShowPlayerCallback(Core core, EngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.ResetAndShowPlayer();
+            _core.Player.ResetAndShow();
         }
     }
 }

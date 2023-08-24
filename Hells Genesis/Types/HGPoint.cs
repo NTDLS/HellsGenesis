@@ -2,75 +2,75 @@
 
 namespace HG.Types
 {
-    internal class HGPoint<T>
+    internal class HgPoint<T>
     {
         public T X { get; set; }
         public T Y { get; set; }
 
-        public HGPoint()
+        public HgPoint()
         {
         }
-        public HGPoint(T x, T y)
+        public HgPoint(T x, T y)
         {
             X = x;
             Y = y;
         }
 
-        public HGPoint(HGPoint<T> p)
+        public HgPoint(HgPoint<T> p)
         {
             X = p.X;
             Y = p.Y;
         }
 
-        public static T DistanceTo(HGPoint<T> from, HGPoint<T> to)
+        public static T DistanceTo(HgPoint<T> from, HgPoint<T> to)
         {
             var deltaX = Math.Pow((to.X - (dynamic)from.X), 2);
             var deltaY = Math.Pow((to.Y - (dynamic)from.Y), 2);
             return Math.Sqrt(deltaY + deltaX);
         }
 
-        public static T AngleTo(HGPoint<T> from, HGPoint<T> to)
+        public static T AngleTo(HgPoint<T> from, HgPoint<T> to)
         {
             var fRadians = Math.Atan2((to.Y - (dynamic)from.Y), (to.X - (dynamic)from.X));
-            var fDegrees = ((HGAngle<double>.RadiansToDegrees(fRadians) + 360.0) + HGAngle<double>.DegreeOffset) % 360.0;
+            var fDegrees = ((HgAngle<double>.RadiansToDegrees(fRadians) + 360.0) + HgAngle<double>.DegreeOffset) % 360.0;
             return fDegrees;
         }
 
         #region  Unary Operator Overloading.
 
-        public static HGPoint<T> operator -(HGPoint<T> original, HGPoint<T> modifier)
+        public static HgPoint<T> operator -(HgPoint<T> original, HgPoint<T> modifier)
         {
-            return new HGPoint<T>(original.X - (dynamic)modifier.X, original.Y - (dynamic)modifier.Y);
+            return new HgPoint<T>(original.X - (dynamic)modifier.X, original.Y - (dynamic)modifier.Y);
         }
 
-        public static HGPoint<T> operator -(HGPoint<T> original, T modifier)
+        public static HgPoint<T> operator -(HgPoint<T> original, T modifier)
         {
-            return new HGPoint<T>(original.X - (dynamic)modifier, original.Y - (dynamic)modifier);
+            return new HgPoint<T>(original.X - (dynamic)modifier, original.Y - (dynamic)modifier);
         }
 
-        public static HGPoint<T> operator +(HGPoint<T> original, HGPoint<T> modifier)
+        public static HgPoint<T> operator +(HgPoint<T> original, HgPoint<T> modifier)
         {
-            return new HGPoint<T>(original.X + (dynamic)modifier.X, original.Y + (dynamic)modifier.Y);
+            return new HgPoint<T>(original.X + (dynamic)modifier.X, original.Y + (dynamic)modifier.Y);
         }
 
-        public static HGPoint<T> operator +(HGPoint<T> original, T modifier)
+        public static HgPoint<T> operator +(HgPoint<T> original, T modifier)
         {
-            return new HGPoint<T>(original.X + (dynamic)modifier, original.Y + (dynamic)modifier);
+            return new HgPoint<T>(original.X + (dynamic)modifier, original.Y + (dynamic)modifier);
         }
 
-        public static HGPoint<T> operator *(HGPoint<T> original, HGPoint<T> modifier)
+        public static HgPoint<T> operator *(HgPoint<T> original, HgPoint<T> modifier)
         {
-            return new HGPoint<T>(original.X * (dynamic)modifier.X, original.Y * (dynamic)modifier.Y);
+            return new HgPoint<T>(original.X * (dynamic)modifier.X, original.Y * (dynamic)modifier.Y);
         }
 
-        public static HGPoint<T> operator *(HGPoint<T> original, T modifier)
+        public static HgPoint<T> operator *(HgPoint<T> original, T modifier)
         {
-            return new HGPoint<T>(original.X * (dynamic)modifier, original.Y * (dynamic)modifier);
+            return new HgPoint<T>(original.X * (dynamic)modifier, original.Y * (dynamic)modifier);
         }
 
         public override bool Equals(object o)
         {
-            return (Math.Round((dynamic)((HGPoint<T>)o).X, 4) == X && Math.Round((dynamic)((HGPoint<T>)o).Y, 4) == Y);
+            return (Math.Round((dynamic)((HgPoint<T>)o).X, 4) == X && Math.Round((dynamic)((HgPoint<T>)o).Y, 4) == Y);
         }
 
         #endregion

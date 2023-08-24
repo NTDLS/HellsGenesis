@@ -1,5 +1,5 @@
-﻿using HG.Actors.Objects;
-using HG.Actors.Objects.Enemies;
+﻿using HG.Actors;
+using HG.Actors.Enemies;
 using HG.Types;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,18 +10,18 @@ namespace HG.Engine.Managers
     internal class EngineInputManager
     {
         private readonly Core _core;
-        private readonly Dictionary<HGPlayerKey, HGKeyPressState> _keyStates = new Dictionary<HGPlayerKey, HGKeyPressState>();
+        private readonly Dictionary<HgPlayerKey, HgKeyPressState> _keyStates = new Dictionary<HgPlayerKey, HgKeyPressState>();
 
         public EngineInputManager(Core core)
         {
             _core = core;
         }
 
-        public bool IsKeyPressed(HGPlayerKey key)
+        public bool IsKeyPressed(HgPlayerKey key)
         {
             if (_keyStates.ContainsKey(key))
             {
-                return _keyStates[key] == HGKeyPressState.Down;
+                return _keyStates[key] == HgKeyPressState.Down;
             }
 
             return false;
@@ -32,7 +32,7 @@ namespace HG.Engine.Managers
         /// </summary>
         /// <param name="key"></param>
         /// <param name="state"></param>
-        public void KeyStateChanged(HGPlayerKey key, HGKeyPressState state, Keys? other = null)
+        public void KeyStateChanged(HgPlayerKey key, HgKeyPressState state, Keys? other = null)
         {
             if (_keyStates.ContainsKey(key))
             {
@@ -67,10 +67,10 @@ namespace HG.Engine.Managers
             }
             else if (key == Keys.P)
             {
-                var textBlock = _core.Actors.GetActorByTag<ActorTextBlock>("PausedText");
+                var textBlock = _core.Actors.GetActorByAssetTag<ActorTextBlock>("PausedText");
                 if (textBlock == null)
                 {
-                    textBlock = _core.Actors.TextBlocks.Create("Consolas", Brushes.Red, 50, new HGPoint<double>(100, 100), true, "PausedText");
+                    textBlock = _core.Actors.TextBlocks.Create("Consolas", Brushes.Red, 50, new HgPoint<double>(100, 100), true, "PausedText");
                     textBlock.Text = "Paused...";
                     textBlock.X = _core.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
                     textBlock.Y = _core.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;

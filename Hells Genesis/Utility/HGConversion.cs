@@ -2,7 +2,7 @@
 
 namespace HG.Engine
 {
-    internal class HGConversion
+    internal class HgConversion
     {
         public static dynamic DynamicCast(dynamic source, Type dest) => Convert.ChangeType(source, dest);
     }

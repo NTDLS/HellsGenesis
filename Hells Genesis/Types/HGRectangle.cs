@@ -1,17 +1,17 @@
 ﻿namespace HG.Types
 {
-    internal class HGRectangle<T>
+    internal class HgRectangle<T>
     {
         public T X { get; set; }
         public T Y { get; set; }
         public T Width { get; set; }
         public T Height { get; set; }
 
-        public HGRectangle()
+        public HgRectangle()
         {
         }
 
-        public HGRectangle(T x, T y, T width, T height)
+        public HgRectangle(T x, T y, T width, T height)
         {
             X = x;
             Y = y;

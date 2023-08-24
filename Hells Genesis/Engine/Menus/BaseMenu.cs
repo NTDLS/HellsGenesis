@@ -1,4 +1,4 @@
-﻿using HG.Actors.Objects;
+﻿using HG.Actors;
 using HG.Types;
 using System;
 using System.Collections.Generic;
@@ -44,7 +44,7 @@ namespace HG.Engine.Menus
 
         }
 
-        public ActorMenuItem NewTitleItem(HGPoint<double> location, string text, Brush brush, int size = 24)
+        public ActorMenuItem NewTitleItem(HgPoint<double> location, string text, Brush brush, int size = 24)
         {
             var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
             {
@@ -55,7 +55,7 @@ namespace HG.Engine.Menus
             return item;
         }
 
-        public ActorMenuItem NewTextItem(HGPoint<double> location, string text, Brush brush, int size = 16)
+        public ActorMenuItem NewTextItem(HgPoint<double> location, string text, Brush brush, int size = 16)
         {
             var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
             {
@@ -66,7 +66,7 @@ namespace HG.Engine.Menus
             return item;
         }
 
-        public ActorMenuItem NewMenuItem(HGPoint<double> location, string name, string text, Brush brush, int size = 14)
+        public ActorMenuItem NewMenuItem(HgPoint<double> location, string name, string text, Brush brush, int size = 14)
         {
             var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
             {
@@ -93,7 +93,7 @@ namespace HG.Engine.Menus
                 return; //We have to keep the menues from going crazy.
             }
 
-            if (_core.Input.IsKeyPressed(HGPlayerKey.Enter))
+            if (_core.Input.IsKeyPressed(HgPlayerKey.Enter))
             {
                 _lastInputHandled = DateTime.UtcNow;
 
@@ -108,7 +108,7 @@ namespace HG.Engine.Menus
                 }
             }
 
-            if (_core.Input.IsKeyPressed(HGPlayerKey.Right) || _core.Input.IsKeyPressed(HGPlayerKey.Down) || _core.Input.IsKeyPressed(HGPlayerKey.RotateClockwise))
+            if (_core.Input.IsKeyPressed(HgPlayerKey.Right) || _core.Input.IsKeyPressed(HgPlayerKey.Down) || _core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
             {
                 _lastInputHandled = DateTime.UtcNow;
 
@@ -155,7 +155,7 @@ namespace HG.Engine.Menus
                 }
             }
 
-            if (_core.Input.IsKeyPressed(HGPlayerKey.Left) || _core.Input.IsKeyPressed(HGPlayerKey.Up) || _core.Input.IsKeyPressed(HGPlayerKey.RotateCounterClockwise))
+            if (_core.Input.IsKeyPressed(HgPlayerKey.Left) || _core.Input.IsKeyPressed(HgPlayerKey.Up) || _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise))
             {
                 _lastInputHandled = DateTime.UtcNow;
 

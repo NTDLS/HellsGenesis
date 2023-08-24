@@ -1,6 +1,6 @@
 ﻿using Determinet;
 using Determinet.Types;
-using HG.Actors.Objects;
+using HG.Actors;
 using HG.Engine;
 using HG.Types;
 using System;
@@ -42,7 +42,7 @@ namespace HG.AI.Logistics
         public double VisionToleranceDegrees { get; set; } = 25;
         public DateTime? LastDecisionTime { get; set; }
         public int MillisecondsBetweenDecisions { get; set; } = 50;
-        public float DecisionSensitivity { get; set; } = (float)HGRandom.RandomNumber(0.25, 0.55);
+        public float DecisionSensitivity { get; set; } = (float)HgRandom.RandomNumber(0.25, 0.55);
 
         #endregion
 
@@ -161,7 +161,7 @@ namespace HG.AI.Logistics
             Network = newNetwork.Clone();//.Mutate(0.2, 0.1)
         }
 
-        public void ApplyIntelligence(HGPoint<double> appliedOffset)
+        public void ApplyIntelligence(HgPoint<double> displacementVector)
         {
             var now = DateTime.UtcNow;
 

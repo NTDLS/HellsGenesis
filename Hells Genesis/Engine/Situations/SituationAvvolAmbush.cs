@@ -1,4 +1,4 @@
-﻿using HG.Actors.Objects.Enemies;
+﻿using HG.Actors.Enemies;
 using System.Collections.Generic;
 
 namespace HG.Engine.Situations
@@ -11,7 +11,7 @@ namespace HG.Engine.Situations
             TotalWaves = 5;
         }
 
-        readonly List<EngineCallbackEvent> events = new List<EngineCallbackEvent>();
+        readonly List<HgEngineCallbackEvent> events = new List<HgEngineCallbackEvent>();
 
         public override void BeginSituation()
         {
@@ -24,12 +24,12 @@ namespace HG.Engine.Situations
             _core.Player.Actor.AddShieldPoints(10);
         }
 
-        private void FirstShowPlayerCallback(Core core, EngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.ResetAndShowPlayer();
+            _core.Player.ResetAndShow();
         }
 
-        private void AddFreshEnemiesCallback(Core core, EngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
             if (_core.Actors.OfType<EnemyBase>().Count == 0)
             {
@@ -39,11 +39,11 @@ namespace HG.Engine.Situations
                     return;
                 }
 
-                int enemyCount = HGRandom.Random.Next(CurrentWave + 1, CurrentWave + 5);
+                int enemyCount = HgRandom.Random.Next(CurrentWave + 1, CurrentWave + 5);
 
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HGRandom.RandomNumber(0, 800)), AddEnemyCallback);
+                    _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.RandomNumber(0, 800)), AddEnemyCallback);
                 }
 
                 _core.Audio.RadarBlipsSound.Play();
@@ -52,7 +52,7 @@ namespace HG.Engine.Situations
             }
         }
 
-        private void AddEnemyCallback(Core core, EngineCallbackEvent sender, object refObj)
+        private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
             _core.Actors.Enemies.Create<EnemyAvvol>();
         }

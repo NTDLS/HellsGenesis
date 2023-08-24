@@ -9,9 +9,9 @@ namespace HG.Engine.Managers
     {
         private readonly Core _core;
 
-        public Dictionary<Point, HGQuadrant> Quadrants { get; private set; } = new();
-        public HGQuadrant CurrentQuadrant { get; set; }
-        public HGPoint<double> BackgroundOffset { get; private set; } = new HGPoint<double>(); //Offset of background, all cals must take into account.
+        public Dictionary<Point, HgQuadrant> Quadrants { get; private set; } = new();
+        public HgQuadrant CurrentQuadrant { get; set; }
+        public HgPoint<double> BackgroundOffset { get; private set; } = new HgPoint<double>(); //Offset of background, all cals must take into account.
         public FrameCounter GameLoopCounter { get; private set; } = new FrameCounter();
 
         public Control DrawingSurface { get; private set; }
@@ -106,45 +106,45 @@ namespace HG.Engine.Managers
             }
         }
 
-        public HGPoint<double> RandomOnScreenLocation()
+        public HgPoint<double> RandomOnScreenLocation()
         {
-            return new HGPoint<double>(HGRandom.Random.Next(0, NatrualScreenSize.Width), HGRandom.Random.Next(0, NatrualScreenSize.Height));
+            return new HgPoint<double>(HgRandom.Random.Next(0, NatrualScreenSize.Width), HgRandom.Random.Next(0, NatrualScreenSize.Height));
         }
 
-        public HGPoint<double> RandomOffScreenLocation(int min = 100, int max = 500)
+        public HgPoint<double> RandomOffScreenLocation(int min = 100, int max = 500)
         {
             double x;
             double y;
 
-            if (HGRandom.FlipCoin())
+            if (HgRandom.FlipCoin())
             {
-                if (HGRandom.FlipCoin())
+                if (HgRandom.FlipCoin())
                 {
-                    x = -HGRandom.RandomNumber(min, max);
-                    y = HGRandom.RandomNumber(0, NatrualScreenSize.Height);
+                    x = -HgRandom.RandomNumber(min, max);
+                    y = HgRandom.RandomNumber(0, NatrualScreenSize.Height);
                 }
                 else
                 {
-                    y = -HGRandom.RandomNumber(min, max);
-                    x = HGRandom.RandomNumber(0, NatrualScreenSize.Width);
+                    y = -HgRandom.RandomNumber(min, max);
+                    x = HgRandom.RandomNumber(0, NatrualScreenSize.Width);
                 }
             }
             else
             {
-                if (HGRandom.FlipCoin())
+                if (HgRandom.FlipCoin())
                 {
-                    x = NatrualScreenSize.Width + HGRandom.RandomNumber(min, max);
-                    y = HGRandom.RandomNumber(0, NatrualScreenSize.Height);
+                    x = NatrualScreenSize.Width + HgRandom.RandomNumber(min, max);
+                    y = HgRandom.RandomNumber(0, NatrualScreenSize.Height);
                 }
                 else
                 {
-                    y = NatrualScreenSize.Height + HGRandom.RandomNumber(min, max);
-                    x = HGRandom.RandomNumber(0, NatrualScreenSize.Width);
+                    y = NatrualScreenSize.Height + HgRandom.RandomNumber(min, max);
+                    x = HgRandom.RandomNumber(0, NatrualScreenSize.Width);
                 }
 
             }
 
-            return new HGPoint<double>(x, y);
+            return new HgPoint<double>(x, y);
         }
 
         public EngineDisplayManager(Core core, Control drawingSurface, Size visibleSize)
@@ -162,7 +162,7 @@ namespace HG.Engine.Managers
             TotalCanvasSize = new Size(visibleSize.Width + OverdrawSize.Width, visibleSize.Height + OverdrawSize.Height);
         }
 
-        public HGQuadrant GetQuadrant(double x, double y)
+        public HgQuadrant GetQuadrant(double x, double y)
         {
             var coord = new Point(
                     (int)(x / NatrualScreenSize.Width),
@@ -177,7 +177,7 @@ namespace HG.Engine.Managers
                     NatrualScreenSize.Width,
                     NatrualScreenSize.Height);
 
-                var quad = new HGQuadrant(coord, absoluteBounds);
+                var quad = new HgQuadrant(coord, absoluteBounds);
 
                 Quadrants.Add(coord, quad);
             }

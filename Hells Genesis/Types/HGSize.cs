@@ -1,16 +1,16 @@
 ﻿namespace HG.Types
 {
-    internal class HGSize<T>
+    internal class HgSize<T>
     {
         public T Width { get; set; }
         public T Height { get; set; }
 
-        public HGSize()
+        public HgSize()
         {
 
         }
 
-        public HGSize(T width, T height)
+        public HgSize(T width, T height)
         {
             Width = width;
             Height = height;

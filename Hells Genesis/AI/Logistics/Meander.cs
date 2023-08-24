@@ -1,7 +1,7 @@
 ﻿using Determinet;
 using Determinet.Types;
 using Hells_Genesis.ExtensionMethods;
-using HG.Actors.Objects;
+using HG.Actors;
 using HG.Engine;
 using HG.Types;
 using System;
@@ -65,7 +65,7 @@ namespace HG.AI.Logistics
             _core = core;
             _owner = owner;
             _observedObject = observedObject;
-            FavorateDirection = HGRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
+            FavorateDirection = HgRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
 
             if (_singletonNetwork != null)
             {
@@ -165,7 +165,7 @@ namespace HG.AI.Logistics
             Network = newNetwork.Clone();//.Mutate(0.2, 0.1)
         }
 
-        public void ApplyIntelligence(HGPoint<double> appliedOffset)
+        public void ApplyIntelligence(HgPoint<double> displacementVector)
         {
             var now = DateTime.UtcNow;
 
@@ -175,7 +175,7 @@ namespace HG.AI.Logistics
             {
                 if (elapsedTimeSinceLastDecision > 1000)
                 {
-                    FavorateDirection = HGRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
+                    FavorateDirection = HgRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
                 }
 
                 var decidingFactors = GatherInputs();
@@ -215,7 +215,7 @@ namespace HG.AI.Logistics
 
             var deltaAngle = _owner.DeltaAngle(_observedObject);
 
-            var angleToIn6thRadians = HGAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
+            var angleToIn6thRadians = HgAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
 
             aiParams.Set(Inputs.AngleToObservationObjectIn6thRadians,
                 angleToIn6thRadians.SplitToNegative(Math.PI / 6));

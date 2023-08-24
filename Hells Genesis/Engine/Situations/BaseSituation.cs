@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using static HG.Engine.EngineCallbackEvent;
+using static HG.Engine.HgEngineCallbackEvent;
 
 namespace HG.Engine.Situations
 {
@@ -15,7 +15,7 @@ namespace HG.Engine.Situations
             Ended
         }
 
-        protected List<EngineCallbackEvent> Events = new();
+        protected List<HgEngineCallbackEvent> Events = new();
 
         protected Core _core;
         public int CurrentWave { get; set; } = 0;
@@ -43,15 +43,15 @@ namespace HG.Engine.Situations
             State = ScenarioState.Running;
         }
 
-        protected EngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, OnExecute executeCallback)
+        protected HgEngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, HgOnExecute executeCallback)
         {
             //Keep track of recurring events to we can delete them when we are done.
-            var obj = _core.Events.Create(timeout, executeCallback, null, CallbackEventMode.Recurring);
+            var obj = _core.Events.Create(timeout, executeCallback, null, HgCallbackEventMode.Recurring);
             Events.Add(obj);
             return obj;
         }
 
-        protected EngineCallbackEvent AddSingleFireEvent(TimeSpan timeout, OnExecute executeCallback)
+        protected HgEngineCallbackEvent AddSingleFireEvent(TimeSpan timeout, HgOnExecute executeCallback)
         {
             return _core.Events.Create(timeout, executeCallback);
         }

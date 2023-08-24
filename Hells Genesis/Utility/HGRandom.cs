@@ -2,7 +2,7 @@
 
 namespace HG.Engine
 {
-    internal class HGRandom
+    internal class HgRandom
     {
         public static Random Random = new();
 

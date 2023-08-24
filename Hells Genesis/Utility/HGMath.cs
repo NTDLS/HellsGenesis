@@ -1,10 +1,10 @@
-﻿using HG.Actors.Objects;
+﻿using HG.Actors;
 using HG.Types;
 using System;
 
 namespace HG.Engine
 {
-    internal class HGMath
+    internal class HgMath
     {
         /// <summary>
         /// Calculates a point at a given angle and a given distance.
@@ -12,9 +12,9 @@ namespace HG.Engine
         /// <param name="angle"></param>
         /// <param name="distance"></param>
         /// <returns></returns>
-        public static HGPoint<double> AngleFromPointAtDistance(HGAngle<double> angle, HGPoint<double> distance)
+        public static HgPoint<double> AngleFromPointAtDistance(HgAngle<double> angle, HgPoint<double> distance)
         {
-            return new HGPoint<double>(
+            return new HgPoint<double>(
                 (Math.Cos(angle.Radians) * distance.X),
                 (Math.Sin(angle.Radians) * distance.Y));
         }
@@ -27,17 +27,17 @@ namespace HG.Engine
         /// <returns></returns>
         public static double AngleTo(ActorBase from, ActorBase to)
         {
-            return HGPoint<double>.AngleTo(from.Location, to.Location);
+            return HgPoint<double>.AngleTo(from.Location, to.Location);
         }
 
-        public static double AngleTo(HGPoint<double> from, ActorBase to)
+        public static double AngleTo(HgPoint<double> from, ActorBase to)
         {
-            return HGPoint<double>.AngleTo(from, to.Location);
+            return HgPoint<double>.AngleTo(from, to.Location);
         }
 
-        public static double AngleTo(ActorBase from, HGPoint<double> to)
+        public static double AngleTo(ActorBase from, HgPoint<double> to)
         {
-            return HGPoint<double>.AngleTo(from.Location, to);
+            return HgPoint<double>.AngleTo(from.Location, to);
         }
 
         public static bool IsPointingAway(ActorBase fromObj, ActorBase atObj, double toleranceDegrees)
@@ -99,7 +99,7 @@ namespace HG.Engine
 
         public static double DistanceTo(ActorBase from, ActorBase to)
         {
-            return HGPoint<double>.DistanceTo(from.Location, to.Location);
+            return HgPoint<double>.DistanceTo(from.Location, to.Location);
         }
     }
 }

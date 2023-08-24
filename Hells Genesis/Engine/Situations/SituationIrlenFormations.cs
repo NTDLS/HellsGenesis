@@ -1,4 +1,4 @@
-﻿using HG.Actors.Objects.Enemies;
+﻿using HG.Actors.Enemies;
 using HG.Types;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,10 +25,10 @@ namespace HG.Engine.Situations
             _core.Player.Actor.AddShieldPoints(10);
         }
 
-        private void RedirectFormationCallback(Core core, EngineCallbackEvent sender, object refObj)
+        private void RedirectFormationCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            List<EnemyIrlen> formationIrlens = _core.Actors.Enemies.VisibleOfType<EnemyIrlen>()
-                .Where(o => o.Mode == EnemyIrlen.AIMode.InFormation).ToList();
+            var formationIrlens = _core.Actors.Enemies.VisibleOfType<EnemyIrlen>()
+                .Where(o => o.Mode == EnemyIrlen.HgAIMode.InFormation).ToList();
 
             if (formationIrlens.Count > 0)
             {
@@ -44,14 +44,14 @@ namespace HG.Engine.Situations
             }
         }
 
-        private void FirstShowPlayerCallback(Core core, EngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.ResetAndShowPlayer();
+            _core.Player.ResetAndShow();
         }
 
         bool waitingOnPopulation = false;
 
-        private void AdvanceWaveCallback(Core core, EngineCallbackEvent sender, object refObj)
+        private void AdvanceWaveCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
             if (_core.Actors.OfType<EnemyBase>().Count == 0 && !waitingOnPopulation)
             {
@@ -67,9 +67,9 @@ namespace HG.Engine.Situations
             }
         }
 
-        private void AddFreshEnemiesCallback(Core core, EngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            HGPoint<double> baseLocation = _core.Display.RandomOffScreenLocation();
+            HgPoint<double> baseLocation = _core.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave);
             _core.Audio.RadarBlipsSound.Play();
             waitingOnPopulation = false;
@@ -86,9 +86,9 @@ namespace HG.Engine.Situations
             return enemy;
         }
 
-        private void CreateTriangleFormation(HGPoint<double> baseLocation, double spacing, int depth)
+        private void CreateTriangleFormation(HgPoint<double> baseLocation, double spacing, int depth)
         {
-            double angle = HGMath.AngleTo(baseLocation, _core.Player.Actor);
+            double angle = HgMath.AngleTo(baseLocation, _core.Player.Actor);
 
             for (int col = 0; col < depth; col++)
             {
