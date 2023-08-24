@@ -13,7 +13,7 @@ namespace HG.TickManagers
         private readonly EngineActorManager _manager;
 
         public List<subType> VisibleOfType<subType>() where subType : ActorStar => _manager.VisibleOfType<subType>();
-        public List<ActorStar> VisibleOfType() => _manager.VisibleOfType<ActorStar>();
+        public List<ActorStar> Visible() => _manager.VisibleOfType<ActorStar>();
         public List<subType> OfType<subType>() where subType : ActorStar => _manager.OfType<subType>();
 
 

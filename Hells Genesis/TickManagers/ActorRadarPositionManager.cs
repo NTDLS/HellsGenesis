@@ -15,7 +15,7 @@ namespace HG.TickManagers
         private readonly EngineActorManager _manager;
 
         public List<subType> VisibleOfType<subType>() where subType : ActorRadarPositionIndicator => _manager.VisibleOfType<subType>();
-        public List<ActorRadarPositionIndicator> VisibleOfType() => _manager.VisibleOfType<ActorRadarPositionIndicator>();
+        public List<ActorRadarPositionIndicator> Visible() => _manager.VisibleOfType<ActorRadarPositionIndicator>();
         public List<subType> OfType<subType>() where subType : ActorRadarPositionIndicator => _manager.OfType<subType>();
 
         public ActorRadarPositionManager(Core core, EngineActorManager manager)

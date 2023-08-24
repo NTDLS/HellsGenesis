@@ -2,6 +2,7 @@
 using HG.Engine;
 using HG.TickManagers.Interfaces;
 using HG.Types;
+using System.Diagnostics;
 
 namespace HG.TickManagers
 {
@@ -14,6 +15,9 @@ namespace HG.TickManagers
         {
             _core = core;
         }
+
+        private bool _allowLockPlayerAngleToNearbyEnemy = true;
+
 
         /// <summary>
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
@@ -54,6 +58,38 @@ namespace HG.TickManagers
                             Actor.AmmoEmptySound.Play();
                             Actor.SelectFirstAvailableUsableSecondaryWeapon();
                         }
+                    }
+                }
+
+                if (_core.Settings.LockPlayerAngleToNearbyEnemy)
+                {
+                    //This needs some work. It works, but its sloppy - the movement is rigid.
+                    if (_core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise) == false && _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise) == false)
+                    {
+                        if (_allowLockPlayerAngleToNearbyEnemy)
+                        {
+                            var enemies = _core.Actors.Enemies.Visible();
+                            foreach (var enemy in enemies)
+                            {
+                                var distanceTo = _core.Player.Actor.DistanceTo(enemy);
+                                if (distanceTo < 500)
+                                {
+                                    if (_core.Player.Actor.IsPointingAt(enemy, 50))
+                                    {
+                                        if (enemy.IsPointingAway(_core.Player.Actor, 50))
+                                        {
+                                            var angleTo = _core.Player.Actor.AngleTo(enemy);
+                                            _core.Player.Actor.Velocity.Angle.Degrees = angleTo;
+                                        }
+                                    }
+                                }
+                            }
+                            _allowLockPlayerAngleToNearbyEnemy = false;
+                        }
+                    }
+                    else
+                    {
+                        _allowLockPlayerAngleToNearbyEnemy = true;
                     }
                 }
 

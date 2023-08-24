@@ -15,7 +15,7 @@ namespace HG.TickManagers
         private readonly EngineActorManager _manager;
 
         public List<subType> VisibleOfType<subType>() where subType : ActorTextBlock => _manager.VisibleOfType<subType>();
-        public List<ActorTextBlock> VisibleOfType() => _manager.VisibleOfType<ActorTextBlock>();
+        public List<ActorTextBlock> Visible() => _manager.VisibleOfType<ActorTextBlock>();
         public List<subType> OfType<subType>() where subType : ActorTextBlock => _manager.OfType<subType>();
 
         public ActorTextBlockManager(Core core, EngineActorManager manager)

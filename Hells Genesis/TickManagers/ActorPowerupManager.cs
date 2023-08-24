@@ -14,7 +14,7 @@ namespace HG.TickManagers
         private readonly EngineActorManager _manager;
 
         public List<subType> VisibleOfType<subType>() where subType : PowerUpBase => _manager.VisibleOfType<subType>();
-        public List<PowerUpBase> VisibleOfType() => _manager.VisibleOfType<PowerUpBase>();
+        public List<PowerUpBase> Visible() => _manager.VisibleOfType<PowerUpBase>();
         public List<subType> OfType<subType>() where subType : PowerUpBase => _manager.OfType<subType>();
 
         public ActorPowerupManager(Core core, EngineActorManager manager)

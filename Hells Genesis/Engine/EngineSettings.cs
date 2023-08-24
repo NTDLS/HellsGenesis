@@ -7,6 +7,8 @@
         public bool HighlightAllActors { get; set; } = false;
         #endregion
 
+        public bool LockPlayerAngleToNearbyEnemy { get; set; } = false;
+
         public bool AutoZoomWhenMoving { get; set; } = true;
 
         public double PlayerThrustRampUp { get; set; } = 0.05;
