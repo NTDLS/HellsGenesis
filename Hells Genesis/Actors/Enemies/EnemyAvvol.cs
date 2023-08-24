@@ -59,7 +59,7 @@ namespace HG.Actors.Enemies
 
         #region Artificial Intelligence.
 
-        private enum HgAIMode
+        private enum AIMode
         {
             Approaching,
             MovingToFallback,
@@ -71,7 +71,7 @@ namespace HG.Actors.Enemies
         const double baseFallbackDistance = 400;
         double fallbackDistance;
         HgAngle<double> fallToAngle;
-        HgAIMode mode = HgAIMode.Approaching;
+        AIMode mode = AIMode.Approaching;
 
         public override void ApplyIntelligence(HgPoint<double> displacementVector)
         {
@@ -79,7 +79,7 @@ namespace HG.Actors.Enemies
 
             double distanceToPlayer = HgMath.DistanceTo(this, _core.Player.Actor);
 
-            if (mode == HgAIMode.Approaching)
+            if (mode == AIMode.Approaching)
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
@@ -87,13 +87,13 @@ namespace HG.Actors.Enemies
                 }
                 else
                 {
-                    mode = HgAIMode.MovingToFallback;
+                    mode = AIMode.MovingToFallback;
                     fallToAngle = Velocity.Angle + (180.0 + HgRandom.RandomNumberNegative(0, 10));
                     fallbackDistance = baseFallbackDistance * (HgRandom.Random.NextDouble() + 1);
                 }
             }
 
-            if (mode == HgAIMode.MovingToFallback)
+            if (mode == AIMode.MovingToFallback)
             {
                 var deltaAngle = Velocity.Angle - fallToAngle;
 
@@ -111,11 +111,11 @@ namespace HG.Actors.Enemies
 
                 if (distanceToPlayer > fallbackDistance)
                 {
-                    mode = HgAIMode.MovingToApproach;
+                    mode = AIMode.MovingToApproach;
                 }
             }
 
-            if (mode == HgAIMode.MovingToApproach)
+            if (mode == AIMode.MovingToApproach)
             {
                 var deltaAngle = DeltaAngle(_core.Player.Actor);
 
@@ -132,7 +132,7 @@ namespace HG.Actors.Enemies
                 }
                 else
                 {
-                    mode = HgAIMode.Approaching;
+                    mode = AIMode.Approaching;
                     distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
                 }
             }

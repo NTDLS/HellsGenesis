@@ -27,7 +27,7 @@ namespace HG.Engine.Situations
         private void RedirectFormationCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
             var formationIrlens = _core.Actors.Enemies.VisibleOfType<EnemyIrlen>()
-                .Where(o => o.Mode == EnemyIrlen.HgAIMode.InFormation).ToList();
+                .Where(o => o.Mode == EnemyIrlen.AIMode.InFormation).ToList();
 
             if (formationIrlens.Count > 0)
             {

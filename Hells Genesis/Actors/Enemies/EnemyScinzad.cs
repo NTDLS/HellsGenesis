@@ -44,7 +44,7 @@ namespace HG.Actors.Enemies
 
         #region Artificial Intelligence.
 
-        private enum HgAIMode
+        private enum AIMode
         {
             Approaching,
             Tailing,
@@ -57,7 +57,7 @@ namespace HG.Actors.Enemies
         private const double baseFallbackDistance = 800;
         private double fallbackDistance;
         private HgAngle<double> fallToAngle;
-        private HgAIMode mode = HgAIMode.Approaching;
+        private AIMode mode = AIMode.Approaching;
         private int bulletsRemainingBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
@@ -67,7 +67,7 @@ namespace HG.Actors.Enemies
 
             double distanceToPlayer = HgMath.DistanceTo(this, _core.Player.Actor);
 
-            if (mode == HgAIMode.Approaching)
+            if (mode == AIMode.Approaching)
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
@@ -75,13 +75,13 @@ namespace HG.Actors.Enemies
                 }
                 else
                 {
-                    mode = HgAIMode.Tailing;
+                    mode = AIMode.Tailing;
                     bulletsRemainingBeforeTailing = TotalAvailableSecondaryWeaponRounds();
                     hpRemainingBeforeTailing = HitPoints;
                 }
             }
 
-            if (mode == HgAIMode.Tailing)
+            if (mode == AIMode.Tailing)
             {
                 MoveInDirectionOf(_core.Player.Actor);
 
@@ -89,7 +89,7 @@ namespace HG.Actors.Enemies
                 if (distanceToPlayer > distanceToKeep + 300)
                 {
                     Velocity.ThrottlePercentage = 1;
-                    mode = HgAIMode.Approaching;
+                    mode = AIMode.Approaching;
                 }
                 else
                 {
@@ -106,13 +106,13 @@ namespace HG.Actors.Enemies
                     || bulletsRemainingBeforeTailing - TotalAvailableSecondaryWeaponRounds() > 15)
                 {
                     Velocity.ThrottlePercentage = 1;
-                    mode = HgAIMode.MovingToFallback;
+                    mode = AIMode.MovingToFallback;
                     fallToAngle = Velocity.Angle + (180.0 + HgRandom.RandomNumberNegative(0, 10));
                     fallbackDistance = baseFallbackDistance * (HgRandom.Random.NextDouble() + 1);
                 }
             }
 
-            if (mode == HgAIMode.MovingToFallback)
+            if (mode == AIMode.MovingToFallback)
             {
                 var deltaAngle = Velocity.Angle - fallToAngle;
 
@@ -130,11 +130,11 @@ namespace HG.Actors.Enemies
 
                 if (distanceToPlayer > fallbackDistance)
                 {
-                    mode = HgAIMode.MovingToApproach;
+                    mode = AIMode.MovingToApproach;
                 }
             }
 
-            if (mode == HgAIMode.MovingToApproach)
+            if (mode == AIMode.MovingToApproach)
             {
                 var deltaAngle = DeltaAngle(_core.Player.Actor);
 
@@ -151,7 +151,7 @@ namespace HG.Actors.Enemies
                 }
                 else
                 {
-                    mode = HgAIMode.Approaching;
+                    mode = AIMode.Approaching;
                     distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
                 }
             }

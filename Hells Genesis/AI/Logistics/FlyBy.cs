@@ -22,20 +22,20 @@ namespace HG.AI.Logistics
 
         #region I/O Enumerations.
 
-        public enum Inputs
+        public enum AIInputs
         {
-            DistanceFromObservationObject,
+            DistanceFromObservedObject,
             /// <summary>
-            /// This should be the angle to the ObservationObject (likely the player) in relation to the nose of the enemy ship expressed in 1/6th radians split in half.
+            /// This should be the angle to the ObservedObject (likely the player) in relation to the nose of the enemy ship expressed in 1/6th radians split in half.
             /// 0 is pointing at the player, ~0.26 is 90° to the right, ~0.523 is 180° and -0.26 is 270° to the left.
             /// </summary>
-            AngleToObservationObjectIn6thRadians
+            AngleToObservedObjectIn6thRadians
         }
 
-        public enum Outputs
+        public enum AIOutputs
         {
-            TransitionToObservationObject,
-            TransitionFromObservationObject,
+            TransitionToObservedObject,
+            TransitionFromObservedObject,
             SpeedAdjust
         }
 
@@ -92,8 +92,8 @@ namespace HG.AI.Logistics
             //Vision inputs.
             newNetwork.Layers.AddInput(ActivationType.LeakyReLU,
                 new object[] {
-                        Inputs.DistanceFromObservationObject,
-                        Inputs.AngleToObservationObjectIn6thRadians
+                        AIInputs.DistanceFromObservedObject,
+                        AIInputs.AngleToObservedObjectIn6thRadians
                 });
 
             //Where the magic happens.
@@ -102,9 +102,9 @@ namespace HG.AI.Logistics
             //Decision outputs
             newNetwork.Layers.AddOutput(
                 new object[] {
-                        Outputs.TransitionToObservationObject,
-                        Outputs.TransitionFromObservationObject,
-                        Outputs.SpeedAdjust
+                        AIOutputs.TransitionToObservedObject,
+                        AIOutputs.TransitionFromObservedObject,
+                        AIOutputs.SpeedAdjust
                 });
 
             for (int epoch = 0; epoch < 5000; epoch++)
@@ -138,22 +138,22 @@ namespace HG.AI.Logistics
                 newNetwork.BackPropagate(TrainingScenerio(0.75, -0.5), TrainingDecision(1, 0, 0));
             }
 
-            static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservationObject, double angleToObservationObjectIn10thRadians)
+            static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservedObject, double angleToObservedObjectIn10thRadians)
             {
                 var param = new DniNamedInterfaceParameters();
 
-                param.Set(Inputs.DistanceFromObservationObject, distanceFromObservationObject);
-                param.Set(Inputs.AngleToObservationObjectIn6thRadians, angleToObservationObjectIn10thRadians);
+                param.Set(AIInputs.DistanceFromObservedObject, distanceFromObservedObject);
+                param.Set(AIInputs.AngleToObservedObjectIn6thRadians, angleToObservedObjectIn10thRadians);
                 return param;
             }
 
-            static DniNamedInterfaceParameters TrainingDecision(double transitionToObservationObject,
-                double transitionFromObservationObject, double speedAdjust)
+            static DniNamedInterfaceParameters TrainingDecision(double transitionToObservedObject,
+                double transitionFromObservedObject, double speedAdjust)
             {
                 var param = new DniNamedInterfaceParameters();
-                param.Set(Outputs.TransitionToObservationObject, transitionToObservationObject);
-                param.Set(Outputs.TransitionFromObservationObject, transitionFromObservationObject);
-                param.Set(Outputs.SpeedAdjust, speedAdjust);
+                param.Set(AIOutputs.TransitionToObservedObject, transitionToObservedObject);
+                param.Set(AIOutputs.TransitionFromObservedObject, transitionFromObservedObject);
+                param.Set(AIOutputs.SpeedAdjust, speedAdjust);
                 return param;
             }
 
@@ -199,7 +199,7 @@ namespace HG.AI.Logistics
                 var decidingFactors = GatherInputs();
                 var decisions = Network.FeedForward(decidingFactors);
 
-                var speedAdjust = decisions.Get(Outputs.SpeedAdjust);
+                var speedAdjust = decisions.Get(AIOutputs.SpeedAdjust);
 
                 if (speedAdjust >= 0.5)
                 {
@@ -210,18 +210,18 @@ namespace HG.AI.Logistics
                     _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
                 }
 
-                bool transitionToObservationObject = decisions.Get(Outputs.TransitionToObservationObject) > 0.9;
-                bool transitionFromObservationObject = decisions.Get(Outputs.TransitionFromObservationObject) > 0.9;
+                bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.9;
+                bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.9;
 
-                if (transitionToObservationObject && transitionFromObservationObject)
+                if (transitionToObservedObject && transitionFromObservedObject)
                 {
                     CurrentAction = ActionState.None;
                 }
-                else if (transitionToObservationObject)
+                else if (transitionToObservedObject)
                 {
                     CurrentAction = ActionState.MovingToApproach;
                 }
-                else if (transitionFromObservationObject)
+                else if (transitionFromObservedObject)
                 {
                     CurrentAction = ActionState.MovingToDepart;
                 }
@@ -280,13 +280,13 @@ namespace HG.AI.Logistics
             var distance = _owner.DistanceTo(_observedObject);
             var percentageOfCloseness = (distance / DistanceToKeep).Box(0, 1);
 
-            aiParams.Set(Inputs.DistanceFromObservationObject, percentageOfCloseness);
+            aiParams.Set(AIInputs.DistanceFromObservedObject, percentageOfCloseness);
 
             var deltaAngle = _owner.DeltaAngle(_observedObject);
 
             var angleToIn6thRadians = HgAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
 
-            aiParams.Set(Inputs.AngleToObservationObjectIn6thRadians,
+            aiParams.Set(AIInputs.AngleToObservedObjectIn6thRadians,
                 angleToIn6thRadians.SplitToNegative(Math.PI / 6));
 
             return aiParams;

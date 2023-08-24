@@ -40,7 +40,7 @@ namespace HG.Actors.Enemies
 
         #region Artificial Intelligence.
 
-        public enum HgAIMode
+        public enum AIMode
         {
             InFormation,
             InFormationTurning,
@@ -55,7 +55,7 @@ namespace HG.Actors.Enemies
         const double baseFallbackDistance = 400;
         double fallbackDistance;
         HgAngle<double> fallToAngle;
-        public HgAIMode Mode = HgAIMode.InFormation;
+        public AIMode Mode = AIMode.InFormation;
 
         public override void ApplyIntelligence(HgPoint<double> displacementVector)
         {
@@ -63,19 +63,19 @@ namespace HG.Actors.Enemies
 
             double distanceToPlayer = HgMath.DistanceTo(this, _core.Player.Actor);
 
-            if (Mode == HgAIMode.InFormation)
+            if (Mode == AIMode.InFormation)
             {
                 //Since we need to handle the entire "platoon" of formation ships all at once, a good
                 //  deal of this AI is handled by the Scenerio engine(s). (see: ScenarioIrlenFormations).
                 if (distanceToPlayer < 500 && HgRandom.ChanceIn(10000) || HitPoints != initialHitPoints)
                 {
-                    Mode = HgAIMode.MovingToFallback;
+                    Mode = AIMode.MovingToFallback;
                     fallToAngle = Velocity.Angle + (180.0 + HgRandom.RandomNumberNegative(0, 10));
                     fallbackDistance = baseFallbackDistance * (HgRandom.Random.NextDouble() + 1);
                 }
             }
 
-            if (Mode == HgAIMode.Approaching)
+            if (Mode == AIMode.Approaching)
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
@@ -83,13 +83,13 @@ namespace HG.Actors.Enemies
                 }
                 else
                 {
-                    Mode = HgAIMode.MovingToFallback;
+                    Mode = AIMode.MovingToFallback;
                     fallToAngle = Velocity.Angle + (180.0 + HgRandom.RandomNumberNegative(0, 10));
                     fallbackDistance = baseFallbackDistance * (HgRandom.Random.NextDouble() + 1);
                 }
             }
 
-            if (Mode == HgAIMode.MovingToFallback)
+            if (Mode == AIMode.MovingToFallback)
             {
                 var deltaAngle = Velocity.Angle - fallToAngle;
 
@@ -107,11 +107,11 @@ namespace HG.Actors.Enemies
 
                 if (distanceToPlayer > fallbackDistance)
                 {
-                    Mode = HgAIMode.MovingToApproach;
+                    Mode = AIMode.MovingToApproach;
                 }
             }
 
-            if (Mode == HgAIMode.MovingToApproach)
+            if (Mode == AIMode.MovingToApproach)
             {
                 var deltaAngle = DeltaAngle(_core.Player.Actor);
 
@@ -128,7 +128,7 @@ namespace HG.Actors.Enemies
                 }
                 else
                 {
-                    Mode = HgAIMode.Approaching;
+                    Mode = AIMode.Approaching;
                     distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
                 }
             }

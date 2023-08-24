@@ -96,7 +96,7 @@ namespace HG.Actors.Enemies.Bosses
 
         #region Artificial Intelligence.
 
-        private enum HgAIMode
+        private enum AIMode
         {
             Approaching,
             Tailing,
@@ -110,7 +110,7 @@ namespace HG.Actors.Enemies.Bosses
         private const double baseFallbackDistance = 800;
         private double fallbackDistance;
         private HgAngle<double> fallToAngle;
-        private HgAIMode mode = HgAIMode.Approaching;
+        private AIMode mode = AIMode.Approaching;
         private int bulletsRemainingBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
@@ -123,7 +123,7 @@ namespace HG.Actors.Enemies.Bosses
             //We have no engines. :(
             if (_thrust.IsDead)
             {
-                mode = HgAIMode.LameDuck;
+                mode = AIMode.LameDuck;
             }
 
             //If we get down to one engine, slowly cut the max thrust to half of what it originally was. If we lose both, reduce it to 1.
@@ -136,7 +136,7 @@ namespace HG.Actors.Enemies.Bosses
                 }
             }
 
-            if (mode == HgAIMode.LameDuck)
+            if (mode == AIMode.LameDuck)
             {
                 if (distanceToPlayer > 2500)
                 {
@@ -177,7 +177,7 @@ namespace HG.Actors.Enemies.Bosses
                     }
                 }
             }
-            else if (mode == HgAIMode.Approaching)
+            else if (mode == AIMode.Approaching)
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
@@ -185,13 +185,13 @@ namespace HG.Actors.Enemies.Bosses
                 }
                 else
                 {
-                    mode = HgAIMode.Tailing;
+                    mode = AIMode.Tailing;
                     bulletsRemainingBeforeTailing = TotalAvailableSecondaryWeaponRounds();
                     hpRemainingBeforeTailing = HitPoints;
                 }
             }
 
-            if (mode == HgAIMode.Tailing)
+            if (mode == AIMode.Tailing)
             {
                 MoveInDirectionOf(_core.Player.Actor);
 
@@ -199,7 +199,7 @@ namespace HG.Actors.Enemies.Bosses
                 if (distanceToPlayer > distanceToKeep + 300)
                 {
                     Velocity.ThrottlePercentage = 1;
-                    mode = HgAIMode.Approaching;
+                    mode = AIMode.Approaching;
                 }
                 else
                 {
@@ -216,13 +216,13 @@ namespace HG.Actors.Enemies.Bosses
                     || bulletsRemainingBeforeTailing - TotalAvailableSecondaryWeaponRounds() > 15)
                 {
                     Velocity.ThrottlePercentage = 1;
-                    mode = HgAIMode.MovingToFallback;
+                    mode = AIMode.MovingToFallback;
                     fallToAngle = Velocity.Angle + (180.0 + HgRandom.RandomNumberNegative(0, 10));
                     fallbackDistance = baseFallbackDistance * (HgRandom.Random.NextDouble() + 1);
                 }
             }
 
-            if (mode == HgAIMode.MovingToFallback)
+            if (mode == AIMode.MovingToFallback)
             {
                 var deltaAngle = Velocity.Angle - fallToAngle;
 
@@ -240,11 +240,11 @@ namespace HG.Actors.Enemies.Bosses
 
                 if (distanceToPlayer > fallbackDistance)
                 {
-                    mode = HgAIMode.MovingToApproach;
+                    mode = AIMode.MovingToApproach;
                 }
             }
 
-            if (mode == HgAIMode.MovingToApproach)
+            if (mode == AIMode.MovingToApproach)
             {
                 var deltaAngle = DeltaAngle(_core.Player.Actor);
 
@@ -261,7 +261,7 @@ namespace HG.Actors.Enemies.Bosses
                 }
                 else
                 {
-                    mode = HgAIMode.Approaching;
+                    mode = AIMode.Approaching;
                     distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
                 }
             }

@@ -4,13 +4,13 @@
       {
         "_neurons": [
           {
-            "Alias": "DistanceFromObservationObject",
+            "Alias": "DistanceFromObservedObject",
             "Bias": -0.49566192296131606,
             "Value": 0.35258172936814947,
             "Weights": []
           },
           {
-            "Alias": "AngleToObservationObjectIn6thRadians",
+            "Alias": "AngleToObservedObjectIn6thRadians",
             "Bias": -1.6966643779057378,
             "Value": 0.2468151491727911,
             "Weights": []
@@ -106,7 +106,7 @@
       {
         "_neurons": [
           {
-            "Alias": "TransitionToObservationObject",
+            "Alias": "TransitionToObservedObject",
             "Bias": 1.8563290535734636,
             "Value": 0.11002021705048383,
             "Weights": [
@@ -121,7 +121,7 @@
             ]
           },
           {
-            "Alias": "TransitionFromObservationObject",
+            "Alias": "TransitionFromObservedObject",
             "Bias": -1.844878876509554,
             "Value": 0.8953951180421756,
             "Weights": [

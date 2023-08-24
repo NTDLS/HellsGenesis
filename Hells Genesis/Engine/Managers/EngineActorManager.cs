@@ -68,24 +68,27 @@ namespace HG.Engine.Managers
 
         public void CleanupDeletedObjects()
         {
-            _core.Actors.Collection.Where(o => o.ReadyForDeletion).ToList().ForEach(p => p.Cleanup());
-            _core.Actors.Collection.RemoveAll(o => o.ReadyForDeletion);
-
-            for (int i = 0; i < _core.Events.Collection.Count; i++)
+            lock (Collection)
             {
-                if (_core.Events.Collection[i].ReadyForDeletion)
+                _core.Actors.Collection.Where(o => o.ReadyForDeletion).ToList().ForEach(p => p.Cleanup());
+                _core.Actors.Collection.RemoveAll(o => o.ReadyForDeletion);
+
+                for (int i = 0; i < _core.Events.Collection.Count; i++)
                 {
-                    _core.Events.Delete(_core.Events.Collection[i]);
+                    if (_core.Events.Collection[i].ReadyForDeletion)
+                    {
+                        _core.Events.Delete(_core.Events.Collection[i]);
+                    }
                 }
-            }
 
-            _core.Menus.CleanupDeletedObjects();
+                _core.Menus.CleanupDeletedObjects();
 
-            if (_core.Player.Actor.IsDead)
-            {
-                _core.Player.Actor.Visable = false;
-                _core.Player.Actor.IsDead = false;
-                _core.Menus.Insert(new MenuStartNewGame(_core));
+                if (_core.Player.Actor.IsDead)
+                {
+                    _core.Player.Actor.Visable = false;
+                    _core.Player.Actor.IsDead = false;
+                    _core.Menus.Insert(new MenuStartNewGame(_core));
+                }
             }
         }
 
@@ -149,19 +152,22 @@ namespace HG.Engine.Managers
 
         public List<ActorBase> Intersections(ActorBase with)
         {
-            var objs = new List<ActorBase>();
-
-            foreach (var obj in Collection.Where(o => o.Visable == true))
+            lock (Collection)
             {
-                if (obj != with)
+                var objs = new List<ActorBase>();
+
+                foreach (var obj in Collection.Where(o => o.Visable == true))
                 {
-                    if (obj.Intersects(with.Location, new HgPoint<double>(with.Size.Width, with.Size.Height)))
+                    if (obj != with)
                     {
-                        objs.Add(obj);
+                        if (obj.Intersects(with.Location, new HgPoint<double>(with.Size.Width, with.Size.Height)))
+                        {
+                            objs.Add(obj);
+                        }
                     }
                 }
+                return objs;
             }
-            return objs;
         }
 
         public List<ActorBase> Intersections(double x, double y, double width, double height)
