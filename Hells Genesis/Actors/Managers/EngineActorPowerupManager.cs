@@ -1,19 +1,29 @@
 ﻿using HG.Actors.Objects.PowerUp;
 using HG.Engine;
 using HG.Engine.Managers;
+using HG.Types;
 using System;
 
 namespace HG.Actors.Factories
 {
-    internal class EngineActorPowerupFactory
+    internal class EngineActorPowerupManager
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;
 
-        public EngineActorPowerupFactory(Core core, EngineActorManager manager)
+        public EngineActorPowerupManager(Core core, EngineActorManager manager)
         {
             _core = core;
             _manager = manager;
+        }
+
+        public void ExecuteWorldClockTick(HGPoint<double> appliedOffset)
+        {
+            foreach (var powerUp in _core.Actors.VisibleOfType<PowerUpBase>())
+            {
+                HGConversion.DynamicCast(powerUp, powerUp.GetType()).ApplyIntelligence(appliedOffset);
+                powerUp.ApplyMotion(appliedOffset);
+            }
         }
 
         public void DeleteAll()

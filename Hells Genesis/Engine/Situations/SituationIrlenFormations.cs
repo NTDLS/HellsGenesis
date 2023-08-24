@@ -21,8 +21,8 @@ namespace HG.Engine.Situations
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 1), AdvanceWaveCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 5), RedirectFormationCallback);
 
-            _core.Actors.Player.AddHitPoints(100);
-            _core.Actors.Player.AddShieldPoints(10);
+            _core.Player.Actor.AddHitPoints(100);
+            _core.Player.Actor.AddShieldPoints(10);
         }
 
         private void RedirectFormationCallback(Core core, EngineCallbackEvent sender, object refObj)
@@ -34,7 +34,7 @@ namespace HG.Engine.Situations
             {
                 if (formationIrlens.Exists(o => o.IsOnScreen == true) == false)
                 {
-                    double angleToPlayer = formationIrlens.First().AngleTo(_core.Actors.Player);
+                    double angleToPlayer = formationIrlens.First().AngleTo(_core.Player.Actor);
 
                     foreach (EnemyIrlen enemy in formationIrlens)
                     {
@@ -88,7 +88,7 @@ namespace HG.Engine.Situations
 
         private void CreateTriangleFormation(HGPoint<double> baseLocation, double spacing, int depth)
         {
-            double angle = HGMath.AngleTo(baseLocation, _core.Actors.Player);
+            double angle = HGMath.AngleTo(baseLocation, _core.Player.Actor);
 
             for (int col = 0; col < depth; col++)
             {

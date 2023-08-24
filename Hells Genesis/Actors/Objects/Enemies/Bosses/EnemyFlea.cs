@@ -132,7 +132,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
         {
             base.ApplyIntelligence(appliedOffset);
 
-            double distanceToPlayer = HGMath.DistanceTo(this, _core.Actors.Player);
+            double distanceToPlayer = HGMath.DistanceTo(this, _core.Player.Actor);
 
             //We have no engines. :(
             if (_leftThrust.IsDead && _rightThrust.IsDead)
@@ -163,7 +163,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
                 }
 
                 //Keep pointing at the player.
-                var deltaAngle = DeltaAngle(_core.Actors.Player);
+                var deltaAngle = DeltaAngle(_core.Player.Actor);
 
                 if (deltaAngle > 10)
                 {
@@ -200,7 +200,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
-                    MoveInDirectionOf(_core.Actors.Player);
+                    MoveInDirectionOf(_core.Player.Actor);
                 }
                 else
                 {
@@ -212,7 +212,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
 
             if (mode == AIMode.Tailing)
             {
-                MoveInDirectionOf(_core.Actors.Player);
+                MoveInDirectionOf(_core.Player.Actor);
 
                 //Stay on the players tail.
                 if (distanceToPlayer > distanceToKeep + 300)
@@ -265,7 +265,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_core.Actors.Player);
+                var deltaAngle = DeltaAngle(_core.Player.Actor);
 
                 if (deltaAngle > 10)
                 {
@@ -289,7 +289,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
             {
                 if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
                     if (isPointingAtPlayer)
                     {
                         SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
@@ -298,7 +298,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
                 }
                 else if (distanceToPlayer > 0 && HasSecondaryWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
                     if (isPointingAtPlayer)
                     {
                         SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));

@@ -70,7 +70,7 @@ namespace HG.Actors.Objects.PowerUp
 
         public virtual void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
-            if (Intersects(_core.Actors.Player))
+            if (Intersects(_core.Player.Actor))
             {
                 Explode();
             }

@@ -16,8 +16,9 @@ namespace HG.Engine
         public EngineAudioManager Audio { get; set; }
         public EngineImageManager Imaging { get; set; }
         public EngineMenuManager Menus { get; set; }
-
+        public EnginePlayerManager Player { get; set; }
         public EngineDrawingCacheManager DrawingCache { get; set; } = new();
+
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
@@ -45,7 +46,7 @@ namespace HG.Engine
             Audio = new EngineAudioManager(this);
             Imaging = new EngineImageManager(this);
             Menus = new EngineMenuManager(this);
-
+            Player = new EnginePlayerManager(this);
 
             _gameLoop = new GameLoop(this);
 

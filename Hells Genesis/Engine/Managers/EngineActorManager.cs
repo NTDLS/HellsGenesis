@@ -20,21 +20,20 @@ namespace HG.Engine.Managers
     {
         private readonly Core _core;
 
-        public ActorPlayer Player { get; private set; }
         public ActorTextBlock PlayerStatsText { get; private set; }
         public ActorTextBlock DebugText { get; private set; }
         public bool RenderRadar { get; set; } = false;
 
         #region Actors and their factories.
         internal List<ActorBase> Collection { get; private set; } = new();
-        public EngineActorAnimationFactory Animations { get; set; }
-        public EngineActorBulletFactory Bullets { get; set; }
-        public EngineActorDebugFactory Debugs { get; set; }
-        public EngineActorEnemyFactory Enemies { get; set; }
-        public EngineActorPowerupFactory Powerups { get; set; }
-        public EngineActorRadarPositionFactory RadarPositions { get; set; }
-        public EngineActorStarFactory Stars { get; set; }
-        public EngineActorTextBlockFactory TextBlocks { get; set; }
+        public EngineActorAnimationManager Animations { get; set; }
+        public EngineActorBulletManager Bullets { get; set; }
+        public EngineActorDebugManager Debugs { get; set; }
+        public EngineActorEnemyManager Enemies { get; set; }
+        public EngineActorPowerupManager Powerups { get; set; }
+        public EngineActorRadarPositionManager RadarPositions { get; set; }
+        public EngineActorStarManager Stars { get; set; }
+        public EngineActorTextBlockManager TextBlocks { get; set; }
 
         #endregion
 
@@ -42,19 +41,19 @@ namespace HG.Engine.Managers
         {
             _core = core;
 
-            Animations = new EngineActorAnimationFactory(_core, this);
-            Bullets = new EngineActorBulletFactory(_core, this);
-            Debugs = new EngineActorDebugFactory(_core, this);
-            Enemies = new EngineActorEnemyFactory(_core, this);
-            Powerups = new EngineActorPowerupFactory(_core, this);
-            RadarPositions = new EngineActorRadarPositionFactory(_core, this);
-            Stars = new EngineActorStarFactory(_core, this);
-            TextBlocks = new EngineActorTextBlockFactory(_core, this);
+            Animations = new EngineActorAnimationManager(_core, this);
+            Bullets = new EngineActorBulletManager(_core, this);
+            Debugs = new EngineActorDebugManager(_core, this);
+            Enemies = new EngineActorEnemyManager(_core, this);
+            Powerups = new EngineActorPowerupManager(_core, this);
+            RadarPositions = new EngineActorRadarPositionManager(_core, this);
+            Stars = new EngineActorStarManager(_core, this);
+            TextBlocks = new EngineActorTextBlockManager(_core, this);
         }
 
         public void Start()
         {
-            Player = new ActorPlayer(_core, Constants.PlayerClass.Atlant) { Visable = false };
+            _core.Player.Actor = new ActorPlayer(_core, Constants.PlayerClass.Atlant) { Visable = false };
 
             PlayerStatsText = TextBlocks.Create("Consolas", Brushes.WhiteSmoke, 9,
                 //new Point<double>((_core.Display.OverdrawSize.Width) / 2 + 5, (_core.Display.OverdrawSize.Height / 2) + 5), true);
@@ -88,10 +87,10 @@ namespace HG.Engine.Managers
 
             _core.Menus.CleanupDeletedObjects();
 
-            if (_core.Actors.Player.IsDead)
+            if (_core.Player.Actor.IsDead)
             {
-                _core.Actors.Player.Visable = false;
-                _core.Actors.Player.IsDead = false;
+                _core.Player.Actor.Visable = false;
+                _core.Player.Actor.IsDead = false;
                 _core.Menus.Insert(new MenuStartNewGame(_core));
             }
         }
@@ -140,20 +139,20 @@ namespace HG.Engine.Managers
 
         public void ResetAndShowPlayer()
         {
-            Player.Reset();
+            _core.Player.Actor.Reset();
 
             RenderRadar = true;
-            Player.Visable = true;
-            Player.ShipEngineIdleSound.Play();
-            Player.AllSystemsGoSound.Play();
+            _core.Player.Actor.Visable = true;
+            _core.Player.Actor.ShipEngineIdleSound.Play();
+            _core.Player.Actor.AllSystemsGoSound.Play();
         }
 
         public void HidePlayer()
         {
-            Player.Visable = false;
+            _core.Player.Actor.Visable = false;
             RenderRadar = false;
-            Player.ShipEngineIdleSound.Stop();
-            Player.ShipEngineRoarSound.Stop();
+            _core.Player.Actor.ShipEngineIdleSound.Stop();
+            _core.Player.Actor.ShipEngineRoarSound.Stop();
         }
 
         public List<T> VisibleOfType<T>() where T : class
@@ -297,14 +296,14 @@ namespace HG.Engine.Managers
 
             if (RenderRadar)
             {
-                if (Player is not null && Player.Visable)
+                if (_core.Player.Actor is not null && _core.Player.Actor.Visable)
                 {
                     double centerOfRadarX = (int)(radarDrawing.Bitmap.Width / 2.0) - 2.0; //Subtract half the dot size.
                     double centerOfRadarY = (int)(radarDrawing.Bitmap.Height / 2.0) - 2.0; //Subtract half the dot size.
 
                     _radarOffset = new HGPoint<double>(
-                        centerOfRadarX - Player.X * _radarScale.X,
-                        centerOfRadarY - Player.Y * _radarScale.Y);
+                        centerOfRadarX - _core.Player.Actor.X * _radarScale.X,
+                        centerOfRadarY - _core.Player.Actor.Y * _radarScale.Y);
                 }
 
                 radarDrawing.Graphics.DrawImage(_RadarBackgroundImage, new Point(0, 0));
@@ -354,7 +353,7 @@ namespace HG.Engine.Managers
                                 HGConversion.DynamicCast(actor, actor.GetType()).Render(screenDrawing.Graphics);
                             }
                         }
-                        Player?.Render(screenDrawing.Graphics);
+                        _core.Player.Actor?.Render(screenDrawing.Graphics);
                     }
 
                     _core.Menus.Render(screenDrawing.Graphics);
@@ -391,19 +390,19 @@ namespace HG.Engine.Managers
 
             if (_core.Settings.AutoZoomWhenMoving)
             {
-                if (_core.Actors.Player != null)
+                if (_core.Player.Actor != null)
                 {
                     //Scale the screen based on the player throttle.
-                    if (_core.Actors.Player.Velocity.ThrottlePercentage > 0.5)
+                    if (_core.Player.Actor.Velocity.ThrottlePercentage > 0.5)
                         _core.Display.ThrottleFrameScaleFactor += 2;
-                    else if (_core.Actors.Player.Velocity.ThrottlePercentage < 1)
+                    else if (_core.Player.Actor.Velocity.ThrottlePercentage < 1)
                         _core.Display.ThrottleFrameScaleFactor -= 2;
 
                     //Scale the screen based on the player boost.
                     _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 40);
-                    if (_core.Actors.Player.Velocity.BoostPercentage > 0.5)
+                    if (_core.Player.Actor.Velocity.BoostPercentage > 0.5)
                         _core.Display.BoostFrameScaleFactor += 1;
-                    else if (_core.Actors.Player.Velocity.BoostPercentage < 1)
+                    else if (_core.Player.Actor.Velocity.BoostPercentage < 1)
                         _core.Display.BoostFrameScaleFactor -= 1;
 
                     _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 20);

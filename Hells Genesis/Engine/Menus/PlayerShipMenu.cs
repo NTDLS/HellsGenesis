@@ -182,7 +182,7 @@ namespace HG.Engine.Menus
         {
             var playerClass = (PlayerClass)Enum.Parse(typeof(PlayerClass), item.Name);
 
-            _core.Actors.Player.Reset(playerClass);
+            _core.Player.Actor.Reset(playerClass);
 
             this.QueueForDelete();
             _core.Actors.DeleteAllActorsByTag("MENU_SHIP_SELECT");

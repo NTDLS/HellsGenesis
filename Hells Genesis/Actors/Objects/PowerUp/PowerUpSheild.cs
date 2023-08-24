@@ -30,9 +30,9 @@ namespace HG.Actors.Objects.PowerUp
 
         public new void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
-            if (Intersects(_core.Actors.Player))
+            if (Intersects(_core.Player.Actor))
             {
-                _core.Actors.Player.AddShieldPoints(_repairPoints);
+                _core.Player.Actor.AddShieldPoints(_repairPoints);
                 Explode();
             }
             else if (AgeInMiliseconds > TimeToLive)

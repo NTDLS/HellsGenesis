@@ -85,7 +85,7 @@ namespace HG.Actors.Objects.Weapons.Bullets
 
             if (FiredFromType == HGFiredFromType.Enemy && !(testHit is EnemyBase))
             {
-                if (Intersects(_core.Actors.Player))
+                if (Intersects(_core.Player.Actor))
                 {
                     //We don't auto delete the player because there is only one instance, the engine always assumes its valid.
                     testHit.Hit(this, true, false);

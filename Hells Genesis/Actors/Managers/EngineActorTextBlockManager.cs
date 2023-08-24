@@ -3,18 +3,27 @@ using HG.Engine;
 using HG.Engine.Managers;
 using HG.Types;
 using System.Drawing;
+using System.Linq;
 
 namespace HG.Actors.Factories
 {
-    internal class EngineActorTextBlockFactory
+    internal class EngineActorTextBlockManager
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;
 
-        public EngineActorTextBlockFactory(Core core, EngineActorManager manager)
+        public EngineActorTextBlockManager(Core core, EngineActorManager manager)
         {
             _core = core;
             _manager = manager;
+        }
+
+        public void ExecuteWorldClockTick(HGPoint<double> appliedOffset)
+        {
+            foreach (var textBlock in _manager.VisibleOfType<ActorTextBlock>().Where(o => o.IsPositionStatic == false))
+            {
+                textBlock.ApplyMotion(appliedOffset);
+            }
         }
 
         public ActorRadarPositionTextBlock CreateRadarPosition(string font, Brush color, double size, HGPoint<double> location)

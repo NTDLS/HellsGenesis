@@ -26,7 +26,7 @@ namespace HG.Engine.Managers
             }
         }
 
-        public void HandleInput()
+        public void ExecuteWorldClockTick()
         {
             for (int i = 0; i < Collection.Count; i++)
             {

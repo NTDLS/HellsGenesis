@@ -1,4 +1,5 @@
 ﻿using HG.Actors.Objects;
+using HG.Actors.Objects.Enemies;
 using HG.Actors.Objects.Weapons;
 using HG.Actors.Objects.Weapons.Bullets;
 using HG.Engine;
@@ -7,15 +8,37 @@ using HG.Types;
 
 namespace HG.Actors.Factories
 {
-    internal class EngineActorBulletFactory
+    internal class EngineActorBulletManager
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;
 
-        public EngineActorBulletFactory(Core core, EngineActorManager manager)
+        public EngineActorBulletManager(Core core, EngineActorManager manager)
         {
             _core = core;
             _manager = manager;
+        }
+
+        public void ExecuteWorldClockTick(HGPoint<double> appliedOffset)
+        {
+            foreach (var bullet in _manager.VisibleOfType<BulletBase>())
+            {
+                bullet.ApplyMotion(appliedOffset);
+
+                //Check to see if the bullet hit the player:
+                bullet.ApplyIntelligence(appliedOffset, _core.Player.Actor);
+
+                //Check to see if the bullet hit an enemy.
+                foreach (var enemy in _manager.VisibleOfType<EnemyBase>())
+                {
+                    bullet.ApplyIntelligence(appliedOffset, enemy);
+                }
+
+                foreach (var enemy in _manager.VisibleOfType<ActorAttachment>())
+                {
+                    bullet.ApplyIntelligence(appliedOffset, enemy);
+                }
+            }
         }
 
         public void DeleteAll()

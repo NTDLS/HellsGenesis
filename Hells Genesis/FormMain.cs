@@ -94,9 +94,9 @@ namespace HG
             highlightedActors.Clear();
 
             var actors = _core.Actors.Intersections(new HGPoint<double>(x, y), new HGPoint<double>(1, 1));
-            if (_core.Actors.Player.Intersects(new HGPoint<double>(x, y), new HGPoint<double>(1, 1)))
+            if (_core.Player.Actor.Intersects(new HGPoint<double>(x, y), new HGPoint<double>(1, 1)))
             {
-                actors.Add(_core.Actors.Player);
+                actors.Add(_core.Player.Actor);
             }
 
             foreach (var actor in actors)
@@ -114,9 +114,9 @@ namespace HG
             double y = e.Y;
 
             var actors = _core.Actors.Intersections(new HGPoint<double>(x, y), new HGPoint<double>(1, 1));
-            if (_core.Actors.Player.Intersects(new HGPoint<double>(x, y), new HGPoint<double>(1, 1)))
+            if (_core.Player.Actor.Intersects(new HGPoint<double>(x, y), new HGPoint<double>(1, 1)))
             {
-                actors.Add(_core.Actors.Player);
+                actors.Add(_core.Player.Actor);
             }
 
             var actor = actors.FirstOrDefault();

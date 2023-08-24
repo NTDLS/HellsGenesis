@@ -1,18 +1,27 @@
 ﻿using HG.Actors.Objects;
 using HG.Engine;
 using HG.Engine.Managers;
+using HG.Types;
 
 namespace HG.Actors.Factories
 {
-    internal class EngineActorDebugFactory
+    internal class EngineActorDebugManager
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;
 
-        public EngineActorDebugFactory(Core core, EngineActorManager manager)
+        public EngineActorDebugManager(Core core, EngineActorManager manager)
         {
             _core = core;
             _manager = manager;
+        }
+
+        public void ExecuteWorldClockTick(HGPoint<double> appliedOffset)
+        {
+            foreach (var debug in _manager.VisibleOfType<ActorDebug>())
+            {
+                debug.ApplyMotion(appliedOffset);
+            }
         }
 
         public ActorDebug Create(double x, double y)

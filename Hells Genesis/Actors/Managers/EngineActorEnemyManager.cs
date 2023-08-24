@@ -1,21 +1,62 @@
 ﻿using HG.Actors.Objects.Enemies;
 using HG.Engine;
 using HG.Engine.Managers;
+using HG.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace HG.Actors.Factories
 {
-    internal class EngineActorEnemyFactory
+    internal class EngineActorEnemyManager
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;
 
-        public EngineActorEnemyFactory(Core core, EngineActorManager manager)
+        public EngineActorEnemyManager(Core core, EngineActorManager manager)
         {
             _core = core;
             _manager = manager;
+        }
+
+        public void ExecuteWorldClockTick(HGPoint<double> appliedOffset)
+        {
+            if (_core.Player.Actor != null)
+            {
+                _core.Player.Actor.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
+            }
+
+            foreach (var enemy in _core.Actors.VisibleOfType<EnemyBase>())
+            {
+                enemy.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
+
+                if (_core.Player.Actor.Visable)
+                {
+                    enemy.ApplyIntelligence(appliedOffset);
+
+                    //Player collides with enemy.
+                    if (enemy.Intersects(_core.Player.Actor))
+                    {
+                        if (_core.Player.Actor.Hit(enemy.CollisionDamage, true, false))
+                        {
+                            _core.Player.Actor.HitExplosion();
+                            //enemy.Hit(enemy.CollisionDamage);
+                        }
+                    }
+
+                    if (_core.Player.Actor.SelectedSecondaryWeapon != null)
+                    {
+                        _core.Player.Actor.SelectedSecondaryWeapon.ApplyIntelligence(appliedOffset, enemy); //Player lock-on to enemy. :D
+                    }
+                }
+
+                enemy.ApplyMotion(appliedOffset);
+
+                if (enemy.ThrustAnimation != null)
+                {
+                    enemy.ThrustAnimation.Visable = enemy.Velocity.ThrottlePercentage > 0;
+                }
+            }
         }
 
         public void DeleteAll()

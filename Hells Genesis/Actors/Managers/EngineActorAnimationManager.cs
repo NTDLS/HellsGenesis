@@ -6,15 +6,24 @@ using System.Drawing;
 
 namespace HG.Actors.Factories
 {
-    internal class EngineActorAnimationFactory
+    internal class EngineActorAnimationManager
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;
 
-        public EngineActorAnimationFactory(Core core, EngineActorManager manager)
+        public EngineActorAnimationManager(Core core, EngineActorManager manager)
         {
             _core = core;
             _manager = manager;
+        }
+
+        public void ExecuteWorldClockTick(HGPoint<double> appliedOffset)
+        {
+            foreach (var animation in _manager.VisibleOfType<ActorAnimation>())
+            {
+                animation.ApplyMotion(appliedOffset);
+                animation.AdvanceImage();
+            }
         }
 
         public void DeleteAll()

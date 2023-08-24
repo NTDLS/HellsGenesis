@@ -82,11 +82,11 @@ namespace HG.Engine.Managers
 
             if (key == Keys.Q)
             {
-                _core.Actors.Player.SelectPreviousAvailableUsableSecondaryWeapon();
+                _core.Player.Actor.SelectPreviousAvailableUsableSecondaryWeapon();
             }
             else if (key == Keys.E)
             {
-                _core.Actors.Player.SelectNextAvailableUsableSecondaryWeapon();
+                _core.Player.Actor.SelectNextAvailableUsableSecondaryWeapon();
             }
         }
     }

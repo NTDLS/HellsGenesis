@@ -96,19 +96,19 @@ namespace HG.Actors.Objects.Enemies
             {
                 if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(this.Bounds, -50) == false)
                 {
-                    RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_core.Actors.Player));
+                    RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_core.Player.Actor));
 
                     RadarPositionText.Visable = true;
                     RadarPositionIndicator.Visable = true;
 
-                    double requiredAngle = _core.Actors.Player.AngleTo(this);
+                    double requiredAngle = _core.Player.Actor.AngleTo(this);
 
                     var offset = HGMath.AngleFromPointAtDistance(new HGAngle<double>(requiredAngle), new HGPoint<double>(200, 200));
 
-                    RadarPositionText.Location = _core.Actors.Player.Location + offset + new HGPoint<double>(25, 25);
+                    RadarPositionText.Location = _core.Player.Actor.Location + offset + new HGPoint<double>(25, 25);
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
 
-                    RadarPositionIndicator.Location = _core.Actors.Player.Location + offset;
+                    RadarPositionIndicator.Location = _core.Player.Actor.Location + offset;
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
                 }
                 else
@@ -121,9 +121,9 @@ namespace HG.Actors.Objects.Enemies
 
         public virtual void ApplyIntelligence(HGPoint<double> appliedOffset)
         {
-            if (SelectedSecondaryWeapon != null && _core.Actors.Player != null)
+            if (SelectedSecondaryWeapon != null && _core.Player.Actor != null)
             {
-                SelectedSecondaryWeapon.ApplyIntelligence(appliedOffset, _core.Actors.Player); //Enemy lock-on to Player. :O
+                SelectedSecondaryWeapon.ApplyIntelligence(appliedOffset, _core.Player.Actor); //Enemy lock-on to Player. :O
             }
         }
 

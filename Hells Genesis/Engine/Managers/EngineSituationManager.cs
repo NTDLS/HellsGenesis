@@ -1,7 +1,5 @@
 ﻿using HG.Engine.Situations;
 using System.Collections.Generic;
-using static HG.Engine.Situations.BaseSituation;
-using static System.Windows.Forms.AxHost;
 
 namespace HG.Engine.Managers
 {
@@ -72,7 +70,7 @@ namespace HG.Engine.Managers
             return true;
         }
 
-        public void AdvanceSituationIfReady()
+        public void ExecuteWorldClockTick()
         {
             if (CurrentSituation?.State == BaseSituation.ScenarioState.Ended)
             {

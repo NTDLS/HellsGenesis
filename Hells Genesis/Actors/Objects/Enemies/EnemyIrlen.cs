@@ -33,7 +33,7 @@ namespace HG.Actors.Objects.Enemies
                 FireDelayMilliseconds = 250
             });
 
-            Velocity.Angle.Degrees = AngleTo(_core.Actors.Player);
+            Velocity.Angle.Degrees = AngleTo(_core.Player.Actor);
 
             initialHitPoints = HitPoints;
         }
@@ -61,7 +61,7 @@ namespace HG.Actors.Objects.Enemies
         {
             base.ApplyIntelligence(appliedOffset);
 
-            double distanceToPlayer = HGMath.DistanceTo(this, _core.Actors.Player);
+            double distanceToPlayer = HGMath.DistanceTo(this, _core.Player.Actor);
 
             if (Mode == AIMode.InFormation)
             {
@@ -79,7 +79,7 @@ namespace HG.Actors.Objects.Enemies
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
-                    MoveInDirectionOf(_core.Actors.Player);
+                    MoveInDirectionOf(_core.Player.Actor);
                 }
                 else
                 {
@@ -113,7 +113,7 @@ namespace HG.Actors.Objects.Enemies
 
             if (Mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_core.Actors.Player);
+                var deltaAngle = DeltaAngle(_core.Player.Actor);
 
                 if (deltaAngle > 10)
                 {
@@ -137,7 +137,7 @@ namespace HG.Actors.Objects.Enemies
             {
                 if (distanceToPlayer > 400 && HasSecondaryWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
                     if (isPointingAtPlayer)
                     {
                         SelectSecondaryWeapon(typeof(WeaponPhotonTorpedo));
@@ -146,7 +146,7 @@ namespace HG.Actors.Objects.Enemies
                 }
                 else if (HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
                     if (isPointingAtPlayer)
                     {
                         SelectSecondaryWeapon(typeof(WeaponVulcanCannon));

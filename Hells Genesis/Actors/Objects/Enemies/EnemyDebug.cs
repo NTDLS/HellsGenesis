@@ -41,9 +41,9 @@ namespace HG.Actors.Objects.Enemies
 
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
 
-            //AddAIController(new HostileEngagement(_core, this, _core.Actors.Player));
-            AddAIController(new FlyBy(_core, this, _core.Actors.Player));
-            //AddAIController(new Meander(_core, this, _core.Actors.Player));
+            //AddAIController(new HostileEngagement(_core, this, _core.Player.Actor));
+            AddAIController(new FlyBy(_core, this, _core.Player.Actor));
+            //AddAIController(new Meander(_core, this, _core.Player.Actor));
 
             SetCurrentAIController(AIControllers[typeof(FlyBy)]);
 

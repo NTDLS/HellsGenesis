@@ -128,7 +128,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
                 if (_turret.IsDead == false)
                 {
                     var pointRight = HGMath.AngleFromPointAtDistance(Velocity.Angle, new HGPoint<double>(0, 0));
-                    _turret.Velocity.Angle.Degrees = AngleTo(_core.Actors.Player);
+                    _turret.Velocity.Angle.Degrees = AngleTo(_core.Player.Actor);
                     _turret.X = X + pointRight.X;
                     _turret.Y = Y + pointRight.Y;
                 }
@@ -159,7 +159,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
         {
             base.ApplyIntelligence(appliedOffset);
 
-            double distanceToPlayer = HGMath.DistanceTo(this, _core.Actors.Player);
+            double distanceToPlayer = HGMath.DistanceTo(this, _core.Player.Actor);
 
             //We have no engines. :(
             if (_leftThrust.IsDead && _rightThrust.IsDead)
@@ -190,7 +190,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
                 }
 
                 //Keep pointing at the player.
-                var deltaAngle = DeltaAngle(_core.Actors.Player);
+                var deltaAngle = DeltaAngle(_core.Player.Actor);
 
                 if (deltaAngle > 10)
                 {
@@ -227,7 +227,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
-                    MoveInDirectionOf(_core.Actors.Player);
+                    MoveInDirectionOf(_core.Player.Actor);
                 }
                 else
                 {
@@ -239,7 +239,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
 
             if (mode == AIMode.Tailing)
             {
-                MoveInDirectionOf(_core.Actors.Player);
+                MoveInDirectionOf(_core.Player.Actor);
 
                 //Stay on the players tail.
                 if (distanceToPlayer > distanceToKeep + 300)
@@ -292,7 +292,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_core.Actors.Player);
+                var deltaAngle = DeltaAngle(_core.Player.Actor);
 
                 if (deltaAngle > 10)
                 {
@@ -316,7 +316,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
             {
                 if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
                     if (isPointingAtPlayer)
                     {
                         SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
@@ -325,7 +325,7 @@ namespace HG.Actors.Objects.Enemies.Bosses
                 }
                 else if (distanceToPlayer > 0 && HasSecondaryWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
                     if (isPointingAtPlayer)
                     {
                         SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));

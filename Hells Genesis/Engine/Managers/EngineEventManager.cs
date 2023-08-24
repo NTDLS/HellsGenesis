@@ -16,7 +16,7 @@ namespace HG.Engine.Managers
             _core = core;
         }
 
-        public void Execute()
+        public void ExecuteWorldClockTick()
         {
             for (int i = 0; i < Collection.Count; i++)
             {

@@ -77,13 +77,13 @@ namespace HG.Actors.Objects.Enemies
         {
             base.ApplyIntelligence(appliedOffset);
 
-            double distanceToPlayer = HGMath.DistanceTo(this, _core.Actors.Player);
+            double distanceToPlayer = HGMath.DistanceTo(this, _core.Player.Actor);
 
             if (mode == AIMode.Approaching)
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
-                    MoveInDirectionOf(_core.Actors.Player);
+                    MoveInDirectionOf(_core.Player.Actor);
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace HG.Actors.Objects.Enemies
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_core.Actors.Player);
+                var deltaAngle = DeltaAngle(_core.Player.Actor);
 
                 if (deltaAngle > 10)
                 {
@@ -141,7 +141,7 @@ namespace HG.Actors.Objects.Enemies
             {
                 if (distanceToPlayer > 500 && HasSecondaryWeaponAndAmmo(typeof(WeaponGuidedFragMissile)))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
                     if (isPointingAtPlayer)
                     {
                         SelectSecondaryWeapon(typeof(WeaponGuidedFragMissile));
@@ -150,7 +150,7 @@ namespace HG.Actors.Objects.Enemies
                 }
                 else if (distanceToPlayer > 300 && HasSecondaryWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
                     if (isPointingAtPlayer)
                     {
                         SelectSecondaryWeapon(typeof(WeaponPhotonTorpedo));
@@ -159,7 +159,7 @@ namespace HG.Actors.Objects.Enemies
                 }
                 else if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
                     if (isPointingAtPlayer)
                     {
                         SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
@@ -168,7 +168,7 @@ namespace HG.Actors.Objects.Enemies
                 }
                 else if (distanceToPlayer > 100 && HasSecondaryWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Actors.Player, 8.0);
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
                     if (isPointingAtPlayer)
                     {
                         SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));

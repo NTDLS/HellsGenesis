@@ -793,7 +793,7 @@ namespace HG.Actors.Objects
         {
             if (this is EnemyBase)
             {
-                _core.Actors.Player.Score += (this as EnemyBase).ScorePoints;
+                _core.Player.Actor.Score += (this as EnemyBase).ScorePoints;
 
                 //If the type of explosion is an enemy then maybe spawn a powerup.
                 if (HGRandom.ChanceIn(5))
