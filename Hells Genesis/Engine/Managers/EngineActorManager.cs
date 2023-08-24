@@ -23,9 +23,6 @@ namespace HG.Engine.Managers
         public ActorTextBlock PlayerStatsText { get; private set; }
         public ActorTextBlock DebugText { get; private set; }
         public bool RenderRadar { get; set; } = false;
-        public List<T> OfType<T>() where T : class => _core.Actors.Collection.Where(o => o is T).Select(o => o as T).ToList();
-        public List<T> VisibleOfType<T>() where T : class =>
-            _core.Actors.Collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList();
 
         #region Actors and their factories.
         internal List<ActorBase> Collection { get; private set; } = new();
@@ -117,6 +114,22 @@ namespace HG.Engine.Managers
             lock (Collection)
             {
                 return Collection.Where(o => o.AssetTag == assetTag).SingleOrDefault() as T;
+            }
+        }
+
+        public List<T> OfType<T>() where T : class
+        {
+            lock (Collection)
+            {
+                return _core.Actors.Collection.Where(o => o is T).Select(o => o as T).ToList();
+            }
+        }
+
+        public List<T> VisibleOfType<T>() where T : class
+        {
+            lock (Collection)
+            {
+                return _core.Actors.Collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList();
             }
         }
 
