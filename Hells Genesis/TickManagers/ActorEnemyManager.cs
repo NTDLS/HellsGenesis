@@ -1,12 +1,10 @@
-﻿using HG.Actors;
-using HG.Actors.Enemies;
+﻿using HG.Actors.Enemies;
 using HG.Engine;
 using HG.Engine.Managers;
 using HG.TickManagers.Interfaces;
 using HG.Types;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace HG.TickManagers
 {

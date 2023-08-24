@@ -5,7 +5,7 @@ namespace HG.TickManagers.Interfaces
     /// <summary>
     /// Tick managers which update their actors using the supplied 2D vector.
     /// </summary>
-    internal interface IVectoredTickManager: ITickManager
+    internal interface IVectoredTickManager : ITickManager
     {
         /// <summary>
         /// </summary>

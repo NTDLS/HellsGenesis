@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace HG.TickManagers
 {
-    internal class MenuManager: IUnvectoredTickManager
+    internal class MenuManager : IUnvectoredTickManager
     {
         public List<BaseMenu> Collection { get; private set; } = new();
 

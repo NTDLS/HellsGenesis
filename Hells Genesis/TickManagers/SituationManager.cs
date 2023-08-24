@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace HG.TickManagers
 {
-    internal class SituationManager: IUnvectoredTickManager
+    internal class SituationManager : IUnvectoredTickManager
     {
         public Core _core { get; private set; }
         public BaseSituation CurrentSituation { get; private set; }

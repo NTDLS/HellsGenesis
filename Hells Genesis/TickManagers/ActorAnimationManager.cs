@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace HG.TickManagers
 {
-    internal class ActorAnimationManager: IVectoredTickManager
+    internal class ActorAnimationManager : IVectoredTickManager
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;

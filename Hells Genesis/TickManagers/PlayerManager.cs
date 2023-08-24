@@ -5,7 +5,7 @@ using HG.Types;
 
 namespace HG.TickManagers
 {
-    internal class PlayerManager: IVectorGeneratorTickManager
+    internal class PlayerManager : IVectorGeneratorTickManager
     {
         public ActorPlayer Actor { get; set; }
         private readonly Core _core;

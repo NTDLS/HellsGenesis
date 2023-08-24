@@ -1,5 +1,4 @@
-﻿using HG.Actors;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Menus;
 using HG.TickManagers.Interfaces;
 using System;
@@ -8,7 +7,7 @@ using static HG.Engine.HgEngineCallbackEvent;
 
 namespace HG.TickManagers
 {
-    internal class EventManager: IUnvectoredTickManager
+    internal class EventManager : IUnvectoredTickManager
     {
         public List<HgEngineCallbackEvent> Collection { get; private set; } = new();
 

@@ -1,5 +1,4 @@
 ﻿using HG.Actors;
-using HG.Actors.PowerUp;
 using HG.Engine;
 using HG.Engine.Managers;
 using HG.TickManagers.Interfaces;
@@ -10,7 +9,7 @@ using System.Linq;
 
 namespace HG.TickManagers
 {
-    internal class ActorRadarPositionManager: IUnvectoredTickManager
+    internal class ActorRadarPositionManager : IUnvectoredTickManager
     {
         private readonly Core _core;
         private readonly EngineActorManager _manager;
