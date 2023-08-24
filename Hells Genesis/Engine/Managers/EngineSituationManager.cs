@@ -1,5 +1,7 @@
 ﻿using HG.Engine.Situations;
 using System.Collections.Generic;
+using static HG.Engine.Situations.BaseSituation;
+using static System.Windows.Forms.AxHost;
 
 namespace HG.Engine.Managers
 {
@@ -21,7 +23,7 @@ namespace HG.Engine.Managers
             {
                 foreach (var obj in Situations)
                 {
-                    obj.Cleanup();
+                    obj.EndSituation();
                 }
             }
 
@@ -57,8 +59,9 @@ namespace HG.Engine.Managers
 
                 if (Situations.Count > 0)
                 {
+                    _core.Actors.HidePlayer();
                     CurrentSituation = Situations[0];
-                    CurrentSituation.Execute();
+                    CurrentSituation.BeginSituation();
                 }
                 else
                 {
@@ -67,6 +70,17 @@ namespace HG.Engine.Managers
                 }
             }
             return true;
+        }
+
+        public void AdvanceSituationIfReady()
+        {
+            if (CurrentSituation?.State == BaseSituation.ScenarioState.Ended)
+            {
+                if (AdvanceSituation() == false)
+                {
+                    _core.Events.QueueTheDoorIsAjar();
+                }
+            }
         }
     }
 }

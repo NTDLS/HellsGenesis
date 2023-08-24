@@ -79,6 +79,5 @@ namespace HG.Actors.Factories
                 _manager.Collection.Remove(obj);
             }
         }
-
     }
 }

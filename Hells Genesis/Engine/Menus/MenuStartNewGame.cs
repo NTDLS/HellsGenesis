@@ -53,7 +53,7 @@ namespace HG.Engine.Menus
             }
             else if (item.Name == "YES")
             {
-                _core.Actors.Menus.Insert(new PlayerShipMenu(_core));
+                _core.Menus.Insert(new PlayerShipMenu(_core));
             }
 
             QueueForDelete();

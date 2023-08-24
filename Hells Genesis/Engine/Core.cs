@@ -15,6 +15,7 @@ namespace HG.Engine
         public EngineEventManager Events { get; set; }
         public EngineAudioManager Audio { get; set; }
         public EngineImageManager Imaging { get; set; }
+        public EngineMenuManager Menus { get; set; }
 
         public EngineDrawingCacheManager DrawingCache { get; set; } = new();
         public bool IsRunning { get; private set; } = false;
@@ -43,6 +44,8 @@ namespace HG.Engine
             Events = new EngineEventManager(this);
             Audio = new EngineAudioManager(this);
             Imaging = new EngineImageManager(this);
+            Menus = new EngineMenuManager(this);
+
 
             _gameLoop = new GameLoop(this);
 
@@ -51,7 +54,7 @@ namespace HG.Engine
 
         private void NewGameMenuCallback(Core core, EngineCallbackEvent sender, object refObj)
         {
-            Actors.Menus.Insert(new MenuStartNewGame(this));
+            Menus.Insert(new MenuStartNewGame(this));
         }
 
         public void Start()

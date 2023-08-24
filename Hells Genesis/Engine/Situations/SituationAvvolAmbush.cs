@@ -13,18 +13,15 @@ namespace HG.Engine.Situations
 
         readonly List<EngineCallbackEvent> events = new List<EngineCallbackEvent>();
 
-        public override void Execute()
+        public override void BeginSituation()
         {
-            State = ScenarioState.Running;
-
-            _core.Actors.HidePlayer();
+            base.BeginSituation();
 
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 0, 5000), AddFreshEnemiesCallback);
 
             _core.Actors.Player.AddHitPoints(100);
             _core.Actors.Player.AddShieldPoints(10);
-
         }
 
         private void FirstShowPlayerCallback(Core core, EngineCallbackEvent sender, object refObj)
@@ -38,7 +35,7 @@ namespace HG.Engine.Situations
             {
                 if (CurrentWave == TotalWaves)
                 {
-                    Cleanup();
+                    EndSituation();
                     return;
                 }
 

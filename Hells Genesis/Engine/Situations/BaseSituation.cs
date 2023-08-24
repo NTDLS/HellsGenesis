@@ -28,7 +28,7 @@ namespace HG.Engine.Situations
             Name = name;
         }
 
-        public virtual void Cleanup()
+        public virtual void EndSituation()
         {
             foreach (var obj in Events)
             {
@@ -38,16 +38,15 @@ namespace HG.Engine.Situations
             State = ScenarioState.Ended;
         }
 
-        public virtual void Execute()
+        public virtual void BeginSituation()
         {
+            State = ScenarioState.Running;
         }
 
         protected EngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, OnExecute executeCallback)
         {
             //Keep track of recurring events to we can delete them when we are done.
-            var obj = _core.Events.Create(timeout,
-                executeCallback, null, CallbackEventMode.Recurring);
-
+            var obj = _core.Events.Create(timeout, executeCallback, null, CallbackEventMode.Recurring);
             Events.Add(obj);
             return obj;
         }

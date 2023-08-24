@@ -1,11 +1,11 @@
-﻿using HG.Actors.Factories;
+﻿using Hells_Genesis.ExtensionMethods;
+using HG.Actors.Factories;
 using HG.Actors.Objects;
 using HG.Actors.Objects.Enemies;
 using HG.Actors.Objects.PowerUp;
 using HG.Actors.Objects.Weapons.Bullets;
 using HG.Engine.Menus;
 using HG.Types;
-using Hells_Genesis.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -31,7 +31,6 @@ namespace HG.Engine.Managers
         public EngineActorBulletFactory Bullets { get; set; }
         public EngineActorDebugFactory Debugs { get; set; }
         public EngineActorEnemyFactory Enemies { get; set; }
-        public EngineActorMenuFactory Menus { get; set; }
         public EngineActorPowerupFactory Powerups { get; set; }
         public EngineActorRadarPositionFactory RadarPositions { get; set; }
         public EngineActorStarFactory Stars { get; set; }
@@ -47,7 +46,6 @@ namespace HG.Engine.Managers
             Bullets = new EngineActorBulletFactory(_core, this);
             Debugs = new EngineActorDebugFactory(_core, this);
             Enemies = new EngineActorEnemyFactory(_core, this);
-            Menus = new EngineActorMenuFactory(_core, this);
             Powerups = new EngineActorPowerupFactory(_core, this);
             RadarPositions = new EngineActorRadarPositionFactory(_core, this);
             Stars = new EngineActorStarFactory(_core, this);
@@ -88,19 +86,13 @@ namespace HG.Engine.Managers
                 }
             }
 
-            for (int i = 0; i < Menus.Collection.Count; i++)
-            {
-                if (Menus.Collection[i].ReadyForDeletion)
-                {
-                    Menus.Delete(Menus.Collection[i]);
-                }
-            }
+            _core.Menus.CleanupDeletedObjects();
 
             if (_core.Actors.Player.IsDead)
             {
                 _core.Actors.Player.Visable = false;
                 _core.Actors.Player.IsDead = false;
-                Menus.Insert(new MenuStartNewGame(_core));
+                _core.Menus.Insert(new MenuStartNewGame(_core));
             }
         }
 
@@ -245,7 +237,6 @@ namespace HG.Engine.Managers
 
         #region Factories.
 
-
         public ActorAttachment AddNewActorAttachment(string imagePath = null, Size? size = null, string assetTag = "")
         {
             lock (Collection)
@@ -259,7 +250,6 @@ namespace HG.Engine.Managers
             }
         }
 
-
         #endregion
 
         #region Rendering.
@@ -268,49 +258,6 @@ namespace HG.Engine.Managers
         private HGPoint<double> _radarOffset;
         private Bitmap _RadarBackgroundImage = null;
         private readonly SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
-
-        private Bitmap _latestFrame = null;
-        private readonly object _LatestFrameLock = new object();
-
-        /// <summary>
-        /// Using the render thread, we can always have a frame ready, but that really means we render even when we dont need to.
-        /// </summary>
-        private void RenderThreadProc()
-        {
-            while (_core.IsRunning)
-            {
-                RefreshLatestFrame();
-                Thread.Sleep(10);
-            }
-        }
-
-        public void RefreshLatestFrame()
-        {
-            var frame = Render();
-
-            lock (_LatestFrameLock)
-            {
-                if (_latestFrame != null)
-                {
-                    _latestFrame.Dispose();
-                    _latestFrame = null;
-                }
-                _latestFrame = (Bitmap)frame.Clone();
-            }
-        }
-
-        public Bitmap GetLatestFrame()
-        {
-            lock (_LatestFrameLock)
-            {
-                if (_latestFrame == null)
-                {
-                    return null;
-                }
-
-                return (Bitmap)_latestFrame.Clone();
-            }
-        }
 
         /// <summary>
         /// Will render the current game state to a single bitmap. If a lock cannot be acquired
@@ -410,7 +357,7 @@ namespace HG.Engine.Managers
                         Player?.Render(screenDrawing.Graphics);
                     }
 
-                    Menus.Render(screenDrawing.Graphics);
+                    _core.Menus.Render(screenDrawing.Graphics);
                 }
 
                 //displayDC.DrawImage(screenDrawing.Bitmap, 0, 0);

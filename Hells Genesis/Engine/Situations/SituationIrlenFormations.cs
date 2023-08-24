@@ -13,11 +13,9 @@ namespace HG.Engine.Situations
             TotalWaves = 5;
         }
 
-        public override void Execute()
+        public override void BeginSituation()
         {
-            State = ScenarioState.Running;
-
-            _core.Actors.HidePlayer();
+            base.BeginSituation();
 
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 1), AdvanceWaveCallback);
@@ -59,7 +57,7 @@ namespace HG.Engine.Situations
             {
                 if (CurrentWave == TotalWaves && waitingOnPopulation != true)
                 {
-                    Cleanup();
+                    EndSituation();
                     return;
                 }
 

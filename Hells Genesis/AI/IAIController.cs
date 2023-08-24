@@ -1,5 +1,5 @@
-﻿using HG.Types;
-using Determinet;
+﻿using Determinet;
+using HG.Types;
 
 namespace HG.AI
 {

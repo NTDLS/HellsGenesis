@@ -10,10 +10,10 @@ namespace HG.Engine.Menus
 {
     internal class BaseMenu
     {
+        private List<ActorMenuItem> _menuItems { get; set; } = new();
+        private DateTime _lastInputHandled = DateTime.UtcNow;
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;
-
-        private List<ActorMenuItem> _menuItems { get; set; } = new List<ActorMenuItem>();
 
         public void QueueForDelete()
         {
@@ -28,7 +28,6 @@ namespace HG.Engine.Menus
                 return _readyForDeletion;
             }
         }
-
 
         public BaseMenu(Core core)
         {
@@ -81,25 +80,22 @@ namespace HG.Engine.Menus
 
         public void AddMenuItem(ActorMenuItem item)
         {
-            lock (_core.Actors.Menus.Collection)
+            lock (_core.Menus.Collection)
             {
                 _menuItems.Add(item);
             }
         }
 
-
-        DateTime lastInputHandled = DateTime.UtcNow;
-
         public void HandleInput()
         {
-            if ((DateTime.UtcNow - lastInputHandled).TotalMilliseconds < 250)
+            if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds < 250)
             {
                 return; //We have to keep the menues from going crazy.
             }
 
             if (_core.Input.IsKeyPressed(HGPlayerKey.Enter))
             {
-                lastInputHandled = DateTime.UtcNow;
+                _lastInputHandled = DateTime.UtcNow;
 
                 var selectedItem = (from o in _menuItems where o.ItemType == ActorMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
                 if (selectedItem != null)
@@ -114,7 +110,7 @@ namespace HG.Engine.Menus
 
             if (_core.Input.IsKeyPressed(HGPlayerKey.Right) || _core.Input.IsKeyPressed(HGPlayerKey.Down) || _core.Input.IsKeyPressed(HGPlayerKey.RotateClockwise))
             {
-                lastInputHandled = DateTime.UtcNow;
+                _lastInputHandled = DateTime.UtcNow;
 
                 int selectIndex = 0;
 
@@ -161,7 +157,7 @@ namespace HG.Engine.Menus
 
             if (_core.Input.IsKeyPressed(HGPlayerKey.Left) || _core.Input.IsKeyPressed(HGPlayerKey.Up) || _core.Input.IsKeyPressed(HGPlayerKey.RotateCounterClockwise))
             {
-                lastInputHandled = DateTime.UtcNow;
+                _lastInputHandled = DateTime.UtcNow;
 
                 int selectIndex = 0;
 

@@ -33,7 +33,7 @@ namespace HG.Engine.Managers
             Create(new TimeSpan(0, 0, 0, 5), (core, sender, refObj) =>
             {
                 core.Audio.DoorIsAjarSound.Play();
-                core.Actors.Menus.Insert(new MenuStartNewGame(core));
+                core.Menus.Insert(new MenuStartNewGame(core));
             });
         }
 

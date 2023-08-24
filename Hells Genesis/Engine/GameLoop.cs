@@ -2,7 +2,6 @@
 using HG.Actors.Objects.Enemies;
 using HG.Actors.Objects.PowerUp;
 using HG.Actors.Objects.Weapons.Bullets;
-using HG.Engine.Situations;
 using HG.Types;
 using System;
 using System.Collections.Generic;
@@ -62,10 +61,6 @@ namespace HG.Engine
 
         private void GraphicsThreadProc()
         {
-            var debug = _core.Actors.Debugs.CreateCenterScreen(@"..\..\..\Assets\Graphics\Bases\8.png");
-
-            debug.Velocity.ThrottlePercentage = 1;
-
             #region Add initial stars.
 
             for (int i = 0; i < 60; i++)
@@ -88,7 +83,7 @@ namespace HG.Engine
                 {
                     Monitor.Enter(_core.DrawingSemaphore);
 
-                    lock (_core.Actors.Menus.Collection)
+                    lock (_core.Menus.Collection)
                         lock (_core.Actors.Player)
                             lock (_core.Actors.Collection)
                             {
@@ -100,7 +95,7 @@ namespace HG.Engine
                     Monitor.Exit(_core.DrawingSemaphore);
                 }
 
-                if (_core.Actors.Menus.Collection.Count > 0)
+                if (_core.Menus.Collection.Count > 0)
                 {
                     Thread.Sleep(20);
                 }
@@ -126,23 +121,19 @@ namespace HG.Engine
         {
             #region Menu Management.
 
-            for (int i = 0; i < _core.Actors.Menus.Collection.Count; i++)
+            for (int i = 0; i < _core.Menus.Collection.Count; i++)
             {
-                var menu = _core.Actors.Menus.Collection[i];
+                var menu = _core.Menus.Collection[i];
                 menu.HandleInput();
             }
+
+            //_core.Menus.HandleInput();
 
             #endregion
 
             #region Situation Advancement.
 
-            if (_core.Situations.CurrentSituation?.State == BaseSituation.ScenarioState.Ended)
-            {
-                if (_core.Situations.AdvanceSituation() == false)
-                {
-                    _core.Events.QueueTheDoorIsAjar();
-                }
-            }
+            _core.Situations.AdvanceSituationIfReady();
 
             #endregion
 

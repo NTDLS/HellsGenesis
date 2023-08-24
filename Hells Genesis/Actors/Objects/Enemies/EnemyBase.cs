@@ -1,7 +1,7 @@
-﻿using HG.AI;
+﻿using Hells_Genesis.ExtensionMethods;
+using HG.AI;
 using HG.Engine;
 using HG.Types;
-using Hells_Genesis.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -94,7 +94,7 @@ namespace HG.Actors.Objects.Enemies
 
             if (RadarPositionIndicator != null)
             {
-                if(_core.Display.CurrentScaledScreenBounds.IntersectsWith(this.Bounds, -50) == false)
+                if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(this.Bounds, -50) == false)
                 {
                     RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_core.Actors.Player));
 

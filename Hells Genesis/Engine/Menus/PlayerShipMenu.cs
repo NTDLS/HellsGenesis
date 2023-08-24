@@ -56,7 +56,7 @@ namespace HG.Engine.Menus
             player4.Y = baseY;
             baseY += 50;
 
-            var player5Select = NewMenuItem(new HGPoint<double>(baseX + 25, baseY), $"{PlayerClass.Whidbey }", $"{PlayerClass.Whidbey }", Brushes.OrangeRed);
+            var player5Select = NewMenuItem(new HGPoint<double>(baseX + 25, baseY), $"{PlayerClass.Whidbey}", $"{PlayerClass.Whidbey}", Brushes.OrangeRed);
             player5Select.Y -= player5Select.Size.Height / 2;
             player5.X = baseX;
             player5.Y = baseY;
@@ -137,7 +137,7 @@ namespace HG.Engine.Menus
                     "\r\n The Atlant is a well rounded heavily armed and armored agile \r\n fighter for heavy enemies."
                   );
             }
-            else if (item.Name == PlayerClass.Whidbey .ToString())
+            else if (item.Name == PlayerClass.Whidbey.ToString())
             {
                 _shipBlurb.Text = GetHelpText(
                     "Whidbey ", //Name

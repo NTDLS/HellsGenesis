@@ -1,22 +1,18 @@
-﻿using HG.Engine;
-using HG.Engine.Managers;
-using HG.Engine.Menus;
+﻿using HG.Engine.Menus;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace HG.Actors.Factories
+namespace HG.Engine.Managers
 {
-    internal class EngineActorMenuFactory
+    internal class EngineMenuManager
     {
         public List<BaseMenu> Collection { get; private set; } = new();
 
         private readonly Core _core;
-        private readonly EngineActorManager _manager;
 
-        public EngineActorMenuFactory(Core core, EngineActorManager manager)
+        public EngineMenuManager(Core core)
         {
             _core = core;
-            _manager = manager;
         }
 
         public void Render(Graphics dc)
@@ -26,6 +22,26 @@ namespace HG.Actors.Factories
                 foreach (var obj in Collection)
                 {
                     obj.Render(dc);
+                }
+            }
+        }
+
+        public void HandleInput()
+        {
+            for (int i = 0; i < Collection.Count; i++)
+            {
+                var menu = Collection[i];
+                menu.HandleInput();
+            }
+        }
+
+        public void CleanupDeletedObjects()
+        {
+            for (int i = 0; i < Collection.Count; i++)
+            {
+                if (Collection[i].ReadyForDeletion)
+                {
+                    Delete(Collection[i]);
                 }
             }
         }
