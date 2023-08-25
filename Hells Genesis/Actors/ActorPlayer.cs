@@ -9,7 +9,6 @@ namespace HG.Actors
 {
     internal class ActorPlayer : ActorBase
     {
-        public bool IsBoostFading { get; set; }
         public PlayerClass Class { get; private set; }
         public AudioClip AmmoLowSound { get; private set; }
         public AudioClip AmmoEmptySound { get; private set; }

@@ -11,6 +11,9 @@
 
         public bool AutoZoomWhenMoving { get; set; } = true;
 
+        public double EnemyThrustRampUp { get; set; } = 0.05;
+        public double EnemyThrustRampDown { get; set; } = 0.01;
+
         public double PlayerThrustRampUp { get; set; } = 0.05;
         public double PlayerThrustRampDown { get; set; } = 0.01;
 

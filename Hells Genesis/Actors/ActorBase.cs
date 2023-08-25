@@ -15,6 +15,7 @@ namespace HG.Actors
     internal class ActorBase
     {
         protected Core _core;
+        public bool IsBoostFading { get; set; }
 
         private readonly List<WeaponBase> _secondaryWeapons = new();
         private readonly List<WeaponBase> _primaryWeapons = new();
@@ -65,6 +66,24 @@ namespace HG.Actors
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
         public int HitPoints { get; private set; } = 0;
         public int ShieldPoints { get; private set; } = 0;
+
+        #region Events.
+
+        public delegate void HitEvent(ActorBase sender, HgDamageType damageType);
+        public event HitEvent OnHit;
+
+        public delegate void QueuedForDeleteEvent(ActorBase sender);
+        public event QueuedForDeleteEvent OnQueuedForDelete;
+
+        public delegate void VisibilityChangedEvent(ActorBase sender);
+        public event VisibilityChangedEvent OnVisibilityChanged;
+
+
+        public delegate void ExplodeEvent(ActorBase sender);
+        public event ExplodeEvent OnExplode;
+
+        #endregion
+
 
         private HgVelocity<double> _velocity;
         public HgVelocity<double> Velocity
@@ -179,6 +198,9 @@ namespace HG.Actors
             {
                 VisibilityChanged();
             }
+
+            OnQueuedForDelete?.Invoke(this);
+
             _readyForDeletion = true;
         }
 
@@ -302,12 +324,15 @@ namespace HG.Actors
                 {
                     _isVisible = value;
 
+                    OnVisibilityChanged?.Invoke(this);
+
+                    /*
                     var invalidRect = new Rectangle(
                         (int)(_location.X - _size.Width / 2.0),
                         (int)(_location.Y - _size.Height / 2.0),
                         _size.Width, _size.Height);
-
-                    //_core.Display.DrawingSurface.Invalidate(invalidRect);
+                    _core.Display.DrawingSurface.Invalidate(invalidRect);
+                    */
 
                     VisibilityChanged();
                 }
@@ -578,11 +603,13 @@ namespace HG.Actors
 
         public void Invalidate()
         {
+            /*
             var invalidRect = new Rectangle(
                 (int)(_location.X - _size.Width / 2.0),
                 (int)(_location.Y - _size.Height / 2.0),
                 _size.Width, _size.Height);
-            //_core.Display.DrawingSurface.Invalidate(invalidRect);
+            _core.Display.DrawingSurface.Invalidate(invalidRect);
+            */
         }
 
         public bool Intersects(ActorBase otherObject)
@@ -657,6 +684,8 @@ namespace HG.Actors
                     damage = damage < 1 ? 1 : damage;
                     ShieldPoints -= damage > ShieldPoints ? ShieldPoints : damage; //No need to go negative with the damage.
 
+                    OnHit?.Invoke(this, HgDamageType.Shield);
+
                     if (this is ActorPlayer)
                     {
                         var player = this as ActorPlayer;
@@ -670,6 +699,8 @@ namespace HG.Actors
                 {
                     _hitSound.Play();
                     HitPoints -= damage > HitPoints ? HitPoints : damage; //No need to go negative with the damage.
+
+                    OnHit?.Invoke(this, HgDamageType.Hull);
 
                     if (this is ActorPlayer)
                     {
@@ -817,6 +848,8 @@ namespace HG.Actors
             {
                 QueueForDelete();
             }
+
+            OnExplode?.Invoke(this);
         }
 
         public void HitExplosion()

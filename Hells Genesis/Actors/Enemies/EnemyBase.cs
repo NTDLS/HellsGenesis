@@ -5,6 +5,7 @@ using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Numerics;
 
 namespace HG.Actors.Enemies
 {
@@ -90,7 +91,39 @@ namespace HG.Actors.Enemies
                 return;
             }
 
-            base.ApplyMotion(displacementVector);
+            if (Velocity.AvailableBoost > 0)
+            {
+                if (Velocity.BoostPercentage < 1.0) //Ramp up the boost until it is at 100%
+                {
+                    Velocity.BoostPercentage += _core.Settings.EnemyThrustRampUp;
+                }
+                Velocity.AvailableBoost -= Velocity.MaxBoost * Velocity.BoostPercentage; //Consume boost.
+
+                if (Velocity.AvailableBoost < 0) //Sanity check available boost.
+                {
+                    Velocity.AvailableBoost = 0;
+                }
+            }
+            else if (Velocity.BoostPercentage > 0) //Ramp down the boost.
+            {
+                Velocity.BoostPercentage -= _core.Settings.EnemyThrustRampDown;
+                if (Velocity.BoostPercentage < 0)
+                {
+                    Velocity.BoostPercentage = 0;
+                }
+            }
+
+            var forwardThrust = Velocity.MaxSpeed * Velocity.ThrottlePercentage;
+
+            if (Velocity.BoostPercentage > 0)
+            {
+                forwardThrust += Velocity.MaxBoost * Velocity.BoostPercentage;
+            }
+
+            X += Velocity.Angle.X * forwardThrust - displacementVector.X;
+            Y += Velocity.Angle.Y * forwardThrust - displacementVector.Y;
+
+            //base.ApplyMotion(displacementVector);
 
             if (RadarPositionIndicator != null)
             {

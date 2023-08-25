@@ -25,6 +25,7 @@ namespace HG.Actors.Enemies
 
             SetHitPoints(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
+            Velocity.MaxBoost = 1.5;
             Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 2, _core.Settings.MaxSpeed); //Upper end of the speed spectrum
 
             AddSecondaryWeapon(new WeaponVulcanCannon(_core)
@@ -42,10 +43,10 @@ namespace HG.Actors.Enemies
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
 
             //AddAIController(new HostileEngagement(_core, this, _core.Player.Actor));
-            AddAIController(new FlyBy(_core, this, _core.Player.Actor));
+            AddAIController(new Taunt(_core, this, _core.Player.Actor));
             //AddAIController(new Meander(_core, this, _core.Player.Actor));
 
-            SetCurrentAIController(AIControllers[typeof(FlyBy)]);
+            SetCurrentAIController(AIControllers[typeof(Taunt)]);
 
         }
 

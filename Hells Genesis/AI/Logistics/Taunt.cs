@@ -5,14 +5,16 @@ using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
 using System;
+using System.Diagnostics;
 using System.IO;
+using static HG.Engine.Constants;
 
 namespace HG.AI.Logistics
 {
     /// <summary>
-    /// AI brain to keep an object swooping in and out. Very near and somewhat agressively.
+    /// Finite-state-machine where AI decides the states. "Taunt" keeps an object swooping in and out. Very near and somewhat aggressively.
     /// </summary>
-    internal class FlyBy : IAIController
+    internal class Taunt : IAIController
     {
         private const string _assetPath = @"..\..\..\Assets\AI\Logistics\FlyBy.txt";
 
@@ -43,9 +45,13 @@ namespace HG.AI.Logistics
 
         #region Instance parameters.
 
-        public double DistanceToKeep { get; set; } = 1000;
-        public DateTime? LastDecisionTime { get; set; } = DateTime.Now.AddHours(-1);
-        public int MillisecondsBetweenDecisions { get; set; } = 50;
+        private ActionState _currentAction = ActionState.None;
+        private readonly double _distanceToKeep = 2000;
+        private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
+        private readonly int _millisecondsBetweenDecisions = 1000;
+        private double _evasiveLoopTargetAngle = 0;
+        private RelativeDirection _evasiveLoopDirection;
+        private double? _approachAngleToObserved = null;
 
         #endregion
 
@@ -59,12 +65,170 @@ namespace HG.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public FlyBy(Core core, ActorBase owner, ActorBase observedObject)
+        public Taunt(Core core, ActorBase owner, ActorBase observedObject)
         {
             _core = core;
             _owner = owner;
             _observedObject = observedObject;
 
+            owner.OnHit += Owner_OnHit;
+
+            SetNeuralNetwork();
+        }
+
+        private void Owner_OnHit(ActorBase sender, HgDamageType damageType)
+        {
+            AlterActionState(ActionState.EvasiveLoop); //If you hit me, I will take off!
+        }
+
+        private void AlterActionState(ActionState state)
+        {
+            Debug.Print(state.ToString());
+
+            switch (state)
+            {
+                case ActionState.EvasiveLoop:
+                    _evasiveLoopTargetAngle = (_owner.Velocity.Angle.Degrees + 180).NormalizeDegrees();
+                    _evasiveLoopDirection = HgRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
+                    _owner.Velocity.ThrottlePercentage = 1.0;
+                    _owner.Velocity.AvailableBoost = 250;
+                    break;
+                case ActionState.TransitionToDepart:
+                    _approachAngleToObserved = 0;
+                    break;
+            }
+
+            _currentAction = state;
+        }
+
+        private enum ActionState
+        {
+            None,
+            TransitionToApproach,
+            TransitionToDepart,
+            Approaching,
+            Departing,
+            EvasiveLoop
+        }
+
+        public void ApplyIntelligence(HgPoint<double> displacementVector)
+        {
+            //We are evading, dont make any other decisions until evasion is complete.
+            if (_currentAction == ActionState.EvasiveLoop)
+            {
+                if (_owner.Velocity.Angle.IsBetween(_evasiveLoopTargetAngle, _evasiveLoopTargetAngle + 30))
+                {
+                    AlterActionState(ActionState.TransitionToApproach);
+                }
+
+                if (_evasiveLoopDirection == RelativeDirection.Right)
+                {
+                    _owner.Velocity.Angle += 1;
+                }
+                else if (_evasiveLoopDirection == RelativeDirection.Left)
+                {
+                    _owner.Velocity.Angle -= 1;
+                }
+                return;
+            }
+
+            var now = DateTime.UtcNow;
+            var elapsedTimeSinceLastDecision = (now - (DateTime)_lastDecisionTime).TotalMilliseconds;
+            //If its been awhile since we thought about anything, do some thinking.
+            if (elapsedTimeSinceLastDecision >= _millisecondsBetweenDecisions)
+            {
+                var decidingFactors = GatherInputs(); //Gather inputs.
+                var decisions = Network.FeedForward(decidingFactors); //Make decisions.
+                //Execute on those ↑ decisions:...
+
+                var speedAdjust = decisions.Get(AIOutputs.SpeedAdjust);
+                if (speedAdjust >= 0.5)
+                {
+                    _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage + 0.01).Box(0.5, 1);
+                }
+                else if (speedAdjust < 0.5)
+                {
+                    _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
+                }
+
+                bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.9;
+                bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.9;
+
+                if (transitionToObservedObject && transitionFromObservedObject)
+                {
+                    AlterActionState(ActionState.None);
+                }
+                else if (transitionToObservedObject)
+                {
+                    AlterActionState(ActionState.TransitionToApproach);
+                }
+                else if (transitionFromObservedObject)
+                {
+                    AlterActionState(ActionState.TransitionToDepart);
+                }
+                else
+                {
+                    AlterActionState(ActionState.None);
+                }
+
+                _lastDecisionTime = now;
+            }
+
+            if (_currentAction == ActionState.TransitionToApproach)
+            {
+                var deltaAngle = _owner.DeltaAngle(_observedObject);
+
+                if (deltaAngle > 10)
+                {
+                    if (deltaAngle >= 180.0)
+                    {
+                        _owner.Velocity.Angle += 1;
+                    }
+                    else if (deltaAngle < 180.0)
+                    {
+                        _owner.Velocity.Angle -= 1;
+                    }
+                }
+                else
+                {
+                    AlterActionState(ActionState.Approaching);
+                }
+            }
+            else if (_currentAction == ActionState.TransitionToDepart)
+            {
+                var distanceToObservedObject = _owner.DistanceTo(_observedObject);
+                double augmentationDegrees = 0.2;
+
+                if (_approachAngleToObserved == null)
+                {
+                    _approachAngleToObserved = _owner.DeltaAngle(_observedObject);
+                }
+
+                //We are making the transition to our depart angle, but if we get too close then make the angle more agressive.
+                double percentOfAllowableCloseness = (100 / distanceToObservedObject);
+                if (percentOfAllowableCloseness.IsBetween(0, 1))
+                {
+                    augmentationDegrees += percentOfAllowableCloseness;
+                }
+
+                if (_approachAngleToObserved <= 180.0)
+                {
+                    _owner.Velocity.Angle += augmentationDegrees;
+                }
+                else if (_approachAngleToObserved > 180.0)
+                {
+                    _owner.Velocity.Angle -= augmentationDegrees;
+                }
+
+                if (distanceToObservedObject > _distanceToKeep)
+                {
+                    AlterActionState(ActionState.None);
+                }
+            }
+        }
+
+        private void SetNeuralNetwork()
+        {
             if (_singletonNetwork != null)
             {
                 Network = _singletonNetwork.Clone();//.Mutate(0.2, 0.1);
@@ -165,120 +329,13 @@ namespace HG.AI.Logistics
             Network = newNetwork.Clone();//.Mutate(0.2, 0.1)
         }
 
-        enum ActionState
-        {
-            None,
-            MovingToApproach,
-            MovingToDepart,
-            Approaching,
-            Departing
-        }
-
-        private ActionState _currentAction = ActionState.None;
-        private ActionState CurrentAction
-        {
-            get { return _currentAction; }
-            set
-            {
-                if (_currentAction != value)
-                {
-                    //Debug.Print($"{value}");
-                }
-                _currentAction = value;
-            }
-        }
-
-        public void ApplyIntelligence(HgPoint<double> displacementVector)
-        {
-            var now = DateTime.UtcNow;
-
-            var elapsedTimeSinceLastDecision = (now - (DateTime)LastDecisionTime).TotalMilliseconds;
-
-            if (elapsedTimeSinceLastDecision >= MillisecondsBetweenDecisions)
-            {
-                var decidingFactors = GatherInputs();
-                var decisions = Network.FeedForward(decidingFactors);
-
-                var speedAdjust = decisions.Get(AIOutputs.SpeedAdjust);
-
-                if (speedAdjust >= 0.5)
-                {
-                    _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage + 0.01).Box(0.5, 1);
-                }
-                else if (speedAdjust < 0.5)
-                {
-                    _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
-                }
-
-                bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.9;
-                bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.9;
-
-                if (transitionToObservedObject && transitionFromObservedObject)
-                {
-                    CurrentAction = ActionState.None;
-                }
-                else if (transitionToObservedObject)
-                {
-                    CurrentAction = ActionState.MovingToApproach;
-                }
-                else if (transitionFromObservedObject)
-                {
-                    CurrentAction = ActionState.MovingToDepart;
-                }
-                else
-                {
-                    CurrentAction = ActionState.None;
-                }
-
-                LastDecisionTime = now;
-            }
-
-            if (CurrentAction == ActionState.MovingToApproach)
-            {
-                var deltaAngle = _owner.DeltaAngle(_observedObject);
-
-                if (deltaAngle > 10)
-                {
-                    if (deltaAngle >= 180.0)
-                    {
-                        _owner.Velocity.Angle += 1;
-                    }
-                    else if (deltaAngle < 180.0)
-                    {
-                        _owner.Velocity.Angle -= 1;
-                    }
-                }
-                else
-                {
-                    CurrentAction = ActionState.Approaching;
-                }
-            }
-            else if (CurrentAction == ActionState.MovingToDepart)
-            {
-                var distanceToObservedObject = _owner.DistanceTo(_observedObject);
-
-                if (_owner.Velocity.Angle.Degrees <= 180.0)
-                {
-                    _owner.Velocity.Angle += 0.8;
-                }
-                else if (_owner.Velocity.Angle.Degrees > 180.0)
-                {
-                    _owner.Velocity.Angle -= 0.8;
-                }
-
-                if (distanceToObservedObject > DistanceToKeep)
-                {
-                    CurrentAction = ActionState.None;
-                }
-            }
-        }
 
         private DniNamedInterfaceParameters GatherInputs()
         {
             var aiParams = new DniNamedInterfaceParameters();
 
             var distance = _owner.DistanceTo(_observedObject);
-            var percentageOfCloseness = (distance / DistanceToKeep).Box(0, 1);
+            var percentageOfCloseness = (distance / _distanceToKeep).Box(0, 1);
 
             aiParams.Set(AIInputs.DistanceFromObservedObject, percentageOfCloseness);
 

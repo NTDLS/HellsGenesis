@@ -5,6 +5,14 @@
         Up,
         Down
     }
+
+    public enum HgDamageType
+    {
+        Unspecified,
+        Shield,
+        Hull
+    }
+
     public enum HgFiredFromType
     {
         Unspecified,

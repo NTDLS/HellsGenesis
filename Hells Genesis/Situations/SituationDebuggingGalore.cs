@@ -55,11 +55,13 @@ namespace HG.Situations
         {
             //_core.Actors.AddNewEnemy<EnemyAvvol>();
             _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
+            //_core.Actors.Enemies.Create<EnemyDebug>();
+            //_core.Actors.Enemies.Create<EnemyDebug>();
+            //_core.Actors.Enemies.Create<EnemyDebug>();
+            //_core.Actors.Enemies.Create<EnemyDebug>();
+            //_core.Actors.Enemies.Create<EnemyDebug>();
 
             //var debug = _core.Actors.Debugs.CreateAtCenterScreen(@"..\..\..\Assets\Graphics\Bases\8.png");
-
-
         }
     }
 }

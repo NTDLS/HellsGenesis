@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace HG.Types
 {
@@ -126,6 +127,23 @@ namespace HG.Types
             return $"{{{Math.Round((dynamic)X, 4):#.####}x,{Math.Round((dynamic)Y, 4):#.####}y}}";
         }
 
+        public bool IsBetween(T minValue, T maxValue)
+        {
+            var normalized = (dynamic)DegreesNormalized;
+            if ((dynamic)minValue > maxValue)
+            {
+                return normalized >= maxValue && normalized <= minValue;
+            }
+            return normalized >= minValue && normalized <= maxValue;
+        }
+
+        public T DegreesNormalized
+        {
+            get
+            {
+                return ((dynamic)_degrees + 180) % 360 - 180;
+            }
+        }
 
         public T _degrees;
         public T Degrees
