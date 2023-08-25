@@ -20,7 +20,7 @@ namespace HG.Actors.Weapons.Bullets
             {
                 if (LockedTarget.Visable)
                 {
-                    var deltaAngle = DeltaAngle(LockedTarget);
+                    var deltaAngle = DeltaAngle360(LockedTarget);
 
                     if (deltaAngle >= 180.0) //We might as well turn around clock-wise
                     {

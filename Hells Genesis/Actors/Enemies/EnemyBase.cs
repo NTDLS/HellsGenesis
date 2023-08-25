@@ -18,6 +18,7 @@ namespace HG.Actors.Enemies
         public ActorRadarPositionIndicator RadarPositionIndicator { get; set; }
         public ActorRadarPositionTextBlock RadarPositionText { get; set; }
         public ActorAnimation ThrustAnimation { get; private set; }
+        public ActorAnimation BoostAnimation { get; private set; }
 
         public EnemyBase(Core core, int hitPoints, int scoreMultiplier)
             : base(core)
@@ -35,6 +36,8 @@ namespace HG.Actors.Enemies
             RadarPositionIndicator.Visable = false;
             RadarPositionText = _core.Actors.TextBlocks.CreateRadarPosition("Consolas", Brushes.Red, 8, new HgPoint<double>());
 
+            this.OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
+
             var playMode = new ActorAnimation.PlayMode()
             {
                 Replay = ActorAnimation.ReplayMode.LoopedPlay,
@@ -50,6 +53,28 @@ namespace HG.Actors.Enemies
             ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
             ThrustAnimation.X = X + pointRight.X;
             ThrustAnimation.Y = Y + pointRight.Y;
+
+            BoostAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
+
+            BoostAnimation.Reset();
+            _core.Actors.Animations.CreateAt(BoostAnimation, this);
+
+            pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+            BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
+            BoostAnimation.X = X + pointRight.X;
+            BoostAnimation.Y = Y + pointRight.Y;
+        }
+
+        private void EnemyBase_OnVisibilityChanged(ActorBase sender)
+        {
+            if (ThrustAnimation != null)
+            {
+                ThrustAnimation.Visable = false;
+            }
+            if (BoostAnimation != null)
+            {
+                BoostAnimation.Visable = false;
+            }
         }
 
         public virtual void BeforeCreate()
@@ -72,6 +97,13 @@ namespace HG.Actors.Enemies
                 ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                 ThrustAnimation.X = X + pointRight.X;
                 ThrustAnimation.Y = Y + pointRight.Y;
+            }
+            if (BoostAnimation != null && BoostAnimation.Visable)
+            {
+                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+                BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
+                BoostAnimation.X = X + pointRight.X;
+                BoostAnimation.Y = Y + pointRight.Y;
             }
         }
 
@@ -120,6 +152,8 @@ namespace HG.Actors.Enemies
                 forwardThrust += Velocity.MaxBoost * Velocity.BoostPercentage;
             }
 
+            BoostAnimation.Visable = Velocity.BoostPercentage > 0;
+
             X += Velocity.Angle.X * forwardThrust - displacementVector.X;
             Y += Velocity.Angle.Y * forwardThrust - displacementVector.Y;
 
@@ -167,10 +201,10 @@ namespace HG.Actors.Enemies
                 RadarPositionIndicator.QueueForDelete();
                 RadarPositionText.QueueForDelete();
             }
-            if (ThrustAnimation != null)
-            {
-                ThrustAnimation.QueueForDelete();
-            }
+
+            ThrustAnimation?.QueueForDelete();
+            BoostAnimation?.QueueForDelete();
+
             base.Cleanup();
         }
 

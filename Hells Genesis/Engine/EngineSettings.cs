@@ -7,8 +7,8 @@
         public bool HighlightAllActors { get; set; } = false;
         #endregion
 
+        public bool CollisionCausesDamage { get; set; } = false;
         public bool LockPlayerAngleToNearbyEnemy { get; set; } = false;
-
         public bool AutoZoomWhenMoving { get; set; } = true;
 
         public double EnemyThrustRampUp { get; set; } = 0.05;
@@ -22,7 +22,7 @@
 
         public double MaxPlayerSpeed { get; set; } = 10;
         public double MaxPlayerBoostSpeed { get; set; } = 5;
-        public double MaxPlayerBoost { get; set; } = 2500;
+        public double MaxPlayerBoost { get; set; } = 5000;
 
         public double MaxRotationSpeed { get; set; } = 2;
 

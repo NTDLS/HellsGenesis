@@ -23,7 +23,7 @@ namespace HG.Engine
 
         public static int RandomNumber(int min, int max)
         {
-            return Random.Next(min, 1000) % max;
+            return Random.Next(min, max);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using HG.Actors;
 using HG.Types;
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace HG.Engine
@@ -42,7 +43,7 @@ namespace HG.Engine
 
         public static bool IsPointingAway(ActorBase fromObj, ActorBase atObj, double toleranceDegrees)
         {
-            var deltaAngle = Math.Abs(DeltaAngle(fromObj, atObj));
+            var deltaAngle = Math.Abs(DeltaAngle360(fromObj, atObj));
             return deltaAngle < 180 + toleranceDegrees && deltaAngle > 180 - toleranceDegrees;
         }
 
@@ -59,7 +60,7 @@ namespace HG.Engine
 
         public static bool IsPointingAt(ActorBase fromObj, ActorBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle = 0)
         {
-            var deltaAngle = Math.Abs(DeltaAngle(fromObj, atObj, offsetAngle));
+            var deltaAngle = Math.Abs(DeltaAngle360(fromObj, atObj, offsetAngle));
             if (deltaAngle < toleranceDegrees || deltaAngle > (360 - toleranceDegrees))
             {
                 return DistanceTo(fromObj, atObj) <= maxDistance;
@@ -76,6 +77,28 @@ namespace HG.Engine
         /// <param name="offsetAngle">-90 degrees would be looking off te left-hand side of the object</param>
         /// <returns></returns>
         public static double DeltaAngle(ActorBase fromObj, ActorBase atObj, double offsetAngle = 0)
+        {
+            double fromAngle = fromObj.Velocity.Angle.Degrees + offsetAngle;
+
+            double angleTo = AngleTo(fromObj, atObj);
+
+            if (fromAngle < 0) fromAngle = (0 - fromAngle);
+            if (angleTo < 0)
+            {
+                angleTo = (0 - angleTo);
+            }
+
+            return (fromAngle - angleTo + 180) % 360 - 180;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fromObj"></param>
+        /// <param name="atObj"></param>
+        /// <param name="offsetAngle">-90 degrees would be looking off te left-hand side of the object</param>
+        /// <returns></returns>
+        public static double DeltaAngle360(ActorBase fromObj, ActorBase atObj, double offsetAngle = 0)
         {
             double fromAngle = fromObj.Velocity.Angle.Degrees + offsetAngle;
 

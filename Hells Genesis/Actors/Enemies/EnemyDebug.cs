@@ -2,6 +2,7 @@
 using HG.AI.Logistics;
 using HG.Engine;
 using HG.Types;
+using System;
 using System.Drawing;
 using System.IO;
 
@@ -26,7 +27,7 @@ namespace HG.Actors.Enemies
             SetHitPoints(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
             Velocity.MaxBoost = 1.5;
-            Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 2, _core.Settings.MaxSpeed); //Upper end of the speed spectrum
+            Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 4, _core.Settings.MaxSpeed - 3);
 
             AddSecondaryWeapon(new WeaponVulcanCannon(_core)
             {
@@ -42,18 +43,51 @@ namespace HG.Actors.Enemies
 
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
 
-            //AddAIController(new HostileEngagement(_core, this, _core.Player.Actor));
+            AddAIController(new HostileEngagement(_core, this, _core.Player.Actor));
             AddAIController(new Taunt(_core, this, _core.Player.Actor));
-            //AddAIController(new Meander(_core, this, _core.Player.Actor));
+            AddAIController(new Meander(_core, this, _core.Player.Actor));
+
+            if (HgRandom.FlipCoin())
+            {
+                SetDefaultAIController(AIControllers[typeof(Taunt)]);
+            }
+            else
+            {
+                SetDefaultAIController(AIControllers[typeof(Meander)]);
+            }
+
+            behaviorChangeThresholdMiliseconds = HgRandom.RandomNumber(2000, 10000);
 
             SetDefaultAIController(AIControllers[typeof(Taunt)]);
         }
 
         #region Artificial Intelligence.
 
+        DateTime lastBehaviorChangeTime = DateTime.Now;
+        double behaviorChangeThresholdMiliseconds = 0;
+
         public override void ApplyIntelligence(HgPoint<double> displacementVector)
         {
             base.ApplyIntelligence(displacementVector);
+
+            if ((DateTime.Now - lastBehaviorChangeTime).TotalMilliseconds > behaviorChangeThresholdMiliseconds)
+            {
+                behaviorChangeThresholdMiliseconds = HgRandom.RandomNumber(2000, 10000);
+
+                if (HgRandom.ChanceIn(2))
+                {
+                    SetDefaultAIController(AIControllers[typeof(HostileEngagement)]);
+                }
+                if (HgRandom.ChanceIn(2))
+                {
+                    SetDefaultAIController(AIControllers[typeof(Taunt)]);
+                }
+                else if (HgRandom.ChanceIn(2))
+                {
+                    SetDefaultAIController(AIControllers[typeof(Meander)]);
+                }
+            }
+
             DefaultAIController?.ApplyIntelligence(displacementVector);
         }
 

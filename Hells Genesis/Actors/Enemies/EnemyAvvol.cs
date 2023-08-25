@@ -117,7 +117,7 @@ namespace HG.Actors.Enemies
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_core.Player.Actor);
+                var deltaAngle = DeltaAngle360(_core.Player.Actor);
 
                 if (deltaAngle > 10)
                 {

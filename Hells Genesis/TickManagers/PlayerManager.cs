@@ -2,6 +2,7 @@
 using HG.Engine;
 using HG.TickManagers.Interfaces;
 using HG.Types;
+using HG.Utility.ExtensionMethods;
 
 namespace HG.TickManagers
 {
@@ -127,7 +128,7 @@ namespace HG.TickManagers
 
                     if (Actor.Velocity.AvailableBoost < _core.Settings.MaxPlayerBoost)
                     {
-                        Actor.Velocity.AvailableBoost += 1 - Actor.Velocity.BoostPercentage;
+                        Actor.Velocity.AvailableBoost = (Actor.Velocity.AvailableBoost + (1 - Actor.Velocity.BoostPercentage)).Box(0, _core.Settings.MaxPlayerBoost);
                     }
                     else
                     {

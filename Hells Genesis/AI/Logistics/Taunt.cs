@@ -49,7 +49,7 @@ namespace HG.AI.Logistics
         private readonly double _distanceToKeep = 2000;
         private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
         private readonly int _millisecondsBetweenDecisions = 1000;
-        private double _evasiveLoopTargetAngle = 0;
+        private HgNormalizedAngle _evasiveLoopTargetAngle = new();
         private RelativeDirection _evasiveLoopDirection;
         private double? _approachAngleToObserved = null;
 
@@ -83,12 +83,10 @@ namespace HG.AI.Logistics
 
         private void AlterActionState(ActionState state)
         {
-            Debug.Print(state.ToString());
-
             switch (state)
             {
                 case ActionState.EvasiveLoop:
-                    _evasiveLoopTargetAngle = (_owner.Velocity.Angle.Degrees + 180).NormalizeDegrees();
+                    _evasiveLoopTargetAngle.Degrees = _owner.Velocity.Angle.Degrees + 180;
                     _evasiveLoopDirection = HgRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
                     _owner.Velocity.ThrottlePercentage = 1.0;
                     _owner.Velocity.AvailableBoost = 250;
@@ -116,7 +114,7 @@ namespace HG.AI.Logistics
             //We are evading, dont make any other decisions until evasion is complete.
             if (_currentAction == ActionState.EvasiveLoop)
             {
-                if (_owner.Velocity.Angle.IsBetween(_evasiveLoopTargetAngle, _evasiveLoopTargetAngle + 30))
+                if (_owner.Velocity.Angle.IsBetween(_evasiveLoopTargetAngle.Degrees, _evasiveLoopTargetAngle.Degrees + 30))
                 {
                     AlterActionState(ActionState.TransitionToApproach);
                 }
@@ -176,7 +174,7 @@ namespace HG.AI.Logistics
 
             if (_currentAction == ActionState.TransitionToApproach)
             {
-                var deltaAngle = _owner.DeltaAngle(_observedObject);
+                var deltaAngle = _owner.DeltaAngle360(_observedObject);
 
                 if (deltaAngle > 10)
                 {
@@ -201,7 +199,7 @@ namespace HG.AI.Logistics
 
                 if (_approachAngleToObserved == null)
                 {
-                    _approachAngleToObserved = _owner.DeltaAngle(_observedObject);
+                    _approachAngleToObserved = _owner.DeltaAngle360(_observedObject);
                 }
 
                 //We are making the transition to our depart angle, but if we get too close then make the angle more agressive.
@@ -339,7 +337,7 @@ namespace HG.AI.Logistics
 
             aiParams.Set(AIInputs.DistanceFromObservedObject, percentageOfCloseness);
 
-            var deltaAngle = _owner.DeltaAngle(_observedObject);
+            var deltaAngle = _owner.DeltaAngle360(_observedObject);
 
             var angleToIn6thRadians = HgAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
 

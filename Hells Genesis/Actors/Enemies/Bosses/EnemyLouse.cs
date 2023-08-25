@@ -144,7 +144,7 @@ namespace HG.Actors.Enemies.Bosses
                 }
 
                 //Keep pointing at the player.
-                var deltaAngle = DeltaAngle(_core.Player.Actor);
+                var deltaAngle = DeltaAngle360(_core.Player.Actor);
 
                 if (deltaAngle > 10)
                 {
@@ -246,7 +246,7 @@ namespace HG.Actors.Enemies.Bosses
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_core.Player.Actor);
+                var deltaAngle = DeltaAngle360(_core.Player.Actor);
 
                 if (deltaAngle > 10)
                 {

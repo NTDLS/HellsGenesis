@@ -16,12 +16,7 @@ namespace HG.Utility.ExtensionMethods
                 && with.Y < reference.Y + reference.Height + tolerance
                 && reference.Y < with.Y + with.Height + tolerance;
         }
-
-        public static double NormalizeDegrees(this double value)
-        {
-            return (value + 180) % 360 - 180;
-        }
-       
+      
         public static bool IsBetween(this double value, double minValue, double maxValue)
         {
             if (minValue > maxValue)

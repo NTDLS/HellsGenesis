@@ -213,7 +213,7 @@ namespace HG.AI.Logistics
 
             aiParams.Set(Inputs.DistanceFromObservationObject, percentageOfCloseness);
 
-            var deltaAngle = _owner.DeltaAngle(_observedObject);
+            var deltaAngle = _owner.DeltaAngle360(_observedObject);
 
             var angleToIn6thRadians = HgAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
 

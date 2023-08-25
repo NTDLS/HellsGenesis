@@ -150,7 +150,6 @@ namespace HG
                     {
                         var enemy = (EnemyBase)actor;
 
-                        text.AppendLine($"Collision Damage: {enemy.CollisionDamage:n0}");
                         text.AppendLine($"Hit Points: {enemy.HitPoints:n0}");
                         text.AppendLine($"Is Locked-on: {enemy.IsLockedOn}");
                         text.AppendLine($"Is Locked-on (Soft): {enemy.IsLockedOnSoft:n0}");

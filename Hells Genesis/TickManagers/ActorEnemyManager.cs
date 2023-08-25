@@ -38,13 +38,16 @@ namespace HG.TickManagers
                 {
                     enemy.ApplyIntelligence(displacementVector);
 
-                    //Player collides with enemy.
-                    if (enemy.Intersects(_core.Player.Actor))
+                    if (_core.Settings.CollisionCausesDamage)
                     {
-                        if (_core.Player.Actor.Hit(enemy.CollisionDamage, true, false))
+                        //Player collides with enemy.
+                        if (enemy.Intersects(_core.Player.Actor))
                         {
-                            _core.Player.Actor.HitExplosion();
-                            //enemy.Hit(enemy.CollisionDamage);
+                            if (_core.Player.Actor.Hit(enemy.CollisionDamage, true, false))
+                            {
+                                _core.Player.Actor.HitExplosion();
+                                //enemy.Hit(enemy.CollisionDamage);
+                            }
                         }
                     }
 

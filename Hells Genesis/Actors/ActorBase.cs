@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace HG.Actors
 {
@@ -770,6 +771,12 @@ namespace HG.Actors
         /// </summary>
         /// <param name="atObj"></param>
         /// <returns></returns>
+        [Obsolete("This function returns the angle in 0-360 degress which is almost impossible to work with, use DeltaAngle() instead.")]
+        public double DeltaAngle360(ActorBase atObj)
+        {
+            return HgMath.DeltaAngle360(this, atObj);
+        }
+
         public double DeltaAngle(ActorBase atObj)
         {
             return HgMath.DeltaAngle(this, atObj);
