@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace HG.Actors
 {
@@ -385,7 +384,6 @@ namespace HG.Actors
             {
                 _selectedHitExplosionAnimationIndex = HgRandom.Random.Next(0, 1000) % _hitExplosionAnimationCount;
                 _hitExplosionAnimation = new ActorAnimation(_core, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
-
             }
             else
             {
@@ -842,8 +840,8 @@ namespace HG.Actors
                 }
             }
 
-            _explodeSound.Play();
-            _explosionAnimation.Reset();
+            _explodeSound?.Play();
+            _explosionAnimation?.Reset();
             _core.Actors.Animations.CreateAt(_explosionAnimation, this);
 
             if (autoKill)

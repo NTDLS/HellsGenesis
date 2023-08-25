@@ -16,7 +16,7 @@ namespace HG.Utility.ExtensionMethods
                 && with.Y < reference.Y + reference.Height + tolerance
                 && reference.Y < with.Y + with.Height + tolerance;
         }
-      
+
         public static bool IsBetween(this double value, double minValue, double maxValue)
         {
             if (minValue > maxValue)

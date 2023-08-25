@@ -22,8 +22,6 @@ namespace HG.Actors.Enemies.Bosses
         public EnemyLouse(Core core)
             : base(core, GetGenericHP(core), ScoreMultiplier)
         {
-            ThrustAnimation.QueueForDelete();
-
             _leftGun = Attach(_imagesPath + "Louse.Gun.Left.png", true, 3);
             _rightGun = Attach(_imagesPath + "Louse.Gun.Right.png", true, 3);
             _thrust = Attach(_imagesPath + "Louse.Jet.png", true, 3);
@@ -68,7 +66,7 @@ namespace HG.Actors.Enemies.Bosses
         {
             if (_leftGun != null && _rightGun != null)
             {
-                if (_leftGun.IsDead == false)
+                if (_leftGun?.IsDead == false)
                 {
                     var pointLeft = HgMath.AngleFromPointAtDistance(Velocity.Angle - 90, new HgPoint<double>(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
@@ -76,7 +74,7 @@ namespace HG.Actors.Enemies.Bosses
                     _leftGun.Y = Y + pointLeft.Y;
                 }
 
-                if (_rightGun.IsDead == false)
+                if (_rightGun?.IsDead == false)
                 {
                     var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 90, new HgPoint<double>(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
@@ -84,7 +82,7 @@ namespace HG.Actors.Enemies.Bosses
                     _rightGun.Y = Y + pointRight.Y;
                 }
 
-                if (_thrust.IsDead == false)
+                if (_thrust?.IsDead == false)
                 {
                     var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(35, 35));
                     _thrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
@@ -121,13 +119,13 @@ namespace HG.Actors.Enemies.Bosses
             double distanceToPlayer = HgMath.DistanceTo(this, _core.Player.Actor);
 
             //We have no engines. :(
-            if (_thrust.IsDead)
+            if (_thrust?.IsDead == true)
             {
                 mode = AIMode.LameDuck;
             }
 
             //If we get down to one engine, slowly cut the max thrust to half of what it originally was. If we lose both, reduce it to 1.
-            if (_thrust.IsDead)
+            if (_thrust?.IsDead == true)
             {
                 Velocity.MaxSpeed -= 0.5;
                 if (Velocity.MaxSpeed < 1)
@@ -266,7 +264,7 @@ namespace HG.Actors.Enemies.Bosses
                 }
             }
 
-            if (distanceToPlayer < 700 && (_rightGun.IsDead == false || _leftGun.IsDead == false))
+            if (distanceToPlayer < 700 && (_rightGun?.IsDead == false || _leftGun?.IsDead == false))
             {
                 if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
                 {

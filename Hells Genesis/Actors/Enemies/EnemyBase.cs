@@ -5,7 +5,6 @@ using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Numerics;
 
 namespace HG.Actors.Enemies
 {
@@ -38,6 +37,7 @@ namespace HG.Actors.Enemies
 
             this.OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
 
+            /*
             var playMode = new ActorAnimation.PlayMode()
             {
                 Replay = ActorAnimation.ReplayMode.LoopedPlay,
@@ -53,7 +53,9 @@ namespace HG.Actors.Enemies
             ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
             ThrustAnimation.X = X + pointRight.X;
             ThrustAnimation.Y = Y + pointRight.Y;
+            */
 
+            /*
             BoostAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
 
             BoostAnimation.Reset();
@@ -63,6 +65,7 @@ namespace HG.Actors.Enemies
             BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
             BoostAnimation.X = X + pointRight.X;
             BoostAnimation.Y = Y + pointRight.Y;
+            */
         }
 
         private void EnemyBase_OnVisibilityChanged(ActorBase sender)
@@ -152,7 +155,10 @@ namespace HG.Actors.Enemies
                 forwardThrust += Velocity.MaxBoost * Velocity.BoostPercentage;
             }
 
-            BoostAnimation.Visable = Velocity.BoostPercentage > 0;
+            if (BoostAnimation != null)
+            {
+                BoostAnimation.Visable = Velocity.BoostPercentage > 0;
+            }
 
             X += Velocity.Angle.X * forwardThrust - displacementVector.X;
             Y += Velocity.Angle.Y * forwardThrust - displacementVector.Y;

@@ -73,8 +73,8 @@ namespace HG
             _core.OnStop += _core_OnStop;
 
 #if DEBUG
-            MouseDown += DrawingSurface_MouseDown;
-            MouseMove += DrawingSurface_MouseMove;
+            drawingSurface.MouseDown += DrawingSurface_MouseDown;
+            drawingSurface.MouseMove += DrawingSurface_MouseMove;
 #endif
         }
 
