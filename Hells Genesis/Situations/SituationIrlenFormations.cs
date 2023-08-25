@@ -1,8 +1,9 @@
 ﻿using HG.Actors.Enemies;
+using HG.Engine;
 using HG.Types;
 using System.Linq;
 
-namespace HG.Engine.Situations
+namespace HG.Situations
 {
     internal class SituationIrlenFormations : BaseSituation
     {

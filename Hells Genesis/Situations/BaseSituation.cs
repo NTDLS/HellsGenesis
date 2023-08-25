@@ -1,8 +1,9 @@
-﻿using System;
+﻿using HG.Engine;
+using System;
 using System.Collections.Generic;
 using static HG.Engine.HgEngineCallbackEvent;
 
-namespace HG.Engine.Situations
+namespace HG.Situations
 {
     internal class BaseSituation
     {

@@ -1,14 +1,18 @@
 ﻿using HG.Actors.Enemies;
+using HG.Engine;
+using System.Collections.Generic;
 
-namespace HG.Engine.Situations
+namespace HG.Situations
 {
-    internal class SituationScinzadSkirmish : BaseSituation
+    internal class SituationAvvolAmbush : BaseSituation
     {
-        public SituationScinzadSkirmish(Core core)
-            : base(core, "Scinzad Skirmish")
+        public SituationAvvolAmbush(Core core)
+            : base(core, "Avvol Ambush")
         {
             TotalWaves = 5;
         }
+
+        readonly List<HgEngineCallbackEvent> events = new List<HgEngineCallbackEvent>();
 
         public override void BeginSituation()
         {
@@ -51,7 +55,7 @@ namespace HG.Engine.Situations
 
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.Enemies.Create<EnemyScinzad>();
+            _core.Actors.Enemies.Create<EnemyAvvol>();
         }
     }
 }

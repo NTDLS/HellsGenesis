@@ -1,8 +1,9 @@
 ﻿using HG.Actors;
+using HG.Engine;
 using HG.Types;
 using System.Drawing;
 
-namespace HG.Engine.Menus
+namespace HG.Menus
 {
     internal class MenuStartNewGame : BaseMenu
     {
@@ -10,7 +11,7 @@ namespace HG.Engine.Menus
             : base(core)
         {
             double baseX = _core.Display.TotalCanvasSize.Width / 2;
-            double baseY = (_core.Display.TotalCanvasSize.Height / 4) + 100;
+            double baseY = _core.Display.TotalCanvasSize.Height / 4 + 100;
 
             var itemTitle = NewTitleItem(new HgPoint<double>(baseX, baseY), "Start new game?", Brushes.OrangeRed);
             itemTitle.X -= itemTitle.Size.Width / 2;

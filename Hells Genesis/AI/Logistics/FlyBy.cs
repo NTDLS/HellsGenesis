@@ -1,9 +1,9 @@
 ﻿using Determinet;
 using Determinet.Types;
-using Hells_Genesis.ExtensionMethods;
 using HG.Actors;
 using HG.Engine;
 using HG.Types;
+using HG.Utility.ExtensionMethods;
 using System;
 using System.IO;
 

@@ -1,11 +1,12 @@
 ﻿using HG.Actors.Enemies;
+using HG.Engine;
 
-namespace HG.Engine.Situations
+namespace HG.Situations
 {
-    internal class SituationDebuggingGalore : BaseSituation
+    internal class SituationScinzadSkirmish : BaseSituation
     {
-        public SituationDebuggingGalore(Core core)
-            : base(core, "Debugging Galore")
+        public SituationScinzadSkirmish(Core core)
+            : base(core, "Scinzad Skirmish")
         {
             TotalWaves = 5;
         }
@@ -36,8 +37,7 @@ namespace HG.Engine.Situations
                     return;
                 }
 
-                //int enemyCount = Utility.Random.Next(CurrentWave + 1, CurrentWave + 5);
-                int enemyCount = 1;
+                int enemyCount = HgRandom.Random.Next(CurrentWave + 1, CurrentWave + 5);
 
                 for (int i = 0; i < enemyCount; i++)
                 {
@@ -52,12 +52,7 @@ namespace HG.Engine.Situations
 
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            //_core.Actors.AddNewEnemy<EnemyAvvol>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-
-            var debug = _core.Actors.Debugs.CreateAtCenterScreen(@"..\..\..\Assets\Graphics\Bases\8.png");
-
-
+            _core.Actors.Enemies.Create<EnemyScinzad>();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Hells_Genesis.ExtensionMethods
+namespace HG.Utility.ExtensionMethods
 {
     internal static class Misc
     {

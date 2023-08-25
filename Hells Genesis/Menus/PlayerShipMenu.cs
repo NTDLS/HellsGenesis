@@ -1,10 +1,11 @@
 ﻿using HG.Actors;
+using HG.Engine;
 using HG.Types;
 using System;
 using System.Drawing;
 using static HG.Engine.Constants;
 
-namespace HG.Engine.Menus
+namespace HG.Menus
 {
     internal class PlayerShipMenu : BaseMenu
     {
@@ -184,7 +185,7 @@ namespace HG.Engine.Menus
 
             _core.Player.Actor.Reset(playerClass);
 
-            this.QueueForDelete();
+            QueueForDelete();
             _core.Actors.DeleteAllActorsByAssetTag("MENU_SHIP_SELECT");
 
             _core.Actors.NewGame();

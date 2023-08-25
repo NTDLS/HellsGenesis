@@ -1,17 +1,15 @@
 ﻿using HG.Actors.Enemies;
-using System.Collections.Generic;
+using HG.Engine;
 
-namespace HG.Engine.Situations
+namespace HG.Situations
 {
-    internal class SituationAvvolAmbush : BaseSituation
+    internal class SituationDebuggingGalore : BaseSituation
     {
-        public SituationAvvolAmbush(Core core)
-            : base(core, "Avvol Ambush")
+        public SituationDebuggingGalore(Core core)
+            : base(core, "Debugging Galore")
         {
             TotalWaves = 5;
         }
-
-        readonly List<HgEngineCallbackEvent> events = new List<HgEngineCallbackEvent>();
 
         public override void BeginSituation()
         {
@@ -39,7 +37,8 @@ namespace HG.Engine.Situations
                     return;
                 }
 
-                int enemyCount = HgRandom.Random.Next(CurrentWave + 1, CurrentWave + 5);
+                //int enemyCount = Utility.Random.Next(CurrentWave + 1, CurrentWave + 5);
+                int enemyCount = 1;
 
                 for (int i = 0; i < enemyCount; i++)
                 {
@@ -54,7 +53,13 @@ namespace HG.Engine.Situations
 
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.Enemies.Create<EnemyAvvol>();
+            //_core.Actors.AddNewEnemy<EnemyAvvol>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+
+            //var debug = _core.Actors.Debugs.CreateAtCenterScreen(@"..\..\..\Assets\Graphics\Bases\8.png");
+
+
         }
     }
 }

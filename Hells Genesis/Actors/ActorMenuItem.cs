@@ -1,5 +1,5 @@
 ﻿using HG.Engine;
-using HG.Engine.Menus;
+using HG.Menus;
 using HG.Types;
 using System.Drawing;
 

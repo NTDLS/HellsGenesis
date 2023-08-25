@@ -1,4 +1,5 @@
 ﻿using HG.Actors;
+using HG.Engine;
 using HG.Types;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HG.Engine.Menus
+namespace HG.Menus
 {
     internal class BaseMenu
     {

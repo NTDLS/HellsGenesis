@@ -1,7 +1,7 @@
-﻿using Hells_Genesis.ExtensionMethods;
-using HG.AI;
+﻿using HG.AI;
 using HG.Engine;
 using HG.Types;
+using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

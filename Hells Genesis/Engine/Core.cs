@@ -1,5 +1,5 @@
 ﻿using HG.Engine.Managers;
-using HG.Engine.Menus;
+using HG.Menus;
 using HG.TickManagers;
 using System.Drawing;
 using System.Windows.Forms;

@@ -1,4 +1,4 @@
-﻿namespace HG.TickManagers
+﻿namespace HG.TickManagers.Interfaces
 {
     internal interface ITickManager
     {

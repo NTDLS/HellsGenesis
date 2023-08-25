@@ -2,7 +2,6 @@
 using HG.Engine;
 using HG.TickManagers.Interfaces;
 using HG.Types;
-using System.Diagnostics;
 
 namespace HG.TickManagers
 {
@@ -17,7 +16,6 @@ namespace HG.TickManagers
         }
 
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
-
 
         /// <summary>
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
@@ -63,7 +61,7 @@ namespace HG.TickManagers
 
                 if (_core.Settings.LockPlayerAngleToNearbyEnemy)
                 {
-                    //This needs some work. It works, but its sloppy - the movement is rigid.
+                    #region //This needs some work. It works, but its sloppy - the movement is rigid.
                     if (_core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise) == false && _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise) == false)
                     {
                         if (_allowLockPlayerAngleToNearbyEnemy)
@@ -91,6 +89,7 @@ namespace HG.TickManagers
                     {
                         _allowLockPlayerAngleToNearbyEnemy = true;
                     }
+                    #endregion
                 }
 
                 //Make player boost "build up" and fade-in.

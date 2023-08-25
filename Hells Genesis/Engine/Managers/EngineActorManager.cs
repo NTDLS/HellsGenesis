@@ -1,11 +1,11 @@
-﻿using Hells_Genesis.ExtensionMethods;
-using HG.Actors;
+﻿using HG.Actors;
 using HG.Actors.Enemies;
 using HG.Actors.PowerUp;
 using HG.Actors.Weapons.Bullets;
-using HG.Engine.Menus;
+using HG.Menus;
 using HG.TickManagers;
 using HG.Types;
+using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using HG.Engine;
+using System.Collections.Generic;
 
-namespace HG.Engine.Situations
+namespace HG.Situations
 {
     internal class SituationFreeFlight : BaseSituation
     {
