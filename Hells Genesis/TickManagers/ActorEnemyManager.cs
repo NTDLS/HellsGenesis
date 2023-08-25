@@ -1,4 +1,4 @@
-﻿using HG.Actors.Enemies;
+﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Engine;
 using HG.Engine.Managers;
 using HG.TickManagers.Interfaces;

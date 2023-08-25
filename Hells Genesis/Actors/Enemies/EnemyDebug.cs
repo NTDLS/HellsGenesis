@@ -1,4 +1,5 @@
-﻿using HG.Actors.Weapons;
+﻿using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Weapons;
 using HG.AI.Logistics;
 using HG.Engine;
 using HG.Types;
@@ -11,7 +12,7 @@ namespace HG.Actors.Enemies
     /// <summary>
     /// Debugging enemy uint.
     /// </summary>
-    internal class EnemyDebug : EnemyBase
+    internal class EnemyDebug : EnemyBasicBase
     {
         public const int ScoreMultiplier = 15;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Debug\";
@@ -87,6 +88,34 @@ namespace HG.Actors.Enemies
                     SetDefaultAIController(AIControllers[typeof(Meander)]);
                 }
             }
+
+            double distanceToPlayer = this.DistanceTo(_core.Player.Actor);
+
+
+            if (distanceToPlayer < 700)
+            {
+                if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
+                {
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
+                    if (isPointingAtPlayer)
+                    {
+                        SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
+                        SelectedSecondaryWeapon?.Fire();
+                    }
+                }
+                else if (distanceToPlayer > 0 && HasSecondaryWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
+                {
+                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
+                    if (isPointingAtPlayer)
+                    {
+                        SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));
+                        SelectedSecondaryWeapon?.Fire();
+                    }
+                }
+            }
+
+
+
 
             DefaultAIController?.ApplyIntelligence(displacementVector);
         }

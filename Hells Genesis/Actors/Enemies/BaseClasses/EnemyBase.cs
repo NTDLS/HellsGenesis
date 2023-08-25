@@ -6,18 +6,18 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace HG.Actors.Enemies
+namespace HG.Actors.Enemies.BaseClasses
 {
     internal class EnemyBase : ActorBase
     {
+        public ActorAnimation ThrustAnimation { get; internal set; }
+        public ActorAnimation BoostAnimation { get; internal set; }
         public IAIController DefaultAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
         public int CollisionDamage { get; set; } = 25;
         public int ScorePoints { get; private set; } = 25;
         public ActorRadarPositionIndicator RadarPositionIndicator { get; set; }
         public ActorRadarPositionTextBlock RadarPositionText { get; set; }
-        public ActorAnimation ThrustAnimation { get; private set; }
-        public ActorAnimation BoostAnimation { get; private set; }
 
         public EnemyBase(Core core, int hitPoints, int scoreMultiplier)
             : base(core)
@@ -34,55 +34,12 @@ namespace HG.Actors.Enemies
             RadarPositionIndicator = _core.Actors.RadarPositions.Create();
             RadarPositionIndicator.Visable = false;
             RadarPositionText = _core.Actors.TextBlocks.CreateRadarPosition("Consolas", Brushes.Red, 8, new HgPoint<double>());
-
-            this.OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
-
-            /*
-            var playMode = new ActorAnimation.PlayMode()
-            {
-                Replay = ActorAnimation.ReplayMode.LoopedPlay,
-                DeleteActorAfterPlay = false,
-                ReplayDelay = new TimeSpan(0)
-            };
-            ThrustAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
-
-            ThrustAnimation.Reset();
-            _core.Actors.Animations.CreateAt(ThrustAnimation, this);
-
-            var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
-            ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-            ThrustAnimation.X = X + pointRight.X;
-            ThrustAnimation.Y = Y + pointRight.Y;
-            */
-
-            /*
-            BoostAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
-
-            BoostAnimation.Reset();
-            _core.Actors.Animations.CreateAt(BoostAnimation, this);
-
-            pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
-            BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-            BoostAnimation.X = X + pointRight.X;
-            BoostAnimation.Y = Y + pointRight.Y;
-            */
-        }
-
-        private void EnemyBase_OnVisibilityChanged(ActorBase sender)
-        {
-            if (ThrustAnimation != null)
-            {
-                ThrustAnimation.Visable = false;
-            }
-            if (BoostAnimation != null)
-            {
-                BoostAnimation.Visable = false;
-            }
         }
 
         public virtual void BeforeCreate()
         {
         }
+
         public virtual void AfterCreate()
         {
         }
@@ -90,6 +47,11 @@ namespace HG.Actors.Enemies
         public override void RotationChanged()
         {
             PositionChanged();
+        }
+
+        public static int GetGenericHP(Core core)
+        {
+            return HgRandom.Random.Next(core.Settings.MinEnemyHealth, core.Settings.MaxEnemyHealth);
         }
 
         public override void PositionChanged()
@@ -108,11 +70,6 @@ namespace HG.Actors.Enemies
                 BoostAnimation.X = X + pointRight.X;
                 BoostAnimation.Y = Y + pointRight.Y;
             }
-        }
-
-        public static int GetGenericHP(Core core)
-        {
-            return HgRandom.Random.Next(core.Settings.MinEnemyHealth, core.Settings.MaxEnemyHealth);
         }
 
         public new void ApplyMotion(HgPoint<double> displacementVector)

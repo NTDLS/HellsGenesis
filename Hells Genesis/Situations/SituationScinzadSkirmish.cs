@@ -1,4 +1,5 @@
 ﻿using HG.Actors.Enemies;
+using HG.Actors.Enemies.BaseClasses;
 using HG.Engine;
 
 namespace HG.Situations

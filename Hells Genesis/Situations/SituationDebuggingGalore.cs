@@ -1,4 +1,5 @@
 ﻿using HG.Actors.Enemies;
+using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Enemies.Bosses;
 using HG.Engine;
 
@@ -55,10 +56,12 @@ namespace HG.Situations
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
             _core.Actors.Enemies.Create<EnemyLouse>();
-            //_core.Actors.AddNewEnemy<EnemyAvvol>();
-            //_core.Actors.Enemies.Create<EnemyDebug>();
-            //_core.Actors.Enemies.Create<EnemyDebug>();
-            //_core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyDebug>();

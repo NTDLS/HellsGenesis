@@ -1,4 +1,5 @@
-﻿using HG.Actors.Weapons;
+﻿using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Weapons;
 using HG.Engine;
 using HG.Types;
 
@@ -7,7 +8,7 @@ namespace HG.Actors.Enemies.Bosses
     /// <summary>
     /// 100% Experimental
     /// </summary>
-    internal class EnemyScarab : EnemyBase
+    internal class EnemyScarab : EnemyAdvancedBase
     {
         public const int ScoreMultiplier = 15;
 

@@ -1,5 +1,5 @@
 ﻿using HG.Actors;
-using HG.Actors.Enemies;
+using HG.Actors.Enemies.BaseClasses;
 using HG.Engine;
 using HG.Types;
 using System;
@@ -16,7 +16,7 @@ namespace HG
     public partial class FormMain : Form
     {
         private readonly Core _core;
-        private readonly bool _fullScreen = false;
+        private readonly bool _fullScreen = true;
 
         //This really shouldn't be necessary! :(
         protected override CreateParams CreateParams

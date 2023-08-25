@@ -1,10 +1,11 @@
-﻿using HG.Engine;
+﻿using HG.Actors.Enemies.BaseClasses;
+using HG.Engine;
 using System.Drawing;
 using System.IO;
 
 namespace HG.Actors.Enemies
 {
-    internal class EnemyTheda : EnemyBase
+    internal class EnemyTheda : EnemyBasicBase
     {
         public const int ScoreMultiplier = 1;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Theda\";
