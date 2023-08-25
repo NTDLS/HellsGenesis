@@ -46,8 +46,7 @@ namespace HG.Actors.Enemies
             AddAIController(new Taunt(_core, this, _core.Player.Actor));
             //AddAIController(new Meander(_core, this, _core.Player.Actor));
 
-            SetCurrentAIController(AIControllers[typeof(Taunt)]);
-
+            SetDefaultAIController(AIControllers[typeof(Taunt)]);
         }
 
         #region Artificial Intelligence.
@@ -55,11 +54,7 @@ namespace HG.Actors.Enemies
         public override void ApplyIntelligence(HgPoint<double> displacementVector)
         {
             base.ApplyIntelligence(displacementVector);
-
-            if (CurrentAIController != null)
-            {
-                CurrentAIController.ApplyIntelligence(displacementVector);
-            }
+            DefaultAIController?.ApplyIntelligence(displacementVector);
         }
 
         #endregion

@@ -11,7 +11,7 @@ namespace HG.Actors.Enemies
 {
     internal class EnemyBase : ActorBase
     {
-        public IAIController CurrentAIController { get; set; }
+        public IAIController DefaultAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
         public int CollisionDamage { get; set; } = 25;
         public int ScorePoints { get; private set; } = 25;
@@ -179,9 +179,9 @@ namespace HG.Actors.Enemies
             AIControllers.Add(controller.GetType(), controller);
         }
 
-        internal void SetCurrentAIController(IAIController value)
+        internal void SetDefaultAIController(IAIController value)
         {
-            CurrentAIController = value;
+            DefaultAIController = value;
         }
     }
 }

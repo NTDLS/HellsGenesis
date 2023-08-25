@@ -161,9 +161,9 @@ namespace HG
                         text.AppendLine($"Primary Weapon: {enemy.SelectedPrimaryWeapon?.GetType()?.Name}");
                         text.AppendLine($"Selected Weapon: {enemy.SelectedSecondaryWeapon?.GetType()?.Name}");
 
-                        if (enemy.CurrentAIController != null)
+                        if (enemy.DefaultAIController != null)
                         {
-                            text.AppendLine($"AI: {enemy.CurrentAIController.GetType().Name}");
+                            text.AppendLine($"AI: {enemy.DefaultAIController.GetType().Name}");
                         }
                     }
 
