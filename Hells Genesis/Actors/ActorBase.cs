@@ -1,4 +1,4 @@
-﻿using HG.Actors.Enemies.BaseClasses;
+﻿using HG.Actors.Enemies;
 using HG.Actors.PowerUp;
 using HG.Actors.Weapons;
 using HG.Actors.Weapons.Bullets;
@@ -56,7 +56,8 @@ namespace HG.Actors
         #region Properties.
 
         public string AssetTag { get; set; }
-        public Guid UID { get; private set; } = Guid.NewGuid();
+        public uint UID { get; private set; } = Core.GetNextSequentialId();
+        public uint OwnerUID { get; set; }
         public List<ActorAttachment> Attachments { get; private set; } = new();
         public HgPoint<int> RadarDotSize { get; set; } = new HgPoint<int>(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
@@ -119,7 +120,7 @@ namespace HG.Actors
         /// <returns></returns>
         public ActorAttachment Attach(string imagePath, bool takesDamage = false, int hitPoints = 1)
         {
-            var attachment = _core.Actors.AddNewActorAttachment(imagePath, null, UID.ToString() + $"_Attachment_{Attachments.Count}");
+            var attachment = _core.Actors.AddNewActorAttachment(imagePath, null, UID);
             attachment.TakesDamage = takesDamage;
             attachment.SetHitPoints(hitPoints);
             Attachments.Add(attachment);

@@ -1,4 +1,4 @@
-﻿using HG.Actors.Enemies.BaseClasses;
+﻿using HG.Actors.Enemies;
 using HG.Engine;
 using HG.Types;
 using System;

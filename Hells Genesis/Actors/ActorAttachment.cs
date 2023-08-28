@@ -1,7 +1,6 @@
 ﻿using HG.Engine;
 using HG.Types;
 using System.Drawing;
-using System.IO;
 
 namespace HG.Actors
 {

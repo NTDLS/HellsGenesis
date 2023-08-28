@@ -1,5 +1,5 @@
 ﻿using HG.Actors;
-using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Enemies;
 using HG.Engine;
 using HG.Types;
 using System;
@@ -144,7 +144,7 @@ namespace HG
 
                     text.AppendLine($"Type: {actor.GetType().Name}");
                     text.AppendLine($"UID: {actor.UID}");
-                    text.AppendLine($"X,Y: {actor.X:n2},{actor.X:n2}");
+                    text.AppendLine($"X,Y: {actor.X:n2},{actor.Y:n2}");
 
                     if (actor is EnemyBase)
                     {

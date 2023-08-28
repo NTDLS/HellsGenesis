@@ -1,5 +1,5 @@
 ﻿using HG.Actors;
-using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Enemies;
 using HG.Actors.PowerUp;
 using HG.Actors.Weapons.Bullets;
 using HG.Menus;
@@ -219,13 +219,13 @@ namespace HG.Engine.Managers
 
         #region Factories.
 
-        public ActorAttachment AddNewActorAttachment(string imagePath = null, Size? size = null, string assetTag = "")
+        public ActorAttachment AddNewActorAttachment(string imagePath = null, Size? size = null, uint ownerUID = 0)
         {
             lock (Collection)
             {
-                ActorAttachment obj = new ActorAttachment(_core, imagePath, size)
+                var obj = new ActorAttachment(_core, imagePath, size)
                 {
-                    AssetTag = assetTag
+                    OwnerUID = ownerUID
                 };
                 Collection.Add(obj);
                 return obj;

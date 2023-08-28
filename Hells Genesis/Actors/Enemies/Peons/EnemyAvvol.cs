@@ -1,17 +1,16 @@
-﻿using HG.Actors.Enemies.BaseClasses;
-using HG.Actors.Weapons;
+﻿using HG.Actors.Weapons;
 using HG.Engine;
 using HG.Types;
 using System.Drawing;
 using System.IO;
 
-namespace HG.Actors.Enemies
+namespace HG.Actors.Enemies.Peons
 {
     /// <summary>
     /// These are a heavy fighting unit, employing various types of weapons and seemingly various stratigies.
     /// They like to stay at a medium range. Some units have seeking-missiles.
     /// </summary>
-    internal class EnemyAvvol : EnemyBasicBase
+    internal class EnemyAvvol : EnemyPeonBase
     {
         public const int ScoreMultiplier = 25;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Avvol\";

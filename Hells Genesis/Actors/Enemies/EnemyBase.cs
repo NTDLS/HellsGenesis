@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace HG.Actors.Enemies.BaseClasses
+namespace HG.Actors.Enemies
 {
     internal class EnemyBase : ActorBase
     {
@@ -14,10 +14,11 @@ namespace HG.Actors.Enemies.BaseClasses
         public ActorAnimation BoostAnimation { get; internal set; }
         public IAIController DefaultAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
-        public int CollisionDamage { get; set; } = 25;
-        public int ScorePoints { get; private set; } = 25;
         public ActorRadarPositionIndicator RadarPositionIndicator { get; set; }
         public ActorRadarPositionTextBlock RadarPositionText { get; set; }
+
+        public int CollisionDamage { get; set; } = 25;
+        public int ScorePoints { get; private set; } = 25;
 
         public EnemyBase(Core core, int hitPoints, int scoreMultiplier)
             : base(core)
@@ -83,6 +84,7 @@ namespace HG.Actors.Enemies.BaseClasses
                 return;
             }
 
+            //When an enemy had boost available, it will use it.
             if (Velocity.AvailableBoost > 0)
             {
                 if (Velocity.BoostPercentage < 1.0) //Ramp up the boost until it is at 100%

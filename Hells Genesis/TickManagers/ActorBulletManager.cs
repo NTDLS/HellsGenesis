@@ -1,5 +1,5 @@
 ﻿using HG.Actors;
-using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Enemies;
 using HG.Actors.Weapons;
 using HG.Actors.Weapons.Bullets;
 using HG.Engine;

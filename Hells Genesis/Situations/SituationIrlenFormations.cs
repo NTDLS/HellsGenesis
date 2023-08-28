@@ -1,5 +1,5 @@
 ﻿using HG.Actors.Enemies;
-using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Enemies.Peons;
 using HG.Engine;
 using HG.Types;
 using System.Linq;

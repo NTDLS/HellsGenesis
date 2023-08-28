@@ -1,13 +1,12 @@
-﻿using HG.Actors.Enemies.BaseClasses;
-using HG.Actors.Weapons;
+﻿using HG.Actors.Weapons;
 using HG.Engine;
 using HG.Types;
 using System.Drawing;
 using System.IO;
 
-namespace HG.Actors.Enemies
+namespace HG.Actors.Enemies.Peons
 {
-    internal class EnemyIrlen : EnemyBasicBase
+    internal class EnemyIrlen : EnemyPeonBase
     {
         public const int ScoreMultiplier = 1;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Irlen\";

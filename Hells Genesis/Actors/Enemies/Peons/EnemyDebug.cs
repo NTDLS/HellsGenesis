@@ -1,5 +1,4 @@
-﻿using HG.Actors.Enemies.BaseClasses;
-using HG.Actors.Weapons;
+﻿using HG.Actors.Weapons;
 using HG.AI.Logistics;
 using HG.Engine;
 using HG.Types;
@@ -7,12 +6,12 @@ using System;
 using System.Drawing;
 using System.IO;
 
-namespace HG.Actors.Enemies
+namespace HG.Actors.Enemies.Peons
 {
     /// <summary>
     /// Debugging enemy uint.
     /// </summary>
-    internal class EnemyDebug : EnemyBasicBase
+    internal class EnemyDebug : EnemyPeonBase
     {
         public const int ScoreMultiplier = 15;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Debug\";
@@ -89,7 +88,7 @@ namespace HG.Actors.Enemies
                 }
             }
 
-            double distanceToPlayer = this.DistanceTo(_core.Player.Actor);
+            double distanceToPlayer = DistanceTo(_core.Player.Actor);
 
 
             if (distanceToPlayer < 700)

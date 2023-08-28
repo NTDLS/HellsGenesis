@@ -1,13 +1,12 @@
 ﻿using HG.Engine;
 using HG.Types;
-using System;
 using System.Drawing;
 
-namespace HG.Actors.Enemies.BaseClasses
+namespace HG.Actors.Enemies.Bosses
 {
-    internal class EnemyAdvancedBase : EnemyBase
+    internal class EnemyBossBase : EnemyBase
     {
-        public EnemyAdvancedBase(Core core, int hitPoints, int scoreMultiplier)
+        public EnemyBossBase(Core core, int hitPoints, int scoreMultiplier)
             : base(core, hitPoints, scoreMultiplier)
         {
             Velocity.ThrottlePercentage = 1;

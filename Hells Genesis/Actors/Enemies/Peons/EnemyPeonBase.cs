@@ -3,11 +3,11 @@ using HG.Types;
 using System;
 using System.Drawing;
 
-namespace HG.Actors.Enemies.BaseClasses
+namespace HG.Actors.Enemies.Peons
 {
-    internal class EnemyBasicBase : EnemyBase
+    internal class EnemyPeonBase : EnemyBase
     {
-        public EnemyBasicBase(Core core, int hitPoints, int scoreMultiplier)
+        public EnemyPeonBase(Core core, int hitPoints, int scoreMultiplier)
             : base(core, hitPoints, scoreMultiplier)
         {
             Velocity.ThrottlePercentage = 1;

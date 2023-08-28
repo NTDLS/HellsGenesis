@@ -1,16 +1,15 @@
-﻿using HG.Actors.Enemies.BaseClasses;
-using HG.Actors.Weapons;
+﻿using HG.Actors.Weapons;
 using HG.Engine;
 using HG.Types;
 using System.Drawing;
 using System.IO;
 
-namespace HG.Actors.Enemies
+namespace HG.Actors.Enemies.Peons
 {
     /// <summary>
     /// 100% traditional weapons, they enforce their distance and are are moddled to provoke dog fighting. These are fast units.
     /// </summary>
-    internal class EnemyScinzad : EnemyBasicBase
+    internal class EnemyScinzad : EnemyPeonBase
     {
         public const int ScoreMultiplier = 15;
         private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Scinzad\";

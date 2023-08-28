@@ -27,6 +27,16 @@ namespace HG.Engine
 
         private readonly GameLoop _gameLoop;
 
+        static uint _nextSequentialId = 1;
+        static object _nextSequentialLock = new object();
+        public static uint GetNextSequentialId()
+        {
+            lock (_nextSequentialLock)
+            {
+                return _nextSequentialId++;
+            }
+        }
+
         #region Events.
 
         public delegate void StartEvent(Core sender);

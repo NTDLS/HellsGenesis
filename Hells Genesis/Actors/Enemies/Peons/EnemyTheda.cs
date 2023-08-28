@@ -1,18 +1,17 @@
-﻿using HG.Actors.Enemies.BaseClasses;
-using HG.Engine;
+﻿using HG.Engine;
 using System.Drawing;
 using System.IO;
 
-namespace HG.Actors.Enemies
+namespace HG.Actors.Enemies.Peons
 {
-    internal class EnemyUves : EnemyBasicBase
+    internal class EnemyTheda : EnemyPeonBase
     {
         public const int ScoreMultiplier = 1;
-        private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Uves\";
+        private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Theda\";
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 
-        public EnemyUves(Core core)
+        public EnemyTheda(Core core)
             : base(core, GetGenericHP(core), ScoreMultiplier)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
