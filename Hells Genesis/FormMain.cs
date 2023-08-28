@@ -16,7 +16,7 @@ namespace HG
     public partial class FormMain : Form
     {
         private readonly Core _core;
-        private readonly bool _fullScreen = true;
+        private readonly bool _fullScreen = false;
 
         //This really shouldn't be necessary! :(
         protected override CreateParams CreateParams
@@ -83,8 +83,8 @@ namespace HG
 
         private void DrawingSurface_MouseMove(object sender, MouseEventArgs e)
         {
-            int x = e.X;
-            int y = e.Y;
+            double x = e.X + _core.Display.OverdrawSize.Width / 2;
+            double y = e.Y + _core.Display.OverdrawSize.Height / 2;
 
             foreach (var actor in highlightedActors)
             {
@@ -110,8 +110,8 @@ namespace HG
 
         private void DrawingSurface_MouseDown(object sender, MouseEventArgs e)
         {
-            double x = e.X;
-            double y = e.Y;
+            double x = e.X + _core.Display.OverdrawSize.Width / 2;
+            double y = e.Y + _core.Display.OverdrawSize.Height / 2;
 
             var actors = _core.Actors.Intersections(new HgPoint<double>(x, y), new HgPoint<double>(1, 1));
             if (_core.Player.Actor.Intersects(new HgPoint<double>(x, y), new HgPoint<double>(1, 1)))
