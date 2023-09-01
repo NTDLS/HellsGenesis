@@ -391,17 +391,33 @@ namespace HG.Engine.Managers
                 }
             }
 
+            /*
             //Select the bitmap from the large screen bitmap and copy it to the "scaling drawing".
-            int scaleSubtraction = _core.Display.SpeedOrientedFrameScalingSubtraction();
+            int scaleSubtractionX = _core.Display.SpeedOrientedFrameScalingSubtractionX();
+            int scaleSubtractionY = _core.Display.SpeedOrientedFrameScalingSubtractionY();
 
             scaledDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
                     new RectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height),
                     new Rectangle(
-                        _core.Display.OverdrawSize.Width / 2 - scaleSubtraction,
-                        _core.Display.OverdrawSize.Height / 2 - scaleSubtraction,
-                        _core.Display.NatrualScreenSize.Width + scaleSubtraction * 2,
-                        _core.Display.NatrualScreenSize.Height + scaleSubtraction * 2
+                        _core.Display.OverdrawSize.Width  - scaleSubtractionX,
+                        _core.Display.OverdrawSize.Height  - scaleSubtractionY,
+                        _core.Display.NatrualScreenSize.Width + scaleSubtractionX,
+                        _core.Display.NatrualScreenSize.Height + scaleSubtractionY
                     ),
+                GraphicsUnit.Pixel);
+            */
+
+            double zoomFactor = _core.Display.SpeedOrientedFrameScalingFactor();
+
+            int zoomedWidth = (int)(_core.Display.NatrualScreenSize.Width / zoomFactor);
+            int zoomedHeight = (int)(_core.Display.NatrualScreenSize.Height / zoomFactor);
+            int sourceX = (screenDrawing.Bitmap.Width - zoomedWidth) / 2;
+            int sourceY = (screenDrawing.Bitmap.Height - zoomedHeight) / 2;
+
+            // Draw the center-zoomed image
+            scaledDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
+                new RectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height),
+                new Rectangle(sourceX, sourceY, zoomedWidth, zoomedHeight),
                 GraphicsUnit.Pixel);
 
             if (RenderRadar)

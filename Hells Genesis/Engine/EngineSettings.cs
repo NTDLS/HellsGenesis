@@ -50,8 +50,8 @@ namespace HG.Engine
         /// <summary>
         /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (1 = 100% larger or 2x).
         /// </summary>
-        public double OverdrawScale = 0.5;
+        public double OverdrawScale = 1;
 
-        public InterpolationMode GraphicsScalingMode { get; set; } = InterpolationMode.Bilinear;
+        public InterpolationMode GraphicsScalingMode { get; set; } = InterpolationMode.NearestNeighbor;
     }
 }

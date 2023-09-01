@@ -28,7 +28,10 @@ namespace HG.Engine.Managers
         /// The number of pixles to remove from the length and width to perform the scaling at the current speed.
         /// </summary>
         /// <returns></returns>
-        public int SpeedOrientedFrameScalingSubtraction() => (int)(OverdrawSize.Width / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0));
+        public int SpeedOrientedFrameScalingSubtractionX() => (int)(OverdrawSize.Width / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0));
+        public int SpeedOrientedFrameScalingSubtractionY() => (int)(OverdrawSize.Height / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0));
+        public double SpeedOrientedFrameScalingFactor() =>
+            1 - (OverdrawSize.Width / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0) / _core.Display.OverdrawSize.Width) / 2.0;
 
         /// <summary>
         /// The number of extra pixles to draw beyond the NatrualScreenSize.
@@ -85,10 +88,10 @@ namespace HG.Engine.Managers
         {
             get
             {
-                int scaleSubtraction = SpeedOrientedFrameScalingSubtraction();
-                return new RectangleF(OverdrawSize.Width / 2.0f - scaleSubtraction, OverdrawSize.Height / 2.0f - scaleSubtraction,
-                        NatrualScreenSize.Width + scaleSubtraction * 2.0f, NatrualScreenSize.Height + scaleSubtraction * 2.0f
-                );
+                int scaleSubtractionX = SpeedOrientedFrameScalingSubtractionX();
+                int scaleSubtractionY = SpeedOrientedFrameScalingSubtractionY();
+                return new RectangleF(OverdrawSize.Width / 2.0f - scaleSubtractionX, OverdrawSize.Height / 2.0f - scaleSubtractionY,
+                        NatrualScreenSize.Width + scaleSubtractionX * 2.0f, NatrualScreenSize.Height + scaleSubtractionY * 2.0f);
             }
         }
 
@@ -96,8 +99,9 @@ namespace HG.Engine.Managers
         {
             get
             {
-                int scaleSubtraction = SpeedOrientedFrameScalingSubtraction();
-                return new Size(NatrualScreenSize.Width + scaleSubtraction * 2, NatrualScreenSize.Height + scaleSubtraction * 2);
+                int scaleSubtractionX = SpeedOrientedFrameScalingSubtractionX();
+                int scaleSubtractionY = SpeedOrientedFrameScalingSubtractionY();
+                return new Size(NatrualScreenSize.Width + scaleSubtractionX * 2, NatrualScreenSize.Height + scaleSubtractionY * 2);
             }
         }
 

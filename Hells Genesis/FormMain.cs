@@ -49,6 +49,12 @@ namespace HG
                 //TopMost = true;
                 WindowState = FormWindowState.Maximized;
             }
+            else
+            {
+                Width = (int)(Screen.PrimaryScreen.Bounds.Width * 0.75);
+                Height = (int)(Screen.PrimaryScreen.Bounds.Height * 0.75);
+
+            }
 
             var drawingSurface = new Control();
             Controls.Add(drawingSurface);
