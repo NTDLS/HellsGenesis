@@ -19,9 +19,5 @@ namespace HG.Actors.Enemies.Bosses
             RadarPositionIndicator.Visable = false;
             RadarPositionText = _core.Actors.TextBlocks.CreateRadarPosition("Consolas", Brushes.Red, 8, new HgPoint<double>());
         }
-
-        public override void Cleanup()
-        {
-        }
     }
 }

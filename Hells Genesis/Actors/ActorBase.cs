@@ -841,6 +841,11 @@ namespace HG.Actors
                 }
             }
 
+            foreach (var attachments in Attachments)
+            {
+                attachments.Explode();
+            }
+
             _explodeSound?.Play();
             _explosionAnimation?.Reset();
             _core.Actors.Animations.CreateAt(_explosionAnimation, this);
