@@ -8,22 +8,22 @@ namespace HG.Engine
 {
     internal class Core
     {
-        public EngineSettings Settings { get; set; } = new();
+        public EngineSettings Settings { get; private set; } = new();
         public EngineInputManager Input { get; private set; }
         public EngineDisplayManager Display { get; private set; }
         public EngineActorManager Actors { get; private set; }
-        public SituationManager Situations { get; set; }
-        public EventManager Events { get; set; }
-        public EngineAudioManager Audio { get; set; }
-        public EngineImageManager Imaging { get; set; }
-        public MenuManager Menus { get; set; }
-        public PlayerManager Player { get; set; }
-        public EngineDrawingCacheManager DrawingCache { get; set; } = new();
+        public SituationManager Situations { get; private set; }
+        public EventManager Events { get; private set; }
+        public EngineAudioManager Audio { get; private set; }
+        public EngineImageManager Imaging { get; private set; }
+        public MenuManager Menus { get; private set; }
+        public PlayerManager Player { get; private set; }
+        public EngineDrawingCacheManager DrawingCache { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
-        public object DrawingSemaphore { get; set; } = new();
+        public object DrawingSemaphore { get; private set; } = new();
 
         private readonly GameLoop _gameLoop;
 
@@ -58,6 +58,7 @@ namespace HG.Engine
             Imaging = new EngineImageManager(this);
             Menus = new MenuManager(this);
             Player = new PlayerManager(this);
+            DrawingCache = new EngineDrawingCacheManager(this);
 
             _gameLoop = new GameLoop(this);
 

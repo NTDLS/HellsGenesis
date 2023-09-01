@@ -6,6 +6,9 @@ namespace HG.Engine.Managers
 {
     internal class EngineDrawingCacheManager
     {
+        private readonly Dictionary<DrawingCacheType, DrawingCacheItem> _graphicsCache = new();
+        private readonly Core _core;
+
         public enum DrawingCacheType
         {
             Scaling,
@@ -13,7 +16,11 @@ namespace HG.Engine.Managers
             Radar
         }
 
-        private readonly Dictionary<DrawingCacheType, DrawingCacheItem> _graphicsCache = new();
+        public EngineDrawingCacheManager(Core core)
+        {
+            _core = core;
+        }
+
 
         internal class DrawingCacheItem
         {
@@ -51,6 +58,7 @@ namespace HG.Engine.Managers
             else
             {
                 var newInstance = new DrawingCacheItem(size);
+                newInstance.Graphics.InterpolationMode = _core.Settings.GraphicsScalingMode;
                 _graphicsCache.Add(key, newInstance);
                 return newInstance;
             }
@@ -62,6 +70,7 @@ namespace HG.Engine.Managers
                 throw new System.Exception("Graphics cache item already exists and can not be recreated.");
             }
             var newInstance = new DrawingCacheItem(size);
+            newInstance.Graphics.InterpolationMode = _core.Settings.GraphicsScalingMode;
             _graphicsCache.Add(key, newInstance);
             return newInstance;
         }

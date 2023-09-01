@@ -9,7 +9,6 @@ using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Threading;
 using static HG.Engine.Managers.EngineDrawingCacheManager;
@@ -382,20 +381,19 @@ namespace HG.Engine.Managers
                         _core.Display.ThrottleFrameScaleFactor -= 2;
 
                     //Scale the screen based on the player boost.
-                    _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 40);
+                    _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 100);
                     if (_core.Player.Actor.Velocity.BoostPercentage > 0.5)
                         _core.Display.BoostFrameScaleFactor += 1;
                     else if (_core.Player.Actor.Velocity.BoostPercentage < 1)
                         _core.Display.BoostFrameScaleFactor -= 1;
 
-                    _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 20);
+                    _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 100);
                 }
             }
 
             //Select the bitmap from the large screen bitmap and copy it to the "scaling drawing".
             int scaleSubtraction = _core.Display.SpeedOrientedFrameScalingSubtraction();
 
-            scaledDrawing.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor;
             scaledDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
                     new RectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height),
                     new Rectangle(

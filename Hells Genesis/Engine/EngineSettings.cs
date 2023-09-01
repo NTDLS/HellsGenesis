@@ -1,4 +1,6 @@
-﻿namespace HG.Engine
+﻿using System.Drawing.Drawing2D;
+
+namespace HG.Engine
 {
     internal class EngineSettings
     {
@@ -22,7 +24,7 @@
 
         public double MaxPlayerSpeed { get; set; } = 10;
         public double MaxPlayerBoostSpeed { get; set; } = 5;
-        public double MaxPlayerBoost { get; set; } = 5000;
+        public double MaxPlayerBoost { get; set; } = 50000;
 
         public double MaxRotationSpeed { get; set; } = 2;
 
@@ -44,5 +46,12 @@
 
         public double InfiniteScrollWallX { get; set; } = 200; //The size of the "box" where the player flies and where "infinite scrolling" begins.
         public double InfiniteScrollWallY { get; set; } = 200; //The size of the "box" where the player flies and where "infinite scrolling" begins.
+
+        /// <summary>
+        /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (1 = 100% larger or 2x).
+        /// </summary>
+        public double OverdrawScale = 0.5;
+
+        public InterpolationMode GraphicsScalingMode { get; set; } = InterpolationMode.Bilinear;
     }
 }

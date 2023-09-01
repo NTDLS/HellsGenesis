@@ -17,11 +17,6 @@ namespace HG.Engine.Managers
         public Control DrawingSurface { get; private set; }
 
         /// <summary>
-        /// How much larger then the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out.
-        /// </summary>
-        public const double OverdrawScale = 1;
-
-        /// <summary>
         /// The scaling factor to apply based on the current player speed.
         /// </summary>
         public double ThrottleFrameScaleFactor { get; set; }
@@ -33,7 +28,7 @@ namespace HG.Engine.Managers
         /// The number of pixles to remove from the length and width to perform the scaling at the current speed.
         /// </summary>
         /// <returns></returns>
-        public int SpeedOrientedFrameScalingSubtraction() => (int)(OverdrawSize.Width / 4.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0));
+        public int SpeedOrientedFrameScalingSubtraction() => (int)(OverdrawSize.Width / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0));
 
         /// <summary>
         /// The number of extra pixles to draw beyond the NatrualScreenSize.
@@ -153,8 +148,8 @@ namespace HG.Engine.Managers
             DrawingSurface = drawingSurface;
             NatrualScreenSize = visibleSize;
 
-            int overdrawHeight = (int)(visibleSize.Height * OverdrawScale);
-            int overdrawWidth = (int)(visibleSize.Width * OverdrawScale);
+            int overdrawHeight = (int)(visibleSize.Height * core.Settings.OverdrawScale);
+            int overdrawWidth = (int)(visibleSize.Width * core.Settings.OverdrawScale);
             if (overdrawHeight % 2 != 0) overdrawHeight++;
             if (overdrawWidth % 2 != 0) overdrawWidth++;
             OverdrawSize = new Size(overdrawWidth, overdrawHeight);
