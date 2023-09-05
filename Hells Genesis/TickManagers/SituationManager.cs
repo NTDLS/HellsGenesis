@@ -48,10 +48,10 @@ namespace HG.TickManagers
             {
                 ClearScenarios();
 
-                Situations.Add(new SituationDebuggingGalore(_core));
-                Situations.Add(new SituationScinzadSkirmish(_core));
+                //Situations.Add(new SituationDebuggingGalore(_core));
+                //Situations.Add(new SituationScinzadSkirmish(_core));
                 Situations.Add(new SituationIrlenFormations(_core));
-                Situations.Add(new SituationAvvolAmbush(_core));
+                //Situations.Add(new SituationAvvolAmbush(_core));
             }
         }
 

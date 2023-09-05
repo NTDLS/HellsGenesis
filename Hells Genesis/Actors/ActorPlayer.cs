@@ -34,24 +34,24 @@ namespace HG.Actors
         {
             Class = playerClass;
 
-            string imagePath = @$"..\..\..\Assets\Graphics\Player\Alien\{(int)Class}.png";
+            string imagePath = @$"Graphics\Player\Alien\{(int)Class}.png";
 
             Initialize(imagePath, new Size(32, 32));
 
-            AmmoLowSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Ammo Low.wav", 0.75f);
-            SystemsFailingSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Systems Failing.wav", 0.75f);
-            HullBreachedSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Hull Breached.wav", 0.75f);
-            IntegrityLowSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Integrity Low.wav", 0.75f);
-            ShieldFailSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Shield Fail.wav", 0.75f);
-            ShieldDownSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Shield Down.wav", 0.75f);
-            ShieldMaxSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Shield Max.wav", 0.75f);
-            ShieldNominalSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Shield Nominal.wav", 0.75f);
-            AllSystemsGoSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\All Systems Go.wav", 0.75f);
-            AmmoLowSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Ammo Low.wav", 0.75f);
-            AmmoEmptySound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Ammo Empty.wav", 0.75f);
-            ShipEngineRoarSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Engine Roar.wav", 1.0f, true);
-            ShipEngineIdleSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Engine Idle.wav", 0.6f, true);
-            ShipEngineBoostSound = _core.Audio.Get(@"..\..\..\Assets\Sounds\Ship\Engine Boost.wav", 1.0f, true);
+            AmmoLowSound = _core.Audio.Get(@"Sounds\Ship\Ammo Low.wav", 0.75f);
+            SystemsFailingSound = _core.Audio.Get(@"Sounds\Ship\Systems Failing.wav", 0.75f);
+            HullBreachedSound = _core.Audio.Get(@"Sounds\Ship\Hull Breached.wav", 0.75f);
+            IntegrityLowSound = _core.Audio.Get(@"Sounds\Ship\Integrity Low.wav", 0.75f);
+            ShieldFailSound = _core.Audio.Get(@"Sounds\Ship\Shield Fail.wav", 0.75f);
+            ShieldDownSound = _core.Audio.Get(@"Sounds\Ship\Shield Down.wav", 0.75f);
+            ShieldMaxSound = _core.Audio.Get(@"Sounds\Ship\Shield Max.wav", 0.75f);
+            ShieldNominalSound = _core.Audio.Get(@"Sounds\Ship\Shield Nominal.wav", 0.75f);
+            AllSystemsGoSound = _core.Audio.Get(@"Sounds\Ship\All Systems Go.wav", 0.75f);
+            AmmoLowSound = _core.Audio.Get(@"Sounds\Ship\Ammo Low.wav", 0.75f);
+            AmmoEmptySound = _core.Audio.Get(@"Sounds\Ship\Ammo Empty.wav", 0.75f);
+            ShipEngineRoarSound = _core.Audio.Get(@"Sounds\Ship\Engine Roar.wav", 1.0f, true);
+            ShipEngineIdleSound = _core.Audio.Get(@"Sounds\Ship\Engine Idle.wav", 0.6f, true);
+            ShipEngineBoostSound = _core.Audio.Get(@"Sounds\Ship\Engine Boost.wav", 1.0f, true);
         }
 
 
@@ -63,7 +63,7 @@ namespace HG.Actors
         {
             Class = playerClass;
 
-            string imagePath = @$"..\..\..\Assets\Graphics\Player\Alien\{(int)Class}.png";
+            string imagePath = @$"Graphics\Player\Alien\{(int)Class}.png";
 
             SetImage(imagePath, new Size(32, 32));
 
@@ -172,7 +172,7 @@ namespace HG.Actors
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    ThrustAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
+                    ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
                     ThrustAnimation.Reset();
                     ThrustAnimation.Visable = false;
                     _core.Actors.Animations.CreateAt(ThrustAnimation, this);
@@ -191,7 +191,7 @@ namespace HG.Actors
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    BoostAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
+                    BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
                     BoostAnimation.Reset();
                     BoostAnimation.Visable = false;
                     _core.Actors.Animations.CreateAt(BoostAnimation, this);

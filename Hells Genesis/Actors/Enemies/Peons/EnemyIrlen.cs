@@ -9,7 +9,7 @@ namespace HG.Actors.Enemies.Peons
     internal class EnemyIrlen : EnemyPeonBase
     {
         public const int ScoreMultiplier = 1;
-        private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Irlen\";
+        private const string _assetPath = @"Graphics\Enemy\Irlen\";
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 

@@ -8,14 +8,14 @@ namespace HG.Actors.PowerUp
 {
     internal class PowerUpBase : ActorBase
     {
-        private const string _assetHitAnimationPath = @"..\..\..\Assets\Graphics\Animation\PowerUp\";
+        private const string _assetHitAnimationPath = @"Graphics\Animation\PowerUp\";
         private readonly string[] _assetHitAnimationFiles = {
             #region Image Paths.
             "PowerUpShort128x128.png",
             #endregion
         };
 
-        private const string _assetExplosionSoundPath = @"..\..\..\Assets\Sounds\PowerUp\";
+        private const string _assetExplosionSoundPath = @"Sounds\PowerUp\";
         private readonly string[] _assetExplosionSoundFiles = {
             #region Sound Paths.
             "PowerUp1.wav",

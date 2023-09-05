@@ -24,13 +24,11 @@ namespace HG.Actors.Enemies.Bosses
 
         private readonly double _initialMaxpeed;
 
-        readonly string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Scarab\";
+        readonly string _imagesPath = @"Graphics\Enemy\Scarab\";
 
         public EnemyScarab(Core core)
             : base(core, GetGenericHP(core), ScoreMultiplier)
         {
-            ThrustAnimation.QueueForDelete();
-
             _leftCannon = Attach(_imagesPath + "Scarab.Gun.Cannon.Left.png", true, 3);
             _rightCannon = Attach(_imagesPath + "Scarab.Gun.Cannon.Right.png", true, 3);
             _leftGun = Attach(_imagesPath + "Scarab.Gun.Left.png", true, 3);

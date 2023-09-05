@@ -15,7 +15,7 @@ namespace HG.AI.Logistics
     /// </summary>
     internal class HostileEngagement : IAIController
     {
-        private const string _assetPath = @"..\..\..\Assets\AI\Logistics\FlyBy.txt";
+        private const string _assetPath = @"AI\Logistics\FlyBy.txt";
 
         private readonly Core _core;
         private readonly ActorBase _owner;

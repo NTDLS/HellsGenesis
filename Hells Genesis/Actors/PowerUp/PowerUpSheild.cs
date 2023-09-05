@@ -9,7 +9,7 @@ namespace HG.Actors.PowerUp
     {
         public const int ScoreMultiplier = 1;
 
-        private const string _assetPath = @"..\..\..\Assets\Graphics\PowerUp\Sheild\";
+        private const string _assetPath = @"Graphics\PowerUp\Sheild\";
         private readonly string[] _imagePaths = {
             #region images.
             "1.png",

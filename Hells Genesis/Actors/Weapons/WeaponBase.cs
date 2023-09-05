@@ -40,7 +40,7 @@ namespace HG.Actors.Weapons
 
         public virtual BulletBase CreateBullet(ActorBase lockedTarget, HgPoint<double> xyOffset = null)
         {
-            return new BulletGeneric(_core, this, _owner, @"..\..\..\Assets\Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
+            return new BulletGeneric(_core, this, _owner, @"Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
         }
 
         public virtual void ApplyIntelligence(HgPoint<double> displacementVector, ActorBase wouldFireAt)

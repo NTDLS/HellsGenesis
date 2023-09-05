@@ -6,7 +6,7 @@ namespace HG.Actors.Weapons
 {
     internal class WeaponScramsMissile : WeaponBase
     {
-        private const string soundPath = @"..\..\..\Assets\Sounds\Weapons\WeaponScramsMissile.wav";
+        private const string soundPath = @"Sounds\Weapons\WeaponScramsMissile.wav";
         private const float soundVolumne = 0.4f;
 
         private bool _toggle = false;

@@ -2,13 +2,14 @@
 using SharpDX.Multimedia;
 using SharpDX.XAudio2;
 using System;
+using System.IO;
 using System.Threading;
 
 namespace HG.Engine
 {
     internal class AudioClip
     {
-        private readonly XAudio2 _xaudio = new XAudio2();
+        private readonly XAudio2 _xaudio = new();
         private readonly WaveFormat _waveFormat;
         private readonly AudioBuffer _buffer;
         private readonly SoundStream _soundstream;
@@ -16,7 +17,6 @@ namespace HG.Engine
         private readonly bool _loopForever;
         private bool _isPlaying = false; //Only applicable when _loopForever == false;
         private bool _isFading;
-        private readonly string _wavFilePath; //For debugging.
         private readonly float _initialVolumne;
 
         public float InitialVolumne
@@ -32,17 +32,14 @@ namespace HG.Engine
             _singleSourceVoice.SetVolume(volumne);
         }
 
-        public AudioClip(string wavFilePath, float initialVolumne = 1, bool loopForever = false)
+        public AudioClip(Stream stream, float initialVolumne = 1, bool loopForever = false)
         {
             _loopForever = loopForever;
-            _wavFilePath = wavFilePath;
             _initialVolumne = initialVolumne;
 
             var masteringsound = new MasteringVoice(_xaudio); //Yes, this is required.
-            var nativefilestream = new NativeFileStream(wavFilePath,
-                NativeFileMode.Open, NativeFileAccess.Read, NativeFileShare.Read);
 
-            _soundstream = new SoundStream(nativefilestream);
+            _soundstream = new SoundStream(stream);
 
             _waveFormat = _soundstream.Format;
             _buffer = new AudioBuffer

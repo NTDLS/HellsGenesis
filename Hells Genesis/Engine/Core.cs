@@ -16,6 +16,8 @@ namespace HG.Engine
         public EventManager Events { get; private set; }
         public EngineAudioManager Audio { get; private set; }
         public EngineImageManager Imaging { get; private set; }
+        public EngineAssetManager Assets { get; private set; }
+
         public MenuManager Menus { get; private set; }
         public PlayerManager Player { get; private set; }
         public EngineDrawingCacheManager DrawingCache { get; private set; }
@@ -50,6 +52,7 @@ namespace HG.Engine
         public Core(Control drawingSurface)
         {
             Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
+            Assets = new EngineAssetManager(this);
             Actors = new EngineActorManager(this);
             Input = new EngineInputManager(this);
             Situations = new SituationManager(this);
@@ -98,7 +101,7 @@ namespace HG.Engine
                         DeleteActorAfterPlay = false
                     };
 
-                    var coinAnimation = new ObjAnimation(_core, @"..\..\..\Assets\Graphics\Animation\Coin.png", new Size(32, 23), 20, mode);
+                    var coinAnimation = new ObjAnimation(_core, @"Graphics\Animation\Coin.png", new Size(32, 23), 20, mode);
                 }
                 */
 

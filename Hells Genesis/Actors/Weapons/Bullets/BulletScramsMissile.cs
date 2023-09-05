@@ -5,7 +5,7 @@ namespace HG.Actors.Weapons.Bullets
 {
     internal class BulletScramsMissile : BulletBase
     {
-        private const string imagePath = @"..\..\..\Assets\Graphics\Weapon\Missiles\BulletScramsMissile.png";
+        private const string imagePath = @"Graphics\Weapon\Missiles\BulletScramsMissile.png";
 
         public BulletScramsMissile(Core core, WeaponBase weapon, ActorBase firedFrom,
              ActorBase lockedTarget = null, HgPoint<double> xyOffset = null)

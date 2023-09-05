@@ -7,7 +7,7 @@ namespace HG.Actors.PowerUp
 {
     internal class PowerUpRepair : PowerUpBase
     {
-        private const string _assetPath = @"..\..\..\Assets\Graphics\PowerUp\Repair\";
+        private const string _assetPath = @"Graphics\PowerUp\Repair\";
         private readonly string[] _imagePaths = {
             #region images.
             "1.png",

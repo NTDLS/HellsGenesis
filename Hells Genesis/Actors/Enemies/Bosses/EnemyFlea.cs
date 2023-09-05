@@ -18,12 +18,12 @@ namespace HG.Actors.Enemies.Bosses
 
         private readonly double _initialMaxpeed;
 
-        readonly string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Flea\";
+        readonly string _imagesPath = @"Graphics\Enemy\Flea\";
 
         public EnemyFlea(Core core)
             : base(core, GetGenericHP(core), ScoreMultiplier)
         {
-            ThrustAnimation.QueueForDelete();
+            //ThrustAnimation?.QueueForDelete();
 
             _leftGun = Attach(_imagesPath + "Flea.Gun.Left.png", true, 3);
             _rightGun = Attach(_imagesPath + "Flea.Gun.Right.png", true, 3);

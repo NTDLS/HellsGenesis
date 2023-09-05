@@ -7,7 +7,7 @@ namespace HG.Actors.Weapons.Bullets
 {
     internal class BulletHotPepper : BulletBase
     {
-        private const string _assetPath = @"..\..\..\Assets\Graphics\Weapon\BulletHotPepper";
+        private const string _assetPath = @"Graphics\Weapon\BulletHotPepper";
         private readonly int imageCount = 4;
         private readonly int selectedImageIndex = 0;
 

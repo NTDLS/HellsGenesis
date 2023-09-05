@@ -6,7 +6,7 @@ namespace HG.Actors
 {
     internal class ActorStar : ActorBase
     {
-        private const string _assetPath = @"..\..\..\Assets\Graphics\Star\";
+        private const string _assetPath = @"Graphics\Star\";
         private readonly int _imageCount = 5;
         private readonly int selectedImageIndex = 0;
 

@@ -5,7 +5,7 @@ namespace HG.Actors.Weapons
 {
     internal class WeaponDualVulcanCannon : WeaponBase
     {
-        private const string soundPath = @"..\..\..\Assets\Sounds\Weapons\WeaponDualVulcanCannon.wav";
+        private const string soundPath = @"Sounds\Weapons\WeaponDualVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponDualVulcanCannon(Core core)

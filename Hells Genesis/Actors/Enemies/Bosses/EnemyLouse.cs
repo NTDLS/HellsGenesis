@@ -17,7 +17,7 @@ namespace HG.Actors.Enemies.Bosses
 
         private readonly double _initialMaxpeed;
 
-        readonly string _imagesPath = @"..\..\..\Assets\Graphics\Enemy\Louse\";
+        readonly string _imagesPath = @"Graphics\Enemy\Louse\";
 
         public EnemyLouse(Core core)
             : base(core, GetGenericHP(core), ScoreMultiplier)

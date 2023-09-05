@@ -28,7 +28,7 @@ namespace HG.Actors.Enemies.Peons
                 DeleteActorAfterPlay = false,
                 ReplayDelay = new TimeSpan(0)
             };
-            ThrustAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
+            ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
 
             ThrustAnimation.Reset();
             _core.Actors.Animations.CreateAt(ThrustAnimation, this);
@@ -38,7 +38,7 @@ namespace HG.Actors.Enemies.Peons
             ThrustAnimation.X = X + pointRight.X;
             ThrustAnimation.Y = Y + pointRight.Y;
 
-            BoostAnimation = new ActorAnimation(_core, @"..\..\..\Assets\Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
+            BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
 
             BoostAnimation.Reset();
             _core.Actors.Animations.CreateAt(BoostAnimation, this);

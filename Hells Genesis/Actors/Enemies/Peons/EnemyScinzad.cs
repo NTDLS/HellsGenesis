@@ -12,7 +12,7 @@ namespace HG.Actors.Enemies.Peons
     internal class EnemyScinzad : EnemyPeonBase
     {
         public const int ScoreMultiplier = 15;
-        private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Scinzad\";
+        private const string _assetPath = @"Graphics\Enemy\Scinzad\";
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 

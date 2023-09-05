@@ -23,33 +23,33 @@ namespace HG.Actors
         private SolidBrush _radarDotBrush = new(Color.FromArgb(255, 255, 0, 0));
         private Image _image;
 
-        private readonly string _assetPathlockedOnImage = @"..\..\..\Assets\Graphics\Weapon\Locked On.png";
+        private readonly string _assetPathlockedOnImage = @"Graphics\Weapon\Locked On.png";
         private Image _lockedOnImage;
 
-        private readonly string _assetPathlockedOnSoftImage = @"..\..\..\Assets\Graphics\Weapon\Locked Soft.png";
+        private readonly string _assetPathlockedOnSoftImage = @"Graphics\Weapon\Locked Soft.png";
         private Image _lockedOnSoftImage;
 
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private readonly int _MillisecondsBetweenHits = 200;
 
-        private readonly string _assetPathHitSound = @"..\..\..\Assets\Sounds\Ship\Object Hit.wav";
+        private readonly string _assetPathHitSound = @"Sounds\Ship\Object Hit.wav";
         private AudioClip _hitSound;
 
-        private readonly string _assetPathshieldHit = @"..\..\..\Assets\Sounds\Ship\Shield Hit.wav";
+        private readonly string _assetPathshieldHit = @"Sounds\Ship\Shield Hit.wav";
         private AudioClip _shieldHit;
 
         private ActorAnimation _explosionAnimation;
-        private const string _assetPathExplosionAnimation = @"..\..\..\Assets\Graphics\Animation\Explode\Explosion 256x256\";
+        private const string _assetPathExplosionAnimation = @"Graphics\Animation\Explode\Explosion 256x256\";
         private readonly int _explosionAnimationCount = 3;
         private int _selectedExplosionAnimationIndex = 0;
 
         private ActorAnimation _hitExplosionAnimation;
-        private const string _assetPathHitExplosionAnimation = @"..\..\..\Assets\Graphics\Animation\Explode\Hit Explosion 22x22\";
+        private const string _assetPathHitExplosionAnimation = @"Graphics\Animation\Explode\Hit Explosion 22x22\";
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
         private AudioClip _explodeSound;
-        private const string _assetExplosionSoundPath = @"..\..\..\Assets\Sounds\Explode\";
+        private const string _assetExplosionSoundPath = @"Sounds\Explode\";
         private readonly int _hitExplosionSoundCount = 2;
         private int _selectedHitExplosionSoundIndex = 0;
 

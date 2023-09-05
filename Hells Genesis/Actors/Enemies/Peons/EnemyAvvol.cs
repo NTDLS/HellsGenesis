@@ -13,7 +13,7 @@ namespace HG.Actors.Enemies.Peons
     internal class EnemyAvvol : EnemyPeonBase
     {
         public const int ScoreMultiplier = 25;
-        private const string _assetPath = @"..\..\..\Assets\Graphics\Enemy\Avvol\";
+        private const string _assetPath = @"Graphics\Enemy\Avvol\";
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 
