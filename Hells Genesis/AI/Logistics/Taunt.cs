@@ -82,8 +82,6 @@ namespace HG.AI.Logistics
 
         private void AlterActionState(ActionState state)
         {
-            Debug.Print($"{state}");
-
             switch (state)
             {
                 case ActionState.EvasiveLoop:
@@ -111,9 +109,6 @@ namespace HG.AI.Logistics
 
         public void ApplyIntelligence(HgPoint<double> displacementVector)
         {
-            //var adeltaAngle = _owner.DeltaAngle(_observedObject);
-            //Debug.Print("{deltaAngle:n1}");
-
             //We are evading, dont make any other decisions until evasion is complete.
             if (_currentAction == ActionState.EvasiveLoop)
             {
@@ -254,9 +249,10 @@ namespace HG.AI.Logistics
                 return;
             }
 
-            if (string.IsNullOrEmpty(_assetPath) == false && File.Exists(_assetPath))
+            var networkJson = _core.Assets.GetText(_assetPath);
+            if (string.IsNullOrEmpty(networkJson) == false)
             {
-                var loadedNetwork = DniNeuralNetwork.Load(_assetPath);
+                var loadedNetwork = DniNeuralNetwork.LoadFromText(networkJson);
                 if (loadedNetwork != null)
                 {
                     _singletonNetwork = loadedNetwork;

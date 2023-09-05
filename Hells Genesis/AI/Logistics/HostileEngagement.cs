@@ -335,9 +335,10 @@ namespace HG.AI.Logistics
                 return;
             }
 
-            if (string.IsNullOrEmpty(_assetPath) == false && File.Exists(_assetPath))
+            var networkJson = _core.Assets.GetText(_assetPath);
+            if (string.IsNullOrEmpty(networkJson) == false)
             {
-                var loadedNetwork = DniNeuralNetwork.Load(_assetPath);
+                var loadedNetwork = DniNeuralNetwork.LoadFromText(networkJson);
                 if (loadedNetwork != null)
                 {
                     _singletonNetwork = loadedNetwork;

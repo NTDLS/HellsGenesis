@@ -224,6 +224,8 @@ namespace HG.Engine.Managers
         private Bitmap _RadarBackgroundImage = null;
         private readonly SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
 
+        TimeSpan lockTimeout = TimeSpan.FromMilliseconds(1);
+
         /// <summary>
         /// Will render the current game state to a single bitmap. If a lock cannot be acquired
         /// for drawing then the previous frame will be returned.
@@ -233,7 +235,6 @@ namespace HG.Engine.Managers
         {
             _core.IsRendering = true;
 
-            var timeout = TimeSpan.FromMilliseconds(1);
             bool lockTaken = false;
 
             var screenDrawing = _core.DrawingCache.Get(DrawingCacheType.Screen, _core.Display.TotalCanvasSize);
@@ -278,7 +279,7 @@ namespace HG.Engine.Managers
             try
             {
                 lockTaken = false;
-                Monitor.TryEnter(_core.DrawingSemaphore, timeout, ref lockTaken);
+                Monitor.TryEnter(_core.DrawingSemaphore, lockTimeout, ref lockTaken);
 
                 if (lockTaken)
                 {
@@ -324,8 +325,6 @@ namespace HG.Engine.Managers
 
                     _core.Menus.Render(screenDrawing.Graphics);
                 }
-
-                //displayDC.DrawImage(screenDrawing.Bitmap, 0, 0);
             }
             finally
             {
@@ -375,24 +374,7 @@ namespace HG.Engine.Managers
                 }
             }
 
-            /*
-            //Select the bitmap from the large screen bitmap and copy it to the "scaling drawing".
-            int scaleSubtractionX = _core.Display.SpeedOrientedFrameScalingSubtractionX();
-            int scaleSubtractionY = _core.Display.SpeedOrientedFrameScalingSubtractionY();
-
-            scaledDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
-                    new RectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height),
-                    new Rectangle(
-                        _core.Display.OverdrawSize.Width  - scaleSubtractionX,
-                        _core.Display.OverdrawSize.Height  - scaleSubtractionY,
-                        _core.Display.NatrualScreenSize.Width + scaleSubtractionX,
-                        _core.Display.NatrualScreenSize.Height + scaleSubtractionY
-                    ),
-                GraphicsUnit.Pixel);
-            */
-
             double zoomFactor = _core.Display.SpeedOrientedFrameScalingFactor();
-
             int zoomedWidth = (int)(_core.Display.NatrualScreenSize.Width / zoomFactor);
             int zoomedHeight = (int)(_core.Display.NatrualScreenSize.Height / zoomFactor);
             int sourceX = (screenDrawing.Bitmap.Width - zoomedWidth) / 2;
@@ -414,29 +396,13 @@ namespace HG.Engine.Managers
                     );
                 scaledDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
             }
-            try
-            {
-                //lockTaken = false;
-                //Monitor.TryEnter(_core.DrawingSemaphore, timeout, ref lockTaken);
 
-                //if (lockTaken)
-                {
-                    lock (Collection)
-                    {
-                        //Render to display:
-                        foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
-                        {
-                            HgConversion.DynamicCast(actor, actor.GetType()).Render(scaledDrawing.Graphics);
-                        }
-                    }
-                }
-            }
-            finally
+            lock (Collection)
             {
-                // Ensure that the lock is released.
-                if (lockTaken)
+                //Render to display:
+                foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
                 {
-                    //Monitor.Exit(_core.DrawingSemaphore);
+                    HgConversion.DynamicCast(actor, actor.GetType()).Render(scaledDrawing.Graphics);
                 }
             }
 

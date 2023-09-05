@@ -5,7 +5,6 @@ using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
 using System;
-using System.IO;
 using static HG.Engine.Constants;
 
 namespace HG.AI.Logistics
@@ -15,6 +14,8 @@ namespace HG.AI.Logistics
     /// </summary>
     internal class Meander : IAIController
     {
+        private const string _assetPath = @"AI\Logistics\FlyBy.txt";
+
         private readonly Core _core;
         private readonly ActorBase _owner;
         private readonly ActorBase _observedObject;
@@ -59,8 +60,7 @@ namespace HG.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        /// <param name="pretrainedModelFile">If there is a pre-trained model, this would be the file.</param>
-        public Meander(Core core, ActorBase owner, ActorBase observedObject, string pretrainedModelFile = null)
+        public Meander(Core core, ActorBase owner, ActorBase observedObject)
         {
             _core = core;
             _owner = owner;
@@ -73,9 +73,10 @@ namespace HG.AI.Logistics
                 return;
             }
 
-            if (string.IsNullOrEmpty(pretrainedModelFile) == false && File.Exists(pretrainedModelFile))
+            var networkJson = _core.Assets.GetText(_assetPath);
+            if (string.IsNullOrEmpty(networkJson) == false)
             {
-                var loadedNetwork = DniNeuralNetwork.Load(pretrainedModelFile);
+                var loadedNetwork = DniNeuralNetwork.LoadFromText(networkJson);
                 if (loadedNetwork != null)
                 {
                     _singletonNetwork = loadedNetwork;

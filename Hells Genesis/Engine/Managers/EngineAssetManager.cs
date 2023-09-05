@@ -1,6 +1,8 @@
 ﻿using SharpCompress.Archives;
 using SharpCompress.Common;
 using SharpCompress.Readers;
+using SharpDX;
+using SharpDX.Text;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -22,42 +24,63 @@ namespace HG.Engine.Managers
             _core = core;
         }
 
-        public AudioClip GetAudio(string path, float initialVolumne, bool loopForever = false)
+        public string GetText(string path, string defaultText = "")
         {
             lock (_collection)
             {
-                AudioClip result = null;
-
                 path = path.Trim().ToLower();
 
                 if (_collection.ContainsKey(path))
                 {
-                    result = (AudioClip)_collection[path];
+                    return _collection[path] as string;
+                }
+                else
+                {
+                    try
+                    {
+                        var text = GetCompressedText(path);
+                        _collection.Add(path, text);
+                        return text;
+                    }
+                    catch
+                    {
+                        return defaultText;
+                    }
+                }
+            }
+        }
+
+        public AudioClip GetAudio(string path, float initialVolumne, bool loopForever = false)
+        {
+            lock (_collection)
+            {
+                path = path.Trim().ToLower();
+
+                if (_collection.ContainsKey(path))
+                {
+                    return (AudioClip)_collection[path];
                 }
                 else
                 {
                     using (var stream = GetCompressedStream(path))
                     {
-                        result = new AudioClip(stream, initialVolumne, loopForever);
+                        var result = new AudioClip(stream, initialVolumne, loopForever);
+                        _collection.Add(path, result);
+                        return result;
                     }
-                    _collection.Add(path, result);
                 }
-
-                return result;
             }
         }
 
         public Bitmap GetBitmap(string path)
         {
-            Bitmap result;
-
             path = path.Trim().ToLower();
 
             lock (_collection)
             {
                 if (_collection.ContainsKey(path))
                 {
-                    result = (Bitmap)((Bitmap)_collection[path]).Clone();
+                    return (Bitmap)((Bitmap)_collection[path]).Clone();
                 }
                 else
                 {
@@ -65,20 +88,28 @@ namespace HG.Engine.Managers
                     {
                         using var image = Image.FromStream(stream);
                         var newbitmap = new Bitmap(image);
-                        result = newbitmap.Clone() as Bitmap;
+                        var result = newbitmap.Clone() as Bitmap;
                         _collection.Add(path, newbitmap);
+                        return result;
                     }
                 }
             }
+        }
 
-            return result;
+        private string GetCompressedText(string path)
+        {
+            using (var stream = GetCompressedStream(path))
+            {
+
+                return System.Text.Encoding.UTF8.GetString(stream.ToArray());
+            }
         }
 
         private MemoryStream GetCompressedStream(string path)
         {
             string zipFilePath = Path.Combine(_assetZipPath, "Assets.zip");
 
-            using (var archive = ArchiveFactory.Open(zipFilePath, new ReaderOptions() { ArchiveEncoding = new ArchiveEncoding() { Default = Encoding.Default } }))
+            using (var archive = ArchiveFactory.Open(zipFilePath, new ReaderOptions() { ArchiveEncoding = new ArchiveEncoding() { Default = System.Text.Encoding.Default } }))
             {
                 string desiredFilePath = Path.Combine("Assets", path).Trim().Replace("\\", "/");
 
