@@ -83,7 +83,7 @@ namespace HG.TickHandlers
 
                 #endregion
 
-                foreach (var star in _controller.VisibleOfType<ActorStar>())
+                foreach (var star in Visible())
                 {
                     star.ApplyMotion(displacementVector);
                 }

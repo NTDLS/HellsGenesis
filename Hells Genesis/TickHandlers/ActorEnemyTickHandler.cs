@@ -30,7 +30,7 @@ namespace HG.TickHandlers
                 _core.Player.Actor.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
             }
 
-            foreach (var enemy in _core.Actors.VisibleOfType<EnemyBase>())
+            foreach (var enemy in Visible())
             {
                 enemy.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
 

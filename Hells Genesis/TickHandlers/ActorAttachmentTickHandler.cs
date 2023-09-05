@@ -26,7 +26,10 @@ namespace HG.TickHandlers
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
         {
-
+            foreach (var attachment in Visible())
+            {
+                attachment.ApplyMotion(displacementVector);
+            }
         }
 
         #region Factories.

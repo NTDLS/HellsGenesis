@@ -24,7 +24,7 @@ namespace HG.TickHandlers
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
         {
-            foreach (var debug in _controller.VisibleOfType<ActorDebug>())
+            foreach (var debug in Visible())
             {
                 debug.ApplyMotion(displacementVector);
             }

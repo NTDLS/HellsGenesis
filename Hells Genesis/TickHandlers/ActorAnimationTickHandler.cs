@@ -25,7 +25,7 @@ namespace HG.TickHandlers
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
         {
-            foreach (var animation in _controller.VisibleOfType<ActorAnimation>())
+            foreach (var animation in Visible())
             {
                 animation.ApplyMotion(displacementVector);
                 animation.AdvanceImage();
