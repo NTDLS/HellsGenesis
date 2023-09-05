@@ -1,6 +1,7 @@
 ﻿using HG.Actors.Weapons;
 using HG.Engine;
 using HG.Types;
+using HG.Utility.ExtensionMethods;
 using System.Drawing;
 using System.IO;
 
@@ -136,15 +137,15 @@ namespace HG.Actors.Enemies.Peons
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle360(_core.Player.Actor);
+                var deltaAngle = DeltaAngle(_core.Player.Actor);
 
-                if (deltaAngle > 10)
+                if (deltaAngle.IsNotBetween(-10, 10))
                 {
-                    if (deltaAngle >= 180.0)
+                    if (deltaAngle >= 0)
                     {
                         Velocity.Angle += 1;
                     }
-                    else if (deltaAngle < 180.0)
+                    else if (deltaAngle < 0)
                     {
                         Velocity.Angle -= 1;
                     }

@@ -94,7 +94,7 @@ namespace HG.Actors
         /// <returns></returns>
         public ActorAttachment Attach(string imagePath, bool takesDamage = false, int hitPoints = 1)
         {
-            var attachment = _core.Actors.AddNewActorAttachment(imagePath, null, UID);
+            var attachment = _core.Actors.Attachments.Create(imagePath, null, UID);
             attachment.TakesDamage = takesDamage;
             attachment.SetHitPoints(hitPoints);
             Attachments.Add(attachment);
@@ -493,16 +493,20 @@ namespace HG.Actors
         }
 
         /// <summary>
-        /// Calculated the difference in heading angle from one object to get to another.
+        /// Calculates the difference in heading angle from one object to get to another between 0-259.
         /// </summary>
         /// <param name="atObj"></param>
         /// <returns></returns>
-        [Obsolete("This function returns the angle in 0-360 degress which is almost impossible to work with, use DeltaAngle() instead.")]
         public double DeltaAngle360(ActorBase atObj)
         {
             return HgMath.DeltaAngle360(this, atObj);
         }
 
+        /// <summary>
+        /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
+        /// </summary>
+        /// <param name="atObj"></param>
+        /// <returns></returns>
         public double DeltaAngle(ActorBase atObj)
         {
             return HgMath.DeltaAngle(this, atObj);

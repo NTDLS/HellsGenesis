@@ -1,36 +1,36 @@
 ﻿using HG.Engine;
 using HG.Menus;
-using HG.TickManagers.Interfaces;
+using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace HG.TickManagers
+namespace HG.TickHandlers
 {
-    internal class MenuManager : IUnvectoredTickManager
+    internal class MenuTickHandler : IUnvectoredTickManager
     {
-        public List<BaseMenu> Collection { get; private set; } = new();
+        public List<BaseMenu> _controller { get; private set; } = new();
 
         private readonly Core _core;
 
-        public MenuManager(Core core)
+        public MenuTickHandler(Core core)
         {
             _core = core;
         }
 
         public void ExecuteWorldClockTick()
         {
-            for (int i = 0; i < Collection.Count; i++)
+            for (int i = 0; i < _controller.Count; i++)
             {
-                var menu = Collection[i];
+                var menu = _controller[i];
                 menu.HandleInput();
             }
         }
 
         public void Render(Graphics dc)
         {
-            lock (Collection)
+            lock (_controller)
             {
-                foreach (var obj in Collection)
+                foreach (var obj in _controller)
                 {
                     obj.Render(dc);
                 }
@@ -41,29 +41,29 @@ namespace HG.TickManagers
 
         public void CleanupDeletedObjects()
         {
-            for (int i = 0; i < Collection.Count; i++)
+            for (int i = 0; i < _controller.Count; i++)
             {
-                if (Collection[i].ReadyForDeletion)
+                if (_controller[i].ReadyForDeletion)
                 {
-                    Delete(Collection[i]);
+                    Delete(_controller[i]);
                 }
             }
         }
 
         public void Insert(BaseMenu menu)
         {
-            lock (Collection)
+            lock (_controller)
             {
-                Collection.Add(menu);
+                _controller.Add(menu);
             }
         }
 
         public void Delete(BaseMenu menu)
         {
-            lock (Collection)
+            lock (_controller)
             {
                 menu.Cleanup();
-                Collection.Remove(menu);
+                _controller.Remove(menu);
             }
         }
 

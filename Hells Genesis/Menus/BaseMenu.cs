@@ -81,7 +81,7 @@ namespace HG.Menus
 
         public void AddMenuItem(ActorMenuItem item)
         {
-            lock (_core.Menus.Collection)
+            lock (_core.Menus._controller)
             {
                 _menuItems.Add(item);
             }

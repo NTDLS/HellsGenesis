@@ -5,8 +5,6 @@ using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
 using System;
-using System.Diagnostics;
-using System.IO;
 using static HG.Engine.Constants;
 
 namespace HG.AI.Logistics

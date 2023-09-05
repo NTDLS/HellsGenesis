@@ -1,25 +1,22 @@
 ﻿using SharpCompress.Archives;
 using SharpCompress.Common;
 using SharpCompress.Readers;
-using SharpDX;
-using SharpDX.Text;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
 
-namespace HG.Engine.Managers
+namespace HG.Engine.Controllers
 {
-    internal class EngineAssetManager
+    internal class EngineAssetController
     {
         private readonly Core _core;
         private readonly Dictionary<string, object> _collection = new();
 
         private readonly string _assetZipPath = @"..\..\..\";
 
-        public EngineAssetManager(Core core)
+        public EngineAssetController(Core core)
         {
             _core = core;
         }

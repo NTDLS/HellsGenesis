@@ -5,14 +5,14 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace HG.Engine.Managers
+namespace HG.Engine.Controllers
 {
-    internal class EngineInputManager
+    internal class EngineInputController
     {
         private readonly Core _core;
         private readonly Dictionary<HgPlayerKey, HgKeyPressState> _keyStates = new Dictionary<HgPlayerKey, HgKeyPressState>();
 
-        public EngineInputManager(Core core)
+        public EngineInputController(Core core)
         {
             _core = core;
         }

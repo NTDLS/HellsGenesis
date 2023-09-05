@@ -1,27 +1,27 @@
 ﻿using HG.Actors;
 using HG.Engine;
-using HG.Engine.Managers;
-using HG.TickManagers.Interfaces;
+using HG.Engine.Controllers;
+using HG.TickHandlers.Interfaces;
 using HG.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HG.TickManagers
+namespace HG.TickHandlers
 {
-    internal class ActorRadarPositionManager : IUnvectoredTickManager
+    internal class ActorRadarPositionTickHandler : IUnvectoredTickManager
     {
         private readonly Core _core;
-        private readonly EngineActorManager _manager;
+        private readonly EngineActorController _controller;
 
-        public List<subType> VisibleOfType<subType>() where subType : ActorRadarPositionIndicator => _manager.VisibleOfType<subType>();
-        public List<ActorRadarPositionIndicator> Visible() => _manager.VisibleOfType<ActorRadarPositionIndicator>();
-        public List<subType> OfType<subType>() where subType : ActorRadarPositionIndicator => _manager.OfType<subType>();
+        public List<subType> VisibleOfType<subType>() where subType : ActorRadarPositionIndicator => _controller.VisibleOfType<subType>();
+        public List<ActorRadarPositionIndicator> Visible() => _controller.VisibleOfType<ActorRadarPositionIndicator>();
+        public List<subType> OfType<subType>() where subType : ActorRadarPositionIndicator => _controller.OfType<subType>();
 
-        public ActorRadarPositionManager(Core core, EngineActorManager manager)
+        public ActorRadarPositionTickHandler(Core core, EngineActorController manager)
         {
             _core = core;
-            _manager = manager;
+            _controller = manager;
         }
 
         public void ExecuteWorldClockTick()
@@ -81,21 +81,21 @@ namespace HG.TickManagers
 
         public ActorRadarPositionIndicator Create()
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 var obj = new ActorRadarPositionIndicator(_core);
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
         public void Delete(ActorRadarPositionIndicator obj)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 obj.Cleanup();
                 obj.Visable = false;
-                _manager.Collection.Remove(obj);
+                _controller.Collection.Remove(obj);
             }
         }
 

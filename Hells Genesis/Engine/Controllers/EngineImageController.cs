@@ -1,12 +1,12 @@
 ﻿using System.Drawing;
 
-namespace HG.Engine.Managers
+namespace HG.Engine.Controllers
 {
-    internal class EngineImageManager
+    internal class EngineImageController
     {
         private readonly Core _core;
 
-        public EngineImageManager(Core core)
+        public EngineImageController(Core core)
         {
             _core = core;
         }

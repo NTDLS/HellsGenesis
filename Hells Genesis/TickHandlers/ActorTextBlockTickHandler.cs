@@ -1,27 +1,27 @@
 ﻿using HG.Actors;
 using HG.Engine;
-using HG.Engine.Managers;
-using HG.TickManagers.Interfaces;
+using HG.Engine.Controllers;
+using HG.TickHandlers.Interfaces;
 using HG.Types;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace HG.TickManagers
+namespace HG.TickHandlers
 {
-    internal class ActorTextBlockManager : IVectoredTickManager
+    internal class ActorTextBlockTickHandler : IVectoredTickManager
     {
         private readonly Core _core;
-        private readonly EngineActorManager _manager;
+        private readonly EngineActorController _controller;
 
-        public List<subType> VisibleOfType<subType>() where subType : ActorTextBlock => _manager.VisibleOfType<subType>();
-        public List<ActorTextBlock> Visible() => _manager.VisibleOfType<ActorTextBlock>();
-        public List<subType> OfType<subType>() where subType : ActorTextBlock => _manager.OfType<subType>();
+        public List<subType> VisibleOfType<subType>() where subType : ActorTextBlock => _controller.VisibleOfType<subType>();
+        public List<ActorTextBlock> Visible() => _controller.VisibleOfType<ActorTextBlock>();
+        public List<subType> OfType<subType>() where subType : ActorTextBlock => _controller.OfType<subType>();
 
-        public ActorTextBlockManager(Core core, EngineActorManager manager)
+        public ActorTextBlockTickHandler(Core core, EngineActorController manager)
         {
             _core = core;
-            _manager = manager;
+            _controller = manager;
         }
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
@@ -36,41 +36,41 @@ namespace HG.TickManagers
 
         public ActorRadarPositionTextBlock CreateRadarPosition(string font, Brush color, double size, HgPoint<double> location)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 var obj = new ActorRadarPositionTextBlock(_core, font, color, size, location);
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
         public ActorTextBlock Create(string font, Brush color, double size, HgPoint<double> location, bool isPositionStatic)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 var obj = new ActorTextBlock(_core, font, color, size, location, isPositionStatic);
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
         public ActorTextBlock Create(string font, Brush color, double size, HgPoint<double> location, bool isPositionStatic, string assetTag)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 var obj = new ActorTextBlock(_core, font, color, size, location, isPositionStatic);
                 obj.AssetTag = assetTag;
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
         public void Delete(ActorTextBlock obj)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 obj.Cleanup();
-                _manager.Collection.Remove(obj);
+                _controller.Collection.Remove(obj);
             }
         }
 

@@ -5,7 +5,6 @@ using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
 using System;
-using System.IO;
 using static HG.Engine.Constants;
 
 namespace HG.AI.Logistics
@@ -440,7 +439,7 @@ namespace HG.AI.Logistics
 
             aiParams.Set(AIInputs.DistanceFromObservedObject, percentageOfCloseness);
 
-            var deltaAngle = _owner.DeltaAngle360(_observedObject);
+            var deltaAngle = _owner.DeltaAngle(_observedObject);
 
             var angleToIn6thRadians = HgAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
 

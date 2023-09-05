@@ -1,31 +1,31 @@
 ﻿using HG.Actors;
 using HG.Engine;
-using HG.Engine.Managers;
-using HG.TickManagers.Interfaces;
+using HG.Engine.Controllers;
+using HG.TickHandlers.Interfaces;
 using HG.Types;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace HG.TickManagers
+namespace HG.TickHandlers
 {
-    internal class ActorAnimationManager : IVectoredTickManager
+    internal class ActorAnimationTickHandler : IVectoredTickManager
     {
         private readonly Core _core;
-        private readonly EngineActorManager _manager;
+        private readonly EngineActorController _controller;
 
-        public List<subType> VisibleOfType<subType>() where subType : ActorAnimation => _manager.VisibleOfType<subType>();
-        public List<ActorAnimation> Visible() => _manager.VisibleOfType<ActorAnimation>();
-        public List<subType> OfType<subType>() where subType : ActorAnimation => _manager.OfType<subType>();
+        public List<subType> VisibleOfType<subType>() where subType : ActorAnimation => _controller.VisibleOfType<subType>();
+        public List<ActorAnimation> Visible() => _controller.VisibleOfType<ActorAnimation>();
+        public List<subType> OfType<subType>() where subType : ActorAnimation => _controller.OfType<subType>();
 
-        public ActorAnimationManager(Core core, EngineActorManager manager)
+        public ActorAnimationTickHandler(Core core, EngineActorController manager)
         {
             _core = core;
-            _manager = manager;
+            _controller = manager;
         }
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
         {
-            foreach (var animation in _manager.VisibleOfType<ActorAnimation>())
+            foreach (var animation in _controller.VisibleOfType<ActorAnimation>())
             {
                 animation.ApplyMotion(displacementVector);
                 animation.AdvanceImage();
@@ -34,9 +34,9 @@ namespace HG.TickManagers
 
         public void DeleteAll()
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
-                _manager.OfType<ActorAnimation>().ForEach(c => c.QueueForDelete());
+                _controller.OfType<ActorAnimation>().ForEach(c => c.QueueForDelete());
             }
         }
 
@@ -49,31 +49,31 @@ namespace HG.TickManagers
         /// <param name="defaultPosition"></param>
         public void CreateAt(ActorAnimation animation, ActorBase defaultPosition)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 animation.X = defaultPosition.X;
                 animation.Y = defaultPosition.Y;
                 animation.RotationMode = HgRotationMode.Clip; //Much less expensive. Use this or NONE if you can.
-                _manager.Collection.Add(animation);
+                _controller.Collection.Add(animation);
             }
         }
 
         public ActorAnimation Create(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, ActorAnimation.PlayMode playMode = null)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 ActorAnimation obj = new ActorAnimation(_core, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
         public void Delete(ActorAnimation obj)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 obj.Cleanup();
-                _manager.Collection.Remove(obj);
+                _controller.Collection.Remove(obj);
             }
         }
 

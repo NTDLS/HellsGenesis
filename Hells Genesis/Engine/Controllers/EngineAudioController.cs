@@ -1,6 +1,6 @@
-﻿namespace HG.Engine.Managers
+﻿namespace HG.Engine.Controllers
 {
-    internal class EngineAudioManager
+    internal class EngineAudioController
     {
         private readonly Core _core;
 
@@ -9,7 +9,7 @@
         public AudioClip DoorIsAjarSound { get; private set; }
         public AudioClip LockedOnBlip { get; private set; }
 
-        public EngineAudioManager(Core core)
+        public EngineAudioController(Core core)
         {
             _core = core;
 

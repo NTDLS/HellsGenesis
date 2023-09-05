@@ -75,7 +75,7 @@ namespace HG.Engine
                 {
                     Monitor.Enter(_core.DrawingSemaphore);
 
-                    lock (_core.Menus.Collection)
+                    lock (_core.Menus._controller)
                         lock (_core.Player.Actor)
                             lock (_core.Actors.Collection)
                             {
@@ -87,7 +87,7 @@ namespace HG.Engine
                     Monitor.Exit(_core.DrawingSemaphore);
                 }
 
-                if (_core.Menus.Collection.Count > 0)
+                if (_core.Menus._controller.Count > 0)
                 {
                     Thread.Sleep(20);
                 }

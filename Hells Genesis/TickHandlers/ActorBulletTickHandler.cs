@@ -3,26 +3,26 @@ using HG.Actors.Enemies;
 using HG.Actors.Weapons;
 using HG.Actors.Weapons.Bullets;
 using HG.Engine;
-using HG.Engine.Managers;
-using HG.TickManagers.Interfaces;
+using HG.Engine.Controllers;
+using HG.TickHandlers.Interfaces;
 using HG.Types;
 using System.Collections.Generic;
 
-namespace HG.TickManagers
+namespace HG.TickHandlers
 {
-    internal class ActorBulletManager : IVectoredTickManager
+    internal class ActorBulletTickHandler : IVectoredTickManager
     {
         private readonly Core _core;
-        private readonly EngineActorManager _manager;
+        private readonly EngineActorController _controller;
 
-        public List<subType> VisibleOfType<subType>() where subType : BulletBase => _manager.VisibleOfType<subType>();
-        public List<BulletBase> Visible() => _manager.VisibleOfType<BulletBase>();
-        public List<subType> OfType<subType>() where subType : BulletBase => _manager.OfType<subType>();
+        public List<subType> VisibleOfType<subType>() where subType : BulletBase => _controller.VisibleOfType<subType>();
+        public List<BulletBase> Visible() => _controller.VisibleOfType<BulletBase>();
+        public List<subType> OfType<subType>() where subType : BulletBase => _controller.OfType<subType>();
 
-        public ActorBulletManager(Core core, EngineActorManager manager)
+        public ActorBulletTickHandler(Core core, EngineActorController manager)
         {
             _core = core;
-            _manager = manager;
+            _controller = manager;
         }
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
@@ -32,9 +32,9 @@ namespace HG.TickManagers
                 _core.Player.Actor
             };
 
-            thingsThatCanBeHit.AddRange(_manager.VisibleOfType<EnemyBossBase>());
-            thingsThatCanBeHit.AddRange(_manager.VisibleOfType<EnemyPeonBase>());
-            thingsThatCanBeHit.AddRange(_manager.VisibleOfType<ActorAttachment>());
+            thingsThatCanBeHit.AddRange(_controller.VisibleOfType<EnemyBossBase>());
+            thingsThatCanBeHit.AddRange(_controller.VisibleOfType<EnemyPeonBase>());
+            thingsThatCanBeHit.AddRange(_controller.VisibleOfType<ActorAttachment>());
 
             foreach (var bullet in VisibleOfType<BulletBase>())
             {
@@ -57,38 +57,38 @@ namespace HG.TickManagers
 
         public void DeleteAll()
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
-                _manager.OfType<BulletBase>().ForEach(c => c.QueueForDelete());
+                _controller.OfType<BulletBase>().ForEach(c => c.QueueForDelete());
             }
         }
 
         public BulletBase CreateLocked(WeaponBase weapon, ActorBase firedFrom, ActorBase lockedTarget, HgPoint<double> xyOffset = null)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 var obj = weapon.CreateBullet(lockedTarget, xyOffset);
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
         public BulletBase Create(WeaponBase weapon, ActorBase firedFrom, HgPoint<double> xyOffset = null)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 var obj = weapon.CreateBullet(null, xyOffset);
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
         public void Delete(BulletBase obj)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 obj.Cleanup();
-                _manager.Collection.Remove(obj);
+                _controller.Collection.Remove(obj);
             }
         }
 

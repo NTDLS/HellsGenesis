@@ -1,26 +1,26 @@
 ﻿using HG.Actors;
 using HG.Engine;
-using HG.Engine.Managers;
-using HG.TickManagers.Interfaces;
+using HG.Engine.Controllers;
+using HG.TickHandlers.Interfaces;
 using HG.Types;
 using System.Collections.Generic;
 
-namespace HG.TickManagers
+namespace HG.TickHandlers
 {
-    internal class ActorStarManager : IVectoredTickManager
+    internal class ActorStarTickHandler : IVectoredTickManager
     {
         private readonly Core _core;
-        private readonly EngineActorManager _manager;
+        private readonly EngineActorController _controller;
 
-        public List<subType> VisibleOfType<subType>() where subType : ActorStar => _manager.VisibleOfType<subType>();
-        public List<ActorStar> Visible() => _manager.VisibleOfType<ActorStar>();
-        public List<subType> OfType<subType>() where subType : ActorStar => _manager.OfType<subType>();
+        public List<subType> VisibleOfType<subType>() where subType : ActorStar => _controller.VisibleOfType<subType>();
+        public List<ActorStar> Visible() => _controller.VisibleOfType<ActorStar>();
+        public List<subType> OfType<subType>() where subType : ActorStar => _controller.OfType<subType>();
 
 
-        public ActorStarManager(Core core, EngineActorManager manager)
+        public ActorStarTickHandler(Core core, EngineActorController manager)
         {
             _core = core;
-            _manager = manager;
+            _controller = manager;
         }
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
@@ -29,7 +29,7 @@ namespace HG.TickManagers
             {
                 #region Add new stars...
 
-                if (_manager.VisibleOfType<ActorStar>().Count < 100) //Never wan't more than n stars.
+                if (_controller.VisibleOfType<ActorStar>().Count < 100) //Never wan't more than n stars.
                 {
                     if (displacementVector.X > 0)
                     {
@@ -39,7 +39,7 @@ namespace HG.TickManagers
                             {
                                 int x = HgRandom.Random.Next(_core.Display.TotalCanvasSize.Width - (int)displacementVector.X, _core.Display.TotalCanvasSize.Width);
                                 int y = HgRandom.Random.Next(0, _core.Display.TotalCanvasSize.Height);
-                                _manager.Stars.Create(x, y);
+                                _controller.Stars.Create(x, y);
                             }
                         }
                     }
@@ -51,7 +51,7 @@ namespace HG.TickManagers
                             {
                                 int x = HgRandom.Random.Next(0, (int)-displacementVector.X);
                                 int y = HgRandom.Random.Next(0, _core.Display.TotalCanvasSize.Height);
-                                _manager.Stars.Create(x, y);
+                                _controller.Stars.Create(x, y);
                             }
                         }
                     }
@@ -63,7 +63,7 @@ namespace HG.TickManagers
                             {
                                 int x = HgRandom.Random.Next(0, _core.Display.TotalCanvasSize.Width);
                                 int y = HgRandom.Random.Next(_core.Display.TotalCanvasSize.Height - (int)displacementVector.Y, _core.Display.TotalCanvasSize.Height);
-                                _manager.Stars.Create(x, y);
+                                _controller.Stars.Create(x, y);
                             }
                         }
                     }
@@ -75,7 +75,7 @@ namespace HG.TickManagers
                             {
                                 int x = HgRandom.Random.Next(0, _core.Display.TotalCanvasSize.Width);
                                 int y = HgRandom.Random.Next(0, (int)-displacementVector.Y);
-                                _manager.Stars.Create(x, y);
+                                _controller.Stars.Create(x, y);
                             }
                         }
                     }
@@ -83,7 +83,7 @@ namespace HG.TickManagers
 
                 #endregion
 
-                foreach (var star in _manager.VisibleOfType<ActorStar>())
+                foreach (var star in _controller.VisibleOfType<ActorStar>())
                 {
                     star.ApplyMotion(displacementVector);
                 }
@@ -94,34 +94,34 @@ namespace HG.TickManagers
 
         public ActorStar Create(double x, double y)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 var obj = new ActorStar(_core)
                 {
                     X = x,
                     Y = y
                 };
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
         public ActorStar Create()
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 var obj = new ActorStar(_core);
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
         public void Delete(ActorStar obj)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 obj.Cleanup();
-                _manager.Collection.Remove(obj);
+                _controller.Collection.Remove(obj);
             }
         }
 

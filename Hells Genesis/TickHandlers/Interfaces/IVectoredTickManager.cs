@@ -1,6 +1,6 @@
 ﻿using HG.Types;
 
-namespace HG.TickManagers.Interfaces
+namespace HG.TickHandlers.Interfaces
 {
     /// <summary>
     /// Tick managers which update their actors using the supplied 2D vector.

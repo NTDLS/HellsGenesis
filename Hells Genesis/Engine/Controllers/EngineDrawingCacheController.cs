@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace HG.Engine.Managers
+namespace HG.Engine.Controllers
 {
-    internal class EngineDrawingCacheManager
+    internal class EngineDrawingCacheController
     {
         private readonly Dictionary<DrawingCacheType, DrawingCacheItem> _graphicsCache = new();
         private readonly Core _core;
@@ -16,11 +16,10 @@ namespace HG.Engine.Managers
             Radar
         }
 
-        public EngineDrawingCacheManager(Core core)
+        public EngineDrawingCacheController(Core core)
         {
             _core = core;
         }
-
 
         internal class DrawingCacheItem
         {

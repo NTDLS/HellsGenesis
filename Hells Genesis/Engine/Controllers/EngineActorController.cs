@@ -3,19 +3,23 @@ using HG.Actors.Enemies;
 using HG.Actors.PowerUp;
 using HG.Actors.Weapons.Bullets;
 using HG.Menus;
-using HG.TickManagers;
+using HG.TickHandlers;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading;
-using static HG.Engine.Managers.EngineDrawingCacheManager;
+using static HG.Engine.Controllers.EngineDrawingCacheController;
 
-namespace HG.Engine.Managers
+namespace HG.Engine.Controllers
 {
-    internal class EngineActorManager
+    /// <summary>
+    /// Contains the collection of all actors and their factories.
+    /// </summary>
+    internal class EngineActorController
     {
         private readonly Core _core;
 
@@ -24,30 +28,35 @@ namespace HG.Engine.Managers
         public bool RenderRadar { get; set; } = false;
 
         #region Actors and their factories.
+
         internal List<ActorBase> Collection { get; private set; } = new();
-        public ActorAnimationManager Animations { get; set; }
-        public ActorBulletManager Bullets { get; set; }
-        public ActorDebugManager Debugs { get; set; }
-        public ActorEnemyManager Enemies { get; set; }
-        public ActorPowerupManager Powerups { get; set; }
-        public ActorRadarPositionManager RadarPositions { get; set; }
-        public ActorStarManager Stars { get; set; }
-        public ActorTextBlockManager TextBlocks { get; set; }
+        public ActorAnimationTickHandler Animations { get; set; }
+        public ActorAttachmentTickHandler Attachments { get; set; }
+        public ActorBulletTickHandler Bullets { get; set; }
+        public ActorDebugTickHandler Debugs { get; set; }
+        public ActorEnemyTickHandler Enemies { get; set; }
+        public ActorPowerupTickHandler Powerups { get; set; }
+        public ActorRadarPositionTickHandler RadarPositions { get; set; }
+        public ActorStarTickHandler Stars { get; set; }
+        public ActorTextBlockTickHandler TextBlocks { get; set; }
+
+
 
         #endregion
 
-        public EngineActorManager(Core core)
+        public EngineActorController(Core core)
         {
             _core = core;
 
-            Animations = new ActorAnimationManager(_core, this);
-            Bullets = new ActorBulletManager(_core, this);
-            Debugs = new ActorDebugManager(_core, this);
-            Enemies = new ActorEnemyManager(_core, this);
-            Powerups = new ActorPowerupManager(_core, this);
-            RadarPositions = new ActorRadarPositionManager(_core, this);
-            Stars = new ActorStarManager(_core, this);
-            TextBlocks = new ActorTextBlockManager(_core, this);
+            Animations = new ActorAnimationTickHandler(_core, this);
+            Attachments = new ActorAttachmentTickHandler(_core, this);
+            Bullets = new ActorBulletTickHandler(_core, this);
+            Debugs = new ActorDebugTickHandler(_core, this);
+            Enemies = new ActorEnemyTickHandler(_core, this);
+            Powerups = new ActorPowerupTickHandler(_core, this);
+            RadarPositions = new ActorRadarPositionTickHandler(_core, this);
+            Stars = new ActorStarTickHandler(_core, this);
+            TextBlocks = new ActorTextBlockTickHandler(_core, this);
         }
 
         public void Start()
@@ -200,23 +209,6 @@ namespace HG.Engine.Managers
             }
         }
 
-        #region Factories.
-
-        public ActorAttachment AddNewActorAttachment(string imagePath = null, Size? size = null, uint ownerUID = 0)
-        {
-            lock (Collection)
-            {
-                var obj = new ActorAttachment(_core, imagePath, size)
-                {
-                    OwnerUID = ownerUID
-                };
-                Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        #endregion
-
         #region Rendering.
 
         private HgPoint<double> _radarScale;
@@ -253,7 +245,7 @@ namespace HG.Engine.Managers
 
                 radarDrawing = _core.DrawingCache.Get(DrawingCacheType.Radar, new Size((int)radarWidth, (int)radarHeight));
 
-                _radarScale = new HgPoint<double>((double)radarDrawing.Bitmap.Width / radarVisionWidth, (double)radarDrawing.Bitmap.Height / radarVisionHeight);
+                _radarScale = new HgPoint<double>(radarDrawing.Bitmap.Width / radarVisionWidth, radarDrawing.Bitmap.Height / radarVisionHeight);
                 _radarOffset = new HgPoint<double>(radarWidth / 2.0, radarHeight / 2.0); //Best guess until player is visible.
             }
             else
@@ -390,8 +382,8 @@ namespace HG.Engine.Managers
             {
                 //We add the radar last so that it does not get scaled down.
                 var rect = new Rectangle(
-                        (_core.Display.NatrualScreenSize.Width - (radarDrawing.Bitmap.Width + 25)),
-                        (_core.Display.NatrualScreenSize.Height - (radarDrawing.Bitmap.Height + 50)),
+                        _core.Display.NatrualScreenSize.Width - (radarDrawing.Bitmap.Width + 25),
+                        _core.Display.NatrualScreenSize.Height - (radarDrawing.Bitmap.Height + 50),
                         radarDrawing.Bitmap.Width, radarDrawing.Bitmap.Height
                     );
                 scaledDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);

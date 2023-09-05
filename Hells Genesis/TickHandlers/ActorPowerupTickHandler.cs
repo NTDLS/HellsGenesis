@@ -1,26 +1,26 @@
 ﻿using HG.Actors.PowerUp;
 using HG.Engine;
-using HG.Engine.Managers;
-using HG.TickManagers.Interfaces;
+using HG.Engine.Controllers;
+using HG.TickHandlers.Interfaces;
 using HG.Types;
 using System;
 using System.Collections.Generic;
 
-namespace HG.TickManagers
+namespace HG.TickHandlers
 {
-    internal class ActorPowerupManager : IVectoredTickManager
+    internal class ActorPowerupTickHandler : IVectoredTickManager
     {
         private readonly Core _core;
-        private readonly EngineActorManager _manager;
+        private readonly EngineActorController _controller;
 
-        public List<subType> VisibleOfType<subType>() where subType : PowerUpBase => _manager.VisibleOfType<subType>();
-        public List<PowerUpBase> Visible() => _manager.VisibleOfType<PowerUpBase>();
-        public List<subType> OfType<subType>() where subType : PowerUpBase => _manager.OfType<subType>();
+        public List<subType> VisibleOfType<subType>() where subType : PowerUpBase => _controller.VisibleOfType<subType>();
+        public List<PowerUpBase> Visible() => _controller.VisibleOfType<PowerUpBase>();
+        public List<subType> OfType<subType>() where subType : PowerUpBase => _controller.OfType<subType>();
 
-        public ActorPowerupManager(Core core, EngineActorManager manager)
+        public ActorPowerupTickHandler(Core core, EngineActorController manager)
         {
             _core = core;
-            _manager = manager;
+            _controller = manager;
         }
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
@@ -36,51 +36,51 @@ namespace HG.TickManagers
 
         public void DeleteAll()
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
-                _manager.OfType<PowerUpBase>().ForEach(c => c.QueueForDelete());
+                _controller.OfType<PowerUpBase>().ForEach(c => c.QueueForDelete());
             }
         }
 
         public void Insert(PowerUpBase obj)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
             }
         }
 
         public void Delete(PowerUpBase obj)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 obj.Cleanup();
-                _manager.Collection.Remove(obj);
+                _controller.Collection.Remove(obj);
             }
         }
 
         public T Create<T>() where T : PowerUpBase
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 object[] param = { _core };
                 var obj = (PowerUpBase)Activator.CreateInstance(typeof(T), param);
 
                 obj.Location = _core.Display.RandomOffScreenLocation(100, 1000);
 
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return (T)obj;
             }
         }
 
         public T Create<T>(double x, double y) where T : PowerUpBase
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 object[] param = { _core };
                 var obj = (PowerUpBase)Activator.CreateInstance(typeof(T), param);
                 obj.Location = new HgPoint<double>(x, y);
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 return (T)obj;
             }
         }

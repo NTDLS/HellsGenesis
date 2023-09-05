@@ -1,6 +1,6 @@
-﻿using HG.Engine.Managers;
+﻿using HG.Engine.Controllers;
 using HG.Menus;
-using HG.TickManagers;
+using HG.TickHandlers;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -9,18 +9,18 @@ namespace HG.Engine
     internal class Core
     {
         public EngineSettings Settings { get; private set; } = new();
-        public EngineInputManager Input { get; private set; }
-        public EngineDisplayManager Display { get; private set; }
-        public EngineActorManager Actors { get; private set; }
-        public SituationManager Situations { get; private set; }
-        public EventManager Events { get; private set; }
-        public EngineAudioManager Audio { get; private set; }
-        public EngineImageManager Imaging { get; private set; }
-        public EngineAssetManager Assets { get; private set; }
+        public EngineInputController Input { get; private set; }
+        public EngineDisplayController Display { get; private set; }
+        public EngineActorController Actors { get; private set; }
+        public SituationTickHandler Situations { get; private set; }
+        public EventTickHandler Events { get; private set; }
+        public EngineAudioController Audio { get; private set; }
+        public EngineImageController Imaging { get; private set; }
+        public EngineAssetController Assets { get; private set; }
 
-        public MenuManager Menus { get; private set; }
-        public PlayerManager Player { get; private set; }
-        public EngineDrawingCacheManager DrawingCache { get; private set; }
+        public MenuTickHandler Menus { get; private set; }
+        public PlayerTickHandler Player { get; private set; }
+        public EngineDrawingCacheController DrawingCache { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
@@ -51,17 +51,17 @@ namespace HG.Engine
 
         public Core(Control drawingSurface)
         {
-            Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
-            Assets = new EngineAssetManager(this);
-            Actors = new EngineActorManager(this);
-            Input = new EngineInputManager(this);
-            Situations = new SituationManager(this);
-            Events = new EventManager(this);
-            Audio = new EngineAudioManager(this);
-            Imaging = new EngineImageManager(this);
-            Menus = new MenuManager(this);
-            Player = new PlayerManager(this);
-            DrawingCache = new EngineDrawingCacheManager(this);
+            Display = new EngineDisplayController(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
+            Assets = new EngineAssetController(this);
+            Actors = new EngineActorController(this);
+            Input = new EngineInputController(this);
+            Situations = new SituationTickHandler(this);
+            Events = new EventTickHandler(this);
+            Audio = new EngineAudioController(this);
+            Imaging = new EngineImageController(this);
+            Menus = new MenuTickHandler(this);
+            Player = new PlayerTickHandler(this);
+            DrawingCache = new EngineDrawingCacheController(this);
 
             _gameLoop = new GameLoop(this);
 

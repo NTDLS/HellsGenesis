@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace HG.Engine.Managers
+namespace HG.Engine.Controllers
 {
-    internal class EngineDisplayManager
+    internal class EngineDisplayController
     {
         private readonly Core _core;
 
@@ -31,7 +31,7 @@ namespace HG.Engine.Managers
         public int SpeedOrientedFrameScalingSubtractionX() => (int)(OverdrawSize.Width / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0));
         public int SpeedOrientedFrameScalingSubtractionY() => (int)(OverdrawSize.Height / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0));
         public double SpeedOrientedFrameScalingFactor() =>
-            1 - (OverdrawSize.Width / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0) / _core.Display.OverdrawSize.Width) / 2.0;
+            1 - OverdrawSize.Width / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0) / _core.Display.OverdrawSize.Width / 2.0;
 
         /// <summary>
         /// The number of extra pixles to draw beyond the NatrualScreenSize.
@@ -146,7 +146,7 @@ namespace HG.Engine.Managers
             return new HgPoint<double>(x, y);
         }
 
-        public EngineDisplayManager(Core core, Control drawingSurface, Size visibleSize)
+        public EngineDisplayController(Core core, Control drawingSurface, Size visibleSize)
         {
             _core = core;
             DrawingSurface = drawingSurface;

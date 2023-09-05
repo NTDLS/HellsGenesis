@@ -17,6 +17,16 @@ namespace HG.Utility.ExtensionMethods
                 && reference.Y < with.Y + with.Height + tolerance;
         }
 
+        public static bool IsNotBetween(this double value, double minValue, double maxValue)
+        {
+            return !IsBetween(value, minValue, maxValue);
+        }
+
+        public static bool IsNotBetween(this double? value, double minValue, double maxValue)
+        {
+            return !IsBetween(value, minValue, maxValue);
+        }
+
         public static bool IsBetween(this double value, double minValue, double maxValue)
         {
             if (minValue > maxValue)

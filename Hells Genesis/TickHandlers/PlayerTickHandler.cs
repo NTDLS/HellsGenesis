@@ -1,17 +1,17 @@
 ﻿using HG.Actors;
 using HG.Engine;
-using HG.TickManagers.Interfaces;
+using HG.TickHandlers.Interfaces;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
 
-namespace HG.TickManagers
+namespace HG.TickHandlers
 {
-    internal class PlayerManager : IVectorGeneratorTickManager
+    internal class PlayerTickHandler : IVectorGeneratorTickManager
     {
         public ActorPlayer Actor { get; set; }
         private readonly Core _core;
 
-        public PlayerManager(Core core)
+        public PlayerTickHandler(Core core)
         {
             _core = core;
         }

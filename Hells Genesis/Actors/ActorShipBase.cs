@@ -12,8 +12,8 @@ namespace HG.Actors
 {
     internal class ActorShipBase : ActorBase
     {
-        public ActorRadarPositionIndicator RadarPositionIndicator { get; set; }
-        public ActorRadarPositionTextBlock RadarPositionText { get; set; }
+        public ActorRadarPositionIndicator RadarPositionIndicator { get; protected set; }
+        public ActorRadarPositionTextBlock RadarPositionText { get; protected set; }
 
         private readonly List<WeaponBase> _secondaryWeapons = new();
         private readonly List<WeaponBase> _primaryWeapons = new();

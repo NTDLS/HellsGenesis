@@ -1,6 +1,6 @@
 ﻿using HG.Types;
 
-namespace HG.TickManagers.Interfaces
+namespace HG.TickHandlers.Interfaces
 {
     /// <summary>
     /// Tick managers that generate offset vectors. Realistically, this is only the "player" actor.

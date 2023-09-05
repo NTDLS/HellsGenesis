@@ -1,26 +1,26 @@
 ﻿using HG.Actors.Enemies;
 using HG.Engine;
-using HG.Engine.Managers;
-using HG.TickManagers.Interfaces;
+using HG.Engine.Controllers;
+using HG.TickHandlers.Interfaces;
 using HG.Types;
 using System;
 using System.Collections.Generic;
 
-namespace HG.TickManagers
+namespace HG.TickHandlers
 {
-    internal class ActorEnemyManager : IVectoredTickManager
+    internal class ActorEnemyTickHandler : IVectoredTickManager
     {
         private readonly Core _core;
-        private readonly EngineActorManager _manager;
+        private readonly EngineActorController _controller;
 
-        public List<subType> VisibleOfType<subType>() where subType : EnemyBase => _manager.VisibleOfType<subType>();
-        public List<EnemyBase> Visible() => _manager.VisibleOfType<EnemyBase>();
-        public List<subType> OfType<subType>() where subType : EnemyBase => _manager.OfType<subType>();
+        public List<subType> VisibleOfType<subType>() where subType : EnemyBase => _controller.VisibleOfType<subType>();
+        public List<EnemyBase> Visible() => _controller.VisibleOfType<EnemyBase>();
+        public List<subType> OfType<subType>() where subType : EnemyBase => _controller.OfType<subType>();
 
-        public ActorEnemyManager(Core core, EngineActorManager manager)
+        public ActorEnemyTickHandler(Core core, EngineActorController manager)
         {
             _core = core;
-            _manager = manager;
+            _controller = manager;
         }
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
@@ -52,23 +52,23 @@ namespace HG.TickManagers
 
         public void DeleteAll()
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
-                _manager.OfType<EnemyBase>().ForEach(c => c.QueueForDelete());
+                _controller.OfType<EnemyBase>().ForEach(c => c.QueueForDelete());
             }
         }
 
         public void Insert(EnemyBase obj)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
             }
         }
 
         public T Create<T>() where T : EnemyBase
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 object[] param = { _core };
                 EnemyBase obj = (EnemyBase)Activator.CreateInstance(typeof(T), param);
@@ -78,7 +78,7 @@ namespace HG.TickManagers
                 obj.Velocity.Angle.Degrees = HgRandom.Random.Next(0, 360);
 
                 obj.BeforeCreate();
-                _manager.Collection.Add(obj);
+                _controller.Collection.Add(obj);
                 obj.AfterCreate();
 
                 return (T)obj;
@@ -87,10 +87,10 @@ namespace HG.TickManagers
 
         public void Delete(EnemyBase obj)
         {
-            lock (_manager.Collection)
+            lock (_controller.Collection)
             {
                 obj.Cleanup();
-                _manager.Collection.Remove(obj);
+                _controller.Collection.Remove(obj);
             }
         }
 

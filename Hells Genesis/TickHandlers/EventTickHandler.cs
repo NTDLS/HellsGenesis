@@ -1,19 +1,19 @@
 ﻿using HG.Engine;
 using HG.Menus;
-using HG.TickManagers.Interfaces;
+using HG.TickHandlers.Interfaces;
 using System;
 using System.Collections.Generic;
 using static HG.Engine.HgEngineCallbackEvent;
 
-namespace HG.TickManagers
+namespace HG.TickHandlers
 {
-    internal class EventManager : IUnvectoredTickManager
+    internal class EventTickHandler : IUnvectoredTickManager
     {
         public List<HgEngineCallbackEvent> Collection { get; private set; } = new();
 
         private readonly Core _core;
 
-        public EventManager(Core core)
+        public EventTickHandler(Core core)
         {
             _core = core;
         }
