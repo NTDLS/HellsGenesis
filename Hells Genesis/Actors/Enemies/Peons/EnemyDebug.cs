@@ -3,7 +3,6 @@ using HG.AI.Logistics;
 using HG.Engine;
 using HG.Types;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 
@@ -50,7 +49,7 @@ namespace HG.Actors.Enemies.Peons
 
             //if (HgRandom.FlipCoin())
             //{
-                SetDefaultAIController(AIControllers[typeof(Taunt)]);
+            SetDefaultAIController(AIControllers[typeof(Taunt)]);
             //}
             //else
             //{
@@ -83,7 +82,7 @@ namespace HG.Actors.Enemies.Peons
                 if (HgRandom.ChanceIn(2))
                 {
                 */
-                    SetDefaultAIController(AIControllers[typeof(Taunt)]);
+                SetDefaultAIController(AIControllers[typeof(Taunt)]);
                 /*
                 }
                 else if (HgRandom.ChanceIn(2))

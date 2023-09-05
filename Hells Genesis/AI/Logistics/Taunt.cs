@@ -203,7 +203,7 @@ namespace HG.AI.Logistics
                 var distanceToObservedObject = _owner.DistanceTo(_observedObject);
                 double augmentationDegrees = 0.2;
 
-                    var approachAngleToObserved = _owner.DeltaAngle(_observedObject);
+                var approachAngleToObserved = _owner.DeltaAngle(_observedObject);
 
                 //We are making the transition to our depart angle, but if we get too close then make the angle more agressive.
                 double percentOfAllowableCloseness = (100 / distanceToObservedObject);

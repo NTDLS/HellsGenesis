@@ -1,5 +1,4 @@
 ﻿using HG.Actors.Enemies;
-using HG.Actors.Enemies.Bosses;
 using HG.Actors.Enemies.Peons;
 using HG.Engine;
 
