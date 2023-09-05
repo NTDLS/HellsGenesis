@@ -352,7 +352,17 @@ namespace HG.Actors
             Highlight = _core.Settings.HighlightAllActors;
         }
 
-        public void Initialize(string imagePath = null, Size? size = null,
+        public void InitializeGenericBasic(string imagePath = null, Size? size = null)
+        {
+            if (imagePath != null)
+            {
+                SetImage(imagePath, size);
+            }
+
+            VisibilityChanged();
+        }
+
+        public void InitializeGenericExplodable(string imagePath = null, Size? size = null,
             string explosionAnimationFile = null, Size? explosionAnimationDimensions = null, string explosionSoundFile = null,
             string hitAnimationFile = null, Size? hitAnimationFileDimensions = null, string hitSoundFile = null, string shieldHitSoundFile = null)
         {

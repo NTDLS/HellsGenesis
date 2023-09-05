@@ -14,7 +14,7 @@ namespace HG.Actors
             : base(core)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % _imageCount;
-            Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
+            InitializeGenericBasic(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
             X = HgRandom.Random.Next(0, core.Display.TotalCanvasSize.Width);
             Y = HgRandom.Random.Next(0, core.Display.TotalCanvasSize.Height);

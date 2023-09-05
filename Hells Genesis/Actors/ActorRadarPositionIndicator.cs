@@ -12,7 +12,7 @@ namespace HG.Actors
         public ActorRadarPositionIndicator(Core core)
             : base(core)
         {
-            Initialize(Path.Combine(_assetPath, _assetFile), new Size(8, 8));
+            InitializeGenericBasic(Path.Combine(_assetPath, _assetFile), new Size(8, 8));
 
             X = 0;
             Y = 0;

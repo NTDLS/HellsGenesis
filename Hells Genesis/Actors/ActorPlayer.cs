@@ -36,7 +36,7 @@ namespace HG.Actors
 
             string imagePath = @$"Graphics\Player\Alien\{(int)Class}.png";
 
-            Initialize(imagePath, new Size(32, 32));
+            InitializeGenericExplodable(imagePath, new Size(32, 32));
 
             AmmoLowSound = _core.Audio.Get(@"Sounds\Ship\Ammo Low.wav", 0.75f);
             SystemsFailingSound = _core.Audio.Get(@"Sounds\Ship\Systems Failing.wav", 0.75f);

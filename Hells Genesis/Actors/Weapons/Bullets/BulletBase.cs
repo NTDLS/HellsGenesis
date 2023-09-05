@@ -25,7 +25,7 @@ namespace HG.Actors.Weapons.Bullets
              ActorBase lockedTarget = null, HgPoint<double> xyOffset = null)
             : base(core)
         {
-            Initialize(imagePath);
+            InitializeGenericBasic(imagePath);
 
             Weapon = weapon;
             LockedTarget = lockedTarget;

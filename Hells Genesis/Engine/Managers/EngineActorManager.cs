@@ -191,22 +191,6 @@ namespace HG.Engine.Managers
             }
         }
 
-        public ActorBase Insert(string imagePath = null, Size? size = null, string assetTag = "")
-        {
-            lock (Collection)
-            {
-                var actor = new ActorBase(_core, assetTag)
-                {
-                    Visable = true
-                };
-
-                actor.Initialize(imagePath, size);
-
-                Collection.Add(actor);
-                return actor;
-            }
-        }
-
         public ActorBase Insert(ActorBase actor)
         {
             lock (Collection)

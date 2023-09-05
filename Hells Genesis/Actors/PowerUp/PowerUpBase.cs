@@ -43,7 +43,7 @@ namespace HG.Actors.PowerUp
         public PowerUpBase(Core core)
             : base(core)
         {
-            Initialize();
+            InitializeGenericBasic();
 
             int _hitImageIndex = HgRandom.RandomNumber(0, _assetHitAnimationFiles.Count());
             _hitAnimation = new ActorAnimation(_core, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
