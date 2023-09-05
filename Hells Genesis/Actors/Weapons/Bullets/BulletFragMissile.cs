@@ -11,12 +11,14 @@ namespace HG.Actors.Weapons.Bullets
              ActorBase lockedTarget = null, HgPoint<double> xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
-            InitializeGenericBasic(imagePath);
+            Initialize(imagePath);
         }
 
-        public override void ApplyIntelligence(HgPoint<double> displacementVector, ActorBase testHit)
+        /*
+        public override void ApplyIntelligence(HgPoint<double> displacementVector, dynamic testHit)
         {
-            base.ApplyIntelligence(displacementVector, testHit);
+            base.ApplyIntelligence(displacementVector, testHit as BulletFragMissile);
         }
+        */
     }
 }

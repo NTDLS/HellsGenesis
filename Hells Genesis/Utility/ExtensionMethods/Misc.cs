@@ -26,6 +26,15 @@ namespace HG.Utility.ExtensionMethods
             return value >= minValue && value <= maxValue;
         }
 
+        public static bool IsBetween(this double? value, double minValue, double maxValue)
+        {
+            if (minValue > maxValue)
+            {
+                return value >= maxValue && value <= minValue;
+            }
+            return value >= minValue && value <= maxValue;
+        }
+
         public static double Box(this double value, double minValue, double maxValue)
         {
             if (value > maxValue) return maxValue;

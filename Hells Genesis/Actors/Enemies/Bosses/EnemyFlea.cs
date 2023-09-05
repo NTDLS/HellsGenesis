@@ -23,8 +23,6 @@ namespace HG.Actors.Enemies.Bosses
         public EnemyFlea(Core core)
             : base(core, GetGenericHP(core), ScoreMultiplier)
         {
-            //ThrustAnimation?.QueueForDelete();
-
             _leftGun = Attach(_imagesPath + "Flea.Gun.Left.png", true, 3);
             _rightGun = Attach(_imagesPath + "Flea.Gun.Right.png", true, 3);
             _leftThrust = Attach(_imagesPath + "Flea.Jet.png", true, 3);

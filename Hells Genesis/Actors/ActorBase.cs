@@ -1,13 +1,10 @@
-﻿using HG.Actors.Enemies;
-using HG.Actors.PowerUp;
-using HG.Actors.Weapons;
+﻿using HG.Actors.Weapons;
 using HG.Actors.Weapons.Bullets;
 using HG.Engine;
 using HG.Types;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 
 namespace HG.Actors
@@ -17,41 +14,22 @@ namespace HG.Actors
         protected Core _core;
         public bool IsBoostFading { get; set; }
 
-        private readonly List<WeaponBase> _secondaryWeapons = new();
-        private readonly List<WeaponBase> _primaryWeapons = new();
-
-        private SolidBrush _radarDotBrush = new(Color.FromArgb(255, 255, 0, 0));
         private Image _image;
 
-        private readonly string _assetPathlockedOnImage = @"Graphics\Weapon\Locked On.png";
-        private Image _lockedOnImage;
+        protected Image _lockedOnImage;
+        protected Image _lockedOnSoftImage;
+        protected AudioClip _hitSound;
+        protected AudioClip _shieldHit;
+        protected AudioClip _explodeSound;
 
-        private readonly string _assetPathlockedOnSoftImage = @"Graphics\Weapon\Locked Soft.png";
-        private Image _lockedOnSoftImage;
+        protected ActorAnimation _explosionAnimation;
+        protected ActorAnimation _hitExplosionAnimation;
+        protected ActorAnimation _hitAnimation;
+
+        private SolidBrush _radarDotBrush = new(Color.FromArgb(255, 255, 0, 0));
 
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private readonly int _MillisecondsBetweenHits = 200;
-
-        private readonly string _assetPathHitSound = @"Sounds\Ship\Object Hit.wav";
-        private AudioClip _hitSound;
-
-        private readonly string _assetPathshieldHit = @"Sounds\Ship\Shield Hit.wav";
-        private AudioClip _shieldHit;
-
-        private ActorAnimation _explosionAnimation;
-        private const string _assetPathExplosionAnimation = @"Graphics\Animation\Explode\Explosion 256x256\";
-        private readonly int _explosionAnimationCount = 3;
-        private int _selectedExplosionAnimationIndex = 0;
-
-        private ActorAnimation _hitExplosionAnimation;
-        private const string _assetPathHitExplosionAnimation = @"Graphics\Animation\Explode\Hit Explosion 22x22\";
-        private readonly int _hitExplosionAnimationCount = 2;
-        private int _selectedHitExplosionAnimationIndex = 0;
-
-        private AudioClip _explodeSound;
-        private const string _assetExplosionSoundPath = @"Sounds\Explode\";
-        private readonly int _hitExplosionSoundCount = 2;
-        private int _selectedHitExplosionSoundIndex = 0;
 
         #region Properties.
 
@@ -63,14 +41,12 @@ namespace HG.Actors
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
         public bool Highlight { get; set; } = false;
         public HgRotationMode RotationMode { get; set; }
-        public WeaponBase SelectedPrimaryWeapon { get; private set; }
-        public WeaponBase SelectedSecondaryWeapon { get; private set; }
         public int HitPoints { get; private set; } = 0;
         public int ShieldPoints { get; private set; } = 0;
 
         #region Events.
 
-        public delegate void HitEvent(ActorBase sender, HgDamageType damageType);
+        public delegate void HitEvent(ActorBase sender, HgDamageType damageType, int damageAmount);
         public event HitEvent OnHit;
 
         public delegate void QueuedForDeleteEvent(ActorBase sender);
@@ -133,19 +109,6 @@ namespace HG.Actors
             {
                 pointsToAdd = _core.Settings.MaxHitpoints - (HitPoints + pointsToAdd);
             }
-
-            /*
-            if (this is ObjPlayer)
-            {
-                var player = this as ObjPlayer;
-
-                if (HitPoints < _core.Settings.MaxShieldPoints && HitPoints + pointsToAdd >= _core.Settings.MaxShieldPoints)
-                {
-                    player.AllSystemsGoSound.Play();
-                }
-            }
-            */
-
             HitPoints += pointsToAdd;
         }
 
@@ -352,55 +315,8 @@ namespace HG.Actors
             Highlight = _core.Settings.HighlightAllActors;
         }
 
-        public void InitializeGenericBasic(string imagePath = null, Size? size = null)
+        public void Initialize(string imagePath = null, Size? size = null)
         {
-            if (imagePath != null)
-            {
-                SetImage(imagePath, size);
-            }
-
-            VisibilityChanged();
-        }
-
-        public void InitializeGenericExplodable(string imagePath = null, Size? size = null,
-            string explosionAnimationFile = null, Size? explosionAnimationDimensions = null, string explosionSoundFile = null,
-            string hitAnimationFile = null, Size? hitAnimationFileDimensions = null, string hitSoundFile = null, string shieldHitSoundFile = null)
-        {
-            if (hitSoundFile == null)
-                _hitSound = _core.Audio.Get(_assetPathHitSound, 0.5f);
-            else _hitSound = _core.Audio.Get(hitSoundFile, 0.5f);
-
-            if (shieldHitSoundFile == null)
-                _shieldHit = _core.Audio.Get(_assetPathshieldHit, 0.5f);
-            else _shieldHit = _core.Audio.Get(shieldHitSoundFile, 0.5f);
-
-            if (explosionSoundFile == null)
-            {
-                _selectedHitExplosionSoundIndex = HgRandom.Random.Next(0, 1000) % _hitExplosionSoundCount;
-                _explodeSound = _core.Audio.Get(Path.Combine(_assetExplosionSoundPath, $"{_selectedHitExplosionSoundIndex}.wav"), 1.0f);
-            }
-            else _explodeSound = _core.Audio.Get(explosionSoundFile, 1.0f);
-
-            if (explosionAnimationFile == null)
-            {
-                _selectedExplosionAnimationIndex = HgRandom.Random.Next(0, 1000) % _explosionAnimationCount;
-                _explosionAnimation = new ActorAnimation(_core, Path.Combine(_assetPathExplosionAnimation, $"{_selectedExplosionAnimationIndex}.png"), new Size(256, 256));
-            }
-            else _explosionAnimation = new ActorAnimation(_core, explosionAnimationFile, (Size)explosionAnimationDimensions);
-
-            _lockedOnImage = _core.Imaging.Get(_assetPathlockedOnImage);
-            _lockedOnSoftImage = _core.Imaging.Get(_assetPathlockedOnSoftImage);
-
-            if (hitAnimationFile == null)
-            {
-                _selectedHitExplosionAnimationIndex = HgRandom.Random.Next(0, 1000) % _hitExplosionAnimationCount;
-                _hitExplosionAnimation = new ActorAnimation(_core, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
-            }
-            else
-            {
-                _hitExplosionAnimation = new ActorAnimation(_core, hitAnimationFile, (Size)hitAnimationFileDimensions);
-            }
-
             if (imagePath != null)
             {
                 SetImage(imagePath, size);
@@ -413,173 +329,6 @@ namespace HG.Actors
         {
             X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
             Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
-        }
-
-        public void ClearPrimaryWeapons()
-        {
-            _primaryWeapons.Clear();
-        }
-
-        public void ClearSecondaryWeapons()
-        {
-            _secondaryWeapons.Clear();
-        }
-
-        public void AddPrimaryWeapon(WeaponBase weapon)
-        {
-            var existing = GetPrimaryWeaponOfType(weapon.GetType());
-            if (existing == null)
-            {
-                weapon.SetOwner(this);
-                _primaryWeapons.Add(weapon);
-            }
-            else
-            {
-                existing.RoundQuantity += weapon.RoundQuantity;
-            }
-        }
-
-        public void AddSecondaryWeapon(WeaponBase weapon)
-        {
-            var existing = GetSecondaryWeaponOfType(weapon.GetType());
-            if (existing == null)
-            {
-                weapon.SetOwner(this);
-                _secondaryWeapons.Add(weapon);
-            }
-            else
-            {
-                existing.RoundQuantity += weapon.RoundQuantity;
-            }
-        }
-
-        public int TotalAvailableSecondaryWeaponRounds()
-        {
-            return (from o in _secondaryWeapons select o.RoundQuantity).Sum();
-        }
-
-        public int TotalSecondaryWeaponFiredRounds()
-        {
-            return (from o in _secondaryWeapons select o.RoundsFired).Sum();
-        }
-
-        public WeaponBase SelectPreviousAvailableUsableSecondaryWeapon()
-        {
-            WeaponBase previousWeapon = null;
-
-            foreach (var weapon in _secondaryWeapons)
-            {
-                if (weapon == SelectedSecondaryWeapon)
-                {
-                    if (previousWeapon == null)
-                    {
-                        return SelectLastAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the end.
-                    }
-                    SelectedSecondaryWeapon = previousWeapon;
-                    return previousWeapon;
-                }
-
-                previousWeapon = weapon;
-            }
-
-            return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
-        }
-
-        public WeaponBase SelectNextAvailableUsableSecondaryWeapon()
-        {
-            bool selectNextWeapon = false;
-
-            foreach (var weapon in _secondaryWeapons)
-            {
-                if (selectNextWeapon)
-                {
-                    SelectedSecondaryWeapon = weapon;
-                    return weapon;
-                }
-
-                if (weapon == SelectedSecondaryWeapon) //Find the current weapon in the collection;
-                {
-                    selectNextWeapon = true;
-                }
-            }
-
-            return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
-        }
-
-        public bool HasSecondaryWeapon(Type weaponType)
-        {
-            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
-            return existingWeapon != null;
-        }
-
-        public bool HasSecondaryWeaponAndAmmo(Type weaponType)
-        {
-            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
-            return existingWeapon != null && existingWeapon.RoundQuantity > 0;
-        }
-
-        public WeaponBase SelectLastAvailableUsableSecondaryWeapon()
-        {
-            var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).LastOrDefault();
-            if (existingWeapon != null)
-            {
-                SelectedSecondaryWeapon = existingWeapon;
-            }
-            else
-            {
-                SelectedSecondaryWeapon = null;
-            }
-            return SelectedSecondaryWeapon;
-        }
-
-        public WeaponBase SelectFirstAvailableUsablePrimaryWeapon()
-        {
-            var existingWeapon = (from o in _primaryWeapons where o.RoundQuantity > 0 select o).FirstOrDefault();
-            if (existingWeapon != null)
-            {
-                SelectedPrimaryWeapon = existingWeapon;
-            }
-            else
-            {
-                SelectedPrimaryWeapon = null;
-            }
-            return SelectedSecondaryWeapon;
-        }
-
-        public WeaponBase SelectFirstAvailableUsableSecondaryWeapon()
-        {
-            var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).FirstOrDefault();
-            if (existingWeapon != null)
-            {
-                SelectedSecondaryWeapon = existingWeapon;
-            }
-            else
-            {
-                SelectedSecondaryWeapon = null;
-            }
-            return SelectedSecondaryWeapon;
-        }
-
-        public WeaponBase GetPrimaryWeaponOfType(Type weaponType)
-        {
-            return (from o in _primaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
-        }
-
-        public WeaponBase GetSecondaryWeaponOfType(Type weaponType)
-        {
-            return (from o in _secondaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
-        }
-
-        public WeaponBase SelectPrimaryWeapon(Type weaponType)
-        {
-            SelectedPrimaryWeapon = GetPrimaryWeaponOfType(weaponType);
-            return SelectedPrimaryWeapon;
-        }
-
-        public WeaponBase SelectSecondaryWeapon(Type weaponType)
-        {
-            SelectedSecondaryWeapon = GetSecondaryWeaponOfType(weaponType);
-            return SelectedSecondaryWeapon;
         }
 
         public void SetImage(Image image, Size? size = null)
@@ -680,7 +429,7 @@ namespace HG.Actors
         /// Subtract from the objects hitpoints.
         /// </summary>
         /// <returns></returns>
-        public bool Hit(int damage, bool autoKill = true, bool autoDelete = true)
+        public bool Hit(int damage)
         {
             bool result = (DateTime.Now - _lastHit).TotalMilliseconds > _MillisecondsBetweenHits;
             if (result)
@@ -692,59 +441,29 @@ namespace HG.Actors
                     _shieldHit.Play();
                     damage /= 2; //Weapons do less damage to Shields. They are designed to take hits.
                     damage = damage < 1 ? 1 : damage;
-                    ShieldPoints -= damage > ShieldPoints ? ShieldPoints : damage; //No need to go negative with the damage.
+                    damage = damage > ShieldPoints ? ShieldPoints : damage; //No need to go negative with the damage.
+                    ShieldPoints -= damage;
 
-                    OnHit?.Invoke(this, HgDamageType.Shield);
-
-                    if (this is ActorPlayer)
-                    {
-                        var player = this as ActorPlayer;
-                        if (ShieldPoints == 0)
-                        {
-                            player.ShieldDownSound.Play();
-                        }
-                    }
+                    OnHit?.Invoke(this, HgDamageType.Shield, damage);
                 }
                 else
                 {
                     _hitSound.Play();
-                    HitPoints -= damage > HitPoints ? HitPoints : damage; //No need to go negative with the damage.
+                    damage = damage > HitPoints ? HitPoints : damage; //No need to go negative with the damage.
+                    HitPoints -= damage;
 
-                    OnHit?.Invoke(this, HgDamageType.Hull);
-
-                    if (this is ActorPlayer)
-                    {
-                        var player = this as ActorPlayer;
-                        //This is the hit that took us under the treshold.
-                        if (HitPoints < 100 && HitPoints + damage > 100)
-                        {
-                            player.IntegrityLowSound.Play();
-                        }
-                        else if (HitPoints < 50 && HitPoints + damage > 50)
-                        {
-                            player.SystemsFailingSound.Play();
-                        }
-                        else if (HitPoints < 20 && HitPoints + damage > 20)
-                        {
-                            player.HullBreachedSound.Play();
-                        }
-                    }
-
-                    if (HitPoints <= 0)
-                    {
-                        Explode(autoKill, autoDelete);
-                    }
+                    OnHit?.Invoke(this, HgDamageType.Hull, damage);
                 }
             }
 
             return result;
         }
 
-        public bool Hit(BulletBase bullet, bool autoKill = true, bool autoDelete = true)
+        public bool Hit(BulletBase bullet)
         {
             if (bullet != null)
             {
-                return Hit(bullet.Weapon.Damage, autoKill, autoDelete);
+                return Hit(bullet.Weapon.Damage);
             }
             return false;
         }
@@ -838,27 +557,10 @@ namespace HG.Actors
 
         public void Explode(bool autoKill = true, bool autoDelete = true)
         {
-            if (this is EnemyBase)
-            {
-                _core.Player.Actor.Score += (this as EnemyBase).ScorePoints;
-
-                //If the type of explosion is an enemy then maybe spawn a powerup.
-                if (HgRandom.ChanceIn(5))
-                {
-                    PowerUpBase powerUp = HgRandom.FlipCoin() ? new PowerUpRepair(_core) : new PowerUpSheild(_core);
-                    powerUp.Location = Location;
-                    _core.Actors.Powerups.Insert(powerUp);
-                }
-            }
-
             foreach (var attachments in Attachments)
             {
                 attachments.Explode();
             }
-
-            _explodeSound?.Play();
-            _explosionAnimation?.Reset();
-            _core.Actors.Animations.CreateAt(_explosionAnimation, this);
 
             if (autoKill)
             {
@@ -875,8 +577,11 @@ namespace HG.Actors
 
         public void HitExplosion()
         {
-            _hitExplosionAnimation.Reset();
-            _core.Actors.Animations.CreateAt(_hitExplosionAnimation, this);
+            if (_hitExplosionAnimation != null)
+            {
+                _hitExplosionAnimation.Reset();
+                _core.Actors.Animations.CreateAt(_hitExplosionAnimation, this);
+            }
         }
 
         public List<ActorBase> Intersections()

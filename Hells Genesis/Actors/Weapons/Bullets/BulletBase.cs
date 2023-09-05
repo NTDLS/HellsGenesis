@@ -25,7 +25,7 @@ namespace HG.Actors.Weapons.Bullets
              ActorBase lockedTarget = null, HgPoint<double> xyOffset = null)
             : base(core)
         {
-            InitializeGenericBasic(imagePath);
+            Initialize(imagePath);
 
             Weapon = weapon;
             LockedTarget = lockedTarget;
@@ -75,7 +75,7 @@ namespace HG.Actors.Weapons.Bullets
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(HgPoint<double> displacementVector, ActorBase testHit)
+        public virtual void ApplyIntelligence(HgPoint<double> displacementVector, dynamic testHit)
         {
             if (AgeInMilliseconds > MaxAgeInMilliseconds)
             {
@@ -83,23 +83,29 @@ namespace HG.Actors.Weapons.Bullets
                 return;
             }
 
-            if (FiredFromType == HgFiredFromType.Enemy && !(testHit is EnemyBase))
+            if (FiredFromType == HgFiredFromType.Enemy && testHit is not EnemyBase)
             {
                 if (Intersects(_core.Player.Actor))
                 {
                     //We don't auto delete the player because there is only one instance, the engine always assumes its valid.
-                    testHit.Hit(this, true, false);
+                    testHit.Hit(this);
                     if (this is BulletPulseMeson == false)
                     {
                         Explode();
                     }
                 }
             }
-            else if (FiredFromType == HgFiredFromType.Player && !(testHit is ActorPlayer))
+            else if (FiredFromType == HgFiredFromType.Player && testHit is not ActorPlayer)
             {
                 if (Intersects(testHit))
                 {
-                    testHit.Hit(this);
+                    if (testHit.Hit(this))
+                    {
+                        if (testHit.HitPoints <= 0)
+                        {
+                            testHit.Explode();
+                        }
+                    }
 
                     if (this is BulletPulseMeson == false)
                     {

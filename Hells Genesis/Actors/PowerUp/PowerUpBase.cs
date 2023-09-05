@@ -36,14 +36,10 @@ namespace HG.Actors.PowerUp
             }
         }
 
-        private readonly AudioClip _explodeSound;
-
-        private ActorAnimation _hitAnimation { get; set; }
-
         public PowerUpBase(Core core)
             : base(core)
         {
-            InitializeGenericBasic();
+            Initialize();
 
             int _hitImageIndex = HgRandom.RandomNumber(0, _assetHitAnimationFiles.Count());
             _hitAnimation = new ActorAnimation(_core, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
@@ -65,7 +61,7 @@ namespace HG.Actors.PowerUp
             _explodeSound.Play();
             _hitAnimation.Reset();
             _core.Actors.Animations.CreateAt(_hitAnimation, this);
-            QueueForDelete(); ;
+            QueueForDelete();
         }
 
         public virtual void ApplyIntelligence(HgPoint<double> displacementVector)

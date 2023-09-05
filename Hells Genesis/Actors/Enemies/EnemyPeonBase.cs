@@ -3,15 +3,18 @@ using HG.Types;
 using System;
 using System.Drawing;
 
-namespace HG.Actors.Enemies.Peons
+namespace HG.Actors.Enemies
 {
     internal class EnemyPeonBase : EnemyBase
     {
+        public ActorAnimation ThrustAnimation { get; internal set; }
+        public ActorAnimation BoostAnimation { get; internal set; }
+
         public EnemyPeonBase(Core core, int hitPoints, int scoreMultiplier)
             : base(core, hitPoints, scoreMultiplier)
         {
             Velocity.ThrottlePercentage = 1;
-            InitializeGenericExplodable();
+            Initialize();
 
             RadarDotSize = new HgPoint<int>(4, 4);
             RadarDotColor = Color.FromArgb(200, 100, 100);
@@ -49,6 +52,24 @@ namespace HG.Actors.Enemies.Peons
             BoostAnimation.Y = Y + pointRight.Y;
         }
 
+        public override void PositionChanged()
+        {
+            if (ThrustAnimation != null && ThrustAnimation.Visable)
+            {
+                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+                ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
+                ThrustAnimation.X = X + pointRight.X;
+                ThrustAnimation.Y = Y + pointRight.Y;
+            }
+            if (BoostAnimation != null && BoostAnimation.Visable)
+            {
+                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+                BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
+                BoostAnimation.X = X + pointRight.X;
+                BoostAnimation.Y = Y + pointRight.Y;
+            }
+        }
+
         private void EnemyBase_OnVisibilityChanged(ActorBase sender)
         {
             if (ThrustAnimation != null)
@@ -61,14 +82,19 @@ namespace HG.Actors.Enemies.Peons
             }
         }
 
-        public override void Cleanup()
+        public new void ApplyMotion(HgPoint<double> displacementVector)
         {
-            if (RadarPositionIndicator != null)
+            base.ApplyMotion(displacementVector);
+
+            if (ThrustAnimation != null)
             {
-                RadarPositionIndicator.QueueForDelete();
-                RadarPositionText.QueueForDelete();
+                ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
             }
 
+        }
+
+        public override void Cleanup()
+        {
             ThrustAnimation?.QueueForDelete();
             BoostAnimation?.QueueForDelete();
 

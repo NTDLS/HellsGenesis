@@ -18,7 +18,7 @@ namespace HG.Actors.Weapons.Bullets
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
-            InitializeGenericBasic();
+            Initialize();
         }
     }
 }

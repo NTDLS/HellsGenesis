@@ -11,16 +11,16 @@ namespace HG.Actors.Weapons.Bullets
              ActorBase lockedTarget = null, HgPoint<double> xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
-            InitializeGenericBasic(imagePath);
+            Initialize(imagePath);
         }
 
-        public override void ApplyIntelligence(HgPoint<double> displacementVector, ActorBase testHit)
+        public override void ApplyIntelligence(HgPoint<double> displacementVector, dynamic testHit)
         {
             if (LockedTarget != null)
             {
                 if (LockedTarget.Visable)
                 {
-                    var deltaAngle = DeltaAngle360(LockedTarget);
+                    var deltaAngle = DeltaAngle(LockedTarget);
 
                     if (deltaAngle >= 180.0) //We might as well turn around clock-wise
                     {
@@ -33,7 +33,7 @@ namespace HG.Actors.Weapons.Bullets
                 }
             }
 
-            base.ApplyIntelligence(displacementVector, testHit);
+            base.ApplyIntelligence(displacementVector, testHit as ActorBase);
         }
     }
 }

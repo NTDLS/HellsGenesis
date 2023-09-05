@@ -78,7 +78,7 @@ namespace HG.AI.Logistics
             SetNeuralNetwork();
         }
 
-        private void Owner_OnHit(ActorBase sender, HgDamageType damageType)
+        private void Owner_OnHit(ActorBase sender, HgDamageType damageType, int damageAmount)
         {
             AlterActionState(ActionState.EvasiveLoop); //If you hit me, I will take off!
         }

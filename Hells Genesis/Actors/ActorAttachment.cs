@@ -11,7 +11,7 @@ namespace HG.Actors
         public ActorAttachment(Core core, string imagePath, Size? size = null)
             : base(core)
         {
-            InitializeGenericExplodable(imagePath, size);
+            Initialize(imagePath, size);
 
             X = 0;
             Y = 0;

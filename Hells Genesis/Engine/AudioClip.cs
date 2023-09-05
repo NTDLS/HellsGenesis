@@ -1,5 +1,4 @@
-﻿using SharpDX.IO;
-using SharpDX.Multimedia;
+﻿using SharpDX.Multimedia;
 using SharpDX.XAudio2;
 using System;
 using System.IO;

@@ -47,14 +47,14 @@ namespace HG.Actors.Enemies.Peons
             AddAIController(new Taunt(_core, this, _core.Player.Actor));
             AddAIController(new Meander(_core, this, _core.Player.Actor));
 
-            if (HgRandom.FlipCoin())
-            {
+            //if (HgRandom.FlipCoin())
+            //{
                 SetDefaultAIController(AIControllers[typeof(Taunt)]);
-            }
-            else
-            {
-                SetDefaultAIController(AIControllers[typeof(Meander)]);
-            }
+            //}
+            //else
+            //{
+            //    SetDefaultAIController(AIControllers[typeof(Meander)]);
+            //}
 
             behaviorChangeThresholdMiliseconds = HgRandom.RandomNumber(2000, 10000);
 
@@ -74,22 +74,25 @@ namespace HG.Actors.Enemies.Peons
             {
                 behaviorChangeThresholdMiliseconds = HgRandom.RandomNumber(2000, 10000);
 
+                /*
                 if (HgRandom.ChanceIn(2))
                 {
                     SetDefaultAIController(AIControllers[typeof(HostileEngagement)]);
                 }
                 if (HgRandom.ChanceIn(2))
                 {
+                */
                     SetDefaultAIController(AIControllers[typeof(Taunt)]);
+                /*
                 }
                 else if (HgRandom.ChanceIn(2))
                 {
                     SetDefaultAIController(AIControllers[typeof(Meander)]);
                 }
+                */
             }
 
             double distanceToPlayer = DistanceTo(_core.Player.Actor);
-
 
             if (distanceToPlayer < 700)
             {
@@ -112,8 +115,6 @@ namespace HG.Actors.Enemies.Peons
                     }
                 }
             }
-
-
 
 
             DefaultAIController?.ApplyIntelligence(displacementVector);

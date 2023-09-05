@@ -4,12 +4,12 @@ using System.Drawing;
 
 namespace HG.Actors
 {
-    internal class ActorDebug : ActorBase
+    internal class ActorDebug : ActorShipBase
     {
         public ActorDebug(Core core)
             : base(core)
         {
-            InitializeGenericExplodable(@"Graphics\Debug.png", new Size(64, 64));
+            Initialize(@"Graphics\Debug.png", new Size(64, 64));
             X = 0;
             Y = 0;
             Velocity = new HgVelocity<double>();
@@ -18,7 +18,7 @@ namespace HG.Actors
         public ActorDebug(Core core, double x, double y)
             : base(core)
         {
-            InitializeGenericExplodable(@"Graphics\Debug.png", new Size(64, 64));
+            Initialize(@"Graphics\Debug.png", new Size(64, 64));
             X = x;
             Y = y;
             Velocity = new HgVelocity<double>();
@@ -27,7 +27,7 @@ namespace HG.Actors
         public ActorDebug(Core core, double x, double y, string imagePath)
             : base(core)
         {
-            InitializeGenericExplodable(imagePath);
+            Initialize(imagePath);
             X = x;
             Y = y;
             Velocity = new HgVelocity<double>();

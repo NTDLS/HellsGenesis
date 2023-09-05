@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-
-namespace HG.Engine.Managers
+﻿namespace HG.Engine.Managers
 {
     internal class EngineAudioManager
     {

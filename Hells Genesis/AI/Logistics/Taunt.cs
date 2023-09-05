@@ -5,6 +5,7 @@ using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
 using System;
+using System.Diagnostics;
 using System.IO;
 using static HG.Engine.Constants;
 
@@ -50,7 +51,6 @@ namespace HG.AI.Logistics
         private readonly int _millisecondsBetweenDecisions = 1000;
         private HgNormalizedAngle _evasiveLoopTargetAngle = new();
         private RelativeDirection _evasiveLoopDirection;
-        private double? _approachAngleToObserved = null;
 
         #endregion
 
@@ -75,13 +75,15 @@ namespace HG.AI.Logistics
             SetNeuralNetwork();
         }
 
-        private void Owner_OnHit(ActorBase sender, HgDamageType damageType)
+        private void Owner_OnHit(ActorBase sender, HgDamageType damageType, int damageAmount)
         {
             AlterActionState(ActionState.EvasiveLoop); //If you hit me, I will take off!
         }
 
         private void AlterActionState(ActionState state)
         {
+            Debug.Print($"{state}");
+
             switch (state)
             {
                 case ActionState.EvasiveLoop:
@@ -91,7 +93,6 @@ namespace HG.AI.Logistics
                     _owner.Velocity.AvailableBoost = 250;
                     break;
                 case ActionState.TransitionToDepart:
-                    _approachAngleToObserved = 0;
                     break;
             }
 
@@ -110,6 +111,9 @@ namespace HG.AI.Logistics
 
         public void ApplyIntelligence(HgPoint<double> displacementVector)
         {
+            //var adeltaAngle = _owner.DeltaAngle(_observedObject);
+            //Debug.Print("{deltaAngle:n1}");
+
             //We are evading, dont make any other decisions until evasion is complete.
             if (_currentAction == ActionState.EvasiveLoop)
             {
@@ -129,61 +133,64 @@ namespace HG.AI.Logistics
                 return;
             }
 
-            var now = DateTime.UtcNow;
-            var elapsedTimeSinceLastDecision = (now - (DateTime)_lastDecisionTime).TotalMilliseconds;
-            //If its been awhile since we thought about anything, do some thinking.
-            if (elapsedTimeSinceLastDecision >= _millisecondsBetweenDecisions)
+            if (_currentAction == ActionState.None)
             {
-                var decidingFactors = GatherInputs(); //Gather inputs.
-                var decisions = Network.FeedForward(decidingFactors); //Make decisions.
-                //Execute on those ↑ decisions:...
+                var now = DateTime.UtcNow;
+                var elapsedTimeSinceLastDecision = (now - (DateTime)_lastDecisionTime).TotalMilliseconds;
+                //If its been awhile since we thought about anything, do some thinking.
+                if (elapsedTimeSinceLastDecision >= _millisecondsBetweenDecisions)
+                {
+                    var decidingFactors = GatherInputs(); //Gather inputs.
+                    var decisions = Network.FeedForward(decidingFactors); //Make decisions.
+                                                                          //Execute on those ↑ decisions:...
 
-                var speedAdjust = decisions.Get(AIOutputs.SpeedAdjust);
-                if (speedAdjust >= 0.5)
-                {
-                    _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage + 0.01).Box(0.5, 1);
-                }
-                else if (speedAdjust < 0.5)
-                {
-                    _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
-                }
+                    var speedAdjust = decisions.Get(AIOutputs.SpeedAdjust);
+                    if (speedAdjust >= 0.5)
+                    {
+                        _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage + 0.01).Box(0.5, 1);
+                    }
+                    else if (speedAdjust < 0.5)
+                    {
+                        _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
+                    }
 
-                bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.9;
-                bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.9;
+                    bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.9;
+                    bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.9;
 
-                if (transitionToObservedObject && transitionFromObservedObject)
-                {
-                    AlterActionState(ActionState.None);
-                }
-                else if (transitionToObservedObject)
-                {
-                    AlterActionState(ActionState.TransitionToApproach);
-                }
-                else if (transitionFromObservedObject)
-                {
-                    AlterActionState(ActionState.TransitionToDepart);
-                }
-                else
-                {
-                    AlterActionState(ActionState.None);
-                }
+                    if (transitionToObservedObject && transitionFromObservedObject)
+                    {
+                        AlterActionState(ActionState.None);
+                    }
+                    else if (transitionToObservedObject)
+                    {
+                        AlterActionState(ActionState.TransitionToApproach);
+                    }
+                    else if (transitionFromObservedObject)
+                    {
+                        AlterActionState(ActionState.TransitionToDepart);
+                    }
+                    else
+                    {
+                        AlterActionState(ActionState.None);
+                    }
 
-                _lastDecisionTime = now;
+                    _lastDecisionTime = now;
+                }
             }
 
             if (_currentAction == ActionState.TransitionToApproach)
             {
-                var deltaAngle = _owner.DeltaAngle360(_observedObject);
+                var deltaAngle = _owner.DeltaAngle(_observedObject);
 
-                if (deltaAngle > 10)
+                if (deltaAngle.IsBetween(-10, 10) == false)
                 {
-                    if (deltaAngle >= 180.0)
-                    {
-                        _owner.Velocity.Angle += 1;
-                    }
-                    else if (deltaAngle < 180.0)
+                    if (deltaAngle >= -10)
                     {
                         _owner.Velocity.Angle -= 1;
+                    }
+                    else if (deltaAngle < 10)
+                    {
+                        _owner.Velocity.Angle += 1;
                     }
                 }
                 else
@@ -196,10 +203,7 @@ namespace HG.AI.Logistics
                 var distanceToObservedObject = _owner.DistanceTo(_observedObject);
                 double augmentationDegrees = 0.2;
 
-                if (_approachAngleToObserved == null)
-                {
-                    _approachAngleToObserved = _owner.DeltaAngle360(_observedObject);
-                }
+                    var approachAngleToObserved = _owner.DeltaAngle(_observedObject);
 
                 //We are making the transition to our depart angle, but if we get too close then make the angle more agressive.
                 double percentOfAllowableCloseness = (100 / distanceToObservedObject);
@@ -208,19 +212,37 @@ namespace HG.AI.Logistics
                     augmentationDegrees += percentOfAllowableCloseness;
                 }
 
-                if (_approachAngleToObserved <= 180.0)
+                if (approachAngleToObserved.IsBetween(-20, 20) == false)
                 {
-                    _owner.Velocity.Angle += augmentationDegrees;
-                }
-                else if (_approachAngleToObserved > 180.0)
-                {
-                    _owner.Velocity.Angle -= augmentationDegrees;
+                    if (approachAngleToObserved <= 10)
+                    {
+                        _owner.Velocity.Angle -= augmentationDegrees;
+                    }
+                    else if (approachAngleToObserved > 10)
+                    {
+                        _owner.Velocity.Angle += augmentationDegrees;
+                    }
                 }
 
                 if (distanceToObservedObject > _distanceToKeep)
                 {
                     AlterActionState(ActionState.None);
                 }
+            }
+            else if (_currentAction == ActionState.Approaching)
+            {
+                if (_owner.DistanceTo(_observedObject) < 500)
+                {
+                    AlterActionState(ActionState.None);
+                }
+            }
+            else if (_currentAction == ActionState.Departing)
+            {
+                if (_owner.DistanceTo(_observedObject) > 1000)
+                {
+                    AlterActionState(ActionState.None);
+                }
+
             }
         }
 
@@ -336,7 +358,7 @@ namespace HG.AI.Logistics
 
             aiParams.Set(AIInputs.DistanceFromObservedObject, percentageOfCloseness);
 
-            var deltaAngle = _owner.DeltaAngle360(_observedObject);
+            var deltaAngle = _owner.DeltaAngle(_observedObject);
 
             var angleToIn6thRadians = HgAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
 

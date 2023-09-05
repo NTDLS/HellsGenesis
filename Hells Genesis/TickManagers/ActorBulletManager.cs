@@ -27,22 +27,22 @@ namespace HG.TickManagers
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
         {
+            var thingsThatCanBeHit = new List<dynamic>
+            {
+                _core.Player.Actor
+            };
+
+            thingsThatCanBeHit.AddRange(_manager.VisibleOfType<EnemyBossBase>());
+            thingsThatCanBeHit.AddRange(_manager.VisibleOfType<EnemyPeonBase>());
+            thingsThatCanBeHit.AddRange(_manager.VisibleOfType<ActorAttachment>());
+
             foreach (var bullet in VisibleOfType<BulletBase>())
             {
-                bullet.ApplyMotion(displacementVector);
+                bullet.ApplyMotion(displacementVector); //Move the bullet.
 
-                //Check to see if the bullet hit the player:
-                bullet.ApplyIntelligence(displacementVector, _core.Player.Actor);
-
-                //Check to see if the bullet hit an enemy.
-                foreach (var enemy in _manager.VisibleOfType<EnemyBase>())
+                foreach (var thing in thingsThatCanBeHit)
                 {
-                    bullet.ApplyIntelligence(displacementVector, enemy);
-                }
-
-                foreach (var enemy in _manager.VisibleOfType<ActorAttachment>())
-                {
-                    bullet.ApplyIntelligence(displacementVector, enemy);
+                    bullet.ApplyIntelligence(displacementVector, thing);
                 }
             }
         }

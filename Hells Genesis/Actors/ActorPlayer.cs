@@ -7,7 +7,7 @@ using static HG.Engine.Constants;
 
 namespace HG.Actors
 {
-    internal class ActorPlayer : ActorBase
+    internal class ActorPlayer : ActorShipBase
     {
         public PlayerClass Class { get; private set; }
         public AudioClip AmmoLowSound { get; private set; }
@@ -36,7 +36,9 @@ namespace HG.Actors
 
             string imagePath = @$"Graphics\Player\Alien\{(int)Class}.png";
 
-            InitializeGenericExplodable(imagePath, new Size(32, 32));
+            Initialize(imagePath, new Size(32, 32));
+
+            OnHit += ActorPlayer_OnHit;
 
             AmmoLowSound = _core.Audio.Get(@"Sounds\Ship\Ammo Low.wav", 0.75f);
             SystemsFailingSound = _core.Audio.Get(@"Sounds\Ship\Systems Failing.wav", 0.75f);
@@ -54,7 +56,6 @@ namespace HG.Actors
             ShipEngineBoostSound = _core.Audio.Get(@"Sounds\Ship\Engine Boost.wav", 1.0f, true);
         }
 
-
         /// <summary>
         /// Resets ship image, state, health etc while allowing you to change the class.
         /// </summary>
@@ -62,11 +63,7 @@ namespace HG.Actors
         public void Reset(PlayerClass playerClass)
         {
             Class = playerClass;
-
-            string imagePath = @$"Graphics\Player\Alien\{(int)Class}.png";
-
-            SetImage(imagePath, new Size(32, 32));
-
+            SetImage(@$"Graphics\Player\Alien\{(int)Class}.png", new Size(32, 32));
             Reset();
         }
 
@@ -231,6 +228,31 @@ namespace HG.Actors
         public new void Explode(bool autoKill = true, bool autoDelete = true)
         {
             base.Explode(true, false);
+        }
+
+        private void ActorPlayer_OnHit(ActorBase sender, HgDamageType damageType, int damageAmount)
+        {
+            if (damageType == HgDamageType.Shield)
+            {
+                if (ShieldPoints == 0)
+                {
+                    ShieldDownSound.Play();
+                }
+            }
+
+            //This is the hit that took us under the treshold.
+            if (HitPoints < 100 && HitPoints + damageAmount > 100)
+            {
+                IntegrityLowSound.Play();
+            }
+            else if (HitPoints < 50 && HitPoints + damageAmount > 50)
+            {
+                SystemsFailingSound.Play();
+            }
+            else if (HitPoints < 20 && HitPoints + damageAmount > 20)
+            {
+                HullBreachedSound.Play();
+            }
         }
     }
 }

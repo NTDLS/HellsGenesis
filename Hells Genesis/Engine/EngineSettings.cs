@@ -9,7 +9,6 @@ namespace HG.Engine
         public bool HighlightAllActors { get; set; } = false;
         #endregion
 
-        public bool CollisionCausesDamage { get; set; } = false;
         public bool LockPlayerAngleToNearbyEnemy { get; set; } = false;
         public bool AutoZoomWhenMoving { get; set; } = true;
 

@@ -38,19 +38,6 @@ namespace HG.TickManagers
                 {
                     enemy.ApplyIntelligence(displacementVector);
 
-                    if (_core.Settings.CollisionCausesDamage)
-                    {
-                        //Player collides with enemy.
-                        if (enemy.Intersects(_core.Player.Actor))
-                        {
-                            if (_core.Player.Actor.Hit(enemy.CollisionDamage, true, false))
-                            {
-                                _core.Player.Actor.HitExplosion();
-                                //enemy.Hit(enemy.CollisionDamage);
-                            }
-                        }
-                    }
-
                     if (_core.Player.Actor.SelectedSecondaryWeapon != null)
                     {
                         _core.Player.Actor.SelectedSecondaryWeapon.ApplyIntelligence(displacementVector, enemy); //Player lock-on to enemy. :D
@@ -58,11 +45,6 @@ namespace HG.TickManagers
                 }
 
                 enemy.ApplyMotion(displacementVector);
-
-                if (enemy.ThrustAnimation != null)
-                {
-                    enemy.ThrustAnimation.Visable = enemy.Velocity.ThrottlePercentage > 0;
-                }
             }
         }
 

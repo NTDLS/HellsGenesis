@@ -2,7 +2,7 @@
 using HG.Types;
 using System.Drawing;
 
-namespace HG.Actors.Enemies.Bosses
+namespace HG.Actors.Enemies
 {
     internal class EnemyBossBase : EnemyBase
     {
@@ -10,7 +10,7 @@ namespace HG.Actors.Enemies.Bosses
             : base(core, hitPoints, scoreMultiplier)
         {
             Velocity.ThrottlePercentage = 1;
-            InitializeGenericExplodable();
+            Initialize();
 
             RadarDotSize = new HgPoint<int>(4, 4);
             RadarDotColor = Color.FromArgb(200, 100, 100);

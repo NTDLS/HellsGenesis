@@ -1,4 +1,5 @@
-﻿using HG.AI;
+﻿using HG.Actors.PowerUp;
+using HG.AI;
 using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
@@ -8,14 +9,10 @@ using System.Drawing;
 
 namespace HG.Actors.Enemies
 {
-    internal class EnemyBase : ActorBase
+    internal class EnemyBase : ActorShipBase
     {
-        public ActorAnimation ThrustAnimation { get; internal set; }
-        public ActorAnimation BoostAnimation { get; internal set; }
         public IAIController DefaultAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
-        public ActorRadarPositionIndicator RadarPositionIndicator { get; set; }
-        public ActorRadarPositionTextBlock RadarPositionText { get; set; }
 
         public int CollisionDamage { get; set; } = 25;
         public int ScorePoints { get; private set; } = 25;
@@ -24,7 +21,7 @@ namespace HG.Actors.Enemies
             : base(core)
         {
             Velocity.ThrottlePercentage = 1;
-            InitializeGenericExplodable();
+            Initialize();
 
             RadarDotSize = new HgPoint<int>(4, 4);
             RadarDotColor = Color.FromArgb(200, 100, 100);
@@ -55,22 +52,18 @@ namespace HG.Actors.Enemies
             return HgRandom.Random.Next(core.Settings.MinEnemyHealth, core.Settings.MaxEnemyHealth);
         }
 
-        public override void PositionChanged()
+        public new void Explode(bool autoKill = true, bool autoDelete = true)
         {
-            if (ThrustAnimation != null && ThrustAnimation.Visable)
+            _core.Player.Actor.Score += ScorePoints;
+
+            //If the type of explosion is an enemy then maybe spawn a powerup.
+            if (HgRandom.ChanceIn(5))
             {
-                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
-                ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                ThrustAnimation.X = X + pointRight.X;
-                ThrustAnimation.Y = Y + pointRight.Y;
+                PowerUpBase powerUp = HgRandom.FlipCoin() ? new PowerUpRepair(_core) : new PowerUpSheild(_core);
+                powerUp.Location = Location;
+                _core.Actors.Powerups.Insert(powerUp);
             }
-            if (BoostAnimation != null && BoostAnimation.Visable)
-            {
-                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
-                BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                BoostAnimation.X = X + pointRight.X;
-                BoostAnimation.Y = Y + pointRight.Y;
-            }
+            base.Explode(autoKill);
         }
 
         public new void ApplyMotion(HgPoint<double> displacementVector)
@@ -114,11 +107,6 @@ namespace HG.Actors.Enemies
                 forwardThrust += Velocity.MaxBoost * Velocity.BoostPercentage;
             }
 
-            if (BoostAnimation != null)
-            {
-                BoostAnimation.Visable = Velocity.BoostPercentage > 0;
-            }
-
             X += Velocity.Angle.X * forwardThrust - displacementVector.X;
             Y += Velocity.Angle.Y * forwardThrust - displacementVector.Y;
 
@@ -157,20 +145,6 @@ namespace HG.Actors.Enemies
             {
                 SelectedSecondaryWeapon.ApplyIntelligence(displacementVector, _core.Player.Actor); //Enemy lock-on to Player. :O
             }
-        }
-
-        public override void Cleanup()
-        {
-            if (RadarPositionIndicator != null)
-            {
-                RadarPositionIndicator.QueueForDelete();
-                RadarPositionText.QueueForDelete();
-            }
-
-            ThrustAnimation?.QueueForDelete();
-            BoostAnimation?.QueueForDelete();
-
-            base.Cleanup();
         }
 
         internal void AddAIController(IAIController controller)

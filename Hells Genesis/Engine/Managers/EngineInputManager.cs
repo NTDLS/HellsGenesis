@@ -46,7 +46,6 @@ namespace HG.Engine.Managers
 
         public void HandleSingleKeyPress(Keys key)
         {
-
             #region Debug stuff.
             if (key == Keys.Delete)
             {

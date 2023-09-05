@@ -10,7 +10,7 @@ namespace HG.Actors.Weapons.Bullets
              ActorBase lockedTarget = null, HgPoint<double> xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
-            InitializeGenericBasic(imagePath);
+            Initialize(imagePath);
         }
     }
 }
