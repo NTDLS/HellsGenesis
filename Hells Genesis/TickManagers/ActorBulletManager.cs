@@ -38,12 +38,18 @@ namespace HG.TickManagers
 
             foreach (var bullet in VisibleOfType<BulletBase>())
             {
-                bullet.ApplyMotion(displacementVector); //Move the bullet.
+                bullet.ApplyMotion(displacementVector);
 
                 foreach (var thing in thingsThatCanBeHit)
                 {
-                    bullet.ApplyIntelligence(displacementVector, thing);
+                    if (thing.TestHit(displacementVector, bullet))
+                    {
+                        bullet.Explode();
+                        continue;
+                    }
                 }
+
+                bullet.ApplyIntelligence(displacementVector);
             }
         }
 

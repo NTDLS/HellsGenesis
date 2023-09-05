@@ -8,11 +8,11 @@ namespace HG.Actors.Weapons.Bullets
 {
     internal class BulletBase : ActorBase
     {
-        public HgFiredFromType FiredFromType { get; set; }
+        public HgFiredFromType FiredFromType { get; private set; }
         public WeaponBase Weapon { get; private set; }
         public ActorBase LockedTarget { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
-        public double MaxAgeInMilliseconds { get; set; } = 4000;
+        public double MaxAgeInMilliseconds { get; private set; } = 4000;
         public double AgeInMilliseconds
         {
             get
@@ -75,43 +75,12 @@ namespace HG.Actors.Weapons.Bullets
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(HgPoint<double> displacementVector, dynamic testHit)
+        public virtual void ApplyIntelligence(HgPoint<double> displacementVector)
         {
             if (AgeInMilliseconds > MaxAgeInMilliseconds)
             {
                 Explode();
                 return;
-            }
-
-            if (FiredFromType == HgFiredFromType.Enemy && testHit is not EnemyBase)
-            {
-                if (Intersects(_core.Player.Actor))
-                {
-                    //We don't auto delete the player because there is only one instance, the engine always assumes its valid.
-                    testHit.Hit(this);
-                    if (this is BulletPulseMeson == false)
-                    {
-                        Explode();
-                    }
-                }
-            }
-            else if (FiredFromType == HgFiredFromType.Player && testHit is not ActorPlayer)
-            {
-                if (Intersects(testHit))
-                {
-                    if (testHit.Hit(this))
-                    {
-                        if (testHit.HitPoints <= 0)
-                        {
-                            testHit.Explode();
-                        }
-                    }
-
-                    if (this is BulletPulseMeson == false)
-                    {
-                        Explode();
-                    }
-                }
             }
         }
 

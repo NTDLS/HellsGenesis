@@ -1,4 +1,5 @@
 ﻿using HG.Actors.PowerUp;
+using HG.Actors.Weapons.Bullets;
 using HG.AI;
 using HG.Engine;
 using HG.Types;
@@ -64,6 +65,25 @@ namespace HG.Actors.Enemies
                 _core.Actors.Powerups.Insert(powerUp);
             }
             base.Explode(autoKill);
+        }
+
+        public override bool TestHit(HgPoint<double> displacementVector, BulletBase bullet)
+        {
+            if (bullet.FiredFromType == HgFiredFromType.Player)
+            {
+                if (Intersects(bullet))
+                {
+                    if (Hit(bullet))
+                    {
+                        if (HitPoints <= 0)
+                        {
+                            Explode();
+                        }
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         public new void ApplyMotion(HgPoint<double> displacementVector)

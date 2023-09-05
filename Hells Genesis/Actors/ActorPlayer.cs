@@ -1,4 +1,6 @@
-﻿using HG.Actors.Weapons;
+﻿using HG.Actors.Enemies;
+using HG.Actors.Weapons;
+using HG.Actors.Weapons.Bullets;
 using HG.Engine;
 using HG.Types;
 using System;
@@ -126,10 +128,10 @@ namespace HG.Actors
                 SetShieldPoints(1000);
 
                 AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 5000 });
-                AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 16 });
-                AddSecondaryWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 10 });
-                AddSecondaryWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 6 });
-                AddSecondaryWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 32 });
+                AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 1600 });
+                AddSecondaryWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 1000 });
+                AddSecondaryWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 600 });
+                AddSecondaryWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 3200 });
             }
             else if (Class == PlayerClass.Whidbey)
             {
@@ -228,6 +230,22 @@ namespace HG.Actors
         public new void Explode(bool autoKill = true, bool autoDelete = true)
         {
             base.Explode(true, false);
+        }
+
+        public override bool TestHit(HgPoint<double> displacementVector, BulletBase bullet)
+        {
+            if (bullet.FiredFromType == HgFiredFromType.Enemy)
+            {
+                if (Intersects(bullet))
+                {
+                    //We don't auto delete the player because there is only one instance, the engine always assumes its valid.
+                    if (Hit(bullet))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         private void ActorPlayer_OnHit(ActorBase sender, HgDamageType damageType, int damageAmount)

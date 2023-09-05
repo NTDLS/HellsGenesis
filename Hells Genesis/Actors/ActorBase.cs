@@ -1,11 +1,9 @@
-﻿using HG.Actors.Weapons;
-using HG.Actors.Weapons.Bullets;
+﻿using HG.Actors.Weapons.Bullets;
 using HG.Engine;
 using HG.Types;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 
 namespace HG.Actors
 {
@@ -429,7 +427,7 @@ namespace HG.Actors
         /// Subtract from the objects hitpoints.
         /// </summary>
         /// <returns></returns>
-        public bool Hit(int damage)
+        public virtual bool Hit(int damage)
         {
             bool result = (DateTime.Now - _lastHit).TotalMilliseconds > _MillisecondsBetweenHits;
             if (result)
@@ -459,7 +457,7 @@ namespace HG.Actors
             return result;
         }
 
-        public bool Hit(BulletBase bullet)
+        public virtual bool Hit(BulletBase bullet)
         {
             if (bullet != null)
             {

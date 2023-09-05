@@ -3,6 +3,7 @@ using HG.AI.Logistics;
 using HG.Engine;
 using HG.Types;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 
@@ -116,6 +117,7 @@ namespace HG.Actors.Enemies.Peons
                 }
             }
 
+            //this.Velocity.ThrottlePercentage = 0;
 
             DefaultAIController?.ApplyIntelligence(displacementVector);
         }

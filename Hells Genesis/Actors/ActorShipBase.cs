@@ -1,5 +1,7 @@
 ﻿using HG.Actors.Weapons;
+using HG.Actors.Weapons.Bullets;
 using HG.Engine;
+using HG.Types;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -68,6 +70,11 @@ namespace HG.Actors
             _explosionAnimation?.Reset();
             _core.Actors.Animations.CreateAt(_explosionAnimation, this);
             base.Explode(autoKill);
+        }
+
+        public virtual bool TestHit(HgPoint<double> displacementVector, BulletBase bullet)
+        {
+            return false;
         }
 
         public override void Cleanup()

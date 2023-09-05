@@ -77,26 +77,17 @@ namespace HG.Engine
         /// <returns></returns>
         public static double DeltaAngle(ActorBase fromObj, ActorBase atObj, double offsetAngle = 0)
         {
-            double fromAngle = fromObj.Velocity.Angle.Degrees + offsetAngle;
-
-            double angleTo = AngleTo(fromObj, atObj);
-
-            if (fromAngle < 0) fromAngle = (0 - fromAngle);
-            if (angleTo < 0)
+            var da360 = DeltaAngle360(fromObj, atObj, offsetAngle);
+            if (da360 > 180)
             {
-                angleTo = (0 - angleTo);
+                da360 -= 180;
+                da360 = 180 - da360;
+                da360 *= -1;
             }
 
-            return (fromAngle - angleTo + 180) % 360 - 180;
+            return -da360;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="fromObj"></param>
-        /// <param name="atObj"></param>
-        /// <param name="offsetAngle">-90 degrees would be looking off te left-hand side of the object</param>
-        /// <returns></returns>
         public static double DeltaAngle360(ActorBase fromObj, ActorBase atObj, double offsetAngle = 0)
         {
             double fromAngle = fromObj.Velocity.Angle.Degrees + offsetAngle;

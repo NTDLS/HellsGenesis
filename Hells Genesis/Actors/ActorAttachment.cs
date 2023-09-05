@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace HG.Actors
 {
-    internal class ActorAttachment : ActorBase
+    internal class ActorAttachment : ActorShipBase
     {
         public bool TakesDamage { get; set; }
 
