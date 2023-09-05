@@ -1,4 +1,5 @@
-﻿using HG.Actors.Weapons;
+﻿using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Weapons;
 using HG.AI.Logistics;
 using HG.Engine;
 using HG.Types;

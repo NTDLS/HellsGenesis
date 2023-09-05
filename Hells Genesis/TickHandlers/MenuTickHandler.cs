@@ -1,5 +1,5 @@
 ﻿using HG.Engine;
-using HG.Menus;
+using HG.Menus.BaseClasses;
 using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +8,7 @@ namespace HG.TickHandlers
 {
     internal class MenuTickHandler : IUnvectoredTickManager
     {
-        public List<BaseMenu> _controller { get; private set; } = new();
+        public List<MenuBase> _controller { get; private set; } = new();
 
         private readonly Core _core;
 
@@ -50,7 +50,7 @@ namespace HG.TickHandlers
             }
         }
 
-        public void Insert(BaseMenu menu)
+        public void Insert(MenuBase menu)
         {
             lock (_controller)
             {
@@ -58,7 +58,7 @@ namespace HG.TickHandlers
             }
         }
 
-        public void Delete(BaseMenu menu)
+        public void Delete(MenuBase menu)
         {
             lock (_controller)
             {

@@ -1,6 +1,6 @@
 ﻿using Determinet;
 using Determinet.Types;
-using HG.Actors;
+using HG.Actors.BaseClasses;
 using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;

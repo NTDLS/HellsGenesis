@@ -1,5 +1,6 @@
 ﻿using HG.Engine;
 using HG.Situations;
+using HG.Situations.BaseClasses;
 using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
 
@@ -8,9 +9,9 @@ namespace HG.TickHandlers
     internal class SituationTickHandler : IUnvectoredTickManager
     {
         public Core _core { get; private set; }
-        public BaseSituation CurrentSituation { get; private set; }
+        public SituationBase CurrentSituation { get; private set; }
 
-        public List<BaseSituation> Situations = new();
+        public List<SituationBase> Situations = new();
 
         public SituationTickHandler(Core core)
         {
@@ -19,7 +20,7 @@ namespace HG.TickHandlers
 
         public void ExecuteWorldClockTick()
         {
-            if (CurrentSituation?.State == BaseSituation.ScenarioState.Ended)
+            if (CurrentSituation?.State == SituationBase.ScenarioState.Ended)
             {
                 if (AdvanceSituation() == false)
                 {

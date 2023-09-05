@@ -1,0 +1,19 @@
+Weapons:
+	Regular Missiles
+	Locking Missiles
+	Multiple Locking Missiles
+	Fragmentation Missiles
+	Faster Missiles
+	Space Mines (Stay in position and explode)
+
+Damage (enemy or player):
+	Slows down
+	Shoots slower
+	Weapon Lost / Disabled
+
+Powerups:
+	Sheilds (Restores Sheild)
+	Repair (Restores Hitpoint)
+	Radar Indicators?? <maybe?>
+
+Bases to load up on different weapons or change ships.

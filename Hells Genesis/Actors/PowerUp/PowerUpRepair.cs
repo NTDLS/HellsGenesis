@@ -1,4 +1,5 @@
-﻿using HG.Engine;
+﻿using HG.Actors.PowerUp.BaseClasses;
+using HG.Engine;
 using HG.Types;
 using System.Drawing;
 using System.Linq;

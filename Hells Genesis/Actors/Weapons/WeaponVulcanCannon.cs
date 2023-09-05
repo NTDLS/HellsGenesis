@@ -1,4 +1,5 @@
-﻿using HG.Engine;
+﻿using HG.Actors.Weapons.BaseClasses;
+using HG.Engine;
 
 namespace HG.Actors.Weapons
 {

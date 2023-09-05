@@ -1,4 +1,4 @@
-﻿using HG.Actors.PowerUp;
+﻿using HG.Actors.PowerUp.BaseClasses;
 using HG.Engine;
 using HG.Engine.Controllers;
 using HG.TickHandlers.Interfaces;

@@ -1,7 +1,8 @@
-﻿using HG.Actors;
-using HG.Actors.Enemies;
-using HG.Actors.PowerUp;
-using HG.Actors.Weapons.Bullets;
+﻿using HG.Actors.BaseClasses;
+using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Ordinary;
+using HG.Actors.PowerUp.BaseClasses;
+using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Menus;
 using HG.TickHandlers;
 using HG.Types;

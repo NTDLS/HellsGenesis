@@ -1,4 +1,4 @@
-﻿using HG.Actors;
+﻿using HG.Actors.BaseClasses;
 using HG.Types;
 using System;
 

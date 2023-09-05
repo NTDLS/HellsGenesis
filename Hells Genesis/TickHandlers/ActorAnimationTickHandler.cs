@@ -1,4 +1,5 @@
-﻿using HG.Actors;
+﻿using HG.Actors.BaseClasses;
+using HG.Actors.Ordinary;
 using HG.Engine;
 using HG.Engine.Controllers;
 using HG.TickHandlers.Interfaces;

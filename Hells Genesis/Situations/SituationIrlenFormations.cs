@@ -1,12 +1,13 @@
-﻿using HG.Actors.Enemies;
+﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Enemies.Peons;
 using HG.Engine;
+using HG.Situations.BaseClasses;
 using HG.Types;
 using System.Linq;
 
 namespace HG.Situations
 {
-    internal class SituationIrlenFormations : BaseSituation
+    internal class SituationIrlenFormations : SituationBase
     {
         public SituationIrlenFormations(Core core)
             : base(core, "Irlen Formations")

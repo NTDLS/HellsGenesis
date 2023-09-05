@@ -1,4 +1,7 @@
-﻿using HG.Actors.Weapons.Bullets;
+﻿using HG.Actors.BaseClasses;
+using HG.Actors.Weapons.BaseClasses;
+using HG.Actors.Weapons.Bullets;
+using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Types;
 

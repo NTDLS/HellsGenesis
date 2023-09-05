@@ -1,5 +1,5 @@
-﻿using HG.Actors;
-using HG.Actors.Enemies;
+﻿using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Ordinary;
 using HG.Types;
 using System.Collections.Generic;
 using System.Drawing;

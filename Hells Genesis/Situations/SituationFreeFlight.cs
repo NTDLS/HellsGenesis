@@ -1,9 +1,10 @@
 ﻿using HG.Engine;
+using HG.Situations.BaseClasses;
 using System.Collections.Generic;
 
 namespace HG.Situations
 {
-    internal class SituationFreeFlight : BaseSituation
+    internal class SituationFreeFlight : SituationBase
     {
         public SituationFreeFlight(Core core)
             : base(core, "Free Flight")

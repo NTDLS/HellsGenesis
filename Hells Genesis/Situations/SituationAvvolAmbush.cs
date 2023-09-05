@@ -1,11 +1,12 @@
-﻿using HG.Actors.Enemies;
+﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Enemies.Peons;
 using HG.Engine;
+using HG.Situations.BaseClasses;
 using System.Collections.Generic;
 
 namespace HG.Situations
 {
-    internal class SituationAvvolAmbush : BaseSituation
+    internal class SituationAvvolAmbush : SituationBase
     {
         public SituationAvvolAmbush(Core core)
             : base(core, "Avvol Ambush")

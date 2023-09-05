@@ -1,4 +1,6 @@
-﻿using HG.Actors.Weapons;
+﻿using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Ordinary;
+using HG.Actors.Weapons;
 using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;

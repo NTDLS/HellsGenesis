@@ -1,10 +1,11 @@
-﻿using HG.Actors.Enemies;
+﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Enemies.Peons;
 using HG.Engine;
+using HG.Situations.BaseClasses;
 
 namespace HG.Situations
 {
-    internal class SituationDebuggingGalore : BaseSituation
+    internal class SituationDebuggingGalore : SituationBase
     {
         public SituationDebuggingGalore(Core core)
             : base(core, "Debugging Galore")

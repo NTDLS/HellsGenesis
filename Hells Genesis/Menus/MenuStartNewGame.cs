@@ -1,11 +1,12 @@
-﻿using HG.Actors;
+﻿using HG.Actors.Ordinary;
 using HG.Engine;
+using HG.Menus.BaseClasses;
 using HG.Types;
 using System.Drawing;
 
 namespace HG.Menus
 {
-    internal class MenuStartNewGame : BaseMenu
+    internal class MenuStartNewGame : MenuBase
     {
         public MenuStartNewGame(Core core)
             : base(core)

@@ -1,5 +1,7 @@
 ﻿using HG.Actors;
+using HG.Actors.Ordinary;
 using HG.Engine;
+using HG.Menus.BaseClasses;
 using HG.Types;
 using System;
 using System.Drawing;
@@ -7,7 +9,7 @@ using static HG.Engine.Constants;
 
 namespace HG.Menus
 {
-    internal class PlayerShipMenu : BaseMenu
+    internal class PlayerShipMenu : MenuBase
     {
         private readonly ActorMenuItem _shipBlurb;
 

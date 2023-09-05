@@ -1,10 +1,11 @@
-﻿using HG.Actors.Enemies;
+﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Enemies.Peons;
 using HG.Engine;
+using HG.Situations.BaseClasses;
 
 namespace HG.Situations
 {
-    internal class SituationScinzadSkirmish : BaseSituation
+    internal class SituationScinzadSkirmish : SituationBase
     {
         public SituationScinzadSkirmish(Core core)
             : base(core, "Scinzad Skirmish")
