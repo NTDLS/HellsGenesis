@@ -13,7 +13,7 @@ namespace HG.TickHandlers
         private readonly Core _core;
         private readonly EngineActorController _controller;
 
-        public ActorDebug ByAssetTag(string assetTag) => _controller.VisibleOfType<ActorDebug>().Where(o => o.AssetTag == assetTag).FirstOrDefault();
+        public ActorDebug ByAssetTag(string name) => _controller.VisibleOfType<ActorDebug>().Where(o => o.Name == name).FirstOrDefault();
 
         public List<subType> VisibleOfType<subType>() where subType : ActorDebug => _controller.VisibleOfType<subType>();
         public List<ActorDebug> Visible() => _controller.VisibleOfType<ActorDebug>();
@@ -60,20 +60,20 @@ namespace HG.TickHandlers
 
         #region Factories.
 
-        public ActorDebug Create(double x, double y, string assetTag = "")
+        public ActorDebug Create(double x, double y, string name = "")
         {
             lock (_controller.Collection)
             {
                 var obj = new ActorDebug(_core, x, y)
                 {
-                    AssetTag = assetTag
+                    Name = name
                 };
                 _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
-        public ActorDebug CreateAtCenterScreen(string imagePath, string assetTag = "")
+        public ActorDebug CreateAtCenterScreen(string imagePath, string name = "")
         {
             lock (_controller.Collection)
             {
@@ -82,14 +82,14 @@ namespace HG.TickHandlers
 
                 var obj = new ActorDebug(_core, x, y, imagePath)
                 {
-                    AssetTag = assetTag
+                    Name = name
                 };
                 _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
-        public ActorDebug CreateAtCenterScreen(string assetTag = "")
+        public ActorDebug CreateAtCenterScreen(string name = "")
         {
             lock (_controller.Collection)
             {
@@ -98,32 +98,32 @@ namespace HG.TickHandlers
 
                 var obj = new ActorDebug(_core, x, y)
                 {
-                    AssetTag = assetTag
+                    Name = name
                 };
                 _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
-        public ActorDebug Create(double x, double y, string imagePath, string assetTag = "")
+        public ActorDebug Create(double x, double y, string imagePath, string name = "")
         {
             lock (_controller.Collection)
             {
                 var obj = new ActorDebug(_core, x, y, imagePath)
                 {
-                    AssetTag = assetTag
+                    Name = name
                 }; _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
-        public ActorDebug Create(string assetTag = "")
+        public ActorDebug Create(string name = "")
         {
             lock (_controller.Collection)
             {
                 var obj = new ActorDebug(_core)
                 {
-                    AssetTag = assetTag
+                    Name = name
                 };
                 _controller.Collection.Add(obj);
                 return obj;

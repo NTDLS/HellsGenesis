@@ -120,11 +120,11 @@ namespace HG.Engine.Controllers
             Animations.DeleteAll();
         }
 
-        public T GetActorByAssetTag<T>(string assetTag) where T : ActorBase
+        public T GetActorByAssetTag<T>(string name) where T : ActorBase
         {
             lock (Collection)
             {
-                return Collection.Where(o => o.AssetTag == assetTag).SingleOrDefault() as T;
+                return Collection.Where(o => o.Name == name).SingleOrDefault() as T;
             }
         }
 
@@ -144,13 +144,13 @@ namespace HG.Engine.Controllers
             }
         }
 
-        public void DeleteAllActorsByAssetTag(string assetTag)
+        public void DeleteAllActorsByAssetTag(string name)
         {
             lock (Collection)
             {
                 foreach (var actor in Collection)
                 {
-                    if (actor.AssetTag == assetTag)
+                    if (actor.Name == name)
                     {
                         actor.QueueForDelete();
                     }

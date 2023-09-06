@@ -49,11 +49,11 @@ namespace HG.Menus
 
         public override void ExecuteSelection(ActorMenuItem item)
         {
-            if (item.Name == "NO")
+            if (item.Key == "NO")
             {
                 _core.Stop();
             }
-            else if (item.Name == "YES")
+            else if (item.Key == "YES")
             {
                 _core.Menus.Insert(new PlayerShipMenu(_core));
             }

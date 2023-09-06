@@ -4,12 +4,38 @@ namespace HG.Types
 {
     internal class HgPoint<T>
     {
-        public T X { get; set; }
-        public T Y { get; set; }
+        private static readonly Lazy<HgPoint<T>> _zero = new Lazy<HgPoint<T>>(() => new HgPoint<T>());
+        public static HgPoint<T> Zero => _zero.Value;
+
+        private T _x;
+        private T _y;
+
+        public T X
+        {
+            get => _x;
+            set
+            {
+                if (IsReadonly) throw new Exception("The point is readonly");
+                _x = value;
+            }
+        }
+
+        public T Y
+        {
+            get => _y;
+            set
+            {
+                if (IsReadonly) throw new Exception("The point is readonly");
+                _y = value;
+            }
+        }
+
+        public bool IsReadonly { get; private set; }
 
         public HgPoint()
         {
         }
+
         public HgPoint(T x, T y)
         {
             X = x;
@@ -21,6 +47,28 @@ namespace HG.Types
             X = p.X;
             Y = p.Y;
         }
+
+        public HgPoint(bool isReadonly)
+        {
+            IsReadonly = isReadonly;
+        }
+
+        public HgPoint(T x, T y, bool isReadonly)
+        {
+            IsReadonly = isReadonly;
+            _x = x;
+            _y = y;
+        }
+
+        public HgPoint(HgPoint<T> p, bool isReadonly)
+        {
+            IsReadonly = isReadonly;
+            _x = p.X;
+            _y = p.Y;
+        }
+
+        public HgPoint<T> ToWriteableCopy => new HgPoint<T>(this);
+    
 
         public static T DistanceTo(HgPoint<T> from, HgPoint<T> to)
         {

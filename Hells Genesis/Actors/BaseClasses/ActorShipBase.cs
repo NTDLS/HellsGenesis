@@ -39,8 +39,10 @@ namespace HG.Actors.BaseClasses
         private readonly int _hitExplosionSoundCount = 2;
         private int _selectedExplosionSoundIndex = 0;
 
-        public ActorShipBase(Core core, string assetTag = "")
-            : base(core, assetTag)
+        public bool IsBoostFading { get; set; }
+
+        public ActorShipBase(Core core, string name = "")
+            : base(core, name)
         {
             _core = core;
         }

@@ -15,7 +15,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
         public WeaponBase Weapon { get; private set; }
         public ActorBase LockedTarget { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
-        public double MaxAgeInMilliseconds { get; private set; } = 4000;
+        public double MilisecondsToLive { get; private set; } = 4000;
         public double AgeInMilliseconds
         {
             get
@@ -49,7 +49,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
                 headingDegrees = firedFrom.Velocity.Angle.Degrees + (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * 2);
             }
 
-            HgVelocity<double> initialVelocity = new HgVelocity<double>()
+            var initialVelocity = new HgVelocity<double>()
             {
                 Angle = new HgAngle<double>(headingDegrees),
                 MaxSpeed = weapon.Speed,
@@ -61,10 +61,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
                 initialVelocity.MaxSpeed += (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * (double)weapon.AngleSlop);
             }
 
-            var initialLocation = firedFrom.Location;
-            initialLocation.X = initialLocation.X + (xyOffset == null ? 0 : xyOffset.X);
-            initialLocation.Y = initialLocation.Y + (xyOffset == null ? 0 : xyOffset.Y);
-            Location = initialLocation;
+            Location = firedFrom.Location + (xyOffset == null ? HgPoint<double>.Zero : xyOffset);
 
             if (firedFrom is EnemyBase)
             {
@@ -80,7 +77,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
 
         public virtual void ApplyIntelligence(HgPoint<double> displacementVector)
         {
-            if (AgeInMilliseconds > MaxAgeInMilliseconds)
+            if (AgeInMilliseconds > MilisecondsToLive)
             {
                 Explode();
                 return;
@@ -108,7 +105,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             {
                 HitExplosion();
             }
-            QueueForDelete(); ;
+            QueueForDelete();
         }
     }
 }

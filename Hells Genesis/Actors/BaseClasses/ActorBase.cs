@@ -5,13 +5,13 @@ using HG.Types;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Security.Cryptography;
 
 namespace HG.Actors.BaseClasses
 {
     internal class ActorBase
     {
         protected Core _core;
-        public bool IsBoostFading { get; set; }
 
         private Image _image;
 
@@ -32,7 +32,7 @@ namespace HG.Actors.BaseClasses
 
         #region Properties.
 
-        public string AssetTag { get; set; }
+        public string Name { get; set; }
         public uint UID { get; private set; } = Core.GetNextSequentialId();
         public uint OwnerUID { get; set; }
         public List<ActorAttachment> Attachments { get; private set; } = new();
@@ -169,20 +169,24 @@ namespace HG.Actors.BaseClasses
         private HgPoint<double> _location = new HgPoint<double>();
 
         /// <summary>
-        /// Do not modify this location, it will not have any affect.
+        /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
         public HgPoint<double> Location
         {
             get
             {
-                return new HgPoint<double>(_location);
+                return new HgPoint<double>(_location, true);
             }
             set
             {
-                Invalidate();
-                _location = value;
-                Invalidate();
+                _location = value.ToWriteableCopy;
             }
+        }
+
+        public void SetLocation(HgPoint<double> location)
+        {
+            _location = location;
+            PositionChanged();
         }
 
         public double X
@@ -193,10 +197,8 @@ namespace HG.Actors.BaseClasses
             }
             set
             {
-                Invalidate();
                 _location.X = value;
                 PositionChanged();
-                Invalidate();
             }
         }
 
@@ -208,10 +210,8 @@ namespace HG.Actors.BaseClasses
             }
             set
             {
-                Invalidate();
                 _location.Y = value;
                 PositionChanged();
-                Invalidate();
             }
         }
 
@@ -303,10 +303,10 @@ namespace HG.Actors.BaseClasses
 
         #endregion
 
-        public ActorBase(Core core, string assetTag = "")
+        public ActorBase(Core core, string name = "")
         {
             _core = core;
-            AssetTag = assetTag;
+            Name = name;
             RotationMode = HgRotationMode.Upsize;
             Velocity = new HgVelocity<double>();
             Velocity.MaxRotationSpeed = _core.Settings.MaxRotationSpeed;
@@ -334,7 +334,6 @@ namespace HG.Actors.BaseClasses
         {
             _image = image;
             _size = new Size(_image.Size.Width, _image.Size.Height);
-            Invalidate();
         }
 
         public void SetImage(Image image, Size size)
@@ -346,7 +345,6 @@ namespace HG.Actors.BaseClasses
                 _image = HgGraphics.ResizeImage(_image, size.Width, size.Height);
             }
             _size = new Size(_image.Size.Width, _image.Size.Height);
-            Invalidate();
         }
 
         public void SetImage(string imagePath)
@@ -370,17 +368,6 @@ namespace HG.Actors.BaseClasses
         public Image GetImage()
         {
             return _image;
-        }
-
-        public void Invalidate()
-        {
-            /*
-            var invalidRect = new Rectangle(
-                (int)(_location.X - _size.Width / 2.0),
-                (int)(_location.Y - _size.Height / 2.0),
-                _size.Width, _size.Height);
-            _core.Display.DrawingSurface.Invalidate(invalidRect);
-            */
         }
 
         #region Intersections.
@@ -505,7 +492,6 @@ namespace HG.Actors.BaseClasses
         public void Rotate(double degrees)
         {
             Velocity.Angle.Degrees += degrees;
-            Invalidate();
             RotationChanged();
         }
 
@@ -643,7 +629,6 @@ namespace HG.Actors.BaseClasses
         public virtual void Cleanup()
         {
             Visable = false;
-            Invalidate();
 
             foreach (var attachments in Attachments)
             {

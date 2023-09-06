@@ -15,13 +15,13 @@ namespace HG.Menus
         public PlayerShipMenu(Core core)
             : base(core)
         {
-            var player0 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Debug) { AssetTag = "MENU_SHIP_SELECT" });
-            var player1 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Nimitz) { AssetTag = "MENU_SHIP_SELECT" });
-            var player2 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Knox) { AssetTag = "MENU_SHIP_SELECT" });
-            var player3 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Luhu) { AssetTag = "MENU_SHIP_SELECT" });
-            var player4 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Atlant) { AssetTag = "MENU_SHIP_SELECT" });
-            var player5 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Whidbey) { AssetTag = "MENU_SHIP_SELECT" });
-            var player6 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Kirov) { AssetTag = "MENU_SHIP_SELECT" });
+            var player0 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Debug) { Name = "MENU_SHIP_SELECT" });
+            var player1 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Nimitz) { Name = "MENU_SHIP_SELECT" });
+            var player2 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Knox) { Name = "MENU_SHIP_SELECT" });
+            var player3 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Luhu) { Name = "MENU_SHIP_SELECT" });
+            var player4 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Atlant) { Name = "MENU_SHIP_SELECT" });
+            var player5 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Whidbey) { Name = "MENU_SHIP_SELECT" });
+            var player6 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Kirov) { Name = "MENU_SHIP_SELECT" });
 
             double baseX = _core.Display.CurrentScaledScreenBounds.X + 40;
             double baseY = _core.Display.CurrentScaledScreenBounds.Y + 100;
@@ -100,7 +100,7 @@ namespace HG.Menus
 
         public override void SelectionChanged(ActorMenuItem item)
         {
-            if (item.Name == PlayerClass.Debug.ToString())
+            if (item.Key == PlayerClass.Debug.ToString())
             {
                 _shipBlurb.Text = GetHelpText(
                     "Debug", //Name
@@ -110,10 +110,10 @@ namespace HG.Menus
                     "10,000", //Hull
                     "6.0", //Speed
                     "4.0", //Warp
-                    "\r\n The Nimitz Class fighter is a heavily armored, medium armed \r\n and not-so-nimble fighter."
+                    "\r\n This ship might look crude, but its faster than the bullets and missiles.\r\n It feels like a glitttch in thƏ m@tR|x..."
                   );
             }
-            else if (item.Name == PlayerClass.Nimitz.ToString())
+            else if (item.Key == PlayerClass.Nimitz.ToString())
             {
                 _shipBlurb.Text = GetHelpText(
                     "Nimitz", //Name
@@ -126,7 +126,7 @@ namespace HG.Menus
                     "\r\n The Nimitz Class fighter is a heavily armored, medium armed \r\n and not-so-nimble fighter."
                   );
             }
-            else if (item.Name == PlayerClass.Knox.ToString())
+            else if (item.Key == PlayerClass.Knox.ToString())
             {
                 _shipBlurb.Text = GetHelpText(
                     "Knox", //Name
@@ -139,7 +139,7 @@ namespace HG.Menus
                     "\r\n Heavier than a destroyer, this fighter can take a serious \r\n beating while sacraficing speed."
                   );
             }
-            else if (item.Name == PlayerClass.Luhu.ToString())
+            else if (item.Key == PlayerClass.Luhu.ToString())
             {
                 _shipBlurb.Text = GetHelpText(
                     "Luhu", //Name
@@ -152,7 +152,7 @@ namespace HG.Menus
                     "\r\n This destroyer class ship is a medium armored, medium armament \r\n agile fighter for medium weight enemies."
                   );
             }
-            else if (item.Name == PlayerClass.Atlant.ToString())
+            else if (item.Key == PlayerClass.Atlant.ToString())
             {
                 _shipBlurb.Text = GetHelpText(
                     "Atlant", //Name
@@ -165,7 +165,7 @@ namespace HG.Menus
                     "\r\n The Atlant is a well rounded heavily armed and armored agile \r\n fighter for heavy enemies."
                   );
             }
-            else if (item.Name == PlayerClass.Whidbey.ToString())
+            else if (item.Key == PlayerClass.Whidbey.ToString())
             {
                 _shipBlurb.Text = GetHelpText(
                     "Whidbey ", //Name
@@ -178,7 +178,7 @@ namespace HG.Menus
                     "\r\n The Whidbey  is just fast and packs an intense punch with \r\n near-light-speed energy weapons."
                   );
             }
-            else if (item.Name == PlayerClass.Kirov.ToString())
+            else if (item.Key == PlayerClass.Kirov.ToString())
             {
                 _shipBlurb.Text = GetHelpText(
                     "Kirov", //Name
@@ -194,7 +194,7 @@ namespace HG.Menus
             else
             {
                 _shipBlurb.Text = GetHelpText(
-                    item.Name, //Name
+                    item.Key, //Name
                     "∞", //Primary Weapon
                     "∞", //Secondary Weapon
                     "∞", //Sheilds
@@ -208,7 +208,7 @@ namespace HG.Menus
 
         public override void ExecuteSelection(ActorMenuItem item)
         {
-            var playerClass = (PlayerClass)Enum.Parse(typeof(PlayerClass), item.Name);
+            var playerClass = (PlayerClass)Enum.Parse(typeof(PlayerClass), item.Key);
 
             _core.Player.Actor.Reset(playerClass);
 

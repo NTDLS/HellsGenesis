@@ -54,12 +54,12 @@ namespace HG.TickHandlers
             }
         }
 
-        public ActorTextBlock Create(string font, Brush color, double size, HgPoint<double> location, bool isPositionStatic, string assetTag)
+        public ActorTextBlock Create(string font, Brush color, double size, HgPoint<double> location, bool isPositionStatic, string name)
         {
             lock (_controller.Collection)
             {
                 var obj = new ActorTextBlock(_core, font, color, size, location, isPositionStatic);
-                obj.AssetTag = assetTag;
+                obj.Name = name;
                 _controller.Collection.Add(obj);
                 return obj;
             }

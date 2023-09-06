@@ -71,7 +71,7 @@ namespace HG.Menus.BaseClasses
         {
             var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
             {
-                Name = name,
+                Key = name,
                 Text = text,
                 ItemType = ActorMenuItem.MenuItemType.Item
             };

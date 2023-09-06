@@ -34,7 +34,7 @@ namespace HG.Actors.Ordinary
             Item
         }
 
-        public string Name { get; set; }
+        public string Key { get; set; }
 
         public MenuItemType ItemType { get; set; }
 
