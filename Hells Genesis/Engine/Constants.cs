@@ -1,7 +1,11 @@
-﻿namespace HG.Engine
+﻿using System;
+
+namespace HG.Engine
 {
     internal static class Constants
     {
+        public static readonly TimeSpan OneMilisecond = TimeSpan.FromMilliseconds(1);
+
         public enum RelativeDirection
         {
             None,

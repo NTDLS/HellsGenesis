@@ -216,8 +216,6 @@ namespace HG.Engine.Controllers
         private Bitmap _RadarBackgroundImage = null;
         private readonly SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
 
-        TimeSpan lockTimeout = TimeSpan.FromMilliseconds(1);
-
         /// <summary>
         /// Will render the current game state to a single bitmap. If a lock cannot be acquired
         /// for drawing then the previous frame will be returned.
@@ -271,7 +269,7 @@ namespace HG.Engine.Controllers
             try
             {
                 lockTaken = false;
-                Monitor.TryEnter(_core.DrawingSemaphore, lockTimeout, ref lockTaken);
+                Monitor.TryEnter(_core.DrawingSemaphore, Constants.OneMilisecond, ref lockTaken);
 
                 if (lockTaken)
                 {

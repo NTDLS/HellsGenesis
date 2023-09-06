@@ -10,7 +10,7 @@ namespace HG.Engine.Controllers
     internal class EngineInputController
     {
         private readonly Core _core;
-        private readonly Dictionary<HgPlayerKey, HgKeyPressState> _keyStates = new Dictionary<HgPlayerKey, HgKeyPressState>();
+        private readonly Dictionary<HgPlayerKey, HgKeyPressState> _keyStates = new();
 
         public EngineInputController(Core core)
         {

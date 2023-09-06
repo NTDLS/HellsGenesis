@@ -109,7 +109,7 @@ namespace HG.Menus.BaseClasses
                 }
             }
 
-            if (_core.Input.IsKeyPressed(HgPlayerKey.Right) || _core.Input.IsKeyPressed(HgPlayerKey.Down) || _core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
+            if (_core.Input.IsKeyPressed(HgPlayerKey.Right) || _core.Input.IsKeyPressed(HgPlayerKey.Down) || _core.Input.IsKeyPressed(HgPlayerKey.Reverse) || _core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
             {
                 _lastInputHandled = DateTime.UtcNow;
 
@@ -156,7 +156,7 @@ namespace HG.Menus.BaseClasses
                 }
             }
 
-            if (_core.Input.IsKeyPressed(HgPlayerKey.Left) || _core.Input.IsKeyPressed(HgPlayerKey.Up) || _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise))
+            if (_core.Input.IsKeyPressed(HgPlayerKey.Left) || _core.Input.IsKeyPressed(HgPlayerKey.Up) || _core.Input.IsKeyPressed(HgPlayerKey.Forward) || _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise))
             {
                 _lastInputHandled = DateTime.UtcNow;
 

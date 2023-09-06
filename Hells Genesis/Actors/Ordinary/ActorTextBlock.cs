@@ -24,7 +24,10 @@ namespace HG.Actors.Ordinary
             {
                 if (_height == 0)
                 {
-                    _height = _genericDC.MeasureString("void", _font).Height;
+                    lock (_genericDC)
+                    {
+                        _height = _genericDC.MeasureString("void", _font).Height;
+                    }
                 }
                 return _height;
             }
@@ -52,10 +55,11 @@ namespace HG.Actors.Ordinary
 
                 //Now that we have used _prevRegion to invaldate the previous region, set it to the new region coords.
                 //And invalidate them for the new text.
-                var stringSize = _genericDC.MeasureString(_text, _font);
-
-                _size = new Size((int)Math.Ceiling(stringSize.Width), (int)Math.Ceiling(stringSize.Height));
-
+                lock (_genericDC)
+                {
+                    var stringSize = _genericDC.MeasureString(_text, _font);
+                    _size = new Size((int)Math.Ceiling(stringSize.Width), (int)Math.Ceiling(stringSize.Height));
+                }
                 _prevRegion = new Rectangle((int)X, (int)Y, _size.Width, _size.Height);
                 _core.Display.DrawingSurface.Invalidate((Rectangle)_prevRegion);
             }
@@ -70,6 +74,7 @@ namespace HG.Actors.Ordinary
             Location = new HgPoint<double>(location);
             _color = color;
             _font = new Font(font, (float)size);
+
             _genericDC = _core.Display.DrawingSurface.CreateGraphics();
         }
 
