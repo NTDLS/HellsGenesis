@@ -317,31 +317,51 @@ namespace HG.Actors.BaseClasses
         {
             if (imagePath != null)
             {
-                SetImage(imagePath, size);
+                if (size == null)
+                {
+                    SetImage(imagePath);
+                }
+                else
+                {
+                    SetImage(imagePath, (Size)size);
+                }
             }
 
             VisibilityChanged();
         }
 
-        public void SetImage(Image image, Size? size = null)
+        public void SetImage(Image image)
+        {
+            _image = image;
+            _size = new Size(_image.Size.Width, _image.Size.Height);
+            Invalidate();
+        }
+
+        public void SetImage(Image image, Size size)
         {
             _image = image;
 
-            if (size != null)
+            if (image.Width != size.Width && image.Height != size.Height)
             {
-                _image = HgGraphics.ResizeImage(_image, ((Size)size).Width, ((Size)size).Height);
+                _image = HgGraphics.ResizeImage(_image, size.Width, size.Height);
             }
             _size = new Size(_image.Size.Width, _image.Size.Height);
             Invalidate();
         }
 
-        public void SetImage(string imagePath, Size? size = null)
+        public void SetImage(string imagePath)
+        {
+            _image = _core.Imaging.Get(imagePath);
+            _size = new Size(_image.Size.Width, _image.Size.Height);
+        }
+
+        public void SetImage(string imagePath, Size size)
         {
             _image = _core.Imaging.Get(imagePath);
 
-            if (size != null)
+            if (_image.Width != size.Width && _image.Height != size.Height)
             {
-                _image = HgGraphics.ResizeImage(_image, ((Size)size).Width, ((Size)size).Height);
+                _image = HgGraphics.ResizeImage(_image, size.Width, size.Height);
             }
 
             _size = new Size(_image.Size.Width, _image.Size.Height);
