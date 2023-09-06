@@ -11,13 +11,6 @@ namespace HG.Actors.Enemies.BaseClasses
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
-
-            RadarDotSize = new HgPoint<int>(4, 4);
-            RadarDotColor = Color.FromArgb(200, 100, 100);
-
-            RadarPositionIndicator = _core.Actors.RadarPositions.Create();
-            RadarPositionIndicator.Visable = false;
-            RadarPositionText = _core.Actors.TextBlocks.CreateRadarPosition("Consolas", Brushes.Red, 8, new HgPoint<double>());
         }
     }
 }

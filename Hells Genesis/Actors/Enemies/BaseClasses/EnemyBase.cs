@@ -26,9 +26,6 @@ namespace HG.Actors.Enemies.BaseClasses
             Velocity.ThrottlePercentage = 1;
             Initialize();
 
-            RadarDotSize = new HgPoint<int>(4, 4);
-            RadarDotColor = Color.FromArgb(200, 100, 100);
-
             SetHitPoints(hitPoints);
             ScorePoints = HitPoints * scoreMultiplier;
 

@@ -57,8 +57,14 @@ namespace HG.Situations
         {
             //_core.Actors.Enemies.Create<EnemyLouse>();
             _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyAvvol>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyScarab>();
 
+            //var fff = _core.Actors.RadarPositions.Create();
+            //fff.Visable = true;
+            //fff.X = 100;
+            //fff.X = 100;
 
             //var debug = _core.Actors.Debugs.CreateAtCenterScreen(@"Graphics\Bases\8.png");
         }
