@@ -57,7 +57,7 @@ namespace HG.Actors.Enemies.BaseClasses
             _core.Player.Actor.Score += ScorePoints;
 
             //If the type of explosion is an enemy then maybe spawn a powerup.
-            if (HgRandom.ChanceIn(5))
+            //if (HgRandom.ChanceIn(5))
             {
                 PowerUpBase powerUp = HgRandom.FlipCoin() ? new PowerUpRepair(_core) : new PowerUpSheild(_core);
                 powerUp.Location = Location;

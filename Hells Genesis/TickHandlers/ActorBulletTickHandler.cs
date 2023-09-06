@@ -28,7 +28,7 @@ namespace HG.TickHandlers
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
         {
-            var thingsThatCanBeHit = new List<dynamic>
+            var thingsThatCanBeHit = new List<ActorShipBase>
             {
                 _core.Player.Actor
             };

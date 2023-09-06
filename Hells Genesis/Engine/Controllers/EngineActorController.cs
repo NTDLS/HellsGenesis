@@ -286,7 +286,7 @@ namespace HG.Engine.Controllers
                             {
                                 if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
                                 {
-                                    HgConversion.DynamicCast(actor, actor.GetType()).RenderRadar(radarDrawing.Graphics, _radarScale, _radarOffset);
+                                    actor.RenderRadar(radarDrawing.Graphics, _radarScale, _radarOffset);
                                 }
                             }
 
@@ -309,7 +309,7 @@ namespace HG.Engine.Controllers
 
                             if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(actor.Bounds))
                             {
-                                HgConversion.DynamicCast(actor, actor.GetType()).Render(screenDrawing.Graphics);
+                                actor.Render(screenDrawing.Graphics);
                             }
                         }
                         _core.Player.Actor?.Render(screenDrawing.Graphics);
@@ -394,7 +394,7 @@ namespace HG.Engine.Controllers
                 //Render to display:
                 foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
                 {
-                    HgConversion.DynamicCast(actor, actor.GetType()).Render(scaledDrawing.Graphics);
+                    actor.Render(scaledDrawing.Graphics);
                 }
             }
 

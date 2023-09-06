@@ -85,6 +85,10 @@ namespace HG.Actors.Enemies.BaseClasses
             {
                 ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
             }
+            if (BoostAnimation != null)
+            {
+                BoostAnimation.Visable = Velocity.BoostPercentage > 0;
+            }
         }
 
         public override void Cleanup()

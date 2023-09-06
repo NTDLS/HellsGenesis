@@ -25,10 +25,10 @@ namespace HG.TickHandlers
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
         {
-            foreach (var powerUp in Visible())
+            foreach (var actor in Visible())
             {
-                HgConversion.DynamicCast(powerUp, powerUp.GetType()).ApplyIntelligence(displacementVector);
-                powerUp.ApplyMotion(displacementVector);
+                actor.ApplyIntelligence(displacementVector);
+                actor.ApplyMotion(displacementVector);
             }
         }
 
