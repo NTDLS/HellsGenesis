@@ -43,24 +43,6 @@ namespace HG.Actors.BaseClasses
         public int HitPoints { get; private set; } = 0;
         public int ShieldPoints { get; private set; } = 0;
 
-        #region Events.
-
-        public delegate void HitEvent(ActorBase sender, HgDamageType damageType, int damageAmount);
-        public event HitEvent OnHit;
-
-        public delegate void QueuedForDeleteEvent(ActorBase sender);
-        public event QueuedForDeleteEvent OnQueuedForDelete;
-
-        public delegate void VisibilityChangedEvent(ActorBase sender);
-        public event VisibilityChangedEvent OnVisibilityChanged;
-
-
-        public delegate void ExplodeEvent(ActorBase sender);
-        public event ExplodeEvent OnExplode;
-
-        #endregion
-
-
         private HgVelocity<double> _velocity;
         public HgVelocity<double> Velocity
         {
@@ -304,6 +286,23 @@ namespace HG.Actors.BaseClasses
 
         #endregion
 
+        #region Events.
+
+        public delegate void HitEvent(ActorBase sender, HgDamageType damageType, int damageAmount);
+        public event HitEvent OnHit;
+
+        public delegate void QueuedForDeleteEvent(ActorBase sender);
+        public event QueuedForDeleteEvent OnQueuedForDelete;
+
+        public delegate void VisibilityChangedEvent(ActorBase sender);
+        public event VisibilityChangedEvent OnVisibilityChanged;
+
+
+        public delegate void ExplodeEvent(ActorBase sender);
+        public event ExplodeEvent OnExplode;
+
+        #endregion
+
         public ActorBase(Core core, string assetTag = "")
         {
             _core = core;
@@ -314,7 +313,7 @@ namespace HG.Actors.BaseClasses
             Highlight = _core.Settings.HighlightAllActors;
         }
 
-        public void Initialize(string imagePath = null, Size? size = null)
+        public virtual void Initialize(string imagePath = null, Size? size = null)
         {
             if (imagePath != null)
             {
@@ -322,12 +321,6 @@ namespace HG.Actors.BaseClasses
             }
 
             VisibilityChanged();
-        }
-
-        public void ApplyMotion(HgPoint<double> displacementVector)
-        {
-            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
-            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
         }
 
         public void SetImage(Image image, Size? size = null)
@@ -369,6 +362,8 @@ namespace HG.Actors.BaseClasses
             _core.Display.DrawingSurface.Invalidate(invalidRect);
             */
         }
+
+        #region Intersections.
 
         public bool Intersects(ActorBase otherObject)
         {
@@ -421,6 +416,26 @@ namespace HG.Actors.BaseClasses
 
             return Bounds.IntersectsWith(alteredHitBox);
         }
+
+        public List<ActorBase> Intersections()
+        {
+            var intersections = new List<ActorBase>();
+
+            foreach (var intersection in _core.Actors.Collection)
+            {
+                if (intersection != this && intersection.Visable && intersection is not ActorTextBlock)
+                {
+                    if (Intersects(intersection))
+                    {
+                        intersections.Add(intersection);
+                    }
+                }
+            }
+
+            return intersections;
+        }
+
+        #endregion
 
         #region Actions.
 
@@ -493,6 +508,39 @@ namespace HG.Actors.BaseClasses
             }
         }
 
+        public virtual void Explode(bool autoKill = true, bool autoDelete = true)
+        {
+            foreach (var attachments in Attachments)
+            {
+                attachments.Explode();
+            }
+
+            if (autoKill)
+            {
+                IsDead = true;
+            }
+
+            if (autoDelete)
+            {
+                QueueForDelete();
+            }
+
+            OnExplode?.Invoke(this);
+        }
+
+        public virtual void HitExplosion()
+        {
+            if (_hitExplosionAnimation != null)
+            {
+                _hitExplosionAnimation.Reset();
+                _core.Actors.Animations.CreateAt(_hitExplosionAnimation, this);
+            }
+        }
+
+        #endregion
+
+        #region Actor geometry.
+
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 0-259.
         /// </summary>
@@ -558,52 +606,19 @@ namespace HG.Actors.BaseClasses
             return HgPoint<double>.DistanceTo(Location, to);
         }
 
-        public void Explode(bool autoKill = true, bool autoDelete = true)
+
+        #endregion
+
+        public virtual void ApplyMotion(HgPoint<double> displacementVector)
         {
-            foreach (var attachments in Attachments)
-            {
-                attachments.Explode();
-            }
-
-            if (autoKill)
-            {
-                IsDead = true;
-            }
-
-            if (autoDelete)
-            {
-                QueueForDelete();
-            }
-
-            OnExplode?.Invoke(this);
+            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
+            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
         }
 
-        public void HitExplosion()
-        {
-            if (_hitExplosionAnimation != null)
-            {
-                _hitExplosionAnimation.Reset();
-                _core.Actors.Animations.CreateAt(_hitExplosionAnimation, this);
-            }
-        }
-
-        public List<ActorBase> Intersections()
-        {
-            var intersections = new List<ActorBase>();
-
-            foreach (var intersection in _core.Actors.Collection)
-            {
-                if (intersection != this && intersection.Visable && intersection is not ActorTextBlock)
-                {
-                    if (Intersects(intersection))
-                    {
-                        intersections.Add(intersection);
-                    }
-                }
-            }
-
-            return intersections;
-        }
+        public virtual void VelocityChanged() { }
+        public virtual void VisibilityChanged() { }
+        public virtual void PositionChanged() { }
+        public virtual void RotationChanged() { }
 
         public virtual void Cleanup()
         {
@@ -616,23 +631,9 @@ namespace HG.Actors.BaseClasses
             }
         }
 
-        public virtual void VelocityChanged()
-        {
-        }
+        #region Rendering.
 
-        public virtual void VisibilityChanged()
-        {
-        }
-
-        public virtual void PositionChanged()
-        {
-        }
-
-        public virtual void RotationChanged()
-        {
-        }
-
-        public void Render(Graphics dc)
+        public virtual void Render(Graphics dc)
         {
             if (_isVisible && _image != null)
             {

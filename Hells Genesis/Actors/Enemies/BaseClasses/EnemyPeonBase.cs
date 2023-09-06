@@ -77,7 +77,7 @@ namespace HG.Actors.Enemies.BaseClasses
             }
         }
 
-        public new void ApplyMotion(HgPoint<double> displacementVector)
+        public override void ApplyMotion(HgPoint<double> displacementVector)
         {
             base.ApplyMotion(displacementVector);
 
@@ -85,7 +85,6 @@ namespace HG.Actors.Enemies.BaseClasses
             {
                 ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
             }
-
         }
 
         public override void Cleanup()

@@ -73,7 +73,7 @@ namespace HG.Actors.Ordinary
             _genericDC = _core.Display.DrawingSurface.CreateGraphics();
         }
 
-        public new void Render(Graphics dc)
+        public override void Render(Graphics dc)
         {
             if (Visable)
             {

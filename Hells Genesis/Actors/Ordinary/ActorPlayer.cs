@@ -36,7 +36,7 @@ namespace HG.Actors.Ordinary
         {
             Class = playerClass;
 
-            string imagePath = @$"Graphics\Player\Alien\{(int)Class}.png";
+            string imagePath = @$"Graphics\Player\Ships\{(int)Class}.png";
 
             Initialize(imagePath, new Size(32, 32));
 
@@ -65,7 +65,7 @@ namespace HG.Actors.Ordinary
         public void Reset(PlayerClass playerClass)
         {
             Class = playerClass;
-            SetImage(@$"Graphics\Player\Alien\{(int)Class}.png", new Size(32, 32));
+            SetImage(@$"Graphics\Player\Ships\{(int)Class}.png", new Size(32, 32));
             Reset();
         }
 
@@ -88,7 +88,27 @@ namespace HG.Actors.Ordinary
             Velocity.AvailableBoost = _core.Settings.MaxPlayerBoost;
             Velocity.MaxRotationSpeed = _core.Settings.MaxRotationSpeed;
 
-            if (Class == PlayerClass.Nimitz)
+            if (Class == PlayerClass.Debug)
+            {
+                Velocity.MaxSpeed = 6.0;
+                Velocity.MaxBoost = 4.0;
+                SetHitPoints(10000);
+                SetShieldPoints(10000);
+
+                AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 50000 });
+
+                AddSecondaryWeapon(new WeaponHotPepper(_core) { RoundQuantity = 10000 });
+                AddSecondaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 5000 });
+                AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 10000 });
+                AddSecondaryWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 10000 });
+                AddSecondaryWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 10000 });
+                AddSecondaryWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 10000 });
+                AddSecondaryWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 10000 });
+                AddSecondaryWeapon(new WeaponPhotonTorpedo(_core) { RoundQuantity = 10000 });
+                AddSecondaryWeapon(new WeaponPulseMeson(_core) { RoundQuantity = 10000 });
+
+            }
+            else if (Class == PlayerClass.Nimitz)
             {
                 Velocity.MaxSpeed = 3.0;
                 Velocity.MaxBoost = 1.5;
@@ -127,11 +147,11 @@ namespace HG.Actors.Ordinary
                 SetHitPoints(500);
                 SetShieldPoints(1000);
 
-                AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 5000 });
-                AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 1600 });
-                AddSecondaryWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 1000 });
-                AddSecondaryWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 600 });
-                AddSecondaryWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 3200 });
+                AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 500 });
+                AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 16 });
+                AddSecondaryWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 10 });
+                AddSecondaryWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 6 });
+                AddSecondaryWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 4 });
             }
             else if (Class == PlayerClass.Whidbey)
             {
@@ -227,7 +247,7 @@ namespace HG.Actors.Ordinary
             }
         }
 
-        public new void Explode(bool autoKill = true, bool autoDelete = true)
+        public override void Explode(bool autoKill = true, bool autoDelete = true)
         {
             base.Explode(true, false);
         }

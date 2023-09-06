@@ -10,7 +10,7 @@ namespace HG.Situations
         public SituationDebuggingGalore(Core core)
             : base(core, "Debugging Galore")
         {
-            TotalWaves = 5;
+            TotalWaves = 100;
         }
 
         public override void BeginSituation()
@@ -27,6 +27,8 @@ namespace HG.Situations
         private void FirstShowPlayerCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
             _core.Player.ResetAndShow();
+            _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.RandomNumber(0, 800)), AddEnemyCallback);
+
         }
 
         private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
@@ -57,16 +59,25 @@ namespace HG.Situations
         {
             //_core.Actors.Enemies.Create<EnemyLouse>();
             _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyAvvol>();
             _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            //_core.Actors.Enemies.Create<EnemyAvvol>();
             //_core.Actors.Enemies.Create<EnemyScarab>();
 
-            //var fff = _core.Actors.RadarPositions.Create();
-            //fff.Visable = true;
-            //fff.X = 100;
-            //fff.X = 100;
 
-            //var debug = _core.Actors.Debugs.CreateAtCenterScreen(@"Graphics\Bases\8.png");
+            //TODO **************** Point ↑ at ↓ ***************************** in a tick controller.
+            //Maybe evewn add a debug tick controller???
+
+
+            //debug.X = 500;
+            //debug.Y = 500;
         }
     }
 }

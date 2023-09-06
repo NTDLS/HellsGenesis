@@ -1,5 +1,4 @@
-﻿using HG.Actors;
-using HG.Actors.Ordinary;
+﻿using HG.Actors.Ordinary;
 using HG.Engine;
 using HG.Menus.BaseClasses;
 using HG.Types;
@@ -16,6 +15,7 @@ namespace HG.Menus
         public PlayerShipMenu(Core core)
             : base(core)
         {
+            var player0 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Debug) { AssetTag = "MENU_SHIP_SELECT" });
             var player1 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Nimitz) { AssetTag = "MENU_SHIP_SELECT" });
             var player2 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Knox) { AssetTag = "MENU_SHIP_SELECT" });
             var player3 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Luhu) { AssetTag = "MENU_SHIP_SELECT" });
@@ -34,9 +34,21 @@ namespace HG.Menus
             _shipBlurb.X = baseX + 200;
             _shipBlurb.Y = baseY - _shipBlurb.Size.Height;
 
+#if DEBUG
+
+            var player0Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Debug}", $"{PlayerClass.Debug}", Brushes.OrangeRed);
+            player0Select.Y -= player0Select.Size.Height / 2;
+            player0Select.Selected = true;
+            player0.X = baseX;
+            player0.Y = baseY;
+            baseY += 50;
+#endif
+
             var player1Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Nimitz}", $"{PlayerClass.Nimitz}", Brushes.OrangeRed);
             player1Select.Y -= player1Select.Size.Height / 2;
+#if !DEBUG
             player1Select.Selected = true;
+#endif
             player1.X = baseX;
             player1.Y = baseY;
             baseY += 50;
@@ -88,7 +100,20 @@ namespace HG.Menus
 
         public override void SelectionChanged(ActorMenuItem item)
         {
-            if (item.Name == PlayerClass.Nimitz.ToString())
+            if (item.Name == PlayerClass.Debug.ToString())
+            {
+                _shipBlurb.Text = GetHelpText(
+                    "Debug", //Name
+                    "Vulcan Cannon", //Primary Weapon
+                    "Every Weapon in the Game, basically infinite ammo", //Secondary Weapon
+                    "10,000", //Sheilds
+                    "10,000", //Hull
+                    "6.0", //Speed
+                    "4.0", //Warp
+                    "\r\n The Nimitz Class fighter is a heavily armored, medium armed \r\n and not-so-nimble fighter."
+                  );
+            }
+            else if (item.Name == PlayerClass.Nimitz.ToString())
             {
                 _shipBlurb.Text = GetHelpText(
                     "Nimitz", //Name

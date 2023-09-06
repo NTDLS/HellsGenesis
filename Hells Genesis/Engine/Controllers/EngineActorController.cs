@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Net.Mail;
 using System.Threading;
 using static HG.Engine.Controllers.EngineDrawingCacheController;
 

@@ -27,7 +27,7 @@ namespace HG.Actors.PowerUp
             _repairPoints *= imageIndex + 1;
         }
 
-        public new void ApplyIntelligence(HgPoint<double> displacementVector)
+        public override void ApplyIntelligence(HgPoint<double> displacementVector)
         {
             if (Intersects(_core.Player.Actor))
             {

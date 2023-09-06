@@ -52,7 +52,7 @@ namespace HG.Actors.Enemies.BaseClasses
             return HgRandom.Random.Next(core.Settings.MinEnemyHealth, core.Settings.MaxEnemyHealth);
         }
 
-        public new void Explode(bool autoKill = true, bool autoDelete = true)
+        public override void Explode(bool autoKill = true, bool autoDelete = true)
         {
             _core.Player.Actor.Score += ScorePoints;
 
@@ -85,7 +85,7 @@ namespace HG.Actors.Enemies.BaseClasses
             return false;
         }
 
-        public new void ApplyMotion(HgPoint<double> displacementVector)
+        public override void ApplyMotion(HgPoint<double> displacementVector)
         {
             if (X < -_core.Settings.EnemySceneDistanceLimit
                 || X >= _core.Display.NatrualScreenSize.Width + _core.Settings.EnemySceneDistanceLimit

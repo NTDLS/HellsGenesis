@@ -1,6 +1,4 @@
 ﻿using HG.Engine;
-using HG.Types;
-using System.Drawing;
 
 namespace HG.Actors.Enemies.BaseClasses
 {

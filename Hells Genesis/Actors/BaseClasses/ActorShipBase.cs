@@ -45,7 +45,7 @@ namespace HG.Actors.BaseClasses
             _core = core;
         }
 
-        public new void Initialize(string imagePath = null, Size? size = null)
+        public override void Initialize(string imagePath = null, Size? size = null)
         {
             _hitSound = _core.Audio.Get(_assetPathHitSound, 0.5f);
             _shieldHit = _core.Audio.Get(_assetPathshieldHit, 0.5f);
@@ -62,10 +62,10 @@ namespace HG.Actors.BaseClasses
             _lockedOnImage = _core.Imaging.Get(_assetPathlockedOnImage);
             _lockedOnSoftImage = _core.Imaging.Get(_assetPathlockedOnSoftImage);
 
-            base.Initialize();
+            base.Initialize(imagePath, size);
         }
 
-        public new void Explode(bool autoKill = true, bool autoDelete = true)
+        public override void Explode(bool autoKill = true, bool autoDelete = true)
         {
             _explodeSound?.Play();
             _explosionAnimation?.Reset();

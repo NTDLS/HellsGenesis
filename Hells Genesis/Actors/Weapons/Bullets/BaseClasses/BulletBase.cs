@@ -87,7 +87,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             }
         }
 
-        public new void ApplyMotion(HgPoint<double> displacementVector)
+        public override void ApplyMotion(HgPoint<double> displacementVector)
         {
             if (X < -_core.Settings.BulletSceneDistanceLimit
                 || X >= _core.Display.TotalCanvasSize.Width + _core.Settings.BulletSceneDistanceLimit
