@@ -180,7 +180,7 @@ namespace HG.Actors.BaseClasses
             }
             set
             {
-                _location = value.ToWriteableCopy;
+                _location = value.ToWriteableCopy();
             }
         }
 
@@ -375,9 +375,31 @@ namespace HG.Actors.BaseClasses
 
         public bool Intersects(ActorBase otherObject)
         {
+
             if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
                 return Bounds.IntersectsWith(otherObject.Bounds);
+            }
+            return false;
+        }
+
+        public bool IntersectsWithTrajectory(ActorBase otherObject)
+        {
+            if (Visable && otherObject.Visable)
+            {
+                var previousPosition = otherObject.Location.ToWriteableCopy();
+
+                for (int i = 0; i < otherObject.Velocity.MaxSpeed; i++)
+                {
+                    previousPosition.X -= otherObject.Velocity.Angle.X;
+                    previousPosition.Y -= otherObject.Velocity.Angle.Y;
+
+                    if (Intersects(previousPosition))
+                    {
+                        return true;
+
+                    }
+                }
             }
             return false;
         }
@@ -411,6 +433,13 @@ namespace HG.Actors.BaseClasses
                 (float)size.X,
                 (float)size.Y
                 );
+
+            return VisibleBounds.IntersectsWith(alteredHitBox);
+        }
+
+        public bool Intersects(HgPoint<double> location)
+        {
+            var alteredHitBox = new RectangleF((float)location.X, (float)location.Y, 1f, 1f);
 
             return VisibleBounds.IntersectsWith(alteredHitBox);
         }
@@ -633,7 +662,6 @@ namespace HG.Actors.BaseClasses
             return false;
         }
 
-
         /// <summary>
         /// Rotates the object by the specified amount until it is pointing at the target angle (with given tolerance).
         /// </summary>
@@ -643,7 +671,9 @@ namespace HG.Actors.BaseClasses
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(double toDegrees, RelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
         {
-            if (Velocity.Angle.Degrees.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
+            toDegrees = toDegrees.DegreesNormalized();
+
+            if (Velocity.Angle.DegreesNormalized.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
                 if (direction == RelativeDirection.Right)
                 {
@@ -713,19 +743,17 @@ namespace HG.Actors.BaseClasses
             return false;
         }
 
-        public virtual void Explode(bool autoKill = true, bool autoDelete = true)
+        public virtual void Explode()
         {
             foreach (var attachments in Attachments)
             {
                 attachments.Explode();
             }
 
-            if (autoKill)
-            {
-                IsDead = true;
-            }
+            IsDead = true;
+            _isVisible = false;
 
-            if (autoDelete)
+            if (this is not ActorAttachment) //Attachments are deleted when the owning object is deleted.
             {
                 QueueForDelete();
             }

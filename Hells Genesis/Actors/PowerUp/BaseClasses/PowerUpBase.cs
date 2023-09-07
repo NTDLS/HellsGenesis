@@ -58,7 +58,7 @@ namespace HG.Actors.PowerUp.BaseClasses
             base.Cleanup();
         }
 
-        public void Explode()
+        public override void Explode()
         {
             _explodeSound.Play();
             _hitAnimation.Reset();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace HG.Types
 {
@@ -67,7 +68,22 @@ namespace HG.Types
             _y = p.Y;
         }
 
-        public HgPoint<T> ToWriteableCopy => new HgPoint<T>(this);
+        public HgPoint<T> ToWriteableCopy() => new HgPoint<T>(this);
+
+        public RectangleF ToRectangleF(float width, float height)
+        {
+            return new RectangleF((float)(dynamic)_x, (float)(dynamic)_y, width, height);
+        }
+
+        public RectangleF ToRectangleF(float sizeX, Size size)
+        {
+            return new RectangleF((float)(dynamic)_x, (float)(dynamic)_y, size.Width, size.Height);
+        }
+
+        public RectangleF ToRectangleF()
+        {
+            return new RectangleF((float)(dynamic)_x, (float)(dynamic)_y, 1f, 1f);
+        }
 
         /// <summary>
         /// Calculates the distance from one object to another.

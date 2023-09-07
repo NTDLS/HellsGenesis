@@ -247,16 +247,16 @@ namespace HG.Actors.Ordinary
             }
         }
 
-        public override void Explode(bool autoKill = true, bool autoDelete = true)
+        public override void Explode()
         {
-            base.Explode(true, false);
+            base.Explode();
         }
 
-        public override bool TestHit(HgPoint<double> displacementVector, BulletBase bullet)
+        public override bool TestHit(HgPoint<double> displacementVector, BulletBase bullet, HgPoint<double> hitTestPosition)
         {
             if (bullet.FiredFromType == HgFiredFromType.Enemy)
             {
-                if (Intersects(bullet))
+                if (Intersects(hitTestPosition))
                 {
                     //We don't auto delete the player because there is only one instance, the engine always assumes its valid.
                     if (Hit(bullet))

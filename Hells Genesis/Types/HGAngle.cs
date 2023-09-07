@@ -144,6 +144,14 @@ namespace HG.Types
             }
         }
 
+        public T DegreesNormalized360
+        {
+            get
+            {
+                return ((dynamic)_degrees + 360) % 360;
+            }
+        }
+
         public T _degrees;
         public T Degrees
         {

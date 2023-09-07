@@ -5,6 +5,7 @@ using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
 using System;
+using System.Diagnostics;
 using static HG.Engine.Constants;
 
 namespace HG.AI.Logistics
@@ -47,7 +48,7 @@ namespace HG.AI.Logistics
         private readonly double _idealMaxDistance = 2000;
         private readonly double _idealMinDistance = 500;
         private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
-        private readonly int _millisecondsBetweenDecisions = 1000;
+        private readonly int _millisecondsBetweenDecisions = 10000;
         private HgNormalizedAngle _evasiveLoopTargetAngle = new();
         private RelativeDirection _evasiveLoopDirection;
 
@@ -81,6 +82,7 @@ namespace HG.AI.Logistics
 
         private void AlterActionState(ActionState state)
         {
+            Debug.Print($"{state}");
             switch (state)
             {
                 case ActionState.EvasiveLoop:
@@ -111,38 +113,28 @@ namespace HG.AI.Logistics
 
         public void ApplyIntelligence(HgPoint<double> displacementVector)
         {
-            //We are evading, dont make any other decisions until evasion is complete.
-            if (_currentAction == ActionState.EvasiveLoop)
+            var now = DateTime.UtcNow;
+            var elapsedTimeSinceLastDecision = (now - (DateTime)_lastDecisionTime).TotalMilliseconds;
+            //If its been awhile since we thought about anything, do some thinking.
+            if (elapsedTimeSinceLastDecision >= _millisecondsBetweenDecisions || _currentAction == ActionState.None)
             {
-                if (_owner.RotateTo(_evasiveLoopTargetAngle.Degrees, _evasiveLoopDirection, 1, 30) == false)
+                var decidingFactors = GatherInputs(); //Gather inputs.
+                var decisions = Network.FeedForward(decidingFactors); //Make decisions.
+                                                                      //Execute on those ↑ decisions:...
+                var speedAdjust = decisions.Get(AIOutputs.SpeedAdjust);
+                if (speedAdjust >= 0.5)
                 {
-                    AlterActionState(ActionState.TransitionToApproach);
+                    _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage + 0.01).Box(0.5, 1);
                 }
-                return;
-            }
-
-            if (_currentAction == ActionState.None)
-            {
-                var now = DateTime.UtcNow;
-                var elapsedTimeSinceLastDecision = (now - (DateTime)_lastDecisionTime).TotalMilliseconds;
-                //If its been awhile since we thought about anything, do some thinking.
-                if (elapsedTimeSinceLastDecision >= _millisecondsBetweenDecisions)
+                else if (speedAdjust < 0.5)
                 {
-                    var decidingFactors = GatherInputs(); //Gather inputs.
-                    var decisions = Network.FeedForward(decidingFactors); //Make decisions.
-                                                                          //Execute on those ↑ decisions:...
-                    var speedAdjust = decisions.Get(AIOutputs.SpeedAdjust);
-                    if (speedAdjust >= 0.5)
-                    {
-                        _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage + 0.01).Box(0.5, 1);
-                    }
-                    else if (speedAdjust < 0.5)
-                    {
-                        _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
-                    }
+                    _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
+                }
 
-                    bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.9;
-                    bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.9;
+                //if (_currentAction == ActionState.None) //We're just cruising, make a decision about the next state.
+                {
+                    bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.99;
+                    bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.99;
 
                     if (transitionToObservedObject && transitionFromObservedObject)
                     {
@@ -160,12 +152,21 @@ namespace HG.AI.Logistics
                     {
                         AlterActionState(ActionState.None);
                     }
-
-                    _lastDecisionTime = now;
                 }
+                _lastDecisionTime = now;
             }
 
-            if (_currentAction == ActionState.TransitionToApproach)
+
+            //We are evading, dont make any other decisions until evasion is complete.
+            if (_currentAction == ActionState.EvasiveLoop)
+            {
+                if (_owner.RotateTo(_evasiveLoopTargetAngle.Degrees, _evasiveLoopDirection, 1, 30) == false)
+                {
+                    AlterActionState(ActionState.Departing);
+                }
+                return;
+            }
+            else if (_currentAction == ActionState.TransitionToApproach)
             {
                 if (_owner.RotateTo(_observedObject, 1, 10) == false)
                 {

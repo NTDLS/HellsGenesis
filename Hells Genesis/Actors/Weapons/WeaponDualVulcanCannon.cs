@@ -15,6 +15,9 @@ namespace HG.Actors.Weapons
             RoundQuantity = 500;
             Damage = 2;
             FireDelayMilliseconds = 150;
+            AngleSlop = 0;
+            Speed = 18;
+            SpeedSlop = 0;
         }
 
         public override bool Fire()

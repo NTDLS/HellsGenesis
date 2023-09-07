@@ -67,16 +67,34 @@ namespace HG.Actors.BaseClasses
             base.Initialize(imagePath, size);
         }
 
-        public override void Explode(bool autoKill = true, bool autoDelete = true)
+        public override void Explode()
         {
             _explodeSound?.Play();
             _explosionAnimation?.Reset();
             _core.Actors.Animations.CreateAt(_explosionAnimation, this);
-            base.Explode(autoKill);
+            base.Explode();
         }
 
-        public virtual bool TestHit(HgPoint<double> displacementVector, BulletBase bullet)
+        /// <summary>
+        /// Allows for the testing of hits from a bullet. This is called for each movement along a bullets path.
+        /// </summary>
+        /// <param name="displacementVector">The background offset vector.</param>
+        /// <param name="bullet">The bullet object that is being tested for.</param>
+        /// <param name="hitTestPosition">The position to test for hit.</param>
+        /// <returns></returns>
+        public virtual bool TestHit(HgPoint<double> displacementVector, BulletBase bullet, HgPoint<double> hitTestPosition)
         {
+            if (Intersects(hitTestPosition))
+            {
+                if (Hit(bullet))
+                {
+                    if (HitPoints <= 0)
+                    {
+                        Explode();
+                    }
+                    return true;
+                }
+            }
             return false;
         }
 

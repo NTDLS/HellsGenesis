@@ -39,14 +39,23 @@ namespace HG.TickHandlers
 
             foreach (var bullet in VisibleOfType<BulletBase>())
             {
-                bullet.ApplyMotion(displacementVector);
+                bullet.ApplyMotion(displacementVector); //Move the bullet.
 
-                foreach (var thing in thingsThatCanBeHit)
+                var hitTestPosition = bullet.Location.ToWriteableCopy(); //Grab the new location of the bullet.
+
+                //Loop backwards and hit-test each position along the bullets path.
+                for (int i = 0; i < bullet.Velocity.MaxSpeed; i++)
                 {
-                    if (thing.TestHit(displacementVector, bullet))
+                    hitTestPosition.X -= bullet.Velocity.Angle.X;
+                    hitTestPosition.Y -= bullet.Velocity.Angle.Y;
+
+                    foreach (var thing in thingsThatCanBeHit)
                     {
-                        bullet.Explode();
-                        continue;
+                        if (thing.TestHit(displacementVector, bullet, hitTestPosition))
+                        {
+                            bullet.Explode();
+                            break;
+                        }
                     }
                 }
 

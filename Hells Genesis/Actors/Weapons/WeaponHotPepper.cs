@@ -19,7 +19,7 @@ namespace HG.Actors.Weapons
             Damage = 1;
             FireDelayMilliseconds = 25;
             AngleSlop = 4;
-            Speed = 11;
+            Speed = 15;
             SpeedSlop = 10;
         }
 

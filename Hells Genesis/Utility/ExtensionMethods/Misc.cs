@@ -9,6 +9,17 @@ namespace HG.Utility.ExtensionMethods
             return new RectangleF(rectangle.Location, rectangle.Size);
         }
 
+
+        public static double DegreesNormalized(this double value)
+        {
+            return (value + 180) % 360 - 180;
+        }
+
+        public static double DegreesNormalized360(this double value)
+        {
+            return ((dynamic)value + 360) % 360;
+        }
+
         public static bool IntersectsWith(this RectangleF reference, RectangleF with, float tolerance)
         {
             return with.X < reference.X + reference.Width + tolerance

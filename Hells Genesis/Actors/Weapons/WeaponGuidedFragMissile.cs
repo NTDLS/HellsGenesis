@@ -20,7 +20,7 @@ namespace HG.Actors.Weapons
             RoundQuantity = 500;
             Damage = 10;
             FireDelayMilliseconds = 1000;
-            Speed = 6;
+            Speed = 12;
 
             CanLockOn = true;
             MinLockDistance = 100;

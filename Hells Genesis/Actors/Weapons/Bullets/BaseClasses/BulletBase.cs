@@ -99,7 +99,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
         }
 
-        public virtual void Explode()
+        public override void Explode()
         {
             if (Weapon != null && Weapon.ExplodesOnImpact)
             {

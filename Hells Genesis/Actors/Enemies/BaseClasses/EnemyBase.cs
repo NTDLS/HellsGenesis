@@ -52,25 +52,24 @@ namespace HG.Actors.Enemies.BaseClasses
             return HgRandom.Random.Next(core.Settings.MinEnemyHealth, core.Settings.MaxEnemyHealth);
         }
 
-        public override void Explode(bool autoKill = true, bool autoDelete = true)
+        public override void Explode()
         {
             _core.Player.Actor.Score += ScorePoints;
 
-            //If the type of explosion is an enemy then maybe spawn a powerup.
-            //if (HgRandom.ChanceIn(5))
+            if (HgRandom.ChanceIn(5))
             {
                 PowerUpBase powerUp = HgRandom.FlipCoin() ? new PowerUpRepair(_core) : new PowerUpSheild(_core);
                 powerUp.Location = Location;
                 _core.Actors.Powerups.Insert(powerUp);
             }
-            base.Explode(autoKill);
+            base.Explode();
         }
 
-        public override bool TestHit(HgPoint<double> displacementVector, BulletBase bullet)
+        public override bool TestHit(HgPoint<double> displacementVector, BulletBase bullet, HgPoint<double> hitTestPosition)
         {
             if (bullet.FiredFromType == HgFiredFromType.Player)
             {
-                if (Intersects(bullet))
+                if (Intersects(hitTestPosition))
                 {
                     if (Hit(bullet))
                     {
