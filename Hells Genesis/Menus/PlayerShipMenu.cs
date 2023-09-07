@@ -31,7 +31,16 @@ namespace HG.Menus
                 var menuItem = CreateAndAddMenuItem(new HgPoint<double>(offsetX + 25, offsetY), loadout.Name, loadout.Name, Brushes.OrangeRed);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
-                var shipIcon = _core.Actors.Insert(new ActorPlayer(_core, loadout) { Name = "MENU_SHIP_SELECT" });
+                var shipIcon = _core.Actors.InsertPlayer(new ActorPlayer(_core, loadout) { Name = "MENU_SHIP_SELECT" });
+
+                if (loadout.Name == "Debug")
+                {
+                    shipIcon.ThrustAnimation.Visable = true;
+                }
+                else
+                {
+                    shipIcon.BoostAnimation.Visable = true;
+                }
                 shipIcon.X = offsetX;
                 shipIcon.Y = offsetY;
                 offsetY += 50;
@@ -43,14 +52,14 @@ namespace HG.Menus
         private string GetHelpText(string name, string primaryWeapon, string secondaryWeapons,
             string sheilds, string hullStrength, string maxSpeed, string warpDrive, string blurb)
         {
-            string result = $"             Name : {name}\r\n";
-            result += $"   Primary weapon : {primaryWeapon}\r\n";
-            result += $"Secondary Weapons : {secondaryWeapons}\r\n";
-            result += $"          Sheilds : {sheilds}\r\n";
-            result += $"    Hull Strength : {hullStrength}\r\n";
-            result += $"        Max Speed : {maxSpeed}\r\n";
-            result += $"       Warp Drive : {warpDrive}\r\n";
-            result += $"{blurb}";
+            string result = $"             Name : {name}\n";
+            result += $"   Primary weapon : {primaryWeapon}\n";
+            result += $"Secondary Weapons : {secondaryWeapons}\n";
+            result += $"          Sheilds : {sheilds}\n";
+            result += $"    Hull Strength : {hullStrength}\n";
+            result += $"        Max Speed : {maxSpeed}\n";
+            result += $"       Warp Drive : {warpDrive}\n";
+            result += $"\n{blurb}";
             return result;
         }
 
@@ -76,7 +85,7 @@ namespace HG.Menus
                 $"{loadout.Hull:n0}",       //Hull
                 $"{loadout.Speed:n1}",      //Speed
                 $"{loadout.Boost:n1}",      //Boost
-                $"\r\n {loadout.Description}"
+                $"{loadout.Description}"
             );
         }
 

@@ -31,7 +31,10 @@ namespace HG.Loudouts
                     Boost = 4.0,
                     Hull = 10000,
                     Sheilds = 10000,
-                    Description = "This ship might look crude, but its faster than the bullets and missiles.\r\n It feels like a glitttch in thƏ m@tR|x...",
+                    Description = "→ The code crusader ←\n"
+                        + "Equipped with advanced diagnostics and repair systems.\n"
+                        + "Nearly indestructible and inconceivably fast. Its mission is to discover\n"
+                        + "glitches in the vast cosmic code, ensuring smooth journeys for all who follow...",
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 100000)
                 };
 
@@ -52,7 +55,9 @@ namespace HG.Loudouts
             {
                 var loadout = new ShipLoadout(PlayerClass.Frigate)
                 {
-                    Description = "The Frigate...",
+                    Description = "→ Nimble Interceptor ←\n"
+                        + "A nimble interceptor, designed for hit-and-run tactics\n"
+                        + "and lightning-fast strikes against enemy forces.",
                     Speed = 3.0,
                     Boost = 1.5,
                     Hull = 500,
@@ -70,7 +75,9 @@ namespace HG.Loudouts
             {
                 var loadout = new ShipLoadout(PlayerClass.Cruiser)
                 {
-                    Description = "The Cruiser...",
+                    Description = "→ Heavy Assault Cruiser ←\n"
+                       + "A formidable heavy assault vessel, bristling with weaponry\n"
+                       + "and to take on any adversary in head-to-head combat.",
                     Speed = 2.2,
                     Boost = 1.0,
                     Hull = 2500,
@@ -88,7 +95,9 @@ namespace HG.Loudouts
             {
                 var loadout = new ShipLoadout(PlayerClass.Destroyer)
                 {
-                    Description = "The Destroyer...",
+                    Description = "→ Vicious Annihilator ←\n"
+                        + "Lives up to its name as a relentless annihilator,\n"
+                        + "unleashing devastating firepower to obliterate foes.",
                     Speed = 5.0,
                     Boost = 2.5,
                     Hull = 500,
@@ -105,7 +114,9 @@ namespace HG.Loudouts
             {
                 var loadout = new ShipLoadout(PlayerClass.Dreadnaught)
                 {
-                    Description = "The Dreadnaught...",
+                    Description = "→ Titanic Dreadnought ←\n"
+                        + "Titanic force of destruction, capable of withstanding\n"
+                        + "immense firepower while dishing out colossal damage.",
                     Speed = 4.0,
                     Boost = 2.0,
                     Hull = 500,
@@ -125,7 +136,9 @@ namespace HG.Loudouts
             {
                 var loadout = new ShipLoadout(PlayerClass.Reaver)
                 {
-                    Description = "The Reaver...",
+                    Description = "→ Rogue Reaver ←\n"
+                        + "A rogue fighter, known for its hit-and-fade tactics,\n"
+                        + "striking and disappearing into the cosmos with warp speed.",
                     Speed = 6.0,
                     Boost = 3.5,
                     Hull = 500,
@@ -143,7 +156,9 @@ namespace HG.Loudouts
             {
                 var loadout = new ShipLoadout(PlayerClass.Serpent)
                 {
-                    Description = "The Serpent...",
+                    Description = "→ Stealthy Serpent ←\n"
+                        + "A stealthy long distance fighter, expert in covert operations\n"
+                        + "and ambushing unsuspecting adversaries with deadly precision.",
                     Speed = 5.0,
                     Boost = 3.5,
                     Hull = 100,

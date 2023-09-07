@@ -199,7 +199,7 @@ namespace HG.Engine.Controllers
             }
         }
 
-        public ActorBase Insert(ActorBase actor)
+        public ActorPlayer InsertPlayer(ActorPlayer actor)
         {
             lock (Collection)
             {
