@@ -1,0 +1,212 @@
+{
+  "Collection": [
+    {
+      "Class": "Debug",
+      "ImageIndex": 0,
+      "Name": "Debug",
+      "Description": "→ The code crusader ←\nEquipped with advanced diagnostics and repair systems.\nNearly indestructible and inconceivably fast. Its mission is to discover\nglitches in the vast cosmic code, ensuring smooth journeys for all who follow...",
+      "Speed": 3.0,
+      "Boost": 4.0,
+      "Hull": 10000,
+      "Sheilds": 10000,
+      "PrimaryWeapon": {
+        "Type": "WeaponVulcanCannon",
+        "Rounds": 100000
+      },
+      "SecondaryWeapons": [
+        {
+          "Type": "WeaponVulcanCannon",
+          "Rounds": 100000
+        },
+        {
+          "Type": "WeaponHotPepper",
+          "Rounds": 100000
+        },
+        {
+          "Type": "WeaponFragMissile",
+          "Rounds": 100000
+        },
+        {
+          "Type": "WeaponGuidedFragMissile",
+          "Rounds": 100000
+        },
+        {
+          "Type": "WeaponPrecisionGuidedFragMissile",
+          "Rounds": 100000
+        },
+        {
+          "Type": "WeaponScramsMissile",
+          "Rounds": 100000
+        },
+        {
+          "Type": "WeaponDualVulcanCannon",
+          "Rounds": 100000
+        },
+        {
+          "Type": "WeaponPhotonTorpedo",
+          "Rounds": 100000
+        },
+        {
+          "Type": "WeaponPulseMeson",
+          "Rounds": 100000
+        }
+      ]
+    },
+    {
+      "Class": "Frigate",
+      "ImageIndex": 1,
+      "Name": "Frigate",
+      "Description": "→ Nimble Interceptor ←\nA nimble interceptor, designed for hit-and-run tactics\nand lightning-fast strikes against enemy forces.",
+      "Speed": 3.0,
+      "Boost": 1.5,
+      "Hull": 500,
+      "Sheilds": 100,
+      "PrimaryWeapon": {
+        "Type": "WeaponHotPepper",
+        "Rounds": 10000
+      },
+      "SecondaryWeapons": [
+        {
+          "Type": "WeaponFragMissile",
+          "Rounds": 16
+        }
+      ]
+    },
+    {
+      "Class": "Cruiser",
+      "ImageIndex": 2,
+      "Name": "Cruiser",
+      "Description": "→ Heavy Assault Cruiser ←\nA formidable heavy assault vessel, bristling with weaponry\nand to take on any adversary in head-to-head combat.",
+      "Speed": 2.2,
+      "Boost": 1.0,
+      "Hull": 2500,
+      "Sheilds": 3000,
+      "PrimaryWeapon": {
+        "Type": "WeaponVulcanCannon",
+        "Rounds": 5000
+      },
+      "SecondaryWeapons": [
+        {
+          "Type": "WeaponFragMissile",
+          "Rounds": 16
+        }
+      ]
+    },
+    {
+      "Class": "Destroyer",
+      "ImageIndex": 3,
+      "Name": "Destroyer",
+      "Description": "→ Vicious Annihilator ←\nLives up to its name as a relentless annihilator,\nunleashing devastating firepower to obliterate foes.",
+      "Speed": 5.0,
+      "Boost": 2.5,
+      "Hull": 500,
+      "Sheilds": 1000,
+      "PrimaryWeapon": {
+        "Type": "WeaponVulcanCannon",
+        "Rounds": 5000
+      },
+      "SecondaryWeapons": [
+        {
+          "Type": "WeaponGuidedFragMissile",
+          "Rounds": 16
+        }
+      ]
+    },
+    {
+      "Class": "Dreadnaught",
+      "ImageIndex": 4,
+      "Name": "Dreadnaught",
+      "Description": "→ Titanic Dreadnought ←\nTitanic force of destruction, capable of withstanding\nimmense firepower while dishing out colossal damage.",
+      "Speed": 4.0,
+      "Boost": 2.0,
+      "Hull": 500,
+      "Sheilds": 1000,
+      "PrimaryWeapon": {
+        "Type": "WeaponVulcanCannon",
+        "Rounds": 500
+      },
+      "SecondaryWeapons": [
+        {
+          "Type": "WeaponFragMissile",
+          "Rounds": 16
+        },
+        {
+          "Type": "WeaponGuidedFragMissile",
+          "Rounds": 10
+        },
+        {
+          "Type": "WeaponPrecisionGuidedFragMissile",
+          "Rounds": 6
+        },
+        {
+          "Type": "WeaponScramsMissile",
+          "Rounds": 4
+        }
+      ]
+    },
+    {
+      "Class": "Reaver",
+      "ImageIndex": 5,
+      "Name": "Reaver",
+      "Description": "→ Rogue Reaver ←\nA rogue fighter, known for its hit-and-fade tactics,\nstriking and disappearing into the cosmos with warp speed.",
+      "Speed": 6.0,
+      "Boost": 3.5,
+      "Hull": 500,
+      "Sheilds": 1000,
+      "PrimaryWeapon": {
+        "Type": "WeaponDualVulcanCannon",
+        "Rounds": 5000
+      },
+      "SecondaryWeapons": [
+        {
+          "Type": "WeaponPhotonTorpedo",
+          "Rounds": 100
+        },
+        {
+          "Type": "WeaponPulseMeson",
+          "Rounds": 8
+        }
+      ]
+    },
+    {
+      "Class": "Serpent",
+      "ImageIndex": 6,
+      "Name": "Serpent",
+      "Description": "→ Stealthy Serpent ←\nA stealthy long distance fighter, expert in covert operations\nand ambushing unsuspecting adversaries with deadly precision.",
+      "Speed": 5.0,
+      "Boost": 3.5,
+      "Hull": 100,
+      "Sheilds": 15000,
+      "PrimaryWeapon": {
+        "Type": "WeaponVulcanCannon",
+        "Rounds": 5000
+      },
+      "SecondaryWeapons": [
+        {
+          "Type": "WeaponDualVulcanCannon",
+          "Rounds": 2500
+        }
+      ]
+    },
+    {
+      "Class": "Starfighter",
+      "ImageIndex": 7,
+      "Name": "Starfighter",
+      "Description": "→ Celestial Aviator ←\nA sleek and versatile spacecraft, built for supremacy among the stars.\nIt's the first choice for finesse, agility, and unmatched combat prowess\nwithout all the fuss of a powerful loadout.",
+      "Speed": 5.0,
+      "Boost": 3.5,
+      "Hull": 100,
+      "Sheilds": 15000,
+      "PrimaryWeapon": {
+        "Type": "WeaponVulcanCannon",
+        "Rounds": 5000
+      },
+      "SecondaryWeapons": [
+        {
+          "Type": "WeaponDualVulcanCannon",
+          "Rounds": 2500
+        }
+      ]
+    }
+  ]
+}
