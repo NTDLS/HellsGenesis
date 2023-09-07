@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Determinet\Determinet.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Assets\Loadouts\" />
+  </ItemGroup>
+
 </Project>

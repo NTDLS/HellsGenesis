@@ -67,11 +67,11 @@ namespace HG.Menus.BaseClasses
             return item;
         }
 
-        public ActorMenuItem NewMenuItem(HgPoint<double> location, string name, string text, Brush brush, int size = 14)
+        public ActorMenuItem NewMenuItem(HgPoint<double> location, string key, string text, Brush brush, int size = 14)
         {
             var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
             {
-                Key = name,
+                Key = key,
                 Text = text,
                 ItemType = ActorMenuItem.MenuItemType.Item
             };

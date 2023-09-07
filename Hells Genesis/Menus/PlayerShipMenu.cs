@@ -2,9 +2,8 @@
 using HG.Engine;
 using HG.Menus.BaseClasses;
 using HG.Types;
-using System;
+using HG.Utility;
 using System.Drawing;
-using static HG.Engine.Constants;
 
 namespace HG.Menus
 {
@@ -15,73 +14,28 @@ namespace HG.Menus
         public PlayerShipMenu(Core core)
             : base(core)
         {
-            var player0 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Debug) { Name = "MENU_SHIP_SELECT" });
-            var player1 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Nimitz) { Name = "MENU_SHIP_SELECT" });
-            var player2 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Knox) { Name = "MENU_SHIP_SELECT" });
-            var player3 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Luhu) { Name = "MENU_SHIP_SELECT" });
-            var player4 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Atlant) { Name = "MENU_SHIP_SELECT" });
-            var player5 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Whidbey) { Name = "MENU_SHIP_SELECT" });
-            var player6 = _core.Actors.Insert(new ActorPlayer(_core, PlayerClass.Kirov) { Name = "MENU_SHIP_SELECT" });
+            double offsetX = _core.Display.CurrentScaledScreenBounds.X + 40;
+            double offsetY = _core.Display.CurrentScaledScreenBounds.Y + 100;
 
-            double baseX = _core.Display.CurrentScaledScreenBounds.X + 40;
-            double baseY = _core.Display.CurrentScaledScreenBounds.Y + 100;
+            var itemTitle = NewTitleItem(new HgPoint<double>(offsetX, offsetY), "Select a Ship Class:", Brushes.OrangeRed);
+            itemTitle.X = offsetX + 200;
+            itemTitle.Y = offsetY - itemTitle.Size.Height;
 
-            var itemTitle = NewTitleItem(new HgPoint<double>(baseX, baseY), "Select a Ship Class:", Brushes.OrangeRed);
-            itemTitle.X = baseX + 200;
-            itemTitle.Y = baseY - itemTitle.Size.Height;
+            _shipBlurb = NewTextItem(new HgPoint<double>(offsetX, offsetY), "", Brushes.LawnGreen, 10);
+            _shipBlurb.X = offsetX + 200;
+            _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
-            _shipBlurb = NewTextItem(new HgPoint<double>(baseX, baseY), "", Brushes.LawnGreen, 10);
-            _shipBlurb.X = baseX + 200;
-            _shipBlurb.Y = baseY - _shipBlurb.Size.Height;
+            foreach (var loadout in core.PrefabPlayerLoadouts.Collection)
+            {
+                var menuItem = NewMenuItem(new HgPoint<double>(offsetX + 25, offsetY), loadout.Name, loadout.Name, Brushes.OrangeRed);
+                menuItem.Y -= menuItem.Size.Height / 2;
+                menuItem.Selected = true;
 
-#if DEBUG
-
-            var player0Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Debug}", $"{PlayerClass.Debug}", Brushes.OrangeRed);
-            player0Select.Y -= player0Select.Size.Height / 2;
-            player0Select.Selected = true;
-            player0.X = baseX;
-            player0.Y = baseY;
-            baseY += 50;
-#endif
-
-            var player1Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Nimitz}", $"{PlayerClass.Nimitz}", Brushes.OrangeRed);
-            player1Select.Y -= player1Select.Size.Height / 2;
-#if !DEBUG
-            player1Select.Selected = true;
-#endif
-            player1.X = baseX;
-            player1.Y = baseY;
-            baseY += 50;
-
-            var player2Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Knox}", $"{PlayerClass.Knox}", Brushes.OrangeRed);
-            player2Select.Y -= player2Select.Size.Height / 2;
-            player2.X = baseX;
-            player2.Y = baseY;
-            baseY += 50;
-
-            var player3Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Luhu}", $"{PlayerClass.Luhu}", Brushes.OrangeRed);
-            player3Select.Y -= player3Select.Size.Height / 2;
-            player3.X = baseX;
-            player3.Y = baseY;
-            baseY += 50;
-
-            var player4Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Atlant}", $"{PlayerClass.Atlant}", Brushes.OrangeRed);
-            player4Select.Y -= player4Select.Size.Height / 2;
-            player4.X = baseX;
-            player4.Y = baseY;
-            baseY += 50;
-
-            var player5Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Whidbey}", $"{PlayerClass.Whidbey}", Brushes.OrangeRed);
-            player5Select.Y -= player5Select.Size.Height / 2;
-            player5.X = baseX;
-            player5.Y = baseY;
-            baseY += 50;
-
-            var player6Select = NewMenuItem(new HgPoint<double>(baseX + 25, baseY), $"{PlayerClass.Kirov}", $"{PlayerClass.Kirov}", Brushes.OrangeRed);
-            player6Select.Y -= player6Select.Size.Height / 2;
-            player6.X = baseX;
-            player6.Y = baseY;
-            baseY += 50;
+                var shipIcon = _core.Actors.Insert(new ActorPlayer(_core, loadout) { Name = "MENU_SHIP_SELECT" });
+                shipIcon.X = offsetX;
+                shipIcon.Y = offsetY;
+                offsetY += 50;
+            }
         }
 
         private string GetHelpText(string name, string primaryWeapon, string secondaryWeapons,
@@ -100,119 +54,38 @@ namespace HG.Menus
 
         public override void SelectionChanged(ActorMenuItem item)
         {
-            if (item.Key == PlayerClass.Debug.ToString())
+            var loadout = _core.PrefabPlayerLoadouts.GetByName(item.Key);
+
+            string weaponName = Misc.GetStaticPropertyValue(loadout.PrimaryWeapon.Type, "Name");
+            string primaryWeapon = $"{weaponName} x{loadout.PrimaryWeapon.Rounds}";
+
+            string secondaryWeapons = string.Empty;
+            foreach (var weapon in loadout.SecondaryWeapons)
             {
-                _shipBlurb.Text = GetHelpText(
-                    "Debug", //Name
-                    "Vulcan Cannon", //Primary Weapon
-                    "Every Weapon in the Game, basically infinite ammo", //Secondary Weapon
-                    "10,000", //Sheilds
-                    "10,000", //Hull
-                    "6.0", //Speed
-                    "4.0", //Warp
-                    "\r\n This ship might look crude, but its faster than the bullets and missiles.\r\n It feels like a glitttch in thƏ m@tR|x..."
-                  );
+                weaponName = Misc.GetStaticPropertyValue(weapon.Type, "Name");
+                secondaryWeapons += $"{weaponName} x{weapon.Rounds}\n{new string(' ', 20)}";
             }
-            else if (item.Key == PlayerClass.Nimitz.ToString())
-            {
-                _shipBlurb.Text = GetHelpText(
-                    "Nimitz", //Name
-                    "Vulcan Cannon", //Primary Weapon
-                    "Conventional non-Guided Missiles x2", //Secondary Weapon
-                    "1,000", //Sheilds
-                    "500", //Hull
-                    "3.0", //Speed
-                    "1.5", //Warp
-                    "\r\n The Nimitz Class fighter is a heavily armored, medium armed \r\n and not-so-nimble fighter."
-                  );
-            }
-            else if (item.Key == PlayerClass.Knox.ToString())
-            {
-                _shipBlurb.Text = GetHelpText(
-                    "Knox", //Name
-                    "Vulcan Cannon", //Primary Weapon
-                    "Conventional non-Guided Missiles x2", //Secondary Weapon
-                    "5,000", //Sheilds
-                    "2,500", //Hull
-                    "2.2", //Speed
-                    "1.0", //Warp
-                    "\r\n Heavier than a destroyer, this fighter can take a serious \r\n beating while sacraficing speed."
-                  );
-            }
-            else if (item.Key == PlayerClass.Luhu.ToString())
-            {
-                _shipBlurb.Text = GetHelpText(
-                    "Luhu", //Name
-                    "Vulcan Cannon", //Primary Weapon
-                    "Conventional Guided Missiles x1", //Secondary Weapon
-                    "1,000", //Sheilds
-                    "500", //Hull
-                    "5.0", //Speed
-                    "2.5", //Warp
-                    "\r\n This destroyer class ship is a medium armored, medium armament \r\n agile fighter for medium weight enemies."
-                  );
-            }
-            else if (item.Key == PlayerClass.Atlant.ToString())
-            {
-                _shipBlurb.Text = GetHelpText(
-                    "Atlant", //Name
-                    "Dual-Vulcan Cannon", //Primary Weapon
-                    "Conventional Guided and non-Guided Missiles x4", //Secondary Weapon
-                    "1,000", //Sheilds
-                    "500", //Hull
-                    "4.0", //Speed
-                    "2.0", //Warp
-                    "\r\n The Atlant is a well rounded heavily armed and armored agile \r\n fighter for heavy enemies."
-                  );
-            }
-            else if (item.Key == PlayerClass.Whidbey.ToString())
-            {
-                _shipBlurb.Text = GetHelpText(
-                    "Whidbey ", //Name
-                    "Dual-Vulcan Cannon", //Primary Weapon
-                    "Energy non-Guided x2", //Secondary Weapon
-                    "1,000", //Sheilds
-                    "500", //Hull
-                    "6.0", //Speed
-                    "3.5", //Warp
-                    "\r\n The Whidbey  is just fast and packs an intense punch with \r\n near-light-speed energy weapons."
-                  );
-            }
-            else if (item.Key == PlayerClass.Kirov.ToString())
-            {
-                _shipBlurb.Text = GetHelpText(
-                    "Kirov", //Name
-                    "Vulcan Cannon", //Primary Weapon
-                    "Dual-Vulcan Cannon", //Secondary Weapon
-                    "15,000", //Sheilds
-                    "100", //Hull
-                    "5.0", //Speed
-                    "3.5", //Warp
-                    "\r\n The Kirov employs a fragile light-weight hull but expends tons \r\n of energy on its heavy energy sheilds. A space dog-fighter."
-                  );
-            }
-            else
-            {
-                _shipBlurb.Text = GetHelpText(
-                    item.Key, //Name
-                    "∞", //Primary Weapon
-                    "∞", //Secondary Weapon
-                    "∞", //Sheilds
-                    "∞", //Hull
-                    "∞", //Speed
-                    "∞", //Warp
-                    "\r\n What have you done?!."
-                  );
-            }
+
+            _shipBlurb.Text = GetHelpText(
+                loadout.Name,               //Name
+                primaryWeapon.Trim(),       //Primary Weapon
+                secondaryWeapons.Trim(),    //Secondary Weapon
+                $"{loadout.Sheilds:n0}",    //Sheilds
+                $"{loadout.Hull:n0}",       //Hull
+                $"{loadout.Speed:n1}",      //Speed
+                $"{loadout.Boost:n1}",      //Boost
+                $"\r\n {loadout.Description}"
+            );
         }
 
         public override void ExecuteSelection(ActorMenuItem item)
         {
-            var playerClass = (PlayerClass)Enum.Parse(typeof(PlayerClass), item.Key);
+            var loadout = _core.PrefabPlayerLoadouts.GetByName(item.Key);
 
-            _core.Player.Actor.Reset(playerClass);
+            _core.Player.Actor.Reset(loadout);
 
             QueueForDelete();
+
             _core.Actors.DeleteAllActorsByAssetTag("MENU_SHIP_SELECT");
 
             _core.Actors.NewGame();

@@ -9,11 +9,13 @@ namespace HG.Actors.Weapons
 {
     internal class WeaponHotPepper : WeaponBase
     {
+        static new string Name { get; } = "Hot Pepper";
+
         private const string soundPath = @"Sounds\Weapons\WeaponVulcanCannon.wav";
         private const float soundVolumne = 0.2f;
 
         public WeaponHotPepper(Core core)
-            : base(core, "Hot Pepper", soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne)
         {
             RoundQuantity = 500;
             Damage = 1;

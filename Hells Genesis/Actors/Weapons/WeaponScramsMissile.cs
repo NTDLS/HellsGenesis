@@ -9,13 +9,15 @@ namespace HG.Actors.Weapons
 {
     internal class WeaponScramsMissile : WeaponBase
     {
+        static new string Name { get; } = "Guided Scrams Missile";
+
         private const string soundPath = @"Sounds\Weapons\WeaponScramsMissile.wav";
         private const float soundVolumne = 0.4f;
 
         private bool _toggle = false;
 
         public WeaponScramsMissile(Core core)
-            : base(core, "Guided Scrams Missile", soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne)
         {
             RoundQuantity = 500;
             Damage = 5;

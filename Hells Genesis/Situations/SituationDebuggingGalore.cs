@@ -1,5 +1,6 @@
 ﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Enemies.Bosses;
+using HG.Actors.Enemies.Peons;
 using HG.Engine;
 using HG.Situations.BaseClasses;
 
@@ -58,17 +59,16 @@ namespace HG.Situations
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
             _core.Actors.Enemies.Create<EnemyLouse>();
-            //_core.Actors.Enemies.Create<EnemyDebug>();
-            //_core.Actors.Enemies.Create<EnemyAvvol>();
-            //_core.Actors.Enemies.Create<EnemyScarab>();
-
-
-            //TODO **************** Point ↑ at ↓ ***************************** in a tick controller.
-            //Maybe evewn add a debug tick controller???
-
-
-            //debug.X = 500;
-            //debug.Y = 500;
+            _core.Actors.Enemies.Create<EnemyLouse>();
+            _core.Actors.Enemies.Create<EnemyLouse>();
+            _core.Actors.Enemies.Create<EnemyLouse>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyAvvol>();
+            _core.Actors.Enemies.Create<EnemyAvvol>();
+            _core.Actors.Enemies.Create<EnemyAvvol>();
+            _core.Actors.Enemies.Create<EnemyScarab>();
+            _core.Actors.Enemies.Create<EnemyScarab>();
+            _core.Actors.Enemies.Create<EnemyScarab>();
         }
     }
 }

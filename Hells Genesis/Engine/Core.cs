@@ -1,6 +1,9 @@
 ﻿using HG.Engine.Controllers;
+using HG.Loudouts;
 using HG.Menus;
 using HG.TickHandlers;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -8,6 +11,8 @@ namespace HG.Engine
 {
     internal class Core
     {
+        public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
+
         public EngineSettings Settings { get; private set; } = new();
         public EngineInputController Input { get; private set; }
         public EngineDisplayController Display { get; private set; }
@@ -63,9 +68,36 @@ namespace HG.Engine
             Player = new PlayerTickHandler(this);
             DrawingCache = new EngineDrawingCacheController(this);
 
+            LoadPrefabs();
+
             _gameLoop = new GameLoop(this);
 
             Events.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
+        }
+
+        private void LoadPrefabs()
+        {
+            var playerLoadoutPath = "Loadouts\\Player.json";
+            var playerLoadoutText = Assets.GetText(playerLoadoutPath);
+            if (string.IsNullOrEmpty(playerLoadoutText) == false)
+            {
+                PrefabPlayerLoadouts = JsonConvert.DeserializeObject<PrefabPlayerLoadouts>(playerLoadoutText);
+            }
+            else
+            {
+                PrefabPlayerLoadouts = new PrefabPlayerLoadouts();
+
+                PrefabPlayerLoadouts.CreateDefaults(); //We couldnt find a file, create a default loadout/
+
+                JsonSerializerSettings settings = new JsonSerializerSettings
+                {
+                    Converters = new JsonConverter[] { new StringEnumConverter() }
+                };
+                var defaultLoadout = JsonConvert.SerializeObject(PrefabPlayerLoadouts, Formatting.Indented, settings);
+
+                //Create the missing loadout file.
+                Assets.PutText(playerLoadoutPath, defaultLoadout);
+            }
         }
 
         private void NewGameMenuCallback(Core core, HgEngineCallbackEvent sender, object refObj)

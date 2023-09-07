@@ -60,7 +60,7 @@ namespace HG.Engine.Controllers
 
         public void Start()
         {
-            _core.Player.Actor = new ActorPlayer(_core, Constants.PlayerClass.Atlant) { Visable = false };
+            _core.Player.Actor = new ActorPlayer(_core, _core.PrefabPlayerLoadouts.GetDefault()) { Visable = false };
 
             PlayerStatsText = TextBlocks.Create("Consolas", Brushes.WhiteSmoke, 9, new HgPoint<double>(5, 5), true);
             PlayerStatsText.Visable = false;

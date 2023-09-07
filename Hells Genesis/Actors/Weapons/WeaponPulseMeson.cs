@@ -9,13 +9,15 @@ namespace HG.Actors.Weapons
 {
     internal class WeaponPulseMeson : WeaponBase
     {
+        static new string Name { get; } = "Pulse Meson";
+
         private const string soundPath = @"Sounds\Weapons\WeaponPulseMeson.wav";
         private const float soundVolumne = 0.4f;
 
         private bool _toggle = false;
 
         public WeaponPulseMeson(Core core)
-            : base(core, "Pulse Meson", soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne)
         {
             RoundQuantity = 500;
             Damage = 25;

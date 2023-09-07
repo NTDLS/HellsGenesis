@@ -9,11 +9,13 @@ namespace HG.Actors.Weapons
 {
     internal class WeaponPhotonTorpedo : WeaponBase
     {
+        static new string Name { get; } = "Photon Torpedo";
+
         private const string soundPath = @"Sounds\Weapons\BulletPhotonTorpedo.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponPhotonTorpedo(Core core)
-            : base(core, "Photon Torpedo", soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne)
         {
             RoundQuantity = 10;
             Damage = 15;

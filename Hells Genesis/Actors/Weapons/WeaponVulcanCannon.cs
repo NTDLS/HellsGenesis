@@ -5,11 +5,13 @@ namespace HG.Actors.Weapons
 {
     internal class WeaponVulcanCannon : WeaponBase
     {
+        static new string Name { get; } = "Vulcan Cannon";
+
         private const string soundPath = @"Sounds\Weapons\WeaponVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponVulcanCannon(Core core)
-            : base(core, "Vulcan Cannon", soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne)
         {
             RoundQuantity = 500;
             Damage = 2;

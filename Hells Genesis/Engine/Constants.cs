@@ -25,12 +25,12 @@ namespace HG.Engine
         public enum PlayerClass
         {
             Debug = 0,
-            Nimitz = 1,
-            Knox = 2,
-            Luhu = 3,
-            Atlant = 4,
-            Whidbey = 5,
-            Kirov = 6
+            Frigate = 1,
+            Cruiser = 2,
+            Destroyer = 3,
+            Dreadnaught = 4,
+            Reaver = 5,
+            Serpent = 6
         }
     }
 }

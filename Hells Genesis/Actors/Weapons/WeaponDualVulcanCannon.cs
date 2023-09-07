@@ -6,11 +6,13 @@ namespace HG.Actors.Weapons
 {
     internal class WeaponDualVulcanCannon : WeaponBase
     {
+        static new string Name { get; } = "Dual Vulcan Cannon";
+
         private const string soundPath = @"Sounds\Weapons\WeaponDualVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponDualVulcanCannon(Core core)
-            : base(core, "Dual Vulcan", soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne)
         {
             RoundQuantity = 500;
             Damage = 2;

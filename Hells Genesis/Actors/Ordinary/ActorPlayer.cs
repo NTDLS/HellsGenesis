@@ -1,17 +1,18 @@
 ﻿using HG.Actors.BaseClasses;
-using HG.Actors.Weapons;
+using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
+using HG.Loudouts;
 using HG.Types;
+using HG.Utility;
 using System;
 using System.Drawing;
-using static HG.Engine.Constants;
 
 namespace HG.Actors.Ordinary
 {
     internal class ActorPlayer : ActorShipBase
     {
-        public PlayerClass Class { get; private set; }
+        public ShipLoadout Loadout { get; private set; }
         public AudioClip AmmoLowSound { get; private set; }
         public AudioClip AmmoEmptySound { get; private set; }
         public AudioClip ShipEngineRoarSound { get; private set; }
@@ -31,12 +32,12 @@ namespace HG.Actors.Ordinary
         public ActorAnimation ThrustAnimation { get; private set; }
         public ActorAnimation BoostAnimation { get; private set; }
 
-        public ActorPlayer(Core core, PlayerClass playerClass)
+        public ActorPlayer(Core core, ShipLoadout loadout)
             : base(core)
         {
-            Class = playerClass;
+            Loadout = loadout;
 
-            string imagePath = @$"Graphics\Player\Ships\{(int)Class}.png";
+            string imagePath = @$"Graphics\Player\Ships\{loadout.ImageIndex}.png";
 
             Initialize(imagePath, new Size(32, 32));
 
@@ -62,10 +63,10 @@ namespace HG.Actors.Ordinary
         /// Resets ship image, state, health etc while allowing you to change the class.
         /// </summary>
         /// <param name="playerClass"></param>
-        public void Reset(PlayerClass playerClass)
+        public void Reset(ShipLoadout loadout)
         {
-            Class = playerClass;
-            SetImage(@$"Graphics\Player\Ships\{(int)Class}.png", new Size(32, 32));
+            Loadout = loadout;
+            SetImage(@$"Graphics\Player\Ships\{Loadout.ImageIndex}.png", new Size(32, 32));
             Reset();
         }
 
@@ -88,92 +89,26 @@ namespace HG.Actors.Ordinary
             Velocity.AvailableBoost = _core.Settings.MaxPlayerBoost;
             Velocity.MaxRotationSpeed = _core.Settings.MaxRotationSpeed;
 
-            if (Class == PlayerClass.Debug)
+            #region Reset loadout.
+
+            Velocity.MaxSpeed = Loadout.Speed;
+            Velocity.MaxBoost = Loadout.Boost;
+
+            SetHitPoints(Loadout.Hull);
+            SetShieldPoints(Loadout.Sheilds);
+
+            var weapon = Misc.CreateInstanceOf<WeaponBase>(Loadout.PrimaryWeapon.Type, new object[] { _core });
+            weapon.RoundQuantity = Loadout.PrimaryWeapon.Rounds;
+            AddPrimaryWeapon(weapon);
+
+            foreach (var secondaryWeapon in Loadout.SecondaryWeapons)
             {
-                Velocity.MaxSpeed = 6.0;
-                Velocity.MaxBoost = 4.0;
-                SetHitPoints(10000);
-                SetShieldPoints(10000);
-
-                AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 50000 });
-
-                AddSecondaryWeapon(new WeaponHotPepper(_core) { RoundQuantity = 10000 });
-                AddSecondaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 5000 });
-                AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 10000 });
-                AddSecondaryWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 10000 });
-                AddSecondaryWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 10000 });
-                AddSecondaryWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 10000 });
-                AddSecondaryWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 10000 });
-                AddSecondaryWeapon(new WeaponPhotonTorpedo(_core) { RoundQuantity = 10000 });
-                AddSecondaryWeapon(new WeaponPulseMeson(_core) { RoundQuantity = 10000 });
-
+                var secondaryWeaponInstance = Misc.CreateInstanceOf<WeaponBase>(secondaryWeapon.Type, new object[] { _core });
+                secondaryWeaponInstance.RoundQuantity = secondaryWeapon.Rounds;
+                AddSecondaryWeapon(secondaryWeaponInstance);
             }
-            else if (Class == PlayerClass.Nimitz)
-            {
-                Velocity.MaxSpeed = 3.0;
-                Velocity.MaxBoost = 1.5;
-                SetHitPoints(500);
-                SetShieldPoints(100);
 
-                AddPrimaryWeapon(new WeaponHotPepper(_core) { RoundQuantity = 10000 });
-                AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 16 });
-                //AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 500 }); //I dont have a second non guided missile.
-            }
-            else if (Class == PlayerClass.Knox)
-            {
-                Velocity.MaxSpeed = 2.2;
-                Velocity.MaxBoost = 1.0;
-                SetHitPoints(2500);
-                SetShieldPoints(3000);
-
-                AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 5000 });
-                AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 16 });
-                //AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 500 }); //I dont have a second non guided missile.
-            }
-            else if (Class == PlayerClass.Luhu)
-            {
-                Velocity.MaxSpeed = 5.0;
-                Velocity.MaxBoost = 2.5;
-                SetHitPoints(500);
-                SetShieldPoints(1000);
-
-                AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 5000 });
-                AddSecondaryWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 16 });
-            }
-            else if (Class == PlayerClass.Atlant)
-            {
-                Velocity.MaxSpeed = 4.0;
-                Velocity.MaxBoost = 2.0;
-                SetHitPoints(500);
-                SetShieldPoints(1000);
-
-                AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 500 });
-                AddSecondaryWeapon(new WeaponFragMissile(_core) { RoundQuantity = 16 });
-                AddSecondaryWeapon(new WeaponGuidedFragMissile(_core) { RoundQuantity = 10 });
-                AddSecondaryWeapon(new WeaponPrecisionGuidedFragMissile(_core) { RoundQuantity = 6 });
-                AddSecondaryWeapon(new WeaponScramsMissile(_core) { RoundQuantity = 4 });
-            }
-            else if (Class == PlayerClass.Whidbey)
-            {
-                Velocity.MaxSpeed = 6.0;
-                Velocity.MaxBoost = 3.5;
-                SetHitPoints(500);
-                SetShieldPoints(1000);
-
-                AddPrimaryWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 5000 });
-                AddSecondaryWeapon(new WeaponPhotonTorpedo(_core) { RoundQuantity = 100 });
-                AddSecondaryWeapon(new WeaponPulseMeson(_core) { RoundQuantity = 8 });
-            }
-            else if (Class == PlayerClass.Kirov)
-            {
-                Velocity.MaxSpeed = 5.0;
-                Velocity.MaxBoost = 3.5;
-                SetHitPoints(100);
-                SetShieldPoints(15000);
-
-                AddPrimaryWeapon(new WeaponVulcanCannon(_core) { RoundQuantity = 5000 });
-                AddSecondaryWeapon(new WeaponDualVulcanCannon(_core) { RoundQuantity = 2500 });
-            }
+            #endregion
 
             SelectFirstAvailableUsablePrimaryWeapon();
             SelectFirstAvailableUsableSecondaryWeapon();
