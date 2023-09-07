@@ -201,7 +201,7 @@ namespace HG.Actors.Enemies.Bosses
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
-                    MoveInDirectionOf(_core.Player.Actor);
+                    PointAtAndGoto(_core.Player.Actor);
                 }
                 else
                 {
@@ -213,7 +213,7 @@ namespace HG.Actors.Enemies.Bosses
 
             if (mode == AIMode.Tailing)
             {
-                MoveInDirectionOf(_core.Player.Actor);
+                PointAtAndGoto(_core.Player.Actor);
 
                 //Stay on the players tail.
                 if (distanceToPlayer > distanceToKeep + 300)

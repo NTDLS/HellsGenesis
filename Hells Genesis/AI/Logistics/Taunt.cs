@@ -44,7 +44,8 @@ namespace HG.AI.Logistics
         #region Instance parameters.
 
         private ActionState _currentAction = ActionState.None;
-        private readonly double _distanceToKeep = 2000;
+        private readonly double _idealMaxDistance = 2000;
+        private readonly double _idealMinDistance = 500;
         private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
         private readonly int _millisecondsBetweenDecisions = 1000;
         private HgNormalizedAngle _evasiveLoopTargetAngle = new();
@@ -89,7 +90,10 @@ namespace HG.AI.Logistics
                     _owner.Velocity.AvailableBoost = 250;
                     break;
                 case ActionState.TransitionToDepart:
-                    break;
+                    {
+                        _owner.Velocity.AvailableBoost = 100;
+                        break;
+                    }
             }
 
             _currentAction = state;
@@ -110,18 +114,9 @@ namespace HG.AI.Logistics
             //We are evading, dont make any other decisions until evasion is complete.
             if (_currentAction == ActionState.EvasiveLoop)
             {
-                if (_owner.Velocity.Angle.IsBetween(_evasiveLoopTargetAngle.Degrees, _evasiveLoopTargetAngle.Degrees + 30))
+                if (_owner.RotateTo(_evasiveLoopTargetAngle.Degrees, _evasiveLoopDirection, 1, 30) == false)
                 {
                     AlterActionState(ActionState.TransitionToApproach);
-                }
-
-                if (_evasiveLoopDirection == RelativeDirection.Right)
-                {
-                    _owner.Velocity.Angle += 1;
-                }
-                else if (_evasiveLoopDirection == RelativeDirection.Left)
-                {
-                    _owner.Velocity.Angle -= 1;
                 }
                 return;
             }
@@ -136,7 +131,6 @@ namespace HG.AI.Logistics
                     var decidingFactors = GatherInputs(); //Gather inputs.
                     var decisions = Network.FeedForward(decidingFactors); //Make decisions.
                                                                           //Execute on those ↑ decisions:...
-
                     var speedAdjust = decisions.Get(AIOutputs.SpeedAdjust);
                     if (speedAdjust >= 0.5)
                     {
@@ -173,20 +167,7 @@ namespace HG.AI.Logistics
 
             if (_currentAction == ActionState.TransitionToApproach)
             {
-                var deltaAngle = _owner.DeltaAngle(_observedObject);
-
-                if (deltaAngle.IsBetween(-10, 10) == false)
-                {
-                    if (deltaAngle >= -10)
-                    {
-                        _owner.Velocity.Angle -= 1;
-                    }
-                    else if (deltaAngle < 10)
-                    {
-                        _owner.Velocity.Angle += 1;
-                    }
-                }
-                else
+                if (_owner.RotateTo(_observedObject, 1, 10) == false)
                 {
                     AlterActionState(ActionState.Approaching);
                 }
@@ -196,8 +177,6 @@ namespace HG.AI.Logistics
                 var distanceToObservedObject = _owner.DistanceTo(_observedObject);
                 double augmentationDegrees = 0.2;
 
-                var approachAngleToObserved = _owner.DeltaAngle(_observedObject);
-
                 //We are making the transition to our depart angle, but if we get too close then make the angle more agressive.
                 double percentOfAllowableCloseness = (100 / distanceToObservedObject);
                 if (percentOfAllowableCloseness.IsBetween(0, 1))
@@ -205,37 +184,33 @@ namespace HG.AI.Logistics
                     augmentationDegrees += percentOfAllowableCloseness;
                 }
 
-                if (approachAngleToObserved.IsBetween(-20, 20) == false)
-                {
-                    if (approachAngleToObserved <= 10)
-                    {
-                        _owner.Velocity.Angle -= augmentationDegrees;
-                    }
-                    else if (approachAngleToObserved > 10)
-                    {
-                        _owner.Velocity.Angle += augmentationDegrees;
-                    }
-                }
+                _owner.RotateTo(_observedObject, augmentationDegrees, 20);
 
-                if (distanceToObservedObject > _distanceToKeep)
+                if (distanceToObservedObject > _idealMinDistance)
                 {
-                    AlterActionState(ActionState.None);
+                    AlterActionState(ActionState.Departing);
                 }
             }
             else if (_currentAction == ActionState.Approaching)
             {
-                if (_owner.DistanceTo(_observedObject) < 500)
+                var distanceTo = _owner.DistanceTo(_observedObject);
+
+                if (distanceTo > _idealMaxDistance)
+                {
+                    _owner.Velocity.AvailableBoost = 100;
+                }
+
+                if (distanceTo < _idealMinDistance)
                 {
                     AlterActionState(ActionState.None);
                 }
             }
             else if (_currentAction == ActionState.Departing)
             {
-                if (_owner.DistanceTo(_observedObject) > 1000)
+                if (_owner.DistanceTo(_observedObject) > _idealMaxDistance)
                 {
                     AlterActionState(ActionState.None);
                 }
-
             }
         }
 
@@ -348,7 +323,7 @@ namespace HG.AI.Logistics
             var aiParams = new DniNamedInterfaceParameters();
 
             var distance = _owner.DistanceTo(_observedObject);
-            var percentageOfCloseness = (distance / _distanceToKeep).Box(0, 1);
+            var percentageOfCloseness = (distance / _idealMaxDistance).Box(0, 1);
 
             aiParams.Set(AIInputs.DistanceFromObservedObject, percentageOfCloseness);
 

@@ -7,7 +7,6 @@ using HG.Menus;
 using HG.TickHandlers;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;

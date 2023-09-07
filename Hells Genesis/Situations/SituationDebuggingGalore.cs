@@ -59,15 +59,6 @@ namespace HG.Situations
         {
             //_core.Actors.Enemies.Create<EnemyLouse>();
             _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyAvvol>();
             //_core.Actors.Enemies.Create<EnemyScarab>();
 

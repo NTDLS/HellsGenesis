@@ -9,8 +9,8 @@ namespace HG.Types
         /// <summary>
         /// Rotate the angle counter-clockwise by 90 degrees. All of our graphics math should assume this.
         /// </summary>
-        public static double DegreeOffset = 90.0;
-        public static double RadianOffset = (Math.PI / 180) * DegreeOffset; //1.5707963267948966
+        public const double AngleOffsetDegrees = 90.0;
+        public const double AngleOffsetRadians = 1.5707963267948966; //(Math.PI / 180.0) * AngleOffsetDegrees;
 
         const double DEG_TO_RAD = Math.PI / 180.0;
         const double RAD_TO_DEG = 180.0 / Math.PI;
@@ -27,12 +27,12 @@ namespace HG.Types
 
         public static T XYToRadians(T x, T y)
         {
-            return Math.Atan2((dynamic)y, (dynamic)x) + RadianOffset;
+            return Math.Atan2((dynamic)y, (dynamic)x) + AngleOffsetRadians;
         }
 
         public static T XYToDegrees(T x, T y)
         {
-            return RadiansToDegrees(Math.Atan2((dynamic)y, (dynamic)x)) + DegreeOffset;
+            return RadiansToDegrees(Math.Atan2((dynamic)y, (dynamic)x)) + AngleOffsetDegrees;
         }
 
         public static HgPoint<T> ToXY(HgAngle<T> angle)
@@ -42,13 +42,13 @@ namespace HG.Types
 
         public static HgPoint<T> DegreesToXY(T degrees)
         {
-            T radians = DegreesToRadians(degrees) - (dynamic)RadianOffset;
+            T radians = DegreesToRadians(degrees) - (dynamic)AngleOffsetRadians;
             return new HgPoint<T>(Math.Cos((dynamic)radians), Math.Sin((dynamic)radians));
         }
 
         public static HgPoint<T> RadiansToXY(T radians)
         {
-            radians -= (dynamic)RadianOffset;
+            radians -= (dynamic)AngleOffsetRadians;
             return new HgPoint<T>(Math.Cos((dynamic)radians), Math.Sin((dynamic)radians));
         }
 
@@ -72,7 +72,7 @@ namespace HG.Types
 
         public HgAngle(T x, T y)
         {
-            Degrees = RadiansToDegrees(Math.Atan2((dynamic)y, (dynamic)x)) + DegreeOffset;
+            Degrees = RadiansToDegrees(Math.Atan2((dynamic)y, (dynamic)x)) + AngleOffsetDegrees;
         }
 
         #endregion
@@ -168,7 +168,7 @@ namespace HG.Types
         {
             get
             {
-                return DegreesToRadians(_degrees) - (dynamic)RadianOffset;
+                return DegreesToRadians(_degrees) - (dynamic)AngleOffsetRadians;
             }
         }
 

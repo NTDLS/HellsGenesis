@@ -4,7 +4,7 @@ namespace HG.Types
 {
     internal class HgPoint<T>
     {
-        private static readonly Lazy<HgPoint<T>> _zero = new Lazy<HgPoint<T>>(() => new HgPoint<T>());
+        private static readonly Lazy<HgPoint<T>> _zero = new(() => new HgPoint<T>());
         public static HgPoint<T> Zero => _zero.Value;
 
         private T _x;
@@ -68,8 +68,13 @@ namespace HG.Types
         }
 
         public HgPoint<T> ToWriteableCopy => new HgPoint<T>(this);
-    
 
+        /// <summary>
+        /// Calculates the distance from one object to another.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
         public static T DistanceTo(HgPoint<T> from, HgPoint<T> to)
         {
             var deltaX = Math.Pow((to.X - (dynamic)from.X), 2);
@@ -77,11 +82,16 @@ namespace HG.Types
             return Math.Sqrt(deltaY + deltaX);
         }
 
+        /// <summary>
+        /// Calculates the angle from one obect to another, returns the degrees.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
         public static T AngleTo(HgPoint<T> from, HgPoint<T> to)
         {
-            var fRadians = Math.Atan2((to.Y - (dynamic)from.Y), (to.X - (dynamic)from.X));
-            var fDegrees = ((HgAngle<double>.RadiansToDegrees(fRadians) + 360.0) + HgAngle<double>.DegreeOffset) % 360.0;
-            return fDegrees;
+            var radians = Math.Atan2((to.Y - (dynamic)from.Y), (to.X - (dynamic)from.X));
+            return ((HgAngle<T>.RadiansToDegrees(radians) + 360.0) + HgAngle<T>.AngleOffsetDegrees) % 360.0;
         }
 
         #region  Unary Operator Overloading.

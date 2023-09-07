@@ -2,10 +2,11 @@
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Types;
+using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Security.Cryptography;
+using static HG.Engine.Constants;
 
 namespace HG.Actors.BaseClasses
 {
@@ -495,23 +496,221 @@ namespace HG.Actors.BaseClasses
             RotationChanged();
         }
 
-        public void MoveInDirectionOf(HgPoint<double> location, double? speed = null)
+        /// <summary>
+        /// Instantly points an object at a location and sets the travel speed. Only used for off-screen transitions.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="velocity"></param>
+        public void PointAtAndGoto(HgPoint<double> location, double? velocity = null)
         {
             Velocity.Angle.Degrees = HgPoint<double>.AngleTo(Location, location);
-            if (speed != null)
+            if (velocity != null)
             {
-                Velocity.MaxSpeed = (double)speed;
+                Velocity.MaxSpeed = (double)velocity;
             }
         }
 
-        public void MoveInDirectionOf(ActorBase obj, double? speed = null)
+        /// <summary>
+        /// Instantly points an object at another object and sets the travel speed. Only used for off-screen transitions.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="velocity"></param>
+        public void PointAtAndGoto(ActorBase obj, double? velocity = null)
         {
             Velocity.Angle.Degrees = HgPoint<double>.AngleTo(Location, obj.Location);
 
-            if (speed != null)
+            if (velocity != null)
             {
-                Velocity.MaxSpeed = (double)speed;
+                Velocity.MaxSpeed = (double)velocity;
             }
+        }
+
+        /// <summary>
+        /// Rotates the object towards the target object by the specified amount.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="rotationSpeed"></param>
+        /// <param name="untilPointingAtDegreesFallsBetween"></param>
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
+        public bool RotateTo(ActorBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        {
+            var deltaAngle = DeltaAngle(obj);
+
+            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            {
+                if (deltaAngle >= -untilPointingAtDegreesFallsBetween)
+                {
+                    Velocity.Angle.Degrees += rotationAmount;
+                }
+                else if (deltaAngle < untilPointingAtDegreesFallsBetween)
+                {
+                    Velocity.Angle.Degrees -= rotationAmount;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Rotates the object towards the target object by the specified amount.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="rotationSpeed"></param>
+        /// <param name="untilPointingAtDegreesFallsBetween"></param>
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
+        public bool RotateTo(ActorBase obj, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        {
+            var deltaAngle = DeltaAngle(obj);
+
+            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            {
+                if (direction == RelativeDirection.Right)
+                {
+                    Velocity.Angle.Degrees += rotationAmount;
+                }
+                if (direction == RelativeDirection.Left)
+                {
+                    Velocity.Angle.Degrees -= rotationAmount;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Rotates the object towards the target coordinates by the specified amount.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="rotationSpeed"></param>
+        /// <param name="untilPointingAtDegreesFallsBetween"></param>
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
+        public bool RotateTo(HgPoint<double> toLocation, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        {
+            var deltaAngle = DeltaAngle(toLocation);
+
+            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            {
+                if (deltaAngle >= -untilPointingAtDegreesFallsBetween)
+                {
+                    Velocity.Angle.Degrees += rotationAmount;
+                }
+                else if (deltaAngle < untilPointingAtDegreesFallsBetween)
+                {
+                    Velocity.Angle.Degrees -= rotationAmount;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Rotates the object towards the target coordinates by the specified amount.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="rotationSpeed"></param>
+        /// <param name="untilPointingAtDegreesFallsBetween"></param>
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
+        public bool RotateTo(HgPoint<double> toLocation, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        {
+            var deltaAngle = DeltaAngle(toLocation);
+
+            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            {
+                if (direction == RelativeDirection.Right)
+                {
+                    Velocity.Angle.Degrees += rotationAmount;
+                }
+                if (direction == RelativeDirection.Left)
+                {
+                    Velocity.Angle.Degrees -= rotationAmount;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
+        /// Rotates the object by the specified amount until it is pointing at the target angle (with given tolerance).
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="rotationSpeed"></param>
+        /// <param name="untilPointingAtDegreesFallsBetween"></param>
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
+        public bool RotateTo(double toDegrees, RelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
+        {
+            if (Velocity.Angle.Degrees.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
+            {
+                if (direction == RelativeDirection.Right)
+                {
+                    Velocity.Angle.Degrees += rotationAmount;
+                }
+                if (direction == RelativeDirection.Left)
+                {
+                    Velocity.Angle.Degrees -= rotationAmount;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Rotates the object from the target object by the specified amount.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="rotationSpeed"></param>
+        /// <param name="untilPointingAtDegreesFallsBetween"></param>
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
+        public bool RotateFrom(ActorBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        {
+            var deltaAngle = obj.DeltaAngle(this);
+
+            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            {
+                if (deltaAngle >= -untilPointingAtDegreesFallsBetween)
+                {
+                    Velocity.Angle += rotationAmount;
+                }
+                else if (deltaAngle < untilPointingAtDegreesFallsBetween)
+                {
+                    Velocity.Angle -= rotationAmount;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Rotates the object from the target object by the specified amount.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="rotationSpeed"></param>
+        /// <param name="untilPointingAtDegreesFallsBetween"></param>
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
+        public bool RotateFrom(ActorBase obj, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        {
+            var deltaAngle = obj.DeltaAngle(this);
+
+            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            {
+                if (direction == RelativeDirection.Right)
+                {
+                    Velocity.Angle += rotationAmount;
+                }
+                if (direction == RelativeDirection.Left)
+                {
+                    Velocity.Angle -= rotationAmount;
+                }
+                return true;
+            }
+
+            return false;
         }
 
         public virtual void Explode(bool autoKill = true, bool autoDelete = true)
@@ -550,11 +749,21 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 0-259.
         /// </summary>
-        /// <param name="atObj"></param>
+        /// <param name="toObj"></param>
         /// <returns></returns>
-        public double DeltaAngle360(ActorBase atObj)
+        public double DeltaAngle360(ActorBase toObj)
         {
-            return HgMath.DeltaAngle360(this, atObj);
+            return HgMath.DeltaAngle360(this, toObj);
+        }
+
+        /// <summary>
+        /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
+        /// </summary>
+        /// <param name="toObj"></param>
+        /// <returns></returns>
+        public double DeltaAngle(ActorBase toObj)
+        {
+            return HgMath.DeltaAngle(this, toObj);
         }
 
         /// <summary>
@@ -562,19 +771,25 @@ namespace HG.Actors.BaseClasses
         /// </summary>
         /// <param name="atObj"></param>
         /// <returns></returns>
-        public double DeltaAngle(ActorBase atObj)
+        public double DeltaAngle(HgPoint<double> toLocation)
         {
-            return HgMath.DeltaAngle(this, atObj);
+            return HgMath.DeltaAngle(this, toLocation);
         }
 
         /// <summary>
-        /// Calculates the angle in degrees of one objects location to another location.
+        /// Calculates the angle in degrees to another object,
         /// </summary>
         /// <param name="atObj"></param>
         /// <returns></returns>
         public double AngleTo(ActorBase atObj)
         {
             return HgMath.AngleTo(this, atObj);
+        }
+
+        /// Calculates the angle in degrees to a location.
+        public double AngleTo(HgPoint<double> location)
+        {
+            return HgMath.AngleTo(this, location);
         }
 
         public bool IsPointingAt(ActorBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)

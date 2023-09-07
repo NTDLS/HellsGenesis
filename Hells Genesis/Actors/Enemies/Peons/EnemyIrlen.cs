@@ -81,7 +81,7 @@ namespace HG.Actors.Enemies.Peons
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
-                    MoveInDirectionOf(_core.Player.Actor);
+                    PointAtAndGoto(_core.Player.Actor);
                 }
                 else
                 {

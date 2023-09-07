@@ -72,12 +72,12 @@ namespace HG.Engine
         /// 
         /// </summary>
         /// <param name="fromObj"></param>
-        /// <param name="atObj"></param>
-        /// <param name="offsetAngle">-90 degrees would be looking off te left-hand side of the object</param>
+        /// <param name="toObj"></param>
+        /// <param name="offsetAngle">-90 degrees would be looking off the left-hand side of the object</param>
         /// <returns></returns>
-        public static double DeltaAngle(ActorBase fromObj, ActorBase atObj, double offsetAngle = 0)
+        public static double DeltaAngle(ActorBase fromObj, ActorBase toObj, double offsetAngle = 0)
         {
-            var da360 = DeltaAngle360(fromObj, atObj, offsetAngle);
+            var da360 = DeltaAngle360(fromObj, toObj, offsetAngle);
             if (da360 > 180)
             {
                 da360 -= 180;
@@ -88,11 +88,46 @@ namespace HG.Engine
             return -da360;
         }
 
-        public static double DeltaAngle360(ActorBase fromObj, ActorBase atObj, double offsetAngle = 0)
+        public static double DeltaAngle(ActorBase fromObj, HgPoint<double> toLocation, double offsetAngle = 0)
+        {
+            var da360 = DeltaAngle360(fromObj, toLocation, offsetAngle);
+            if (da360 > 180)
+            {
+                da360 -= 180;
+                da360 = 180 - da360;
+                da360 *= -1;
+            }
+
+            return -da360;
+        }
+
+        public static double DeltaAngle360(ActorBase fromObj, ActorBase toObj, double offsetAngle = 0)
         {
             double fromAngle = fromObj.Velocity.Angle.Degrees + offsetAngle;
 
-            double angleTo = AngleTo(fromObj, atObj);
+            double angleTo = AngleTo(fromObj, toObj);
+
+            if (fromAngle < 0) fromAngle = (0 - fromAngle);
+            if (angleTo < 0)
+            {
+                angleTo = (0 - angleTo);
+            }
+
+            angleTo = fromAngle - angleTo;
+
+            if (angleTo < 0)
+            {
+                angleTo = 360.0 - (Math.Abs(angleTo) % 360.0);
+            }
+
+            return angleTo;
+        }
+
+        public static double DeltaAngle360(ActorBase fromObj, HgPoint<double> toLocation, double offsetAngle = 0)
+        {
+            double fromAngle = fromObj.Velocity.Angle.Degrees + offsetAngle;
+
+            double angleTo = AngleTo(fromObj, toLocation);
 
             if (fromAngle < 0) fromAngle = (0 - fromAngle);
             if (angleTo < 0)
