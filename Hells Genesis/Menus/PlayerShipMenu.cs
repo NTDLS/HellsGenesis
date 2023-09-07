@@ -4,6 +4,7 @@ using HG.Menus.BaseClasses;
 using HG.Types;
 using HG.Utility;
 using System.Drawing;
+using System.Linq;
 
 namespace HG.Menus
 {
@@ -17,25 +18,26 @@ namespace HG.Menus
             double offsetX = _core.Display.CurrentScaledScreenBounds.X + 40;
             double offsetY = _core.Display.CurrentScaledScreenBounds.Y + 100;
 
-            var itemTitle = NewTitleItem(new HgPoint<double>(offsetX, offsetY), "Select a Ship Class:", Brushes.OrangeRed);
+            var itemTitle = CreateAndAddTitleItem(new HgPoint<double>(offsetX, offsetY), "Select a Ship Class:", Brushes.OrangeRed);
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
-            _shipBlurb = NewTextItem(new HgPoint<double>(offsetX, offsetY), "", Brushes.LawnGreen, 10);
+            _shipBlurb = CreateAndAddTextItem(new HgPoint<double>(offsetX, offsetY), "", Brushes.LawnGreen, 10);
             _shipBlurb.X = offsetX + 200;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
             foreach (var loadout in core.PrefabPlayerLoadouts.Collection)
             {
-                var menuItem = NewMenuItem(new HgPoint<double>(offsetX + 25, offsetY), loadout.Name, loadout.Name, Brushes.OrangeRed);
+                var menuItem = CreateAndAddMenuItem(new HgPoint<double>(offsetX + 25, offsetY), loadout.Name, loadout.Name, Brushes.OrangeRed);
                 menuItem.Y -= menuItem.Size.Height / 2;
-                menuItem.Selected = true;
 
                 var shipIcon = _core.Actors.Insert(new ActorPlayer(_core, loadout) { Name = "MENU_SHIP_SELECT" });
                 shipIcon.X = offsetX;
                 shipIcon.Y = offsetY;
                 offsetY += 50;
             }
+
+            SelectableItems().First().Selected = true;
         }
 
         private string GetHelpText(string name, string primaryWeapon, string secondaryWeapons,
