@@ -30,7 +30,8 @@ namespace HG.Engine
             Destroyer = 3,
             Dreadnaught = 4,
             Reaver = 5,
-            Serpent = 6
+            Serpent = 6,
+            Starfighter = 7
         }
     }
 }

@@ -11,7 +11,7 @@ namespace HG.Menus
     internal class PlayerShipMenu : MenuBase
     {
         private readonly ActorMenuItem _shipBlurb;
-
+                   
         public PlayerShipMenu(Core core)
             : base(core)
         {

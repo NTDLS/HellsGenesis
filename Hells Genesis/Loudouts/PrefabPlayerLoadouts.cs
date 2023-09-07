@@ -169,6 +169,25 @@ namespace HG.Loudouts
 
                 Collection.Add(loadout);
             }
+
+            //Starfighter
+            {
+                var loadout = new ShipLoadout(PlayerClass.Starfighter)
+                {
+                    Description = "→ Celestial Aviator ←\n"
+                        + "A sleek and versatile spacecraft, built for supremacy among the stars.\n"
+                        + "It's the first choice for finesse, agility, and unmatched combat prowess\n"
+                        + "without all the fuss of a powerful loadout.",
+                    Speed = 5.0,
+                    Boost = 3.5,
+                    Hull = 100,
+                    Sheilds = 15000,
+                    PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000)
+                };
+                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponDualVulcanCannon), 2500));
+
+                Collection.Add(loadout);
+            }
         }
     }
 }
