@@ -77,7 +77,7 @@ namespace HG.Engine
             ScreenRenderTarget?.Dispose();
         }
 
-        public SharpDX.Direct2D1.Bitmap GetCachedBitmap(string path)
+        public SharpDX.Direct2D1.Bitmap GetCachedBitmap(RenderTarget renderTarget, string path)
         {
             path = path.ToLower();
 
@@ -93,7 +93,7 @@ namespace HG.Engine
                 using var converter = new FormatConverter(wicFactory);
                 converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
 
-                var result = SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
+                var result = SharpDX.Direct2D1.Bitmap.FromWicBitmap(renderTarget, converter);
                 _textureCache.Add(path, result);
                 return result;
             }
