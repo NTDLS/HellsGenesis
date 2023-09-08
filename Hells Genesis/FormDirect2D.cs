@@ -1,8 +1,4 @@
 ﻿using HG.Engine;
-using HG.Utility.ExtensionMethods;
-using SharpDX;
-using SharpDX.Direct2D1;
-using SharpDX.Mathematics.Interop;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -37,9 +33,6 @@ namespace HG
 
             _core = new Core(this);
 
-            interSize = new Size2F(_core.Display.TotalCanvasSize.Width, _core.Display.TotalCanvasSize.Height);
-            intermediateRenderTarget = new BitmapRenderTarget(_core.D2DX.ScreenRenderTarget, CompatibleRenderTargetOptions.None, interSize);
-
             var timer = new Timer()
             {
                 Enabled = true,
@@ -52,7 +45,7 @@ namespace HG
                 Invalidate();
             };
 
-            this.Shown += (object sender, EventArgs e) =>
+            Shown += (object sender, EventArgs e) =>
             {
                 //_core.Start();
             };
@@ -62,7 +55,7 @@ namespace HG
                 //_core.Stop();
             };
 
-            this.MouseWheel += FormDirect2D_MouseWheel;
+            MouseWheel += FormDirect2D_MouseWheel;
         }
 
         private void FormDirect2D_MouseWheel(object sender, MouseEventArgs e)
@@ -87,55 +80,29 @@ namespace HG
             // Prevent background painting to avoid flickering
         }
 
-        SharpDX.Size2F interSize;
-        BitmapRenderTarget intermediateRenderTarget;
-
         protected override void OnPaint(PaintEventArgs e)
         {
-            //base.OnPaint(e);
 
             try
             {
                 lock (this)
                 {
-                    _core.D2DX.ScreenRenderTarget.BeginDraw();
-
-                    intermediateRenderTarget.BeginDraw();
-
+                    _core.DirectX.StartDraw();
 
                     //_core.Actors.Render();
                     //e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
 
-                    _core.D2DX.ScreenRenderTarget.Clear(_core.D2DX.RawColorGray);
-
-                    intermediateRenderTarget.Clear(_core.D2DX.RawColorGray);
-
                     float x = _core.Display.TotalCanvasSize.Width / 2;
                     float y = _core.Display.TotalCanvasSize.Height / 2;
 
-                    var bitmap = _core.D2DX.GetCachedBitmap("c:\\0.png", 32, 32);
-                    var bitmapRect = _core.D2DX.DrawBitmapAt(intermediateRenderTarget, bitmap, x, y, angle);
+                    var bitmap = _core.DirectX.GetCachedBitmap("c:\\0.png", 32, 32);
+                    var bitmapRect = _core.DirectX.DrawBitmapAt(bitmap, x, y, angle);
 
-                    //_core.D2DX.DrawRectangleAt(intermediateRenderTarget, bitmapRect, angle, _core.D2DX.RawColorRed, 2, 1);
+                    _core.DirectX.DrawRectangleAt(bitmapRect, angle, _core.DirectX.RawColorRed, 2, 1);
+                    var textLocation = _core.DirectX.DrawTextAt(x, y, -angle, "Hello from the GPU!", _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushRed);
+                    _core.DirectX.DrawRectangleAt(textLocation, -angle, _core.DirectX.RawColorGreen);
 
-                    //var textLocation = _core.D2DX.DrawTextAt(intermediateRenderTarget, x, y, -angle, "Hello from the GPU!", _core.D2DX.LargeTextFormat, _core.D2DX.SolidColorBrushRed);
-                    //_core.D2DX.DrawRectangleAt(intermediateRenderTarget, textLocation, -angle, _core.D2DX.RawColorGreen);
-
-                    intermediateRenderTarget.EndDraw();
-
-                    scaleFactor = scaleFactor.Box(0, 100);
-
-                    float widthScale = _core.Display.OverdrawSize.Width * (scaleFactor / 100.0f);
-                    float heightScale = _core.Display.OverdrawSize.Height * (scaleFactor / 100.0f);
-
-                    // Define the source rectangle to crop from intermediateRenderTarget (assuming you want to crop from the center)
-                    RawRectangleF sourceRect = new RawRectangleF(widthScale, heightScale,
-                        intermediateRenderTarget.Size.Width - widthScale, intermediateRenderTarget.Size.Height - heightScale);
-
-                    var destRect = new RawRectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height);
-                    _core.D2DX.ScreenRenderTarget.DrawBitmap(intermediateRenderTarget.Bitmap, destRect, 1.0f, BitmapInterpolationMode.Linear, sourceRect);
-
-                    _core.D2DX.ScreenRenderTarget.EndDraw();
+                    _core.DirectX.EndDraw(scaleFactor);
                 }
             }
             catch

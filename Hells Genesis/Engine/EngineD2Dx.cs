@@ -1,4 +1,5 @@
-﻿using SharpDX;
+﻿using HG.Utility.ExtensionMethods;
+using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using SharpDX.DXGI;
@@ -18,6 +19,7 @@ namespace HG.Engine
 
         private readonly Dictionary<string, SharpDX.Direct2D1.Bitmap> _textureCache = new();
 
+        public SharpDX.Direct2D1.BitmapRenderTarget IntermediateRenderTarget { get; private set; }
         public WindowRenderTarget ScreenRenderTarget { get; private set; }
         public SharpDX.Direct2D1.Factory D2dfactory { get; private set; }
         public SharpDX.DirectWrite.Factory DirectWriteFactory { get; private set; }
@@ -62,6 +64,9 @@ namespace HG.Engine
 
             ScreenRenderTarget = new WindowRenderTarget(D2dfactory, renderTargetProperties, renderProperties);
 
+            var IntermediateRenderTargetSize = new Size2F(_core.Display.TotalCanvasSize.Width, _core.Display.TotalCanvasSize.Height);
+            IntermediateRenderTarget = new SharpDX.Direct2D1.BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, IntermediateRenderTargetSize);
+
             DirectWriteFactory = new SharpDX.DirectWrite.Factory();
             SolidColorBrushRed = new SolidColorBrush(ScreenRenderTarget, RawColorRed);
             SolidColorBrushGreen = new SolidColorBrush(ScreenRenderTarget, RawColorGreen);
@@ -76,6 +81,32 @@ namespace HG.Engine
         public void Cleanup()
         {
             ScreenRenderTarget?.Dispose();
+        }
+
+        public void StartDraw()
+        {
+            ScreenRenderTarget.BeginDraw();
+            IntermediateRenderTarget.BeginDraw();
+            ScreenRenderTarget.Clear(RawColorGray);
+            IntermediateRenderTarget.Clear(RawColorGray);
+        }
+
+        public void EndDraw(float scaleFactor)
+        {
+            scaleFactor = scaleFactor.Box(0, 100);
+
+            float widthScale = _core.Display.OverdrawSize.Width * (scaleFactor / 100.0f);
+            float heightScale = _core.Display.OverdrawSize.Height * (scaleFactor / 100.0f);
+
+            // Define the source rectangle to crop from intermediateRenderTarget (assuming you want to crop from the center)
+            RawRectangleF sourceRect = new RawRectangleF(widthScale, heightScale,
+                IntermediateRenderTarget.Size.Width - widthScale, IntermediateRenderTarget.Size.Height - heightScale);
+
+            var destRect = new RawRectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height);
+            ScreenRenderTarget.DrawBitmap(IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
+
+            IntermediateRenderTarget.EndDraw();
+            ScreenRenderTarget.EndDraw();
         }
 
         public SharpDX.Direct2D1.Bitmap GetCachedBitmap(string path)
@@ -150,17 +181,17 @@ namespace HG.Engine
         /// Draws a bitmap at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
-        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float x, float y, float angle)
+        public RawRectangleF DrawBitmapAt(SharpDX.Direct2D1.Bitmap bitmap, float x, float y, float angle)
         {
-            SetTransformAngle(renderTarget, new SharpDX.RectangleF(x, y, bitmap.PixelSize.Width, bitmap.PixelSize.Height), angle);
+            SetTransformAngle(new SharpDX.RectangleF(x, y, bitmap.PixelSize.Width, bitmap.PixelSize.Height), angle);
 
             // Apply the rotation matrix and draw the bitmap
-            renderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // Enable antialiasing
+            IntermediateRenderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // Enable antialiasing
 
             var destRect = new RawRectangleF(x, y, x + bitmap.PixelSize.Width, y + bitmap.PixelSize.Height);
-            renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+            IntermediateRenderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
 
-            ResetTransform(renderTarget);
+            ResetTransform(IntermediateRenderTarget);
 
             return destRect;
         }
@@ -169,7 +200,7 @@ namespace HG.Engine
         /// Draws text at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
-        public RawRectangleF DrawTextAt(RenderTarget renderTarget, float x, float y, float angle, string text, TextFormat format, SolidColorBrush brush)
+        public RawRectangleF DrawTextAt(float x, float y, float angle, string text, TextFormat format, SolidColorBrush brush)
         {
             var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
@@ -179,9 +210,9 @@ namespace HG.Engine
             // Create a rectangle that fits the text
             var textRectangle = new RawRectangleF(x, y, x + textWidth, y + textHeight);
 
-            SetTransformAngle(renderTarget, textRectangle, angle);
-            renderTarget.DrawText(text, format, textRectangle, brush);
-            ResetTransform(renderTarget);
+            SetTransformAngle(textRectangle, angle);
+            IntermediateRenderTarget.DrawText(text, format, textRectangle, brush);
+            ResetTransform(IntermediateRenderTarget);
 
             return textRectangle;
         }
@@ -190,7 +221,7 @@ namespace HG.Engine
         /// Draws a rectangle at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF rect, float angle, RawColor4 color, float expand = 0, float strokeWidth = 1)
+        public RawRectangleF DrawRectangleAt(RawRectangleF rect, float angle, RawColor4 color, float expand = 0, float strokeWidth = 1)
         {
             if (expand != 0)
             {
@@ -200,14 +231,14 @@ namespace HG.Engine
                 rect.Right += expand;
             }
 
-            SetTransformAngle(renderTarget, rect, angle);
-            renderTarget.DrawRectangle(rect, new SolidColorBrush(renderTarget, color), strokeWidth);
-            ResetTransform(renderTarget);
+            SetTransformAngle(rect, angle);
+            IntermediateRenderTarget.DrawRectangle(rect, new SolidColorBrush(IntermediateRenderTarget, color), strokeWidth);
+            ResetTransform(IntermediateRenderTarget);
 
             return rect;
         }
 
-        public void SetTransformAngle(RenderTarget renderTarget, SharpDX.RectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
+        public void SetTransformAngle(SharpDX.RectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
         {
             float centerX = rect.Left + rect.Width / 2.0f;
             float centerY = rect.Top + rect.Height / 2.0f;
@@ -228,10 +259,10 @@ namespace HG.Engine
                 rotationMatrix = MultiplyMatrices((RawMatrix3x2)existimMatrix, rotationMatrix);
             }
 
-            renderTarget.Transform = rotationMatrix;
+            IntermediateRenderTarget.Transform = rotationMatrix;
         }
 
-        public void SetTransformAngle(RenderTarget renderTarget, RawRectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
+        public void SetTransformAngle(RawRectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
         {
             float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
             float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
@@ -252,7 +283,7 @@ namespace HG.Engine
                 rotationMatrix = MultiplyMatrices(rotationMatrix, (RawMatrix3x2)existimMatrix);
             }
 
-            renderTarget.Transform = rotationMatrix;
+            IntermediateRenderTarget.Transform = rotationMatrix;
         }
 
         private RawMatrix3x2 GetScalingMatrix(float zoomFactor)
@@ -270,61 +301,6 @@ namespace HG.Engine
 
             return scalingMatrix;
         }
-
-        /*
-        public void FFS()
-        {
-            // Define the rotation angle in degrees
-            float rotationAngleInDegrees = 45.0f; // Adjust as needed
-
-            // Convert degrees to radians
-            float rotationAngleInRadians = rotationAngleInDegrees * (float)Math.PI / 180.0f;
-
-            // Create an intermediate render target for rendering bitmaps
-            using (var intermediateRenderTarget = new BitmapRenderTarget(renderTarget, CompatibleRenderTargetOptions.None))
-            {
-                // Loop through your bitmaps and apply rotation to each one
-                foreach (var bitmap in bitmaps)
-                {
-                    // Apply the rotation transformation to the current bitmap
-                    renderTarget.Transform = new RawMatrix3x2(
-                        (float)Math.Cos(rotationAngleInRadians), (float)Math.Sin(rotationAngleInRadians),
-                        -(float)Math.Sin(rotationAngleInRadians), (float)Math.Cos(rotationAngleInRadians),
-                        0, 0
-                    );
-
-                    // Draw the rotated bitmap onto the intermediate render target
-                    intermediateRenderTarget.DrawBitmap(bitmap, new RawRectangleF(0, 0, bitmap.Width, bitmap.Height), 1.0f, BitmapInterpolationMode.Linear);
-                }
-
-                // Reset the transformation on the intermediate render target
-                intermediateRenderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-
-                // Calculate the crop percentage (e.g., 50% for center crop)
-                float cropPercentage = 0.5f; // Adjust as needed
-
-                // Calculate the scaling factor to achieve the desired crop percentage
-                float scale = 1.0f / cropPercentage;
-
-                // Apply the scaling transformation to crop the intermediate result
-                var scalingMatrix = new RawMatrix3x2(
-                    scale, 0,
-                    0, scale,
-                    0, 0
-                );
-
-                // Apply the scaling transformation to the entire intermediate scene
-                intermediateRenderTarget.Transform = scalingMatrix;
-
-                // Stretch the scaled image to fit the final render target (screen)
-                var screenRect = new RawRectangleF(0, 0, screenWidth, screenHeight); // Adjust as needed
-                renderTarget.DrawBitmap(intermediateRenderTarget.Bitmap, screenRect);
-
-                // Reset the transformation on the final render target
-                renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-            }
-        }
-        */
 
         public RawMatrix3x2 MultiplyMatrices(RawMatrix3x2 matrix1, RawMatrix3x2 matrix2)
         {

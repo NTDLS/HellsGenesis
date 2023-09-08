@@ -12,7 +12,7 @@ namespace HG.Engine
     internal class Core
     {
         public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
-        public EngineD2Dx D2DX { get; private set; }
+        public EngineD2Dx DirectX { get; private set; }
         public EngineSettings Settings { get; private set; } = new();
         public EngineInputController Input { get; private set; }
         public EngineDisplayController Display { get; private set; }
@@ -67,7 +67,7 @@ namespace HG.Engine
             Menus = new MenuTickHandler(this);
             Player = new PlayerTickHandler(this);
             DrawingCache = new EngineDrawingCacheController(this);
-            D2DX = new EngineD2Dx(this);
+            DirectX = new EngineD2Dx(this);
 
             LoadPrefabs();
 
@@ -150,7 +150,7 @@ namespace HG.Engine
                 _gameLoop.Stop();
                 Actors.Stop();
                 OnStop?.Invoke(this);
-                D2DX.Cleanup();
+                DirectX.Cleanup();
             }
         }
 
