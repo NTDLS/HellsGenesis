@@ -1,4 +1,7 @@
 ﻿using HG.Engine;
+using SharpDX.Direct2D1;
+using SharpDX.DXGI;
+using SharpDX.Mathematics.Interop;
 using System;
 using System.Windows.Forms;
 
@@ -26,8 +29,8 @@ namespace HG
             }
             else
             {
-                Width = (int)(Screen.PrimaryScreen.Bounds.Width * 0.75);
-                Height = (int)(Screen.PrimaryScreen.Bounds.Height * 0.75);
+                ClientSize = new System.Drawing.Size((int)(Screen.PrimaryScreen.Bounds.Width * 0.75), (int)(Screen.PrimaryScreen.Bounds.Height * 0.75));
+                StartPosition = FormStartPosition.CenterScreen;
             }
 
             var timer = new Timer()
@@ -38,25 +41,40 @@ namespace HG
 
             timer.Tick += (object sender, EventArgs e) =>
             {
-                angle += 0.01f;
-                //Invalidate();
+                angle += 0.1f;
+                Invalidate();
             };
 
             _core = new Core(this);
 
             this.Shown += (object sender, EventArgs e) =>
             {
-                _core.Start();
+                //_core.Start();
             };
 
             FormClosed += (sender, e) =>
             {
-                _core.Stop();
+                //_core.Stop();
             };
+
+            this.MouseWheel += FormDirect2D_MouseWheel;
+
         }
 
+        private void FormDirect2D_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (e.Delta > 0)
+            {
+                scaleFactor += 0.1f;
+            }
+            else if (e.Delta < 0)
+            {
+                scaleFactor -= 0.1f;
+            }
+        }
 
-        float angle = 0.45f;
+        float angle = 0;
+        float scaleFactor = 1;
 
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
@@ -73,24 +91,27 @@ namespace HG
                 {
                     _core.D2DX.RenderTarget.BeginDraw();
 
-                    _core.Actors.Render();
-
+                    //_core.Actors.Render();
                     //e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
 
                     _core.D2DX.RenderTarget.Clear(_core.D2DX.RawColorGray);
 
-                    float x = 200;
-                    float y = 200;
+                    //using (var intermediateRenderTarget = new BitmapRenderTarget(_core.D2DX.RenderTarget, CompatibleRenderTargetOptions.None))
+                    {
 
-                    var bitmap = _core.D2DX.GetCachedBitmap("c:\\test.bmp");
-                    var bitmapRect = _core.D2DX.DrawBitmapAt(bitmap, x, y, angle);
+                        float x = _core.Display.TotalCanvasSize.Width / 2;
+                        float y = _core.Display.TotalCanvasSize.Height / 2;
 
-                    _core.D2DX.DrawRectangleAt(bitmapRect, angle, _core.D2DX.RawColorRed, 2, 1);
+                        var bitmap = _core.D2DX.GetCachedBitmap("c:\\test.bmp");
+                        var bitmapRect = _core.D2DX.DrawBitmapAt(bitmap, x, y, angle);
 
-                    var textLocation = _core.D2DX.DrawTextAt(400, 400, -angle, "Hello from the GPU!", _core.D2DX.LargeTextFormat, _core.D2DX.SolidColorBrushRed);
-                    _core.D2DX.DrawRectangleAt(textLocation, -angle, _core.D2DX.RawColorGreen);
+                        _core.D2DX.DrawRectangleAt(bitmapRect, angle, _core.D2DX.RawColorRed, 2, 1);
 
-                    _core.D2DX.RenderTarget.EndDraw();
+                        var textLocation = _core.D2DX.DrawTextAt(x, y, -angle, "Hello from the GPU!", _core.D2DX.LargeTextFormat, _core.D2DX.SolidColorBrushRed);
+                        _core.D2DX.DrawRectangleAt(textLocation, -angle, _core.D2DX.RawColorGreen);
+
+                        _core.D2DX.RenderTarget.EndDraw();
+                    }
                 }
             }
             catch

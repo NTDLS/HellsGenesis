@@ -57,7 +57,6 @@ namespace HG.Engine
 
         public Core(Control drawingSurface)
         {
-            D2DX = new EngineD2Dx(drawingSurface);
             Display = new EngineDisplayController(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
             Assets = new EngineAssetController(this);
             Actors = new EngineActorController(this);
@@ -69,6 +68,7 @@ namespace HG.Engine
             Menus = new MenuTickHandler(this);
             Player = new PlayerTickHandler(this);
             DrawingCache = new EngineDrawingCacheController(this);
+            D2DX = new EngineD2Dx(this);
 
             LoadPrefabs();
 

@@ -13,6 +13,8 @@ namespace HG.Engine
 {
     internal class EngineD2Dx
     {
+        private Core _core;
+
         private readonly Dictionary<string, SharpDX.Direct2D1.Bitmap> _textureCache = new();
 
         public WindowRenderTarget RenderTarget { get; private set; }
@@ -41,16 +43,18 @@ namespace HG.Engine
         public SolidColorBrush SolidColorBrushGray { get; private set; }
         #endregion
 
-        public EngineD2Dx(Control renderSurface)
+        public EngineD2Dx(Core core)
         {
+            _core = core;
+
             D2dfactory = new SharpDX.Direct2D1.Factory(SharpDX.Direct2D1.FactoryType.SingleThreaded);
 
             var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
             var renderTargetProperties = new RenderTargetProperties(pixelFormat);
             var renderProperties = new HwndRenderTargetProperties
             {
-                Hwnd = renderSurface.Handle,
-                PixelSize = new Size2(renderSurface.ClientSize.Width, renderSurface.ClientSize.Height),
+                Hwnd = core.Display.DrawingSurface.Handle,
+                PixelSize = new Size2(core.Display.TotalCanvasSize.Width, core.Display.TotalCanvasSize.Height),
                 PresentOptions = PresentOptions.Immediately
             };
 
@@ -100,7 +104,7 @@ namespace HG.Engine
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
         public RawRectangleF DrawBitmapAt(SharpDX.Direct2D1.Bitmap bitmap, float x, float y, float angle)
         {
-            SetTransformAngle(new RectangleF(x, y, bitmap.PixelSize.Width, bitmap.PixelSize.Height), angle);
+            SetTransformAngle(new SharpDX.RectangleF(x, y, bitmap.PixelSize.Width, bitmap.PixelSize.Height), angle);
 
             // Apply the rotation matrix and draw the bitmap
             RenderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // Enable antialiasing
@@ -155,7 +159,7 @@ namespace HG.Engine
             return rect;
         }
 
-        public void SetTransformAngle(RectangleF rect, float angle)
+        public void SetTransformAngle(SharpDX.RectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
         {
             float centerX = rect.Left + rect.Width / 2.0f;
             float centerY = rect.Top + rect.Height / 2.0f;
@@ -164,15 +168,22 @@ namespace HG.Engine
             float cosAngle = (float)Math.Cos(angle);
             float sinAngle = (float)Math.Sin(angle);
 
-            RenderTarget.Transform = new RawMatrix3x2(
+            var rotationMatrix = new RawMatrix3x2(
                 cosAngle, sinAngle,
                 -sinAngle, cosAngle,
                 centerX - cosAngle * centerX + sinAngle * centerY,
                 centerY - sinAngle * centerX - cosAngle * centerY
             );
+
+            if (existimMatrix != null)
+            {
+                rotationMatrix = MultiplyMatrices((RawMatrix3x2)existimMatrix, rotationMatrix);
+            }
+
+            RenderTarget.Transform = rotationMatrix;
         }
 
-        public void SetTransformAngle(RawRectangleF rect, float angle)
+        public void SetTransformAngle(RawRectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
         {
             float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
             float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
@@ -181,11 +192,101 @@ namespace HG.Engine
             float cosAngle = (float)Math.Cos(angle);
             float sinAngle = (float)Math.Sin(angle);
 
-            RenderTarget.Transform = new RawMatrix3x2(
+            var rotationMatrix = new RawMatrix3x2(
                 cosAngle, sinAngle,
                 -sinAngle, cosAngle,
                 centerX - cosAngle * centerX + sinAngle * centerY,
                 centerY - sinAngle * centerX - cosAngle * centerY
+            );
+
+            if (existimMatrix != null)
+            {
+                rotationMatrix = MultiplyMatrices(rotationMatrix, (RawMatrix3x2)existimMatrix);
+            }
+
+            RenderTarget.Transform = rotationMatrix;
+        }
+
+        private RawMatrix3x2 GetScalingMatrix(float zoomFactor)
+        {
+            // Calculate the new center point (assuming your image dimensions are known)
+            float centerX = _core.Display.TotalCanvasSize.Width / 2.0f;
+            float centerY = _core.Display.TotalCanvasSize.Height / 2.0f;
+
+            // Calculate the scaling transformation matrix
+            var scalingMatrix = new RawMatrix3x2(
+                zoomFactor, 0,
+                0, zoomFactor,
+                centerX * (1 - zoomFactor), centerY * (1 - zoomFactor)
+            );
+
+            return scalingMatrix;
+        }
+
+        /*
+        public void FFS()
+        {
+            // Define the rotation angle in degrees
+            float rotationAngleInDegrees = 45.0f; // Adjust as needed
+
+            // Convert degrees to radians
+            float rotationAngleInRadians = rotationAngleInDegrees * (float)Math.PI / 180.0f;
+
+            // Create an intermediate render target for rendering bitmaps
+            using (var intermediateRenderTarget = new BitmapRenderTarget(renderTarget, CompatibleRenderTargetOptions.None))
+            {
+                // Loop through your bitmaps and apply rotation to each one
+                foreach (var bitmap in bitmaps)
+                {
+                    // Apply the rotation transformation to the current bitmap
+                    renderTarget.Transform = new RawMatrix3x2(
+                        (float)Math.Cos(rotationAngleInRadians), (float)Math.Sin(rotationAngleInRadians),
+                        -(float)Math.Sin(rotationAngleInRadians), (float)Math.Cos(rotationAngleInRadians),
+                        0, 0
+                    );
+
+                    // Draw the rotated bitmap onto the intermediate render target
+                    intermediateRenderTarget.DrawBitmap(bitmap, new RawRectangleF(0, 0, bitmap.Width, bitmap.Height), 1.0f, BitmapInterpolationMode.Linear);
+                }
+
+                // Reset the transformation on the intermediate render target
+                intermediateRenderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+
+                // Calculate the crop percentage (e.g., 50% for center crop)
+                float cropPercentage = 0.5f; // Adjust as needed
+
+                // Calculate the scaling factor to achieve the desired crop percentage
+                float scale = 1.0f / cropPercentage;
+
+                // Apply the scaling transformation to crop the intermediate result
+                var scalingMatrix = new RawMatrix3x2(
+                    scale, 0,
+                    0, scale,
+                    0, 0
+                );
+
+                // Apply the scaling transformation to the entire intermediate scene
+                intermediateRenderTarget.Transform = scalingMatrix;
+
+                // Stretch the scaled image to fit the final render target (screen)
+                var screenRect = new RawRectangleF(0, 0, screenWidth, screenHeight); // Adjust as needed
+                renderTarget.DrawBitmap(intermediateRenderTarget.Bitmap, screenRect);
+
+                // Reset the transformation on the final render target
+                renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+            }
+        }
+        */
+
+        public RawMatrix3x2 MultiplyMatrices(RawMatrix3x2 matrix1, RawMatrix3x2 matrix2)
+        {
+            return new RawMatrix3x2(
+                matrix1.M11 * matrix2.M11 + matrix1.M12 * matrix2.M21,
+                matrix1.M11 * matrix2.M12 + matrix1.M12 * matrix2.M22,
+                matrix1.M21 * matrix2.M11 + matrix1.M22 * matrix2.M21,
+                matrix1.M21 * matrix2.M12 + matrix1.M22 * matrix2.M22,
+                matrix1.M31 * matrix2.M11 + matrix1.M32 * matrix2.M21 + matrix2.M31,
+                matrix1.M31 * matrix2.M12 + matrix1.M32 * matrix2.M22 + matrix2.M32
             );
         }
 
