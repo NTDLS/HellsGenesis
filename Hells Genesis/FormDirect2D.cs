@@ -1,21 +1,34 @@
-﻿using System;
-using System.Drawing;
+﻿using HG.Engine;
+using System;
 using System.Windows.Forms;
 
 namespace HG
 {
     public partial class FormDirect2D : Form
     {
-        HgDirectX hgDx;
+        private readonly Core _core;
+        private readonly bool _fullScreen = false;
 
         public FormDirect2D()
         {
             InitializeComponent();
 
-            ClientSize = new Size(1024, 768);
-            StartPosition = FormStartPosition.CenterScreen;
-
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
+
+            if (_fullScreen)
+            {
+                FormBorderStyle = FormBorderStyle.None;
+                Width = Screen.PrimaryScreen.Bounds.Width;
+                Height = Screen.PrimaryScreen.Bounds.Height;
+                ShowInTaskbar = true;
+                //TopMost = true;
+                WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                Width = (int)(Screen.PrimaryScreen.Bounds.Width * 0.75);
+                Height = (int)(Screen.PrimaryScreen.Bounds.Height * 0.75);
+            }
 
             var timer = new Timer()
             {
@@ -26,15 +39,20 @@ namespace HG
             timer.Tick += (object sender, EventArgs e) =>
             {
                 angle += 0.01f;
-                Invalidate();
+                //Invalidate();
             };
 
-            FormClosing += (sender, e) =>
+            _core = new Core(this);
+
+            this.Shown += (object sender, EventArgs e) =>
             {
-                //renderTarget?.Dispose();
+                _core.Start();
             };
 
-            hgDx = new HgDirectX(this);
+            FormClosed += (sender, e) =>
+            {
+                _core.Stop();
+            };
         }
 
 
@@ -47,25 +65,37 @@ namespace HG
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            base.OnPaint(e);
+            //base.OnPaint(e);
 
-            hgDx.RenderTarget.BeginDraw();
+            try
+            {
+                lock (this)
+                {
+                    _core.D2DX.RenderTarget.BeginDraw();
 
-            hgDx.RenderTarget.Clear(hgDx.RawColorGray);
+                    _core.Actors.Render();
 
-            float x = 200;
-            float y = 200;
+                    //e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
 
-            var bitmap = hgDx.GetCachedBitmap("c:\\test.bmp");
-            var bitmapRect = hgDx.DrawBitmapAt(bitmap, x, y, angle);
+                    _core.D2DX.RenderTarget.Clear(_core.D2DX.RawColorGray);
 
-            hgDx.DrawRectangleAt(bitmapRect, angle, hgDx.RawColorRed, 2, 1);
+                    float x = 200;
+                    float y = 200;
 
+                    var bitmap = _core.D2DX.GetCachedBitmap("c:\\test.bmp");
+                    var bitmapRect = _core.D2DX.DrawBitmapAt(bitmap, x, y, angle);
 
-            var textLocation = hgDx.DrawTextAt(400, 400, -angle, "Hello from the GPU!", hgDx.LargeTextFormat, hgDx.SolidColorBrushRed);
-            hgDx.DrawRectangleAt(textLocation, -angle, hgDx.RawColorGreen);
+                    _core.D2DX.DrawRectangleAt(bitmapRect, angle, _core.D2DX.RawColorRed, 2, 1);
 
-            hgDx.RenderTarget.EndDraw();
+                    var textLocation = _core.D2DX.DrawTextAt(400, 400, -angle, "Hello from the GPU!", _core.D2DX.LargeTextFormat, _core.D2DX.SolidColorBrushRed);
+                    _core.D2DX.DrawRectangleAt(textLocation, -angle, _core.D2DX.RawColorGreen);
+
+                    _core.D2DX.RenderTarget.EndDraw();
+                }
+            }
+            catch
+            {
+            }
         }
     }
 }

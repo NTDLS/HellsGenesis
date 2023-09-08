@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace HG
+namespace HG.Engine
 {
-    internal class HgDirectX
+    internal class EngineD2Dx
     {
         private readonly Dictionary<string, SharpDX.Direct2D1.Bitmap> _textureCache = new();
 
@@ -41,7 +41,7 @@ namespace HG
         public SolidColorBrush SolidColorBrushGray { get; private set; }
         #endregion
 
-        public HgDirectX(Form form)
+        public EngineD2Dx(Control renderSurface)
         {
             D2dfactory = new SharpDX.Direct2D1.Factory(SharpDX.Direct2D1.FactoryType.SingleThreaded);
 
@@ -49,8 +49,8 @@ namespace HG
             var renderTargetProperties = new RenderTargetProperties(pixelFormat);
             var renderProperties = new HwndRenderTargetProperties
             {
-                Hwnd = form.Handle,
-                PixelSize = new Size2(form.ClientSize.Width, form.ClientSize.Height),
+                Hwnd = renderSurface.Handle,
+                PixelSize = new Size2(renderSurface.ClientSize.Width, renderSurface.ClientSize.Height),
                 PresentOptions = PresentOptions.Immediately
             };
 
@@ -65,6 +65,11 @@ namespace HG
             SolidColorBrushGray = new SolidColorBrush(RenderTarget, RawColorGray);
 
             LargeTextFormat = new TextFormat(DirectWriteFactory, "Arial", 24);
+        }
+
+        public void Cleanup()
+        {
+            RenderTarget?.Dispose();
         }
 
         public SharpDX.Direct2D1.Bitmap GetCachedBitmap(string path)

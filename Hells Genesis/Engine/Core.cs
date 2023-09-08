@@ -4,6 +4,7 @@ using HG.Menus;
 using HG.TickHandlers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SharpDX.Direct2D1;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,7 +13,7 @@ namespace HG.Engine
     internal class Core
     {
         public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
-
+        public EngineD2Dx D2DX { get; private set; }
         public EngineSettings Settings { get; private set; } = new();
         public EngineInputController Input { get; private set; }
         public EngineDisplayController Display { get; private set; }
@@ -56,6 +57,7 @@ namespace HG.Engine
 
         public Core(Control drawingSurface)
         {
+            D2DX = new EngineD2Dx(drawingSurface);
             Display = new EngineDisplayController(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
             Assets = new EngineAssetController(this);
             Actors = new EngineActorController(this);
@@ -149,6 +151,7 @@ namespace HG.Engine
                 _gameLoop.Stop();
                 Actors.Stop();
                 OnStop?.Invoke(this);
+                D2DX.Cleanup();
             }
         }
 
