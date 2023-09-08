@@ -17,7 +17,7 @@ namespace HG.Engine
 
         private readonly Dictionary<string, SharpDX.Direct2D1.Bitmap> _textureCache = new();
 
-        public WindowRenderTarget RenderTarget { get; private set; }
+        public WindowRenderTarget ScreenRenderTarget { get; private set; }
         public SharpDX.Direct2D1.Factory D2dfactory { get; private set; }
         public SharpDX.DirectWrite.Factory DirectWriteFactory { get; private set; }
         public TextFormat LargeTextFormat { get; private set; }
@@ -54,26 +54,27 @@ namespace HG.Engine
             var renderProperties = new HwndRenderTargetProperties
             {
                 Hwnd = core.Display.DrawingSurface.Handle,
-                PixelSize = new Size2(core.Display.TotalCanvasSize.Width, core.Display.TotalCanvasSize.Height),
+                //PixelSize = new Size2(core.Display.TotalCanvasSize.Width, core.Display.TotalCanvasSize.Height),
+                PixelSize = new Size2(core.Display.NatrualScreenSize.Width, core.Display.NatrualScreenSize.Height),
                 PresentOptions = PresentOptions.Immediately
             };
 
-            RenderTarget = new WindowRenderTarget(D2dfactory, renderTargetProperties, renderProperties);
+            ScreenRenderTarget = new WindowRenderTarget(D2dfactory, renderTargetProperties, renderProperties);
 
             DirectWriteFactory = new SharpDX.DirectWrite.Factory();
-            SolidColorBrushRed = new SolidColorBrush(RenderTarget, RawColorRed);
-            SolidColorBrushGreen = new SolidColorBrush(RenderTarget, RawColorGreen);
-            SolidColorBrushBlue = new SolidColorBrush(RenderTarget, RawColorBlue);
-            SolidColorBrushBlack = new SolidColorBrush(RenderTarget, RawColorBlack);
-            SolidColorBrushWhite = new SolidColorBrush(RenderTarget, RawColorWhite);
-            SolidColorBrushGray = new SolidColorBrush(RenderTarget, RawColorGray);
+            SolidColorBrushRed = new SolidColorBrush(ScreenRenderTarget, RawColorRed);
+            SolidColorBrushGreen = new SolidColorBrush(ScreenRenderTarget, RawColorGreen);
+            SolidColorBrushBlue = new SolidColorBrush(ScreenRenderTarget, RawColorBlue);
+            SolidColorBrushBlack = new SolidColorBrush(ScreenRenderTarget, RawColorBlack);
+            SolidColorBrushWhite = new SolidColorBrush(ScreenRenderTarget, RawColorWhite);
+            SolidColorBrushGray = new SolidColorBrush(ScreenRenderTarget, RawColorGray);
 
             LargeTextFormat = new TextFormat(DirectWriteFactory, "Arial", 24);
         }
 
         public void Cleanup()
         {
-            RenderTarget?.Dispose();
+            ScreenRenderTarget?.Dispose();
         }
 
         public SharpDX.Direct2D1.Bitmap GetCachedBitmap(string path)
@@ -92,7 +93,7 @@ namespace HG.Engine
                 using var converter = new FormatConverter(wicFactory);
                 converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
 
-                var result = SharpDX.Direct2D1.Bitmap.FromWicBitmap(RenderTarget, converter);
+                var result = SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
                 _textureCache.Add(path, result);
                 return result;
             }
@@ -102,17 +103,17 @@ namespace HG.Engine
         /// Draws a bitmap at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
-        public RawRectangleF DrawBitmapAt(SharpDX.Direct2D1.Bitmap bitmap, float x, float y, float angle)
+        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float x, float y, float angle)
         {
-            SetTransformAngle(new SharpDX.RectangleF(x, y, bitmap.PixelSize.Width, bitmap.PixelSize.Height), angle);
+            SetTransformAngle(renderTarget, new SharpDX.RectangleF(x, y, bitmap.PixelSize.Width, bitmap.PixelSize.Height), angle);
 
             // Apply the rotation matrix and draw the bitmap
-            RenderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // Enable antialiasing
+            renderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // Enable antialiasing
 
             var destRect = new RawRectangleF(x, y, x + bitmap.PixelSize.Width, y + bitmap.PixelSize.Height);
-            RenderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+            renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
 
-            ResetTransform();
+            ResetTransform(renderTarget);
 
             return destRect;
         }
@@ -121,7 +122,7 @@ namespace HG.Engine
         /// Draws text at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
-        public RawRectangleF DrawTextAt(float x, float y, float angle, string text, TextFormat format, SolidColorBrush brush)
+        public RawRectangleF DrawTextAt(RenderTarget renderTarget, float x, float y, float angle, string text, TextFormat format, SolidColorBrush brush)
         {
             var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
@@ -131,9 +132,9 @@ namespace HG.Engine
             // Create a rectangle that fits the text
             var textRectangle = new RawRectangleF(x, y, x + textWidth, y + textHeight);
 
-            SetTransformAngle(textRectangle, angle);
-            RenderTarget.DrawText(text, format, textRectangle, brush);
-            ResetTransform();
+            SetTransformAngle(renderTarget, textRectangle, angle);
+            renderTarget.DrawText(text, format, textRectangle, brush);
+            ResetTransform(renderTarget);
 
             return textRectangle;
         }
@@ -142,7 +143,7 @@ namespace HG.Engine
         /// Draws a rectangle at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public RawRectangleF DrawRectangleAt(RawRectangleF rect, float angle, RawColor4 color, float expand = 0, float strokeWidth = 1)
+        public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF rect, float angle, RawColor4 color, float expand = 0, float strokeWidth = 1)
         {
             if (expand != 0)
             {
@@ -152,14 +153,14 @@ namespace HG.Engine
                 rect.Right += expand;
             }
 
-            SetTransformAngle(rect, angle);
-            RenderTarget.DrawRectangle(rect, new SolidColorBrush(RenderTarget, color), strokeWidth);
-            ResetTransform();
+            SetTransformAngle(renderTarget, rect, angle);
+            renderTarget.DrawRectangle(rect, new SolidColorBrush(renderTarget, color), strokeWidth);
+            ResetTransform(renderTarget);
 
             return rect;
         }
 
-        public void SetTransformAngle(SharpDX.RectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
+        public void SetTransformAngle(RenderTarget renderTarget, SharpDX.RectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
         {
             float centerX = rect.Left + rect.Width / 2.0f;
             float centerY = rect.Top + rect.Height / 2.0f;
@@ -180,10 +181,10 @@ namespace HG.Engine
                 rotationMatrix = MultiplyMatrices((RawMatrix3x2)existimMatrix, rotationMatrix);
             }
 
-            RenderTarget.Transform = rotationMatrix;
+            renderTarget.Transform = rotationMatrix;
         }
 
-        public void SetTransformAngle(RawRectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
+        public void SetTransformAngle(RenderTarget renderTarget, RawRectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
         {
             float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
             float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
@@ -204,7 +205,7 @@ namespace HG.Engine
                 rotationMatrix = MultiplyMatrices(rotationMatrix, (RawMatrix3x2)existimMatrix);
             }
 
-            RenderTarget.Transform = rotationMatrix;
+            renderTarget.Transform = rotationMatrix;
         }
 
         private RawMatrix3x2 GetScalingMatrix(float zoomFactor)
@@ -290,9 +291,9 @@ namespace HG.Engine
             );
         }
 
-        public void ResetTransform()
+        public void ResetTransform(RenderTarget renderTarget)
         {
-            RenderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+            renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
         }
     }
 }

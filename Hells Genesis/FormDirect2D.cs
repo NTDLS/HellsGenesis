@@ -1,4 +1,5 @@
 ﻿using HG.Engine;
+using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
@@ -89,28 +90,29 @@ namespace HG
             {
                 lock (this)
                 {
-                    _core.D2DX.RenderTarget.BeginDraw();
+                    _core.D2DX.ScreenRenderTarget.BeginDraw();
 
                     //_core.Actors.Render();
                     //e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
 
-                    _core.D2DX.RenderTarget.Clear(_core.D2DX.RawColorGray);
+                    _core.D2DX.ScreenRenderTarget.Clear(_core.D2DX.RawColorGray);
 
-                    //using (var intermediateRenderTarget = new BitmapRenderTarget(_core.D2DX.RenderTarget, CompatibleRenderTargetOptions.None))
+                    var intermediateSize = new Size2F(_core.Display.TotalCanvasSize.Width, _core.Display.TotalCanvasSize.Height);
+
+                    using (var intermediateRenderTarget = new BitmapRenderTarget(_core.D2DX.ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateSize))
                     {
-
-                        float x = _core.Display.TotalCanvasSize.Width / 2;
-                        float y = _core.Display.TotalCanvasSize.Height / 2;
+                        float x = _core.Display.NatrualScreenSize.Width / 2;
+                        float y = _core.Display.NatrualScreenSize.Height / 2;
 
                         var bitmap = _core.D2DX.GetCachedBitmap("c:\\test.bmp");
-                        var bitmapRect = _core.D2DX.DrawBitmapAt(bitmap, x, y, angle);
+                        var bitmapRect = _core.D2DX.DrawBitmapAt(_core.D2DX.ScreenRenderTarget, bitmap, x, y, angle);
 
-                        _core.D2DX.DrawRectangleAt(bitmapRect, angle, _core.D2DX.RawColorRed, 2, 1);
+                        _core.D2DX.DrawRectangleAt(_core.D2DX.ScreenRenderTarget, bitmapRect, angle, _core.D2DX.RawColorRed, 2, 1);
 
-                        var textLocation = _core.D2DX.DrawTextAt(x, y, -angle, "Hello from the GPU!", _core.D2DX.LargeTextFormat, _core.D2DX.SolidColorBrushRed);
-                        _core.D2DX.DrawRectangleAt(textLocation, -angle, _core.D2DX.RawColorGreen);
+                        var textLocation = _core.D2DX.DrawTextAt(_core.D2DX.ScreenRenderTarget, x, y, -angle, "Hello from the GPU!", _core.D2DX.LargeTextFormat, _core.D2DX.SolidColorBrushRed);
+                        _core.D2DX.DrawRectangleAt(_core.D2DX.ScreenRenderTarget, textLocation, -angle, _core.D2DX.RawColorGreen);
 
-                        _core.D2DX.RenderTarget.EndDraw();
+                        _core.D2DX.ScreenRenderTarget.EndDraw();
                     }
                 }
             }
