@@ -58,17 +58,19 @@ namespace HG.Situations
 
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.Enemies.Create<EnemyLouse>();
-            _core.Actors.Enemies.Create<EnemyLouse>();
-            _core.Actors.Enemies.Create<EnemyLouse>();
-            _core.Actors.Enemies.Create<EnemyLouse>();
+            //_core.Actors.Enemies.Create<EnemyLouse>();
+            //_core.Actors.Enemies.Create<EnemyLouse>();
+            //_core.Actors.Enemies.Create<EnemyLouse>();
+            //_core.Actors.Enemies.Create<EnemyLouse>();
             _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyAvvol>();
-            _core.Actors.Enemies.Create<EnemyAvvol>();
-            _core.Actors.Enemies.Create<EnemyAvvol>();
-            _core.Actors.Enemies.Create<EnemyScarab>();
-            _core.Actors.Enemies.Create<EnemyScarab>();
-            _core.Actors.Enemies.Create<EnemyScarab>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            //_core.Actors.Enemies.Create<EnemyAvvol>();
+            //_core.Actors.Enemies.Create<EnemyAvvol>();
+            //_core.Actors.Enemies.Create<EnemyAvvol>();
+            //_core.Actors.Enemies.Create<EnemyScarab>();
+            //_core.Actors.Enemies.Create<EnemyScarab>();
+            //_core.Actors.Enemies.Create<EnemyScarab>();
         }
     }
 }

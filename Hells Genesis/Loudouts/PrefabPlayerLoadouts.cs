@@ -32,9 +32,9 @@ namespace HG.Loudouts
                     Hull = 10000,
                     Sheilds = 10000,
                     Description = "→ The code crusader ←\n"
-                        + "Equipped with advanced diagnostics and repair systems.\n"
+                        + "Crude in design but equipped with advanced diagnostics and repair systems.\n"
                         + "Nearly indestructible and inconceivably fast. Its mission is to discover\n"
-                        + "glitches in the vast cosmic code, ensuring smooth journeys for all who follow...",
+                        + "glitches in the vast cosmic code, ensuring a smooth journey for all that follow...",
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 100000)
                 };
 
