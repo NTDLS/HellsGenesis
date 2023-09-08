@@ -20,23 +20,33 @@ namespace HG
         public SharpDX.DirectWrite.Factory DirectWriteFactory { get; private set; }
         public TextFormat LargeTextFormat { get; private set; }
 
+        #region Raw colors.
+
         public readonly RawColor4 RawColorRed = new RawColor4(1, 0, 0, 1);
         public readonly RawColor4 RawColorGreen = new RawColor4(0, 1, 0, 1);
         public readonly RawColor4 RawColorBlue = new RawColor4(0, 0, 1, 1);
         public readonly RawColor4 RawColorBlack = new RawColor4(0, 0, 0, 1);
         public readonly RawColor4 RawColorWhite = new RawColor4(1, 1, 1, 1);
-        public readonly RawColor4 RawColorLightGray = new RawColor4(0.25f, 0.25f, 0.25f, 1);
+        public readonly RawColor4 RawColorGray = new RawColor4(0.25f, 0.25f, 0.25f, 1);
+
+        #endregion
+
+        #region Solid brushes.
 
         public SolidColorBrush SolidColorBrushRed { get; private set; }
         public SolidColorBrush SolidColorBrushGreen { get; private set; }
         public SolidColorBrush SolidColorBrushBlue { get; private set; }
         public SolidColorBrush SolidColorBrushBlack { get; private set; }
         public SolidColorBrush SolidColorBrushWhite { get; private set; }
-        public SolidColorBrush SolidColorBrushLightGray { get; private set; }
+        public SolidColorBrush SolidColorBrushGray { get; private set; }
+        #endregion
 
         public HgDirectX(Form form)
         {
             D2dfactory = new SharpDX.Direct2D1.Factory(SharpDX.Direct2D1.FactoryType.SingleThreaded);
+
+            var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
+            var renderTargetProperties = new RenderTargetProperties(pixelFormat);
             var renderProperties = new HwndRenderTargetProperties
             {
                 Hwnd = form.Handle,
@@ -44,7 +54,7 @@ namespace HG
                 PresentOptions = PresentOptions.Immediately
             };
 
-            RenderTarget = new WindowRenderTarget(D2dfactory, new RenderTargetProperties(new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied)), renderProperties);
+            RenderTarget = new WindowRenderTarget(D2dfactory, renderTargetProperties, renderProperties);
 
             DirectWriteFactory = new SharpDX.DirectWrite.Factory();
             SolidColorBrushRed = new SolidColorBrush(RenderTarget, RawColorRed);
@@ -52,11 +62,10 @@ namespace HG
             SolidColorBrushBlue = new SolidColorBrush(RenderTarget, RawColorBlue);
             SolidColorBrushBlack = new SolidColorBrush(RenderTarget, RawColorBlack);
             SolidColorBrushWhite = new SolidColorBrush(RenderTarget, RawColorWhite);
-            SolidColorBrushLightGray = new SolidColorBrush(RenderTarget, RawColorLightGray);
+            SolidColorBrushGray = new SolidColorBrush(RenderTarget, RawColorGray);
 
             LargeTextFormat = new TextFormat(DirectWriteFactory, "Arial", 24);
         }
-
 
         public SharpDX.Direct2D1.Bitmap GetCachedBitmap(string path)
         {

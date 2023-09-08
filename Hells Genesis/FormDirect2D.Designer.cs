@@ -37,7 +37,6 @@
             ClientSize = new System.Drawing.Size(808, 741);
             Name = "FormDirect2D";
             Text = "FormDirect2D";
-            Load += FormDirect2D_Load;
             ResumeLayout(false);
         }
 

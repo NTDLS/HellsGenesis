@@ -11,26 +11,9 @@ namespace HG
         public FormDirect2D()
         {
             InitializeComponent();
-        }
 
-        private void FormDirect2D_Load(object sender, EventArgs e)
-        {
-            this.ClientSize = new Size(800, 600);
-            this.Text = "SharpDX 2D Drawing";
-
-            FormClosing += (sender, e) =>
-            {
-                //renderTarget?.Dispose();
-            };
-
-            InitializeDirectX();
-
-            hgDx = new HgDirectX(this);
-        }
-
-        private void InitializeDirectX()
-        {
-            this.ClientSize = new Size(800, 600);
+            ClientSize = new Size(1024, 768);
+            StartPosition = FormStartPosition.CenterScreen;
 
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
 
@@ -45,7 +28,15 @@ namespace HG
                 angle += 0.01f;
                 Invalidate();
             };
+
+            FormClosing += (sender, e) =>
+            {
+                //renderTarget?.Dispose();
+            };
+
+            hgDx = new HgDirectX(this);
         }
+
 
         float angle = 0.45f;
 
@@ -60,7 +51,7 @@ namespace HG
 
             hgDx.RenderTarget.BeginDraw();
 
-            hgDx.RenderTarget.Clear(hgDx.RawColorLightGray);
+            hgDx.RenderTarget.Clear(hgDx.RawColorGray);
 
             float x = 200;
             float y = 200;
