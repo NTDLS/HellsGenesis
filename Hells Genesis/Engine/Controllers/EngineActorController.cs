@@ -327,7 +327,7 @@ namespace HG.Engine.Controllers
             if (_core.Settings.HighlightNatrualBounds)
             {
                 //Highlight the 1:1 frame
-                using (var pen = new Pen(Color.FromArgb(75,75,75), 1))
+                using (var pen = new Pen(Color.FromArgb(75, 75, 75), 1))
                 {
                     screenDrawing.Graphics.DrawRectangle(pen, _core.Display.NatrualScreenBounds);
                 }
