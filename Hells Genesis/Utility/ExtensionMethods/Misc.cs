@@ -63,6 +63,13 @@ namespace HG.Utility.ExtensionMethods
             else return value;
         }
 
+        public static float Box(this float value, float minValue, float maxValue)
+        {
+            if (value > maxValue) return maxValue;
+            else if (value < minValue) return minValue;
+            else return value;
+        }
+
         /// <summary>
         /// Take a value divides it by two and makes it negative if it over a given threshold
         /// </summary>

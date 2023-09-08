@@ -4,7 +4,6 @@ using HG.Menus;
 using HG.TickHandlers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using SharpDX.Direct2D1;
 using System.Drawing;
 using System.Windows.Forms;
 

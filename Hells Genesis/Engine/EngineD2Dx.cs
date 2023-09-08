@@ -7,7 +7,8 @@ using SharpDX.WIC;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
+using System.Drawing.Imaging;
+using System.IO;
 
 namespace HG.Engine
 {
@@ -77,7 +78,7 @@ namespace HG.Engine
             ScreenRenderTarget?.Dispose();
         }
 
-        public SharpDX.Direct2D1.Bitmap GetCachedBitmap(RenderTarget renderTarget, string path)
+        public SharpDX.Direct2D1.Bitmap GetCachedBitmap(string path)
         {
             path = path.ToLower();
 
@@ -91,11 +92,57 @@ namespace HG.Engine
                 using var wicFactory = new ImagingFactory();
                 using var decoder = new BitmapDecoder(wicFactory, path, DecodeOptions.CacheOnLoad);
                 using var converter = new FormatConverter(wicFactory);
+
                 converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
 
-                var result = SharpDX.Direct2D1.Bitmap.FromWicBitmap(renderTarget, converter);
+                var result = SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
+
                 _textureCache.Add(path, result);
                 return result;
+            }
+        }
+
+
+        public SharpDX.Direct2D1.Bitmap GetCachedBitmap(string path, int newWidth, int newHeight)
+        {
+            path = path.ToLower();
+
+            lock (_textureCache)
+            {
+                if (_textureCache.TryGetValue(path, out var cached))
+                {
+                    return cached;
+                }
+                using (var image = System.Drawing.Image.FromFile(path)) // Replace 'yourStream' with your actual stream
+                {
+                    var resizedImage = new System.Drawing.Bitmap(newWidth, newHeight);
+
+                    using (var g = Graphics.FromImage(resizedImage))
+                    {
+                        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                        g.DrawImage(image, 0, 0, newWidth, newHeight);
+                    }
+
+                    // Create a WIC stream from the System.Drawing.Image
+                    using (var wicFactory = new ImagingFactory())
+                    using (var imageStream = new MemoryStream())
+                    {
+                        resizedImage.Save(imageStream, ImageFormat.Png);
+                        imageStream.Seek(0, SeekOrigin.Begin);
+
+                        using (var decoder = new BitmapDecoder(wicFactory, imageStream, DecodeOptions.CacheOnLoad))
+                        using (var converter = new FormatConverter(wicFactory))
+                        {
+                            converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
+
+                            var result = SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
+
+                            _textureCache.Add(path, result);
+
+                            return result;
+                        }
+                    }
+                }
             }
         }
 
