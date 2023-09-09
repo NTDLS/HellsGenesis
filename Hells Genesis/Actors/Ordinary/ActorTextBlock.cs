@@ -1,7 +1,6 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
 using HG.Types;
-using System;
 using System.Drawing;
 
 namespace HG.Actors.Ordinary
@@ -49,24 +48,6 @@ namespace HG.Actors.Ordinary
 
                 var size = _core.DirectX.GetTextSize(_text, _core.DirectX.LargeTextFormat);
                 _size = new Size((int)size.Width, (int)size.Height);
-
-                /*
-                //If we have previously drawn text, then we need to invalidate the entire region which it occupied.
-                if (_prevRegion != null)
-                {
-                    _core.Display.DrawingSurface.Invalidate((Rectangle)_prevRegion);
-                }
-
-                //Now that we have used _prevRegion to invaldate the previous region, set it to the new region coords.
-                //And invalidate them for the new text.
-                lock (_genericDC)
-                {
-                    var stringSize = _genericDC.MeasureString(_text, _font);
-                    _size = new Size((int)Math.Ceiling(stringSize.Width), (int)Math.Ceiling(stringSize.Height));
-                }
-                _prevRegion = new Rectangle((int)X, (int)Y, _size.Width, _size.Height);
-                _core.Display.DrawingSurface.Invalidate((Rectangle)_prevRegion);
-                */
             }
         }
 
@@ -88,8 +69,6 @@ namespace HG.Actors.Ordinary
             if (Visable)
             {
                 _core.DirectX.DrawTextAt((float)X, (float)Y, 0, _text ?? string.Empty, _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushGreen);
-
-                //dc.DrawString(_text, _font, _color, (float)X, (float)Y);
             }
         }
     }

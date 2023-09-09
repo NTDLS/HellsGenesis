@@ -288,6 +288,7 @@ namespace HG
 
             return true; // Mark the key as handled
         }
+
         private void FormMain_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, HgKeyPressState.Down);

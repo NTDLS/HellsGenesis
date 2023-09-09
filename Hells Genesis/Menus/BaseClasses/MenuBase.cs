@@ -213,14 +213,18 @@ namespace HG.Menus.BaseClasses
                 item.Render();
             }
 
-            //DX Fixme!
-            /*
             var selectedItem = (from o in Items where o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
-                dc.DrawRectangle(new Pen(Color.Red, 1), selectedItem.BoundsI);
+                _core.DirectX.DrawRectangleAt(
+                    new SharpDX.Mathematics.Interop.RawRectangleF(
+                        selectedItem.BoundsI.X,
+                        selectedItem.BoundsI.Y,
+                        selectedItem.BoundsI.X + selectedItem.BoundsI.Width,
+                        selectedItem.BoundsI.Y + selectedItem.BoundsI.Height),
+                    0,
+                    _core.DirectX.RawColorRed, 2, 2);
             }
-            */
         }
 
         public virtual void Cleanup()
