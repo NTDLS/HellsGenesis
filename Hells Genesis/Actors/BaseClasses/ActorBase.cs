@@ -14,10 +14,10 @@ namespace HG.Actors.BaseClasses
     {
         protected Core _core;
 
-        private Image _image;
+        private SharpDX.Direct2D1.Bitmap _image;
 
-        protected Image _lockedOnImage;
-        protected Image _lockedOnSoftImage;
+        protected SharpDX.Direct2D1.Bitmap _lockedOnImage;
+        protected SharpDX.Direct2D1.Bitmap _lockedOnSoftImage;
         protected AudioClip _hitSound;
         protected AudioClip _shieldHit;
         protected AudioClip _explodeSound;
@@ -331,42 +331,25 @@ namespace HG.Actors.BaseClasses
             VisibilityChanged();
         }
 
-        public void SetImage(Image image)
+        public void SetImage(SharpDX.Direct2D1.Bitmap bitmap)
         {
-            _image = image;
-            _size = new Size(_image.Size.Width, _image.Size.Height);
-        }
-
-        public void SetImage(Image image, Size size)
-        {
-            _image = image;
-
-            if (image.Width != size.Width && image.Height != size.Height)
-            {
-                _image = HgGraphics.ResizeImage(_image, size.Width, size.Height);
-            }
-            _size = new Size(_image.Size.Width, _image.Size.Height);
+            _image = bitmap;
+            _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
         public void SetImage(string imagePath)
         {
             _image = _core.Imaging.Get(imagePath);
-            _size = new Size(_image.Size.Width, _image.Size.Height);
+            _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
         public void SetImage(string imagePath, Size size)
         {
-            _image = _core.Imaging.Get(imagePath);
-
-            if (_image.Width != size.Width && _image.Height != size.Height)
-            {
-                _image = HgGraphics.ResizeImage(_image, size.Width, size.Height);
-            }
-
-            _size = new Size(_image.Size.Width, _image.Size.Height);
+            _image = _core.Imaging.Get(imagePath, size.Width, size.Height);
+            _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
-        public Image GetImage()
+        public SharpDX.Direct2D1.Bitmap GetImage()
         {
             return _image;
         }
@@ -881,12 +864,13 @@ namespace HG.Actors.BaseClasses
 
         #region Rendering.
 
-        public virtual void Render(Graphics dc)
+        public virtual void Render()
         {
             if (_isVisible && _image != null)
             {
-                DrawImage(dc, _image);
+                DrawImage(_image);
 
+                /*
                 if (_lockedOnImage != null && IsLockedOn)
                 {
                     DrawImage(dc, _lockedOnImage, 0);
@@ -904,7 +888,12 @@ namespace HG.Actors.BaseClasses
                         dc.DrawRectangle(pen, rect);
                     }
                 }
+                */
             }
+        }
+
+        public virtual void Render(Graphics dc)
+        {
         }
 
         public Color RadarDotColor
@@ -926,12 +915,13 @@ namespace HG.Actors.BaseClasses
             }
         }
 
-        private void DrawImage(Graphics dc, Image rawImage, double? angleInDegrees = null)
+        private void DrawImage(SharpDX.Direct2D1.Bitmap bitmap, double? angleInDegrees = null)
         {
-            double angle = (double)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
+            float angle = (float)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
 
-            var bitmap = new Bitmap(rawImage);
+            _core.DirectX.DrawBitmapAt(bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0), angle);
 
+/*
             if (angle != 0 && RotationMode != HgRotationMode.None)
             {
                 if (RotationMode == HgRotationMode.Upsize) //Very expensize
@@ -957,6 +947,11 @@ namespace HG.Actors.BaseClasses
                 Rectangle rect = new Rectangle((int)(_location.X - bitmap.Width / 2.0), (int)(_location.Y - bitmap.Height / 2.0), bitmap.Width, bitmap.Height);
                 dc.DrawImage(bitmap, rect);
             }
+*/
+        }
+
+        private void DrawImage(Graphics dc, Image rawImage, double? angleInDegrees = null)
+        {
         }
 
         #endregion

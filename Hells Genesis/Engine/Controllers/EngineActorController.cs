@@ -226,6 +226,8 @@ namespace HG.Engine.Controllers
 
             bool lockTaken = false;
 
+            /*
+
             var screenDrawing = _core.DrawingCache.Get(DrawingCacheType.Screen, _core.Display.TotalCanvasSize);
             DrawingCacheItem radarDrawing = null;
 
@@ -265,6 +267,8 @@ namespace HG.Engine.Controllers
                 radarDrawing.Graphics.DrawImage(_RadarBackgroundImage, new Point(0, 0));
             }
 
+            */
+
             try
             {
                 lockTaken = false;
@@ -274,6 +278,7 @@ namespace HG.Engine.Controllers
                 {
                     lock (Collection)
                     {
+                        /*
                         screenDrawing.Graphics.Clear(Color.Black);
 
                         if (RenderRadar)
@@ -292,7 +297,7 @@ namespace HG.Engine.Controllers
                                 (int)(radarDrawing.Bitmap.Width / 2.0) - 2,
                                 (int)(radarDrawing.Bitmap.Height / 2.0) - 2, 4, 4);
                         }
-
+                        */
                         //Render to display:
                         foreach (var actor in Collection.Where(o => o.Visable == true))
                         {
@@ -306,13 +311,16 @@ namespace HG.Engine.Controllers
 
                             if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(actor.Bounds))
                             {
-                                actor.Render(screenDrawing.Graphics);
+                                actor.Render();
                             }
                         }
+
+                        /*
                         _core.Player.Actor?.Render(screenDrawing.Graphics);
+                        */
                     }
 
-                    _core.Menus.Render(screenDrawing.Graphics);
+                    _core.Menus.Render();
                 }
             }
             finally
@@ -329,9 +337,12 @@ namespace HG.Engine.Controllers
                 //Highlight the 1:1 frame
                 using (var pen = new Pen(Color.FromArgb(75, 75, 75), 1))
                 {
-                    screenDrawing.Graphics.DrawRectangle(pen, _core.Display.NatrualScreenBounds);
+                    //screenDrawing.Graphics.DrawRectangle(pen, _core.Display.NatrualScreenBounds);
+                    _core.DirectX.DrawRectangleAt(_core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.RawColorRed, 0, 1);
                 }
             }
+
+            /*
 
             var scaledDrawing = _core.DrawingCache.Get(DrawingCacheType.Scaling, _core.Display.NatrualScreenSize);
 
@@ -378,19 +389,24 @@ namespace HG.Engine.Controllers
                     );
                 scaledDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
             }
+            */
 
             lock (Collection)
             {
+                var dbug = OfType<ActorTextBlock>();
+
+
                 //Render to display:
                 foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
                 {
-                    actor.Render(scaledDrawing.Graphics);
+                    actor.Render();
                 }
             }
+            
 
             _core.IsRendering = false;
 
-            return scaledDrawing.Bitmap;
+            return null;
         }
 
         #endregion

@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace HG.Engine.Controllers
+﻿namespace HG.Engine.Controllers
 {
     internal class EngineImageController
     {
@@ -11,9 +9,14 @@ namespace HG.Engine.Controllers
             _core = core;
         }
 
-        public Bitmap Get(string path)
+        public SharpDX.Direct2D1.Bitmap Get(string path)
         {
             return _core.Assets.GetBitmap(path);
+        }
+
+        public SharpDX.Direct2D1.Bitmap Get(string path, int newWidth, int newHeight)
+        {
+            return _core.Assets.GetBitmap(path, newWidth, newHeight);
         }
     }
 }

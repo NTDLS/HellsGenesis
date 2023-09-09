@@ -101,42 +101,20 @@ namespace HG.Engine.Controllers
             }
         }
 
-        public Bitmap GetBitmap(string path)
+        public SharpDX.Direct2D1.Bitmap GetBitmap(string path)
         {
             path = Path.Combine(assetRawPath, path).Trim().Replace("\\", "/");
 
-            lock (_collection)
-            {
-                if (_collection.ContainsKey(path))
-                {
-                    return (Bitmap)((Bitmap)_collection[path]).Clone();
-                }
-                else
-                {
-                    using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-                    {
-                        using var image = Image.FromStream(stream);
-                        var newbitmap = new Bitmap(image);
-                        var result = newbitmap.Clone() as Bitmap;
-                        _collection.Add(path, newbitmap);
-                        stream.Close();
-                        return result;
-                    }
-
-                    /*
-                    using (var stream = GetCompressedStream(path))
-                    {
-                        using var image = Image.FromStream(stream);
-                        var newbitmap = new Bitmap(image);
-                        var result = newbitmap.Clone() as Bitmap;
-                        _collection.Add(path, newbitmap);
-                        stream.Close();
-                        return result;
-                    }
-                    */
-                }
-            }
+            return  _core.DirectX.GetCachedBitmap(path);
         }
+
+        public SharpDX.Direct2D1.Bitmap GetBitmap(string path, int newWidth, int newHeight)
+        {
+            path = Path.Combine(assetRawPath, path).Trim().Replace("\\", "/");
+
+            return _core.DirectX.GetCachedBitmap(path, newWidth, newHeight);
+        }
+
 
         private string GetCompressedText(string path)
         {

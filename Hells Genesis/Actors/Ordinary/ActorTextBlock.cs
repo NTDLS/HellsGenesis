@@ -47,6 +47,10 @@ namespace HG.Actors.Ordinary
             {
                 _text = value;
 
+                var size = _core.DirectX.GetTextSize(_text, _core.DirectX.LargeTextFormat);
+                _size = new Size((int)size.Width, (int)size.Height);
+
+                /*
                 //If we have previously drawn text, then we need to invalidate the entire region which it occupied.
                 if (_prevRegion != null)
                 {
@@ -62,6 +66,7 @@ namespace HG.Actors.Ordinary
                 }
                 _prevRegion = new Rectangle((int)X, (int)Y, _size.Width, _size.Height);
                 _core.Display.DrawingSurface.Invalidate((Rectangle)_prevRegion);
+                */
             }
         }
 
@@ -78,11 +83,13 @@ namespace HG.Actors.Ordinary
             _genericDC = _core.Display.DrawingSurface.CreateGraphics();
         }
 
-        public override void Render(Graphics dc)
+        public override void Render()
         {
             if (Visable)
             {
-                dc.DrawString(_text, _font, _color, (float)X, (float)Y);
+                _core.DirectX.DrawTextAt((float)X, (float)Y, 0, _text ?? string.Empty, _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushGreen);
+
+                //dc.DrawString(_text, _font, _color, (float)X, (float)Y);
             }
         }
     }

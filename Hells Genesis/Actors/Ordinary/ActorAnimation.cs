@@ -8,7 +8,7 @@ namespace HG.Actors.Ordinary
 {
     internal class ActorAnimation : ActorBase
     {
-        private readonly Bitmap _frameImage;
+        private readonly SharpDX.Direct2D1.Bitmap _frameImage;
         private readonly int _frameCount;
         private int _currentFrame = 0;
         private int _currentRow = 0;
@@ -55,6 +55,7 @@ namespace HG.Actors.Ordinary
         public ActorAnimation(Core core, string imageFrames, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
             : base(core)
         {
+            /*
             _playMode = playMode;
 
             if (_playMode == null)
@@ -90,7 +91,7 @@ namespace HG.Actors.Ordinary
 
             Location = new HgPoint<double>(0, 0);
             Velocity = new HgVelocity<double>();
-
+            */
             AdvanceImage();
         }
 
@@ -105,6 +106,7 @@ namespace HG.Actors.Ordinary
 
         public void AdvanceImage()
         {
+            /*
             if (_playMode.Replay == ReplayMode.StillFrame)
             {
                 if (GetImage() != null)
@@ -150,6 +152,7 @@ namespace HG.Actors.Ordinary
 
                 _currentFrame++;
             }
+            */
         }
     }
 }

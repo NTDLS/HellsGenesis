@@ -47,7 +47,7 @@ namespace HG
 
             Shown += (object sender, EventArgs e) =>
             {
-                //_core.Start();
+                _core.Start();
             };
 
             FormClosed += (sender, e) =>
@@ -89,7 +89,7 @@ namespace HG
                 {
                     _core.DirectX.StartDraw();
 
-                    //_core.Actors.Render();
+                    _core.Actors.Render();
                     //e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
 
                     float x = _core.Display.TotalCanvasSize.Width / 2;

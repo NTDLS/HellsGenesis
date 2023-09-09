@@ -26,13 +26,13 @@ namespace HG.TickHandlers
             }
         }
 
-        public void Render(Graphics dc)
+        public void Render()
         {
             lock (_controller)
             {
                 foreach (var obj in _controller)
                 {
-                    obj.Render(dc);
+                    obj.Render();
                 }
             }
         }

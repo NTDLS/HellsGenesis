@@ -87,8 +87,8 @@ namespace HG.Engine
         {
             ScreenRenderTarget.BeginDraw();
             IntermediateRenderTarget.BeginDraw();
-            ScreenRenderTarget.Clear(RawColorGray);
-            IntermediateRenderTarget.Clear(RawColorGray);
+            ScreenRenderTarget.Clear(RawColorBlack);
+            IntermediateRenderTarget.Clear(RawColorBlack);
         }
 
         public void EndDraw(float scaleFactor)
@@ -194,6 +194,19 @@ namespace HG.Engine
             ResetTransform(IntermediateRenderTarget);
 
             return destRect;
+        }
+
+        public RawRectangleF GetTextRext(float x, float y, string text, TextFormat format)
+        {
+            var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
+
+            return new RawRectangleF(x, y, x + textLayout.Metrics.Width, y + textLayout.Metrics.Height);
+        }
+
+        public SizeF GetTextSize(string text, TextFormat format)
+        {
+            var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
+            return new SizeF(textLayout.Metrics.Width, textLayout.Metrics.Height);
         }
 
         /// <summary>

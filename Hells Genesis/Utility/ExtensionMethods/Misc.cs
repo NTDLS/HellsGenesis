@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using SharpCompress;
+using SharpDX.Mathematics.Interop;
+using System.Drawing;
 
 namespace HG.Utility.ExtensionMethods
 {
@@ -9,10 +11,14 @@ namespace HG.Utility.ExtensionMethods
             return new RectangleF(rectangle.Location, rectangle.Size);
         }
 
-
         public static double DegreesNormalized(this double value)
         {
             return (value + 180) % 360 - 180;
+        }
+
+        public static RawRectangleF ToRawRectangleF(this RectangleF value)
+        {
+            return new RawRectangleF(value.Left, value.Top, value.Right, value.Bottom);
         }
 
         public static double DegreesNormalized360(this double value)

@@ -206,18 +206,21 @@ namespace HG.Menus.BaseClasses
             }
         }
 
-        public void Render(Graphics dc)
+        public void Render()
         {
             foreach (var item in Items)
             {
-                item.Render(dc);
+                item.Render();
             }
 
+            //DX Fixme!
+            /*
             var selectedItem = (from o in Items where o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
                 dc.DrawRectangle(new Pen(Color.Red, 1), selectedItem.BoundsI);
             }
+            */
         }
 
         public virtual void Cleanup()
