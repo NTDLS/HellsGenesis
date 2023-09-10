@@ -24,6 +24,8 @@ namespace HG.Engine
         public SharpDX.DirectWrite.Factory DirectWriteFactory { get; private set; }
         public TextFormat LargeTextFormat { get; private set; }
 
+        public float GlobalScale { get; set; } = 50.0f;
+
         #region Raw colors.
 
         public readonly RawColor4 RawColorRed = new RawColor4(1, 0, 0, 1);
@@ -82,12 +84,12 @@ namespace HG.Engine
             ScreenRenderTarget?.Dispose();
         }
 
-        public void ApplyScaling(float scaleFactor)
+        public void ApplyScaling()
         {
-            scaleFactor = scaleFactor.Box(0, 100);
+            GlobalScale = GlobalScale.Box(0, 100);
 
-            float widthScale = _core.Display.OverdrawSize.Width * (scaleFactor / 100.0f);
-            float heightScale = _core.Display.OverdrawSize.Height * (scaleFactor / 100.0f);
+            float widthScale = _core.Display.OverdrawSize.Width * (GlobalScale / 100.0f);
+            float heightScale = _core.Display.OverdrawSize.Height * (GlobalScale / 100.0f);
 
             // Define the source rectangle to crop from intermediateRenderTarget (assuming you want to crop from the center)
             RawRectangleF sourceRect = new RawRectangleF(widthScale, heightScale,
@@ -254,7 +256,6 @@ namespace HG.Engine
 
         public void SetTransformAngle(RenderTarget renderTarget, SharpDX.RectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
         {
-
             angle = HgMath.DegreesToRadians(angle);
 
             float centerX = rect.Left + rect.Width / 2.0f;
@@ -281,6 +282,8 @@ namespace HG.Engine
 
         public void SetTransformAngle(RenderTarget renderTarget, RawRectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
         {
+            angle = HgMath.DegreesToRadians(angle);
+
             float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
             float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
 

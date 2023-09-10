@@ -56,25 +56,8 @@ namespace HG
                 //_core.Stop();
             };
 
-            this.KeyDown += FormMain_KeyDown;
-            this.KeyUp += FormMain_KeyUp;
-
-
-            MouseWheel += FormDirect2D_MouseWheel;
-        }
-
-        private void FormDirect2D_MouseWheel(object sender, MouseEventArgs e)
-        {
-            if (e.Delta > 0)
-            {
-                scaleFactor += 0.5f;
-            }
-            else if (e.Delta < 0)
-            {
-                scaleFactor -= 0.5f;
-            }
-
-            Debug.Print($"{scaleFactor:n1}");
+            KeyDown += FormMain_KeyDown;
+            KeyUp += FormMain_KeyUp;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -144,7 +127,6 @@ namespace HG
         }
 
         float angle = 0;
-        float scaleFactor = 50;
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -162,7 +144,7 @@ namespace HG
 
                     _core.DirectX.IntermediateRenderTarget.EndDraw();
 
-                    _core.DirectX.ApplyScaling(scaleFactor);
+                    _core.DirectX.ApplyScaling();
                     _core.Actors.RenderPostScaling(_core.DirectX.ScreenRenderTarget);
 
                     /*

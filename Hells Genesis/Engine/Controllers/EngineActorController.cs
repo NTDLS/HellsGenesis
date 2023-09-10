@@ -350,12 +350,10 @@ namespace HG.Engine.Controllers
                 }
             }
 
-            /*
-
-            var scaledDrawing = _core.DrawingCache.Get(DrawingCacheType.Scaling, _core.Display.NatrualScreenSize);
 
             if (_core.Settings.AutoZoomWhenMoving)
             {
+                //TODO: FFS, fix all of this - its totally overcomplicated.
                 if (_core.Player.Actor != null)
                 {
                     //Scale the screen based on the player throttle.
@@ -363,30 +361,27 @@ namespace HG.Engine.Controllers
                         _core.Display.ThrottleFrameScaleFactor += 2;
                     else if (_core.Player.Actor.Velocity.ThrottlePercentage < 1)
                         _core.Display.ThrottleFrameScaleFactor -= 2;
+                    _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 50);
 
                     //Scale the screen based on the player boost.
-                    _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 100);
                     if (_core.Player.Actor.Velocity.BoostPercentage > 0.5)
                         _core.Display.BoostFrameScaleFactor += 1;
                     else if (_core.Player.Actor.Velocity.BoostPercentage < 1)
                         _core.Display.BoostFrameScaleFactor -= 1;
+                    _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 50);
 
-                    _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 100);
+                    
+
+                    double baseScale = ((double)_core.Display.NatrualScreenSize.Width / (double)_core.Display.TotalCanvasSize.Width) * 100.0;
+
+                    double reduction = (baseScale / 100)
+                        * (_core.Display.ThrottleFrameScaleFactor + _core.Display.BoostFrameScaleFactor).Box(0, 100);
+
+                    _core.DirectX.GlobalScale = (float)(baseScale - reduction);
                 }
             }
 
-            double zoomFactor = _core.Display.SpeedOrientedFrameScalingFactor();
-            int zoomedWidth = (int)(_core.Display.NatrualScreenSize.Width / zoomFactor);
-            int zoomedHeight = (int)(_core.Display.NatrualScreenSize.Height / zoomFactor);
-            int sourceX = (screenDrawing.Bitmap.Width - zoomedWidth) / 2;
-            int sourceY = (screenDrawing.Bitmap.Height - zoomedHeight) / 2;
-
-            // Draw the center-zoomed image
-            scaledDrawing.Graphics.DrawImage(screenDrawing.Bitmap,
-                new RectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height),
-                new Rectangle(sourceX, sourceY, zoomedWidth, zoomedHeight),
-                GraphicsUnit.Pixel);
-
+            /*
             if (RenderRadar)
             {
                 //We add the radar last so that it does not get scaled down.

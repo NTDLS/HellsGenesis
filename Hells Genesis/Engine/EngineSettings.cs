@@ -6,7 +6,7 @@ namespace HG.Engine
     {
         #region Debug settings.
         public bool HighlightNatrualBounds { get; set; } = true;
-        public bool HighlightAllActors { get; set; } = false;
+        public bool HighlightAllActors { get; set; } = true;
         #endregion
 
         public bool LockPlayerAngleToNearbyEnemy { get; set; } = false;

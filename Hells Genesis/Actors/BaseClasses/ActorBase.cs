@@ -861,25 +861,21 @@ namespace HG.Actors.BaseClasses
             {
                 DrawImage(renderTarget, _image);
 
-                /*
                 if (_lockedOnImage != null && IsLockedOn)
                 {
-                    DrawImage(dc, _lockedOnImage, 0);
+                    DrawImage(renderTarget, _lockedOnImage, 0);
                 }
                 else if (_lockedOnImage != null && IsLockedOnSoft)
                 {
-                    DrawImage(dc, _lockedOnSoftImage, 0);
+                    DrawImage(renderTarget, _lockedOnSoftImage, 0);
                 }
 
                 if (Highlight)
                 {
-                    using (var pen = new Pen(Color.Red, 3))
-                    {
-                        var rect = new Rectangle((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
-                        dc.DrawRectangle(pen, rect);
-                    }
+                    var rectangle = new  RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
+
+                    _core.DirectX.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), (float)this.Velocity.Angle.Degrees, _core.DirectX.RawColorRed, 0, 1);
                 }
-                */
             }
         }
 
