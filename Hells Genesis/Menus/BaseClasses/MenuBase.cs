@@ -206,17 +206,17 @@ namespace HG.Menus.BaseClasses
             }
         }
 
-        public void Render()
+        public void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
             foreach (var item in Items)
             {
-                item.Render();
+                item.Render(renderTarget);
             }
 
             var selectedItem = (from o in Items where o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
-                _core.DirectX.DrawRectangleAt(
+                _core.DirectX.DrawRectangleAt(renderTarget,
                     new SharpDX.Mathematics.Interop.RawRectangleF(
                         selectedItem.BoundsI.X,
                         selectedItem.BoundsI.Y,

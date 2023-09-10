@@ -357,7 +357,7 @@ namespace HG
 
         private void FormMain_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
+            //e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
         }
     }
 }

@@ -143,7 +143,7 @@ namespace HG
             // Prevent background painting to avoid flickering
         }
 
-        //float angle = 0;
+        float angle = 0;
         float scaleFactor = 50;
 
         protected override void OnPaint(PaintEventArgs e)
@@ -152,24 +152,33 @@ namespace HG
             {
                 lock (this)
                 {
-                    _core.DirectX.StartDraw();
+                    _core.DirectX.ScreenRenderTarget.BeginDraw();
+                    _core.DirectX.IntermediateRenderTarget.BeginDraw();
 
-                    _core.Actors.RenderPreScaling();
+                    _core.DirectX.ScreenRenderTarget.Clear(_core.DirectX.RawColorBlack);
+                    _core.DirectX.IntermediateRenderTarget.Clear(_core.DirectX.RawColorBlack);
+
+                    _core.Actors.RenderPreScaling(_core.DirectX.IntermediateRenderTarget);
+
+                    _core.DirectX.IntermediateRenderTarget.EndDraw();
+
                     _core.DirectX.ApplyScaling(scaleFactor);
-                    _core.Actors.RenderPostScaling();
+                    _core.Actors.RenderPostScaling(_core.DirectX.ScreenRenderTarget);
 
-                    //float x = _core.Display.TotalCanvasSize.Width / 2;
-                    //float y = _core.Display.TotalCanvasSize.Height / 2;
+                    /*
+                    float x = _core.Display.NatrualScreenSize.Width / 2;
+                    float y = _core.Display.NatrualScreenSize.Height / 2;
 
-                    //var bitmap = _core.DirectX.GetCachedBitmap("c:\\0.png", 32, 32);
-                    //var bitmapRect = _core.DirectX.DrawBitmapAt(bitmap, x, y, angle);
+                    var bitmap = _core.DirectX.GetCachedBitmap("c:\\0.png", 32, 32);
+                    var bitmapRect = _core.DirectX.DrawBitmapAt(_core.DirectX.ScreenRenderTarget, bitmap, x, y, angle);
 
-                    //_core.DirectX.DrawRectangleAt(bitmapRect, angle, _core.DirectX.RawColorRed, 2, 1);
-                    //var textLocation = _core.DirectX.DrawTextAt(x, y, -angle, "Hello from the GPU!", _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushRed);
-                    //_core.DirectX.DrawRectangleAt(textLocation, -angle, _core.DirectX.RawColorGreen);
+                    _core.DirectX.DrawRectangleAt(_core.DirectX.ScreenRenderTarget, bitmapRect, angle, _core.DirectX.RawColorRed, 2, 1);
+                    var textLocation = _core.DirectX.DrawTextAt(_core.DirectX.ScreenRenderTarget, x, y, -angle, "Hello from the GPU!", _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushRed);
+                    _core.DirectX.DrawRectangleAt(_core.DirectX.ScreenRenderTarget, textLocation, -angle, _core.DirectX.RawColorGreen);
+                    */
 
-                    _core.DirectX.EndDraw();
-                }
+                    _core.DirectX.ScreenRenderTarget.EndDraw();
+               }
             }
             catch
             {

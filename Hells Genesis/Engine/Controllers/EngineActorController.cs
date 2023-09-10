@@ -7,6 +7,7 @@ using HG.Menus;
 using HG.TickHandlers;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
+using SharpDX.Direct2D1;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -212,12 +213,22 @@ namespace HG.Engine.Controllers
 
         private HgPoint<double> _radarScale;
         private HgPoint<double> _radarOffset;
-        private Bitmap _RadarBackgroundImage = null;
+        private SharpDX.Direct2D1.Bitmap _RadarBackgroundImage = null;
         private readonly SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
 
 
-        public void RenderPostScaling()
+        public void RenderPostScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
+            float x = _core.Display.TotalCanvasSize.Width / 2;
+            float y = _core.Display.TotalCanvasSize.Height / 2;
+
+            var bitmap = _core.DirectX.GetCachedBitmap("c:\\0.png", 32, 32);
+            var bitmapRect = _core.DirectX.DrawBitmapAt(renderTarget, bitmap, x, y, 0);
+
+            _core.DirectX.DrawRectangleAt(renderTarget, bitmapRect, 0, _core.DirectX.RawColorRed, 2, 1);
+            var textLocation = _core.DirectX.DrawTextAt(renderTarget, x, y, -0, "Hello from the GPU!", _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushRed);
+            _core.DirectX.DrawRectangleAt(renderTarget, textLocation, -0, _core.DirectX.RawColorGreen);
+
         }
 
         /// <summary>
@@ -225,7 +236,7 @@ namespace HG.Engine.Controllers
         /// for drawing then the previous frame will be returned.
         /// </summary>
         /// <returns></returns>
-        public void RenderPreScaling()
+        public void RenderPreScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
             _core.IsRendering = true;
 
@@ -315,14 +326,14 @@ namespace HG.Engine.Controllers
 
                             if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(actor.Bounds))
                             {
-                                actor.Render();
+                                actor.Render(renderTarget);
                             }
                         }
 
-                        _core.Player.Actor?.Render();
+                        _core.Player.Actor?.Render(renderTarget);
                     }
 
-                    _core.Menus.Render();
+                    _core.Menus.Render(renderTarget);
                 }
             }
             finally
@@ -340,7 +351,7 @@ namespace HG.Engine.Controllers
                 using (var pen = new Pen(Color.FromArgb(75, 75, 75), 1))
                 {
                     //screenDrawing.Graphics.DrawRectangle(pen, _core.Display.NatrualScreenBounds);
-                    _core.DirectX.DrawRectangleAt(_core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.RawColorRed, 0, 1);
+                    _core.DirectX.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.RawColorRed, 0, 1);
                 }
             }
 
@@ -401,7 +412,7 @@ namespace HG.Engine.Controllers
                 //Render to display:
                 foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
                 {
-                    actor.Render();
+                    actor.Render(renderTarget);
                 }
             }
 

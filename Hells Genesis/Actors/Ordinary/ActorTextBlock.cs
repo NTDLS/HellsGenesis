@@ -64,11 +64,11 @@ namespace HG.Actors.Ordinary
             _genericDC = _core.Display.DrawingSurface.CreateGraphics();
         }
 
-        public override void Render()
+        public override void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
             if (Visable)
             {
-                _core.DirectX.DrawTextAt((float)X, (float)Y, 0, _text ?? string.Empty, _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushGreen);
+                _core.DirectX.DrawTextAt(renderTarget, (float)X, (float)Y, 0, _text ?? string.Empty, _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushGreen);
             }
         }
     }

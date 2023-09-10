@@ -26,13 +26,13 @@ namespace HG.TickHandlers
             }
         }
 
-        public void Render()
+        public void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
             lock (_controller)
             {
                 foreach (var obj in _controller)
                 {
-                    obj.Render();
+                    obj.Render(renderTarget);
                 }
             }
         }

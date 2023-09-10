@@ -6,7 +6,6 @@ using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection.Metadata;
 using static HG.Engine.Constants;
 
 namespace HG.Actors.BaseClasses
@@ -856,11 +855,11 @@ namespace HG.Actors.BaseClasses
 
         #region Rendering.
 
-        public virtual void Render()
+        public virtual void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
             if (_isVisible && _image != null)
             {
-                DrawImage(_image);
+                DrawImage(renderTarget, _image);
 
                 /*
                 if (_lockedOnImage != null && IsLockedOn)
@@ -907,18 +906,17 @@ namespace HG.Actors.BaseClasses
             }
         }
 
-
-        private void DrawImage(SharpDX.Direct2D1.Bitmap bitmap, double? angleInDegrees = null)
+        private void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double? angleInDegrees = null)
         {
             float angle = (float)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
 
             if (RotationMode != HgRotationMode.None)
             {
-                _core.DirectX.DrawBitmapAt(bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0), angle);
+                _core.DirectX.DrawBitmapAt(renderTarget, bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0), angle);
             }
             else //Almost free.
             {
-                _core.DirectX.DrawBitmapAt(bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0));
+                _core.DirectX.DrawBitmapAt(renderTarget, bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0));
             }
         }
 
