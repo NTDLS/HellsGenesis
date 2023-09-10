@@ -2,7 +2,6 @@
 using HG.Menus.BaseClasses;
 using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace HG.TickHandlers
 {

@@ -1,6 +1,5 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types;
 using System;
 using System.Drawing;
 

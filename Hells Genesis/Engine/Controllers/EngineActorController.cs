@@ -1,18 +1,13 @@
 ﻿using HG.Actors.BaseClasses;
-using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Ordinary;
-using HG.Actors.PowerUp.BaseClasses;
-using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Menus;
 using HG.TickHandlers;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
-using SharpDX.Direct2D1;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
-using static HG.Engine.Controllers.EngineDrawingCacheController;
 
 namespace HG.Engine.Controllers
 {

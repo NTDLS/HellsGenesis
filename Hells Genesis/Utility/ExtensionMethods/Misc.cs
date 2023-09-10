@@ -1,5 +1,4 @@
-﻿using SharpCompress;
-using SharpDX.Mathematics.Interop;
+﻿using SharpDX.Mathematics.Interop;
 using System.Drawing;
 
 namespace HG.Utility.ExtensionMethods

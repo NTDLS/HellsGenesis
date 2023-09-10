@@ -178,7 +178,7 @@ namespace HG
                     */
 
                     _core.DirectX.ScreenRenderTarget.EndDraw();
-               }
+                }
             }
             catch
             {

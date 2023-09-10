@@ -3,7 +3,6 @@ using SharpCompress.Common;
 using SharpCompress.Readers;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 
@@ -105,7 +104,7 @@ namespace HG.Engine.Controllers
         {
             path = Path.Combine(assetRawPath, path).Trim().Replace("\\", "/");
 
-            return  _core.DirectX.GetCachedBitmap(path);
+            return _core.DirectX.GetCachedBitmap(path);
         }
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(string path, int newWidth, int newHeight)
