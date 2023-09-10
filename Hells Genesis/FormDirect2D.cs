@@ -42,7 +42,7 @@ namespace HG
 
             timer.Tick += (object sender, EventArgs e) =>
             {
-                angle += 0.1f;
+                //angle += 0.1f;
                 Invalidate();
             };
 
@@ -138,37 +138,37 @@ namespace HG
             if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(HgPlayerKey.Enter, HgKeyPressState.Up);
         }
 
-        float angle = 0;
-        float scaleFactor = 50;
-
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
             // Prevent background painting to avoid flickering
         }
 
+        //float angle = 0;
+        float scaleFactor = 50;
+
         protected override void OnPaint(PaintEventArgs e)
         {
-
             try
             {
                 lock (this)
                 {
                     _core.DirectX.StartDraw();
 
-                    _core.Actors.Render();
-                    //e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
+                    _core.Actors.RenderPreScaling();
+                    _core.DirectX.ApplyScaling(scaleFactor);
+                    _core.Actors.RenderPostScaling();
 
-                    float x = _core.Display.TotalCanvasSize.Width / 2;
-                    float y = _core.Display.TotalCanvasSize.Height / 2;
+                    //float x = _core.Display.TotalCanvasSize.Width / 2;
+                    //float y = _core.Display.TotalCanvasSize.Height / 2;
 
-                    var bitmap = _core.DirectX.GetCachedBitmap("c:\\0.png", 32, 32);
-                    var bitmapRect = _core.DirectX.DrawBitmapAt(bitmap, x, y, angle);
+                    //var bitmap = _core.DirectX.GetCachedBitmap("c:\\0.png", 32, 32);
+                    //var bitmapRect = _core.DirectX.DrawBitmapAt(bitmap, x, y, angle);
 
-                    _core.DirectX.DrawRectangleAt(bitmapRect, angle, _core.DirectX.RawColorRed, 2, 1);
-                    var textLocation = _core.DirectX.DrawTextAt(x, y, -angle, "Hello from the GPU!", _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushRed);
-                    _core.DirectX.DrawRectangleAt(textLocation, -angle, _core.DirectX.RawColorGreen);
+                    //_core.DirectX.DrawRectangleAt(bitmapRect, angle, _core.DirectX.RawColorRed, 2, 1);
+                    //var textLocation = _core.DirectX.DrawTextAt(x, y, -angle, "Hello from the GPU!", _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushRed);
+                    //_core.DirectX.DrawRectangleAt(textLocation, -angle, _core.DirectX.RawColorGreen);
 
-                    _core.DirectX.EndDraw(scaleFactor);
+                    _core.DirectX.EndDraw();
                 }
             }
             catch

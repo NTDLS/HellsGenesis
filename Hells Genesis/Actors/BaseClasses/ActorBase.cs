@@ -6,6 +6,7 @@ using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection.Metadata;
 using static HG.Engine.Constants;
 
 namespace HG.Actors.BaseClasses
@@ -30,6 +31,7 @@ namespace HG.Actors.BaseClasses
 
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private readonly int _MillisecondsBetweenHits = 200;
+        private double _lastDrawAngle = 0;
 
         #region Properties.
 
@@ -269,17 +271,7 @@ namespace HG.Actors.BaseClasses
                 if (_isVisible != value)
                 {
                     _isVisible = value;
-
                     OnVisibilityChanged?.Invoke(this);
-
-                    /*
-                    var invalidRect = new Rectangle(
-                        (int)(_location.X - _size.Width / 2.0),
-                        (int)(_location.Y - _size.Height / 2.0),
-                        _size.Width, _size.Height);
-                    _core.Display.DrawingSurface.Invalidate(invalidRect);
-                    */
-
                     VisibilityChanged();
                 }
             }
@@ -308,7 +300,7 @@ namespace HG.Actors.BaseClasses
         {
             _core = core;
             Name = name;
-            RotationMode = HgRotationMode.Upsize;
+            RotationMode = HgRotationMode.Rotate;
             Velocity = new HgVelocity<double>();
             Velocity.MaxRotationSpeed = _core.Settings.MaxRotationSpeed;
             Highlight = _core.Settings.HighlightAllActors;
@@ -915,39 +907,19 @@ namespace HG.Actors.BaseClasses
             }
         }
 
+
         private void DrawImage(SharpDX.Direct2D1.Bitmap bitmap, double? angleInDegrees = null)
         {
             float angle = (float)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
 
-            _core.DirectX.DrawBitmapAt(bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0), angle);
-
-/*
-            if (angle != 0 && RotationMode != HgRotationMode.None)
+            if (RotationMode != HgRotationMode.None)
             {
-                if (RotationMode == HgRotationMode.Upsize) //Very expensize
-                {
-                    var image = HgGraphics.RotateImageWithUpsize(bitmap, angle, Color.Transparent);
-                    var rect = new Rectangle((int)(_location.X - image.Width / 2.0), (int)(_location.Y - image.Height / 2.0), image.Width, image.Height);
-                    dc.DrawImage(image, rect);
-                    _size.Height = image.Height;
-                    _size.Width = image.Width;
-                }
-                else if (RotationMode == HgRotationMode.Clip) //Much less expensive.
-                {
-                    var image = HgGraphics.RotateImageWithClipping(bitmap, angle, Color.Transparent);
-                    var rect = new Rectangle((int)(_location.X - image.Width / 2.0), (int)(_location.Y - image.Height / 2.0), image.Width, image.Height);
-                    dc.DrawImage(image, rect);
-
-                    _size.Height = image.Height;
-                    _size.Width = image.Width;
-                }
+                _core.DirectX.DrawBitmapAt(bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0), angle);
             }
             else //Almost free.
             {
-                Rectangle rect = new Rectangle((int)(_location.X - bitmap.Width / 2.0), (int)(_location.Y - bitmap.Height / 2.0), bitmap.Width, bitmap.Height);
-                dc.DrawImage(bitmap, rect);
+                _core.DirectX.DrawBitmapAt(bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0));
             }
-*/
         }
 
         private void DrawImage(Graphics dc, Image rawImage, double? angleInDegrees = null)

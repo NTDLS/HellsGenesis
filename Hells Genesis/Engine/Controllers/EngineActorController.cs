@@ -215,19 +215,23 @@ namespace HG.Engine.Controllers
         private Bitmap _RadarBackgroundImage = null;
         private readonly SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
 
+
+        public void RenderPostScaling()
+        {
+        }
+
         /// <summary>
         /// Will render the current game state to a single bitmap. If a lock cannot be acquired
         /// for drawing then the previous frame will be returned.
         /// </summary>
         /// <returns></returns>
-        public Bitmap Render()
+        public void RenderPreScaling()
         {
             _core.IsRendering = true;
 
             bool lockTaken = false;
 
             /*
-
             var screenDrawing = _core.DrawingCache.Get(DrawingCacheType.Screen, _core.Display.TotalCanvasSize);
             DrawingCacheItem radarDrawing = null;
 
@@ -315,9 +319,7 @@ namespace HG.Engine.Controllers
                             }
                         }
 
-                        /*
-                        _core.Player.Actor?.Render(screenDrawing.Graphics);
-                        */
+                        _core.Player.Actor?.Render();
                     }
 
                     _core.Menus.Render();
@@ -402,11 +404,8 @@ namespace HG.Engine.Controllers
                     actor.Render();
                 }
             }
-            
 
             _core.IsRendering = false;
-
-            return null;
         }
 
         #endregion

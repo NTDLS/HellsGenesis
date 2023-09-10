@@ -33,6 +33,7 @@ namespace HG.Situations
 
         private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
+            /*
             if (_core.Actors.OfType<EnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
@@ -53,6 +54,7 @@ namespace HG.Situations
 
                 CurrentWave++;
             }
+            */
         }
 
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
@@ -61,9 +63,12 @@ namespace HG.Situations
             //_core.Actors.Enemies.Create<EnemyLouse>();
             //_core.Actors.Enemies.Create<EnemyLouse>();
             //_core.Actors.Enemies.Create<EnemyLouse>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            _core.Actors.Enemies.Create<EnemyDebug>();
+
+            _core.Actors.Debugs.CreateAtCenterScreen();
+
+            //_core.Actors.Enemies.Create<EnemyDebug>();
+            //_core.Actors.Enemies.Create<EnemyDebug>();
+            //_core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyAvvol>();
             //_core.Actors.Enemies.Create<EnemyAvvol>();
             //_core.Actors.Enemies.Create<EnemyAvvol>();

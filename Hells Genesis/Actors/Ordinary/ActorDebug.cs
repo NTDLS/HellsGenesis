@@ -33,5 +33,11 @@ namespace HG.Actors.Ordinary
             Y = y;
             Velocity = new HgVelocity<double>();
         }
+
+        public override void ApplyMotion(HgPoint<double> displacementVector)
+        {
+            this.Velocity.Angle.Degrees = AngleTo(_core.Player.Actor);
+            base.ApplyMotion(displacementVector);
+        }
     }
 }

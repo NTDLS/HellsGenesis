@@ -91,7 +91,7 @@ namespace HG.Engine
             IntermediateRenderTarget.Clear(RawColorBlack);
         }
 
-        public void EndDraw(float scaleFactor)
+        public void ApplyScaling(float scaleFactor)
         {
             scaleFactor = scaleFactor.Box(0, 100);
 
@@ -104,7 +104,10 @@ namespace HG.Engine
 
             var destRect = new RawRectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height);
             ScreenRenderTarget.DrawBitmap(IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
+        }
 
+        public void EndDraw()
+        {
             IntermediateRenderTarget.EndDraw();
             ScreenRenderTarget.EndDraw();
         }
@@ -132,7 +135,6 @@ namespace HG.Engine
                 return result;
             }
         }
-
 
         public SharpDX.Direct2D1.Bitmap GetCachedBitmap(string path, int newWidth, int newHeight)
         {
@@ -196,6 +198,20 @@ namespace HG.Engine
             return destRect;
         }
 
+        /// <summary>
+        /// Draws a bitmap at the specified location.
+        /// </summary>
+        /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
+        public RawRectangleF DrawBitmapAt(SharpDX.Direct2D1.Bitmap bitmap, float x, float y)
+        {
+            // Apply the rotation matrix and draw the bitmap
+            IntermediateRenderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // Enable antialiasing
+
+            var destRect = new RawRectangleF(x, y, x + bitmap.PixelSize.Width, y + bitmap.PixelSize.Height);
+            IntermediateRenderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+            return destRect;
+        }
+
         public RawRectangleF GetTextRext(float x, float y, string text, TextFormat format)
         {
             var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
@@ -253,6 +269,9 @@ namespace HG.Engine
 
         public void SetTransformAngle(SharpDX.RectangleF rect, float angle, RawMatrix3x2? existimMatrix = null)
         {
+
+            angle = HgMath.DegreesToRadians(angle);
+
             float centerX = rect.Left + rect.Width / 2.0f;
             float centerY = rect.Top + rect.Height / 2.0f;
 
