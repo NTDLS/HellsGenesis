@@ -29,7 +29,6 @@ namespace HG.Situations
         {
             _core.Player.ResetAndShow();
             _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.RandomNumber(0, 800)), AddEnemyCallback);
-
         }
 
         private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
