@@ -26,11 +26,8 @@ namespace HG.Actors.BaseClasses
         protected ActorAnimation _hitExplosionAnimation;
         protected ActorAnimation _hitAnimation;
 
-        private SolidBrush _radarDotBrush = new(Color.FromArgb(255, 255, 0, 0));
-
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private readonly int _MillisecondsBetweenHits = 200;
-        private double _lastDrawAngle = 0;
 
         #region Properties.
 
@@ -872,14 +869,6 @@ namespace HG.Actors.BaseClasses
 
         public virtual void Render(Graphics dc)
         {
-        }
-
-        public Color RadarDotColor
-        {
-            set
-            {
-                _radarDotBrush = new SolidBrush(value);
-            }
         }
 
         public void RenderRadar(SharpDX.Direct2D1.RenderTarget renderTarget, HgPoint<double> scale, HgPoint<double> offset)

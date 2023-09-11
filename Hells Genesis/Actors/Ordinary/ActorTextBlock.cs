@@ -9,8 +9,6 @@ namespace HG.Actors.Ordinary
 {
     internal class ActorTextBlock : ActorBase
     {
-        private Rectangle? _prevRegion;
-
         public bool IsPositionStatic { get; set; }
 
         #region Properties.

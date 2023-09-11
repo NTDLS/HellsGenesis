@@ -1,6 +1,5 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
-using System.Drawing;
 
 namespace HG.Engine
 {

@@ -43,10 +43,19 @@ namespace HG.Engine
                 PresentOptions = PresentOptions.Immediately
             };
 
-            ScreenRenderTarget = new WindowRenderTarget(D2dfactory, renderTargetProperties, renderProperties);
+            ScreenRenderTarget = new WindowRenderTarget(D2dfactory, renderTargetProperties, renderProperties)
+            {
+                AntialiasMode = AntialiasMode.PerPrimitive,
+                TextAntialiasMode = TextAntialiasMode.Cleartype
+            };
 
             var intermediateRenderTargetSize = new Size2F(_core.Display.TotalCanvasSize.Width, _core.Display.TotalCanvasSize.Height);
-            IntermediateRenderTarget = new BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize);
+            IntermediateRenderTarget = new BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
+            {
+                AntialiasMode = AntialiasMode.PerPrimitive,
+                TextAntialiasMode = TextAntialiasMode.Cleartype
+            };
+
 
             DirectWriteFactory = new SharpDX.DirectWrite.Factory();
 
@@ -149,14 +158,21 @@ namespace HG.Engine
         {
             SetTransformAngle(renderTarget, new SharpDX.RectangleF(x, y, bitmap.PixelSize.Width, bitmap.PixelSize.Height), angle);
 
-            renderTarget.AntialiasMode = AntialiasMode.PerPrimitive;
-            renderTarget.TextAntialiasMode = TextAntialiasMode.Cleartype;
-
             var destRect = new RawRectangleF(x, y, x + bitmap.PixelSize.Width, y + bitmap.PixelSize.Height);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
 
             ResetTransform(renderTarget);
 
+            return destRect;
+        }
+
+        /// Draws a bitmap from a specified location of a given size, to the the specified location.
+        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float x, float y, float angle, RawRectangleF sourceRect, Size2F destSize)
+        {
+            var destRect = new RawRectangleF(x, y, x + destSize.Width, y + destSize.Height);
+            SetTransformAngle(renderTarget, new SharpDX.RectangleF(x, y, destSize.Width, destSize.Height), angle);
+            renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
+            ResetTransform(renderTarget);
             return destRect;
         }
 
@@ -166,9 +182,6 @@ namespace HG.Engine
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
         public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float x, float y)
         {
-            // Apply the rotation matrix and draw the bitmap
-            renderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // Enable antialiasing
-
             var destRect = new RawRectangleF(x, y, x + bitmap.PixelSize.Width, y + bitmap.PixelSize.Height);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
             return destRect;
@@ -260,8 +273,8 @@ namespace HG.Engine
             var rotationMatrix = new RawMatrix3x2(
                 cosAngle, sinAngle,
                 -sinAngle, cosAngle,
-                centerX - cosAngle * centerX + sinAngle * centerY,
-                centerY - sinAngle * centerX - cosAngle * centerY
+                centerX - centerX * cosAngle + centerY * sinAngle,
+                centerY - centerX * sinAngle - centerY * cosAngle
             );
 
             if (existimMatrix != null)
