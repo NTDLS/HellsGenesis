@@ -60,9 +60,9 @@ namespace HG.Engine.Controllers
         {
             _core.Player.Actor = new ActorPlayer(_core, _core.PrefabPlayerLoadouts.GetDefault()) { Visable = false };
 
-            PlayerStatsText = TextBlocks.Create("Consolas", Brushes.WhiteSmoke, 9, new HgPoint<double>(5, 5), true);
+            PlayerStatsText = TextBlocks.Create(_core.DirectX.RealtimePlayerStatsTextFormat, _core.DirectX.SolidColorBrushWhiteSmoke, new HgPoint<double>(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create("Consolas", Brushes.Aqua, 10, new HgPoint<double>(5, PlayerStatsText.Y + 80), true);
+            DebugText = TextBlocks.Create(_core.DirectX.RealtimePlayerStatsTextFormat, _core.DirectX.SolidColorBrushCyan, new HgPoint<double>(5, PlayerStatsText.Y + 80), true);
 
             _core.Audio.BackgroundMusicSound.Play();
         }

@@ -69,7 +69,7 @@ namespace HG.Engine.Controllers
                 var textBlock = _core.Actors.GetActorByAssetTag<ActorTextBlock>("PausedText");
                 if (textBlock == null)
                 {
-                    textBlock = _core.Actors.TextBlocks.Create("Consolas", Brushes.Red, 50, new HgPoint<double>(100, 100), true, "PausedText");
+                    textBlock = _core.Actors.TextBlocks.Create(_core.DirectX.LargeBlockerTextFormat, _core.DirectX.SolidColorBrushRed, new HgPoint<double>(100, 100), true, "PausedText");
                     textBlock.Text = "Paused...";
                     textBlock.X = _core.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
                     textBlock.Y = _core.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;

@@ -13,7 +13,7 @@ namespace HG.Engine
     internal class Core
     {
         public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
-        public EngineD2Dx DirectX { get; private set; }
+        public DirectX DirectX { get; private set; }
         public Settings Settings { get; private set; } = new();
         public EngineInputController Input { get; private set; }
         public EngineDisplayController Display { get; private set; }
@@ -67,7 +67,7 @@ namespace HG.Engine
             Menus = new MenuTickHandler(this);
             Player = new PlayerTickHandler(this);
             DrawingCache = new EngineDrawingCacheController(this);
-            DirectX = new EngineD2Dx(this);
+            DirectX = new DirectX(this);
 
             LoadPrefabs();
 

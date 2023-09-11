@@ -47,9 +47,9 @@ namespace HG.Menus.BaseClasses
 
         }
 
-        public ActorMenuItem CreateAndAddTitleItem(HgPoint<double> location, string text, Brush brush, int size = 24)
+        public ActorMenuItem CreateAndAddTitleItem(HgPoint<double> location, string text)
         {
-            var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.MenuTitleTextFormat, _core.DirectX.SolidColorOrangeRed, location)
             {
                 Text = text,
                 ItemType = ActorMenuItem.MenuItemType.Title
@@ -58,9 +58,9 @@ namespace HG.Menus.BaseClasses
             return item;
         }
 
-        public ActorMenuItem CreateAndAddTextItem(HgPoint<double> location, string text, Brush brush, int size = 16)
+        public ActorMenuItem CreateAndAddTextItem(HgPoint<double> location, string text)
         {
-            var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.MenuGeneralTextFormat, _core.DirectX.SolidColorLawnGreen, location)
             {
                 Text = text,
                 ItemType = ActorMenuItem.MenuItemType.Text
@@ -69,9 +69,9 @@ namespace HG.Menus.BaseClasses
             return item;
         }
 
-        public ActorMenuItem CreateAndAddMenuItem(HgPoint<double> location, string key, string text, Brush brush, int size = 14)
+        public ActorMenuItem CreateAndAddMenuItem(HgPoint<double> location, string key, string text)
         {
-            var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.MenuItemTextFormat, _core.DirectX.SolidColorOrangeRed, location)
             {
                 Key = key,
                 Text = text,

@@ -18,17 +18,17 @@ namespace HG.Menus
             double offsetX = _core.Display.CurrentScaledScreenBounds.X + 40;
             double offsetY = _core.Display.CurrentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new HgPoint<double>(offsetX, offsetY), "Select a Ship Class:", Brushes.OrangeRed);
+            var itemTitle = CreateAndAddTitleItem(new HgPoint<double>(offsetX, offsetY), "Select a Ship Class:");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
-            _shipBlurb = CreateAndAddTextItem(new HgPoint<double>(offsetX, offsetY), "", Brushes.LawnGreen, 10);
+            _shipBlurb = CreateAndAddTextItem(new HgPoint<double>(offsetX, offsetY), "");
             _shipBlurb.X = offsetX + 200;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
             foreach (var loadout in core.PrefabPlayerLoadouts.Collection)
             {
-                var menuItem = CreateAndAddMenuItem(new HgPoint<double>(offsetX + 25, offsetY), loadout.Name, loadout.Name, Brushes.OrangeRed);
+                var menuItem = CreateAndAddMenuItem(new HgPoint<double>(offsetX + 25, offsetY), loadout.Name, loadout.Name);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
                 var shipIcon = _core.Actors.InsertPlayer(new ActorPlayer(_core, loadout) { Name = "MENU_SHIP_SELECT" });

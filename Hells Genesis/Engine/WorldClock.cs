@@ -74,17 +74,17 @@ namespace HG.Engine
 
                 _core.Display.GameLoopCounter.Calculate();
 
-                if (_pause == false)
-                {
-                    lock (_core.Menus._controller)
-                        lock (_core.Player.Actor)
-                            lock (_core.Actors.Collection)
+                lock (_core.Menus._controller)
+                    lock (_core.Player.Actor)
+                        lock (_core.Actors.Collection)
+                        {
+                            if (_pause == false)
                             {
                                 ExecuteWorldClockTick();
-                                _core.Render();
-                                timer.Stop();
                             }
-                }
+                            _core.Render();
+                            timer.Stop();
+                        }
 
                 if (_core.Menus._controller.Count > 0)
                 {

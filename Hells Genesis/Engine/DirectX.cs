@@ -13,7 +13,7 @@ using System.IO;
 
 namespace HG.Engine
 {
-    internal class EngineD2Dx
+    internal class DirectX
     {
         private Core _core;
 
@@ -22,18 +22,29 @@ namespace HG.Engine
         public WindowRenderTarget ScreenRenderTarget { get; private set; }
         public SharpDX.Direct2D1.Factory D2dfactory { get; private set; }
         public SharpDX.DirectWrite.Factory DirectWriteFactory { get; private set; }
-        public TextFormat LargeTextFormat { get; private set; }
+
+        public TextFormat MenuGeneralTextFormat { get; private set; }
+        public TextFormat MenuTitleTextFormat { get; private set; }
+        public TextFormat MenuItemTextFormat { get; private set; }
+        //public TextFormat LargeTextFormat { get; private set; }
+        public TextFormat LargeBlockerTextFormat { get; private set; }
+        public TextFormat RadarPositionIndicatorTextFormat { get; private set; }
+        public TextFormat RealtimePlayerStatsTextFormat { get; private set; }
 
         public float GlobalScale { get; set; } = 50.0f;
 
         #region Raw colors.
 
-        public readonly RawColor4 RawColorRed = new RawColor4(1, 0, 0, 1);
-        public readonly RawColor4 RawColorGreen = new RawColor4(0, 1, 0, 1);
-        public readonly RawColor4 RawColorBlue = new RawColor4(0, 0, 1, 1);
-        public readonly RawColor4 RawColorBlack = new RawColor4(0, 0, 0, 1);
-        public readonly RawColor4 RawColorWhite = new RawColor4(1, 1, 1, 1);
-        public readonly RawColor4 RawColorGray = new RawColor4(0.25f, 0.25f, 0.25f, 1);
+        public readonly RawColor4 RawColorRed = new(1, 0, 0, 1);
+        public readonly RawColor4 RawColorGreen = new(0, 1, 0, 1);
+        public readonly RawColor4 RawColorBlue = new(0, 0, 1, 1);
+        public readonly RawColor4 RawColorBlack = new(0, 0, 0, 1);
+        public readonly RawColor4 RawColorWhite = new(1, 1, 1, 1);
+        public readonly RawColor4 RawColorGray = new(0.25f, 0.25f, 0.25f, 1);
+        public readonly RawColor4 RawColorWhiteSmoke = new(0.9608f, 0.9608f, 0.9608f, 1);
+        public readonly RawColor4 RawColorCyan = new(0, 1f, 1f, 1f);
+        public readonly RawColor4 RawColorOrangeRed = new(1f, 0.2706f, 0.0000f, 1);
+        public readonly RawColor4 RawColorLawnGreen = new(0.4863f, 0.9882f, 0f, 1);
 
         #endregion
 
@@ -45,9 +56,14 @@ namespace HG.Engine
         public SolidColorBrush SolidColorBrushBlack { get; private set; }
         public SolidColorBrush SolidColorBrushWhite { get; private set; }
         public SolidColorBrush SolidColorBrushGray { get; private set; }
+        public SolidColorBrush SolidColorBrushWhiteSmoke { get; private set; }
+        public SolidColorBrush SolidColorBrushCyan { get; private set; }
+        public SolidColorBrush SolidColorOrangeRed { get; private set; }
+        public SolidColorBrush SolidColorLawnGreen { get; private set; }
+
         #endregion
 
-        public EngineD2Dx(Core core)
+        public DirectX(Core core)
         {
             _core = core;
 
@@ -75,8 +91,18 @@ namespace HG.Engine
             SolidColorBrushBlack = new SolidColorBrush(ScreenRenderTarget, RawColorBlack);
             SolidColorBrushWhite = new SolidColorBrush(ScreenRenderTarget, RawColorWhite);
             SolidColorBrushGray = new SolidColorBrush(ScreenRenderTarget, RawColorGray);
+            SolidColorBrushWhiteSmoke = new SolidColorBrush(ScreenRenderTarget, RawColorWhiteSmoke);
+            SolidColorBrushCyan = new SolidColorBrush(ScreenRenderTarget, RawColorCyan);
+            SolidColorOrangeRed = new SolidColorBrush(ScreenRenderTarget, RawColorOrangeRed);
+            SolidColorLawnGreen = new SolidColorBrush(ScreenRenderTarget, RawColorLawnGreen);
 
-            LargeTextFormat = new TextFormat(DirectWriteFactory, "Arial", 24);
+            LargeBlockerTextFormat = new TextFormat(DirectWriteFactory, "Consolas", 50);
+            //LargeTextFormat = new TextFormat(DirectWriteFactory, "Consolas", 50);
+            MenuGeneralTextFormat = new TextFormat(DirectWriteFactory, "Consolas", 20);
+            MenuTitleTextFormat = new TextFormat(DirectWriteFactory, "Consolas", 32);
+            MenuItemTextFormat = new TextFormat(DirectWriteFactory, "Consolas", 20);
+            RadarPositionIndicatorTextFormat = new TextFormat(DirectWriteFactory, "Consolas", 8);
+            RealtimePlayerStatsTextFormat = new TextFormat(DirectWriteFactory, "Consolas", 9);
         }
 
         public void Cleanup()
@@ -201,13 +227,13 @@ namespace HG.Engine
 
         public RawRectangleF GetTextRext(float x, float y, string text, TextFormat format)
         {
-            var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
+            using var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
             return new RawRectangleF(x, y, x + textLayout.Metrics.Width, y + textLayout.Metrics.Height);
         }
 
         public SizeF GetTextSize(string text, TextFormat format)
         {
-            var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
+            using var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
             return new SizeF(textLayout.Metrics.Width, textLayout.Metrics.Height);
         }
 
@@ -217,7 +243,7 @@ namespace HG.Engine
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
         public RawRectangleF DrawTextAt(RenderTarget renderTarget, float x, float y, float angle, string text, TextFormat format, SolidColorBrush brush)
         {
-            var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
+            using var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
             var textWidth = textLayout.Metrics.Width;
             var textHeight = textLayout.Metrics.Height;

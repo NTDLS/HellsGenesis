@@ -31,7 +31,7 @@ namespace HG.Actors.Enemies.BaseClasses
 
             RadarPositionIndicator = _core.Actors.RadarPositions.Create();
             RadarPositionIndicator.Visable = false;
-            RadarPositionText = _core.Actors.TextBlocks.CreateRadarPosition("Consolas", Brushes.Red, 8, new HgPoint<double>());
+            RadarPositionText = _core.Actors.TextBlocks.CreateRadarPosition(core.DirectX.RadarPositionIndicatorTextFormat, core.DirectX.SolidColorBrushRed, new HgPoint<double>());
         }
 
         public virtual void BeforeCreate()
