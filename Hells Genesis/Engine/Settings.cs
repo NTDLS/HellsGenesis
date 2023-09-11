@@ -35,6 +35,9 @@ namespace HG.Engine
 
         public double MinPlayerThrust { get; set; } = 0; //0.25;
 
+        public int InitialStarCount { get; set; } = 100;
+        public int FramTargetStarCount { get; set; } = 200;
+
         public int MinSpeed { get; set; } = 3;
         public int MaxSpeed { get; set; } = 7;
 

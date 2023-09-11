@@ -58,7 +58,7 @@ namespace HG.Engine
         {
             #region Add initial stars.
 
-            for (int i = 0; i < 60; i++)
+            for (int i = 0; i < _core.Settings.InitialStarCount; i++)
             {
                 _core.Actors.Stars.Create();
             }
@@ -86,11 +86,6 @@ namespace HG.Engine
                             timer.Stop();
                         }
 
-                if (_core.Menus._controller.Count > 0)
-                {
-                    Thread.Sleep(20);
-                }
-
                 var clockTime = (((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000;
                 var deltaClockTime = targetFrameDuration - clockTime;
                 timer.Restart();
@@ -102,8 +97,7 @@ namespace HG.Engine
 
                 if (_pause)
                 {
-                    _core.Display.DrawingSurface.Invalidate();
-                    Thread.Sleep(5);
+                    Thread.Yield();
                 }
             }
         }
