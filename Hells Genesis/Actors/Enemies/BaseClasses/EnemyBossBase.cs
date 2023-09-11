@@ -1,4 +1,5 @@
 ﻿using HG.Engine;
+using System.IO;
 
 namespace HG.Actors.Enemies.BaseClasses
 {
@@ -9,6 +10,17 @@ namespace HG.Actors.Enemies.BaseClasses
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
+        }
+
+        public override void Explode()
+        {
+            _explodeSound?.Play();
+            _explosionAnimation?.Reset();
+            _core.Actors.Animations.CreateAt(_explosionAnimation, this);
+
+            CreateParticlesExplosion();
+
+            base.Explode();
         }
     }
 }

@@ -36,7 +36,7 @@ namespace HG.Actors.BaseClasses
         private int _selectedHitExplosionAnimationIndex = 0;
 
         private const string _assetExplosionSoundPath = @"Sounds\Explode\";
-        private readonly int _hitExplosionSoundCount = 2;
+        private readonly int _explosionSoundCount = 4;
         private int _selectedExplosionSoundIndex = 0;
 
         public bool IsBoostFading { get; set; }
@@ -52,7 +52,7 @@ namespace HG.Actors.BaseClasses
             _hitSound = _core.Audio.Get(_assetPathHitSound, 0.5f);
             _shieldHit = _core.Audio.Get(_assetPathshieldHit, 0.5f);
 
-            _selectedExplosionSoundIndex = HgRandom.Random.Next(0, 1000) % _hitExplosionSoundCount;
+            _selectedExplosionSoundIndex = HgRandom.Random.Next(0, 1000) % _explosionSoundCount;
             _explodeSound = _core.Audio.Get(Path.Combine(_assetExplosionSoundPath, $"{_selectedExplosionSoundIndex}.wav"), 1.0f);
 
             _selectedExplosionAnimationIndex = HgRandom.Random.Next(0, 1000) % _explosionAnimationCount;
@@ -73,6 +73,39 @@ namespace HG.Actors.BaseClasses
             _explosionAnimation?.Reset();
             _core.Actors.Animations.CreateAt(_explosionAnimation, this);
             base.Explode();
+        }
+
+        public void CreateParticlesExplosion()
+        {
+            //TODO: This number is just to show Aiden, please reduce to 20-30.
+            int particles = HgRandom.RandomNumber(250, 600);
+
+            for (int i = 0; i < particles; i++)
+            {
+                var obj = _core.Actors.Particles.CreateRandomParticleAt(X + HgRandom.RandomNumber(-20, 20), Y + HgRandom.RandomNumber(-20, 20));
+                obj.Visable = true;
+            }
+
+            int lastSelectedExplosionSoundIndex = 0;
+            int explosionsPlayed = 0;
+            while (true)
+            {
+                const string _assetExplosionSoundPath = @"Sounds\Explode\";
+                int explosionSoundCount = 4;
+                int selectedExplosionSoundIndex = HgRandom.Random.Next(0, 1000) % explosionSoundCount;
+                if (selectedExplosionSoundIndex != lastSelectedExplosionSoundIndex)
+                {
+                    var explodeSound = _core.Audio.Get(Path.Combine(_assetExplosionSoundPath, $"{selectedExplosionSoundIndex}.wav"), 1.0f);
+                    explodeSound?.Play();
+                    lastSelectedExplosionSoundIndex = selectedExplosionSoundIndex;
+                    explosionsPlayed++;
+                }
+
+                if (explosionsPlayed >= 2)
+                {
+                    break;
+                }
+            }
         }
 
         /// <summary>

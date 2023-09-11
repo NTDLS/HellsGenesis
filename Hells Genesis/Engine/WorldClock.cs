@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using HG.TickHandlers;
+using System.Diagnostics;
 using System.Threading;
 
 namespace HG.Engine
@@ -111,6 +112,7 @@ namespace HG.Engine
             var displacementVector = _core.Player.ExecuteWorldClockTick();
 
             _core.Actors.Enemies.ExecuteWorldClockTick(displacementVector);
+            _core.Actors.Particles.ExecuteWorldClockTick(displacementVector);
             _core.Actors.RadarPositions.ExecuteWorldClockTick();
             _core.Actors.Bullets.ExecuteWorldClockTick(displacementVector);
             _core.Actors.Stars.ExecuteWorldClockTick(displacementVector);

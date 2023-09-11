@@ -2,6 +2,7 @@
 using HG.Actors.Ordinary;
 using HG.Types;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace HG.Engine.Controllers
@@ -60,7 +61,7 @@ namespace HG.Engine.Controllers
             #endregion
             else if (key == Keys.F1)
             {
-                _core.Actors.NewGame();
+                //_core.Actors.NewGame();
                 //_core.Actors.ResetAndShowPlayer();
             }
             else if (key == Keys.P)

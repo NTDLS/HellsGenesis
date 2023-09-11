@@ -33,11 +33,11 @@ namespace HG.Engine.Controllers
         public ActorBulletTickHandler Bullets { get; set; }
         public ActorDebugTickHandler Debugs { get; set; }
         public ActorEnemyTickHandler Enemies { get; set; }
+        public ActorParticleTickHandler Particles { get; set; }
         public ActorPowerupTickHandler Powerups { get; set; }
         public ActorRadarPositionTickHandler RadarPositions { get; set; }
         public ActorStarTickHandler Stars { get; set; }
         public ActorTextBlockTickHandler TextBlocks { get; set; }
-
 
 
         #endregion
@@ -51,6 +51,7 @@ namespace HG.Engine.Controllers
             Bullets = new ActorBulletTickHandler(_core, this);
             Debugs = new ActorDebugTickHandler(_core, this);
             Enemies = new ActorEnemyTickHandler(_core, this);
+            Particles = new ActorParticleTickHandler(_core, this);
             Powerups = new ActorPowerupTickHandler(_core, this);
             RadarPositions = new ActorRadarPositionTickHandler(_core, this);
             Stars = new ActorStarTickHandler(_core, this);
