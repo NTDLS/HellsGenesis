@@ -28,14 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             SuspendLayout();
             // 
-            // FormDirect2D
+            // FormMain
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(808, 741);
-            Name = "FormDirect2D";
+            BackColor = System.Drawing.Color.Black;
+            ClientSize = new System.Drawing.Size(784, 561);
+            ForeColor = System.Drawing.SystemColors.ControlText;
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
+            Name = "FormMain";
+            SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "FormDirect2D";
             ResumeLayout(false);
         }

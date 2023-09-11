@@ -90,7 +90,7 @@ namespace HG.Menus.BaseClasses
 
         public void HandleInput()
         {
-            if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds < 250)
+            if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds < 150)
             {
                 return; //We have to keep the menues from going crazy.
             }

@@ -43,49 +43,19 @@ namespace HG
                 StartPosition = FormStartPosition.CenterScreen;
             }
 
-            var drawingSurface = new Control();
-            drawingSurface.Dock = DockStyle.Fill;
+            var drawingSurface = new Control
+            {
+                Dock = DockStyle.Fill
+            };
             Controls.Add(drawingSurface);
 
             _core = new Core(drawingSurface);
 
-            var timer = new Timer()
-            {
-                Enabled = true,
-                Interval = 1
-            };
+            Shown += (object sender, EventArgs e) => _core.Start();
+            FormClosing += (sender, e) => _core.Stop();
 
-            timer.Tick += (object sender, EventArgs e) =>
-            {
-                Invalidate();
-            };
-
-            Shown += (object sender, EventArgs e) =>
-            {
-                _core.Start();
-            };
-
-            FormClosed += (sender, e) =>
-            {
-                _core.Stop();
-            };
-
-            drawingSurface.MouseEnter += (object sender, EventArgs e) =>
-            {
-                if (_fullScreen)
-                {
-                    Cursor.Hide();
-                }
-            };
-
-            drawingSurface.MouseLeave += (object sender, EventArgs e) =>
-            {
-                if (_fullScreen)
-                {
-                    Cursor.Show();
-                }
-            };
-
+            drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
+            drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
             drawingSurface.KeyDown += FormMain_KeyDown;
             drawingSurface.KeyUp += FormMain_KeyUp;
 
