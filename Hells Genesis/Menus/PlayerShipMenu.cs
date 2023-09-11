@@ -67,13 +67,13 @@ namespace HG.Menus
         {
             var loadout = _core.PrefabPlayerLoadouts.GetByName(item.Key);
 
-            string weaponName = Misc.GetStaticPropertyValue(loadout.PrimaryWeapon.Type, "Name");
+            string weaponName = HgReflection.GetStaticPropertyValue(loadout.PrimaryWeapon.Type, "Name");
             string primaryWeapon = $"{weaponName} x{loadout.PrimaryWeapon.Rounds}";
 
             string secondaryWeapons = string.Empty;
             foreach (var weapon in loadout.SecondaryWeapons)
             {
-                weaponName = Misc.GetStaticPropertyValue(weapon.Type, "Name");
+                weaponName = HgReflection.GetStaticPropertyValue(weapon.Type, "Name");
                 secondaryWeapons += $"{weaponName} x{weapon.Rounds}\n{new string(' ', 20)}";
             }
 

@@ -2,6 +2,7 @@
 using HG.Loudouts;
 using HG.Menus;
 using HG.TickHandlers;
+using HG.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Drawing;
@@ -13,7 +14,7 @@ namespace HG.Engine
     {
         public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
         public EngineD2Dx DirectX { get; private set; }
-        public EngineSettings Settings { get; private set; } = new();
+        public Settings Settings { get; private set; } = new();
         public EngineInputController Input { get; private set; }
         public EngineDisplayController Display { get; private set; }
         public EngineActorController Actors { get; private set; }
@@ -31,7 +32,7 @@ namespace HG.Engine
         public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
 
-        private readonly GameLoop _gameLoop;
+        private readonly WorldClock _gameLoop;
 
         static uint _nextSequentialId = 1;
         static object _nextSequentialLock = new object();
@@ -70,7 +71,7 @@ namespace HG.Engine
 
             LoadPrefabs();
 
-            _gameLoop = new GameLoop(this);
+            _gameLoop = new WorldClock(this);
 
             Events.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }

@@ -75,7 +75,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Creates a new actor, adds it to the actor collection but also adds it to the collection of another actors children for automatic cleanup when parent is destroyed. 
         /// </summary>
-        /// <param name="imagePath"></param>
         /// <returns></returns>
         public ActorAttachment Attach(string imagePath, bool takesDamage = false, int hitPoints = 1)
         {
@@ -379,10 +378,8 @@ namespace HG.Actors.BaseClasses
         }
 
         /// <summary>
-        /// Allows for intersect detection with larger/smaller "hit box".
+        /// Intersect detection with another object using adjusted "hit box" size.
         /// </summary>
-        /// <param name="otherObject"></param>
-        /// <param name="sizeAdjust"></param>
         /// <returns></returns>
         public bool Intersects(ActorBase otherObject, HgPoint<double> sizeAdjust)
         {
@@ -399,6 +396,24 @@ namespace HG.Actors.BaseClasses
             return false;
         }
 
+        /// <summary>
+        /// Intersect detection with another object using adjusted "hit box" size.
+        /// </summary>
+        /// <returns></returns>
+        public bool Intersects(ActorBase with, int slop = 0)
+        {
+            var alteredHitBox = new RectangleF(
+                (float)(with.Bounds.X - slop),
+                (float)(with.Bounds.Y - slop),
+                with.Size.Width + slop * 2, with.Size.Height + slop * 2);
+
+            return Bounds.IntersectsWith(alteredHitBox);
+        }
+
+        /// <summary>
+        /// Intersect detection with a position using adjusted "hit box" size.
+        /// </summary>
+        /// <returns></returns>
         public bool Intersects(HgPoint<double> location, HgPoint<double> size)
         {
             var alteredHitBox = new RectangleF(
@@ -411,6 +426,10 @@ namespace HG.Actors.BaseClasses
             return VisibleBounds.IntersectsWith(alteredHitBox);
         }
 
+        /// <summary>
+        /// Intersect detection with a position.
+        /// </summary>
+        /// <returns></returns>
         public bool Intersects(HgPoint<double> location)
         {
             var alteredHitBox = new RectangleF((float)location.X, (float)location.Y, 1f, 1f);
@@ -418,16 +437,10 @@ namespace HG.Actors.BaseClasses
             return VisibleBounds.IntersectsWith(alteredHitBox);
         }
 
-        public bool Intersects(ActorBase with, int slop = 0)
-        {
-            var alteredHitBox = new RectangleF(
-                (float)(with.Bounds.X - slop),
-                (float)(with.Bounds.Y - slop),
-                with.Size.Width + slop * 2, with.Size.Height + slop * 2);
-
-            return Bounds.IntersectsWith(alteredHitBox);
-        }
-
+        /// <summary>
+        /// Gets a list of all ov this objects intersections.
+        /// </summary>
+        /// <returns></returns>
         public List<ActorBase> Intersections()
         {
             var intersections = new List<ActorBase>();
@@ -484,6 +497,10 @@ namespace HG.Actors.BaseClasses
             return result;
         }
 
+        /// <summary>
+        /// Hits this object with a given bullet.
+        /// </summary>
+        /// <returns></returns>
         public virtual bool Hit(BulletBase bullet)
         {
             if (bullet != null)
@@ -493,6 +510,9 @@ namespace HG.Actors.BaseClasses
             return false;
         }
 
+        /// <summary>
+        /// Instantly rotates this object by a given degrees.
+        /// </summary>
         public void Rotate(double degrees)
         {
             Velocity.Angle.Degrees += degrees;
@@ -502,8 +522,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Instantly points an object at a location and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        /// <param name="location"></param>
-        /// <param name="velocity"></param>
         public void PointAtAndGoto(HgPoint<double> location, double? velocity = null)
         {
             Velocity.Angle.Degrees = HgPoint<double>.AngleTo(Location, location);
@@ -516,8 +534,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Instantly points an object at another object and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="velocity"></param>
         public void PointAtAndGoto(ActorBase obj, double? velocity = null)
         {
             Velocity.Angle.Degrees = HgPoint<double>.AngleTo(Location, obj.Location);
@@ -531,9 +547,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object towards the target object by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(ActorBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -558,9 +571,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object towards the target object by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(ActorBase obj, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -585,9 +595,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object towards the target coordinates by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(HgPoint<double> toLocation, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -612,9 +619,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object towards the target coordinates by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(HgPoint<double> toLocation, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -639,9 +643,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object by the specified amount until it is pointing at the target angle (with given tolerance).
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(double toDegrees, RelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
         {
@@ -666,9 +667,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object from the target object by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateFrom(ActorBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -693,9 +691,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object from the target object by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateFrom(ActorBase obj, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -751,7 +746,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 0-259.
         /// </summary>
-        /// <param name="toObj"></param>
         /// <returns></returns>
         public double DeltaAngle360(ActorBase toObj)
         {
@@ -761,7 +755,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
-        /// <param name="toObj"></param>
         /// <returns></returns>
         public double DeltaAngle(ActorBase toObj)
         {
@@ -771,7 +764,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
-        /// <param name="atObj"></param>
         /// <returns></returns>
         public double DeltaAngle(HgPoint<double> toLocation)
         {
@@ -781,7 +773,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Calculates the angle in degrees to another object,
         /// </summary>
-        /// <param name="atObj"></param>
         /// <returns></returns>
         public double AngleTo(ActorBase atObj)
         {

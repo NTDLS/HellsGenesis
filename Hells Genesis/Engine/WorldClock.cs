@@ -3,14 +3,17 @@ using System.Threading;
 
 namespace HG.Engine
 {
-    internal class GameLoop
+    /// <summary>
+    /// The world clock. Moves all objects forward in time, renders all objects and keeps the frame-counter in check.
+    /// </summary>
+    internal class WorldClock
     {
         private readonly Core _core;
         private bool _shutdown = false;
         private bool _pause = false;
         private readonly Thread _graphicsThread;
 
-        public GameLoop(Core core)
+        public WorldClock(Core core)
         {
             _core = core;
             _graphicsThread = new Thread(GraphicsThreadProc);

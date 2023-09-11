@@ -2,7 +2,10 @@
 
 namespace HG.Engine
 {
-    internal class EngineSettings
+    /// <summary>
+    /// This contains all of the engine settings.
+    /// </summary>
+    internal class Settings
     {
         #region Debug settings.
         public bool HighlightNatrualBounds { get; set; } = true;

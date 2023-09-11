@@ -6,6 +6,9 @@ using System.Threading;
 
 namespace HG.Engine
 {
+    /// <summary>
+    /// A single pre-loaded audio-clip.
+    /// </summary>
     internal class AudioClip
     {
         private readonly XAudio2 _xaudio = new();

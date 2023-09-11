@@ -1,7 +1,8 @@
-﻿using System;
+﻿using HG.Engine;
+using System;
 using System.Threading;
 
-namespace HG.Engine
+namespace HG.Types
 {
     /// <summary>
     /// Allows for deferred events to be injected into the engine. We use this so that we can

@@ -2,6 +2,9 @@
 
 namespace HG.Engine
 {
+    /// <summary>
+    /// Used to keep track of the FPS that the world clock is executing at.
+    /// </summary>
     internal class FrameCounter
     {
         public DateTime _lastFrame;
