@@ -50,7 +50,6 @@ namespace HG.Actors.PowerUp.BaseClasses
             _explodeSound = _core.Audio.Get(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
 
             RadarDotSize = new HgPoint<int>(4, 4);
-            RadarDotColor = Color.FromArgb(255, 255, 0);
         }
 
         public override void Cleanup()

@@ -3,7 +3,6 @@ using HG.Engine;
 using HG.Types;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,9 +46,9 @@ namespace HG.Menus.BaseClasses
 
         }
 
-        public ActorMenuItem CreateAndAddTitleItem(HgPoint<double> location, string text, Brush brush, int size = 24)
+        public ActorMenuItem CreateAndAddTitleItem(HgPoint<double> location, string text)
         {
-            var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuTitle, _core.DirectX.Colors.Brushes.OrangeRed, location)
             {
                 Text = text,
                 ItemType = ActorMenuItem.MenuItemType.Title
@@ -58,9 +57,9 @@ namespace HG.Menus.BaseClasses
             return item;
         }
 
-        public ActorMenuItem CreateAndAddTextItem(HgPoint<double> location, string text, Brush brush, int size = 16)
+        public ActorMenuItem CreateAndAddTextItem(HgPoint<double> location, string text)
         {
-            var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuGeneral, _core.DirectX.Colors.Brushes.LawnGreen, location)
             {
                 Text = text,
                 ItemType = ActorMenuItem.MenuItemType.Text
@@ -69,9 +68,9 @@ namespace HG.Menus.BaseClasses
             return item;
         }
 
-        public ActorMenuItem CreateAndAddMenuItem(HgPoint<double> location, string key, string text, Brush brush, int size = 14)
+        public ActorMenuItem CreateAndAddMenuItem(HgPoint<double> location, string key, string text)
         {
-            var item = new ActorMenuItem(_core, this, "Consolas", brush, size, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuItem, _core.DirectX.Colors.Brushes.OrangeRed, location)
             {
                 Key = key,
                 Text = text,
@@ -206,17 +205,24 @@ namespace HG.Menus.BaseClasses
             }
         }
 
-        public void Render(Graphics dc)
+        public void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
             foreach (var item in Items)
             {
-                item.Render(dc);
+                item.Render(renderTarget);
             }
 
             var selectedItem = (from o in Items where o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
-                dc.DrawRectangle(new Pen(Color.Red, 1), selectedItem.BoundsI);
+                _core.DirectX.DrawRectangleAt(renderTarget,
+                    new SharpDX.Mathematics.Interop.RawRectangleF(
+                        selectedItem.BoundsI.X,
+                        selectedItem.BoundsI.Y,
+                        selectedItem.BoundsI.X + selectedItem.BoundsI.Width,
+                        selectedItem.BoundsI.Y + selectedItem.BoundsI.Height),
+                    0,
+                    _core.DirectX.Colors.Raw.Red, 2, 2);
             }
         }
 

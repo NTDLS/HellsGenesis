@@ -1,31 +1,25 @@
-﻿using System.Drawing;
-
-namespace HG.Utility.ExtensionMethods
+﻿namespace HG.Utility.ExtensionMethods
 {
-    internal static class Misc
+    internal static class HgDoubleExtensions
     {
-        public static RectangleF Clone(this RectangleF rectangle)
-        {
-            return new RectangleF(rectangle.Location, rectangle.Size);
-        }
-
-
+        /// <summary>
+        /// Degrees 0-360 -> 0 to 180 (right) and 0 to -180 (left).
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static double DegreesNormalized(this double value)
         {
             return (value + 180) % 360 - 180;
         }
 
+        /// <summary>
+        /// Degrees 0-Infinite -> 0 to 360
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static double DegreesNormalized360(this double value)
         {
             return ((dynamic)value + 360) % 360;
-        }
-
-        public static bool IntersectsWith(this RectangleF reference, RectangleF with, float tolerance)
-        {
-            return with.X < reference.X + reference.Width + tolerance
-                && reference.X < with.X + with.Width + tolerance
-                && with.Y < reference.Y + reference.Height + tolerance
-                && reference.Y < with.Y + with.Height + tolerance;
         }
 
         public static bool IsNotBetween(this double value, double minValue, double maxValue)
@@ -56,6 +50,13 @@ namespace HG.Utility.ExtensionMethods
             return value >= minValue && value <= maxValue;
         }
 
+        /// <summary>
+        /// Clips a value to a min/max value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="minValue"></param>
+        /// <param name="maxValue"></param>
+        /// <returns></returns>
         public static double Box(this double value, double minValue, double maxValue)
         {
             if (value > maxValue) return maxValue;

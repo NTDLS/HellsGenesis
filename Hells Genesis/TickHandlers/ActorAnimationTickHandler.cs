@@ -54,7 +54,7 @@ namespace HG.TickHandlers
             {
                 animation.X = defaultPosition.X;
                 animation.Y = defaultPosition.Y;
-                animation.RotationMode = HgRotationMode.Clip; //Much less expensive. Use this or NONE if you can.
+                animation.RotationMode = HgRotationMode.Rotate;
                 _controller.Collection.Add(animation);
             }
         }

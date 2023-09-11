@@ -2,6 +2,7 @@
 using HG.Loudouts;
 using HG.Menus;
 using HG.TickHandlers;
+using HG.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Drawing;
@@ -12,8 +13,8 @@ namespace HG.Engine
     internal class Core
     {
         public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
-
-        public EngineSettings Settings { get; private set; } = new();
+        public DirectX DirectX { get; private set; }
+        public Settings Settings { get; private set; } = new();
         public EngineInputController Input { get; private set; }
         public EngineDisplayController Display { get; private set; }
         public EngineActorController Actors { get; private set; }
@@ -30,9 +31,8 @@ namespace HG.Engine
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
-        public object DrawingSemaphore { get; private set; } = new();
 
-        private readonly GameLoop _gameLoop;
+        private readonly WorldClock _gameLoop;
 
         static uint _nextSequentialId = 1;
         static object _nextSequentialLock = new object();
@@ -67,12 +67,36 @@ namespace HG.Engine
             Menus = new MenuTickHandler(this);
             Player = new PlayerTickHandler(this);
             DrawingCache = new EngineDrawingCacheController(this);
+            DirectX = new DirectX(this);
 
             LoadPrefabs();
 
-            _gameLoop = new GameLoop(this);
+            _gameLoop = new WorldClock(this);
 
             Events.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
+        }
+
+        public void Render()
+        {
+            try
+            {
+                DirectX.ScreenRenderTarget.BeginDraw();
+                DirectX.IntermediateRenderTarget.BeginDraw();
+
+                DirectX.ScreenRenderTarget.Clear(DirectX.Colors.Raw.Black);
+
+                DirectX.IntermediateRenderTarget.Clear(DirectX.Colors.Raw.Black);
+                Actors.RenderPreScaling(DirectX.IntermediateRenderTarget);
+                DirectX.IntermediateRenderTarget.EndDraw();
+
+                DirectX.ApplyScaling();
+                Actors.RenderPostScaling(DirectX.ScreenRenderTarget);
+
+                DirectX.ScreenRenderTarget.EndDraw();
+            }
+            catch
+            {
+            }
         }
 
         private void LoadPrefabs()
@@ -115,28 +139,6 @@ namespace HG.Engine
 
                 _gameLoop.Start();
 
-                //This is debug stuff. Will be moved to a logic engine.
-                //_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 0),
-                //    AddDebugObjectsCallback, null, EngineCallbackEvent.CallbackEventMode.OneTime);
-
-                /*
-                var debug = _core.Actors.AddNewDebug();
-                debug.X = _core.Display.VisibleSize.Width / 2;
-                debug.Y = _core.Display.VisibleSize.Height / 2;
-
-                if (_core.Actors.Animations.Count < 1)
-                {
-                    PlayMode mode = new PlayMode()
-                    {
-                        Replay = ReplayMode.LoopedPlay,
-                        ReplayDelay = new System.TimeSpan(0, 0, 0, 1),
-                        DeleteActorAfterPlay = false
-                    };
-
-                    var coinAnimation = new ObjAnimation(_core, @"Graphics\Animation\Coin.png", new Size(32, 23), 20, mode);
-                }
-                */
-
                 OnStart?.Invoke(this);
             }
         }
@@ -149,6 +151,7 @@ namespace HG.Engine
                 _gameLoop.Stop();
                 Actors.Stop();
                 OnStop?.Invoke(this);
+                DirectX.Cleanup();
             }
         }
 

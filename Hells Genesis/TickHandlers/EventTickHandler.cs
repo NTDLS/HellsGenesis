@@ -1,9 +1,10 @@
 ﻿using HG.Engine;
 using HG.Menus;
 using HG.TickHandlers.Interfaces;
+using HG.Types;
 using System;
 using System.Collections.Generic;
-using static HG.Engine.HgEngineCallbackEvent;
+using static HG.Types.HgEngineCallbackEvent;
 
 namespace HG.TickHandlers
 {

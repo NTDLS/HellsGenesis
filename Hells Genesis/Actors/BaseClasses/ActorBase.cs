@@ -14,10 +14,10 @@ namespace HG.Actors.BaseClasses
     {
         protected Core _core;
 
-        private Image _image;
+        private SharpDX.Direct2D1.Bitmap _image;
 
-        protected Image _lockedOnImage;
-        protected Image _lockedOnSoftImage;
+        protected SharpDX.Direct2D1.Bitmap _lockedOnImage;
+        protected SharpDX.Direct2D1.Bitmap _lockedOnSoftImage;
         protected AudioClip _hitSound;
         protected AudioClip _shieldHit;
         protected AudioClip _explodeSound;
@@ -25,8 +25,6 @@ namespace HG.Actors.BaseClasses
         protected ActorAnimation _explosionAnimation;
         protected ActorAnimation _hitExplosionAnimation;
         protected ActorAnimation _hitAnimation;
-
-        private SolidBrush _radarDotBrush = new(Color.FromArgb(255, 255, 0, 0));
 
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private readonly int _MillisecondsBetweenHits = 200;
@@ -74,7 +72,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Creates a new actor, adds it to the actor collection but also adds it to the collection of another actors children for automatic cleanup when parent is destroyed. 
         /// </summary>
-        /// <param name="imagePath"></param>
         /// <returns></returns>
         public ActorAttachment Attach(string imagePath, bool takesDamage = false, int hitPoints = 1)
         {
@@ -269,17 +266,7 @@ namespace HG.Actors.BaseClasses
                 if (_isVisible != value)
                 {
                     _isVisible = value;
-
                     OnVisibilityChanged?.Invoke(this);
-
-                    /*
-                    var invalidRect = new Rectangle(
-                        (int)(_location.X - _size.Width / 2.0),
-                        (int)(_location.Y - _size.Height / 2.0),
-                        _size.Width, _size.Height);
-                    _core.Display.DrawingSurface.Invalidate(invalidRect);
-                    */
-
                     VisibilityChanged();
                 }
             }
@@ -308,7 +295,7 @@ namespace HG.Actors.BaseClasses
         {
             _core = core;
             Name = name;
-            RotationMode = HgRotationMode.Upsize;
+            RotationMode = HgRotationMode.Rotate;
             Velocity = new HgVelocity<double>();
             Velocity.MaxRotationSpeed = _core.Settings.MaxRotationSpeed;
             Highlight = _core.Settings.HighlightAllActors;
@@ -331,42 +318,25 @@ namespace HG.Actors.BaseClasses
             VisibilityChanged();
         }
 
-        public void SetImage(Image image)
+        public void SetImage(SharpDX.Direct2D1.Bitmap bitmap)
         {
-            _image = image;
-            _size = new Size(_image.Size.Width, _image.Size.Height);
-        }
-
-        public void SetImage(Image image, Size size)
-        {
-            _image = image;
-
-            if (image.Width != size.Width && image.Height != size.Height)
-            {
-                _image = HgGraphics.ResizeImage(_image, size.Width, size.Height);
-            }
-            _size = new Size(_image.Size.Width, _image.Size.Height);
+            _image = bitmap;
+            _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
         public void SetImage(string imagePath)
         {
             _image = _core.Imaging.Get(imagePath);
-            _size = new Size(_image.Size.Width, _image.Size.Height);
+            _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
         public void SetImage(string imagePath, Size size)
         {
-            _image = _core.Imaging.Get(imagePath);
-
-            if (_image.Width != size.Width && _image.Height != size.Height)
-            {
-                _image = HgGraphics.ResizeImage(_image, size.Width, size.Height);
-            }
-
-            _size = new Size(_image.Size.Width, _image.Size.Height);
+            _image = _core.Imaging.Get(imagePath, size.Width, size.Height);
+            _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
-        public Image GetImage()
+        public SharpDX.Direct2D1.Bitmap GetImage()
         {
             return _image;
         }
@@ -405,10 +375,8 @@ namespace HG.Actors.BaseClasses
         }
 
         /// <summary>
-        /// Allows for intersect detection with larger/smaller "hit box".
+        /// Intersect detection with another object using adjusted "hit box" size.
         /// </summary>
-        /// <param name="otherObject"></param>
-        /// <param name="sizeAdjust"></param>
         /// <returns></returns>
         public bool Intersects(ActorBase otherObject, HgPoint<double> sizeAdjust)
         {
@@ -425,6 +393,24 @@ namespace HG.Actors.BaseClasses
             return false;
         }
 
+        /// <summary>
+        /// Intersect detection with another object using adjusted "hit box" size.
+        /// </summary>
+        /// <returns></returns>
+        public bool Intersects(ActorBase with, int slop = 0)
+        {
+            var alteredHitBox = new RectangleF(
+                (float)(with.Bounds.X - slop),
+                (float)(with.Bounds.Y - slop),
+                with.Size.Width + slop * 2, with.Size.Height + slop * 2);
+
+            return Bounds.IntersectsWith(alteredHitBox);
+        }
+
+        /// <summary>
+        /// Intersect detection with a position using adjusted "hit box" size.
+        /// </summary>
+        /// <returns></returns>
         public bool Intersects(HgPoint<double> location, HgPoint<double> size)
         {
             var alteredHitBox = new RectangleF(
@@ -437,6 +423,10 @@ namespace HG.Actors.BaseClasses
             return VisibleBounds.IntersectsWith(alteredHitBox);
         }
 
+        /// <summary>
+        /// Intersect detection with a position.
+        /// </summary>
+        /// <returns></returns>
         public bool Intersects(HgPoint<double> location)
         {
             var alteredHitBox = new RectangleF((float)location.X, (float)location.Y, 1f, 1f);
@@ -444,16 +434,10 @@ namespace HG.Actors.BaseClasses
             return VisibleBounds.IntersectsWith(alteredHitBox);
         }
 
-        public bool Intersects(ActorBase with, int slop = 0)
-        {
-            var alteredHitBox = new RectangleF(
-                (float)(with.Bounds.X - slop),
-                (float)(with.Bounds.Y - slop),
-                with.Size.Width + slop * 2, with.Size.Height + slop * 2);
-
-            return Bounds.IntersectsWith(alteredHitBox);
-        }
-
+        /// <summary>
+        /// Gets a list of all ov this objects intersections.
+        /// </summary>
+        /// <returns></returns>
         public List<ActorBase> Intersections()
         {
             var intersections = new List<ActorBase>();
@@ -510,6 +494,10 @@ namespace HG.Actors.BaseClasses
             return result;
         }
 
+        /// <summary>
+        /// Hits this object with a given bullet.
+        /// </summary>
+        /// <returns></returns>
         public virtual bool Hit(BulletBase bullet)
         {
             if (bullet != null)
@@ -519,6 +507,9 @@ namespace HG.Actors.BaseClasses
             return false;
         }
 
+        /// <summary>
+        /// Instantly rotates this object by a given degrees.
+        /// </summary>
         public void Rotate(double degrees)
         {
             Velocity.Angle.Degrees += degrees;
@@ -528,8 +519,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Instantly points an object at a location and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        /// <param name="location"></param>
-        /// <param name="velocity"></param>
         public void PointAtAndGoto(HgPoint<double> location, double? velocity = null)
         {
             Velocity.Angle.Degrees = HgPoint<double>.AngleTo(Location, location);
@@ -542,8 +531,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Instantly points an object at another object and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="velocity"></param>
         public void PointAtAndGoto(ActorBase obj, double? velocity = null)
         {
             Velocity.Angle.Degrees = HgPoint<double>.AngleTo(Location, obj.Location);
@@ -557,9 +544,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object towards the target object by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(ActorBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -584,9 +568,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object towards the target object by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(ActorBase obj, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -611,9 +592,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object towards the target coordinates by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(HgPoint<double> toLocation, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -638,9 +616,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object towards the target coordinates by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(HgPoint<double> toLocation, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -665,9 +640,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object by the specified amount until it is pointing at the target angle (with given tolerance).
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateTo(double toDegrees, RelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
         {
@@ -692,9 +664,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object from the target object by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateFrom(ActorBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -719,9 +688,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Rotates the object from the target object by the specified amount.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="rotationSpeed"></param>
-        /// <param name="untilPointingAtDegreesFallsBetween"></param>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
         public bool RotateFrom(ActorBase obj, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
@@ -777,7 +743,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 0-259.
         /// </summary>
-        /// <param name="toObj"></param>
         /// <returns></returns>
         public double DeltaAngle360(ActorBase toObj)
         {
@@ -787,7 +752,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
-        /// <param name="toObj"></param>
         /// <returns></returns>
         public double DeltaAngle(ActorBase toObj)
         {
@@ -797,7 +761,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
-        /// <param name="atObj"></param>
         /// <returns></returns>
         public double DeltaAngle(HgPoint<double> toLocation)
         {
@@ -807,7 +770,6 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Calculates the angle in degrees to another object,
         /// </summary>
-        /// <param name="atObj"></param>
         /// <returns></returns>
         public double AngleTo(ActorBase atObj)
         {
@@ -881,82 +843,63 @@ namespace HG.Actors.BaseClasses
 
         #region Rendering.
 
-        public virtual void Render(Graphics dc)
+        public virtual void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
             if (_isVisible && _image != null)
             {
-                DrawImage(dc, _image);
+                DrawImage(renderTarget, _image);
 
                 if (_lockedOnImage != null && IsLockedOn)
                 {
-                    DrawImage(dc, _lockedOnImage, 0);
+                    DrawImage(renderTarget, _lockedOnImage, 0);
                 }
                 else if (_lockedOnImage != null && IsLockedOnSoft)
                 {
-                    DrawImage(dc, _lockedOnSoftImage, 0);
+                    DrawImage(renderTarget, _lockedOnSoftImage, 0);
                 }
 
                 if (Highlight)
                 {
-                    using (var pen = new Pen(Color.Red, 3))
-                    {
-                        var rect = new Rectangle((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
-                        dc.DrawRectangle(pen, rect);
-                    }
+                    var rectangle = new RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
+
+                    _core.DirectX.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), (float)this.Velocity.Angle.Degrees, _core.DirectX.Colors.Raw.Red, 0, 1);
                 }
             }
         }
 
-        public Color RadarDotColor
+        public virtual void Render(Graphics dc)
         {
-            set
-            {
-                _radarDotBrush = new SolidBrush(value);
-            }
         }
 
-        public void RenderRadar(Graphics dc, HgPoint<double> scale, HgPoint<double> offset)
+        public void RenderRadar(SharpDX.Direct2D1.RenderTarget renderTarget, HgPoint<double> scale, HgPoint<double> offset)
         {
             if (_isVisible && _image != null)
             {
-                double x = (int)(X * scale.X + offset.X - RadarDotSize.X / 2.0);
-                double y = (int)(Y * scale.Y + offset.Y - RadarDotSize.Y / 2.0);
+                _core.DirectX.FillEllipseAt(renderTarget,
+                    (float)(offset.X + (X * scale.X)),
+                    (float)(offset.Y + (Y * scale.Y)),
+                    2, //RadiusX
+                    2, //RadiusY
+                    _core.DirectX.Colors.Raw.Red);
+            }
+        }
 
-                dc.FillEllipse(_radarDotBrush, (int)x, (int)y, RadarDotSize.X, RadarDotSize.Y);
+        private void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double? angleInDegrees = null)
+        {
+            float angle = (float)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
+
+            if (RotationMode != HgRotationMode.None)
+            {
+                _core.DirectX.DrawBitmapAt(renderTarget, bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0), angle);
+            }
+            else //Almost free.
+            {
+                _core.DirectX.DrawBitmapAt(renderTarget, bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0));
             }
         }
 
         private void DrawImage(Graphics dc, Image rawImage, double? angleInDegrees = null)
         {
-            double angle = (double)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
-
-            var bitmap = new Bitmap(rawImage);
-
-            if (angle != 0 && RotationMode != HgRotationMode.None)
-            {
-                if (RotationMode == HgRotationMode.Upsize) //Very expensize
-                {
-                    var image = HgGraphics.RotateImageWithUpsize(bitmap, angle, Color.Transparent);
-                    var rect = new Rectangle((int)(_location.X - image.Width / 2.0), (int)(_location.Y - image.Height / 2.0), image.Width, image.Height);
-                    dc.DrawImage(image, rect);
-                    _size.Height = image.Height;
-                    _size.Width = image.Width;
-                }
-                else if (RotationMode == HgRotationMode.Clip) //Much less expensive.
-                {
-                    var image = HgGraphics.RotateImageWithClipping(bitmap, angle, Color.Transparent);
-                    var rect = new Rectangle((int)(_location.X - image.Width / 2.0), (int)(_location.Y - image.Height / 2.0), image.Width, image.Height);
-                    dc.DrawImage(image, rect);
-
-                    _size.Height = image.Height;
-                    _size.Width = image.Width;
-                }
-            }
-            else //Almost free.
-            {
-                Rectangle rect = new Rectangle((int)(_location.X - bitmap.Width / 2.0), (int)(_location.Y - bitmap.Height / 2.0), bitmap.Width, bitmap.Height);
-                dc.DrawImage(bitmap, rect);
-            }
         }
 
         #endregion

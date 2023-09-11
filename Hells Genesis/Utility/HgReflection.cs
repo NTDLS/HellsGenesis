@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace HG.Utility
 {
-    internal static class Misc
+    internal static class HgReflection
     {
         public static string GetStaticPropertyValue(string typeName, string propertyName)
         {

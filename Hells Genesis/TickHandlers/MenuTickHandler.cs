@@ -2,7 +2,6 @@
 using HG.Menus.BaseClasses;
 using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace HG.TickHandlers
 {
@@ -26,13 +25,13 @@ namespace HG.TickHandlers
             }
         }
 
-        public void Render(Graphics dc)
+        public void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
             lock (_controller)
             {
                 foreach (var obj in _controller)
                 {
-                    obj.Render(dc);
+                    obj.Render(renderTarget);
                 }
             }
         }

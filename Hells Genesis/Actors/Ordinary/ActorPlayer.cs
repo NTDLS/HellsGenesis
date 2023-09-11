@@ -54,9 +54,9 @@ namespace HG.Actors.Ordinary
             AllSystemsGoSound = _core.Audio.Get(@"Sounds\Ship\All Systems Go.wav", 0.75f);
             AmmoLowSound = _core.Audio.Get(@"Sounds\Ship\Ammo Low.wav", 0.75f);
             AmmoEmptySound = _core.Audio.Get(@"Sounds\Ship\Ammo Empty.wav", 0.75f);
-            ShipEngineRoarSound = _core.Audio.Get(@"Sounds\Ship\Engine Roar.wav", 1.0f, true);
-            ShipEngineIdleSound = _core.Audio.Get(@"Sounds\Ship\Engine Idle.wav", 0.6f, true);
-            ShipEngineBoostSound = _core.Audio.Get(@"Sounds\Ship\Engine Boost.wav", 1.0f, true);
+            ShipEngineRoarSound = _core.Audio.Get(@"Sounds\Ship\Engine Roar.wav", 0.5f, true);
+            ShipEngineIdleSound = _core.Audio.Get(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
+            ShipEngineBoostSound = _core.Audio.Get(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
         }
 
         /// <summary>
@@ -97,13 +97,13 @@ namespace HG.Actors.Ordinary
             SetHitPoints(Loadout.Hull);
             SetShieldPoints(Loadout.Sheilds);
 
-            var weapon = Misc.CreateInstanceOf<WeaponBase>(Loadout.PrimaryWeapon.Type, new object[] { _core });
+            var weapon = HgReflection.CreateInstanceOf<WeaponBase>(Loadout.PrimaryWeapon.Type, new object[] { _core });
             weapon.RoundQuantity = Loadout.PrimaryWeapon.Rounds;
             AddPrimaryWeapon(weapon);
 
             foreach (var secondaryWeapon in Loadout.SecondaryWeapons)
             {
-                var secondaryWeaponInstance = Misc.CreateInstanceOf<WeaponBase>(secondaryWeapon.Type, new object[] { _core });
+                var secondaryWeaponInstance = HgReflection.CreateInstanceOf<WeaponBase>(secondaryWeapon.Type, new object[] { _core });
                 secondaryWeaponInstance.RoundQuantity = secondaryWeapon.Rounds;
                 AddSecondaryWeapon(secondaryWeaponInstance);
             }

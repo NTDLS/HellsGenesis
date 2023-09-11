@@ -1,6 +1,9 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
 using HG.Types;
+using SharpDX;
+using SharpDX.Direct2D1;
+using SharpDX.Mathematics.Interop;
 using System;
 using System.Drawing;
 
@@ -8,7 +11,7 @@ namespace HG.Actors.Ordinary
 {
     internal class ActorAnimation : ActorBase
     {
-        private readonly Bitmap _frameImage;
+        private readonly SharpDX.Direct2D1.Bitmap _sheetImage;
         private readonly int _frameCount;
         private int _currentFrame = 0;
         private int _currentRow = 0;
@@ -24,8 +27,7 @@ namespace HG.Actors.Ordinary
         public enum ReplayMode
         {
             SinglePlay,
-            LoopedPlay,
-            StillFrame
+            LoopedPlay
         };
 
         internal class PlayMode
@@ -69,23 +71,11 @@ namespace HG.Actors.Ordinary
 
             _imageName = imageFrames;
             _frameDelayMilliseconds = frameDelayMilliseconds;
-            _frameImage = _core.Imaging.Get(imageFrames);
-
-            if (frameSize == null)
-            {
-                if (playMode.Replay == ReplayMode.StillFrame)
-                {
-                    frameSize = _frameImage.Size;
-                }
-                else
-                {
-                    throw new Exception("The anamation frame size must be set unless it is a still shot.");
-                }
-            }
+            _sheetImage = _core.Imaging.Get(imageFrames);
 
             _frameSize = (Size)frameSize;
-            _rows = _frameImage.Height / ((Size)frameSize).Height;
-            _columns = _frameImage.Width / ((Size)frameSize).Width;
+            _rows = (int)(_sheetImage.Size.Height / ((Size)frameSize).Height);
+            _columns = (int)(_sheetImage.Size.Width / ((Size)frameSize).Width);
             _frameCount = _rows * _columns;
 
             Location = new HgPoint<double>(0, 0);
@@ -103,44 +93,30 @@ namespace HG.Actors.Ordinary
             Visable = true;
         }
 
+        public override void Render(RenderTarget renderTarget)
+        {
+            var sourceRect = new RawRectangleF(
+                _currentColumn * _frameSize.Width,
+                _currentRow * _frameSize.Height,
+                (_currentColumn * _frameSize.Width) + _frameSize.Width,
+                (_currentRow * _frameSize.Height) + _frameSize.Height);
+
+            _core.DirectX.DrawBitmapAt(
+                renderTarget,
+                _sheetImage,
+                (int)(X - _frameSize.Width / 2.0),
+                (int)(Y - _frameSize.Height / 2.0),
+                (float)Velocity.Angle.Degrees,
+                sourceRect,
+                new Size2F(_frameSize.Width, _frameSize.Height)
+            );
+        }
+
         public void AdvanceImage()
         {
-            if (_playMode.Replay == ReplayMode.StillFrame)
-            {
-                if (GetImage() != null)
-                {
-                    return;
-                }
-
-                Rectangle cloneRect = new Rectangle(_currentColumn * _frameSize.Width, _currentRow * _frameSize.Height, _frameSize.Width, _frameSize.Height);
-                System.Drawing.Imaging.PixelFormat format = _frameImage.PixelFormat;
-                SetImage(_frameImage.Clone(cloneRect, format));
-                return;
-            }
-
             if ((DateTime.Now - _lastFrameChange).TotalMilliseconds > _frameDelayMilliseconds)
             {
                 _lastFrameChange = DateTime.Now;
-
-                if (_currentFrame == _frameCount)
-                {
-                    if (_playMode.DeleteActorAfterPlay)
-                    {
-                        QueueForDelete(); ;
-                        return;
-                    }
-
-                    if (_playMode.Replay == ReplayMode.LoopedPlay)
-                    {
-                        Reset();
-                        _lastFrameChange = DateTime.Now.AddMilliseconds(_playMode.ReplayDelay.TotalMilliseconds);
-                    }
-                    return;
-                }
-
-                Rectangle cloneRect = new Rectangle(_currentColumn * _frameSize.Width, _currentRow * _frameSize.Height, _frameSize.Width, _frameSize.Height);
-                System.Drawing.Imaging.PixelFormat format = _frameImage.PixelFormat;
-                SetImage(_frameImage.Clone(cloneRect, format));
 
                 if (++_currentColumn == _columns)
                 {
@@ -149,6 +125,23 @@ namespace HG.Actors.Ordinary
                 }
 
                 _currentFrame++;
+
+                if (_currentFrame == _frameCount)
+                {
+                    if (_playMode.DeleteActorAfterPlay)
+                    {
+                        QueueForDelete();
+                        return;
+                    }
+
+                    if (_playMode.Replay == ReplayMode.LoopedPlay)
+                    {
+                        _currentFrame = 0;
+                        _currentColumn = 0;
+                        _currentRow = 0;
+                    }
+                    return;
+                }
             }
         }
     }

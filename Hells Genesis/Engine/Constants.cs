@@ -2,6 +2,9 @@
 
 namespace HG.Engine
 {
+    /// <summary>
+    /// A place for engine constants.
+    /// </summary>
     internal static class Constants
     {
         public static readonly TimeSpan OneMilisecond = TimeSpan.FromMilliseconds(1);

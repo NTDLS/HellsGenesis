@@ -23,8 +23,7 @@
     public enum HgRotationMode
     {
         None, //Almost free.
-        Clip, //Expensive...
-        Upsize //Hella expensive!
+        Rotate
     }
 
     public enum HgPlayerKey

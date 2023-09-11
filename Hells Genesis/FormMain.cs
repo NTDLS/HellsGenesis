@@ -55,7 +55,6 @@ namespace HG
             {
                 Width = (int)(Screen.PrimaryScreen.Bounds.Width * 0.75);
                 Height = (int)(Screen.PrimaryScreen.Bounds.Height * 0.75);
-
             }
 
             var drawingSurface = new Control();
@@ -289,6 +288,7 @@ namespace HG
 
             return true; // Mark the key as handled
         }
+
         private void FormMain_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, HgKeyPressState.Down);
@@ -357,7 +357,7 @@ namespace HG
 
         private void FormMain_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
+            //e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
         }
     }
 }

@@ -5,7 +5,6 @@ using HG.Actors.Weapons.BaseClasses;
 using HG.Engine;
 using HG.Types;
 using System;
-using System.Drawing;
 
 namespace HG.Actors.Weapons.Bullets.BaseClasses
 {
@@ -15,7 +14,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
         public WeaponBase Weapon { get; private set; }
         public ActorBase LockedTarget { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
-        public double MilisecondsToLive { get; private set; } = 4000;
+        public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds
         {
             get
@@ -35,7 +34,6 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             Velocity.ThrottlePercentage = 100;
 
             RadarDotSize = new HgPoint<int>(2, 2);
-            RadarDotColor = Color.FromArgb(255, 0, 0);
 
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
 

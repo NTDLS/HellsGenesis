@@ -3,8 +3,9 @@ using HG.Engine;
 using HG.Engine.Controllers;
 using HG.TickHandlers.Interfaces;
 using HG.Types;
+using SharpDX.Direct2D1;
+using SharpDX.DirectWrite;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace HG.TickHandlers
@@ -34,31 +35,31 @@ namespace HG.TickHandlers
 
         #region Factories.
 
-        public ActorRadarPositionTextBlock CreateRadarPosition(string font, Brush color, double size, HgPoint<double> location)
+        public ActorRadarPositionTextBlock CreateRadarPosition(TextFormat format, SolidColorBrush color, HgPoint<double> location)
         {
             lock (_controller.Collection)
             {
-                var obj = new ActorRadarPositionTextBlock(_core, font, color, size, location);
+                var obj = new ActorRadarPositionTextBlock(_core, format, color, location);
                 _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
-        public ActorTextBlock Create(string font, Brush color, double size, HgPoint<double> location, bool isPositionStatic)
+        public ActorTextBlock Create(TextFormat format, SolidColorBrush color, HgPoint<double> location, bool isPositionStatic)
         {
             lock (_controller.Collection)
             {
-                var obj = new ActorTextBlock(_core, font, color, size, location, isPositionStatic);
+                var obj = new ActorTextBlock(_core, format, color, location, isPositionStatic);
                 _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
-        public ActorTextBlock Create(string font, Brush color, double size, HgPoint<double> location, bool isPositionStatic, string name)
+        public ActorTextBlock Create(TextFormat format, SolidColorBrush color, HgPoint<double> location, bool isPositionStatic, string name)
         {
             lock (_controller.Collection)
             {
-                var obj = new ActorTextBlock(_core, font, color, size, location, isPositionStatic);
+                var obj = new ActorTextBlock(_core, format, color, location, isPositionStatic);
                 obj.Name = name;
                 _controller.Collection.Add(obj);
                 return obj;
