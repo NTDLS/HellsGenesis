@@ -48,7 +48,7 @@ namespace HG.Engine
             {
                 Stream = _soundstream.ToDataStream(),
                 AudioBytes = (int)_soundstream.Length,
-                Flags = BufferFlags.EndOfStream
+                Flags = BufferFlags.EndOfStream,
             };
 
             if (loopForever)
@@ -73,6 +73,7 @@ namespace HG.Engine
 
                         return;
                     }
+
                     _singleSourceVoice = new SourceVoice(_xaudio, _waveFormat, true);
                     _singleSourceVoice.SubmitSourceBuffer(_buffer, _soundstream.DecodedPacketsInfo);
                     _singleSourceVoice.SetVolume(_initialVolumne);
