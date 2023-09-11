@@ -73,18 +73,14 @@ namespace HG.Engine
 
                 if (_pause == false)
                 {
-                    Monitor.Enter(_core.DrawingSemaphore);
-
                     lock (_core.Menus._controller)
                         lock (_core.Player.Actor)
                             lock (_core.Actors.Collection)
                             {
                                 ExecuteWorldClockTick();
+                                _core.Render();
                                 timer.Stop();
-
                             }
-
-                    Monitor.Exit(_core.DrawingSemaphore);
                 }
 
                 if (_core.Menus._controller.Count > 0)

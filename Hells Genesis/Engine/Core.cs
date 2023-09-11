@@ -30,7 +30,6 @@ namespace HG.Engine
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
-        public object DrawingSemaphore { get; private set; } = new();
 
         private readonly GameLoop _gameLoop;
 
@@ -76,6 +75,29 @@ namespace HG.Engine
             Events.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
 
+        public void Render()
+        {
+            try
+            {
+                DirectX.ScreenRenderTarget.BeginDraw();
+                DirectX.IntermediateRenderTarget.BeginDraw();
+
+                DirectX.ScreenRenderTarget.Clear(DirectX.RawColorBlack);
+
+                DirectX.IntermediateRenderTarget.Clear(DirectX.RawColorBlack);
+                Actors.RenderPreScaling(DirectX.IntermediateRenderTarget);
+                DirectX.IntermediateRenderTarget.EndDraw();
+
+                DirectX.ApplyScaling();
+                Actors.RenderPostScaling(DirectX.ScreenRenderTarget);
+
+                DirectX.ScreenRenderTarget.EndDraw();
+            }
+            catch
+            {
+            }
+        }
+
         private void LoadPrefabs()
         {
             var playerLoadoutPath = "Loadouts\\Player.json";
@@ -115,28 +137,6 @@ namespace HG.Engine
                 //Actors.ResetPlayer();
 
                 _gameLoop.Start();
-
-                //This is debug stuff. Will be moved to a logic engine.
-                //_core.Actors.AddNewEngineCallbackEvent(new System.TimeSpan(0, 0, 0, 0, 0),
-                //    AddDebugObjectsCallback, null, EngineCallbackEvent.CallbackEventMode.OneTime);
-
-                /*
-                var debug = _core.Actors.AddNewDebug();
-                debug.X = _core.Display.VisibleSize.Width / 2;
-                debug.Y = _core.Display.VisibleSize.Height / 2;
-
-                if (_core.Actors.Animations.Count < 1)
-                {
-                    PlayMode mode = new PlayMode()
-                    {
-                        Replay = ReplayMode.LoopedPlay,
-                        ReplayDelay = new System.TimeSpan(0, 0, 0, 1),
-                        DeleteActorAfterPlay = false
-                    };
-
-                    var coinAnimation = new ObjAnimation(_core, @"Graphics\Animation\Coin.png", new Size(32, 23), 20, mode);
-                }
-                */
 
                 OnStart?.Invoke(this);
             }

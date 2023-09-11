@@ -174,8 +174,8 @@ namespace HG.Engine
         {
             SetTransformAngle(renderTarget, new SharpDX.RectangleF(x, y, bitmap.PixelSize.Width, bitmap.PixelSize.Height), angle);
 
-            // Apply the rotation matrix and draw the bitmap
-            renderTarget.AntialiasMode = AntialiasMode.PerPrimitive; // Enable antialiasing
+            renderTarget.AntialiasMode = AntialiasMode.PerPrimitive;
+            renderTarget.TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Cleartype;
 
             var destRect = new RawRectangleF(x, y, x + bitmap.PixelSize.Width, y + bitmap.PixelSize.Height);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
@@ -202,7 +202,6 @@ namespace HG.Engine
         public RawRectangleF GetTextRext(float x, float y, string text, TextFormat format)
         {
             var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
-
             return new RawRectangleF(x, y, x + textLayout.Metrics.Width, y + textLayout.Metrics.Height);
         }
 

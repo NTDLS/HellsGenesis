@@ -872,7 +872,7 @@ namespace HG.Actors.BaseClasses
 
                 if (Highlight)
                 {
-                    var rectangle = new  RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
+                    var rectangle = new RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
 
                     _core.DirectX.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), (float)this.Velocity.Angle.Degrees, _core.DirectX.RawColorRed, 0, 1);
                 }

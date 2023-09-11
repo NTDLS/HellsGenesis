@@ -10,7 +10,6 @@ using HG.Utility.ExtensionMethods;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 
 namespace HG.Engine.Controllers
 {
@@ -217,29 +216,10 @@ namespace HG.Engine.Controllers
 
         public void RenderPostScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            /*
-            float x = _core.Display.TotalCanvasSize.Width / 2;
-            float y = _core.Display.TotalCanvasSize.Height / 2;
-
-            var bitmap = _core.DirectX.GetCachedBitmap("c:\\0.png", 32, 32);
-            var bitmapRect = _core.DirectX.DrawBitmapAt(renderTarget, bitmap, x, y, 0);
-
-            _core.DirectX.DrawRectangleAt(renderTarget, bitmapRect, 0, _core.DirectX.RawColorRed, 2, 1);
-            var textLocation = _core.DirectX.DrawTextAt(renderTarget, x, y, -0, "Hello from the GPU!", _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushRed);
-            _core.DirectX.DrawRectangleAt(renderTarget, textLocation, -0, _core.DirectX.RawColorGreen);
-            */
-
-            _core.IsRendering = true;
-
-            lock (Collection)
+            //Render to display:
+            foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
             {
-                var dbug = OfType<ActorTextBlock>();
-
-                //Render to display:
-                foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
-                {
-                    actor.Render(renderTarget);
-                }
+                actor.Render(renderTarget);
             }
 
             if (RenderRadar)
@@ -286,8 +266,6 @@ namespace HG.Engine.Controllers
                         2, 2, _core.DirectX.RawColorGreen);
                 }
             }
-
-            _core.IsRendering = false;
         }
 
         /// <summary>
@@ -297,74 +275,26 @@ namespace HG.Engine.Controllers
         /// <returns></returns>
         public void RenderPreScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            _core.IsRendering = true;
-
-            bool lockTaken = false;
-
-
-
-
-
-            try
+            //Render to display:
+            foreach (var actor in Collection.Where(o => o.Visable == true))
             {
-                lockTaken = false;
-                Monitor.TryEnter(_core.DrawingSemaphore, Constants.OneMilisecond, ref lockTaken);
-
-                if (lockTaken)
+                if (actor is ActorTextBlock actorTextBlock)
                 {
-                    lock (Collection)
+                    if (actorTextBlock.IsPositionStatic == true)
                     {
-                        /*
-                        screenDrawing.Graphics.Clear(Color.Black);
-
-                        if (RenderRadar)
-                        {
-                            //Render radar:
-                            foreach (var actor in Collection.Where(o => o.Visable == true))
-                            {
-                                if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
-                                {
-                                    actor.RenderRadar(radarDrawing.Graphics, _radarScale, _radarOffset);
-                                }
-                            }
-
-                            //Render player blip:
-                            radarDrawing.Graphics.FillEllipse(_playerRadarDotBrush,
-                                (int)(radarDrawing.Bitmap.Width / 2.0) - 2,
-                                (int)(radarDrawing.Bitmap.Height / 2.0) - 2, 4, 4);
-                        }
-                        */
-                        //Render to display:
-                        foreach (var actor in Collection.Where(o => o.Visable == true))
-                        {
-                            if (actor is ActorTextBlock actorTextBlock)
-                            {
-                                if (actorTextBlock.IsPositionStatic == true)
-                                {
-                                    continue; //We want to add these later so they are not scaled.
-                                }
-                            }
-
-                            if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(actor.Bounds))
-                            {
-                                actor.Render(renderTarget);
-                            }
-                        }
-
-                        _core.Player.Actor?.Render(renderTarget);
+                        continue; //We want to add these later so they are not scaled.
                     }
+                }
 
-                    _core.Menus.Render(renderTarget);
-                }
-            }
-            finally
-            {
-                // Ensure that the lock is released.
-                if (lockTaken)
+                if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(actor.Bounds))
                 {
-                    Monitor.Exit(_core.DrawingSemaphore);
+                    actor.Render(renderTarget);
                 }
             }
+
+            _core.Player.Actor?.Render(renderTarget);
+            _core.Menus.Render(renderTarget);
+
 
             if (_core.Settings.HighlightNatrualBounds)
             {
@@ -401,22 +331,8 @@ namespace HG.Engine.Controllers
 
                     _core.DirectX.GlobalScale = (float)(baseScale - reduction);
                 }
-            }
 
-            /*
-            if (RenderRadar)
-            {
-                //We add the radar last so that it does not get scaled down.
-                var rect = new Rectangle(
-                        _core.Display.NatrualScreenSize.Width - (radarDrawing.Bitmap.Width + 25),
-                        _core.Display.NatrualScreenSize.Height - (radarDrawing.Bitmap.Height + 50),
-                        radarDrawing.Bitmap.Width, radarDrawing.Bitmap.Height
-                    );
-                scaledDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
             }
-            */
-
-            _core.IsRendering = false;
         }
 
         #endregion
