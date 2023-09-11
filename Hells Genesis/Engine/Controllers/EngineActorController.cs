@@ -306,11 +306,7 @@ namespace HG.Engine.Controllers
             if (_core.Settings.HighlightNatrualBounds)
             {
                 //Highlight the 1:1 frame
-                using (var pen = new Pen(Color.FromArgb(75, 75, 75), 1))
-                {
-                    //screenDrawing.Graphics.DrawRectangle(pen, _core.Display.NatrualScreenBounds);
-                    _core.DirectX.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.Colors.Raw.Red, 0, 1);
-                }
+                _core.DirectX.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.Colors.Raw.Red, 0, 1);
             }
 
             if (_core.Settings.AutoZoomWhenMoving)
@@ -320,19 +316,20 @@ namespace HG.Engine.Controllers
                 {
                     //Scale the screen based on the player throttle.
                     if (_core.Player.Actor.Velocity.ThrottlePercentage > 0.5)
-                        _core.Display.ThrottleFrameScaleFactor += 2;
+                        _core.Display.ThrottleFrameScaleFactor += 0.5;
                     else if (_core.Player.Actor.Velocity.ThrottlePercentage < 1)
-                        _core.Display.ThrottleFrameScaleFactor -= 2;
-                    _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 50);
+                        _core.Display.ThrottleFrameScaleFactor -= 0.5;
+                    _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 75);
 
                     //Scale the screen based on the player boost.
                     if (_core.Player.Actor.Velocity.BoostPercentage > 0.5)
-                        _core.Display.BoostFrameScaleFactor += 1;
+                        _core.Display.BoostFrameScaleFactor += 0.25;
                     else if (_core.Player.Actor.Velocity.BoostPercentage < 1)
-                        _core.Display.BoostFrameScaleFactor -= 1;
-                    _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 50);
+                        _core.Display.BoostFrameScaleFactor -= 0.25;
+                    _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 25);
 
-                    double baseScale = ((double)_core.Display.NatrualScreenSize.Width / (double)_core.Display.TotalCanvasSize.Width) * 100.0;
+
+                    double baseScale = 100 / _core.Settings.OverdrawScale;
                     double reduction = (baseScale / 100)
                         * (_core.Display.ThrottleFrameScaleFactor + _core.Display.BoostFrameScaleFactor).Box(0, 100);
 

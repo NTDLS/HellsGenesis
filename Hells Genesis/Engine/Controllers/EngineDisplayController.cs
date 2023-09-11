@@ -152,13 +152,15 @@ namespace HG.Engine.Controllers
             DrawingSurface = drawingSurface;
             NatrualScreenSize = visibleSize;
 
-            int overdrawHeight = (int)(visibleSize.Height * core.Settings.OverdrawScale);
-            int overdrawWidth = (int)(visibleSize.Width * core.Settings.OverdrawScale);
-            if (overdrawHeight % 2 != 0) overdrawHeight++;
-            if (overdrawWidth % 2 != 0) overdrawWidth++;
-            OverdrawSize = new Size(overdrawWidth, overdrawHeight);
+            int totalSizeX = (int)(visibleSize.Width * core.Settings.OverdrawScale);
+            int totalSizeY = (int)(visibleSize.Height * core.Settings.OverdrawScale);
 
-            TotalCanvasSize = new Size(visibleSize.Width + OverdrawSize.Width, visibleSize.Height + OverdrawSize.Height);
+            if (totalSizeX % 2 != 0) totalSizeX++;
+            if (totalSizeY % 2 != 0) totalSizeY++;
+
+            TotalCanvasSize = new Size(totalSizeX, totalSizeY);
+
+            OverdrawSize = new Size(totalSizeX - NatrualScreenSize.Width, totalSizeY - NatrualScreenSize.Height);
         }
 
         public HgQuadrant GetQuadrant(double x, double y)

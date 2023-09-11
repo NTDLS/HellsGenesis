@@ -8,7 +8,7 @@ namespace HG.Engine
     internal class Settings
     {
         #region Debug settings.
-        public bool HighlightNatrualBounds { get; set; } = true;
+        public bool HighlightNatrualBounds { get; set; } = false;
         public bool HighlightAllActors { get; set; } = false;
         #endregion
 
@@ -50,9 +50,9 @@ namespace HG.Engine
         public double InfiniteScrollWallY { get; set; } = 200; //The size of the "box" where the player flies and where "infinite scrolling" begins.
 
         /// <summary>
-        /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (1 = 100% larger or 2x).
+        /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (2 = 2x larger than screen.).
         /// </summary>
-        public double OverdrawScale { get; set; } = 1;
+        public double OverdrawScale { get; set; } = 2;
 
         public InterpolationMode GraphicsScalingMode { get; set; } = InterpolationMode.NearestNeighbor;
     }

@@ -21,6 +21,8 @@ namespace HG.Menus
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
+            offsetY += itemTitle.Height;
+
             _shipBlurb = CreateAndAddTextItem(new HgPoint<double>(offsetX, offsetY), "");
             _shipBlurb.X = offsetX + 200;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
