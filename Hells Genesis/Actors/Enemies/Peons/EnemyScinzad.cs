@@ -13,19 +13,19 @@ namespace HG.Actors.Enemies.Peons
     /// </summary>
     internal class EnemyScinzad : EnemyPeonBase
     {
-        public const int ScoreMultiplier = 15;
+        public const int bountyMultiplier = 15;
         private const string _assetPath = @"Graphics\Enemy\Scinzad\";
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 
 
         public EnemyScinzad(Core core)
-            : base(core, GetGenericHP(core), ScoreMultiplier)
+            : base(core, GetGenericHP(core), bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            SetHitPoints(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
+            SetHullHealth(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
             Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 2, _core.Settings.MaxSpeed); //Upper end of the speed spectrum
 
@@ -79,7 +79,7 @@ namespace HG.Actors.Enemies.Peons
                 {
                     mode = AIMode.Tailing;
                     bulletsRemainingBeforeTailing = TotalAvailableSecondaryWeaponRounds();
-                    hpRemainingBeforeTailing = HitPoints;
+                    hpRemainingBeforeTailing = HullHealth;
                 }
             }
 
@@ -104,7 +104,7 @@ namespace HG.Actors.Enemies.Peons
 
                 //We we get too close, do too much damage or they fire at us enough, they fall back and come in again
                 if (distanceToPlayer < distanceToKeep / 2.0
-                    || hpRemainingBeforeTailing - HitPoints > 2
+                    || hpRemainingBeforeTailing - HullHealth > 2
                     || bulletsRemainingBeforeTailing - TotalAvailableSecondaryWeaponRounds() > 15)
                 {
                     Velocity.ThrottlePercentage = 1;

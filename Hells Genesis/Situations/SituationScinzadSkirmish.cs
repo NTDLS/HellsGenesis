@@ -21,8 +21,8 @@ namespace HG.Situations
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 0, 5000), AddFreshEnemiesCallback);
 
-            _core.Player.Actor.AddHitPoints(100);
-            _core.Player.Actor.AddShieldPoints(10);
+            _core.Player.Actor.AddHullHealth(100);
+            _core.Player.Actor.AddShieldHealth(10);
         }
 
         private void FirstShowPlayerCallback(Core core, HgEngineCallbackEvent sender, object refObj)

@@ -66,6 +66,8 @@ namespace HG
             else if (keyData == Keys.Down) _core.Input.KeyStateChanged(HgPlayerKey.Down, HgKeyPressState.Down);
             else return base.ProcessCmdKey(ref msg, keyData);
 
+            _core.Input.HandleSingleKeyPress(keyData);
+
             return true; // Mark the key as handled
         }
 

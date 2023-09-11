@@ -23,8 +23,8 @@ namespace HG.Situations
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 1), AdvanceWaveCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 5), RedirectFormationCallback);
 
-            _core.Player.Actor.AddHitPoints(100);
-            _core.Player.Actor.AddShieldPoints(10);
+            _core.Player.Actor.AddHullHealth(100);
+            _core.Player.Actor.AddShieldHealth(10);
         }
 
         private void RedirectFormationCallback(Core core, HgEngineCallbackEvent sender, object refObj)

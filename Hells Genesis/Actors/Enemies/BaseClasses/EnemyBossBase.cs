@@ -4,8 +4,8 @@ namespace HG.Actors.Enemies.BaseClasses
 {
     internal class EnemyBossBase : EnemyBase
     {
-        public EnemyBossBase(Core core, int hitPoints, int scoreMultiplier)
-            : base(core, hitPoints, scoreMultiplier)
+        public EnemyBossBase(Core core, int hullHealth, int bountyMultiplier)
+            : base(core, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();

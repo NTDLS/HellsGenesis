@@ -17,16 +17,16 @@ namespace HG.Actors.Enemies.BaseClasses
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
 
         public int CollisionDamage { get; set; } = 25;
-        public int ScorePoints { get; private set; } = 25;
+        public int BountyWorth { get; private set; } = 25;
 
-        public EnemyBase(Core core, int hitPoints, int scoreMultiplier)
+        public EnemyBase(Core core, int hullHealth, int bountyMultiplier)
             : base(core)
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
 
-            SetHitPoints(hitPoints);
-            ScorePoints = HitPoints * scoreMultiplier;
+            SetHullHealth(hullHealth);
+            BountyWorth = HullHealth * bountyMultiplier;
 
             RadarPositionIndicator = _core.Actors.RadarPositions.Create();
             RadarPositionIndicator.Visable = false;
@@ -53,7 +53,7 @@ namespace HG.Actors.Enemies.BaseClasses
 
         public override void Explode()
         {
-            _core.Player.Actor.Score += ScorePoints;
+            _core.Player.Actor.Bounty += BountyWorth;
 
             if (HgRandom.ChanceIn(5))
             {
@@ -72,7 +72,7 @@ namespace HG.Actors.Enemies.BaseClasses
                 {
                     if (Hit(bullet))
                     {
-                        if (HitPoints <= 0)
+                        if (HullHealth <= 0)
                         {
                             Explode();
                         }

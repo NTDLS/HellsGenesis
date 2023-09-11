@@ -41,8 +41,8 @@ namespace HG.Actors.BaseClasses
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
         public bool Highlight { get; set; } = false;
         public HgRotationMode RotationMode { get; set; }
-        public int HitPoints { get; private set; } = 0;
-        public int ShieldPoints { get; private set; } = 0;
+        public int HullHealth { get; private set; } = 0; //Ship hit-points.
+        public int ShieldHealth { get; private set; } = 0; //Sheild hit-points, these take 1/2 damage.
 
         private HgVelocity<double> _velocity;
         public HgVelocity<double> Velocity
@@ -65,58 +65,58 @@ namespace HG.Actors.BaseClasses
 
         public bool IsDead { get; set; } = false;
 
-        public void SetHitPoints(int points)
+        public void SetHullHealth(int points)
         {
-            HitPoints = 0;
-            AddHitPoints(points);
+            HullHealth = 0;
+            AddHullHealth(points);
         }
 
         /// <summary>
         /// Creates a new actor, adds it to the actor collection but also adds it to the collection of another actors children for automatic cleanup when parent is destroyed. 
         /// </summary>
         /// <returns></returns>
-        public ActorAttachment Attach(string imagePath, bool takesDamage = false, int hitPoints = 1)
+        public ActorAttachment Attach(string imagePath, bool takesDamage = false, int hullHealth = 1)
         {
             var attachment = _core.Actors.Attachments.Create(imagePath, null, UID);
             attachment.TakesDamage = takesDamage;
-            attachment.SetHitPoints(hitPoints);
+            attachment.SetHullHealth(hullHealth);
             Attachments.Add(attachment);
             return attachment;
         }
 
-        public void AddHitPoints(int pointsToAdd)
+        public void AddHullHealth(int pointsToAdd)
         {
-            if (HitPoints + pointsToAdd > _core.Settings.MaxHitpoints)
+            if (HullHealth + pointsToAdd > _core.Settings.MaxHullHealth)
             {
-                pointsToAdd = _core.Settings.MaxHitpoints - (HitPoints + pointsToAdd);
+                pointsToAdd = _core.Settings.MaxHullHealth - (HullHealth + pointsToAdd);
             }
-            HitPoints += pointsToAdd;
+            HullHealth += pointsToAdd;
         }
 
-        public void SetShieldPoints(int points)
+        public void SetShieldHealth(int points)
         {
-            ShieldPoints = 0;
-            AddShieldPoints(points);
+            ShieldHealth = 0;
+            AddShieldHealth(points);
         }
 
-        public void AddShieldPoints(int pointsToAdd)
+        public void AddShieldHealth(int pointsToAdd)
         {
-            if (ShieldPoints + pointsToAdd > _core.Settings.MaxShieldPoints)
+            if (ShieldHealth + pointsToAdd > _core.Settings.MaxShieldPoints)
             {
-                pointsToAdd = _core.Settings.MaxShieldPoints - (ShieldPoints + pointsToAdd);
+                pointsToAdd = _core.Settings.MaxShieldPoints - (ShieldHealth + pointsToAdd);
             }
 
             if (this is ActorPlayer)
             {
                 var player = this as ActorPlayer;
 
-                if (ShieldPoints < _core.Settings.MaxShieldPoints && ShieldPoints + pointsToAdd >= _core.Settings.MaxShieldPoints)
+                if (ShieldHealth < _core.Settings.MaxShieldPoints && ShieldHealth + pointsToAdd >= _core.Settings.MaxShieldPoints)
                 {
                     player.ShieldMaxSound.Play();
                 }
             }
 
-            ShieldPoints += pointsToAdd;
+            ShieldHealth += pointsToAdd;
         }
 
         bool _isLockedOn = false;
@@ -463,7 +463,7 @@ namespace HG.Actors.BaseClasses
         #region Actions.
 
         /// <summary>
-        /// Subtract from the objects hitpoints.
+        /// Subtract from the objects hullHealth.
         /// </summary>
         /// <returns></returns>
         public virtual bool Hit(int damage)
@@ -473,21 +473,21 @@ namespace HG.Actors.BaseClasses
             {
                 _lastHit = DateTime.Now;
 
-                if (ShieldPoints > 0)
+                if (ShieldHealth > 0)
                 {
                     _shieldHit.Play();
                     damage /= 2; //Weapons do less damage to Shields. They are designed to take hits.
                     damage = damage < 1 ? 1 : damage;
-                    damage = damage > ShieldPoints ? ShieldPoints : damage; //No need to go negative with the damage.
-                    ShieldPoints -= damage;
+                    damage = damage > ShieldHealth ? ShieldHealth : damage; //No need to go negative with the damage.
+                    ShieldHealth -= damage;
 
                     OnHit?.Invoke(this, HgDamageType.Shield, damage);
                 }
                 else
                 {
                     _hitSound.Play();
-                    damage = damage > HitPoints ? HitPoints : damage; //No need to go negative with the damage.
-                    HitPoints -= damage;
+                    damage = damage > HullHealth ? HullHealth : damage; //No need to go negative with the damage.
+                    HullHealth -= damage;
 
                     OnHit?.Invoke(this, HgDamageType.Hull, damage);
                 }
@@ -906,7 +906,7 @@ namespace HG.Actors.BaseClasses
                         size = 1;
                     }
                 }
-                _core.DirectX.FillEllipseAt(renderTarget, x, y,size,size,color); ;
+                _core.DirectX.FillEllipseAt(renderTarget, x, y, size, size, color); ;
             }
         }
 

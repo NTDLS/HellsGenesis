@@ -31,7 +31,7 @@ namespace HG.Actors.PowerUp
         {
             if (Intersects(_core.Player.Actor))
             {
-                _core.Player.Actor.AddHitPoints(_repairPoints);
+                _core.Player.Actor.AddHullHealth(_repairPoints);
                 Explode();
             }
             else if (AgeInMiliseconds > TimeToLive)

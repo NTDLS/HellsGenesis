@@ -14,18 +14,18 @@ namespace HG.Actors.Enemies.Peons
     /// </summary>
     internal class EnemyAvvol : EnemyPeonBase
     {
-        public const int ScoreMultiplier = 25;
+        public const int bountyMultiplier = 25;
         private const string _assetPath = @"Graphics\Enemy\Avvol\";
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 
         public EnemyAvvol(Core core)
-            : base(core, GetGenericHP(core), ScoreMultiplier)
+            : base(core, GetGenericHP(core), bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            SetHitPoints(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
+            SetHullHealth(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
             Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 4, _core.Settings.MaxSpeed - 2); //Upper end of the speed spectrum.
 

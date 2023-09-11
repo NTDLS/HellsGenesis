@@ -26,8 +26,8 @@ namespace HG.Actors.Ordinary
         public AudioClip HullBreachedSound { get; private set; }
         public AudioClip IntegrityLowSound { get; private set; }
         public AudioClip ShipEngineBoostSound { get; private set; }
-        public int Score { get; set; }
-        public int MaxHitPoints { get; set; }
+        public int Bounty { get; set; } //Score points.
+        public int MaxHullHealth { get; set; }
         public int MaxShieldPoints { get; set; }
         public ActorAnimation ThrustAnimation { get; private set; }
         public ActorAnimation BoostAnimation { get; private set; }
@@ -94,8 +94,8 @@ namespace HG.Actors.Ordinary
             Velocity.MaxSpeed = Loadout.Speed;
             Velocity.MaxBoost = Loadout.Boost;
 
-            SetHitPoints(Loadout.Hull);
-            SetShieldPoints(Loadout.Sheilds);
+            SetHullHealth(Loadout.Hull);
+            SetShieldHealth(Loadout.Sheilds);
 
             var weapon = HgReflection.CreateInstanceOf<WeaponBase>(Loadout.PrimaryWeapon.Type, new object[] { _core });
             weapon.RoundQuantity = Loadout.PrimaryWeapon.Rounds;
@@ -126,7 +126,7 @@ namespace HG.Actors.Ordinary
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
+                    ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode);
                     ThrustAnimation.Reset();
                     ThrustAnimation.Visable = false;
                     _core.Actors.Animations.CreateAt(ThrustAnimation, this);
@@ -145,7 +145,7 @@ namespace HG.Actors.Ordinary
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
+                    BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode);
                     BoostAnimation.Reset();
                     BoostAnimation.Visable = false;
                     _core.Actors.Animations.CreateAt(BoostAnimation, this);
@@ -207,22 +207,22 @@ namespace HG.Actors.Ordinary
         {
             if (damageType == HgDamageType.Shield)
             {
-                if (ShieldPoints == 0)
+                if (ShieldHealth == 0)
                 {
                     ShieldDownSound.Play();
                 }
             }
 
             //This is the hit that took us under the treshold.
-            if (HitPoints < 100 && HitPoints + damageAmount > 100)
+            if (HullHealth < 100 && HullHealth + damageAmount > 100)
             {
                 IntegrityLowSound.Play();
             }
-            else if (HitPoints < 50 && HitPoints + damageAmount > 50)
+            else if (HullHealth < 50 && HullHealth + damageAmount > 50)
             {
                 SystemsFailingSound.Play();
             }
-            else if (HitPoints < 20 && HitPoints + damageAmount > 20)
+            else if (HullHealth < 20 && HullHealth + damageAmount > 20)
             {
                 HullBreachedSound.Play();
             }

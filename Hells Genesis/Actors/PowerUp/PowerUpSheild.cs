@@ -8,7 +8,7 @@ namespace HG.Actors.PowerUp
 {
     internal class PowerUpSheild : PowerUpBase
     {
-        public const int ScoreMultiplier = 1;
+        public const int bountyMultiplier = 1;
 
         private const string _assetPath = @"Graphics\PowerUp\Sheild\";
         private readonly string[] _imagePaths = {
@@ -33,7 +33,7 @@ namespace HG.Actors.PowerUp
         {
             if (Intersects(_core.Player.Actor))
             {
-                _core.Player.Actor.AddShieldPoints(_repairPoints);
+                _core.Player.Actor.AddShieldHealth(_repairPoints);
                 Explode();
             }
             else if (AgeInMiliseconds > TimeToLive)

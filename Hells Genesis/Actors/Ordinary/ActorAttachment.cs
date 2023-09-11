@@ -28,7 +28,7 @@ namespace HG.Actors.Ordinary
                 {
                     if (Hit(bullet))
                     {
-                        if (HitPoints <= 0)
+                        if (HullHealth <= 0)
                         {
                             Explode();
                         }

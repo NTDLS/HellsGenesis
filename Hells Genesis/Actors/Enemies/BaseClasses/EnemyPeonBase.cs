@@ -12,8 +12,8 @@ namespace HG.Actors.Enemies.BaseClasses
         public ActorAnimation ThrustAnimation { get; internal set; }
         public ActorAnimation BoostAnimation { get; internal set; }
 
-        public EnemyPeonBase(Core core, int hitPoints, int scoreMultiplier)
-            : base(core, hitPoints, scoreMultiplier)
+        public EnemyPeonBase(Core core, int hullHealth, int bountyMultiplier)
+            : base(core, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
@@ -26,7 +26,7 @@ namespace HG.Actors.Enemies.BaseClasses
                 DeleteActorAfterPlay = false,
                 ReplayDelay = new TimeSpan(0)
             };
-            ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\AirThrust32x32.png", new Size(32, 32), 10, playMode);
+            ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode);
 
             ThrustAnimation.Reset();
             _core.Actors.Animations.CreateAt(ThrustAnimation, this);
@@ -36,7 +36,7 @@ namespace HG.Actors.Enemies.BaseClasses
             ThrustAnimation.X = X + pointRight.X;
             ThrustAnimation.Y = Y + pointRight.Y;
 
-            BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\FireThrust32x32.png", new Size(32, 32), 10, playMode);
+            BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode);
 
             BoostAnimation.Reset();
             _core.Actors.Animations.CreateAt(BoostAnimation, this);

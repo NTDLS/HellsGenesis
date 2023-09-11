@@ -10,18 +10,18 @@ namespace HG.Actors.Enemies.Peons
 {
     internal class EnemyIrlen : EnemyPeonBase
     {
-        public const int ScoreMultiplier = 1;
+        public const int bountyMultiplier = 1;
         private const string _assetPath = @"Graphics\Enemy\Irlen\";
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 
         public EnemyIrlen(Core core)
-            : base(core, GetGenericHP(core), ScoreMultiplier)
+            : base(core, GetGenericHP(core), bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            SetHitPoints(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
+            SetHullHealth(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
             AddSecondaryWeapon(new WeaponPhotonTorpedo(_core)
             {
@@ -37,7 +37,7 @@ namespace HG.Actors.Enemies.Peons
 
             Velocity.Angle.Degrees = AngleTo(_core.Player.Actor);
 
-            initialHitPoints = HitPoints;
+            initialHullHealth = HullHealth;
         }
 
         #region Artificial Intelligence.
@@ -51,7 +51,7 @@ namespace HG.Actors.Enemies.Peons
             MovingToApproach,
         }
 
-        readonly int initialHitPoints = 0;
+        readonly int initialHullHealth = 0;
         const double baseDistanceToKeep = 100;
         double distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
         const double baseFallbackDistance = 400;
@@ -69,7 +69,7 @@ namespace HG.Actors.Enemies.Peons
             {
                 //Since we need to handle the entire "platoon" of formation ships all at once, a good
                 //  deal of this AI is handled by the Scenerio engine(s). (see: ScenarioIrlenFormations).
-                if (distanceToPlayer < 500 && HgRandom.ChanceIn(10000) || HitPoints != initialHitPoints)
+                if (distanceToPlayer < 500 && HgRandom.ChanceIn(10000) || HullHealth != initialHullHealth)
                 {
                     Mode = AIMode.MovingToFallback;
                     fallToAngle = Velocity.Angle + (180.0 + HgRandom.RandomNumberNegative(0, 10));

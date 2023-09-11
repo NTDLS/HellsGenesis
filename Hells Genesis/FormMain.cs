@@ -157,10 +157,10 @@ namespace HG
                     {
                         var enemy = (EnemyBase)actor;
 
-                        text.AppendLine($"Hit Points: {enemy.HitPoints:n0}");
+                        text.AppendLine($"Hit Points: {enemy.HullHealth:n0}");
                         text.AppendLine($"Is Locked-on: {enemy.IsLockedOn}");
                         text.AppendLine($"Is Locked-on (Soft): {enemy.IsLockedOnSoft:n0}");
-                        text.AppendLine($"Shield Points: {enemy.ShieldPoints:n0}");
+                        text.AppendLine($"Shield Points: {enemy.ShieldHealth:n0}");
                         text.AppendLine($"MaxSpeed: {enemy.Velocity.MaxSpeed:n2}");
                         text.AppendLine($"Angle: {enemy.Velocity.Angle.Degrees:n2}° {enemy.Velocity.Angle:n2}");
                         text.AppendLine($"Throttle Percent: {enemy.Velocity.ThrottlePercentage:n2}");
@@ -285,6 +285,8 @@ namespace HG
             else if (keyData == Keys.Up) _core.Input.KeyStateChanged(HgPlayerKey.Up, HgKeyPressState.Down);
             else if (keyData == Keys.Down) _core.Input.KeyStateChanged(HgPlayerKey.Down, HgKeyPressState.Down);
             else return base.ProcessCmdKey(ref msg, keyData);
+
+            _core.Input.HandleSingleKeyPress(keyData);
 
             return true; // Mark the key as handled
         }

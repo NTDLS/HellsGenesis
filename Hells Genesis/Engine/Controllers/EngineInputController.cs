@@ -78,13 +78,19 @@ namespace HG.Engine.Controllers
                 textBlock.Visable = _core.IsPaused();
             }
 
-            if (key == Keys.Q)
+            if (key == Keys.Left)
             {
-                _core.Player.Actor.SelectPreviousAvailableUsableSecondaryWeapon();
+                if (_core.Player?.Actor?.Visable == true)
+                {
+                    _core.Player?.Actor?.SelectPreviousAvailableUsableSecondaryWeapon();
+                }
             }
-            else if (key == Keys.E)
+            else if (key == Keys.Right)
             {
-                _core.Player.Actor.SelectNextAvailableUsableSecondaryWeapon();
+                if (_core.Player?.Actor?.Visable == true)
+                {
+                    _core.Player?.Actor?.SelectNextAvailableUsableSecondaryWeapon();
+                }
             }
         }
     }

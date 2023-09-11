@@ -142,10 +142,10 @@ namespace HG.Engine
 
             _core.Actors.PlayerStatsText.Text =
                   $" Situation: {situation}\r\n"
-                + $"      Hull: {_core.Player.Actor.HitPoints} (Shields: {_core.Player.Actor.ShieldPoints})\r\n"
-                + $"     Boost: {_core.Player.Actor.Velocity.AvailableBoost.ToString("#,0")}\r\n"
-                + $"Pri-Weapon: {_core.Player.Actor.SelectedPrimaryWeapon?.Name} x{_core.Player.Actor.SelectedPrimaryWeapon?.RoundQuantity}\r\n"
-                + $"Sec-Weapon: {_core.Player.Actor.SelectedSecondaryWeapon?.Name} x{_core.Player.Actor.SelectedSecondaryWeapon?.RoundQuantity}\r\n";
+                + $"      Hull: {_core.Player.Actor.HullHealth:n0} (Shields: {_core.Player.Actor.ShieldHealth:n0}) | Bounty: ${_core.Player.Actor.Bounty}\r\n"
+                + $"      Warp: {_core.Player.Actor.Velocity.AvailableBoost:n0}\r\n"
+                + $"Pri-Weapon: {_core.Player.Actor.SelectedPrimaryWeapon?.Name} x{_core.Player.Actor.SelectedPrimaryWeapon?.RoundQuantity:n0}\r\n"
+                + $"Sec-Weapon: {_core.Player.Actor.SelectedSecondaryWeapon?.Name} x{_core.Player.Actor.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
 
             if (_core.ShowDebug)
             {
@@ -165,7 +165,7 @@ namespace HG.Engine
                     + $"           Thrust: {(_core.Player.Actor.Velocity.ThrottlePercentage * 100):#0.00}\r\n"
                     + $"            Boost: {(_core.Player.Actor.Velocity.BoostPercentage * 100):#0.00}\r\n"
                     + $"         Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}\r\n"
-                    + $"            Score: {_core.Player.Actor.Score.ToString("#,0")}";
+                    + $"           Bounty: {_core.Player.Actor.Bounty.ToString("#,0")}";
             }
             else
             {

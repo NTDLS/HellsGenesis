@@ -12,7 +12,7 @@ namespace HG.Actors.Enemies.Bosses
     /// </summary>
     internal class EnemyScarab : EnemyBossBase
     {
-        public const int ScoreMultiplier = 15;
+        public const int bountyMultiplier = 15;
 
         private readonly ActorAttachment _leftCannon;
         private readonly ActorAttachment _rightCannon;
@@ -30,7 +30,7 @@ namespace HG.Actors.Enemies.Bosses
         readonly string _imagesPath = @"Graphics\Enemy\Scarab\";
 
         public EnemyScarab(Core core)
-            : base(core, GetGenericHP(core), ScoreMultiplier)
+            : base(core, GetGenericHP(core), bountyMultiplier)
         {
             _leftCannon = Attach(_imagesPath + "Scarab.Gun.Cannon.Left.png", true, 3);
             _rightCannon = Attach(_imagesPath + "Scarab.Gun.Cannon.Right.png", true, 3);
@@ -39,7 +39,7 @@ namespace HG.Actors.Enemies.Bosses
             _leftThrust = Attach(_imagesPath + "Scarab.Jet.Left.png", true, 3);
             _rightThrust = Attach(_imagesPath + "Scarab.Jet.Right.png", true, 3);
 
-            SetHitPoints(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
+            SetHullHealth(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
             _initialMaxpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 2, _core.Settings.MaxSpeed); //Upper end of the speed spectrum
 
@@ -234,7 +234,7 @@ namespace HG.Actors.Enemies.Bosses
                 {
                     mode = AIMode.Tailing;
                     bulletsRemainingBeforeTailing = TotalAvailableSecondaryWeaponRounds();
-                    hpRemainingBeforeTailing = HitPoints;
+                    hpRemainingBeforeTailing = HullHealth;
                 }
             }
 
@@ -259,7 +259,7 @@ namespace HG.Actors.Enemies.Bosses
 
                 //We we get too close, do too much damage or they fire at us enough, they fall back and come in again
                 if (distanceToPlayer < distanceToKeep / 2.0
-                    || hpRemainingBeforeTailing - HitPoints > 2
+                    || hpRemainingBeforeTailing - HullHealth > 2
                     || bulletsRemainingBeforeTailing - TotalAvailableSecondaryWeaponRounds() > 15)
                 {
                     Velocity.ThrottlePercentage = 1;

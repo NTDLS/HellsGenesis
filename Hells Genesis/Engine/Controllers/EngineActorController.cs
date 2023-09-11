@@ -8,7 +8,6 @@ using HG.TickHandlers;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace HG.Engine.Controllers
