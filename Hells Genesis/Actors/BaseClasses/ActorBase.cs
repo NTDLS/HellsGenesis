@@ -891,14 +891,16 @@ namespace HG.Actors.BaseClasses
             }
         }
 
-        public void RenderRadar(Graphics dc, HgPoint<double> scale, HgPoint<double> offset)
+        public void RenderRadar(SharpDX.Direct2D1.RenderTarget renderTarget, HgPoint<double> scale, HgPoint<double> offset)
         {
             if (_isVisible && _image != null)
             {
-                double x = (int)(X * scale.X + offset.X - RadarDotSize.X / 2.0);
-                double y = (int)(Y * scale.Y + offset.Y - RadarDotSize.Y / 2.0);
-
-                dc.FillEllipse(_radarDotBrush, (int)x, (int)y, RadarDotSize.X, RadarDotSize.Y);
+                _core.DirectX.FillEllipseAt(renderTarget,
+                    (float)(offset.X + (X * scale.X)),
+                    (float)(offset.Y + (Y * scale.Y)),
+                    2, //RadiusX
+                    2, //RadiusY
+                    _core.DirectX.RawColorRed);
             }
         }
 

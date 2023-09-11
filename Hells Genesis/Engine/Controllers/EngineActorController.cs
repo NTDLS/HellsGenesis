@@ -1,5 +1,8 @@
 ﻿using HG.Actors.BaseClasses;
+using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Ordinary;
+using HG.Actors.PowerUp.BaseClasses;
+using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Menus;
 using HG.TickHandlers;
 using HG.Types;
@@ -214,6 +217,7 @@ namespace HG.Engine.Controllers
 
         public void RenderPostScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
+            /*
             float x = _core.Display.TotalCanvasSize.Width / 2;
             float y = _core.Display.TotalCanvasSize.Height / 2;
 
@@ -223,7 +227,67 @@ namespace HG.Engine.Controllers
             _core.DirectX.DrawRectangleAt(renderTarget, bitmapRect, 0, _core.DirectX.RawColorRed, 2, 1);
             var textLocation = _core.DirectX.DrawTextAt(renderTarget, x, y, -0, "Hello from the GPU!", _core.DirectX.LargeTextFormat, _core.DirectX.SolidColorBrushRed);
             _core.DirectX.DrawRectangleAt(renderTarget, textLocation, -0, _core.DirectX.RawColorGreen);
+            */
 
+            _core.IsRendering = true;
+
+            lock (Collection)
+            {
+                var dbug = OfType<ActorTextBlock>();
+
+                //Render to display:
+                foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
+                {
+                    actor.Render(renderTarget);
+                }
+            }
+
+            if (RenderRadar)
+            {
+                var radarBgImage = _core.Imaging.Get(@"Graphics\RadarTransparent.png");
+
+                _core.DirectX.DrawBitmapAt(renderTarget, radarBgImage,
+                    _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,
+                    _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height,
+                    0);
+
+                double radarDistance = 5;
+
+                double radarVisionWidth = _core.Display.NatrualScreenSize.Width * radarDistance;
+                double radarVisionHeight = _core.Display.NatrualScreenSize.Height * radarDistance;
+
+                _radarScale = new HgPoint<double>(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
+                _radarOffset = new HgPoint<double>(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
+
+                if (_core.Player.Actor is not null && _core.Player.Actor.Visable)
+                {
+                    double centerOfRadarX = (int)(radarBgImage.Size.Width / 2.0) - 2.0; //Subtract half the dot size.
+                    double centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0) - 2.0; //Subtract half the dot size.
+
+                    _radarOffset = new HgPoint<double>(
+                        (_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + (centerOfRadarX - _core.Player.Actor.X * _radarScale.X),
+                        (_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + (centerOfRadarY - _core.Player.Actor.Y * _radarScale.Y)
+                        );
+
+                    //Render radar:
+                    foreach (var actor in Collection.Where(o => o.Visable == true))
+                    {
+                        if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
+                        {
+                            actor.RenderRadar(renderTarget, _radarScale, _radarOffset);
+                        }
+                    }
+
+                    //Render player blip:
+                    _core.DirectX.FillEllipseAt(
+                        renderTarget,
+                        (float)((_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + (centerOfRadarX)),
+                        (float)((_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + (centerOfRadarY)),
+                        2, 2, _core.DirectX.RawColorGreen);
+                }
+            }
+
+            _core.IsRendering = false;
         }
 
         /// <summary>
@@ -237,47 +301,9 @@ namespace HG.Engine.Controllers
 
             bool lockTaken = false;
 
-            /*
-            var screenDrawing = _core.DrawingCache.Get(DrawingCacheType.Screen, _core.Display.TotalCanvasSize);
-            DrawingCacheItem radarDrawing = null;
 
-            if (_core.DrawingCache.Exists(DrawingCacheType.Radar) == false)
-            {
-                _RadarBackgroundImage = _core.Imaging.Get(@"Graphics\RadarTransparent.png");
 
-                double radarDistance = 5;
-                double radarWidth = _RadarBackgroundImage.Width;
-                double radarHeight = _RadarBackgroundImage.Height;
 
-                double radarVisionWidth = _core.Display.NatrualScreenSize.Width * radarDistance;
-                double radarVisionHeight = _core.Display.NatrualScreenSize.Height * radarDistance;
-
-                radarDrawing = _core.DrawingCache.Get(DrawingCacheType.Radar, new Size((int)radarWidth, (int)radarHeight));
-
-                _radarScale = new HgPoint<double>(radarDrawing.Bitmap.Width / radarVisionWidth, radarDrawing.Bitmap.Height / radarVisionHeight);
-                _radarOffset = new HgPoint<double>(radarWidth / 2.0, radarHeight / 2.0); //Best guess until player is visible.
-            }
-            else
-            {
-                radarDrawing = _core.DrawingCache.Get(DrawingCacheType.Radar);
-            }
-
-            if (RenderRadar)
-            {
-                if (_core.Player.Actor is not null && _core.Player.Actor.Visable)
-                {
-                    double centerOfRadarX = (int)(radarDrawing.Bitmap.Width / 2.0) - 2.0; //Subtract half the dot size.
-                    double centerOfRadarY = (int)(radarDrawing.Bitmap.Height / 2.0) - 2.0; //Subtract half the dot size.
-
-                    _radarOffset = new HgPoint<double>(
-                        centerOfRadarX - _core.Player.Actor.X * _radarScale.X,
-                        centerOfRadarY - _core.Player.Actor.Y * _radarScale.Y);
-                }
-
-                radarDrawing.Graphics.DrawImage(_RadarBackgroundImage, new Point(0, 0));
-            }
-
-            */
 
             try
             {
@@ -350,7 +376,6 @@ namespace HG.Engine.Controllers
                 }
             }
 
-
             if (_core.Settings.AutoZoomWhenMoving)
             {
                 //TODO: FFS, fix all of this - its totally overcomplicated.
@@ -370,10 +395,7 @@ namespace HG.Engine.Controllers
                         _core.Display.BoostFrameScaleFactor -= 1;
                     _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 50);
 
-                    
-
                     double baseScale = ((double)_core.Display.NatrualScreenSize.Width / (double)_core.Display.TotalCanvasSize.Width) * 100.0;
-
                     double reduction = (baseScale / 100)
                         * (_core.Display.ThrottleFrameScaleFactor + _core.Display.BoostFrameScaleFactor).Box(0, 100);
 
@@ -393,18 +415,6 @@ namespace HG.Engine.Controllers
                 scaledDrawing.Graphics.DrawImage(radarDrawing.Bitmap, rect);
             }
             */
-
-            lock (Collection)
-            {
-                var dbug = OfType<ActorTextBlock>();
-
-
-                //Render to display:
-                foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
-                {
-                    actor.Render(renderTarget);
-                }
-            }
 
             _core.IsRendering = false;
         }

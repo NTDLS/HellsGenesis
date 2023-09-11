@@ -1,4 +1,5 @@
-﻿using HG.Engine;
+﻿using HG.Actors.Weapons.Bullets;
+using HG.Engine;
 using HG.Situations.BaseClasses;
 
 namespace HG.Situations

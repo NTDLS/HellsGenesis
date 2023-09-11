@@ -237,6 +237,24 @@ namespace HG.Engine
         /// Draws a rectangle at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
+        public Ellipse FillEllipseAt(RenderTarget renderTarget, float x, float y, float radiusX, float radiusY, RawColor4 color)
+        {
+            var ellipse = new Ellipse()
+            {
+                Point = new RawVector2(x, y),
+                RadiusX = radiusX,
+                RadiusY = radiusY,
+            };
+
+            renderTarget.FillEllipse(ellipse, new SolidColorBrush(renderTarget, color));
+
+            return ellipse;
+        }
+
+        /// <summary>
+        /// Draws a rectangle at the specified location.
+        /// </summary>
+        /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
         public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF rect, float angle, RawColor4 color, float expand = 0, float strokeWidth = 1)
         {
             if (expand != 0)

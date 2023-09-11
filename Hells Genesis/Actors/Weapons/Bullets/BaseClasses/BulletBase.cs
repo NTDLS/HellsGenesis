@@ -15,7 +15,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
         public WeaponBase Weapon { get; private set; }
         public ActorBase LockedTarget { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
-        public double MilisecondsToLive { get; private set; } = 4000;
+        public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds
         {
             get
