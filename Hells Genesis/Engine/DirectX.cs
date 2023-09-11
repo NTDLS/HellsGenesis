@@ -1,7 +1,6 @@
 ﻿using HG.Utility.ExtensionMethods;
 using SharpDX;
 using SharpDX.Direct2D1;
-using SharpDX.DirectWrite;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
@@ -18,7 +17,7 @@ namespace HG.Engine
         private Core _core;
 
         private readonly Dictionary<string, SharpDX.Direct2D1.Bitmap> _textureCache = new();
-        public SharpDX.Direct2D1.BitmapRenderTarget IntermediateRenderTarget { get; private set; }
+        public BitmapRenderTarget IntermediateRenderTarget { get; private set; }
         public WindowRenderTarget ScreenRenderTarget { get; private set; }
         public SharpDX.Direct2D1.Factory D2dfactory { get; private set; }
         public SharpDX.DirectWrite.Factory DirectWriteFactory { get; private set; }
@@ -32,7 +31,7 @@ namespace HG.Engine
         {
             _core = core;
 
-            D2dfactory = new SharpDX.Direct2D1.Factory(SharpDX.Direct2D1.FactoryType.SingleThreaded);
+            D2dfactory = new SharpDX.Direct2D1.Factory(FactoryType.SingleThreaded);
 
             var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
             var renderTargetProperties = new RenderTargetProperties(pixelFormat);
@@ -47,7 +46,7 @@ namespace HG.Engine
             ScreenRenderTarget = new WindowRenderTarget(D2dfactory, renderTargetProperties, renderProperties);
 
             var intermediateRenderTargetSize = new Size2F(_core.Display.TotalCanvasSize.Width, _core.Display.TotalCanvasSize.Height);
-            IntermediateRenderTarget = new SharpDX.Direct2D1.BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize);
+            IntermediateRenderTarget = new BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize);
 
             DirectWriteFactory = new SharpDX.DirectWrite.Factory();
 
@@ -151,7 +150,7 @@ namespace HG.Engine
             SetTransformAngle(renderTarget, new SharpDX.RectangleF(x, y, bitmap.PixelSize.Width, bitmap.PixelSize.Height), angle);
 
             renderTarget.AntialiasMode = AntialiasMode.PerPrimitive;
-            renderTarget.TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Cleartype;
+            renderTarget.TextAntialiasMode = TextAntialiasMode.Cleartype;
 
             var destRect = new RawRectangleF(x, y, x + bitmap.PixelSize.Width, y + bitmap.PixelSize.Height);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
@@ -175,15 +174,15 @@ namespace HG.Engine
             return destRect;
         }
 
-        public RawRectangleF GetTextRext(float x, float y, string text, TextFormat format)
+        public RawRectangleF GetTextRext(float x, float y, string text, SharpDX.DirectWrite.TextFormat format)
         {
-            using var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
+            using var textLayout = new SharpDX.DirectWrite.TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
             return new RawRectangleF(x, y, x + textLayout.Metrics.Width, y + textLayout.Metrics.Height);
         }
 
-        public SizeF GetTextSize(string text, TextFormat format)
+        public SizeF GetTextSize(string text, SharpDX.DirectWrite.TextFormat format)
         {
-            using var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
+            using var textLayout = new SharpDX.DirectWrite.TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
             return new SizeF(textLayout.Metrics.Width, textLayout.Metrics.Height);
         }
 
@@ -191,9 +190,9 @@ namespace HG.Engine
         /// Draws text at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
-        public RawRectangleF DrawTextAt(RenderTarget renderTarget, float x, float y, float angle, string text, TextFormat format, SolidColorBrush brush)
+        public RawRectangleF DrawTextAt(RenderTarget renderTarget, float x, float y, float angle, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
         {
-            using var textLayout = new TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
+            using var textLayout = new SharpDX.DirectWrite.TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
             var textWidth = textLayout.Metrics.Width;
             var textHeight = textLayout.Metrics.Height;
