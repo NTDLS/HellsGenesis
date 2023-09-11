@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -15,32 +14,19 @@ namespace HG
 {
     public partial class FormMain : Form
     {
+#if DEBUG
+        readonly List<ActorBase> highlightedActors = new();
+        private readonly ToolTip _interrogationTip = new ToolTip();
+#endif
+
         private readonly Core _core;
         private readonly bool _fullScreen = false;
-
-        //This really shouldn't be necessary! :(
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                //Paints all descendants of a window in bottom-to-top painting order using double-buffering.
-                // For more information, see Remarks. This cannot be used if the window has a class style of either CS_OWNDC or CS_CLASSDC. 
-                CreateParams handleParam = base.CreateParams;
-                handleParam.ExStyle |= 0x02000000; //WS_EX_COMPOSITED       
-                return handleParam;
-            }
-        }
 
         public FormMain()
         {
             InitializeComponent();
 
-            DoubleBuffered = true;
-            SetStyle(ControlStyles.DoubleBuffer | ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
-            UpdateStyles();
-            BackColor = Color.FromArgb(100, 100, 100);
-
-            KeyPreview = true;
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
 
             if (_fullScreen)
             {
@@ -53,42 +39,66 @@ namespace HG
             }
             else
             {
-                Width = (int)(Screen.PrimaryScreen.Bounds.Width * 0.75);
-                Height = (int)(Screen.PrimaryScreen.Bounds.Height * 0.75);
+                ClientSize = new Size((int)(Screen.PrimaryScreen.Bounds.Width * 0.75), (int)(Screen.PrimaryScreen.Bounds.Height * 0.75));
+                StartPosition = FormStartPosition.CenterScreen;
             }
 
             var drawingSurface = new Control();
-            Controls.Add(drawingSurface);
             drawingSurface.Dock = DockStyle.Fill;
-
-            typeof(Control).GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(drawingSurface, true, null);
-
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            SetStyle(ControlStyles.UserPaint, true);
+            Controls.Add(drawingSurface);
 
             _core = new Core(drawingSurface);
 
-            drawingSurface.Paint += FormMain_Paint;
+            var timer = new Timer()
+            {
+                Enabled = true,
+                Interval = 1
+            };
+
+            timer.Tick += (object sender, EventArgs e) =>
+            {
+                Invalidate();
+            };
+
+            Shown += (object sender, EventArgs e) =>
+            {
+                _core.Start();
+            };
+
+            FormClosed += (sender, e) =>
+            {
+                _core.Stop();
+            };
+
+            drawingSurface.MouseEnter += (object sender, EventArgs e) =>
+            {
+                if (_fullScreen)
+                {
+                    Cursor.Hide();
+                }
+            };
+
+            drawingSurface.MouseLeave += (object sender, EventArgs e) =>
+            {
+                if (_fullScreen)
+                {
+                    Cursor.Show();
+                }
+            };
+
             drawingSurface.KeyDown += FormMain_KeyDown;
             drawingSurface.KeyUp += FormMain_KeyUp;
-            drawingSurface.MouseEnter += FormMain_MouseEnter;
-            drawingSurface.MouseLeave += FormMain_MouseLeave;
-            drawingSurface.Location = new Point(25, 25);
-            drawingSurface.Visible = true;
-
-            _core.OnStop += _core_OnStop;
 
 #if DEBUG
-            drawingSurface.MouseDown += DrawingSurface_MouseDown;
-            drawingSurface.MouseMove += DrawingSurface_MouseMove;
+            drawingSurface.MouseDown += FormDirect2D_MouseDown;
+            drawingSurface.MouseMove += FormDirect2D_MouseMove;
 #endif
         }
 
-#if DEBUG
-        readonly List<ActorBase> highlightedActors = new();
+        #region Debug interactions.
 
-        private void DrawingSurface_MouseMove(object sender, MouseEventArgs e)
+#if DEBUG
+        private void FormDirect2D_MouseMove(object sender, MouseEventArgs e)
         {
             double x = e.X + _core.Display.OverdrawSize.Width / 2;
             double y = e.Y + _core.Display.OverdrawSize.Height / 2;
@@ -113,9 +123,7 @@ namespace HG
             }
         }
 
-        private readonly ToolTip _interrogationTip = new ToolTip();
-
-        private void DrawingSurface_MouseDown(object sender, MouseEventArgs e)
+        private void FormDirect2D_MouseDown(object sender, MouseEventArgs e)
         {
             double x = e.X + _core.Display.OverdrawSize.Width / 2;
             double y = e.Y + _core.Display.OverdrawSize.Height / 2;
@@ -258,25 +266,10 @@ namespace HG
                 }
             }
         }
+
 #endif
 
-        private void _core_OnStop(Core sender)
-        {
-            Invoke((MethodInvoker)delegate
-            {
-                Close();
-            });
-        }
-
-        private void FormMain_Shown(object sender, EventArgs e)
-        {
-            _core.Start();
-        }
-
-        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            _core.Stop();
-        }
+        #endregion
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -341,25 +334,14 @@ namespace HG
             if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(HgPlayerKey.Enter, HgKeyPressState.Up);
         }
 
-        private void FormMain_MouseEnter(object sender, EventArgs e)
+        protected override void OnPaintBackground(PaintEventArgs pevent)
         {
-            if (_fullScreen)
-            {
-                Cursor.Hide();
-            }
+            // Prevent background painting to avoid flickering
         }
 
-        private void FormMain_MouseLeave(object sender, EventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
-            if (_fullScreen)
-            {
-                Cursor.Show();
-            }
-        }
-
-        private void FormMain_Paint(object sender, PaintEventArgs e)
-        {
-            //e.Graphics.DrawImage(_core.Actors.Render(), 0, 0);
+            // Prevent painting to avoid flickering.
         }
     }
 }
