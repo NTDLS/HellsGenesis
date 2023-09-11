@@ -7,16 +7,16 @@ namespace HG.Engine
     {
         internal class RawColors
         {
-            public readonly RawColor4 Red = new(1, 0, 0, 1);
-            public readonly RawColor4 Green = new(0, 1, 0, 1);
-            public readonly RawColor4 Blue = new(0, 0, 1, 1);
-            public readonly RawColor4 Black = new(0, 0, 0, 1);
-            public readonly RawColor4 White = new(1, 1, 1, 1);
-            public readonly RawColor4 Gray = new(0.25f, 0.25f, 0.25f, 1);
-            public readonly RawColor4 WhiteSmoke = new(0.9608f, 0.9608f, 0.9608f, 1);
-            public readonly RawColor4 Cyan = new(0, 1f, 1f, 1f);
-            public readonly RawColor4 OrangeRed = new(1f, 0.2706f, 0.0000f, 1);
-            public readonly RawColor4 LawnGreen = new(0.4863f, 0.9882f, 0f, 1);
+            public RawColor4 Red { get; private set; } = new(1, 0, 0, 1);
+            public RawColor4 Green { get; private set; } = new(0, 1, 0, 1);
+            public RawColor4 Blue { get; private set; } = new(0, 0, 1, 1);
+            public RawColor4 Black { get; private set; } = new(0, 0, 0, 1);
+            public RawColor4 White { get; private set; } = new(1, 1, 1, 1);
+            public RawColor4 Gray { get; private set; } = new(0.25f, 0.25f, 0.25f, 1);
+            public RawColor4 WhiteSmoke { get; private set; } = new(0.9608f, 0.9608f, 0.9608f, 1);
+            public RawColor4 Cyan { get; private set; } = new(0, 1f, 1f, 1f);
+            public RawColor4 OrangeRed { get; private set; } = new(1f, 0.2706f, 0.0000f, 1);
+            public RawColor4 LawnGreen { get; private set; } = new(0.4863f, 0.9882f, 0f, 1);
         }
 
         internal class ColorBrushes
@@ -38,7 +38,6 @@ namespace HG.Engine
 
         internal DirectXColors(RenderTarget renterTarget)
         {
-
             Brushes.Red = new SolidColorBrush(renterTarget, Raw.Red);
             Brushes.Green = new SolidColorBrush(renterTarget, Raw.Green);
             Brushes.Blue = new SolidColorBrush(renterTarget, Raw.Blue);

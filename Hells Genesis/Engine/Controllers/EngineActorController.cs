@@ -268,8 +268,8 @@ namespace HG.Engine.Controllers
                     //Render player blip:
                     _core.DirectX.FillEllipseAt(
                         renderTarget,
-                        (float)((_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + (centerOfRadarX)),
-                        (float)((_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + (centerOfRadarY)),
+                        ((_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + (centerOfRadarX)),
+                        ((_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + (centerOfRadarY)),
                         2, 2, _core.DirectX.Colors.Raw.Green);
                 }
             }

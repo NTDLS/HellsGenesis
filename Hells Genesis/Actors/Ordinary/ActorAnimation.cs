@@ -104,9 +104,9 @@ namespace HG.Actors.Ordinary
             _core.DirectX.DrawBitmapAt(
                 renderTarget,
                 _sheetImage,
-                (int)(X - _frameSize.Width / 2.0),
-                (int)(Y - _frameSize.Height / 2.0),
-                (float)Velocity.Angle.Degrees,
+                (X - _frameSize.Width / 2.0),
+                (Y - _frameSize.Height / 2.0),
+                Velocity.Angle.Degrees,
                 sourceRect,
                 new Size2F(_frameSize.Width, _frameSize.Height)
             );

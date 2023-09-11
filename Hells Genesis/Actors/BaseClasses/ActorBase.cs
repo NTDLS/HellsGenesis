@@ -864,7 +864,7 @@ namespace HG.Actors.BaseClasses
                 {
                     var rectangle = new RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
 
-                    _core.DirectX.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), (float)this.Velocity.Angle.Degrees, _core.DirectX.Colors.Raw.Red, 0, 1);
+                    _core.DirectX.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), Velocity.Angle.Degrees, _core.DirectX.Colors.Raw.Red, 0, 1);
                 }
             }
         }
@@ -906,7 +906,7 @@ namespace HG.Actors.BaseClasses
                         size = 1;
                     }
                 }
-                _core.DirectX.FillEllipseAt(renderTarget, x, y, size, size, color); ;
+                _core.DirectX.FillEllipseAt(renderTarget, x, y, size, size, color);
             }
         }
 
@@ -916,11 +916,13 @@ namespace HG.Actors.BaseClasses
 
             if (RotationMode != HgRotationMode.None)
             {
-                _core.DirectX.DrawBitmapAt(renderTarget, bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0), angle);
+                _core.DirectX.DrawBitmapAt(renderTarget, bitmap,
+                    (_location.X - bitmap.Size.Width / 2.0),
+                    (_location.Y - bitmap.Size.Height / 2.0), angle);
             }
             else //Almost free.
             {
-                _core.DirectX.DrawBitmapAt(renderTarget, bitmap, (int)(_location.X - bitmap.Size.Width / 2.0), (int)(_location.Y - bitmap.Size.Height / 2.0));
+                _core.DirectX.DrawBitmapAt(renderTarget, bitmap, (_location.X - bitmap.Size.Width / 2.0), (_location.Y - bitmap.Size.Height / 2.0));
             }
         }
 
