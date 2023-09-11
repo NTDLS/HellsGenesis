@@ -3,7 +3,6 @@ using HG.Engine;
 using HG.Types;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -49,7 +48,7 @@ namespace HG.Menus.BaseClasses
 
         public ActorMenuItem CreateAndAddTitleItem(HgPoint<double> location, string text)
         {
-            var item = new ActorMenuItem(_core, this, _core.DirectX.MenuTitleTextFormat, _core.DirectX.SolidColorOrangeRed, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuTitle, _core.DirectX.Colors.Brushes.OrangeRed, location)
             {
                 Text = text,
                 ItemType = ActorMenuItem.MenuItemType.Title
@@ -60,7 +59,7 @@ namespace HG.Menus.BaseClasses
 
         public ActorMenuItem CreateAndAddTextItem(HgPoint<double> location, string text)
         {
-            var item = new ActorMenuItem(_core, this, _core.DirectX.MenuGeneralTextFormat, _core.DirectX.SolidColorLawnGreen, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuGeneral, _core.DirectX.Colors.Brushes.LawnGreen, location)
             {
                 Text = text,
                 ItemType = ActorMenuItem.MenuItemType.Text
@@ -71,7 +70,7 @@ namespace HG.Menus.BaseClasses
 
         public ActorMenuItem CreateAndAddMenuItem(HgPoint<double> location, string key, string text)
         {
-            var item = new ActorMenuItem(_core, this, _core.DirectX.MenuItemTextFormat, _core.DirectX.SolidColorOrangeRed, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuItem, _core.DirectX.Colors.Brushes.OrangeRed, location)
             {
                 Key = key,
                 Text = text,
@@ -223,7 +222,7 @@ namespace HG.Menus.BaseClasses
                         selectedItem.BoundsI.X + selectedItem.BoundsI.Width,
                         selectedItem.BoundsI.Y + selectedItem.BoundsI.Height),
                     0,
-                    _core.DirectX.RawColorRed, 2, 2);
+                    _core.DirectX.Colors.Raw.Red, 2, 2);
             }
         }
 

@@ -865,7 +865,7 @@ namespace HG.Actors.BaseClasses
                 {
                     var rectangle = new RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
 
-                    _core.DirectX.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), (float)this.Velocity.Angle.Degrees, _core.DirectX.RawColorRed, 0, 1);
+                    _core.DirectX.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), (float)this.Velocity.Angle.Degrees, _core.DirectX.Colors.Raw.Red, 0, 1);
                 }
             }
         }
@@ -891,7 +891,7 @@ namespace HG.Actors.BaseClasses
                     (float)(offset.Y + (Y * scale.Y)),
                     2, //RadiusX
                     2, //RadiusY
-                    _core.DirectX.RawColorRed);
+                    _core.DirectX.Colors.Raw.Red);
             }
         }
 

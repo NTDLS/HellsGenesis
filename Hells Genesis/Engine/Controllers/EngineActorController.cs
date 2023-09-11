@@ -60,9 +60,9 @@ namespace HG.Engine.Controllers
         {
             _core.Player.Actor = new ActorPlayer(_core, _core.PrefabPlayerLoadouts.GetDefault()) { Visable = false };
 
-            PlayerStatsText = TextBlocks.Create(_core.DirectX.RealtimePlayerStatsTextFormat, _core.DirectX.SolidColorBrushWhiteSmoke, new HgPoint<double>(5, 5), true);
+            PlayerStatsText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Colors.Brushes.WhiteSmoke, new HgPoint<double>(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_core.DirectX.RealtimePlayerStatsTextFormat, _core.DirectX.SolidColorBrushCyan, new HgPoint<double>(5, PlayerStatsText.Y + 80), true);
+            DebugText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Colors.Brushes.Cyan, new HgPoint<double>(5, PlayerStatsText.Y + 80), true);
 
             _core.Audio.BackgroundMusicSound.Play();
         }
@@ -263,7 +263,7 @@ namespace HG.Engine.Controllers
                         renderTarget,
                         (float)((_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + (centerOfRadarX)),
                         (float)((_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + (centerOfRadarY)),
-                        2, 2, _core.DirectX.RawColorGreen);
+                        2, 2, _core.DirectX.Colors.Raw.Green);
                 }
             }
         }
@@ -302,7 +302,7 @@ namespace HG.Engine.Controllers
                 using (var pen = new Pen(Color.FromArgb(75, 75, 75), 1))
                 {
                     //screenDrawing.Graphics.DrawRectangle(pen, _core.Display.NatrualScreenBounds);
-                    _core.DirectX.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.RawColorRed, 0, 1);
+                    _core.DirectX.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.Colors.Raw.Red, 0, 1);
                 }
             }
 

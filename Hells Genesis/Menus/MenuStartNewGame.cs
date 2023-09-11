@@ -2,7 +2,6 @@
 using HG.Engine;
 using HG.Menus.BaseClasses;
 using HG.Types;
-using System.Drawing;
 
 namespace HG.Menus
 {

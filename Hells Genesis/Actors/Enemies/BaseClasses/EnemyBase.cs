@@ -8,7 +8,6 @@ using HG.Types;
 using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace HG.Actors.Enemies.BaseClasses
 {
@@ -31,7 +30,7 @@ namespace HG.Actors.Enemies.BaseClasses
 
             RadarPositionIndicator = _core.Actors.RadarPositions.Create();
             RadarPositionIndicator.Visable = false;
-            RadarPositionText = _core.Actors.TextBlocks.CreateRadarPosition(core.DirectX.RadarPositionIndicatorTextFormat, core.DirectX.SolidColorBrushRed, new HgPoint<double>());
+            RadarPositionText = _core.Actors.TextBlocks.CreateRadarPosition(core.DirectX.TextFormats.RadarPositionIndicator, core.DirectX.Colors.Brushes.Red, new HgPoint<double>());
         }
 
         public virtual void BeforeCreate()

@@ -3,7 +3,6 @@ using HG.Engine;
 using HG.Menus.BaseClasses;
 using HG.Types;
 using HG.Utility;
-using System.Drawing;
 using System.Linq;
 
 namespace HG.Menus

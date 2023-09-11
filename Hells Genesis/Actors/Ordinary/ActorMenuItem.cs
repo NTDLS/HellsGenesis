@@ -3,7 +3,6 @@ using HG.Menus.BaseClasses;
 using HG.Types;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using System.Drawing;
 
 namespace HG.Actors.Ordinary
 {

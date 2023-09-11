@@ -83,9 +83,9 @@ namespace HG.Engine
                 DirectX.ScreenRenderTarget.BeginDraw();
                 DirectX.IntermediateRenderTarget.BeginDraw();
 
-                DirectX.ScreenRenderTarget.Clear(DirectX.RawColorBlack);
+                DirectX.ScreenRenderTarget.Clear(DirectX.Colors.Raw.Black);
 
-                DirectX.IntermediateRenderTarget.Clear(DirectX.RawColorBlack);
+                DirectX.IntermediateRenderTarget.Clear(DirectX.Colors.Raw.Black);
                 Actors.RenderPreScaling(DirectX.IntermediateRenderTarget);
                 DirectX.IntermediateRenderTarget.EndDraw();
 
