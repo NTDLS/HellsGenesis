@@ -1,4 +1,5 @@
-﻿using HG.Actors.Enemies.Peons;
+﻿using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Enemies.Peons;
 using HG.Engine;
 using HG.Situations.BaseClasses;
 using HG.Types;
@@ -33,7 +34,6 @@ namespace HG.Situations
 
         private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            /*
             if (_core.Actors.OfType<EnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
@@ -54,7 +54,6 @@ namespace HG.Situations
 
                 CurrentWave++;
             }
-            */
         }
 
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
