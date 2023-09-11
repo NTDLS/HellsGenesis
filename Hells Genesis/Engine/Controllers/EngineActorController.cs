@@ -225,11 +225,12 @@ namespace HG.Engine.Controllers
                     _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height,
                     0);
 
+                double radarDistance = 5;
+
                 if (_radarScale == null)
                 {
-                    double radarDistance = 5;
-                    double radarVisionWidth = _core.Display.NatrualScreenSize.Width * radarDistance;
-                    double radarVisionHeight = _core.Display.NatrualScreenSize.Height * radarDistance;
+                    double radarVisionWidth = _core.Display.TotalCanvasSize.Width * radarDistance;
+                    double radarVisionHeight = _core.Display.TotalCanvasSize.Height * radarDistance;
 
                     _radarScale = new HgPoint<double>(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
                     _radarOffset = new HgPoint<double>(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
@@ -248,9 +249,20 @@ namespace HG.Engine.Controllers
                     //Render radar:
                     foreach (var actor in Collection.Where(o => o.Visable == true))
                     {
-                        if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
+                        //HgPoint<double> scale, HgPoint< double > offset
+                        int x = (int)(_radarOffset.X + (actor.X * _radarScale.X));
+                        int y = (int)(_radarOffset.Y + (actor.Y * _radarScale.Y));
+
+                        if (x > _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
+                            && x < ((_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + radarBgImage.Size.Width)
+                            && y > _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
+                            && y < ((_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + radarBgImage.Size.Height)
+                            )
                         {
-                            actor.RenderRadar(renderTarget, _radarScale, _radarOffset);
+                            if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
+                            {
+                                actor.RenderRadar(renderTarget, x, y);
+                            }
                         }
                     }
 

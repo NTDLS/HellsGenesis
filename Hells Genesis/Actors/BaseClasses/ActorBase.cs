@@ -1,8 +1,10 @@
-﻿using HG.Actors.Ordinary;
+﻿using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Ordinary;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
+using SharpDX.Mathematics.Interop;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -871,16 +873,40 @@ namespace HG.Actors.BaseClasses
         {
         }
 
-        public void RenderRadar(SharpDX.Direct2D1.RenderTarget renderTarget, HgPoint<double> scale, HgPoint<double> offset)
+        public void RenderRadar(SharpDX.Direct2D1.RenderTarget renderTarget, int x, int y)
         {
             if (_isVisible && _image != null)
             {
-                _core.DirectX.FillEllipseAt(renderTarget,
-                    (float)(offset.X + (X * scale.X)),
-                    (float)(offset.Y + (Y * scale.Y)),
-                    2, //RadiusX
-                    2, //RadiusY
-                    _core.DirectX.Colors.Raw.Red);
+                float size = 0;
+
+                RawColor4 color = _core.DirectX.Colors.Raw.Blue;
+                if (this is EnemyBase)
+                {
+                    color = _core.DirectX.Colors.Raw.WhiteSmoke;
+                    size = 3;
+                }
+                else if (this is BulletBase)
+                {
+                    var bullet = this as BulletBase;
+                    if (bullet.FiredFromType == HgFiredFromType.Enemy)
+                    {
+                        color = _core.DirectX.Colors.Raw.Red;
+                    }
+                    else
+                    {
+                        color = _core.DirectX.Colors.Raw.Green;
+                    }
+
+                    if (bullet.Weapon.ExplodesOnImpact)
+                    {
+                        size = 2;
+                    }
+                    else
+                    {
+                        size = 1;
+                    }
+                }
+                _core.DirectX.FillEllipseAt(renderTarget, x, y,size,size,color); ;
             }
         }
 
