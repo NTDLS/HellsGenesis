@@ -1,5 +1,6 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
+using System.Drawing;
 
 namespace HG.Engine
 {
@@ -33,11 +34,12 @@ namespace HG.Engine
             public SolidColorBrush LawnGreen { get; internal set; }
         }
 
-        internal ColorBrushes Brushes { get; set; }
-        internal RawColors Raw { get; set; }
+        internal ColorBrushes Brushes { get; set; } = new();
+        internal RawColors Raw { get; set; } = new();
 
         internal DirectXColors(RenderTarget renterTarget)
         {
+
             Brushes.Red = new SolidColorBrush(renterTarget, Raw.Red);
             Brushes.Green = new SolidColorBrush(renterTarget, Raw.Green);
             Brushes.Blue = new SolidColorBrush(renterTarget, Raw.Blue);

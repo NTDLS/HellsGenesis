@@ -1,4 +1,5 @@
-﻿using HG.Engine;
+﻿using HG.Actors.Enemies.Peons;
+using HG.Engine;
 using HG.Situations.BaseClasses;
 using HG.Types;
 
@@ -64,8 +65,9 @@ namespace HG.Situations
             //_core.Actors.Enemies.Create<EnemyLouse>();
 
             _core.Actors.Debugs.CreateAtCenterScreen();
+            _core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
 
-            //_core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyAvvol>();

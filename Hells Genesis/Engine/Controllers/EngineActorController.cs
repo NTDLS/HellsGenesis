@@ -19,6 +19,8 @@ namespace HG.Engine.Controllers
     internal class EngineActorController
     {
         private readonly Core _core;
+        private HgPoint<double> _radarScale;
+        private HgPoint<double> _radarOffset;
 
         public ActorTextBlock PlayerStatsText { get; private set; }
         public ActorTextBlock DebugText { get; private set; }
@@ -206,14 +208,6 @@ namespace HG.Engine.Controllers
             }
         }
 
-        #region Rendering.
-
-        private HgPoint<double> _radarScale;
-        private HgPoint<double> _radarOffset;
-        private SharpDX.Direct2D1.Bitmap _RadarBackgroundImage = null;
-        private readonly SolidBrush _playerRadarDotBrush = new SolidBrush(Color.FromArgb(255, 0, 0));
-
-
         public void RenderPostScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
             //Render to display:
@@ -231,13 +225,15 @@ namespace HG.Engine.Controllers
                     _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height,
                     0);
 
-                double radarDistance = 5;
+                if (_radarScale == null)
+                {
+                    double radarDistance = 5;
+                    double radarVisionWidth = _core.Display.NatrualScreenSize.Width * radarDistance;
+                    double radarVisionHeight = _core.Display.NatrualScreenSize.Height * radarDistance;
 
-                double radarVisionWidth = _core.Display.NatrualScreenSize.Width * radarDistance;
-                double radarVisionHeight = _core.Display.NatrualScreenSize.Height * radarDistance;
-
-                _radarScale = new HgPoint<double>(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
-                _radarOffset = new HgPoint<double>(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
+                    _radarScale = new HgPoint<double>(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
+                    _radarOffset = new HgPoint<double>(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
+                }
 
                 if (_core.Player.Actor is not null && _core.Player.Actor.Visable)
                 {
@@ -245,8 +241,8 @@ namespace HG.Engine.Controllers
                     double centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0) - 2.0; //Subtract half the dot size.
 
                     _radarOffset = new HgPoint<double>(
-                        (_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + (centerOfRadarX - _core.Player.Actor.X * _radarScale.X),
-                        (_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + (centerOfRadarY - _core.Player.Actor.Y * _radarScale.Y)
+                            (_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + (centerOfRadarX - _core.Player.Actor.X * _radarScale.X),
+                            (_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + (centerOfRadarY - _core.Player.Actor.Y * _radarScale.Y)
                         );
 
                     //Render radar:
@@ -295,7 +291,6 @@ namespace HG.Engine.Controllers
             _core.Player.Actor?.Render(renderTarget);
             _core.Menus.Render(renderTarget);
 
-
             if (_core.Settings.HighlightNatrualBounds)
             {
                 //Highlight the 1:1 frame
@@ -331,10 +326,7 @@ namespace HG.Engine.Controllers
 
                     _core.DirectX.GlobalScale = (float)(baseScale - reduction);
                 }
-
             }
         }
-
-        #endregion
     }
 }

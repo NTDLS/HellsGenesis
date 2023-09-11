@@ -17,8 +17,8 @@ namespace HG.Engine
             MenuGeneral = new TextFormat(factory, "Consolas", 20);
             MenuTitle = new TextFormat(factory, "Consolas", 32);
             MenuItem = new TextFormat(factory, "Consolas", 20);
-            RadarPositionIndicator = new TextFormat(factory, "Consolas", 8);
-            RealtimePlayerStats = new TextFormat(factory, "Consolas", 9);
+            RadarPositionIndicator = new TextFormat(factory, "Consolas", 16);
+            RealtimePlayerStats = new TextFormat(factory, "Consolas", 16);
         }
     }
 }
