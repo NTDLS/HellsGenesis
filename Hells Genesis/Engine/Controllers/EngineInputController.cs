@@ -2,10 +2,7 @@
 using HG.Actors.Ordinary;
 using HG.Types;
 using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
-using static HG.Engine.Constants;
 
 namespace HG.Engine.Controllers
 {
@@ -63,68 +60,8 @@ namespace HG.Engine.Controllers
             #endregion
             else if (key == Keys.F1)
             {
-                int particles = HgRandom.RandomNumber(250, 600);
-
-                double X = _core.Player.Actor.X;
-                double Y = _core.Player.Actor.Y;
-
-                for (int i = 0; i < particles; i++)
-                {
-                    var obj = _core.Actors.Particles.CreateRandomShipPartParticleAt(X + HgRandom.RandomNumber(-20, 20), Y + HgRandom.RandomNumber(-20, 20));
-                    obj.Visable = true;
-                }
-
-                /*
-                string assetPath = @"..\..\..\Assets\Graphics\Fragments";
-
-                int newImageIndex = 0;
-
-                for (var imageIndex = 0; imageIndex < 31; imageIndex++)
-                {
-                    for (int sizeX = 1; sizeX < 4; sizeX += 2)
-                    {
-                        for (int sizeY = 1; sizeY < 24; sizeY += 2)
-                        {
-                            string imagePath = Path.Combine(assetPath, $"{imageIndex}.png");
-                            using (var image = Image.FromFile(imagePath))
-                            {
-                                var resizedImage = new Bitmap(sizeX, sizeY);
-
-                                using (var g = Graphics.FromImage(resizedImage))
-                                {
-                                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
-                                    g.DrawImage(image, 0, 0, sizeX, sizeY);
-                                }
-
-                                string newImagePath = Path.Combine(assetPath, "Variants", $"{newImageIndex++}.png");
-                                resizedImage.Save(newImagePath);
-                            }
-                        }
-                    }
-
-                    for (int sizeX = 1; sizeX < 24; sizeX += 2)
-                    {
-                        for (int sizeY = 1; sizeY < 4; sizeY += 2)
-                        {
-                            string imagePath = Path.Combine(assetPath, $"{imageIndex}.png");
-                            using (var image = Image.FromFile(imagePath))
-                            {
-                                var resizedImage = new Bitmap(sizeX, sizeY);
-
-                                using (var g = Graphics.FromImage(resizedImage))
-                                {
-                                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Bicubic;
-                                    g.DrawImage(image, 0, 0, sizeX, sizeY);
-                                }
-
-                                string newImagePath = Path.Combine(assetPath, "Variants", $"{newImageIndex++}.png");
-                                resizedImage.Save(newImagePath);
-                            }
-                        }
-                    }
-                }
-                */
-
+                //HgDevelopmentTools.ParticleBlast(_core, 50);
+                //HgDevelopmentTools.CreateImageSizeVariants(@"..\..\..\Assets\Graphics\Fragments");
                 //_core.Actors.NewGame();
                 //_core.Actors.ResetAndShowPlayer();
             }

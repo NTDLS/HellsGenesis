@@ -5,7 +5,6 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -102,7 +101,7 @@ namespace HG.Engine
 
                 using (var g = Graphics.FromImage(resizedImage))
                 {
-                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
                     g.DrawImage(image, 0, 0, newWidth, newHeight);
                 }
 
