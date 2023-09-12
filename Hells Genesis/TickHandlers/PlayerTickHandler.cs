@@ -70,15 +70,15 @@ namespace HG.TickHandlers
                             var enemies = _core.Actors.Enemies.Visible();
                             foreach (var enemy in enemies)
                             {
-                                var distanceTo = _core.Player.Actor.DistanceTo(enemy);
+                                var distanceTo = Actor.DistanceTo(enemy);
                                 if (distanceTo < 500)
                                 {
-                                    if (_core.Player.Actor.IsPointingAt(enemy, 50))
+                                    if (Actor.IsPointingAt(enemy, 50))
                                     {
-                                        if (enemy.IsPointingAway(_core.Player.Actor, 50))
+                                        if (enemy.IsPointingAway(Actor, 50))
                                         {
-                                            var angleTo = _core.Player.Actor.AngleTo(enemy);
-                                            _core.Player.Actor.Velocity.Angle.Degrees = angleTo;
+                                            var angleTo = Actor.AngleTo(enemy);
+                                            Actor.Velocity.Angle.Degrees = angleTo;
                                         }
                                     }
                                 }
@@ -250,25 +250,27 @@ namespace HG.TickHandlers
                 Actor.X + _core.Display.BackgroundOffset.X,
                 Actor.Y + _core.Display.BackgroundOffset.Y);
 
+            Actor.RenewableResources.RenewAllResources();
+
             return displacementVector;
         }
 
         public void ResetAndShow()
         {
-            _core.Player.Actor.Reset();
+            Actor.Reset();
 
             _core.Actors.RenderRadar = true;
-            _core.Player.Actor.Visable = true;
-            _core.Player.Actor.ShipEngineIdleSound.Play();
-            _core.Player.Actor.AllSystemsGoSound.Play();
+            Actor.Visable = true;
+            Actor.ShipEngineIdleSound.Play();
+            Actor.AllSystemsGoSound.Play();
         }
 
         public void Hide()
         {
-            _core.Player.Actor.Visable = false;
+            Actor.Visable = false;
             _core.Actors.RenderRadar = false;
-            _core.Player.Actor.ShipEngineIdleSound.Stop();
-            _core.Player.Actor.ShipEngineRoarSound.Stop();
+            Actor.ShipEngineIdleSound.Stop();
+            Actor.ShipEngineRoarSound.Stop();
         }
     }
 }

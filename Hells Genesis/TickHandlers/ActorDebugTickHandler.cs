@@ -55,6 +55,7 @@ namespace HG.TickHandlers
             foreach (var debug in Visible())
             {
                 debug.ApplyMotion(displacementVector);
+                debug.RenewableResources.RenewAllResources();
             }
         }
 

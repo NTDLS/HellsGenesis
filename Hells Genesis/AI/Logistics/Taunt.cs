@@ -10,6 +10,7 @@ using static HG.Engine.Constants;
 
 namespace HG.AI.Logistics
 {
+
     /// <summary>
     /// Finite-state-machine where AI decides the states. "Taunt" keeps an object swooping in and out. Very near and somewhat aggressively.
     /// </summary>
@@ -18,8 +19,13 @@ namespace HG.AI.Logistics
         private const string _assetPath = @"AI\Logistics\FlyBy.txt";
 
         private readonly Core _core;
-        private readonly ActorBase _owner;
+        private readonly ActorShipBase _owner;
         private readonly ActorBase _observedObject;
+
+        private static class RenewableResources
+        {
+            public static string Boost = "IAIController_Taunt_Boost";
+        }
 
         #region I/O Enumerations.
 
@@ -64,13 +70,15 @@ namespace HG.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public Taunt(Core core, ActorBase owner, ActorBase observedObject)
+        public Taunt(Core core, ActorShipBase owner, ActorBase observedObject)
         {
             _core = core;
             _owner = owner;
             _observedObject = observedObject;
 
             owner.OnHit += Owner_OnHit;
+
+            _owner.RenewableResources.CreateResource(RenewableResources.Boost, 800, 0, 10);
 
             SetNeuralNetwork();
         }
@@ -82,18 +90,20 @@ namespace HG.AI.Logistics
 
         private void AlterActionState(ActionState state)
         {
-            Debug.Print($"{state}");
+            double boost = _owner.RenewableResources.Observe(RenewableResources.Boost);
+
+            Debug.Print($"{state} -> {boost:n2}");
             switch (state)
             {
                 case ActionState.EvasiveLoop:
                     _evasiveLoopTargetAngle.Degrees = _owner.Velocity.Angle.Degrees + 180;
                     _evasiveLoopDirection = HgRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
                     _owner.Velocity.ThrottlePercentage = 1.0;
-                    _owner.Velocity.AvailableBoost = 250;
+                    _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, 250);
                     break;
                 case ActionState.TransitionToDepart:
                     {
-                        _owner.Velocity.AvailableBoost = 100;
+                        _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, 100);
                         break;
                     }
             }
@@ -155,7 +165,6 @@ namespace HG.AI.Logistics
                 }
                 _lastDecisionTime = now;
             }
-
 
             //We are evading, dont make any other decisions until evasion is complete.
             if (_currentAction == ActionState.EvasiveLoop)
@@ -317,7 +326,6 @@ namespace HG.AI.Logistics
             _singletonNetwork = newNetwork;
             Network = newNetwork.Clone();//.Mutate(0.2, 0.1)
         }
-
 
         private DniNamedInterfaceParameters GatherInputs()
         {

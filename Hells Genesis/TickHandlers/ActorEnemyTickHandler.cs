@@ -45,6 +45,7 @@ namespace HG.TickHandlers
                 }
 
                 enemy.ApplyMotion(displacementVector);
+                enemy.RenewableResources.RenewAllResources();
             }
         }
 

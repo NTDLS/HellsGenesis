@@ -17,7 +17,7 @@ namespace HG.AI.Logistics
         private const string _assetPath = @"AI\Logistics\FlyBy.txt";
 
         private readonly Core _core;
-        private readonly ActorBase _owner;
+        private readonly ActorShipBase _owner;
         private readonly ActorBase _observedObject;
 
         #region I/O Enumerations.
@@ -60,7 +60,7 @@ namespace HG.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public Meander(Core core, ActorBase owner, ActorBase observedObject)
+        public Meander(Core core, ActorShipBase owner, ActorBase observedObject)
         {
             _core = core;
             _owner = owner;

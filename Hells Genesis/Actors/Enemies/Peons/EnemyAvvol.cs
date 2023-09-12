@@ -1,20 +1,17 @@
 ﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Weapons;
+using HG.AI.Logistics;
 using HG.Engine;
 using HG.Types;
-using HG.Utility.ExtensionMethods;
+using System;
 using System.Drawing;
 using System.IO;
 
 namespace HG.Actors.Enemies.Peons
 {
-    /// <summary>
-    /// These are a heavy fighting unit, employing various types of weapons and seemingly various stratigies.
-    /// They like to stay at a medium range. Some units have seeking-missiles.
-    /// </summary>
     internal class EnemyAvvol : EnemyPeonBase
     {
-        public const int bountyMultiplier = 25;
+        public const int bountyMultiplier = 15;
         private const string _assetPath = @"Graphics\Enemy\Avvol\";
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
@@ -27,157 +24,102 @@ namespace HG.Actors.Enemies.Peons
 
             SetHullHealth(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
-            Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 4, _core.Settings.MaxSpeed - 2); //Upper end of the speed spectrum.
-
-            AddSecondaryWeapon(new WeaponPhotonTorpedo(_core)
-            {
-                RoundQuantity = 5,
-                FireDelayMilliseconds = 1000,
-            });
+            Velocity.MaxBoost = 1.5;
+            Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 4, _core.Settings.MaxSpeed - 3);
 
             AddSecondaryWeapon(new WeaponVulcanCannon(_core)
             {
-                RoundQuantity = 100,
-                FireDelayMilliseconds = 500
+                RoundQuantity = 1000,
+                FireDelayMilliseconds = 250
             });
 
             AddSecondaryWeapon(new WeaponDualVulcanCannon(_core)
             {
-                RoundQuantity = 100,
+                RoundQuantity = 500,
                 FireDelayMilliseconds = 500
             });
 
-            if (selectedImageIndex == 0 || selectedImageIndex == 2 || selectedImageIndex == 5)
-            {
-                AddSecondaryWeapon(new WeaponGuidedFragMissile(_core)
-                {
-                    RoundQuantity = 10,
-                    FireDelayMilliseconds = 2000
-                });
-            }
-
             SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
+
+            AddAIController(new HostileEngagement(_core, this, _core.Player.Actor));
+            AddAIController(new Taunt(_core, this, _core.Player.Actor));
+            AddAIController(new Meander(_core, this, _core.Player.Actor));
+
+            //if (HgRandom.FlipCoin())
+            //{
+            SetDefaultAIController(AIControllers[typeof(Taunt)]);
+            //}
+            //else
+            //{
+            //    SetDefaultAIController(AIControllers[typeof(Meander)]);
+            //}
+
+            behaviorChangeThresholdMiliseconds = HgRandom.RandomNumber(2000, 10000);
+
+            SetDefaultAIController(AIControllers[typeof(Taunt)]);
         }
 
         #region Artificial Intelligence.
 
-        private enum AIMode
-        {
-            Approaching,
-            MovingToFallback,
-            MovingToApproach,
-        }
-
-        const double baseDistanceToKeep = 100;
-        double distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
-        const double baseFallbackDistance = 400;
-        double fallbackDistance;
-        HgAngle<double> fallToAngle;
-        AIMode mode = AIMode.Approaching;
+        DateTime lastBehaviorChangeTime = DateTime.Now;
+        double behaviorChangeThresholdMiliseconds = 0;
 
         public override void ApplyIntelligence(HgPoint<double> displacementVector)
         {
             base.ApplyIntelligence(displacementVector);
 
-            double distanceToPlayer = HgMath.DistanceTo(this, _core.Player.Actor);
-
-            if (mode == AIMode.Approaching)
+            if ((DateTime.Now - lastBehaviorChangeTime).TotalMilliseconds > behaviorChangeThresholdMiliseconds)
             {
-                if (distanceToPlayer > distanceToKeep)
+                behaviorChangeThresholdMiliseconds = HgRandom.RandomNumber(2000, 10000);
+
+                /*
+                if (HgRandom.ChanceIn(2))
                 {
-                    PointAtAndGoto(_core.Player.Actor);
+                    SetDefaultAIController(AIControllers[typeof(HostileEngagement)]);
                 }
-                else
+                if (HgRandom.ChanceIn(2))
                 {
-                    mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.RandomNumberNegative(0, 10));
-                    fallbackDistance = baseFallbackDistance * (HgRandom.Random.NextDouble() + 1);
+                */
+                SetDefaultAIController(AIControllers[typeof(Taunt)]);
+                /*
+                }
+                else if (HgRandom.ChanceIn(2))
+                {
+                    SetDefaultAIController(AIControllers[typeof(Meander)]);
+                }
+                */
+            }
+
+            bool isHostile = false;
+
+            if (isHostile)
+            {
+                double distanceToPlayer = DistanceTo(_core.Player.Actor);
+
+                if (distanceToPlayer < 700)
+                {
+                    if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
+                    {
+                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
+                        if (isPointingAtPlayer)
+                        {
+                            SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
+                            SelectedSecondaryWeapon?.Fire();
+                        }
+                    }
+                    else if (distanceToPlayer > 0 && HasSecondaryWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
+                    {
+                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 15.0);
+                        if (isPointingAtPlayer)
+                        {
+                            SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));
+                            SelectedSecondaryWeapon?.Fire();
+                        }
+                    }
                 }
             }
 
-            if (mode == AIMode.MovingToFallback)
-            {
-                var deltaAngle = Velocity.Angle - fallToAngle;
-
-                if (deltaAngle.Degrees > 10)
-                {
-                    if (deltaAngle.Degrees >= 180.0) //We might as well turn around clock-wise
-                    {
-                        Velocity.Angle += 1;
-                    }
-                    else if (deltaAngle.Degrees < 180.0) //We might as well turn around counter clock-wise
-                    {
-                        Velocity.Angle -= 1;
-                    }
-                }
-
-                if (distanceToPlayer > fallbackDistance)
-                {
-                    mode = AIMode.MovingToApproach;
-                }
-            }
-
-            if (mode == AIMode.MovingToApproach)
-            {
-                var deltaAngle = DeltaAngle(_core.Player.Actor);
-
-                if (deltaAngle.IsNotBetween(-10, 10))
-                {
-                    if (deltaAngle >= 0)
-                    {
-                        Velocity.Angle += 1;
-                    }
-                    else if (deltaAngle < 0)
-                    {
-                        Velocity.Angle -= 1;
-                    }
-                }
-                else
-                {
-                    mode = AIMode.Approaching;
-                    distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
-                }
-            }
-
-            if (distanceToPlayer < 700)
-            {
-                if (distanceToPlayer > 500 && HasSecondaryWeaponAndAmmo(typeof(WeaponGuidedFragMissile)))
-                {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
-                    if (isPointingAtPlayer)
-                    {
-                        SelectSecondaryWeapon(typeof(WeaponGuidedFragMissile));
-                        SelectedSecondaryWeapon?.Fire();
-                    }
-                }
-                else if (distanceToPlayer > 300 && HasSecondaryWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
-                {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
-                    if (isPointingAtPlayer)
-                    {
-                        SelectSecondaryWeapon(typeof(WeaponPhotonTorpedo));
-                        SelectedSecondaryWeapon?.Fire();
-                    }
-                }
-                else if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
-                {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
-                    if (isPointingAtPlayer)
-                    {
-                        SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
-                        SelectedSecondaryWeapon?.Fire();
-                    }
-                }
-                else if (distanceToPlayer > 100 && HasSecondaryWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
-                {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
-                    if (isPointingAtPlayer)
-                    {
-                        SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));
-                        SelectedSecondaryWeapon?.Fire();
-                    }
-                }
-            }
+            DefaultAIController?.ApplyIntelligence(displacementVector);
         }
 
         #endregion

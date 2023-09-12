@@ -1,5 +1,5 @@
 ﻿using HG.Actors.Enemies.BaseClasses;
-using HG.Actors.Enemies.Bosses;
+using HG.Actors.Enemies.Peons;
 using HG.Engine;
 using HG.Situations.BaseClasses;
 using HG.Types;
@@ -42,7 +42,7 @@ namespace HG.Situations
                 }
 
                 //int enemyCount = Utility.Random.Next(CurrentWave + 1, CurrentWave + 5);
-                int enemyCount = 1;
+                int enemyCount = 5;
 
                 for (int i = 0; i < enemyCount; i++)
                 {
@@ -57,22 +57,11 @@ namespace HG.Situations
 
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            /*
-            for (int i = 0; i < 20; i++)
-            {
-                double x = (_core.Display.TotalCanvasSize.Width / 2) + i * 11;
-                double y = _core.Display.TotalCanvasSize.Height / 2 + i * 10;
-
-                var obj = _core.Actors.Particles.CreateRandomParticle(x, y);
-                obj.Visable = true;
-            }
-            */
-
             //_core.Actors.Enemies.Create<EnemyLouse>();
             //_core.Actors.Enemies.Create<EnemyLouse>();
             //_core.Actors.Enemies.Create<EnemyLouse>();
             //_core.Actors.Enemies.Create<EnemyLouse>();
-            _core.Actors.Enemies.Create<EnemyLouse>();
+            _core.Actors.Enemies.Create<EnemyAvvol>();
 
             //_core.Actors.Debugs.CreateAtCenterScreen();
             //_core.Actors.Enemies.Create<EnemyDebug>();

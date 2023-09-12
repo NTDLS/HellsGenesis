@@ -122,8 +122,6 @@ namespace HG.Actors.Enemies.Peons
                 }
             }
 
-            this.Velocity.ThrottlePercentage = 0;
-
             DefaultAIController?.ApplyIntelligence(displacementVector);
         }
 

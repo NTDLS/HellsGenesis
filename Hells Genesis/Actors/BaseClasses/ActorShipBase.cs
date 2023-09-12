@@ -15,6 +15,7 @@ namespace HG.Actors.BaseClasses
     {
         public ActorRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public ActorRadarPositionTextBlock RadarPositionText { get; protected set; }
+        public TimeRenewableResources RenewableResources { get; set; } = new();
 
         private readonly List<WeaponBase> _secondaryWeapons = new();
         private readonly List<WeaponBase> _primaryWeapons = new();

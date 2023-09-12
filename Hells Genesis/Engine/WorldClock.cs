@@ -1,9 +1,4 @@
-﻿using SharpDX.Direct2D1;
-using System.Collections.Generic;
-using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Numerics;
+﻿using System.Diagnostics;
 using System.Threading;
 
 namespace HG.Engine
