@@ -1,12 +1,8 @@
 ﻿using HG.Actors.BaseClasses;
-using HG.Actors.Weapons;
-using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Loudouts;
 using HG.Types;
-using HG.Utility;
-using SharpDX.Direct2D1.Effects;
 using System;
 using System.Drawing;
 
@@ -98,7 +94,7 @@ namespace HG.Actors.Ordinary
 
             SetHullHealth(Loadout.Hull);
             SetShieldHealth(Loadout.Sheilds);
-           
+
             SetPrimaryWeapon(Loadout.PrimaryWeapon.Type, Loadout.PrimaryWeapon.Rounds);
 
             foreach (var secondaryWeapon in Loadout.SecondaryWeapons)

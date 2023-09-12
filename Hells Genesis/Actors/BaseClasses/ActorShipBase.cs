@@ -4,7 +4,6 @@ using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Types;
 using HG.Utility;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
