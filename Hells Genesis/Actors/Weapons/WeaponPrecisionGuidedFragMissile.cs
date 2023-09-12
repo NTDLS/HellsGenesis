@@ -16,8 +16,13 @@ namespace HG.Actors.Weapons
 
         private bool _toggle = false;
 
+        public WeaponPrecisionGuidedFragMissile(Core core, ActorShipBase owner)
+            : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+
         public WeaponPrecisionGuidedFragMissile(Core core)
-            : base(core, Name, soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
+
+        private void InitializeWeapon()
         {
             RoundQuantity = 500;
             Damage = 8;
@@ -31,6 +36,7 @@ namespace HG.Actors.Weapons
             MaxLockOnAngle = 45;
             ExplodesOnImpact = true;
         }
+
 
         public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint<double> xyOffset = null)
         {

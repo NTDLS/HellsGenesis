@@ -23,17 +23,8 @@ namespace HG.Actors.Enemies.Peons
 
             SetHullHealth(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
-            AddSecondaryWeapon(new WeaponPhotonTorpedo(_core)
-            {
-                RoundQuantity = 5,
-                FireDelayMilliseconds = 1000,
-            });
-
-            AddSecondaryWeapon(new WeaponVulcanCannon(_core)
-            {
-                RoundQuantity = 500,
-                FireDelayMilliseconds = 250
-            });
+            AddPrimaryWeapon<WeaponPhotonTorpedo>(5);
+            AddSecondaryWeapon<WeaponVulcanCannon>(500);
 
             Velocity.Angle.Degrees = AngleTo(_core.Player.Actor);
 
@@ -135,24 +126,25 @@ namespace HG.Actors.Enemies.Peons
                 }
             }
 
-            if (distanceToPlayer < 700)
+            if (IsHostile)
             {
-                if (distanceToPlayer > 400 && HasSecondaryWeaponAndAmmo(typeof(WeaponPhotonTorpedo)))
+                if (distanceToPlayer < 800)
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
-                    if (isPointingAtPlayer)
+                    if (distanceToPlayer > 400 && HasSelectedSecondaryWeaponAndAmmo())
                     {
-                        SelectSecondaryWeapon(typeof(WeaponPhotonTorpedo));
-                        SelectedSecondaryWeapon?.Fire();
+                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
+                        if (isPointingAtPlayer)
+                        {
+                            SelectedSecondaryWeapon?.Fire();
+                        }
                     }
-                }
-                else if (HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
-                {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
-                    if (isPointingAtPlayer)
+                    else if (distanceToPlayer > 0 && HasSelectedPrimaryWeaponAndAmmo())
                     {
-                        SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
-                        SelectedSecondaryWeapon?.Fire();
+                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 15.0);
+                        if (isPointingAtPlayer)
+                        {
+                            SelectedPrimaryWeapon?.Fire();
+                        }
                     }
                 }
             }

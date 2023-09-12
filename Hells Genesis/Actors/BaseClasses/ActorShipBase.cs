@@ -3,7 +3,7 @@ using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Types;
-using System;
+using HG.Utility;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -116,6 +116,8 @@ namespace HG.Actors.BaseClasses
             base.Cleanup();
         }
 
+        #region Weapons selection and evaluation.
+
         public void ClearPrimaryWeapons()
         {
             _primaryWeapons.Clear();
@@ -126,31 +128,93 @@ namespace HG.Actors.BaseClasses
             _secondaryWeapons.Clear();
         }
 
-        public void AddPrimaryWeapon(WeaponBase weapon)
+        public void AddPrimaryWeapon(string weaponTypeName, int roundQuantity)
         {
-            var existing = GetPrimaryWeaponOfType(weapon.GetType());
-            if (existing == null)
+            var weaponType = HgReflection.GetTypeByName(weaponTypeName);
+
+            var weapon = _primaryWeapons.Where(o => o.GetType() == weaponType).SingleOrDefault();
+
+            if(weapon == null)
             {
-                weapon.SetOwner(this);
+                weapon = HgReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _core, this });
+                weapon.RoundQuantity += roundQuantity;
+                _primaryWeapons.Add(weapon);
+            }
+
+            weapon.RoundQuantity += roundQuantity;
+
+            if (SelectedPrimaryWeapon == null)//If there is no primary weapon selected, then default to the newly added one.
+            {
+                SelectedPrimaryWeapon = weapon;
+            }
+        }
+
+        public void AddSecondaryWeapon(string weaponTypeName, int roundQuantity)
+        {
+            var weaponType = HgReflection.GetTypeByName(weaponTypeName);
+
+            var weapon = _secondaryWeapons.Where(o => o.GetType() == weaponType).SingleOrDefault();
+
+            if (weapon == null)
+            {
+                weapon = HgReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _core, this });
+                weapon.RoundQuantity += roundQuantity;
+                _secondaryWeapons.Add(weapon);
+            }
+
+            weapon.RoundQuantity += roundQuantity;
+
+            if (SelectedSecondaryWeapon == null)//If there is no secondary weapon selected, then default to the newly added one.
+            {
+                SelectedSecondaryWeapon = weapon;
+            }
+        }
+
+        /// <summary>
+        /// Adds a new primary weapon or adds its ammo to the current of its type.
+        /// </summary>
+        /// <param name="weapon"></param>
+        public void AddPrimaryWeapon<T>(int roundQuantity) where T : WeaponBase
+        {
+            var weapon = GetPrimaryWeaponOfType<T>();
+            if (weapon == null)
+            {
+                weapon = HgReflection.CreateInstanceOf<T>(new object[] { _core, this });
+                weapon.RoundQuantity += roundQuantity;
                 _primaryWeapons.Add(weapon);
             }
             else
             {
-                existing.RoundQuantity += weapon.RoundQuantity;
+                weapon.RoundQuantity += roundQuantity;
+            }
+
+            if (SelectedPrimaryWeapon == null)//If there is no primary weapon selected, then default to the newly added one.
+            {
+                SelectedPrimaryWeapon = weapon;
             }
         }
 
-        public void AddSecondaryWeapon(WeaponBase weapon)
+        /// <summary>
+        /// Adds a new secondary weapon or adds its ammo to the current of its type.
+        /// </summary>
+        /// <param name="weapon"></param>
+        public void AddSecondaryWeapon<T>(int roundQuantity) where T : WeaponBase
         {
-            var existing = GetSecondaryWeaponOfType(weapon.GetType());
-            if (existing == null)
+            var weapon = GetSecondaryWeaponOfType<T>();
+            if (weapon == null)
             {
-                weapon.SetOwner(this);
+                weapon = HgReflection.CreateInstanceOf<T>(new object[] { _core, this });
+                weapon.RoundQuantity += roundQuantity;
                 _secondaryWeapons.Add(weapon);
             }
             else
             {
-                existing.RoundQuantity += weapon.RoundQuantity;
+                weapon.RoundQuantity += roundQuantity;
+            }
+
+            if (SelectedSecondaryWeapon == null) //If there is no secondary weapon selected, then default to the newly added one.
+            {
+                SelectedSecondaryWeapon = weapon;
             }
         }
 
@@ -207,15 +271,27 @@ namespace HG.Actors.BaseClasses
             return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
 
-        public bool HasSecondaryWeapon(Type weaponType)
+        public bool HasSecondaryWeapon<T>() where T : WeaponBase
         {
-            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
+            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
             return existingWeapon != null;
         }
 
-        public bool HasSecondaryWeaponAndAmmo(Type weaponType)
+        public bool HasSecondaryWeaponAndAmmo<T>() where T : WeaponBase
         {
-            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
+            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
+            return existingWeapon != null && existingWeapon.RoundQuantity > 0;
+        }
+
+        public bool HasPrimaryWeaponAndAmmo<T>() where T : WeaponBase
+        {
+            var existingWeapon = (from o in _primaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
+            return existingWeapon != null && existingWeapon.RoundQuantity > 0;
+        }
+
+        public bool HasPrimaryWeaponAndAmmo()
+        {
+            var existingWeapon = (from o in _primaryWeapons select o).FirstOrDefault();
             return existingWeapon != null && existingWeapon.RoundQuantity > 0;
         }
 
@@ -271,26 +347,28 @@ namespace HG.Actors.BaseClasses
             return SelectedSecondaryWeapon;
         }
 
-        public WeaponBase GetPrimaryWeaponOfType(Type weaponType)
+        public WeaponBase GetPrimaryWeaponOfType<T>() where T : WeaponBase
         {
-            return (from o in _primaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
+            return (from o in _primaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
         }
 
-        public WeaponBase GetSecondaryWeaponOfType(Type weaponType)
+        public WeaponBase GetSecondaryWeaponOfType<T>() where T : WeaponBase
         {
-            return (from o in _secondaryWeapons where o.GetType() == weaponType select o).FirstOrDefault();
+            return (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
         }
 
-        public WeaponBase SelectPrimaryWeapon(Type weaponType)
+        public WeaponBase SelectPrimaryWeapon<T>() where T : WeaponBase
         {
-            SelectedPrimaryWeapon = GetPrimaryWeaponOfType(weaponType);
+            SelectedPrimaryWeapon = GetPrimaryWeaponOfType<T>();
             return SelectedPrimaryWeapon;
         }
 
-        public WeaponBase SelectSecondaryWeapon(Type weaponType)
+        public WeaponBase SelectSecondaryWeapon<T>() where T : WeaponBase
         {
-            SelectedSecondaryWeapon = GetSecondaryWeaponOfType(weaponType);
+            SelectedSecondaryWeapon = GetSecondaryWeaponOfType<T>();
             return SelectedSecondaryWeapon;
         }
+
+        #endregion
     }
 }

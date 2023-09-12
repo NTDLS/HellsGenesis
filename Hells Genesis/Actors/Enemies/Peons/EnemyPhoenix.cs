@@ -27,18 +27,8 @@ namespace HG.Actors.Enemies.Peons
             Velocity.MaxBoost = 1.5;
             Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 4, _core.Settings.MaxSpeed - 3);
 
-            AddPrimaryWeapon(new WeaponScattershot(_core)
-            {
-                RoundQuantity = 1000
-            });
-
-            AddSecondaryWeapon(new WeaponDualVulcanCannon(_core)
-            {
-                RoundQuantity = 500
-            });
-
-            SelectPrimaryWeapon(typeof(WeaponScattershot));
-            SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));
+            AddPrimaryWeapon<WeaponScattershot>(1000);
+            AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
 
             AddAIController(new HostileEngagement(_core, this, _core.Player.Actor));
             AddAIController(new Taunt(_core, this, _core.Player.Actor));

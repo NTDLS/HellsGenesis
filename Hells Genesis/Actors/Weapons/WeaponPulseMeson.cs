@@ -16,8 +16,13 @@ namespace HG.Actors.Weapons
 
         private bool _toggle = false;
 
+        public WeaponPulseMeson(Core core, ActorShipBase owner)
+            : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+
         public WeaponPulseMeson(Core core)
-            : base(core, Name, soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
+
+        private void InitializeWeapon()
         {
             RoundQuantity = 500;
             Damage = 25;

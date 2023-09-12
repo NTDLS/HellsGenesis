@@ -14,8 +14,13 @@ namespace HG.Actors.Weapons
         private const string soundPath = @"Sounds\Weapons\WeaponVulcanCannon.wav";
         private const float soundVolumne = 0.2f;
 
+        public WeaponScattershot(Core core, ActorShipBase owner)
+            : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+
         public WeaponScattershot(Core core)
-            : base(core, Name, soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
+
+        private void InitializeWeapon()
         {
             RoundQuantity = 500;
             Damage = 1;

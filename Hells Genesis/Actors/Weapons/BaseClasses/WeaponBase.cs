@@ -40,13 +40,30 @@ namespace HG.Actors.Weapons.BaseClasses
             Name = name;
         }
 
+        public WeaponBase(Core core, ActorShipBase owner, string name, string soundPath, float soundVolume)
+        {
+            _owner = owner;
+            _core = core;
+            _fireSound = _core.Audio.Get(soundPath, soundVolume);
+            Name = name;
+        }
+
         public virtual BulletBase CreateBullet(ActorBase lockedTarget, HgPoint<double> xyOffset = null)
         {
+            if (_owner == null)
+            {
+                throw new ArgumentNullException("Weapon is not owned.");
+            }
             return new BulletGeneric(_core, this, _owner, @"Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
         }
 
         public virtual void ApplyIntelligence(HgPoint<double> displacementVector, ActorBase wouldFireAt)
         {
+            if (_owner == null)
+            {
+                throw new ArgumentNullException("Weapon is not owned.");
+            }
+
             bool lockOn = false;
             bool softLockOn = false;
 
@@ -77,6 +94,11 @@ namespace HG.Actors.Weapons.BaseClasses
 
         public virtual bool Fire()
         {
+            if (_owner == null)
+            {
+                throw new ArgumentNullException("Weapon is not owned.");
+            }
+
             if (CanFire)
             {
                 RoundsFired++;
@@ -90,18 +112,6 @@ namespace HG.Actors.Weapons.BaseClasses
 
         public virtual void Hit()
         {
-        }
-
-        public void SetOwner(ActorBase owner)
-        {
-            if (_owner == null)
-            {
-                _owner = owner;
-            }
-            else
-            {
-                throw new Exception("The weapon is already owned by an object");
-            }
         }
 
         public bool CanFire

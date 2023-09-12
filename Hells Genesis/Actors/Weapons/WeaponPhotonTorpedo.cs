@@ -14,8 +14,13 @@ namespace HG.Actors.Weapons
         private const string soundPath = @"Sounds\Weapons\BulletPhotonTorpedo.wav";
         private const float soundVolumne = 0.4f;
 
+        public WeaponPhotonTorpedo(Core core, ActorShipBase owner)
+            : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+
         public WeaponPhotonTorpedo(Core core)
-            : base(core, Name, soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
+
+        private void InitializeWeapon()
         {
             RoundQuantity = 10;
             Damage = 15;

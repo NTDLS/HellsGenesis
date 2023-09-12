@@ -1,4 +1,5 @@
-﻿using HG.Actors.Weapons.BaseClasses;
+﻿using HG.Actors.BaseClasses;
+using HG.Actors.Weapons.BaseClasses;
 using HG.Engine;
 
 namespace HG.Actors.Weapons
@@ -10,8 +11,13 @@ namespace HG.Actors.Weapons
         private const string soundPath = @"Sounds\Weapons\WeaponVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
+        public WeaponVulcanCannon(Core core, ActorShipBase owner)
+            : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+
         public WeaponVulcanCannon(Core core)
-            : base(core, Name, soundPath, soundVolumne)
+            : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
+
+        private void InitializeWeapon()
         {
             RoundQuantity = 500;
             Damage = 2;

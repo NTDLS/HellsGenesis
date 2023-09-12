@@ -47,19 +47,8 @@ namespace HG.Actors.Enemies.Bosses
 
             SetImage(_imagesPath + "Hull.png");
 
-            AddSecondaryWeapon(new WeaponVulcanCannon(_core)
-            {
-                RoundQuantity = 1000,
-                FireDelayMilliseconds = 250
-            });
-
-            AddSecondaryWeapon(new WeaponDualVulcanCannon(_core)
-            {
-                RoundQuantity = 500,
-                FireDelayMilliseconds = 500
-            });
-
-            SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
+            AddPrimaryWeapon<WeaponVulcanCannon>(1000);
+            AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
         }
 
         public override void BeforeCreate()
@@ -313,24 +302,28 @@ namespace HG.Actors.Enemies.Bosses
                 }
             }
 
-            if (distanceToPlayer < 700 && (_rightGun.IsDead == false || _leftGun.IsDead == false))
+            if (IsHostile)
             {
-                if (distanceToPlayer > 200 && HasSecondaryWeaponAndAmmo(typeof(WeaponVulcanCannon)))
+                if (distanceToPlayer < 700 && (_rightGun.IsDead == false || _leftGun.IsDead == false))
                 {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
-                    if (isPointingAtPlayer)
+                    if (distanceToPlayer < 800)
                     {
-                        SelectSecondaryWeapon(typeof(WeaponVulcanCannon));
-                        SelectedSecondaryWeapon?.Fire();
-                    }
-                }
-                else if (distanceToPlayer > 0 && HasSecondaryWeaponAndAmmo(typeof(WeaponDualVulcanCannon)))
-                {
-                    bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
-                    if (isPointingAtPlayer)
-                    {
-                        SelectSecondaryWeapon(typeof(WeaponDualVulcanCannon));
-                        SelectedSecondaryWeapon?.Fire();
+                        if (distanceToPlayer > 400 && HasSelectedSecondaryWeaponAndAmmo())
+                        {
+                            bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 8.0);
+                            if (isPointingAtPlayer)
+                            {
+                                SelectedSecondaryWeapon?.Fire();
+                            }
+                        }
+                        else if (distanceToPlayer > 0 && HasSelectedPrimaryWeaponAndAmmo())
+                        {
+                            bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 15.0);
+                            if (isPointingAtPlayer)
+                            {
+                                SelectedPrimaryWeapon?.Fire();
+                            }
+                        }
                     }
                 }
             }
