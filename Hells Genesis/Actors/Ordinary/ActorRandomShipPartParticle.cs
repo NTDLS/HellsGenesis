@@ -6,7 +6,7 @@ using static HG.Engine.Constants;
 
 namespace HG.Actors.Ordinary
 {
-    internal class ActorRandomParticle : ActorParticleBase
+    internal class ActorRandomShipPartParticle : ActorParticleBase
     {
         private const string _assetPath = @"Graphics\Fragments";
         private readonly int _imageCount = 31;
@@ -17,11 +17,20 @@ namespace HG.Actors.Ordinary
         private RelativeDirection _rotationDirection;
         private HgAngle<double> _travelAngle = new();
 
-        public ActorRandomParticle(Core core, double x, double y)
+        public ActorRandomShipPartParticle(Core core, double x, double y)
             : base(core)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % _imageCount;
-            Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
+
+            int sizeX = HgRandom.RandomNumber(1, 15);
+            int sizeY = HgRandom.RandomNumber(1, 15);
+
+            if (HgRandom.FlipCoin())
+            {
+                (sizeX, sizeY) = (sizeY, sizeX);
+            }
+
+            Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new System.Drawing.Size(sizeX, sizeY));
 
             X = x;
             Y = y;

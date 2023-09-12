@@ -25,54 +25,49 @@ namespace HG.TickHandlers
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
         {
-            /*
-            if (_core.Player.Actor != null)
+            foreach (var particle in Visible())
             {
-                var anchor = _core.Actors.Debugs.ByAssetTag("Anchor");
-                if (anchor == null)
-                {
-                    _core.Actors.Debugs.CreateAtCenterScreen("Anchor");
-                    anchor = _core.Actors.Debugs.ByAssetTag("Anchor");
-                }
-
-                var pointer = _core.Actors.Debugs.ByAssetTag("Pointer");
-                if (pointer == null)
-                {
-                    _core.Actors.Debugs.CreateAtCenterScreen("Pointer");
-                    pointer = _core.Actors.Debugs.ByAssetTag("Pointer");
-                }
-
-                double requiredAngle = _core.Player.Actor.AngleTo(anchor);
-                var offset = HgMath.AngleFromPointAtDistance(new HgAngle<double>(requiredAngle), new HgPoint<double>(200, 200));
-                pointer.Velocity.Angle.Degrees = requiredAngle;
-                pointer.Location = _core.Player.Actor.Location + offset;
-                anchor.Velocity.Angle.Degrees = anchor.AngleTo(_core.Player.Actor);
-            }
-            */
-
-            foreach (var debug in Visible())
-            {
-                debug.ApplyMotion(displacementVector);
+                particle.ApplyMotion(displacementVector);
             }
         }
 
         #region Factories.
 
-        public ActorRandomParticle CreateRandomParticleAt(ActorBase actor)
+        public void CreateRandomShipPartParticlesAt(double x, double y, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var obj = _core.Actors.Particles.CreateRandomShipPartParticleAt(
+                    x + HgRandom.RandomNumber(-20, 20), y + HgRandom.RandomNumber(-20, 20));
+                obj.Visable = true;
+            }
+        }
+
+        public void CreateRandomShipPartParticlesAt(ActorBase actor, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var obj = _core.Actors.Particles.CreateRandomShipPartParticleAt(
+                    actor.X + HgRandom.RandomNumber(-20, 20), actor.Y + HgRandom.RandomNumber(-20, 20));
+                obj.Visable = true;
+            }
+        }
+
+        public ActorRandomShipPartParticle CreateRandomShipPartParticleAt(ActorBase actor)
         {
             lock (_controller.Collection)
             {
-                var obj = new ActorRandomParticle(_core, actor.X, actor.Y);
+                var obj = new ActorRandomShipPartParticle(_core, actor.X, actor.Y);
                 _controller.Collection.Add(obj);
                 return obj;
             }
         }
 
-        public ActorRandomParticle CreateRandomParticleAt(double x, double y)
+        public ActorRandomShipPartParticle CreateRandomShipPartParticleAt(double x, double y)
         {
             lock (_controller.Collection)
             {
-                var obj = new ActorRandomParticle(_core, x, y);
+                var obj = new ActorRandomShipPartParticle(_core, x, y);
                 _controller.Collection.Add(obj);
                 return obj;
             }

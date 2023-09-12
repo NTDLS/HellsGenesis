@@ -71,7 +71,7 @@ namespace HG.Situations
             //_core.Actors.Enemies.Create<EnemyLouse>();
             //_core.Actors.Enemies.Create<EnemyLouse>();
             //_core.Actors.Enemies.Create<EnemyLouse>();
-            _core.Actors.Enemies.Create<EnemyLouse>();
+            //_core.Actors.Enemies.Create<EnemyLouse>();
             _core.Actors.Enemies.Create<EnemyLouse>();
 
             //_core.Actors.Debugs.CreateAtCenterScreen();

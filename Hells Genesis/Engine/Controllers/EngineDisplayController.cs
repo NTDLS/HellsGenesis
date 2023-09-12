@@ -62,17 +62,6 @@ namespace HG.Engine.Controllers
         }
 
         /// <summary>
-        /// The total bounds of the drawing surface (canvas) natrual + overdraw (with no scaling) with respect to the infinite scrolling background,
-        /// </summary>
-        public RectangleF VirtualTotalScreenBounds
-        {
-            get
-            {
-                return new RectangleF((float)_core.Display.BackgroundOffset.X, (float)_core.Display.BackgroundOffset.Y, TotalCanvasSize.Width, TotalCanvasSize.Height);
-            }
-        }
-
-        /// <summary>
         /// The total bounds of the drawing surface (canvas) natrual + overdraw (with no scaling).
         /// </summary>
         public RectangleF TotalScreenBounds

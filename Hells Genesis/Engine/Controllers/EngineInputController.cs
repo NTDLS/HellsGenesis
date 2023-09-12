@@ -60,6 +60,17 @@ namespace HG.Engine.Controllers
             #endregion
             else if (key == Keys.F1)
             {
+                int particles = HgRandom.RandomNumber(250, 600);
+
+                double X = _core.Player.Actor.X;
+                double Y = _core.Player.Actor.Y;
+
+                for (int i = 0; i < particles; i++)
+                {
+                    var obj = _core.Actors.Particles.CreateRandomShipPartParticleAt(X + HgRandom.RandomNumber(-20, 20), Y + HgRandom.RandomNumber(-20, 20));
+                    obj.Visable = true;
+                }
+
                 //_core.Actors.NewGame();
                 //_core.Actors.ResetAndShowPlayer();
             }

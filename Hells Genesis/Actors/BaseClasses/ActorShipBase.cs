@@ -77,35 +77,8 @@ namespace HG.Actors.BaseClasses
 
         public void CreateParticlesExplosion()
         {
-            //TODO: This number is just to show Aiden, please reduce to 20-30.
-            int particles = HgRandom.RandomNumber(250, 600);
-
-            for (int i = 0; i < particles; i++)
-            {
-                var obj = _core.Actors.Particles.CreateRandomParticleAt(X + HgRandom.RandomNumber(-20, 20), Y + HgRandom.RandomNumber(-20, 20));
-                obj.Visable = true;
-            }
-
-            int lastSelectedExplosionSoundIndex = 0;
-            int explosionsPlayed = 0;
-            while (true)
-            {
-                const string _assetExplosionSoundPath = @"Sounds\Explode\";
-                int explosionSoundCount = 4;
-                int selectedExplosionSoundIndex = HgRandom.Random.Next(0, 1000) % explosionSoundCount;
-                if (selectedExplosionSoundIndex != lastSelectedExplosionSoundIndex)
-                {
-                    var explodeSound = _core.Audio.Get(Path.Combine(_assetExplosionSoundPath, $"{selectedExplosionSoundIndex}.wav"), 1.0f);
-                    explodeSound?.Play();
-                    lastSelectedExplosionSoundIndex = selectedExplosionSoundIndex;
-                    explosionsPlayed++;
-                }
-
-                if (explosionsPlayed >= 2)
-                {
-                    break;
-                }
-            }
+            _core.Actors.Particles.CreateRandomShipPartParticlesAt(this, HgRandom.RandomNumber(30, 50));
+            _core.Audio.PlayRandomExplosion();
         }
 
         /// <summary>

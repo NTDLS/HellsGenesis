@@ -1,4 +1,6 @@
-﻿namespace HG.Engine.Controllers
+﻿using System.IO;
+
+namespace HG.Engine.Controllers
 {
     internal class EngineAudioController
     {
@@ -22,6 +24,15 @@
         public AudioClip Get(string path, float initialVolumne, bool loopForever = false)
         {
             return _core.Assets.GetAudio(path, initialVolumne, loopForever);
+        }
+
+        public void PlayRandomExplosion()
+        {
+            const string _assetExplosionSoundPath = @"Sounds\Explode\";
+            int explosionSoundCount = 4;
+            int selectedExplosionSoundIndex = HgRandom.Random.Next(0, 1000) % explosionSoundCount;
+            var explodeSound = _core.Audio.Get(Path.Combine(_assetExplosionSoundPath, $"{selectedExplosionSoundIndex}.wav"), 1.0f);
+            explodeSound?.Play();
         }
     }
 }
