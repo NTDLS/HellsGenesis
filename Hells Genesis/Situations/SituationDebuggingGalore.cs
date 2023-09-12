@@ -57,11 +57,15 @@ namespace HG.Situations
 
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            //_core.Actors.Enemies.Create<EnemyLouse>();
-            //_core.Actors.Enemies.Create<EnemyLouse>();
-            //_core.Actors.Enemies.Create<EnemyLouse>();
-            //_core.Actors.Enemies.Create<EnemyLouse>();
-            _core.Actors.Enemies.Create<EnemyAvvol>();
+            //_core.Actors.Enemies.Create<EnemyRepulsor>();
+            //_core.Actors.Enemies.Create<EnemyRepulsor>();
+            //_core.Actors.Enemies.Create<EnemyRepulsor>();
+            //_core.Actors.Enemies.Create<EnemyRepulsor>();
+            _core.Actors.Enemies.Create<EnemyPhoenix>();
+            _core.Actors.Enemies.Create<EnemyPhoenix>();
+            _core.Actors.Enemies.Create<EnemyPhoenix>();
+            _core.Actors.Enemies.Create<EnemyPhoenix>();
+            _core.Actors.Enemies.Create<EnemyPhoenix>();
 
             //_core.Actors.Debugs.CreateAtCenterScreen();
             //_core.Actors.Enemies.Create<EnemyDebug>();
@@ -71,12 +75,12 @@ namespace HG.Situations
 
             //_core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyDebug>();
-            //_core.Actors.Enemies.Create<EnemyAvvol>();
-            //_core.Actors.Enemies.Create<EnemyAvvol>();
-            //_core.Actors.Enemies.Create<EnemyAvvol>();
-            //_core.Actors.Enemies.Create<EnemyScarab>();
-            //_core.Actors.Enemies.Create<EnemyScarab>();
-            //_core.Actors.Enemies.Create<EnemyScarab>();
+            //_core.Actors.Enemies.Create<EnemyPhoenix>();
+            //_core.Actors.Enemies.Create<EnemyPhoenix>();
+            //_core.Actors.Enemies.Create<EnemyPhoenix>();
+            //_core.Actors.Enemies.Create<EnemyDevastator>();
+            //_core.Actors.Enemies.Create<EnemyDevastator>();
+            //_core.Actors.Enemies.Create<EnemyDevastator>();
         }
     }
 }

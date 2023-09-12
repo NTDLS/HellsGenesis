@@ -15,9 +15,9 @@ namespace HG.Actors.Enemies.BaseClasses
     {
         public IAIController DefaultAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
-
         public int CollisionDamage { get; set; } = 25;
         public int BountyWorth { get; private set; } = 25;
+        public bool IsHostile { get; set; } = true;
 
         public EnemyBase(Core core, int hullHealth, int bountyMultiplier)
             : base(core)

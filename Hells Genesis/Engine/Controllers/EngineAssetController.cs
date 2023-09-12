@@ -1,10 +1,8 @@
-﻿using SharpCompress.Archives;
-using SharpCompress.Common;
-using SharpCompress.Readers;
-using System;
+﻿using Determinet;
+using SharpDX.Win32;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Windows.Forms;
 
 namespace HG.Engine.Controllers
 {
@@ -20,135 +18,127 @@ namespace HG.Engine.Controllers
             _core = core;
         }
 
-        public string GetText(string path, string defaultText = "")
+        public DniNeuralNetwork GetNeuralNetwork(string assetRelativePath)
         {
-            path = Path.Combine(assetRawPath, path).Trim().Replace("\\", "/");
+            string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
+            string key = $"DniNeuralNetwork({assetAbsolutePath})";
 
             lock (_collection)
             {
-                if (_collection.ContainsKey(path))
+                if (_collection.TryGetValue(key, out var value))
                 {
-                    return _collection[path] as string;
+                    return (value as DniNeuralNetwork);
                 }
-                else
+
+                var json = _core.Assets.GetText(assetRelativePath);
+                if (string.IsNullOrEmpty(json) == false)
                 {
-                    try
-                    {
-                        var text = GetCompressedText(path);
-                        _collection.Add(path, text);
-                        return text;
-                    }
-                    catch
-                    {
-                        return defaultText;
-                    }
+                    var network = DniNeuralNetwork.LoadFromText(json);
+                    _collection.Add(key, network);
+                    return network;
                 }
             }
+
+            return null;
         }
 
-        public void PutText(string path, string value)
+        public string GetText(string assetRelativePath, string defaultText = "")
         {
-            path = Path.Combine(assetRawPath, path).Trim().Replace("\\", "/");
+            string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
+            string key = $"Text({assetRelativePath})";
 
             lock (_collection)
             {
-                File.WriteAllText(path, value);
+                if (_collection.TryGetValue(key, out var value))
+                {
+                    return value as string;
+                }
 
-                if (_collection.ContainsKey(path))
+                if (File.Exists(assetAbsolutePath) == false)
                 {
-                    _collection[path] = value;
+                    return defaultText;
                 }
-                else
-                {
-                    _collection.Add(path, value);
-                }
+
+                return File.ReadAllText(assetAbsolutePath);
             }
         }
 
-        public AudioClip GetAudio(string path, float initialVolumne, bool loopForever = false)
+        public void PutText(string assetRelativePath, string value)
         {
-            path = Path.Combine(assetRawPath, path).Trim().Replace("\\", "/");
+            string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
+            string key = $"Text({assetRelativePath})";
 
             lock (_collection)
             {
-                path = path.Trim().ToLower();
+                File.WriteAllText(assetAbsolutePath, value);
 
-                if (_collection.ContainsKey(path))
+                if (_collection.ContainsKey(key))
                 {
-                    return (AudioClip)_collection[path];
+                    _collection[key] = value;
                 }
                 else
                 {
-                    using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-                    {
-                        var result = new AudioClip(stream, initialVolumne, loopForever);
-                        _collection.Add(path, result);
-                        stream.Close();
-                        return result;
-                    }
-
-                    /*
-                    using (var stream = GetCompressedStream(path))
-                    {
-                        var result = new AudioClip(stream, initialVolumne, loopForever);
-                        _collection.Add(path, result);
-                        stream.Close();
-                        return result;
-                    }
-                    */
+                    _collection.Add(key, value);
                 }
             }
         }
 
-        public SharpDX.Direct2D1.Bitmap GetBitmap(string path)
+        public AudioClip GetAudio(string assetRelativePath, float initialVolumne, bool loopForever = false)
         {
-            path = Path.Combine(assetRawPath, path).Trim().Replace("\\", "/");
+            string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
+            string key = $"Audio({assetRelativePath})";
 
-            return _core.DirectX.GetCachedBitmap(path);
-        }
-
-        public SharpDX.Direct2D1.Bitmap GetBitmap(string path, int newWidth, int newHeight)
-        {
-            path = Path.Combine(assetRawPath, path).Trim().Replace("\\", "/");
-
-            return _core.DirectX.GetCachedBitmap(path, newWidth, newHeight);
-        }
-
-
-        private string GetCompressedText(string path)
-        {
-            return File.ReadAllText(path);
-
-            /*
-            using (var stream = GetCompressedStream(path))
+            lock (_collection)
             {
-                return System.Text.Encoding.UTF8.GetString(stream.ToArray());
-            }
-            */
-        }
-
-        private MemoryStream GetCompressedStream(string path)
-        {
-            string zipFilePath = Path.Combine(assetRawPath, "Assets.zip");
-
-            using (var archive = ArchiveFactory.Open(zipFilePath, new ReaderOptions() { ArchiveEncoding = new ArchiveEncoding() { Default = System.Text.Encoding.Default } }))
-            {
-                string desiredFilePath = Path.Combine("Assets", path).Trim().Replace("\\", "/");
-
-                var entry = archive.Entries.FirstOrDefault(e => e.Key.Equals(desiredFilePath, StringComparison.OrdinalIgnoreCase));
-                if (entry != null)
+                if (_collection.TryGetValue(key, out var value))
                 {
-                    using (var stream = entry.OpenEntryStream())
-                    {
-                        var memoryStream = new MemoryStream();
-                        stream.CopyTo(memoryStream);
-                        memoryStream.Position = 0;
-                        return memoryStream;
-                    }
+                    return value as AudioClip;
+                }
+
+                using (var stream = new FileStream(assetAbsolutePath, FileMode.Open, FileAccess.Read))
+                {
+                    var result = new AudioClip(stream, initialVolumne, loopForever);
+                    _collection.Add(key, result);
+                    stream.Close();
+                    return result;
                 }
             }
+        }
 
-            throw new FileNotFoundException(path);
+        public SharpDX.Direct2D1.Bitmap GetBitmap(string assetRelativePath)
+        {
+            string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
+            string key = $"Bitmap({assetRelativePath})";
+
+            lock (_collection)
+            {
+                if (_collection.TryGetValue(key, out var value))
+                {
+                    return value as SharpDX.Direct2D1.Bitmap;
+                }
+
+                var result = _core.DirectX.GetBitmap(assetAbsolutePath);
+                _collection.Add(key, result);
+                return result;
+            }
+        }
+
+        public SharpDX.Direct2D1.Bitmap GetBitmap(string assetRelativePath, int newWidth, int newHeight)
+        {
+            string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
+            string key = $"Bitmap({assetRelativePath})";
+
+            lock (_collection)
+            {
+                if (_collection.TryGetValue(key, out var value))
+                {
+                    return value as SharpDX.Direct2D1.Bitmap;
+                }
+
+                var result = _core.DirectX.GetBitmap(assetAbsolutePath, newWidth, newHeight);
+                _collection.Add(key, result);
+                return result;
+            }
         }
     }
 }

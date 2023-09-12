@@ -7,10 +7,10 @@ using System.Collections.Generic;
 
 namespace HG.Situations
 {
-    internal class SituationAvvolAmbush : SituationBase
+    internal class SituationPhoenixAmbush : SituationBase
     {
-        public SituationAvvolAmbush(Core core)
-            : base(core, "Avvol Ambush")
+        public SituationPhoenixAmbush(Core core)
+            : base(core, "Phoenix Ambush")
         {
             TotalWaves = 5;
         }
@@ -58,7 +58,7 @@ namespace HG.Situations
 
         private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.Enemies.Create<EnemyAvvol>();
+            _core.Actors.Enemies.Create<EnemyPhoenix>();
         }
     }
 }

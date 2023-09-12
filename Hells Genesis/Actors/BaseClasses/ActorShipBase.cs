@@ -219,6 +219,16 @@ namespace HG.Actors.BaseClasses
             return existingWeapon != null && existingWeapon.RoundQuantity > 0;
         }
 
+        public bool HasSelectedPrimaryWeaponAndAmmo()
+        {
+            return (SelectedPrimaryWeapon != null && SelectedPrimaryWeapon.RoundQuantity > 0);
+        }
+
+        public bool HasSelectedSecondaryWeaponAndAmmo()
+        {
+            return (SelectedSecondaryWeapon != null && SelectedSecondaryWeapon.RoundQuantity > 0);
+        }
+
         public WeaponBase SelectLastAvailableUsableSecondaryWeapon()
         {
             var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).LastOrDefault();

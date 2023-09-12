@@ -9,7 +9,7 @@ namespace HG.Actors.Ordinary
     internal class ActorRandomShipPartParticle : ActorParticleBase
     {
         private const string _assetPath = @"Graphics\Fragments";
-        private readonly int _imageCount = 31;
+        private readonly int _imageCount = 1488;
         private readonly int selectedImageIndex = 0;
 
 
@@ -22,15 +22,7 @@ namespace HG.Actors.Ordinary
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % _imageCount;
 
-            int sizeX = HgRandom.RandomNumber(1, 15);
-            int sizeY = HgRandom.RandomNumber(1, 15);
-
-            if (HgRandom.FlipCoin())
-            {
-                (sizeX, sizeY) = (sizeY, sizeX);
-            }
-
-            Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new System.Drawing.Size(sizeX, sizeY));
+            Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
             X = x;
             Y = y;

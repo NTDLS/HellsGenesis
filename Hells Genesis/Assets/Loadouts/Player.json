@@ -19,7 +19,7 @@
           "Rounds": 100000
         },
         {
-          "Type": "WeaponHotPepper",
+          "Type": "WeaponScattershot",
           "Rounds": 100000
         },
         {
@@ -62,7 +62,7 @@
       "Hull": 500,
       "Sheilds": 100,
       "PrimaryWeapon": {
-        "Type": "WeaponHotPepper",
+        "Type": "WeaponScattershot",
         "Rounds": 10000
       },
       "SecondaryWeapons": [

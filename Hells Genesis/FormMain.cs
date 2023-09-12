@@ -1,4 +1,6 @@
-﻿using HG.Actors.BaseClasses;
+﻿#define DEBUGUI
+
+using HG.Actors.BaseClasses;
 using HG.Actors.Enemies.BaseClasses;
 using HG.Engine;
 using HG.Types;
@@ -14,7 +16,7 @@ namespace HG
 {
     public partial class FormMain : Form
     {
-#if DEBUG
+#if DEBUGUI
         readonly List<ActorBase> highlightedActors = new();
         private readonly ToolTip _interrogationTip = new ToolTip();
 #endif
@@ -59,7 +61,7 @@ namespace HG
             drawingSurface.KeyDown += FormMain_KeyDown;
             drawingSurface.KeyUp += FormMain_KeyUp;
 
-#if DEBUG
+#if DEBUGUI
             drawingSurface.MouseDown += FormDirect2D_MouseDown;
             drawingSurface.MouseMove += FormDirect2D_MouseMove;
 #endif
@@ -67,7 +69,7 @@ namespace HG
 
         #region Debug interactions.
 
-#if DEBUG
+#if DEBUGUI
         private void FormDirect2D_MouseMove(object sender, MouseEventArgs e)
         {
             double x = e.X + _core.Display.OverdrawSize.Width / 2;

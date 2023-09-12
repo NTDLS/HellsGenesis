@@ -5,7 +5,6 @@ using HG.Engine;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
 using System;
-using System.Diagnostics;
 using static HG.Engine.Constants;
 
 namespace HG.AI.Logistics
@@ -16,18 +15,28 @@ namespace HG.AI.Logistics
     /// </summary>
     internal class Taunt : IAIController
     {
-        private const string _assetPath = @"AI\Logistics\FlyBy.txt";
+        private const string _assetPath = @"AI\Logistics\Taunt.txt";
 
         private readonly Core _core;
         private readonly ActorShipBase _owner;
         private readonly ActorBase _observedObject;
+
+        #region "Enumerations".
 
         private static class RenewableResources
         {
             public static string Boost = "IAIController_Taunt_Boost";
         }
 
-        #region I/O Enumerations.
+        private enum ActionState
+        {
+            None,
+            TransitionToApproach,
+            TransitionToDepart,
+            Approaching,
+            Departing,
+            EvasiveLoop
+        }
 
         public enum AIInputs
         {
@@ -62,8 +71,6 @@ namespace HG.AI.Logistics
 
         public DniNeuralNetwork Network { get; set; }
 
-        private static DniNeuralNetwork _singletonNetwork = null;
-
         /// <summary>
         /// Creates a new instance of the intelligence object.
         /// </summary>
@@ -90,9 +97,6 @@ namespace HG.AI.Logistics
 
         private void AlterActionState(ActionState state)
         {
-            double boost = _owner.RenewableResources.Observe(RenewableResources.Boost);
-
-            Debug.Print($"{state} -> {boost:n2}");
             switch (state)
             {
                 case ActionState.EvasiveLoop:
@@ -109,16 +113,6 @@ namespace HG.AI.Logistics
             }
 
             _currentAction = state;
-        }
-
-        private enum ActionState
-        {
-            None,
-            TransitionToApproach,
-            TransitionToDepart,
-            Approaching,
-            Departing,
-            EvasiveLoop
         }
 
         public void ApplyIntelligence(HgPoint<double> displacementVector)
@@ -226,105 +220,89 @@ namespace HG.AI.Logistics
 
         private void SetNeuralNetwork()
         {
-            if (_singletonNetwork != null)
-            {
-                Network = _singletonNetwork.Clone();//.Mutate(0.2, 0.1);
-                return;
-            }
+            Network = _core.Assets.GetNeuralNetwork(_assetPath);
 
-            var networkJson = _core.Assets.GetText(_assetPath);
-            if (string.IsNullOrEmpty(networkJson) == false)
+            if (Network == null)
             {
-                var loadedNetwork = DniNeuralNetwork.LoadFromText(networkJson);
-                if (loadedNetwork != null)
+                var newNetwork = new DniNeuralNetwork
                 {
-                    _singletonNetwork = loadedNetwork;
-                    Network = loadedNetwork.Clone();//.Mutate(0.2, 0.1)
-                    return;
-                }
-            }
+                    LearningRate = 0.01
+                };
 
-            #region New neural network and training.
+                #region New neural network and training.
 
-            var newNetwork = new DniNeuralNetwork()
-            {
-                LearningRate = 0.01
-            };
-
-            //Vision inputs.
-            newNetwork.Layers.AddInput(ActivationType.LeakyReLU,
-                new object[] {
+                //Vision inputs.
+                newNetwork.Layers.AddInput(ActivationType.LeakyReLU,
+                    new object[] {
                         AIInputs.DistanceFromObservedObject,
                         AIInputs.AngleToObservedObjectIn6thRadians
-                });
+                    });
 
-            //Where the magic happens.
-            newNetwork.Layers.AddIntermediate(ActivationType.Sigmoid, 8);
+                //Where the magic happens.
+                newNetwork.Layers.AddIntermediate(ActivationType.Sigmoid, 8);
 
-            //Decision outputs
-            newNetwork.Layers.AddOutput(
-                new object[] {
+                //Decision outputs
+                newNetwork.Layers.AddOutput(
+                    new object[] {
                         AIOutputs.TransitionToObservedObject,
                         AIOutputs.TransitionFromObservedObject,
                         AIOutputs.SpeedAdjust
-                });
+                    });
 
-            for (int epoch = 0; epoch < 5000; epoch++)
-            {
-                //Very close to observed object, get away.
-                newNetwork.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0, 1, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, -1), TrainingDecision(0, 1, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 1), TrainingDecision(0, 1, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.5), TrainingDecision(0, 1, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, -0.5), TrainingDecision(0, 1, 1));
+                for (int epoch = 0; epoch < 5000; epoch++)
+                {
+                    //Very close to observed object, get away.
+                    newNetwork.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0, 1, 1));
+                    newNetwork.BackPropagate(TrainingScenerio(0, -1), TrainingDecision(0, 1, 1));
+                    newNetwork.BackPropagate(TrainingScenerio(0, 1), TrainingDecision(0, 1, 1));
+                    newNetwork.BackPropagate(TrainingScenerio(0, 0.5), TrainingDecision(0, 1, 1));
+                    newNetwork.BackPropagate(TrainingScenerio(0, -0.5), TrainingDecision(0, 1, 1));
 
-                //Pretty close to observed object, get away.
-                newNetwork.BackPropagate(TrainingScenerio(0.25, 0), TrainingDecision(0, 1, 0.6));
-                newNetwork.BackPropagate(TrainingScenerio(0.25, -1), TrainingDecision(0, 1, 0.6));
-                newNetwork.BackPropagate(TrainingScenerio(0.25, 1), TrainingDecision(0, 1, 0.6));
-                newNetwork.BackPropagate(TrainingScenerio(0.25, 0.5), TrainingDecision(0, 1, 0.6));
-                newNetwork.BackPropagate(TrainingScenerio(0.25, -0.5), TrainingDecision(0, 1, 0.6));
+                    //Pretty close to observed object, get away.
+                    newNetwork.BackPropagate(TrainingScenerio(0.25, 0), TrainingDecision(0, 1, 0.6));
+                    newNetwork.BackPropagate(TrainingScenerio(0.25, -1), TrainingDecision(0, 1, 0.6));
+                    newNetwork.BackPropagate(TrainingScenerio(0.25, 1), TrainingDecision(0, 1, 0.6));
+                    newNetwork.BackPropagate(TrainingScenerio(0.25, 0.5), TrainingDecision(0, 1, 0.6));
+                    newNetwork.BackPropagate(TrainingScenerio(0.25, -0.5), TrainingDecision(0, 1, 0.6));
 
-                //Very far from observed object, get closer.
-                newNetwork.BackPropagate(TrainingScenerio(1, 0), TrainingDecision(2, 0, 0));
-                newNetwork.BackPropagate(TrainingScenerio(1, -1), TrainingDecision(2, 0, 0));
-                newNetwork.BackPropagate(TrainingScenerio(1, 1), TrainingDecision(2, 0, 0));
-                newNetwork.BackPropagate(TrainingScenerio(1, 0.5), TrainingDecision(2, 0, 0));
-                newNetwork.BackPropagate(TrainingScenerio(1, -0.5), TrainingDecision(2, 0, 0));
+                    //Very far from observed object, get closer.
+                    newNetwork.BackPropagate(TrainingScenerio(1, 0), TrainingDecision(2, 0, 0));
+                    newNetwork.BackPropagate(TrainingScenerio(1, -1), TrainingDecision(2, 0, 0));
+                    newNetwork.BackPropagate(TrainingScenerio(1, 1), TrainingDecision(2, 0, 0));
+                    newNetwork.BackPropagate(TrainingScenerio(1, 0.5), TrainingDecision(2, 0, 0));
+                    newNetwork.BackPropagate(TrainingScenerio(1, -0.5), TrainingDecision(2, 0, 0));
 
-                //Pretty far from observed object, get closer.
-                newNetwork.BackPropagate(TrainingScenerio(0.75, 0), TrainingDecision(1, 0, 0));
-                newNetwork.BackPropagate(TrainingScenerio(0.75, -1), TrainingDecision(1, 0, 0));
-                newNetwork.BackPropagate(TrainingScenerio(0.75, 1), TrainingDecision(1, 0, 0));
-                newNetwork.BackPropagate(TrainingScenerio(0.75, 0.5), TrainingDecision(1, 0, 0));
-                newNetwork.BackPropagate(TrainingScenerio(0.75, -0.5), TrainingDecision(1, 0, 0));
+                    //Pretty far from observed object, get closer.
+                    newNetwork.BackPropagate(TrainingScenerio(0.75, 0), TrainingDecision(1, 0, 0));
+                    newNetwork.BackPropagate(TrainingScenerio(0.75, -1), TrainingDecision(1, 0, 0));
+                    newNetwork.BackPropagate(TrainingScenerio(0.75, 1), TrainingDecision(1, 0, 0));
+                    newNetwork.BackPropagate(TrainingScenerio(0.75, 0.5), TrainingDecision(1, 0, 0));
+                    newNetwork.BackPropagate(TrainingScenerio(0.75, -0.5), TrainingDecision(1, 0, 0));
+                }
+
+                static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservedObject, double angleToObservedObjectIn10thRadians)
+                {
+                    var param = new DniNamedInterfaceParameters();
+
+                    param.Set(AIInputs.DistanceFromObservedObject, distanceFromObservedObject);
+                    param.Set(AIInputs.AngleToObservedObjectIn6thRadians, angleToObservedObjectIn10thRadians);
+                    return param;
+                }
+
+                static DniNamedInterfaceParameters TrainingDecision(double transitionToObservedObject,
+                    double transitionFromObservedObject, double speedAdjust)
+                {
+                    var param = new DniNamedInterfaceParameters();
+                    param.Set(AIOutputs.TransitionToObservedObject, transitionToObservedObject);
+                    param.Set(AIOutputs.TransitionFromObservedObject, transitionFromObservedObject);
+                    param.Set(AIOutputs.SpeedAdjust, speedAdjust);
+                    return param;
+                }
+                #endregion
+
+                _core.Assets.PutText(_assetPath, newNetwork.Serialize());
+                SetNeuralNetwork(); //Retry loading the network.
             }
-
-            static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservedObject, double angleToObservedObjectIn10thRadians)
-            {
-                var param = new DniNamedInterfaceParameters();
-
-                param.Set(AIInputs.DistanceFromObservedObject, distanceFromObservedObject);
-                param.Set(AIInputs.AngleToObservedObjectIn6thRadians, angleToObservedObjectIn10thRadians);
-                return param;
-            }
-
-            static DniNamedInterfaceParameters TrainingDecision(double transitionToObservedObject,
-                double transitionFromObservedObject, double speedAdjust)
-            {
-                var param = new DniNamedInterfaceParameters();
-                param.Set(AIOutputs.TransitionToObservedObject, transitionToObservedObject);
-                param.Set(AIOutputs.TransitionFromObservedObject, transitionFromObservedObject);
-                param.Set(AIOutputs.SpeedAdjust, speedAdjust);
-                return param;
-            }
-
-            //newNetwork.Save(fileName);
-
-            #endregion
-
-            _singletonNetwork = newNetwork;
-            Network = newNetwork.Clone();//.Mutate(0.2, 0.1)
         }
 
         private DniNamedInterfaceParameters GatherInputs()

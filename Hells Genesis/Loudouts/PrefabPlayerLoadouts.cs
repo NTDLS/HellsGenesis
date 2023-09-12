@@ -39,7 +39,7 @@ namespace HG.Loudouts
                 };
 
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 100000));
-                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponHotPepper), 100000));
+                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponScattershot), 100000));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 100000));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponGuidedFragMissile), 100000));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponPrecisionGuidedFragMissile), 100000));
@@ -62,7 +62,7 @@ namespace HG.Loudouts
                     Boost = 1.5,
                     Hull = 500,
                     Sheilds = 100,
-                    PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponHotPepper), 10000)
+                    PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponScattershot), 10000)
                 };
 
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 16));
