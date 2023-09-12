@@ -30,16 +30,15 @@ namespace HG.TickHandlers
             {
                 if (_core.Input.IsKeyPressed(HgPlayerKey.PrimaryFire))
                 {
-                    if (Actor.SelectedPrimaryWeapon != null && Actor.SelectedPrimaryWeapon.Fire())
+                    if (Actor.PrimaryWeapon != null && Actor.PrimaryWeapon.Fire())
                     {
-                        if (Actor.SelectedPrimaryWeapon?.RoundQuantity == 25)
+                        if (Actor.PrimaryWeapon?.RoundQuantity == 25)
                         {
                             Actor.AmmoLowSound.Play();
                         }
-                        if (Actor.SelectedPrimaryWeapon?.RoundQuantity == 0)
+                        if (Actor.PrimaryWeapon?.RoundQuantity == 0)
                         {
                             Actor.AmmoEmptySound.Play();
-                            Actor.SelectFirstAvailableUsablePrimaryWeapon();
                         }
                     }
                 }

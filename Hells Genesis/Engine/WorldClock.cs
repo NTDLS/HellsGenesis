@@ -139,7 +139,7 @@ namespace HG.Engine
                   $" Situation: {situation}\r\n"
                 + $"      Hull: {_core.Player.Actor.HullHealth:n0} (Shields: {_core.Player.Actor.ShieldHealth:n0}) | Bounty: ${_core.Player.Actor.Bounty}\r\n"
                 + $"      Warp: {_core.Player.Actor.Velocity.AvailableBoost:n0}\r\n"
-                + $"Pri-Weapon: {_core.Player.Actor.SelectedPrimaryWeapon?.Name} x{_core.Player.Actor.SelectedPrimaryWeapon?.RoundQuantity:n0}\r\n"
+                + $"Pri-Weapon: {_core.Player.Actor.PrimaryWeapon?.Name} x{_core.Player.Actor.PrimaryWeapon?.RoundQuantity:n0}\r\n"
                 + $"Sec-Weapon: {_core.Player.Actor.SelectedSecondaryWeapon?.Name} x{_core.Player.Actor.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
 
             if (_core.ShowDebug)

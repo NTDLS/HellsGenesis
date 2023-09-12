@@ -29,10 +29,8 @@ namespace HG.Actors.Enemies.Peons
 
             Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 2, _core.Settings.MaxSpeed); //Upper end of the speed spectrum
 
-            AddPrimaryWeapon<WeaponVulcanCannon>(1000);
+            SetPrimaryWeapon<WeaponVulcanCannon>(1000);
             AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
-
-            SelectPrimaryWeapon<WeaponVulcanCannon>();
         }
 
         #region Artificial Intelligence.
@@ -166,7 +164,7 @@ namespace HG.Actors.Enemies.Peons
                         bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 15.0);
                         if (isPointingAtPlayer)
                         {
-                            SelectedPrimaryWeapon?.Fire();
+                            PrimaryWeapon?.Fire();
                         }
                     }
                 }

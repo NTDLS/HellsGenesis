@@ -96,8 +96,6 @@ namespace HG.Menus
 
             _core.Player.Actor.Reset(loadout);
 
-            QueueForDelete();
-
             _core.Actors.DeleteAllActorsByAssetTag("MENU_SHIP_SELECT");
 
             _core.Actors.NewGame();

@@ -4,6 +4,7 @@ using HG.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace HG.Menus.BaseClasses
@@ -90,6 +91,12 @@ namespace HG.Menus.BaseClasses
 
         public void HandleInput()
         {
+            if (ReadyForDeletion)
+            {
+                Thread.Sleep(1);
+                return;
+            }
+
             if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds < 150)
             {
                 return; //We have to keep the menues from going crazy.
@@ -102,6 +109,8 @@ namespace HG.Menus.BaseClasses
                 var selectedItem = (from o in Items where o.ItemType == ActorMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
                 if (selectedItem != null)
                 {
+                    QueueForDelete();
+
                     //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
                     //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                     //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.

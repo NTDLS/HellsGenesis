@@ -23,7 +23,7 @@ namespace HG.Actors.Enemies.Peons
 
             SetHullHealth(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
 
-            AddPrimaryWeapon<WeaponPhotonTorpedo>(5);
+            SetPrimaryWeapon<WeaponPhotonTorpedo>(5);
             AddSecondaryWeapon<WeaponVulcanCannon>(500);
 
             Velocity.Angle.Degrees = AngleTo(_core.Player.Actor);
@@ -143,7 +143,7 @@ namespace HG.Actors.Enemies.Peons
                         bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 15.0);
                         if (isPointingAtPlayer)
                         {
-                            SelectedPrimaryWeapon?.Fire();
+                            PrimaryWeapon?.Fire();
                         }
                     }
                 }

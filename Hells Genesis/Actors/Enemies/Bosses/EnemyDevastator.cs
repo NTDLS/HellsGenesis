@@ -47,7 +47,7 @@ namespace HG.Actors.Enemies.Bosses
 
             SetImage(_imagesPath + "Hull.png");
 
-            AddPrimaryWeapon<WeaponVulcanCannon>(1000);
+            SetPrimaryWeapon<WeaponVulcanCannon>(1000);
             AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
         }
 
@@ -321,7 +321,7 @@ namespace HG.Actors.Enemies.Bosses
                             bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 15.0);
                             if (isPointingAtPlayer)
                             {
-                                SelectedPrimaryWeapon?.Fire();
+                                PrimaryWeapon?.Fire();
                             }
                         }
                     }

@@ -30,7 +30,7 @@ namespace HG.Actors.Enemies.Peons
             Velocity.MaxBoost = 1.5;
             Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 4, _core.Settings.MaxSpeed - 3);
 
-            AddPrimaryWeapon<WeaponVulcanCannon>(1000);
+            SetPrimaryWeapon<WeaponVulcanCannon>(1000);
             AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
 
             AddAIController(new HostileEngagement(_core, this, _core.Player.Actor));
@@ -101,7 +101,7 @@ namespace HG.Actors.Enemies.Peons
                         bool isPointingAtPlayer = IsPointingAt(_core.Player.Actor, 15.0);
                         if (isPointingAtPlayer)
                         {
-                            SelectedPrimaryWeapon?.Fire();
+                            PrimaryWeapon?.Fire();
                         }
                     }
                 }

@@ -56,8 +56,6 @@ namespace HG.Menus
             {
                 _core.Menus.Insert(new PlayerShipMenu(_core));
             }
-
-            QueueForDelete();
         }
     }
 }

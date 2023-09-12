@@ -77,7 +77,7 @@ namespace HG.Actors.Ordinary
         /// </summary>
         public void Reset()
         {
-            ClearPrimaryWeapons();
+            ClearPrimaryWeapon();
             ClearSecondaryWeapons();
 
             IsDead = false;
@@ -98,18 +98,16 @@ namespace HG.Actors.Ordinary
 
             SetHullHealth(Loadout.Hull);
             SetShieldHealth(Loadout.Sheilds);
-
            
-            AddPrimaryWeapon(Loadout.PrimaryWeapon.Type, Loadout.PrimaryWeapon.Rounds);
+            SetPrimaryWeapon(Loadout.PrimaryWeapon.Type, Loadout.PrimaryWeapon.Rounds);
 
             foreach (var secondaryWeapon in Loadout.SecondaryWeapons)
             {
-                AddPrimaryWeapon(secondaryWeapon.Type, secondaryWeapon.Rounds);
+                AddSecondaryWeapon(secondaryWeapon.Type, secondaryWeapon.Rounds);
             }
 
             #endregion
 
-            SelectFirstAvailableUsablePrimaryWeapon();
             SelectFirstAvailableUsableSecondaryWeapon();
         }
 
