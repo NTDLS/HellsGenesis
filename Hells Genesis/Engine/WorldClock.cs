@@ -1,5 +1,4 @@
-﻿using HG.TickHandlers;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading;
 
 namespace HG.Engine

@@ -158,21 +158,19 @@ namespace HG.Engine
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
         public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double x, double y, double angle)
         {
-            SetTransformAngle(renderTarget, new SharpDX.RectangleF((float)x, (float)y, bitmap.PixelSize.Width, bitmap.PixelSize.Height), angle);
-
             var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
+            SetTransformAngle(renderTarget, destRect, angle);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
-
             ResetTransform(renderTarget);
-
             return destRect;
         }
 
         /// Draws a bitmap from a specified location of a given size, to the the specified location.
-        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double x, double y, double angle, RawRectangleF sourceRect, Size2F destSize)
+        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap,
+            double x, double y, double angle, RawRectangleF sourceRect, Size2F destSize)
         {
             var destRect = new RawRectangleF((float)x, (float)y, (float)(x + destSize.Width), (float)(y + destSize.Height));
-            SetTransformAngle(renderTarget, new SharpDX.RectangleF((float)x, (float)y, destSize.Width, destSize.Height), angle);
+            SetTransformAngle(renderTarget, destRect, angle);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
             ResetTransform(renderTarget);
             return destRect;
@@ -259,32 +257,6 @@ namespace HG.Engine
             ResetTransform(renderTarget);
 
             return rect;
-        }
-
-        public void SetTransformAngle(RenderTarget renderTarget, SharpDX.RectangleF rect, double angle, RawMatrix3x2? existimMatrix = null)
-        {
-            angle = HgMath.DegreesToRadians(angle);
-
-            float centerX = rect.Left + rect.Width / 2.0f;
-            float centerY = rect.Top + rect.Height / 2.0f;
-
-            // Calculate the rotation matrix
-            float cosAngle = (float)Math.Cos(angle);
-            float sinAngle = (float)Math.Sin(angle);
-
-            var rotationMatrix = new RawMatrix3x2(
-                cosAngle, sinAngle,
-                -sinAngle, cosAngle,
-                centerX - centerX * cosAngle + centerY * sinAngle,
-                centerY - centerX * sinAngle - centerY * cosAngle
-            );
-
-            if (existimMatrix != null)
-            {
-                rotationMatrix = MultiplyMatrices((RawMatrix3x2)existimMatrix, rotationMatrix);
-            }
-
-            renderTarget.Transform = rotationMatrix;
         }
 
         public void SetTransformAngle(RenderTarget renderTarget, RawRectangleF rect, double angle, RawMatrix3x2? existimMatrix = null)

@@ -1,5 +1,4 @@
 ﻿using HG.Engine;
-using System.IO;
 
 namespace HG.Actors.Enemies.BaseClasses
 {
