@@ -28,7 +28,7 @@ namespace HG.Actors.BaseClasses
         private readonly string _assetPathshieldHit = @"Sounds\Ship\Shield Hit.wav";
 
         private const string _assetPathExplosionAnimation = @"Graphics\Animation\Explode\Explosion 256x256\";
-        private readonly int _explosionAnimationCount = 3;
+        private readonly int _explosionAnimationCount = 6;
         private int _selectedExplosionAnimationIndex = 0;
 
         private const string _assetPathHitExplosionAnimation = @"Graphics\Animation\Explode\Hit Explosion 22x22\";
