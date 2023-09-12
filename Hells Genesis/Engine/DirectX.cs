@@ -38,7 +38,6 @@ namespace HG.Engine
             var renderProperties = new HwndRenderTargetProperties
             {
                 Hwnd = core.Display.DrawingSurface.Handle,
-                //PixelSize = new Size2(core.Display.TotalCanvasSize.Width, core.Display.TotalCanvasSize.Height),
                 PixelSize = new Size2(core.Display.NatrualScreenSize.Width, core.Display.NatrualScreenSize.Height),
                 PresentOptions = PresentOptions.Immediately
             };
