@@ -12,11 +12,13 @@ namespace HG.Engine.Controllers
         public HgAudioClip RadarBlipsSound { get; private set; }
         public HgAudioClip DoorIsAjarSound { get; private set; }
         public HgAudioClip LockedOnBlip { get; private set; }
+        public HgAudioClip Click { get; private set; }
 
         public EngineAudioController(Core core)
         {
             _core = core;
 
+            Click = Get(@"Sounds\Other\Click.wav", 0.70f, false);
             DoorIsAjarSound = Get(@"Sounds\Ship\Door Is Ajar.wav", 0.50f, false);
             RadarBlipsSound = Get(@"Sounds\Ship\Radar Blips.wav", 0.20f, false);
             LockedOnBlip = Get(@"Sounds\Ship\Locked On.wav", 0.20f, false);

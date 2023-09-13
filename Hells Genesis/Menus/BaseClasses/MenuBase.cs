@@ -93,6 +93,8 @@ namespace HG.Menus.BaseClasses
 
             if (_core.Input.IsKeyPressed(HgPlayerKey.Enter))
             {
+                _core.Audio.Click.Play();
+
                 _lastInputHandled = DateTime.UtcNow;
 
                 var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.Item && o.Selected == true select o).FirstOrDefault();
@@ -145,6 +147,8 @@ namespace HG.Menus.BaseClasses
                         var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.Item && o.Selected == true select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
+                            _core.Audio.Click.Play();
+
                             //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
                             //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                             //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
@@ -192,6 +196,8 @@ namespace HG.Menus.BaseClasses
                         var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.Item && o.Selected == true select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
+                            _core.Audio.Click.Play();
+
                             //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
                             //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                             //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.

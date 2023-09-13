@@ -23,24 +23,28 @@ namespace HG.Menus
             itemYes.X -= (itemYes.Size.Width + itemNo.Size.Width) / 2;
             itemNo.X -= (itemYes.Size.Width + itemNo.Size.Width) / 2;
 
-            var help1 = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Move with <W>, <A>, <S>, <D>.");
-            help1.X -= help1.Size.Width / 2;
+            var helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Move with <W>, <A>, <S>.");
+            helpItem.X -= helpItem.Size.Width / 2;
             baseY += itemTitle.Size.Height + 5;
 
-            var help2 = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Boost Speed With <SHIFT>.");
-            help2.X -= help2.Size.Width / 2;
+            helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Warp Drive with <SHIFT>.");
+            helpItem.X -= helpItem.Size.Width / 2;
             baseY += itemTitle.Size.Height + 5;
 
-            var help3 = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Fire primary with <SPACE>.");
-            help3.X -= help3.Size.Width / 2;
+            helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Fire primary with <SPACE>.");
+            helpItem.X -= helpItem.Size.Width / 2;
             baseY += itemTitle.Size.Height + 10;
 
-            var help4 = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Fire secondary with <CTRL>.");
-            help4.X -= help4.Size.Width / 2;
+            helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Fire secondary with <CTRL>.");
+            helpItem.X -= helpItem.Size.Width / 2;
             baseY += itemTitle.Size.Height + 10;
 
-            var help5 = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Change weapons with <Q> and <E>.");
-            help5.X -= help5.Size.Width / 2;
+            helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Change weapons with <left> and <right> arrows.");
+            helpItem.X -= helpItem.Size.Width / 2;
+            baseY += itemTitle.Size.Height + 10;
+
+            helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Change speed with <up> and <down> arrows.");
+            helpItem.X -= helpItem.Size.Width / 2;
             baseY += itemTitle.Size.Height + 10;
 
             itemYes.Selected = true;
