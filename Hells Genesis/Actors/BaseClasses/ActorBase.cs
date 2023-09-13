@@ -31,7 +31,7 @@ namespace HG.Actors.BaseClasses
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private readonly int _MillisecondsBetweenHits = 200;
 
-        public bool FixedPosition { get; set; }
+        public bool IsFixedPosition { get; set; }
 
         #region Properties.
 
@@ -826,7 +826,7 @@ namespace HG.Actors.BaseClasses
 
         public virtual void ApplyMotion(HgPoint<double> displacementVector)
         {
-            if (FixedPosition == false)
+            if (IsFixedPosition == false)
             {
                 X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
                 Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;

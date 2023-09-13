@@ -27,7 +27,7 @@ namespace HG.TickHandlers
 
         public void ExecuteWorldClockTick(HgPoint<double> displacementVector)
         {
-            foreach (var textBlock in Visible().Where(o => o.IsPositionStatic == false))
+            foreach (var textBlock in Visible().Where(o => o.IsFixedPosition == false))
             {
                 textBlock.ApplyMotion(displacementVector);
             }

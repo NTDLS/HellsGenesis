@@ -121,7 +121,7 @@ namespace HG.Actors.Ordinary
                     };
                     ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
                     {
-                        FixedPosition = true,
+                        IsFixedPosition = true,
                         Visable = false
                     };
                     ThrustAnimation.Reset();
@@ -139,7 +139,7 @@ namespace HG.Actors.Ordinary
                     };
                     BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
                     {
-                        FixedPosition = true,
+                        IsFixedPosition = true,
                         Visable = false
                     };
                     BoostAnimation.Reset();

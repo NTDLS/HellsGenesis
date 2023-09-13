@@ -211,7 +211,7 @@ namespace HG.Engine.Controllers
         public void RenderPostScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
             //Render to display:
-            foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsPositionStatic == true))
+            foreach (var actor in OfType<ActorTextBlock>().Where(o => o.Visable == true && o.IsFixedPosition == true))
             {
                 actor.Render(renderTarget);
             }
@@ -288,7 +288,7 @@ namespace HG.Engine.Controllers
             {
                 if (actor is ActorTextBlock actorTextBlock)
                 {
-                    if (actorTextBlock.IsPositionStatic == true)
+                    if (actorTextBlock.IsFixedPosition == true)
                     {
                         continue; //We want to add these later so they are not scaled.
                     }

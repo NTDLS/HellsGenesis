@@ -3,8 +3,6 @@ using HG.Engine;
 using HG.TickHandlers.Interfaces;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
-using System;
-using System.Diagnostics;
 
 namespace HG.TickHandlers
 {
@@ -135,6 +133,11 @@ namespace HG.TickHandlers
                 {
                     if (Actor.Velocity.ThrottlePercentage < 1.0)
                     {
+                        //We add the first thrust amount with the amount defined in "PlayerThrustRampUp", after that we add the
+                        // calculated inversee-percentage-from-100-percent of "PlayerThrustRampUp" to the ThrottlePercentage until we reach 100%.
+                        // This causes our thrust to start qucikly and acceleration to fade fast as we approach full throttle. The last few %-points
+                        //  of throttle will take a while. We do the reverse of this to stop. Stopping fast at first and slowly-slowly slowing to a stop.
+
                         double thrustToAdd = Actor.Velocity.ThrottlePercentage > 0
                             ? _core.Settings.PlayerThrustRampUp * (1 - Actor.Velocity.ThrottlePercentage) : _core.Settings.PlayerThrustRampUp;
 

@@ -9,8 +9,6 @@ namespace HG.Actors.Ordinary
 {
     internal class ActorTextBlock : ActorBase
     {
-        public bool IsPositionStatic { get; set; }
-
         #region Properties.
 
         public TextFormat Format { get; set; }
@@ -39,17 +37,17 @@ namespace HG.Actors.Ordinary
 
         #endregion
 
-        public ActorTextBlock(Core core, TextFormat format, SolidColorBrush color, HgPoint<double> location, bool isPositionStatic)
+        public ActorTextBlock(Core core, TextFormat format, SolidColorBrush color, HgPoint<double> location, bool isFixedPosition)
             : base(core)
         {
-            IsPositionStatic = isPositionStatic;
+            IsFixedPosition = isFixedPosition;
             Location = new HgPoint<double>(location);
             Color = color;
 
             Format = format;
         }
 
-        public override void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
+        public override void Render(RenderTarget renderTarget)
         {
             if (Visable)
             {
