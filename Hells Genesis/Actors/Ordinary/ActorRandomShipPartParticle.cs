@@ -1,8 +1,8 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System.IO;
-using static HG.Engine.Constants;
 
 namespace HG.Actors.Ordinary
 {
@@ -14,8 +14,8 @@ namespace HG.Actors.Ordinary
 
 
         private double _rotationSpeed;
-        private RelativeDirection _rotationDirection;
-        private HgAngle<double> _travelAngle = new();
+        private HgRelativeDirection _rotationDirection;
+        private HgAngle _travelAngle = new();
 
         public ActorRandomShipPartParticle(Core core, double x, double y)
             : base(core)
@@ -28,7 +28,7 @@ namespace HG.Actors.Ordinary
             Y = y;
 
             _rotationSpeed = HgRandom.RandomNumber(1, 100) / 20.0;
-            _rotationDirection = HgRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
+            _rotationDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
             _travelAngle.Degrees = HgRandom.RandomNumber(0, 360);
 
             Velocity.ThrottlePercentage = 100;
@@ -37,16 +37,16 @@ namespace HG.Actors.Ordinary
             _core = core;
         }
 
-        public override void ApplyMotion(HgPoint<double> displacementVector)
+        public override void ApplyMotion(HgPoint displacementVector)
         {
             X += _travelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
             Y += _travelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
 
-            if (_rotationDirection == RelativeDirection.Right)
+            if (_rotationDirection == HgRelativeDirection.Right)
             {
                 this.Velocity.Angle.Degrees += _rotationSpeed;
             }
-            else if (_rotationDirection == RelativeDirection.Left)
+            else if (_rotationDirection == HgRelativeDirection.Left)
             {
                 this.Velocity.Angle.Degrees -= _rotationSpeed;
             }

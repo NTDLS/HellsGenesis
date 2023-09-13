@@ -3,6 +3,8 @@ using HG.Actors.Enemies.Peons;
 using HG.Engine;
 using HG.Situations.BaseClasses;
 using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System.Linq;
 
 namespace HG.Situations
@@ -71,7 +73,7 @@ namespace HG.Situations
 
         private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
-            HgPoint<double> baseLocation = _core.Display.RandomOffScreenLocation();
+            HgPoint baseLocation = _core.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave * 2);
             _core.Audio.RadarBlipsSound.Play();
             waitingOnPopulation = false;
@@ -88,7 +90,7 @@ namespace HG.Situations
             return enemy;
         }
 
-        private void CreateTriangleFormation(HgPoint<double> baseLocation, double spacing, int depth)
+        private void CreateTriangleFormation(HgPoint baseLocation, double spacing, int depth)
         {
             double angle = HgMath.AngleTo(baseLocation, _core.Player.Actor);
 

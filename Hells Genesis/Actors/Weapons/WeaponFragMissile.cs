@@ -3,7 +3,8 @@ using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 
 namespace HG.Actors.Weapons
 {
@@ -33,7 +34,7 @@ namespace HG.Actors.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint<double> xyOffset = null)
+        public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint xyOffset = null)
         {
             return new BulletFragMissile(_core, this, _owner, lockedTarget, xyOffset);
         }
@@ -49,12 +50,12 @@ namespace HG.Actors.Weapons
                 {
                     if (_toggle)
                     {
-                        var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new HgPoint<double>(10, 10));
+                        var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new HgPoint(10, 10));
                         _core.Actors.Bullets.Create(this, _owner, pointRight);
                     }
                     else
                     {
-                        var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new HgPoint<double>(10, 10));
+                        var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new HgPoint(10, 10));
                         _core.Actors.Bullets.Create(this, _owner, pointLeft);
                     }
 

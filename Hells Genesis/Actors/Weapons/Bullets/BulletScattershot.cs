@@ -2,7 +2,8 @@
 using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System.IO;
 
 namespace HG.Actors.Weapons.Bullets
@@ -14,7 +15,7 @@ namespace HG.Actors.Weapons.Bullets
         private readonly int selectedImageIndex = 0;
 
         public BulletScattershot(Core core, WeaponBase weapon, ActorBase firedFrom,
-             ActorBase lockedTarget = null, HgPoint<double> xyOffset = null)
+             ActorBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, null, lockedTarget, xyOffset)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;

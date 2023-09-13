@@ -2,7 +2,8 @@
 using HG.Actors.Weapons;
 using HG.AI.Logistics;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System;
 using System.Drawing;
 using System.IO;
@@ -56,7 +57,7 @@ namespace HG.Actors.Enemies.Peons
         DateTime lastBehaviorChangeTime = DateTime.Now;
         double behaviorChangeThresholdMiliseconds = 0;
 
-        public override void ApplyIntelligence(HgPoint<double> displacementVector)
+        public override void ApplyIntelligence(HgPoint displacementVector)
         {
             base.ApplyIntelligence(displacementVector);
 

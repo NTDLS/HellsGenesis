@@ -1,4 +1,5 @@
 ﻿using Determinet;
+using HG.Types;
 using System.Collections.Generic;
 using System.IO;
 
@@ -25,7 +26,7 @@ namespace HG.Engine.Controllers
             {
                 if (_collection.TryGetValue(key, out var value))
                 {
-                    return (value as DniNeuralNetwork);
+                    return value as DniNeuralNetwork;
                 }
 
                 var json = _core.Assets.GetText(assetRelativePath);
@@ -81,7 +82,7 @@ namespace HG.Engine.Controllers
             }
         }
 
-        public AudioClip GetAudio(string assetRelativePath, float initialVolumne, bool loopForever = false)
+        public HgAudioClip GetAudio(string assetRelativePath, float initialVolumne, bool loopForever = false)
         {
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
             string key = $"Audio({assetRelativePath})";
@@ -90,12 +91,12 @@ namespace HG.Engine.Controllers
             {
                 if (_collection.TryGetValue(key, out var value))
                 {
-                    return value as AudioClip;
+                    return value as HgAudioClip;
                 }
 
                 using (var stream = new FileStream(assetAbsolutePath, FileMode.Open, FileAccess.Read))
                 {
-                    var result = new AudioClip(stream, initialVolumne, loopForever);
+                    var result = new HgAudioClip(stream, initialVolumne, loopForever);
                     _collection.Add(key, result);
                     stream.Close();
                     return result;

@@ -1,7 +1,8 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Actors.Weapons.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 
 namespace HG.Actors.Weapons
 {
@@ -36,19 +37,19 @@ namespace HG.Actors.Weapons
 
                 if (RoundQuantity > 0)
                 {
-                    var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new HgPoint<double>(5, 5));
+                    var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new HgPoint(5, 5));
                     _core.Actors.Bullets.Create(this, _owner, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0)
                 {
-                    var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new HgPoint<double>(5, 5));
+                    var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new HgPoint(5, 5));
                     _core.Actors.Bullets.Create(this, _owner, pointLeft);
                     RoundQuantity--;
                 }
 
-                _owner.Velocity.RecoilAmount += RecoilAmount;
+                _owner.Velocity.RecoilPercentage += RecoilAmount;
 
                 return true;
             }

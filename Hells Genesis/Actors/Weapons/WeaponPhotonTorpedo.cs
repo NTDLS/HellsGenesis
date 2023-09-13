@@ -3,7 +3,7 @@ using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
 
 namespace HG.Actors.Weapons
 {
@@ -26,7 +26,7 @@ namespace HG.Actors.Weapons
             FireDelayMilliseconds = 500;
         }
 
-        public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint<double> xyOffset = null)
+        public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint xyOffset = null)
         {
             return new BulletPhotonTorpedo(_core, this, _owner, lockedTarget, xyOffset);
         }

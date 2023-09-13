@@ -3,6 +3,7 @@ using HG.Actors.Weapons.Bullets;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Types;
+using HG.Types.Geometry;
 using System;
 using System.Collections.Generic;
 
@@ -15,7 +16,7 @@ namespace HG.Actors.Weapons.BaseClasses
         protected ActorBase _owner;
 
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
-        protected AudioClip _fireSound;
+        protected HgAudioClip _fireSound;
 
         /// <summary>
         /// RecoilAmount is expressed in decimal percentage of thrust.
@@ -52,7 +53,7 @@ namespace HG.Actors.Weapons.BaseClasses
             Name = name;
         }
 
-        public virtual BulletBase CreateBullet(ActorBase lockedTarget, HgPoint<double> xyOffset = null)
+        public virtual BulletBase CreateBullet(ActorBase lockedTarget, HgPoint xyOffset = null)
         {
             if (_owner == null)
             {
@@ -61,7 +62,7 @@ namespace HG.Actors.Weapons.BaseClasses
             return new BulletGeneric(_core, this, _owner, @"Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
         }
 
-        public virtual void ApplyIntelligence(HgPoint<double> displacementVector, ActorBase wouldFireAt)
+        public virtual void ApplyIntelligence(HgPoint displacementVector, ActorBase wouldFireAt)
         {
             if (_owner == null)
             {
@@ -110,7 +111,7 @@ namespace HG.Actors.Weapons.BaseClasses
                 _fireSound.Play();
                 _core.Actors.Bullets.Create(this, _owner);
 
-                _owner.Velocity.RecoilAmount += RecoilAmount;
+                _owner.Velocity.RecoilPercentage += RecoilAmount;
 
                 return true;
             }

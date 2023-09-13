@@ -1,8 +1,8 @@
 ﻿using HG.Actors.BaseClasses;
-using HG.Types;
+using HG.Types.Geometry;
 using System;
 
-namespace HG.Engine
+namespace HG.Utility
 {
     internal class HgMath
     {
@@ -38,9 +38,9 @@ namespace HG.Engine
         /// <param name="angle"></param>
         /// <param name="distance"></param>
         /// <returns></returns>
-        public static HgPoint<double> AngleFromPointAtDistance(HgAngle<double> angle, HgPoint<double> distance)
+        public static HgPoint AngleFromPointAtDistance(HgAngle angle, HgPoint distance)
         {
-            return new HgPoint<double>(
+            return new HgPoint(
                 (Math.Cos(angle.Radians) * distance.X),
                 (Math.Sin(angle.Radians) * distance.Y));
         }
@@ -53,17 +53,17 @@ namespace HG.Engine
         /// <returns></returns>
         public static double AngleTo(ActorBase from, ActorBase to)
         {
-            return HgPoint<double>.AngleTo(from.Location, to.Location);
+            return HgPoint.AngleTo(from.Location, to.Location);
         }
 
-        public static double AngleTo(HgPoint<double> from, ActorBase to)
+        public static double AngleTo(HgPoint from, ActorBase to)
         {
-            return HgPoint<double>.AngleTo(from, to.Location);
+            return HgPoint.AngleTo(from, to.Location);
         }
 
-        public static double AngleTo(ActorBase from, HgPoint<double> to)
+        public static double AngleTo(ActorBase from, HgPoint to)
         {
-            return HgPoint<double>.AngleTo(from.Location, to);
+            return HgPoint.AngleTo(from.Location, to);
         }
 
         public static bool IsPointingAway(ActorBase fromObj, ActorBase atObj, double toleranceDegrees)
@@ -114,7 +114,7 @@ namespace HG.Engine
             return -da360;
         }
 
-        public static double DeltaAngle(ActorBase fromObj, HgPoint<double> toLocation, double offsetAngle = 0)
+        public static double DeltaAngle(ActorBase fromObj, HgPoint toLocation, double offsetAngle = 0)
         {
             var da360 = DeltaAngle360(fromObj, toLocation, offsetAngle);
             if (da360 > 180)
@@ -149,7 +149,7 @@ namespace HG.Engine
             return angleTo;
         }
 
-        public static double DeltaAngle360(ActorBase fromObj, HgPoint<double> toLocation, double offsetAngle = 0)
+        public static double DeltaAngle360(ActorBase fromObj, HgPoint toLocation, double offsetAngle = 0)
         {
             double fromAngle = fromObj.Velocity.Angle.Degrees + offsetAngle;
 
@@ -173,7 +173,7 @@ namespace HG.Engine
 
         public static double DistanceTo(ActorBase from, ActorBase to)
         {
-            return HgPoint<double>.DistanceTo(from.Location, to.Location);
+            return HgPoint.DistanceTo(from.Location, to.Location);
         }
     }
 }

@@ -4,6 +4,8 @@ using HG.Actors.Ordinary;
 using HG.Actors.Weapons.BaseClasses;
 using HG.Engine;
 using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System;
 
 namespace HG.Actors.Weapons.Bullets.BaseClasses
@@ -18,7 +20,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
 
         public BulletBase(Core core, WeaponBase weapon, ActorBase firedFrom, string imagePath,
-             ActorBase lockedTarget = null, HgPoint<double> xyOffset = null)
+             ActorBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core)
         {
             Initialize(imagePath);
@@ -27,7 +29,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             LockedTarget = lockedTarget;
             Velocity.ThrottlePercentage = 1.0;
 
-            RadarDotSize = new HgPoint<int>(2, 2);
+            RadarDotSize = new HgPoint(2, 2);
 
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
 
@@ -43,7 +45,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
 
             var initialVelocity = new HgVelocity()
             {
-                Angle = new HgAngle<double>(headingDegrees),
+                Angle = new HgAngle(headingDegrees),
                 MaxSpeed = weapon.Speed,
                 ThrottlePercentage = 1.0
             };
@@ -53,7 +55,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
                 initialVelocity.MaxSpeed += (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * (double)weapon.SpeedVariance);
             }
 
-            Location = firedFrom.Location + (xyOffset ?? HgPoint<double>.Zero);
+            Location = firedFrom.Location + (xyOffset ?? HgPoint.Zero);
 
             if (firedFrom is EnemyBase)
             {
@@ -67,7 +69,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(HgPoint<double> displacementVector)
+        public virtual void ApplyIntelligence(HgPoint displacementVector)
         {
             if (AgeInMilliseconds > MilisecondsToLive)
             {
@@ -76,7 +78,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             }
         }
 
-        public override void ApplyMotion(HgPoint<double> displacementVector)
+        public override void ApplyMotion(HgPoint displacementVector)
         {
             if (X < -Settings.BulletSceneDistanceLimit
                 || X >= _core.Display.TotalCanvasSize.Width + Settings.BulletSceneDistanceLimit

@@ -1,7 +1,8 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Actors.Ordinary;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System;
 using System.Drawing;
 using System.Linq;
@@ -48,7 +49,7 @@ namespace HG.Actors.PowerUp.BaseClasses
             int _soundIndex = HgRandom.RandomNumber(0, _assetExplosionSoundFiles.Count());
             _explodeSound = _core.Audio.Get(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
 
-            RadarDotSize = new HgPoint<int>(4, 4);
+            RadarDotSize = new HgPoint(4, 4);
         }
 
         public override void Cleanup()
@@ -64,7 +65,7 @@ namespace HG.Actors.PowerUp.BaseClasses
             QueueForDelete();
         }
 
-        public virtual void ApplyIntelligence(HgPoint<double> displacementVector)
+        public virtual void ApplyIntelligence(HgPoint displacementVector)
         {
             if (Intersects(_core.Player.Actor))
             {

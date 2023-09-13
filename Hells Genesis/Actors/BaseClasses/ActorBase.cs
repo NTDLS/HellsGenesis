@@ -3,12 +3,13 @@ using HG.Actors.Ordinary;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using SharpDX.Mathematics.Interop;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using static HG.Engine.Constants;
 
 namespace HG.Actors.BaseClasses
 {
@@ -20,9 +21,9 @@ namespace HG.Actors.BaseClasses
 
         protected SharpDX.Direct2D1.Bitmap _lockedOnImage;
         protected SharpDX.Direct2D1.Bitmap _lockedOnSoftImage;
-        protected AudioClip _hitSound;
-        protected AudioClip _shieldHit;
-        protected AudioClip _explodeSound;
+        protected HgAudioClip _hitSound;
+        protected HgAudioClip _shieldHit;
+        protected HgAudioClip _explodeSound;
 
         protected ActorAnimation _explosionAnimation;
         protected ActorAnimation _hitExplosionAnimation;
@@ -34,7 +35,7 @@ namespace HG.Actors.BaseClasses
         private bool _isLockedOn = false;
         private HgVelocity _velocity;
         private bool _readyForDeletion;
-        private HgPoint<double> _location = new();
+        private HgPoint _location = new();
         private Size _size;
 
         #region Properties.
@@ -43,7 +44,7 @@ namespace HG.Actors.BaseClasses
         public uint UID { get; private set; } = Core.GetNextSequentialId();
         public uint OwnerUID { get; set; }
         public List<ActorAttachment> Attachments { get; private set; } = new();
-        public HgPoint<int> RadarDotSize { get; set; } = new HgPoint<int>(4, 4);
+        public HgPoint RadarDotSize { get; set; } = new HgPoint(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
         public bool IsOnScreen => _core.Display.CurrentScaledScreenBounds.IntersectsWith(Bounds);
         public bool Highlight { get; set; } = false;
@@ -54,7 +55,7 @@ namespace HG.Actors.BaseClasses
         public bool ReadyForDeletion => _readyForDeletion;
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public HgPoint<double> LocationCenter => new(_location.X - Size.Width / 2.0, _location.Y - Size.Height / 2.0);
+        public HgPoint LocationCenter => new(_location.X - Size.Width / 2.0, _location.Y - Size.Height / 2.0);
         public RectangleF VisibleBounds => new Rectangle((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
         public RectangleF Bounds => new((float)_location.X, (float)_location.Y, Size.Width, Size.Height);
         public Rectangle BoundsI => new((int)_location.X, (int)_location.Y, Size.Width, Size.Height);
@@ -158,11 +159,11 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
-        public HgPoint<double> Location
+        public HgPoint Location
         {
             get
             {
-                return new HgPoint<double>(_location, true);
+                return new HgPoint(_location, true);
             }
             set
             {
@@ -170,7 +171,7 @@ namespace HG.Actors.BaseClasses
             }
         }
 
-        public void SetLocation(HgPoint<double> location)
+        public void SetLocation(HgPoint location)
         {
             _location = location;
             PositionChanged();
@@ -325,7 +326,7 @@ namespace HG.Actors.BaseClasses
         /// Intersect detection with another object using adjusted "hit box" size.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(ActorBase otherObject, HgPoint<double> sizeAdjust)
+        public bool Intersects(ActorBase otherObject, HgPoint sizeAdjust)
         {
             if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
@@ -358,7 +359,7 @@ namespace HG.Actors.BaseClasses
         /// Intersect detection with a position using adjusted "hit box" size.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(HgPoint<double> location, HgPoint<double> size)
+        public bool Intersects(HgPoint location, HgPoint size)
         {
             var alteredHitBox = new RectangleF(
                 (float)location.X,
@@ -374,7 +375,7 @@ namespace HG.Actors.BaseClasses
         /// Intersect detection with a position.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(HgPoint<double> location)
+        public bool Intersects(HgPoint location)
         {
             var alteredHitBox = new RectangleF((float)location.X, (float)location.Y, 1f, 1f);
             return VisibleBounds.IntersectsWith(alteredHitBox);
@@ -465,9 +466,9 @@ namespace HG.Actors.BaseClasses
         /// <summary>
         /// Instantly points an object at a location and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        public void PointAtAndGoto(HgPoint<double> location, double? velocity = null)
+        public void PointAtAndGoto(HgPoint location, double? velocity = null)
         {
-            Velocity.Angle.Degrees = HgPoint<double>.AngleTo(Location, location);
+            Velocity.Angle.Degrees = HgPoint.AngleTo(Location, location);
             if (velocity != null)
             {
                 Velocity.MaxSpeed = (double)velocity;
@@ -479,7 +480,7 @@ namespace HG.Actors.BaseClasses
         /// </summary>
         public void PointAtAndGoto(ActorBase obj, double? velocity = null)
         {
-            Velocity.Angle.Degrees = HgPoint<double>.AngleTo(Location, obj.Location);
+            Velocity.Angle.Degrees = HgPoint.AngleTo(Location, obj.Location);
 
             if (velocity != null)
             {
@@ -515,17 +516,17 @@ namespace HG.Actors.BaseClasses
         /// Rotates the object towards the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(ActorBase obj, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateTo(ActorBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = DeltaAngle(obj);
 
             if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
             {
-                if (direction == RelativeDirection.Right)
+                if (direction == HgRelativeDirection.Right)
                 {
                     Velocity.Angle.Degrees += rotationAmount;
                 }
-                if (direction == RelativeDirection.Left)
+                if (direction == HgRelativeDirection.Left)
                 {
                     Velocity.Angle.Degrees -= rotationAmount;
                 }
@@ -539,7 +540,7 @@ namespace HG.Actors.BaseClasses
         /// Rotates the object towards the target coordinates by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(HgPoint<double> toLocation, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateTo(HgPoint toLocation, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = DeltaAngle(toLocation);
 
@@ -563,17 +564,17 @@ namespace HG.Actors.BaseClasses
         /// Rotates the object towards the target coordinates by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(HgPoint<double> toLocation, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateTo(HgPoint toLocation, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = DeltaAngle(toLocation);
 
             if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
             {
-                if (direction == RelativeDirection.Right)
+                if (direction == HgRelativeDirection.Right)
                 {
                     Velocity.Angle.Degrees += rotationAmount;
                 }
-                if (direction == RelativeDirection.Left)
+                if (direction == HgRelativeDirection.Left)
                 {
                     Velocity.Angle.Degrees -= rotationAmount;
                 }
@@ -587,17 +588,17 @@ namespace HG.Actors.BaseClasses
         /// Rotates the object by the specified amount until it is pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(double toDegrees, RelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
+        public bool RotateTo(double toDegrees, HgRelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
         {
             toDegrees = toDegrees.DegreesNormalized();
 
             if (Velocity.Angle.DegreesNormalized.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
-                if (direction == RelativeDirection.Right)
+                if (direction == HgRelativeDirection.Right)
                 {
                     Velocity.Angle.Degrees += rotationAmount;
                 }
-                if (direction == RelativeDirection.Left)
+                if (direction == HgRelativeDirection.Left)
                 {
                     Velocity.Angle.Degrees -= rotationAmount;
                 }
@@ -635,17 +636,17 @@ namespace HG.Actors.BaseClasses
         /// Rotates the object from the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateFrom(ActorBase obj, RelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateFrom(ActorBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = obj.DeltaAngle(this);
 
             if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
             {
-                if (direction == RelativeDirection.Right)
+                if (direction == HgRelativeDirection.Right)
                 {
                     Velocity.Angle += rotationAmount;
                 }
-                if (direction == RelativeDirection.Left)
+                if (direction == HgRelativeDirection.Left)
                 {
                     Velocity.Angle -= rotationAmount;
                 }
@@ -702,7 +703,7 @@ namespace HG.Actors.BaseClasses
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <=>s></returns>
-        public double DeltaAngle(HgPoint<double> toLocation) => HgMath.DeltaAngle(this, toLocation);
+        public double DeltaAngle(HgPoint toLocation) => HgMath.DeltaAngle(this, toLocation);
 
         /// <summary>
         /// Calculates the angle in degrees to another object,
@@ -711,7 +712,7 @@ namespace HG.Actors.BaseClasses
         public double AngleTo(ActorBase atObj) => HgMath.AngleTo(this, atObj);
 
         /// Calculates the angle in degrees to a location.
-        public double AngleTo(HgPoint<double> location) => HgMath.AngleTo(this, location);
+        public double AngleTo(HgPoint location) => HgMath.AngleTo(this, location);
 
         public bool IsPointingAt(ActorBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
             => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
@@ -724,13 +725,13 @@ namespace HG.Actors.BaseClasses
 
         public bool IsPointingAway(ActorBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public double DistanceTo(ActorBase to) => HgPoint<double>.DistanceTo(Location, to.Location);
+        public double DistanceTo(ActorBase to) => HgPoint.DistanceTo(Location, to.Location);
 
-        public double DistanceTo(HgPoint<double> to) => HgPoint<double>.DistanceTo(Location, to);
+        public double DistanceTo(HgPoint to) => HgPoint.DistanceTo(Location, to);
 
         #endregion
 
-        public virtual void ApplyMotion(HgPoint<double> displacementVector)
+        public virtual void ApplyMotion(HgPoint displacementVector)
         {
             if (IsFixedPosition == false)
             {
@@ -775,7 +776,7 @@ namespace HG.Actors.BaseClasses
                 {
                     var rectangle = new RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
 
-                    _core.DirectX.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), Velocity.Angle.Degrees, _core.DirectX.Colors.Raw.Red, 0, 1);
+                    _core.DirectX.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), Velocity.Angle.Degrees, _core.DirectX.Materials.Raw.Red, 0, 1);
                 }
             }
         }
@@ -790,10 +791,10 @@ namespace HG.Actors.BaseClasses
             {
                 float size = 0;
 
-                RawColor4 color = _core.DirectX.Colors.Raw.Blue;
+                RawColor4 color = _core.DirectX.Materials.Raw.Blue;
                 if (this is EnemyBase)
                 {
-                    color = _core.DirectX.Colors.Raw.WhiteSmoke;
+                    color = _core.DirectX.Materials.Raw.WhiteSmoke;
                     size = 3;
                 }
                 else if (this is BulletBase)
@@ -801,11 +802,11 @@ namespace HG.Actors.BaseClasses
                     var bullet = this as BulletBase;
                     if (bullet.FiredFromType == HgFiredFromType.Enemy)
                     {
-                        color = _core.DirectX.Colors.Raw.Red;
+                        color = _core.DirectX.Materials.Raw.Red;
                     }
                     else
                     {
-                        color = _core.DirectX.Colors.Raw.Green;
+                        color = _core.DirectX.Materials.Raw.Green;
                     }
 
                     if (bullet.Weapon.ExplodesOnImpact)

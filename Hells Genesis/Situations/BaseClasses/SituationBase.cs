@@ -15,14 +15,7 @@ namespace HG.Situations.BaseClasses
         public string Name { get; set; }
         public int CurrentWave { get; set; } = 0;
         public int TotalWaves { get; set; } = 1;
-        public ScenarioState State { get; protected set; } = ScenarioState.NotStarted;
-
-        public enum ScenarioState
-        {
-            NotStarted,
-            Running,
-            Ended
-        }
+        public HgSituationState State { get; protected set; } = HgSituationState.NotStarted;
 
         public SituationBase(Core core, string name)
         {
@@ -37,12 +30,12 @@ namespace HG.Situations.BaseClasses
                 obj.ReadyForDeletion = true;
             }
 
-            State = ScenarioState.Ended;
+            State = HgSituationState.Ended;
         }
 
         public virtual void BeginSituation()
         {
-            State = ScenarioState.Running;
+            State = HgSituationState.Running;
         }
 
         protected HgEngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, HgOnExecute executeCallback)

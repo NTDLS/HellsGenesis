@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using HG.Types;
+using HG.Utility;
+using System.IO;
 
 namespace HG.Engine.Controllers
 {
@@ -6,10 +8,10 @@ namespace HG.Engine.Controllers
     {
         private readonly Core _core;
 
-        public AudioClip BackgroundMusicSound { get; private set; }
-        public AudioClip RadarBlipsSound { get; private set; }
-        public AudioClip DoorIsAjarSound { get; private set; }
-        public AudioClip LockedOnBlip { get; private set; }
+        public HgAudioClip BackgroundMusicSound { get; private set; }
+        public HgAudioClip RadarBlipsSound { get; private set; }
+        public HgAudioClip DoorIsAjarSound { get; private set; }
+        public HgAudioClip LockedOnBlip { get; private set; }
 
         public EngineAudioController(Core core)
         {
@@ -21,7 +23,7 @@ namespace HG.Engine.Controllers
             BackgroundMusicSound = Get(@"Sounds\Music\Background.wav", 0.25f, true);
         }
 
-        public AudioClip Get(string path, float initialVolumne, bool loopForever = false)
+        public HgAudioClip Get(string path, float initialVolumne, bool loopForever = false)
         {
             return _core.Assets.GetAudio(path, initialVolumne, loopForever);
         }

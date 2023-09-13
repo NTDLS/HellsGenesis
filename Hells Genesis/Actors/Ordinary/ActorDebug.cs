@@ -1,6 +1,7 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
 using HG.Types;
+using HG.Types.Geometry;
 using System.Drawing;
 
 namespace HG.Actors.Ordinary
@@ -34,7 +35,7 @@ namespace HG.Actors.Ordinary
             Velocity = new HgVelocity();
         }
 
-        public override void ApplyMotion(HgPoint<double> displacementVector)
+        public override void ApplyMotion(HgPoint displacementVector)
         {
             this.Velocity.Angle.Degrees = AngleTo(_core.Player.Actor);
             base.ApplyMotion(displacementVector);

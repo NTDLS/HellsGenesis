@@ -1,4 +1,6 @@
 ﻿using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -11,8 +13,8 @@ namespace HG.Engine.Controllers
 
         public Dictionary<Point, HgQuadrant> Quadrants { get; private set; } = new();
         public HgQuadrant CurrentQuadrant { get; set; }
-        public HgPoint<double> BackgroundOffset { get; private set; } = new(); //Offset of background, all cals must take into account.
-        public FrameCounter GameLoopCounter { get; private set; } = new();
+        public HgPoint BackgroundOffset { get; private set; } = new(); //Offset of background, all cals must take into account.
+        public HgFrameCounter GameLoopCounter { get; private set; } = new();
 
         public Control DrawingSurface { get; private set; }
 
@@ -94,12 +96,12 @@ namespace HG.Engine.Controllers
             }
         }
 
-        public HgPoint<double> RandomOnScreenLocation()
+        public HgPoint RandomOnScreenLocation()
         {
-            return new HgPoint<double>(HgRandom.Random.Next(0, NatrualScreenSize.Width), HgRandom.Random.Next(0, NatrualScreenSize.Height));
+            return new HgPoint(HgRandom.Random.Next(0, NatrualScreenSize.Width), HgRandom.Random.Next(0, NatrualScreenSize.Height));
         }
 
-        public HgPoint<double> RandomOffScreenLocation(int min = 100, int max = 500)
+        public HgPoint RandomOffScreenLocation(int min = 100, int max = 500)
         {
             double x;
             double y;
@@ -132,7 +134,7 @@ namespace HG.Engine.Controllers
 
             }
 
-            return new HgPoint<double>(x, y);
+            return new HgPoint(x, y);
         }
 
         public EngineDisplayController(Core core, Control drawingSurface, Size visibleSize)

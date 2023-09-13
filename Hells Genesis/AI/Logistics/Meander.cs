@@ -2,10 +2,10 @@
 using Determinet.Types;
 using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using System;
-using static HG.Engine.Constants;
 
 namespace HG.AI.Logistics
 {
@@ -46,7 +46,7 @@ namespace HG.AI.Logistics
         public double DistanceToKeep { get; set; } = 500;
         public DateTime? LastDecisionTime { get; set; } = DateTime.Now.AddHours(-1);
         public int MillisecondsBetweenDecisions { get; set; } = 50;
-        public RelativeDirection FavorateDirection = RelativeDirection.None;
+        public HgRelativeDirection FavorateDirection = HgRelativeDirection.None;
 
         #endregion
 
@@ -65,7 +65,7 @@ namespace HG.AI.Logistics
             _core = core;
             _owner = owner;
             _observedObject = observedObject;
-            FavorateDirection = HgRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
+            FavorateDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
 
             if (_singletonNetwork != null)
             {
@@ -166,7 +166,7 @@ namespace HG.AI.Logistics
             Network = newNetwork.Clone();//.Mutate(0.2, 0.1)
         }
 
-        public void ApplyIntelligence(HgPoint<double> displacementVector)
+        public void ApplyIntelligence(HgPoint displacementVector)
         {
             var now = DateTime.UtcNow;
 
@@ -176,7 +176,7 @@ namespace HG.AI.Logistics
             {
                 if (elapsedTimeSinceLastDecision > 1000)
                 {
-                    FavorateDirection = HgRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
+                    FavorateDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
                 }
 
                 var decidingFactors = GatherInputs();
@@ -194,11 +194,11 @@ namespace HG.AI.Logistics
                 }
                 else if (transitionToObservationObject)
                 {
-                    _owner.Rotate((45 * 0.05) * (FavorateDirection == RelativeDirection.Left ? 1 : -1));
+                    _owner.Rotate((45 * 0.05) * (FavorateDirection == HgRelativeDirection.Left ? 1 : -1));
                 }
                 else if (transitionFromObservationObject)
                 {
-                    _owner.Rotate((-45 * 0.05) * (FavorateDirection == RelativeDirection.Left ? 1 : -1));
+                    _owner.Rotate((-45 * 0.05) * (FavorateDirection == HgRelativeDirection.Left ? 1 : -1));
                 }
 
                 LastDecisionTime = now;
@@ -216,7 +216,7 @@ namespace HG.AI.Logistics
 
             var deltaAngle = _owner.DeltaAngle(_observedObject);
 
-            var angleToIn6thRadians = HgAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
+            var angleToIn6thRadians = HgAngle.DegreesToRadians(deltaAngle) / 6.0;
 
             aiParams.Set(Inputs.AngleToObservationObjectIn6thRadians,
                 angleToIn6thRadians.SplitToNegative(Math.PI / 6));

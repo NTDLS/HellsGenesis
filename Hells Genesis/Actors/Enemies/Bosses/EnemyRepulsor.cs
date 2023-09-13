@@ -2,7 +2,8 @@
 using HG.Actors.Ordinary;
 using HG.Actors.Weapons;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using HG.Utility.ExtensionMethods;
 
 namespace HG.Actors.Enemies.Bosses
@@ -60,7 +61,7 @@ namespace HG.Actors.Enemies.Bosses
             {
                 if (_leftGun?.IsDead == false)
                 {
-                    var pointLeft = HgMath.AngleFromPointAtDistance(Velocity.Angle - 90, new HgPoint<double>(25, 25));
+                    var pointLeft = HgMath.AngleFromPointAtDistance(Velocity.Angle - 90, new HgPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _leftGun.X = X + pointLeft.X;
                     _leftGun.Y = Y + pointLeft.Y;
@@ -68,7 +69,7 @@ namespace HG.Actors.Enemies.Bosses
 
                 if (_rightGun?.IsDead == false)
                 {
-                    var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 90, new HgPoint<double>(25, 25));
+                    var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 90, new HgPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _rightGun.X = X + pointRight.X;
                     _rightGun.Y = Y + pointRight.Y;
@@ -76,7 +77,7 @@ namespace HG.Actors.Enemies.Bosses
 
                 if (_thrust?.IsDead == false)
                 {
-                    var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(35, 35));
+                    var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint(35, 35));
                     _thrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _thrust.X = X + pointRight.X;
                     _thrust.Y = Y + pointRight.Y;
@@ -99,12 +100,12 @@ namespace HG.Actors.Enemies.Bosses
         private double distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
         private const double baseFallbackDistance = 800;
         private double fallbackDistance;
-        private HgAngle<double> fallToAngle;
+        private HgAngle fallToAngle;
         private AIMode mode = AIMode.Approaching;
         private int bulletsRemainingBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
-        public override void ApplyIntelligence(HgPoint<double> displacementVector)
+        public override void ApplyIntelligence(HgPoint displacementVector)
         {
             base.ApplyIntelligence(displacementVector);
 

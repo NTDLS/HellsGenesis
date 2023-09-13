@@ -1,7 +1,8 @@
 ﻿using HG.Engine.Controllers;
+using HG.Engine.ImageProcessing;
+using HG.Engine.TickHandlers;
 using HG.Loudouts;
 using HG.Menus;
-using HG.TickHandlers;
 using HG.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -31,7 +32,7 @@ namespace HG.Engine
         public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
 
-        private readonly WorldClock _gameLoop;
+        private readonly EngineWorldClock _gameLoop;
 
         static uint _nextSequentialId = 1;
         static object _nextSequentialLock = new object();
@@ -70,7 +71,7 @@ namespace HG.Engine
 
             LoadPrefabs();
 
-            _gameLoop = new WorldClock(this);
+            _gameLoop = new EngineWorldClock(this);
 
             Events.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
@@ -82,9 +83,9 @@ namespace HG.Engine
                 DirectX.ScreenRenderTarget.BeginDraw();
                 DirectX.IntermediateRenderTarget.BeginDraw();
 
-                DirectX.ScreenRenderTarget.Clear(DirectX.Colors.Raw.Black);
+                DirectX.ScreenRenderTarget.Clear(DirectX.Materials.Raw.Black);
 
-                DirectX.IntermediateRenderTarget.Clear(DirectX.Colors.Raw.Black);
+                DirectX.IntermediateRenderTarget.Clear(DirectX.Materials.Raw.Black);
                 Actors.RenderPreScaling(DirectX.IntermediateRenderTarget);
                 DirectX.IntermediateRenderTarget.EndDraw();
 

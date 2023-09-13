@@ -3,9 +3,9 @@ using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Ordinary;
 using HG.Actors.PowerUp.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
+using HG.Engine.TickHandlers;
 using HG.Menus;
-using HG.TickHandlers;
-using HG.Types;
+using HG.Types.Geometry;
 using HG.Utility.ExtensionMethods;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +18,8 @@ namespace HG.Engine.Controllers
     internal class EngineActorController
     {
         private readonly Core _core;
-        private HgPoint<double> _radarScale;
-        private HgPoint<double> _radarOffset;
+        private HgPoint _radarScale;
+        private HgPoint _radarOffset;
 
         public ActorTextBlock PlayerStatsText { get; private set; }
         public ActorTextBlock DebugText { get; private set; }
@@ -62,9 +62,9 @@ namespace HG.Engine.Controllers
         {
             _core.Player.Actor = new ActorPlayer(_core, _core.PrefabPlayerLoadouts.GetDefault()) { Visable = false };
 
-            PlayerStatsText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Colors.Brushes.WhiteSmoke, new HgPoint<double>(5, 5), true);
+            PlayerStatsText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Materials.Brushes.WhiteSmoke, new HgPoint(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Colors.Brushes.Cyan, new HgPoint<double>(5, PlayerStatsText.Y + 80), true);
+            DebugText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Materials.Brushes.Cyan, new HgPoint(5, PlayerStatsText.Y + 80), true);
 
             _core.Audio.BackgroundMusicSound.Play();
         }
@@ -167,7 +167,7 @@ namespace HG.Engine.Controllers
                 {
                     if (obj != with)
                     {
-                        if (obj.Intersects(with.Location, new HgPoint<double>(with.Size.Width, with.Size.Height)))
+                        if (obj.Intersects(with.Location, new HgPoint(with.Size.Width, with.Size.Height)))
                         {
                             objs.Add(obj);
                         }
@@ -178,9 +178,9 @@ namespace HG.Engine.Controllers
         }
 
         public List<ActorBase> Intersections(double x, double y, double width, double height)
-            => Intersections(new HgPoint<double>(x, y), new HgPoint<double>(width, height));
+            => Intersections(new HgPoint(x, y), new HgPoint(width, height));
 
-        public List<ActorBase> Intersections(HgPoint<double> location, HgPoint<double> size)
+        public List<ActorBase> Intersections(HgPoint location, HgPoint size)
         {
             lock (Collection)
             {
@@ -230,8 +230,8 @@ namespace HG.Engine.Controllers
                     double radarVisionWidth = _core.Display.TotalCanvasSize.Width * radarDistance;
                     double radarVisionHeight = _core.Display.TotalCanvasSize.Height * radarDistance;
 
-                    _radarScale = new HgPoint<double>(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
-                    _radarOffset = new HgPoint<double>(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
+                    _radarScale = new HgPoint(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
+                    _radarOffset = new HgPoint(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
                 }
 
                 if (_core.Player.Actor is not null && _core.Player.Actor.Visable)
@@ -239,22 +239,22 @@ namespace HG.Engine.Controllers
                     double centerOfRadarX = (int)(radarBgImage.Size.Width / 2.0) - 2.0; //Subtract half the dot size.
                     double centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0) - 2.0; //Subtract half the dot size.
 
-                    _radarOffset = new HgPoint<double>(
-                            (_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + (centerOfRadarX - _core.Player.Actor.X * _radarScale.X),
-                            (_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + (centerOfRadarY - _core.Player.Actor.Y * _radarScale.Y)
+                    _radarOffset = new HgPoint(
+                            _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _core.Player.Actor.X * _radarScale.X),
+                            _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _core.Player.Actor.Y * _radarScale.Y)
                         );
 
                     //Render radar:
                     foreach (var actor in Collection.Where(o => o.Visable == true))
                     {
-                        //HgPoint<double> scale, HgPoint< double > offset
-                        int x = (int)(_radarOffset.X + (actor.X * _radarScale.X));
-                        int y = (int)(_radarOffset.Y + (actor.Y * _radarScale.Y));
+                        //HgPoint scale, HgPoint< double > offset
+                        int x = (int)(_radarOffset.X + actor.X * _radarScale.X);
+                        int y = (int)(_radarOffset.Y + actor.Y * _radarScale.Y);
 
                         if (x > _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
-                            && x < ((_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + radarBgImage.Size.Width)
+                            && x < _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
                             && y > _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
-                            && y < ((_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + radarBgImage.Size.Height)
+                            && y < _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
                             )
                         {
                             if ((actor is EnemyBase || actor is BulletBase || actor is PowerUpBase) && actor.Visable == true)
@@ -267,9 +267,9 @@ namespace HG.Engine.Controllers
                     //Render player blip:
                     _core.DirectX.FillEllipseAt(
                         renderTarget,
-                        ((_core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width) + (centerOfRadarX)),
-                        ((_core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height) + (centerOfRadarY)),
-                        2, 2, _core.DirectX.Colors.Raw.Green);
+                        _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + centerOfRadarX,
+                        _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + centerOfRadarY,
+                        2, 2, _core.DirectX.Materials.Raw.Green);
                 }
             }
         }
@@ -304,7 +304,7 @@ namespace HG.Engine.Controllers
             if (Settings.HighlightNatrualBounds)
             {
                 //Highlight the 1:1 frame
-                _core.DirectX.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.Colors.Raw.Red, 0, 1);
+                _core.DirectX.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.Materials.Raw.Red, 0, 1);
             }
 
             if (Settings.AutoZoomWhenMoving)
@@ -328,7 +328,7 @@ namespace HG.Engine.Controllers
 
 
                     double baseScale = 100 / Settings.OverdrawScale;
-                    double reduction = (baseScale / 100)
+                    double reduction = baseScale / 100
                         * (_core.Display.ThrottleFrameScaleFactor + _core.Display.BoostFrameScaleFactor).Box(0, 100);
 
                     _core.DirectX.GlobalScale = (float)(baseScale - reduction);

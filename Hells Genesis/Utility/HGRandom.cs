@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HG.Engine
+namespace HG.Utility
 {
     internal class HgRandom
     {

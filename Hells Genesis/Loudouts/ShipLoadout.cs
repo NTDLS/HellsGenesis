@@ -1,13 +1,13 @@
-﻿using System;
+﻿using HG.Engine;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using static HG.Engine.Constants;
 
 namespace HG.Loudouts
 {
     internal class ShipLoadout
     {
-        public PlayerClass Class { get; set; }
+        public HgPlayerClass Class { get; set; }
         [JsonIgnore]
         public int ImageIndex => (int)Class;
         [JsonIgnore]
@@ -25,7 +25,7 @@ namespace HG.Loudouts
         {
         }
 
-        public ShipLoadout(PlayerClass shipClass)
+        public ShipLoadout(HgPlayerClass shipClass)
         {
             Class = shipClass;
         }

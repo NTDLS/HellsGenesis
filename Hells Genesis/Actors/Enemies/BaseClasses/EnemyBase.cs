@@ -4,7 +4,8 @@ using HG.Actors.PowerUp.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.AI;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace HG.Actors.Enemies.BaseClasses
             RadarPositionIndicator.Visable = false;
             RadarPositionText = _core.Actors.TextBlocks.CreateRadarPosition(
                 core.DirectX.TextFormats.RadarPositionIndicator,
-                core.DirectX.Colors.Brushes.Red, new HgPoint<double>());
+                core.DirectX.Materials.Brushes.Red, new HgPoint());
         }
 
         public virtual void BeforeCreate() { }
@@ -57,7 +58,7 @@ namespace HG.Actors.Enemies.BaseClasses
             base.Explode();
         }
 
-        public override bool TestHit(HgPoint<double> displacementVector, BulletBase bullet, HgPoint<double> hitTestPosition)
+        public override bool TestHit(HgPoint displacementVector, BulletBase bullet, HgPoint hitTestPosition)
         {
             if (bullet.FiredFromType == HgFiredFromType.Player)
             {
@@ -76,7 +77,7 @@ namespace HG.Actors.Enemies.BaseClasses
             return false;
         }
 
-        public override void ApplyMotion(HgPoint<double> displacementVector)
+        public override void ApplyMotion(HgPoint displacementVector)
         {
             if (X < -Settings.EnemySceneDistanceLimit
                 || X >= _core.Display.NatrualScreenSize.Width + Settings.EnemySceneDistanceLimit
@@ -110,7 +111,7 @@ namespace HG.Actors.Enemies.BaseClasses
                 }
             }
 
-            var thrustVector = (Velocity.MaxSpeed * (Velocity.ThrottlePercentage + -Velocity.RecoilAmount));
+            var thrustVector = (Velocity.MaxSpeed * (Velocity.ThrottlePercentage + -Velocity.RecoilPercentage));
 
             if (Velocity.BoostPercentage > 0)
             {
@@ -133,9 +134,9 @@ namespace HG.Actors.Enemies.BaseClasses
 
                     double requiredAngle = _core.Player.Actor.AngleTo(this);
 
-                    var offset = HgMath.AngleFromPointAtDistance(new HgAngle<double>(requiredAngle), new HgPoint<double>(200, 200));
+                    var offset = HgMath.AngleFromPointAtDistance(new HgAngle(requiredAngle), new HgPoint(200, 200));
 
-                    RadarPositionText.Location = _core.Player.Actor.Location + offset + new HgPoint<double>(25, 25);
+                    RadarPositionText.Location = _core.Player.Actor.Location + offset + new HgPoint(25, 25);
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
 
                     RadarPositionIndicator.Location = _core.Player.Actor.Location + offset;
@@ -148,17 +149,17 @@ namespace HG.Actors.Enemies.BaseClasses
                 }
             }
 
-            if (Velocity.RecoilAmount > 0)
+            if (Velocity.RecoilPercentage > 0)
             {
-                Velocity.RecoilAmount -= (Velocity.RecoilAmount * 0.01);
-                if (Velocity.RecoilAmount < 0.01)
+                Velocity.RecoilPercentage -= (Velocity.RecoilPercentage * 0.01);
+                if (Velocity.RecoilPercentage < 0.01)
                 {
-                    Velocity.RecoilAmount = 0;
+                    Velocity.RecoilPercentage = 0;
                 }
             }
         }
 
-        public virtual void ApplyIntelligence(HgPoint<double> displacementVector)
+        public virtual void ApplyIntelligence(HgPoint displacementVector)
         {
             if (SelectedSecondaryWeapon != null && _core.Player.Actor != null)
             {

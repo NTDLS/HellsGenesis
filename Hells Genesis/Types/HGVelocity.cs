@@ -1,4 +1,5 @@
 ﻿using HG.Engine;
+using HG.Types.Geometry;
 using HG.Utility.ExtensionMethods;
 
 namespace HG.Types
@@ -11,21 +12,20 @@ namespace HG.Types
         public event ValueChangeEvent OnBoostChanged;
         public event ValueChangeEvent OnRecoilChanged;
 
-        public HgAngle<double> Angle { get; set; } = new();
+        public HgAngle Angle { get; set; } = new();
         public double MaxSpeed { get; set; }
         public double MaxBoost { get; set; }
         public double AvailableBoost { get; set; }
         public double MaxRotationSpeed { get; set; }
         public bool BoostRebuilding { get; set; }
 
-        private double _recoilAmount = 0;
-
-        public double RecoilAmount
+        private double _recoilPercentage = 0;
+        public double RecoilPercentage
         {
-            get => _recoilAmount;
+            get => _recoilPercentage;
             set
             {
-                _recoilAmount = value.Box(0, Settings.MaxRecoilAmount);
+                _recoilPercentage = value.Box(0, Settings.MaxRecoilPercentage);
                 OnRecoilChanged?.Invoke(this);
             }
         }

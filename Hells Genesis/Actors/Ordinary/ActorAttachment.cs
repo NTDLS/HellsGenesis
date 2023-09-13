@@ -2,6 +2,7 @@
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Types;
+using HG.Types.Geometry;
 using System.Drawing;
 
 namespace HG.Actors.Ordinary
@@ -20,7 +21,7 @@ namespace HG.Actors.Ordinary
             Velocity = new HgVelocity();
         }
 
-        public override bool TestHit(HgPoint<double> displacementVector, BulletBase bullet, HgPoint<double> hitTestPosition)
+        public override bool TestHit(HgPoint displacementVector, BulletBase bullet, HgPoint hitTestPosition)
         {
             if (bullet.FiredFromType == HgFiredFromType.Player)
             {

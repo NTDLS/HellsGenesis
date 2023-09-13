@@ -1,7 +1,7 @@
 ﻿using HG.Actors.Weapons;
+using HG.Engine;
 using System.Collections.Generic;
 using System.Linq;
-using static HG.Engine.Constants;
 using static HG.Loudouts.ShipLoadout;
 
 namespace HG.Loudouts
@@ -18,7 +18,7 @@ namespace HG.Loudouts
 #if DEBUG
             //Debug
             {
-                var loadout = new ShipLoadout(PlayerClass.Debug)
+                var loadout = new ShipLoadout(HgPlayerClass.Debug)
                 {
                     Speed = 3.0,
                     Boost = 4.0,
@@ -46,7 +46,7 @@ namespace HG.Loudouts
 #endif
             //Frigate
             {
-                var loadout = new ShipLoadout(PlayerClass.Frigate)
+                var loadout = new ShipLoadout(HgPlayerClass.Frigate)
                 {
                     Description = "→ Nimble Interceptor ←\n"
                         + "A nimble interceptor, designed for hit-and-run tactics\n"
@@ -66,7 +66,7 @@ namespace HG.Loudouts
 
             //Cruiser
             {
-                var loadout = new ShipLoadout(PlayerClass.Cruiser)
+                var loadout = new ShipLoadout(HgPlayerClass.Cruiser)
                 {
                     Description = "→ Heavy Assault Cruiser ←\n"
                        + "A formidable heavy assault vessel, bristling with weaponry\n"
@@ -86,7 +86,7 @@ namespace HG.Loudouts
 
             //Destroyer
             {
-                var loadout = new ShipLoadout(PlayerClass.Destroyer)
+                var loadout = new ShipLoadout(HgPlayerClass.Destroyer)
                 {
                     Description = "→ Vicious Annihilator ←\n"
                         + "Lives up to its name as a relentless annihilator,\n"
@@ -105,7 +105,7 @@ namespace HG.Loudouts
 
             //Dreadnaught
             {
-                var loadout = new ShipLoadout(PlayerClass.Dreadnaught)
+                var loadout = new ShipLoadout(HgPlayerClass.Dreadnaught)
                 {
                     Description = "→ Titanic Dreadnought ←\n"
                         + "Titanic force of destruction, capable of withstanding\n"
@@ -127,7 +127,7 @@ namespace HG.Loudouts
 
             //Reaver
             {
-                var loadout = new ShipLoadout(PlayerClass.Reaver)
+                var loadout = new ShipLoadout(HgPlayerClass.Reaver)
                 {
                     Description = "→ Rogue Reaver ←\n"
                         + "A rogue fighter, known for its hit-and-fade tactics,\n"
@@ -147,7 +147,7 @@ namespace HG.Loudouts
 
             //Serpent
             {
-                var loadout = new ShipLoadout(PlayerClass.Serpent)
+                var loadout = new ShipLoadout(HgPlayerClass.Serpent)
                 {
                     Description = "→ Stealthy Serpent ←\n"
                         + "A stealthy long distance fighter, expert in covert operations\n"
@@ -165,7 +165,7 @@ namespace HG.Loudouts
 
             //Starfighter
             {
-                var loadout = new ShipLoadout(PlayerClass.Starfighter)
+                var loadout = new ShipLoadout(HgPlayerClass.Starfighter)
                 {
                     Description = "→ Celestial Aviator ←\n"
                         + "A sleek and versatile spacecraft, built for supremacy among the stars.\n"

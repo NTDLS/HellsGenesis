@@ -1,5 +1,6 @@
 ﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Engine;
+using HG.Utility;
 using System.Drawing;
 using System.IO;
 

@@ -1,6 +1,6 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using System.Drawing;
@@ -9,27 +9,22 @@ namespace HG.Actors.Ordinary
 {
     internal class ActorTextBlock : ActorBase
     {
+        private Size _size = Size.Empty;
+        private string _text;
+
         #region Properties.
 
         public TextFormat Format { get; set; }
         public SolidColorBrush Color { get; private set; }
-
         public double Height => _size.Height;
-
-        private Size _size = Size.Empty;
         public override Size Size => _size;
 
-        private string _text;
         public string Text
         {
-            get
-            {
-                return _text;
-            }
+            get => _text;
             set
             {
                 _text = value;
-
                 var size = _core.DirectX.GetTextSize(_text, Format);
                 _size = new Size((int)size.Width, (int)size.Height);
             }
@@ -37,11 +32,11 @@ namespace HG.Actors.Ordinary
 
         #endregion
 
-        public ActorTextBlock(Core core, TextFormat format, SolidColorBrush color, HgPoint<double> location, bool isFixedPosition)
+        public ActorTextBlock(Core core, TextFormat format, SolidColorBrush color, HgPoint location, bool isFixedPosition)
             : base(core)
         {
             IsFixedPosition = isFixedPosition;
-            Location = new HgPoint<double>(location);
+            Location = new HgPoint(location);
             Color = color;
 
             Format = format;

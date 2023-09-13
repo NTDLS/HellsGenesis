@@ -28,7 +28,7 @@ namespace HG.Engine
         public static double MaxPlayerBoostSpeed { get; set; } = 5;
         public static double MaxPlayerBoost { get; set; } = 5000;
         public static double PlayerBoostRebuildMin { get; set; } = 1000;
-        public static double MaxRecoilAmount { get; set; } = 0.5; //Max amount that will be substracted from the thrust percentage.
+        public static double MaxRecoilPercentage { get; set; } = 0.5; //Max amount that will be substracted from the thrust percentage.
         public static double MaxRotationSpeed { get; set; } = 2;
 
         public static int StartingPlayerHullHealth { get; set; } = 250;

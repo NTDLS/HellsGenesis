@@ -2,10 +2,10 @@
 using Determinet.Types;
 using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using System;
-using static HG.Engine.Constants;
 
 namespace HG.AI.Logistics
 {
@@ -65,7 +65,7 @@ namespace HG.AI.Logistics
         private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
         private readonly int _millisecondsBetweenDecisions = 10000;
         private HgNormalizedAngle _evasiveLoopTargetAngle = new();
-        private RelativeDirection _evasiveLoopDirection;
+        private HgRelativeDirection _evasiveLoopDirection;
 
         #endregion
 
@@ -101,7 +101,7 @@ namespace HG.AI.Logistics
             {
                 case ActionState.EvasiveLoop:
                     _evasiveLoopTargetAngle.Degrees = _owner.Velocity.Angle.Degrees + 180;
-                    _evasiveLoopDirection = HgRandom.FlipCoin() ? RelativeDirection.Left : RelativeDirection.Right;
+                    _evasiveLoopDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
                     _owner.Velocity.ThrottlePercentage = 1.0;
                     _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, 250);
                     break;
@@ -115,7 +115,7 @@ namespace HG.AI.Logistics
             _currentAction = state;
         }
 
-        public void ApplyIntelligence(HgPoint<double> displacementVector)
+        public void ApplyIntelligence(HgPoint displacementVector)
         {
             var now = DateTime.UtcNow;
             var elapsedTimeSinceLastDecision = (now - (DateTime)_lastDecisionTime).TotalMilliseconds;
@@ -316,7 +316,7 @@ namespace HG.AI.Logistics
 
             var deltaAngle = _owner.DeltaAngle(_observedObject);
 
-            var angleToIn6thRadians = HgAngle<double>.DegreesToRadians(deltaAngle) / 6.0;
+            var angleToIn6thRadians = HgAngle.DegreesToRadians(deltaAngle) / 6.0;
 
             aiParams.Set(AIInputs.AngleToObservedObjectIn6thRadians,
                 angleToIn6thRadians.SplitToNegative(Math.PI / 6));

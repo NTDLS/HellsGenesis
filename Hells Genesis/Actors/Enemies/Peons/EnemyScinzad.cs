@@ -1,7 +1,8 @@
 ﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Weapons;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using System.Drawing;
 using System.IO;
@@ -47,12 +48,12 @@ namespace HG.Actors.Enemies.Peons
         private double distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
         private const double baseFallbackDistance = 800;
         private double fallbackDistance;
-        private HgAngle<double> fallToAngle;
+        private HgAngle fallToAngle;
         private AIMode mode = AIMode.Approaching;
         private int bulletsRemainingBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
-        public override void ApplyIntelligence(HgPoint<double> displacementVector)
+        public override void ApplyIntelligence(HgPoint displacementVector)
         {
             base.ApplyIntelligence(displacementVector);
 

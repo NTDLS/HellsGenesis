@@ -1,6 +1,7 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
 using HG.Types;
+using HG.Types.Geometry;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
@@ -23,17 +24,11 @@ namespace HG.Actors.Ordinary
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
         private readonly PlayMode _playMode;
 
-        public enum ReplayMode
-        {
-            SinglePlay,
-            LoopedPlay
-        };
-
         internal class PlayMode
         {
-            private ReplayMode _replay;
+            private HgAnimationReplayMode _replay;
 
-            public ReplayMode Replay
+            public HgAnimationReplayMode Replay
             {
                 get
                 {
@@ -41,7 +36,7 @@ namespace HG.Actors.Ordinary
                 }
                 set
                 {
-                    if (value == ReplayMode.LoopedPlay)
+                    if (value == HgAnimationReplayMode.LoopedPlay)
                     {
                         DeleteActorAfterPlay = false;
                     }
@@ -63,7 +58,7 @@ namespace HG.Actors.Ordinary
                 _playMode = new PlayMode()
                 {
                     DeleteActorAfterPlay = true,
-                    Replay = ReplayMode.SinglePlay,
+                    Replay = HgAnimationReplayMode.SinglePlay,
                     ReplayDelay = new TimeSpan(0, 0, 0, 0, frameDelayMilliseconds)
                 };
             }
@@ -76,7 +71,7 @@ namespace HG.Actors.Ordinary
             _columns = (int)(_sheetImage.Size.Width / ((Size)frameSize).Width);
             _frameCount = _rows * _columns;
 
-            Location = new HgPoint<double>(0, 0);
+            Location = new HgPoint(0, 0);
             Velocity = new HgVelocity();
 
             AdvanceImage();
@@ -132,7 +127,7 @@ namespace HG.Actors.Ordinary
                         return;
                     }
 
-                    if (_playMode.Replay == ReplayMode.LoopedPlay)
+                    if (_playMode.Replay == HgAnimationReplayMode.LoopedPlay)
                     {
                         _currentFrame = 0;
                         _currentColumn = 0;

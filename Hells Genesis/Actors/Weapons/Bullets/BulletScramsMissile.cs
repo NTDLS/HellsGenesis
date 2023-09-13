@@ -3,7 +3,8 @@ using HG.Actors.Ordinary;
 using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System.Drawing;
 using System.IO;
 
@@ -17,7 +18,7 @@ namespace HG.Actors.Weapons.Bullets
         private int _selectedHitExplosionAnimationIndex = 0;
 
         public BulletScramsMissile(Core core, WeaponBase weapon, ActorBase firedFrom,
-             ActorBase lockedTarget = null, HgPoint<double> xyOffset = null)
+             ActorBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             _selectedHitExplosionAnimationIndex = HgRandom.Random.Next(0, 1000) % _hitExplosionAnimationCount;
@@ -25,7 +26,7 @@ namespace HG.Actors.Weapons.Bullets
 
         }
 
-        public override void ApplyIntelligence(HgPoint<double> displacementVector)
+        public override void ApplyIntelligence(HgPoint displacementVector)
         {
             if (LockedTarget != null)
             {

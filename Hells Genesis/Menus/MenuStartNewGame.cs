@@ -1,7 +1,7 @@
 ﻿using HG.Actors.Ordinary;
 using HG.Engine;
 using HG.Menus.BaseClasses;
-using HG.Types;
+using HG.Types.Geometry;
 
 namespace HG.Menus
 {
@@ -13,33 +13,33 @@ namespace HG.Menus
             double baseX = _core.Display.TotalCanvasSize.Width / 2;
             double baseY = _core.Display.TotalCanvasSize.Height / 4 + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new HgPoint<double>(baseX, baseY), "Start new game?");
+            var itemTitle = CreateAndAddTitleItem(new HgPoint(baseX, baseY), "Start new game?");
             itemTitle.X -= itemTitle.Size.Width / 2;
             baseY += itemTitle.Size.Height + 10;
 
-            var itemYes = CreateAndAddMenuItem(new HgPoint<double>(baseX, baseY), "YES", "Yes");
-            var itemNo = CreateAndAddMenuItem(new HgPoint<double>(baseX + itemYes.Size.Width + 10, baseY), "NO", "No");
+            var itemYes = CreateAndAddMenuItem(new HgPoint(baseX, baseY), "YES", "Yes");
+            var itemNo = CreateAndAddMenuItem(new HgPoint(baseX + itemYes.Size.Width + 10, baseY), "NO", "No");
             baseY += itemNo.Size.Height + 20;
             itemYes.X -= (itemYes.Size.Width + itemNo.Size.Width) / 2;
             itemNo.X -= (itemYes.Size.Width + itemNo.Size.Width) / 2;
 
-            var help1 = CreateAndAddTextItem(new HgPoint<double>(baseX, baseY), "Move with <W>, <A>, <S>, <D>.");
+            var help1 = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Move with <W>, <A>, <S>, <D>.");
             help1.X -= help1.Size.Width / 2;
             baseY += itemTitle.Size.Height + 5;
 
-            var help2 = CreateAndAddTextItem(new HgPoint<double>(baseX, baseY), "Boost Speed With <SHIFT>.");
+            var help2 = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Boost Speed With <SHIFT>.");
             help2.X -= help2.Size.Width / 2;
             baseY += itemTitle.Size.Height + 5;
 
-            var help3 = CreateAndAddTextItem(new HgPoint<double>(baseX, baseY), "Fire primary with <SPACE>.");
+            var help3 = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Fire primary with <SPACE>.");
             help3.X -= help3.Size.Width / 2;
             baseY += itemTitle.Size.Height + 10;
 
-            var help4 = CreateAndAddTextItem(new HgPoint<double>(baseX, baseY), "Fire secondary with <CTRL>.");
+            var help4 = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Fire secondary with <CTRL>.");
             help4.X -= help4.Size.Width / 2;
             baseY += itemTitle.Size.Height + 10;
 
-            var help5 = CreateAndAddTextItem(new HgPoint<double>(baseX, baseY), "Change weapons with <Q> and <E>.");
+            var help5 = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Change weapons with <Q> and <E>.");
             help5.X -= help5.Size.Width / 2;
             baseY += itemTitle.Size.Height + 10;
 

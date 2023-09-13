@@ -6,15 +6,8 @@ namespace HG.Engine.Controllers
 {
     internal class EngineDrawingCacheController
     {
-        private readonly Dictionary<DrawingCacheType, DrawingCacheItem> _graphicsCache = new();
+        private readonly Dictionary<HgDrawingCacheType, DrawingCacheItem> _graphicsCache = new();
         private readonly Core _core;
-
-        public enum DrawingCacheType
-        {
-            Scaling,
-            Screen,
-            Radar
-        }
 
         public EngineDrawingCacheController(Core core)
         {
@@ -39,12 +32,12 @@ namespace HG.Engine.Controllers
             }
         }
 
-        public bool Exists(DrawingCacheType key)
+        public bool Exists(HgDrawingCacheType key)
         {
             return _graphicsCache.ContainsKey(key);
         }
 
-        public DrawingCacheItem Get(DrawingCacheType key, Size size)
+        public DrawingCacheItem Get(HgDrawingCacheType key, Size size)
         {
             if (_graphicsCache.TryGetValue(key, out var item))
             {
@@ -62,7 +55,7 @@ namespace HG.Engine.Controllers
                 return newInstance;
             }
         }
-        public DrawingCacheItem Create(DrawingCacheType key, Size size)
+        public DrawingCacheItem Create(HgDrawingCacheType key, Size size)
         {
             if (_graphicsCache.ContainsKey(key))
             {
@@ -74,7 +67,7 @@ namespace HG.Engine.Controllers
             return newInstance;
         }
 
-        public DrawingCacheItem Get(DrawingCacheType key)
+        public DrawingCacheItem Get(HgDrawingCacheType key)
         {
             if (_graphicsCache.TryGetValue(key, out var item))
             {

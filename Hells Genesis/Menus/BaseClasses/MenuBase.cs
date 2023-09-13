@@ -1,6 +1,6 @@
 ﻿using HG.Actors.Ordinary;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace HG.Menus.BaseClasses
         public bool ReadyForDeletion { get; private set; }
         public Guid UID { get; private set; } = Guid.NewGuid();
 
-        public List<ActorMenuItem> SelectableItems() => Items.Where(o => o.ItemType == ActorMenuItem.MenuItemType.Item).ToList();
+        public List<ActorMenuItem> SelectableItems() => Items.Where(o => o.ItemType == HgMenuItemType.Item).ToList();
 
         public void QueueForDelete()
         {
@@ -36,35 +36,35 @@ namespace HG.Menus.BaseClasses
 
         public virtual void SelectionChanged(ActorMenuItem item) { }
 
-        public ActorMenuItem CreateAndAddTitleItem(HgPoint<double> location, string text)
+        public ActorMenuItem CreateAndAddTitleItem(HgPoint location, string text)
         {
-            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuTitle, _core.DirectX.Colors.Brushes.OrangeRed, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuTitle, _core.DirectX.Materials.Brushes.OrangeRed, location)
             {
                 Text = text,
-                ItemType = ActorMenuItem.MenuItemType.Title
+                ItemType = HgMenuItemType.Title
             };
             AddMenuItem(item);
             return item;
         }
 
-        public ActorMenuItem CreateAndAddTextItem(HgPoint<double> location, string text)
+        public ActorMenuItem CreateAndAddTextItem(HgPoint location, string text)
         {
-            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuGeneral, _core.DirectX.Colors.Brushes.LawnGreen, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuGeneral, _core.DirectX.Materials.Brushes.LawnGreen, location)
             {
                 Text = text,
-                ItemType = ActorMenuItem.MenuItemType.Text
+                ItemType = HgMenuItemType.Text
             };
             AddMenuItem(item);
             return item;
         }
 
-        public ActorMenuItem CreateAndAddMenuItem(HgPoint<double> location, string key, string text)
+        public ActorMenuItem CreateAndAddMenuItem(HgPoint location, string key, string text)
         {
-            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuItem, _core.DirectX.Colors.Brushes.OrangeRed, location)
+            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuItem, _core.DirectX.Materials.Brushes.OrangeRed, location)
             {
                 Key = key,
                 Text = text,
-                ItemType = ActorMenuItem.MenuItemType.Item
+                ItemType = HgMenuItemType.Item
             };
             AddMenuItem(item);
             return item;
@@ -95,7 +95,7 @@ namespace HG.Menus.BaseClasses
             {
                 _lastInputHandled = DateTime.UtcNow;
 
-                var selectedItem = (from o in Items where o.ItemType == ActorMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
+                var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.Item && o.Selected == true select o).FirstOrDefault();
                 if (selectedItem != null)
                 {
                     QueueForDelete();
@@ -114,7 +114,7 @@ namespace HG.Menus.BaseClasses
 
                 int selectIndex = 0;
 
-                var items = (from o in Items where o.ItemType == ActorMenuItem.MenuItemType.Item select o).ToList();
+                var items = (from o in Items where o.ItemType == HgMenuItemType.Item select o).ToList();
                 if (items != null && items.Count > 0)
                 {
                     int previouslySelectedIndex = -1;
@@ -122,7 +122,7 @@ namespace HG.Menus.BaseClasses
                     for (int i = 0; i < items.Count; i++)
                     {
                         var item = items[i];
-                        if (item.ItemType == ActorMenuItem.MenuItemType.Item)
+                        if (item.ItemType == HgMenuItemType.Item)
                         {
                             if (item.Selected)
                             {
@@ -142,7 +142,7 @@ namespace HG.Menus.BaseClasses
 
                     if (selectIndex != previouslySelectedIndex)
                     {
-                        var selectedItem = (from o in Items where o.ItemType == ActorMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
+                        var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.Item && o.Selected == true select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
                             //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
@@ -161,7 +161,7 @@ namespace HG.Menus.BaseClasses
 
                 int selectIndex = 0;
 
-                var items = (from o in Items where o.ItemType == ActorMenuItem.MenuItemType.Item select o).ToList();
+                var items = (from o in Items where o.ItemType == HgMenuItemType.Item select o).ToList();
                 if (items != null && items.Count > 0)
                 {
                     int previouslySelectedIndex = -1;
@@ -169,7 +169,7 @@ namespace HG.Menus.BaseClasses
                     for (int i = 0; i < items.Count; i++)
                     {
                         var item = items[i];
-                        if (item.ItemType == ActorMenuItem.MenuItemType.Item)
+                        if (item.ItemType == HgMenuItemType.Item)
                         {
                             if (item.Selected)
                             {
@@ -189,7 +189,7 @@ namespace HG.Menus.BaseClasses
 
                     if (selectIndex != previouslySelectedIndex)
                     {
-                        var selectedItem = (from o in Items where o.ItemType == ActorMenuItem.MenuItemType.Item && o.Selected == true select o).FirstOrDefault();
+                        var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.Item && o.Selected == true select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
                             //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
@@ -220,7 +220,7 @@ namespace HG.Menus.BaseClasses
                         selectedItem.BoundsI.X + selectedItem.BoundsI.Width,
                         selectedItem.BoundsI.Y + selectedItem.BoundsI.Height),
                     0,
-                    _core.DirectX.Colors.Raw.Red, 2, 2);
+                    _core.DirectX.Materials.Raw.Red, 2, 2);
             }
         }
     }

@@ -3,6 +3,7 @@ using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Types;
+using HG.Types.Geometry;
 using HG.Utility;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,7 +16,7 @@ namespace HG.Actors.BaseClasses
     {
         public ActorRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public ActorRadarPositionTextBlock RadarPositionText { get; protected set; }
-        public TimeRenewableResources RenewableResources { get; set; } = new();
+        public HgTimeRenewableResources RenewableResources { get; set; } = new();
 
         public WeaponBase PrimaryWeapon { get; private set; }
 
@@ -86,7 +87,7 @@ namespace HG.Actors.BaseClasses
         /// <param name="bullet">The bullet object that is being tested for.</param>
         /// <param name="hitTestPosition">The position to test for hit.</param>
         /// <returns></returns>
-        public virtual bool TestHit(HgPoint<double> displacementVector, BulletBase bullet, HgPoint<double> hitTestPosition)
+        public virtual bool TestHit(HgPoint displacementVector, BulletBase bullet, HgPoint hitTestPosition)
         {
             if (Intersects(hitTestPosition))
             {

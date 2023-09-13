@@ -3,7 +3,7 @@
 using HG.Actors.BaseClasses;
 using HG.Actors.Enemies.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -82,8 +82,8 @@ namespace HG
 
             highlightedActors.Clear();
 
-            var actors = _core.Actors.Intersections(new HgPoint<double>(x, y), new HgPoint<double>(1, 1));
-            if (_core.Player.Actor.Intersects(new HgPoint<double>(x, y), new HgPoint<double>(1, 1)))
+            var actors = _core.Actors.Intersections(new HgPoint(x, y), new HgPoint(1, 1));
+            if (_core.Player.Actor.Intersects(new HgPoint(x, y), new HgPoint(1, 1)))
             {
                 actors.Add(_core.Player.Actor);
             }
@@ -100,8 +100,8 @@ namespace HG
             double x = e.X + _core.Display.OverdrawSize.Width / 2;
             double y = e.Y + _core.Display.OverdrawSize.Height / 2;
 
-            var actors = _core.Actors.Intersections(new HgPoint<double>(x, y), new HgPoint<double>(1, 1));
-            if (_core.Player.Actor.Intersects(new HgPoint<double>(x, y), new HgPoint<double>(1, 1)))
+            var actors = _core.Actors.Intersections(new HgPoint(x, y), new HgPoint(1, 1));
+            if (_core.Player.Actor.Intersects(new HgPoint(x, y), new HgPoint(1, 1)))
             {
                 actors.Add(_core.Player.Actor);
             }

@@ -1,6 +1,7 @@
 ﻿using HG.Actors.PowerUp.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System.Drawing;
 using System.Linq;
 
@@ -27,7 +28,7 @@ namespace HG.Actors.PowerUp
             _repairPoints *= imageIndex + 1;
         }
 
-        public override void ApplyIntelligence(HgPoint<double> displacementVector)
+        public override void ApplyIntelligence(HgPoint displacementVector)
         {
             if (Intersects(_core.Player.Actor))
             {

@@ -1,7 +1,8 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Actors.Ordinary;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System;
 using System.Drawing;
 
@@ -22,7 +23,7 @@ namespace HG.Actors.Enemies.BaseClasses
 
             var playMode = new ActorAnimation.PlayMode()
             {
-                Replay = ActorAnimation.ReplayMode.LoopedPlay,
+                Replay = HgAnimationReplayMode.LoopedPlay,
                 DeleteActorAfterPlay = false,
                 ReplayDelay = new TimeSpan(0)
             };
@@ -31,7 +32,7 @@ namespace HG.Actors.Enemies.BaseClasses
             ThrustAnimation.Reset();
             _core.Actors.Animations.InsertAt(ThrustAnimation, this);
 
-            var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+            var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint(20, 20));
             ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
             ThrustAnimation.X = X + pointRight.X;
             ThrustAnimation.Y = Y + pointRight.Y;
@@ -41,7 +42,7 @@ namespace HG.Actors.Enemies.BaseClasses
             BoostAnimation.Reset();
             _core.Actors.Animations.InsertAt(BoostAnimation, this);
 
-            pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+            pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint(20, 20));
             BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
             BoostAnimation.X = X + pointRight.X;
             BoostAnimation.Y = Y + pointRight.Y;
@@ -51,14 +52,14 @@ namespace HG.Actors.Enemies.BaseClasses
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint(20, 20));
                 ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                 ThrustAnimation.X = X + pointRight.X;
                 ThrustAnimation.Y = Y + pointRight.Y;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint(20, 20));
                 BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                 BoostAnimation.X = X + pointRight.X;
                 BoostAnimation.Y = Y + pointRight.Y;
@@ -77,7 +78,7 @@ namespace HG.Actors.Enemies.BaseClasses
             }
         }
 
-        public override void ApplyMotion(HgPoint<double> displacementVector)
+        public override void ApplyMotion(HgPoint displacementVector)
         {
             base.ApplyMotion(displacementVector);
 

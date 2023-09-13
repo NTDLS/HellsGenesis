@@ -1,6 +1,7 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System.IO;
 
 namespace HG.Actors.Ordinary
@@ -30,7 +31,7 @@ namespace HG.Actors.Ordinary
             }
         }
 
-        public override void ApplyMotion(HgPoint<double> displacementVector)
+        public override void ApplyMotion(HgPoint displacementVector)
         {
             X -= displacementVector.X * Velocity.ThrottlePercentage;
             Y -= displacementVector.Y * Velocity.ThrottlePercentage;

@@ -3,6 +3,8 @@ using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
 using HG.Loudouts;
 using HG.Types;
+using HG.Types.Geometry;
+using HG.Utility;
 using System;
 using System.Drawing;
 
@@ -11,19 +13,19 @@ namespace HG.Actors.Ordinary
     internal class ActorPlayer : ActorShipBase
     {
         public ShipLoadout Loadout { get; private set; }
-        public AudioClip AmmoLowSound { get; private set; }
-        public AudioClip AmmoEmptySound { get; private set; }
-        public AudioClip ShipEngineRoarSound { get; private set; }
-        public AudioClip ShipEngineIdleSound { get; private set; }
-        public AudioClip AllSystemsGoSound { get; private set; }
-        public AudioClip ShieldFailSound { get; private set; }
-        public AudioClip ShieldDownSound { get; private set; }
-        public AudioClip ShieldMaxSound { get; private set; }
-        public AudioClip ShieldNominalSound { get; private set; }
-        public AudioClip SystemsFailingSound { get; private set; }
-        public AudioClip HullBreachedSound { get; private set; }
-        public AudioClip IntegrityLowSound { get; private set; }
-        public AudioClip ShipEngineBoostSound { get; private set; }
+        public HgAudioClip AmmoLowSound { get; private set; }
+        public HgAudioClip AmmoEmptySound { get; private set; }
+        public HgAudioClip ShipEngineRoarSound { get; private set; }
+        public HgAudioClip ShipEngineIdleSound { get; private set; }
+        public HgAudioClip AllSystemsGoSound { get; private set; }
+        public HgAudioClip ShieldFailSound { get; private set; }
+        public HgAudioClip ShieldDownSound { get; private set; }
+        public HgAudioClip ShieldMaxSound { get; private set; }
+        public HgAudioClip ShieldNominalSound { get; private set; }
+        public HgAudioClip SystemsFailingSound { get; private set; }
+        public HgAudioClip HullBreachedSound { get; private set; }
+        public HgAudioClip IntegrityLowSound { get; private set; }
+        public HgAudioClip ShipEngineBoostSound { get; private set; }
         public int Bounty { get; set; } //Score points.
         public int MaxHullHealth { get; set; }
         public int MaxShieldPoints { get; set; }
@@ -81,7 +83,7 @@ namespace HG.Actors.Ordinary
             X = _core.Display.TotalCanvasSize.Width / 2;
             Y = _core.Display.TotalCanvasSize.Height / 2;
 
-            Velocity.Angle = new HgAngle<double>(45);
+            Velocity.Angle = new HgAngle(45);
 
             Velocity.ThrottlePercentage = Settings.MinPlayerThrust;
             Velocity.AvailableBoost = Settings.MaxPlayerBoost;
@@ -115,7 +117,7 @@ namespace HG.Actors.Ordinary
                 {
                     var playMode = new ActorAnimation.PlayMode()
                     {
-                        Replay = ActorAnimation.ReplayMode.LoopedPlay,
+                        Replay = HgAnimationReplayMode.LoopedPlay,
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
@@ -133,7 +135,7 @@ namespace HG.Actors.Ordinary
                 {
                     var playMode = new ActorAnimation.PlayMode()
                     {
-                        Replay = ActorAnimation.ReplayMode.LoopedPlay,
+                        Replay = HgAnimationReplayMode.LoopedPlay,
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
@@ -155,7 +157,7 @@ namespace HG.Actors.Ordinary
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointBehind = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+                var pointBehind = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint(20, 20));
                 ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                 ThrustAnimation.X = X + pointBehind.X;
                 ThrustAnimation.Y = Y + pointBehind.Y;
@@ -163,7 +165,7 @@ namespace HG.Actors.Ordinary
 
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointBehind = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+                var pointBehind = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint(20, 20));
                 BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                 BoostAnimation.X = X + pointBehind.X;
                 BoostAnimation.Y = Y + pointBehind.Y;
@@ -176,7 +178,7 @@ namespace HG.Actors.Ordinary
             base.Explode();
         }
 
-        public override bool TestHit(HgPoint<double> displacementVector, BulletBase bullet, HgPoint<double> hitTestPosition)
+        public override bool TestHit(HgPoint displacementVector, BulletBase bullet, HgPoint hitTestPosition)
         {
             if (bullet.FiredFromType == HgFiredFromType.Enemy)
             {
