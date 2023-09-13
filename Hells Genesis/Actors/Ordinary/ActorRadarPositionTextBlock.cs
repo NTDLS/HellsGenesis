@@ -11,7 +11,7 @@ namespace HG.Actors.Ordinary
             : base(core, format, color, location, false)
         {
             Visable = false;
-            Velocity = new HgVelocity<double>();
+            Velocity = new HgVelocity();
         }
 
         private double _distanceValue;

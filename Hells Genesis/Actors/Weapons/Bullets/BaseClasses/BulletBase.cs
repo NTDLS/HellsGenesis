@@ -41,7 +41,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
                 headingDegrees = firedFrom.Velocity.Angle.Degrees + (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * 2);
             }
 
-            var initialVelocity = new HgVelocity<double>()
+            var initialVelocity = new HgVelocity()
             {
                 Angle = new HgAngle<double>(headingDegrees),
                 MaxSpeed = weapon.Speed,

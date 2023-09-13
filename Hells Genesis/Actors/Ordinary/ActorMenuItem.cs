@@ -44,7 +44,7 @@ namespace HG.Actors.Ordinary
         {
             Menu = menu;
             Visable = true;
-            Velocity = new HgVelocity<double>();
+            Velocity = new HgVelocity();
         }
     }
 }

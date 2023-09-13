@@ -13,7 +13,7 @@ namespace HG.Actors.Ordinary
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
             X = 0;
             Y = 0;
-            Velocity = new HgVelocity<double>();
+            Velocity = new HgVelocity();
         }
 
         public ActorDebug(Core core, double x, double y)
@@ -22,7 +22,7 @@ namespace HG.Actors.Ordinary
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
             X = x;
             Y = y;
-            Velocity = new HgVelocity<double>();
+            Velocity = new HgVelocity();
         }
 
         public ActorDebug(Core core, double x, double y, string imagePath)
@@ -31,7 +31,7 @@ namespace HG.Actors.Ordinary
             Initialize(imagePath);
             X = x;
             Y = y;
-            Velocity = new HgVelocity<double>();
+            Velocity = new HgVelocity();
         }
 
         public override void ApplyMotion(HgPoint<double> displacementVector)

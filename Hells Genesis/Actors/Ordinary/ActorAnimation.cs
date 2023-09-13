@@ -77,7 +77,7 @@ namespace HG.Actors.Ordinary
             _frameCount = _rows * _columns;
 
             Location = new HgPoint<double>(0, 0);
-            Velocity = new HgVelocity<double>();
+            Velocity = new HgVelocity();
 
             AdvanceImage();
         }

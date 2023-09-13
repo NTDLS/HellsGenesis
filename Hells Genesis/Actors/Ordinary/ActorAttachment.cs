@@ -17,7 +17,7 @@ namespace HG.Actors.Ordinary
 
             X = 0;
             Y = 0;
-            Velocity = new HgVelocity<double>();
+            Velocity = new HgVelocity();
         }
 
         public override bool TestHit(HgPoint<double> displacementVector, BulletBase bullet, HgPoint<double> hitTestPosition)

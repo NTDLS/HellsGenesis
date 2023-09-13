@@ -1,66 +1,54 @@
 ﻿using HG.Engine;
+using HG.Utility.ExtensionMethods;
 
 namespace HG.Types
 {
-    internal class HgVelocity<T>
+    internal class HgVelocity
     {
-        public delegate void ThrottleChange(HgVelocity<T> sender);
-        public event ThrottleChange OnThrottleChange;
+        public delegate void ValueChangeEvent(HgVelocity sender);
 
-        public HgAngle<T> Angle { get; set; } = new HgAngle<T>();
-        public T MaxSpeed { get; set; }
-        public T MaxBoost { get; set; }
-        public T AvailableBoost { get; set; }
-        public T MaxRotationSpeed { get; set; }
+        public event ValueChangeEvent OnThrottleChanged;
+        public event ValueChangeEvent OnBoostChanged;
+        public event ValueChangeEvent OnRecoilChanged;
 
+        public HgAngle<double> Angle { get; set; } = new();
+        public double MaxSpeed { get; set; }
+        public double MaxBoost { get; set; }
+        public double AvailableBoost { get; set; }
+        public double MaxRotationSpeed { get; set; }
         public bool BoostRebuilding { get; set; }
 
-        private T _recoilAmount = (dynamic)0;
+        private double _recoilAmount = 0;
 
-        public T RecoilAmount
+        public double RecoilAmount
         {
             get => _recoilAmount;
             set
             {
-                _recoilAmount = value;
-                if (_recoilAmount > (dynamic)Settings.MaxRecoilAmount)
-                {
-                    _recoilAmount = (dynamic)Settings.MaxRecoilAmount;
-                }
+                _recoilAmount = value.Box(0, Settings.MaxRecoilAmount);
+                OnRecoilChanged?.Invoke(this);
             }
         }
 
-
-        public T _throttlePercentage;
-        public T ThrottlePercentage
+        public double _throttlePercentage;
+        public double ThrottlePercentage
         {
-            get
-            {
-                return _throttlePercentage;
-            }
+            get => _throttlePercentage;
             set
             {
-                _throttlePercentage = value;
-                _throttlePercentage = (dynamic)_throttlePercentage > 1 ? 1 : (dynamic)_throttlePercentage;
-                _throttlePercentage = (dynamic)_throttlePercentage < -1 ? -1 : (dynamic)_throttlePercentage;
-
-                OnThrottleChange?.Invoke(this);
+                _throttlePercentage = value.Box(-1, 1);
+                OnThrottleChanged?.Invoke(this);
             }
         }
 
-
-        public T _boostPercentage;
-        public T BoostPercentage
+        public double _boostPercentage;
+        public double BoostPercentage
         {
-            get
-            {
-                return _boostPercentage;
-            }
+            get => _boostPercentage;
             set
             {
-                _boostPercentage = value;
-                _boostPercentage = (dynamic)_boostPercentage > 1 ? 1 : (dynamic)_boostPercentage;
-                _boostPercentage = (dynamic)_boostPercentage < -1 ? -1 : (dynamic)_boostPercentage;
+                _boostPercentage = value.Box(-1, 1);
+                OnBoostChanged?.Invoke(this);
             }
         }
     }

@@ -32,11 +32,10 @@ namespace HG.Actors.BaseClasses
         private readonly int _MillisecondsBetweenHits = 200;
 
         private bool _isLockedOn = false;
-        private HgVelocity<double> _velocity;
+        private HgVelocity _velocity;
         private bool _readyForDeletion;
         private HgPoint<double> _location = new();
         private Size _size;
-
 
         #region Properties.
 
@@ -55,12 +54,12 @@ namespace HG.Actors.BaseClasses
         public bool ReadyForDeletion => _readyForDeletion;
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public HgPoint<double> LocationCenter => new HgPoint<double>(_location.X - Size.Width / 2.0, _location.Y - Size.Height / 2.0);
+        public HgPoint<double> LocationCenter => new(_location.X - Size.Width / 2.0, _location.Y - Size.Height / 2.0);
         public RectangleF VisibleBounds => new Rectangle((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
-        public RectangleF Bounds => new RectangleF((float)_location.X, (float)_location.Y, Size.Width, Size.Height);
-        public Rectangle BoundsI => new Rectangle((int)_location.X, (int)_location.Y, Size.Width, Size.Height);
+        public RectangleF Bounds => new((float)_location.X, (float)_location.Y, Size.Width, Size.Height);
+        public Rectangle BoundsI => new((int)_location.X, (int)_location.Y, Size.Width, Size.Height);
 
-        public HgVelocity<double> Velocity
+        public HgVelocity Velocity
         {
             get
             {
@@ -69,7 +68,7 @@ namespace HG.Actors.BaseClasses
             set
             {
                 _velocity = value;
-                _velocity.OnThrottleChange += (HgVelocity<double> sender) => VelocityChanged();
+                _velocity.OnThrottleChanged += (HgVelocity sender) => VelocityChanged();
             }
         }
 
@@ -245,7 +244,7 @@ namespace HG.Actors.BaseClasses
             _core = core;
             Name = name;
             RotationMode = HgRotationMode.Rotate;
-            Velocity = new HgVelocity<double>();
+            Velocity = new HgVelocity();
             Velocity.MaxRotationSpeed = Settings.MaxRotationSpeed;
             Highlight = Settings.HighlightAllActors;
         }
