@@ -28,7 +28,6 @@ namespace HG.Actors.PowerUp.BaseClasses
         /// Time until the powerup exploded on its own.
         /// </summary>
         public double TimeToLive { get; set; } = 30000;
-
         public DateTime CreationTime { get; set; } = DateTime.UtcNow;
         public double AgeInMiliseconds
         {

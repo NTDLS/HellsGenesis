@@ -178,9 +178,7 @@ namespace HG.Engine.Controllers
         }
 
         public List<ActorBase> Intersections(double x, double y, double width, double height)
-        {
-            return Intersections(new HgPoint<double>(x, y), new HgPoint<double>(width, height));
-        }
+            => Intersections(new HgPoint<double>(x, y), new HgPoint<double>(width, height));
 
         public List<ActorBase> Intersections(HgPoint<double> location, HgPoint<double> size)
         {

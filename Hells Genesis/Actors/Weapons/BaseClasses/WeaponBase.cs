@@ -21,8 +21,8 @@ namespace HG.Actors.Weapons.BaseClasses
         /// RecoilAmount is expressed in decimal percentage of thrust.
         /// </summary>
         public double RecoilAmount { get; set; } = 0;
-        public double? AngleSlop { get; set; } = null;
-        public double? SpeedSlop { get; set; } = null;
+        public double? AngleVariance { get; set; } = null;
+        public double? SpeedVariance { get; set; } = null;
         public string Name { get; private set; }
         public int Speed { get; set; } = 25;
         public int RoundQuantity { get; set; } = int.MaxValue;
@@ -30,7 +30,7 @@ namespace HG.Actors.Weapons.BaseClasses
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
         public bool CanLockOn { get; set; } = false;
-        public List<ActorBase> LockedOnObjects { get; set; } = new List<ActorBase>();
+        public List<ActorBase> LockedOnObjects { get; set; } = new();
         public double MaxLockOnAngle { get; set; } = 10;
         public double MaxLocks { get; set; } = 1;
         public double MinLockDistance { get; set; } = 50;
@@ -111,8 +111,12 @@ namespace HG.Actors.Weapons.BaseClasses
                 RoundQuantity--;
                 _fireSound.Play();
                 _core.Actors.Bullets.Create(this, _owner);
+
+                _owner.Velocity.ThrottlePercentage -= RecoilAmount;
+
                 return true;
             }
+
             return false;
         }
 

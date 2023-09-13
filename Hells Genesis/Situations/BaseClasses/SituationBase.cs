@@ -8,21 +8,21 @@ namespace HG.Situations.BaseClasses
 {
     internal class SituationBase
     {
+        protected Core _core;
+        protected List<HgEngineCallbackEvent> Events = new();
+
         public Guid UID { get; private set; } = Guid.NewGuid();
         public string Name { get; set; }
+        public int CurrentWave { get; set; } = 0;
+        public int TotalWaves { get; set; } = 1;
+        public ScenarioState State { get; protected set; } = ScenarioState.NotStarted;
+
         public enum ScenarioState
         {
             NotStarted,
             Running,
             Ended
         }
-
-        protected List<HgEngineCallbackEvent> Events = new();
-
-        protected Core _core;
-        public int CurrentWave { get; set; } = 0;
-        public int TotalWaves { get; set; } = 1;
-        public ScenarioState State { get; protected set; } = ScenarioState.NotStarted;
 
         public SituationBase(Core core, string name)
         {

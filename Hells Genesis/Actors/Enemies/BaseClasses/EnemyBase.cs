@@ -33,23 +33,14 @@ namespace HG.Actors.Enemies.BaseClasses
             RadarPositionText = _core.Actors.TextBlocks.CreateRadarPosition(core.DirectX.TextFormats.RadarPositionIndicator, core.DirectX.Colors.Brushes.Red, new HgPoint<double>());
         }
 
-        public virtual void BeforeCreate()
-        {
-        }
+        public virtual void BeforeCreate() { }
 
-        public virtual void AfterCreate()
-        {
-        }
+        public virtual void AfterCreate() { }
 
-        public override void RotationChanged()
-        {
-            PositionChanged();
-        }
+        public override void RotationChanged() => PositionChanged();
 
-        public static int GetGenericHP(Core core)
-        {
-            return HgRandom.Random.Next(core.Settings.MinEnemyHealth, core.Settings.MaxEnemyHealth);
-        }
+        public static int GetGenericHP(Core core) =>
+            HgRandom.Random.Next(core.Settings.MinEnemyHealth, core.Settings.MaxEnemyHealth);
 
         public override void Explode()
         {
@@ -165,9 +156,7 @@ namespace HG.Actors.Enemies.BaseClasses
         }
 
         internal void AddAIController(IAIController controller)
-        {
-            AIControllers.Add(controller.GetType(), controller);
-        }
+            => AIControllers.Add(controller.GetType(), controller);
 
         internal void SetDefaultAIController(IAIController value)
         {

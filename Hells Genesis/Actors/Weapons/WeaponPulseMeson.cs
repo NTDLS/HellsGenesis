@@ -10,7 +10,6 @@ namespace HG.Actors.Weapons
     internal class WeaponPulseMeson : WeaponBase
     {
         static new string Name { get; } = "Pulse Meson";
-
         private const string soundPath = @"Sounds\Weapons\WeaponPulseMeson.wav";
         private const float soundVolumne = 0.4f;
 

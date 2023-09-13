@@ -8,7 +8,6 @@ namespace HG.Actors.Weapons
     internal class WeaponDualVulcanCannon : WeaponBase
     {
         static new string Name { get; } = "Dual Vulcan Cannon";
-
         private const string soundPath = @"Sounds\Weapons\WeaponDualVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
@@ -23,9 +22,9 @@ namespace HG.Actors.Weapons
             RoundQuantity = 500;
             Damage = 2;
             FireDelayMilliseconds = 150;
-            AngleSlop = 0;
+            AngleVariance = 0;
             Speed = 18;
-            SpeedSlop = 0;
+            SpeedVariance = 0;
             RecoilAmount = 0.25;
         }
 
@@ -50,7 +49,6 @@ namespace HG.Actors.Weapons
                 }
 
                 _owner.Velocity.ThrottlePercentage -= RecoilAmount;
-
 
                 return true;
             }

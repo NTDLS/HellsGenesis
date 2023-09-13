@@ -51,11 +51,6 @@ namespace HG.Actors.Enemies.Bosses
             AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
         }
 
-        public override void BeforeCreate()
-        {
-            base.BeforeCreate();
-        }
-
         public override void AfterCreate()
         {
             _turret = Attach(_imagesPath + "Devastator.Gun.Turret.png", true, 3);

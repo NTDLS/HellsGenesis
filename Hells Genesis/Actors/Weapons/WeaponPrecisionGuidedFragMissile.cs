@@ -10,7 +10,6 @@ namespace HG.Actors.Weapons
     internal class WeaponPrecisionGuidedFragMissile : WeaponBase
     {
         static new string Name { get; } = "Precision Guided Frag Missile";
-
         private const string soundPath = @"Sounds\Weapons\WeaponGuidedFragMissile.wav";
         private const float soundVolumne = 0.4f;
 

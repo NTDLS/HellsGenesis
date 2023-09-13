@@ -21,7 +21,6 @@ namespace HG.Actors.Ordinary
         private readonly int _columns;
         private readonly int _frameDelayMilliseconds = 10;
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
-        private readonly string _imageName; //Debugging.
         private readonly PlayMode _playMode;
 
         public enum ReplayMode
@@ -54,7 +53,7 @@ namespace HG.Actors.Ordinary
             public bool DeleteActorAfterPlay;
         }
 
-        public ActorAnimation(Core core, string imageFrames, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
+        public ActorAnimation(Core core, string spriteSheetFileName, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
             : base(core)
         {
             _playMode = playMode;
@@ -69,9 +68,8 @@ namespace HG.Actors.Ordinary
                 };
             }
 
-            _imageName = imageFrames;
             _frameDelayMilliseconds = frameDelayMilliseconds;
-            _sheetImage = _core.Imaging.Get(imageFrames);
+            _sheetImage = _core.Imaging.Get(spriteSheetFileName);
 
             _frameSize = (Size)frameSize;
             _rows = (int)(_sheetImage.Size.Height / ((Size)frameSize).Height);

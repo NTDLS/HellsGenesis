@@ -61,7 +61,7 @@ namespace HG.TickHandlers
 
                 if (_core.Settings.LockPlayerAngleToNearbyEnemy)
                 {
-                    #region //This needs some work. It works, but its sloppy - the movement is rigid.
+                    #region //This needs some work. It works, but its Variancepy - the movement is rigid.
                     if (_core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise) == false && _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise) == false)
                     {
                         if (_allowLockPlayerAngleToNearbyEnemy)

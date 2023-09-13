@@ -7,7 +7,6 @@ namespace HG.Actors.Weapons
     internal class WeaponVulcanCannon : WeaponBase
     {
         static new string Name { get; } = "Vulcan Cannon";
-
         private const string soundPath = @"Sounds\Weapons\WeaponVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
@@ -22,9 +21,9 @@ namespace HG.Actors.Weapons
             RoundQuantity = 500;
             Damage = 2;
             FireDelayMilliseconds = 100;
-            AngleSlop = 1;
+            AngleVariance = 1;
             Speed = 20;
-            SpeedSlop = 10;
+            SpeedVariance = 10;
         }
     }
 }

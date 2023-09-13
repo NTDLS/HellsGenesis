@@ -5,7 +5,6 @@ using HG.Engine;
 using HG.Types;
 using System.IO;
 
-
 namespace HG.Actors.Weapons.Bullets
 {
     internal class BulletScattershot : BulletBase

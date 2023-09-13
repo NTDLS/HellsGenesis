@@ -149,10 +149,7 @@ namespace HG.Actors.Ordinary
             }
         }
 
-        public override void RotationChanged()
-        {
-            UpdateThrustAnimationPositions();
-        }
+        public override void RotationChanged() => UpdateThrustAnimationPositions();
 
         private void UpdateThrustAnimationPositions()
         {
@@ -175,6 +172,7 @@ namespace HG.Actors.Ordinary
 
         public override void Explode()
         {
+            //Anything else?
             base.Explode();
         }
 

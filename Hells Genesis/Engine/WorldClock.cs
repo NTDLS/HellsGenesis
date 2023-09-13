@@ -33,10 +33,7 @@ namespace HG.Engine
             _graphicsThread.Join();
         }
 
-        public bool IsPaused()
-        {
-            return _pause;
-        }
+        public bool IsPaused() => _pause;
 
         public void TogglePause()
         {

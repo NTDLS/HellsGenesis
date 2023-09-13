@@ -10,7 +10,6 @@ namespace HG.Actors.Weapons
     internal class WeaponScattershot : WeaponBase
     {
         static new string Name { get; } = "Scattershot";
-
         private const string soundPath = @"Sounds\Weapons\WeaponVulcanCannon.wav";
         private const float soundVolumne = 0.2f;
 
@@ -25,9 +24,9 @@ namespace HG.Actors.Weapons
             RoundQuantity = 500;
             Damage = 1;
             FireDelayMilliseconds = 25;
-            AngleSlop = 4;
+            AngleVariance = 4;
             Speed = 15;
-            SpeedSlop = 10;
+            SpeedVariance = 10;
         }
 
         public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint<double> xyOffset = null)

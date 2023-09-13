@@ -11,8 +11,8 @@ namespace HG.Engine.Controllers
 
         public Dictionary<Point, HgQuadrant> Quadrants { get; private set; } = new();
         public HgQuadrant CurrentQuadrant { get; set; }
-        public HgPoint<double> BackgroundOffset { get; private set; } = new HgPoint<double>(); //Offset of background, all cals must take into account.
-        public FrameCounter GameLoopCounter { get; private set; } = new FrameCounter();
+        public HgPoint<double> BackgroundOffset { get; private set; } = new(); //Offset of background, all cals must take into account.
+        public FrameCounter GameLoopCounter { get; private set; } = new();
 
         public Control DrawingSurface { get; private set; }
 

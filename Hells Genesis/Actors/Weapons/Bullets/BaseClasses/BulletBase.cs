@@ -15,13 +15,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
         public ActorBase LockedTarget { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
         public double MilisecondsToLive { get; set; } = 4000;
-        public double AgeInMilliseconds
-        {
-            get
-            {
-                return (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
-            }
-        }
+        public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
 
         public BulletBase(Core core, WeaponBase weapon, ActorBase firedFrom, string imagePath,
              ActorBase lockedTarget = null, HgPoint<double> xyOffset = null)
@@ -31,15 +25,15 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
 
             Weapon = weapon;
             LockedTarget = lockedTarget;
-            Velocity.ThrottlePercentage = 100;
+            Velocity.ThrottlePercentage = 1.0;
 
             RadarDotSize = new HgPoint<int>(2, 2);
 
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
 
-            if (weapon.AngleSlop != null)
+            if (weapon.AngleVariance != null)
             {
-                headingDegrees = firedFrom.Velocity.Angle.Degrees + (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * (double)weapon.AngleSlop);
+                headingDegrees = firedFrom.Velocity.Angle.Degrees + (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * (double)weapon.AngleVariance);
             }
 
             if (firedFrom is EnemyBase)
@@ -51,15 +45,15 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             {
                 Angle = new HgAngle<double>(headingDegrees),
                 MaxSpeed = weapon.Speed,
-                ThrottlePercentage = 100
+                ThrottlePercentage = 1.0
             };
 
-            if (Weapon.SpeedSlop != null)
+            if (Weapon.SpeedVariance != null)
             {
-                initialVelocity.MaxSpeed += (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * (double)weapon.AngleSlop);
+                initialVelocity.MaxSpeed += (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * (double)weapon.SpeedVariance);
             }
 
-            Location = firedFrom.Location + (xyOffset == null ? HgPoint<double>.Zero : xyOffset);
+            Location = firedFrom.Location + (xyOffset ?? HgPoint<double>.Zero);
 
             if (firedFrom is EnemyBase)
             {

@@ -155,24 +155,9 @@ namespace HG.Engine
             }
         }
 
-        public bool IsPaused()
-        {
-            return _gameLoop.IsPaused();
-        }
-
-        public void TogglePause()
-        {
-            _gameLoop.TogglePause();
-        }
-
-        public void Pause()
-        {
-            _gameLoop.Pause();
-        }
-
-        public void Resume()
-        {
-            _gameLoop.Resume();
-        }
+        public bool IsPaused() => _gameLoop.IsPaused();
+        public void TogglePause() => _gameLoop.TogglePause();
+        public void Pause() => _gameLoop.Pause();
+        public void Resume() => _gameLoop.Resume();
     }
 }

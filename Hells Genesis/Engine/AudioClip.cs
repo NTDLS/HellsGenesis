@@ -19,15 +19,7 @@ namespace HG.Engine
         private readonly bool _loopForever;
         private bool _isPlaying = false; //Only applicable when _loopForever == false;
         private bool _isFading;
-        private readonly float _initialVolumne;
-
-        public float InitialVolumne
-        {
-            get
-            {
-                return _initialVolumne;
-            }
-        }
+        public float InitialVolumne { get; private set; }
 
         public void SetVolume(float volumne)
         {
@@ -37,9 +29,9 @@ namespace HG.Engine
         public AudioClip(Stream stream, float initialVolumne = 1, bool loopForever = false)
         {
             _loopForever = loopForever;
-            _initialVolumne = initialVolumne;
+            InitialVolumne = initialVolumne;
 
-            var masteringsound = new MasteringVoice(_xaudio); //Yes, this is required.
+            _ = new MasteringVoice(_xaudio); //Yes, this is required.
 
             _soundstream = new SoundStream(stream);
 
@@ -68,7 +60,7 @@ namespace HG.Engine
                         if (_isFading)
                         {
                             _isFading = false;
-                            _singleSourceVoice.SetVolume(_initialVolumne);
+                            _singleSourceVoice.SetVolume(InitialVolumne);
                         }
 
                         return;
@@ -76,7 +68,7 @@ namespace HG.Engine
 
                     _singleSourceVoice = new SourceVoice(_xaudio, _waveFormat, true);
                     _singleSourceVoice.SubmitSourceBuffer(_buffer, _soundstream.DecodedPacketsInfo);
-                    _singleSourceVoice.SetVolume(_initialVolumne);
+                    _singleSourceVoice.SetVolume(InitialVolumne);
 
                     _singleSourceVoice.Start();
                     _isPlaying = true;
@@ -86,7 +78,7 @@ namespace HG.Engine
 
             var sourceVoice = new SourceVoice(_xaudio, _waveFormat, true);
             sourceVoice.SubmitSourceBuffer(_buffer, _soundstream.DecodedPacketsInfo);
-            sourceVoice.SetVolume(_initialVolumne);
+            sourceVoice.SetVolume(InitialVolumne);
             sourceVoice.Start();
         }
 

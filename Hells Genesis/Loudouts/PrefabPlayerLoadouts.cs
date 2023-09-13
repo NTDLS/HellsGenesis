@@ -10,15 +10,8 @@ namespace HG.Loudouts
     {
         public List<ShipLoadout> Collection { get; private set; } = new();
 
-        public ShipLoadout GetByName(string name)
-        {
-            return Collection.Where(o => o.Name == name).First();
-        }
-
-        public ShipLoadout GetDefault()
-        {
-            return Collection.First();
-        }
+        public ShipLoadout GetByName(string name) => Collection.Where(o => o.Name == name).First();
+        public ShipLoadout GetDefault() => Collection.First();
 
         public void CreateDefaults()
         {

@@ -120,10 +120,7 @@ namespace HG.Actors.BaseClasses
             PrimaryWeapon = null;
         }
 
-        public void ClearSecondaryWeapons()
-        {
-            _secondaryWeapons.Clear();
-        }
+        public void ClearSecondaryWeapons() => _secondaryWeapons.Clear();
 
         public void SetPrimaryWeapon(string weaponTypeName, int roundQuantity)
         {
@@ -208,15 +205,8 @@ namespace HG.Actors.BaseClasses
             }
         }
 
-        public int TotalAvailableSecondaryWeaponRounds()
-        {
-            return (from o in _secondaryWeapons select o.RoundQuantity).Sum();
-        }
-
-        public int TotalSecondaryWeaponFiredRounds()
-        {
-            return (from o in _secondaryWeapons select o.RoundsFired).Sum();
-        }
+        public int TotalAvailableSecondaryWeaponRounds() => (from o in _secondaryWeapons select o.RoundQuantity).Sum();
+        public int TotalSecondaryWeaponFiredRounds() => (from o in _secondaryWeapons select o.RoundsFired).Sum();
 
         public WeaponBase SelectPreviousAvailableUsableSecondaryWeapon()
         {

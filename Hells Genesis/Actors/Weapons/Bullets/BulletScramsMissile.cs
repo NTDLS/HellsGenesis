@@ -12,7 +12,6 @@ namespace HG.Actors.Weapons.Bullets
     internal class BulletScramsMissile : BulletBase
     {
         private const string imagePath = @"Graphics\Weapon\Missiles\BulletScramsMissile.png";
-
         private const string _assetPathHitExplosionAnimation = @"Graphics\Animation\Explode\Hit Explosion 22x22\";
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;

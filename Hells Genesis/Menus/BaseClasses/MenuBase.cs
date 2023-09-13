@@ -11,25 +11,18 @@ namespace HG.Menus.BaseClasses
 {
     internal class MenuBase
     {
-        public List<ActorMenuItem> Items { get; private set; } = new();
-        private DateTime _lastInputHandled = DateTime.UtcNow;
-        public Guid UID { get; private set; } = Guid.NewGuid();
         protected Core _core;
+        private DateTime _lastInputHandled = DateTime.UtcNow;
+
+        public List<ActorMenuItem> Items { get; private set; } = new();
+        public bool ReadyForDeletion { get; private set; }
+        public Guid UID { get; private set; } = Guid.NewGuid();
 
         public List<ActorMenuItem> SelectableItems() => Items.Where(o => o.ItemType == ActorMenuItem.MenuItemType.Item).ToList();
 
         public void QueueForDelete()
         {
-            _readyForDeletion = true;
-        }
-
-        private bool _readyForDeletion;
-        public bool ReadyForDeletion
-        {
-            get
-            {
-                return _readyForDeletion;
-            }
+            ReadyForDeletion = true;
         }
 
         public MenuBase(Core core)
@@ -37,15 +30,11 @@ namespace HG.Menus.BaseClasses
             _core = core;
         }
 
-        public virtual void ExecuteSelection(ActorMenuItem item)
-        {
+        public virtual void Cleanup() { }
 
-        }
+        public virtual void ExecuteSelection(ActorMenuItem item) { }
 
-        public virtual void SelectionChanged(ActorMenuItem item)
-        {
-
-        }
+        public virtual void SelectionChanged(ActorMenuItem item) { }
 
         public ActorMenuItem CreateAndAddTitleItem(HgPoint<double> location, string text)
         {
@@ -233,10 +222,6 @@ namespace HG.Menus.BaseClasses
                     0,
                     _core.DirectX.Colors.Raw.Red, 2, 2);
             }
-        }
-
-        public virtual void Cleanup()
-        {
         }
     }
 }

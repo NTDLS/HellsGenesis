@@ -31,7 +31,12 @@ namespace HG.Actors.BaseClasses
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private readonly int _MillisecondsBetweenHits = 200;
 
-        public bool IsFixedPosition { get; set; }
+        private bool _isLockedOn = false;
+        private HgVelocity<double> _velocity;
+        private bool _readyForDeletion;
+        private HgPoint<double> _location = new();
+        private Size _size;
+
 
         #region Properties.
 
@@ -41,12 +46,20 @@ namespace HG.Actors.BaseClasses
         public List<ActorAttachment> Attachments { get; private set; } = new();
         public HgPoint<int> RadarDotSize { get; set; } = new HgPoint<int>(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
+        public bool IsOnScreen => _core.Display.CurrentScaledScreenBounds.IntersectsWith(Bounds);
         public bool Highlight { get; set; } = false;
         public HgRotationMode RotationMode { get; set; }
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
         public int ShieldHealth { get; private set; } = 0; //Sheild hit-points, these take 1/2 damage.
+        public bool IsDead { get; set; } = false;
+        public bool ReadyForDeletion => _readyForDeletion;
+        public bool IsFixedPosition { get; set; }
+        public virtual Size Size => _size;
+        public HgPoint<double> LocationCenter => new HgPoint<double>(_location.X - Size.Width / 2.0, _location.Y - Size.Height / 2.0);
+        public RectangleF VisibleBounds => new Rectangle((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
+        public RectangleF Bounds => new RectangleF((float)_location.X, (float)_location.Y, Size.Width, Size.Height);
+        public Rectangle BoundsI => new Rectangle((int)_location.X, (int)_location.Y, Size.Width, Size.Height);
 
-        private HgVelocity<double> _velocity;
         public HgVelocity<double> Velocity
         {
             get
@@ -56,16 +69,9 @@ namespace HG.Actors.BaseClasses
             set
             {
                 _velocity = value;
-                _velocity.OnThrottleChange += _velocity_OnThrottleChange;
+                _velocity.OnThrottleChange += (HgVelocity<double> sender) => VelocityChanged();
             }
         }
-
-        private void _velocity_OnThrottleChange(HgVelocity<double> sender)
-        {
-            VelocityChanged();
-        }
-
-        public bool IsDead { get; set; } = false;
 
         public void SetHullHealth(int points)
         {
@@ -121,7 +127,6 @@ namespace HG.Actors.BaseClasses
             ShieldHealth += pointsToAdd;
         }
 
-        bool _isLockedOn = false;
         public bool IsLockedOn //The object is the subject of a foreign weapons lock.
         {
             get
@@ -150,25 +155,6 @@ namespace HG.Actors.BaseClasses
 
             _readyForDeletion = true;
         }
-
-        private bool _readyForDeletion;
-        public bool ReadyForDeletion
-        {
-            get
-            {
-                return _readyForDeletion;
-            }
-        }
-
-        public bool IsOnScreen
-        {
-            get
-            {
-                return _core.Display.CurrentScaledScreenBounds.IntersectsWith(Bounds);
-            }
-        }
-
-        private HgPoint<double> _location = new HgPoint<double>();
 
         /// <summary>
         /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
@@ -214,47 +200,6 @@ namespace HG.Actors.BaseClasses
             {
                 _location.Y = value;
                 PositionChanged();
-            }
-        }
-
-        public HgPoint<double> LocationCenter
-        {
-            get
-            {
-                return new HgPoint<double>(_location.X - Size.Width / 2.0, _location.Y - Size.Height / 2.0);
-            }
-        }
-
-        private Size _size;
-        public virtual Size Size
-        {
-            get
-            {
-                return _size;
-            }
-        }
-
-        public RectangleF VisibleBounds
-        {
-            get
-            {
-                return new Rectangle((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
-            }
-        }
-
-        public RectangleF Bounds
-        {
-            get
-            {
-                return new RectangleF((float)_location.X, (float)_location.Y, Size.Width, Size.Height);
-            }
-        }
-
-        public Rectangle BoundsI
-        {
-            get
-            {
-                return new Rectangle((int)_location.X, (int)_location.Y, Size.Width, Size.Height);
             }
         }
 
@@ -349,7 +294,6 @@ namespace HG.Actors.BaseClasses
 
         public bool Intersects(ActorBase otherObject)
         {
-
             if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
                 return Bounds.IntersectsWith(otherObject.Bounds);
@@ -401,12 +345,12 @@ namespace HG.Actors.BaseClasses
         /// Intersect detection with another object using adjusted "hit box" size.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(ActorBase with, int slop = 0)
+        public bool Intersects(ActorBase with, int variance = 0)
         {
             var alteredHitBox = new RectangleF(
-                (float)(with.Bounds.X - slop),
-                (float)(with.Bounds.Y - slop),
-                with.Size.Width + slop * 2, with.Size.Height + slop * 2);
+                (float)(with.Bounds.X - variance),
+                (float)(with.Bounds.Y - variance),
+                with.Size.Width + variance * 2, with.Size.Height + variance * 2);
 
             return Bounds.IntersectsWith(alteredHitBox);
         }
@@ -434,7 +378,6 @@ namespace HG.Actors.BaseClasses
         public bool Intersects(HgPoint<double> location)
         {
             var alteredHitBox = new RectangleF((float)location.X, (float)location.Y, 1f, 1f);
-
             return VisibleBounds.IntersectsWith(alteredHitBox);
         }
 
@@ -748,79 +691,43 @@ namespace HG.Actors.BaseClasses
         /// Calculates the difference in heading angle from one object to get to another between 0-259.
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngle360(ActorBase toObj)
-        {
-            return HgMath.DeltaAngle360(this, toObj);
-        }
+        public double DeltaAngle360(ActorBase toObj) => HgMath.DeltaAngle360(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngle(ActorBase toObj)
-        {
-            return HgMath.DeltaAngle(this, toObj);
-        }
+        public double DeltaAngle(ActorBase toObj) => HgMath.DeltaAngle(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
-        /// <returns></returns>
-        public double DeltaAngle(HgPoint<double> toLocation)
-        {
-            return HgMath.DeltaAngle(this, toLocation);
-        }
+        /// <=>s></returns>
+        public double DeltaAngle(HgPoint<double> toLocation) => HgMath.DeltaAngle(this, toLocation);
 
         /// <summary>
         /// Calculates the angle in degrees to another object,
         /// </summary>
         /// <returns></returns>
-        public double AngleTo(ActorBase atObj)
-        {
-            return HgMath.AngleTo(this, atObj);
-        }
+        public double AngleTo(ActorBase atObj) => HgMath.AngleTo(this, atObj);
 
         /// Calculates the angle in degrees to a location.
-        public double AngleTo(HgPoint<double> location)
-        {
-            return HgMath.AngleTo(this, location);
-        }
+        public double AngleTo(HgPoint<double> location) => HgMath.AngleTo(this, location);
 
         public bool IsPointingAt(ActorBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
-        {
-            return HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
-        }
+            => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
 
-        public bool IsPointingAt(ActorBase atObj, double toleranceDegrees, double maxDistance)
-        {
-            return HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
-        }
+        public bool IsPointingAt(ActorBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
 
-        public bool IsPointingAt(ActorBase atObj, double toleranceDegrees)
-        {
-            return HgMath.IsPointingAt(this, atObj, toleranceDegrees);
-        }
+        public bool IsPointingAt(ActorBase atObj, double toleranceDegrees) => HgMath.IsPointingAt(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(ActorBase atObj, double toleranceDegrees)
-        {
-            return HgMath.IsPointingAway(this, atObj, toleranceDegrees);
-        }
+        public bool IsPointingAway(ActorBase atObj, double toleranceDegrees) => HgMath.IsPointingAway(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(ActorBase atObj, double toleranceDegrees, double maxDistance)
-        {
-            return HgMath.IsPointingAway(this, atObj, toleranceDegrees);
-        }
+        public bool IsPointingAway(ActorBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public double DistanceTo(ActorBase to)
-        {
-            return HgPoint<double>.DistanceTo(Location, to.Location);
-        }
+        public double DistanceTo(ActorBase to) => HgPoint<double>.DistanceTo(Location, to.Location);
 
-        public double DistanceTo(HgPoint<double> to)
-        {
-            return HgPoint<double>.DistanceTo(Location, to);
-        }
-
+        public double DistanceTo(HgPoint<double> to) => HgPoint<double>.DistanceTo(Location, to);
 
         #endregion
 
@@ -929,10 +836,6 @@ namespace HG.Actors.BaseClasses
             {
                 _core.DirectX.DrawBitmapAt(renderTarget, bitmap, (_location.X - bitmap.Size.Width / 2.0), (_location.Y - bitmap.Size.Height / 2.0));
             }
-        }
-
-        private void DrawImage(Graphics dc, Image rawImage, double? angleInDegrees = null)
-        {
         }
 
         #endregion

@@ -19,9 +19,7 @@ namespace HG.Engine
         public WindowRenderTarget ScreenRenderTarget { get; private set; }
         public SharpDX.Direct2D1.Factory D2dfactory { get; private set; }
         public SharpDX.DirectWrite.Factory DirectWriteFactory { get; private set; }
-
         public double GlobalScale { get; set; } = 50.0f;
-
         public DirectXColors Colors { get; private set; }
         public DirectXTextFormats TextFormats { get; private set; }
 
