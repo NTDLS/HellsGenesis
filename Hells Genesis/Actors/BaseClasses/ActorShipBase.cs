@@ -39,8 +39,6 @@ namespace HG.Actors.BaseClasses
         private readonly int _explosionSoundCount = 4;
         private int _selectedExplosionSoundIndex = 0;
 
-        public bool IsBoostFading { get; set; }
-
         public ActorShipBase(Core core, string name = "")
             : base(core, name)
         {
@@ -71,7 +69,7 @@ namespace HG.Actors.BaseClasses
         {
             _explodeSound?.Play();
             _explosionAnimation?.Reset();
-            _core.Actors.Animations.CreateAt(_explosionAnimation, this);
+            _core.Actors.Animations.InsertAt(_explosionAnimation, this);
             base.Explode();
         }
 

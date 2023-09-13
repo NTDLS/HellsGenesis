@@ -31,6 +31,8 @@ namespace HG.Actors.BaseClasses
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
         private readonly int _MillisecondsBetweenHits = 200;
 
+        public bool FixedPosition { get; set; }
+
         #region Properties.
 
         public string Name { get; set; }
@@ -734,7 +736,7 @@ namespace HG.Actors.BaseClasses
             if (_hitExplosionAnimation != null)
             {
                 _hitExplosionAnimation.Reset();
-                _core.Actors.Animations.CreateAt(_hitExplosionAnimation, this);
+                _core.Actors.Animations.InsertAt(_hitExplosionAnimation, this);
             }
         }
 
@@ -824,8 +826,11 @@ namespace HG.Actors.BaseClasses
 
         public virtual void ApplyMotion(HgPoint<double> displacementVector)
         {
-            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
-            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
+            if (FixedPosition == false)
+            {
+                X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
+                Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
+            }
         }
 
         public virtual void VelocityChanged() { }

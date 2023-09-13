@@ -26,6 +26,7 @@ namespace HG.Actors.Weapons
             AngleSlop = 0;
             Speed = 18;
             SpeedSlop = 0;
+            RecoilAmount = 0.25;
         }
 
         public override bool Fire()
@@ -47,6 +48,9 @@ namespace HG.Actors.Weapons
                     _core.Actors.Bullets.Create(this, _owner, pointLeft);
                     RoundQuantity--;
                 }
+
+                _owner.Velocity.ThrottlePercentage -= RecoilAmount;
+
 
                 return true;
             }

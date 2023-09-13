@@ -48,7 +48,7 @@ namespace HG.TickHandlers
         /// </summary>
         /// <param name="animation"></param>
         /// <param name="defaultPosition"></param>
-        public void CreateAt(ActorAnimation animation, ActorBase defaultPosition)
+        public void InsertAt(ActorAnimation animation, ActorBase defaultPosition)
         {
             lock (_controller.Collection)
             {

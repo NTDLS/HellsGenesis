@@ -30,6 +30,7 @@ namespace HG.Engine
         public void Stop()
         {
             _shutdown = true;
+            _graphicsThread.Join();
         }
 
         public bool IsPaused()

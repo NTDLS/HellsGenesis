@@ -29,7 +29,7 @@ namespace HG.Actors.Enemies.BaseClasses
             ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode);
 
             ThrustAnimation.Reset();
-            _core.Actors.Animations.CreateAt(ThrustAnimation, this);
+            _core.Actors.Animations.InsertAt(ThrustAnimation, this);
 
             var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
             ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
@@ -39,7 +39,7 @@ namespace HG.Actors.Enemies.BaseClasses
             BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode);
 
             BoostAnimation.Reset();
-            _core.Actors.Animations.CreateAt(BoostAnimation, this);
+            _core.Actors.Animations.InsertAt(BoostAnimation, this);
 
             pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
             BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;

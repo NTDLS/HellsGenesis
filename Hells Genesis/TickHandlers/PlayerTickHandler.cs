@@ -3,6 +3,8 @@ using HG.Engine;
 using HG.TickHandlers.Interfaces;
 using HG.Types;
 using HG.Utility.ExtensionMethods;
+using System;
+using System.Diagnostics;
 
 namespace HG.TickHandlers
 {
@@ -94,11 +96,14 @@ namespace HG.TickHandlers
 
                 //Make player boost "build up" and fade-in.
                 if (_core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) && _core.Input.IsKeyPressed(HgPlayerKey.Forward)
-                    && Actor.Velocity.AvailableBoost > 0 && Actor.IsBoostFading == false)
+                    && Actor.Velocity.AvailableBoost > 0)
                 {
                     if (Actor.Velocity.BoostPercentage < 1.0)
                     {
-                        Actor.Velocity.BoostPercentage += _core.Settings.PlayerThrustRampUp;
+                        double boostToAdd = Actor.Velocity.BoostPercentage > 0
+                            ? _core.Settings.PlayerThrustRampUp * (1 - Actor.Velocity.BoostPercentage) : _core.Settings.PlayerThrustRampUp;
+
+                        Actor.Velocity.BoostPercentage += boostToAdd;
                     }
 
                     Actor.Velocity.AvailableBoost -= Actor.Velocity.MaxBoost * Actor.Velocity.BoostPercentage;
@@ -109,12 +114,6 @@ namespace HG.TickHandlers
                 }
                 else
                 {
-                    if (Actor.Velocity.AvailableBoost == 0)
-                    {
-                        //The boost was all used up, now we have to wait on it to cool down.
-                        Actor.IsBoostFading = true;
-                    }
-
                     //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
                     if (Actor.Velocity.BoostPercentage > _core.Settings.MinPlayerThrust)
                     {
@@ -129,23 +128,6 @@ namespace HG.TickHandlers
                     {
                         Actor.Velocity.AvailableBoost = (Actor.Velocity.AvailableBoost + (1 - Actor.Velocity.BoostPercentage)).Box(0, _core.Settings.MaxPlayerBoost);
                     }
-                    else
-                    {
-                        Actor.IsBoostFading = false;
-                    }
-                }
-
-                if (Actor.BoostAnimation != null)
-                {
-                    Actor.BoostAnimation.Visable = _core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost)
-                        && _core.Input.IsKeyPressed(HgPlayerKey.Forward)
-                        && Actor.Velocity.AvailableBoost > 0
-                        && Actor.IsBoostFading == false;
-                }
-
-                if (Actor.ThrustAnimation != null)
-                {
-                    Actor.ThrustAnimation.Visable = Actor.Velocity.ThrottlePercentage > 0;
                 }
 
                 //Make player thrust "build up" and fade-in.
@@ -153,7 +135,10 @@ namespace HG.TickHandlers
                 {
                     if (Actor.Velocity.ThrottlePercentage < 1.0)
                     {
-                        Actor.Velocity.ThrottlePercentage += _core.Settings.PlayerThrustRampUp;
+                        double thrustToAdd = Actor.Velocity.ThrottlePercentage > 0
+                            ? _core.Settings.PlayerThrustRampUp * (1 - Actor.Velocity.ThrottlePercentage) : _core.Settings.PlayerThrustRampUp;
+
+                        Actor.Velocity.ThrottlePercentage += thrustToAdd;
                     }
                 }
                 else
@@ -161,53 +146,78 @@ namespace HG.TickHandlers
                     //If no "forward" or "reverse" user input is received... then fade the thrust.
                     if (Actor.Velocity.ThrottlePercentage > _core.Settings.MinPlayerThrust)
                     {
-                        Actor.Velocity.ThrottlePercentage -= _core.Settings.PlayerThrustRampDown;
+                        //Ramp down to a stop:
+                        double thrustToRemove = Actor.Velocity.ThrottlePercentage < 1
+                            ? _core.Settings.PlayerThrustRampDown * (Actor.Velocity.ThrottlePercentage) : _core.Settings.PlayerThrustRampDown;
+
+                        Actor.Velocity.ThrottlePercentage -= thrustToRemove;
+
                         if (Actor.Velocity.ThrottlePercentage < 0)
                         {
+                            //Dont overshoot the stop.
+                            Actor.Velocity.ThrottlePercentage = 0;
+                        }
+                    }
+                    else if (Actor.Velocity.ThrottlePercentage < 0)
+                    {
+                        //Ramp up to a stop:
+                        double thrustToRemove = (Actor.Velocity.ThrottlePercentage * -1) < 1
+                            ? _core.Settings.PlayerThrustRampDown * (1 - (Actor.Velocity.ThrottlePercentage * -1)) : _core.Settings.PlayerThrustRampDown;
+
+                        Actor.Velocity.ThrottlePercentage += thrustToRemove;
+                        if (Actor.Velocity.ThrottlePercentage > 0)
+                        {
+                            //Dont overshoot the stop.
                             Actor.Velocity.ThrottlePercentage = 0;
                         }
                     }
                 }
 
-                if (Actor.Velocity.ThrottlePercentage > 0)
+                if (Actor.BoostAnimation != null)
                 {
-                    var forwardThrust = Actor.Velocity.MaxSpeed * Actor.Velocity.ThrottlePercentage;
+                    Actor.BoostAnimation.Visable =
+                        _core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost)
+                        && _core.Input.IsKeyPressed(HgPlayerKey.Forward)
+                        && Actor.Velocity.AvailableBoost > 0;
+                }
 
-                    if (Actor.Velocity.BoostPercentage > 0)
-                    {
-                        forwardThrust += Actor.Velocity.MaxBoost * Actor.Velocity.BoostPercentage;
-                    }
+                if (Actor.ThrustAnimation != null)
+                {
+                    Actor.ThrustAnimation.Visable = Actor.Velocity.ThrottlePercentage > 0;
+                }
 
-                    //Close to the right wall and travelling in that direction.
-                    if (Actor.X > _core.Display.NatrualScreenBounds.X + _core.Display.NatrualScreenBounds.Width - _core.Settings.InfiniteScrollWallX
-                        && Actor.Velocity.Angle.X > 0)
-                    {
-                        displacementVector.X = Actor.Velocity.Angle.X * forwardThrust;
-                    }
+                var forwardThrust = (Actor.Velocity.MaxSpeed * Actor.Velocity.ThrottlePercentage);
 
-                    //Close to the bottom wall and travelling in that direction.
-                    if (Actor.Y > _core.Display.NatrualScreenBounds.Y + _core.Display.NatrualScreenBounds.Height - _core.Settings.InfiniteScrollWallY
-                        && Actor.Velocity.Angle.Y > 0)
-                    {
-                        displacementVector.Y = Actor.Velocity.Angle.Y * forwardThrust;
-                    }
+                if (Actor.Velocity.BoostPercentage > 0)
+                {
+                    forwardThrust += Actor.Velocity.MaxBoost * Actor.Velocity.BoostPercentage;
+                }
 
-                    //Close to the left wall and travelling in that direction.
-                    if (Actor.X < _core.Display.NatrualScreenBounds.X + _core.Settings.InfiniteScrollWallX
-                        && Actor.Velocity.Angle.X < 0)
-                    {
-                        displacementVector.X = Actor.Velocity.Angle.X * forwardThrust;
-                    }
+                if (Actor.X < _core.Display.NatrualScreenBounds.X + _core.Display.NatrualScreenBounds.Width - _core.Settings.InfiniteScrollWallX
+                    && Actor.Velocity.Angle.X < 0)
+                {
+                    displacementVector.X += Actor.Velocity.Angle.X * forwardThrust;
+                }
 
-                    //Close to the top wall and travelling in that direction.
-                    if (Actor.Y < _core.Display.NatrualScreenBounds.Y + _core.Settings.InfiniteScrollWallY
-                        && Actor.Velocity.Angle.Y < 0)
-                    {
-                        displacementVector.Y = Actor.Velocity.Angle.Y * forwardThrust;
-                    }
+                //Close to the bottom wall and travelling in that direction.
+                if (Actor.Y < _core.Display.NatrualScreenBounds.Y + _core.Display.NatrualScreenBounds.Height - _core.Settings.InfiniteScrollWallY
+                    && Actor.Velocity.Angle.Y < 0)
+                {
+                    displacementVector.Y += Actor.Velocity.Angle.Y * forwardThrust;
+                }
 
-                    Actor.X += Actor.Velocity.Angle.X * forwardThrust - displacementVector.X;
-                    Actor.Y += Actor.Velocity.Angle.Y * forwardThrust - displacementVector.Y;
+                //Close to the left wall and travelling in that direction.
+                if (Actor.X > _core.Display.NatrualScreenBounds.X + _core.Settings.InfiniteScrollWallX
+                    && Actor.Velocity.Angle.X > 0)
+                {
+                    displacementVector.X += Actor.Velocity.Angle.X * forwardThrust;
+                }
+
+                //Close to the top wall and travelling in that direction.
+                if (Actor.Y > _core.Display.NatrualScreenBounds.Y + _core.Settings.InfiniteScrollWallY
+                    && Actor.Velocity.Angle.Y > 0)
+                {
+                    displacementVector.Y += Actor.Velocity.Angle.Y * forwardThrust;
                 }
 
                 if (Actor.Velocity.BoostPercentage > 0)

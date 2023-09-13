@@ -61,7 +61,7 @@ namespace HG.Actors.PowerUp.BaseClasses
         {
             _explodeSound.Play();
             _hitAnimation.Reset();
-            _core.Actors.Animations.CreateAt(_hitAnimation, this);
+            _core.Actors.Animations.InsertAt(_hitAnimation, this);
             QueueForDelete();
         }
 

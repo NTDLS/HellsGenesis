@@ -119,15 +119,14 @@ namespace HG.Actors.Ordinary
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode);
+                    ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
+                    {
+                        FixedPosition = true,
+                        Visable = false
+                    };
                     ThrustAnimation.Reset();
-                    ThrustAnimation.Visable = false;
-                    _core.Actors.Animations.CreateAt(ThrustAnimation, this);
-
-                    var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
-                    ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                    ThrustAnimation.X = X + pointRight.X;
-                    ThrustAnimation.Y = Y + pointRight.Y;
+                    _core.Actors.Animations.InsertAt(ThrustAnimation, this);
+                    ThrustAnimation.OnVisibilityChanged += (ActorBase sender) => UpdateThrustAnimationPositions();
                 }
 
                 if (BoostAnimation == null || BoostAnimation.ReadyForDeletion == true)
@@ -138,40 +137,39 @@ namespace HG.Actors.Ordinary
                         DeleteActorAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode);
+                    BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
+                    {
+                        FixedPosition = true,
+                        Visable = false
+                    };
                     BoostAnimation.Reset();
-                    BoostAnimation.Visable = false;
-                    _core.Actors.Animations.CreateAt(BoostAnimation, this);
-
-                    var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
-                    BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                    BoostAnimation.X = X + pointRight.X;
-                    BoostAnimation.Y = Y + pointRight.Y;
+                    _core.Actors.Animations.InsertAt(BoostAnimation, this);
+                    BoostAnimation.OnVisibilityChanged += (ActorBase sender) => UpdateThrustAnimationPositions();
                 }
             }
         }
 
         public override void RotationChanged()
         {
-            PositionChanged();
+            UpdateThrustAnimationPositions();
         }
 
-        public override void PositionChanged()
+        private void UpdateThrustAnimationPositions()
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+                var pointBehind = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
                 ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                ThrustAnimation.X = X + pointRight.X;
-                ThrustAnimation.Y = Y + pointRight.Y;
+                ThrustAnimation.X = X + pointBehind.X;
+                ThrustAnimation.Y = Y + pointBehind.Y;
             }
 
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
+                var pointBehind = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint<double>(20, 20));
                 BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                BoostAnimation.X = X + pointRight.X;
-                BoostAnimation.Y = Y + pointRight.Y;
+                BoostAnimation.X = X + pointBehind.X;
+                BoostAnimation.Y = Y + pointBehind.Y;
             }
         }
 

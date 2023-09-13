@@ -1,3 +1,4 @@
-[] Add recoil to non-energy and non-rocket-powered weapons.
+[x] Add recoil to non-energy and non-rocket-powered weapons.
 [] Finish AI for first peop enemy: Phoenix
 [] Map up and down arrows to throttle max adjust.
+[x] Keep player in the middle, always centered. Allows for more visibility.

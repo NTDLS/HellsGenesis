@@ -15,7 +15,7 @@ namespace HG.Actors.Enemies.BaseClasses
         {
             _explodeSound?.Play();
             _explosionAnimation?.Reset();
-            _core.Actors.Animations.CreateAt(_explosionAnimation, this);
+            _core.Actors.Animations.InsertAt(_explosionAnimation, this);
 
             CreateParticlesExplosion();
 

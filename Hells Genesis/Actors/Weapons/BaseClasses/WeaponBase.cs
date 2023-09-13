@@ -17,6 +17,10 @@ namespace HG.Actors.Weapons.BaseClasses
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected AudioClip _fireSound;
 
+        /// <summary>
+        /// RecoilAmount is expressed in decimal percentage of thrust.
+        /// </summary>
+        public double RecoilAmount { get; set; } = 0;
         public double? AngleSlop { get; set; } = null;
         public double? SpeedSlop { get; set; } = null;
         public string Name { get; private set; }
@@ -98,6 +102,8 @@ namespace HG.Actors.Weapons.BaseClasses
             {
                 throw new ArgumentNullException("Weapon is not owned.");
             }
+
+            _owner.Velocity.ThrottlePercentage -= RecoilAmount;
 
             if (CanFire)
             {
