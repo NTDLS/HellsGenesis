@@ -18,7 +18,7 @@ namespace HG.Actors.Enemies.Peons
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            AddHullHealth(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
+            AddHullHealth(HgRandom.Random.Next(Settings.MinEnemyHealth, Settings.MaxEnemyHealth));
         }
     }
 }

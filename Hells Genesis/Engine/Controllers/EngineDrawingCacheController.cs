@@ -57,7 +57,7 @@ namespace HG.Engine.Controllers
             else
             {
                 var newInstance = new DrawingCacheItem(size);
-                newInstance.Graphics.InterpolationMode = _core.Settings.GraphicsScalingMode;
+                newInstance.Graphics.InterpolationMode = Settings.GraphicsScalingMode;
                 _graphicsCache.Add(key, newInstance);
                 return newInstance;
             }
@@ -69,7 +69,7 @@ namespace HG.Engine.Controllers
                 throw new System.Exception("Graphics cache item already exists and can not be recreated.");
             }
             var newInstance = new DrawingCacheItem(size);
-            newInstance.Graphics.InterpolationMode = _core.Settings.GraphicsScalingMode;
+            newInstance.Graphics.InterpolationMode = Settings.GraphicsScalingMode;
             _graphicsCache.Add(key, newInstance);
             return newInstance;
         }

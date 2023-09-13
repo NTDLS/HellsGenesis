@@ -141,8 +141,8 @@ namespace HG.Engine.Controllers
             DrawingSurface = drawingSurface;
             NatrualScreenSize = visibleSize;
 
-            int totalSizeX = (int)(visibleSize.Width * core.Settings.OverdrawScale);
-            int totalSizeY = (int)(visibleSize.Height * core.Settings.OverdrawScale);
+            int totalSizeX = (int)(visibleSize.Width * Settings.OverdrawScale);
+            int totalSizeY = (int)(visibleSize.Height * Settings.OverdrawScale);
 
             if (totalSizeX % 2 != 0) totalSizeX++;
             if (totalSizeY % 2 != 0) totalSizeY++;

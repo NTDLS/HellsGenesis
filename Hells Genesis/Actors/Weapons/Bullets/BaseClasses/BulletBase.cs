@@ -78,10 +78,10 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
 
         public override void ApplyMotion(HgPoint<double> displacementVector)
         {
-            if (X < -_core.Settings.BulletSceneDistanceLimit
-                || X >= _core.Display.TotalCanvasSize.Width + _core.Settings.BulletSceneDistanceLimit
-                || Y < -_core.Settings.BulletSceneDistanceLimit
-                || Y >= _core.Display.TotalCanvasSize.Height + _core.Settings.BulletSceneDistanceLimit)
+            if (X < -Settings.BulletSceneDistanceLimit
+                || X >= _core.Display.TotalCanvasSize.Width + Settings.BulletSceneDistanceLimit
+                || Y < -Settings.BulletSceneDistanceLimit
+                || Y >= _core.Display.TotalCanvasSize.Height + Settings.BulletSceneDistanceLimit)
             {
                 QueueForDelete();
                 return;

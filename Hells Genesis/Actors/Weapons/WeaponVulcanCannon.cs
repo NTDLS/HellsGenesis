@@ -24,6 +24,7 @@ namespace HG.Actors.Weapons
             AngleVariance = 1;
             Speed = 20;
             SpeedVariance = 10;
+            RecoilAmount = 0.10;
         }
     }
 }

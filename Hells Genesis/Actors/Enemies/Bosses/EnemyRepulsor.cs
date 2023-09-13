@@ -29,9 +29,9 @@ namespace HG.Actors.Enemies.Bosses
             _rightGun = Attach(_imagesPath + "Gun.Right.png", true, 3);
             _thrust = Attach(_imagesPath + "Jet.png", true, 3);
 
-            SetHullHealth(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
+            SetHullHealth(HgRandom.Random.Next(Settings.MinEnemyHealth, Settings.MaxEnemyHealth));
 
-            _initialMaxpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 2, _core.Settings.MaxSpeed); //Upper end of the speed spectrum
+            _initialMaxpeed = HgRandom.Random.Next(Settings.MaxSpeed - 2, Settings.MaxSpeed); //Upper end of the speed spectrum
 
             Velocity.MaxSpeed = _initialMaxpeed;
 

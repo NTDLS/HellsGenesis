@@ -1,4 +1,6 @@
-﻿namespace HG.Types
+﻿using HG.Engine;
+
+namespace HG.Types
 {
     internal class HgVelocity<T>
     {
@@ -10,6 +12,24 @@
         public T MaxBoost { get; set; }
         public T AvailableBoost { get; set; }
         public T MaxRotationSpeed { get; set; }
+
+        public bool BoostRebuilding { get; set; }
+
+        private T _recoilAmount = (dynamic)0;
+
+        public T RecoilAmount
+        {
+            get => _recoilAmount;
+            set
+            {
+                _recoilAmount = value;
+                if (_recoilAmount > (dynamic)Settings.MaxRecoilAmount)
+                {
+                    _recoilAmount = (dynamic)Settings.MaxRecoilAmount;
+                }
+            }
+        }
+
 
         public T _throttlePercentage;
         public T ThrottlePercentage

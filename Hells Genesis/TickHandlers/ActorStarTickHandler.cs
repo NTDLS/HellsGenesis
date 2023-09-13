@@ -29,7 +29,7 @@ namespace HG.TickHandlers
             {
                 #region Add new stars...
 
-                if (_controller.VisibleOfType<ActorStar>().Count < _core.Settings.FramTargetStarCount) //Never wan't more than n stars.
+                if (_controller.VisibleOfType<ActorStar>().Count < Settings.FramTargetStarCount) //Never wan't more than n stars.
                 {
                     if (displacementVector.X > 0)
                     {

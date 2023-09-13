@@ -103,8 +103,6 @@ namespace HG.Actors.Weapons.BaseClasses
                 throw new ArgumentNullException("Weapon is not owned.");
             }
 
-            _owner.Velocity.ThrottlePercentage -= RecoilAmount;
-
             if (CanFire)
             {
                 RoundsFired++;
@@ -112,7 +110,7 @@ namespace HG.Actors.Weapons.BaseClasses
                 _fireSound.Play();
                 _core.Actors.Bullets.Create(this, _owner);
 
-                _owner.Velocity.ThrottlePercentage -= RecoilAmount;
+                _owner.Velocity.RecoilAmount += RecoilAmount;
 
                 return true;
             }

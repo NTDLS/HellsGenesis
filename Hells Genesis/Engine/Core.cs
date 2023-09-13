@@ -14,7 +14,6 @@ namespace HG.Engine
     {
         public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
         public DirectX DirectX { get; private set; }
-        public Settings Settings { get; private set; } = new();
         public EngineInputController Input { get; private set; }
         public EngineDisplayController Display { get; private set; }
         public EngineActorController Actors { get; private set; }

@@ -83,9 +83,9 @@ namespace HG.Actors.Ordinary
 
             Velocity.Angle = new HgAngle<double>(45);
 
-            Velocity.ThrottlePercentage = _core.Settings.MinPlayerThrust;
-            Velocity.AvailableBoost = _core.Settings.MaxPlayerBoost;
-            Velocity.MaxRotationSpeed = _core.Settings.MaxRotationSpeed;
+            Velocity.ThrottlePercentage = Settings.MinPlayerThrust;
+            Velocity.AvailableBoost = Settings.MaxPlayerBoost;
+            Velocity.MaxRotationSpeed = Settings.MaxRotationSpeed;
 
             #region Reset loadout.
 

@@ -75,7 +75,7 @@ namespace HG.TickHandlers
                 EnemyBase obj = (EnemyBase)Activator.CreateInstance(typeof(T), param);
 
                 obj.Location = _core.Display.RandomOffScreenLocation();
-                obj.Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MinSpeed, _core.Settings.MaxSpeed);
+                obj.Velocity.MaxSpeed = HgRandom.Random.Next(Settings.MinSpeed, Settings.MaxSpeed);
                 obj.Velocity.Angle.Degrees = HgRandom.Random.Next(0, 360);
 
                 obj.BeforeCreate();

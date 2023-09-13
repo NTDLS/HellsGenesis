@@ -40,7 +40,7 @@ namespace HG.Actors.Enemies.BaseClasses
         public override void RotationChanged() => PositionChanged();
 
         public static int GetGenericHP(Core core) =>
-            HgRandom.Random.Next(core.Settings.MinEnemyHealth, core.Settings.MaxEnemyHealth);
+            HgRandom.Random.Next(Settings.MinEnemyHealth, Settings.MaxEnemyHealth);
 
         public override void Explode()
         {
@@ -76,10 +76,10 @@ namespace HG.Actors.Enemies.BaseClasses
 
         public override void ApplyMotion(HgPoint<double> displacementVector)
         {
-            if (X < -_core.Settings.EnemySceneDistanceLimit
-                || X >= _core.Display.NatrualScreenSize.Width + _core.Settings.EnemySceneDistanceLimit
-                || Y < -_core.Settings.EnemySceneDistanceLimit
-                || Y >= _core.Display.NatrualScreenSize.Height + _core.Settings.EnemySceneDistanceLimit)
+            if (X < -Settings.EnemySceneDistanceLimit
+                || X >= _core.Display.NatrualScreenSize.Width + Settings.EnemySceneDistanceLimit
+                || Y < -Settings.EnemySceneDistanceLimit
+                || Y >= _core.Display.NatrualScreenSize.Height + Settings.EnemySceneDistanceLimit)
             {
                 QueueForDelete();
                 return;
@@ -90,7 +90,7 @@ namespace HG.Actors.Enemies.BaseClasses
             {
                 if (Velocity.BoostPercentage < 1.0) //Ramp up the boost until it is at 100%
                 {
-                    Velocity.BoostPercentage += _core.Settings.EnemyThrustRampUp;
+                    Velocity.BoostPercentage += Settings.EnemyThrustRampUp;
                 }
                 Velocity.AvailableBoost -= Velocity.MaxBoost * Velocity.BoostPercentage; //Consume boost.
 
@@ -101,22 +101,22 @@ namespace HG.Actors.Enemies.BaseClasses
             }
             else if (Velocity.BoostPercentage > 0) //Ramp down the boost.
             {
-                Velocity.BoostPercentage -= _core.Settings.EnemyThrustRampDown;
+                Velocity.BoostPercentage -= Settings.EnemyThrustRampDown;
                 if (Velocity.BoostPercentage < 0)
                 {
                     Velocity.BoostPercentage = 0;
                 }
             }
 
-            var forwardThrust = Velocity.MaxSpeed * Velocity.ThrottlePercentage;
+            var thrustVector = (Velocity.MaxSpeed * (Velocity.ThrottlePercentage + -Velocity.RecoilAmount));
 
             if (Velocity.BoostPercentage > 0)
             {
-                forwardThrust += Velocity.MaxBoost * Velocity.BoostPercentage;
+                thrustVector += Velocity.MaxBoost * Velocity.BoostPercentage;
             }
 
-            X += Velocity.Angle.X * forwardThrust - displacementVector.X;
-            Y += Velocity.Angle.Y * forwardThrust - displacementVector.Y;
+            X += Velocity.Angle.X * thrustVector - displacementVector.X;
+            Y += Velocity.Angle.Y * thrustVector - displacementVector.Y;
 
             //base.ApplyMotion(displacementVector);
 
@@ -143,6 +143,15 @@ namespace HG.Actors.Enemies.BaseClasses
                 {
                     RadarPositionText.Visable = false;
                     RadarPositionIndicator.Visable = false;
+                }
+            }
+
+            if (Velocity.RecoilAmount > 0)
+            {
+                Velocity.RecoilAmount -= (Velocity.RecoilAmount * 0.01);
+                if (Velocity.RecoilAmount < 0.01)
+                {
+                    Velocity.RecoilAmount = 0;
                 }
             }
         }

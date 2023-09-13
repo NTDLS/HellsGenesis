@@ -94,9 +94,9 @@ namespace HG.Actors.BaseClasses
 
         public void AddHullHealth(int pointsToAdd)
         {
-            if (HullHealth + pointsToAdd > _core.Settings.MaxHullHealth)
+            if (HullHealth + pointsToAdd > Settings.MaxHullHealth)
             {
-                pointsToAdd = _core.Settings.MaxHullHealth - (HullHealth + pointsToAdd);
+                pointsToAdd = Settings.MaxHullHealth - (HullHealth + pointsToAdd);
             }
             HullHealth += pointsToAdd;
         }
@@ -109,16 +109,16 @@ namespace HG.Actors.BaseClasses
 
         public void AddShieldHealth(int pointsToAdd)
         {
-            if (ShieldHealth + pointsToAdd > _core.Settings.MaxShieldPoints)
+            if (ShieldHealth + pointsToAdd > Settings.MaxShieldPoints)
             {
-                pointsToAdd = _core.Settings.MaxShieldPoints - (ShieldHealth + pointsToAdd);
+                pointsToAdd = Settings.MaxShieldPoints - (ShieldHealth + pointsToAdd);
             }
 
             if (this is ActorPlayer)
             {
                 var player = this as ActorPlayer;
 
-                if (ShieldHealth < _core.Settings.MaxShieldPoints && ShieldHealth + pointsToAdd >= _core.Settings.MaxShieldPoints)
+                if (ShieldHealth < Settings.MaxShieldPoints && ShieldHealth + pointsToAdd >= Settings.MaxShieldPoints)
                 {
                     player.ShieldMaxSound.Play();
                 }
@@ -246,8 +246,8 @@ namespace HG.Actors.BaseClasses
             Name = name;
             RotationMode = HgRotationMode.Rotate;
             Velocity = new HgVelocity<double>();
-            Velocity.MaxRotationSpeed = _core.Settings.MaxRotationSpeed;
-            Highlight = _core.Settings.HighlightAllActors;
+            Velocity.MaxRotationSpeed = Settings.MaxRotationSpeed;
+            Highlight = Settings.HighlightAllActors;
         }
 
         public virtual void Initialize(string imagePath = null, Size? size = null)

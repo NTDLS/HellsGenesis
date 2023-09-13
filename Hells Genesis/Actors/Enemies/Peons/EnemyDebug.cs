@@ -25,10 +25,10 @@ namespace HG.Actors.Enemies.Peons
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            SetHullHealth(HgRandom.Random.Next(_core.Settings.MinEnemyHealth, _core.Settings.MaxEnemyHealth));
+            SetHullHealth(HgRandom.Random.Next(Settings.MinEnemyHealth, Settings.MaxEnemyHealth));
 
             Velocity.MaxBoost = 1.5;
-            Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxSpeed - 4, _core.Settings.MaxSpeed - 3);
+            Velocity.MaxSpeed = HgRandom.Random.Next(Settings.MaxSpeed - 4, Settings.MaxSpeed - 3);
 
             SetPrimaryWeapon<WeaponVulcanCannon>(1000);
             AddSecondaryWeapon<WeaponDualVulcanCannon>(500);

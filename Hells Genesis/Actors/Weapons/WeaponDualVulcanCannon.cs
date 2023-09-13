@@ -48,7 +48,7 @@ namespace HG.Actors.Weapons
                     RoundQuantity--;
                 }
 
-                _owner.Velocity.ThrottlePercentage -= RecoilAmount;
+                _owner.Velocity.RecoilAmount += RecoilAmount;
 
                 return true;
             }

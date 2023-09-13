@@ -301,13 +301,13 @@ namespace HG.Engine.Controllers
             _core.Player.Actor?.Render(renderTarget);
             _core.Menus.Render(renderTarget);
 
-            if (_core.Settings.HighlightNatrualBounds)
+            if (Settings.HighlightNatrualBounds)
             {
                 //Highlight the 1:1 frame
                 _core.DirectX.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.Colors.Raw.Red, 0, 1);
             }
 
-            if (_core.Settings.AutoZoomWhenMoving)
+            if (Settings.AutoZoomWhenMoving)
             {
                 //TODO: FFS, fix all of this - its totally overcomplicated.
                 if (_core.Player.Actor != null)
@@ -327,7 +327,7 @@ namespace HG.Engine.Controllers
                     _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 25);
 
 
-                    double baseScale = 100 / _core.Settings.OverdrawScale;
+                    double baseScale = 100 / Settings.OverdrawScale;
                     double reduction = (baseScale / 100)
                         * (_core.Display.ThrottleFrameScaleFactor + _core.Display.BoostFrameScaleFactor).Box(0, 100);
 

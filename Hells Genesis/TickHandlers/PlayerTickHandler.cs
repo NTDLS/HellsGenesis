@@ -59,9 +59,9 @@ namespace HG.TickHandlers
                     }
                 }
 
-                if (_core.Settings.LockPlayerAngleToNearbyEnemy)
+                if (Settings.LockPlayerAngleToNearbyEnemy)
                 {
-                    #region //This needs some work. It works, but its Variancepy - the movement is rigid.
+                    #region //This needs some work. It works, but its odd - the movement is rigid.
                     if (_core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise) == false && _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise) == false)
                     {
                         if (_allowLockPlayerAngleToNearbyEnemy)
@@ -94,12 +94,12 @@ namespace HG.TickHandlers
 
                 //Make player boost "build up" and fade-in.
                 if (_core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) && _core.Input.IsKeyPressed(HgPlayerKey.Forward)
-                    && Actor.Velocity.AvailableBoost > 0)
+                    && Actor.Velocity.AvailableBoost > 0 && Actor.Velocity.BoostRebuilding == false)
                 {
                     if (Actor.Velocity.BoostPercentage < 1.0)
                     {
                         double boostToAdd = Actor.Velocity.BoostPercentage > 0
-                            ? _core.Settings.PlayerThrustRampUp * (1 - Actor.Velocity.BoostPercentage) : _core.Settings.PlayerThrustRampUp;
+                            ? Settings.PlayerThrustRampUp * (1 - Actor.Velocity.BoostPercentage) : Settings.PlayerThrustRampUp;
 
                         Actor.Velocity.BoostPercentage += boostToAdd;
                     }
@@ -113,18 +113,23 @@ namespace HG.TickHandlers
                 else
                 {
                     //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
-                    if (Actor.Velocity.BoostPercentage > _core.Settings.MinPlayerThrust)
+                    if (Actor.Velocity.BoostPercentage > Settings.MinPlayerThrust)
                     {
-                        Actor.Velocity.BoostPercentage -= _core.Settings.PlayerThrustRampDown;
-                        if (Actor.Velocity.BoostPercentage < 0)
+                        Actor.Velocity.BoostPercentage -= Settings.PlayerThrustRampDown;
+                        if (Actor.Velocity.BoostPercentage < 0.1)
                         {
                             Actor.Velocity.BoostPercentage = 0;
                         }
                     }
 
-                    if (Actor.Velocity.AvailableBoost < _core.Settings.MaxPlayerBoost)
+                    if (Actor.Velocity.AvailableBoost < Settings.MaxPlayerBoost)
                     {
-                        Actor.Velocity.AvailableBoost = (Actor.Velocity.AvailableBoost + (1 - Actor.Velocity.BoostPercentage)).Box(0, _core.Settings.MaxPlayerBoost);
+                        Actor.Velocity.AvailableBoost = (Actor.Velocity.AvailableBoost + (1 - Actor.Velocity.BoostPercentage)).Box(0, Settings.MaxPlayerBoost);
+
+                        if (Actor.Velocity.BoostRebuilding && Actor.Velocity.AvailableBoost >= Settings.PlayerBoostRebuildMin)
+                        {
+                            Actor.Velocity.BoostRebuilding = false;
+                        }
                     }
                 }
 
@@ -139,7 +144,7 @@ namespace HG.TickHandlers
                         //  of throttle will take a while. We do the reverse of this to stop. Stopping fast at first and slowly-slowly slowing to a stop.
 
                         double thrustToAdd = Actor.Velocity.ThrottlePercentage > 0
-                            ? _core.Settings.PlayerThrustRampUp * (1 - Actor.Velocity.ThrottlePercentage) : _core.Settings.PlayerThrustRampUp;
+                            ? Settings.PlayerThrustRampUp * (1 - Actor.Velocity.ThrottlePercentage) : Settings.PlayerThrustRampUp;
 
                         Actor.Velocity.ThrottlePercentage += thrustToAdd;
                     }
@@ -147,15 +152,15 @@ namespace HG.TickHandlers
                 else
                 {
                     //If no "forward" or "reverse" user input is received... then fade the thrust.
-                    if (Actor.Velocity.ThrottlePercentage > _core.Settings.MinPlayerThrust)
+                    if (Actor.Velocity.ThrottlePercentage > Settings.MinPlayerThrust)
                     {
                         //Ramp down to a stop:
                         double thrustToRemove = Actor.Velocity.ThrottlePercentage < 1
-                            ? _core.Settings.PlayerThrustRampDown * (Actor.Velocity.ThrottlePercentage) : _core.Settings.PlayerThrustRampDown;
+                            ? Settings.PlayerThrustRampDown * (Actor.Velocity.ThrottlePercentage) : Settings.PlayerThrustRampDown;
 
                         Actor.Velocity.ThrottlePercentage -= thrustToRemove;
 
-                        if (Actor.Velocity.ThrottlePercentage < 0)
+                        if (Actor.Velocity.ThrottlePercentage < 0.1)
                         {
                             //Dont overshoot the stop.
                             Actor.Velocity.ThrottlePercentage = 0;
@@ -165,7 +170,7 @@ namespace HG.TickHandlers
                     {
                         //Ramp up to a stop:
                         double thrustToRemove = (Actor.Velocity.ThrottlePercentage * -1) < 1
-                            ? _core.Settings.PlayerThrustRampDown * (1 - (Actor.Velocity.ThrottlePercentage * -1)) : _core.Settings.PlayerThrustRampDown;
+                            ? Settings.PlayerThrustRampDown * (1 - (Actor.Velocity.ThrottlePercentage * -1)) : Settings.PlayerThrustRampDown;
 
                         Actor.Velocity.ThrottlePercentage += thrustToRemove;
                         if (Actor.Velocity.ThrottlePercentage > 0)
@@ -181,7 +186,13 @@ namespace HG.TickHandlers
                     Actor.BoostAnimation.Visable =
                         _core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost)
                         && _core.Input.IsKeyPressed(HgPlayerKey.Forward)
-                        && Actor.Velocity.AvailableBoost > 0;
+                        && Actor.Velocity.AvailableBoost > 0 && Actor.Velocity.BoostRebuilding == false;
+                }
+
+                if (Actor.Velocity.AvailableBoost <= 0)
+                {
+                    Actor.Velocity.AvailableBoost = 0;
+                    Actor.Velocity.BoostRebuilding = true;
                 }
 
                 if (Actor.ThrustAnimation != null)
@@ -189,38 +200,38 @@ namespace HG.TickHandlers
                     Actor.ThrustAnimation.Visable = Actor.Velocity.ThrottlePercentage > 0;
                 }
 
-                var forwardThrust = (Actor.Velocity.MaxSpeed * Actor.Velocity.ThrottlePercentage);
+                var thrustVector = (Actor.Velocity.MaxSpeed * (Actor.Velocity.ThrottlePercentage + -Actor.Velocity.RecoilAmount));
 
                 if (Actor.Velocity.BoostPercentage > 0)
                 {
-                    forwardThrust += Actor.Velocity.MaxBoost * Actor.Velocity.BoostPercentage;
+                    thrustVector += Actor.Velocity.MaxBoost * Actor.Velocity.BoostPercentage;
                 }
 
-                if (Actor.X < _core.Display.NatrualScreenBounds.X + _core.Display.NatrualScreenBounds.Width - _core.Settings.InfiniteScrollWallX
+                if (Actor.X < _core.Display.NatrualScreenBounds.X + _core.Display.NatrualScreenBounds.Width - Settings.InfiniteScrollWallX
                     && Actor.Velocity.Angle.X < 0)
                 {
-                    displacementVector.X += Actor.Velocity.Angle.X * forwardThrust;
+                    displacementVector.X += Actor.Velocity.Angle.X * thrustVector;
                 }
 
                 //Close to the bottom wall and travelling in that direction.
-                if (Actor.Y < _core.Display.NatrualScreenBounds.Y + _core.Display.NatrualScreenBounds.Height - _core.Settings.InfiniteScrollWallY
+                if (Actor.Y < _core.Display.NatrualScreenBounds.Y + _core.Display.NatrualScreenBounds.Height - Settings.InfiniteScrollWallY
                     && Actor.Velocity.Angle.Y < 0)
                 {
-                    displacementVector.Y += Actor.Velocity.Angle.Y * forwardThrust;
+                    displacementVector.Y += Actor.Velocity.Angle.Y * thrustVector;
                 }
 
                 //Close to the left wall and travelling in that direction.
-                if (Actor.X > _core.Display.NatrualScreenBounds.X + _core.Settings.InfiniteScrollWallX
+                if (Actor.X > _core.Display.NatrualScreenBounds.X + Settings.InfiniteScrollWallX
                     && Actor.Velocity.Angle.X > 0)
                 {
-                    displacementVector.X += Actor.Velocity.Angle.X * forwardThrust;
+                    displacementVector.X += Actor.Velocity.Angle.X * thrustVector;
                 }
 
                 //Close to the top wall and travelling in that direction.
-                if (Actor.Y > _core.Display.NatrualScreenBounds.Y + _core.Settings.InfiniteScrollWallY
+                if (Actor.Y > _core.Display.NatrualScreenBounds.Y + Settings.InfiniteScrollWallY
                     && Actor.Velocity.Angle.Y > 0)
                 {
-                    displacementVector.Y += Actor.Velocity.Angle.Y * forwardThrust;
+                    displacementVector.Y += Actor.Velocity.Angle.Y * thrustVector;
                 }
 
                 if (Actor.Velocity.BoostPercentage > 0)
@@ -232,7 +243,7 @@ namespace HG.TickHandlers
                     Actor.ShipEngineBoostSound.Fade();
                 }
 
-                if (Actor.Velocity.ThrottlePercentage > _core.Settings.MinPlayerThrust)
+                if (Actor.Velocity.ThrottlePercentage > Settings.MinPlayerThrust)
                 {
                     Actor.ShipEngineRoarSound.Play();
                 }
@@ -261,6 +272,15 @@ namespace HG.TickHandlers
             _core.Display.CurrentQuadrant = _core.Display.GetQuadrant(
                 Actor.X + _core.Display.BackgroundOffset.X,
                 Actor.Y + _core.Display.BackgroundOffset.Y);
+
+            if (Actor.Velocity.RecoilAmount > 0)
+            {
+                Actor.Velocity.RecoilAmount -= (Actor.Velocity.RecoilAmount * 0.01);
+                if (Actor.Velocity.RecoilAmount < 0.01)
+                {
+                    Actor.Velocity.RecoilAmount = 0;
+                }
+            }
 
             Actor.RenewableResources.RenewAllResources();
 
