@@ -1,6 +1,8 @@
 ﻿using HG.Types;
 using HG.Types.Geometry;
 using HG.Utility;
+using HG.Utility.ExtensionMethods;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -26,14 +28,19 @@ namespace HG.Engine.Controllers
         /// The scaling factor to apply based on the current player boost.
         public double BoostFrameScaleFactor { get; set; }
 
-        /// <summary>
-        /// The number of pixles to remove from the length and width to perform the scaling at the current speed.
-        /// </summary>
-        /// <returns></returns>
-        public int SpeedOrientedFrameScalingSubtractionX() => (int)(OverdrawSize.Width / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0));
-        public int SpeedOrientedFrameScalingSubtractionY() => (int)(OverdrawSize.Height / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0));
-        public double SpeedOrientedFrameScalingFactor() =>
-            1 - OverdrawSize.Width / 2.0 * ((ThrottleFrameScaleFactor + BoostFrameScaleFactor) / 100.0) / _core.Display.OverdrawSize.Width / 2.0;
+        public double SpeedOrientedFrameScalingFactor()
+        {
+            double weightedThrottlePercent = (
+                    (_core.Player.Actor.Velocity.ThrottlePercentage * 0.60) //n-percent of the zoom is throttle.
+                    + (_core.Player.Actor.Velocity.BoostPercentage * 0.40)  //n-percent of the zoom is boost.
+                ).Box(0, 1);
+
+            double remainingRatioZoom = (1 - BaseDrawScale);
+            double debugFactor = remainingRatioZoom * weightedThrottlePercent;
+            return BaseDrawScale + debugFactor;
+        }
+
+        public double BaseDrawScale => (100.0 / Settings.OverdrawScale) / 100.0;
 
         /// <summary>
         /// The number of extra pixles to draw beyond the NatrualScreenSize.
@@ -79,20 +86,33 @@ namespace HG.Engine.Controllers
         {
             get
             {
-                int scaleSubtractionX = SpeedOrientedFrameScalingSubtractionX();
-                int scaleSubtractionY = SpeedOrientedFrameScalingSubtractionY();
-                return new RectangleF(OverdrawSize.Width / 2.0f - scaleSubtractionX, OverdrawSize.Height / 2.0f - scaleSubtractionY,
-                        NatrualScreenSize.Width + scaleSubtractionX * 2.0f, NatrualScreenSize.Height + scaleSubtractionY * 2.0f);
-            }
-        }
+                var scale = SpeedOrientedFrameScalingFactor();
 
-        public Size CurrentScreenSize
-        {
-            get
-            {
-                int scaleSubtractionX = SpeedOrientedFrameScalingSubtractionX();
-                int scaleSubtractionY = SpeedOrientedFrameScalingSubtractionY();
-                return new Size(NatrualScreenSize.Width + scaleSubtractionX * 2, NatrualScreenSize.Height + scaleSubtractionY * 2);
+                if (scale < -1 || scale > 1)
+                {
+                    throw new ArgumentException("Scale must be in the range [-1, 1].");
+                }
+
+                float centerX = TotalCanvasSize.Width * 0.5f;
+                float centerY = TotalCanvasSize.Height * 0.5f;
+
+                float smallerWidth = (float)(TotalCanvasSize.Width * scale);
+                float smallerHeight = (float)(TotalCanvasSize.Height * scale);
+
+                float left = centerX - (smallerWidth * 0.5f);
+                float top = centerY - (smallerHeight * 0.5f);
+                float right = smallerWidth;
+                float bottom = smallerHeight;
+
+                if (scale >= 0)
+                {
+                    return new RectangleF(left, top, right, bottom);
+                }
+                else
+                {
+                    //TODO: This is untested
+                    return new RectangleF(right, bottom, left, top);
+                }
             }
         }
 

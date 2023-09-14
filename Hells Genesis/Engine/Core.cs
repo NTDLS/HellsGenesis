@@ -89,7 +89,14 @@ namespace HG.Engine
                 Actors.RenderPreScaling(DirectX.IntermediateRenderTarget);
                 DirectX.IntermediateRenderTarget.EndDraw();
 
-                DirectX.ApplyScaling();
+                if (Settings.AutoZoomWhenMoving)
+                {
+                    DirectX.ApplyScaling((float)Display.SpeedOrientedFrameScalingFactor());
+                }
+                else
+                {
+                    DirectX.ApplyScaling((float)Display.BaseDrawScale);
+                }
                 Actors.RenderPostScaling(DirectX.ScreenRenderTarget);
 
                 DirectX.ScreenRenderTarget.EndDraw();

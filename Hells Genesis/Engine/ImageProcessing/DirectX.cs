@@ -64,13 +64,9 @@ namespace HG.Engine.ImageProcessing
             ScreenRenderTarget?.Dispose();
         }
 
-        public void ApplyScaling()
+        public void ApplyScaling(float scale)
         {
-            //This is almost perfect. figure out why we blow up if we remove the ".Box(-1, 1)".
-            var scale = ((float)GlobalScale / 100.0f).Box(-1, 1);
-
             var sourceRect = CalculateCenterCopyRectangle(IntermediateRenderTarget.Size, scale);
-
             var destRect = new RawRectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height);
             ScreenRenderTarget.DrawBitmap(IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
         }

@@ -306,26 +306,6 @@ namespace HG.Engine.Controllers
                 //Highlight the 1:1 frame
                 _core.DirectX.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.Materials.Raw.Red, 0, 1);
             }
-
-            if (Settings.AutoZoomWhenMoving)
-            {
-                //TODO: FFS, fix all of this - its totally overcomplicated.
-                if (_core.Player.Actor != null)
-                {
-                    double baseScale = 100 / Settings.OverdrawScale;
-
-                    double weightedThrottlePercent = (
-                            (_core.Player.Actor.Velocity.ThrottlePercentage * 0.60) //n-percent of the zoom is throttle.
-                            + (_core.Player.Actor.Velocity.BoostPercentage * 0.40)  //n-percent of the zoom is boost.
-                        ).Box(0, 100);
-
-                    double remainingRatioZoom = (100 - baseScale);
-
-                    double debugFactor = (remainingRatioZoom * (weightedThrottlePercent / 100.0)) * 100;
-
-                    _core.DirectX.GlobalScale = (float)(baseScale + debugFactor);
-                }
-            }
         }
     }
 }
