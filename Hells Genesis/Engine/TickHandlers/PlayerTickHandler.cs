@@ -206,32 +206,8 @@ namespace HG.Engine.TickHandlers
                     thrustVector += Actor.Velocity.MaxBoost * Actor.Velocity.BoostPercentage;
                 }
 
-                if (Actor.X < _core.Display.NatrualScreenBounds.X + _core.Display.NatrualScreenBounds.Width - Settings.InfiniteScrollWallX
-                    && Actor.Velocity.Angle.X < 0)
-                {
-                    displacementVector.X += Actor.Velocity.Angle.X * thrustVector;
-                }
-
-                //Close to the bottom wall and travelling in that direction.
-                if (Actor.Y < _core.Display.NatrualScreenBounds.Y + _core.Display.NatrualScreenBounds.Height - Settings.InfiniteScrollWallY
-                    && Actor.Velocity.Angle.Y < 0)
-                {
-                    displacementVector.Y += Actor.Velocity.Angle.Y * thrustVector;
-                }
-
-                //Close to the left wall and travelling in that direction.
-                if (Actor.X > _core.Display.NatrualScreenBounds.X + Settings.InfiniteScrollWallX
-                    && Actor.Velocity.Angle.X > 0)
-                {
-                    displacementVector.X += Actor.Velocity.Angle.X * thrustVector;
-                }
-
-                //Close to the top wall and travelling in that direction.
-                if (Actor.Y > _core.Display.NatrualScreenBounds.Y + Settings.InfiniteScrollWallY
-                    && Actor.Velocity.Angle.Y > 0)
-                {
-                    displacementVector.Y += Actor.Velocity.Angle.Y * thrustVector;
-                }
+                displacementVector.X += Actor.Velocity.Angle.X * thrustVector;
+                displacementVector.Y += Actor.Velocity.Angle.Y * thrustVector;
 
                 if (Actor.Velocity.BoostPercentage > 0)
                 {

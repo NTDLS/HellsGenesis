@@ -24,20 +24,15 @@ namespace HG.Engine
         public static int MaxHullHealth { get; set; } = 100000;
         public static int MaxShieldPoints { get; set; } = 100000;
 
-        public static double MaxPlayerSpeed { get; set; } = 10;
-        public static double MaxPlayerBoostSpeed { get; set; } = 5;
         public static double MaxPlayerBoost { get; set; } = 10000;
         public static double PlayerBoostRebuildMin { get; set; } = 1000;
         public static double MaxRecoilPercentage { get; set; } = 0.5; //Max amount that will be substracted from the thrust percentage.
         public static double MaxRotationSpeed { get; set; } = 2;
 
-        public static int StartingPlayerHullHealth { get; set; } = 250;
-        public static int StartingPlayerShieldHealth { get; set; } = 25;
-
         public static double MinPlayerThrust { get; set; } = 0; //0.25;
 
         public static int InitialStarCount { get; set; } = 100;
-        public static int FramTargetStarCount { get; set; } = 200;
+        public static int FrameTargetStarCount { get; set; } = 200;
 
         public static int MinSpeed { get; set; } = 3;
         public static int MaxSpeed { get; set; } = 7;
@@ -49,9 +44,6 @@ namespace HG.Engine
 
         public static double BulletSceneDistanceLimit { get; set; } = 800; //The distance from the scene that a bullet can travel before it is cleaned up.
         public static double EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
-
-        public static double InfiniteScrollWallX { get; set; } = 200; //The size of the "box" where the player flies and where "infinite scrolling" begins.
-        public static double InfiniteScrollWallY { get; set; } = 200; //The size of the "box" where the player flies and where "infinite scrolling" begins.
 
         /// <summary>
         /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (2 = 2x larger than screen.).

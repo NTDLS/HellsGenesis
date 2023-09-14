@@ -14,6 +14,15 @@ namespace HG
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            using (var form = new FormStartup())
+            {
+                if (form.ShowDialog() == DialogResult.Cancel)
+                {
+                    return;
+                }
+            }
+
             Application.Run(new FormMain());
         }
     }
