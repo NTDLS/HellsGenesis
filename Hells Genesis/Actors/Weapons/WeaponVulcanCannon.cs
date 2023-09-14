@@ -21,9 +21,9 @@ namespace HG.Actors.Weapons
             RoundQuantity = 500;
             Damage = 2;
             FireDelayMilliseconds = 100;
-            AngleVariance = 1;
+            AngleVariancePercent = 1;
             Speed = 20;
-            SpeedVariance = 10;
+            SpeedVariancePercent = 10;
             RecoilAmount = 0.10;
         }
     }

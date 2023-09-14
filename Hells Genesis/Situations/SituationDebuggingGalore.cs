@@ -64,7 +64,7 @@ namespace HG.Situations
             //_core.Actors.Enemies.Create<EnemyRepulsor>();
             //_core.Actors.Enemies.Create<EnemyRepulsor>();
             //_core.Actors.Enemies.Create<EnemyPhoenix>();
-            _core.Actors.Enemies.Create<EnemyPhoenix>();
+            //_core.Actors.Enemies.Create<EnemyPhoenix>();
             //_core.Actors.Enemies.Create<EnemyPhoenix>();
             //_core.Actors.Enemies.Create<EnemyPhoenix>();
 
@@ -79,9 +79,9 @@ namespace HG.Situations
             //_core.Actors.Enemies.Create<EnemyPhoenix>();
             //_core.Actors.Enemies.Create<EnemyPhoenix>();
             //_core.Actors.Enemies.Create<EnemyPhoenix>();
-            _core.Actors.Enemies.Create<EnemyDevastator>();
-            _core.Actors.Enemies.Create<EnemyRepulsor>();
-            _core.Actors.Enemies.Create<EnemySpectre>();
+            //_core.Actors.Enemies.Create<EnemyDevastator>();
+            //_core.Actors.Enemies.Create<EnemyRepulsor>();
+            //_core.Actors.Enemies.Create<EnemySpectre>();
             //_core.Actors.Enemies.Create<EnemyDevastator>();
             //_core.Actors.Enemies.Create<EnemyDevastator>();
         }

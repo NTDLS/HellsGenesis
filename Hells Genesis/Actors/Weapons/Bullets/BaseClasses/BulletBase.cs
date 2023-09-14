@@ -7,6 +7,8 @@ using HG.Types;
 using HG.Types.Geometry;
 using HG.Utility;
 using System;
+using System.Security.Cryptography;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HG.Actors.Weapons.Bullets.BaseClasses
 {
@@ -29,31 +31,30 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             LockedTarget = lockedTarget;
             Velocity.ThrottlePercentage = 1.0;
 
-            RadarDotSize = new HgPoint(2, 2);
+            RadarDotSize = new HgPoint(1, 1);
 
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
-
-            if (weapon.AngleVariance != null)
+            if (weapon.AngleVariancePercent > 0)
             {
-                headingDegrees = firedFrom.Velocity.Angle.Degrees + (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * (double)weapon.AngleVariance);
+                var randomNumber = HgRandom.RandomNumber(0, weapon.AngleVariancePercent);
+                var variance = (randomNumber / 100) * firedFrom.Velocity.Angle.Degrees;
+                headingDegrees += (HgRandom.FlipCoin() ? 1 : -1) * variance;
             }
 
-            if (firedFrom is EnemyBase)
+            double initialSpeed = weapon.Speed;
+            if (Weapon.SpeedVariancePercent > 0)
             {
-                headingDegrees = firedFrom.Velocity.Angle.Degrees + (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * 2);
+                var randomNumber = HgRandom.RandomNumber(0, weapon.SpeedVariancePercent);
+                var variance = (randomNumber / 100) * weapon.Speed;
+                initialSpeed += (HgRandom.FlipCoin() ? 1 : -1) * variance;
             }
 
             var initialVelocity = new HgVelocity()
             {
                 Angle = new HgAngle(headingDegrees),
-                MaxSpeed = weapon.Speed,
+                MaxSpeed = initialSpeed,
                 ThrottlePercentage = 1.0
             };
-
-            if (Weapon.SpeedVariance != null)
-            {
-                initialVelocity.MaxSpeed += (HgRandom.FlipCoin() ? 1 : -1) * (HgRandom.Random.NextDouble() * (double)weapon.SpeedVariance);
-            }
 
             Location = firedFrom.Location + (xyOffset ?? HgPoint.Zero);
 
