@@ -54,7 +54,7 @@ namespace HG.Actors.Enemies.Bosses
 
         public override void AfterCreate()
         {
-            _turret = Attach(_imagesPath + "Devastator.Gun.Turret.png", true, 3);
+            _turret = Attach(_imagesPath + "Gun.Turret.png", true, 3);
             base.AfterCreate();
         }
 

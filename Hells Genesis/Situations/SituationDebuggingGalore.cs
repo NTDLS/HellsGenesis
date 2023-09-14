@@ -1,4 +1,5 @@
 ﻿using HG.Actors.Enemies.BaseClasses;
+using HG.Actors.Enemies.Bosses;
 using HG.Actors.Enemies.Peons;
 using HG.Engine;
 using HG.Situations.BaseClasses;
@@ -68,7 +69,7 @@ namespace HG.Situations
             //_core.Actors.Enemies.Create<EnemyPhoenix>();
 
             //_core.Actors.Debugs.CreateAtCenterScreen();
-            //_core.Actors.Enemies.Create<EnemyDebug>();
+            _core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyDebug>();
             //_core.Actors.Enemies.Create<EnemyDebug>();
@@ -78,7 +79,9 @@ namespace HG.Situations
             //_core.Actors.Enemies.Create<EnemyPhoenix>();
             //_core.Actors.Enemies.Create<EnemyPhoenix>();
             //_core.Actors.Enemies.Create<EnemyPhoenix>();
-            //_core.Actors.Enemies.Create<EnemyDevastator>();
+            _core.Actors.Enemies.Create<EnemyDevastator>();
+            _core.Actors.Enemies.Create<EnemyRepulsor>();
+            _core.Actors.Enemies.Create<EnemySpectre>();
             //_core.Actors.Enemies.Create<EnemyDevastator>();
             //_core.Actors.Enemies.Create<EnemyDevastator>();
         }
