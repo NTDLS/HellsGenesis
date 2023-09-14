@@ -22,7 +22,7 @@ namespace HG.Actors.Weapons.BaseClasses
         /// RecoilAmount is expressed in decimal percentage of thrust.
         /// </summary>
         public double RecoilAmount { get; set; } = 0;
-        public double AngleVariancePercent { get; set; } = 0;
+        public double AngleVarianceDegrees { get; set; } = 0;
         public double SpeedVariancePercent { get; set; } = 0;
         public string Name { get; private set; }
         public int Speed { get; set; } = 25;

@@ -32,11 +32,10 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             RadarDotSize = new HgPoint(1, 1);
 
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
-            if (weapon.AngleVariancePercent > 0)
+            if (weapon.AngleVarianceDegrees > 0)
             {
-                var randomNumber = HgRandom.RandomNumber(0, weapon.AngleVariancePercent * 100.0) / 100.0;
-                var variance = randomNumber * firedFrom.Velocity.Angle.Degrees;
-                headingDegrees += (HgRandom.FlipCoin() ? 1 : -1) * variance;
+                var randomNumber = HgRandom.RandomNumber(0, weapon.AngleVarianceDegrees * 100.0) / 100.0;
+                headingDegrees += (HgRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 
             double initialSpeed = weapon.Speed;

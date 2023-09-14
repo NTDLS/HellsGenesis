@@ -24,7 +24,7 @@ namespace HG.Actors.Weapons
             Damage = 2;
             FireDelayMilliseconds = 150;
             Speed = 18;
-            AngleVariancePercent = 0.01;
+            AngleVarianceDegrees = 0.5;
             SpeedVariancePercent = 0.05;
             RecoilAmount = 0.25;
         }

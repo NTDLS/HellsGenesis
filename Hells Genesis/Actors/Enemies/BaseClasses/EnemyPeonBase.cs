@@ -27,28 +27,21 @@ namespace HG.Actors.Enemies.BaseClasses
                 DeleteActorAfterPlay = false,
                 ReplayDelay = new TimeSpan(0)
             };
-            ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode);
 
+            ThrustAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode);
             ThrustAnimation.Reset();
             _core.Actors.Animations.InsertAt(ThrustAnimation, this);
 
-            var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint(20, 20));
-            ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-            ThrustAnimation.X = X + pointRight.X;
-            ThrustAnimation.Y = Y + pointRight.Y;
-
             BoostAnimation = new ActorAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode);
-
             BoostAnimation.Reset();
             _core.Actors.Animations.InsertAt(BoostAnimation, this);
 
-            pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new HgPoint(20, 20));
-            BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-            BoostAnimation.X = X + pointRight.X;
-            BoostAnimation.Y = Y + pointRight.Y;
+            UpdateThrustAnimationPositions();
         }
 
-        public override void PositionChanged()
+        public override void PositionChanged() => UpdateThrustAnimationPositions();
+
+        private void UpdateThrustAnimationPositions()
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
