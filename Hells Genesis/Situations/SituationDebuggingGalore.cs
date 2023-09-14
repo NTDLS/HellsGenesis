@@ -44,7 +44,7 @@ namespace HG.Situations
                 }
 
                 //int enemyCount = Utility.Random.Next(CurrentWave + 1, CurrentWave + 5);
-                int enemyCount = 5;
+                int enemyCount = 1;
 
                 for (int i = 0; i < enemyCount; i++)
                 {

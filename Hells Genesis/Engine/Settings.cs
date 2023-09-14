@@ -8,7 +8,7 @@ namespace HG.Engine
     internal static class Settings
     {
         #region Debug settings.
-        public static bool HighlightNatrualBounds { get; set; } = true;
+        public static bool HighlightNatrualBounds { get; set; } = false;
         public static bool HighlightAllActors { get; set; } = false;
         #endregion
 
@@ -26,7 +26,7 @@ namespace HG.Engine
 
         public static double MaxPlayerSpeed { get; set; } = 10;
         public static double MaxPlayerBoostSpeed { get; set; } = 5;
-        public static double MaxPlayerBoost { get; set; } = 5000;
+        public static double MaxPlayerBoost { get; set; } = 10000;
         public static double PlayerBoostRebuildMin { get; set; } = 1000;
         public static double MaxRecoilPercentage { get; set; } = 0.5; //Max amount that will be substracted from the thrust percentage.
         public static double MaxRotationSpeed { get; set; } = 2;
@@ -45,7 +45,7 @@ namespace HG.Engine
         public static int MinEnemyHealth { get; set; } = 2;
         public static int MaxEnemyHealth { get; set; } = 20;
 
-        public static double FrameLimiter { get; set; } = 100; //~100.0 seems to be a good rate.
+        public static double FrameLimiter { get; set; } = 120; //~120.0 seems to be a good rate. 2 frames per second?
 
         public static double BulletSceneDistanceLimit { get; set; } = 800; //The distance from the scene that a bullet can travel before it is cleaned up.
         public static double EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
@@ -56,7 +56,7 @@ namespace HG.Engine
         /// <summary>
         /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (2 = 2x larger than screen.).
         /// </summary>
-        public static double OverdrawScale { get; set; } = 1.2;
+        public static double OverdrawScale { get; set; } = 1.5;
 
         public static InterpolationMode GraphicsScalingMode { get; set; } = InterpolationMode.NearestNeighbor;
     }
