@@ -28,6 +28,7 @@ namespace HG.Actors.Weapons
             Damage = 5;
             FireDelayMilliseconds = 500;
             Speed = 11;
+            SpeedVariancePercent = 0.10;
 
             CanLockOn = true;
             MinLockDistance = 100;

@@ -7,8 +7,6 @@ using HG.Types;
 using HG.Types.Geometry;
 using HG.Utility;
 using System;
-using System.Security.Cryptography;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HG.Actors.Weapons.Bullets.BaseClasses
 {
@@ -36,16 +34,16 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
             if (weapon.AngleVariancePercent > 0)
             {
-                var randomNumber = HgRandom.RandomNumber(0, weapon.AngleVariancePercent);
-                var variance = (randomNumber / 100) * firedFrom.Velocity.Angle.Degrees;
+                var randomNumber = HgRandom.RandomNumber(0, weapon.AngleVariancePercent * 100.0) / 100.0;
+                var variance = randomNumber * firedFrom.Velocity.Angle.Degrees;
                 headingDegrees += (HgRandom.FlipCoin() ? 1 : -1) * variance;
             }
 
             double initialSpeed = weapon.Speed;
             if (Weapon.SpeedVariancePercent > 0)
             {
-                var randomNumber = HgRandom.RandomNumber(0, weapon.SpeedVariancePercent);
-                var variance = (randomNumber / 100) * weapon.Speed;
+                var randomNumber = HgRandom.RandomNumber(0, weapon.SpeedVariancePercent * 100.0) / 100.0;
+                var variance = randomNumber * weapon.Speed;
                 initialSpeed += (HgRandom.FlipCoin() ? 1 : -1) * variance;
             }
 

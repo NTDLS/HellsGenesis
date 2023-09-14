@@ -111,12 +111,17 @@ namespace HG.Actors.Weapons.BaseClasses
                 _fireSound.Play();
                 _core.Actors.Bullets.Create(this, _owner);
 
-                _owner.Velocity.RecoilPercentage += RecoilAmount;
+                ApplyRecoil();
 
                 return true;
             }
 
             return false;
+        }
+
+        public void ApplyRecoil()
+        {
+            _owner.Velocity.RecoilPercentage += RecoilAmount;
         }
 
         public virtual void Hit()

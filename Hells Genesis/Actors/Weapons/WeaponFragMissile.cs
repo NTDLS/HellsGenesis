@@ -29,6 +29,7 @@ namespace HG.Actors.Weapons
             Damage = 10;
             FireDelayMilliseconds = 250;
             Speed = 11;
+            SpeedVariancePercent = 0.10;
 
             CanLockOn = false;
             ExplodesOnImpact = true;

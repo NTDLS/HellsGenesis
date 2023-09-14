@@ -24,9 +24,10 @@ namespace HG.Actors.Weapons
             RoundQuantity = 500;
             Damage = 1;
             FireDelayMilliseconds = 25;
-            AngleVariancePercent = 10;
             Speed = 15;
-            SpeedVariancePercent = 10;
+            AngleVariancePercent = 0.10;
+            SpeedVariancePercent = 0.10;
+            RecoilAmount = 0.25;
         }
 
         public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint xyOffset = null)

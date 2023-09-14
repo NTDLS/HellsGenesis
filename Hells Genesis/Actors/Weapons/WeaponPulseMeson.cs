@@ -27,6 +27,14 @@ namespace HG.Actors.Weapons
             RoundQuantity = 500;
             Damage = 25;
             FireDelayMilliseconds = 1000;
+
+            RoundQuantity = 500;
+            Damage = 25;
+            FireDelayMilliseconds = 1000;
+            Speed = 25;
+            AngleVariancePercent = 0.00;
+            SpeedVariancePercent = 0.00;
+            RecoilAmount = 0.65;
         }
 
         public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint xyOffset = null)
@@ -53,6 +61,8 @@ namespace HG.Actors.Weapons
                 }
 
                 _toggle = !_toggle;
+
+                ApplyRecoil();
 
                 return true;
             }
