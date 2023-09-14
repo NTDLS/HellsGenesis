@@ -6,6 +6,7 @@ using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
 using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -66,19 +67,41 @@ namespace HG.Engine.ImageProcessing
 
         public void ApplyScaling()
         {
-            GlobalScale = GlobalScale.Box(0, 100);
+            //This is almost perfect. figure out why we blow up if we remove the ".Box(-1, 1)".
+            var scale = ((float)GlobalScale / 100.0f).Box(-1, 1);
 
-            double widthScale = _core.Display.OverdrawSize.Width * (GlobalScale / 100.0f);
-            double heightScale = _core.Display.OverdrawSize.Height * (GlobalScale / 100.0f);
-
-            // Define the source rectangle to crop from intermediateRenderTarget (assuming you want to crop from the center)
-            RawRectangleF sourceRect = new RawRectangleF(
-                (float)widthScale, (float)heightScale,
-                (float)(IntermediateRenderTarget.Size.Width - widthScale),
-                (float)(IntermediateRenderTarget.Size.Height - heightScale));
+            var sourceRect = CalculateCenterCopyRectangle(IntermediateRenderTarget.Size, scale);
 
             var destRect = new RawRectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height);
             ScreenRenderTarget.DrawBitmap(IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
+        }
+
+        public static RawRectangleF CalculateCenterCopyRectangle(Size2F largerSize, float percentage)
+        {
+            if (percentage < -1 || percentage > 1)
+            {
+                throw new ArgumentException("Percentage must be in the range [-1, 1].");
+            }
+
+            float centerX = largerSize.Width * 0.5f;
+            float centerY = largerSize.Height * 0.5f;
+
+            float smallerWidth = largerSize.Width * percentage;
+            float smallerHeight = largerSize.Height * percentage;
+
+            float left = centerX - (smallerWidth * 0.5f);
+            float top = centerY - (smallerHeight * 0.5f);
+            float right = left + smallerWidth;
+            float bottom = top + smallerHeight;
+
+            if (percentage >= 0)
+            {
+                return new RawRectangleF(left, top, right, bottom);
+            }
+            else
+            {
+                return new RawRectangleF(right, bottom, left, top);
+            }
         }
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(string path)

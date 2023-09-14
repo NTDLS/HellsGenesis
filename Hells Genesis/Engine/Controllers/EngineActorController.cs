@@ -312,26 +312,18 @@ namespace HG.Engine.Controllers
                 //TODO: FFS, fix all of this - its totally overcomplicated.
                 if (_core.Player.Actor != null)
                 {
-                    //Scale the screen based on the player throttle.
-                    if (_core.Player.Actor.Velocity.ThrottlePercentage > 0.5)
-                        _core.Display.ThrottleFrameScaleFactor += 0.5;
-                    else if (_core.Player.Actor.Velocity.ThrottlePercentage < 1)
-                        _core.Display.ThrottleFrameScaleFactor -= 0.5;
-                    _core.Display.ThrottleFrameScaleFactor = _core.Display.ThrottleFrameScaleFactor.Box(0, 75);
-
-                    //Scale the screen based on the player boost.
-                    if (_core.Player.Actor.Velocity.BoostPercentage > 0.5)
-                        _core.Display.BoostFrameScaleFactor += 0.25;
-                    else if (_core.Player.Actor.Velocity.BoostPercentage < 1)
-                        _core.Display.BoostFrameScaleFactor -= 0.25;
-                    _core.Display.BoostFrameScaleFactor = _core.Display.BoostFrameScaleFactor.Box(0, 25);
-
-
                     double baseScale = 100 / Settings.OverdrawScale;
-                    double reduction = baseScale / 100
-                        * (_core.Display.ThrottleFrameScaleFactor + _core.Display.BoostFrameScaleFactor).Box(0, 100);
 
-                    _core.DirectX.GlobalScale = (float)(baseScale - reduction);
+                    double weightedThrottlePercent = (
+                            (_core.Player.Actor.Velocity.ThrottlePercentage * 0.60) //n-percent of the zoom is throttle.
+                            + (_core.Player.Actor.Velocity.BoostPercentage * 0.40)  //n-percent of the zoom is boost.
+                        ).Box(0, 100);
+
+                    double remainingRatioZoom = (100 - baseScale);
+
+                    double debugFactor = (remainingRatioZoom * (weightedThrottlePercent / 100.0)) * 100;
+
+                    _core.DirectX.GlobalScale = (float)(baseScale + debugFactor);
                 }
             }
         }

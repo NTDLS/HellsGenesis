@@ -8,7 +8,7 @@ namespace HG.Engine
     internal static class Settings
     {
         #region Debug settings.
-        public static bool HighlightNatrualBounds { get; set; } = false;
+        public static bool HighlightNatrualBounds { get; set; } = true;
         public static bool HighlightAllActors { get; set; } = false;
         #endregion
 
@@ -56,7 +56,7 @@ namespace HG.Engine
         /// <summary>
         /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (2 = 2x larger than screen.).
         /// </summary>
-        public static double OverdrawScale { get; set; } = 2;
+        public static double OverdrawScale { get; set; } = 1.2;
 
         public static InterpolationMode GraphicsScalingMode { get; set; } = InterpolationMode.NearestNeighbor;
     }

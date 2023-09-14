@@ -74,7 +74,7 @@ namespace HG.Situations
         private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
         {
             HgPoint baseLocation = _core.Display.RandomOffScreenLocation();
-            CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave * 2);
+            CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave * 5);
             _core.Audio.RadarBlipsSound.Play();
             waitingOnPopulation = false;
         }
