@@ -1,5 +1,4 @@
 ﻿using HG.Utility;
-using HG.Utility.ExtensionMethods;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DXGI;

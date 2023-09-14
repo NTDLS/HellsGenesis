@@ -62,10 +62,10 @@ namespace HG.Situations
             //_core.Actors.Enemies.Create<EnemyRepulsor>();
             //_core.Actors.Enemies.Create<EnemyRepulsor>();
             //_core.Actors.Enemies.Create<EnemyRepulsor>();
-            //_core.Actors.Enemies.Create<EnemyPhoenix>();
-            //_core.Actors.Enemies.Create<EnemyPhoenix>();
-            //_core.Actors.Enemies.Create<EnemyPhoenix>();
-            //_core.Actors.Enemies.Create<EnemyPhoenix>();
+            _core.Actors.Enemies.Create<EnemyPhoenix>();
+            _core.Actors.Enemies.Create<EnemyPhoenix>();
+            _core.Actors.Enemies.Create<EnemyPhoenix>();
+            _core.Actors.Enemies.Create<EnemyPhoenix>();
 
             //_core.Actors.Debugs.CreateAtCenterScreen();
             _core.Actors.Enemies.Create<EnemyDebug>();

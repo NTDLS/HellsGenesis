@@ -26,7 +26,7 @@ namespace HG.Engine.Controllers
             {
                 if (_collection.TryGetValue(key, out var value))
                 {
-                    return value as DniNeuralNetwork;
+                    return (value as DniNeuralNetwork).Clone();
                 }
 
                 var json = _core.Assets.GetText(assetRelativePath);
@@ -34,7 +34,7 @@ namespace HG.Engine.Controllers
                 {
                     var network = DniNeuralNetwork.LoadFromText(json);
                     _collection.Add(key, network);
-                    return network;
+                    return network.Clone();
                 }
             }
 

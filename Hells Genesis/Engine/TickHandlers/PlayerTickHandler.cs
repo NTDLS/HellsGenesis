@@ -115,7 +115,7 @@ namespace HG.Engine.TickHandlers
                     if (Actor.Velocity.BoostPercentage > Settings.MinPlayerThrust)
                     {
                         Actor.Velocity.BoostPercentage -= Settings.PlayerThrustRampDown;
-                        if (Actor.Velocity.BoostPercentage < 0.1)
+                        if (Actor.Velocity.BoostPercentage < 0.01)
                         {
                             Actor.Velocity.BoostPercentage = 0;
                         }
@@ -159,7 +159,7 @@ namespace HG.Engine.TickHandlers
 
                         Actor.Velocity.ThrottlePercentage -= thrustToRemove;
 
-                        if (Actor.Velocity.ThrottlePercentage < 0.1)
+                        if (Actor.Velocity.ThrottlePercentage < 0.01)
                         {
                             //Dont overshoot the stop.
                             Actor.Velocity.ThrottlePercentage = 0;
@@ -196,7 +196,7 @@ namespace HG.Engine.TickHandlers
 
                 if (Actor.ThrustAnimation != null)
                 {
-                    Actor.ThrustAnimation.Visable = Actor.Velocity.ThrottlePercentage > 0;
+                    Actor.ThrustAnimation.Visable = _core.Input.IsKeyPressed(HgPlayerKey.Forward);
                 }
 
                 var thrustVector = Actor.Velocity.MaxSpeed * (Actor.Velocity.ThrottlePercentage + -Actor.Velocity.RecoilPercentage);

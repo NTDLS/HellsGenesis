@@ -6,6 +6,7 @@ using HG.Types.Geometry;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using System;
+using System.Diagnostics;
 
 namespace HG.AI.Logistics
 {
@@ -224,7 +225,7 @@ namespace HG.AI.Logistics
 
             if (Network == null)
             {
-                var newNetwork = new DniNeuralNetwork
+                Network = new DniNeuralNetwork
                 {
                     LearningRate = 0.01
                 };
@@ -232,17 +233,17 @@ namespace HG.AI.Logistics
                 #region New neural network and training.
 
                 //Vision inputs.
-                newNetwork.Layers.AddInput(ActivationType.LeakyReLU,
+                Network.Layers.AddInput(ActivationType.LeakyReLU,
                     new object[] {
                         AIInputs.DistanceFromObservedObject,
                         AIInputs.AngleToObservedObjectIn6thRadians
                     });
 
                 //Where the magic happens.
-                newNetwork.Layers.AddIntermediate(ActivationType.Sigmoid, 8);
+                Network.Layers.AddIntermediate(ActivationType.Sigmoid, 8);
 
                 //Decision outputs
-                newNetwork.Layers.AddOutput(
+                Network.Layers.AddOutput(
                     new object[] {
                         AIOutputs.TransitionToObservedObject,
                         AIOutputs.TransitionFromObservedObject,
@@ -252,32 +253,32 @@ namespace HG.AI.Logistics
                 for (int epoch = 0; epoch < 5000; epoch++)
                 {
                     //Very close to observed object, get away.
-                    newNetwork.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0, 1, 1));
-                    newNetwork.BackPropagate(TrainingScenerio(0, -1), TrainingDecision(0, 1, 1));
-                    newNetwork.BackPropagate(TrainingScenerio(0, 1), TrainingDecision(0, 1, 1));
-                    newNetwork.BackPropagate(TrainingScenerio(0, 0.5), TrainingDecision(0, 1, 1));
-                    newNetwork.BackPropagate(TrainingScenerio(0, -0.5), TrainingDecision(0, 1, 1));
+                    Network.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0, 1, 1));
+                    Network.BackPropagate(TrainingScenerio(0, -1), TrainingDecision(0, 1, 1));
+                    Network.BackPropagate(TrainingScenerio(0, 1), TrainingDecision(0, 1, 1));
+                    Network.BackPropagate(TrainingScenerio(0, 0.5), TrainingDecision(0, 1, 1));
+                    Network.BackPropagate(TrainingScenerio(0, -0.5), TrainingDecision(0, 1, 1));
 
                     //Pretty close to observed object, get away.
-                    newNetwork.BackPropagate(TrainingScenerio(0.25, 0), TrainingDecision(0, 1, 0.6));
-                    newNetwork.BackPropagate(TrainingScenerio(0.25, -1), TrainingDecision(0, 1, 0.6));
-                    newNetwork.BackPropagate(TrainingScenerio(0.25, 1), TrainingDecision(0, 1, 0.6));
-                    newNetwork.BackPropagate(TrainingScenerio(0.25, 0.5), TrainingDecision(0, 1, 0.6));
-                    newNetwork.BackPropagate(TrainingScenerio(0.25, -0.5), TrainingDecision(0, 1, 0.6));
+                    Network.BackPropagate(TrainingScenerio(0.25, 0), TrainingDecision(0, 1, 0.6));
+                    Network.BackPropagate(TrainingScenerio(0.25, -1), TrainingDecision(0, 1, 0.6));
+                    Network.BackPropagate(TrainingScenerio(0.25, 1), TrainingDecision(0, 1, 0.6));
+                    Network.BackPropagate(TrainingScenerio(0.25, 0.5), TrainingDecision(0, 1, 0.6));
+                    Network.BackPropagate(TrainingScenerio(0.25, -0.5), TrainingDecision(0, 1, 0.6));
 
                     //Very far from observed object, get closer.
-                    newNetwork.BackPropagate(TrainingScenerio(1, 0), TrainingDecision(2, 0, 0));
-                    newNetwork.BackPropagate(TrainingScenerio(1, -1), TrainingDecision(2, 0, 0));
-                    newNetwork.BackPropagate(TrainingScenerio(1, 1), TrainingDecision(2, 0, 0));
-                    newNetwork.BackPropagate(TrainingScenerio(1, 0.5), TrainingDecision(2, 0, 0));
-                    newNetwork.BackPropagate(TrainingScenerio(1, -0.5), TrainingDecision(2, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(1, 0), TrainingDecision(2, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(1, -1), TrainingDecision(2, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(1, 1), TrainingDecision(2, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(1, 0.5), TrainingDecision(2, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(1, -0.5), TrainingDecision(2, 0, 0));
 
                     //Pretty far from observed object, get closer.
-                    newNetwork.BackPropagate(TrainingScenerio(0.75, 0), TrainingDecision(1, 0, 0));
-                    newNetwork.BackPropagate(TrainingScenerio(0.75, -1), TrainingDecision(1, 0, 0));
-                    newNetwork.BackPropagate(TrainingScenerio(0.75, 1), TrainingDecision(1, 0, 0));
-                    newNetwork.BackPropagate(TrainingScenerio(0.75, 0.5), TrainingDecision(1, 0, 0));
-                    newNetwork.BackPropagate(TrainingScenerio(0.75, -0.5), TrainingDecision(1, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(0.75, 0), TrainingDecision(1, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(0.75, -1), TrainingDecision(1, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(0.75, 1), TrainingDecision(1, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(0.75, 0.5), TrainingDecision(1, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(0.75, -0.5), TrainingDecision(1, 0, 0));
                 }
 
                 static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservedObject, double angleToObservedObjectIn10thRadians)
@@ -300,8 +301,7 @@ namespace HG.AI.Logistics
                 }
                 #endregion
 
-                _core.Assets.PutText(_assetPath, newNetwork.Serialize());
-                SetNeuralNetwork(); //Retry loading the network.
+                _core.Assets.PutText(_assetPath, Network.Serialize());
             }
         }
 
