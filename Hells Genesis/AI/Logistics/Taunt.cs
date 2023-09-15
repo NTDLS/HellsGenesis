@@ -61,10 +61,10 @@ namespace HG.AI.Logistics
         #region Instance parameters.
 
         private ActionState _currentAction = ActionState.None;
-        private readonly double _idealMaxDistance = 2000;
+        private readonly double _idealMaxDistance = 1000;
         private readonly double _idealMinDistance = 500;
         private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
-        private readonly int _millisecondsBetweenDecisions = 10000;
+        private readonly int _millisecondsBetweenDecisions = 2000;
         private HgNormalizedAngle _evasiveLoopTargetAngle = new();
         private HgRelativeDirection _evasiveLoopDirection;
 
