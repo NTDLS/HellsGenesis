@@ -57,7 +57,7 @@
       "ImageIndex": 1,
       "Name": "Frigate",
       "Description": "→ Nimble Interceptor ←\nA nimble interceptor, designed for hit-and-run tactics\nand lightning-fast strikes against enemy forces.",
-      "Speed": 3.0,
+      "Speed": 4.5,
       "Boost": 1.5,
       "Hull": 500,
       "Sheilds": 100,
@@ -68,6 +68,10 @@
       "SecondaryWeapons": [
         {
           "Type": "WeaponFragMissile",
+          "Rounds": 42
+        },
+        {
+          "Type": "WeaponThunderstrikeMissile",
           "Rounds": 16
         }
       ]
@@ -77,8 +81,8 @@
       "ImageIndex": 2,
       "Name": "Cruiser",
       "Description": "→ Heavy Assault Cruiser ←\nA formidable heavy assault vessel, bristling with weaponry\nand to take on any adversary in head-to-head combat.",
-      "Speed": 2.2,
-      "Boost": 1.0,
+      "Speed": 3.5,
+      "Boost": 1.5,
       "Hull": 2500,
       "Sheilds": 3000,
       "PrimaryWeapon": {
@@ -88,6 +92,10 @@
       "SecondaryWeapons": [
         {
           "Type": "WeaponFragMissile",
+          "Rounds": 42
+        },
+        {
+          "Type": "WeaponThunderstrikeMissile",
           "Rounds": 16
         }
       ]
@@ -108,7 +116,7 @@
       "SecondaryWeapons": [
         {
           "Type": "WeaponGuidedFragMissile",
-          "Rounds": 16
+          "Rounds": 42
         }
       ]
     },
@@ -128,7 +136,7 @@
       "SecondaryWeapons": [
         {
           "Type": "WeaponFragMissile",
-          "Rounds": 16
+          "Rounds": 42
         },
         {
           "Type": "WeaponGuidedFragMissile",

@@ -22,10 +22,8 @@ namespace HG.Actors.Weapons
         public WeaponFragMissile(Core core)
             : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-
         private void InitializeWeapon()
         {
-            RoundQuantity = 500;
             Damage = 10;
             FireDelayMilliseconds = 250;
             Speed = 11;

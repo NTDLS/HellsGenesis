@@ -8,38 +8,34 @@ using HG.Utility;
 
 namespace HG.Actors.Weapons
 {
-    internal class WeaponGuidedFragMissile : WeaponBase
+    internal class WeaponThunderstrikeMissile : WeaponBase
     {
-        static new string Name { get; } = "Guided Frag Missile";
-        private const string soundPath = @"Sounds\Weapons\WeaponGuidedFragMissile.wav";
+        static new string Name { get; } = "Thunderstrike Missile";
+        private const string soundPath = @"Sounds\Weapons\WeaponThunderstrikeMissile.wav";
         private const float soundVolumne = 0.4f;
 
         private bool _toggle = false;
 
-        public WeaponGuidedFragMissile(Core core, ActorShipBase owner)
+        public WeaponThunderstrikeMissile(Core core, ActorShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponGuidedFragMissile(Core core)
+        public WeaponThunderstrikeMissile(Core core)
             : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()
         {
-            Damage = 10;
-            FireDelayMilliseconds = 1000;
-            Speed = 12;
+            Damage = 20;
+            FireDelayMilliseconds = 250;
+            Speed = 15;
             SpeedVariancePercent = 0.10;
 
-            CanLockOn = true;
-            MinLockDistance = 100;
-            MaxLockDistance = 600;
-            MaxLocks = 2;
-            MaxLockOnAngle = 40;
+            CanLockOn = false;
             ExplodesOnImpact = true;
         }
 
         public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint xyOffset = null)
         {
-            return new BulletGuidedFragMissile(_core, this, _owner, lockedTarget, xyOffset);
+            return new BulletFragMissile(_core, this, _owner, lockedTarget, xyOffset);
         }
 
         public override bool Fire()
@@ -64,27 +60,10 @@ namespace HG.Actors.Weapons
 
                     _toggle = !_toggle;
                 }
-                else
-                {
-                    foreach (var lockedOn in LockedOnObjects)
-                    {
-                        if (_toggle)
-                        {
-                            var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new HgPoint(10, 10));
-                            _core.Actors.Bullets.CreateLocked(this, _owner, lockedOn, pointRight);
-                        }
-                        else
-                        {
-                            var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new HgPoint(10, 10));
-                            _core.Actors.Bullets.CreateLocked(this, _owner, lockedOn, pointLeft);
-                        }
-                        _toggle = !_toggle;
-                    }
-                }
-
 
                 return true;
             }
+
             return false;
 
         }

@@ -6,7 +6,6 @@ using HG.Types.Geometry;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using System;
-using System.Diagnostics;
 
 namespace HG.AI.Logistics
 {
@@ -36,7 +35,8 @@ namespace HG.AI.Logistics
             TransitionToDepart,
             Approaching,
             Departing,
-            EvasiveLoop
+            EvasiveLoop,
+            Escape
         }
 
         public enum AIInputs
@@ -93,7 +93,10 @@ namespace HG.AI.Logistics
 
         private void Owner_OnHit(ActorBase sender, HgDamageType damageType, int damageAmount)
         {
-            AlterActionState(ActionState.EvasiveLoop); //If you hit me, I will take off!
+            if (sender.HullHealth <= 10)
+            {
+                AlterActionState(ActionState.EvasiveLoop);
+            }
         }
 
         private void AlterActionState(ActionState state)
@@ -120,8 +123,9 @@ namespace HG.AI.Logistics
         {
             var now = DateTime.UtcNow;
             var elapsedTimeSinceLastDecision = (now - (DateTime)_lastDecisionTime).TotalMilliseconds;
+
             //If its been awhile since we thought about anything, do some thinking.
-            if (elapsedTimeSinceLastDecision >= _millisecondsBetweenDecisions || _currentAction == ActionState.None)
+            if (elapsedTimeSinceLastDecision >= _millisecondsBetweenDecisions && _currentAction == ActionState.None)
             {
                 var decidingFactors = GatherInputs(); //Gather inputs.
                 var decisions = Network.FeedForward(decidingFactors); //Make decisions.
@@ -136,7 +140,7 @@ namespace HG.AI.Logistics
                     _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
                 }
 
-                //if (_currentAction == ActionState.None) //We're just cruising, make a decision about the next state.
+                if (_currentAction == ActionState.None) //We're just cruising, make a decision about the next state.
                 {
                     bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.99;
                     bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.99;
@@ -166,8 +170,26 @@ namespace HG.AI.Logistics
             {
                 if (_owner.RotateTo(_evasiveLoopTargetAngle.Degrees, _evasiveLoopDirection, 1, 30) == false)
                 {
-                    AlterActionState(ActionState.Departing);
+                    AlterActionState(ActionState.Escape);
                 }
+                return;
+            }
+            if (_currentAction == ActionState.Escape)
+            {
+                double distanceToPlayer = _owner.DistanceTo(_observedObject);
+                if (distanceToPlayer < 500)
+                {
+                    if (HgRandom.FlipCoin())
+                    {
+                        _owner.Velocity.Angle.Degrees++;
+                    }
+                    else
+                    {
+                        _owner.Velocity.Angle.Degrees--;
+                    }
+                }
+
+                //Just get away.
                 return;
             }
             else if (_currentAction == ActionState.TransitionToApproach)

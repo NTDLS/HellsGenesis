@@ -156,8 +156,10 @@ namespace HG.Actors.BaseClasses
                 weapon.RoundQuantity += roundQuantity;
                 _secondaryWeapons.Add(weapon);
             }
-
-            weapon.RoundQuantity += roundQuantity;
+            else
+            {
+                weapon.RoundQuantity += roundQuantity;
+            }
 
             if (SelectedSecondaryWeapon == null)//If there is no secondary weapon selected, then default to the newly added one.
             {

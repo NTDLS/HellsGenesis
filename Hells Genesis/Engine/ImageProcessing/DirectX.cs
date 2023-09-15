@@ -100,13 +100,24 @@ namespace HG.Engine.ImageProcessing
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(string path)
         {
-            using var wicFactory = new ImagingFactory();
-            using var decoder = new BitmapDecoder(wicFactory, path, DecodeOptions.CacheOnLoad);
-            using var converter = new FormatConverter(wicFactory);
+            using (var image = System.Drawing.Image.FromFile(path))
+            {
+                // Create a WIC stream from the System.Drawing.Image
+                using (var wicFactory = new ImagingFactory())
+                using (var imageStream = new MemoryStream())
+                {
+                    image.Save(imageStream, ImageFormat.Png);
+                    imageStream.Seek(0, SeekOrigin.Begin);
 
-            converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
+                    using (var decoder = new BitmapDecoder(wicFactory, imageStream, DecodeOptions.CacheOnLoad))
+                    using (var converter = new FormatConverter(wicFactory))
+                    {
+                        converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
 
-            return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
+                        return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
+                    }
+                }
+            }
         }
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(string path, int newWidth, int newHeight)

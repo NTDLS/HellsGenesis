@@ -51,15 +51,15 @@ namespace HG.Loudouts
                     Description = "→ Nimble Interceptor ←\n"
                         + "A nimble interceptor, designed for hit-and-run tactics\n"
                         + "and lightning-fast strikes against enemy forces.",
-                    Speed = 3.0,
+                    Speed = 4.5,
                     Boost = 1.5,
                     Hull = 500,
                     Sheilds = 100,
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponScattershot), 10000)
                 };
 
-                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 16));
-                //loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 500)); //I dont have a second non guided missile.
+                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
+                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
 
                 Collection.Add(loadout);
             }
@@ -71,15 +71,15 @@ namespace HG.Loudouts
                     Description = "→ Heavy Assault Cruiser ←\n"
                        + "A formidable heavy assault vessel, bristling with weaponry\n"
                        + "and to take on any adversary in head-to-head combat.",
-                    Speed = 2.2,
-                    Boost = 1.0,
+                    Speed = 3.5,
+                    Boost = 1.5,
                     Hull = 2500,
                     Sheilds = 3000,
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000)
                 };
 
-                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 16));
-                //loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 500 )); //I dont have a second non guided missile.
+                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
+                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
 
                 Collection.Add(loadout);
             }
@@ -98,7 +98,7 @@ namespace HG.Loudouts
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000)
                 };
 
-                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponGuidedFragMissile), 16));
+                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponGuidedFragMissile), 42));
 
                 Collection.Add(loadout);
             }
@@ -117,7 +117,7 @@ namespace HG.Loudouts
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 500)
                 };
 
-                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 16));
+                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponGuidedFragMissile), 10));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponPrecisionGuidedFragMissile), 6));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponScramsMissile), 4));

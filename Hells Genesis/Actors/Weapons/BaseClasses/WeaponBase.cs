@@ -26,7 +26,7 @@ namespace HG.Actors.Weapons.BaseClasses
         public double SpeedVariancePercent { get; set; } = 0;
         public string Name { get; private set; }
         public int Speed { get; set; } = 25;
-        public int RoundQuantity { get; set; } = int.MaxValue;
+        public int RoundQuantity { get; set; }
         public int RoundsFired { get; set; }
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;

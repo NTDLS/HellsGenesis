@@ -18,7 +18,6 @@ namespace HG.Actors.Weapons
 
         private void InitializeWeapon()
         {
-            RoundQuantity = 500;
             Damage = 2;
             FireDelayMilliseconds = 100;
             Speed = 20;

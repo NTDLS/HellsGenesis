@@ -26,7 +26,7 @@ namespace HG.Actors.Enemies.Peons
             SetHullHealth(HgRandom.Random.Next(Settings.MinEnemyHealth, Settings.MaxEnemyHealth));
 
             Velocity.MaxBoost = 1.5;
-            Velocity.MaxSpeed = HgRandom.Random.Next(Settings.MaxSpeed - 4, Settings.MaxSpeed - 3);
+            Velocity.MaxSpeed = HgRandom.PickOne(4, 5);
 
             SetPrimaryWeapon<WeaponScattershot>(1000);
             AddSecondaryWeapon<WeaponDualVulcanCannon>(500);

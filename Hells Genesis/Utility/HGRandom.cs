@@ -6,6 +6,25 @@ namespace HG.Utility
     {
         public static Random Random = new();
 
+        public static double PickOne(double one, double two)
+        {
+            return PickOne(new double[] { one, two });
+        }
+
+        public static double PickOne(double one, double two, double three)
+        {
+            return PickOne(new double[] { one, two, three });
+        }
+        public static double PickOne(double one, double two, double three, double four)
+        {
+            return PickOne(new double[] { one, two, three, four });
+        }
+
+        public static double PickOne(double[] values)
+        {
+            return values[RandomNumber(0, values.Length - 1)];
+        }
+
         public static bool ChanceIn(int n)
         {
             return (Random.Next(0, n * 10) % n) == n / 2;

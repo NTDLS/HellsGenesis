@@ -121,9 +121,9 @@ namespace HG.Engine.TickHandlers
                         }
                     }
 
-                    if (Actor.Velocity.AvailableBoost < Settings.MaxPlayerBoost)
+                    if (_core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) == false && Actor.Velocity.AvailableBoost < Settings.MaxPlayerBoost)
                     {
-                        Actor.Velocity.AvailableBoost = (Actor.Velocity.AvailableBoost + (1 - Actor.Velocity.BoostPercentage)).Box(0, Settings.MaxPlayerBoost);
+                        Actor.Velocity.AvailableBoost = (Actor.Velocity.AvailableBoost + 5).Box(0, Settings.MaxPlayerBoost);
 
                         if (Actor.Velocity.BoostRebuilding && Actor.Velocity.AvailableBoost >= Settings.PlayerBoostRebuildMin)
                         {
