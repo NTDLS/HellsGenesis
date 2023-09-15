@@ -28,8 +28,6 @@ namespace HG.Engine
 
         public MenuTickHandler Menus { get; private set; }
         public PlayerTickHandler Player { get; private set; }
-        public EngineDrawingCacheController DrawingCache { get; private set; }
-
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
@@ -70,7 +68,6 @@ namespace HG.Engine
             Imaging = new EngineImageController(this);
             Menus = new MenuTickHandler(this);
             Player = new PlayerTickHandler(this);
-            DrawingCache = new EngineDrawingCacheController(this);
             DirectX = new DirectX(this);
 
             LoadPrefabs();

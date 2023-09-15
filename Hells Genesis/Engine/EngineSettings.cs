@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Converters;
-using System.Drawing;
-using System.Drawing.Drawing2D;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace HG.Engine
@@ -44,7 +42,6 @@ namespace HG.Engine
         public int MaxEnemySpeed { get; set; } = 7;
 
         public double FrameLimiter { get; set; } = 120; //~120.0 seems to be a good rate. 2 frames per second?
-
         public double BulletSceneDistanceLimit { get; set; } = 800; //The distance from the scene that a bullet can travel before it is cleaned up.
         public double EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
 
@@ -52,9 +49,6 @@ namespace HG.Engine
         /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (2 = 2x larger than screen.).
         /// </summary>
         public double OverdrawScale { get; set; } = 1.5;
-
-        [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
-        public InterpolationMode GraphicsScalingMode { get; set; } = InterpolationMode.NearestNeighbor;
 
         public EngineSettings()
         {
