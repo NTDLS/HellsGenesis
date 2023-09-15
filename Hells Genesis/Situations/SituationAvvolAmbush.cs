@@ -1,8 +1,8 @@
 ﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Enemies.Peons;
 using HG.Engine;
+using HG.Engine.Types;
 using HG.Situations.BaseClasses;
-using HG.Types;
 using HG.Utility;
 using System.Collections.Generic;
 
@@ -10,7 +10,7 @@ namespace HG.Situations
 {
     internal class SituationPhoenixAmbush : SituationBase
     {
-        public SituationPhoenixAmbush(Core core)
+        public SituationPhoenixAmbush(EngineCore core)
             : base(core, "Phoenix Ambush")
         {
             TotalWaves = 5;
@@ -29,12 +29,12 @@ namespace HG.Situations
             _core.Player.Actor.AddShieldHealth(10);
         }
 
-        private void FirstShowPlayerCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             _core.Player.ResetAndShow();
         }
 
-        private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             if (_core.Actors.OfType<EnemyBase>().Count == 0)
             {
@@ -57,7 +57,7 @@ namespace HG.Situations
             }
         }
 
-        private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void AddEnemyCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             _core.Actors.Enemies.Create<EnemyPhoenix>();
         }

@@ -1,6 +1,6 @@
 ﻿using HG.Actors.Ordinary;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace HG.Menus.BaseClasses
 {
     internal class MenuBase
     {
-        protected Core _core;
+        protected EngineCore _core;
         private DateTime _lastInputHandled = DateTime.UtcNow;
 
         public List<ActorMenuItem> Items { get; private set; } = new();
@@ -25,7 +25,7 @@ namespace HG.Menus.BaseClasses
             ReadyForDeletion = true;
         }
 
-        public MenuBase(Core core)
+        public MenuBase(EngineCore core)
         {
             _core = core;
         }

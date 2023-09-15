@@ -4,7 +4,7 @@ using HG.Actors.PowerUp.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.AI;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using System;
@@ -20,7 +20,7 @@ namespace HG.Actors.Enemies.BaseClasses
         public int BountyWorth { get; private set; } = 25;
         public bool IsHostile { get; set; } = true;
 
-        public EnemyBase(Core core, int hullHealth, int bountyMultiplier)
+        public EnemyBase(EngineCore core, int hullHealth, int bountyMultiplier)
             : base(core)
         {
             Velocity.ThrottlePercentage = 1;
@@ -41,9 +41,6 @@ namespace HG.Actors.Enemies.BaseClasses
         public virtual void AfterCreate() { }
 
         public override void RotationChanged() => PositionChanged();
-
-        public static int GetGenericHP(Core core) =>
-            HgRandom.Random.Next(Settings.MinEnemyHealth, Settings.MaxEnemyHealth);
 
         public override void Explode()
         {
@@ -79,10 +76,10 @@ namespace HG.Actors.Enemies.BaseClasses
 
         public override void ApplyMotion(HgPoint displacementVector)
         {
-            if (X < -Settings.EnemySceneDistanceLimit
-                || X >= _core.Display.NatrualScreenSize.Width + Settings.EnemySceneDistanceLimit
-                || Y < -Settings.EnemySceneDistanceLimit
-                || Y >= _core.Display.NatrualScreenSize.Height + Settings.EnemySceneDistanceLimit)
+            if (X < -_core.Settings.EnemySceneDistanceLimit
+                || X >= _core.Display.NatrualScreenSize.Width + _core.Settings.EnemySceneDistanceLimit
+                || Y < -_core.Settings.EnemySceneDistanceLimit
+                || Y >= _core.Display.NatrualScreenSize.Height + _core.Settings.EnemySceneDistanceLimit)
             {
                 QueueForDelete();
                 return;
@@ -93,7 +90,7 @@ namespace HG.Actors.Enemies.BaseClasses
             {
                 if (Velocity.BoostPercentage < 1.0) //Ramp up the boost until it is at 100%
                 {
-                    Velocity.BoostPercentage += Settings.EnemyThrustRampUp;
+                    Velocity.BoostPercentage += _core.Settings.EnemyThrustRampUp;
                 }
                 Velocity.AvailableBoost -= Velocity.MaxBoost * Velocity.BoostPercentage; //Consume boost.
 
@@ -104,7 +101,7 @@ namespace HG.Actors.Enemies.BaseClasses
             }
             else if (Velocity.BoostPercentage > 0) //Ramp down the boost.
             {
-                Velocity.BoostPercentage -= Settings.EnemyThrustRampDown;
+                Velocity.BoostPercentage -= _core.Settings.EnemyThrustRampDown;
                 if (Velocity.BoostPercentage < 0)
                 {
                     Velocity.BoostPercentage = 0;

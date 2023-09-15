@@ -1,9 +1,9 @@
 ﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Enemies.Peons;
 using HG.Engine;
+using HG.Engine.Types;
+using HG.Engine.Types.Geometry;
 using HG.Situations.BaseClasses;
-using HG.Types;
-using HG.Types.Geometry;
 using HG.Utility;
 using System.Linq;
 
@@ -11,7 +11,7 @@ namespace HG.Situations
 {
     internal class SituationIrlenFormations : SituationBase
     {
-        public SituationIrlenFormations(Core core)
+        public SituationIrlenFormations(EngineCore core)
             : base(core, "Irlen Formations")
         {
             TotalWaves = 5;
@@ -29,7 +29,7 @@ namespace HG.Situations
             _core.Player.Actor.AddShieldHealth(10);
         }
 
-        private void RedirectFormationCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void RedirectFormationCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             var formationIrlens = _core.Actors.Enemies.VisibleOfType<EnemyIrlen>()
                 .Where(o => o.Mode == EnemyIrlen.AIMode.InFormation).ToList();
@@ -48,14 +48,14 @@ namespace HG.Situations
             }
         }
 
-        private void FirstShowPlayerCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             _core.Player.ResetAndShow();
         }
 
         bool waitingOnPopulation = false;
 
-        private void AdvanceWaveCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void AdvanceWaveCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             if (_core.Actors.OfType<EnemyBase>().Count == 0 && !waitingOnPopulation)
             {
@@ -71,7 +71,7 @@ namespace HG.Situations
             }
         }
 
-        private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             HgPoint baseLocation = _core.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave * 5);

@@ -10,10 +10,10 @@ namespace HG.Actors.Weapons
         private const string soundPath = @"Sounds\Weapons\WeaponVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponVulcanCannon(Core core, ActorShipBase owner)
+        public WeaponVulcanCannon(EngineCore core, ActorShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponVulcanCannon(Core core)
+        public WeaponVulcanCannon(EngineCore core)
             : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()

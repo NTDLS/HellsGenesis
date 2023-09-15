@@ -1,9 +1,9 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
+using HG.Engine.Types;
+using HG.Engine.Types.Geometry;
 using HG.Loudouts;
-using HG.Types;
-using HG.Types.Geometry;
 using HG.Utility;
 using System;
 using System.Drawing;
@@ -32,7 +32,7 @@ namespace HG.Actors.Ordinary
         public ActorAnimation ThrustAnimation { get; private set; }
         public ActorAnimation BoostAnimation { get; private set; }
 
-        public ActorPlayer(Core core, ShipLoadout loadout)
+        public ActorPlayer(EngineCore core, ShipLoadout loadout)
             : base(core)
         {
             Loadout = loadout;
@@ -85,9 +85,8 @@ namespace HG.Actors.Ordinary
 
             Velocity.Angle = new HgAngle(45);
 
-            Velocity.ThrottlePercentage = Settings.MinPlayerThrust;
-            Velocity.AvailableBoost = Settings.MaxPlayerBoost;
-            Velocity.MaxRotationSpeed = Settings.MaxRotationSpeed;
+            Velocity.ThrottlePercentage = 0;
+            Velocity.AvailableBoost = _core.Settings.MaxPlayerBoost;
 
             #region Reset loadout.
 
@@ -107,6 +106,17 @@ namespace HG.Actors.Ordinary
             #endregion
 
             SelectFirstAvailableUsableSecondaryWeapon();
+        }
+
+        public override void AddShieldHealth(int pointsToAdd)
+        {
+            if (ShieldHealth < _core.Settings.MaxShieldPoints && ShieldHealth + pointsToAdd >= _core.Settings.MaxShieldPoints)
+            {
+                //If we didnt have full shields but now we do, tell the player.
+                ShieldMaxSound.Play();
+            }
+
+            base.AddShieldHealth(pointsToAdd);
         }
 
         public override void VisibilityChanged()

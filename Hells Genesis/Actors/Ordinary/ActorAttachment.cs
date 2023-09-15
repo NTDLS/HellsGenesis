@@ -1,8 +1,8 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types;
-using HG.Types.Geometry;
+using HG.Engine.Types;
+using HG.Engine.Types.Geometry;
 using System.Drawing;
 
 namespace HG.Actors.Ordinary
@@ -11,7 +11,7 @@ namespace HG.Actors.Ordinary
     {
         public bool TakesDamage { get; set; }
 
-        public ActorAttachment(Core core, string imagePath, Size? size = null)
+        public ActorAttachment(EngineCore core, string imagePath, Size? size = null)
             : base(core)
         {
             Initialize(imagePath, size);

@@ -1,6 +1,6 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using System.IO;
 
@@ -12,7 +12,7 @@ namespace HG.Actors.Ordinary
         private readonly int _imageCount = 5;
         private readonly int selectedImageIndex = 0;
 
-        public ActorStar(Core core)
+        public ActorStar(EngineCore core)
             : base(core)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % _imageCount;

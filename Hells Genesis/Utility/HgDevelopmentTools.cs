@@ -42,7 +42,7 @@ namespace HG.Utility
         /// Tests dumping particles at a given position.
         /// </summary>
         /// <param name="core"></param>
-        public static void ParticleBlast(Core core, int particleCount)
+        public static void ParticleBlast(EngineCore core, int particleCount)
         {
             double X = core.Player.Actor.X;
             double Y = core.Player.Actor.Y;

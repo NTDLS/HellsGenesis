@@ -1,6 +1,4 @@
-﻿using HG.Controls;
-
-namespace HG
+﻿namespace HG
 {
     partial class FormStartup
     {
@@ -81,7 +79,7 @@ namespace HG
             Opacity = 0.9D;
             ShowIcon = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "FormStartup";
+            Text = "Hells Genesis";
             Load += FormStartup_Load;
             ResumeLayout(false);
         }

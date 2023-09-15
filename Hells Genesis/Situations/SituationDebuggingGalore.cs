@@ -1,15 +1,15 @@
 ﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Enemies.Peons;
 using HG.Engine;
+using HG.Engine.Types;
 using HG.Situations.BaseClasses;
-using HG.Types;
 using HG.Utility;
 
 namespace HG.Situations
 {
     internal class SituationDebuggingGalore : SituationBase
     {
-        public SituationDebuggingGalore(Core core)
+        public SituationDebuggingGalore(EngineCore core)
             : base(core, "Debugging Galore")
         {
             TotalWaves = 100;
@@ -26,13 +26,13 @@ namespace HG.Situations
             _core.Player.Actor.AddShieldHealth(10);
         }
 
-        private void FirstShowPlayerCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             _core.Player.ResetAndShow();
             _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.RandomNumber(0, 800)), AddEnemyCallback);
         }
 
-        private void AddFreshEnemiesCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             if (_core.Actors.OfType<EnemyBase>().Count == 0)
             {
@@ -56,7 +56,7 @@ namespace HG.Situations
             }
         }
 
-        private void AddEnemyCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void AddEnemyCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             //_core.Actors.Enemies.Create<EnemyRepulsor>();
             //_core.Actors.Enemies.Create<EnemyRepulsor>();

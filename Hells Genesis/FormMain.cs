@@ -1,9 +1,7 @@
-﻿#define DEBUGUI
-
-using HG.Actors.BaseClasses;
+﻿using HG.Actors.BaseClasses;
 using HG.Actors.Enemies.BaseClasses;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -16,12 +14,10 @@ namespace HG
 {
     public partial class FormMain : Form
     {
-#if DEBUGUI
         readonly List<ActorBase> highlightedActors = new();
         private readonly ToolTip _interrogationTip = new ToolTip();
-#endif
 
-        private readonly Core _core;
+        private readonly EngineCore _core;
         private readonly bool _fullScreen = false;
 
         public FormMain()
@@ -30,18 +26,25 @@ namespace HG
 
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
 
-            if (_fullScreen)
+            var settings = EngineCore.LoadSettings();
+
+            if (settings.AlwaysOnTop)
+            {
+                TopMost = true;
+            }
+
+            if (settings.FullScreen)
             {
                 FormBorderStyle = FormBorderStyle.None;
                 Width = Screen.PrimaryScreen.Bounds.Width;
                 Height = Screen.PrimaryScreen.Bounds.Height;
                 ShowInTaskbar = true;
-                //TopMost = true;
+                TopMost = true;
                 WindowState = FormWindowState.Maximized;
             }
             else
             {
-                ClientSize = new Size((int)(Screen.PrimaryScreen.Bounds.Width * 0.75), (int)(Screen.PrimaryScreen.Bounds.Height * 0.75));
+                ClientSize = settings.Resolution;
                 StartPosition = FormStartPosition.CenterScreen;
             }
 
@@ -51,7 +54,7 @@ namespace HG
             };
             Controls.Add(drawingSurface);
 
-            _core = new Core(drawingSurface);
+            _core = new EngineCore(drawingSurface);
 
             Shown += (object sender, EventArgs e) => _core.Start();
             FormClosing += (sender, e) => _core.Stop();
@@ -61,15 +64,14 @@ namespace HG
             drawingSurface.KeyDown += FormMain_KeyDown;
             drawingSurface.KeyUp += FormMain_KeyUp;
 
-#if DEBUGUI
-            drawingSurface.MouseDown += FormDirect2D_MouseDown;
-            drawingSurface.MouseMove += FormDirect2D_MouseMove;
-#endif
+            if (settings.EnableActorsInterrogation)
+            {
+                drawingSurface.MouseDown += FormDirect2D_MouseDown;
+                drawingSurface.MouseMove += FormDirect2D_MouseMove;
+            }
         }
 
         #region Debug interactions.
-
-#if DEBUGUI
         private void FormDirect2D_MouseMove(object sender, MouseEventArgs e)
         {
             double x = e.X + _core.Display.OverdrawSize.Width / 2;
@@ -238,8 +240,6 @@ namespace HG
                 }
             }
         }
-
-#endif
 
         #endregion
 

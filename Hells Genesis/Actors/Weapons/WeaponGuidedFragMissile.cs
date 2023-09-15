@@ -3,7 +3,7 @@ using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 
 namespace HG.Actors.Weapons
@@ -16,10 +16,10 @@ namespace HG.Actors.Weapons
 
         private bool _toggle = false;
 
-        public WeaponGuidedFragMissile(Core core, ActorShipBase owner)
+        public WeaponGuidedFragMissile(EngineCore core, ActorShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponGuidedFragMissile(Core core)
+        public WeaponGuidedFragMissile(EngineCore core)
             : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()

@@ -2,7 +2,7 @@
 using HG.Actors.Weapons;
 using HG.AI.Logistics;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using System;
 using System.Drawing;
@@ -15,21 +15,21 @@ namespace HG.Actors.Enemies.Peons
     /// </summary>
     internal class EnemyDebug : EnemyPeonBase
     {
+        public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
+
         private const string _assetPath = @"Graphics\Enemy\Debug\";
         private readonly int imageCount = 1;
         private readonly int selectedImageIndex = 0;
 
-        public EnemyDebug(Core core)
-            : base(core, GetGenericHP(core), bountyMultiplier)
+        public EnemyDebug(EngineCore core)
+            : base(core, hullHealth, bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            SetHullHealth(HgRandom.Random.Next(Settings.MinEnemyHealth, Settings.MaxEnemyHealth));
-
             Velocity.MaxBoost = 1.5;
-            Velocity.MaxSpeed = HgRandom.Random.Next(Settings.MaxSpeed - 4, Settings.MaxSpeed - 3);
+            Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxEnemySpeed - 4, _core.Settings.MaxEnemySpeed - 3);
 
             SetPrimaryWeapon<WeaponVulcanCannon>(1000);
             AddSecondaryWeapon<WeaponDualVulcanCannon>(500);

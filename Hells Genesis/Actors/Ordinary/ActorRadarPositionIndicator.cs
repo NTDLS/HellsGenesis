@@ -9,7 +9,7 @@ namespace HG.Actors.Ordinary
         private const string _assetPath = @"Graphics\Radar Indicator\";
         private readonly string _assetFile = "16x16.png";
 
-        public ActorRadarPositionIndicator(Core core)
+        public ActorRadarPositionIndicator(EngineCore core)
             : base(core)
         {
             Initialize(Path.Combine(_assetPath, _assetFile));

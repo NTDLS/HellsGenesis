@@ -1,4 +1,4 @@
-﻿using HG.Types.Geometry;
+﻿using HG.Engine.Types.Geometry;
 using System.Diagnostics;
 using System.Threading;
 
@@ -9,12 +9,12 @@ namespace HG.Engine
     /// </summary>
     internal class EngineWorldClock
     {
-        private readonly Core _core;
+        private readonly EngineCore _core;
         private bool _shutdown = false;
         private bool _pause = false;
         private readonly Thread _graphicsThread;
 
-        public EngineWorldClock(Core core)
+        public EngineWorldClock(EngineCore core)
         {
             _core = core;
             _graphicsThread = new Thread(GraphicsThreadProc);
@@ -57,7 +57,7 @@ namespace HG.Engine
         {
             #region Add initial stars.
 
-            for (int i = 0; i < Settings.InitialStarCount; i++)
+            for (int i = 0; i < _core.Settings.InitialFrameStarCount; i++)
             {
                 _core.Actors.Stars.Create();
             }
@@ -65,7 +65,7 @@ namespace HG.Engine
             #endregion
 
             var timer = new Stopwatch();
-            var targetFrameDuration = 1000000 / Settings.FrameLimiter; //1000000 / n-frames/second.
+            var targetFrameDuration = 1000000 / _core.Settings.FrameLimiter; //1000000 / n-frames/second.
 
             while (_shutdown == false)
             {
@@ -145,12 +145,12 @@ namespace HG.Engine
                 situation = $"{_core.Situations.CurrentSituation.Name} (Wave {_core.Situations.CurrentSituation.CurrentWave} of {_core.Situations.CurrentSituation.TotalWaves})";
             }
 
-            double boostRebuildPercent = (_core.Player.Actor.Velocity.AvailableBoost / Settings.PlayerBoostRebuildMin) * 100.0;
+            double boostRebuildPercent = (_core.Player.Actor.Velocity.AvailableBoost / _core.Settings.PlayerBoostRebuildMin) * 100.0;
 
             _core.Actors.PlayerStatsText.Text =
                   $" Situation: {situation}\r\n"
                 + $"      Hull: {_core.Player.Actor.HullHealth:n0} (Shields: {_core.Player.Actor.ShieldHealth:n0}) | Bounty: ${_core.Player.Actor.Bounty}\r\n"
-                + $"      Warp: {((_core.Player.Actor.Velocity.AvailableBoost / Settings.MaxPlayerBoost) * 100.0):n1}%"
+                + $"      Warp: {((_core.Player.Actor.Velocity.AvailableBoost / _core.Settings.MaxPlayerBoost) * 100.0):n1}%"
                     + (_core.Player.Actor.Velocity.BoostRebuilding ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
                 + $"Pri-Weapon: {_core.Player.Actor.PrimaryWeapon?.Name} x{_core.Player.Actor.PrimaryWeapon?.RoundQuantity:n0}\r\n"
                 + $"Sec-Weapon: {_core.Player.Actor.SelectedSecondaryWeapon?.Name} x{_core.Player.Actor.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";

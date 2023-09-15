@@ -30,126 +30,50 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSettings));
             tabControl1 = new System.Windows.Forms.TabControl();
-            tabPageDisplayAdvanced = new System.Windows.Forms.TabPage();
-            groupBox1 = new System.Windows.Forms.GroupBox();
-            labelResolution = new System.Windows.Forms.Label();
-            checkBoxFullscreen = new System.Windows.Forms.CheckBox();
-            labelResolutionLabel = new System.Windows.Forms.Label();
-            trackBarResolution = new System.Windows.Forms.TrackBar();
-            checkBox1 = new System.Windows.Forms.CheckBox();
             tabPageDisplay = new System.Windows.Forms.TabPage();
+            trackBarResolution = new System.Windows.Forms.TrackBar();
+            checkBoxAutoZoomWhenMoving = new System.Windows.Forms.CheckBox();
+            labelResolutionLabel = new System.Windows.Forms.Label();
+            labelResolution = new System.Windows.Forms.Label();
+            tabPageDisplayAdvanced = new System.Windows.Forms.TabPage();
+            labelInitialStarCount = new System.Windows.Forms.Label();
+            labelFrameTargetStarCount = new System.Windows.Forms.Label();
+            textBoxDeltaFrameTargetStarCount = new System.Windows.Forms.TextBox();
+            textBoxInitialFrameStarCount = new System.Windows.Forms.TextBox();
             label2 = new System.Windows.Forms.Label();
             labelOverdrawScale = new System.Windows.Forms.Label();
             textBoxOverdrawScale = new System.Windows.Forms.TextBox();
             textBoxFrameLimiter = new System.Windows.Forms.TextBox();
-            checkBox3 = new System.Windows.Forms.CheckBox();
-            checkBox2 = new System.Windows.Forms.CheckBox();
-            labelInitialStarCount = new System.Windows.Forms.Label();
-            labelFrameTargetStarCount = new System.Windows.Forms.Label();
-            textBoxFrameTargetStarCount = new System.Windows.Forms.TextBox();
-            textBoxInitialStarCount = new System.Windows.Forms.TextBox();
             buttonCancel = new System.Windows.Forms.Button();
             buttonSave = new System.Windows.Forms.Button();
+            tabPageDebug = new System.Windows.Forms.TabPage();
+            checkBoxEnableActorsInterrogation = new System.Windows.Forms.CheckBox();
+            checkBoxHighlightAllActors = new System.Windows.Forms.CheckBox();
+            checkBoxHighlightNatrualBounds = new System.Windows.Forms.CheckBox();
             tabControl1.SuspendLayout();
-            tabPageDisplayAdvanced.SuspendLayout();
-            groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)trackBarResolution).BeginInit();
             tabPageDisplay.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarResolution).BeginInit();
+            tabPageDisplayAdvanced.SuspendLayout();
+            tabPageDebug.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
             // 
             tabControl1.Controls.Add(tabPageDisplay);
             tabControl1.Controls.Add(tabPageDisplayAdvanced);
+            tabControl1.Controls.Add(tabPageDebug);
             tabControl1.Location = new System.Drawing.Point(12, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
             tabControl1.Size = new System.Drawing.Size(550, 332);
             tabControl1.TabIndex = 17;
             // 
-            // tabPageDisplayAdvanced
-            // 
-            tabPageDisplayAdvanced.Controls.Add(labelInitialStarCount);
-            tabPageDisplayAdvanced.Controls.Add(labelFrameTargetStarCount);
-            tabPageDisplayAdvanced.Controls.Add(textBoxFrameTargetStarCount);
-            tabPageDisplayAdvanced.Controls.Add(textBoxInitialStarCount);
-            tabPageDisplayAdvanced.Controls.Add(checkBox3);
-            tabPageDisplayAdvanced.Controls.Add(checkBox2);
-            tabPageDisplayAdvanced.Controls.Add(label2);
-            tabPageDisplayAdvanced.Controls.Add(labelOverdrawScale);
-            tabPageDisplayAdvanced.Controls.Add(textBoxOverdrawScale);
-            tabPageDisplayAdvanced.Controls.Add(textBoxFrameLimiter);
-            tabPageDisplayAdvanced.Location = new System.Drawing.Point(4, 24);
-            tabPageDisplayAdvanced.Name = "tabPageDisplayAdvanced";
-            tabPageDisplayAdvanced.Padding = new System.Windows.Forms.Padding(3);
-            tabPageDisplayAdvanced.Size = new System.Drawing.Size(542, 269);
-            tabPageDisplayAdvanced.TabIndex = 1;
-            tabPageDisplayAdvanced.Text = "Display (Advanced)";
-            tabPageDisplayAdvanced.UseVisualStyleBackColor = true;
-            // 
-            // groupBox1
-            // 
-            groupBox1.Controls.Add(trackBarResolution);
-            groupBox1.Controls.Add(labelResolutionLabel);
-            groupBox1.Controls.Add(checkBoxFullscreen);
-            groupBox1.Controls.Add(labelResolution);
-            groupBox1.Location = new System.Drawing.Point(33, 25);
-            groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(249, 121);
-            groupBox1.TabIndex = 16;
-            groupBox1.TabStop = false;
-            groupBox1.Text = "Rsolution";
-            // 
-            // labelResolution
-            // 
-            labelResolution.AutoSize = true;
-            labelResolution.Location = new System.Drawing.Point(81, 19);
-            labelResolution.Name = "labelResolution";
-            labelResolution.Size = new System.Drawing.Size(61, 15);
-            labelResolution.TabIndex = 10;
-            labelResolution.Text = "0000x0000";
-            // 
-            // checkBoxFullscreen
-            // 
-            checkBoxFullscreen.AutoSize = true;
-            checkBoxFullscreen.Location = new System.Drawing.Point(6, 88);
-            checkBoxFullscreen.Name = "checkBoxFullscreen";
-            checkBoxFullscreen.Size = new System.Drawing.Size(84, 19);
-            checkBoxFullscreen.TabIndex = 7;
-            checkBoxFullscreen.Text = "Fullscreen?";
-            checkBoxFullscreen.UseVisualStyleBackColor = true;
-            // 
-            // labelResolutionLabel
-            // 
-            labelResolutionLabel.AutoSize = true;
-            labelResolutionLabel.Location = new System.Drawing.Point(6, 19);
-            labelResolutionLabel.Name = "labelResolutionLabel";
-            labelResolutionLabel.Size = new System.Drawing.Size(69, 15);
-            labelResolutionLabel.TabIndex = 9;
-            labelResolutionLabel.Text = "Resolution: ";
-            // 
-            // trackBarResolution
-            // 
-            trackBarResolution.LargeChange = 1;
-            trackBarResolution.Location = new System.Drawing.Point(6, 37);
-            trackBarResolution.Name = "trackBarResolution";
-            trackBarResolution.Size = new System.Drawing.Size(223, 45);
-            trackBarResolution.TabIndex = 8;
-            // 
-            // checkBox1
-            // 
-            checkBox1.AutoSize = true;
-            checkBox1.Location = new System.Drawing.Point(33, 169);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new System.Drawing.Size(168, 19);
-            checkBox1.TabIndex = 17;
-            checkBox1.Text = "Auto-zoom when moving?";
-            checkBox1.UseVisualStyleBackColor = true;
-            // 
             // tabPageDisplay
             // 
-            tabPageDisplay.Controls.Add(checkBox1);
-            tabPageDisplay.Controls.Add(groupBox1);
+            tabPageDisplay.Controls.Add(trackBarResolution);
+            tabPageDisplay.Controls.Add(checkBoxAutoZoomWhenMoving);
+            tabPageDisplay.Controls.Add(labelResolutionLabel);
+            tabPageDisplay.Controls.Add(labelResolution);
             tabPageDisplay.Location = new System.Drawing.Point(4, 24);
             tabPageDisplay.Name = "tabPageDisplay";
             tabPageDisplay.Padding = new System.Windows.Forms.Padding(3);
@@ -157,12 +81,97 @@
             tabPageDisplay.TabIndex = 0;
             tabPageDisplay.Text = "Display";
             tabPageDisplay.UseVisualStyleBackColor = true;
-            tabPageDisplay.Click += tabPageDisplay_Click;
+            // 
+            // trackBarResolution
+            // 
+            trackBarResolution.LargeChange = 1;
+            trackBarResolution.Location = new System.Drawing.Point(16, 31);
+            trackBarResolution.Name = "trackBarResolution";
+            trackBarResolution.Size = new System.Drawing.Size(223, 45);
+            trackBarResolution.TabIndex = 8;
+            // 
+            // checkBoxAutoZoomWhenMoving
+            // 
+            checkBoxAutoZoomWhenMoving.AutoSize = true;
+            checkBoxAutoZoomWhenMoving.Location = new System.Drawing.Point(16, 82);
+            checkBoxAutoZoomWhenMoving.Name = "checkBoxAutoZoomWhenMoving";
+            checkBoxAutoZoomWhenMoving.Size = new System.Drawing.Size(168, 19);
+            checkBoxAutoZoomWhenMoving.TabIndex = 17;
+            checkBoxAutoZoomWhenMoving.Text = "Auto-zoom when moving?";
+            checkBoxAutoZoomWhenMoving.UseVisualStyleBackColor = true;
+            // 
+            // labelResolutionLabel
+            // 
+            labelResolutionLabel.AutoSize = true;
+            labelResolutionLabel.Location = new System.Drawing.Point(16, 13);
+            labelResolutionLabel.Name = "labelResolutionLabel";
+            labelResolutionLabel.Size = new System.Drawing.Size(69, 15);
+            labelResolutionLabel.TabIndex = 9;
+            labelResolutionLabel.Text = "Resolution: ";
+            // 
+            // labelResolution
+            // 
+            labelResolution.AutoSize = true;
+            labelResolution.Location = new System.Drawing.Point(91, 13);
+            labelResolution.Name = "labelResolution";
+            labelResolution.Size = new System.Drawing.Size(61, 15);
+            labelResolution.TabIndex = 10;
+            labelResolution.Text = "0000x0000";
+            // 
+            // tabPageDisplayAdvanced
+            // 
+            tabPageDisplayAdvanced.Controls.Add(labelInitialStarCount);
+            tabPageDisplayAdvanced.Controls.Add(labelFrameTargetStarCount);
+            tabPageDisplayAdvanced.Controls.Add(textBoxDeltaFrameTargetStarCount);
+            tabPageDisplayAdvanced.Controls.Add(textBoxInitialFrameStarCount);
+            tabPageDisplayAdvanced.Controls.Add(label2);
+            tabPageDisplayAdvanced.Controls.Add(labelOverdrawScale);
+            tabPageDisplayAdvanced.Controls.Add(textBoxOverdrawScale);
+            tabPageDisplayAdvanced.Controls.Add(textBoxFrameLimiter);
+            tabPageDisplayAdvanced.Location = new System.Drawing.Point(4, 24);
+            tabPageDisplayAdvanced.Name = "tabPageDisplayAdvanced";
+            tabPageDisplayAdvanced.Padding = new System.Windows.Forms.Padding(3);
+            tabPageDisplayAdvanced.Size = new System.Drawing.Size(542, 304);
+            tabPageDisplayAdvanced.TabIndex = 1;
+            tabPageDisplayAdvanced.Text = "Display (Advanced)";
+            tabPageDisplayAdvanced.UseVisualStyleBackColor = true;
+            // 
+            // labelInitialStarCount
+            // 
+            labelInitialStarCount.AutoSize = true;
+            labelInitialStarCount.Location = new System.Drawing.Point(16, 114);
+            labelInitialStarCount.Name = "labelInitialStarCount";
+            labelInitialStarCount.Size = new System.Drawing.Size(100, 15);
+            labelInitialStarCount.TabIndex = 33;
+            labelInitialStarCount.Text = "Initial frame stars:";
+            // 
+            // labelFrameTargetStarCount
+            // 
+            labelFrameTargetStarCount.AutoSize = true;
+            labelFrameTargetStarCount.Location = new System.Drawing.Point(16, 164);
+            labelFrameTargetStarCount.Name = "labelFrameTargetStarCount";
+            labelFrameTargetStarCount.Size = new System.Drawing.Size(134, 15);
+            labelFrameTargetStarCount.TabIndex = 32;
+            labelFrameTargetStarCount.Text = "Delta-frame target stars:";
+            // 
+            // textBoxDeltaFrameTargetStarCount
+            // 
+            textBoxDeltaFrameTargetStarCount.Location = new System.Drawing.Point(16, 182);
+            textBoxDeltaFrameTargetStarCount.Name = "textBoxDeltaFrameTargetStarCount";
+            textBoxDeltaFrameTargetStarCount.Size = new System.Drawing.Size(133, 23);
+            textBoxDeltaFrameTargetStarCount.TabIndex = 31;
+            // 
+            // textBoxInitialFrameStarCount
+            // 
+            textBoxInitialFrameStarCount.Location = new System.Drawing.Point(16, 132);
+            textBoxInitialFrameStarCount.Name = "textBoxInitialFrameStarCount";
+            textBoxInitialFrameStarCount.Size = new System.Drawing.Size(133, 23);
+            textBoxInitialFrameStarCount.TabIndex = 30;
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(319, 14);
+            label2.Location = new System.Drawing.Point(16, 13);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(80, 15);
             label2.TabIndex = 27;
@@ -171,7 +180,7 @@
             // labelOverdrawScale
             // 
             labelOverdrawScale.AutoSize = true;
-            labelOverdrawScale.Location = new System.Drawing.Point(319, 64);
+            labelOverdrawScale.Location = new System.Drawing.Point(16, 63);
             labelOverdrawScale.Name = "labelOverdrawScale";
             labelOverdrawScale.Size = new System.Drawing.Size(90, 15);
             labelOverdrawScale.TabIndex = 26;
@@ -179,69 +188,17 @@
             // 
             // textBoxOverdrawScale
             // 
-            textBoxOverdrawScale.Location = new System.Drawing.Point(319, 82);
+            textBoxOverdrawScale.Location = new System.Drawing.Point(16, 81);
             textBoxOverdrawScale.Name = "textBoxOverdrawScale";
             textBoxOverdrawScale.Size = new System.Drawing.Size(133, 23);
             textBoxOverdrawScale.TabIndex = 25;
             // 
             // textBoxFrameLimiter
             // 
-            textBoxFrameLimiter.Location = new System.Drawing.Point(319, 32);
+            textBoxFrameLimiter.Location = new System.Drawing.Point(16, 31);
             textBoxFrameLimiter.Name = "textBoxFrameLimiter";
             textBoxFrameLimiter.Size = new System.Drawing.Size(133, 23);
             textBoxFrameLimiter.TabIndex = 24;
-            // 
-            // checkBox3
-            // 
-            checkBox3.AutoSize = true;
-            checkBox3.Location = new System.Drawing.Point(19, 39);
-            checkBox3.Name = "checkBox3";
-            checkBox3.Size = new System.Drawing.Size(131, 19);
-            checkBox3.TabIndex = 29;
-            checkBox3.Text = "Highlight all actors?";
-            checkBox3.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            checkBox2.AutoSize = true;
-            checkBox2.Location = new System.Drawing.Point(19, 14);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new System.Drawing.Size(164, 19);
-            checkBox2.TabIndex = 28;
-            checkBox2.Text = "Highlight natrual bounds?";
-            checkBox2.UseVisualStyleBackColor = true;
-            // 
-            // labelInitialStarCount
-            // 
-            labelInitialStarCount.AutoSize = true;
-            labelInitialStarCount.Location = new System.Drawing.Point(319, 115);
-            labelInitialStarCount.Name = "labelInitialStarCount";
-            labelInitialStarCount.Size = new System.Drawing.Size(95, 15);
-            labelInitialStarCount.TabIndex = 33;
-            labelInitialStarCount.Text = "Initial star count:";
-            // 
-            // labelFrameTargetStarCount
-            // 
-            labelFrameTargetStarCount.AutoSize = true;
-            labelFrameTargetStarCount.Location = new System.Drawing.Point(319, 165);
-            labelFrameTargetStarCount.Name = "labelFrameTargetStarCount";
-            labelFrameTargetStarCount.Size = new System.Drawing.Size(133, 15);
-            labelFrameTargetStarCount.TabIndex = 32;
-            labelFrameTargetStarCount.Text = "Frame target star count:";
-            // 
-            // textBoxFrameTargetStarCount
-            // 
-            textBoxFrameTargetStarCount.Location = new System.Drawing.Point(319, 183);
-            textBoxFrameTargetStarCount.Name = "textBoxFrameTargetStarCount";
-            textBoxFrameTargetStarCount.Size = new System.Drawing.Size(133, 23);
-            textBoxFrameTargetStarCount.TabIndex = 31;
-            // 
-            // textBoxInitialStarCount
-            // 
-            textBoxInitialStarCount.Location = new System.Drawing.Point(319, 133);
-            textBoxInitialStarCount.Name = "textBoxInitialStarCount";
-            textBoxInitialStarCount.Size = new System.Drawing.Size(133, 23);
-            textBoxInitialStarCount.TabIndex = 30;
             // 
             // buttonCancel
             // 
@@ -251,6 +208,7 @@
             buttonCancel.TabIndex = 18;
             buttonCancel.Text = "Cancel";
             buttonCancel.UseVisualStyleBackColor = true;
+            buttonCancel.Click += buttonCancel_Click;
             // 
             // buttonSave
             // 
@@ -260,6 +218,49 @@
             buttonSave.TabIndex = 19;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = true;
+            buttonSave.Click += buttonSave_Click;
+            // 
+            // tabPageDebug
+            // 
+            tabPageDebug.Controls.Add(checkBoxEnableActorsInterrogation);
+            tabPageDebug.Controls.Add(checkBoxHighlightAllActors);
+            tabPageDebug.Controls.Add(checkBoxHighlightNatrualBounds);
+            tabPageDebug.Location = new System.Drawing.Point(4, 24);
+            tabPageDebug.Name = "tabPageDebug";
+            tabPageDebug.Size = new System.Drawing.Size(542, 304);
+            tabPageDebug.TabIndex = 2;
+            tabPageDebug.Text = "Debug";
+            tabPageDebug.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEnableActorsInterrogation
+            // 
+            checkBoxEnableActorsInterrogation.AutoSize = true;
+            checkBoxEnableActorsInterrogation.Location = new System.Drawing.Point(13, 63);
+            checkBoxEnableActorsInterrogation.Name = "checkBoxEnableActorsInterrogation";
+            checkBoxEnableActorsInterrogation.Size = new System.Drawing.Size(173, 19);
+            checkBoxEnableActorsInterrogation.TabIndex = 37;
+            checkBoxEnableActorsInterrogation.Text = "Enable actors interrogation?";
+            checkBoxEnableActorsInterrogation.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxHighlightAllActors
+            // 
+            checkBoxHighlightAllActors.AutoSize = true;
+            checkBoxHighlightAllActors.Location = new System.Drawing.Point(13, 38);
+            checkBoxHighlightAllActors.Name = "checkBoxHighlightAllActors";
+            checkBoxHighlightAllActors.Size = new System.Drawing.Size(131, 19);
+            checkBoxHighlightAllActors.TabIndex = 36;
+            checkBoxHighlightAllActors.Text = "Highlight all actors?";
+            checkBoxHighlightAllActors.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxHighlightNatrualBounds
+            // 
+            checkBoxHighlightNatrualBounds.AutoSize = true;
+            checkBoxHighlightNatrualBounds.Location = new System.Drawing.Point(13, 13);
+            checkBoxHighlightNatrualBounds.Name = "checkBoxHighlightNatrualBounds";
+            checkBoxHighlightNatrualBounds.Size = new System.Drawing.Size(164, 19);
+            checkBoxHighlightNatrualBounds.TabIndex = 35;
+            checkBoxHighlightNatrualBounds.Text = "Highlight natrual bounds?";
+            checkBoxHighlightNatrualBounds.UseVisualStyleBackColor = true;
             // 
             // FormSettings
             // 
@@ -275,16 +276,16 @@
             Name = "FormSettings";
             ShowInTaskbar = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            Text = "FormSettings";
+            Text = "Settings";
             Load += FormSettings_Load;
             tabControl1.ResumeLayout(false);
-            tabPageDisplayAdvanced.ResumeLayout(false);
-            tabPageDisplayAdvanced.PerformLayout();
-            groupBox1.ResumeLayout(false);
-            groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)trackBarResolution).EndInit();
             tabPageDisplay.ResumeLayout(false);
             tabPageDisplay.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)trackBarResolution).EndInit();
+            tabPageDisplayAdvanced.ResumeLayout(false);
+            tabPageDisplayAdvanced.PerformLayout();
+            tabPageDebug.ResumeLayout(false);
+            tabPageDebug.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -292,23 +293,23 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPageDisplayAdvanced;
         private System.Windows.Forms.TabPage tabPageDisplay;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox checkBoxAutoZoomWhenMoving;
         private System.Windows.Forms.TrackBar trackBarResolution;
         private System.Windows.Forms.Label labelResolutionLabel;
-        private System.Windows.Forms.CheckBox checkBoxFullscreen;
         private System.Windows.Forms.Label labelResolution;
-        private System.Windows.Forms.CheckBox checkBox3;
-        private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelOverdrawScale;
         private System.Windows.Forms.TextBox textBoxOverdrawScale;
         private System.Windows.Forms.TextBox textBoxFrameLimiter;
         private System.Windows.Forms.Label labelInitialStarCount;
         private System.Windows.Forms.Label labelFrameTargetStarCount;
-        private System.Windows.Forms.TextBox textBoxFrameTargetStarCount;
-        private System.Windows.Forms.TextBox textBoxInitialStarCount;
+        private System.Windows.Forms.TextBox textBoxDeltaFrameTargetStarCount;
+        private System.Windows.Forms.TextBox textBoxInitialFrameStarCount;
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.TabPage tabPageDebug;
+        private System.Windows.Forms.CheckBox checkBoxEnableActorsInterrogation;
+        private System.Windows.Forms.CheckBox checkBoxHighlightAllActors;
+        private System.Windows.Forms.CheckBox checkBoxHighlightNatrualBounds;
     }
 }

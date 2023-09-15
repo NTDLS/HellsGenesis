@@ -1,7 +1,7 @@
 ﻿using HG.Engine;
+using HG.Engine.Types;
+using HG.Engine.Types.Geometry;
 using HG.Menus.BaseClasses;
-using HG.Types;
-using HG.Types.Geometry;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 
@@ -33,7 +33,7 @@ namespace HG.Actors.Ordinary
 
         public HgMenuItemType ItemType { get; set; }
 
-        public ActorMenuItem(Core core, MenuBase menu, TextFormat format, SolidColorBrush color, HgPoint location)
+        public ActorMenuItem(EngineCore core, MenuBase menu, TextFormat format, SolidColorBrush color, HgPoint location)
             : base(core, format, color, location, true)
         {
             Menu = menu;

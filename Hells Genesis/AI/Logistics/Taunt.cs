@@ -2,7 +2,7 @@
 using Determinet.Types;
 using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using System;
@@ -17,7 +17,7 @@ namespace HG.AI.Logistics
     {
         private const string _assetPath = @"AI\Logistics\Taunt.txt";
 
-        private readonly Core _core;
+        private readonly EngineCore _core;
         private readonly ActorShipBase _owner;
         private readonly ActorBase _observedObject;
 
@@ -78,7 +78,7 @@ namespace HG.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public Taunt(Core core, ActorShipBase owner, ActorBase observedObject)
+        public Taunt(EngineCore core, ActorShipBase owner, ActorBase observedObject)
         {
             _core = core;
             _owner = owner;

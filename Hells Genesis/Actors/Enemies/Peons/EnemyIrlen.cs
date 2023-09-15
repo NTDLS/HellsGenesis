@@ -1,7 +1,7 @@
 ﻿using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Weapons;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using System.Drawing;
@@ -11,18 +11,18 @@ namespace HG.Actors.Enemies.Peons
 {
     internal class EnemyIrlen : EnemyPeonBase
     {
-        public const int bountyMultiplier = 1;
+        public const int hullHealth = 10;
+        public const int bountyMultiplier = 15;
+
         private const string _assetPath = @"Graphics\Enemy\Irlen\";
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 
-        public EnemyIrlen(Core core)
-            : base(core, GetGenericHP(core), bountyMultiplier)
+        public EnemyIrlen(EngineCore core)
+            : base(core, hullHealth, bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
-
-            SetHullHealth(HgRandom.Random.Next(Settings.MinEnemyHealth, Settings.MaxEnemyHealth));
 
             SetPrimaryWeapon<WeaponPhotonTorpedo>(5);
             AddSecondaryWeapon<WeaponVulcanCannon>(500);

@@ -3,8 +3,8 @@ using HG.Actors.Enemies.BaseClasses;
 using HG.Actors.Ordinary;
 using HG.Actors.Weapons.BaseClasses;
 using HG.Engine;
-using HG.Types;
-using HG.Types.Geometry;
+using HG.Engine.Types;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using System;
 
@@ -19,7 +19,7 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
         public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
 
-        public BulletBase(Core core, WeaponBase weapon, ActorBase firedFrom, string imagePath,
+        public BulletBase(EngineCore core, WeaponBase weapon, ActorBase firedFrom, string imagePath,
              ActorBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core)
         {
@@ -78,10 +78,10 @@ namespace HG.Actors.Weapons.Bullets.BaseClasses
 
         public override void ApplyMotion(HgPoint displacementVector)
         {
-            if (X < -Settings.BulletSceneDistanceLimit
-                || X >= _core.Display.TotalCanvasSize.Width + Settings.BulletSceneDistanceLimit
-                || Y < -Settings.BulletSceneDistanceLimit
-                || Y >= _core.Display.TotalCanvasSize.Height + Settings.BulletSceneDistanceLimit)
+            if (X < -_core.Settings.BulletSceneDistanceLimit
+                || X >= _core.Display.TotalCanvasSize.Width + _core.Settings.BulletSceneDistanceLimit
+                || Y < -_core.Settings.BulletSceneDistanceLimit
+                || Y >= _core.Display.TotalCanvasSize.Height + _core.Settings.BulletSceneDistanceLimit)
             {
                 QueueForDelete();
                 return;

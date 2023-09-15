@@ -2,7 +2,7 @@
 using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 
 namespace HG.Actors.Weapons.Bullets
 {
@@ -10,7 +10,7 @@ namespace HG.Actors.Weapons.Bullets
     {
         private const string imagePath = @"Graphics\Weapon\BulletVulcanCannon.png";
 
-        public BulletVulcanCannon(Core core, WeaponBase weapon, ActorBase firedFrom,
+        public BulletVulcanCannon(EngineCore core, WeaponBase weapon, ActorBase firedFrom,
              ActorBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {

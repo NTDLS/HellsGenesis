@@ -2,8 +2,8 @@
 using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types;
-using HG.Types.Geometry;
+using HG.Engine.Types;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using System.Collections.Generic;
 using System.Drawing;
@@ -40,7 +40,7 @@ namespace HG.Actors.BaseClasses
         private readonly int _explosionSoundCount = 4;
         private int _selectedExplosionSoundIndex = 0;
 
-        public ActorShipBase(Core core, string name = "")
+        public ActorShipBase(EngineCore core, string name = "")
             : base(core, name)
         {
             _core = core;

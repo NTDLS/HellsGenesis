@@ -8,18 +8,18 @@ namespace HG.Actors.Enemies.Peons
 {
     internal class EnemyTheda : EnemyPeonBase
     {
-        public const int bountyMultiplier = 1;
+        public const int hullHealth = 10;
+        public const int bountyMultiplier = 15;
+
         private const string _assetPath = @"Graphics\Enemy\Theda\";
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 
-        public EnemyTheda(Core core)
-            : base(core, GetGenericHP(core), bountyMultiplier)
+        public EnemyTheda(EngineCore core)
+            : base(core, hullHealth, bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
-
-            AddHullHealth(HgRandom.Random.Next(Settings.MinEnemyHealth, Settings.MaxEnemyHealth));
         }
     }
 }

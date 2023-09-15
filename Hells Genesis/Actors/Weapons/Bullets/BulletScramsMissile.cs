@@ -3,7 +3,7 @@ using HG.Actors.Ordinary;
 using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using System.Drawing;
 using System.IO;
@@ -17,7 +17,7 @@ namespace HG.Actors.Weapons.Bullets
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public BulletScramsMissile(Core core, WeaponBase weapon, ActorBase firedFrom,
+        public BulletScramsMissile(EngineCore core, WeaponBase weapon, ActorBase firedFrom,
              ActorBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {

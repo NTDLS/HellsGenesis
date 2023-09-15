@@ -2,8 +2,9 @@
 using HG.Actors.Weapons.Bullets;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types;
-using HG.Types.Geometry;
+using HG.Engine.Types;
+using HG.Engine.Types.Geometry;
+using HG.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +13,7 @@ namespace HG.Actors.Weapons.BaseClasses
     internal class WeaponBase
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
-        protected Core _core;
+        protected EngineCore _core;
         protected ActorBase _owner;
 
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
@@ -38,14 +39,14 @@ namespace HG.Actors.Weapons.BaseClasses
         public double MaxLockDistance { get; set; } = 100;
         public bool ExplodesOnImpact { get; set; } = false;
 
-        public WeaponBase(Core core, string name, string soundPath, float soundVolume)
+        public WeaponBase(EngineCore core, string name, string soundPath, float soundVolume)
         {
             _core = core;
             _fireSound = _core.Audio.Get(soundPath, soundVolume);
             Name = name;
         }
 
-        public WeaponBase(Core core, ActorShipBase owner, string name, string soundPath, float soundVolume)
+        public WeaponBase(EngineCore core, ActorShipBase owner, string name, string soundPath, float soundVolume)
         {
             _owner = owner;
             _core = core;
@@ -122,6 +123,7 @@ namespace HG.Actors.Weapons.BaseClasses
         public void ApplyRecoil()
         {
             _owner.Velocity.RecoilPercentage += RecoilAmount;
+            _owner.Velocity.RecoilPercentage.Box(0, _core.Settings.MaxRecoilPercentage);
         }
 
         public virtual void Hit()

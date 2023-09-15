@@ -1,7 +1,7 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Actors.Ordinary;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using System;
 using System.Drawing;
@@ -38,7 +38,7 @@ namespace HG.Actors.PowerUp.BaseClasses
             }
         }
 
-        public PowerUpBase(Core core)
+        public PowerUpBase(EngineCore core)
             : base(core)
         {
             Initialize();

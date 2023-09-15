@@ -1,6 +1,6 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using System.Drawing;
@@ -32,7 +32,7 @@ namespace HG.Actors.Ordinary
 
         #endregion
 
-        public ActorTextBlock(Core core, TextFormat format, SolidColorBrush color, HgPoint location, bool isFixedPosition)
+        public ActorTextBlock(EngineCore core, TextFormat format, SolidColorBrush color, HgPoint location, bool isFixedPosition)
             : base(core)
         {
             IsFixedPosition = isFixedPosition;

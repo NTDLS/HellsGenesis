@@ -1,6 +1,6 @@
 ﻿using HG.Actors.PowerUp.BaseClasses;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using System.Drawing;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace HG.Actors.PowerUp
 
         private readonly int _repairPoints = 25;
 
-        public PowerUpSheild(Core core)
+        public PowerUpSheild(EngineCore core)
             : base(core)
         {
             int imageIndex = HgRandom.Random.Next(0, 1000) % _imagePaths.Count();

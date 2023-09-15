@@ -1,51 +1,51 @@
 ﻿using HG.Actors.Ordinary;
 using HG.Engine;
+using HG.Engine.Types.Geometry;
 using HG.Menus.BaseClasses;
-using HG.Types.Geometry;
 
 namespace HG.Menus
 {
     internal class MenuStartNewGame : MenuBase
     {
-        public MenuStartNewGame(Core core)
+        public MenuStartNewGame(EngineCore core)
             : base(core)
         {
-            double baseX = _core.Display.TotalCanvasSize.Width / 2;
-            double baseY = _core.Display.TotalCanvasSize.Height / 4 + 100;
+            double offsetX = _core.Display.TotalCanvasSize.Width / 2;
+            double offsetY = _core.Display.CurrentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new HgPoint(baseX, baseY), "Start new game?");
+            var itemTitle = CreateAndAddTitleItem(new HgPoint(offsetX, offsetY), "Start new game?");
             itemTitle.X -= itemTitle.Size.Width / 2;
-            baseY += itemTitle.Size.Height + 10;
+            offsetY += itemTitle.Size.Height + 10;
 
-            var itemYes = CreateAndAddMenuItem(new HgPoint(baseX, baseY), "YES", "Yes");
-            var itemNo = CreateAndAddMenuItem(new HgPoint(baseX + itemYes.Size.Width + 10, baseY), "NO", "No");
-            baseY += itemNo.Size.Height + 20;
+            var itemYes = CreateAndAddMenuItem(new HgPoint(offsetX, offsetY), "YES", "Yes");
+            var itemNo = CreateAndAddMenuItem(new HgPoint(offsetX + itemYes.Size.Width + 10, offsetY), "NO", "No");
+            offsetY += itemNo.Size.Height + 20;
             itemYes.X -= (itemYes.Size.Width + itemNo.Size.Width) / 2;
             itemNo.X -= (itemYes.Size.Width + itemNo.Size.Width) / 2;
 
-            var helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Move with <W>, <A>, <S>.");
+            var helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Move with <W>, <A>, <S>.");
             helpItem.X -= helpItem.Size.Width / 2;
-            baseY += itemTitle.Size.Height + 5;
+            offsetY += itemTitle.Size.Height + 5;
 
-            helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Warp Drive with <SHIFT>.");
+            helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Warp Drive with <SHIFT>.");
             helpItem.X -= helpItem.Size.Width / 2;
-            baseY += itemTitle.Size.Height + 5;
+            offsetY += itemTitle.Size.Height + 5;
 
-            helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Fire primary with <SPACE>.");
+            helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Fire primary with <SPACE>.");
             helpItem.X -= helpItem.Size.Width / 2;
-            baseY += itemTitle.Size.Height + 10;
+            offsetY += itemTitle.Size.Height + 10;
 
-            helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Fire secondary with <CTRL>.");
+            helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Fire secondary with <CTRL>.");
             helpItem.X -= helpItem.Size.Width / 2;
-            baseY += itemTitle.Size.Height + 10;
+            offsetY += itemTitle.Size.Height + 10;
 
-            helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Change weapons with <left> and <right> arrows.");
+            helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Change weapons with <left> and <right> arrows.");
             helpItem.X -= helpItem.Size.Width / 2;
-            baseY += itemTitle.Size.Height + 10;
+            offsetY += itemTitle.Size.Height + 10;
 
-            helpItem = CreateAndAddTextItem(new HgPoint(baseX, baseY), "Change speed with <up> and <down> arrows.");
+            helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Change speed with <up> and <down> arrows.");
             helpItem.X -= helpItem.Size.Width / 2;
-            baseY += itemTitle.Size.Height + 10;
+            offsetY += itemTitle.Size.Height + 10;
 
             itemYes.Selected = true;
         }

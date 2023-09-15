@@ -2,7 +2,7 @@
 using HG.Actors.Ordinary;
 using HG.Actors.Weapons;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
 
@@ -13,6 +13,7 @@ namespace HG.Actors.Enemies.Bosses
     /// </summary>
     internal class EnemyDevastator : EnemyBossBase
     {
+        public const int hullHealth = 100;
         public const int bountyMultiplier = 15;
 
         private readonly ActorAttachment _leftCannon;
@@ -30,8 +31,8 @@ namespace HG.Actors.Enemies.Bosses
 
         readonly string _imagesPath = @"Graphics\Enemy\Devastator\";
 
-        public EnemyDevastator(Core core)
-            : base(core, GetGenericHP(core), bountyMultiplier)
+        public EnemyDevastator(EngineCore core)
+            : base(core, hullHealth, bountyMultiplier)
         {
             _leftCannon = Attach(_imagesPath + "Gun.Cannon.Left.png", true, 3);
             _rightCannon = Attach(_imagesPath + "Gun.Cannon.Right.png", true, 3);
@@ -40,9 +41,7 @@ namespace HG.Actors.Enemies.Bosses
             _leftThrust = Attach(_imagesPath + "Jet.Left.png", true, 3);
             _rightThrust = Attach(_imagesPath + "Jet.Right.png", true, 3);
 
-            SetHullHealth(HgRandom.Random.Next(Settings.MinEnemyHealth, Settings.MaxEnemyHealth));
-
-            _initialMaxpeed = HgRandom.Random.Next(Settings.MaxSpeed - 2, Settings.MaxSpeed); //Upper end of the speed spectrum
+            _initialMaxpeed = HgRandom.Random.Next(_core.Settings.MaxEnemySpeed - 2, _core.Settings.MaxEnemySpeed); //Upper end of the speed spectrum
 
             Velocity.MaxSpeed = _initialMaxpeed;
 

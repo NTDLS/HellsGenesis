@@ -1,14 +1,14 @@
 ﻿using HG.Engine;
-using HG.Types;
+using HG.Engine.Types;
 using System;
 using System.Collections.Generic;
-using static HG.Types.HgEngineCallbackEvent;
+using static HG.Engine.Types.HgEngineCallbackEvent;
 
 namespace HG.Situations.BaseClasses
 {
     internal class SituationBase
     {
-        protected Core _core;
+        protected EngineCore _core;
         protected List<HgEngineCallbackEvent> Events = new();
 
         public Guid UID { get; private set; } = Guid.NewGuid();
@@ -17,7 +17,7 @@ namespace HG.Situations.BaseClasses
         public int TotalWaves { get; set; } = 1;
         public HgSituationState State { get; protected set; } = HgSituationState.NotStarted;
 
-        public SituationBase(Core core, string name)
+        public SituationBase(EngineCore core, string name)
         {
             _core = core;
             Name = name;

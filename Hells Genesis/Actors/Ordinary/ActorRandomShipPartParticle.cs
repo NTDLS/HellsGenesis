@@ -1,6 +1,6 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using System.IO;
 
@@ -17,7 +17,7 @@ namespace HG.Actors.Ordinary
         private HgRelativeDirection _rotationDirection;
         private HgAngle _travelAngle = new();
 
-        public ActorRandomShipPartParticle(Core core, double x, double y)
+        public ActorRandomShipPartParticle(EngineCore core, double x, double y)
             : base(core)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % _imageCount;

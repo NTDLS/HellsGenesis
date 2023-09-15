@@ -13,7 +13,7 @@ namespace HG.Engine.ImageProcessing
 {
     internal class DirectX
     {
-        private readonly Core _core;
+        private readonly EngineCore _core;
 
         public BitmapRenderTarget IntermediateRenderTarget { get; private set; }
         public WindowRenderTarget ScreenRenderTarget { get; private set; }
@@ -23,7 +23,7 @@ namespace HG.Engine.ImageProcessing
         public DirectXMaterials Materials { get; private set; }
         public DirectXTextFormats TextFormats { get; private set; }
 
-        public DirectX(Core core)
+        public DirectX(EngineCore core)
         {
             _core = core;
 

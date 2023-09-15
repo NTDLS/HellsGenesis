@@ -2,8 +2,8 @@
 using HG.Actors.Ordinary;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types;
-using HG.Types.Geometry;
+using HG.Engine.Types;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using SharpDX.Mathematics.Interop;
@@ -15,7 +15,7 @@ namespace HG.Actors.BaseClasses
 {
     internal class ActorBase
     {
-        protected Core _core;
+        protected EngineCore _core;
 
         private SharpDX.Direct2D1.Bitmap _image;
 
@@ -41,7 +41,7 @@ namespace HG.Actors.BaseClasses
         #region Properties.
 
         public string Name { get; set; }
-        public uint UID { get; private set; } = Core.GetNextSequentialId();
+        public uint UID { get; private set; } = EngineCore.GetNextSequentialId();
         public uint OwnerUID { get; set; }
         public List<ActorAttachment> Attachments { get; private set; } = new();
         public HgPoint RadarDotSize { get; set; } = new HgPoint(4, 4);
@@ -92,39 +92,22 @@ namespace HG.Actors.BaseClasses
             return attachment;
         }
 
-        public void AddHullHealth(int pointsToAdd)
+        public virtual void AddHullHealth(int pointsToAdd)
         {
-            if (HullHealth + pointsToAdd > Settings.MaxHullHealth)
-            {
-                pointsToAdd = Settings.MaxHullHealth - (HullHealth + pointsToAdd);
-            }
             HullHealth += pointsToAdd;
+            HullHealth = HullHealth.Box(0, _core.Settings.MaxHullHealth);
         }
 
-        public void SetShieldHealth(int points)
+        public virtual void SetShieldHealth(int points)
         {
             ShieldHealth = 0;
             AddShieldHealth(points);
         }
 
-        public void AddShieldHealth(int pointsToAdd)
+        public virtual void AddShieldHealth(int pointsToAdd)
         {
-            if (ShieldHealth + pointsToAdd > Settings.MaxShieldPoints)
-            {
-                pointsToAdd = Settings.MaxShieldPoints - (ShieldHealth + pointsToAdd);
-            }
-
-            if (this is ActorPlayer)
-            {
-                var player = this as ActorPlayer;
-
-                if (ShieldHealth < Settings.MaxShieldPoints && ShieldHealth + pointsToAdd >= Settings.MaxShieldPoints)
-                {
-                    player.ShieldMaxSound.Play();
-                }
-            }
-
             ShieldHealth += pointsToAdd;
+            ShieldHealth = ShieldHealth.Box(1, _core.Settings.MaxShieldPoints);
         }
 
         public bool IsLockedOn //The object is the subject of a foreign weapons lock.
@@ -240,14 +223,13 @@ namespace HG.Actors.BaseClasses
 
         #endregion
 
-        public ActorBase(Core core, string name = "")
+        public ActorBase(EngineCore core, string name = "")
         {
             _core = core;
             Name = name;
             RotationMode = HgRotationMode.Rotate;
             Velocity = new HgVelocity();
-            Velocity.MaxRotationSpeed = Settings.MaxRotationSpeed;
-            Highlight = Settings.HighlightAllActors;
+            Highlight = _core.Settings.HighlightAllActors;
         }
 
         public virtual void Initialize(string imagePath = null, Size? size = null)

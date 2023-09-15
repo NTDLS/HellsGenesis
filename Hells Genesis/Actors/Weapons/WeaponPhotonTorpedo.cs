@@ -3,7 +3,7 @@ using HG.Actors.Weapons.BaseClasses;
 using HG.Actors.Weapons.Bullets;
 using HG.Actors.Weapons.Bullets.BaseClasses;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 
 namespace HG.Actors.Weapons
 {
@@ -13,10 +13,10 @@ namespace HG.Actors.Weapons
         private const string soundPath = @"Sounds\Weapons\BulletPhotonTorpedo.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponPhotonTorpedo(Core core, ActorShipBase owner)
+        public WeaponPhotonTorpedo(EngineCore core, ActorShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponPhotonTorpedo(Core core)
+        public WeaponPhotonTorpedo(EngineCore core)
             : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()

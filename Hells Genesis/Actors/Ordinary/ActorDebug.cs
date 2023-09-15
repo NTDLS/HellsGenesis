@@ -1,14 +1,14 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types;
-using HG.Types.Geometry;
+using HG.Engine.Types;
+using HG.Engine.Types.Geometry;
 using System.Drawing;
 
 namespace HG.Actors.Ordinary
 {
     internal class ActorDebug : ActorShipBase
     {
-        public ActorDebug(Core core)
+        public ActorDebug(EngineCore core)
             : base(core)
         {
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
@@ -17,7 +17,7 @@ namespace HG.Actors.Ordinary
             Velocity = new HgVelocity();
         }
 
-        public ActorDebug(Core core, double x, double y)
+        public ActorDebug(EngineCore core, double x, double y)
             : base(core)
         {
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
@@ -26,7 +26,7 @@ namespace HG.Actors.Ordinary
             Velocity = new HgVelocity();
         }
 
-        public ActorDebug(Core core, double x, double y, string imagePath)
+        public ActorDebug(EngineCore core, double x, double y, string imagePath)
             : base(core)
         {
             Initialize(imagePath);

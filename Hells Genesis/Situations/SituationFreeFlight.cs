@@ -1,13 +1,13 @@
 ﻿using HG.Engine;
+using HG.Engine.Types;
 using HG.Situations.BaseClasses;
-using HG.Types;
 using System.Collections.Generic;
 
 namespace HG.Situations
 {
     internal class SituationFreeFlight : SituationBase
     {
-        public SituationFreeFlight(Core core)
+        public SituationFreeFlight(EngineCore core)
             : base(core, "Free Flight")
         {
             TotalWaves = 5;
@@ -22,7 +22,7 @@ namespace HG.Situations
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
         }
 
-        private void FirstShowPlayerCallback(Core core, HgEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             _core.Player.ResetAndShow();
         }

@@ -1,7 +1,7 @@
 ﻿using HG.Actors.Ordinary;
 using HG.Engine;
+using HG.Engine.Types.Geometry;
 using HG.Menus.BaseClasses;
-using HG.Types.Geometry;
 using HG.Utility;
 using System.Linq;
 
@@ -11,7 +11,7 @@ namespace HG.Menus
     {
         private readonly ActorMenuItem _shipBlurb;
 
-        public PlayerShipMenu(Core core)
+        public PlayerShipMenu(EngineCore core)
             : base(core)
         {
             double offsetX = _core.Display.CurrentScaledScreenBounds.X + 40;

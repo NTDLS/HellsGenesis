@@ -1,7 +1,7 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Engine;
-using HG.Types;
-using HG.Types.Geometry;
+using HG.Engine.Types;
+using HG.Engine.Types.Geometry;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
@@ -48,7 +48,7 @@ namespace HG.Actors.Ordinary
             public bool DeleteActorAfterPlay;
         }
 
-        public ActorAnimation(Core core, string spriteSheetFileName, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
+        public ActorAnimation(EngineCore core, string spriteSheetFileName, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
             : base(core)
         {
             _playMode = playMode;

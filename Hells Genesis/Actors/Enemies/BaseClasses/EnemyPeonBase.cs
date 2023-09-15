@@ -1,7 +1,7 @@
 ﻿using HG.Actors.BaseClasses;
 using HG.Actors.Ordinary;
 using HG.Engine;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using HG.Utility;
 using System;
 using System.Drawing;
@@ -13,7 +13,7 @@ namespace HG.Actors.Enemies.BaseClasses
         public ActorAnimation ThrustAnimation { get; internal set; }
         public ActorAnimation BoostAnimation { get; internal set; }
 
-        public EnemyPeonBase(Core core, int hullHealth, int bountyMultiplier)
+        public EnemyPeonBase(EngineCore core, int hullHealth, int bountyMultiplier)
             : base(core, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;

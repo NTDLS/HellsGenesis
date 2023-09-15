@@ -1,5 +1,5 @@
 ﻿using Determinet;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 
 namespace HG.AI
 {

@@ -1,5 +1,5 @@
 ﻿using HG.Actors.BaseClasses;
-using HG.Types.Geometry;
+using HG.Engine.Types.Geometry;
 using System;
 
 namespace HG.Utility
