@@ -12,8 +12,6 @@ namespace HG
         [STAThread]
         static void Main()
         {
-            HgDevelopmentTools.StripWavFiles(@"C:\NTDLS\HellsGenesis\Hells Genesis\Assets\Sounds");
-
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
