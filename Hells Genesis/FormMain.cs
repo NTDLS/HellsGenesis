@@ -56,6 +56,14 @@ namespace HG
 
             _core = new EngineCore(drawingSurface);
 
+            _core.OnStop += (EngineCore sender) =>
+            {   //If the engine is stopped, close the main form.
+                Invoke((MethodInvoker)delegate
+                {
+                    Close();
+                });
+            };
+
             Shown += (object sender, EventArgs e) => _core.Start();
             FormClosing += (sender, e) => _core.Stop();
 

@@ -13,7 +13,7 @@ namespace HG.Menus
             double offsetX = _core.Display.TotalCanvasSize.Width / 2;
             double offsetY = _core.Display.CurrentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new HgPoint(offsetX, offsetY), "Start new game?");
+            var itemTitle = CreateAndAddTitleItem(new HgPoint(offsetX, offsetY), "Ready to start?");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 10;
 
