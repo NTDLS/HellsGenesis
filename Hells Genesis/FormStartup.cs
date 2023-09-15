@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Media;
 using System.Windows.Forms;
 
 namespace HG
@@ -30,6 +31,9 @@ namespace HG
             TransparencyKey = Color.FromArgb(1, 1, 1);
             BackColor = Color.FromArgb(1, 1, 1);
 
+
+            Shown += FormStartup_Shown;
+
             var timer = new Timer()
             {
                 Enabled = true,
@@ -39,7 +43,7 @@ namespace HG
             timer.Tick += (object sender, EventArgs e) =>
             {
                 Opacity += 0.05;
-                if (Opacity > 0.95)
+                if (Opacity >= 1)
                 {
                     timer.Stop();
 
@@ -51,6 +55,20 @@ namespace HG
 
             timer.Start();
         }
+
+        private void FormStartup_Shown(object sender, EventArgs e)
+        {
+
+            try
+            {
+                using (var player = new SoundPlayer(@"..\..\..\Assets\Splash.wav"))
+                {
+                    player.Play();
+                }
+            }
+            catch { }
+        }
+
 
         private void buttonExit_Click(object sender, EventArgs e)
         {

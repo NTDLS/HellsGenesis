@@ -44,7 +44,7 @@
             Name = "FormMain";
             SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "FormDirect2D";
+            Text = "Hells Genesis";
             ResumeLayout(false);
         }
 
