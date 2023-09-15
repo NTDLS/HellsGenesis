@@ -1,4 +1,4 @@
-﻿using Determinet;
+﻿using NTDLS.Determinet;
 using HG.Engine.Types.Geometry;
 
 namespace HG.AI

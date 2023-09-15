@@ -1,5 +1,5 @@
-﻿using Determinet;
-using Determinet.Types;
+﻿using NTDLS.Determinet;
+using NTDLS.Determinet.Types;
 using HG.Actors.BaseClasses;
 using HG.Engine;
 using HG.Engine.Types.Geometry;

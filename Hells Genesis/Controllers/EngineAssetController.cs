@@ -1,4 +1,4 @@
-﻿using Determinet;
+﻿using NTDLS.Determinet;
 using HG.Engine;
 using HG.Engine.Types;
 using System.Collections.Generic;
