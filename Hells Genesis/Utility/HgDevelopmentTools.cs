@@ -1,4 +1,5 @@
 ﻿using HG.Engine;
+using NAudio.Wave;
 using System.Drawing;
 using System.IO;
 
@@ -6,6 +7,29 @@ namespace HG.Utility
 {
     internal static class HgDevelopmentTools
     {
+        public static void StripWavFiles()
+        {
+            string inputFilePath = "input.wav";
+            string outputFilePath = "output.wav";
+
+            using (var reader = new WaveFileReader(inputFilePath))
+            {
+                // Create a WaveFileWriter to write the output WAV file
+                using (var writer = new WaveFileWriter(outputFilePath, reader.WaveFormat))
+                {
+                    byte[] buffer = new byte[4096];
+                    int bytesRead;
+
+                    // Loop through the input WAV file, skipping metadata chunks
+                    while ((bytesRead = reader.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        writer.Write(buffer, 0, bytesRead);
+                    }
+                }
+            }
+        }
+
+
         /// <summary>
         /// Tests dumping particles at a given position.
         /// </summary>
