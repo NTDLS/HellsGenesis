@@ -48,9 +48,34 @@ namespace HG.Actors.Enemies.BaseClasses
 
             if (HgRandom.ChanceIn(5))
             {
-                PowerUpBase powerUp = HgRandom.FlipCoin() ? new PowerUpRepair(_core) : new PowerUpSheild(_core);
-                powerUp.Location = Location;
-                _core.Actors.Powerups.Insert(powerUp);
+                int random = HgRandom.RandomNumber(0, 4);
+
+                PowerUpBase powerUp = null;
+
+                switch (random)
+                {
+                    case 0:
+                        powerUp = new PowerUpAmmo(_core);
+                        break;
+                    case 1:
+                        powerUp = new PowerUpBoost(_core);
+                        break;
+                    case 2:
+                        powerUp = new PowerUpBounty(_core);
+                        break;
+                    case 3:
+                        powerUp = new PowerUpRepair(_core);
+                        break;
+                    case 4:
+                        powerUp = new PowerUpSheild(_core);
+                        break;
+                }
+
+                if (powerUp != null)
+                {
+                    powerUp.Location = Location;
+                    _core.Actors.Powerups.Insert(powerUp);
+                }
             }
             base.Explode();
         }

@@ -7,15 +7,15 @@ using System.IO;
 
 namespace HG.Actors.PowerUp
 {
-    internal class PowerUpSheild : PowerUpBase
+    internal class PowerUpBoost : PowerUpBase
     {
-        private const string _assetPath = @"Graphics\PowerUp\Sheild\";
+        private const string _assetPath = @"Graphics\PowerUp\Boost\";
         private readonly int imageCount = 3;
         private readonly int selectedImageIndex = 0;
 
         private readonly int _powerUpAmount = 100;
 
-        public PowerUpSheild(EngineCore core)
+        public PowerUpBoost(EngineCore core)
             : base(core)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
@@ -27,7 +27,7 @@ namespace HG.Actors.PowerUp
         {
             if (Intersects(_core.Player.Actor))
             {
-                _core.Player.Actor.AddShieldHealth(_powerUpAmount);
+                _core.Player.Actor.Velocity.AvailableBoost += _powerUpAmount;
                 Explode();
             }
             else if (AgeInMiliseconds > TimeToLive)

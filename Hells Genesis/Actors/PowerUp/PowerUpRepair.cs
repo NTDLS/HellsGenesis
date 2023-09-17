@@ -3,36 +3,31 @@ using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Utility;
 using System.Drawing;
-using System.Linq;
+using System.IO;
 
 namespace HG.Actors.PowerUp
 {
     internal class PowerUpRepair : PowerUpBase
     {
         private const string _assetPath = @"Graphics\PowerUp\Repair\";
-        private readonly string[] _imagePaths = {
-            #region images.
-            "1.png",
-            "2.png",
-            "3.png"
-            #endregion
-        };
+        private readonly int imageCount = 3;
+        private readonly int selectedImageIndex = 0;
 
-        private readonly int _repairPoints = 100;
+        private readonly int _powerUpAmount = 100;
 
         public PowerUpRepair(EngineCore core)
             : base(core)
         {
-            int imageIndex = HgRandom.Random.Next(0, 1000) % _imagePaths.Count();
-            SetImage(_assetPath + _imagePaths[imageIndex], new Size(32, 32));
-            _repairPoints *= imageIndex + 1;
+            selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
+            SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
+            _powerUpAmount *= (selectedImageIndex + 1);
         }
 
         public override void ApplyIntelligence(HgPoint displacementVector)
         {
             if (Intersects(_core.Player.Actor))
             {
-                _core.Player.Actor.AddHullHealth(_repairPoints);
+                _core.Player.Actor.AddHullHealth(_powerUpAmount);
                 Explode();
             }
             else if (AgeInMiliseconds > TimeToLive)
