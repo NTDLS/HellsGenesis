@@ -14,7 +14,7 @@ namespace HG
 {
     public partial class FormMain : Form
     {
-        readonly List<ActorBase> highlightedActors = new();
+        readonly List<SpriteBase> highlightedSprites = new();
         private readonly ToolTip _interrogationTip = new ToolTip();
 
         private readonly EngineCore _core;
@@ -72,7 +72,7 @@ namespace HG
             drawingSurface.KeyDown += FormMain_KeyDown;
             drawingSurface.KeyUp += FormMain_KeyUp;
 
-            if (settings.EnableActorsInterrogation)
+            if (settings.EnableSpriteInterrogation)
             {
                 drawingSurface.MouseDown += FormDirect2D_MouseDown;
                 drawingSurface.MouseMove += FormDirect2D_MouseMove;
@@ -85,23 +85,23 @@ namespace HG
             double x = e.X + _core.Display.OverdrawSize.Width / 2;
             double y = e.Y + _core.Display.OverdrawSize.Height / 2;
 
-            foreach (var actor in highlightedActors)
+            foreach (var sprite in highlightedSprites)
             {
-                actor.Highlight = false;
+                sprite.Highlight = false;
             }
 
-            highlightedActors.Clear();
+            highlightedSprites.Clear();
 
-            var actors = _core.Actors.Intersections(new HgPoint(x, y), new HgPoint(1, 1));
-            if (_core.Player.Actor.Intersects(new HgPoint(x, y), new HgPoint(1, 1)))
+            var sprites = _core.Sprites.Intersections(new HgPoint(x, y), new HgPoint(1, 1));
+            if (_core.Player.Sprite.Intersects(new HgPoint(x, y), new HgPoint(1, 1)))
             {
-                actors.Add(_core.Player.Actor);
+                sprites.Add(_core.Player.Sprite);
             }
 
-            foreach (var actor in actors)
+            foreach (var sprite in sprites)
             {
-                highlightedActors.Add(actor);
-                actor.Highlight = true;
+                highlightedSprites.Add(sprite);
+                sprite.Highlight = true;
             }
         }
 
@@ -110,27 +110,27 @@ namespace HG
             double x = e.X + _core.Display.OverdrawSize.Width / 2;
             double y = e.Y + _core.Display.OverdrawSize.Height / 2;
 
-            var actors = _core.Actors.Intersections(new HgPoint(x, y), new HgPoint(1, 1));
-            if (_core.Player.Actor.Intersects(new HgPoint(x, y), new HgPoint(1, 1)))
+            var sprites = _core.Sprites.Intersections(new HgPoint(x, y), new HgPoint(1, 1));
+            if (_core.Player.Sprite.Intersects(new HgPoint(x, y), new HgPoint(1, 1)))
             {
-                actors.Add(_core.Player.Actor);
+                sprites.Add(_core.Player.Sprite);
             }
 
-            var actor = actors.FirstOrDefault();
+            var sprite = sprites.FirstOrDefault();
 
-            if (actor != null)
+            if (sprite != null)
             {
                 if (e.Button == MouseButtons.Right)
                 {
                     var menu = new ContextMenuStrip();
 
                     menu.ItemClicked += Menu_ItemClicked;
-                    if (actor is EnemyBase)
+                    if (sprite is SpriteEnemyBase)
                     {
-                        menu.Items.Add("Save Brain").Tag = actor;
-                        menu.Items.Add("View Brain").Tag = actor;
+                        menu.Items.Add("Save Brain").Tag = sprite;
+                        menu.Items.Add("View Brain").Tag = sprite;
                     }
-                    menu.Items.Add("Delete").Tag = actor;
+                    menu.Items.Add("Delete").Tag = sprite;
 
                     var location = new Point((int)e.X + 10, (int)e.Y);
                     menu.Show(_core.Display.DrawingSurface, location);
@@ -139,13 +139,13 @@ namespace HG
                 {
                     var text = new StringBuilder();
 
-                    text.AppendLine($"Type: {actor.GetType().Name}");
-                    text.AppendLine($"UID: {actor.UID}");
-                    text.AppendLine($"X,Y: {actor.X:n2},{actor.Y:n2}");
+                    text.AppendLine($"Type: {sprite.GetType().Name}");
+                    text.AppendLine($"UID: {sprite.UID}");
+                    text.AppendLine($"X,Y: {sprite.X:n2},{sprite.Y:n2}");
 
-                    if (actor is EnemyBase)
+                    if (sprite is SpriteEnemyBase)
                     {
-                        var enemy = (EnemyBase)actor;
+                        var enemy = (SpriteEnemyBase)sprite;
 
                         text.AppendLine($"Hit Points: {enemy.HullHealth:n0}");
                         text.AppendLine($"Is Locked-on: {enemy.IsLockedOn}");
@@ -165,7 +165,7 @@ namespace HG
 
                     if (text.Length > 0)
                     {
-                        var location = new Point((int)e.X, (int)e.Y - actor.Size.Height);
+                        var location = new Point((int)e.X, (int)e.Y - sprite.Size.Height);
                         _interrogationTip.Show(text.ToString(), _core.Display.DrawingSurface, location, 5000);
                     }
                 }
@@ -179,18 +179,18 @@ namespace HG
 
             menu.Close();
 
-            var actor = e.ClickedItem?.Tag as ActorBase;
-            if (actor == null) return;
+            var sprite = e.ClickedItem?.Tag as SpriteBase;
+            if (sprite == null) return;
 
             if (e.ClickedItem?.Text == "Delete")
             {
-                actor.QueueForDelete();
+                sprite.QueueForDelete();
             }
             else if (e.ClickedItem?.Text == "Save Brain")
             {
-                if (actor is EnemyBase)
+                if (sprite is SpriteEnemyBase)
                 {
-                    var enemy = (EnemyBase)actor;
+                    var enemy = (SpriteEnemyBase)sprite;
 
                     bool wasPaused = _core.IsPaused();
                     if (wasPaused == false)
@@ -218,9 +218,9 @@ namespace HG
             }
             else if (e.ClickedItem?.Text == "View Brain")
             {
-                if (actor is EnemyBase)
+                if (sprite is SpriteEnemyBase)
                 {
-                    var enemy = (EnemyBase)actor;
+                    var enemy = (SpriteEnemyBase)sprite;
 
                     bool wasPaused = _core.IsPaused();
                     if (wasPaused == false)

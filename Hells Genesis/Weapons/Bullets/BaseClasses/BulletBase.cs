@@ -10,17 +10,17 @@ using System;
 
 namespace HG.Weapons.Bullets.BaseClasses
 {
-    internal class BulletBase : ActorBase
+    internal class BulletBase : SpriteBase
     {
         public HgFiredFromType FiredFromType { get; private set; }
         public WeaponBase Weapon { get; private set; }
-        public ActorBase LockedTarget { get; private set; }
+        public SpriteBase LockedTarget { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
         public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
 
-        public BulletBase(EngineCore core, WeaponBase weapon, ActorBase firedFrom, string imagePath,
-             ActorBase lockedTarget = null, HgPoint xyOffset = null)
+        public BulletBase(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
+             SpriteBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core)
         {
             Initialize(imagePath);
@@ -55,11 +55,11 @@ namespace HG.Weapons.Bullets.BaseClasses
 
             Location = firedFrom.Location + (xyOffset ?? HgPoint.Zero);
 
-            if (firedFrom is EnemyBase)
+            if (firedFrom is SpriteEnemyBase)
             {
                 FiredFromType = HgFiredFromType.Enemy;
             }
-            else if (firedFrom is ActorPlayer)
+            else if (firedFrom is SpritePlayer)
             {
                 FiredFromType = HgFiredFromType.Player;
             }

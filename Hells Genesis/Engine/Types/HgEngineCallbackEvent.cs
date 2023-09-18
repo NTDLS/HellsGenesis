@@ -5,7 +5,7 @@ namespace HG.Engine.Types
 {
     /// <summary>
     /// Allows for deferred events to be injected into the engine. We use this so that we can
-    /// defer things without sleeping and so we can inject into the actors durring the frame logic.
+    /// defer things without sleeping and so we can inject into the sprites durring the frame logic.
     /// </summary>
     internal class HgEngineCallbackEvent
     {

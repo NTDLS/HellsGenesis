@@ -9,7 +9,7 @@ namespace HG.Menus
 {
     internal class PlayerShipMenu : MenuBase
     {
-        private readonly ActorMenuItem _shipBlurb;
+        private readonly SpriteMenuItem _shipBlurb;
 
         public PlayerShipMenu(EngineCore core)
             : base(core)
@@ -32,7 +32,7 @@ namespace HG.Menus
                 var menuItem = CreateAndAddMenuItem(new HgPoint(offsetX + 25, offsetY), loadout.Name, loadout.Name);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
-                var shipIcon = _core.Actors.InsertPlayer(new ActorPlayer(_core, loadout) { Name = "MENU_SHIP_SELECT" });
+                var shipIcon = _core.Sprites.InsertPlayer(new SpritePlayer(_core, loadout) { Name = "MENU_SHIP_SELECT" });
 
                 if (loadout.Name == "Debug")
                 {
@@ -64,7 +64,7 @@ namespace HG.Menus
             return result;
         }
 
-        public override void SelectionChanged(ActorMenuItem item)
+        public override void SelectionChanged(SpriteMenuItem item)
         {
             var loadout = _core.PrefabPlayerLoadouts.GetByName(item.Key);
 
@@ -90,15 +90,15 @@ namespace HG.Menus
             );
         }
 
-        public override void ExecuteSelection(ActorMenuItem item)
+        public override void ExecuteSelection(SpriteMenuItem item)
         {
             var loadout = _core.PrefabPlayerLoadouts.GetByName(item.Key);
 
-            _core.Player.Actor.Reset(loadout);
+            _core.Player.Sprite.Reset(loadout);
 
-            _core.Actors.DeleteAllActorsByAssetTag("MENU_SHIP_SELECT");
+            _core.Sprites.DeleteAllSpriteByAssetTag("MENU_SHIP_SELECT");
 
-            _core.Actors.NewGame();
+            _core.Sprites.NewGame();
         }
     }
 }

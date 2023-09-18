@@ -3,7 +3,7 @@
 namespace HG.TickHandlers.Interfaces
 {
     /// <summary>
-    /// Tick managers which update their actors using the supplied 2D vector.
+    /// Tick managers which update their sprites using the supplied 2D vector.
     /// </summary>
     internal interface IVectoredTickManager : ITickManager
     {

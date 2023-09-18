@@ -47,8 +47,8 @@
             buttonCancel = new System.Windows.Forms.Button();
             buttonSave = new System.Windows.Forms.Button();
             tabPageDebug = new System.Windows.Forms.TabPage();
-            checkBoxEnableActorsInterrogation = new System.Windows.Forms.CheckBox();
-            checkBoxHighlightAllActors = new System.Windows.Forms.CheckBox();
+            checkBoxEnableSpriteInterrogation = new System.Windows.Forms.CheckBox();
+            checkBoxHighlightAllSprites = new System.Windows.Forms.CheckBox();
             checkBoxHighlightNatrualBounds = new System.Windows.Forms.CheckBox();
             tabControl1.SuspendLayout();
             tabPageDisplay.SuspendLayout();
@@ -222,8 +222,8 @@
             // 
             // tabPageDebug
             // 
-            tabPageDebug.Controls.Add(checkBoxEnableActorsInterrogation);
-            tabPageDebug.Controls.Add(checkBoxHighlightAllActors);
+            tabPageDebug.Controls.Add(checkBoxEnableSpriteInterrogation);
+            tabPageDebug.Controls.Add(checkBoxHighlightAllSprites);
             tabPageDebug.Controls.Add(checkBoxHighlightNatrualBounds);
             tabPageDebug.Location = new System.Drawing.Point(4, 24);
             tabPageDebug.Name = "tabPageDebug";
@@ -232,25 +232,25 @@
             tabPageDebug.Text = "Debug";
             tabPageDebug.UseVisualStyleBackColor = true;
             // 
-            // checkBoxEnableActorsInterrogation
+            // checkBoxEnableSpriteInterrogation
             // 
-            checkBoxEnableActorsInterrogation.AutoSize = true;
-            checkBoxEnableActorsInterrogation.Location = new System.Drawing.Point(13, 63);
-            checkBoxEnableActorsInterrogation.Name = "checkBoxEnableActorsInterrogation";
-            checkBoxEnableActorsInterrogation.Size = new System.Drawing.Size(173, 19);
-            checkBoxEnableActorsInterrogation.TabIndex = 37;
-            checkBoxEnableActorsInterrogation.Text = "Enable actors interrogation?";
-            checkBoxEnableActorsInterrogation.UseVisualStyleBackColor = true;
+            checkBoxEnableSpriteInterrogation.AutoSize = true;
+            checkBoxEnableSpriteInterrogation.Location = new System.Drawing.Point(13, 63);
+            checkBoxEnableSpriteInterrogation.Name = "checkBoxEnableSpriteInterrogation";
+            checkBoxEnableSpriteInterrogation.Size = new System.Drawing.Size(173, 19);
+            checkBoxEnableSpriteInterrogation.TabIndex = 37;
+            checkBoxEnableSpriteInterrogation.Text = "Enable sprites interrogation?";
+            checkBoxEnableSpriteInterrogation.UseVisualStyleBackColor = true;
             // 
-            // checkBoxHighlightAllActors
+            // checkBoxHighlightAllSprites
             // 
-            checkBoxHighlightAllActors.AutoSize = true;
-            checkBoxHighlightAllActors.Location = new System.Drawing.Point(13, 38);
-            checkBoxHighlightAllActors.Name = "checkBoxHighlightAllActors";
-            checkBoxHighlightAllActors.Size = new System.Drawing.Size(131, 19);
-            checkBoxHighlightAllActors.TabIndex = 36;
-            checkBoxHighlightAllActors.Text = "Highlight all actors?";
-            checkBoxHighlightAllActors.UseVisualStyleBackColor = true;
+            checkBoxHighlightAllSprites.AutoSize = true;
+            checkBoxHighlightAllSprites.Location = new System.Drawing.Point(13, 38);
+            checkBoxHighlightAllSprites.Name = "checkBoxHighlightAllSprites";
+            checkBoxHighlightAllSprites.Size = new System.Drawing.Size(131, 19);
+            checkBoxHighlightAllSprites.TabIndex = 36;
+            checkBoxHighlightAllSprites.Text = "Highlight all sprites?";
+            checkBoxHighlightAllSprites.UseVisualStyleBackColor = true;
             // 
             // checkBoxHighlightNatrualBounds
             // 
@@ -308,8 +308,8 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.TabPage tabPageDebug;
-        private System.Windows.Forms.CheckBox checkBoxEnableActorsInterrogation;
-        private System.Windows.Forms.CheckBox checkBoxHighlightAllActors;
+        private System.Windows.Forms.CheckBox checkBoxEnableSpriteInterrogation;
+        private System.Windows.Forms.CheckBox checkBoxHighlightAllSprites;
         private System.Windows.Forms.CheckBox checkBoxHighlightNatrualBounds;
     }
 }

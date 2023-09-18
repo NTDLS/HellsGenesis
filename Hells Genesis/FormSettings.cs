@@ -20,9 +20,9 @@ namespace HG
             var settings = EngineCore.LoadSettings();
 
             checkBoxAutoZoomWhenMoving.Checked = settings.AutoZoomWhenMoving;
-            checkBoxHighlightAllActors.Checked = settings.HighlightAllActors;
+            checkBoxHighlightAllSprites.Checked = settings.HighlightAllSprites;
             checkBoxHighlightNatrualBounds.Checked = settings.HighlightNatrualBounds;
-            checkBoxEnableActorsInterrogation.Checked = settings.EnableActorsInterrogation;
+            checkBoxEnableSpriteInterrogation.Checked = settings.EnableSpriteInterrogation;
             textBoxFrameLimiter.Text = $"{settings.FrameLimiter:n0}";
             textBoxOverdrawScale.Text = $"{settings.OverdrawScale:n0}";
             textBoxInitialFrameStarCount.Text = $"{settings.InitialFrameStarCount:n0}";
@@ -103,9 +103,9 @@ namespace HG
                 var settings = EngineCore.LoadSettings();
 
                 settings.AutoZoomWhenMoving = checkBoxAutoZoomWhenMoving.Checked;
-                settings.HighlightAllActors = checkBoxHighlightAllActors.Checked;
+                settings.HighlightAllSprites = checkBoxHighlightAllSprites.Checked;
                 settings.HighlightNatrualBounds = checkBoxHighlightNatrualBounds.Checked;
-                settings.EnableActorsInterrogation = checkBoxEnableActorsInterrogation.Checked;
+                settings.EnableSpriteInterrogation = checkBoxEnableSpriteInterrogation.Checked;
 
                 settings.FrameLimiter = GetAndValidate(textBoxFrameLimiter, 30, 1000, "Frame Limiter");
                 settings.OverdrawScale = GetAndValidate(textBoxOverdrawScale, 1.0, 10.0, "Overdraw scale");

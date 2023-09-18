@@ -13,7 +13,7 @@ namespace HG.Weapons
         private const string soundPath = @"Sounds\Weapons\BulletPhotonTorpedo.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponPhotonTorpedo(EngineCore core, ActorShipBase owner)
+        public WeaponPhotonTorpedo(EngineCore core, SpriteShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponPhotonTorpedo(EngineCore core)
@@ -25,7 +25,7 @@ namespace HG.Weapons
             FireDelayMilliseconds = 500;
         }
 
-        public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint xyOffset = null)
+        public override BulletBase CreateBullet(SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
             return new BulletPhotonTorpedo(_core, this, _owner, lockedTarget, xyOffset);
         }

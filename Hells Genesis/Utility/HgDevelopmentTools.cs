@@ -44,12 +44,12 @@ namespace HG.Utility
         /// <param name="core"></param>
         public static void ParticleBlast(EngineCore core, int particleCount)
         {
-            double X = core.Player.Actor.X;
-            double Y = core.Player.Actor.Y;
+            double X = core.Player.Sprite.X;
+            double Y = core.Player.Sprite.Y;
 
             for (int i = 0; i < particleCount; i++)
             {
-                var obj = core.Actors.Particles.CreateRandomShipPartParticleAt(X + HgRandom.RandomNumber(-20, 20), Y + HgRandom.RandomNumber(-20, 20));
+                var obj = core.Sprites.Particles.CreateRandomShipPartParticleAt(X + HgRandom.RandomNumber(-20, 20), Y + HgRandom.RandomNumber(-20, 20));
                 obj.Visable = true;
             }
         }

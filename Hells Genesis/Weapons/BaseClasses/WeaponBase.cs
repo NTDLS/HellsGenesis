@@ -14,7 +14,7 @@ namespace HG.Weapons.BaseClasses
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected EngineCore _core;
-        protected ActorBase _owner;
+        protected SpriteBase _owner;
 
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected HgAudioClip _fireSound;
@@ -32,7 +32,7 @@ namespace HG.Weapons.BaseClasses
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
         public bool CanLockOn { get; set; } = false;
-        public List<ActorBase> LockedOnObjects { get; set; } = new();
+        public List<SpriteBase> LockedOnObjects { get; set; } = new();
         public double MaxLockOnAngle { get; set; } = 10;
         public double MaxLocks { get; set; } = 1;
         public double MinLockDistance { get; set; } = 50;
@@ -46,7 +46,7 @@ namespace HG.Weapons.BaseClasses
             Name = name;
         }
 
-        public WeaponBase(EngineCore core, ActorShipBase owner, string name, string soundPath, float soundVolume)
+        public WeaponBase(EngineCore core, SpriteShipBase owner, string name, string soundPath, float soundVolume)
         {
             _owner = owner;
             _core = core;
@@ -54,7 +54,7 @@ namespace HG.Weapons.BaseClasses
             Name = name;
         }
 
-        public virtual BulletBase CreateBullet(ActorBase lockedTarget, HgPoint xyOffset = null)
+        public virtual BulletBase CreateBullet(SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
             if (_owner == null)
             {
@@ -63,7 +63,7 @@ namespace HG.Weapons.BaseClasses
             return new BulletGeneric(_core, this, _owner, @"Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
         }
 
-        public virtual void ApplyIntelligence(HgPoint displacementVector, ActorBase wouldFireAt)
+        public virtual void ApplyIntelligence(HgPoint displacementVector, SpriteBase wouldFireAt)
         {
             if (_owner == null)
             {
@@ -110,7 +110,7 @@ namespace HG.Weapons.BaseClasses
                 RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
-                _core.Actors.Bullets.Create(this, _owner);
+                _core.Sprites.Bullets.Create(this, _owner);
 
                 ApplyRecoil();
 

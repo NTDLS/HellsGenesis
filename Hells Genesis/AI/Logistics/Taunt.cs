@@ -18,8 +18,8 @@ namespace HG.AI.Logistics
         private const string _assetPath = @"AI\Logistics\Taunt.txt";
 
         private readonly EngineCore _core;
-        private readonly ActorShipBase _owner;
-        private readonly ActorBase _observedObject;
+        private readonly SpriteShipBase _owner;
+        private readonly SpriteBase _observedObject;
 
         #region "Enumerations".
 
@@ -78,7 +78,7 @@ namespace HG.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public Taunt(EngineCore core, ActorShipBase owner, ActorBase observedObject)
+        public Taunt(EngineCore core, SpriteShipBase owner, SpriteBase observedObject)
         {
             _core = core;
             _owner = owner;
@@ -91,7 +91,7 @@ namespace HG.AI.Logistics
             SetNeuralNetwork();
         }
 
-        private void Owner_OnHit(ActorBase sender, HgDamageType damageType, int damageAmount)
+        private void Owner_OnHit(SpriteBase sender, HgDamageType damageType, int damageAmount)
         {
             if (sender.HullHealth <= 10)
             {

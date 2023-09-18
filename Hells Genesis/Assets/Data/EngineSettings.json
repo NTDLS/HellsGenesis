@@ -1,8 +1,8 @@
 {
-  "EnableActorsInterrogation": false,
+  "EnableSpriteInterrogation": false,
   "HighlightNatrualBounds": false,
-  "HighlightAllActors": false,
-  "Resolution": "1200, 675",
+  "HighlightAllSprites": false,
+  "Resolution": "1440, 810",
   "FullScreen": false,
   "AlwaysOnTop": false,
   "LockPlayerAngleToNearbyEnemy": false,

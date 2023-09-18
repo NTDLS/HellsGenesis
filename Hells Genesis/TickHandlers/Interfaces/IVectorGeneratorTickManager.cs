@@ -3,7 +3,7 @@
 namespace HG.TickHandlers.Interfaces
 {
     /// <summary>
-    /// Tick managers that generate offset vectors. Realistically, this is only the "player" actor.
+    /// Tick managers that generate offset vectors. Realistically, this is only the "player" sprite.
     /// </summary>
     internal interface IVectorGeneratorTickManager : ITickManager
     {

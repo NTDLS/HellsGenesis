@@ -18,7 +18,7 @@ namespace HG.Engine
         public DirectX DirectX { get; private set; }
         public EngineInputController Input { get; private set; }
         public EngineDisplayController Display { get; private set; }
-        public EngineActorController Actors { get; private set; }
+        public EngineSpriteController Sprites { get; private set; }
         public SituationTickHandler Situations { get; private set; }
         public EventTickHandler Events { get; private set; }
         public EngineAudioController Audio { get; private set; }
@@ -60,7 +60,7 @@ namespace HG.Engine
 
             Display = new EngineDisplayController(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
             Assets = new EngineAssetController(this);
-            Actors = new EngineActorController(this);
+            Sprites = new EngineSpriteController(this);
             Input = new EngineInputController(this);
             Situations = new SituationTickHandler(this);
             Events = new EventTickHandler(this);
@@ -105,7 +105,7 @@ namespace HG.Engine
                 DirectX.ScreenRenderTarget.Clear(DirectX.Materials.Raw.Black);
 
                 DirectX.IntermediateRenderTarget.Clear(DirectX.Materials.Raw.Black);
-                Actors.RenderPreScaling(DirectX.IntermediateRenderTarget);
+                Sprites.RenderPreScaling(DirectX.IntermediateRenderTarget);
                 DirectX.IntermediateRenderTarget.EndDraw();
 
                 if (Settings.AutoZoomWhenMoving)
@@ -116,7 +116,7 @@ namespace HG.Engine
                 {
                     DirectX.ApplyScaling((float)Display.BaseDrawScale);
                 }
-                Actors.RenderPostScaling(DirectX.ScreenRenderTarget);
+                Sprites.RenderPostScaling(DirectX.ScreenRenderTarget);
 
                 DirectX.ScreenRenderTarget.EndDraw();
             }
@@ -160,8 +160,8 @@ namespace HG.Engine
             if (IsRunning == false)
             {
                 IsRunning = true;
-                Actors.Start();
-                //Actors.ResetPlayer();
+                Sprites.Start();
+                //Sprites.ResetPlayer();
 
                 _gameLoop.Start();
 
@@ -175,7 +175,7 @@ namespace HG.Engine
             {
                 IsRunning = false;
                 _gameLoop.Stop();
-                Actors.Stop();
+                Sprites.Stop();
                 OnStop?.Invoke(this);
                 DirectX.Cleanup();
             }

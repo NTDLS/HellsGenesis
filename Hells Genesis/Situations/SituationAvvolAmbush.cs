@@ -25,8 +25,8 @@ namespace HG.Situations
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 0, 5000), AddFreshEnemiesCallback);
 
-            _core.Player.Actor.AddHullHealth(100);
-            _core.Player.Actor.AddShieldHealth(10);
+            _core.Player.Sprite.AddHullHealth(100);
+            _core.Player.Sprite.AddShieldHealth(10);
         }
 
         private void FirstShowPlayerCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
@@ -36,7 +36,7 @@ namespace HG.Situations
 
         private void AddFreshEnemiesCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Actors.OfType<EnemyBase>().Count == 0)
+            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {
@@ -59,7 +59,7 @@ namespace HG.Situations
 
         private void AddEnemyCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
-            _core.Actors.Enemies.Create<EnemyPhoenix>();
+            _core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
         }
     }
 }

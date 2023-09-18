@@ -32,8 +32,8 @@ namespace HG.Controllers
         public double SpeedOrientedFrameScalingFactor()
         {
             double weightedThrottlePercent = (
-                    _core.Player.Actor.Velocity.ThrottlePercentage * 0.60 //n-percent of the zoom is throttle.
-                    + _core.Player.Actor.Velocity.BoostPercentage * 0.40  //n-percent of the zoom is boost.
+                    _core.Player.Sprite.Velocity.ThrottlePercentage * 0.60 //n-percent of the zoom is throttle.
+                    + _core.Player.Sprite.Velocity.BoostPercentage * 0.40  //n-percent of the zoom is boost.
                 ).Box(0, 1);
 
             double remainingRatioZoom = 1 - BaseDrawScale;

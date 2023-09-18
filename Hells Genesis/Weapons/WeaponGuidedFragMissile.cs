@@ -16,7 +16,7 @@ namespace HG.Weapons
 
         private bool _toggle = false;
 
-        public WeaponGuidedFragMissile(EngineCore core, ActorShipBase owner)
+        public WeaponGuidedFragMissile(EngineCore core, SpriteShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponGuidedFragMissile(EngineCore core)
@@ -37,7 +37,7 @@ namespace HG.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint xyOffset = null)
+        public override BulletBase CreateBullet(SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
             return new BulletGuidedFragMissile(_core, this, _owner, lockedTarget, xyOffset);
         }
@@ -54,12 +54,12 @@ namespace HG.Weapons
                     if (_toggle)
                     {
                         var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new HgPoint(10, 10));
-                        _core.Actors.Bullets.Create(this, _owner, pointRight);
+                        _core.Sprites.Bullets.Create(this, _owner, pointRight);
                     }
                     else
                     {
                         var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new HgPoint(10, 10));
-                        _core.Actors.Bullets.Create(this, _owner, pointLeft);
+                        _core.Sprites.Bullets.Create(this, _owner, pointLeft);
                     }
 
                     _toggle = !_toggle;
@@ -71,12 +71,12 @@ namespace HG.Weapons
                         if (_toggle)
                         {
                             var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new HgPoint(10, 10));
-                            _core.Actors.Bullets.CreateLocked(this, _owner, lockedOn, pointRight);
+                            _core.Sprites.Bullets.CreateLocked(this, _owner, lockedOn, pointRight);
                         }
                         else
                         {
                             var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new HgPoint(10, 10));
-                            _core.Actors.Bullets.CreateLocked(this, _owner, lockedOn, pointLeft);
+                            _core.Sprites.Bullets.CreateLocked(this, _owner, lockedOn, pointLeft);
                         }
                         _toggle = !_toggle;
                     }

@@ -49,9 +49,9 @@ namespace HG.Controllers
             #region Debug stuff.
             if (key == Keys.Delete)
             {
-                if (_core.Actors.OfType<EnemyBase>().Count > 0)
+                if (_core.Sprites.OfType<SpriteEnemyBase>().Count > 0)
                 {
-                    _core.Actors.OfType<EnemyBase>()[0].Explode();
+                    _core.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
                 }
             }
             else if (key == Keys.Oem3) //~
@@ -63,15 +63,15 @@ namespace HG.Controllers
             {
                 //HgDevelopmentTools.ParticleBlast(_core, 50);
                 //HgDevelopmentTools.CreateImageSizeVariants(@"..\..\..\Assets\Graphics\Fragments");
-                //_core.Actors.NewGame();
-                //_core.Actors.ResetAndShowPlayer();
+                //_core.Sprites.NewGame();
+                //_core.Sprites.ResetAndShowPlayer();
             }
             else if (key == Keys.P)
             {
-                var textBlock = _core.Actors.GetActorByAssetTag<ActorTextBlock>("PausedText");
+                var textBlock = _core.Sprites.GetSpriteByAssetTag<SpriteTextBlock>("PausedText");
                 if (textBlock == null)
                 {
-                    textBlock = _core.Actors.TextBlocks.Create(_core.DirectX.TextFormats.LargeBlocker, _core.DirectX.Materials.Brushes.Red, new HgPoint(100, 100), true, "PausedText");
+                    textBlock = _core.Sprites.TextBlocks.Create(_core.DirectX.TextFormats.LargeBlocker, _core.DirectX.Materials.Brushes.Red, new HgPoint(100, 100), true, "PausedText");
                     textBlock.Text = "Paused...";
                     textBlock.X = _core.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
                     textBlock.Y = _core.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
@@ -83,16 +83,16 @@ namespace HG.Controllers
 
             if (key == Keys.Left)
             {
-                if (_core.Player?.Actor?.Visable == true)
+                if (_core.Player?.Sprite?.Visable == true)
                 {
-                    _core.Player?.Actor?.SelectPreviousAvailableUsableSecondaryWeapon();
+                    _core.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
                 }
             }
             else if (key == Keys.Right)
             {
-                if (_core.Player?.Actor?.Visable == true)
+                if (_core.Player?.Sprite?.Visable == true)
                 {
-                    _core.Player?.Actor?.SelectNextAvailableUsableSecondaryWeapon();
+                    _core.Player?.Sprite?.SelectNextAvailableUsableSecondaryWeapon();
                 }
             }
         }

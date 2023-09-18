@@ -14,11 +14,11 @@ namespace HG.Menus.BaseClasses
         protected EngineCore _core;
         private DateTime _lastInputHandled = DateTime.UtcNow;
 
-        public List<ActorMenuItem> Items { get; private set; } = new();
+        public List<SpriteMenuItem> Items { get; private set; } = new();
         public bool ReadyForDeletion { get; private set; }
         public Guid UID { get; private set; } = Guid.NewGuid();
 
-        public List<ActorMenuItem> SelectableItems() => Items.Where(o => o.ItemType == HgMenuItemType.Item).ToList();
+        public List<SpriteMenuItem> SelectableItems() => Items.Where(o => o.ItemType == HgMenuItemType.Item).ToList();
 
         public void QueueForDelete()
         {
@@ -32,13 +32,13 @@ namespace HG.Menus.BaseClasses
 
         public virtual void Cleanup() { }
 
-        public virtual void ExecuteSelection(ActorMenuItem item) { }
+        public virtual void ExecuteSelection(SpriteMenuItem item) { }
 
-        public virtual void SelectionChanged(ActorMenuItem item) { }
+        public virtual void SelectionChanged(SpriteMenuItem item) { }
 
-        public ActorMenuItem CreateAndAddTitleItem(HgPoint location, string text)
+        public SpriteMenuItem CreateAndAddTitleItem(HgPoint location, string text)
         {
-            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuTitle, _core.DirectX.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuItem(_core, this, _core.DirectX.TextFormats.MenuTitle, _core.DirectX.Materials.Brushes.OrangeRed, location)
             {
                 Text = text,
                 ItemType = HgMenuItemType.Title
@@ -47,9 +47,9 @@ namespace HG.Menus.BaseClasses
             return item;
         }
 
-        public ActorMenuItem CreateAndAddTextItem(HgPoint location, string text)
+        public SpriteMenuItem CreateAndAddTextItem(HgPoint location, string text)
         {
-            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuGeneral, _core.DirectX.Materials.Brushes.LawnGreen, location)
+            var item = new SpriteMenuItem(_core, this, _core.DirectX.TextFormats.MenuGeneral, _core.DirectX.Materials.Brushes.LawnGreen, location)
             {
                 Text = text,
                 ItemType = HgMenuItemType.Text
@@ -58,9 +58,9 @@ namespace HG.Menus.BaseClasses
             return item;
         }
 
-        public ActorMenuItem CreateAndAddMenuItem(HgPoint location, string key, string text)
+        public SpriteMenuItem CreateAndAddMenuItem(HgPoint location, string key, string text)
         {
-            var item = new ActorMenuItem(_core, this, _core.DirectX.TextFormats.MenuItem, _core.DirectX.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuItem(_core, this, _core.DirectX.TextFormats.MenuItem, _core.DirectX.Materials.Brushes.OrangeRed, location)
             {
                 Key = key,
                 Text = text,
@@ -70,7 +70,7 @@ namespace HG.Menus.BaseClasses
             return item;
         }
 
-        public void AddMenuItem(ActorMenuItem item)
+        public void AddMenuItem(SpriteMenuItem item)
         {
             lock (_core.Menus._controller)
             {

@@ -9,9 +9,9 @@ namespace HG.Engine
     internal class EngineSettings
     {
         #region Debug settings.
-        public bool EnableActorsInterrogation { get; set; } = false;
+        public bool EnableSpriteInterrogation { get; set; } = false;
         public bool HighlightNatrualBounds { get; set; } = false;
-        public bool HighlightAllActors { get; set; } = false;
+        public bool HighlightAllSprites { get; set; } = false;
         #endregion
 
         public Size Resolution { get; set; }

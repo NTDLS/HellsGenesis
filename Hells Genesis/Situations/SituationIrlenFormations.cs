@@ -25,22 +25,22 @@ namespace HG.Situations
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 1), AdvanceWaveCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 5), RedirectFormationCallback);
 
-            _core.Player.Actor.AddHullHealth(100);
-            _core.Player.Actor.AddShieldHealth(10);
+            _core.Player.Sprite.AddHullHealth(100);
+            _core.Player.Sprite.AddShieldHealth(10);
         }
 
         private void RedirectFormationCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
-            var formationIrlens = _core.Actors.Enemies.VisibleOfType<EnemyIrlen>()
-                .Where(o => o.Mode == EnemyIrlen.AIMode.InFormation).ToList();
+            var formationIrlens = _core.Sprites.Enemies.VisibleOfType<SpriteEnemyIrlen>()
+                .Where(o => o.Mode == SpriteEnemyIrlen.AIMode.InFormation).ToList();
 
             if (formationIrlens.Count > 0)
             {
                 if (formationIrlens.Exists(o => o.IsOnScreen == true) == false)
                 {
-                    double angleToPlayer = formationIrlens.First().AngleTo(_core.Player.Actor);
+                    double angleToPlayer = formationIrlens.First().AngleTo(_core.Player.Sprite);
 
-                    foreach (EnemyIrlen enemy in formationIrlens)
+                    foreach (SpriteEnemyIrlen enemy in formationIrlens)
                     {
                         enemy.Velocity.Angle.Degrees = angleToPlayer;
                     }
@@ -57,7 +57,7 @@ namespace HG.Situations
 
         private void AdvanceWaveCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Actors.OfType<EnemyBase>().Count == 0 && !waitingOnPopulation)
+            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !waitingOnPopulation)
             {
                 if (CurrentWave == TotalWaves && waitingOnPopulation != true)
                 {
@@ -79,9 +79,9 @@ namespace HG.Situations
             waitingOnPopulation = false;
         }
 
-        private EnemyIrlen AddOneEnemyAt(double x, double y, double angle)
+        private SpriteEnemyIrlen AddOneEnemyAt(double x, double y, double angle)
         {
-            var enemy = _core.Actors.Enemies.Create<EnemyIrlen>();
+            var enemy = _core.Sprites.Enemies.Create<SpriteEnemyIrlen>();
             enemy.X = x;
             enemy.Y = y;
             enemy.Velocity.ThrottlePercentage = 0.8;
@@ -92,7 +92,7 @@ namespace HG.Situations
 
         private void CreateTriangleFormation(HgPoint baseLocation, double spacing, int depth)
         {
-            double angle = HgMath.AngleTo(baseLocation, _core.Player.Actor);
+            double angle = HgMath.AngleTo(baseLocation, _core.Player.Sprite);
 
             for (int col = 0; col < depth; col++)
             {

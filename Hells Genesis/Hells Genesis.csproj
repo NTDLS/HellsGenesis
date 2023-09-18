@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Actors\" />
+    <Folder Include="Assets\Data\" />
     <Folder Include="Assets\Loadouts\" />
   </ItemGroup>
 

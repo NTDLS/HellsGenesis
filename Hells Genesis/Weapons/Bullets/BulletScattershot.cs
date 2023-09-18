@@ -14,8 +14,8 @@ namespace HG.Weapons.Bullets
         private readonly int imageCount = 4;
         private readonly int selectedImageIndex = 0;
 
-        public BulletScattershot(EngineCore core, WeaponBase weapon, ActorBase firedFrom,
-             ActorBase lockedTarget = null, HgPoint xyOffset = null)
+        public BulletScattershot(EngineCore core, WeaponBase weapon, SpriteBase firedFrom,
+             SpriteBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, null, lockedTarget, xyOffset)
         {
             selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;

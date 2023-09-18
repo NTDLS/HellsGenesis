@@ -13,7 +13,7 @@ namespace HG.Weapons
         private const string soundPath = @"Sounds\Weapons\WeaponVulcanCannon.wav";
         private const float soundVolumne = 0.2f;
 
-        public WeaponScattershot(EngineCore core, ActorShipBase owner)
+        public WeaponScattershot(EngineCore core, SpriteShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponScattershot(EngineCore core)
@@ -29,7 +29,7 @@ namespace HG.Weapons
             RecoilAmount = 0.25;
         }
 
-        public override BulletBase CreateBullet(ActorBase lockedTarget, HgPoint xyOffset = null)
+        public override BulletBase CreateBullet(SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
             return new BulletScattershot(_core, this, _owner, lockedTarget, xyOffset);
         }

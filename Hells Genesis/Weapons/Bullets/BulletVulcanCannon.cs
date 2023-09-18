@@ -10,8 +10,8 @@ namespace HG.Weapons.Bullets
     {
         private const string imagePath = @"Graphics\Weapon\BulletVulcanCannon.png";
 
-        public BulletVulcanCannon(EngineCore core, WeaponBase weapon, ActorBase firedFrom,
-             ActorBase lockedTarget = null, HgPoint xyOffset = null)
+        public BulletVulcanCannon(EngineCore core, WeaponBase weapon, SpriteBase firedFrom,
+             SpriteBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             Initialize(imagePath);

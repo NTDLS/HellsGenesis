@@ -22,8 +22,8 @@ namespace HG.Situations
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 0, 5000), AddFreshEnemiesCallback);
 
-            _core.Player.Actor.AddHullHealth(100);
-            _core.Player.Actor.AddShieldHealth(10);
+            _core.Player.Sprite.AddHullHealth(100);
+            _core.Player.Sprite.AddShieldHealth(10);
         }
 
         private void FirstShowPlayerCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
@@ -34,7 +34,7 @@ namespace HG.Situations
 
         private void AddFreshEnemiesCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Actors.OfType<EnemyBase>().Count == 0)
+            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {
@@ -58,31 +58,31 @@ namespace HG.Situations
 
         private void AddEnemyCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
-            //_core.Actors.Enemies.Create<EnemyRepulsor>();
-            //_core.Actors.Enemies.Create<EnemyRepulsor>();
-            //_core.Actors.Enemies.Create<EnemyRepulsor>();
-            //_core.Actors.Enemies.Create<EnemyRepulsor>();
-            _core.Actors.Enemies.Create<EnemyPhoenix>();
-            _core.Actors.Enemies.Create<EnemyPhoenix>();
-            _core.Actors.Enemies.Create<EnemyPhoenix>();
-            _core.Actors.Enemies.Create<EnemyPhoenix>();
+            //_core.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_core.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_core.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_core.Sprites.Enemies.Create<EnemyRepulsor>();
+            _core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
 
-            //_core.Actors.Debugs.CreateAtCenterScreen();
-            _core.Actors.Enemies.Create<EnemyDebug>();
-            //_core.Actors.Enemies.Create<EnemyDebug>();
-            //_core.Actors.Enemies.Create<EnemyDebug>();
-            //_core.Actors.Enemies.Create<EnemyDebug>();
+            //_core.Sprites.Debugs.CreateAtCenterScreen();
+            _core.Sprites.Enemies.Create<SpriteEnemyDebug>();
+            //_core.Sprites.Enemies.Create<EnemyDebug>();
+            //_core.Sprites.Enemies.Create<EnemyDebug>();
+            //_core.Sprites.Enemies.Create<EnemyDebug>();
 
-            //_core.Actors.Enemies.Create<EnemyDebug>();
-            //_core.Actors.Enemies.Create<EnemyDebug>();
-            //_core.Actors.Enemies.Create<EnemyPhoenix>();
-            //_core.Actors.Enemies.Create<EnemyPhoenix>();
-            //_core.Actors.Enemies.Create<EnemyPhoenix>();
-            //_core.Actors.Enemies.Create<EnemyDevastator>();
-            //_core.Actors.Enemies.Create<EnemyRepulsor>();
-            //_core.Actors.Enemies.Create<EnemySpectre>();
-            //_core.Actors.Enemies.Create<EnemyDevastator>();
-            //_core.Actors.Enemies.Create<EnemyDevastator>();
+            //_core.Sprites.Enemies.Create<EnemyDebug>();
+            //_core.Sprites.Enemies.Create<EnemyDebug>();
+            //_core.Sprites.Enemies.Create<EnemyPhoenix>();
+            //_core.Sprites.Enemies.Create<EnemyPhoenix>();
+            //_core.Sprites.Enemies.Create<EnemyPhoenix>();
+            //_core.Sprites.Enemies.Create<EnemyDevastator>();
+            //_core.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_core.Sprites.Enemies.Create<EnemySpectre>();
+            //_core.Sprites.Enemies.Create<EnemyDevastator>();
+            //_core.Sprites.Enemies.Create<EnemyDevastator>();
         }
     }
 }

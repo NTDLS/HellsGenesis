@@ -50,7 +50,7 @@ namespace HG.Menus
             itemYes.Selected = true;
         }
 
-        public override void ExecuteSelection(ActorMenuItem item)
+        public override void ExecuteSelection(SpriteMenuItem item)
         {
             if (item.Key == "NO")
             {
