@@ -1,14 +1,14 @@
-﻿using HG.Engine;
+﻿using HG.Controller.Interfaces;
+using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites.PowerUp;
-using HG.TickHandlers.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace HG.TickHandlers
+namespace HG.Controller
 {
-    internal class PowerupSpriteTickHandler : IVectoredTickManager
+    internal class PowerupSpriteTickController : IVectoredTickController
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;
@@ -17,7 +17,7 @@ namespace HG.TickHandlers
         public List<SpritePowerUpBase> Visible() => _controller.VisibleOfType<SpritePowerUpBase>();
         public List<subType> OfType<subType>() where subType : SpritePowerUpBase => _controller.OfType<subType>();
 
-        public PowerupSpriteTickHandler(EngineCore core, EngineSpriteManager manager)
+        public PowerupSpriteTickController(EngineCore core, EngineSpriteManager manager)
         {
             _core = core;
             _controller = manager;

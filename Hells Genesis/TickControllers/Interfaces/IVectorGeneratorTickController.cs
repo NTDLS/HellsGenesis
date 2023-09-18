@@ -1,11 +1,11 @@
 ﻿using HG.Engine.Types.Geometry;
 
-namespace HG.TickHandlers.Interfaces
+namespace HG.Controller.Interfaces
 {
     /// <summary>
     /// Tick managers that generate offset vectors. Realistically, this is only the "player" sprite.
     /// </summary>
-    internal interface IVectorGeneratorTickManager : ITickManager
+    internal interface IVectorGeneratorTickController : ITickController
     {
         /// <summary>
         /// Moves the player and returns the direction and amount of movment which was applied.

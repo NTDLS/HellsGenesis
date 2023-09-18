@@ -1,9 +1,9 @@
-﻿using HG.Engine.ImageProcessing;
+﻿using HG.Controller;
+using HG.Engine.ImageProcessing;
 using HG.Engine.Types;
 using HG.Loudouts;
 using HG.Managers;
 using HG.Menus;
-using HG.TickHandlers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Drawing;
@@ -14,27 +14,34 @@ namespace HG.Engine
 {
     internal class EngineCore
     {
-        public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
-        public DirectX DirectX { get; private set; }
+        public SituationTickController Situations { get; private set; }
+        public EventTickController Events { get; private set; }
+        public PlayerTickController Player { get; private set; }
+
         public EngineInputManager Input { get; private set; }
         public EngineDisplayManager Display { get; private set; }
-        public EngineSpriteManager Sprites { get; private set; }
-        public SituationTickHandler Situations { get; private set; }
-        public EventTickHandler Events { get; private set; }
+        public EngineSpriteManager Sprites { get; private set; } //Also contains all of the sprite tick controllers.
         public EngineAudioManager Audio { get; private set; }
         public EngineAssetManager Assets { get; private set; }
+        public MenuTickHandler Menus { get; private set; }
+
+        public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
+        public DirectX DirectX { get; private set; }
+
         public EngineSettings Settings { get; private set; }
 
-        public MenuTickHandler Menus { get; private set; }
-        public PlayerTickHandler Player { get; private set; }
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
         public bool ShowDebug { get; set; } = false;
 
-        private readonly EngineWorldClock _gameLoop;
+        private readonly EngineWorldClock _worldClock;
 
         static uint _nextSequentialId = 1;
-        static object _nextSequentialLock = new object();
+        static readonly object _nextSequentialLock = new();
+        /// <summary>
+        /// Used to give all loaded sprites a unique ID. Very handy for debugging.
+        /// </summary>
+        /// <returns></returns>
         public static uint GetNextSequentialId()
         {
             lock (_nextSequentialLock)
@@ -61,16 +68,16 @@ namespace HG.Engine
             Assets = new EngineAssetManager(this);
             Sprites = new EngineSpriteManager(this);
             Input = new EngineInputManager(this);
-            Situations = new SituationTickHandler(this);
-            Events = new EventTickHandler(this);
+            Situations = new SituationTickController(this);
+            Events = new EventTickController(this);
             Audio = new EngineAudioManager(this);
             Menus = new MenuTickHandler(this);
-            Player = new PlayerTickHandler(this);
+            Player = new PlayerTickController(this);
             DirectX = new DirectX(this);
 
             LoadPrefabs();
 
-            _gameLoop = new EngineWorldClock(this);
+            _worldClock = new EngineWorldClock(this);
 
             Events.Create(new System.TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
@@ -161,7 +168,7 @@ namespace HG.Engine
                 Sprites.Start();
                 //Sprites.ResetPlayer();
 
-                _gameLoop.Start();
+                _worldClock.Start();
 
                 OnStart?.Invoke(this);
             }
@@ -172,16 +179,16 @@ namespace HG.Engine
             if (IsRunning)
             {
                 IsRunning = false;
-                _gameLoop.Stop();
+                _worldClock.Stop();
                 Sprites.Stop();
                 OnStop?.Invoke(this);
                 DirectX.Cleanup();
             }
         }
 
-        public bool IsPaused() => _gameLoop.IsPaused();
-        public void TogglePause() => _gameLoop.TogglePause();
-        public void Pause() => _gameLoop.Pause();
-        public void Resume() => _gameLoop.Resume();
+        public bool IsPaused() => _worldClock.IsPaused();
+        public void TogglePause() => _worldClock.TogglePause();
+        public void Pause() => _worldClock.Pause();
+        public void Resume() => _worldClock.Resume();
     }
 }

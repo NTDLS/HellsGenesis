@@ -1,18 +1,18 @@
-﻿using HG.Engine;
+﻿using HG.Controller.Interfaces;
+using HG.Engine;
 using HG.Situations;
-using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
 
-namespace HG.TickHandlers
+namespace HG.Controller
 {
-    internal class SituationTickHandler : IUnvectoredTickManager
+    internal class SituationTickController : IUnvectoredTickController
     {
         public EngineCore _core { get; private set; }
         public SituationBase CurrentSituation { get; private set; }
 
         public List<SituationBase> Situations = new();
 
-        public SituationTickHandler(EngineCore core)
+        public SituationTickController(EngineCore core)
         {
             _core = core;
         }

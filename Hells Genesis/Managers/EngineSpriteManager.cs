@@ -1,10 +1,10 @@
-﻿using HG.Engine;
+﻿using HG.Controller;
+using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Menus;
 using HG.Sprites;
 using HG.Sprites.Enemies;
 using HG.Sprites.PowerUp;
-using HG.TickHandlers;
 using HG.Utility.ExtensionMethods;
 using HG.Weapons.Bullets;
 using System.Collections.Generic;
@@ -28,17 +28,17 @@ namespace HG.Managers
         #region Sprites and their factories.
 
         internal List<SpriteBase> Collection { get; private set; } = new();
-        public AnimationSpriteTickHandler Animations { get; set; }
-        public AttachmentSpriteTickHandler Attachments { get; set; }
-        public BulletSpriteTickHandler Bullets { get; set; }
-        public DebugSpriteTickHandler Debugs { get; set; }
-        public EnemySpriteTickHandler Enemies { get; set; }
-        public ParticleSpriteTickHandler Particles { get; set; }
-        public PowerupSpriteTickHandler Powerups { get; set; }
-        public RadarPositionSpriteTickHandler RadarPositions { get; set; }
-        public StarSpriteTickHandler Stars { get; set; }
-        public TextBlockSpriteTickHandler TextBlocks { get; set; }
 
+        public AnimationSpriteTickController Animations { get; set; }
+        public AttachmentSpriteTickController Attachments { get; set; }
+        public BulletSpriteTickController Bullets { get; set; }
+        public DebugSpriteTickController Debugs { get; set; }
+        public EnemySpriteTickController Enemies { get; set; }
+        public ParticleSpriteTickController Particles { get; set; }
+        public PowerupSpriteTickController Powerups { get; set; }
+        public RadarPositionSpriteTickController RadarPositions { get; set; }
+        public StarSpriteTickController Stars { get; set; }
+        public TextBlockSpriteTickController TextBlocks { get; set; }
 
         #endregion
 
@@ -46,16 +46,16 @@ namespace HG.Managers
         {
             _core = core;
 
-            Animations = new AnimationSpriteTickHandler(_core, this);
-            Attachments = new AttachmentSpriteTickHandler(_core, this);
-            Bullets = new BulletSpriteTickHandler(_core, this);
-            Debugs = new DebugSpriteTickHandler(_core, this);
-            Enemies = new EnemySpriteTickHandler(_core, this);
-            Particles = new ParticleSpriteTickHandler(_core, this);
-            Powerups = new PowerupSpriteTickHandler(_core, this);
-            RadarPositions = new RadarPositionSpriteTickHandler(_core, this);
-            Stars = new StarSpriteTickHandler(_core, this);
-            TextBlocks = new TextBlockSpriteTickHandler(_core, this);
+            Animations = new AnimationSpriteTickController(_core, this);
+            Attachments = new AttachmentSpriteTickController(_core, this);
+            Bullets = new BulletSpriteTickController(_core, this);
+            Debugs = new DebugSpriteTickController(_core, this);
+            Enemies = new EnemySpriteTickController(_core, this);
+            Particles = new ParticleSpriteTickController(_core, this);
+            Powerups = new PowerupSpriteTickController(_core, this);
+            RadarPositions = new RadarPositionSpriteTickController(_core, this);
+            Stars = new StarSpriteTickController(_core, this);
+            TextBlocks = new TextBlockSpriteTickController(_core, this);
         }
 
         public void Start()

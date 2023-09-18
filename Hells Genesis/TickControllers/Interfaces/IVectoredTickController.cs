@@ -1,11 +1,11 @@
 ﻿using HG.Engine.Types.Geometry;
 
-namespace HG.TickHandlers.Interfaces
+namespace HG.Controller.Interfaces
 {
     /// <summary>
     /// Tick managers which update their sprites using the supplied 2D vector.
     /// </summary>
-    internal interface IVectoredTickManager : ITickManager
+    internal interface IVectoredTickController : ITickController
     {
         /// <summary>
         /// </summary>

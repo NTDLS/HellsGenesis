@@ -1,15 +1,15 @@
-﻿using HG.Engine;
+﻿using HG.Controller.Interfaces;
+using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
-using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace HG.TickHandlers
+namespace HG.Controller
 {
-    internal class AttachmentSpriteTickHandler : IVectoredTickManager
+    internal class AttachmentSpriteTickController : IVectoredTickController
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;
@@ -18,7 +18,7 @@ namespace HG.TickHandlers
         public List<SpriteAttachment> Visible() => _controller.VisibleOfType<SpriteAttachment>();
         public List<subType> OfType<subType>() where subType : SpriteAttachment => _controller.OfType<subType>();
 
-        public AttachmentSpriteTickHandler(EngineCore core, EngineSpriteManager manager)
+        public AttachmentSpriteTickController(EngineCore core, EngineSpriteManager manager)
         {
             _core = core;
             _controller = manager;

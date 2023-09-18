@@ -1,14 +1,14 @@
-﻿using HG.Engine;
+﻿using HG.Controller.Interfaces;
+using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
-using HG.TickHandlers.Interfaces;
 using HG.Utility;
 using System.Collections.Generic;
 
-namespace HG.TickHandlers
+namespace HG.Controller
 {
-    internal class StarSpriteTickHandler : IVectoredTickManager
+    internal class StarSpriteTickController : IVectoredTickController
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;
@@ -18,7 +18,7 @@ namespace HG.TickHandlers
         public List<subType> OfType<subType>() where subType : SpriteStar => _controller.OfType<subType>();
 
 
-        public StarSpriteTickHandler(EngineCore core, EngineSpriteManager manager)
+        public StarSpriteTickController(EngineCore core, EngineSpriteManager manager)
         {
             _core = core;
             _controller = manager;

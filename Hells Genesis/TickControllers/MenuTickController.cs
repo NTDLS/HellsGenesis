@@ -1,11 +1,11 @@
-﻿using HG.Engine;
+﻿using HG.Controller.Interfaces;
+using HG.Engine;
 using HG.Menus;
-using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
 
-namespace HG.TickHandlers
+namespace HG.Controller
 {
-    internal class MenuTickHandler : IUnvectoredTickManager
+    internal class MenuTickHandler : IUnvectoredTickController
     {
         public List<MenuBase> _controller { get; private set; } = new();
 

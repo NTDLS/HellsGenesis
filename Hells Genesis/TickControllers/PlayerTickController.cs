@@ -1,17 +1,17 @@
-﻿using HG.Engine;
+﻿using HG.Controller.Interfaces;
+using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Sprites;
-using HG.TickHandlers.Interfaces;
 using HG.Utility.ExtensionMethods;
 
-namespace HG.TickHandlers
+namespace HG.Controller
 {
-    internal class PlayerTickHandler : IVectorGeneratorTickManager
+    internal class PlayerTickController : IVectorGeneratorTickController
     {
         public SpritePlayer Sprite { get; set; }
         private readonly EngineCore _core;
 
-        public PlayerTickHandler(EngineCore core)
+        public PlayerTickController(EngineCore core)
         {
             _core = core;
         }

@@ -1,16 +1,16 @@
-﻿using HG.Engine;
+﻿using HG.Controller.Interfaces;
+using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
-using HG.TickHandlers.Interfaces;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HG.TickHandlers
+namespace HG.Controller
 {
-    internal class TextBlockSpriteTickHandler : IVectoredTickManager
+    internal class TextBlockSpriteTickController : IVectoredTickController
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;
@@ -19,7 +19,7 @@ namespace HG.TickHandlers
         public List<SpriteTextBlock> Visible() => _controller.VisibleOfType<SpriteTextBlock>();
         public List<subType> OfType<subType>() where subType : SpriteTextBlock => _controller.OfType<subType>();
 
-        public TextBlockSpriteTickHandler(EngineCore core, EngineSpriteManager manager)
+        public TextBlockSpriteTickController(EngineCore core, EngineSpriteManager manager)
         {
             _core = core;
             _controller = manager;
