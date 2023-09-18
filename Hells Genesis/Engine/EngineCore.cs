@@ -79,9 +79,7 @@ namespace HG.Engine
 
         public static EngineSettings LoadSettings()
         {
-            string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            string executableDirectory = Path.GetDirectoryName(executablePath);
-            string settingsFile = Path.Combine(executableDirectory, "enginesettings.json");
+            string settingsFile = Path.Combine(@"..\..\..\Assets\Data", "EngineSettings.json");
 
             if (File.Exists(settingsFile) == false)
             {
@@ -93,9 +91,7 @@ namespace HG.Engine
 
         public static void SaveSettings(EngineSettings settings)
         {
-            string executablePath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            string executableDirectory = Path.GetDirectoryName(executablePath);
-            string settingsFile = Path.Combine(executableDirectory, "enginesettings.json");
+            string settingsFile = Path.Combine(@"..\..\..\Assets\Data", "EngineSettings.json");
             File.WriteAllText(settingsFile, JsonConvert.SerializeObject(settings, Formatting.Indented));
         }
 
@@ -131,7 +127,7 @@ namespace HG.Engine
 
         private void LoadPrefabs()
         {
-            var playerLoadoutPath = "Loadouts\\Player.json";
+            var playerLoadoutPath = "Data\\PlayerLoadouts.json";
             var playerLoadoutText = Assets.GetText(playerLoadoutPath);
             if (string.IsNullOrEmpty(playerLoadoutText) == false)
             {

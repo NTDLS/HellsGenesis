@@ -1,10 +1,10 @@
-﻿using NTDLS.Determinet;
-using NTDLS.Determinet.Types;
-using HG.Actors.BaseClasses;
+﻿using HG.Actors.BaseClasses;
 using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
+using NTDLS.Determinet;
+using NTDLS.Determinet.Types;
 using System;
 
 namespace HG.AI.Logistics

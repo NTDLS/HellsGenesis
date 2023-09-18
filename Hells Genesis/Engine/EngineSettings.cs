@@ -32,7 +32,7 @@ namespace HG.Engine
 
         public double MaxPlayerBoost { get; set; } = 10000;
         public double PlayerBoostRebuildMin { get; set; } = 1000;
-        public double MaxRecoilPercentage { get; set; } = 0.5; //Max amount that will be substracted from the thrust percentage.
+        public double MaxRecoilPercentage { get; set; } = 0.4; //Max amount that will be substracted from the thrust percentage.
         public double MaxPlayerRotationSpeedDegrees { get; set; } = 2;
 
         public int InitialFrameStarCount { get; set; } = 100;

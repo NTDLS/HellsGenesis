@@ -1,5 +1,5 @@
-﻿using NTDLS.Determinet;
-using HG.Engine.Types.Geometry;
+﻿using HG.Engine.Types.Geometry;
+using NTDLS.Determinet;
 
 namespace HG.AI
 {
