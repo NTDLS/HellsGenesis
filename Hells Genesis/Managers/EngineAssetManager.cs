@@ -4,20 +4,28 @@ using NTDLS.Determinet;
 using System.Collections.Generic;
 using System.IO;
 
-namespace HG.Controllers
+namespace HG.Managers
 {
-    internal class EngineAssetController
+    /// <summary>
+    /// Allows for access to various types of assets (images, sounds, text, etc).
+    /// </summary>
+    internal class EngineAssetManager
     {
         private readonly EngineCore _core;
         private readonly Dictionary<string, object> _collection = new();
 
         private readonly string assetRawPath = @"..\..\..\Assets";
 
-        public EngineAssetController(EngineCore core)
+        public EngineAssetManager(EngineCore core)
         {
             _core = core;
         }
 
+        /// <summary>
+        /// Gets and caches a neural network instance from the asset path. Returns the clone of that network.
+        /// </summary>
+        /// <param name="assetRelativePath"></param>
+        /// <returns>The clone of the cached network.</returns>
         public DniNeuralNetwork GetNeuralNetwork(string assetRelativePath)
         {
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
@@ -42,6 +50,12 @@ namespace HG.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Gets and caches a text files content from the asset path.
+        /// </summary>
+        /// <param name="assetRelativePath"></param>
+        /// <param name="defaultText"></param>
+        /// <returns></returns>
         public string GetText(string assetRelativePath, string defaultText = "")
         {
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
@@ -63,6 +77,11 @@ namespace HG.Controllers
             }
         }
 
+        /// <summary>
+        /// Saves and caches a text file into the asset path.
+        /// </summary>
+        /// <param name="assetRelativePath"></param>
+        /// <param name="value"></param>
         public void PutText(string assetRelativePath, string value)
         {
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
@@ -83,6 +102,13 @@ namespace HG.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets and caches an audio clip from the asset path.
+        /// </summary>
+        /// <param name="assetRelativePath"></param>
+        /// <param name="initialVolumne"></param>
+        /// <param name="loopForever"></param>
+        /// <returns></returns>
         public HgAudioClip GetAudio(string assetRelativePath, float initialVolumne, bool loopForever = false)
         {
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
@@ -105,6 +131,11 @@ namespace HG.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a image from the asset path and caches it.
+        /// </summary>
+        /// <param name="assetRelativePath"></param>
+        /// <returns></returns>
         public SharpDX.Direct2D1.Bitmap GetBitmap(string assetRelativePath)
         {
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
@@ -123,6 +154,14 @@ namespace HG.Controllers
             }
         }
 
+        /// <summary>
+        /// Get a image from the asset path and resizes it before caching. Note that future calls to
+        /// this function will get the originally cached image regardless of the specified size.
+        /// </summary>
+        /// <param name="assetRelativePath"></param>
+        /// <param name="newWidth"></param>
+        /// <param name="newHeight"></param>
+        /// <returns></returns>
         public SharpDX.Direct2D1.Bitmap GetBitmap(string assetRelativePath, int newWidth, int newHeight)
         {
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");

@@ -39,7 +39,7 @@ namespace HG
                 Width = Screen.PrimaryScreen.Bounds.Width;
                 Height = Screen.PrimaryScreen.Bounds.Height;
                 ShowInTaskbar = true;
-                TopMost = true;
+                //TopMost = true; This is a total pain for debugging.
                 WindowState = FormWindowState.Maximized;
             }
             else

@@ -1,6 +1,6 @@
-﻿using HG.Controllers;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
+using HG.Managers;
 using HG.Sprites.Enemies.BaseClasses;
 using HG.TickHandlers.Interfaces;
 using HG.Utility;
@@ -12,13 +12,13 @@ namespace HG.TickHandlers
     internal class EnemySpriteTickHandler : IVectoredTickManager
     {
         private readonly EngineCore _core;
-        private readonly EngineSpriteController _controller;
+        private readonly EngineSpriteManager _controller;
 
         public List<subType> VisibleOfType<subType>() where subType : SpriteEnemyBase => _controller.VisibleOfType<subType>();
         public List<SpriteEnemyBase> Visible() => _controller.VisibleOfType<SpriteEnemyBase>();
         public List<subType> OfType<subType>() where subType : SpriteEnemyBase => _controller.OfType<subType>();
 
-        public EnemySpriteTickHandler(EngineCore core, EngineSpriteController manager)
+        public EnemySpriteTickHandler(EngineCore core, EngineSpriteManager manager)
         {
             _core = core;
             _controller = manager;

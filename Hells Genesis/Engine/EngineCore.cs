@@ -1,7 +1,7 @@
-﻿using HG.Controllers;
-using HG.Engine.ImageProcessing;
+﻿using HG.Engine.ImageProcessing;
 using HG.Engine.Types;
 using HG.Loudouts;
+using HG.Managers;
 using HG.Menus;
 using HG.TickHandlers;
 using Newtonsoft.Json;
@@ -16,14 +16,13 @@ namespace HG.Engine
     {
         public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
         public DirectX DirectX { get; private set; }
-        public EngineInputController Input { get; private set; }
-        public EngineDisplayController Display { get; private set; }
-        public EngineSpriteController Sprites { get; private set; }
+        public EngineInputManager Input { get; private set; }
+        public EngineDisplayManager Display { get; private set; }
+        public EngineSpriteManager Sprites { get; private set; }
         public SituationTickHandler Situations { get; private set; }
         public EventTickHandler Events { get; private set; }
-        public EngineAudioController Audio { get; private set; }
-        public EngineImageController Imaging { get; private set; }
-        public EngineAssetController Assets { get; private set; }
+        public EngineAudioManager Audio { get; private set; }
+        public EngineAssetManager Assets { get; private set; }
         public EngineSettings Settings { get; private set; }
 
         public MenuTickHandler Menus { get; private set; }
@@ -58,14 +57,13 @@ namespace HG.Engine
         {
             Settings = LoadSettings();
 
-            Display = new EngineDisplayController(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
-            Assets = new EngineAssetController(this);
-            Sprites = new EngineSpriteController(this);
-            Input = new EngineInputController(this);
+            Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
+            Assets = new EngineAssetManager(this);
+            Sprites = new EngineSpriteManager(this);
+            Input = new EngineInputManager(this);
             Situations = new SituationTickHandler(this);
             Events = new EventTickHandler(this);
-            Audio = new EngineAudioController(this);
-            Imaging = new EngineImageController(this);
+            Audio = new EngineAudioManager(this);
             Menus = new MenuTickHandler(this);
             Player = new PlayerTickHandler(this);
             DirectX = new DirectX(this);

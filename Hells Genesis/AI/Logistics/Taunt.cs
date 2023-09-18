@@ -15,7 +15,7 @@ namespace HG.AI.Logistics
     /// </summary>
     internal class Taunt : IAIController
     {
-        private const string _assetPath = @"AI\Logistics\Taunt.txt";
+        private const string _assetPath = @"Data\AI\Logistics\Taunt.txt";
 
         private readonly EngineCore _core;
         private readonly SpriteShipBase _owner;

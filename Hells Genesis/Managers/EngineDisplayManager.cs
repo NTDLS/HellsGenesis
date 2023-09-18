@@ -8,9 +8,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace HG.Controllers
+namespace HG.Managers
 {
-    internal class EngineDisplayController
+    /// <summary>
+    /// Various metrics related to display.
+    /// </summary>
+    internal class EngineDisplayManager
     {
         private readonly EngineCore _core;
 
@@ -18,7 +21,6 @@ namespace HG.Controllers
         public HgQuadrant CurrentQuadrant { get; set; }
         public HgPoint BackgroundOffset { get; private set; } = new(); //Offset of background, all cals must take into account.
         public HgFrameCounter GameLoopCounter { get; private set; } = new();
-
         public Control DrawingSurface { get; private set; }
 
         /// <summary>
@@ -158,7 +160,7 @@ namespace HG.Controllers
             return new HgPoint(x, y);
         }
 
-        public EngineDisplayController(EngineCore core, Control drawingSurface, Size visibleSize)
+        public EngineDisplayManager(EngineCore core, Control drawingSurface, Size visibleSize)
         {
             _core = core;
             DrawingSurface = drawingSurface;

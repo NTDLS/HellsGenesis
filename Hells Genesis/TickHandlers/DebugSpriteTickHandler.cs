@@ -1,6 +1,6 @@
-﻿using HG.Controllers;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
+using HG.Managers;
 using HG.Sprites;
 using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace HG.TickHandlers
     internal class DebugSpriteTickHandler : IVectoredTickManager
     {
         private readonly EngineCore _core;
-        private readonly EngineSpriteController _controller;
+        private readonly EngineSpriteManager _controller;
 
         public SpriteDebug ByAssetTag(string name) => _controller.VisibleOfType<SpriteDebug>().Where(o => o.Name == name).FirstOrDefault();
 
@@ -19,7 +19,7 @@ namespace HG.TickHandlers
         public List<SpriteDebug> Visible() => _controller.VisibleOfType<SpriteDebug>();
         public List<subType> OfType<subType>() where subType : SpriteDebug => _controller.OfType<subType>();
 
-        public DebugSpriteTickHandler(EngineCore core, EngineSpriteController manager)
+        public DebugSpriteTickHandler(EngineCore core, EngineSpriteManager manager)
         {
             _core = core;
             _controller = manager;

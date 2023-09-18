@@ -1,6 +1,6 @@
-﻿using HG.Controllers;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
+using HG.Managers;
 using HG.Sprites;
 using HG.Sprites.BaseClasses;
 using HG.TickHandlers.Interfaces;
@@ -12,13 +12,13 @@ namespace HG.TickHandlers
     internal class ParticleSpriteTickHandler : IVectoredTickManager
     {
         private readonly EngineCore _core;
-        private readonly EngineSpriteController _controller;
+        private readonly EngineSpriteManager _controller;
 
         public List<subType> VisibleOfType<subType>() where subType : SpriteParticleBase => _controller.VisibleOfType<subType>();
         public List<SpriteParticleBase> Visible() => _controller.VisibleOfType<SpriteParticleBase>();
         public List<subType> OfType<subType>() where subType : SpriteParticleBase => _controller.OfType<subType>();
 
-        public ParticleSpriteTickHandler(EngineCore core, EngineSpriteController manager)
+        public ParticleSpriteTickHandler(EngineCore core, EngineSpriteManager manager)
         {
             _core = core;
             _controller = manager;

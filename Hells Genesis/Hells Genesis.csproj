@@ -11,6 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Assets\Loadouts\**" />
+    <EmbeddedResource Remove="Assets\Loadouts\**" />
+    <None Remove="Assets\Loadouts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="HG.ico" />
   </ItemGroup>
 
@@ -20,11 +26,6 @@
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
     <PackageReference Include="SharpDX.XAudio2" Version="4.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Assets\Data\" />
-    <Folder Include="Assets\Loadouts\" />
   </ItemGroup>
 
   <ItemGroup>

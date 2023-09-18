@@ -42,7 +42,7 @@ namespace HG.Weapons.BaseClasses
         public WeaponBase(EngineCore core, string name, string soundPath, float soundVolume)
         {
             _core = core;
-            _fireSound = _core.Audio.Get(soundPath, soundVolume);
+            _fireSound = _core.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
         }
 
@@ -50,7 +50,7 @@ namespace HG.Weapons.BaseClasses
         {
             _owner = owner;
             _core = core;
-            _fireSound = _core.Audio.Get(soundPath, soundVolume);
+            _fireSound = _core.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
         }
 

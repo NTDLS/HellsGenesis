@@ -256,13 +256,13 @@ namespace HG.Sprites.BaseClasses
 
         public void SetImage(string imagePath)
         {
-            _image = _core.Imaging.Get(imagePath);
+            _image = _core.Assets.GetBitmap(imagePath);
             _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
         public void SetImage(string imagePath, Size size)
         {
-            _image = _core.Imaging.Get(imagePath, size.Width, size.Height);
+            _image = _core.Assets.GetBitmap(imagePath, size.Width, size.Height);
             _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 

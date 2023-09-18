@@ -1,6 +1,6 @@
-﻿using HG.Controllers;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
+using HG.Managers;
 using HG.Sprites;
 using HG.TickHandlers.Interfaces;
 using System;
@@ -12,13 +12,13 @@ namespace HG.TickHandlers
     internal class RadarPositionSpriteTickHandler : IUnvectoredTickManager
     {
         private readonly EngineCore _core;
-        private readonly EngineSpriteController _controller;
+        private readonly EngineSpriteManager _controller;
 
         public List<subType> VisibleOfType<subType>() where subType : SpriteRadarPositionIndicator => _controller.VisibleOfType<subType>();
         public List<SpriteRadarPositionIndicator> Visible() => _controller.VisibleOfType<SpriteRadarPositionIndicator>();
         public List<subType> OfType<subType>() where subType : SpriteRadarPositionIndicator => _controller.OfType<subType>();
 
-        public RadarPositionSpriteTickHandler(EngineCore core, EngineSpriteController manager)
+        public RadarPositionSpriteTickHandler(EngineCore core, EngineSpriteManager manager)
         {
             _core = core;
             _controller = manager;

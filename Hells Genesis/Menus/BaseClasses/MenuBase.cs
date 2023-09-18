@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace HG.Menus.BaseClasses
 {
+    /// <summary>
+    /// A menu instance. Allows for setting title text, adding items and managing selections.
+    /// </summary>
     internal class MenuBase
     {
         protected EngineCore _core;

@@ -6,6 +6,9 @@ using static HG.Loudouts.ShipLoadout;
 
 namespace HG.Loudouts
 {
+    /// <summary>
+    /// Contains all of the pre-defined loadouts that the player can select from.
+    /// </summary>
     internal class PrefabPlayerLoadouts
     {
         public List<ShipLoadout> Collection { get; private set; } = new();

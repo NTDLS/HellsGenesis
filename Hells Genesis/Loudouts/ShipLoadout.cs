@@ -5,6 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace HG.Loudouts
 {
+    /// <summary>
+    /// Contains a single instance of a player loadout.
+    /// </summary>
     internal class ShipLoadout
     {
         public HgPlayerClass Class { get; set; }

@@ -64,7 +64,7 @@ namespace HG.Sprites
             }
 
             _frameDelayMilliseconds = frameDelayMilliseconds;
-            _sheetImage = _core.Imaging.Get(spriteSheetFileName);
+            _sheetImage = _core.Assets.GetBitmap(spriteSheetFileName);
 
             _frameSize = (Size)frameSize;
             _rows = (int)(_sheetImage.Size.Height / ((Size)frameSize).Height);

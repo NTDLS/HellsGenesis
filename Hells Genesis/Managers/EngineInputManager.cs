@@ -5,14 +5,17 @@ using HG.Sprites.Enemies.BaseClasses;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace HG.Controllers
+namespace HG.Managers
 {
-    internal class EngineInputController
+    /// <summary>
+    /// Handles keyboard input and keeps track of key-press states.
+    /// </summary>
+    internal class EngineInputManager
     {
         private readonly EngineCore _core;
         private readonly Dictionary<HgPlayerKey, HgKeyPressState> _keyStates = new();
 
-        public EngineInputController(EngineCore core)
+        public EngineInputManager(EngineCore core)
         {
             _core = core;
         }

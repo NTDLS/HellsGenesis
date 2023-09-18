@@ -5,6 +5,9 @@ using HG.Sprites;
 
 namespace HG.Menus
 {
+    /// <summary>
+    /// The menu that is shows when the game is first started.
+    /// </summary>
     internal class MenuStartNewGame : MenuBase
     {
         public MenuStartNewGame(EngineCore core)
@@ -58,7 +61,7 @@ namespace HG.Menus
             }
             else if (item.Key == "YES")
             {
-                _core.Menus.Insert(new PlayerShipMenu(_core));
+                _core.Menus.Insert(new PlayerLoadoutMenu(_core));
             }
         }
     }

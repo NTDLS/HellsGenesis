@@ -46,7 +46,7 @@ namespace HG.Sprites.PowerUp.BaseClasses
             _hitAnimation = new SpriteAnimation(_core, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
 
             int _soundIndex = HgRandom.RandomNumber(0, _assetExplosionSoundFiles.Count());
-            _explodeSound = _core.Audio.Get(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
+            _explodeSound = _core.Assets.GetAudio(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
 
             RadarDotSize = new HgPoint(4, 4);
         }

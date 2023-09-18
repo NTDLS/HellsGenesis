@@ -11,12 +11,12 @@ using HG.Weapons.Bullets.BaseClasses;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HG.Controllers
+namespace HG.Managers
 {
     /// <summary>
     /// Contains the collection of all sprites and their factories.
     /// </summary>
-    internal class EngineSpriteController
+    internal class EngineSpriteManager
     {
         private readonly EngineCore _core;
         private HgPoint _radarScale;
@@ -43,7 +43,7 @@ namespace HG.Controllers
 
         #endregion
 
-        public EngineSpriteController(EngineCore core)
+        public EngineSpriteManager(EngineCore core)
         {
             _core = core;
 
@@ -217,7 +217,7 @@ namespace HG.Controllers
 
             if (RenderRadar)
             {
-                var radarBgImage = _core.Imaging.Get(@"Graphics\RadarTransparent.png");
+                var radarBgImage = _core.Assets.GetBitmap(@"Graphics\RadarTransparent.png");
 
                 _core.DirectX.DrawBitmapAt(renderTarget, radarBgImage,
                     _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,

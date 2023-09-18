@@ -47,11 +47,11 @@ namespace HG.Sprites.BaseClasses
 
         public override void Initialize(string imagePath = null, Size? size = null)
         {
-            _hitSound = _core.Audio.Get(_assetPathHitSound, 0.5f);
-            _shieldHit = _core.Audio.Get(_assetPathshieldHit, 0.5f);
+            _hitSound = _core.Assets.GetAudio(_assetPathHitSound, 0.5f);
+            _shieldHit = _core.Assets.GetAudio(_assetPathshieldHit, 0.5f);
 
             _selectedExplosionSoundIndex = HgRandom.Random.Next(0, 1000) % _explosionSoundCount;
-            _explodeSound = _core.Audio.Get(Path.Combine(_assetExplosionSoundPath, $"{_selectedExplosionSoundIndex}.wav"), 1.0f);
+            _explodeSound = _core.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{_selectedExplosionSoundIndex}.wav"), 1.0f);
 
             _selectedExplosionAnimationIndex = HgRandom.Random.Next(0, 1000) % _explosionAnimationCount;
             _explosionAnimation = new SpriteAnimation(_core, Path.Combine(_assetPathExplosionAnimation, $"{_selectedExplosionAnimationIndex}.png"), new Size(256, 256));
@@ -59,8 +59,8 @@ namespace HG.Sprites.BaseClasses
             _selectedHitExplosionAnimationIndex = HgRandom.Random.Next(0, 1000) % _hitExplosionAnimationCount;
             _hitExplosionAnimation = new SpriteAnimation(_core, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
 
-            _lockedOnImage = _core.Imaging.Get(_assetPathlockedOnImage);
-            _lockedOnSoftImage = _core.Imaging.Get(_assetPathlockedOnSoftImage);
+            _lockedOnImage = _core.Assets.GetBitmap(_assetPathlockedOnImage);
+            _lockedOnSoftImage = _core.Assets.GetBitmap(_assetPathlockedOnSoftImage);
 
             base.Initialize(imagePath, size);
         }

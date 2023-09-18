@@ -7,11 +7,14 @@ using System.Linq;
 
 namespace HG.Menus
 {
-    internal class PlayerShipMenu : MenuBase
+    /// <summary>
+    /// The menu that is displayed at game start to allow the player to select a loadout.
+    /// </summary>
+    internal class PlayerLoadoutMenu : MenuBase
     {
         private readonly SpriteMenuItem _shipBlurb;
 
-        public PlayerShipMenu(EngineCore core)
+        public PlayerLoadoutMenu(EngineCore core)
             : base(core)
         {
             double offsetX = _core.Display.CurrentScaledScreenBounds.X + 40;
