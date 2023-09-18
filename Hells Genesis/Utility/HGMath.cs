@@ -1,5 +1,5 @@
-﻿using HG.Actors.BaseClasses;
-using HG.Engine.Types.Geometry;
+﻿using HG.Engine.Types.Geometry;
+using HG.Sprites.BaseClasses;
 using System;
 
 namespace HG.Utility
@@ -41,8 +41,8 @@ namespace HG.Utility
         public static HgPoint AngleFromPointAtDistance(HgAngle angle, HgPoint distance)
         {
             return new HgPoint(
-                (Math.Cos(angle.Radians) * distance.X),
-                (Math.Sin(angle.Radians) * distance.Y));
+                Math.Cos(angle.Radians) * distance.X,
+                Math.Sin(angle.Radians) * distance.Y);
         }
 
         /// <summary>
@@ -80,13 +80,13 @@ namespace HG.Utility
         public static bool IsPointingAt(ActorBase fromObj, ActorBase atObj, double toleranceDegrees)
         {
             var deltaAngle = Math.Abs(DeltaAngle(fromObj, atObj));
-            return deltaAngle < toleranceDegrees || deltaAngle > (360 - toleranceDegrees);
+            return deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees;
         }
 
         public static bool IsPointingAt(ActorBase fromObj, ActorBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle = 0)
         {
             var deltaAngle = Math.Abs(DeltaAngle360(fromObj, atObj, offsetAngle));
-            if (deltaAngle < toleranceDegrees || deltaAngle > (360 - toleranceDegrees))
+            if (deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees)
             {
                 return DistanceTo(fromObj, atObj) <= maxDistance;
             }
@@ -133,17 +133,17 @@ namespace HG.Utility
 
             double angleTo = AngleTo(fromObj, toObj);
 
-            if (fromAngle < 0) fromAngle = (0 - fromAngle);
+            if (fromAngle < 0) fromAngle = 0 - fromAngle;
             if (angleTo < 0)
             {
-                angleTo = (0 - angleTo);
+                angleTo = 0 - angleTo;
             }
 
             angleTo = fromAngle - angleTo;
 
             if (angleTo < 0)
             {
-                angleTo = 360.0 - (Math.Abs(angleTo) % 360.0);
+                angleTo = 360.0 - Math.Abs(angleTo) % 360.0;
             }
 
             return angleTo;
@@ -155,17 +155,17 @@ namespace HG.Utility
 
             double angleTo = AngleTo(fromObj, toLocation);
 
-            if (fromAngle < 0) fromAngle = (0 - fromAngle);
+            if (fromAngle < 0) fromAngle = 0 - fromAngle;
             if (angleTo < 0)
             {
-                angleTo = (0 - angleTo);
+                angleTo = 0 - angleTo;
             }
 
             angleTo = fromAngle - angleTo;
 
             if (angleTo < 0)
             {
-                angleTo = 360.0 - (Math.Abs(angleTo) % 360.0);
+                angleTo = 360.0 - Math.Abs(angleTo) % 360.0;
             }
 
             return angleTo;

@@ -15,24 +15,24 @@ namespace HG.Utility
 
         public static T CreateInstanceFromType<T>(Type type, object[] constructorArgs)
         {
-            return (dynamic)Activator.CreateInstance(type, constructorArgs);
+            return (T)Activator.CreateInstance(type, constructorArgs);
         }
 
         public static T CreateInstanceFromType<T>(Type type)
         {
-            return (dynamic)Activator.CreateInstance(type);
+            return (T)Activator.CreateInstance(type);
         }
 
         public static T CreateInstanceFromTypeName<T>(string typeName, object[] constructorArgs)
         {
             var type = Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);
-            return (dynamic)Activator.CreateInstance(type, constructorArgs);
+            return (T)Activator.CreateInstance(type, constructorArgs);
         }
 
         public static T CreateInstanceFromTypeName<T>(string typeName)
         {
             var type = Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);
-            return (dynamic)Activator.CreateInstance(type);
+            return (T)Activator.CreateInstance(type);
         }
 
         public static Type GetTypeByName(string typeName)

@@ -1,5 +1,5 @@
-﻿using HG.Actors.Weapons;
-using HG.Engine;
+﻿using HG.Engine;
+using HG.Weapons;
 using System.Collections.Generic;
 using System.Linq;
 using static HG.Loudouts.ShipLoadout;

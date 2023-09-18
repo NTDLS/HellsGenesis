@@ -1,9 +1,9 @@
-﻿using HG.Actors.Enemies.BaseClasses;
-using HG.Actors.Enemies.Peons;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
 using HG.Situations.BaseClasses;
+using HG.Sprites.Enemies.BaseClasses;
+using HG.Sprites.Enemies.Peons;
 using HG.Utility;
 using System.Linq;
 

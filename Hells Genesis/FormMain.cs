@@ -1,7 +1,7 @@
-﻿using HG.Actors.BaseClasses;
-using HG.Actors.Enemies.BaseClasses;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
+using HG.Sprites.BaseClasses;
+using HG.Sprites.Enemies.BaseClasses;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

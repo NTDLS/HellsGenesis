@@ -1,12 +1,12 @@
-﻿using HG.Actors.BaseClasses;
-using HG.Actors.Enemies.BaseClasses;
-using HG.Actors.Ordinary;
-using HG.Actors.Weapons.BaseClasses;
-using HG.Actors.Weapons.Bullets.BaseClasses;
-using HG.Controllers;
+﻿using HG.Controllers;
 using HG.Engine;
 using HG.Engine.Types.Geometry;
+using HG.Sprites;
+using HG.Sprites.BaseClasses;
+using HG.Sprites.Enemies.BaseClasses;
 using HG.TickHandlers.Interfaces;
+using HG.Weapons.BaseClasses;
+using HG.Weapons.Bullets.BaseClasses;
 using System.Collections.Generic;
 
 namespace HG.TickHandlers

@@ -1,13 +1,13 @@
-﻿using HG.Actors.BaseClasses;
-using HG.Actors.Enemies.BaseClasses;
-using HG.Actors.Ordinary;
-using HG.Actors.PowerUp.BaseClasses;
-using HG.Actors.Weapons.Bullets.BaseClasses;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Menus;
+using HG.Sprites;
+using HG.Sprites.BaseClasses;
+using HG.Sprites.Enemies.BaseClasses;
+using HG.Sprites.PowerUp.BaseClasses;
 using HG.TickHandlers;
 using HG.Utility.ExtensionMethods;
+using HG.Weapons.Bullets.BaseClasses;
 using System.Collections.Generic;
 using System.Linq;
 

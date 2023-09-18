@@ -1,7 +1,7 @@
-﻿using HG.Actors.Ordinary;
-using HG.Controllers;
+﻿using HG.Controllers;
 using HG.Engine;
 using HG.Engine.Types.Geometry;
+using HG.Sprites;
 using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
 using System.Linq;

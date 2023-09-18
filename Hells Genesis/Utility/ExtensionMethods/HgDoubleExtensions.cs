@@ -24,12 +24,12 @@
 
         public static bool IsNotBetween(this double value, double minValue, double maxValue)
         {
-            return !IsBetween(value, minValue, maxValue);
+            return !value.IsBetween(minValue, maxValue);
         }
 
         public static bool IsNotBetween(this double? value, double minValue, double maxValue)
         {
-            return !IsBetween(value, minValue, maxValue);
+            return !value.IsBetween(minValue, maxValue);
         }
 
         public static bool IsBetween(this double value, double minValue, double maxValue)

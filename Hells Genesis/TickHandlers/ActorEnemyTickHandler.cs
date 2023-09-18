@@ -1,7 +1,7 @@
-﻿using HG.Actors.Enemies.BaseClasses;
-using HG.Controllers;
+﻿using HG.Controllers;
 using HG.Engine;
 using HG.Engine.Types.Geometry;
+using HG.Sprites.Enemies.BaseClasses;
 using HG.TickHandlers.Interfaces;
 using HG.Utility;
 using System;

@@ -1,6 +1,6 @@
-﻿using HG.Actors.Ordinary;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
+using HG.Sprites;
 using HG.TickHandlers.Interfaces;
 using HG.Utility.ExtensionMethods;
 

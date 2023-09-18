@@ -1,8 +1,8 @@
-﻿using HG.Actors.BaseClasses;
-using HG.Actors.Ordinary;
-using HG.Controllers;
+﻿using HG.Controllers;
 using HG.Engine;
 using HG.Engine.Types.Geometry;
+using HG.Sprites;
+using HG.Sprites.BaseClasses;
 using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
 using System.Drawing;
