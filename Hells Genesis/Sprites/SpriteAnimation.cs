@@ -1,7 +1,6 @@
 ﻿using HG.Engine;
 using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.BaseClasses;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;

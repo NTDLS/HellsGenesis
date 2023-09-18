@@ -1,16 +1,16 @@
 ﻿using HG.Engine;
 using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.Enemies.BaseClasses;
+using HG.Sprites.Enemies;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
-using HG.Weapons.Bullets.BaseClasses;
+using HG.Weapons.Bullets;
 using SharpDX.Mathematics.Interop;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace HG.Sprites.BaseClasses
+namespace HG.Sprites
 {
     internal class SpriteBase
     {

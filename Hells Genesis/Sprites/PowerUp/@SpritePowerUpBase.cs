@@ -1,12 +1,11 @@
 ﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.BaseClasses;
 using HG.Utility;
 using System;
 using System.Drawing;
 using System.Linq;
 
-namespace HG.Sprites.PowerUp.BaseClasses
+namespace HG.Sprites.PowerUp
 {
     internal class SpritePowerUpBase : SpriteBase
     {

@@ -2,12 +2,11 @@
 using HG.Engine.Types.Geometry;
 using HG.Menus;
 using HG.Sprites;
-using HG.Sprites.BaseClasses;
-using HG.Sprites.Enemies.BaseClasses;
-using HG.Sprites.PowerUp.BaseClasses;
+using HG.Sprites.Enemies;
+using HG.Sprites.PowerUp;
 using HG.TickHandlers;
 using HG.Utility.ExtensionMethods;
-using HG.Weapons.Bullets.BaseClasses;
+using HG.Weapons.Bullets;
 using System.Collections.Generic;
 using System.Linq;
 

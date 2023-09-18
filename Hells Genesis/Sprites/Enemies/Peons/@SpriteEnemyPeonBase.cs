@@ -1,11 +1,10 @@
 ﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.BaseClasses;
 using HG.Utility;
 using System;
 using System.Drawing;
 
-namespace HG.Sprites.Enemies.BaseClasses
+namespace HG.Sprites.Enemies.Peons
 {
     internal class SpriteEnemyPeonBase : SpriteEnemyBase
     {

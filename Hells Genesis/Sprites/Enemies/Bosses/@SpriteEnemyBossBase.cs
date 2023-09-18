@@ -1,6 +1,6 @@
 ﻿using HG.Engine;
 
-namespace HG.Sprites.Enemies.BaseClasses
+namespace HG.Sprites.Enemies.Bosses
 {
     internal class SpriteEnemyBossBase : SpriteEnemyBase
     {

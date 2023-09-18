@@ -2,14 +2,14 @@
 using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
 using HG.Utility;
-using HG.Weapons.BaseClasses;
-using HG.Weapons.Bullets.BaseClasses;
+using HG.Weapons;
+using HG.Weapons.Bullets;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 
-namespace HG.Sprites.BaseClasses
+namespace HG.Sprites
 {
     internal class SpriteShipBase : SpriteBase
     {

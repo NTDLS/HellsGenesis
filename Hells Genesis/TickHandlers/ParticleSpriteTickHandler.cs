@@ -2,7 +2,6 @@
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
-using HG.Sprites.BaseClasses;
 using HG.TickHandlers.Interfaces;
 using HG.Utility;
 using System.Collections.Generic;

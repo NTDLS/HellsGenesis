@@ -2,9 +2,8 @@
 using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
 using HG.Loudouts;
-using HG.Sprites.BaseClasses;
 using HG.Utility;
-using HG.Weapons.Bullets.BaseClasses;
+using HG.Weapons.Bullets;
 using System;
 using System.Drawing;
 

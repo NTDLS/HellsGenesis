@@ -1,7 +1,7 @@
 ﻿using HG.Engine;
 using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
-using HG.Menus.BaseClasses;
+using HG.Menus;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 

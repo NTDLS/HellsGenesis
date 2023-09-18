@@ -1,7 +1,6 @@
 ﻿using HG.AI.Logistics;
 using HG.Engine;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.Enemies.BaseClasses;
 using HG.Utility;
 using HG.Weapons;
 using System;

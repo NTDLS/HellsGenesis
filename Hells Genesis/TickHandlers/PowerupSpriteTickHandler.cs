@@ -1,7 +1,7 @@
 ﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
-using HG.Sprites.PowerUp.BaseClasses;
+using HG.Sprites.PowerUp;
 using HG.TickHandlers.Interfaces;
 using System;
 using System.Collections.Generic;

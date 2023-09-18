@@ -1,14 +1,13 @@
 ﻿using HG.Engine;
 using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.BaseClasses;
+using HG.Sprites;
 using HG.Utility.ExtensionMethods;
 using HG.Weapons.Bullets;
-using HG.Weapons.Bullets.BaseClasses;
 using System;
 using System.Collections.Generic;
 
-namespace HG.Weapons.BaseClasses
+namespace HG.Weapons
 {
     internal class WeaponBase
     {

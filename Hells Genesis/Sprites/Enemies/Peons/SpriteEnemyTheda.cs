@@ -1,5 +1,4 @@
 ﻿using HG.Engine;
-using HG.Sprites.Enemies.BaseClasses;
 using HG.Utility;
 using System.Drawing;
 using System.IO;

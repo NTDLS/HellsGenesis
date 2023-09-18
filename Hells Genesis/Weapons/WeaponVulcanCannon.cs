@@ -1,6 +1,5 @@
 ﻿using HG.Engine;
-using HG.Sprites.BaseClasses;
-using HG.Weapons.BaseClasses;
+using HG.Sprites;
 
 namespace HG.Weapons
 {

@@ -1,6 +1,5 @@
 ﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.BaseClasses;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using System.Drawing;

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace HG.Menus.BaseClasses
+namespace HG.Menus
 {
     /// <summary>
     /// A menu instance. Allows for setting title text, adding items and managing selections.

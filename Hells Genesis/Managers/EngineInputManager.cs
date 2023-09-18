@@ -1,7 +1,7 @@
 ﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Sprites;
-using HG.Sprites.Enemies.BaseClasses;
+using HG.Sprites.Enemies;
 using System.Collections.Generic;
 using System.Windows.Forms;
 

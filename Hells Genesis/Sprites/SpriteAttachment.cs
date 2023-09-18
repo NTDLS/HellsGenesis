@@ -1,8 +1,7 @@
 ﻿using HG.Engine;
 using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.BaseClasses;
-using HG.Weapons.Bullets.BaseClasses;
+using HG.Weapons.Bullets;
 using System.Drawing;
 
 namespace HG.Sprites

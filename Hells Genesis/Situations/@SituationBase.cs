@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using static HG.Engine.Types.HgEngineCallbackEvent;
 
-namespace HG.Situations.BaseClasses
+namespace HG.Situations
 {
     internal class SituationBase
     {

@@ -1,6 +1,6 @@
 ﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.BaseClasses;
+using HG.Sprites;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
 using NTDLS.Determinet;

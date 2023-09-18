@@ -2,11 +2,11 @@
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
-using HG.Sprites.BaseClasses;
-using HG.Sprites.Enemies.BaseClasses;
+using HG.Sprites.Enemies.Bosses;
+using HG.Sprites.Enemies.Peons;
 using HG.TickHandlers.Interfaces;
-using HG.Weapons.BaseClasses;
-using HG.Weapons.Bullets.BaseClasses;
+using HG.Weapons;
+using HG.Weapons.Bullets;
 using System.Collections.Generic;
 
 namespace HG.TickHandlers

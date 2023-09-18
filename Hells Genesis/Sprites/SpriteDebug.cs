@@ -1,7 +1,6 @@
 ﻿using HG.Engine;
 using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.BaseClasses;
 using System.Drawing;
 
 namespace HG.Sprites

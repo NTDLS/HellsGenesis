@@ -1,6 +1,5 @@
 ﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.PowerUp.BaseClasses;
 using HG.Utility;
 using System.Drawing;
 using System.IO;

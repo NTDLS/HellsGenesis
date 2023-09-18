@@ -1,7 +1,6 @@
 ﻿using HG.Engine;
 using HG.Engine.Types;
-using HG.Situations.BaseClasses;
-using HG.Sprites.Enemies.BaseClasses;
+using HG.Sprites.Enemies;
 using HG.Sprites.Enemies.Peons;
 using HG.Utility;
 

@@ -1,5 +1,5 @@
 ﻿using HG.Engine.Types.Geometry;
-using HG.Sprites.BaseClasses;
+using HG.Sprites;
 using System;
 
 namespace HG.Utility

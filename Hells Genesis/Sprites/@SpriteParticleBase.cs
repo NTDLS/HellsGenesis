@@ -1,6 +1,6 @@
 ﻿using HG.Engine;
 
-namespace HG.Sprites.BaseClasses
+namespace HG.Sprites
 {
     internal class SpriteParticleBase : SpriteBase
     {

@@ -1,5 +1,5 @@
 ﻿using HG.Engine;
-using HG.Menus.BaseClasses;
+using HG.Menus;
 using HG.TickHandlers.Interfaces;
 using System.Collections.Generic;
 

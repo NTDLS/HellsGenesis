@@ -2,13 +2,11 @@
 using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
 using HG.Sprites;
-using HG.Sprites.BaseClasses;
-using HG.Sprites.Enemies.BaseClasses;
+using HG.Sprites.Enemies;
 using HG.Utility;
-using HG.Weapons.BaseClasses;
 using System;
 
-namespace HG.Weapons.Bullets.BaseClasses
+namespace HG.Weapons.Bullets
 {
     internal class BulletBase : SpriteBase
     {

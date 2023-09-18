@@ -1,16 +1,14 @@
 ﻿using HG.AI;
 using HG.Engine;
 using HG.Engine.Types.Geometry;
-using HG.Sprites.BaseClasses;
 using HG.Sprites.PowerUp;
-using HG.Sprites.PowerUp.BaseClasses;
 using HG.Utility;
 using HG.Utility.ExtensionMethods;
-using HG.Weapons.Bullets.BaseClasses;
+using HG.Weapons.Bullets;
 using System;
 using System.Collections.Generic;
 
-namespace HG.Sprites.Enemies.BaseClasses
+namespace HG.Sprites.Enemies
 {
     internal class SpriteEnemyBase : SpriteShipBase
     {

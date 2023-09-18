@@ -1,6 +1,5 @@
 ﻿using HG.Engine;
 using HG.Engine.Types;
-using HG.Situations.BaseClasses;
 using System.Collections.Generic;
 
 namespace HG.Situations

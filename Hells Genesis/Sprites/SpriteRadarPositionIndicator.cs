@@ -1,5 +1,4 @@
 ﻿using HG.Engine;
-using HG.Sprites.BaseClasses;
 using System.IO;
 
 namespace HG.Sprites
