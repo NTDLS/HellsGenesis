@@ -23,7 +23,7 @@ namespace HG
                 }
             }
 
-            Application.Run(new FormMain());
+            Application.Run(new FormRenderTarget());
         }
     }
 }

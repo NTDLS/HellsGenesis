@@ -1,6 +1,6 @@
 ﻿namespace HG
 {
-    partial class FormMain
+    partial class FormRenderTarget
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRenderTarget));
             SuspendLayout();
             // 
             // FormMain

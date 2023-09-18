@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace HG
 {
-    public partial class FormMain : Form
+    public partial class FormRenderTarget : Form
     {
         readonly List<SpriteBase> highlightedSprites = new();
         private readonly ToolTip _interrogationTip = new ToolTip();
@@ -20,7 +20,7 @@ namespace HG
         private readonly EngineCore _core;
         private readonly bool _fullScreen = false;
 
-        public FormMain()
+        public FormRenderTarget()
         {
             InitializeComponent();
 
@@ -69,18 +69,18 @@ namespace HG
 
             drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
             drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
-            drawingSurface.KeyDown += FormMain_KeyDown;
-            drawingSurface.KeyUp += FormMain_KeyUp;
+            drawingSurface.KeyDown += FormRenderTarget_KeyDown;
+            drawingSurface.KeyUp += FormRenderTarget_KeyUp;
 
             if (settings.EnableSpriteInterrogation)
             {
-                drawingSurface.MouseDown += FormDirect2D_MouseDown;
-                drawingSurface.MouseMove += FormDirect2D_MouseMove;
+                drawingSurface.MouseDown += FormRenderTarget_MouseDown;
+                drawingSurface.MouseMove += FormRenderTarget_MouseMove;
             }
         }
 
         #region Debug interactions.
-        private void FormDirect2D_MouseMove(object sender, MouseEventArgs e)
+        private void FormRenderTarget_MouseMove(object sender, MouseEventArgs e)
         {
             double x = e.X + _core.Display.OverdrawSize.Width / 2;
             double y = e.Y + _core.Display.OverdrawSize.Height / 2;
@@ -105,7 +105,7 @@ namespace HG
             }
         }
 
-        private void FormDirect2D_MouseDown(object sender, MouseEventArgs e)
+        private void FormRenderTarget_MouseDown(object sender, MouseEventArgs e)
         {
             double x = e.X + _core.Display.OverdrawSize.Width / 2;
             double y = e.Y + _core.Display.OverdrawSize.Height / 2;
@@ -264,7 +264,7 @@ namespace HG
             return true; // Mark the key as handled
         }
 
-        private void FormMain_KeyDown(object sender, KeyEventArgs e)
+        private void FormRenderTarget_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, HgKeyPressState.Down);
             if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(HgPlayerKey.Forward, HgKeyPressState.Down);
@@ -279,7 +279,7 @@ namespace HG
             _core.Input.HandleSingleKeyPress(e.KeyCode);
         }
 
-        private void FormMain_KeyUp(object sender, KeyEventArgs e)
+        private void FormRenderTarget_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {
