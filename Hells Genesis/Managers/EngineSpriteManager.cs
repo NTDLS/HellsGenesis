@@ -27,7 +27,7 @@ namespace HG.Managers
 
         #region Sprites and their factories.
 
-        internal List<SpriteBase> Collection { get; private set; } = new();
+        internal List<_SpriteBase> Collection { get; private set; } = new();
 
         public AnimationSpriteTickController Animations { get; set; }
         public AttachmentSpriteTickController Attachments { get; set; }
@@ -119,7 +119,7 @@ namespace HG.Managers
             Animations.DeleteAll();
         }
 
-        public T GetSpriteByAssetTag<T>(string name) where T : SpriteBase
+        public T GetSpriteByAssetTag<T>(string name) where T : _SpriteBase
         {
             lock (Collection)
             {
@@ -157,11 +157,11 @@ namespace HG.Managers
             }
         }
 
-        public List<SpriteBase> Intersections(SpriteBase with)
+        public List<_SpriteBase> Intersections(_SpriteBase with)
         {
             lock (Collection)
             {
-                var objs = new List<SpriteBase>();
+                var objs = new List<_SpriteBase>();
 
                 foreach (var obj in Collection.Where(o => o.Visable == true))
                 {
@@ -177,14 +177,14 @@ namespace HG.Managers
             }
         }
 
-        public List<SpriteBase> Intersections(double x, double y, double width, double height)
+        public List<_SpriteBase> Intersections(double x, double y, double width, double height)
             => Intersections(new HgPoint(x, y), new HgPoint(width, height));
 
-        public List<SpriteBase> Intersections(HgPoint location, HgPoint size)
+        public List<_SpriteBase> Intersections(HgPoint location, HgPoint size)
         {
             lock (Collection)
             {
-                var objs = new List<SpriteBase>();
+                var objs = new List<_SpriteBase>();
 
                 foreach (var obj in Collection.Where(o => o.Visable == true))
                 {
@@ -257,7 +257,7 @@ namespace HG.Managers
                             && y < _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
                             )
                         {
-                            if ((sprite is SpriteEnemyBase || sprite is BulletBase || sprite is SpritePowerUpBase) && sprite.Visable == true)
+                            if ((sprite is _SpriteEnemyBase || sprite is _BulletBase || sprite is _SpritePowerUpBase) && sprite.Visable == true)
                             {
                                 sprite.RenderRadar(renderTarget, x, y);
                             }

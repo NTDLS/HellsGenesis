@@ -6,7 +6,7 @@ using HG.Weapons.Bullets;
 
 namespace HG.Weapons
 {
-    internal class WeaponPulseMeson : WeaponBase
+    internal class WeaponPulseMeson : _WeaponBase
     {
         static new string Name { get; } = "Pulse Meson";
         private const string soundPath = @"Sounds\Weapons\WeaponPulseMeson.wav";
@@ -14,7 +14,7 @@ namespace HG.Weapons
 
         private bool _toggle = false;
 
-        public WeaponPulseMeson(EngineCore core, SpriteShipBase owner)
+        public WeaponPulseMeson(EngineCore core, _SpriteShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponPulseMeson(EngineCore core)
@@ -33,7 +33,7 @@ namespace HG.Weapons
             RecoilAmount = 0.65;
         }
 
-        public override BulletBase CreateBullet(SpriteBase lockedTarget, HgPoint xyOffset = null)
+        public override _BulletBase CreateBullet(_SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
             return new BulletPulseMeson(_core, this, _owner, lockedTarget, xyOffset);
         }

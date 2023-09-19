@@ -9,11 +9,11 @@ using System.Collections.Generic;
 
 namespace HG.Weapons
 {
-    internal class WeaponBase
+    internal class _WeaponBase
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected EngineCore _core;
-        protected SpriteBase _owner;
+        protected _SpriteBase _owner;
 
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected HgAudioClip _fireSound;
@@ -31,21 +31,21 @@ namespace HG.Weapons
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
         public bool CanLockOn { get; set; } = false;
-        public List<SpriteBase> LockedOnObjects { get; set; } = new();
+        public List<_SpriteBase> LockedOnObjects { get; set; } = new();
         public double MaxLockOnAngle { get; set; } = 10;
         public double MaxLocks { get; set; } = 1;
         public double MinLockDistance { get; set; } = 50;
         public double MaxLockDistance { get; set; } = 100;
         public bool ExplodesOnImpact { get; set; } = false;
 
-        public WeaponBase(EngineCore core, string name, string soundPath, float soundVolume)
+        public _WeaponBase(EngineCore core, string name, string soundPath, float soundVolume)
         {
             _core = core;
             _fireSound = _core.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
         }
 
-        public WeaponBase(EngineCore core, SpriteShipBase owner, string name, string soundPath, float soundVolume)
+        public _WeaponBase(EngineCore core, _SpriteShipBase owner, string name, string soundPath, float soundVolume)
         {
             _owner = owner;
             _core = core;
@@ -53,7 +53,7 @@ namespace HG.Weapons
             Name = name;
         }
 
-        public virtual BulletBase CreateBullet(SpriteBase lockedTarget, HgPoint xyOffset = null)
+        public virtual _BulletBase CreateBullet(_SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
             if (_owner == null)
             {
@@ -62,7 +62,7 @@ namespace HG.Weapons
             return new BulletGeneric(_core, this, _owner, @"Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
         }
 
-        public virtual void ApplyIntelligence(HgPoint displacementVector, SpriteBase wouldFireAt)
+        public virtual void ApplyIntelligence(HgPoint displacementVector, _SpriteBase wouldFireAt)
         {
             if (_owner == null)
             {

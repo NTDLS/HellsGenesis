@@ -3,13 +3,13 @@ using HG.Sprites;
 
 namespace HG.Weapons
 {
-    internal class WeaponVulcanCannon : WeaponBase
+    internal class WeaponVulcanCannon : _WeaponBase
     {
         static new string Name { get; } = "Vulcan Cannon";
         private const string soundPath = @"Sounds\Weapons\WeaponVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponVulcanCannon(EngineCore core, SpriteShipBase owner)
+        public WeaponVulcanCannon(EngineCore core, _SpriteShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponVulcanCannon(EngineCore core)

@@ -8,7 +8,7 @@ using static HG.Engine.Types.HgEngineCallbackEvent;
 
 namespace HG.Controller
 {
-    internal class EventTickController : UnvectoredTickControllerBase<HgEngineCallbackEvent>
+    internal class EventTickController : _UnvectoredTickControllerBase<HgEngineCallbackEvent>
     {
         public List<HgEngineCallbackEvent> Collection { get; private set; } = new();
 

@@ -6,7 +6,7 @@ using HG.Weapons.Bullets;
 
 namespace HG.Weapons
 {
-    internal class WeaponPrecisionGuidedFragMissile : WeaponBase
+    internal class WeaponPrecisionGuidedFragMissile : _WeaponBase
     {
         static new string Name { get; } = "Precision Guided Frag Missile";
         private const string soundPath = @"Sounds\Weapons\WeaponGuidedFragMissile.wav";
@@ -14,7 +14,7 @@ namespace HG.Weapons
 
         private bool _toggle = false;
 
-        public WeaponPrecisionGuidedFragMissile(EngineCore core, SpriteShipBase owner)
+        public WeaponPrecisionGuidedFragMissile(EngineCore core, _SpriteShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponPrecisionGuidedFragMissile(EngineCore core)
@@ -35,7 +35,7 @@ namespace HG.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override BulletBase CreateBullet(SpriteBase lockedTarget, HgPoint xyOffset = null)
+        public override _BulletBase CreateBullet(_SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
             return new BulletGuidedFragMissile(_core, this, _owner, lockedTarget, xyOffset);
         }

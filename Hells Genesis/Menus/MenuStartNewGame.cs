@@ -8,7 +8,7 @@ namespace HG.Menus
     /// <summary>
     /// The menu that is shows when the game is first started.
     /// </summary>
-    internal class MenuStartNewGame : MenuBase
+    internal class MenuStartNewGame : _MenuBase
     {
         public MenuStartNewGame(EngineCore core)
             : base(core)

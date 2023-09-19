@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace HG.Sprites
 {
-    internal class SpriteTextBlock : SpriteBase
+    internal class SpriteTextBlock : _SpriteBase
     {
         private Size _size = Size.Empty;
         private string _text;

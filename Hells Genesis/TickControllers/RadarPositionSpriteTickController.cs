@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace HG.Controller
 {
-    internal class RadarPositionSpriteTickController : UnvectoredTickControllerBase<SpriteRadarPositionTextBlock>
+    internal class RadarPositionSpriteTickController : _UnvectoredTickControllerBase<SpriteRadarPositionTextBlock>
     {
         private readonly EngineSpriteManager _manager;
 

@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace HG.Controller
 {
-    internal class AnimationSpriteTickController : SpriteTickControllerBase<SpriteAnimation>
+    internal class AnimationSpriteTickController : _SpriteTickControllerBase<SpriteAnimation>
     {
         public AnimationSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)
@@ -28,7 +28,7 @@ namespace HG.Controller
         /// </summary>
         /// <param name="animation"></param>
         /// <param name="defaultPosition"></param>
-        public void InsertAt(SpriteAnimation animation, SpriteBase defaultPosition)
+        public void InsertAt(SpriteAnimation animation, _SpriteBase defaultPosition)
         {
             lock (SpriteManager.Collection)
             {

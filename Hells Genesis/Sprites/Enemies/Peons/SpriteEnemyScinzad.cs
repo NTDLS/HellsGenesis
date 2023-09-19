@@ -11,7 +11,7 @@ namespace HG.Sprites.Enemies.Peons
     /// <summary>
     /// 100% traditional weapons, they enforce their distance and are are moddled to provoke dog fighting. These are fast units.
     /// </summary>
-    internal class SpriteEnemyScinzad : SpriteEnemyPeonBase
+    internal class SpriteEnemyScinzad : _SpriteEnemyPeonBase
     {
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;

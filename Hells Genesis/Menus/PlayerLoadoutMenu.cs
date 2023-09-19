@@ -9,7 +9,7 @@ namespace HG.Menus
     /// <summary>
     /// The menu that is displayed at game start to allow the player to select a loadout.
     /// </summary>
-    internal class PlayerLoadoutMenu : MenuBase
+    internal class PlayerLoadoutMenu : _MenuBase
     {
         private readonly SpriteMenuItem _shipBlurb;
 

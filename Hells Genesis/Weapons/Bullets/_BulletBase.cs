@@ -8,17 +8,17 @@ using System;
 
 namespace HG.Weapons.Bullets
 {
-    internal class BulletBase : SpriteBase
+    internal class _BulletBase : _SpriteBase
     {
         public HgFiredFromType FiredFromType { get; private set; }
-        public WeaponBase Weapon { get; private set; }
-        public SpriteBase LockedTarget { get; private set; }
+        public _WeaponBase Weapon { get; private set; }
+        public _SpriteBase LockedTarget { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
         public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
 
-        public BulletBase(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
-             SpriteBase lockedTarget = null, HgPoint xyOffset = null)
+        public _BulletBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath,
+             _SpriteBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core)
         {
             Initialize(imagePath);
@@ -53,7 +53,7 @@ namespace HG.Weapons.Bullets
 
             Location = firedFrom.Location + (xyOffset ?? HgPoint.Zero);
 
-            if (firedFrom is SpriteEnemyBase)
+            if (firedFrom is _SpriteEnemyBase)
             {
                 FiredFromType = HgFiredFromType.Enemy;
             }

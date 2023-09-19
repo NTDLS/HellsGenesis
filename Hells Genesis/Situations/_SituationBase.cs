@@ -6,7 +6,7 @@ using static HG.Engine.Types.HgEngineCallbackEvent;
 
 namespace HG.Situations
 {
-    internal class SituationBase
+    internal class _SituationBase
     {
         protected EngineCore _core;
         protected List<HgEngineCallbackEvent> Events = new();
@@ -17,7 +17,7 @@ namespace HG.Situations
         public int TotalWaves { get; set; } = 1;
         public HgSituationState State { get; protected set; } = HgSituationState.NotStarted;
 
-        public SituationBase(EngineCore core, string name)
+        public _SituationBase(EngineCore core, string name)
         {
             _core = core;
             Name = name;

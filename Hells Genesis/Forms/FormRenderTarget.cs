@@ -14,7 +14,7 @@ namespace HG
 {
     public partial class FormRenderTarget : Form
     {
-        readonly List<SpriteBase> highlightedSprites = new();
+        readonly List<_SpriteBase> highlightedSprites = new();
         private readonly ToolTip _interrogationTip = new ToolTip();
 
         private readonly EngineCore _core;
@@ -125,7 +125,7 @@ namespace HG
                     var menu = new ContextMenuStrip();
 
                     menu.ItemClicked += Menu_ItemClicked;
-                    if (sprite is SpriteEnemyBase)
+                    if (sprite is _SpriteEnemyBase)
                     {
                         menu.Items.Add("Save Brain").Tag = sprite;
                         menu.Items.Add("View Brain").Tag = sprite;
@@ -143,9 +143,9 @@ namespace HG
                     text.AppendLine($"UID: {sprite.UID}");
                     text.AppendLine($"X,Y: {sprite.X:n2},{sprite.Y:n2}");
 
-                    if (sprite is SpriteEnemyBase)
+                    if (sprite is _SpriteEnemyBase)
                     {
-                        var enemy = (SpriteEnemyBase)sprite;
+                        var enemy = (_SpriteEnemyBase)sprite;
 
                         text.AppendLine($"Hit Points: {enemy.HullHealth:n0}");
                         text.AppendLine($"Is Locked-on: {enemy.IsLockedOn}");
@@ -179,7 +179,7 @@ namespace HG
 
             menu.Close();
 
-            var sprite = e.ClickedItem?.Tag as SpriteBase;
+            var sprite = e.ClickedItem?.Tag as _SpriteBase;
             if (sprite == null) return;
 
             if (e.ClickedItem?.Text == "Delete")
@@ -188,9 +188,9 @@ namespace HG
             }
             else if (e.ClickedItem?.Text == "Save Brain")
             {
-                if (sprite is SpriteEnemyBase)
+                if (sprite is _SpriteEnemyBase)
                 {
-                    var enemy = (SpriteEnemyBase)sprite;
+                    var enemy = (_SpriteEnemyBase)sprite;
 
                     bool wasPaused = _core.IsPaused();
                     if (wasPaused == false)
@@ -218,9 +218,9 @@ namespace HG
             }
             else if (e.ClickedItem?.Text == "View Brain")
             {
-                if (sprite is SpriteEnemyBase)
+                if (sprite is _SpriteEnemyBase)
                 {
-                    var enemy = (SpriteEnemyBase)sprite;
+                    var enemy = (_SpriteEnemyBase)sprite;
 
                     bool wasPaused = _core.IsPaused();
                     if (wasPaused == false)

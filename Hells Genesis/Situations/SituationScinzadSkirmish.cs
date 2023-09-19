@@ -6,7 +6,7 @@ using HG.Utility;
 
 namespace HG.Situations
 {
-    internal class SituationScinzadSkirmish : SituationBase
+    internal class SituationScinzadSkirmish : _SituationBase
     {
         public SituationScinzadSkirmish(EngineCore core)
             : base(core, "Scinzad Skirmish")
@@ -32,7 +32,7 @@ namespace HG.Situations
 
         private void AddFreshEnemiesCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0)
+            if (_core.Sprites.OfType<_SpriteEnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {

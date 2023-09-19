@@ -6,12 +6,12 @@ using System.Drawing;
 
 namespace HG.Sprites.Enemies.Peons
 {
-    internal class SpriteEnemyPeonBase : SpriteEnemyBase
+    internal class _SpriteEnemyPeonBase : _SpriteEnemyBase
     {
         public SpriteAnimation ThrustAnimation { get; internal set; }
         public SpriteAnimation BoostAnimation { get; internal set; }
 
-        public SpriteEnemyPeonBase(EngineCore core, int hullHealth, int bountyMultiplier)
+        public _SpriteEnemyPeonBase(EngineCore core, int hullHealth, int bountyMultiplier)
             : base(core, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;
@@ -57,7 +57,7 @@ namespace HG.Sprites.Enemies.Peons
             }
         }
 
-        private void EnemyBase_OnVisibilityChanged(SpriteBase sender)
+        private void EnemyBase_OnVisibilityChanged(_SpriteBase sender)
         {
             if (ThrustAnimation != null)
             {

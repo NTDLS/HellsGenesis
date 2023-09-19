@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace HG.Situations
 {
-    internal class SituationFreeFlight : SituationBase
+    internal class SituationFreeFlight : _SituationBase
     {
         public SituationFreeFlight(EngineCore core)
             : base(core, "Free Flight")

@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace HG.Sprites
 {
-    internal class SpriteAttachment : SpriteShipBase
+    internal class SpriteAttachment : _SpriteShipBase
     {
         public bool TakesDamage { get; set; }
 
@@ -20,7 +20,7 @@ namespace HG.Sprites
             Velocity = new HgVelocity();
         }
 
-        public override bool TestHit(HgPoint displacementVector, BulletBase bullet, HgPoint hitTestPosition)
+        public override bool TestHit(HgPoint displacementVector, _BulletBase bullet, HgPoint hitTestPosition)
         {
             if (bullet.FiredFromType == HgFiredFromType.Player)
             {

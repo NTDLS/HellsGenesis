@@ -6,7 +6,7 @@ using System.IO;
 
 namespace HG.Sprites.PowerUp
 {
-    internal class SpritePowerUpBoost : SpritePowerUpBase
+    internal class SpritePowerUpBoost : _SpritePowerUpBase
     {
         private const string _assetPath = @"Graphics\PowerUp\Boost\";
         private readonly int imageCount = 3;

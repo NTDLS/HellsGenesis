@@ -11,16 +11,16 @@ using System.Linq;
 
 namespace HG.Sprites
 {
-    internal class SpriteShipBase : SpriteBase
+    internal class _SpriteShipBase : _SpriteBase
     {
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
         public HgTimeRenewableResources RenewableResources { get; set; } = new();
 
-        public WeaponBase PrimaryWeapon { get; private set; }
+        public _WeaponBase PrimaryWeapon { get; private set; }
 
-        private readonly List<WeaponBase> _secondaryWeapons = new();
-        public WeaponBase SelectedSecondaryWeapon { get; private set; }
+        private readonly List<_WeaponBase> _secondaryWeapons = new();
+        public _WeaponBase SelectedSecondaryWeapon { get; private set; }
 
         private readonly string _assetPathlockedOnImage = @"Graphics\Weapon\Locked On.png";
         private readonly string _assetPathlockedOnSoftImage = @"Graphics\Weapon\Locked Soft.png";
@@ -39,7 +39,7 @@ namespace HG.Sprites
         private readonly int _explosionSoundCount = 4;
         private int _selectedExplosionSoundIndex = 0;
 
-        public SpriteShipBase(EngineCore core, string name = "")
+        public _SpriteShipBase(EngineCore core, string name = "")
             : base(core, name)
         {
             _core = core;
@@ -86,7 +86,7 @@ namespace HG.Sprites
         /// <param name="bullet">The bullet object that is being tested for.</param>
         /// <param name="hitTestPosition">The position to test for hit.</param>
         /// <returns></returns>
-        public virtual bool TestHit(HgPoint displacementVector, BulletBase bullet, HgPoint hitTestPosition)
+        public virtual bool TestHit(HgPoint displacementVector, _BulletBase bullet, HgPoint hitTestPosition)
         {
             if (Intersects(hitTestPosition))
             {
@@ -132,7 +132,7 @@ namespace HG.Sprites
             }
             else
             {
-                var weapon = HgReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _core, this });
+                var weapon = HgReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
                 weapon.RoundQuantity += roundQuantity;
                 PrimaryWeapon = weapon;
 
@@ -151,7 +151,7 @@ namespace HG.Sprites
 
             if (weapon == null)
             {
-                weapon = HgReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _core, this });
+                weapon = HgReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
                 weapon.RoundQuantity += roundQuantity;
                 _secondaryWeapons.Add(weapon);
             }
@@ -170,7 +170,7 @@ namespace HG.Sprites
         /// Adds a new primary weapon or adds its ammo to the current of its type.
         /// </summary>
         /// <param name="weapon"></param>
-        public void SetPrimaryWeapon<T>(int roundQuantity) where T : WeaponBase
+        public void SetPrimaryWeapon<T>(int roundQuantity) where T : _WeaponBase
         {
             if (PrimaryWeapon is T)
             {
@@ -187,7 +187,7 @@ namespace HG.Sprites
         /// Adds a new secondary weapon or adds its ammo to the current of its type.
         /// </summary>
         /// <param name="weapon"></param>
-        public void AddSecondaryWeapon<T>(int roundQuantity) where T : WeaponBase
+        public void AddSecondaryWeapon<T>(int roundQuantity) where T : _WeaponBase
         {
             var weapon = GetSecondaryWeaponOfType<T>();
             if (weapon == null)
@@ -210,9 +210,9 @@ namespace HG.Sprites
         public int TotalAvailableSecondaryWeaponRounds() => (from o in _secondaryWeapons select o.RoundQuantity).Sum();
         public int TotalSecondaryWeaponFiredRounds() => (from o in _secondaryWeapons select o.RoundsFired).Sum();
 
-        public WeaponBase SelectPreviousAvailableUsableSecondaryWeapon()
+        public _WeaponBase SelectPreviousAvailableUsableSecondaryWeapon()
         {
-            WeaponBase previousWeapon = null;
+            _WeaponBase previousWeapon = null;
 
             foreach (var weapon in _secondaryWeapons)
             {
@@ -232,7 +232,7 @@ namespace HG.Sprites
             return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
 
-        public WeaponBase SelectNextAvailableUsableSecondaryWeapon()
+        public _WeaponBase SelectNextAvailableUsableSecondaryWeapon()
         {
             bool selectNextWeapon = false;
 
@@ -253,19 +253,19 @@ namespace HG.Sprites
             return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
 
-        public bool HasSecondaryWeapon<T>() where T : WeaponBase
+        public bool HasSecondaryWeapon<T>() where T : _WeaponBase
         {
             var existingWeapon = (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
             return existingWeapon != null;
         }
 
-        public bool HasSecondaryWeaponAndAmmo<T>() where T : WeaponBase
+        public bool HasSecondaryWeaponAndAmmo<T>() where T : _WeaponBase
         {
             var existingWeapon = (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
             return existingWeapon != null && existingWeapon.RoundQuantity > 0;
         }
 
-        public bool HasPrimaryWeaponAndAmmo<T>() where T : WeaponBase
+        public bool HasPrimaryWeaponAndAmmo<T>() where T : _WeaponBase
         {
             if (PrimaryWeapon is T)
             {
@@ -289,7 +289,7 @@ namespace HG.Sprites
             return SelectedSecondaryWeapon != null && SelectedSecondaryWeapon.RoundQuantity > 0;
         }
 
-        public WeaponBase SelectLastAvailableUsableSecondaryWeapon()
+        public _WeaponBase SelectLastAvailableUsableSecondaryWeapon()
         {
             var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).LastOrDefault();
             if (existingWeapon != null)
@@ -303,7 +303,7 @@ namespace HG.Sprites
             return SelectedSecondaryWeapon;
         }
 
-        public WeaponBase SelectFirstAvailableUsableSecondaryWeapon()
+        public _WeaponBase SelectFirstAvailableUsableSecondaryWeapon()
         {
             var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).FirstOrDefault();
             if (existingWeapon != null)
@@ -317,12 +317,12 @@ namespace HG.Sprites
             return SelectedSecondaryWeapon;
         }
 
-        public WeaponBase GetSecondaryWeaponOfType<T>() where T : WeaponBase
+        public _WeaponBase GetSecondaryWeaponOfType<T>() where T : _WeaponBase
         {
             return (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
         }
 
-        public WeaponBase SelectSecondaryWeapon<T>() where T : WeaponBase
+        public _WeaponBase SelectSecondaryWeapon<T>() where T : _WeaponBase
         {
             SelectedSecondaryWeapon = GetSecondaryWeaponOfType<T>();
             return SelectedSecondaryWeapon;

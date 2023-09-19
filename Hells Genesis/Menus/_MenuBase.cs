@@ -12,7 +12,7 @@ namespace HG.Menus
     /// <summary>
     /// A menu instance. Allows for setting title text, adding items and managing selections.
     /// </summary>
-    internal class MenuBase
+    internal class _MenuBase
     {
         protected EngineCore _core;
         private DateTime _lastInputHandled = DateTime.UtcNow;
@@ -28,7 +28,7 @@ namespace HG.Menus
             ReadyForDeletion = true;
         }
 
-        public MenuBase(EngineCore core)
+        public _MenuBase(EngineCore core)
         {
             _core = core;
         }

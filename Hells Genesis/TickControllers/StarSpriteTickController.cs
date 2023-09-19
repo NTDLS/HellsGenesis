@@ -7,7 +7,7 @@ using HG.Utility;
 
 namespace HG.Controller
 {
-    internal class StarSpriteTickController : SpriteTickControllerBase<SpriteStar>
+    internal class StarSpriteTickController : _SpriteTickControllerBase<SpriteStar>
     {
         public StarSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)

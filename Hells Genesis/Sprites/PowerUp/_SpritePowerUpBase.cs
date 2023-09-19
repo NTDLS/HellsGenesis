@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace HG.Sprites.PowerUp
 {
-    internal class SpritePowerUpBase : SpriteBase
+    internal class _SpritePowerUpBase : _SpriteBase
     {
         private const string _assetHitAnimationPath = @"Graphics\Animation\PowerUp\";
         private readonly string[] _assetHitAnimationFiles = {
@@ -36,7 +36,7 @@ namespace HG.Sprites.PowerUp
             }
         }
 
-        public SpritePowerUpBase(EngineCore core)
+        public _SpritePowerUpBase(EngineCore core)
             : base(core)
         {
             Initialize();

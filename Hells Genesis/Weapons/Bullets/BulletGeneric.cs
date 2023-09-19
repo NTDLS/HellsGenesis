@@ -4,10 +4,10 @@ using HG.Sprites;
 
 namespace HG.Weapons.Bullets
 {
-    internal class BulletGeneric : BulletBase
+    internal class BulletGeneric : _BulletBase
     {
-        public BulletGeneric(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
-             SpriteBase lockedTarget = null, HgPoint xyOffset = null)
+        public BulletGeneric(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath,
+             _SpriteBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             Initialize(imagePath);

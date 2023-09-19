@@ -4,12 +4,12 @@ using HG.Sprites;
 
 namespace HG.Weapons.Bullets
 {
-    internal class BulletVulcanCannon : BulletBase
+    internal class BulletVulcanCannon : _BulletBase
     {
         private const string imagePath = @"Graphics\Weapon\BulletVulcanCannon.png";
 
-        public BulletVulcanCannon(EngineCore core, WeaponBase weapon, SpriteBase firedFrom,
-             SpriteBase lockedTarget = null, HgPoint xyOffset = null)
+        public BulletVulcanCannon(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom,
+             _SpriteBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             Initialize(imagePath);

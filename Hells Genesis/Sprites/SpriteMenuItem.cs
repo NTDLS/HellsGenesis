@@ -9,7 +9,7 @@ namespace HG.Sprites
 {
     internal class SpriteMenuItem : SpriteTextBlock
     {
-        public MenuBase Menu { get; private set; }
+        public _MenuBase Menu { get; private set; }
 
         private bool _selected = false;
 
@@ -33,7 +33,7 @@ namespace HG.Sprites
 
         public HgMenuItemType ItemType { get; set; }
 
-        public SpriteMenuItem(EngineCore core, MenuBase menu, TextFormat format, SolidColorBrush color, HgPoint location)
+        public SpriteMenuItem(EngineCore core, _MenuBase menu, TextFormat format, SolidColorBrush color, HgPoint location)
             : base(core, format, color, location, true)
         {
             Menu = menu;

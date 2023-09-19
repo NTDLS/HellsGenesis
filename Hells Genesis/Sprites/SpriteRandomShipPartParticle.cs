@@ -5,7 +5,7 @@ using System.IO;
 
 namespace HG.Sprites
 {
-    internal class SpriteRandomShipPartParticle : SpriteParticleBase
+    internal class SpriteRandomShipPartParticle : _SpriteParticleBase
     {
         private const string _assetPath = @"Graphics\Fragments";
         private readonly int _imageCount = 1488;

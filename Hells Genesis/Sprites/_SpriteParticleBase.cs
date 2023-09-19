@@ -2,9 +2,9 @@
 
 namespace HG.Sprites
 {
-    internal class SpriteParticleBase : SpriteBase
+    internal class _SpriteParticleBase : _SpriteBase
     {
-        public SpriteParticleBase(EngineCore core, string name = "")
+        public _SpriteParticleBase(EngineCore core, string name = "")
             : base(core, name)
         {
             _core = core;

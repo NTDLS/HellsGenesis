@@ -17,8 +17,8 @@ namespace HG.AI.Logistics
         private const string _assetPath = @"Data\Data\AI\Logistics\FlyBy.txt";
 
         private readonly EngineCore _core;
-        private readonly SpriteShipBase _owner;
-        private readonly SpriteBase _observedObject;
+        private readonly _SpriteShipBase _owner;
+        private readonly _SpriteBase _observedObject;
 
         #region I/O Enumerations.
 
@@ -66,7 +66,7 @@ namespace HG.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public HostileEngagement(EngineCore core, SpriteShipBase owner, SpriteBase observedObject)
+        public HostileEngagement(EngineCore core, _SpriteShipBase owner, _SpriteBase observedObject)
         {
             _core = core;
             _owner = owner;
@@ -77,7 +77,7 @@ namespace HG.AI.Logistics
             SetNeuralNetwork();
         }
 
-        private void Owner_OnHit(SpriteBase sender, HgDamageType damageType, int damageAmount)
+        private void Owner_OnHit(_SpriteBase sender, HgDamageType damageType, int damageAmount)
         {
             AlterActionState(ActionState.EvasiveLoop); //If you hit me, I will take off!
         }

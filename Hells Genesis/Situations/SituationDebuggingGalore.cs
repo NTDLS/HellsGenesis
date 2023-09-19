@@ -6,7 +6,7 @@ using HG.Utility;
 
 namespace HG.Situations
 {
-    internal class SituationDebuggingGalore : SituationBase
+    internal class SituationDebuggingGalore : _SituationBase
     {
         public SituationDebuggingGalore(EngineCore core)
             : base(core, "Debugging Galore")
@@ -33,7 +33,7 @@ namespace HG.Situations
 
         private void AddFreshEnemiesCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0)
+            if (_core.Sprites.OfType<_SpriteEnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {

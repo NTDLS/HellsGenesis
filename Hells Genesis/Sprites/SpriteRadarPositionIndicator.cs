@@ -3,7 +3,7 @@ using System.IO;
 
 namespace HG.Sprites
 {
-    internal class SpriteRadarPositionIndicator : SpriteBase
+    internal class SpriteRadarPositionIndicator : _SpriteBase
     {
         private const string _assetPath = @"Graphics\Radar Indicator\";
         private readonly string _assetFile = "16x16.png";

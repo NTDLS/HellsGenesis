@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace HG.Sprites.Enemies
 {
-    internal class SpriteEnemyBase : SpriteShipBase
+    internal class _SpriteEnemyBase : _SpriteShipBase
     {
         public IAIController DefaultAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
@@ -18,7 +18,7 @@ namespace HG.Sprites.Enemies
         public int BountyWorth { get; private set; } = 25;
         public bool IsHostile { get; set; } = true;
 
-        public SpriteEnemyBase(EngineCore core, int hullHealth, int bountyMultiplier)
+        public _SpriteEnemyBase(EngineCore core, int hullHealth, int bountyMultiplier)
             : base(core)
         {
             Velocity.ThrottlePercentage = 1;
@@ -48,7 +48,7 @@ namespace HG.Sprites.Enemies
             {
                 int random = HgRandom.Between(0, 4);
 
-                SpritePowerUpBase powerUp = null;
+                _SpritePowerUpBase powerUp = null;
 
                 switch (random)
                 {
@@ -78,7 +78,7 @@ namespace HG.Sprites.Enemies
             base.Explode();
         }
 
-        public override bool TestHit(HgPoint displacementVector, BulletBase bullet, HgPoint hitTestPosition)
+        public override bool TestHit(HgPoint displacementVector, _BulletBase bullet, HgPoint hitTestPosition)
         {
             if (bullet.FiredFromType == HgFiredFromType.Player)
             {

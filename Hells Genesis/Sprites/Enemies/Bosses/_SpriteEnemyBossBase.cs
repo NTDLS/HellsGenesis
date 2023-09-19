@@ -2,9 +2,9 @@
 
 namespace HG.Sprites.Enemies.Bosses
 {
-    internal class SpriteEnemyBossBase : SpriteEnemyBase
+    internal class _SpriteEnemyBossBase : _SpriteEnemyBase
     {
-        public SpriteEnemyBossBase(EngineCore core, int hullHealth, int bountyMultiplier)
+        public _SpriteEnemyBossBase(EngineCore core, int hullHealth, int bountyMultiplier)
             : base(core, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;

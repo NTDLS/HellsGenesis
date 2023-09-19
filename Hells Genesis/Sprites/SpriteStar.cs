@@ -5,7 +5,7 @@ using System.IO;
 
 namespace HG.Sprites
 {
-    internal class SpriteStar : SpriteBase
+    internal class SpriteStar : _SpriteBase
     {
         private const string _assetPath = @"Graphics\Star\";
         private readonly int _imageCount = 5;

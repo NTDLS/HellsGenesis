@@ -7,7 +7,7 @@ using System.IO;
 
 namespace HG.Weapons.Bullets
 {
-    internal class BulletFragMissile : BulletBase
+    internal class BulletFragMissile : _BulletBase
     {
         private const string imagePath = @"Graphics\Weapon\Missiles\BulletFragMissile.png";
 
@@ -15,8 +15,8 @@ namespace HG.Weapons.Bullets
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public BulletFragMissile(EngineCore core, WeaponBase weapon, SpriteBase firedFrom,
-             SpriteBase lockedTarget = null, HgPoint xyOffset = null)
+        public BulletFragMissile(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom,
+             _SpriteBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
 

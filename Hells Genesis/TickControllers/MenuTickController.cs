@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class MenuTickHandler : UnvectoredTickControllerBase<MenuBase>
+    internal class MenuTickHandler : _UnvectoredTickControllerBase<_MenuBase>
     {
-        public List<MenuBase> Collection { get; private set; } = new();
+        public List<_MenuBase> Collection { get; private set; } = new();
 
         public MenuTickHandler(EngineCore core)
             : base(core)
@@ -47,7 +47,7 @@ namespace HG.Controller
             }
         }
 
-        public void Insert(MenuBase menu)
+        public void Insert(_MenuBase menu)
         {
             lock (Collection)
             {
@@ -55,7 +55,7 @@ namespace HG.Controller
             }
         }
 
-        public void Delete(MenuBase menu)
+        public void Delete(_MenuBase menu)
         {
             lock (Collection)
             {

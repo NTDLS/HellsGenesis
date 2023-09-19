@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace HG.Controller
 {
-    internal class TextBlockSpriteTickController : SpriteTickControllerBase<SpriteTextBlock>
+    internal class TextBlockSpriteTickController : _SpriteTickControllerBase<SpriteTextBlock>
     {
         public TextBlockSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)

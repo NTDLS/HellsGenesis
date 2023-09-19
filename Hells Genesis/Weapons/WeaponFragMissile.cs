@@ -6,7 +6,7 @@ using HG.Weapons.Bullets;
 
 namespace HG.Weapons
 {
-    internal class WeaponFragMissile : WeaponBase
+    internal class WeaponFragMissile : _WeaponBase
     {
         static new string Name { get; } = "Frag Missile";
         private const string soundPath = @"Sounds\Weapons\WeaponFragMissile.wav";
@@ -14,7 +14,7 @@ namespace HG.Weapons
 
         private bool _toggle = false;
 
-        public WeaponFragMissile(EngineCore core, SpriteShipBase owner)
+        public WeaponFragMissile(EngineCore core, _SpriteShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponFragMissile(EngineCore core)
@@ -31,7 +31,7 @@ namespace HG.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override BulletBase CreateBullet(SpriteBase lockedTarget, HgPoint xyOffset = null)
+        public override _BulletBase CreateBullet(_SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
             return new BulletFragMissile(_core, this, _owner, lockedTarget, xyOffset);
         }

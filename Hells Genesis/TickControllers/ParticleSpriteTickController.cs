@@ -7,7 +7,7 @@ using HG.Utility;
 
 namespace HG.Controller
 {
-    internal class ParticleSpriteTickController : SpriteTickControllerBase<SpriteParticleBase>
+    internal class ParticleSpriteTickController : _SpriteTickControllerBase<_SpriteParticleBase>
     {
         public ParticleSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)
@@ -32,7 +32,7 @@ namespace HG.Controller
             }
         }
 
-        public void CreateRandomShipPartParticlesAt(SpriteBase sprite, int count)
+        public void CreateRandomShipPartParticlesAt(_SpriteBase sprite, int count)
         {
             for (int i = 0; i < count; i++)
             {
@@ -42,7 +42,7 @@ namespace HG.Controller
             }
         }
 
-        public SpriteRandomShipPartParticle CreateRandomShipPartParticleAt(SpriteBase sprite)
+        public SpriteRandomShipPartParticle CreateRandomShipPartParticleAt(_SpriteBase sprite)
         {
             lock (SpriteManager.Collection)
             {

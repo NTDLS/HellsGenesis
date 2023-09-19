@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace HG.Sprites
 {
-    internal class SpriteDebug : SpriteShipBase
+    internal class SpriteDebug : _SpriteShipBase
     {
         public SpriteDebug(EngineCore core)
             : base(core)

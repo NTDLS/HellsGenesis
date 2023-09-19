@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class BulletSpriteTickController : SpriteTickControllerBase<BulletBase>
+    internal class BulletSpriteTickController : _SpriteTickControllerBase<_BulletBase>
     {
         public BulletSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)
@@ -20,16 +20,16 @@ namespace HG.Controller
 
         public override void ExecuteWorldClockTick(HgPoint displacementVector)
         {
-            var thingsThatCanBeHit = new List<SpriteShipBase>
+            var thingsThatCanBeHit = new List<_SpriteShipBase>
             {
                 Core.Player.Sprite
             };
 
-            thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyBossBase>());
-            thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyPeonBase>());
+            thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<_SpriteEnemyBossBase>());
+            thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<_SpriteEnemyPeonBase>());
             thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
 
-            foreach (var bullet in VisibleOfType<BulletBase>())
+            foreach (var bullet in VisibleOfType<_BulletBase>())
             {
                 bullet.ApplyMotion(displacementVector); //Move the bullet.
 
@@ -55,7 +55,7 @@ namespace HG.Controller
             }
         }
 
-        public BulletBase Create(WeaponBase weapon, HgPoint xyOffset = null)
+        public _BulletBase Create(_WeaponBase weapon, HgPoint xyOffset = null)
         {
             lock (SpriteManager.Collection)
             {
@@ -65,7 +65,7 @@ namespace HG.Controller
             }
         }
 
-        public BulletBase CreateLocked(WeaponBase weapon, SpriteBase lockedTarget, HgPoint xyOffset = null)
+        public _BulletBase CreateLocked(_WeaponBase weapon, _SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
             lock (SpriteManager.Collection)
             {

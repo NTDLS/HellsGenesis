@@ -8,7 +8,7 @@ using System;
 
 namespace HG.Controller
 {
-    internal class EnemySpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
+    internal class EnemySpriteTickController : _SpriteTickControllerBase<_SpriteEnemyBase>
     {
         public EnemySpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)
@@ -41,12 +41,12 @@ namespace HG.Controller
             }
         }
 
-        public T Create<T>() where T : SpriteEnemyBase
+        public T Create<T>() where T : _SpriteEnemyBase
         {
             lock (SpriteManager.Collection)
             {
                 object[] param = { Core };
-                SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
+                _SpriteEnemyBase obj = (_SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
                 obj.Location = Core.Display.RandomOffScreenLocation();
                 obj.Velocity.MaxSpeed = HgRandom.Generator.Next(Core.Settings.MinEnemySpeed, Core.Settings.MaxEnemySpeed);

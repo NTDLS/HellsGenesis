@@ -7,15 +7,15 @@ using System.IO;
 
 namespace HG.Weapons.Bullets
 {
-    internal class BulletScramsMissile : BulletBase
+    internal class BulletScramsMissile : _BulletBase
     {
         private const string imagePath = @"Graphics\Weapon\Missiles\BulletScramsMissile.png";
         private const string _assetPathHitExplosionAnimation = @"Graphics\Animation\Explode\Hit Explosion 22x22\";
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public BulletScramsMissile(EngineCore core, WeaponBase weapon, SpriteBase firedFrom,
-             SpriteBase lockedTarget = null, HgPoint xyOffset = null)
+        public BulletScramsMissile(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom,
+             _SpriteBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             _selectedHitExplosionAnimationIndex = HgRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;

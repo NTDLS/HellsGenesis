@@ -9,7 +9,7 @@ namespace HG.Sprites.Enemies.Bosses
     /// <summary>
     /// 100% Experimental
     /// </summary>
-    internal class SpriteEnemyRepulsor : SpriteEnemyBossBase
+    internal class SpriteEnemyRepulsor : _SpriteEnemyBossBase
     {
         public const int hullHealth = 100;
         public const int bountyMultiplier = 15;

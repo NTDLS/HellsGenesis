@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class SituationTickController : UnvectoredTickControllerBase<SituationBase>
+    internal class SituationTickController : _UnvectoredTickControllerBase<_SituationBase>
     {
-        public SituationBase CurrentSituation { get; private set; }
-        public List<SituationBase> Situations { get; private set; } = new();
+        public _SituationBase CurrentSituation { get; private set; }
+        public List<_SituationBase> Situations { get; private set; } = new();
 
         public SituationTickController(EngineCore core)
             : base(core)

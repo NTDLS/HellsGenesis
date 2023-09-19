@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace HG.Sprites
 {
-    internal class SpriteAnimation : SpriteBase
+    internal class SpriteAnimation : _SpriteBase
     {
         private readonly SharpDX.Direct2D1.Bitmap _sheetImage;
         private readonly int _frameCount;

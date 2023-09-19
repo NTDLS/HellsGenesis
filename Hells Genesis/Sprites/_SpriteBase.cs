@@ -12,7 +12,7 @@ using System.Drawing;
 
 namespace HG.Sprites
 {
-    internal class SpriteBase
+    internal class _SpriteBase
     {
         protected EngineCore _core;
 
@@ -207,22 +207,22 @@ namespace HG.Sprites
 
         #region Events.
 
-        public delegate void HitEvent(SpriteBase sender, HgDamageType damageType, int damageAmount);
+        public delegate void HitEvent(_SpriteBase sender, HgDamageType damageType, int damageAmount);
         public event HitEvent OnHit;
 
-        public delegate void QueuedForDeleteEvent(SpriteBase sender);
+        public delegate void QueuedForDeleteEvent(_SpriteBase sender);
         public event QueuedForDeleteEvent OnQueuedForDelete;
 
-        public delegate void VisibilityChangedEvent(SpriteBase sender);
+        public delegate void VisibilityChangedEvent(_SpriteBase sender);
         public event VisibilityChangedEvent OnVisibilityChanged;
 
 
-        public delegate void ExplodeEvent(SpriteBase sender);
+        public delegate void ExplodeEvent(_SpriteBase sender);
         public event ExplodeEvent OnExplode;
 
         #endregion
 
-        public SpriteBase(EngineCore core, string name = "")
+        public _SpriteBase(EngineCore core, string name = "")
         {
             _core = core;
             Name = name;
@@ -273,7 +273,7 @@ namespace HG.Sprites
 
         #region Intersections.
 
-        public bool Intersects(SpriteBase otherObject)
+        public bool Intersects(_SpriteBase otherObject)
         {
             if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
@@ -282,7 +282,7 @@ namespace HG.Sprites
             return false;
         }
 
-        public bool IntersectsWithTrajectory(SpriteBase otherObject)
+        public bool IntersectsWithTrajectory(_SpriteBase otherObject)
         {
             if (Visable && otherObject.Visable)
             {
@@ -307,7 +307,7 @@ namespace HG.Sprites
         /// Intersect detection with another object using adjusted "hit box" size.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(SpriteBase otherObject, HgPoint sizeAdjust)
+        public bool Intersects(_SpriteBase otherObject, HgPoint sizeAdjust)
         {
             if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
@@ -326,7 +326,7 @@ namespace HG.Sprites
         /// Intersect detection with another object using adjusted "hit box" size.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(SpriteBase with, int variance = 0)
+        public bool Intersects(_SpriteBase with, int variance = 0)
         {
             var alteredHitBox = new RectangleF(
                 (float)(with.Bounds.X - variance),
@@ -366,9 +366,9 @@ namespace HG.Sprites
         /// Gets a list of all ov this objects intersections.
         /// </summary>
         /// <returns></returns>
-        public List<SpriteBase> Intersections()
+        public List<_SpriteBase> Intersections()
         {
-            var intersections = new List<SpriteBase>();
+            var intersections = new List<_SpriteBase>();
 
             foreach (var intersection in _core.Sprites.Collection)
             {
@@ -426,7 +426,7 @@ namespace HG.Sprites
         /// Hits this object with a given bullet.
         /// </summary>
         /// <returns></returns>
-        public virtual bool Hit(BulletBase bullet)
+        public virtual bool Hit(_BulletBase bullet)
         {
             if (bullet != null)
             {
@@ -459,7 +459,7 @@ namespace HG.Sprites
         /// <summary>
         /// Instantly points an object at another object and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        public void PointAtAndGoto(SpriteBase obj, double? velocity = null)
+        public void PointAtAndGoto(_SpriteBase obj, double? velocity = null)
         {
             Velocity.Angle.Degrees = HgPoint.AngleTo(Location, obj.Location);
 
@@ -473,7 +473,7 @@ namespace HG.Sprites
         /// Rotates the object towards the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(SpriteBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateTo(_SpriteBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = DeltaAngle(obj);
 
@@ -497,7 +497,7 @@ namespace HG.Sprites
         /// Rotates the object towards the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(SpriteBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateTo(_SpriteBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = DeltaAngle(obj);
 
@@ -593,7 +593,7 @@ namespace HG.Sprites
         /// Rotates the object from the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateFrom(SpriteBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateFrom(_SpriteBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = obj.DeltaAngle(this);
 
@@ -617,7 +617,7 @@ namespace HG.Sprites
         /// Rotates the object from the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateFrom(SpriteBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateFrom(_SpriteBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = obj.DeltaAngle(this);
 
@@ -672,13 +672,13 @@ namespace HG.Sprites
         /// Calculates the difference in heading angle from one object to get to another between 0-259.
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngle360(SpriteBase toObj) => HgMath.DeltaAngle360(this, toObj);
+        public double DeltaAngle360(_SpriteBase toObj) => HgMath.DeltaAngle360(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngle(SpriteBase toObj) => HgMath.DeltaAngle(this, toObj);
+        public double DeltaAngle(_SpriteBase toObj) => HgMath.DeltaAngle(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
@@ -690,23 +690,23 @@ namespace HG.Sprites
         /// Calculates the angle in degrees to another object,
         /// </summary>
         /// <returns></returns>
-        public double AngleTo(SpriteBase atObj) => HgMath.AngleTo(this, atObj);
+        public double AngleTo(_SpriteBase atObj) => HgMath.AngleTo(this, atObj);
 
         /// Calculates the angle in degrees to a location.
         public double AngleTo(HgPoint location) => HgMath.AngleTo(this, location);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
+        public bool IsPointingAt(_SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
             => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAt(_SpriteBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees) => HgMath.IsPointingAt(this, atObj, toleranceDegrees);
+        public bool IsPointingAt(_SpriteBase atObj, double toleranceDegrees) => HgMath.IsPointingAt(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees) => HgMath.IsPointingAway(this, atObj, toleranceDegrees);
+        public bool IsPointingAway(_SpriteBase atObj, double toleranceDegrees) => HgMath.IsPointingAway(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAway(_SpriteBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public double DistanceTo(SpriteBase to) => HgPoint.DistanceTo(Location, to.Location);
+        public double DistanceTo(_SpriteBase to) => HgPoint.DistanceTo(Location, to.Location);
 
         public double DistanceTo(HgPoint to) => HgPoint.DistanceTo(Location, to);
 
@@ -773,14 +773,14 @@ namespace HG.Sprites
                 float size = 0;
 
                 RawColor4 color = _core.DirectX.Materials.Raw.Blue;
-                if (this is SpriteEnemyBase)
+                if (this is _SpriteEnemyBase)
                 {
                     color = _core.DirectX.Materials.Raw.WhiteSmoke;
                     size = 3;
                 }
-                else if (this is BulletBase)
+                else if (this is _BulletBase)
                 {
-                    var bullet = this as BulletBase;
+                    var bullet = this as _BulletBase;
                     if (bullet.FiredFromType == HgFiredFromType.Enemy)
                     {
                         color = _core.DirectX.Materials.Raw.Red;

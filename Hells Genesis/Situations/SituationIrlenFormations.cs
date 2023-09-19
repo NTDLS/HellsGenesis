@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace HG.Situations
 {
-    internal class SituationIrlenFormations : SituationBase
+    internal class SituationIrlenFormations : _SituationBase
     {
         public SituationIrlenFormations(EngineCore core)
             : base(core, "Irlen Formations")
@@ -56,7 +56,7 @@ namespace HG.Situations
 
         private void AdvanceWaveCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !waitingOnPopulation)
+            if (_core.Sprites.OfType<_SpriteEnemyBase>().Count == 0 && !waitingOnPopulation)
             {
                 if (CurrentWave == TotalWaves && waitingOnPopulation != true)
                 {

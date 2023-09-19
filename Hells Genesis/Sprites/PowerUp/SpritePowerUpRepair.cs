@@ -6,7 +6,7 @@ using System.IO;
 
 namespace HG.Sprites.PowerUp
 {
-    internal class SpritePowerUpRepair : SpritePowerUpBase
+    internal class SpritePowerUpRepair : _SpritePowerUpBase
     {
         private const string _assetPath = @"Graphics\PowerUp\Repair\";
         private readonly int imageCount = 3;

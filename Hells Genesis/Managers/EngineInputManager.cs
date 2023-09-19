@@ -52,9 +52,9 @@ namespace HG.Managers
             #region Debug stuff.
             if (key == Keys.Delete)
             {
-                if (_core.Sprites.OfType<SpriteEnemyBase>().Count > 0)
+                if (_core.Sprites.OfType<_SpriteEnemyBase>().Count > 0)
                 {
-                    _core.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
+                    _core.Sprites.OfType<_SpriteEnemyBase>()[0].Explode();
                 }
             }
             else if (key == Keys.Oem3) //~

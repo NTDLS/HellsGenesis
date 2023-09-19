@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace HG.Sprites
 {
-    internal class SpritePlayer : SpriteShipBase
+    internal class SpritePlayer : _SpriteShipBase
     {
         public ShipLoadout Loadout { get; private set; }
         public HgAudioClip AmmoLowSound { get; private set; }
@@ -187,7 +187,7 @@ namespace HG.Sprites
             base.Explode();
         }
 
-        public override bool TestHit(HgPoint displacementVector, BulletBase bullet, HgPoint hitTestPosition)
+        public override bool TestHit(HgPoint displacementVector, _BulletBase bullet, HgPoint hitTestPosition)
         {
             if (bullet.FiredFromType == HgFiredFromType.Enemy)
             {
@@ -203,7 +203,7 @@ namespace HG.Sprites
             return false;
         }
 
-        private void SpritePlayer_OnHit(SpriteBase sender, HgDamageType damageType, int damageAmount)
+        private void SpritePlayer_OnHit(_SpriteBase sender, HgDamageType damageType, int damageAmount)
         {
             if (damageType == HgDamageType.Shield)
             {

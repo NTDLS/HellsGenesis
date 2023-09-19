@@ -9,7 +9,7 @@ using System.IO;
 
 namespace HG.Sprites.Enemies.Peons
 {
-    internal class SpriteEnemyPhoenix : SpriteEnemyPeonBase
+    internal class SpriteEnemyPhoenix : _SpriteEnemyPeonBase
     {
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;

@@ -12,7 +12,7 @@ namespace HG.Sprites.Enemies.Peons
     /// <summary>
     /// Debugging enemy uint.
     /// </summary>
-    internal class SpriteEnemyDebug : SpriteEnemyPeonBase
+    internal class SpriteEnemyDebug : _SpriteEnemyPeonBase
     {
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;

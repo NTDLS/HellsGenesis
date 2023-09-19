@@ -5,13 +5,13 @@ using HG.Utility;
 
 namespace HG.Weapons
 {
-    internal class WeaponDualVulcanCannon : WeaponBase
+    internal class WeaponDualVulcanCannon : _WeaponBase
     {
         static new string Name { get; } = "Dual Vulcan Cannon";
         private const string soundPath = @"Sounds\Weapons\WeaponDualVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponDualVulcanCannon(EngineCore core, SpriteShipBase owner)
+        public WeaponDualVulcanCannon(EngineCore core, _SpriteShipBase owner)
             : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponDualVulcanCannon(EngineCore core)
