@@ -1,4 +1,4 @@
-# Hells Genesis
+# Nebula Siege
 Hells Genesis is a 2D space fighter (Hell Fighter Tribute) game engine written in C# (currently .net7) and DirectX.
 
 Infinite space, neural network AI, multiple scenario, event driven, locking/seeking weapons, etc.
