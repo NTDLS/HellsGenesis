@@ -1,15 +1,15 @@
-﻿using HG.Controller.Interfaces;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
+using HG.TickControllers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace HG.Controller
 {
-    internal class RadarPositionSpriteTickController : IUnvectoredTickController<SpriteRadarPositionTextBlock>
+    internal class RadarPositionSpriteTickController : UnvectoredTickControllerBase<SpriteRadarPositionTextBlock>
     {
         private readonly EngineSpriteManager _manager;
 
