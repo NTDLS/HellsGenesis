@@ -14,19 +14,19 @@ namespace HG.Sprites
         public SpriteStar(EngineCore core)
             : base(core)
         {
-            selectedImageIndex = HgRandom.Random.Next(0, 1000) % _imageCount;
+            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % _imageCount;
             Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
-            X = HgRandom.Random.Next(0, core.Display.TotalCanvasSize.Width);
-            Y = HgRandom.Random.Next(0, core.Display.TotalCanvasSize.Height);
+            X = HgRandom.Generator.Next(0, core.Display.TotalCanvasSize.Width);
+            Y = HgRandom.Generator.Next(0, core.Display.TotalCanvasSize.Height);
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
-                Velocity.ThrottlePercentage = HgRandom.Random.Next(8, 10) / 10.0;
+                Velocity.ThrottlePercentage = HgRandom.Generator.Next(8, 10) / 10.0;
             }
             else
             {
-                Velocity.ThrottlePercentage = HgRandom.Random.Next(4, 8) / 10.0;
+                Velocity.ThrottlePercentage = HgRandom.Generator.Next(4, 8) / 10.0;
             }
         }
 
@@ -35,7 +35,7 @@ namespace HG.Sprites
             X -= displacementVector.X * Velocity.ThrottlePercentage;
             Y -= displacementVector.Y * Velocity.ThrottlePercentage;
 
-            if (_core.Display.TotalScreenBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
+            if (_core.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds) == false) //Remove off-screen stars.
             {
                 QueueForDelete();
             }

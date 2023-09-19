@@ -17,7 +17,6 @@ namespace HG.Controller
         public List<SpriteStar> Visible() => _controller.VisibleOfType<SpriteStar>();
         public List<subType> OfType<subType>() where subType : SpriteStar => _controller.OfType<subType>();
 
-
         public StarSpriteTickController(EngineCore core, EngineSpriteManager manager)
         {
             _core = core;
@@ -36,10 +35,10 @@ namespace HG.Controller
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (HgRandom.ChanceIn(1000)) //1 in n chance to create a star.
+                            if (HgRandom.PercentChance(1000)) //1 in n chance to create a star.
                             {
-                                int x = HgRandom.Random.Next(_core.Display.TotalCanvasSize.Width - (int)displacementVector.X, _core.Display.TotalCanvasSize.Width);
-                                int y = HgRandom.Random.Next(0, _core.Display.TotalCanvasSize.Height);
+                                int x = HgRandom.Generator.Next(_core.Display.TotalCanvasSize.Width - (int)displacementVector.X, _core.Display.TotalCanvasSize.Width);
+                                int y = HgRandom.Generator.Next(0, _core.Display.TotalCanvasSize.Height);
                                 _controller.Stars.Create(x, y);
                             }
                         }
@@ -48,10 +47,10 @@ namespace HG.Controller
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (HgRandom.ChanceIn(1000)) //1 in n chance to create a star.
+                            if (HgRandom.PercentChance(1000)) //1 in n chance to create a star.
                             {
-                                int x = HgRandom.Random.Next(0, (int)-displacementVector.X);
-                                int y = HgRandom.Random.Next(0, _core.Display.TotalCanvasSize.Height);
+                                int x = HgRandom.Generator.Next(0, (int)-displacementVector.X);
+                                int y = HgRandom.Generator.Next(0, _core.Display.TotalCanvasSize.Height);
                                 _controller.Stars.Create(x, y);
                             }
                         }
@@ -60,10 +59,10 @@ namespace HG.Controller
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (HgRandom.ChanceIn(1000)) //1 in n chance to create a star.
+                            if (HgRandom.PercentChance(1000)) //1 in n chance to create a star.
                             {
-                                int x = HgRandom.Random.Next(0, _core.Display.TotalCanvasSize.Width);
-                                int y = HgRandom.Random.Next(_core.Display.TotalCanvasSize.Height - (int)displacementVector.Y, _core.Display.TotalCanvasSize.Height);
+                                int x = HgRandom.Generator.Next(0, _core.Display.TotalCanvasSize.Width);
+                                int y = HgRandom.Generator.Next(_core.Display.TotalCanvasSize.Height - (int)displacementVector.Y, _core.Display.TotalCanvasSize.Height);
                                 _controller.Stars.Create(x, y);
                             }
                         }
@@ -72,10 +71,10 @@ namespace HG.Controller
                     {
                         for (int i = 0; i < 100; i++) //n chances to create a star.
                         {
-                            if (HgRandom.ChanceIn(1000)) //1 in n chance to create a star.
+                            if (HgRandom.PercentChance(1000)) //1 in n chance to create a star.
                             {
-                                int x = HgRandom.Random.Next(0, _core.Display.TotalCanvasSize.Width);
-                                int y = HgRandom.Random.Next(0, (int)-displacementVector.Y);
+                                int x = HgRandom.Generator.Next(0, _core.Display.TotalCanvasSize.Width);
+                                int y = HgRandom.Generator.Next(0, (int)-displacementVector.Y);
                                 _controller.Stars.Create(x, y);
                             }
                         }

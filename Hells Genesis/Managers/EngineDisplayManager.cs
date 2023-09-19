@@ -85,79 +85,79 @@ namespace HG.Managers
             }
         }
 
-        public RectangleF CurrentScaledScreenBounds
+        public RectangleF GetCurrentScaledScreenBounds()
         {
-            get
+            var scale = SpeedOrientedFrameScalingFactor();
+
+            if (scale < -1 || scale > 1)
             {
-                var scale = SpeedOrientedFrameScalingFactor();
+                throw new ArgumentException("Scale must be in the range [-1, 1].");
+            }
 
-                if (scale < -1 || scale > 1)
-                {
-                    throw new ArgumentException("Scale must be in the range [-1, 1].");
-                }
+            float centerX = TotalCanvasSize.Width * 0.5f;
+            float centerY = TotalCanvasSize.Height * 0.5f;
 
-                float centerX = TotalCanvasSize.Width * 0.5f;
-                float centerY = TotalCanvasSize.Height * 0.5f;
+            float smallerWidth = (float)(TotalCanvasSize.Width * scale);
+            float smallerHeight = (float)(TotalCanvasSize.Height * scale);
 
-                float smallerWidth = (float)(TotalCanvasSize.Width * scale);
-                float smallerHeight = (float)(TotalCanvasSize.Height * scale);
+            float left = centerX - smallerWidth * 0.5f;
+            float top = centerY - smallerHeight * 0.5f;
+            float right = smallerWidth;
+            float bottom = smallerHeight;
 
-                float left = centerX - smallerWidth * 0.5f;
-                float top = centerY - smallerHeight * 0.5f;
-                float right = smallerWidth;
-                float bottom = smallerHeight;
-
-                if (scale >= 0)
-                {
-                    return new RectangleF(left, top, right, bottom);
-                }
-                else
-                {
-                    //TODO: This is untested
-                    return new RectangleF(right, bottom, left, top);
-                }
+            if (scale >= 0)
+            {
+                return new RectangleF(left, top, right, bottom);
+            }
+            else
+            {
+                //TODO: Zoom-in is untested.
+                return new RectangleF(right, bottom, left, top);
             }
         }
 
         public HgPoint RandomOnScreenLocation()
         {
-            return new HgPoint(HgRandom.Random.Next(0, NatrualScreenSize.Width), HgRandom.Random.Next(0, NatrualScreenSize.Height));
+            var currentScaledScreenBounds = GetCurrentScaledScreenBounds();
+
+            return new HgPoint(
+                    HgRandom.Generator.Next((int)currentScaledScreenBounds.Left, (int)(currentScaledScreenBounds.Left + currentScaledScreenBounds.Width)),
+                    HgRandom.Generator.Next((int)currentScaledScreenBounds.Top, (int)(currentScaledScreenBounds.Top + currentScaledScreenBounds.Height))
+                );
         }
 
-        public HgPoint RandomOffScreenLocation(int min = 100, int max = 500)
+        public HgPoint RandomOffScreenLocation(int minOffscreenDistance = 100, int maxOffscreenDistance = 500)
         {
-            double x;
-            double y;
-
             if (HgRandom.FlipCoin())
             {
                 if (HgRandom.FlipCoin())
                 {
-                    x = -HgRandom.RandomNumber(min, max);
-                    y = HgRandom.RandomNumber(0, NatrualScreenSize.Height);
+                    return new HgPoint(
+                        -HgRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                        HgRandom.Between(0, TotalCanvasSize.Height));
                 }
                 else
                 {
-                    y = -HgRandom.RandomNumber(min, max);
-                    x = HgRandom.RandomNumber(0, NatrualScreenSize.Width);
+                    return new HgPoint(
+                        -HgRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                        HgRandom.Between(0, TotalCanvasSize.Width));
                 }
             }
             else
             {
                 if (HgRandom.FlipCoin())
                 {
-                    x = NatrualScreenSize.Width + HgRandom.RandomNumber(min, max);
-                    y = HgRandom.RandomNumber(0, NatrualScreenSize.Height);
+                    return new HgPoint(
+                        TotalCanvasSize.Width + HgRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                        HgRandom.Between(0, TotalCanvasSize.Height));
                 }
                 else
                 {
-                    y = NatrualScreenSize.Height + HgRandom.RandomNumber(min, max);
-                    x = HgRandom.RandomNumber(0, NatrualScreenSize.Width);
+                    return new HgPoint(
+                        TotalCanvasSize.Height + HgRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                    HgRandom.Between(0, TotalCanvasSize.Width));
                 }
-
             }
-
-            return new HgPoint(x, y);
         }
 
         public EngineDisplayManager(EngineCore core, Control drawingSurface, Size visibleSize)

@@ -1,9 +1,9 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
 
-namespace HG.Engine.ImageProcessing
+namespace HG.Engine.GraphicsProcessing
 {
-    internal class DirectXMaterials
+    internal class PrecreatedMaterials
     {
         internal class RawColors
         {
@@ -36,7 +36,7 @@ namespace HG.Engine.ImageProcessing
         internal ColorBrushes Brushes { get; set; } = new();
         internal RawColors Raw { get; set; } = new();
 
-        internal DirectXMaterials(RenderTarget renterTarget)
+        internal PrecreatedMaterials(RenderTarget renterTarget)
         {
             Brushes.Red = new SolidColorBrush(renterTarget, Raw.Red);
             Brushes.Green = new SolidColorBrush(renterTarget, Raw.Green);

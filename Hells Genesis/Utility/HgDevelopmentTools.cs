@@ -49,7 +49,7 @@ namespace HG.Utility
 
             for (int i = 0; i < particleCount; i++)
             {
-                var obj = core.Sprites.Particles.CreateRandomShipPartParticleAt(X + HgRandom.RandomNumber(-20, 20), Y + HgRandom.RandomNumber(-20, 20));
+                var obj = core.Sprites.Particles.CreateRandomShipPartParticleAt(X + HgRandom.Between(-20, 20), Y + HgRandom.Between(-20, 20));
                 obj.Visable = true;
             }
         }

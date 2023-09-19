@@ -21,11 +21,11 @@ namespace HG.Sprites.Enemies.Peons
         public SpriteEnemyPhoenix(EngineCore core)
             : base(core, hullHealth, bountyMultiplier)
         {
-            selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
+            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
             Velocity.MaxBoost = 1.5;
-            Velocity.MaxSpeed = HgRandom.PickOne(4, 5);
+            Velocity.MaxSpeed = HgRandom.OneOf(4, 5);
 
             SetPrimaryWeapon<WeaponScattershot>(1000);
             AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
@@ -43,7 +43,7 @@ namespace HG.Sprites.Enemies.Peons
             //    SetDefaultAIController(AIControllers[typeof(Meander)]);
             //}
 
-            behaviorChangeThresholdMiliseconds = HgRandom.RandomNumber(2000, 10000);
+            behaviorChangeThresholdMiliseconds = HgRandom.Between(2000, 10000);
 
             SetDefaultAIController(AIControllers[typeof(Taunt)]);
         }
@@ -59,7 +59,7 @@ namespace HG.Sprites.Enemies.Peons
 
             if ((DateTime.Now - lastBehaviorChangeTime).TotalMilliseconds > behaviorChangeThresholdMiliseconds)
             {
-                behaviorChangeThresholdMiliseconds = HgRandom.RandomNumber(2000, 10000);
+                behaviorChangeThresholdMiliseconds = HgRandom.Between(2000, 10000);
 
                 /*
                 if (HgRandom.ChanceIn(2))

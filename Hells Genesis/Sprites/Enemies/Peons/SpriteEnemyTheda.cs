@@ -17,7 +17,7 @@ namespace HG.Sprites.Enemies.Peons
         public SpriteEnemyTheda(EngineCore core)
             : base(core, hullHealth, bountyMultiplier)
         {
-            selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
+            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
         }
     }

@@ -24,10 +24,10 @@ namespace HG.Sprites.Enemies.Peons
         public SpriteEnemyScinzad(EngineCore core)
             : base(core, hullHealth, bountyMultiplier)
         {
-            selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
+            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MaxEnemySpeed - 2, _core.Settings.MaxEnemySpeed); //Upper end of the speed spectrum
+            Velocity.MaxSpeed = HgRandom.Generator.Next(_core.Settings.MaxEnemySpeed - 2, _core.Settings.MaxEnemySpeed); //Upper end of the speed spectrum
 
             SetPrimaryWeapon<WeaponVulcanCannon>(1000);
             AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
@@ -44,7 +44,7 @@ namespace HG.Sprites.Enemies.Peons
         }
 
         private const double baseDistanceToKeep = 200;
-        private double distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
+        private double distanceToKeep = baseDistanceToKeep * (HgRandom.Generator.NextDouble() + 1);
         private const double baseFallbackDistance = 800;
         private double fallbackDistance;
         private HgAngle fallToAngle;
@@ -98,8 +98,8 @@ namespace HG.Sprites.Enemies.Peons
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.RandomNumberNegative(0, 10));
-                    fallbackDistance = baseFallbackDistance * (HgRandom.Random.NextDouble() + 1);
+                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.Between(0, 10));
+                    fallbackDistance = baseFallbackDistance * (HgRandom.Generator.NextDouble() + 1);
                 }
             }
 
@@ -143,7 +143,7 @@ namespace HG.Sprites.Enemies.Peons
                 else
                 {
                     mode = AIMode.Approaching;
-                    distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
+                    distanceToKeep = baseDistanceToKeep * (HgRandom.Generator.NextDouble() + 1);
                 }
             }
 

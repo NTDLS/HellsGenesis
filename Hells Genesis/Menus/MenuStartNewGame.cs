@@ -2,6 +2,7 @@
 using HG.Engine.Types.Geometry;
 using HG.Sprites;
 
+
 namespace HG.Menus
 {
     /// <summary>
@@ -12,56 +13,51 @@ namespace HG.Menus
         public MenuStartNewGame(EngineCore core)
             : base(core)
         {
+            var currentScaledScreenBounds = _core.Display.GetCurrentScaledScreenBounds();
+
             double offsetX = _core.Display.TotalCanvasSize.Width / 2;
-            double offsetY = _core.Display.CurrentScaledScreenBounds.Y + 100;
+            double offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new HgPoint(offsetX, offsetY), "Ready to start?");
+            var itemTitle = CreateAndAddTitleItem(new HgPoint(offsetX, offsetY), "Hells Genesis");
             itemTitle.X -= itemTitle.Size.Width / 2;
-            offsetY += itemTitle.Size.Height + 10;
+            offsetY += itemTitle.Size.Height + 60;
+            itemTitle.Highlight = true;
 
-            var itemYes = CreateAndAddMenuItem(new HgPoint(offsetX, offsetY), "YES", "Yes");
-            var itemNo = CreateAndAddMenuItem(new HgPoint(offsetX + itemYes.Size.Width + 10, offsetY), "NO", "No");
-            offsetY += itemNo.Size.Height + 20;
-            itemYes.X -= (itemYes.Size.Width + itemNo.Size.Width) / 2;
-            itemNo.X -= (itemYes.Size.Width + itemNo.Size.Width) / 2;
-
-            var helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Move with <W>, <A>, <S>.");
+            var helpItem = CreateAndAddMenuItem(new HgPoint(offsetX, offsetY), "ENTER", " Press -ENTER- to start ");
+            helpItem.Selected = true;
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 5;
+
+            helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Move with <W>, <A>, <S>.");
+            helpItem.X -= helpItem.Size.Width / 2;
+            offsetY += helpItem.Size.Height + 5;
 
             helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Warp Drive with <SHIFT>.");
             helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += itemTitle.Size.Height + 5;
+            offsetY += helpItem.Size.Height + 5;
 
             helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Fire primary with <SPACE>.");
             helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += itemTitle.Size.Height + 10;
+            offsetY += helpItem.Size.Height + 10;
 
             helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Fire secondary with <CTRL>.");
             helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += itemTitle.Size.Height + 10;
+            offsetY += helpItem.Size.Height + 10;
 
             helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Change weapons with <left> and <right> arrows.");
             helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += itemTitle.Size.Height + 10;
+            offsetY += helpItem.Size.Height + 10;
 
             helpItem = CreateAndAddTextItem(new HgPoint(offsetX, offsetY), "Change speed with <up> and <down> arrows.");
             helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += itemTitle.Size.Height + 10;
+            offsetY += helpItem.Size.Height + 10;
 
-            itemYes.Selected = true;
+            //itemYes.Selected = true;
         }
 
         public override void ExecuteSelection(SpriteMenuItem item)
         {
-            if (item.Key == "NO")
-            {
-                _core.Stop();
-            }
-            else if (item.Key == "YES")
-            {
-                _core.Menus.Insert(new PlayerLoadoutMenu(_core));
-            }
+            _core.Menus.Insert(new PlayerLoadoutMenu(_core));
         }
     }
 }

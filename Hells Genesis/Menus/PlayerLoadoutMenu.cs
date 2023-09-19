@@ -16,8 +16,10 @@ namespace HG.Menus
         public PlayerLoadoutMenu(EngineCore core)
             : base(core)
         {
-            double offsetX = _core.Display.CurrentScaledScreenBounds.X + 40;
-            double offsetY = _core.Display.CurrentScaledScreenBounds.Y + 100;
+            var currentScaledScreenBounds = _core.Display.GetCurrentScaledScreenBounds();
+
+            double offsetX = currentScaledScreenBounds.X + 40;
+            double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new HgPoint(offsetX, offsetY), "Select a Ship Class:");
             itemTitle.X = offsetX + 200;

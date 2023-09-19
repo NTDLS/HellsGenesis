@@ -33,7 +33,7 @@ namespace HG.Managers
         {
             const string _assetExplosionSoundPath = @"Sounds\Explode\";
             int explosionSoundCount = 4;
-            int selectedExplosionSoundIndex = HgRandom.Random.Next(0, 1000) % explosionSoundCount;
+            int selectedExplosionSoundIndex = HgRandom.Generator.Next(0, 1000) % explosionSoundCount;
             var explodeSound = _core.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{selectedExplosionSoundIndex}.wav"), 1.0f);
             explodeSound?.Play();
         }

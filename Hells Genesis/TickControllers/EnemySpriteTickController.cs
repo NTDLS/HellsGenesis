@@ -76,8 +76,8 @@ namespace HG.Controller
                 SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
                 obj.Location = _core.Display.RandomOffScreenLocation();
-                obj.Velocity.MaxSpeed = HgRandom.Random.Next(_core.Settings.MinEnemySpeed, _core.Settings.MaxEnemySpeed);
-                obj.Velocity.Angle.Degrees = HgRandom.Random.Next(0, 360);
+                obj.Velocity.MaxSpeed = HgRandom.Generator.Next(_core.Settings.MinEnemySpeed, _core.Settings.MaxEnemySpeed);
+                obj.Velocity.Angle.Degrees = HgRandom.Generator.Next(0, 360);
 
                 obj.BeforeCreate();
                 _controller.Collection.Add(obj);

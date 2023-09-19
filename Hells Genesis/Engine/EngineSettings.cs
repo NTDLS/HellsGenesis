@@ -38,10 +38,10 @@ namespace HG.Engine
         public int InitialFrameStarCount { get; set; } = 100;
         public int DeltaFrameTargetStarCount { get; set; } = 200;
 
-        public int MinEnemySpeed { get; set; } = 3;
-        public int MaxEnemySpeed { get; set; } = 7;
+        public int MinEnemySpeed { get; set; } = 5;
+        public int MaxEnemySpeed { get; set; } = 10;
 
-        public double FrameLimiter { get; set; } = 60; //~120.0 seems to be a good rate. 2 frames per second?
+        public double FrameLimiter { get; set; } = 60; //~60 seems to be a good rate.
         public double BulletSceneDistanceLimit { get; set; } = 800; //The distance from the scene that a bullet can travel before it is cleaned up.
         public double EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
 

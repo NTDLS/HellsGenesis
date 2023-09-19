@@ -16,7 +16,7 @@ namespace HG.Weapons.Bullets
              SpriteBase lockedTarget = null, HgPoint xyOffset = null)
             : base(core, weapon, firedFrom, null, lockedTarget, xyOffset)
         {
-            selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
+            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
             Initialize();

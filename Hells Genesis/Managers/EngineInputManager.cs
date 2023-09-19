@@ -75,7 +75,7 @@ namespace HG.Managers
                 if (textBlock == null)
                 {
                     textBlock = _core.Sprites.TextBlocks.Create(_core.DirectX.TextFormats.LargeBlocker, _core.DirectX.Materials.Brushes.Red, new HgPoint(100, 100), true, "PausedText");
-                    textBlock.Text = "Paused...";
+                    textBlock.Text = "Paused";
                     textBlock.X = _core.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
                     textBlock.Y = _core.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
                 }

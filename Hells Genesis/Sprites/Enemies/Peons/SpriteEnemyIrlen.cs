@@ -20,7 +20,7 @@ namespace HG.Sprites.Enemies.Peons
         public SpriteEnemyIrlen(EngineCore core)
             : base(core, hullHealth, bountyMultiplier)
         {
-            selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
+            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
             SetPrimaryWeapon<WeaponPhotonTorpedo>(5);
@@ -44,7 +44,7 @@ namespace HG.Sprites.Enemies.Peons
 
         readonly int initialHullHealth = 0;
         const double baseDistanceToKeep = 100;
-        double distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
+        double distanceToKeep = baseDistanceToKeep * (HgRandom.Generator.NextDouble() + 1);
         const double baseFallbackDistance = 400;
         double fallbackDistance;
         HgAngle fallToAngle;
@@ -60,11 +60,11 @@ namespace HG.Sprites.Enemies.Peons
             {
                 //Since we need to handle the entire "platoon" of formation ships all at once, a good
                 //  deal of this AI is handled by the Scenerio engine(s). (see: ScenarioIrlenFormations).
-                if (distanceToPlayer < 500 && HgRandom.ChanceIn(10000) || HullHealth != initialHullHealth)
+                if (distanceToPlayer < 500 && HgRandom.PercentChance(10000) || HullHealth != initialHullHealth)
                 {
                     Mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.RandomNumberNegative(0, 10));
-                    fallbackDistance = baseFallbackDistance * (HgRandom.Random.NextDouble() + 1);
+                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.Between(0, 10));
+                    fallbackDistance = baseFallbackDistance * (HgRandom.Generator.NextDouble() + 1);
                 }
             }
 
@@ -77,8 +77,8 @@ namespace HG.Sprites.Enemies.Peons
                 else
                 {
                     Mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.RandomNumberNegative(0, 10));
-                    fallbackDistance = baseFallbackDistance * (HgRandom.Random.NextDouble() + 1);
+                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.Between(0, 10));
+                    fallbackDistance = baseFallbackDistance * (HgRandom.Generator.NextDouble() + 1);
                 }
             }
 
@@ -122,7 +122,7 @@ namespace HG.Sprites.Enemies.Peons
                 else
                 {
                     Mode = AIMode.Approaching;
-                    distanceToKeep = baseDistanceToKeep * (HgRandom.Random.NextDouble() + 1);
+                    distanceToKeep = baseDistanceToKeep * (HgRandom.Generator.NextDouble() + 1);
                 }
             }
 

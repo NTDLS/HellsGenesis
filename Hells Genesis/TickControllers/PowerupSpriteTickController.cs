@@ -59,20 +59,6 @@ namespace HG.Controller
             }
         }
 
-        public T Create<T>() where T : SpritePowerUpBase
-        {
-            lock (_controller.Collection)
-            {
-                object[] param = { _core };
-                var obj = (SpritePowerUpBase)Activator.CreateInstance(typeof(T), param);
-
-                obj.Location = _core.Display.RandomOffScreenLocation(100, 1000);
-
-                _controller.Collection.Add(obj);
-                return (T)obj;
-            }
-        }
-
         public T Create<T>(double x, double y) where T : SpritePowerUpBase
         {
             lock (_controller.Collection)

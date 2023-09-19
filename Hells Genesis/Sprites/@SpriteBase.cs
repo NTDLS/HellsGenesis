@@ -45,7 +45,7 @@ namespace HG.Sprites
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public HgPoint RadarDotSize { get; set; } = new HgPoint(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
-        public bool IsOnScreen => _core.Display.CurrentScaledScreenBounds.IntersectsWith(Bounds);
+        public bool IsWithinCurrentScaledScreenBounds => _core.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds);
         public bool Highlight { get; set; } = false;
         public HgRotationMode RotationMode { get; set; }
         public int HullHealth { get; private set; } = 0; //Ship hit-points.

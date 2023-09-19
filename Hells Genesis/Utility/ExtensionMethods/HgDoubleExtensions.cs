@@ -5,8 +5,6 @@
         /// <summary>
         /// Degrees 0-360 -> 0 to 180 (right) and 0 to -180 (left).
         /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
         public static double DegreesNormalized(this double value)
         {
             return (value + 180) % 360 - 180;
@@ -53,10 +51,6 @@
         /// <summary>
         /// Clips a value to a min/max value.
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="minValue"></param>
-        /// <param name="maxValue"></param>
-        /// <returns></returns>
         public static double Box(this double value, double minValue, double maxValue)
         {
             if (value > maxValue) return maxValue;
@@ -67,9 +61,6 @@
         /// <summary>
         /// Take a value divides it by two and makes it negative if it over a given threshold
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="at"></param>
-        /// <returns></returns>
         public static double SplitToNegative(this double value, double threshold)
         {
             value /= 2.0;

@@ -17,7 +17,7 @@ namespace HG.Sprites.PowerUp
         public SpritePowerUpBounty(EngineCore core)
             : base(core)
         {
-            selectedImageIndex = HgRandom.Random.Next(0, 1000) % imageCount;
+            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
             _powerUpAmount *= selectedImageIndex + 1;
         }

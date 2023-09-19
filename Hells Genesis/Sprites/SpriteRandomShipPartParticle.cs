@@ -19,19 +19,19 @@ namespace HG.Sprites
         public SpriteRandomShipPartParticle(EngineCore core, double x, double y)
             : base(core)
         {
-            selectedImageIndex = HgRandom.Random.Next(0, 1000) % _imageCount;
+            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % _imageCount;
 
             Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
             X = x;
             Y = y;
 
-            _rotationSpeed = HgRandom.RandomNumber(1, 100) / 20.0;
+            _rotationSpeed = HgRandom.Between(1, 100) / 20.0;
             _rotationDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
-            _travelAngle.Degrees = HgRandom.RandomNumber(0, 360);
+            _travelAngle.Degrees = HgRandom.Between(0, 360);
 
             Velocity.ThrottlePercentage = 100;
-            Velocity.MaxSpeed = HgRandom.RandomNumber(1.0, 4.0);
+            Velocity.MaxSpeed = HgRandom.Between(1.0, 4.0);
 
             _core = core;
         }

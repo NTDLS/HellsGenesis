@@ -35,7 +35,7 @@ namespace HG.Situations
 
             if (formationIrlens.Count > 0)
             {
-                if (formationIrlens.Exists(o => o.IsOnScreen == true) == false)
+                if (formationIrlens.Exists(o => o.IsWithinCurrentScaledScreenBounds == true) == false)
                 {
                     double angleToPlayer = formationIrlens.First().AngleTo(_core.Player.Sprite);
 

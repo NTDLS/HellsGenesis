@@ -28,7 +28,7 @@ namespace HG.Situations
         private void FirstShowPlayerCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
         {
             _core.Player.ResetAndShow();
-            _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.RandomNumber(0, 800)), AddEnemyCallback);
+            _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddEnemyCallback);
         }
 
         private void AddFreshEnemiesCallback(EngineCore core, HgEngineCallbackEvent sender, object refObj)
@@ -46,7 +46,7 @@ namespace HG.Situations
 
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.RandomNumber(0, 800)), AddEnemyCallback);
+                    _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddEnemyCallback);
                 }
 
                 _core.Audio.RadarBlipsSound.Play();

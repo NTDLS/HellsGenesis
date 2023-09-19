@@ -50,13 +50,13 @@ namespace HG.Sprites
             _hitSound = _core.Assets.GetAudio(_assetPathHitSound, 0.5f);
             _shieldHit = _core.Assets.GetAudio(_assetPathshieldHit, 0.5f);
 
-            _selectedExplosionSoundIndex = HgRandom.Random.Next(0, 1000) % _explosionSoundCount;
+            _selectedExplosionSoundIndex = HgRandom.Generator.Next(0, 1000) % _explosionSoundCount;
             _explodeSound = _core.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{_selectedExplosionSoundIndex}.wav"), 1.0f);
 
-            _selectedExplosionAnimationIndex = HgRandom.Random.Next(0, 1000) % _explosionAnimationCount;
+            _selectedExplosionAnimationIndex = HgRandom.Generator.Next(0, 1000) % _explosionAnimationCount;
             _explosionAnimation = new SpriteAnimation(_core, Path.Combine(_assetPathExplosionAnimation, $"{_selectedExplosionAnimationIndex}.png"), new Size(256, 256));
 
-            _selectedHitExplosionAnimationIndex = HgRandom.Random.Next(0, 1000) % _hitExplosionAnimationCount;
+            _selectedHitExplosionAnimationIndex = HgRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
             _hitExplosionAnimation = new SpriteAnimation(_core, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
 
             _lockedOnImage = _core.Assets.GetBitmap(_assetPathlockedOnImage);
@@ -75,7 +75,7 @@ namespace HG.Sprites
 
         public void CreateParticlesExplosion()
         {
-            _core.Sprites.Particles.CreateRandomShipPartParticlesAt(this, HgRandom.RandomNumber(30, 50));
+            _core.Sprites.Particles.CreateRandomShipPartParticlesAt(this, HgRandom.Between(30, 50));
             _core.Audio.PlayRandomExplosion();
         }
 

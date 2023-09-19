@@ -1,5 +1,5 @@
 ﻿using HG.Controller;
-using HG.Engine.ImageProcessing;
+using HG.Engine.GraphicsProcessing;
 using HG.Engine.Types;
 using HG.Loudouts;
 using HG.Managers;

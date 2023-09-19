@@ -292,7 +292,7 @@ namespace HG.Managers
                     }
                 }
 
-                if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(sprite.Bounds))
+                if (sprite.IsWithinCurrentScaledScreenBounds)
                 {
                     sprite.Render(renderTarget);
                 }

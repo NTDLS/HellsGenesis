@@ -32,14 +32,14 @@ namespace HG.Weapons.Bullets
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
             if (weapon.AngleVarianceDegrees > 0)
             {
-                var randomNumber = HgRandom.RandomNumber(0, weapon.AngleVarianceDegrees * 100.0) / 100.0;
+                var randomNumber = HgRandom.Between(0, weapon.AngleVarianceDegrees * 100.0) / 100.0;
                 headingDegrees += (HgRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 
             double initialSpeed = weapon.Speed;
             if (Weapon.SpeedVariancePercent > 0)
             {
-                var randomNumber = HgRandom.RandomNumber(0, weapon.SpeedVariancePercent * 100.0) / 100.0;
+                var randomNumber = HgRandom.Between(0, weapon.SpeedVariancePercent * 100.0) / 100.0;
                 var variance = randomNumber * weapon.Speed;
                 initialSpeed += (HgRandom.FlipCoin() ? 1 : -1) * variance;
             }

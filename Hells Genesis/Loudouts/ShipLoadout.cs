@@ -38,9 +38,7 @@ namespace HG.Loudouts
             public string Type { get; set; }
             public int Rounds { get; set; }
 
-            public ShipLoadoutWeapon()
-            {
-            }
+            public ShipLoadoutWeapon() { }
 
             public ShipLoadoutWeapon(Type type, int rounds)
             {

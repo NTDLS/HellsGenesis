@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace HG.Engine.ImageProcessing
+namespace HG.Engine.GraphicsProcessing
 {
     internal class DirectX
     {
@@ -17,17 +17,15 @@ namespace HG.Engine.ImageProcessing
 
         public BitmapRenderTarget IntermediateRenderTarget { get; private set; }
         public WindowRenderTarget ScreenRenderTarget { get; private set; }
-        public SharpDX.Direct2D1.Factory D2dfactory { get; private set; }
-        public SharpDX.DirectWrite.Factory DirectWriteFactory { get; private set; }
-        public double GlobalScale { get; set; } = 50.0f;
-        public DirectXMaterials Materials { get; private set; }
-        public DirectXTextFormats TextFormats { get; private set; }
+        public PrecreatedMaterials Materials { get; private set; }
+        public PrecreatedTextFormats TextFormats { get; private set; }
+
+        private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(FactoryType.SingleThreaded);
+        private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
 
         public DirectX(EngineCore core)
         {
             _core = core;
-
-            D2dfactory = new SharpDX.Direct2D1.Factory(FactoryType.SingleThreaded);
 
             var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
             var renderTargetProperties = new RenderTargetProperties(pixelFormat);
@@ -38,7 +36,7 @@ namespace HG.Engine.ImageProcessing
                 PresentOptions = PresentOptions.Immediately
             };
 
-            ScreenRenderTarget = new WindowRenderTarget(D2dfactory, renderTargetProperties, renderProperties)
+            ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, renderTargetProperties, renderProperties)
             {
                 AntialiasMode = AntialiasMode.PerPrimitive,
                 TextAntialiasMode = TextAntialiasMode.Cleartype
@@ -51,15 +49,13 @@ namespace HG.Engine.ImageProcessing
                 TextAntialiasMode = TextAntialiasMode.Cleartype
             };
 
-
-            DirectWriteFactory = new SharpDX.DirectWrite.Factory();
-
-            Materials = new DirectXMaterials(ScreenRenderTarget);
-            TextFormats = new DirectXTextFormats(DirectWriteFactory);
+            Materials = new PrecreatedMaterials(ScreenRenderTarget);
+            TextFormats = new PrecreatedTextFormats(_directWriteFactory);
         }
 
         public void Cleanup()
         {
+            ScreenRenderTarget?.Dispose();
             ScreenRenderTarget?.Dispose();
         }
 
@@ -103,20 +99,16 @@ namespace HG.Engine.ImageProcessing
             using (var image = System.Drawing.Image.FromFile(path))
             {
                 // Create a WIC stream from the System.Drawing.Image
-                using (var wicFactory = new ImagingFactory())
-                using (var imageStream = new MemoryStream())
-                {
-                    image.Save(imageStream, ImageFormat.Png);
-                    imageStream.Seek(0, SeekOrigin.Begin);
+                using var wicFactory = new ImagingFactory();
+                using var imageStream = new MemoryStream();
+                image.Save(imageStream, ImageFormat.Png);
+                imageStream.Seek(0, SeekOrigin.Begin);
 
-                    using (var decoder = new BitmapDecoder(wicFactory, imageStream, DecodeOptions.CacheOnLoad))
-                    using (var converter = new FormatConverter(wicFactory))
-                    {
-                        converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
+                using var decoder = new BitmapDecoder(wicFactory, imageStream, DecodeOptions.CacheOnLoad);
+                using var converter = new FormatConverter(wicFactory);
+                converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
 
-                        return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
-                    }
-                }
+                return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
             }
         }
 
@@ -133,20 +125,16 @@ namespace HG.Engine.ImageProcessing
                 }
 
                 // Create a WIC stream from the System.Drawing.Image
-                using (var wicFactory = new ImagingFactory())
-                using (var imageStream = new MemoryStream())
-                {
-                    resizedImage.Save(imageStream, ImageFormat.Png);
-                    imageStream.Seek(0, SeekOrigin.Begin);
+                using var wicFactory = new ImagingFactory();
+                using var imageStream = new MemoryStream();
+                resizedImage.Save(imageStream, ImageFormat.Png);
+                imageStream.Seek(0, SeekOrigin.Begin);
 
-                    using (var decoder = new BitmapDecoder(wicFactory, imageStream, DecodeOptions.CacheOnLoad))
-                    using (var converter = new FormatConverter(wicFactory))
-                    {
-                        converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
+                using var decoder = new BitmapDecoder(wicFactory, imageStream, DecodeOptions.CacheOnLoad);
+                using var converter = new FormatConverter(wicFactory);
+                converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
 
-                        return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
-                    }
-                }
+                return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
             }
         }
 
@@ -187,14 +175,16 @@ namespace HG.Engine.ImageProcessing
 
         public RawRectangleF GetTextRext(double x, double y, string text, SharpDX.DirectWrite.TextFormat format)
         {
-            using var textLayout = new SharpDX.DirectWrite.TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
+            using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
             return new RawRectangleF((float)x, (float)y, (float)(x + textLayout.Metrics.Width), (float)(y + textLayout.Metrics.Height));
         }
 
         public SizeF GetTextSize(string text, SharpDX.DirectWrite.TextFormat format)
         {
-            using var textLayout = new SharpDX.DirectWrite.TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
-            return new SizeF(textLayout.Metrics.Width, textLayout.Metrics.Height);
+            //We have to check the size with some ending characters becuase TextLayout() seems to want to trim the text before calculating the metrics.
+            using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, $"[{text}]", format, float.MaxValue, float.MaxValue);
+            using var spacerLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, "[]", format, float.MaxValue, float.MaxValue);
+            return new SizeF((textLayout.Metrics.Width - spacerLayout.Metrics.Width), textLayout.Metrics.Height);
         }
 
         /// <summary>
@@ -203,13 +193,15 @@ namespace HG.Engine.ImageProcessing
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
         public RawRectangleF DrawTextAt(RenderTarget renderTarget, double x, double y, double angle, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
         {
-            using var textLayout = new SharpDX.DirectWrite.TextLayout(DirectWriteFactory, text, format, float.MaxValue, float.MaxValue);
+            using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
             var textWidth = textLayout.Metrics.Width;
             var textHeight = textLayout.Metrics.Height;
 
             // Create a rectangle that fits the text
             var textRectangle = new RawRectangleF((float)x, (float)y, (float)(x + textWidth), (float)(y + textHeight));
+
+            //DrawRectangleAt(renderTarget, textRectangle, 0, Materials.Raw.Blue, 0, 1);
 
             SetTransformAngle(renderTarget, textRectangle, angle);
             renderTarget.DrawText(text, format, textRectangle, brush);

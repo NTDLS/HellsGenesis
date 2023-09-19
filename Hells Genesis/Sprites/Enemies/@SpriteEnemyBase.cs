@@ -44,9 +44,9 @@ namespace HG.Sprites.Enemies
         {
             _core.Player.Sprite.Bounty += BountyWorth;
 
-            if (HgRandom.ChanceIn(5))
+            if (HgRandom.PercentChance(5))
             {
-                int random = HgRandom.RandomNumber(0, 4);
+                int random = HgRandom.Between(0, 4);
 
                 SpritePowerUpBase powerUp = null;
 
@@ -145,7 +145,7 @@ namespace HG.Sprites.Enemies
 
             if (RadarPositionIndicator != null)
             {
-                if (_core.Display.CurrentScaledScreenBounds.IntersectsWith(Bounds, -50) == false)
+                if (_core.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds, -50) == false)
                 {
                     RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_core.Player.Sprite));
 

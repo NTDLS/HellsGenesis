@@ -38,7 +38,7 @@ namespace HG.Controller
             for (int i = 0; i < count; i++)
             {
                 var obj = _core.Sprites.Particles.CreateRandomShipPartParticleAt(
-                    x + HgRandom.RandomNumber(-20, 20), y + HgRandom.RandomNumber(-20, 20));
+                    x + HgRandom.Between(-20, 20), y + HgRandom.Between(-20, 20));
                 obj.Visable = true;
             }
         }
@@ -48,7 +48,7 @@ namespace HG.Controller
             for (int i = 0; i < count; i++)
             {
                 var obj = _core.Sprites.Particles.CreateRandomShipPartParticleAt(
-                    sprite.X + HgRandom.RandomNumber(-20, 20), sprite.Y + HgRandom.RandomNumber(-20, 20));
+                    sprite.X + HgRandom.Between(-20, 20), sprite.Y + HgRandom.Between(-20, 20));
                 obj.Visable = true;
             }
         }
