@@ -1,17 +1,17 @@
 [Setup]
 ;-- Main Setup Information
- AppName                         = Hells Genesis
- AppVerName                      = Hells Genesis 1.0.0.0
+ AppName                         = NebulaSiege
+ AppVerName                      = NebulaSiege 1.0.0.0
  AppCopyright                    = Copyright © 1995-2023 NetworkDLS.
- DefaultDirName                  = {commonpf}\NetworkDLS\Hells Genesis
- DefaultGroupName                = NetworkDLS\Hells Genesis
+ DefaultDirName                  = {commonpf}\NetworkDLS\NebulaSiege
+ DefaultGroupName                = NetworkDLS\NebulaSiege
  UninstallDisplayIcon            = {app}\HG.exe
  SetupIconFile                   = HG.ico
  PrivilegesRequired              = admin
  Uninstallable                   = Yes
  Compression                     = bZIP/9
  ChangesAssociations             = Yes
- OutputBaseFilename              = Hells Genesis
+ OutputBaseFilename              = NebulaSiege
  ArchitecturesInstallIn64BitMode = x64
  ArchitecturesAllowed            = x64
 
@@ -22,15 +22,15 @@
  AppVersion      = 1.0.0.2
  
 [Components]
- Name: "Game";         Description: "Hells Genesis";             Types: Full Compact Custom; Flags: Fixed;
+ Name: "Game";         Description: "NebulaSiege";             Types: Full Compact Custom; Flags: Fixed;
  Name: "Assets";       Description: "Assets";           Types: Full Compact Custom; Flags: Fixed;
  Name: "ScenarioEdit"; Description: "Scenario Editor";  Types: Full Custom;
 
 [Files]
- Source: "Hells Genesis\bin\Release\net7.0-windows\*.exe";          DestDir: "{app}";                          Components: Game;          Flags: IgnoreVersion; 
- Source: "Hells Genesis\bin\Release\net7.0-windows\*.dll";          DestDir: "{app}";                          Components: Game;          Flags: IgnoreVersion;
- Source: "Hells Genesis\bin\Release\net7.0-windows\*.json";         DestDir: "{app}";                          Components: Game;          Flags: IgnoreVersion;
- Source: "Hells Genesis\Assets\*.*";                              DestDir: "{app}\Assets";                   Components: Assets;        Flags: IgnoreVersion recursesubdirs;
+ Source: "NebulaSiege\bin\Release\net7.0-windows\*.exe";          DestDir: "{app}";                          Components: Game;          Flags: IgnoreVersion; 
+ Source: "NebulaSiege\bin\Release\net7.0-windows\*.dll";          DestDir: "{app}";                          Components: Game;          Flags: IgnoreVersion;
+ Source: "NebulaSiege\bin\Release\net7.0-windows\*.json";         DestDir: "{app}";                          Components: Game;          Flags: IgnoreVersion;
+ Source: "NebulaSiege\Assets\*.*";                              DestDir: "{app}\Assets";                   Components: Assets;        Flags: IgnoreVersion recursesubdirs;
  
  Source: "Fonts\Digital-7 (Mono).ttf"; DestDir: "{fonts}"; FontInstall: "Digital-7 Mono"; Flags: onlyifdoesntexist uninsneveruninstall
  Source: "Fonts\Digital-7.ttf"; DestDir: "{fonts}"; FontInstall: "digital-7"; Flags: onlyifdoesntexist uninsneveruninstall
@@ -42,10 +42,10 @@
 
 [Registry]
  Root: HKLM; Subkey: "Software\NetworkDLS\Rogue Quest"; ValueType: STRING;ValueName: "CommonAssetPath"; ValueData:"{app}\Assets";               Flags: CreateValueIfDoesntExist;
- Root: HKLM; Subkey: "Software\NetworkDLS\Rogue Quest"; ValueType: STRING;ValueName: "UserAssetPath";   ValueData:"{userappdata}\Hells Genesis"; Flags: CreateValueIfDoesntExist;
+ Root: HKLM; Subkey: "Software\NetworkDLS\Rogue Quest"; ValueType: STRING;ValueName: "UserAssetPath";   ValueData:"{userappdata}\NebulaSiege"; Flags: CreateValueIfDoesntExist;
 
 [Icons]
- Name: "{group}\Hells Genesis"; Filename: "{app}\HG.exe"; Components: Game;
+ Name: "{group}\NebulaSiege"; Filename: "{app}\HG.exe"; Components: Game;
  
 [Run]
- Filename: "{app}\HG.exe"; Description: "Run Hells Genesis now?"; Flags: postinstall nowait skipifsilent shellexec; Components: Game;
+ Filename: "{app}\HG.exe"; Description: "Run NebulaSiege now?"; Flags: postinstall nowait skipifsilent shellexec; Components: Game;
