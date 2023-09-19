@@ -50,7 +50,7 @@ namespace HG.Sprites
                 Velocity.Angle.Degrees -= _rotationSpeed;
             }
 
-            if (_core.Display.TotalScreenBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
+            if (_core.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
             {
                 QueueForDelete();
             }

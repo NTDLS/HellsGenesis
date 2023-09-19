@@ -76,7 +76,7 @@ namespace HG.Managers
         /// <summary>
         /// The total bounds of the drawing surface (canvas) natrual + overdraw (with no scaling).
         /// </summary>
-        public RectangleF TotalScreenBounds
+        public RectangleF TotalCanvasBounds
         {
             get
             {
