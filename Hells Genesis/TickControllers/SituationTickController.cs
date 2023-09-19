@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class SituationTickController : IUnvectoredTickController
+    internal class SituationTickController : IUnvectoredTickController<SituationBase>
     {
         public EngineCore _core { get; private set; }
         public SituationBase CurrentSituation { get; private set; }

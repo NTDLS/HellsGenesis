@@ -5,7 +5,7 @@ namespace HG.Controller.Interfaces
     /// <summary>
     /// Tick managers that generate offset vectors. Realistically, this is only the "player" sprite.
     /// </summary>
-    internal interface IVectorGeneratorTickController : ITickController
+    internal interface IVectorGeneratorTickController<T> : ITickController
     {
         /// <summary>
         /// Moves the player and returns the direction and amount of movment which was applied.

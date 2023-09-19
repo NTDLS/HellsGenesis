@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace HG.Controller
 {
-    internal class TextBlockSpriteTickController : IVectoredTickController
+    internal class TextBlockSpriteTickController : IVectoredTickController<SpriteTextBlock>
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;

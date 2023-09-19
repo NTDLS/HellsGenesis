@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace HG.Controller
 {
-    internal class AttachmentSpriteTickController : IVectoredTickController
+    internal class AttachmentSpriteTickController : IVectoredTickController<SpriteAttachment>
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;

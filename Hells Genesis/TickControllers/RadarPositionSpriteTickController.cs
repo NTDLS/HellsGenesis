@@ -3,22 +3,16 @@ using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
-using HG.Sprites.PowerUp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace HG.Controller
 {
-    internal class RadarPositionSpriteTickController : IUnvectoredTickController
+    internal class RadarPositionSpriteTickController : IUnvectoredTickController<SpriteRadarPositionTextBlock>
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;
-
-        public List<subType> VisibleOfType<subType>() where subType : SpriteRadarPositionIndicator => _controller.VisibleOfType<subType>();
-        public List<SpriteRadarPositionIndicator> Visible() => _controller.VisibleOfType<SpriteRadarPositionIndicator>();
-        public List<SpriteRadarPositionIndicator> All() => _controller.OfType<SpriteRadarPositionIndicator>();
-        public List<subType> OfType<subType>() where subType : SpriteRadarPositionIndicator => _controller.OfType<subType>();
 
         public RadarPositionSpriteTickController(EngineCore core, EngineSpriteManager manager)
         {

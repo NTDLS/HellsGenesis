@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class StarSpriteTickController : IVectoredTickController
+    internal class StarSpriteTickController : IVectoredTickController<SpriteStar>
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;

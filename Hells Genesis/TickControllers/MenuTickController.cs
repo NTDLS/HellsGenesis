@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class MenuTickHandler : IUnvectoredTickController
+    internal class MenuTickHandler : IUnvectoredTickController<MenuBase>
     {
         public List<MenuBase> _controller { get; private set; } = new();
 

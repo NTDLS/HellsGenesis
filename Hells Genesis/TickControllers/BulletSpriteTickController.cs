@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class BulletSpriteTickController : IVectoredTickController
+    internal class BulletSpriteTickController : IVectoredTickController<BulletBase>
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;

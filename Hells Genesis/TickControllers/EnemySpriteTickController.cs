@@ -4,13 +4,12 @@ using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites.Enemies;
 using HG.Utility;
-using HG.Weapons.Bullets;
 using System;
 using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class EnemySpriteTickController : IVectoredTickController
+    internal class EnemySpriteTickController : IVectoredTickController<SpriteEnemyBase>
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;

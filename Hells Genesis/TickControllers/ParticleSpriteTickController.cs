@@ -1,6 +1,5 @@
 ﻿using HG.Controller.Interfaces;
 using HG.Engine;
-using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
@@ -9,7 +8,7 @@ using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class ParticleSpriteTickController : IVectoredTickController
+    internal class ParticleSpriteTickController : IVectoredTickController<SpriteParticleBase>
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;

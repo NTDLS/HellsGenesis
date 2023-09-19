@@ -2,14 +2,13 @@
 using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
-using HG.Sprites;
 using HG.Sprites.PowerUp;
 using System;
 using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class PowerupSpriteTickController : IVectoredTickController
+    internal class PowerupSpriteTickController : IVectoredTickController<SpritePowerUpBase>
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;

@@ -3,13 +3,12 @@ using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
-using HG.Weapons.Bullets;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace HG.Controller
 {
-    internal class DebugSpriteTickController : IVectoredTickController
+    internal class DebugSpriteTickController : IVectoredTickController<SpriteDebug>
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;

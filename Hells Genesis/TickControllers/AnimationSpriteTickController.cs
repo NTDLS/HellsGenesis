@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace HG.Controller
 {
-    internal class AnimationSpriteTickController : IVectoredTickController
+    internal class AnimationSpriteTickController : IVectoredTickController<SpriteAnimation>
     {
         private readonly EngineCore _core;
         private readonly EngineSpriteManager _controller;
