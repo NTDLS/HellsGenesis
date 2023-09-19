@@ -17,6 +17,7 @@ namespace HG.Controller
 
         public List<subType> VisibleOfType<subType>() where subType : SpriteTextBlock => _controller.VisibleOfType<subType>();
         public List<SpriteTextBlock> Visible() => _controller.VisibleOfType<SpriteTextBlock>();
+        public List<SpriteTextBlock> All() => _controller.OfType<SpriteTextBlock>();
         public List<subType> OfType<subType>() where subType : SpriteTextBlock => _controller.OfType<subType>();
 
         public TextBlockSpriteTickController(EngineCore core, EngineSpriteManager manager)

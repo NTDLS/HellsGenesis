@@ -4,6 +4,7 @@ using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites.Enemies;
 using HG.Utility;
+using HG.Weapons.Bullets;
 using System;
 using System.Collections.Generic;
 
@@ -16,6 +17,7 @@ namespace HG.Controller
 
         public List<subType> VisibleOfType<subType>() where subType : SpriteEnemyBase => _controller.VisibleOfType<subType>();
         public List<SpriteEnemyBase> Visible() => _controller.VisibleOfType<SpriteEnemyBase>();
+        public List<SpriteEnemyBase> All() => _controller.OfType<SpriteEnemyBase>();
         public List<subType> OfType<subType>() where subType : SpriteEnemyBase => _controller.OfType<subType>();
 
         public EnemySpriteTickController(EngineCore core, EngineSpriteManager manager)

@@ -16,6 +16,7 @@ namespace HG.Controller
 
         public List<subType> VisibleOfType<subType>() where subType : SpriteAttachment => _controller.VisibleOfType<subType>();
         public List<SpriteAttachment> Visible() => _controller.VisibleOfType<SpriteAttachment>();
+        public List<SpriteAttachment> All() => _controller.OfType<SpriteAttachment>();
         public List<subType> OfType<subType>() where subType : SpriteAttachment => _controller.OfType<subType>();
 
         public AttachmentSpriteTickController(EngineCore core, EngineSpriteManager manager)

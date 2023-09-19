@@ -2,6 +2,7 @@
 using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
+using HG.Sprites;
 using HG.Sprites.PowerUp;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace HG.Controller
 
         public List<subType> VisibleOfType<subType>() where subType : SpritePowerUpBase => _controller.VisibleOfType<subType>();
         public List<SpritePowerUpBase> Visible() => _controller.VisibleOfType<SpritePowerUpBase>();
+        public List<SpritePowerUpBase> All() => _controller.OfType<SpritePowerUpBase>();
         public List<subType> OfType<subType>() where subType : SpritePowerUpBase => _controller.OfType<subType>();
 
         public PowerupSpriteTickController(EngineCore core, EngineSpriteManager manager)

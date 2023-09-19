@@ -34,11 +34,6 @@ namespace HG.Sprites
         {
             X -= displacementVector.X * Velocity.ThrottlePercentage;
             Y -= displacementVector.Y * Velocity.ThrottlePercentage;
-
-            if (_core.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
-            {
-                QueueForDelete();
-            }
         }
     }
 }

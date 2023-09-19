@@ -1,5 +1,6 @@
 ﻿using HG.Controller.Interfaces;
 using HG.Engine;
+using HG.Engine.Types;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
@@ -15,6 +16,7 @@ namespace HG.Controller
 
         public List<subType> VisibleOfType<subType>() where subType : SpriteParticleBase => _controller.VisibleOfType<subType>();
         public List<SpriteParticleBase> Visible() => _controller.VisibleOfType<SpriteParticleBase>();
+        public List<SpriteParticleBase> All() => _controller.OfType<SpriteParticleBase>();
         public List<subType> OfType<subType>() where subType : SpriteParticleBase => _controller.OfType<subType>();
 
         public ParticleSpriteTickController(EngineCore core, EngineSpriteManager manager)

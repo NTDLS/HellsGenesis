@@ -18,6 +18,7 @@ namespace HG.Controller
 
         public List<subType> VisibleOfType<subType>() where subType : BulletBase => _controller.VisibleOfType<subType>();
         public List<BulletBase> Visible() => _controller.VisibleOfType<BulletBase>();
+        public List<BulletBase> All() => _controller.OfType<BulletBase>();
         public List<subType> OfType<subType>() where subType : BulletBase => _controller.OfType<subType>();
 
         public BulletSpriteTickController(EngineCore core, EngineSpriteManager manager)

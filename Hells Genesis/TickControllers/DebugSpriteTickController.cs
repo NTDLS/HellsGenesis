@@ -3,6 +3,7 @@ using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
+using HG.Weapons.Bullets;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,6 +17,7 @@ namespace HG.Controller
         public SpriteDebug ByAssetTag(string name) => _controller.VisibleOfType<SpriteDebug>().Where(o => o.Name == name).FirstOrDefault();
 
         public List<subType> VisibleOfType<subType>() where subType : SpriteDebug => _controller.VisibleOfType<subType>();
+        public List<SpriteDebug> All() => _controller.OfType<SpriteDebug>();
         public List<SpriteDebug> Visible() => _controller.VisibleOfType<SpriteDebug>();
         public List<subType> OfType<subType>() where subType : SpriteDebug => _controller.OfType<subType>();
 

@@ -15,6 +15,7 @@ namespace HG.Controller
 
         public List<subType> VisibleOfType<subType>() where subType : SpriteStar => _controller.VisibleOfType<subType>();
         public List<SpriteStar> Visible() => _controller.VisibleOfType<SpriteStar>();
+        public List<SpriteStar> All() => _controller.OfType<SpriteStar>();
         public List<subType> OfType<subType>() where subType : SpriteStar => _controller.OfType<subType>();
 
         public StarSpriteTickController(EngineCore core, EngineSpriteManager manager)
@@ -76,9 +77,14 @@ namespace HG.Controller
 
                 #endregion
 
-                foreach (var star in Visible())
+                foreach (var star in All())
                 {
                     star.ApplyMotion(displacementVector);
+
+                    if (_core.Display.TotalCanvasBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
+                    {
+                        star.QueueForDelete();
+                    }
                 }
             }
         }

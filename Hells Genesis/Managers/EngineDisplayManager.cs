@@ -63,27 +63,13 @@ namespace HG.Managers
         /// <summary>
         /// The bounds of the screen with no scaling.
         /// </summary>
-        public RectangleF NatrualScreenBounds
-        {
-            get
-            {
-                return new RectangleF(OverdrawSize.Width / 2.0f, OverdrawSize.Height / 2.0f,
-                        NatrualScreenSize.Width, NatrualScreenSize.Height
-                );
-            }
-        }
+        public RectangleF NatrualScreenBounds =>
+            new RectangleF(OverdrawSize.Width / 2.0f, OverdrawSize.Height / 2.0f, NatrualScreenSize.Width, NatrualScreenSize.Height);
 
         /// <summary>
         /// The total bounds of the drawing surface (canvas) natrual + overdraw (with no scaling).
         /// </summary>
-        public RectangleF TotalCanvasBounds
-        {
-            get
-            {
-                return new RectangleF(0, 0, TotalCanvasSize.Width, TotalCanvasSize.Height
-                );
-            }
-        }
+        public RectangleF TotalCanvasBounds => new RectangleF(0, 0, TotalCanvasSize.Width, TotalCanvasSize.Height);
 
         public RectangleF GetCurrentScaledScreenBounds()
         {

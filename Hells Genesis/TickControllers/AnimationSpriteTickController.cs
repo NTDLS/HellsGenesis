@@ -15,6 +15,7 @@ namespace HG.Controller
 
         public List<subType> VisibleOfType<subType>() where subType : SpriteAnimation => _controller.VisibleOfType<subType>();
         public List<SpriteAnimation> Visible() => _controller.VisibleOfType<SpriteAnimation>();
+        public List<SpriteAnimation> All() => _controller.OfType<SpriteAnimation>();
         public List<subType> OfType<subType>() where subType : SpriteAnimation => _controller.OfType<subType>();
 
         public AnimationSpriteTickController(EngineCore core, EngineSpriteManager manager)
