@@ -73,7 +73,7 @@ namespace HG.Engine
 
                 _core.Display.GameLoopCounter.Calculate();
 
-                lock (_core.Menus._controller)
+                lock (_core.Menus.Collection)
                     lock (_core.Player.Sprite)
                         lock (_core.Sprites.Collection)
                         {
@@ -113,13 +113,14 @@ namespace HG.Engine
 
             _core.Sprites.Enemies.ExecuteWorldClockTick(displacementVector);
             _core.Sprites.Particles.ExecuteWorldClockTick(displacementVector);
-            _core.Sprites.RadarPositions.ExecuteWorldClockTick();
             _core.Sprites.Bullets.ExecuteWorldClockTick(displacementVector);
             _core.Sprites.Stars.ExecuteWorldClockTick(displacementVector);
             _core.Sprites.Animations.ExecuteWorldClockTick(displacementVector);
             _core.Sprites.TextBlocks.ExecuteWorldClockTick(displacementVector);
             _core.Sprites.Powerups.ExecuteWorldClockTick(displacementVector);
             _core.Sprites.Debugs.ExecuteWorldClockTick(displacementVector);
+
+            _core.Sprites.RadarPositions.ExecuteWorldClockTick();
 
             _core.Sprites.CleanupDeletedObjects();
 

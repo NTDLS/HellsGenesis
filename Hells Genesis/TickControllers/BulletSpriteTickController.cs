@@ -1,42 +1,33 @@
-﻿using HG.Controller.Interfaces;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Managers;
 using HG.Sprites;
 using HG.Sprites.Enemies.Bosses;
 using HG.Sprites.Enemies.Peons;
+using HG.TickControllers;
 using HG.Weapons;
 using HG.Weapons.Bullets;
 using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class BulletSpriteTickController : IVectoredTickController<BulletBase>
+    internal class BulletSpriteTickController : VectoredTickControllerBase<BulletBase>
     {
-        private readonly EngineCore _core;
-        private readonly EngineSpriteManager _controller;
-
-        public List<subType> VisibleOfType<subType>() where subType : BulletBase => _controller.VisibleOfType<subType>();
-        public List<BulletBase> Visible() => _controller.VisibleOfType<BulletBase>();
-        public List<BulletBase> All() => _controller.OfType<BulletBase>();
-        public List<subType> OfType<subType>() where subType : BulletBase => _controller.OfType<subType>();
-
         public BulletSpriteTickController(EngineCore core, EngineSpriteManager manager)
+            : base(core, manager)
         {
-            _core = core;
-            _controller = manager;
         }
 
-        public void ExecuteWorldClockTick(HgPoint displacementVector)
+        public override void ExecuteWorldClockTick(HgPoint displacementVector)
         {
             var thingsThatCanBeHit = new List<SpriteShipBase>
             {
-                _core.Player.Sprite
+                Core.Player.Sprite
             };
 
-            thingsThatCanBeHit.AddRange(_controller.VisibleOfType<SpriteEnemyBossBase>());
-            thingsThatCanBeHit.AddRange(_controller.VisibleOfType<SpriteEnemyPeonBase>());
-            thingsThatCanBeHit.AddRange(_controller.VisibleOfType<SpriteAttachment>());
+            thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyBossBase>());
+            thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyPeonBase>());
+            thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
 
             foreach (var bullet in VisibleOfType<BulletBase>())
             {
@@ -64,45 +55,24 @@ namespace HG.Controller
             }
         }
 
-        #region Factories.
-
-        public void DeleteAll()
+        public BulletBase Create(WeaponBase weapon, SpriteBase firedFrom, HgPoint xyOffset = null)
         {
-            lock (_controller.Collection)
+            lock (SpriteManager.Collection)
             {
-                _controller.OfType<BulletBase>().ForEach(c => c.QueueForDelete());
+                var obj = weapon.CreateBullet(null, xyOffset);
+                SpriteManager.Collection.Add(obj);
+                return obj;
             }
         }
 
         public BulletBase CreateLocked(WeaponBase weapon, SpriteBase firedFrom, SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
-            lock (_controller.Collection)
+            lock (SpriteManager.Collection)
             {
                 var obj = weapon.CreateBullet(lockedTarget, xyOffset);
-                _controller.Collection.Add(obj);
+                SpriteManager.Collection.Add(obj);
                 return obj;
             }
         }
-
-        public BulletBase Create(WeaponBase weapon, SpriteBase firedFrom, HgPoint xyOffset = null)
-        {
-            lock (_controller.Collection)
-            {
-                var obj = weapon.CreateBullet(null, xyOffset);
-                _controller.Collection.Add(obj);
-                return obj;
-            }
-        }
-
-        public void Delete(BulletBase obj)
-        {
-            lock (_controller.Collection)
-            {
-                obj.Cleanup();
-                _controller.Collection.Remove(obj);
-            }
-        }
-
-        #endregion
     }
 }

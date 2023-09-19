@@ -1,19 +1,18 @@
-﻿using HG.Controller.Interfaces;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types.Geometry;
 using HG.Sprites;
+using HG.TickControllers;
 using HG.Utility.ExtensionMethods;
 
 namespace HG.Controller
 {
-    internal class PlayerTickController : IVectorGeneratorTickController<SpritePlayer>
+    internal class PlayerTickController : VectorGeneratorTickControllerBase<SpritePlayer>
     {
         public SpritePlayer Sprite { get; set; }
-        private readonly EngineCore _core;
 
         public PlayerTickController(EngineCore core)
+            : base(core)
         {
-            _core = core;
         }
 
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
@@ -22,13 +21,13 @@ namespace HG.Controller
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
         /// <returns></returns>
-        public HgPoint ExecuteWorldClockTick()
+        public override HgPoint ExecuteWorldClockTick()
         {
             var displacementVector = new HgPoint();
 
             if (Sprite.Visable)
             {
-                if (_core.Input.IsKeyPressed(HgPlayerKey.PrimaryFire))
+                if (Core.Input.IsKeyPressed(HgPlayerKey.PrimaryFire))
                 {
                     if (Sprite.PrimaryWeapon != null && Sprite.PrimaryWeapon.Fire())
                     {
@@ -43,7 +42,7 @@ namespace HG.Controller
                     }
                 }
 
-                if (_core.Input.IsKeyPressed(HgPlayerKey.SecondaryFire))
+                if (Core.Input.IsKeyPressed(HgPlayerKey.SecondaryFire))
                 {
                     if (Sprite.SelectedSecondaryWeapon != null && Sprite.SelectedSecondaryWeapon.Fire())
                     {
@@ -59,14 +58,14 @@ namespace HG.Controller
                     }
                 }
 
-                if (_core.Settings.LockPlayerAngleToNearbyEnemy)
+                if (Core.Settings.LockPlayerAngleToNearbyEnemy)
                 {
                     #region //This needs some work. It works, but its odd - the movement is rigid.
-                    if (_core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise) == false && _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise) == false)
+                    if (Core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise) == false && Core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise) == false)
                     {
                         if (_allowLockPlayerAngleToNearbyEnemy)
                         {
-                            var enemies = _core.Sprites.Enemies.Visible();
+                            var enemies = Core.Sprites.Enemies.Visible();
                             foreach (var enemy in enemies)
                             {
                                 var distanceTo = Sprite.DistanceTo(enemy);
@@ -93,13 +92,13 @@ namespace HG.Controller
                 }
 
                 //Make player boost "build up" and fade-in.
-                if (_core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) && _core.Input.IsKeyPressed(HgPlayerKey.Forward)
+                if (Core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) && Core.Input.IsKeyPressed(HgPlayerKey.Forward)
                     && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false)
                 {
                     if (Sprite.Velocity.BoostPercentage < 1.0)
                     {
                         double boostToAdd = Sprite.Velocity.BoostPercentage > 0
-                            ? _core.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.BoostPercentage) : _core.Settings.PlayerThrustRampUp;
+                            ? Core.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.BoostPercentage) : Core.Settings.PlayerThrustRampUp;
 
                         Sprite.Velocity.BoostPercentage += boostToAdd;
                     }
@@ -115,18 +114,18 @@ namespace HG.Controller
                     //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
                     if (Sprite.Velocity.BoostPercentage > 0)
                     {
-                        Sprite.Velocity.BoostPercentage -= _core.Settings.PlayerThrustRampDown;
+                        Sprite.Velocity.BoostPercentage -= Core.Settings.PlayerThrustRampDown;
                         if (Sprite.Velocity.BoostPercentage < 0.01)
                         {
                             Sprite.Velocity.BoostPercentage = 0;
                         }
                     }
 
-                    if (_core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < _core.Settings.MaxPlayerBoost)
+                    if (Core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < Core.Settings.MaxPlayerBoost)
                     {
-                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Box(0, _core.Settings.MaxPlayerBoost);
+                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Box(0, Core.Settings.MaxPlayerBoost);
 
-                        if (Sprite.Velocity.BoostRebuilding && Sprite.Velocity.AvailableBoost >= _core.Settings.PlayerBoostRebuildMin)
+                        if (Sprite.Velocity.BoostRebuilding && Sprite.Velocity.AvailableBoost >= Core.Settings.PlayerBoostRebuildMin)
                         {
                             Sprite.Velocity.BoostRebuilding = false;
                         }
@@ -134,7 +133,7 @@ namespace HG.Controller
                 }
 
                 //Make player thrust "build up" and fade-in.
-                if (_core.Input.IsKeyPressed(HgPlayerKey.Forward))
+                if (Core.Input.IsKeyPressed(HgPlayerKey.Forward))
                 {
                     if (Sprite.Velocity.ThrottlePercentage < 1.0)
                     {
@@ -144,7 +143,7 @@ namespace HG.Controller
                         //  of throttle will take a while. We do the reverse of this to stop. Stopping fast at first and slowly-slowly slowing to a stop.
 
                         double thrustToAdd = Sprite.Velocity.ThrottlePercentage > 0
-                            ? _core.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ThrottlePercentage) : _core.Settings.PlayerThrustRampUp;
+                            ? Core.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ThrottlePercentage) : Core.Settings.PlayerThrustRampUp;
 
                         Sprite.Velocity.ThrottlePercentage += thrustToAdd;
                     }
@@ -156,7 +155,7 @@ namespace HG.Controller
                     {
                         //Ramp down to a stop:
                         double thrustToRemove = Sprite.Velocity.ThrottlePercentage < 1
-                            ? _core.Settings.PlayerThrustRampDown * Sprite.Velocity.ThrottlePercentage : _core.Settings.PlayerThrustRampDown;
+                            ? Core.Settings.PlayerThrustRampDown * Sprite.Velocity.ThrottlePercentage : Core.Settings.PlayerThrustRampDown;
 
                         Sprite.Velocity.ThrottlePercentage -= thrustToRemove;
 
@@ -170,7 +169,7 @@ namespace HG.Controller
                     {
                         //Ramp up to a stop:
                         double thrustToRemove = Sprite.Velocity.ThrottlePercentage * -1 < 1
-                            ? _core.Settings.PlayerThrustRampDown * (1 - Sprite.Velocity.ThrottlePercentage * -1) : _core.Settings.PlayerThrustRampDown;
+                            ? Core.Settings.PlayerThrustRampDown * (1 - Sprite.Velocity.ThrottlePercentage * -1) : Core.Settings.PlayerThrustRampDown;
 
                         Sprite.Velocity.ThrottlePercentage += thrustToRemove;
                         if (Sprite.Velocity.ThrottlePercentage > 0)
@@ -184,8 +183,8 @@ namespace HG.Controller
                 if (Sprite.BoostAnimation != null)
                 {
                     Sprite.BoostAnimation.Visable =
-                        _core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost)
-                        && _core.Input.IsKeyPressed(HgPlayerKey.Forward)
+                        Core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost)
+                        && Core.Input.IsKeyPressed(HgPlayerKey.Forward)
                         && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false;
                 }
 
@@ -197,7 +196,7 @@ namespace HG.Controller
 
                 if (Sprite.ThrustAnimation != null)
                 {
-                    Sprite.ThrustAnimation.Visable = _core.Input.IsKeyPressed(HgPlayerKey.Forward);
+                    Sprite.ThrustAnimation.Visable = Core.Input.IsKeyPressed(HgPlayerKey.Forward);
                 }
 
                 var thrustVector = Sprite.Velocity.MaxSpeed * (Sprite.Velocity.ThrottlePercentage + -Sprite.Velocity.RecoilPercentage);
@@ -229,25 +228,25 @@ namespace HG.Controller
                 }
 
                 //We are going to restrict the rotation speed to a percentage of thrust.
-                var rotationSpeed = _core.Settings.MaxPlayerRotationSpeedDegrees * Sprite.Velocity.ThrottlePercentage;
+                var rotationSpeed = Core.Settings.MaxPlayerRotationSpeedDegrees * Sprite.Velocity.ThrottlePercentage;
 
-                if (_core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise))
+                if (Core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise))
                 {
                     Sprite.Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0));
                 }
-                else if (_core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
+                else if (Core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
                 {
                     Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
                 }
             }
 
             //Scroll the background.
-            _core.Display.BackgroundOffset.X += displacementVector.X;
-            _core.Display.BackgroundOffset.Y += displacementVector.Y;
+            Core.Display.BackgroundOffset.X += displacementVector.X;
+            Core.Display.BackgroundOffset.Y += displacementVector.Y;
 
-            _core.Display.CurrentQuadrant = _core.Display.GetQuadrant(
-                Sprite.X + _core.Display.BackgroundOffset.X,
-                Sprite.Y + _core.Display.BackgroundOffset.Y);
+            Core.Display.CurrentQuadrant = Core.Display.GetQuadrant(
+                Sprite.X + Core.Display.BackgroundOffset.X,
+                Sprite.Y + Core.Display.BackgroundOffset.Y);
 
             if (Sprite.Velocity.RecoilPercentage > 0)
             {
@@ -267,7 +266,7 @@ namespace HG.Controller
         {
             Sprite.Reset();
 
-            _core.Sprites.RenderRadar = true;
+            Core.Sprites.RenderRadar = true;
             Sprite.Visable = true;
             Sprite.ShipEngineIdleSound.Play();
             Sprite.AllSystemsGoSound.Play();
@@ -276,7 +275,7 @@ namespace HG.Controller
         public void Hide()
         {
             Sprite.Visable = false;
-            _core.Sprites.RenderRadar = false;
+            Core.Sprites.RenderRadar = false;
             Sprite.ShipEngineIdleSound.Stop();
             Sprite.ShipEngineRoarSound.Stop();
         }

@@ -75,7 +75,7 @@ namespace HG.Menus
 
         public void AddMenuItem(SpriteMenuItem item)
         {
-            lock (_core.Menus._controller)
+            lock (_core.Menus.Collection)
             {
                 Items.Add(item);
             }

@@ -1,29 +1,27 @@
-﻿using HG.Controller.Interfaces;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Situations;
+using HG.TickControllers;
 using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class SituationTickController : IUnvectoredTickController<SituationBase>
+    internal class SituationTickController : UnvectoredTickControllerBase<SituationBase>
     {
-        public EngineCore _core { get; private set; }
         public SituationBase CurrentSituation { get; private set; }
-
-        public List<SituationBase> Situations = new();
+        public List<SituationBase> Situations { get; private set; } = new();
 
         public SituationTickController(EngineCore core)
+            : base(core)
         {
-            _core = core;
         }
 
-        public void ExecuteWorldClockTick()
+        public override void ExecuteWorldClockTick()
         {
             if (CurrentSituation?.State == HgSituationState.Ended)
             {
                 if (AdvanceSituation() == false)
                 {
-                    _core.Events.QueueTheDoorIsAjar();
+                    Core.Events.QueueTheDoorIsAjar();
                 }
             }
         }
@@ -48,10 +46,10 @@ namespace HG.Controller
             {
                 ClearScenarios();
 
-                Situations.Add(new SituationDebuggingGalore(_core));
-                //Situations.Add(new SituationScinzadSkirmish(_core));
-                //Situations.Add(new SituationIrlenFormations(_core));
-                //Situations.Add(new SituationPhoenixAmbush(_core));
+                Situations.Add(new SituationDebuggingGalore(Core));
+                //Situations.Add(new SituationScinzadSkirmish(Core));
+                //Situations.Add(new SituationIrlenFormations(Core));
+                //Situations.Add(new SituationPhoenixAmbush(Core));
             }
         }
 
@@ -70,7 +68,7 @@ namespace HG.Controller
 
                 if (Situations.Count > 0)
                 {
-                    _core.Player.Hide();
+                    Core.Player.Hide();
                     CurrentSituation = Situations[0];
                     CurrentSituation.BeginSituation();
                 }

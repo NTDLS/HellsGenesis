@@ -11,22 +11,21 @@ namespace HG.Controller
 {
     internal class RadarPositionSpriteTickController : IUnvectoredTickController<SpriteRadarPositionTextBlock>
     {
-        private readonly EngineCore _core;
-        private readonly EngineSpriteManager _controller;
+        private readonly EngineSpriteManager _manager;
 
         public RadarPositionSpriteTickController(EngineCore core, EngineSpriteManager manager)
+            : base(core)
         {
-            _core = core;
-            _controller = manager;
+            _manager = manager;
         }
 
-        public void ExecuteWorldClockTick()
+        public override void ExecuteWorldClockTick()
         {
             var overlappingIndicators = new Func<List<List<SpriteRadarPositionTextBlock>>>(() =>
             {
                 var accountedFor = new HashSet<SpriteRadarPositionTextBlock>();
                 var groups = new List<List<SpriteRadarPositionTextBlock>>();
-                var radarTexts = _core.Sprites.VisibleOfType<SpriteRadarPositionTextBlock>();
+                var radarTexts = Core.Sprites.VisibleOfType<SpriteRadarPositionTextBlock>();
 
                 foreach (var parent in radarTexts)
                 {
@@ -77,21 +76,21 @@ namespace HG.Controller
 
         public SpriteRadarPositionIndicator Create()
         {
-            lock (_controller.Collection)
+            lock (_manager.Collection)
             {
-                var obj = new SpriteRadarPositionIndicator(_core);
-                _controller.Collection.Add(obj);
+                var obj = new SpriteRadarPositionIndicator(Core);
+                _manager.Collection.Add(obj);
                 return obj;
             }
         }
 
         public void Delete(SpriteRadarPositionIndicator obj)
         {
-            lock (_controller.Collection)
+            lock (_manager.Collection)
             {
                 obj.Cleanup();
                 obj.Visable = false;
-                _controller.Collection.Remove(obj);
+                _manager.Collection.Remove(obj);
             }
         }
 

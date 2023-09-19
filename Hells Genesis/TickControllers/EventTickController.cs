@@ -1,25 +1,23 @@
-﻿using HG.Controller.Interfaces;
-using HG.Engine;
+﻿using HG.Engine;
 using HG.Engine.Types;
 using HG.Menus;
+using HG.TickControllers;
 using System;
 using System.Collections.Generic;
 using static HG.Engine.Types.HgEngineCallbackEvent;
 
 namespace HG.Controller
 {
-    internal class EventTickController : IUnvectoredTickController<HgEngineCallbackEvent>
+    internal class EventTickController : UnvectoredTickControllerBase<HgEngineCallbackEvent>
     {
         public List<HgEngineCallbackEvent> Collection { get; private set; } = new();
 
-        private readonly EngineCore _core;
-
         public EventTickController(EngineCore core)
+            : base(core)
         {
-            _core = core;
         }
 
-        public void ExecuteWorldClockTick()
+        public override void ExecuteWorldClockTick()
         {
             for (int i = 0; i < Collection.Count; i++)
             {
@@ -48,7 +46,7 @@ namespace HG.Controller
         {
             lock (Collection)
             {
-                var obj = new HgEngineCallbackEvent(_core, countdown, executeCallback, refObj, callbackEventMode, callbackEventAsync);
+                var obj = new HgEngineCallbackEvent(Core, countdown, executeCallback, refObj, callbackEventMode, callbackEventAsync);
                 Collection.Add(obj);
                 return obj;
             }
@@ -58,7 +56,7 @@ namespace HG.Controller
         {
             lock (Collection)
             {
-                var obj = new HgEngineCallbackEvent(_core, countdown, executeCallback, refObj);
+                var obj = new HgEngineCallbackEvent(Core, countdown, executeCallback, refObj);
                 Collection.Add(obj);
                 return obj;
             }
@@ -68,7 +66,7 @@ namespace HG.Controller
         {
             lock (Collection)
             {
-                var obj = new HgEngineCallbackEvent(_core, countdown, executeCallback);
+                var obj = new HgEngineCallbackEvent(Core, countdown, executeCallback);
                 Collection.Add(obj);
                 return obj;
             }
