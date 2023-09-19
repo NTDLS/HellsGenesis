@@ -6,7 +6,7 @@ using HG.TickControllers;
 
 namespace HG.Controller
 {
-    internal class DebugSpriteTickController : VectoredTickControllerBase<SpriteDebug>
+    internal class DebugSpriteTickController : SpriteTickControllerBase<SpriteDebug>
     {
         public DebugSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)

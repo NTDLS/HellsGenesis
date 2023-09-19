@@ -3,7 +3,8 @@
 namespace HG.TickControllers
 {
     /// <summary>
-    /// Tick managers that do no use a vector to update their sprites.
+    /// Tick managers that do not handle sprites or do not use a vector to update their sprites.
+    /// Things like Events, Menues, Radar Position Indicators, etc.
     /// </summary>
     internal class UnvectoredTickControllerBase<T> : TickControllerBase<T> where T : class
     {

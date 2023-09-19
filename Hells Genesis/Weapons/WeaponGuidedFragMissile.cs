@@ -52,12 +52,12 @@ namespace HG.Weapons
                     if (_toggle)
                     {
                         var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new HgPoint(10, 10));
-                        _core.Sprites.Bullets.Create(this, _owner, pointRight);
+                        _core.Sprites.Bullets.Create(this, pointRight);
                     }
                     else
                     {
                         var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new HgPoint(10, 10));
-                        _core.Sprites.Bullets.Create(this, _owner, pointLeft);
+                        _core.Sprites.Bullets.Create(this, pointLeft);
                     }
 
                     _toggle = !_toggle;
@@ -69,12 +69,12 @@ namespace HG.Weapons
                         if (_toggle)
                         {
                             var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new HgPoint(10, 10));
-                            _core.Sprites.Bullets.CreateLocked(this, _owner, lockedOn, pointRight);
+                            _core.Sprites.Bullets.CreateLocked(this, lockedOn, pointRight);
                         }
                         else
                         {
                             var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new HgPoint(10, 10));
-                            _core.Sprites.Bullets.CreateLocked(this, _owner, lockedOn, pointLeft);
+                            _core.Sprites.Bullets.CreateLocked(this, lockedOn, pointLeft);
                         }
                         _toggle = !_toggle;
                     }

@@ -6,7 +6,7 @@ using HG.Utility.ExtensionMethods;
 
 namespace HG.Controller
 {
-    internal class PlayerTickController : VectorGeneratorTickControllerBase<SpritePlayer>
+    internal class PlayerTickController : PlayerTickControllerBase<SpritePlayer>
     {
         public SpritePlayer Sprite { get; set; }
 

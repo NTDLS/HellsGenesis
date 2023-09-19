@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace HG.Controller
 {
-    internal class AnimationSpriteTickController : VectoredTickControllerBase<SpriteAnimation>
+    internal class AnimationSpriteTickController : SpriteTickControllerBase<SpriteAnimation>
     {
         public AnimationSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)

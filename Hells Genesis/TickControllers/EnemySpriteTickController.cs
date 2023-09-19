@@ -8,7 +8,7 @@ using System;
 
 namespace HG.Controller
 {
-    internal class EnemySpriteTickController : VectoredTickControllerBase<SpriteEnemyBase>
+    internal class EnemySpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
     {
         public EnemySpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)

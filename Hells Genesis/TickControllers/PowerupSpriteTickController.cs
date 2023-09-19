@@ -7,7 +7,7 @@ using System;
 
 namespace HG.Controller
 {
-    internal class PowerupSpriteTickController : VectoredTickControllerBase<SpritePowerUpBase>
+    internal class PowerupSpriteTickController : SpriteTickControllerBase<SpritePowerUpBase>
     {
         public PowerupSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)

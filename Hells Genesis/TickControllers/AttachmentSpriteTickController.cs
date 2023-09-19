@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace HG.Controller
 {
-    internal class AttachmentSpriteTickController : VectoredTickControllerBase<SpriteAttachment>
+    internal class AttachmentSpriteTickController : SpriteTickControllerBase<SpriteAttachment>
     {
         public AttachmentSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)

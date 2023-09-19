@@ -36,14 +36,14 @@ namespace HG.Weapons
                 if (RoundQuantity > 0)
                 {
                     var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new HgPoint(5, 5));
-                    _core.Sprites.Bullets.Create(this, _owner, pointRight);
+                    _core.Sprites.Bullets.Create(this, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0)
                 {
                     var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new HgPoint(5, 5));
-                    _core.Sprites.Bullets.Create(this, _owner, pointLeft);
+                    _core.Sprites.Bullets.Create(this, pointLeft);
                     RoundQuantity--;
                 }
 

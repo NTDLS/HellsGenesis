@@ -29,6 +29,9 @@ namespace HG.Controller
             }
         }
 
+        /// <summary>
+        /// We fire this event when the game is won.
+        /// </summary>
         public void QueueTheDoorIsAjar()
         {
             Create(new TimeSpan(0, 0, 0, 5), (core, sender, refObj) =>

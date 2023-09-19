@@ -7,7 +7,7 @@ using HG.Utility;
 
 namespace HG.Controller
 {
-    internal class ParticleSpriteTickController : VectoredTickControllerBase<SpriteParticleBase>
+    internal class ParticleSpriteTickController : SpriteTickControllerBase<SpriteParticleBase>
     {
         public ParticleSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)

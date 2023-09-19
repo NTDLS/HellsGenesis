@@ -10,8 +10,9 @@ namespace HG.TickControllers
 {
     /// <summary>
     /// Tick managers which update their sprites using the supplied 2D vector.
+    /// Also contains various factory methods.
     /// </summary>
-    internal class VectoredTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
+    internal class SpriteTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
     {
         public EngineCore Core { get; private set; }
         public EngineSpriteManager SpriteManager { get; private set; }
@@ -24,7 +25,7 @@ namespace HG.TickControllers
 
         public virtual void ExecuteWorldClockTick(HgPoint displacementVector) { }
 
-        public VectoredTickControllerBase(EngineCore core, EngineSpriteManager manager)
+        public SpriteTickControllerBase(EngineCore core, EngineSpriteManager manager)
         {
             Core = core;
             SpriteManager = manager;

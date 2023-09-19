@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace HG.Controller
 {
-    internal class BulletSpriteTickController : VectoredTickControllerBase<BulletBase>
+    internal class BulletSpriteTickController : SpriteTickControllerBase<BulletBase>
     {
         public BulletSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)
@@ -55,7 +55,7 @@ namespace HG.Controller
             }
         }
 
-        public BulletBase Create(WeaponBase weapon, SpriteBase firedFrom, HgPoint xyOffset = null)
+        public BulletBase Create(WeaponBase weapon, HgPoint xyOffset = null)
         {
             lock (SpriteManager.Collection)
             {
@@ -65,7 +65,7 @@ namespace HG.Controller
             }
         }
 
-        public BulletBase CreateLocked(WeaponBase weapon, SpriteBase firedFrom, SpriteBase lockedTarget, HgPoint xyOffset = null)
+        public BulletBase CreateLocked(WeaponBase weapon, SpriteBase lockedTarget, HgPoint xyOffset = null)
         {
             lock (SpriteManager.Collection)
             {

@@ -109,7 +109,7 @@ namespace HG.Weapons
                 RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
-                _core.Sprites.Bullets.Create(this, _owner);
+                _core.Sprites.Bullets.Create(this);
 
                 ApplyRecoil();
 
