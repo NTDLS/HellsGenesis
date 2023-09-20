@@ -21,7 +21,7 @@ namespace NebulaSiege.Menus
             double offsetX = currentScaledScreenBounds.X + 40;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new NsPoint(offsetX, offsetY), "Select a Ship Class:");
+            var itemTitle = CreateAndAddTitleItem(new NsPoint(offsetX, offsetY), "Select a Ship Class");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 

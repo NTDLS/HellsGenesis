@@ -18,7 +18,7 @@ namespace NebulaSiege.Menus
             double offsetX = _core.Display.TotalCanvasSize.Width / 2;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new NsPoint(offsetX, offsetY), "Hells Genesis");
+            var itemTitle = CreateAndAddTitleItem(new NsPoint(offsetX, offsetY), "Nebula Siege");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;

@@ -29,7 +29,7 @@ namespace NebulaSiege.Sprites
         protected SpriteAnimation _hitAnimation;
 
         private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
-        private readonly int _MillisecondsBetweenHits = 200;
+        //private readonly int _MillisecondsBetweenHits = 200;
 
         private bool _isLockedOn = false;
         private HgVelocity _velocity;
@@ -392,47 +392,37 @@ namespace NebulaSiege.Sprites
         /// Subtract from the objects hullHealth.
         /// </summary>
         /// <returns></returns>
-        public virtual bool Hit(int damage)
+        public virtual void Hit(int damage)
         {
-            bool result = (DateTime.Now - _lastHit).TotalMilliseconds > _MillisecondsBetweenHits;
-            if (result)
+            _lastHit = DateTime.Now;
+
+            if (ShieldHealth > 0)
             {
-                _lastHit = DateTime.Now;
+                _shieldHit.Play();
+                damage /= 2; //Weapons do less damage to Shields. They are designed to take hits.
+                damage = damage < 1 ? 1 : damage;
+                damage = damage > ShieldHealth ? ShieldHealth : damage; //No need to go negative with the damage.
+                ShieldHealth -= damage;
 
-                if (ShieldHealth > 0)
-                {
-                    _shieldHit.Play();
-                    damage /= 2; //Weapons do less damage to Shields. They are designed to take hits.
-                    damage = damage < 1 ? 1 : damage;
-                    damage = damage > ShieldHealth ? ShieldHealth : damage; //No need to go negative with the damage.
-                    ShieldHealth -= damage;
-
-                    OnHit?.Invoke(this, HgDamageType.Shield, damage);
-                }
-                else
-                {
-                    _hitSound.Play();
-                    damage = damage > HullHealth ? HullHealth : damage; //No need to go negative with the damage.
-                    HullHealth -= damage;
-
-                    OnHit?.Invoke(this, HgDamageType.Hull, damage);
-                }
+                OnHit?.Invoke(this, HgDamageType.Shield, damage);
             }
+            else
+            {
+                _hitSound.Play();
+                damage = damage > HullHealth ? HullHealth : damage; //No need to go negative with the damage.
+                HullHealth -= damage;
 
-            return result;
+                OnHit?.Invoke(this, HgDamageType.Hull, damage);
+            }
         }
 
         /// <summary>
         /// Hits this object with a given bullet.
         /// </summary>
         /// <returns></returns>
-        public virtual bool Hit(_BulletBase bullet)
+        public virtual void Hit(_BulletBase bullet)
         {
-            if (bullet != null)
-            {
-                return Hit(bullet.Weapon.Damage);
-            }
-            return false;
+            Hit(bullet?.Weapon?.Damage ?? 0);
         }
 
         /// <summary>

@@ -123,7 +123,7 @@ namespace NebulaSiege
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Hells Genesis", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(ex.Message, "Nebula Siege", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
     }

@@ -39,7 +39,7 @@
             buttonSettings.Location = new System.Drawing.Point(288, 391);
             buttonSettings.Name = "buttonSettings";
             buttonSettings.Size = new System.Drawing.Size(75, 23);
-            buttonSettings.TabIndex = 1;
+            buttonSettings.TabIndex = 2;
             buttonSettings.Text = "Settings";
             buttonSettings.UseVisualStyleBackColor = true;
             buttonSettings.Click += buttonSettings_Click;
@@ -49,7 +49,7 @@
             buttonStart.Location = new System.Drawing.Point(411, 391);
             buttonStart.Name = "buttonStart";
             buttonStart.Size = new System.Drawing.Size(75, 23);
-            buttonStart.TabIndex = 2;
+            buttonStart.TabIndex = 0;
             buttonStart.Text = "Start";
             buttonStart.UseVisualStyleBackColor = true;
             buttonStart.Click += buttonStart_Click;
@@ -59,7 +59,7 @@
             buttonExit.Location = new System.Drawing.Point(165, 391);
             buttonExit.Name = "buttonExit";
             buttonExit.Size = new System.Drawing.Size(75, 23);
-            buttonExit.TabIndex = 0;
+            buttonExit.TabIndex = 1;
             buttonExit.Text = "Exit";
             buttonExit.UseVisualStyleBackColor = true;
             buttonExit.Click += buttonExit_Click;
@@ -81,7 +81,7 @@
             Opacity = 0.9D;
             ShowIcon = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "Hells Genesis";
+            Text = "Nebula Siege";
             Load += FormStartup_Load;
             ResumeLayout(false);
         }

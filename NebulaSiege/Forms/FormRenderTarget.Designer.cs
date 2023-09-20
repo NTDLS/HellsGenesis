@@ -44,7 +44,7 @@
             Name = "FormMain";
             SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "Hells Genesis";
+            Text = "Nebula Siege";
             ResumeLayout(false);
         }
 

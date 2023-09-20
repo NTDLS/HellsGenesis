@@ -194,10 +194,8 @@ namespace NebulaSiege.Sprites
                 if (Intersects(hitTestPosition))
                 {
                     //We don't auto delete the player because there is only one instance, the engine always assumes its valid.
-                    if (Hit(bullet))
-                    {
-                        return true;
-                    }
+                    Hit(bullet);
+                    return true;
                 }
             }
             return false;

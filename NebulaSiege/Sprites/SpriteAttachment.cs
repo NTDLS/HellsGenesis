@@ -26,14 +26,12 @@ namespace NebulaSiege.Sprites
             {
                 if (Intersects(hitTestPosition))
                 {
-                    if (Hit(bullet))
+                    Hit(bullet);
+                    if (HullHealth <= 0)
                     {
-                        if (HullHealth <= 0)
-                        {
-                            Explode();
-                        }
-                        return true;
+                        Explode();
                     }
+                    return true;
                 }
             }
             return false;
