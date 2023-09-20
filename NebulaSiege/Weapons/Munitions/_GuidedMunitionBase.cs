@@ -11,8 +11,8 @@ namespace HellsGenesis.Weapons.Munitions
     /// </summary>
     internal class _GuidedMunitionBase : _MunitionBase
     {
-        public int MaxObservationAngleDegrees { get; set; } = 90;
-        public int RotationRateInDegrees { get; set; } = 3;
+        public int MaxGuidedObservationAngleDegrees { get; set; } = 90;
+        public int GuidedRotationRateInDegrees { get; set; } = 3;
         public _SpriteBase LockedTarget { get; private set; }
 
         public _GuidedMunitionBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath,
@@ -29,16 +29,16 @@ namespace HellsGenesis.Weapons.Munitions
                 if (LockedTarget.Visable)
                 {
                     var deltaAngle = DeltaAngle(LockedTarget);
-                    if (deltaAngle.IsBetween(-MaxObservationAngleDegrees, MaxObservationAngleDegrees))
+                    if (deltaAngle.IsBetween(-MaxGuidedObservationAngleDegrees, MaxGuidedObservationAngleDegrees))
                     {
 
                         if (deltaAngle >= 0) //We might as well turn around clock-wise
                         {
-                            Velocity.Angle += RotationRateInDegrees;
+                            Velocity.Angle += GuidedRotationRateInDegrees;
                         }
                         else if (deltaAngle < 0) //We might as well turn around counter clock-wise
                         {
-                            Velocity.Angle -= RotationRateInDegrees;
+                            Velocity.Angle -= GuidedRotationRateInDegrees;
                         }
                     }
                 }

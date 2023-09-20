@@ -19,8 +19,8 @@ namespace HellsGenesis.Weapons.Munitions
              _SpriteBase lockedTarget = null, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
-            MaxObservationAngleDegrees = 90;
-            RotationRateInDegrees = 10;
+            MaxGuidedObservationAngleDegrees = 90;
+            GuidedRotationRateInDegrees = 10;
 
             _selectedHitExplosionAnimationIndex = HgRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
             _hitExplosionAnimation = new SpriteAnimation(_core, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
