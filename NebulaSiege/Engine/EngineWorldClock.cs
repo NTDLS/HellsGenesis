@@ -146,12 +146,12 @@ namespace NebulaSiege.Engine
                 situation = $"{_core.Situations.CurrentSituation.Name} (Wave {_core.Situations.CurrentSituation.CurrentWave} of {_core.Situations.CurrentSituation.TotalWaves})";
             }
 
-            double boostRebuildPercent = (_core.Player.Sprite.Velocity.AvailableBoost / _core.Settings.PlayerBoostRebuildMin) * 100.0;
+            double boostRebuildPercent = (_core.Player.Sprite.Velocity.AvailableBoost / _core.Settings.PlayerBoostRebuildFloor) * 100.0;
 
             _core.Sprites.PlayerStatsText.Text =
                   $" Situation: {situation}\r\n"
                 + $"      Hull: {_core.Player.Sprite.HullHealth:n0} (Shields: {_core.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_core.Player.Sprite.Bounty}\r\n"
-                + $"      Warp: {((_core.Player.Sprite.Velocity.AvailableBoost / _core.Settings.MaxPlayerBoost) * 100.0):n1}%"
+                + $"      Warp: {((_core.Player.Sprite.Velocity.AvailableBoost / _core.Settings.MaxPlayerBoostAmount) * 100.0):n1}%"
                     + (_core.Player.Sprite.Velocity.BoostRebuilding ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
                 + $"Pri-Weapon: {_core.Player.Sprite.PrimaryWeapon?.Name} x{_core.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
                 + $"Sec-Weapon: {_core.Player.Sprite.SelectedSecondaryWeapon?.Name} x{_core.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";

@@ -30,8 +30,8 @@ namespace NebulaSiege.Engine
         public int MaxHullHealth { get; set; } = 100000;
         public int MaxShieldPoints { get; set; } = 100000;
 
-        public double MaxPlayerBoost { get; set; } = 10000;
-        public double PlayerBoostRebuildMin { get; set; } = 1000;
+        public double MaxPlayerBoostAmount { get; set; } = 10000;
+        public double PlayerBoostRebuildFloor { get; set; } = 1000;
         public double MaxRecoilPercentage { get; set; } = 0.4; //Max amount that will be substracted from the thrust percentage.
         public double MaxPlayerRotationSpeedDegrees { get; set; } = 2;
 

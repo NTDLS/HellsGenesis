@@ -143,18 +143,18 @@ namespace NebulaSiege.Engine
             else
             {
 #endif
-                PrefabPlayerLoadouts = new PrefabPlayerLoadouts();
+            PrefabPlayerLoadouts = new PrefabPlayerLoadouts();
 
-                PrefabPlayerLoadouts.CreateDefaults(); //We couldnt find a file, create a default loadout.
+            PrefabPlayerLoadouts.CreateDefaults(); //We couldnt find a file, create a default loadout.
 
-                JsonSerializerSettings settings = new JsonSerializerSettings
-                {
-                    Converters = new JsonConverter[] { new StringEnumConverter() }
-                };
-                var defaultLoadout = JsonConvert.SerializeObject(PrefabPlayerLoadouts, Formatting.Indented, settings);
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                Converters = new JsonConverter[] { new StringEnumConverter() }
+            };
+            var defaultLoadout = JsonConvert.SerializeObject(PrefabPlayerLoadouts, Formatting.Indented, settings);
 
-                //Create the missing loadout file.
-                Assets.PutText(playerLoadoutPath, defaultLoadout);
+            //Create the missing loadout file.
+            Assets.PutText(playerLoadoutPath, defaultLoadout);
 #if !DEBUG
             }
 #endif

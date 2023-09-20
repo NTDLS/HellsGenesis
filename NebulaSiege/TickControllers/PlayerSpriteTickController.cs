@@ -121,11 +121,11 @@ namespace NebulaSiege.Controller
                         }
                     }
 
-                    if (Core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < Core.Settings.MaxPlayerBoost)
+                    if (Core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < Core.Settings.MaxPlayerBoostAmount)
                     {
-                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Box(0, Core.Settings.MaxPlayerBoost);
+                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Box(0, Core.Settings.MaxPlayerBoostAmount);
 
-                        if (Sprite.Velocity.BoostRebuilding && Sprite.Velocity.AvailableBoost >= Core.Settings.PlayerBoostRebuildMin)
+                        if (Sprite.Velocity.BoostRebuilding && Sprite.Velocity.AvailableBoost >= Core.Settings.PlayerBoostRebuildFloor)
                         {
                             Sprite.Velocity.BoostRebuilding = false;
                         }

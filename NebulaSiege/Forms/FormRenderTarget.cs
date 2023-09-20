@@ -85,6 +85,8 @@ namespace NebulaSiege
             double x = e.X + _core.Display.OverdrawSize.Width / 2;
             double y = e.Y + _core.Display.OverdrawSize.Height / 2;
 
+            //Debug.Print($"x{x:n1}, y{y:n1} => Player x{_core.Player.Sprite.X:n1},x{_core.Player.Sprite.Y:n1}");
+
             foreach (var sprite in highlightedSprites)
             {
                 sprite.Highlight = false;

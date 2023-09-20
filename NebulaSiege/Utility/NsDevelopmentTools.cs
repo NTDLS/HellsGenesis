@@ -1,5 +1,5 @@
-﻿using NebulaSiege.Engine;
-using NAudio.Wave;
+﻿using NAudio.Wave;
+using NebulaSiege.Engine;
 using System;
 using System.Drawing;
 using System.IO;

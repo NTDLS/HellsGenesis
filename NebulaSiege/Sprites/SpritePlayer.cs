@@ -85,7 +85,7 @@ namespace NebulaSiege.Sprites
             Velocity.Angle = new NsAngle(45);
 
             Velocity.ThrottlePercentage = 0;
-            Velocity.AvailableBoost = _core.Settings.MaxPlayerBoost;
+            Velocity.AvailableBoost = _core.Settings.MaxPlayerBoostAmount;
 
             #region Reset loadout.
 
