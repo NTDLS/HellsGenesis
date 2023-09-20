@@ -24,15 +24,15 @@ namespace NebulaSiege.Sprites.Enemies.Peons
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            Velocity.MaxBoost = 1.5;
-            Velocity.MaxSpeed = HgRandom.OneOf(4, 5);
+            Velocity.MaxBoost = 1.0;
+            Velocity.MaxSpeed = HgRandom.Between(4.0, 5.0);
 
             SetPrimaryWeapon<WeaponScattershot>(1000);
             AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
 
-            AddAIController(new HostileEngagement(_core, this, _core.Player.Sprite));
+            //AddAIController(new HostileEngagement(_core, this, _core.Player.Sprite));
             AddAIController(new Taunt(_core, this, _core.Player.Sprite));
-            AddAIController(new Meander(_core, this, _core.Player.Sprite));
+            //AddAIController(new Meander(_core, this, _core.Player.Sprite));
 
             //if (HgRandom.FlipCoin())
             //{
@@ -44,8 +44,6 @@ namespace NebulaSiege.Sprites.Enemies.Peons
             //}
 
             behaviorChangeThresholdMiliseconds = HgRandom.Between(2000, 10000);
-
-            SetDefaultAIController(AIControllers[typeof(Taunt)]);
         }
 
         #region Artificial Intelligence.

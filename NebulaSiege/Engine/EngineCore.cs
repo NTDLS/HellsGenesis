@@ -134,15 +134,18 @@ namespace NebulaSiege.Engine
         {
             var playerLoadoutPath = "Data\\PlayerLoadouts.json";
             var playerLoadoutText = Assets.GetText(playerLoadoutPath);
+
+#if !DEBUG
             if (string.IsNullOrEmpty(playerLoadoutText) == false)
             {
                 PrefabPlayerLoadouts = JsonConvert.DeserializeObject<PrefabPlayerLoadouts>(playerLoadoutText);
             }
             else
             {
+#endif
                 PrefabPlayerLoadouts = new PrefabPlayerLoadouts();
 
-                PrefabPlayerLoadouts.CreateDefaults(); //We couldnt find a file, create a default loadout/
+                PrefabPlayerLoadouts.CreateDefaults(); //We couldnt find a file, create a default loadout.
 
                 JsonSerializerSettings settings = new JsonSerializerSettings
                 {
@@ -152,7 +155,9 @@ namespace NebulaSiege.Engine
 
                 //Create the missing loadout file.
                 Assets.PutText(playerLoadoutPath, defaultLoadout);
+#if !DEBUG
             }
+#endif
         }
 
         private void NewGameMenuCallback(EngineCore core, NsEngineCallbackEvent sender, object refObj)
