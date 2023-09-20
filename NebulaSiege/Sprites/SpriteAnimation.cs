@@ -22,6 +22,7 @@ namespace NebulaSiege.Sprites
         private readonly int _frameDelayMilliseconds = 10;
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
         private readonly PlayMode _playMode;
+        private readonly string _spriteSheetFileName;
 
         internal class PlayMode
         {
@@ -72,6 +73,8 @@ namespace NebulaSiege.Sprites
 
             Location = new NsPoint(0, 0);
             Velocity = new HgVelocity();
+
+            _spriteSheetFileName = spriteSheetFileName;
 
             AdvanceImage();
         }

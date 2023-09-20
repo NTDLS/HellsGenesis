@@ -86,7 +86,7 @@ namespace NebulaSiege.Sprites
         /// <param name="bullet">The bullet object that is being tested for.</param>
         /// <param name="hitTestPosition">The position to test for hit.</param>
         /// <returns></returns>
-        public virtual bool TestHit(NsPoint displacementVector, _BulletBase bullet, NsPoint hitTestPosition)
+        public virtual bool TryBulletHit(NsPoint displacementVector, _BulletBase bullet, NsPoint hitTestPosition)
         {
             if (Intersects(hitTestPosition))
             {

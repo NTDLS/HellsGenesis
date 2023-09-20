@@ -20,39 +20,53 @@ namespace NebulaSiege.Controller
 
         public override void ExecuteWorldClockTick(NsPoint displacementVector)
         {
-            var thingsThatCanBeHit = new List<_SpriteShipBase>
+            var objectsThatCanBeHit = new List<_SpriteShipBase>
             {
                 Core.Player.Sprite
             };
 
-            thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<_SpriteEnemyBossBase>());
-            thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<_SpriteEnemyPeonBase>());
-            thingsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
+            objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<_SpriteEnemyBossBase>());
+            objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<_SpriteEnemyPeonBase>());
+            objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
 
             foreach (var bullet in VisibleOfType<_BulletBase>())
             {
                 bullet.ApplyMotion(displacementVector); //Move the bullet.
 
-                var hitTestPosition = bullet.Location.ToWriteableCopy(); //Grab the new location of the bullet.
-
-                //Loop backwards and hit-test each position along the bullets path.
-                for (int i = 0; i < bullet.Velocity.MaxSpeed; i++)
+                if (TestObjectCollisionsAlongBulletPath(bullet, objectsThatCanBeHit, displacementVector))
                 {
-                    hitTestPosition.X -= bullet.Velocity.Angle.X;
-                    hitTestPosition.Y -= bullet.Velocity.Angle.Y;
-
-                    foreach (var thing in thingsThatCanBeHit)
-                    {
-                        if (thing.TestHit(displacementVector, bullet, hitTestPosition))
-                        {
-                            bullet.Explode();
-                            break;
-                        }
-                    }
+                    bullet.Explode();
                 }
 
                 bullet.ApplyIntelligence(displacementVector);
             }
+        }
+
+        /// <summary>
+        /// Takes the position of a bullet object after it has been moved and tests each location
+        ///     betwwen where it ended up and where it should have come from given its velocity.
+        /// </summary>
+        /// <returns></returns>
+        public bool TestObjectCollisionsAlongBulletPath(_BulletBase bullet, List<_SpriteShipBase> objectsThatCanBeHit, NsPoint displacementVector)
+        {
+            var hitTestPosition = bullet.Location.ToWriteableCopy(); //Grab the new location of the bullet.
+
+            //Loop backwards and hit-test each position along the bullets path.
+            for (int i = 0; i < bullet.Velocity.MaxSpeed; i++)
+            {
+                hitTestPosition.X -= bullet.Velocity.Angle.X;
+                hitTestPosition.Y -= bullet.Velocity.Angle.Y;
+
+                foreach (var obj in objectsThatCanBeHit)
+                {
+                    if (obj.TryBulletHit(displacementVector, bullet, hitTestPosition))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public _BulletBase Create(_WeaponBase weapon, NsPoint xyOffset = null)

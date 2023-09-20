@@ -187,7 +187,7 @@ namespace NebulaSiege.Sprites
             base.Explode();
         }
 
-        public override bool TestHit(NsPoint displacementVector, _BulletBase bullet, NsPoint hitTestPosition)
+        public override bool TryBulletHit(NsPoint displacementVector, _BulletBase bullet, NsPoint hitTestPosition)
         {
             if (bullet.FiredFromType == HgFiredFromType.Enemy)
             {
