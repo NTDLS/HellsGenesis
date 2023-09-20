@@ -223,7 +223,7 @@ namespace NebulaSiege.Managers
                     _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height,
                     0);
 
-                double radarDistance = 5;
+                double radarDistance = 8;
 
                 if (_radarScale == null)
                 {

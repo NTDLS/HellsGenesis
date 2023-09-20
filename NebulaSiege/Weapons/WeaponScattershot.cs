@@ -24,7 +24,7 @@ namespace NebulaSiege.Weapons
             Speed = 15;
             AngleVarianceDegrees = 8;
             SpeedVariancePercent = 0.10;
-            RecoilAmount = 0.25;
+            RecoilAmount = 0.01;
         }
 
         public override _BulletBase CreateBullet(_SpriteBase lockedTarget, NsPoint xyOffset = null)

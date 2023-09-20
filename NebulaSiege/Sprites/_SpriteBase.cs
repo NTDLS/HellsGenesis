@@ -760,16 +760,16 @@ namespace NebulaSiege.Sprites
         {
             if (_isVisible && _image != null)
             {
-                float size = 0;
-
-                RawColor4 color = _core.DirectX.Materials.Raw.Blue;
                 if (this is _SpriteEnemyBase)
                 {
-                    color = _core.DirectX.Materials.Raw.WhiteSmoke;
-                    size = 3;
+                    _core.DirectX.FillTriangleAt(renderTarget, x, y, 3, _core.DirectX.Materials.Brushes.WhiteSmoke);
                 }
                 else if (this is _BulletBase)
                 {
+                    float size;
+
+                    RawColor4 color = _core.DirectX.Materials.Raw.Blue;
+
                     var bullet = this as _BulletBase;
                     if (bullet.FiredFromType == HgFiredFromType.Enemy)
                     {
@@ -788,8 +788,11 @@ namespace NebulaSiege.Sprites
                     {
                         size = 1;
                     }
+
+                    _core.DirectX.FillEllipseAt(renderTarget, x, y, size, size, color);
+
                 }
-                _core.DirectX.FillEllipseAt(renderTarget, x, y, size, size, color);
+
             }
         }
 

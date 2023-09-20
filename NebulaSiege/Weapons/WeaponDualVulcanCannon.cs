@@ -24,7 +24,7 @@ namespace NebulaSiege.Weapons
             Speed = 18;
             AngleVarianceDegrees = 0.5;
             SpeedVariancePercent = 0.05;
-            RecoilAmount = 0.25;
+            RecoilAmount = 0.10;
         }
 
         public override bool Fire()

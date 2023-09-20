@@ -6,11 +6,11 @@ using NebulaSiege.Utility.ExtensionMethods;
 
 namespace NebulaSiege.Controller
 {
-    internal class PlayerTickController : _PlayerTickControllerBase<SpritePlayer>
+    internal class PlayerSpriteTickController : _PlayerTickControllerBase<SpritePlayer>
     {
         public SpritePlayer Sprite { get; set; }
 
-        public PlayerTickController(EngineCore core)
+        public PlayerSpriteTickController(EngineCore core)
             : base(core)
         {
         }
@@ -250,8 +250,8 @@ namespace NebulaSiege.Controller
 
             if (Sprite.Velocity.RecoilPercentage > 0)
             {
-                Sprite.Velocity.RecoilPercentage -= Sprite.Velocity.RecoilPercentage * 0.01;
-                if (Sprite.Velocity.RecoilPercentage < 0.01)
+                Sprite.Velocity.RecoilPercentage -= Sprite.Velocity.RecoilPercentage * 0.10;
+                if (Sprite.Velocity.RecoilPercentage < 0.001)
                 {
                     Sprite.Velocity.RecoilPercentage = 0;
                 }

@@ -1,6 +1,7 @@
 ﻿using NebulaSiege.Utility;
 using SharpDX;
 using SharpDX.Direct2D1;
+using SharpDX.DirectWrite;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
@@ -8,6 +9,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Security.Policy;
 
 namespace NebulaSiege.Engine.GraphicsProcessing
 {
@@ -15,12 +17,12 @@ namespace NebulaSiege.Engine.GraphicsProcessing
     {
         private readonly EngineCore _core;
 
-        public BitmapRenderTarget IntermediateRenderTarget { get; private set; }
+        public SharpDX.Direct2D1.BitmapRenderTarget IntermediateRenderTarget { get; private set; }
         public WindowRenderTarget ScreenRenderTarget { get; private set; }
         public PrecreatedMaterials Materials { get; private set; }
         public PrecreatedTextFormats TextFormats { get; private set; }
 
-        private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(FactoryType.SingleThreaded);
+        private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(SharpDX.Direct2D1.FactoryType.SingleThreaded);
         private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
 
         public DirectX(EngineCore core)
@@ -39,14 +41,14 @@ namespace NebulaSiege.Engine.GraphicsProcessing
             ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, renderTargetProperties, renderProperties)
             {
                 AntialiasMode = AntialiasMode.PerPrimitive,
-                TextAntialiasMode = TextAntialiasMode.Cleartype
+                TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Cleartype
             };
 
             var intermediateRenderTargetSize = new Size2F(_core.Display.TotalCanvasSize.Width, _core.Display.TotalCanvasSize.Height);
-            IntermediateRenderTarget = new BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
+            IntermediateRenderTarget = new SharpDX.Direct2D1.BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
             {
                 AntialiasMode = AntialiasMode.PerPrimitive,
-                TextAntialiasMode = TextAntialiasMode.Cleartype
+                TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Cleartype
             };
 
             Materials = new PrecreatedMaterials(ScreenRenderTarget);
@@ -191,7 +193,7 @@ namespace NebulaSiege.Engine.GraphicsProcessing
         /// Draws text at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
-        public RawRectangleF DrawTextAt(RenderTarget renderTarget, double x, double y, double angle, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
+        public RawRectangleF DrawTextAt(RenderTarget renderTarget, double x, double y, double angle, string text, TextFormat format, SolidColorBrush brush)
         {
             using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
@@ -226,6 +228,46 @@ namespace NebulaSiege.Engine.GraphicsProcessing
             renderTarget.FillEllipse(ellipse, new SolidColorBrush(renderTarget, color));
 
             return ellipse;
+        }
+
+        public void FillTriangleAt(RenderTarget renderTarget, double x, double y, double size, SolidColorBrush brush, double strokeWidth = 1)
+        {
+            // Define the points for the triangle
+            RawVector2[] trianglePoints = new RawVector2[]
+            {
+                new RawVector2(0, (float)size),     // Vertex 1 (bottom-left)
+                new RawVector2((float)size, (float)size),   // Vertex 2 (bottom-right)
+                new RawVector2((float)(size / 2), 0)      // Vertex 3 (top-center)
+            };
+
+            // Create a PathGeometry and add the triangle to it
+            var triangleGeometry = new PathGeometry(_direct2dFactory);
+            using (GeometrySink sink = triangleGeometry.Open())
+            {
+                sink.BeginFigure(trianglePoints[0], FigureBegin.Filled);
+                sink.AddLines(trianglePoints);
+                sink.EndFigure(FigureEnd.Closed);
+                sink.Close();
+            }
+
+            // Calculate the center of the triangle
+            float centerX = (trianglePoints[0].X + trianglePoints[1].X + trianglePoints[2].X) / 3;
+            float centerY = (trianglePoints[0].Y + trianglePoints[1].Y + trianglePoints[2].Y) / 3;
+
+            // Calculate the adjustment needed to center the triangle at the desired position
+            x -= centerX;
+            y -= centerY;
+
+            // Create a translation transform to move the triangle to the desired position
+            renderTarget.Transform = new(
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                (float)x, (float)y
+            );
+
+            renderTarget.DrawGeometry(triangleGeometry, brush, (float)strokeWidth);
+
+            ResetTransform(renderTarget);
         }
 
         /// <summary>

@@ -16,7 +16,7 @@ namespace NebulaSiege.Engine
     {
         public SituationTickController Situations { get; private set; }
         public EventTickController Events { get; private set; }
-        public PlayerTickController Player { get; private set; }
+        public PlayerSpriteTickController Player { get; private set; }
 
         public EngineInputManager Input { get; private set; }
         public EngineDisplayManager Display { get; private set; }
@@ -72,7 +72,7 @@ namespace NebulaSiege.Engine
             Events = new EventTickController(this);
             Audio = new EngineAudioManager(this);
             Menus = new MenuTickHandler(this);
-            Player = new PlayerTickController(this);
+            Player = new PlayerSpriteTickController(this);
             DirectX = new DirectX(this);
 
             LoadPrefabs();

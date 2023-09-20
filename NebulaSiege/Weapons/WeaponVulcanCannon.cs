@@ -22,7 +22,7 @@ namespace NebulaSiege.Weapons
             Speed = 20;
             AngleVarianceDegrees = 1.5;
             SpeedVariancePercent = 0.05;
-            RecoilAmount = 0.25;
+            RecoilAmount = 0.05;
         }
     }
 }
