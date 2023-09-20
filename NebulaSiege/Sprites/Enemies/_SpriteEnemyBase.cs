@@ -1,4 +1,4 @@
-﻿using HellsGenesis.Weapons.Projectiles;
+﻿using HellsGenesis.Weapons.Munitions;
 using NebulaSiege.AI;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
@@ -78,13 +78,13 @@ namespace NebulaSiege.Sprites.Enemies
             base.Explode();
         }
 
-        public override bool TryProjectileHit(NsPoint displacementVector, _ProjectileBase projectile, NsPoint hitTestPosition)
+        public override bool TryMunitionHit(NsPoint displacementVector, _MunitionBase munition, NsPoint hitTestPosition)
         {
-            if (projectile.FiredFromType == HgFiredFromType.Player)
+            if (munition.FiredFromType == HgFiredFromType.Player)
             {
                 if (Intersects(hitTestPosition))
                 {
-                    Hit(projectile);
+                    Hit(munition);
                     if (HullHealth <= 0)
                     {
                         Explode();

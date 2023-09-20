@@ -42,7 +42,7 @@ namespace NebulaSiege.Engine
         public int MaxEnemySpeed { get; set; } = 10;
 
         public double FrameLimiter { get; set; } = 60; //~60 seems to be a good rate.
-        public double ProjectileSceneDistanceLimit { get; set; } = 1500; //The distance from the scene that a projectile can travel before it is cleaned up.
+        public double MunitionSceneDistanceLimit { get; set; } = 1500; //The distance from the scene that a munition can travel before it is cleaned up.
         public double EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
 
         /// <summary>

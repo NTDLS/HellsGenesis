@@ -6,16 +6,16 @@ using NebulaSiege.Weapons;
 using System.Drawing;
 using System.IO;
 
-namespace HellsGenesis.Weapons.Projectiles
+namespace HellsGenesis.Weapons.Munitions
 {
-    internal class ProjectileScramsMissile : _GuidedProjectileBase
+    internal class MunitionScramsMissile : _GuidedMunitionBase
     {
         private const string imagePath = @"Graphics\Weapon\ScramsMissile.png";
         private const string _assetPathHitExplosionAnimation = @"Graphics\Animation\Explode\Hit Explosion 22x22\";
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public ProjectileScramsMissile(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom,
+        public MunitionScramsMissile(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom,
              _SpriteBase lockedTarget = null, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {

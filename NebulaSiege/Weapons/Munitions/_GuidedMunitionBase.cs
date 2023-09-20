@@ -4,18 +4,18 @@ using NebulaSiege.Sprites;
 using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons;
 
-namespace HellsGenesis.Weapons.Projectiles
+namespace HellsGenesis.Weapons.Munitions
 {
     /// <summary>
-    /// Guided projectiles need to be locked onto a target before they are fired. They will adjust heading within given parameters to hit the locked target.
+    /// Guided munitions need to be locked onto a target before they are fired. They will adjust heading within given parameters to hit the locked target.
     /// </summary>
-    internal class _GuidedProjectileBase : _ProjectileBase
+    internal class _GuidedMunitionBase : _MunitionBase
     {
         public int MaxObservationAngleDegrees { get; set; } = 90;
         public int RotationRateInDegrees { get; set; } = 3;
         public _SpriteBase LockedTarget { get; private set; }
 
-        public _GuidedProjectileBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath,
+        public _GuidedMunitionBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath,
              _SpriteBase lockedTarget = null, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, xyOffset)
         {

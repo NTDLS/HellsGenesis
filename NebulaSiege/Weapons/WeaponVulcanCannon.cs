@@ -1,4 +1,4 @@
-﻿using HellsGenesis.Weapons.Projectiles;
+﻿using HellsGenesis.Weapons.Munitions;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
@@ -27,9 +27,9 @@ namespace NebulaSiege.Weapons
             RecoilAmount = 0.05;
         }
 
-        public override _ProjectileBase CreateProjectile(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new ProjectileVulcanCannon(_core, this, _owner, xyOffset);
+            return new MunitionVulcanCannon(_core, this, _owner, xyOffset);
         }
     }
 }

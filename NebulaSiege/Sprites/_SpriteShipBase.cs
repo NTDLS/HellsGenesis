@@ -1,4 +1,4 @@
-﻿using HellsGenesis.Weapons.Projectiles;
+﻿using HellsGenesis.Weapons.Munitions;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
@@ -80,17 +80,17 @@ namespace NebulaSiege.Sprites
         }
 
         /// <summary>
-        /// Allows for the testing of hits from a projectile. This is called for each movement along a projectiles path.
+        /// Allows for the testing of hits from a munition. This is called for each movement along a munitions path.
         /// </summary>
         /// <param name="displacementVector">The background offset vector.</param>
-        /// <param name="projectile">The projectile object that is being tested for.</param>
+        /// <param name="munition">The munition object that is being tested for.</param>
         /// <param name="hitTestPosition">The position to test for hit.</param>
         /// <returns></returns>
-        public virtual bool TryProjectileHit(NsPoint displacementVector, _ProjectileBase projectile, NsPoint hitTestPosition)
+        public virtual bool TryMunitionHit(NsPoint displacementVector, _MunitionBase munition, NsPoint hitTestPosition)
         {
             if (Intersects(hitTestPosition))
             {
-                Hit(projectile);
+                Hit(munition);
                 if (HullHealth <= 0)
                 {
                     Explode();

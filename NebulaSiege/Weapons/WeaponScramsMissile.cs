@@ -1,4 +1,4 @@
-﻿using HellsGenesis.Weapons.Projectiles;
+﻿using HellsGenesis.Weapons.Munitions;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
@@ -35,9 +35,9 @@ namespace NebulaSiege.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override _ProjectileBase CreateProjectile(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new ProjectileGuidedFragMissile(_core, this, _owner, targetOfLock, xyOffset);
+            return new MunitionGuidedFragMissile(_core, this, _owner, targetOfLock, xyOffset);
         }
 
         public override bool Fire()
@@ -52,12 +52,12 @@ namespace NebulaSiege.Weapons
                     if (_toggle)
                     {
                         var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new NsPoint(10, 10));
-                        _core.Sprites.Projectiles.Create(this, pointRight);
+                        _core.Sprites.Munitions.Create(this, pointRight);
                     }
                     else
                     {
                         var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new NsPoint(10, 10));
-                        _core.Sprites.Projectiles.Create(this, pointLeft);
+                        _core.Sprites.Munitions.Create(this, pointLeft);
                     }
 
                     _toggle = !_toggle;
@@ -69,12 +69,12 @@ namespace NebulaSiege.Weapons
                         if (_toggle)
                         {
                             var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new NsPoint(10, 10));
-                            _core.Sprites.Projectiles.CreateLocked(this, lockedOn, pointRight);
+                            _core.Sprites.Munitions.CreateLocked(this, lockedOn, pointRight);
                         }
                         else
                         {
                             var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new NsPoint(10, 10));
-                            _core.Sprites.Projectiles.CreateLocked(this, lockedOn, pointLeft);
+                            _core.Sprites.Munitions.CreateLocked(this, lockedOn, pointLeft);
                         }
                         _toggle = !_toggle;
                     }

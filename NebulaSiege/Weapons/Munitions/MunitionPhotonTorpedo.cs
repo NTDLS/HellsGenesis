@@ -3,13 +3,13 @@ using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Weapons;
 
-namespace HellsGenesis.Weapons.Projectiles
+namespace HellsGenesis.Weapons.Munitions
 {
-    internal class ProjectilePhotonTorpedo : _EnergyProjectileBase
+    internal class MunitionPhotonTorpedo : _EnergyMunitionBase
     {
         private const string imagePath = @"Graphics\Weapon\PhotonTorpedo.png";
 
-        public ProjectilePhotonTorpedo(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, NsPoint xyOffset = null)
+        public MunitionPhotonTorpedo(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, xyOffset)
         {
             Initialize(imagePath);

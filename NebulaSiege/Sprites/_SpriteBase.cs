@@ -1,4 +1,4 @@
-﻿using HellsGenesis.Weapons.Projectiles;
+﻿using HellsGenesis.Weapons.Munitions;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
@@ -417,12 +417,12 @@ namespace NebulaSiege.Sprites
         }
 
         /// <summary>
-        /// Hits this object with a given projectile.
+        /// Hits this object with a given munition.
         /// </summary>
         /// <returns></returns>
-        public virtual void Hit(_ProjectileBase projectile)
+        public virtual void Hit(_MunitionBase munition)
         {
-            Hit(projectile?.Weapon?.Damage ?? 0);
+            Hit(munition?.Weapon?.Damage ?? 0);
         }
 
         /// <summary>
@@ -764,14 +764,14 @@ namespace NebulaSiege.Sprites
                 {
                     _core.DirectX.FillTriangleAt(renderTarget, x, y, 3, _core.DirectX.Materials.Brushes.WhiteSmoke);
                 }
-                else if (this is _ProjectileBase)
+                else if (this is _MunitionBase)
                 {
                     float size;
 
                     RawColor4 color = _core.DirectX.Materials.Raw.Blue;
 
-                    var projectile = this as _ProjectileBase;
-                    if (projectile.FiredFromType == HgFiredFromType.Enemy)
+                    var munition = this as _MunitionBase;
+                    if (munition.FiredFromType == HgFiredFromType.Enemy)
                     {
                         color = _core.DirectX.Materials.Raw.Red;
                     }
@@ -780,7 +780,7 @@ namespace NebulaSiege.Sprites
                         color = _core.DirectX.Materials.Raw.Green;
                     }
 
-                    if (projectile.Weapon.ExplodesOnImpact)
+                    if (munition.Weapon.ExplodesOnImpact)
                     {
                         size = 2;
                     }

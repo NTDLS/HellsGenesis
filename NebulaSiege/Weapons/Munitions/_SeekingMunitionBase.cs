@@ -4,18 +4,18 @@ using NebulaSiege.Sprites;
 using NebulaSiege.Weapons;
 using System;
 
-namespace HellsGenesis.Weapons.Projectiles
+namespace HellsGenesis.Weapons.Munitions
 {
     /// <summary>
-    /// Seeking projectiles do not lock on to targets, but they will follow a target withing some defined parameters.
+    /// Seeking munitions do not lock on to targets, but they will follow a target withing some defined parameters.
     /// </summary>
-    internal class _SeekingProjectileBase : _ProjectileBase
+    internal class _SeekingMunitionBase : _MunitionBase
     {
         public int MaxObservationDistance { get; set; } = 1000;
         public int MaxObservationAngleDegrees { get; set; } = 20;
         public int RotationRateInDegrees { get; set; } = 4;
 
-        public _SeekingProjectileBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath, NsPoint xyOffset = null)
+        public _SeekingMunitionBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, xyOffset)
         {
         }

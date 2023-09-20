@@ -6,9 +6,9 @@ using NebulaSiege.Weapons;
 using System.Drawing;
 using System.IO;
 
-namespace HellsGenesis.Weapons.Projectiles
+namespace HellsGenesis.Weapons.Munitions
 {
-    internal class ProjectileThunderstrikeMissile : _SeekingProjectileBase
+    internal class MunitionThunderstrikeMissile : _SeekingMunitionBase
     {
         private const string imagePath = @"Graphics\Weapon\ThunderstrikeMissile.png";
 
@@ -16,7 +16,7 @@ namespace HellsGenesis.Weapons.Projectiles
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public ProjectileThunderstrikeMissile(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, NsPoint xyOffset = null)
+        public MunitionThunderstrikeMissile(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, xyOffset)
         {
             MaxObservationDistance = 1000;

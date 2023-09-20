@@ -1,4 +1,4 @@
-﻿using HellsGenesis.Weapons.Projectiles;
+﻿using HellsGenesis.Weapons.Munitions;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
@@ -23,9 +23,9 @@ namespace NebulaSiege.Weapons
             FireDelayMilliseconds = 500;
         }
 
-        public override _ProjectileBase CreateProjectile(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new ProjectilePhotonTorpedo(_core, this, _owner, xyOffset);
+            return new MunitionPhotonTorpedo(_core, this, _owner, xyOffset);
         }
     }
 }

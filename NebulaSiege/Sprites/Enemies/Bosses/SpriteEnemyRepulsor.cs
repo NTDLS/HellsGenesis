@@ -99,7 +99,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
         private double fallbackDistance;
         private NsAngle fallToAngle;
         private AIMode mode = AIMode.Approaching;
-        private int projectilesRemainingBeforeTailing = 0;
+        private int munitionsRemainingBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
         public override void ApplyIntelligence(NsPoint displacementVector)
@@ -174,7 +174,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
                 else
                 {
                     mode = AIMode.Tailing;
-                    projectilesRemainingBeforeTailing = TotalAvailableSecondaryWeaponRounds();
+                    munitionsRemainingBeforeTailing = TotalAvailableSecondaryWeaponRounds();
                     hpRemainingBeforeTailing = HullHealth;
                 }
             }
@@ -201,7 +201,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
                 //We we get too close, do too much damage or they fire at us enough, they fall back and come in again
                 if (distanceToPlayer < distanceToKeep / 2.0
                     || hpRemainingBeforeTailing - HullHealth > 2
-                    || projectilesRemainingBeforeTailing - TotalAvailableSecondaryWeaponRounds() > 15)
+                    || munitionsRemainingBeforeTailing - TotalAvailableSecondaryWeaponRounds() > 15)
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;

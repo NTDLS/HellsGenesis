@@ -1,4 +1,4 @@
-﻿using HellsGenesis.Weapons.Projectiles;
+﻿using HellsGenesis.Weapons.Munitions;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
@@ -187,14 +187,14 @@ namespace NebulaSiege.Sprites
             base.Explode();
         }
 
-        public override bool TryProjectileHit(NsPoint displacementVector, _ProjectileBase projectile, NsPoint hitTestPosition)
+        public override bool TryMunitionHit(NsPoint displacementVector, _MunitionBase munition, NsPoint hitTestPosition)
         {
-            if (projectile.FiredFromType == HgFiredFromType.Enemy)
+            if (munition.FiredFromType == HgFiredFromType.Enemy)
             {
                 if (Intersects(hitTestPosition))
                 {
                     //We don't auto delete the player because there is only one instance, the engine always assumes its valid.
-                    Hit(projectile);
+                    Hit(munition);
                     return true;
                 }
             }

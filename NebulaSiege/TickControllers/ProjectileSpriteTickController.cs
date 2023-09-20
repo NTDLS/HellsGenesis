@@ -1,4 +1,4 @@
-﻿using HellsGenesis.Weapons.Projectiles;
+﻿using HellsGenesis.Weapons.Munitions;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Managers;
@@ -11,9 +11,9 @@ using System.Collections.Generic;
 
 namespace NebulaSiege.Controller
 {
-    internal class ProjectileSpriteTickController : _SpriteTickControllerBase<_ProjectileBase>
+    internal class MunitionSpriteTickController : _SpriteTickControllerBase<_MunitionBase>
     {
-        public ProjectileSpriteTickController(EngineCore core, EngineSpriteManager manager)
+        public MunitionSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)
         {
         }
@@ -29,37 +29,37 @@ namespace NebulaSiege.Controller
             objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<_SpriteEnemyPeonBase>());
             objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
 
-            foreach (var projectile in VisibleOfType<_ProjectileBase>())
+            foreach (var munition in VisibleOfType<_MunitionBase>())
             {
-                projectile.ApplyMotion(displacementVector); //Move the projectile.
+                munition.ApplyMotion(displacementVector); //Move the munition.
 
-                if (TestObjectCollisionsAlongProjectilePath(projectile, objectsThatCanBeHit, displacementVector))
+                if (TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit, displacementVector))
                 {
-                    projectile.Explode();
+                    munition.Explode();
                 }
 
-                projectile.ApplyIntelligence(displacementVector);
+                munition.ApplyIntelligence(displacementVector);
             }
         }
 
         /// <summary>
-        /// Takes the position of a projectile object after it has been moved and tests each location
+        /// Takes the position of a munition object after it has been moved and tests each location
         ///     betwwen where it ended up and where it should have come from given its velocity.
         /// </summary>
         /// <returns></returns>
-        public bool TestObjectCollisionsAlongProjectilePath(_ProjectileBase projectile, List<_SpriteShipBase> objectsThatCanBeHit, NsPoint displacementVector)
+        public bool TestObjectCollisionsAlongMunitionPath(_MunitionBase munition, List<_SpriteShipBase> objectsThatCanBeHit, NsPoint displacementVector)
         {
-            var hitTestPosition = projectile.Location.ToWriteableCopy(); //Grab the new location of the projectile.
+            var hitTestPosition = munition.Location.ToWriteableCopy(); //Grab the new location of the munition.
 
-            //Loop backwards and hit-test each position along the projectiles path.
-            for (int i = 0; i < projectile.Velocity.MaxSpeed; i++)
+            //Loop backwards and hit-test each position along the munitions path.
+            for (int i = 0; i < munition.Velocity.MaxSpeed; i++)
             {
-                hitTestPosition.X -= projectile.Velocity.Angle.X;
-                hitTestPosition.Y -= projectile.Velocity.Angle.Y;
+                hitTestPosition.X -= munition.Velocity.Angle.X;
+                hitTestPosition.Y -= munition.Velocity.Angle.Y;
 
                 foreach (var obj in objectsThatCanBeHit)
                 {
-                    if (obj.TryProjectileHit(displacementVector, projectile, hitTestPosition))
+                    if (obj.TryMunitionHit(displacementVector, munition, hitTestPosition))
                     {
                         return true;
                     }
@@ -69,21 +69,21 @@ namespace NebulaSiege.Controller
             return false;
         }
 
-        public _ProjectileBase Create(_WeaponBase weapon, NsPoint xyOffset = null)
+        public _MunitionBase Create(_WeaponBase weapon, NsPoint xyOffset = null)
         {
             lock (SpriteManager.Collection)
             {
-                var obj = weapon.CreateProjectile(xyOffset, null);
+                var obj = weapon.CreateMunition(xyOffset, null);
                 SpriteManager.Collection.Add(obj);
                 return obj;
             }
         }
 
-        public _ProjectileBase CreateLocked(_WeaponBase weapon, _SpriteBase lockedTarget, NsPoint xyOffset = null)
+        public _MunitionBase CreateLocked(_WeaponBase weapon, _SpriteBase lockedTarget, NsPoint xyOffset = null)
         {
             lock (SpriteManager.Collection)
             {
-                var obj = weapon.CreateProjectile(xyOffset, lockedTarget);
+                var obj = weapon.CreateMunition(xyOffset, lockedTarget);
                 SpriteManager.Collection.Add(obj);
                 return obj;
             }

@@ -1,4 +1,4 @@
-﻿using HellsGenesis.Weapons.Projectiles;
+﻿using HellsGenesis.Weapons.Munitions;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
@@ -37,14 +37,14 @@ namespace NebulaSiege.Weapons
                 if (RoundQuantity > 0)
                 {
                     var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new NsPoint(5, 5));
-                    _core.Sprites.Projectiles.Create(this, pointRight);
+                    _core.Sprites.Munitions.Create(this, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0)
                 {
                     var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new NsPoint(5, 5));
-                    _core.Sprites.Projectiles.Create(this, pointLeft);
+                    _core.Sprites.Munitions.Create(this, pointLeft);
                     RoundQuantity--;
                 }
 
@@ -55,9 +55,9 @@ namespace NebulaSiege.Weapons
             return false;
         }
 
-        public override _ProjectileBase CreateProjectile(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new ProjectileVulcanCannon(_core, this, _owner, xyOffset);
+            return new MunitionVulcanCannon(_core, this, _owner, xyOffset);
         }
     }
 }

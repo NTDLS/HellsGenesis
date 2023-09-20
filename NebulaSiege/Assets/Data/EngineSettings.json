@@ -22,7 +22,7 @@
   "MinEnemySpeed": 5,
   "MaxEnemySpeed": 10,
   "FrameLimiter": 60.0,
-  "ProjectileSceneDistanceLimit": 1500.0,
+  "MunitionSceneDistanceLimit": 1500.0,
   "EnemySceneDistanceLimit": 5000.0,
   "OverdrawScale": 1.5
 }

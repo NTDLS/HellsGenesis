@@ -7,9 +7,9 @@ using NebulaSiege.Utility;
 using NebulaSiege.Weapons;
 using System;
 
-namespace HellsGenesis.Weapons.Projectiles
+namespace HellsGenesis.Weapons.Munitions
 {
-    internal class _ProjectileBase : _SpriteBase
+    internal class _MunitionBase : _SpriteBase
     {
         public HgFiredFromType FiredFromType { get; private set; }
         public _WeaponBase Weapon { get; private set; }
@@ -17,7 +17,7 @@ namespace HellsGenesis.Weapons.Projectiles
         public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
 
-        public _ProjectileBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath, NsPoint xyOffset = null)
+        public _MunitionBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath, NsPoint xyOffset = null)
             : base(core)
         {
             Initialize(imagePath);
@@ -74,10 +74,10 @@ namespace HellsGenesis.Weapons.Projectiles
 
         public override void ApplyMotion(NsPoint displacementVector)
         {
-            if (X < -_core.Settings.ProjectileSceneDistanceLimit
-                || X >= _core.Display.TotalCanvasSize.Width + _core.Settings.ProjectileSceneDistanceLimit
-                || Y < -_core.Settings.ProjectileSceneDistanceLimit
-                || Y >= _core.Display.TotalCanvasSize.Height + _core.Settings.ProjectileSceneDistanceLimit)
+            if (X < -_core.Settings.MunitionSceneDistanceLimit
+                || X >= _core.Display.TotalCanvasSize.Width + _core.Settings.MunitionSceneDistanceLimit
+                || Y < -_core.Settings.MunitionSceneDistanceLimit
+                || Y >= _core.Display.TotalCanvasSize.Height + _core.Settings.MunitionSceneDistanceLimit)
             {
                 QueueForDelete();
                 return;

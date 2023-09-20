@@ -6,9 +6,9 @@ using NebulaSiege.Weapons;
 using System.Drawing;
 using System.IO;
 
-namespace HellsGenesis.Weapons.Projectiles
+namespace HellsGenesis.Weapons.Munitions
 {
-    internal class ProjectileGuidedFragMissile : _GuidedProjectileBase
+    internal class MunitionGuidedFragMissile : _GuidedMunitionBase
     {
         private const string imagePath = @"Graphics\Weapon\GuidedFragMissile.png";
 
@@ -16,7 +16,7 @@ namespace HellsGenesis.Weapons.Projectiles
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public ProjectileGuidedFragMissile(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom,
+        public MunitionGuidedFragMissile(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom,
              _SpriteBase lockedTarget = null, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
