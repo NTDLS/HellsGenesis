@@ -39,6 +39,10 @@
           "Rounds": 100000
         },
         {
+          "Type": "WeaponThunderstrikeMissile",
+          "Rounds": 100000
+        },
+        {
           "Type": "WeaponDualVulcanCannon",
           "Rounds": 100000
         },

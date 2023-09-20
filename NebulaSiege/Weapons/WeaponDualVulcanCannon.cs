@@ -2,6 +2,7 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons.Bullets;
 
 namespace NebulaSiege.Weapons
 {
@@ -52,7 +53,11 @@ namespace NebulaSiege.Weapons
                 return true;
             }
             return false;
+        }
 
+        public override _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        {
+            return new BulletVulcanCannon(_core, this, _owner, xyOffset);
         }
     }
 }

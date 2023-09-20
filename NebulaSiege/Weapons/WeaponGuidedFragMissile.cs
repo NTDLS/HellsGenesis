@@ -35,9 +35,9 @@ namespace NebulaSiege.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override _BulletBase CreateBullet(_SpriteBase lockedTarget, NsPoint xyOffset = null)
+        public override _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new BulletGuidedFragMissile(_core, this, _owner, lockedTarget, xyOffset);
+            return new BulletGuidedFragMissile(_core, this, _owner, targetOfLock, xyOffset);
         }
 
         public override bool Fire()

@@ -8,9 +8,8 @@ namespace NebulaSiege.Weapons.Bullets
     {
         private const string imagePath = @"Graphics\Weapon\BulletPhotonTorpedo.png";
 
-        public BulletPhotonTorpedo(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom,
-             _SpriteBase lockedTarget = null, NsPoint xyOffset = null)
-            : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
+        public BulletPhotonTorpedo(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, NsPoint xyOffset = null)
+            : base(core, weapon, firedFrom, imagePath, xyOffset)
         {
             Initialize(imagePath);
         }

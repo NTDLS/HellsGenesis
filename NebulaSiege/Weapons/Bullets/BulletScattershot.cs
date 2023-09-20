@@ -12,9 +12,8 @@ namespace NebulaSiege.Weapons.Bullets
         private readonly int imageCount = 4;
         private readonly int selectedImageIndex = 0;
 
-        public BulletScattershot(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom,
-             _SpriteBase lockedTarget = null, NsPoint xyOffset = null)
-            : base(core, weapon, firedFrom, null, lockedTarget, xyOffset)
+        public BulletScattershot(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, NsPoint xyOffset = null)
+            : base(core, weapon, firedFrom, null, xyOffset)
         {
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));

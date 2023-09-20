@@ -1,5 +1,7 @@
 ﻿using NebulaSiege.Engine;
+using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
+using NebulaSiege.Weapons.Bullets;
 
 namespace NebulaSiege.Weapons
 {
@@ -23,6 +25,11 @@ namespace NebulaSiege.Weapons
             AngleVarianceDegrees = 1.5;
             SpeedVariancePercent = 0.05;
             RecoilAmount = 0.05;
+        }
+
+        public override _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        {
+            return new BulletVulcanCannon(_core, this, _owner, xyOffset);
         }
     }
 }

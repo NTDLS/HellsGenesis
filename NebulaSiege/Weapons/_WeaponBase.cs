@@ -53,13 +53,14 @@ namespace NebulaSiege.Weapons
             Name = name;
         }
 
-        public virtual _BulletBase CreateBullet(_SpriteBase lockedTarget, NsPoint xyOffset = null)
+        public virtual _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase lockedTarget = null)
         {
             if (_owner == null)
             {
                 throw new ArgumentNullException("Weapon is not owned.");
             }
-            return new BulletGeneric(_core, this, _owner, @"Graphics\Weapon\BulletGeneric.png", lockedTarget, xyOffset);
+            throw new Exception("Create bullet should always be overridden by the owning weapon.");
+
         }
 
         public virtual void ApplyIntelligence(NsPoint displacementVector, _SpriteBase wouldFireAt)

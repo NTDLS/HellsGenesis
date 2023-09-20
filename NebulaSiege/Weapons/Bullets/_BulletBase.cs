@@ -12,19 +12,16 @@ namespace NebulaSiege.Weapons.Bullets
     {
         public HgFiredFromType FiredFromType { get; private set; }
         public _WeaponBase Weapon { get; private set; }
-        public _SpriteBase LockedTarget { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
         public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
 
-        public _BulletBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath,
-             _SpriteBase lockedTarget = null, NsPoint xyOffset = null)
+        public _BulletBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath, NsPoint xyOffset = null)
             : base(core)
         {
             Initialize(imagePath);
 
             Weapon = weapon;
-            LockedTarget = lockedTarget;
             Velocity.ThrottlePercentage = 1.0;
 
             RadarDotSize = new NsPoint(1, 1);

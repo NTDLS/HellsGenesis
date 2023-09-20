@@ -73,7 +73,7 @@ namespace NebulaSiege.Controller
         {
             lock (SpriteManager.Collection)
             {
-                var obj = weapon.CreateBullet(null, xyOffset);
+                var obj = weapon.CreateBullet(xyOffset, null);
                 SpriteManager.Collection.Add(obj);
                 return obj;
             }
@@ -83,7 +83,7 @@ namespace NebulaSiege.Controller
         {
             lock (SpriteManager.Collection)
             {
-                var obj = weapon.CreateBullet(lockedTarget, xyOffset);
+                var obj = weapon.CreateBullet(xyOffset, lockedTarget);
                 SpriteManager.Collection.Add(obj);
                 return obj;
             }

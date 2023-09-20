@@ -23,9 +23,9 @@ namespace NebulaSiege.Weapons
             FireDelayMilliseconds = 500;
         }
 
-        public override _BulletBase CreateBullet(_SpriteBase lockedTarget, NsPoint xyOffset = null)
+        public override _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new BulletPhotonTorpedo(_core, this, _owner, lockedTarget, xyOffset);
+            return new BulletPhotonTorpedo(_core, this, _owner,  xyOffset);
         }
     }
 }

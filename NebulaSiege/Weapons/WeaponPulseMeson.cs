@@ -33,9 +33,9 @@ namespace NebulaSiege.Weapons
             RecoilAmount = 0.65;
         }
 
-        public override _BulletBase CreateBullet(_SpriteBase lockedTarget, NsPoint xyOffset = null)
+        public override _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new BulletPulseMeson(_core, this, _owner, lockedTarget, xyOffset);
+            return new BulletPulseMeson(_core, this, _owner, xyOffset);
         }
 
         public override bool Fire()
