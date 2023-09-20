@@ -6,7 +6,7 @@
  DefaultDirName                  = {commonpf}\NetworkDLS\Nebula Siege
  DefaultGroupName                = NetworkDLS\Nebula Siege
  UninstallDisplayIcon            = {app}\NebulaSiege.exe
- SetupIconFile                   = HG.ico
+ SetupIconFile                   = NebulaSiege\Resources\NebulaSiege.ico
  PrivilegesRequired              = admin
  Uninstallable                   = Yes
  Compression                     = bZIP/9
