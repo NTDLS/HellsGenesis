@@ -1,14 +1,14 @@
-﻿using NebulaSiege.Engine;
+﻿using HellsGenesis.Weapons.Projectiles;
+using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
-using NebulaSiege.Weapons.Bullets;
 
 namespace NebulaSiege.Weapons
 {
     internal class WeaponPhotonTorpedo : _WeaponBase
     {
         static new string Name { get; } = "Photon Torpedo";
-        private const string soundPath = @"Sounds\Weapons\BulletPhotonTorpedo.wav";
+        private const string soundPath = @"Sounds\Weapons\PhotonTorpedo.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponPhotonTorpedo(EngineCore core, _SpriteShipBase owner)
@@ -23,9 +23,9 @@ namespace NebulaSiege.Weapons
             FireDelayMilliseconds = 500;
         }
 
-        public override _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override _ProjectileBase CreateProjectile(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new BulletPhotonTorpedo(_core, this, _owner,  xyOffset);
+            return new ProjectilePhotonTorpedo(_core, this, _owner, xyOffset);
         }
     }
 }

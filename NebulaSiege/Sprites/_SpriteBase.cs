@@ -1,10 +1,10 @@
-﻿using NebulaSiege.Engine;
+﻿using HellsGenesis.Weapons.Projectiles;
+using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites.Enemies;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
-using NebulaSiege.Weapons.Bullets;
 using SharpDX.Mathematics.Interop;
 using System;
 using System.Collections.Generic;
@@ -417,12 +417,12 @@ namespace NebulaSiege.Sprites
         }
 
         /// <summary>
-        /// Hits this object with a given bullet.
+        /// Hits this object with a given projectile.
         /// </summary>
         /// <returns></returns>
-        public virtual void Hit(_BulletBase bullet)
+        public virtual void Hit(_ProjectileBase projectile)
         {
-            Hit(bullet?.Weapon?.Damage ?? 0);
+            Hit(projectile?.Weapon?.Damage ?? 0);
         }
 
         /// <summary>
@@ -764,14 +764,14 @@ namespace NebulaSiege.Sprites
                 {
                     _core.DirectX.FillTriangleAt(renderTarget, x, y, 3, _core.DirectX.Materials.Brushes.WhiteSmoke);
                 }
-                else if (this is _BulletBase)
+                else if (this is _ProjectileBase)
                 {
                     float size;
 
                     RawColor4 color = _core.DirectX.Materials.Raw.Blue;
 
-                    var bullet = this as _BulletBase;
-                    if (bullet.FiredFromType == HgFiredFromType.Enemy)
+                    var projectile = this as _ProjectileBase;
+                    if (projectile.FiredFromType == HgFiredFromType.Enemy)
                     {
                         color = _core.DirectX.Materials.Raw.Red;
                     }
@@ -780,7 +780,7 @@ namespace NebulaSiege.Sprites
                         color = _core.DirectX.Materials.Raw.Green;
                     }
 
-                    if (bullet.Weapon.ExplodesOnImpact)
+                    if (projectile.Weapon.ExplodesOnImpact)
                     {
                         size = 2;
                     }

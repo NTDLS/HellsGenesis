@@ -1,20 +1,21 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
+using NebulaSiege.Weapons;
 using System;
 
-namespace NebulaSiege.Weapons.Bullets
+namespace HellsGenesis.Weapons.Projectiles
 {
     /// <summary>
-    /// Seeking bullets do not lock on to targets, but they will follow a target withing some defined parameters.
+    /// Seeking projectiles do not lock on to targets, but they will follow a target withing some defined parameters.
     /// </summary>
-    internal class _SeekingBulletBase : _BulletBase
+    internal class _SeekingProjectileBase : _ProjectileBase
     {
         public int MaxObservationDistance { get; set; } = 1000;
         public int MaxObservationAngleDegrees { get; set; } = 20;
         public int RotationRateInDegrees { get; set; } = 4;
 
-        public _SeekingBulletBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath, NsPoint xyOffset = null)
+        public _SeekingProjectileBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, xyOffset)
         {
         }

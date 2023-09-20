@@ -1,15 +1,15 @@
-﻿using NebulaSiege.Engine;
+﻿using HellsGenesis.Weapons.Projectiles;
+using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
-using NebulaSiege.Weapons.Bullets;
 
 namespace NebulaSiege.Weapons
 {
     internal class WeaponPulseMeson : _WeaponBase
     {
         static new string Name { get; } = "Pulse Meson";
-        private const string soundPath = @"Sounds\Weapons\WeaponPulseMeson.wav";
+        private const string soundPath = @"Sounds\Weapons\PulseMeson.wav";
         private const float soundVolumne = 0.4f;
 
         private bool _toggle = false;
@@ -33,9 +33,9 @@ namespace NebulaSiege.Weapons
             RecoilAmount = 0.65;
         }
 
-        public override _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override _ProjectileBase CreateProjectile(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new BulletPulseMeson(_core, this, _owner, xyOffset);
+            return new ProjectilePulseMeson(_core, this, _owner, xyOffset);
         }
 
         public override bool Fire()
@@ -48,12 +48,12 @@ namespace NebulaSiege.Weapons
                 if (_toggle)
                 {
                     var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new NsPoint(10, 10));
-                    _core.Sprites.Bullets.Create(this, pointRight);
+                    _core.Sprites.Projectiles.Create(this, pointRight);
                 }
                 else
                 {
                     var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new NsPoint(10, 10));
-                    _core.Sprites.Bullets.Create(this, pointLeft);
+                    _core.Sprites.Projectiles.Create(this, pointLeft);
                 }
 
                 _toggle = !_toggle;

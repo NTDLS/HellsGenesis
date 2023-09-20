@@ -1,6 +1,6 @@
 {
-  "EnableSpriteInterrogation": true,
-  "HighlightNatrualBounds": true,
+  "EnableSpriteInterrogation": false,
+  "HighlightNatrualBounds": false,
   "HighlightAllSprites": false,
   "Resolution": "1440, 810",
   "FullScreen": false,
@@ -22,7 +22,7 @@
   "MinEnemySpeed": 5,
   "MaxEnemySpeed": 10,
   "FrameLimiter": 60.0,
-  "BulletSceneDistanceLimit": 1500.0,
+  "ProjectileSceneDistanceLimit": 1500.0,
   "EnemySceneDistanceLimit": 5000.0,
-  "OverdrawScale": 2.0
+  "OverdrawScale": 1.5
 }

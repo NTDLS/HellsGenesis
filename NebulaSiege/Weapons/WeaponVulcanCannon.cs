@@ -1,14 +1,14 @@
-﻿using NebulaSiege.Engine;
+﻿using HellsGenesis.Weapons.Projectiles;
+using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
-using NebulaSiege.Weapons.Bullets;
 
 namespace NebulaSiege.Weapons
 {
     internal class WeaponVulcanCannon : _WeaponBase
     {
         static new string Name { get; } = "Vulcan Cannon";
-        private const string soundPath = @"Sounds\Weapons\WeaponVulcanCannon.wav";
+        private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponVulcanCannon(EngineCore core, _SpriteShipBase owner)
@@ -27,9 +27,9 @@ namespace NebulaSiege.Weapons
             RecoilAmount = 0.05;
         }
 
-        public override _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override _ProjectileBase CreateProjectile(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new BulletVulcanCannon(_core, this, _owner, xyOffset);
+            return new ProjectileVulcanCannon(_core, this, _owner, xyOffset);
         }
     }
 }

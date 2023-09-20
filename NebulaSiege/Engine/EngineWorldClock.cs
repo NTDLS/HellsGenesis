@@ -113,7 +113,7 @@ namespace NebulaSiege.Engine
 
             _core.Sprites.Enemies.ExecuteWorldClockTick(displacementVector);
             _core.Sprites.Particles.ExecuteWorldClockTick(displacementVector);
-            _core.Sprites.Bullets.ExecuteWorldClockTick(displacementVector);
+            _core.Sprites.Projectiles.ExecuteWorldClockTick(displacementVector);
             _core.Sprites.Stars.ExecuteWorldClockTick(displacementVector);
             _core.Sprites.Animations.ExecuteWorldClockTick(displacementVector);
             _core.Sprites.TextBlocks.ExecuteWorldClockTick(displacementVector);

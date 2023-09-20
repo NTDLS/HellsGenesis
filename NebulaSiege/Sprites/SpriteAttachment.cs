@@ -1,7 +1,7 @@
-﻿using NebulaSiege.Engine;
+﻿using HellsGenesis.Weapons.Projectiles;
+using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
-using NebulaSiege.Weapons.Bullets;
 using System.Drawing;
 
 namespace NebulaSiege.Sprites
@@ -20,13 +20,13 @@ namespace NebulaSiege.Sprites
             Velocity = new HgVelocity();
         }
 
-        public override bool TryBulletHit(NsPoint displacementVector, _BulletBase bullet, NsPoint hitTestPosition)
+        public override bool TryProjectileHit(NsPoint displacementVector, _ProjectileBase projectile, NsPoint hitTestPosition)
         {
-            if (bullet.FiredFromType == HgFiredFromType.Player)
+            if (projectile.FiredFromType == HgFiredFromType.Player)
             {
                 if (Intersects(hitTestPosition))
                 {
-                    Hit(bullet);
+                    Hit(projectile);
                     if (HullHealth <= 0)
                     {
                         Explode();

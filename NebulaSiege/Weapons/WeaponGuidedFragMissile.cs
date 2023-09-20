@@ -1,15 +1,15 @@
-﻿using NebulaSiege.Engine;
+﻿using HellsGenesis.Weapons.Projectiles;
+using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
-using NebulaSiege.Weapons.Bullets;
 
 namespace NebulaSiege.Weapons
 {
     internal class WeaponGuidedFragMissile : _WeaponBase
     {
         static new string Name { get; } = "Guided Frag Missile";
-        private const string soundPath = @"Sounds\Weapons\WeaponGuidedFragMissile.wav";
+        private const string soundPath = @"Sounds\Weapons\GuidedFragMissile.wav";
         private const float soundVolumne = 0.4f;
 
         private bool _toggle = false;
@@ -35,9 +35,9 @@ namespace NebulaSiege.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override _ProjectileBase CreateProjectile(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new BulletGuidedFragMissile(_core, this, _owner, targetOfLock, xyOffset);
+            return new ProjectileGuidedFragMissile(_core, this, _owner, targetOfLock, xyOffset);
         }
 
         public override bool Fire()
@@ -52,12 +52,12 @@ namespace NebulaSiege.Weapons
                     if (_toggle)
                     {
                         var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new NsPoint(10, 10));
-                        _core.Sprites.Bullets.Create(this, pointRight);
+                        _core.Sprites.Projectiles.Create(this, pointRight);
                     }
                     else
                     {
                         var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new NsPoint(10, 10));
-                        _core.Sprites.Bullets.Create(this, pointLeft);
+                        _core.Sprites.Projectiles.Create(this, pointLeft);
                     }
 
                     _toggle = !_toggle;
@@ -69,12 +69,12 @@ namespace NebulaSiege.Weapons
                         if (_toggle)
                         {
                             var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new NsPoint(10, 10));
-                            _core.Sprites.Bullets.CreateLocked(this, lockedOn, pointRight);
+                            _core.Sprites.Projectiles.CreateLocked(this, lockedOn, pointRight);
                         }
                         else
                         {
                             var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new NsPoint(10, 10));
-                            _core.Sprites.Bullets.CreateLocked(this, lockedOn, pointLeft);
+                            _core.Sprites.Projectiles.CreateLocked(this, lockedOn, pointLeft);
                         }
                         _toggle = !_toggle;
                     }

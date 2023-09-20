@@ -1,9 +1,9 @@
-﻿using NebulaSiege.Engine;
+﻿using HellsGenesis.Weapons.Projectiles;
+using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility.ExtensionMethods;
-using NebulaSiege.Weapons.Bullets;
 using System;
 using System.Collections.Generic;
 
@@ -53,13 +53,13 @@ namespace NebulaSiege.Weapons
             Name = name;
         }
 
-        public virtual _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase lockedTarget = null)
+        public virtual _ProjectileBase CreateProjectile(NsPoint xyOffset, _SpriteBase lockedTarget = null)
         {
             if (_owner == null)
             {
                 throw new ArgumentNullException("Weapon is not owned.");
             }
-            throw new Exception("Create bullet should always be overridden by the owning weapon.");
+            throw new Exception("Create projectile should always be overridden by the owning weapon.");
 
         }
 
@@ -110,7 +110,7 @@ namespace NebulaSiege.Weapons
                 RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
-                _core.Sprites.Bullets.Create(this);
+                _core.Sprites.Projectiles.Create(this);
 
                 ApplyRecoil();
 

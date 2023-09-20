@@ -2,19 +2,20 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility.ExtensionMethods;
+using NebulaSiege.Weapons;
 
-namespace NebulaSiege.Weapons.Bullets
+namespace HellsGenesis.Weapons.Projectiles
 {
     /// <summary>
-    /// Locking bullets need to be locked onto a target before they are fired. They will adjust heading within given parameters to hit the locked target.
+    /// Guided projectiles need to be locked onto a target before they are fired. They will adjust heading within given parameters to hit the locked target.
     /// </summary>
-    internal class _LockingBulletBase : _BulletBase
+    internal class _GuidedProjectileBase : _ProjectileBase
     {
         public int MaxObservationAngleDegrees { get; set; } = 90;
         public int RotationRateInDegrees { get; set; } = 3;
         public _SpriteBase LockedTarget { get; private set; }
 
-        public _LockingBulletBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath,
+        public _GuidedProjectileBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath,
              _SpriteBase lockedTarget = null, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, xyOffset)
         {

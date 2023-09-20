@@ -1,15 +1,15 @@
-﻿using NebulaSiege.Engine;
+﻿using HellsGenesis.Weapons.Projectiles;
+using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
-using NebulaSiege.Weapons.Bullets;
 
 namespace NebulaSiege.Weapons
 {
     internal class WeaponDualVulcanCannon : _WeaponBase
     {
         static new string Name { get; } = "Dual Vulcan Cannon";
-        private const string soundPath = @"Sounds\Weapons\WeaponDualVulcanCannon.wav";
+        private const string soundPath = @"Sounds\Weapons\DualVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponDualVulcanCannon(EngineCore core, _SpriteShipBase owner)
@@ -37,14 +37,14 @@ namespace NebulaSiege.Weapons
                 if (RoundQuantity > 0)
                 {
                     var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new NsPoint(5, 5));
-                    _core.Sprites.Bullets.Create(this, pointRight);
+                    _core.Sprites.Projectiles.Create(this, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0)
                 {
                     var pointLeft = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle - 90, new NsPoint(5, 5));
-                    _core.Sprites.Bullets.Create(this, pointLeft);
+                    _core.Sprites.Projectiles.Create(this, pointLeft);
                     RoundQuantity--;
                 }
 
@@ -55,9 +55,9 @@ namespace NebulaSiege.Weapons
             return false;
         }
 
-        public override _BulletBase CreateBullet(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override _ProjectileBase CreateProjectile(NsPoint xyOffset, _SpriteBase targetOfLock = null)
         {
-            return new BulletVulcanCannon(_core, this, _owner, xyOffset);
+            return new ProjectileVulcanCannon(_core, this, _owner, xyOffset);
         }
     }
 }

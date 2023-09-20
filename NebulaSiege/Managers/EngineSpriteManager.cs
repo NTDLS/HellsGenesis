@@ -1,4 +1,5 @@
-﻿using NebulaSiege.Controller;
+﻿using HellsGenesis.Weapons.Projectiles;
+using NebulaSiege.Controller;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus;
@@ -6,7 +7,6 @@ using NebulaSiege.Sprites;
 using NebulaSiege.Sprites.Enemies;
 using NebulaSiege.Sprites.PowerUp;
 using NebulaSiege.Utility.ExtensionMethods;
-using NebulaSiege.Weapons.Bullets;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,7 +31,7 @@ namespace NebulaSiege.Managers
 
         public AnimationSpriteTickController Animations { get; set; }
         public AttachmentSpriteTickController Attachments { get; set; }
-        public BulletSpriteTickController Bullets { get; set; }
+        public ProjectileSpriteTickController Projectiles { get; set; }
         public DebugSpriteTickController Debugs { get; set; }
         public EnemySpriteTickController Enemies { get; set; }
         public ParticleSpriteTickController Particles { get; set; }
@@ -48,7 +48,7 @@ namespace NebulaSiege.Managers
 
             Animations = new AnimationSpriteTickController(_core, this);
             Attachments = new AttachmentSpriteTickController(_core, this);
-            Bullets = new BulletSpriteTickController(_core, this);
+            Projectiles = new ProjectileSpriteTickController(_core, this);
             Debugs = new DebugSpriteTickController(_core, this);
             Enemies = new EnemySpriteTickController(_core, this);
             Particles = new ParticleSpriteTickController(_core, this);
@@ -115,7 +115,7 @@ namespace NebulaSiege.Managers
         {
             Powerups.DeleteAll();
             Enemies.DeleteAll();
-            Bullets.DeleteAll();
+            Projectiles.DeleteAll();
             Animations.DeleteAll();
         }
 
@@ -257,7 +257,7 @@ namespace NebulaSiege.Managers
                             && y < _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
                             )
                         {
-                            if ((sprite is _SpriteEnemyBase || sprite is _BulletBase || sprite is _SpritePowerUpBase) && sprite.Visable == true)
+                            if ((sprite is _SpriteEnemyBase || sprite is _ProjectileBase || sprite is _SpritePowerUpBase) && sprite.Visable == true)
                             {
                                 sprite.RenderRadar(renderTarget, x, y);
                             }
