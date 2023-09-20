@@ -20,7 +20,7 @@ namespace NebulaSiege.Weapons
         private void InitializeWeapon()
         {
             Damage = 2;
-            FireDelayMilliseconds = 100;
+            FireDelayMilliseconds = 25;
             Speed = 20;
             AngleVarianceDegrees = 1.5;
             SpeedVariancePercent = 0.05;
