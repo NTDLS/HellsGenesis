@@ -23,8 +23,8 @@ namespace NebulaSiege.Loudouts
             {
                 var loadout = new ShipLoadout(HgPlayerClass.Debug)
                 {
-                    Speed = 7.0,
-                    Boost = 4.0,
+                    Speed = 5.0,
+                    Boost = 2.0,
                     Hull = 10000,
                     Sheilds = 10000,
                     Description = "→ The code crusader ←\n"
@@ -54,7 +54,7 @@ namespace NebulaSiege.Loudouts
                     Description = "→ Nimble Interceptor ←\n"
                         + "A nimble interceptor, designed for hit-and-run tactics\n"
                         + "and lightning-fast strikes against enemy forces.",
-                    Speed = 8.5,
+                    Speed = 4.5,
                     Boost = 1.5,
                     Hull = 500,
                     Sheilds = 100,
@@ -74,7 +74,7 @@ namespace NebulaSiege.Loudouts
                     Description = "→ Heavy Assault Cruiser ←\n"
                        + "A formidable heavy assault vessel, bristling with weaponry\n"
                        + "and to take on any adversary in head-to-head combat.",
-                    Speed = 7.5,
+                    Speed = 3.5,
                     Boost = 1.5,
                     Hull = 2500,
                     Sheilds = 3000,
@@ -94,7 +94,7 @@ namespace NebulaSiege.Loudouts
                     Description = "→ Vicious Annihilator ←\n"
                         + "Lives up to its name as a relentless annihilator,\n"
                         + "unleashing devastating firepower to obliterate foes.",
-                    Speed = 9.0,
+                    Speed = 5.0,
                     Boost = 2.5,
                     Hull = 500,
                     Sheilds = 1000,
@@ -113,7 +113,7 @@ namespace NebulaSiege.Loudouts
                     Description = "→ Titanic Dreadnought ←\n"
                         + "Titanic force of destruction, capable of withstanding\n"
                         + "immense firepower while dishing out colossal damage.",
-                    Speed = 8.0,
+                    Speed = 4.0,
                     Boost = 2.0,
                     Hull = 500,
                     Sheilds = 1000,
@@ -135,7 +135,7 @@ namespace NebulaSiege.Loudouts
                     Description = "→ Rogue Reaver ←\n"
                         + "A rogue fighter, known for its hit-and-fade tactics,\n"
                         + "striking and disappearing into the cosmos with warp speed.",
-                    Speed = 10.0,
+                    Speed = 5.5,
                     Boost = 3.5,
                     Hull = 500,
                     Sheilds = 1000,
@@ -155,7 +155,7 @@ namespace NebulaSiege.Loudouts
                     Description = "→ Stealthy Serpent ←\n"
                         + "A stealthy long distance fighter, expert in covert operations\n"
                         + "and ambushing unsuspecting adversaries with deadly precision.",
-                    Speed = 9.0,
+                    Speed = 5.0,
                     Boost = 3.5,
                     Hull = 100,
                     Sheilds = 15000,
@@ -174,7 +174,7 @@ namespace NebulaSiege.Loudouts
                         + "A sleek and versatile spacecraft, built for supremacy among the stars.\n"
                         + "It's the first choice for finesse, agility, and unmatched combat prowess\n"
                         + "without all the fuss of a powerful loadout.",
-                    Speed = 9.0,
+                    Speed = 5.0,
                     Boost = 3.5,
                     Hull = 100,
                     Sheilds = 15000,

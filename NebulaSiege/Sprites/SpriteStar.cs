@@ -20,6 +20,8 @@ namespace NebulaSiege.Sprites
             X = HgRandom.Generator.Next(0, core.Display.TotalCanvasSize.Width);
             Y = HgRandom.Generator.Next(0, core.Display.TotalCanvasSize.Height);
 
+            Velocity.MaxSpeed = 3;
+
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
                 Velocity.ThrottlePercentage = HgRandom.Generator.Next(8, 10) / 10.0;
@@ -32,8 +34,8 @@ namespace NebulaSiege.Sprites
 
         public override void ApplyMotion(NsPoint displacementVector)
         {
-            X -= displacementVector.X * Velocity.ThrottlePercentage;
-            Y -= displacementVector.Y * Velocity.ThrottlePercentage;
+            X -= displacementVector.X * Velocity.MaxSpeed * Velocity.ThrottlePercentage;
+            Y -= displacementVector.Y * Velocity.MaxSpeed * Velocity.ThrottlePercentage;
 
             if (_core.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
             {
