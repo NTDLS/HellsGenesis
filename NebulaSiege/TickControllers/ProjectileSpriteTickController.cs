@@ -1,5 +1,4 @@
-﻿using NebulaSiege.Weapons.Munitions;
-using NebulaSiege.Engine;
+﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Managers;
 using NebulaSiege.Sprites;
@@ -7,6 +6,7 @@ using NebulaSiege.Sprites.Enemies.Bosses;
 using NebulaSiege.Sprites.Enemies.Peons;
 using NebulaSiege.TickControllers;
 using NebulaSiege.Weapons;
+using NebulaSiege.Weapons.Munitions;
 using System.Collections.Generic;
 
 namespace NebulaSiege.Controller

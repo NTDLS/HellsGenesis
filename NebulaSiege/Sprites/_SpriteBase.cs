@@ -1,10 +1,10 @@
-﻿using NebulaSiege.Weapons.Munitions;
-using NebulaSiege.Engine;
+﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites.Enemies;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
+using NebulaSiege.Weapons.Munitions;
 using SharpDX.Mathematics.Interop;
 using System;
 using System.Collections.Generic;

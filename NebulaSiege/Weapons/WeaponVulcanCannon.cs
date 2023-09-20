@@ -1,7 +1,7 @@
-﻿using NebulaSiege.Weapons.Munitions;
-using NebulaSiege.Engine;
+﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
+using NebulaSiege.Weapons.Munitions;
 
 namespace NebulaSiege.Weapons
 {

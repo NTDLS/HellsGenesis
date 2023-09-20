@@ -2,7 +2,6 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
-using NebulaSiege.Weapons;
 using System.IO;
 
 namespace NebulaSiege.Weapons.Munitions

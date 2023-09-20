@@ -1,10 +1,10 @@
-﻿using NebulaSiege.Weapons.Munitions;
-using NebulaSiege.AI;
+﻿using NebulaSiege.AI;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites.PowerUp;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
+using NebulaSiege.Weapons.Munitions;
 using System;
 using System.Collections.Generic;
 

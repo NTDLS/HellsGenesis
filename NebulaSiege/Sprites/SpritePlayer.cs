@@ -1,9 +1,9 @@
-﻿using NebulaSiege.Weapons.Munitions;
-using NebulaSiege.Engine;
+﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Loudouts;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons.Munitions;
 using System;
 using System.Drawing;
 

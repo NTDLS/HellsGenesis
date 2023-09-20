@@ -1,5 +1,4 @@
-﻿using NebulaSiege.Weapons.Munitions;
-using NebulaSiege.Controller;
+﻿using NebulaSiege.Controller;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus;
@@ -7,6 +6,7 @@ using NebulaSiege.Sprites;
 using NebulaSiege.Sprites.Enemies;
 using NebulaSiege.Sprites.PowerUp;
 using NebulaSiege.Utility.ExtensionMethods;
+using NebulaSiege.Weapons.Munitions;
 using System.Collections.Generic;
 using System.Linq;
 

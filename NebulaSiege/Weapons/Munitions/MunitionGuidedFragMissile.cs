@@ -2,7 +2,6 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
-using NebulaSiege.Weapons;
 using System.Drawing;
 using System.IO;
 

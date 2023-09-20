@@ -4,7 +4,6 @@ using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Sprites.Enemies;
 using NebulaSiege.Utility;
-using NebulaSiege.Weapons;
 using System;
 
 namespace NebulaSiege.Weapons.Munitions
