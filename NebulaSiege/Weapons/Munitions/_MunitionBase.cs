@@ -7,7 +7,7 @@ using NebulaSiege.Utility;
 using NebulaSiege.Weapons;
 using System;
 
-namespace HellsGenesis.Weapons.Munitions
+namespace NebulaSiege.Weapons.Munitions
 {
     internal class _MunitionBase : _SpriteBase
     {

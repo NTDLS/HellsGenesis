@@ -3,7 +3,7 @@ using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Weapons;
 
-namespace HellsGenesis.Weapons.Munitions
+namespace NebulaSiege.Weapons.Munitions
 {
     internal class MunitionPhotonTorpedo : _EnergyMunitionBase
     {

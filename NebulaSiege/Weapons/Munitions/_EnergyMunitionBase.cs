@@ -3,7 +3,7 @@ using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Weapons;
 
-namespace HellsGenesis.Weapons.Munitions
+namespace NebulaSiege.Weapons.Munitions
 {
     /// <summary>
     /// Energy munitions just go straight - for now.... still thinkning this one out.

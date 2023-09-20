@@ -4,9 +4,9 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>Resources\HG.ico</ApplicationIcon>
-    <AssemblyName>HellsGenesis</AssemblyName>
-    <RootNamespace>HellsGenesis</RootNamespace>
+    <ApplicationIcon>Resources\NebulaSiege.ico</ApplicationIcon>
+    <AssemblyName>NebulaSiege</AssemblyName>
+    <RootNamespace>NebulaSiege</RootNamespace>
     <StartupObject>NebulaSiege.Program</StartupObject>
   </PropertyGroup>
 
@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\HG.ico" />
+    <Content Include="Resources\NebulaSiege.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,7 +5,7 @@ using NebulaSiege.Utility;
 using NebulaSiege.Weapons;
 using System.IO;
 
-namespace HellsGenesis.Weapons.Munitions
+namespace NebulaSiege.Weapons.Munitions
 {
     internal class MunitionScattershot : _ProjectileMunitionBase
     {

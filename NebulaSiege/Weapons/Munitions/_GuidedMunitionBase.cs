@@ -4,7 +4,7 @@ using NebulaSiege.Sprites;
 using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons;
 
-namespace HellsGenesis.Weapons.Munitions
+namespace NebulaSiege.Weapons.Munitions
 {
     /// <summary>
     /// Guided munitions need to be locked onto a target before they are fired. They will adjust heading within given parameters to hit the locked target.

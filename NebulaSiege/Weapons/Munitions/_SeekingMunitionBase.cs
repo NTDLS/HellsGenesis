@@ -4,7 +4,7 @@ using NebulaSiege.Sprites;
 using NebulaSiege.Weapons;
 using System;
 
-namespace HellsGenesis.Weapons.Munitions
+namespace NebulaSiege.Weapons.Munitions
 {
     /// <summary>
     /// Seeking munitions do not lock on to targets, but they will follow a target withing some defined parameters.

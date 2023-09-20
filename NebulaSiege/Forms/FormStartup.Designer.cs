@@ -68,7 +68,7 @@
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            BackgroundImage = HellsGenesis.Properties.Resources.NsSplash;
+            BackgroundImage = NebulaSiege.Properties.Resources.NsSplash;
             ClientSize = new System.Drawing.Size(650, 448);
             ControlBox = false;
             Controls.Add(buttonSettings);

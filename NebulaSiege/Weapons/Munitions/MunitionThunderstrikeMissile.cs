@@ -6,7 +6,7 @@ using NebulaSiege.Weapons;
 using System.Drawing;
 using System.IO;
 
-namespace HellsGenesis.Weapons.Munitions
+namespace NebulaSiege.Weapons.Munitions
 {
     internal class MunitionThunderstrikeMissile : _SeekingMunitionBase
     {

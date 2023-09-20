@@ -1,4 +1,4 @@
-﻿using HellsGenesis.Weapons.Munitions;
+﻿using NebulaSiege.Weapons.Munitions;
 using NebulaSiege.AI;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
