@@ -7,7 +7,7 @@ using System.IO;
 
 namespace HellsGenesis.Weapons.Projectiles
 {
-    internal class ProjectileScattershot : _ProjectileBase
+    internal class ProjectileScattershot : _BulletProjectileBase
     {
         private const string _assetPath = @"Graphics\Weapon\Scattershot";
         private readonly int imageCount = 4;

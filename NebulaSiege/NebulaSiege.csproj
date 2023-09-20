@@ -43,4 +43,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Weapons\Munitions\" />
+  </ItemGroup>
+
 </Project>

@@ -5,7 +5,7 @@ using NebulaSiege.Weapons;
 
 namespace HellsGenesis.Weapons.Projectiles
 {
-    internal class ProjectilePulseMeson : _ProjectileBase
+    internal class ProjectilePulseMeson : _EnergyProjectileBase
     {
         private const string imagePath = @"Graphics\Weapon\PulseMeson.png";
 

@@ -5,7 +5,7 @@ using NebulaSiege.Weapons;
 
 namespace HellsGenesis.Weapons.Projectiles
 {
-    internal class ProjectileVulcanCannon : _ProjectileBase
+    internal class ProjectileVulcanCannon : _BulletProjectileBase
     {
         private const string imagePath = @"Graphics\Weapon\VulcanCannon.png";
 

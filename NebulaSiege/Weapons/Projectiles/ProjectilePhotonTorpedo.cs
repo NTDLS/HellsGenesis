@@ -5,7 +5,7 @@ using NebulaSiege.Weapons;
 
 namespace HellsGenesis.Weapons.Projectiles
 {
-    internal class ProjectilePhotonTorpedo : _ProjectileBase
+    internal class ProjectilePhotonTorpedo : _EnergyProjectileBase
     {
         private const string imagePath = @"Graphics\Weapon\PhotonTorpedo.png";
 
