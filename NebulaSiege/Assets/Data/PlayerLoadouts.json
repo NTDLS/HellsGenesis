@@ -10,7 +10,7 @@
       "Hull": 10000,
       "Sheilds": 10000,
       "PrimaryWeapon": {
-        "Type": "WeaponVulcanCannon",
+        "Type": "WeaponBlunderbuss",
         "Rounds": 100000
       },
       "SecondaryWeapons": [
@@ -24,6 +24,10 @@
         },
         {
           "Type": "WeaponFragMissile",
+          "Rounds": 100000
+        },
+        {
+          "Type": "WeaponBlunderbuss",
           "Rounds": 100000
         },
         {

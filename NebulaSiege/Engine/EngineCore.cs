@@ -132,6 +132,12 @@ namespace NebulaSiege.Engine
         private void LoadPrefabs()
         {
             var playerLoadoutPath = "Data\\PlayerLoadouts.json";
+
+#if DEBUG
+            Assets.DeleteFile(playerLoadoutPath);
+#endif
+
+
             var playerLoadoutText = Assets.GetText(playerLoadoutPath);
 
             if (string.IsNullOrEmpty(playerLoadoutText) == false)

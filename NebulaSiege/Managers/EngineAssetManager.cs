@@ -68,12 +68,12 @@ namespace NebulaSiege.Managers
                 Directory.CreateDirectory(userDataPath);
             }
             string assetAbsolutePath = Path.Combine(userDataPath, assetRelativePath).Trim().Replace("\\", "/");
-            if (File.Exists(assetAbsolutePath) == false)
+            if (System.IO.File.Exists(assetAbsolutePath) == false)
             {
                 return defaultText;
             }
 
-            return File.ReadAllText(assetAbsolutePath);
+            return System.IO.File.ReadAllText(assetAbsolutePath);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace NebulaSiege.Managers
                 Directory.CreateDirectory(userDataPath);
             }
             string assetAbsolutePath = Path.Combine(userDataPath, assetRelativePath).Trim().Replace("\\", "/");
-            File.WriteAllText(assetAbsolutePath, value);
+            System.IO.File.WriteAllText(assetAbsolutePath, value);
         }
 
         /// <summary>
@@ -110,12 +110,12 @@ namespace NebulaSiege.Managers
                     return value as string;
                 }
 
-                if (File.Exists(assetAbsolutePath) == false)
+                if (System.IO.File.Exists(assetAbsolutePath) == false)
                 {
                     return defaultText;
                 }
 
-                return File.ReadAllText(assetAbsolutePath);
+                return System.IO.File.ReadAllText(assetAbsolutePath);
             }
         }
 
@@ -131,7 +131,7 @@ namespace NebulaSiege.Managers
 
             lock (_collection)
             {
-                File.WriteAllText(assetAbsolutePath, value);
+                System.IO.File.WriteAllText(assetAbsolutePath, value);
 
                 if (_collection.ContainsKey(key))
                 {
@@ -141,6 +141,18 @@ namespace NebulaSiege.Managers
                 {
                     _collection.Add(key, value);
                 }
+            }
+        }
+
+        public void DeleteFile(string assetRelativePath)
+        {
+            string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
+            string key = $"Text({assetRelativePath})";
+
+            lock (_collection)
+            {
+                System.IO.File.Delete(assetAbsolutePath);
+                _collection.Remove(key);
             }
         }
 

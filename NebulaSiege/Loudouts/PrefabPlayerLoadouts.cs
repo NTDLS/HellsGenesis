@@ -31,12 +31,13 @@ namespace NebulaSiege.Loudouts
                         + "Crude in design but equipped with advanced diagnostics and repair systems.\n"
                         + "Nearly indestructible and inconceivably fast. Its mission is to discover\n"
                         + "glitches in the vast cosmic code, ensuring a smooth journey for all that follow...",
-                    PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 100000)
+                    PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponBlunderbuss), 100000)
                 };
 
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 100000));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponScattershot), 100000));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 100000));
+                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponBlunderbuss), 100000));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponGuidedFragMissile), 100000));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponPrecisionGuidedFragMissile), 100000));
                 loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponScramsMissile), 100000));
