@@ -7,7 +7,6 @@ using NebulaSiege.Menus;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 
 namespace NebulaSiege.Engine
@@ -84,20 +83,20 @@ namespace NebulaSiege.Engine
 
         public static EngineSettings LoadSettings()
         {
-            string settingsFile = Path.Combine(@"..\..\..\Assets\Data", "EngineSettings.json");
+            var engineSettingsText = EngineAssetManager.GetUserText("EngineSettings.json");
 
-            if (File.Exists(settingsFile) == false)
+            if (string.IsNullOrEmpty(engineSettingsText))
             {
-                File.WriteAllText(settingsFile, JsonConvert.SerializeObject(new EngineSettings(), Formatting.Indented));
+                engineSettingsText = JsonConvert.SerializeObject(new EngineSettings(), Formatting.Indented);
+                EngineAssetManager.PutUserText("EngineSettings.json", engineSettingsText);
             }
 
-            return JsonConvert.DeserializeObject<EngineSettings>(File.ReadAllText(settingsFile));
+            return JsonConvert.DeserializeObject<EngineSettings>(engineSettingsText);
         }
 
         public static void SaveSettings(EngineSettings settings)
         {
-            string settingsFile = Path.Combine(@"..\..\..\Assets\Data", "EngineSettings.json");
-            File.WriteAllText(settingsFile, JsonConvert.SerializeObject(settings, Formatting.Indented));
+            EngineAssetManager.PutUserText("EngineSettings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
         }
 
         public void Render()
@@ -135,29 +134,25 @@ namespace NebulaSiege.Engine
             var playerLoadoutPath = "Data\\PlayerLoadouts.json";
             var playerLoadoutText = Assets.GetText(playerLoadoutPath);
 
-#if !DEBUG
             if (string.IsNullOrEmpty(playerLoadoutText) == false)
             {
                 PrefabPlayerLoadouts = JsonConvert.DeserializeObject<PrefabPlayerLoadouts>(playerLoadoutText);
             }
             else
             {
-#endif
-            PrefabPlayerLoadouts = new PrefabPlayerLoadouts();
+                PrefabPlayerLoadouts = new PrefabPlayerLoadouts();
 
-            PrefabPlayerLoadouts.CreateDefaults(); //We couldnt find a file, create a default loadout.
+                PrefabPlayerLoadouts.CreateDefaults(); //We couldnt find a file, create a default loadout.
 
-            JsonSerializerSettings settings = new JsonSerializerSettings
-            {
-                Converters = new JsonConverter[] { new StringEnumConverter() }
-            };
-            var defaultLoadout = JsonConvert.SerializeObject(PrefabPlayerLoadouts, Formatting.Indented, settings);
+                JsonSerializerSettings settings = new JsonSerializerSettings
+                {
+                    Converters = new JsonConverter[] { new StringEnumConverter() }
+                };
+                var defaultLoadout = JsonConvert.SerializeObject(PrefabPlayerLoadouts, Formatting.Indented, settings);
 
-            //Create the missing loadout file.
-            Assets.PutText(playerLoadoutPath, defaultLoadout);
-#if !DEBUG
+                //Create the missing loadout file.
+                Assets.PutText(playerLoadoutPath, defaultLoadout);
             }
-#endif
         }
 
         private void NewGameMenuCallback(EngineCore core, NsEngineCallbackEvent sender, object refObj)

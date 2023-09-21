@@ -1,6 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NTDLS.Determinet;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -14,8 +15,11 @@ namespace NebulaSiege.Managers
         private readonly EngineCore _core;
         private readonly Dictionary<string, object> _collection = new();
 
+#if DEBUG
         private readonly string assetRawPath = @"..\..\..\Assets";
-
+#else
+        private readonly string assetRawPath = @".\Assets";
+#endif
         public EngineAssetManager(EngineCore core)
         {
             _core = core;
@@ -48,6 +52,44 @@ namespace NebulaSiege.Managers
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Gets and caches a text files content from the asset path.
+        /// </summary>
+        /// <param name="assetRelativePath"></param>
+        /// <param name="defaultText"></param>
+        /// <returns></returns>
+        public static string GetUserText(string assetRelativePath, string defaultText = "")
+        {
+            var userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Nebula Siege");
+            if (Directory.Exists(userDataPath) == false)
+            {
+                Directory.CreateDirectory(userDataPath);
+            }
+            string assetAbsolutePath = Path.Combine(userDataPath, assetRelativePath).Trim().Replace("\\", "/");
+            if (File.Exists(assetAbsolutePath) == false)
+            {
+                return defaultText;
+            }
+
+            return File.ReadAllText(assetAbsolutePath);
+        }
+
+        /// <summary>
+        /// Saves and caches a text file into the asset path.
+        /// </summary>
+        /// <param name="assetRelativePath"></param>
+        /// <param name="value"></param>
+        public static void PutUserText(string assetRelativePath, string value)
+        {
+            var userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Nebula Siege");
+            if (Directory.Exists(userDataPath) == false)
+            {
+                Directory.CreateDirectory(userDataPath);
+            }
+            string assetAbsolutePath = Path.Combine(userDataPath, assetRelativePath).Trim().Replace("\\", "/");
+            File.WriteAllText(assetAbsolutePath, value);
         }
 
         /// <summary>

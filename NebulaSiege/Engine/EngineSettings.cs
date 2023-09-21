@@ -8,11 +8,9 @@ namespace NebulaSiege.Engine
     /// </summary>
     internal class EngineSettings
     {
-        #region Debug settings.
         public bool EnableSpriteInterrogation { get; set; } = false;
         public bool HighlightNatrualBounds { get; set; } = false;
         public bool HighlightAllSprites { get; set; } = false;
-        #endregion
 
         public Size Resolution { get; set; }
         public bool FullScreen { get; set; }

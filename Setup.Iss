@@ -44,7 +44,7 @@
  Root: HKLM; Subkey: "Software\NetworkDLS\Nebula Siege"; ValueType: STRING;ValueName: "UserAssetPath";   ValueData:"{userappdata}\NebulaSiege"; Flags: CreateValueIfDoesntExist;
 
 [Icons]
- Name: "{group}\NebulaSiege"; Filename: "{app}\NebulaSiege.exe"; Components: Game;
+ Name: "{group}\Nebula Siege"; Filename: "{app}\NebulaSiege.exe"; Components: Game;
  
 [Run]
- Filename: "{app}\HG.exe"; Description: "Run Nebula Siege now?"; Flags: postinstall nowait skipifsilent shellexec; Components: Game;
+ Filename: "{app}\NebulaSiege.exe"; Description: "Run Nebula Siege now?"; Flags: postinstall nowait skipifsilent shellexec; Components: Game;
