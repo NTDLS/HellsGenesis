@@ -16,10 +16,10 @@ namespace NebulaSiege.Loudouts
         [JsonIgnore]
         public string Name => Class.ToString();
         public string Description { get; set; }
-        public double Speed { get; set; }
-        public double Boost { get; set; }
-        public int Hull { get; set; }
-        public int Sheilds { get; set; }
+        public double MaxSpeed { get; set; }
+        public double MaxBoost { get; set; }
+        public int HullHealth { get; set; }
+        public int ShieldHealth { get; set; }
 
         public ShipLoadoutWeapon PrimaryWeapon { get; set; }
         public List<ShipLoadoutWeapon> SecondaryWeapons { get; set; } = new();

@@ -211,6 +211,16 @@ namespace NebulaSiege.Engine.GraphicsProcessing
             return textRectangle;
         }
 
+        public void DrawLine(RenderTarget renderTarget,
+            double startPointX, double startPointY, double endPointX, double endPointY,
+            SolidColorBrush brush, double strokeWidth = 1)
+        {
+            var startPoint = new RawVector2((float)startPointX, (float)startPointY);
+            var endPoint = new RawVector2((float)endPointX, (float)endPointY); 
+
+            renderTarget.DrawLine(startPoint, endPoint, brush, (float)strokeWidth);
+        }
+
         /// <summary>
         /// Draws a rectangle at the specified location.
         /// </summary>

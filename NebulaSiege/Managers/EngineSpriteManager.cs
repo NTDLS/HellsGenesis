@@ -4,6 +4,7 @@ using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus;
 using NebulaSiege.Sprites;
 using NebulaSiege.Sprites.Enemies;
+using NebulaSiege.Sprites.Player;
 using NebulaSiege.Sprites.PowerUp;
 using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons.Munitions;
@@ -60,7 +61,7 @@ namespace NebulaSiege.Managers
 
         public void Start()
         {
-            _core.Player.Sprite = new SpritePlayer(_core, _core.PrefabPlayerLoadouts.GetDefault()) { Visable = false };
+            _core.Player.Sprite = new SpriteDebugPlayer(_core) { Visable = false };
 
             PlayerStatsText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Materials.Brushes.WhiteSmoke, new NsPoint(5, 5), true);
             PlayerStatsText.Visable = false;
@@ -123,7 +124,7 @@ namespace NebulaSiege.Managers
         {
             lock (Collection)
             {
-                return Collection.Where(o => o.Name == name).SingleOrDefault() as T;
+                return Collection.Where(o => o.SpriteTag == name).SingleOrDefault() as T;
             }
         }
 
@@ -149,7 +150,7 @@ namespace NebulaSiege.Managers
             {
                 foreach (var sprite in Collection)
                 {
-                    if (sprite.Name == name)
+                    if (sprite.SpriteTag == name)
                     {
                         sprite.QueueForDelete();
                     }
@@ -197,7 +198,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public SpritePlayer InsertPlayer(SpritePlayer sprite)
+        public _SpritePlayerBase InsertPlayer(_SpritePlayerBase sprite)
         {
             lock (Collection)
             {

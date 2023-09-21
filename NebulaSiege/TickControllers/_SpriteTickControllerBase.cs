@@ -21,7 +21,7 @@ namespace NebulaSiege.TickControllers
         public List<T> Visible() => SpriteManager.VisibleOfType<T>();
         public List<T> All() => SpriteManager.OfType<T>();
         public List<subType> OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
-        public T ByAssetTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.Name == name).FirstOrDefault();
+        public T ByAssetTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
 
         public virtual void ExecuteWorldClockTick(NsPoint displacementVector) { }
 
@@ -54,7 +54,7 @@ namespace NebulaSiege.TickControllers
                 T obj = (T)Activator.CreateInstance(typeof(T), Core);
                 obj.X = x;
                 obj.Y = y;
-                obj.Name = name; SpriteManager.Collection.Add(obj);
+                obj.SpriteTag = name; SpriteManager.Collection.Add(obj);
                 return obj;
             }
         }
@@ -67,7 +67,7 @@ namespace NebulaSiege.TickControllers
                 obj.X = Core.Display.TotalCanvasSize.Width / 2;
                 obj.Y = Core.Display.TotalCanvasSize.Height / 2;
 
-                obj.Name = name;
+                obj.SpriteTag = name;
 
                 SpriteManager.Collection.Add(obj);
                 return obj;
@@ -101,7 +101,7 @@ namespace NebulaSiege.TickControllers
             lock (SpriteManager.Collection)
             {
                 T obj = (T)Activator.CreateInstance(typeof(T), Core);
-                obj.Name = name;
+                obj.SpriteTag = name;
                 SpriteManager.Collection.Add(obj);
                 return obj;
             }

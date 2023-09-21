@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NebulaSiege.Sprites.Player;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -6,6 +8,12 @@ namespace NebulaSiege.Utility
 {
     internal static class NsReflection
     {
+        public static IEnumerable<Type> GetSubClassesOf<T>()
+        {
+            var allTypes = Assembly.GetExecutingAssembly().GetTypes();
+            return allTypes.Where(type => type.IsSubclassOf(typeof(T)));
+        }
+
         public static string GetStaticPropertyValue(string typeName, string propertyName)
         {
             var type = Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);

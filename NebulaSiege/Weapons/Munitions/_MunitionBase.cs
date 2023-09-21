@@ -3,6 +3,7 @@ using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Sprites.Enemies;
+using NebulaSiege.Sprites.Player;
 using NebulaSiege.Utility;
 using System;
 
@@ -54,7 +55,7 @@ namespace NebulaSiege.Weapons.Munitions
             {
                 FiredFromType = HgFiredFromType.Enemy;
             }
-            else if (firedFrom is SpritePlayer)
+            else if (firedFrom is _SpritePlayerBase)
             {
                 FiredFromType = HgFiredFromType.Player;
             }

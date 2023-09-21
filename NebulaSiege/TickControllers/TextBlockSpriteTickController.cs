@@ -51,7 +51,7 @@ namespace NebulaSiege.Controller
             lock (SpriteManager.Collection)
             {
                 var obj = new SpriteTextBlock(Core, format, color, location, isPositionStatic);
-                obj.Name = name;
+                obj.SpriteTag = name;
                 SpriteManager.Collection.Add(obj);
                 return obj;
             }

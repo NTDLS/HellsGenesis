@@ -1,14 +1,14 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
-using NebulaSiege.Sprites;
+using NebulaSiege.Sprites.Player;
 using NebulaSiege.TickControllers;
 using NebulaSiege.Utility.ExtensionMethods;
 
 namespace NebulaSiege.Controller
 {
-    internal class PlayerSpriteTickController : _PlayerTickControllerBase<SpritePlayer>
+    internal class PlayerSpriteTickController : _PlayerTickControllerBase<_SpritePlayerBase>
     {
-        public SpritePlayer Sprite { get; set; }
+        public _SpritePlayerBase Sprite { get; set; }
 
         public PlayerSpriteTickController(EngineCore core)
             : base(core)

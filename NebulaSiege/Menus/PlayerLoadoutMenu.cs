@@ -1,8 +1,10 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
+using NebulaSiege.Sprites.Player;
 using NebulaSiege.Utility;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace NebulaSiege.Menus
 {
@@ -31,14 +33,22 @@ namespace NebulaSiege.Menus
             _shipBlurb.X = offsetX + 200;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
-            foreach (var loadout in core.PrefabPlayerLoadouts.Collection)
+            var playerTypes = NsReflection.GetSubClassesOf<_SpritePlayerBase>();
+
+            foreach (var playerType in playerTypes)
             {
-                var menuItem = CreateAndAddMenuItem(new NsPoint(offsetX + 25, offsetY), loadout.Name, loadout.Name);
+                var playerTypeInstance = NsReflection.CreateInstanceFromType<_SpritePlayerBase>(playerType, new object[] { core });
+                playerTypeInstance.SpriteTag = "MENU_SHIP_SELECT";
+                playerTypeInstance.Velocity.Angle.Degrees = 45;
+                playerTypeInstance.ThrustAnimation.Visable = true;
+                playerTypeInstance.BoostAnimation.Visable = true;
+
+                var menuItem = CreateAndAddMenuItem(new NsPoint(offsetX + 25, offsetY), playerTypeInstance.Loadout.Name, playerTypeInstance.Loadout.Name);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
-                var shipIcon = _core.Sprites.InsertPlayer(new SpritePlayer(_core, loadout) { Name = "MENU_SHIP_SELECT" });
+                var shipIcon = _core.Sprites.InsertPlayer(playerTypeInstance);
 
-                if (loadout.Name == "Debug")
+                if (playerTypeInstance.Loadout.Name == "Debug")
                 {
                     shipIcon.ThrustAnimation.Visable = true;
                 }
@@ -54,54 +64,21 @@ namespace NebulaSiege.Menus
             SelectableItems().First().Selected = true;
         }
 
-        private string GetHelpText(string name, string primaryWeapon, string secondaryWeapons,
-            string sheilds, string hullStrength, string maxSpeed, string warpDrive, string blurb)
-        {
-            string result = $"             Name : {name}\n";
-            result += $"   Primary weapon : {primaryWeapon}\n";
-            result += $"Secondary Weapons : {secondaryWeapons}\n";
-            result += $"          Sheilds : {sheilds}\n";
-            result += $"    Hull Strength : {hullStrength}\n";
-            result += $"        Max Speed : {maxSpeed}\n";
-            result += $"       Warp Drive : {warpDrive}\n";
-            result += $"\n{blurb}";
-            return result;
-        }
-
         public override void SelectionChanged(SpriteMenuItem item)
         {
-            var loadout = _core.PrefabPlayerLoadouts.GetByName(item.Key);
+            var selectedSprite = _core.Sprites.Collection.OfType<_SpritePlayerBase>()
+                .Where(o => o.SpriteTag == "MENU_SHIP_SELECT" && o.ShipClass.ToString() == item.Key).First();
 
-            string weaponName = NsReflection.GetStaticPropertyValue(loadout.PrimaryWeapon.Type, "Name");
-            string primaryWeapon = $"{weaponName} x{loadout.PrimaryWeapon.Rounds}";
-
-            string secondaryWeapons = string.Empty;
-            foreach (var weapon in loadout.SecondaryWeapons)
-            {
-                weaponName = NsReflection.GetStaticPropertyValue(weapon.Type, "Name");
-                secondaryWeapons += $"{weaponName} x{weapon.Rounds}\n{new string(' ', 20)}";
-            }
-
-            _shipBlurb.Text = GetHelpText(
-                loadout.Name,               //Name
-                primaryWeapon.Trim(),       //Primary Weapon
-                secondaryWeapons.Trim(),    //Secondary Weapon
-                $"{loadout.Sheilds:n0}",    //Sheilds
-                $"{loadout.Hull:n0}",       //Hull
-                $"{loadout.Speed:n1}",      //Speed
-                $"{loadout.Boost:n1}",      //Boost
-                $"{loadout.Description}"
-            );
+            _shipBlurb.Text = selectedSprite.GetLoadoutHelpText();
         }
 
         public override void ExecuteSelection(SpriteMenuItem item)
         {
-            var loadout = _core.PrefabPlayerLoadouts.GetByName(item.Key);
+            var selectedSprite = _core.Sprites.Collection.OfType<_SpritePlayerBase>()
+                .Where(o => o.SpriteTag == "MENU_SHIP_SELECT" && o.ShipClass.ToString() == item.Key).First();
 
-            _core.Player.Sprite.Reset(loadout);
-
+            _core.Player.Sprite.ResetLoadout(selectedSprite.Loadout);
             _core.Sprites.DeleteAllSpriteByAssetTag("MENU_SHIP_SELECT");
-
             _core.Sprites.NewGame();
         }
     }

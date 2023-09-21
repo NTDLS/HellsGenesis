@@ -39,7 +39,7 @@ namespace NebulaSiege.Sprites
 
         #region Properties.
 
-        public string Name { get; set; }
+        public string SpriteTag { get; set; }
         public uint UID { get; private set; } = EngineCore.GetNextSequentialId();
         public uint OwnerUID { get; set; }
         public List<SpriteAttachment> Attachments { get; private set; } = new();
@@ -225,7 +225,7 @@ namespace NebulaSiege.Sprites
         public _SpriteBase(EngineCore core, string name = "")
         {
             _core = core;
-            Name = name;
+            SpriteTag = name;
             RotationMode = HgRotationMode.Rotate;
             Velocity = new HgVelocity();
             Highlight = _core.Settings.HighlightAllSprites;

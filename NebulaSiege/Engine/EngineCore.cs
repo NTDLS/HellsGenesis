@@ -4,9 +4,11 @@ using NebulaSiege.Engine.Types;
 using NebulaSiege.Loudouts;
 using NebulaSiege.Managers;
 using NebulaSiege.Menus;
+using NebulaSiege.Sprites.Player;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace NebulaSiege.Engine
@@ -24,9 +26,7 @@ namespace NebulaSiege.Engine
         public EngineAssetManager Assets { get; private set; }
         public MenuTickHandler Menus { get; private set; }
 
-        public PrefabPlayerLoadouts PrefabPlayerLoadouts { get; private set; }
         public DirectX DirectX { get; private set; }
-
         public EngineSettings Settings { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
@@ -73,8 +73,6 @@ namespace NebulaSiege.Engine
             Menus = new MenuTickHandler(this);
             Player = new PlayerSpriteTickController(this);
             DirectX = new DirectX(this);
-
-            LoadPrefabs();
 
             _worldClock = new EngineWorldClock(this);
 
@@ -126,38 +124,6 @@ namespace NebulaSiege.Engine
             }
             catch
             {
-            }
-        }
-
-        private void LoadPrefabs()
-        {
-            var playerLoadoutPath = "Data\\PlayerLoadouts.json";
-
-#if DEBUG
-            Assets.DeleteFile(playerLoadoutPath);
-#endif
-
-
-            var playerLoadoutText = Assets.GetText(playerLoadoutPath);
-
-            if (string.IsNullOrEmpty(playerLoadoutText) == false)
-            {
-                PrefabPlayerLoadouts = JsonConvert.DeserializeObject<PrefabPlayerLoadouts>(playerLoadoutText);
-            }
-            else
-            {
-                PrefabPlayerLoadouts = new PrefabPlayerLoadouts();
-
-                PrefabPlayerLoadouts.CreateDefaults(); //We couldnt find a file, create a default loadout.
-
-                JsonSerializerSettings settings = new JsonSerializerSettings
-                {
-                    Converters = new JsonConverter[] { new StringEnumConverter() }
-                };
-                var defaultLoadout = JsonConvert.SerializeObject(PrefabPlayerLoadouts, Formatting.Indented, settings);
-
-                //Create the missing loadout file.
-                Assets.PutText(playerLoadoutPath, defaultLoadout);
             }
         }
 
