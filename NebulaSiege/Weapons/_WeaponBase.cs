@@ -22,7 +22,13 @@ namespace NebulaSiege.Weapons
         /// RecoilAmount is expressed in decimal percentage of thrust.
         /// </summary>
         public double RecoilAmount { get; set; } = 0;
+        /// <summary>
+        /// The variance in degrees that the loaded munition will use for an initial heading angle.
+        /// </summary>
         public double AngleVarianceDegrees { get; set; } = 0;
+        /// <summary>
+        /// The variance expressed in decimal percentage that determines the loaded munitions initial velovity.
+        /// </summary>
         public double SpeedVariancePercent { get; set; } = 0;
         public string Name { get; private set; }
         public int Speed { get; set; } = 25;

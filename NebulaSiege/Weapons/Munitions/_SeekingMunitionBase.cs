@@ -21,13 +21,32 @@ namespace NebulaSiege.Weapons.Munitions
 
         public override void ApplyIntelligence(NsPoint displacementVector)
         {
-            if (FiredFromType == HgFiredFromType.Player)
+            if (FiredFromType == HgFiredFromType.Enemy)
+            {
+                if (DistanceTo(_core.Player.Sprite) < MaxSeekingObservationDistance)
+                {
+                    var deltaAngle = DeltaAngle(_core.Player.Sprite);
+
+                    if (Math.Abs((double)deltaAngle) < MaxSeekingObservationAngleDegrees)
+                    {
+                        if (deltaAngle >= 0) //We might as well turn around clock-wise
+                        {
+                            Velocity.Angle += SeekingRotationRateInDegrees;
+                        }
+                        else if (deltaAngle < 0) //We might as well turn around counter clock-wise
+                        {
+                            Velocity.Angle -= SeekingRotationRateInDegrees;
+                        }
+                    }
+                }
+            }
+            else if (FiredFromType == HgFiredFromType.Player)
             {
                 double? smallestAngle = null;
 
                 foreach (var enemy in _core.Sprites.Enemies.Visible())
                 {
-                    if (enemy.DistanceTo(_core.Player.Sprite) < MaxSeekingObservationDistance)
+                    if (DistanceTo(enemy) < MaxSeekingObservationDistance)
                     {
                         var deltaAngle = DeltaAngle(enemy);
 
