@@ -1,14 +1,10 @@
 ﻿using NebulaSiege.Controller;
 using NebulaSiege.Engine.GraphicsProcessing;
 using NebulaSiege.Engine.Types;
-using NebulaSiege.Loudouts;
 using NebulaSiege.Managers;
 using NebulaSiege.Menus;
-using NebulaSiege.Sprites.Player;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace NebulaSiege.Engine

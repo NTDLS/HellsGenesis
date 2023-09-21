@@ -216,7 +216,7 @@ namespace NebulaSiege.Engine.GraphicsProcessing
             SolidColorBrush brush, double strokeWidth = 1)
         {
             var startPoint = new RawVector2((float)startPointX, (float)startPointY);
-            var endPoint = new RawVector2((float)endPointX, (float)endPointY); 
+            var endPoint = new RawVector2((float)endPointX, (float)endPointY);
 
             renderTarget.DrawLine(startPoint, endPoint, brush, (float)strokeWidth);
         }

@@ -4,7 +4,7 @@ using NebulaSiege.Sprites;
 using NebulaSiege.Sprites.Player;
 using NebulaSiege.Utility;
 using System.Linq;
-using System.Xml.Linq;
+using System.Threading;
 
 namespace NebulaSiege.Menus
 {
@@ -14,6 +14,8 @@ namespace NebulaSiege.Menus
     internal class PlayerLoadoutMenu : _MenuBase
     {
         private readonly SpriteMenuItem _shipBlurb;
+        private Timer _animationTimer;
+        private _SpritePlayerBase _selectedSprite;
 
         public PlayerLoadoutMenu(EngineCore core)
             : base(core)
@@ -33,7 +35,15 @@ namespace NebulaSiege.Menus
             _shipBlurb.X = offsetX + 200;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
-            var playerTypes = NsReflection.GetSubClassesOf<_SpritePlayerBase>();
+            var playerTypes = NsReflection.GetSubClassesOf<_SpritePlayerBase>().OrderBy(o=>o.Name).ToList();
+
+            //Move the debug player to the top of the list.
+            var debugPlayer = playerTypes.Where(o => o.Name.Contains("Debug")).FirstOrDefault();
+            if (debugPlayer != null)
+            {
+                playerTypes.Remove(debugPlayer);
+                playerTypes.Insert(0, debugPlayer);
+            }
 
             foreach (var playerType in playerTypes)
             {
@@ -62,18 +72,29 @@ namespace NebulaSiege.Menus
             }
 
             SelectableItems().First().Selected = true;
+
+            _animationTimer = new Timer(PlayerLoadoutMenu_Tick, null, 10, 10);
+        }
+
+        private void PlayerLoadoutMenu_Tick(object sender)
+        {
+            _selectedSprite?.Rotate(1);
         }
 
         public override void SelectionChanged(SpriteMenuItem item)
         {
-            var selectedSprite = _core.Sprites.Collection.OfType<_SpritePlayerBase>()
+            _selectedSprite = _core.Sprites.Collection.OfType<_SpritePlayerBase>()
                 .Where(o => o.SpriteTag == "MENU_SHIP_SELECT" && o.ShipClass.ToString() == item.Key).First();
 
-            _shipBlurb.Text = selectedSprite.GetLoadoutHelpText();
+            _shipBlurb.Text = _selectedSprite.GetLoadoutHelpText();
         }
 
         public override void ExecuteSelection(SpriteMenuItem item)
         {
+            _animationTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            _animationTimer.Dispose();
+
+
             var selectedSprite = _core.Sprites.Collection.OfType<_SpritePlayerBase>()
                 .Where(o => o.SpriteTag == "MENU_SHIP_SELECT" && o.ShipClass.ToString() == item.Key).First();
 

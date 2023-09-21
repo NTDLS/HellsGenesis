@@ -180,40 +180,43 @@ namespace NebulaSiege.Sprites.Player
 
         private void UpdateThrustAnimationPositions()
         {
-            if (ThrustAnimation == null || ThrustAnimation.ReadyForDeletion == true)
+            if (ReadyForDeletion == false)
             {
-                var playMode = new SpriteAnimation.PlayMode()
+                if (ThrustAnimation == null || ThrustAnimation.ReadyForDeletion == true)
                 {
-                    Replay = HgAnimationReplayMode.LoopedPlay,
-                    DeleteSpriteAfterPlay = false,
-                    ReplayDelay = new TimeSpan(0)
-                };
-                ThrustAnimation = new SpriteAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
-                {
-                    IsFixedPosition = true,
-                    Visable = false
-                };
-                ThrustAnimation.Reset();
-                _core.Sprites.Animations.InsertAt(ThrustAnimation, this);
-                ThrustAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
-            }
+                    var playMode = new SpriteAnimation.PlayMode()
+                    {
+                        Replay = HgAnimationReplayMode.LoopedPlay,
+                        DeleteSpriteAfterPlay = false,
+                        ReplayDelay = new TimeSpan(0)
+                    };
+                    ThrustAnimation = new SpriteAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
+                    {
+                        IsFixedPosition = true,
+                        Visable = false
+                    };
+                    ThrustAnimation.Reset();
+                    _core.Sprites.Animations.InsertAt(ThrustAnimation, this);
+                    ThrustAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
+                }
 
-            if (BoostAnimation == null || BoostAnimation.ReadyForDeletion == true)
-            {
-                var playMode = new SpriteAnimation.PlayMode()
+                if (BoostAnimation == null || BoostAnimation.ReadyForDeletion == true)
                 {
-                    Replay = HgAnimationReplayMode.LoopedPlay,
-                    DeleteSpriteAfterPlay = false,
-                    ReplayDelay = new TimeSpan(0)
-                };
-                BoostAnimation = new SpriteAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
-                {
-                    IsFixedPosition = true,
-                    Visable = false
-                };
-                BoostAnimation.Reset();
-                _core.Sprites.Animations.InsertAt(BoostAnimation, this);
-                BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
+                    var playMode = new SpriteAnimation.PlayMode()
+                    {
+                        Replay = HgAnimationReplayMode.LoopedPlay,
+                        DeleteSpriteAfterPlay = false,
+                        ReplayDelay = new TimeSpan(0)
+                    };
+                    BoostAnimation = new SpriteAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
+                    {
+                        IsFixedPosition = true,
+                        Visable = false
+                    };
+                    BoostAnimation.Reset();
+                    _core.Sprites.Animations.InsertAt(BoostAnimation, this);
+                    BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
+                }
             }
 
             if (ThrustAnimation != null)
