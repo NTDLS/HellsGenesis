@@ -1,6 +1,7 @@
 ﻿using NebulaSiege.Engine;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace NebulaSiege.Loudouts
 {
@@ -9,6 +10,7 @@ namespace NebulaSiege.Loudouts
     /// </summary>
     internal class PlayerShipLoadout
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         public HgPlayerClass Class { get; set; }
         [JsonIgnore]
         public int ImageIndex => (int)Class;
