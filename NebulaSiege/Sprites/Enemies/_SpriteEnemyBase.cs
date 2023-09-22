@@ -111,7 +111,7 @@ namespace NebulaSiege.Sprites.Enemies
         {
             EnemyShipLoadout loadout = null;
 
-            var loadoutText = EngineAssetManager.GetUserText($"{shipClass}.loadout.json");
+            var loadoutText = EngineAssetManager.GetUserText($"Enemy.{shipClass}.loadout.json");
 
             try
             {
@@ -131,7 +131,7 @@ namespace NebulaSiege.Sprites.Enemies
         public void SaveLoadoutToFile(EnemyShipLoadout loadout)
         {
             var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
-            EngineAssetManager.PutUserText($"{loadout.Class}.loadout.json", serializedText);
+            EngineAssetManager.PutUserText($"Enemy.{loadout.Class}.loadout.json", serializedText);
         }
 
         public void ResetLoadout(EnemyShipLoadout loadout)

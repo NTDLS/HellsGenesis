@@ -104,7 +104,7 @@ namespace NebulaSiege.Sprites.Player
         {
             PlayerShipLoadout loadout = null;
 
-            var loadoutText = EngineAssetManager.GetUserText($"{shipClass}.loadout.json");
+            var loadoutText = EngineAssetManager.GetUserText($"Player.{shipClass}.loadout.json");
 
             try
             {
@@ -124,7 +124,7 @@ namespace NebulaSiege.Sprites.Player
         public void SaveLoadoutToFile(PlayerShipLoadout loadout)
         {
             var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
-            EngineAssetManager.PutUserText($"{loadout.Class}.loadout.json", serializedText);
+            EngineAssetManager.PutUserText($"Player.{loadout.Class}.loadout.json", serializedText);
         }
 
         /// <summary>
