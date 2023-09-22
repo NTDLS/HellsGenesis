@@ -15,13 +15,19 @@ namespace NebulaSiege.Managers
     {
         private static string[] commandPrototypes = {
             "Sprite|List|typeFilter:Optional:Criterion",
-            "Sprite|Visible|uid:Required:Numeric,visible:Required:Boolean",
+            "Sprite|Visible|uid:Required:Numeric,state:Required:Boolean",
+            "Sprite|Highlight|uid:Required:Numeric,state:Required:Boolean",
             "|Cls|",
             "|Help|",
             "Sprite|Move|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric",
             "Sprite|Center|uid:Required:Numeric",
             "Sprite|Explode|uid:Required:Numeric",
-            "Sprite|Info|uid:Required:Numeric"
+            "Sprite|Info|uid:Required:Numeric",
+            "Sprite|MaxSpeed|uid:Required:Numeric,value:Required:Numeric",
+            "Sprite|MaxBoost|uid:Required:Numeric,value:Required:Numeric",
+            "Sprite|Throttle|uid:Required:Numeric,value:Required:Numeric",
+            "Sprite|Boost|uid:Required:Numeric,value:Required:Numeric",
+            "Sprite|AngleDegrees|uid:Required:Numeric,value:Required:Numeric",
         };
 
         private readonly EngineCore _core;
@@ -64,12 +70,7 @@ namespace NebulaSiege.Managers
                     var parsedCommand = CommandParser.Parse(command);
 
                     var methodToExecute = _hardDebugMethods
-                        .Where(o => o.Name.ToLower() == parsedCommand.PhysicalFunctionKey).FirstOrDefault();
-
-                    if (methodToExecute == null)
-                    {
-                        throw new Exception($"Physical function '{parsedCommand.PhysicalFunctionKey}' is not implemented.");
-                    }
+                        .Where(o => o.Name.ToLower() == parsedCommand.PhysicalFunctionKey).FirstOrDefault() ?? throw new Exception($"Physical function '{parsedCommand.PhysicalFunctionKey}' is not implemented.");
 
                     methodToExecute?.Invoke(this, new object[] { parsedCommand });
                 }
@@ -161,13 +162,73 @@ namespace NebulaSiege.Managers
             }
         }
 
+        public void DebugHandler_Sprite_AngleDegrees(DebugCommand command)
+        {
+            var uid = command.ParameterValue<uint>("uid");
+            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            if (sprite != null)
+            {
+                sprite.Velocity.Angle.Degrees = command.ParameterValue<double>("value");
+            }
+        }
+
+        public void DebugHandler_Sprite_Boost(DebugCommand command)
+        {
+            var uid = command.ParameterValue<uint>("uid");
+            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            if (sprite != null)
+            {
+                sprite.Velocity.BoostPercentage = command.ParameterValue<double>("value");
+            }
+        }
+
+        public void DebugHandler_Sprite_Throttle(DebugCommand command)
+        {
+            var uid = command.ParameterValue<uint>("uid");
+            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            if (sprite != null)
+            {
+                sprite.Velocity.ThrottlePercentage = command.ParameterValue<double>("value");
+            }
+        }
+
+        public void DebugHandler_Sprite_MaxBoost(DebugCommand command)
+        {
+            var uid = command.ParameterValue<uint>("uid");
+            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            if (sprite != null)
+            {
+                sprite.Velocity.MaxBoost = command.ParameterValue<double>("value");
+            }
+        }
+
+        public void DebugHandler_Sprite_MaxSpeed(DebugCommand command)
+        {
+            var uid = command.ParameterValue<uint>("uid");
+            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            if (sprite != null)
+            {
+                sprite.Velocity.MaxSpeed = command.ParameterValue<double>("value");
+            }
+        }
+
+        public void DebugHandler_Sprite_Highlight(DebugCommand command)
+        {
+            var uid = command.ParameterValue<uint>("uid");
+            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            if (sprite != null)
+            {
+                sprite.Highlight = command.ParameterValue<bool>("state");
+            }
+        }
+
         public void DebugHandler_Sprite_Visible(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
-                sprite.Visable = command.ParameterValue<bool>("visible");
+                sprite.Visable = command.ParameterValue<bool>("state");
             }
         }
 
