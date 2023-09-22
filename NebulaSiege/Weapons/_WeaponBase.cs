@@ -69,7 +69,7 @@ namespace NebulaSiege.Weapons
 
         }
 
-        public virtual void ApplyIntelligence(NsPoint displacementVector, _SpriteBase wouldFireAt)
+        public virtual bool ApplyWeaponsLock(NsPoint displacementVector, _SpriteBase wouldFireAt)
         {
             if (_owner == null)
             {
@@ -102,6 +102,8 @@ namespace NebulaSiege.Weapons
 
             wouldFireAt.IsLockedOn = lockOn;
             wouldFireAt.IsLockedOnSoft = softLockOn;
+
+            return lockOn || softLockOn;
         }
 
         public virtual bool Fire()

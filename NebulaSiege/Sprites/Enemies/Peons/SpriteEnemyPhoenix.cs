@@ -1,6 +1,7 @@
 ﻿using NebulaSiege.AI.Logistics;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Loudouts;
 using NebulaSiege.Utility;
 using NebulaSiege.Weapons;
 using System;
@@ -24,11 +25,31 @@ namespace NebulaSiege.Sprites.Enemies.Peons
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            Velocity.MaxBoost = 1.0;
-            Velocity.MaxSpeed = HgRandom.Between(4.0, 5.0);
+            ShipClass = HgEnemyClass.Phoenix;
 
-            SetPrimaryWeapon<WeaponScattershot>(1000);
-            AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
+            //Load the loadout from file or create a new one if it does not exist.
+            EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
+            if (loadout == null)
+            {
+                loadout = new EnemyShipLoadout(ShipClass)
+                {
+                    Description = "→ Phoenix ←\n"
+                       + "TODO: Add a description\n",
+                    MaxSpeed = 3.5,
+                    MaxBoost = 1.5,
+                    HullHealth = 2500,
+                    ShieldHealth = 3000,
+                };
+
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
+
+                SaveLoadoutToFile(loadout);
+            }
+
+            ResetLoadout(loadout);
+
 
             //AddAIController(new HostileEngagement(_core, this, _core.Player.Sprite));
             AddAIController(new Taunt(_core, this, _core.Player.Sprite));
@@ -53,6 +74,8 @@ namespace NebulaSiege.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(NsPoint displacementVector)
         {
+            double distanceToPlayer = HgMath.DistanceTo(this, _core.Player.Sprite);
+
             base.ApplyIntelligence(displacementVector);
 
             if ((DateTime.Now - lastBehaviorChangeTime).TotalMilliseconds > behaviorChangeThresholdMiliseconds)
@@ -79,24 +102,22 @@ namespace NebulaSiege.Sprites.Enemies.Peons
 
             if (IsHostile)
             {
-                double distanceToPlayer = DistanceTo(_core.Player.Sprite);
-
-                if (distanceToPlayer < 800)
+                if (distanceToPlayer < 1000)
                 {
-                    if (distanceToPlayer > 400 && HasSelectedSecondaryWeaponAndAmmo())
+                    if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
                         bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 8.0);
                         if (isPointingAtPlayer)
                         {
-                            SelectedSecondaryWeapon?.Fire();
+                            FireWeapon<WeaponDualVulcanCannon>();
                         }
                     }
-                    else if (distanceToPlayer > 0 && HasSelectedPrimaryWeaponAndAmmo())
+                    else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
                         bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 15.0);
                         if (isPointingAtPlayer)
                         {
-                            PrimaryWeapon?.Fire();
+                            FireWeapon<WeaponVulcanCannon>();
                         }
                     }
                 }

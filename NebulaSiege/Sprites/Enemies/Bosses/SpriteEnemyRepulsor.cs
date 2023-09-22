@@ -1,5 +1,6 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Loudouts;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons;
@@ -29,14 +30,34 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
             _rightGun = Attach(_imagesPath + "Gun.Right.png", true, 3);
             _thrust = Attach(_imagesPath + "Jet.png", true, 3);
 
-            _initialMaxpeed = HgRandom.Generator.Next(_core.Settings.MaxEnemySpeed - 2, _core.Settings.MaxEnemySpeed); //Upper end of the speed spectrum
-
-            Velocity.MaxSpeed = _initialMaxpeed;
-
             SetImage(_imagesPath + "Hull.png");
 
-            SetPrimaryWeapon<WeaponVulcanCannon>(1000);
-            AddSecondaryWeapon<WeaponDualVulcanCannon>(500);
+            ShipClass = HgEnemyClass.Repulsor;
+
+            //Load the loadout from file or create a new one if it does not exist.
+            EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
+            if (loadout == null)
+            {
+                loadout = new EnemyShipLoadout(ShipClass)
+                {
+                    Description = "→ Repulsor ←\n"
+                       + "TODO: Add a description\n",
+                    MaxSpeed = 3.5,
+                    MaxBoost = 1.5,
+                    HullHealth = 2500,
+                    ShieldHealth = 3000,
+                };
+
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
+
+                SaveLoadoutToFile(loadout);
+            }
+
+            ResetLoadout(loadout);
+
+            _initialMaxpeed = Velocity.MaxSpeed;
         }
 
         public override void VelocityChanged()
@@ -99,7 +120,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
         private double fallbackDistance;
         private NsAngle fallToAngle;
         private AIMode mode = AIMode.Approaching;
-        private int munitionsRemainingBeforeTailing = 0;
+        private int roundsToFireBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
         public override void ApplyIntelligence(NsPoint displacementVector)
@@ -174,7 +195,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
                 else
                 {
                     mode = AIMode.Tailing;
-                    munitionsRemainingBeforeTailing = TotalAvailableSecondaryWeaponRounds();
+                    roundsToFireBeforeTailing = 25;
                     hpRemainingBeforeTailing = HullHealth;
                 }
             }
@@ -201,7 +222,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
                 //We we get too close, do too much damage or they fire at us enough, they fall back and come in again
                 if (distanceToPlayer < distanceToKeep / 2.0
                     || hpRemainingBeforeTailing - HullHealth > 2
-                    || munitionsRemainingBeforeTailing - TotalAvailableSecondaryWeaponRounds() > 15)
+                    || roundsToFireBeforeTailing <= 0)
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;
@@ -260,20 +281,26 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
                 {
                     if (distanceToPlayer < 800)
                     {
-                        if (distanceToPlayer > 400 && HasSelectedSecondaryWeaponAndAmmo())
+                        if (distanceToPlayer > 400 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                         {
                             bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 8.0);
                             if (isPointingAtPlayer)
                             {
-                                SelectedSecondaryWeapon?.Fire();
+                                if (FireWeapon<WeaponDualVulcanCannon>())
+                                {
+                                    roundsToFireBeforeTailing++;
+                                }
                             }
                         }
-                        else if (distanceToPlayer > 0 && HasSelectedPrimaryWeaponAndAmmo())
+                        else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                         {
                             bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 15.0);
                             if (isPointingAtPlayer)
                             {
-                                PrimaryWeapon?.Fire();
+                                if (FireWeapon<WeaponVulcanCannon>())
+                                {
+                                    roundsToFireBeforeTailing++;
+                                }
                             }
                         }
                     }

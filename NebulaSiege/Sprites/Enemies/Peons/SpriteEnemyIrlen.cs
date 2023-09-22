@@ -1,5 +1,6 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Loudouts;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons;
@@ -23,8 +24,31 @@ namespace NebulaSiege.Sprites.Enemies.Peons
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            SetPrimaryWeapon<WeaponPhotonTorpedo>(5);
-            AddSecondaryWeapon<WeaponVulcanCannon>(500);
+            ShipClass = HgEnemyClass.Irlen;
+
+            //Load the loadout from file or create a new one if it does not exist.
+            EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
+            if (loadout == null)
+            {
+                loadout = new EnemyShipLoadout(ShipClass)
+                {
+                    Description = "→ Irlen ←\n"
+                       + "TODO: Add a description\n",
+                    MaxSpeed = 3.5,
+                    MaxBoost = 1.5,
+                    HullHealth = 2500,
+                    ShieldHealth = 3000,
+                };
+
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
+
+                SaveLoadoutToFile(loadout);
+            }
+
+            ResetLoadout(loadout);
+
 
             Velocity.Angle.Degrees = AngleTo(_core.Player.Sprite);
 
@@ -128,22 +152,22 @@ namespace NebulaSiege.Sprites.Enemies.Peons
 
             if (IsHostile)
             {
-                if (distanceToPlayer < 800)
+                if (distanceToPlayer < 1000)
                 {
-                    if (distanceToPlayer > 400 && HasSelectedSecondaryWeaponAndAmmo())
+                    if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
                         bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 8.0);
                         if (isPointingAtPlayer)
                         {
-                            SelectedSecondaryWeapon?.Fire();
+                            FireWeapon<WeaponDualVulcanCannon>();
                         }
                     }
-                    else if (distanceToPlayer > 0 && HasSelectedPrimaryWeaponAndAmmo())
+                    else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
                         bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 15.0);
                         if (isPointingAtPlayer)
                         {
-                            PrimaryWeapon?.Fire();
+                            FireWeapon<WeaponVulcanCannon>();
                         }
                     }
                 }

@@ -156,8 +156,6 @@ namespace NebulaSiege
                         text.AppendLine($"MaxSpeed: {enemy.Velocity.MaxSpeed:n2}");
                         text.AppendLine($"Angle: {enemy.Velocity.Angle.Degrees:n2}° {enemy.Velocity.Angle:n2}");
                         text.AppendLine($"Throttle Percent: {enemy.Velocity.ThrottlePercentage:n2}");
-                        text.AppendLine($"Primary Weapon: {enemy.PrimaryWeapon?.GetType()?.Name}");
-                        text.AppendLine($"Selected Weapon: {enemy.SelectedSecondaryWeapon?.GetType()?.Name}");
 
                         if (enemy.DefaultAIController != null)
                         {

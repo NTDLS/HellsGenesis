@@ -1,25 +1,34 @@
 ﻿using NebulaSiege.AI;
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Loudouts;
+using NebulaSiege.Managers;
 using NebulaSiege.Sprites.PowerUp;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
+using NebulaSiege.Weapons;
 using NebulaSiege.Weapons.Munitions;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NebulaSiege.Sprites.Enemies
 {
     internal class _SpriteEnemyBase : _SpriteShipBase
     {
+        public HgEnemyClass ShipClass { get; set; }
+        public EnemyShipLoadout Loadout { get; set; }
         public IAIController DefaultAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
         public int CollisionDamage { get; set; } = 25;
         public int BountyWorth { get; private set; } = 25;
         public bool IsHostile { get; set; } = true;
+        public List<_WeaponBase> Weapons { get; private set; } = new();
+
 
         public _SpriteEnemyBase(EngineCore core, int hullHealth, int bountyMultiplier)
-            : base(core)
+                : base(core)
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
@@ -76,6 +85,58 @@ namespace NebulaSiege.Sprites.Enemies
                 }
             }
             base.Explode();
+        }
+
+        public string GetLoadoutHelpText()
+        {
+            string weapons = string.Empty;
+            foreach (var weapon in Loadout.Weapons)
+            {
+                var weaponName = NsReflection.GetStaticPropertyValue(weapon.Type, "Name");
+                weapons += $"{weaponName} x{weapon.MunitionCount}\n{new string(' ', 20)}";
+            }
+
+            string result = $"          Name : {Loadout.Name}\n";
+            result += $"       Weapons : {weapons.Trim()}\n";
+            result += $"       Sheilds : {Loadout.ShieldHealth:n0}\n";
+            result += $" Hull Strength : {Loadout.HullHealth:n0}\n";
+            result += $"     Max Speed : {Loadout.MaxSpeed:n1}\n";
+            result += $"    Warp Drive : {Loadout.MaxBoost:n1}\n";
+            result += $"\n{Loadout.Description}";
+
+            return result;
+        }
+
+        public EnemyShipLoadout LoadLoadoutFromFile(HgEnemyClass shipClass)
+        {
+            EnemyShipLoadout loadout = null;
+
+            var loadoutText = EngineAssetManager.GetUserText($"{shipClass}.loadout.json");
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(loadoutText))
+                {
+                    loadout = JsonConvert.DeserializeObject<EnemyShipLoadout>(loadoutText);
+                }
+            }
+            catch
+            {
+                loadout = null;
+            }
+
+            return loadout;
+        }
+
+        public void SaveLoadoutToFile(EnemyShipLoadout loadout)
+        {
+            var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
+            EngineAssetManager.PutUserText($"{loadout.Class}.loadout.json", serializedText);
+        }
+
+        public void ResetLoadout(EnemyShipLoadout loadout)
+        {
+            Loadout = loadout;
         }
 
         public override bool TryMunitionHit(NsPoint displacementVector, _MunitionBase munition, NsPoint hitTestPosition)
@@ -179,9 +240,15 @@ namespace NebulaSiege.Sprites.Enemies
 
         public virtual void ApplyIntelligence(NsPoint displacementVector)
         {
-            if (SelectedSecondaryWeapon != null && _core.Player.Sprite != null)
+            if (Weapons != null && _core.Player.Sprite != null)
             {
-                SelectedSecondaryWeapon.ApplyIntelligence(displacementVector, _core.Player.Sprite); //Enemy lock-on to Player. :O
+                foreach (var weapon in Weapons)
+                {
+                    if (weapon.ApplyWeaponsLock(displacementVector, _core.Player.Sprite)) //Enemy lock-on to Player. :O
+                    {
+                        break;
+                    }
+                }
             }
         }
 
@@ -192,5 +259,70 @@ namespace NebulaSiege.Sprites.Enemies
         {
             DefaultAIController = value;
         }
+
+        #region Weapons selection and evaluation.
+
+        public void ClearWeapons() => Weapons.Clear();
+
+        public void AddWeapon(string weaponTypeName, int roundQuantity)
+        {
+            var weaponType = NsReflection.GetTypeByName(weaponTypeName);
+
+            var weapon = Weapons.Where(o => o.GetType() == weaponType).SingleOrDefault();
+
+            if (weapon == null)
+            {
+                weapon = NsReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
+                weapon.RoundQuantity += roundQuantity;
+                Weapons.Add(weapon);
+            }
+            else
+            {
+                weapon.RoundQuantity += roundQuantity;
+            }
+        }
+
+        public void AddWeapon<T>(int roundQuantity) where T : _WeaponBase
+        {
+            var weapon = GetWeaponOfType<T>();
+            if (weapon == null)
+            {
+                weapon = NsReflection.CreateInstanceOf<T>(new object[] { _core, this });
+                weapon.RoundQuantity += roundQuantity;
+                Weapons.Add(weapon);
+            }
+            else
+            {
+                weapon.RoundQuantity += roundQuantity;
+            }
+        }
+
+        public int TotalAvailableWeaponRounds() => (from o in Weapons select o.RoundQuantity).Sum();
+        public int TotalWeaponFiredRounds() => (from o in Weapons select o.RoundsFired).Sum();
+
+        public bool HasWeapon<T>() where T : _WeaponBase
+        {
+            var existingWeapon = (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
+            return existingWeapon != null;
+        }
+
+        public bool HasWeaponAndAmmo<T>() where T : _WeaponBase
+        {
+            var existingWeapon = (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
+            return existingWeapon != null && existingWeapon.RoundQuantity > 0;
+        }
+
+        public bool FireWeapon<T>() where T : _WeaponBase
+        {
+            var weapon = GetWeaponOfType<T>();
+            return weapon?.Fire() == true;
+        }
+
+        public _WeaponBase GetWeaponOfType<T>() where T : _WeaponBase
+        {
+            return (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
+        }
+
+        #endregion
     }
 }

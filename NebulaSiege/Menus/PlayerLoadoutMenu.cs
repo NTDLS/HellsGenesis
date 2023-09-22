@@ -35,6 +35,7 @@ namespace NebulaSiege.Menus
             _shipBlurb.X = offsetX + 200;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
+            //Use reflection to get a list of possible player types.
             var playerTypes = NsReflection.GetSubClassesOf<_SpritePlayerBase>().OrderBy(o=>o.Name).ToList();
 
             //Move the debug player to the top of the list.

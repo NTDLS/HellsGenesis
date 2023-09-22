@@ -4,17 +4,20 @@ using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Loudouts;
 using NebulaSiege.Managers;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons;
 using NebulaSiege.Weapons.Munitions;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace NebulaSiege.Sprites.Player
 {
     internal class _SpritePlayerBase : _SpriteShipBase
     {
         public HgPlayerClass ShipClass { get; set; }
-        public ShipLoadout Loadout { get; private set; }
+        public PlayerShipLoadout Loadout { get; private set; }
         public NsAudioClip AmmoLowSound { get; private set; }
         public NsAudioClip AmmoEmptySound { get; private set; }
         public NsAudioClip ShipEngineRoarSound { get; private set; }
@@ -33,6 +36,11 @@ namespace NebulaSiege.Sprites.Player
         public int MaxShieldPoints { get; set; }
         public SpriteAnimation ThrustAnimation { get; private set; }
         public SpriteAnimation BoostAnimation { get; private set; }
+
+        public _WeaponBase PrimaryWeapon { get; private set; }
+        private readonly List<_WeaponBase> _secondaryWeapons = new();
+        public _WeaponBase SelectedSecondaryWeapon { get; private set; }
+
 
         public _SpritePlayerBase(EngineCore core)
             : base(core)
@@ -71,13 +79,13 @@ namespace NebulaSiege.Sprites.Player
         public string GetLoadoutHelpText()
         {
             string weaponName = NsReflection.GetStaticPropertyValue(Loadout.PrimaryWeapon.Type, "Name");
-            string primaryWeapon = $"{weaponName} x{Loadout.PrimaryWeapon.Rounds}";
+            string primaryWeapon = $"{weaponName} x{Loadout.PrimaryWeapon.MunitionCount}";
 
             string secondaryWeapons = string.Empty;
             foreach (var weapon in Loadout.SecondaryWeapons)
             {
                 weaponName = NsReflection.GetStaticPropertyValue(weapon.Type, "Name");
-                secondaryWeapons += $"{weaponName} x{weapon.Rounds}\n{new string(' ', 20)}";
+                secondaryWeapons += $"{weaponName} x{weapon.MunitionCount}\n{new string(' ', 20)}";
             }
 
             string result = $"             Name : {Loadout.Name}\n";
@@ -92,17 +100,17 @@ namespace NebulaSiege.Sprites.Player
             return result;
         }
 
-        public ShipLoadout LoadLoadoutFromFile(HgPlayerClass playerClass)
+        public PlayerShipLoadout LoadLoadoutFromFile(HgPlayerClass shipClass)
         {
-            ShipLoadout loadout = null;
+            PlayerShipLoadout loadout = null;
 
-            var loadoutText = EngineAssetManager.GetUserText($"{playerClass}.loadout.json");
+            var loadoutText = EngineAssetManager.GetUserText($"{shipClass}.loadout.json");
 
             try
             {
                 if (string.IsNullOrWhiteSpace(loadoutText))
                 {
-                    loadout = JsonConvert.DeserializeObject<ShipLoadout>(loadoutText);
+                    loadout = JsonConvert.DeserializeObject<PlayerShipLoadout>(loadoutText);
                 }
             }
             catch
@@ -113,7 +121,7 @@ namespace NebulaSiege.Sprites.Player
             return loadout;
         }
 
-        public void SaveLoadoutToFile(ShipLoadout loadout)
+        public void SaveLoadoutToFile(PlayerShipLoadout loadout)
         {
             var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
             EngineAssetManager.PutUserText($"{loadout.Class}.loadout.json", serializedText);
@@ -123,7 +131,7 @@ namespace NebulaSiege.Sprites.Player
         /// Resets ship image, state, health etc while allowing you to change the class.
         /// </summary>
         /// <param name="playerClass"></param>
-        public void ResetLoadout(ShipLoadout loadout)
+        public void ResetLoadout(PlayerShipLoadout loadout)
         {
             Loadout = loadout;
             SetImage(@$"Graphics\Player\Ships\{loadout.Name}.png", new Size(32, 32));
@@ -156,11 +164,11 @@ namespace NebulaSiege.Sprites.Player
             SetHullHealth(Loadout.HullHealth);
             SetShieldHealth(Loadout.ShieldHealth);
 
-            SetPrimaryWeapon(Loadout.PrimaryWeapon.Type, Loadout.PrimaryWeapon.Rounds);
+            SetPrimaryWeapon(Loadout.PrimaryWeapon.Type, Loadout.PrimaryWeapon.MunitionCount);
 
             foreach (var secondaryWeapon in Loadout.SecondaryWeapons)
             {
-                AddSecondaryWeapon(secondaryWeapon.Type, secondaryWeapon.Rounds);
+                AddSecondaryWeapon(secondaryWeapon.Type, secondaryWeapon.MunitionCount);
             }
 
             #endregion
@@ -280,5 +288,223 @@ namespace NebulaSiege.Sprites.Player
                 HullBreachedSound.Play();
             }
         }
+
+        #region Weapons selection and evaluation.
+
+        public void ClearPrimaryWeapon()
+        {
+            PrimaryWeapon = null;
+        }
+
+        public void ClearSecondaryWeapons() => _secondaryWeapons.Clear();
+
+        public void SetPrimaryWeapon(string weaponTypeName, int roundQuantity)
+        {
+            var weaponType = NsReflection.GetTypeByName(weaponTypeName);
+
+            if (PrimaryWeapon?.GetType() == weaponType)
+            {
+                PrimaryWeapon.RoundQuantity += roundQuantity;
+            }
+            else
+            {
+                var weapon = NsReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
+                weapon.RoundQuantity += roundQuantity;
+                PrimaryWeapon = weapon;
+
+                if (PrimaryWeapon == null) //If there is no primary weapon selected, then default to the newly added one.
+                {
+                    PrimaryWeapon = weapon;
+                }
+            }
+        }
+
+        public void AddSecondaryWeapon(string weaponTypeName, int roundQuantity)
+        {
+            var weaponType = NsReflection.GetTypeByName(weaponTypeName);
+
+            var weapon = _secondaryWeapons.Where(o => o.GetType() == weaponType).SingleOrDefault();
+
+            if (weapon == null)
+            {
+                weapon = NsReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
+                weapon.RoundQuantity += roundQuantity;
+                _secondaryWeapons.Add(weapon);
+            }
+            else
+            {
+                weapon.RoundQuantity += roundQuantity;
+            }
+
+            if (SelectedSecondaryWeapon == null)//If there is no secondary weapon selected, then default to the newly added one.
+            {
+                SelectedSecondaryWeapon = weapon;
+            }
+        }
+
+        /// <summary>
+        /// Adds a new primary weapon or adds its ammo to the current of its type.
+        /// </summary>
+        /// <param name="weapon"></param>
+        public void SetPrimaryWeapon<T>(int roundQuantity) where T : _WeaponBase
+        {
+            if (PrimaryWeapon is T)
+            {
+                PrimaryWeapon.RoundQuantity += roundQuantity;
+            }
+            else
+            {
+                PrimaryWeapon = NsReflection.CreateInstanceOf<T>(new object[] { _core, this });
+                PrimaryWeapon.RoundQuantity += roundQuantity;
+            }
+        }
+
+        /// <summary>
+        /// Adds a new secondary weapon or adds its ammo to the current of its type.
+        /// </summary>
+        /// <param name="weapon"></param>
+        public void AddSecondaryWeapon<T>(int roundQuantity) where T : _WeaponBase
+        {
+            var weapon = GetSecondaryWeaponOfType<T>();
+            if (weapon == null)
+            {
+                weapon = NsReflection.CreateInstanceOf<T>(new object[] { _core, this });
+                weapon.RoundQuantity += roundQuantity;
+                _secondaryWeapons.Add(weapon);
+            }
+            else
+            {
+                weapon.RoundQuantity += roundQuantity;
+            }
+
+            if (SelectedSecondaryWeapon == null) //If there is no secondary weapon selected, then default to the newly added one.
+            {
+                SelectedSecondaryWeapon = weapon;
+            }
+        }
+
+        public int TotalAvailableSecondaryWeaponRounds() => (from o in _secondaryWeapons select o.RoundQuantity).Sum();
+        public int TotalSecondaryWeaponFiredRounds() => (from o in _secondaryWeapons select o.RoundsFired).Sum();
+
+        public _WeaponBase SelectPreviousAvailableUsableSecondaryWeapon()
+        {
+            _WeaponBase previousWeapon = null;
+
+            foreach (var weapon in _secondaryWeapons)
+            {
+                if (weapon == SelectedSecondaryWeapon)
+                {
+                    if (previousWeapon == null)
+                    {
+                        return SelectLastAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the end.
+                    }
+                    SelectedSecondaryWeapon = previousWeapon;
+                    return previousWeapon;
+                }
+
+                previousWeapon = weapon;
+            }
+
+            return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
+        }
+
+        public _WeaponBase SelectNextAvailableUsableSecondaryWeapon()
+        {
+            bool selectNextWeapon = false;
+
+            foreach (var weapon in _secondaryWeapons)
+            {
+                if (selectNextWeapon)
+                {
+                    SelectedSecondaryWeapon = weapon;
+                    return weapon;
+                }
+
+                if (weapon == SelectedSecondaryWeapon) //Find the current weapon in the collection;
+                {
+                    selectNextWeapon = true;
+                }
+            }
+
+            return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
+        }
+
+        public bool HasSecondaryWeapon<T>() where T : _WeaponBase
+        {
+            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
+            return existingWeapon != null;
+        }
+
+        public bool HasSecondaryWeaponAndAmmo<T>() where T : _WeaponBase
+        {
+            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
+            return existingWeapon != null && existingWeapon.RoundQuantity > 0;
+        }
+
+        public bool HasPrimaryWeaponAndAmmo<T>() where T : _WeaponBase
+        {
+            if (PrimaryWeapon is T)
+            {
+                return PrimaryWeapon.RoundQuantity > 0;
+            }
+            return false;
+        }
+
+        public bool HasPrimaryWeaponAndAmmo()
+        {
+            return PrimaryWeapon?.RoundQuantity > 0;
+        }
+
+        public bool HasSelectedPrimaryWeaponAndAmmo()
+        {
+            return PrimaryWeapon != null && PrimaryWeapon.RoundQuantity > 0;
+        }
+
+        public bool HasSelectedSecondaryWeaponAndAmmo()
+        {
+            return SelectedSecondaryWeapon != null && SelectedSecondaryWeapon.RoundQuantity > 0;
+        }
+
+        public _WeaponBase SelectLastAvailableUsableSecondaryWeapon()
+        {
+            var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).LastOrDefault();
+            if (existingWeapon != null)
+            {
+                SelectedSecondaryWeapon = existingWeapon;
+            }
+            else
+            {
+                SelectedSecondaryWeapon = null;
+            }
+            return SelectedSecondaryWeapon;
+        }
+
+        public _WeaponBase SelectFirstAvailableUsableSecondaryWeapon()
+        {
+            var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).FirstOrDefault();
+            if (existingWeapon != null)
+            {
+                SelectedSecondaryWeapon = existingWeapon;
+            }
+            else
+            {
+                SelectedSecondaryWeapon = null;
+            }
+            return SelectedSecondaryWeapon;
+        }
+
+        public _WeaponBase GetSecondaryWeaponOfType<T>() where T : _WeaponBase
+        {
+            return (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
+        }
+
+        public _WeaponBase SelectSecondaryWeapon<T>() where T : _WeaponBase
+        {
+            SelectedSecondaryWeapon = GetSecondaryWeaponOfType<T>();
+            return SelectedSecondaryWeapon;
+        }
+
+        #endregion
+
     }
 }

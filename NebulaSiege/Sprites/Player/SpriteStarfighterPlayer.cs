@@ -2,7 +2,7 @@
 using NebulaSiege.Loudouts;
 using NebulaSiege.Weapons;
 using System.Drawing;
-using static NebulaSiege.Loudouts.ShipLoadout;
+using static NebulaSiege.Loudouts.PlayerShipLoadout;
 
 namespace NebulaSiege.Sprites.Player
 {
@@ -17,10 +17,10 @@ namespace NebulaSiege.Sprites.Player
             Initialize(imagePath, new Size(32, 32));
 
             //Load the loadout from file or create a new one if it does not exist.
-            ShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
+            PlayerShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
             if (loadout == null)
             {
-                loadout = new ShipLoadout(ShipClass)
+                loadout = new PlayerShipLoadout(ShipClass)
                 {
                     Description = "→ Celestial Aviator ←\n"
                         + "A sleek and versatile spacecraft, built for supremacy among the stars.\n"

@@ -24,7 +24,10 @@ namespace NebulaSiege.Controller
 
             foreach (var enemy in Visible())
             {
-                enemy.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
+                foreach (var weapon in enemy.Weapons)
+                {
+                    weapon.LockedOnObjects.Clear();
+                }
 
                 if (Core.Player.Sprite.Visable)
                 {
@@ -32,7 +35,7 @@ namespace NebulaSiege.Controller
 
                     if (Core.Player.Sprite.SelectedSecondaryWeapon != null)
                     {
-                        Core.Player.Sprite.SelectedSecondaryWeapon.ApplyIntelligence(displacementVector, enemy); //Player lock-on to enemy. :D
+                        Core.Player.Sprite.SelectedSecondaryWeapon.ApplyWeaponsLock(displacementVector, enemy); //Player lock-on to enemy. :D
                     }
                 }
 

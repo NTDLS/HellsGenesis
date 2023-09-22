@@ -32,14 +32,27 @@
 
     public enum HgPlayerClass
     {
-        Debug = 0,
-        Frigate = 1,
-        Cruiser = 2,
-        Destroyer = 3,
-        Dreadnaught = 4,
-        Reaver = 5,
-        Serpent = 6,
-        Starfighter = 7
+        Debug,
+        Frigate,
+        Cruiser,
+        Destroyer,
+        Dreadnaught,
+        Reaver,
+        Serpent,
+        Starfighter
+    }
+
+    public enum HgEnemyClass
+    {
+        Debug,
+        Irlen,
+        Phoenix,
+        Scinzad,
+        Theda,
+        Uves,
+        Devastator,
+        Repulsor,
+        Spectre
     }
 
     public enum HgMenuItemType
