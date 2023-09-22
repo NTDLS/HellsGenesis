@@ -298,18 +298,18 @@ namespace NebulaSiege.Sprites.Player
 
         public void ClearSecondaryWeapons() => _secondaryWeapons.Clear();
 
-        public void SetPrimaryWeapon(string weaponTypeName, int roundQuantity)
+        public void SetPrimaryWeapon(string weaponTypeName, int munitionCount)
         {
             var weaponType = NsReflection.GetTypeByName(weaponTypeName);
 
             if (PrimaryWeapon?.GetType() == weaponType)
             {
-                PrimaryWeapon.RoundQuantity += roundQuantity;
+                PrimaryWeapon.RoundQuantity += munitionCount;
             }
             else
             {
                 var weapon = NsReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
-                weapon.RoundQuantity += roundQuantity;
+                weapon.RoundQuantity += munitionCount;
                 PrimaryWeapon = weapon;
 
                 if (PrimaryWeapon == null) //If there is no primary weapon selected, then default to the newly added one.
@@ -319,7 +319,7 @@ namespace NebulaSiege.Sprites.Player
             }
         }
 
-        public void AddSecondaryWeapon(string weaponTypeName, int roundQuantity)
+        public void AddSecondaryWeapon(string weaponTypeName, int munitionCount)
         {
             var weaponType = NsReflection.GetTypeByName(weaponTypeName);
 
@@ -328,12 +328,12 @@ namespace NebulaSiege.Sprites.Player
             if (weapon == null)
             {
                 weapon = NsReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
-                weapon.RoundQuantity += roundQuantity;
+                weapon.RoundQuantity += munitionCount;
                 _secondaryWeapons.Add(weapon);
             }
             else
             {
-                weapon.RoundQuantity += roundQuantity;
+                weapon.RoundQuantity += munitionCount;
             }
 
             if (SelectedSecondaryWeapon == null)//If there is no secondary weapon selected, then default to the newly added one.
@@ -346,16 +346,16 @@ namespace NebulaSiege.Sprites.Player
         /// Adds a new primary weapon or adds its ammo to the current of its type.
         /// </summary>
         /// <param name="weapon"></param>
-        public void SetPrimaryWeapon<T>(int roundQuantity) where T : _WeaponBase
+        public void SetPrimaryWeapon<T>(int munitionCount) where T : _WeaponBase
         {
             if (PrimaryWeapon is T)
             {
-                PrimaryWeapon.RoundQuantity += roundQuantity;
+                PrimaryWeapon.RoundQuantity += munitionCount;
             }
             else
             {
                 PrimaryWeapon = NsReflection.CreateInstanceOf<T>(new object[] { _core, this });
-                PrimaryWeapon.RoundQuantity += roundQuantity;
+                PrimaryWeapon.RoundQuantity += munitionCount;
             }
         }
 
@@ -363,18 +363,18 @@ namespace NebulaSiege.Sprites.Player
         /// Adds a new secondary weapon or adds its ammo to the current of its type.
         /// </summary>
         /// <param name="weapon"></param>
-        public void AddSecondaryWeapon<T>(int roundQuantity) where T : _WeaponBase
+        public void AddSecondaryWeapon<T>(int munitionCount) where T : _WeaponBase
         {
             var weapon = GetSecondaryWeaponOfType<T>();
             if (weapon == null)
             {
                 weapon = NsReflection.CreateInstanceOf<T>(new object[] { _core, this });
-                weapon.RoundQuantity += roundQuantity;
+                weapon.RoundQuantity += munitionCount;
                 _secondaryWeapons.Add(weapon);
             }
             else
             {
-                weapon.RoundQuantity += roundQuantity;
+                weapon.RoundQuantity += munitionCount;
             }
 
             if (SelectedSecondaryWeapon == null) //If there is no secondary weapon selected, then default to the newly added one.

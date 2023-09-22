@@ -302,7 +302,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
                     {
                         if (distanceToPlayer > 400 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                         {
-                            bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 8.0);
+                            bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
                             if (isPointingAtPlayer)
                             {
                                 if (FireWeapon<WeaponDualVulcanCannon>())
@@ -313,7 +313,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
                         }
                         else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                         {
-                            bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 15.0);
+                            bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
                             if (isPointingAtPlayer)
                             {
                                 if (FireWeapon<WeaponVulcanCannon>())

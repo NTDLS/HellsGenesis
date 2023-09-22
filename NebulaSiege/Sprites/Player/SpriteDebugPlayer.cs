@@ -2,7 +2,6 @@
 using NebulaSiege.Loudouts;
 using NebulaSiege.Weapons;
 using System.Drawing;
-using static NebulaSiege.Loudouts.PlayerShipLoadout;
 
 namespace NebulaSiege.Sprites.Player
 {

@@ -41,11 +41,12 @@ namespace NebulaSiege.Sprites.Enemies.Peons
                        + "When this badboy is spotted, s**t has already hit the proverbial fan.\n",
                     MaxSpeed = 3.5,
                     MaxBoost = 1.5,
-                    HullHealth = 2500,
-                    ShieldHealth = 3000,
+                    HullHealth = 20,
+                    ShieldHealth = 10,
                 };
 
                 loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponDualVulcanCannon), 5000));
                 loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
                 loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
 
@@ -114,7 +115,7 @@ namespace NebulaSiege.Sprites.Enemies.Peons
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 8.0);
+                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponDualVulcanCannon>();
@@ -122,7 +123,7 @@ namespace NebulaSiege.Sprites.Enemies.Peons
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 15.0);
+                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponVulcanCannon>();

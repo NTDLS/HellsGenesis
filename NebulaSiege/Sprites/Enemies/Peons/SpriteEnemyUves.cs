@@ -34,8 +34,8 @@ namespace NebulaSiege.Sprites.Enemies.Peons
                        + "TODO: Add a description\n",
                     MaxSpeed = 3.5,
                     MaxBoost = 1.5,
-                    HullHealth = 2500,
-                    ShieldHealth = 3000,
+                    HullHealth = 20,
+                    ShieldHealth = 10,
                 };
 
                 loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000));

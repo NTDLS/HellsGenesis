@@ -137,6 +137,22 @@ namespace NebulaSiege.Sprites.Enemies
         public void ResetLoadout(EnemyShipLoadout loadout)
         {
             Loadout = loadout;
+            Reset();
+        }
+
+        public void Reset()
+        {
+            Velocity.MaxSpeed = Loadout.MaxSpeed;
+            Velocity.MaxBoost = Loadout.MaxBoost;
+
+            SetHullHealth(Loadout.HullHealth);
+            SetShieldHealth(Loadout.ShieldHealth);
+
+            Weapons.Clear();
+            foreach (var weapon in Loadout.Weapons)
+            {
+                AddWeapon(weapon.Type, weapon.MunitionCount);
+            }
         }
 
         public override bool TryMunitionHit(NsPoint displacementVector, _MunitionBase munition, NsPoint hitTestPosition)
@@ -264,7 +280,7 @@ namespace NebulaSiege.Sprites.Enemies
 
         public void ClearWeapons() => Weapons.Clear();
 
-        public void AddWeapon(string weaponTypeName, int roundQuantity)
+        public void AddWeapon(string weaponTypeName, int munitionCount)
         {
             var weaponType = NsReflection.GetTypeByName(weaponTypeName);
 
@@ -273,27 +289,27 @@ namespace NebulaSiege.Sprites.Enemies
             if (weapon == null)
             {
                 weapon = NsReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
-                weapon.RoundQuantity += roundQuantity;
+                weapon.RoundQuantity += munitionCount;
                 Weapons.Add(weapon);
             }
             else
             {
-                weapon.RoundQuantity += roundQuantity;
+                weapon.RoundQuantity += munitionCount;
             }
         }
 
-        public void AddWeapon<T>(int roundQuantity) where T : _WeaponBase
+        public void AddWeapon<T>(int munitionCount) where T : _WeaponBase
         {
             var weapon = GetWeaponOfType<T>();
             if (weapon == null)
             {
                 weapon = NsReflection.CreateInstanceOf<T>(new object[] { _core, this });
-                weapon.RoundQuantity += roundQuantity;
+                weapon.RoundQuantity += munitionCount;
                 Weapons.Add(weapon);
             }
             else
             {
-                weapon.RoundQuantity += roundQuantity;
+                weapon.RoundQuantity += munitionCount;
             }
         }
 
