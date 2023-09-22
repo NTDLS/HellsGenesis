@@ -12,6 +12,9 @@ using System.Drawing;
 
 namespace NebulaSiege.Sprites
 {
+    /// <summary>
+    /// Represents a single item that can be rendered to the screen. All on-screen objects are derived from this class.
+    /// </summary>
     internal class _SpriteBase
     {
         protected EngineCore _core;

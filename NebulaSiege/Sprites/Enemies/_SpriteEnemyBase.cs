@@ -15,6 +15,9 @@ using System.Linq;
 
 namespace NebulaSiege.Sprites.Enemies
 {
+    /// <summary>
+    /// The enemy base is a sub-class of the ship base. It is used by Peon and Boss enemies.
+    /// </summary>
     internal class _SpriteEnemyBase : _SpriteShipBase
     {
         public HgEnemyClass ShipClass { get; set; }

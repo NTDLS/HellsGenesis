@@ -6,6 +6,9 @@ using System.Drawing;
 
 namespace NebulaSiege.Sprites.Enemies.Peons
 {
+    /// <summary>
+    /// Base class for "Peon" enemies. These guys are basically all the same in theit functionality and animations.
+    /// </summary>
     internal class _SpriteEnemyPeonBase : _SpriteEnemyBase
     {
         public SpriteAnimation ThrustAnimation { get; internal set; }

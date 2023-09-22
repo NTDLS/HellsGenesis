@@ -9,6 +9,9 @@ using System;
 
 namespace NebulaSiege.Weapons.Munitions
 {
+    /// <summary>
+    /// The munition base is the base for all bullets/projectiles/etc.
+    /// </summary>
     internal class _MunitionBase : _SpriteBase
     {
         public HgFiredFromType FiredFromType { get; private set; }

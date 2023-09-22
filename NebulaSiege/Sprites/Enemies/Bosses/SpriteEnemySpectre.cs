@@ -296,30 +296,27 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
 
             if (IsHostile)
             {
-                if (distanceToPlayer < 700 && (_rightGun?.IsDead == false || _leftGun?.IsDead == false))
+                if (distanceToPlayer < 1000 && (_rightGun?.IsDead == false || _leftGun?.IsDead == false))
                 {
-                    if (distanceToPlayer < 800)
+                    if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        if (distanceToPlayer > 400 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
+                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
+                        if (isPointingAtPlayer)
                         {
-                            bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
-                            if (isPointingAtPlayer)
+                            if (FireWeapon<WeaponDualVulcanCannon>())
                             {
-                                if (FireWeapon<WeaponDualVulcanCannon>())
-                                {
-                                    roundsToFireBeforeTailing++;
-                                }
+                                roundsToFireBeforeTailing++;
                             }
                         }
-                        else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
+                    }
+                    else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
+                    {
+                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
+                        if (isPointingAtPlayer)
                         {
-                            bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
-                            if (isPointingAtPlayer)
+                            if (FireWeapon<WeaponVulcanCannon>())
                             {
-                                if (FireWeapon<WeaponVulcanCannon>())
-                                {
-                                    roundsToFireBeforeTailing++;
-                                }
+                                roundsToFireBeforeTailing++;
                             }
                         }
                     }

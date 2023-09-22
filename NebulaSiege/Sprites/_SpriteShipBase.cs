@@ -8,6 +8,9 @@ using System.IO;
 
 namespace NebulaSiege.Sprites
 {
+    /// <summary>
+    /// The ship base is a ship object that moves, can be hit, explodes and can be the subject of locking weapons.
+    /// </summary>
     internal class _SpriteShipBase : _SpriteBase
     {
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }

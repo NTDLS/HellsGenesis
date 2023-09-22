@@ -77,12 +77,12 @@ namespace NebulaSiege.Engine
 
         public static EngineSettings LoadSettings()
         {
-            var engineSettingsText = EngineAssetManager.GetUserText("EngineSettings.json");
+            var engineSettingsText = EngineAssetManager.GetUserText("Engine.Settings.json");
 
             if (string.IsNullOrEmpty(engineSettingsText))
             {
                 engineSettingsText = JsonConvert.SerializeObject(new EngineSettings(), Formatting.Indented);
-                EngineAssetManager.PutUserText("EngineSettings.json", engineSettingsText);
+                EngineAssetManager.PutUserText("Engine.Settings.json", engineSettingsText);
             }
 
             return JsonConvert.DeserializeObject<EngineSettings>(engineSettingsText);
@@ -90,7 +90,7 @@ namespace NebulaSiege.Engine
 
         public static void SaveSettings(EngineSettings settings)
         {
-            EngineAssetManager.PutUserText("EngineSettings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
+            EngineAssetManager.PutUserText("Engine.Settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
         }
 
         public void Render()

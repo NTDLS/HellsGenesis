@@ -9,6 +9,9 @@ using System.Collections.Generic;
 
 namespace NebulaSiege.Weapons
 {
+    /// <summary>
+    /// A weapon is a "device" that fires a "munition" (_MunitionBase). It must be owned by another sprite.
+    /// </summary>
     internal class _WeaponBase
     {
         public Guid UID { get; private set; } = Guid.NewGuid();

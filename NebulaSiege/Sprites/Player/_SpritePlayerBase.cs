@@ -14,6 +14,9 @@ using System.Linq;
 
 namespace NebulaSiege.Sprites.Player
 {
+    /// <summary>
+    /// The player base is a sub-class of the ship base. It is only used by the Player and as a model for menu selections.
+    /// </summary>
     internal class _SpritePlayerBase : _SpriteShipBase
     {
         public HgPlayerClass ShipClass { get; set; }

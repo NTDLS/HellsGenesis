@@ -2,6 +2,9 @@
 
 namespace NebulaSiege.Sprites.Enemies.Bosses
 {
+    /// <summary>
+    /// Boss enemies are specialized enemy types, typically have destructible/moving components.
+    /// </summary>
     internal class _SpriteEnemyBossBase : _SpriteEnemyBase
     {
         public _SpriteEnemyBossBase(EngineCore core, int hullHealth, int bountyMultiplier)

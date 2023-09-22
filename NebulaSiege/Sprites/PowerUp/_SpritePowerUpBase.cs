@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace NebulaSiege.Sprites.PowerUp
 {
+    /// <summary>
+    /// Represents a "power-up" that the player can pick up to gain some ability / stat-improvement.
+    /// </summary>
     internal class _SpritePowerUpBase : _SpriteBase
     {
         private const string _assetHitAnimationPath = @"Graphics\Animation\PowerUp\";
