@@ -83,6 +83,9 @@ namespace NebulaSiege.Engine
                                 var displacementVector = ExecuteWorldClockTick();
                                 AfterExecuteWorldClockTick(displacementVector);
                             }
+
+                            _core.Debug.ProcessCommand();
+
                             _core.Render();
                             timer.Stop();
                         }
@@ -156,33 +159,7 @@ namespace NebulaSiege.Engine
                 + $"Pri-Weapon: {_core.Player.Sprite.PrimaryWeapon?.Name} x{_core.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
                 + $"Sec-Weapon: {_core.Player.Sprite.SelectedSecondaryWeapon?.Name} x{_core.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
 
-            if (_core.ShowDebug)
-            {
-                _core.Sprites.DebugText.Text =
-                      $"       Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")}, "
-                                        + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")}, "
-                                        + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n"
-                    + $"Player Display XY: {_core.Player.Sprite.X:#0.00}x, {_core.Player.Sprite.Y:#0.00}y\r\n"
-                    + $"     Player Angle: {_core.Player.Sprite.Velocity.Angle.X:#0.00}x, {_core.Player.Sprite.Velocity.Angle.Y:#0.00}y, "
-                                        + $"{_core.Player.Sprite.Velocity.Angle.Degrees:#0.00}deg, "
-                                        + $" {_core.Player.Sprite.Velocity.Angle.Radians:#0.00}rad, "
-                                        + $" {_core.Player.Sprite.Velocity.Angle.RadiansUnadjusted:#0.00}rad unadjusted\r\n"
-                    + $"Player Virtual XY: {_core.Player.Sprite.X + _core.Display.BackgroundOffset.X:#0.00}x,"
-                                        + $" {_core.Player.Sprite.Y + _core.Display.BackgroundOffset.Y:#0.00}y\r\n"
-                    + $"        BG Offset: {_core.Display.BackgroundOffset.X:#0.00}x, {_core.Display.BackgroundOffset.Y:#0.00}y\r\n"
-                    + $"  Delta BG Offset: {displacementVector.X:#0.00}x, {displacementVector.Y:#0.00}y\r\n"
-                    + $"           Thrust: {(_core.Player.Sprite.Velocity.ThrottlePercentage * 100):#0.00}\r\n"
-                    + $"            Boost: {(_core.Player.Sprite.Velocity.BoostPercentage * 100):#0.00}\r\n"
-                    + $"         Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}\r\n"
-                    + $"           Bounty: {_core.Player.Sprite.Bounty.ToString("#,0")}";
-            }
-            else
-            {
-                if (_core.Sprites.DebugText.Text != string.Empty)
-                {
-                    _core.Sprites.DebugText.Text = string.Empty;
-                }
-            }
+            //_core.Sprites.DebugText.Text = "Anything we need to know about?";
         }
     }
 }

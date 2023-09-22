@@ -11,7 +11,7 @@ using System.IO;
 namespace NebulaSiege.Sprites.Enemies.Peons
 {
     /// <summary>
-    /// Debugging enemy uint.
+    /// Debugging enemy unit - a scary sight to see.
     /// </summary>
     internal class SpriteEnemyDebug : _SpriteEnemyPeonBase
     {

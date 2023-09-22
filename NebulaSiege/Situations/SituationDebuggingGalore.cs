@@ -61,17 +61,17 @@ namespace NebulaSiege.Situations
             //_core.Sprites.Enemies.Create<EnemyRepulsor>();
             //_core.Sprites.Enemies.Create<EnemyRepulsor>();
             //_core.Sprites.Enemies.Create<EnemyRepulsor>();
+
             _core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             _core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             _core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             _core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
 
             //_core.Sprites.Debugs.CreateAtCenterScreen();
-            _core.Sprites.Enemies.Create<SpriteEnemyDebug>();
+            //_core.Sprites.Enemies.Create<SpriteEnemyDebug>();
             //_core.Sprites.Enemies.Create<EnemyDebug>();
             //_core.Sprites.Enemies.Create<EnemyDebug>();
             //_core.Sprites.Enemies.Create<EnemyDebug>();
-
             //_core.Sprites.Enemies.Create<EnemyDebug>();
             //_core.Sprites.Enemies.Create<EnemyDebug>();
             //_core.Sprites.Enemies.Create<EnemyPhoenix>();

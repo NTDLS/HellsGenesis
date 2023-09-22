@@ -44,12 +44,12 @@
             labelOverdrawScale = new System.Windows.Forms.Label();
             textBoxOverdrawScale = new System.Windows.Forms.TextBox();
             textBoxFrameLimiter = new System.Windows.Forms.TextBox();
-            buttonCancel = new System.Windows.Forms.Button();
-            buttonSave = new System.Windows.Forms.Button();
             tabPageDebug = new System.Windows.Forms.TabPage();
             checkBoxEnableSpriteInterrogation = new System.Windows.Forms.CheckBox();
             checkBoxHighlightAllSprites = new System.Windows.Forms.CheckBox();
             checkBoxHighlightNatrualBounds = new System.Windows.Forms.CheckBox();
+            buttonCancel = new System.Windows.Forms.Button();
+            buttonSave = new System.Windows.Forms.Button();
             tabControl1.SuspendLayout();
             tabPageDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarResolution).BeginInit();
@@ -200,6 +200,48 @@
             textBoxFrameLimiter.Size = new System.Drawing.Size(133, 23);
             textBoxFrameLimiter.TabIndex = 24;
             // 
+            // tabPageDebug
+            // 
+            tabPageDebug.Controls.Add(checkBoxEnableSpriteInterrogation);
+            tabPageDebug.Controls.Add(checkBoxHighlightAllSprites);
+            tabPageDebug.Controls.Add(checkBoxHighlightNatrualBounds);
+            tabPageDebug.Location = new System.Drawing.Point(4, 24);
+            tabPageDebug.Name = "tabPageDebug";
+            tabPageDebug.Size = new System.Drawing.Size(542, 304);
+            tabPageDebug.TabIndex = 2;
+            tabPageDebug.Text = "Debug";
+            tabPageDebug.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEnableSpriteInterrogation
+            // 
+            checkBoxEnableSpriteInterrogation.AutoSize = true;
+            checkBoxEnableSpriteInterrogation.Location = new System.Drawing.Point(13, 63);
+            checkBoxEnableSpriteInterrogation.Name = "checkBoxEnableSpriteInterrogation";
+            checkBoxEnableSpriteInterrogation.Size = new System.Drawing.Size(175, 19);
+            checkBoxEnableSpriteInterrogation.TabIndex = 37;
+            checkBoxEnableSpriteInterrogation.Text = "Enable sprites interrogation?";
+            checkBoxEnableSpriteInterrogation.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxHighlightAllSprites
+            // 
+            checkBoxHighlightAllSprites.AutoSize = true;
+            checkBoxHighlightAllSprites.Location = new System.Drawing.Point(13, 38);
+            checkBoxHighlightAllSprites.Name = "checkBoxHighlightAllSprites";
+            checkBoxHighlightAllSprites.Size = new System.Drawing.Size(133, 19);
+            checkBoxHighlightAllSprites.TabIndex = 36;
+            checkBoxHighlightAllSprites.Text = "Highlight all sprites?";
+            checkBoxHighlightAllSprites.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxHighlightNatrualBounds
+            // 
+            checkBoxHighlightNatrualBounds.AutoSize = true;
+            checkBoxHighlightNatrualBounds.Location = new System.Drawing.Point(13, 13);
+            checkBoxHighlightNatrualBounds.Name = "checkBoxHighlightNatrualBounds";
+            checkBoxHighlightNatrualBounds.Size = new System.Drawing.Size(164, 19);
+            checkBoxHighlightNatrualBounds.TabIndex = 35;
+            checkBoxHighlightNatrualBounds.Text = "Highlight natrual bounds?";
+            checkBoxHighlightNatrualBounds.UseVisualStyleBackColor = true;
+            // 
             // buttonCancel
             // 
             buttonCancel.Location = new System.Drawing.Point(402, 350);
@@ -220,48 +262,6 @@
             buttonSave.UseVisualStyleBackColor = true;
             buttonSave.Click += buttonSave_Click;
             // 
-            // tabPageDebug
-            // 
-            tabPageDebug.Controls.Add(checkBoxEnableSpriteInterrogation);
-            tabPageDebug.Controls.Add(checkBoxHighlightAllSprites);
-            tabPageDebug.Controls.Add(checkBoxHighlightNatrualBounds);
-            tabPageDebug.Location = new System.Drawing.Point(4, 24);
-            tabPageDebug.Name = "tabPageDebug";
-            tabPageDebug.Size = new System.Drawing.Size(542, 304);
-            tabPageDebug.TabIndex = 2;
-            tabPageDebug.Text = "Debug";
-            tabPageDebug.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxEnableSpriteInterrogation
-            // 
-            checkBoxEnableSpriteInterrogation.AutoSize = true;
-            checkBoxEnableSpriteInterrogation.Location = new System.Drawing.Point(13, 63);
-            checkBoxEnableSpriteInterrogation.Name = "checkBoxEnableSpriteInterrogation";
-            checkBoxEnableSpriteInterrogation.Size = new System.Drawing.Size(173, 19);
-            checkBoxEnableSpriteInterrogation.TabIndex = 37;
-            checkBoxEnableSpriteInterrogation.Text = "Enable sprites interrogation?";
-            checkBoxEnableSpriteInterrogation.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxHighlightAllSprites
-            // 
-            checkBoxHighlightAllSprites.AutoSize = true;
-            checkBoxHighlightAllSprites.Location = new System.Drawing.Point(13, 38);
-            checkBoxHighlightAllSprites.Name = "checkBoxHighlightAllSprites";
-            checkBoxHighlightAllSprites.Size = new System.Drawing.Size(131, 19);
-            checkBoxHighlightAllSprites.TabIndex = 36;
-            checkBoxHighlightAllSprites.Text = "Highlight all sprites?";
-            checkBoxHighlightAllSprites.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxHighlightNatrualBounds
-            // 
-            checkBoxHighlightNatrualBounds.AutoSize = true;
-            checkBoxHighlightNatrualBounds.Location = new System.Drawing.Point(13, 13);
-            checkBoxHighlightNatrualBounds.Name = "checkBoxHighlightNatrualBounds";
-            checkBoxHighlightNatrualBounds.Size = new System.Drawing.Size(164, 19);
-            checkBoxHighlightNatrualBounds.TabIndex = 35;
-            checkBoxHighlightNatrualBounds.Text = "Highlight natrual bounds?";
-            checkBoxHighlightNatrualBounds.UseVisualStyleBackColor = true;
-            // 
             // FormSettings
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -276,7 +276,7 @@
             Name = "FormSettings";
             ShowInTaskbar = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            Text = "Settings";
+            Text = "Nebula Siege : Settings";
             Load += FormSettings_Load;
             tabControl1.ResumeLayout(false);
             tabPageDisplay.ResumeLayout(false);

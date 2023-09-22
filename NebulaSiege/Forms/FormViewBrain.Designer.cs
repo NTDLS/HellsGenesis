@@ -55,7 +55,7 @@ namespace NebulaSiege
             Name = "FormViewBrain";
             SizeGripStyle = SizeGripStyle.Show;
             StartPosition = FormStartPosition.CenterParent;
-            Text = "View Brain";
+            Text = "Nebula Siege : Brain";
             ResumeLayout(false);
             PerformLayout();
         }

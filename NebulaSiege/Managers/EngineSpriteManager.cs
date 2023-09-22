@@ -65,7 +65,7 @@ namespace NebulaSiege.Managers
 
             PlayerStatsText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Materials.Brushes.WhiteSmoke, new NsPoint(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Materials.Brushes.Cyan, new NsPoint(5, PlayerStatsText.Y + 80), true);
+            DebugText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Materials.Brushes.Cyan, new NsPoint(5, PlayerStatsText.Y + 100), true);
 
             _core.Audio.BackgroundMusicSound.Play();
         }

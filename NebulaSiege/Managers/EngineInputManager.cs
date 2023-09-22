@@ -59,7 +59,7 @@ namespace NebulaSiege.Managers
             }
             else if (key == Keys.Oem3) //~
             {
-                _core.ShowDebug = !_core.ShowDebug;
+                _core.Debug.ToggleVisibility();
             }
             #endregion
             else if (key == Keys.F1)

@@ -20,6 +20,7 @@ namespace NebulaSiege.Engine
         public EngineSpriteManager Sprites { get; private set; } //Also contains all of the sprite tick controllers.
         public EngineAudioManager Audio { get; private set; }
         public EngineAssetManager Assets { get; private set; }
+        public EngineDebugManager Debug { get; private set; }
         public MenuTickHandler Menus { get; private set; }
 
         public DirectX DirectX { get; private set; }
@@ -27,7 +28,6 @@ namespace NebulaSiege.Engine
 
         public bool IsRunning { get; private set; } = false;
         public bool IsRendering { get; set; } = false;
-        public bool ShowDebug { get; set; } = false;
 
         private readonly EngineWorldClock _worldClock;
 
@@ -69,6 +69,7 @@ namespace NebulaSiege.Engine
             Menus = new MenuTickHandler(this);
             Player = new PlayerSpriteTickController(this);
             DirectX = new DirectX(this);
+            Debug = new EngineDebugManager(this);
 
             _worldClock = new EngineWorldClock(this);
 
