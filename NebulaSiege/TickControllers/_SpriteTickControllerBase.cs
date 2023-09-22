@@ -21,7 +21,7 @@ namespace NebulaSiege.TickControllers
         public List<T> Visible() => SpriteManager.VisibleOfType<T>();
         public List<T> All() => SpriteManager.OfType<T>();
         public List<subType> OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
-        public T ByAssetTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
+        public T ByTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
 
         public virtual void ExecuteWorldClockTick(NsPoint displacementVector) { }
 

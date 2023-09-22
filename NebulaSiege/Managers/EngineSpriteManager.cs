@@ -120,7 +120,7 @@ namespace NebulaSiege.Managers
             Animations.DeleteAll();
         }
 
-        public T GetSpriteByAssetTag<T>(string name) where T : _SpriteBase
+        public T GetSpriteByTag<T>(string name) where T : _SpriteBase
         {
             lock (Collection)
             {
@@ -144,7 +144,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DeleteAllSpriteByAssetTag(string name)
+        public void DeleteAllSpritesByTag(string name)
         {
             lock (Collection)
             {

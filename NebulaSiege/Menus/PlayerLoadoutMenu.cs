@@ -94,12 +94,11 @@ namespace NebulaSiege.Menus
             _animationTimer.Change(Timeout.Infinite, Timeout.Infinite);
             _animationTimer.Dispose();
 
-
             var selectedSprite = _core.Sprites.Collection.OfType<_SpritePlayerBase>()
                 .Where(o => o.SpriteTag == "MENU_SHIP_SELECT" && o.ShipClass.ToString() == item.Key).First();
 
             _core.Player.Sprite.ResetLoadout(selectedSprite.Loadout);
-            _core.Sprites.DeleteAllSpriteByAssetTag("MENU_SHIP_SELECT");
+            _core.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
             _core.Sprites.NewGame();
         }
     }

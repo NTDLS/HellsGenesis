@@ -18,18 +18,18 @@ namespace NebulaSiege.Controller
             /*
             if (Core.Player.Sprite != null)
             {
-                var anchor = Core.Sprites.Debugs.ByAssetTag("Anchor");
+                var anchor = Core.Sprites.Debugs.ByTag("Anchor");
                 if (anchor == null)
                 {
                     Core.Sprites.Debugs.CreateAtCenterScreen("Anchor");
-                    anchor = Core.Sprites.Debugs.ByAssetTag("Anchor");
+                    anchor = Core.Sprites.Debugs.ByTag("Anchor");
                 }
 
-                var pointer = Core.Sprites.Debugs.ByAssetTag("Pointer");
+                var pointer = Core.Sprites.Debugs.ByTag("Pointer");
                 if (pointer == null)
                 {
                     Core.Sprites.Debugs.CreateAtCenterScreen("Pointer");
-                    pointer = Core.Sprites.Debugs.ByAssetTag("Pointer");
+                    pointer = Core.Sprites.Debugs.ByTag("Pointer");
                 }
 
                 double requiredAngle = Core.Player.Sprite.AngleTo(anchor);

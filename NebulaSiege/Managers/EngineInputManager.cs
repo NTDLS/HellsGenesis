@@ -71,7 +71,7 @@ namespace NebulaSiege.Managers
             }
             else if (key == Keys.P)
             {
-                var textBlock = _core.Sprites.GetSpriteByAssetTag<SpriteTextBlock>("PausedText");
+                var textBlock = _core.Sprites.GetSpriteByTag<SpriteTextBlock>("PausedText");
                 if (textBlock == null)
                 {
                     textBlock = _core.Sprites.TextBlocks.Create(_core.DirectX.TextFormats.LargeBlocker, _core.DirectX.Materials.Brushes.Red, new NsPoint(100, 100), true, "PausedText");
