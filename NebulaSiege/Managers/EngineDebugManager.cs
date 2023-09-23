@@ -15,16 +15,18 @@ namespace NebulaSiege.Managers
     {
         private static string[] _commandPrototypes = {
             "Sprite-List|typeFilter:Optional:Criterion",
-            "Sprite-Player-Info|typeFilter:Optional:Criterion",
+            "Sprite-Player-Inspect|typeFilter:Optional:Criterion",
             "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean",
             "Sprite-Highlight|uid:Required:Numeric,state:Required:Boolean",
             "Cls|",
             "Help|",
-            "Display-Framerate|",
+            "Display-Metrics|",
+            "Display-Framerate-Get|",
+            "Display-Framerate-Set|rate:Required:Numeric",
             "Sprite-Move|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric",
-            "Sprite-Center|uid:Required:Numeric",
+            "Sprite-Move-Center|uid:Required:Numeric",
             "Sprite-Explode|uid:Required:Numeric",
-            "Sprite-Info|uid:Required:Numeric",
+            "Sprite-Inspect|uid:Required:Numeric",
             "Sprite-MaxSpeed|uid:Required:Numeric,value:Required:Numeric",
             "Sprite-MaxBoost|uid:Required:Numeric,value:Required:Numeric",
             "Sprite-Throttle|uid:Required:Numeric,value:Required:Numeric",
@@ -122,21 +124,43 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Display_Framerate(DebugCommand command)
+        public void DebugHandler_Display_Metrics(DebugCommand command)
         {
             var infoText =
-                  $"Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")}, "
-                + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")}, "
-                + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n";
+                  $"          BackgroundOffset: X:{_core.Display.BackgroundOffset.X:n2}, Y:{_core.Display.BackgroundOffset.X:n2}\r\n"
+                + $"             BaseDrawScale: {_core.Display.BaseDrawScale:n4}\r\n"
+                + $"              OverdrawSize: W:{_core.Display.OverdrawSize.Width:n0}, H{_core.Display.OverdrawSize.Height:n0}\r\n"
+                + $"         NatrualScreenSize: W:{_core.Display.NatrualScreenSize.Width:n0}, H{_core.Display.NatrualScreenSize.Height:n0}\r\n"
+                + $"           TotalCanvasSize: W:{_core.Display.TotalCanvasSize.Width:n0}, H{_core.Display.TotalCanvasSize.Height:n0}\r\n"
+                + $"         TotalCanvasBounds: X:{_core.Display.TotalCanvasBounds.X:n0}, Y:{_core.Display.TotalCanvasBounds.Y:n0} / W:{_core.Display.TotalCanvasBounds.Width:n0}, H:{_core.Display.TotalCanvasBounds.Height:n0}\r\n"
+                + $"       NatrualScreenBounds: X:{_core.Display.NatrualScreenBounds.X:n0}, Y:{_core.Display.NatrualScreenBounds.Y:n0} / W:{_core.Display.NatrualScreenBounds.Width:n0}, H:{_core.Display.NatrualScreenBounds.Height:n0}\r\n"
+                + $"   SpeedFrameScalingFactor: {_core.Display.SpeedOrientedFrameScalingFactor:n4}\r\n"
+                + $"           CurrentQuadrant: {_core.Display.CurrentQuadrant.Key}";
             formDebug.WriteLine(infoText);
         }
 
-        public void DebugHandler_Sprite_Player_Info(DebugCommand command)
+        public void DebugHandler_Display_Framerate_Set(DebugCommand command)
+        {
+            var rate = command.ParameterValue<double>("rate");
+            _core.Settings.FrameLimiter = rate;
+        }
+
+        public void DebugHandler_Display_Framerate_Get(DebugCommand command)
+        {
+            var infoText =
+                  $"Limit: {_core.Settings.FrameLimiter:n4}\r\n"
+                + $"  Avg: {_core.Display.GameLoopCounter.AverageFrameRate:n4}\r\n"
+                + $"  Min: {_core.Display.GameLoopCounter.FrameRateMin:n4}\r\n"
+                + $"  Max: {_core.Display.GameLoopCounter.FrameRateMax:n4}";
+            formDebug.WriteLine(infoText);
+        }
+
+        public void DebugHandler_Sprite_Player_Inspect(DebugCommand command)
         {
             /*
-                $"Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")}, "
-                + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")}, "
-                + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n"
+                $"Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate:n2}, "
+                + $"Min: {_core.Display.GameLoopCounter.FrameRateMin:n2}, "
+                + $"Max: {_core.Display.GameLoopCounter.FrameRateMax:n2}\r\n"
                 + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}\r\n"
                 //+ $"  Delta BG Offset: {displacementVector.X:#0.00}x, {displacementVector.Y:#0.00}y\r\n"
              */
@@ -158,7 +182,7 @@ namespace NebulaSiege.Managers
             formDebug.WriteLine(infoText);
         }
 
-        public void DebugHandler_Sprite_Info(DebugCommand command)
+        public void DebugHandler_Sprite_Inspect(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -177,6 +201,25 @@ namespace NebulaSiege.Managers
                     + $"       Thrust: {(sprite.Velocity.ThrottlePercentage * 100):#0.00}\r\n"
                     + $"        Boost: {(sprite.Velocity.BoostPercentage * 100):#0.00}\r\n"
                     + $"       Recoil: {(sprite.Velocity.RecoilPercentage * 100):#0.00}\r\n";
+
+                //TODO: Add these items here and to DebugHandler_Sprite_Player_Inspect()
+                //sprite.HullHealth
+                //sprite.ShieldHealth
+                //sprite.RotationMode
+                //sprite.Attachments(...)
+                //sprite.Bounds
+                //sprite.Highlight
+                //sprite.IsDead
+                //sprite.IsFixedPosition
+                //sprite.IsLockedOn
+                //sprite.IsLockedOnSoft
+                //sprite.IsWithinCurrentScaledScreenBounds
+                //sprite.OwnerUID
+                //sprite.ReadyForDeletion
+                //sprite.Size
+                //sprite.SpriteTag
+                //sprite.Visable
+                //sprite.VisibleBounds
 
                 formDebug.WriteLine(infoText);
             }
@@ -273,7 +316,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_Center(DebugCommand command)
+        public void DebugHandler_Sprite_Move_Center(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();

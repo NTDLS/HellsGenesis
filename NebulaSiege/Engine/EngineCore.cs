@@ -27,7 +27,6 @@ namespace NebulaSiege.Engine
         public EngineSettings Settings { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
-        public bool IsRendering { get; set; } = false;
 
         private readonly EngineWorldClock _worldClock;
 

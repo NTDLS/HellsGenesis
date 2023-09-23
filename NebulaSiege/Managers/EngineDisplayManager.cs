@@ -23,14 +23,6 @@ namespace NebulaSiege.Managers
         public NsFrameCounter GameLoopCounter { get; private set; } = new();
         public Control DrawingSurface { get; private set; }
 
-        /// <summary>
-        /// The scaling factor to apply based on the current player speed.
-        /// </summary>
-        public double ThrottleFrameScaleFactor { get; set; }
-
-        /// The scaling factor to apply based on the current player boost.
-        public double BoostFrameScaleFactor { get; set; }
-
         public double SpeedOrientedFrameScalingFactor()
         {
             double weightedThrottlePercent = (

@@ -65,10 +65,10 @@ namespace NebulaSiege.Engine
             #endregion
 
             var timer = new Stopwatch();
-            var targetFrameDuration = 1000000 / _core.Settings.FrameLimiter; //1000000 / n-frames/second.
 
             while (_shutdown == false)
             {
+                var targetFrameDuration = 1000000 / _core.Settings.FrameLimiter; //1000000 / n-frames/second.
                 timer.Restart();
 
                 _core.Display.GameLoopCounter.Calculate();
