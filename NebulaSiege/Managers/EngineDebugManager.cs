@@ -13,28 +13,30 @@ namespace NebulaSiege.Managers
     /// </summary>
     internal class EngineDebugManager
     {
-        private static string[] commandPrototypes = {
-            "Sprite|List|typeFilter:Optional:Criterion",
-            "Sprite|Visible|uid:Required:Numeric,state:Required:Boolean",
-            "Sprite|Highlight|uid:Required:Numeric,state:Required:Boolean",
-            "|Cls|",
-            "|Help|",
-            "Sprite|Move|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric",
-            "Sprite|Center|uid:Required:Numeric",
-            "Sprite|Explode|uid:Required:Numeric",
-            "Sprite|Info|uid:Required:Numeric",
-            "Sprite|MaxSpeed|uid:Required:Numeric,value:Required:Numeric",
-            "Sprite|MaxBoost|uid:Required:Numeric,value:Required:Numeric",
-            "Sprite|Throttle|uid:Required:Numeric,value:Required:Numeric",
-            "Sprite|Boost|uid:Required:Numeric,value:Required:Numeric",
-            "Sprite|AngleDegrees|uid:Required:Numeric,value:Required:Numeric",
+        private static string[] _commandPrototypes = {
+            "Sprite-List|typeFilter:Optional:Criterion",
+            "Sprite-Player-Info|typeFilter:Optional:Criterion",
+            "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean",
+            "Sprite-Highlight|uid:Required:Numeric,state:Required:Boolean",
+            "Cls|",
+            "Help|",
+            "Display-Framerate|",
+            "Sprite-Move|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric",
+            "Sprite-Center|uid:Required:Numeric",
+            "Sprite-Explode|uid:Required:Numeric",
+            "Sprite-Info|uid:Required:Numeric",
+            "Sprite-MaxSpeed|uid:Required:Numeric,value:Required:Numeric",
+            "Sprite-MaxBoost|uid:Required:Numeric,value:Required:Numeric",
+            "Sprite-Throttle|uid:Required:Numeric,value:Required:Numeric",
+            "Sprite-Boost|uid:Required:Numeric,value:Required:Numeric",
+            "Sprite-AngleDegrees|uid:Required:Numeric,value:Required:Numeric",
         };
 
         private readonly EngineCore _core;
         private readonly Stack<string> _commandStack = new();
         private readonly FormDebug formDebug;
-        public DebugCommandParser CommandParser { get; } = new(commandPrototypes);
-        private List<MethodInfo> _hardDebugMethods;
+        public DebugCommandParser CommandParser { get; } = new(_commandPrototypes);
+        private readonly List<MethodInfo> _hardDebugMethods;
 
         public bool IsVisible { get; private set; } = false;
 
@@ -120,24 +122,52 @@ namespace NebulaSiege.Managers
             }
         }
 
+        public void DebugHandler_Display_Framerate(DebugCommand command)
+        {
+            var infoText =
+                  $"Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")}, "
+                + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")}, "
+                + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n";
+            formDebug.WriteLine(infoText);
+        }
+
+        public void DebugHandler_Sprite_Player_Info(DebugCommand command)
+        {
+            /*
+                $"Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")}, "
+                + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")}, "
+                + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n"
+                + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}\r\n"
+                //+ $"  Delta BG Offset: {displacementVector.X:#0.00}x, {displacementVector.Y:#0.00}y\r\n"
+             */
+
+            var infoText =
+                  $">  Sprite UID: {_core.Player.Sprite.UID}y\r\n"
+                + $"   Display XY: {_core.Player.Sprite.X:#0.00}x, {_core.Player.Sprite.Y:#0.00}y\r\n"
+                + $"        Angle: {_core.Player.Sprite.Velocity.Angle.X:#0.00}x, {_core.Player.Sprite.Velocity.Angle.Y:#0.00}y, "
+                                    + $"{_core.Player.Sprite.Velocity.Angle.Degrees:#0.00}deg, "
+                                    + $" {_core.Player.Sprite.Velocity.Angle.Radians:#0.00}rad, "
+                                    + $" {_core.Player.Sprite.Velocity.Angle.RadiansUnadjusted:#0.00}rad unadjusted\r\n"
+                + $"   Virtual XY: {_core.Player.Sprite.X + _core.Display.BackgroundOffset.X:#0.00}x,"
+                                    + $" {_core.Player.Sprite.Y + _core.Display.BackgroundOffset.Y:#0.00}y\r\n"
+                + $"    BG Offset: {_core.Display.BackgroundOffset.X:#0.00}x, {_core.Display.BackgroundOffset.Y:#0.00}y\r\n"
+                + $"       Thrust: {(_core.Player.Sprite.Velocity.ThrottlePercentage * 100):#0.00}\r\n"
+                + $"        Boost: {(_core.Player.Sprite.Velocity.BoostPercentage * 100):#0.00}\r\n"
+                + $"       Recoil: {(_core.Player.Sprite.Velocity.RecoilPercentage * 100):#0.00}\r\n";
+
+            formDebug.WriteLine(infoText);
+        }
+
         public void DebugHandler_Sprite_Info(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
-                /*
-                    $"Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate.ToString("0.0")}, "
-                    + $"Min: {_core.Display.GameLoopCounter.FrameRateMin.ToString("0.0")}, "
-                    + $"Max: {_core.Display.GameLoopCounter.FrameRateMax.ToString("0.0")}\r\n"
-                    + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}\r\n"
-                    //+ $"  Delta BG Offset: {displacementVector.X:#0.00}x, {displacementVector.Y:#0.00}y\r\n"
-                 */
-
                 var infoText =
                       $">  Sprite UID: {sprite.UID}y\r\n"
                     + $"   Display XY: {sprite.X:#0.00}x, {sprite.Y:#0.00}y\r\n"
-                    + $" Player Angle: {sprite.Velocity.Angle.X:#0.00}x, {sprite.Velocity.Angle.Y:#0.00}y, "
+                    + $"        Angle: {sprite.Velocity.Angle.X:#0.00}x, {sprite.Velocity.Angle.Y:#0.00}y, "
                                         + $"{sprite.Velocity.Angle.Degrees:#0.00}deg, "
                                         + $" {sprite.Velocity.Angle.Radians:#0.00}rad, "
                                         + $" {sprite.Velocity.Angle.RadiansUnadjusted:#0.00}rad unadjusted\r\n"

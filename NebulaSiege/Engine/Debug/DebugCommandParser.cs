@@ -15,14 +15,14 @@ namespace NebulaSiege.Engine.Debug
             {
                 var commandParts = prototype.Split('|');
 
-                if (commandParts.Length != 3)
+                if (commandParts.Length != 2)
                 {
                     throw new Exception("Malformed debug command prototype.");
                 }
 
-                var command = new DebugCommandPrototype(commandParts[0], commandParts[1]);
+                var command = new DebugCommandPrototype(commandParts[0]);
 
-                var commandParameters = commandParts[2].Split(",");
+                var commandParameters = commandParts[1].Split(",");
 
                 foreach (var commandParameter in commandParameters)
                 {
@@ -51,7 +51,6 @@ namespace NebulaSiege.Engine.Debug
         {
             int paramStartIndex = commandText.IndexOf(' ');
 
-            string commandSpace = string.Empty;
             string commandName;
 
             if (paramStartIndex > 0)
@@ -63,29 +62,11 @@ namespace NebulaSiege.Engine.Debug
             {
                 commandName = commandText.Trim(); //We have no parameters.
                 commandText = string.Empty;
-
-                var parts = commandName.Split('-');
-                if (parts.Length > 1)
-                {
-                    commandSpace = string.Join("-", parts.Take(parts.Length - 1));
-                    commandName = parts[parts.Length - 1];
-                }
             }
 
-            int spaceIndex = commandName.IndexOf('-');
-            if (spaceIndex > 0)
-            {
-                commandSpace = commandName.Substring(0, spaceIndex).Trim();
-                commandName = commandName.Substring(spaceIndex + 1).Trim();
-            }
-
-            var commandPrototype = Commands.Where(o => o.Space.ToLower() == commandSpace.ToLower() && o.Name.ToLower() == commandName.ToLower()).FirstOrDefault();
+            var commandPrototype = Commands.Where(o => o.Name.ToLower() == commandName.ToLower()).FirstOrDefault();
             if (commandPrototype == null)
             {
-                if (commandSpace != string.Empty)
-                {
-                    throw new Exception($"Unknown '{commandSpace}' command '{commandName}'.");
-                }
                 throw new Exception($"Unknown command '{commandName}'.");
             }
 
@@ -97,7 +78,7 @@ namespace NebulaSiege.Engine.Debug
                 throw new Exception($"Too many parameters supplied to '{commandName}'.");
             }
 
-            var parsedCommand = new DebugCommand(commandSpace, commandName);
+            var parsedCommand = new DebugCommand(commandName);
 
             int paramIndex = 0;
 

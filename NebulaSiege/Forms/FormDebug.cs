@@ -70,9 +70,9 @@ namespace NebulaSiege.Forms
                 comboBoxAutoComplete.Items.Clear();
                 foreach (var command in _core.Debug.CommandParser.Commands)
                 {
-                    if (command.FriendlyName.ToLower().Contains(input))
+                    if (command.Name.ToLower().StartsWith(input))
                     {
-                        comboBoxAutoComplete.Items.Add(command.FriendlyName);
+                        comboBoxAutoComplete.Items.Add(command.Name);
                     }
                 }
 

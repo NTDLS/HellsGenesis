@@ -6,11 +6,10 @@ namespace NebulaSiege.Engine.Debug
 {
     internal class DebugCommand
     {
-        public string Space { get; set; }
         public string Name { get; set; }
         public List<DebugCommandParameter> Parameters { get; private set; } = new();
 
-        public string PhysicalFunctionKey => $"DebugHandler_{Space}_{Name}".Replace("__", "_").ToLower();
+        public string PhysicalFunctionKey => $"DebugHandler_{Name}".Replace('-', '_').Replace("__", "_").ToLower();
 
         public T ParameterValue<T>(string parameterName)
         {
@@ -32,9 +31,8 @@ namespace NebulaSiege.Engine.Debug
             return (T)Convert.ChangeType(parameter.RawValue, typeof(T));
         }
 
-        public DebugCommand(string space, string name)
+        public DebugCommand(string name)
         {
-            Space = space;
             Name = name;
         }
     }
