@@ -32,7 +32,7 @@
             splitContainerBody = new System.Windows.Forms.SplitContainer();
             textBoxOutput = new System.Windows.Forms.TextBox();
             buttonExecute = new System.Windows.Forms.Button();
-            comboBoxInput = new System.Windows.Forms.ComboBox();
+            textBoxInput = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)splitContainerBody).BeginInit();
             splitContainerBody.Panel1.SuspendLayout();
             splitContainerBody.Panel2.SuspendLayout();
@@ -54,7 +54,7 @@
             // 
             // splitContainerBody.Panel2
             // 
-            splitContainerBody.Panel2.Controls.Add(comboBoxInput);
+            splitContainerBody.Panel2.Controls.Add(textBoxInput);
             splitContainerBody.Panel2.Controls.Add(buttonExecute);
             splitContainerBody.Size = new System.Drawing.Size(955, 501);
             splitContainerBody.SplitterDistance = 470;
@@ -82,14 +82,14 @@
             buttonExecute.UseVisualStyleBackColor = true;
             buttonExecute.Click += ButtonExecute_Click;
             // 
-            // comboBoxInput
+            // textBoxInput
             // 
-            comboBoxInput.Dock = System.Windows.Forms.DockStyle.Fill;
-            comboBoxInput.FormattingEnabled = true;
-            comboBoxInput.Location = new System.Drawing.Point(0, 0);
-            comboBoxInput.Name = "comboBoxInput";
-            comboBoxInput.Size = new System.Drawing.Size(880, 23);
-            comboBoxInput.TabIndex = 2;
+            textBoxInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            textBoxInput.Location = new System.Drawing.Point(0, 0);
+            textBoxInput.Name = "textBoxInput";
+            textBoxInput.Size = new System.Drawing.Size(880, 23);
+            textBoxInput.TabIndex = 0;
+            textBoxInput.TabStop = false;
             // 
             // FormDebug
             // 
@@ -104,6 +104,7 @@
             splitContainerBody.Panel1.ResumeLayout(false);
             splitContainerBody.Panel1.PerformLayout();
             splitContainerBody.Panel2.ResumeLayout(false);
+            splitContainerBody.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainerBody).EndInit();
             splitContainerBody.ResumeLayout(false);
             ResumeLayout(false);
@@ -114,6 +115,6 @@
         private System.Windows.Forms.SplitContainer splitContainerBody;
         private System.Windows.Forms.TextBox textBoxOutput;
         private System.Windows.Forms.Button buttonExecute;
-        private System.Windows.Forms.ComboBox comboBoxInput;
+        private System.Windows.Forms.TextBox textBoxInput;
     }
 }

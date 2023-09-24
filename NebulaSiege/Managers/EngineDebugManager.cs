@@ -14,24 +14,31 @@ namespace NebulaSiege.Managers
     internal class EngineDebugManager
     {
         private static string[] _commandPrototypes = {
-            "Sprite-List|typeFilter:Optional:Criterion",
-            "Sprite-Player-Inspect|typeFilter:Optional:Criterion",
-            "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean",
-            "Sprite-Highlight|uid:Required:Numeric,state:Required:Boolean",
-            "Cls|",
-            "Help|",
-            "Display-Metrics|",
-            "Display-Framerate-Get|",
-            "Display-Framerate-Set|rate:Required:Numeric",
-            "Sprite-Move|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric",
-            "Sprite-Move-Center|uid:Required:Numeric",
-            "Sprite-Explode|uid:Required:Numeric",
-            "Sprite-Inspect|uid:Required:Numeric",
-            "Sprite-MaxSpeed|uid:Required:Numeric,value:Required:Numeric",
-            "Sprite-MaxBoost|uid:Required:Numeric,value:Required:Numeric",
-            "Sprite-Throttle|uid:Required:Numeric,value:Required:Numeric",
-            "Sprite-Boost|uid:Required:Numeric,value:Required:Numeric",
-            "Sprite-AngleDegrees|uid:Required:Numeric,value:Required:Numeric",
+            "Cls||Clears the debug screen.",
+
+            "Display-Framerate-Get||Gets the currently configured target framerate.",
+            "Display-Framerate-Set|rate:Required:Numeric|Sets the target framerate.",
+            "Display-Metrics||Displays various display metrics.",
+            "Help||Displays this help.",
+
+            "Sprite-AngleTo|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric|Gets the angle (in degrees) that a sprite is pointing.",
+            "Sprite-IsPointingAt|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric,toleranceDegrees:Optional=10:Numeric,maxDistance:Optional=10000:Numeric|Determines if one sprite is pointing at another.",
+            "Sprite-IsPointingAway|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric,toleranceDegrees:Optional=10:Numeric,maxDistance:Optional=10000:Numeric|Determines if one sprite is pointing aways from another",
+            "Sprite-DistanceTo|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric|Returns the distance from one sprite to another.",
+            "Sprite-AngleInDegrees|uid:Required:Numeric,value:Required:Numeric|Gets the angle (in degrees) from one sprite to another.",
+
+            "Sprite-Boost|uid:Required:Numeric,value:Required:Numeric|Gets the current boost percentage for a sprite.",
+            "Sprite-Explode|uid:Required:Numeric|Causes a sprite to explode.",
+            "Sprite-Highlight|uid:Required:Numeric,state:Required:Boolean|Highlights a given sprite.",
+            "Sprite-Inspect|uid:Required:Numeric|Returns various metrics about a given sprite.",
+            "Sprite-List|typeFilter:Optional:Criterion|Lists all sprites given an optional filter. Filter is a LIKE using !% and _.",
+            "Sprite-MaxBoost|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured max boost speed.",
+            "Sprite-MaxSpeed|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured native boost speed.",
+            "Sprite-Move|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric|Sets a new position for a given sprite.",
+            "Sprite-Move-Center|uid:Required:Numeric|Moves a given sprite to the center of the screen.",
+            "Sprite-Player-Inspect||Returns various metrics about the player sprite",
+            "Sprite-Throttle|uid:Required:Numeric,value:Required:Numeric|Gets the current throttle percentage for a sprite.",
+            "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean|Displays whether a given sprite is visible or not.",
         };
 
         private readonly EngineCore _core;
@@ -71,6 +78,8 @@ namespace NebulaSiege.Managers
             {
                 try
                 {
+                    formDebug.WriteLine($"> {command}:");
+
                     var parsedCommand = CommandParser.Parse(command);
 
                     var methodToExecute = _hardDebugMethods
@@ -105,26 +114,39 @@ namespace NebulaSiege.Managers
 
         #region Physical debug command handlers.
 
-        public void DebugHandler_Cls(DebugCommand command)
+        public void CommandHandler_Cls(DebugCommand command)
         {
             formDebug.ClearText();
         }
 
-        public void DebugHandler_Help(DebugCommand command)
+        public void CommandHandler_Help(DebugCommand command)
         {
             foreach (var cmd in CommandParser.Commands.OrderBy(o => o.Name))
             {
-                string text = $"> {cmd.Name}\r\n";
+                string text = $"{cmd.Name} - {cmd.Description}\r\n";
 
                 foreach (var cmdParam in cmd.Parameters)
                 {
-                    text += $"\t{cmdParam.Name}, {cmdParam.CommandParameterType}" + (cmdParam.IsRequired ? "" : " (optional)") + "\r\n";
+                    string optionalText = "";
+
+                    if (cmdParam.IsRequired == false)
+                    {
+                        optionalText = " (optional";
+                        if (cmdParam.DefaultValue == null)
+                        {
+                            optionalText += "=null";
+                        }
+                        else optionalText += $"={cmdParam.DefaultValue}";
+                        optionalText += ")";
+                    }
+
+                    text += $"\t{cmdParam.Name}, {cmdParam.CommandParameterType}{optionalText}\r\n";
                 }
                 formDebug.Write(text);
             }
         }
 
-        public void DebugHandler_Display_Metrics(DebugCommand command)
+        public void CommandHandler_Display_Metrics(DebugCommand command)
         {
             var infoText =
                   $"          BackgroundOffset: X:{_core.Display.BackgroundOffset.X:n2}, Y:{_core.Display.BackgroundOffset.X:n2}\r\n"
@@ -139,13 +161,13 @@ namespace NebulaSiege.Managers
             formDebug.WriteLine(infoText);
         }
 
-        public void DebugHandler_Display_Framerate_Set(DebugCommand command)
+        public void CommandHandler_Display_Framerate_Set(DebugCommand command)
         {
             var rate = command.ParameterValue<double>("rate");
             _core.Settings.FrameLimiter = rate;
         }
 
-        public void DebugHandler_Display_Framerate_Get(DebugCommand command)
+        public void CommandHandler_Display_Framerate_Get(DebugCommand command)
         {
             var infoText =
                   $"Limit: {_core.Settings.FrameLimiter:n4}\r\n"
@@ -155,77 +177,22 @@ namespace NebulaSiege.Managers
             formDebug.WriteLine(infoText);
         }
 
-        public void DebugHandler_Sprite_Player_Inspect(DebugCommand command)
+        public void CommandHandler_Sprite_Player_Inspect(DebugCommand command)
         {
-            /*
-                $"Frame Rate: Avg: {_core.Display.GameLoopCounter.AverageFrameRate:n2}, "
-                + $"Min: {_core.Display.GameLoopCounter.FrameRateMin:n2}, "
-                + $"Max: {_core.Display.GameLoopCounter.FrameRateMax:n2}\r\n"
-                + $"Quadrant: {_core.Display.CurrentQuadrant.Key.X}:{_core.Display.CurrentQuadrant.Key.Y}\r\n"
-                //+ $"  Delta BG Offset: {displacementVector.X:#0.00}x, {displacementVector.Y:#0.00}y\r\n"
-             */
-
-            var infoText =
-                  $">  Sprite UID: {_core.Player.Sprite.UID}y\r\n"
-                + $"   Display XY: {_core.Player.Sprite.X:#0.00}x, {_core.Player.Sprite.Y:#0.00}y\r\n"
-                + $"        Angle: {_core.Player.Sprite.Velocity.Angle.X:#0.00}x, {_core.Player.Sprite.Velocity.Angle.Y:#0.00}y, "
-                                    + $"{_core.Player.Sprite.Velocity.Angle.Degrees:#0.00}deg, "
-                                    + $" {_core.Player.Sprite.Velocity.Angle.Radians:#0.00}rad, "
-                                    + $" {_core.Player.Sprite.Velocity.Angle.RadiansUnadjusted:#0.00}rad unadjusted\r\n"
-                + $"   Virtual XY: {_core.Player.Sprite.X + _core.Display.BackgroundOffset.X:#0.00}x,"
-                                    + $" {_core.Player.Sprite.Y + _core.Display.BackgroundOffset.Y:#0.00}y\r\n"
-                + $"    BG Offset: {_core.Display.BackgroundOffset.X:#0.00}x, {_core.Display.BackgroundOffset.Y:#0.00}y\r\n"
-                + $"       Thrust: {(_core.Player.Sprite.Velocity.ThrottlePercentage * 100):#0.00}\r\n"
-                + $"        Boost: {(_core.Player.Sprite.Velocity.BoostPercentage * 100):#0.00}\r\n"
-                + $"       Recoil: {(_core.Player.Sprite.Velocity.RecoilPercentage * 100):#0.00}\r\n";
-
-            formDebug.WriteLine(infoText);
+            formDebug.WriteLine(_core.Player.Sprite.GetInspectionText());
         }
 
-        public void DebugHandler_Sprite_Inspect(DebugCommand command)
+        public void CommandHandler_Sprite_Inspect(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
-                var infoText =
-                      $">  Sprite UID: {sprite.UID}y\r\n"
-                    + $"   Display XY: {sprite.X:#0.00}x, {sprite.Y:#0.00}y\r\n"
-                    + $"        Angle: {sprite.Velocity.Angle.X:#0.00}x, {sprite.Velocity.Angle.Y:#0.00}y, "
-                                        + $"{sprite.Velocity.Angle.Degrees:#0.00}deg, "
-                                        + $" {sprite.Velocity.Angle.Radians:#0.00}rad, "
-                                        + $" {sprite.Velocity.Angle.RadiansUnadjusted:#0.00}rad unadjusted\r\n"
-                    + $"   Virtual XY: {sprite.X + _core.Display.BackgroundOffset.X:#0.00}x,"
-                                        + $" {sprite.Y + _core.Display.BackgroundOffset.Y:#0.00}y\r\n"
-                    + $"    BG Offset: {_core.Display.BackgroundOffset.X:#0.00}x, {_core.Display.BackgroundOffset.Y:#0.00}y\r\n"
-                    + $"       Thrust: {(sprite.Velocity.ThrottlePercentage * 100):#0.00}\r\n"
-                    + $"        Boost: {(sprite.Velocity.BoostPercentage * 100):#0.00}\r\n"
-                    + $"       Recoil: {(sprite.Velocity.RecoilPercentage * 100):#0.00}\r\n";
-
-                //TODO: Add these items here and to DebugHandler_Sprite_Player_Inspect()
-                //sprite.HullHealth
-                //sprite.ShieldHealth
-                //sprite.RotationMode
-                //sprite.Attachments(...)
-                //sprite.Bounds
-                //sprite.Highlight
-                //sprite.IsDead
-                //sprite.IsFixedPosition
-                //sprite.IsLockedOn
-                //sprite.IsLockedOnSoft
-                //sprite.IsWithinCurrentScaledScreenBounds
-                //sprite.OwnerUID
-                //sprite.ReadyForDeletion
-                //sprite.Size
-                //sprite.SpriteTag
-                //sprite.Visable
-                //sprite.VisibleBounds
-
-                formDebug.WriteLine(infoText);
+                formDebug.WriteLine(sprite.GetInspectionText());
             }
         }
 
-        public void DebugHandler_Sprite_Explode(DebugCommand command)
+        public void CommandHandler_Sprite_Explode(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -235,7 +202,72 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_AngleDegrees(DebugCommand command)
+        public void CommandHandler_Sprite_IsPointingAt(DebugCommand command)
+        {
+            var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
+            var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
+            var toleranceDegrees = command.ParameterValue<double>("toleranceDegrees");
+            var maxDistance = command.ParameterValue<double>("maxDistance");
+
+            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
+            var targetSprite = _core.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
+
+            if (baseSprite != null && targetSprite != null)
+            {
+                var result = baseSprite.IsPointingAt(targetSprite, toleranceDegrees, maxDistance);
+                formDebug.WriteLine($"IsPointingAt: {result}");
+            }
+        }
+
+        public void CommandHandler_Sprite_IsPointingAway(DebugCommand command)
+        {
+            var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
+            var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
+            var toleranceDegrees = command.ParameterValue<double>("toleranceDegrees", 10);
+            var maxDistance = command.ParameterValue<double>("maxDistance", 1000);
+
+            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
+            var targetSprite = _core.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
+
+            if (baseSprite != null && targetSprite != null)
+            {
+                var result = baseSprite.IsPointingAway(targetSprite, toleranceDegrees, maxDistance);
+                formDebug.WriteLine($"IsPointingAt: {result}");
+            }
+        }
+
+
+        public void CommandHandler_Sprite_DistanceTo(DebugCommand command)
+        {
+            var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
+            var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
+
+            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
+            var targetSprite = _core.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
+
+            if (baseSprite != null && targetSprite != null)
+            {
+                var result = baseSprite.DistanceTo(targetSprite);
+                formDebug.WriteLine($"DistanceTo: {result:n4}");
+            }
+        }
+
+        public void CommandHandler_Sprite_AngleTo(DebugCommand command)
+        {
+            var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
+            var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
+
+            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
+            var targetSprite = _core.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
+
+            if (baseSprite != null && targetSprite != null)
+            {
+                var result = baseSprite.AngleTo(targetSprite);
+                formDebug.WriteLine($"AngleTo: {result:n4}");
+            }
+        }
+
+        public void CommandHandler_Sprite_AngleInDegrees(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -245,7 +277,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_Boost(DebugCommand command)
+        public void CommandHandler_Sprite_Boost(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -255,7 +287,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_Throttle(DebugCommand command)
+        public void CommandHandler_Sprite_Throttle(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -265,7 +297,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_MaxBoost(DebugCommand command)
+        public void CommandHandler_Sprite_MaxBoost(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -275,7 +307,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_MaxSpeed(DebugCommand command)
+        public void CommandHandler_Sprite_MaxSpeed(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -285,7 +317,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_Highlight(DebugCommand command)
+        public void CommandHandler_Sprite_Highlight(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -295,7 +327,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_Visible(DebugCommand command)
+        public void CommandHandler_Sprite_Visible(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -305,7 +337,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_Move(DebugCommand command)
+        public void CommandHandler_Sprite_Move(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -316,7 +348,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_Move_Center(DebugCommand command)
+        public void CommandHandler_Sprite_Move_Center(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
@@ -327,7 +359,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void DebugHandler_Sprite_List(DebugCommand command)
+        public void CommandHandler_Sprite_List(DebugCommand command)
         {
             var sprites = _core.Sprites.Collection.ToList();
 

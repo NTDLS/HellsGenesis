@@ -7,6 +7,7 @@ using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons.Munitions;
 using SharpDX.Mathematics.Interop;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -73,6 +74,39 @@ namespace NebulaSiege.Sprites
                 _velocity = value;
                 _velocity.OnThrottleChanged += (sender) => VelocityChanged();
             }
+        }
+
+        public string GetInspectionText()
+        {
+            return
+                  $">                    UID: {UID}y\r\n"
+                + $"                   Owner: {OwnerUID:n0}\r\n"
+                + $"                     Tag: {SpriteTag:n0}\r\n"
+                + $"             Is Visable?: {Visable:n0}\r\n"
+                + $"                    Size: {Size:n0}\r\n"
+                + $"                  Bounds: {Bounds:n0}\r\n"
+                + $"       Ready for Delete?: {ReadyForDeletion}\r\n"
+                + $"                Is Dead?: {IsDead}\r\n"
+                + $"              Display XY: X:{X:n2}, Y:{Y:n2}\r\n"
+                + $"                   Angle: {Velocity.Angle.X:n2}x, {Velocity.Angle.Y:n2}y\r\n"
+                + $"                          {Velocity.Angle.Degrees:n2}deg\r\n"
+                + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
+                + $"                          {Velocity.Angle.RadiansUnadjusted:n2}rad unadjusted\r\n"
+                + $"              Virtual XY: X:{X + _core.Display.BackgroundOffset.X:n0}, Y:{Y + _core.Display.BackgroundOffset.Y:n0}\r\n"
+                + $"       Background Offset: {_core.Display.BackgroundOffset.X:n2}x, {_core.Display.BackgroundOffset.Y:n2}y\r\n"
+                + $"                  Thrust: {(Velocity.ThrottlePercentage * 100):n2}\r\n"
+                + $"                   Boost: {(Velocity.BoostPercentage * 100):n2}\r\n"
+                + $"                  Recoil: {(Velocity.RecoilPercentage * 100):n2}\r\n"
+                + $"                    Hull: {HullHealth:n0}\r\n"
+                + $"                  Shield: {ShieldHealth:n0}\r\n"
+                + $"                Rotation: {RotationMode}\r\n"
+                + $"             Attachments: {(Attachments?.Count() ?? 0):n0}\r\n"
+                + $"               Highlight: {Highlight}\r\n"
+                + $"       Is Fixed Position: {IsFixedPosition}\r\n"
+                + $"            Is Locked On: {IsLockedOn}\r\n"
+                + $"     Is Locked On (Soft): {IsLockedOnSoft:n0}\r\n"
+                + $"In Current Scaled Bounds: {IsWithinCurrentScaledScreenBounds}\r\n"
+                + $"           VisibleBounds: {VisibleBounds}\r\n";
         }
 
         public void SetHullHealth(int points)

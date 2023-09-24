@@ -14,10 +14,13 @@
         public DebugCommandParameterType CommandParameterType { get; private set; }
         public bool IsRequired { get; private set; }
 
-        public DebugCommandParameterPrototype(string name, bool isRequired, DebugCommandParameterType commandParameterType)
+        public string DefaultValue { get; private set; }
+
+        public DebugCommandParameterPrototype(string name, bool isRequired, string defautValue, DebugCommandParameterType commandParameterType)
         {
             Name = name;
             IsRequired = isRequired;
+            DefaultValue = defautValue;
             CommandParameterType = commandParameterType;
         }
     }

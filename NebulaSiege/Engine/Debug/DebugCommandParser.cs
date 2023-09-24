@@ -15,12 +15,12 @@ namespace NebulaSiege.Engine.Debug
             {
                 var commandParts = prototype.Split('|');
 
-                if (commandParts.Length != 2)
+                if (commandParts.Length != 3)
                 {
                     throw new Exception("Malformed debug command prototype.");
                 }
 
-                var command = new DebugCommandPrototype(commandParts[0]);
+                var command = new DebugCommandPrototype(commandParts[0], commandParts[2]);
 
                 var commandParameters = commandParts[1].Split(",");
 
@@ -35,9 +35,17 @@ namespace NebulaSiege.Engine.Debug
                             throw new Exception("Malformed debug command prototype parameter.");
                         }
 
+                        bool isRequired = commandParameterParts[1].Trim().ToLower() == "required";
+                        string defaultValue = null;
+
+                        if (isRequired == false && commandParameterParts[1].Contains('='))
+                        {
+                            int indexOfEqual = commandParameterParts[1].IndexOf('=');
+                            defaultValue = commandParameterParts[1].Substring(indexOfEqual + 1).Trim();
+                        }
+
                         command.Parameters.Add(new DebugCommandParameterPrototype(
-                            commandParameterParts[0],
-                            (commandParameterParts[1].Trim().ToLower() != "optional"),
+                            commandParameterParts[0], isRequired, defaultValue,
                             Enum.Parse<DebugCommandParameterType>(commandParameterParts[2], true)
                         ));
                     }

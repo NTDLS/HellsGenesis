@@ -24,16 +24,16 @@ namespace NebulaSiege.Forms
 
             splitContainerBody.Panel2.Controls.Add(comboBoxAutoComplete);
 
-            comboBoxInput.Font = new Font("Courier New", 10, FontStyle.Regular);
+            textBoxInput.Font = new Font("Courier New", 10, FontStyle.Regular);
             textBoxOutput.Font = new Font("Courier New", 10, FontStyle.Regular);
 
             AcceptButton = buttonExecute;
 
             _core = core;
 
-            Shown += (object sender, EventArgs e) => comboBoxInput.Focus();
+            Shown += (object sender, EventArgs e) => textBoxInput.Focus();
 
-            comboBoxInput.KeyUp += TextBoxInput_KeyUp;
+            textBoxInput.KeyUp += TextBoxInput_KeyUp;
 
             FormClosing += (object sender, FormClosingEventArgs e) =>
             {
@@ -48,9 +48,12 @@ namespace NebulaSiege.Forms
             {
                 if (comboBoxAutoComplete.Items.Count > 0)
                 {
-                    comboBoxInput.Text = comboBoxAutoComplete.Items[0].ToString();
-                    comboBoxInput.SelectionStart = comboBoxInput.Text.Length;
-                    comboBoxInput.SelectionLength = 0;
+                    textBoxInput.Focus();
+                    textBoxInput.Text = comboBoxAutoComplete.Items[0].ToString();
+                    textBoxInput.SelectionStart = textBoxInput.Text.Length;
+                    textBoxInput.SelectionLength = 0;
+                    comboBoxAutoComplete.DroppedDown = false;
+                    Cursor.Current = Cursors.Default;
                 }
                 return true;
             }
@@ -59,9 +62,15 @@ namespace NebulaSiege.Forms
 
         private void TextBoxInput_KeyUp(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || e.KeyCode == Keys.Back)
+            if (e.KeyCode == Keys.Escape)
             {
-                string input = comboBoxInput.Text.ToLower();
+                comboBoxAutoComplete.DroppedDown = false;
+                Cursor.Current = Cursors.Default;
+                textBoxInput.Focus();
+            }
+            else if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || e.KeyCode == Keys.Back || e.KeyCode == Keys.OemMinus)
+            {
+                string input = textBoxInput.Text.ToLower();
                 if (input.Length <= 0)
                 {
                     return;
@@ -86,33 +95,41 @@ namespace NebulaSiege.Forms
                 }
 
                 comboBoxAutoComplete.DroppedDown = comboBoxAutoComplete.Items.Count > 0;
+                Cursor.Current = Cursors.Default;
             }
-            else if (e.KeyCode == Keys.Up)
+            else if (comboBoxAutoComplete.DroppedDown == true)
             {
-                if (_commandHistoryIndex > 0)
+                comboBoxAutoComplete.Focus();
+            }
+            else
+            {
+                if (e.KeyCode == Keys.Up)
                 {
-                    _commandHistoryIndex--;
-                    comboBoxInput.Text = _commandHistory[_commandHistoryIndex];
-                    comboBoxInput.SelectionStart = comboBoxInput.Text.Length;
-                    comboBoxInput.SelectionLength = 0;
+                    if (_commandHistoryIndex > 0)
+                    {
+                        _commandHistoryIndex--;
+                        textBoxInput.Text = _commandHistory[_commandHistoryIndex];
+                        textBoxInput.SelectionStart = textBoxInput.Text.Length;
+                        textBoxInput.SelectionLength = 0;
+                    }
                 }
-            }
-            else if (e.KeyCode == Keys.Down)
-            {
-                if (_commandHistoryIndex <= _commandHistory.Count - 1)
+                else if (e.KeyCode == Keys.Down)
                 {
-                    comboBoxInput.Text = _commandHistory[_commandHistoryIndex];
-                    _commandHistoryIndex++;
-                    comboBoxInput.SelectionStart = comboBoxInput.Text.Length;
-                    comboBoxInput.SelectionLength = 0;
+                    if (_commandHistoryIndex <= _commandHistory.Count - 1)
+                    {
+                        textBoxInput.Text = _commandHistory[_commandHistoryIndex];
+                        _commandHistoryIndex++;
+                        textBoxInput.SelectionStart = textBoxInput.Text.Length;
+                        textBoxInput.SelectionLength = 0;
+                    }
                 }
             }
         }
 
         private void ButtonExecute_Click(object sender, EventArgs e)
         {
-            var command = comboBoxInput.Text.Trim();
-            comboBoxInput.Text = "";
+            var command = textBoxInput.Text.Trim();
+            textBoxInput.Text = "";
 
             if (string.IsNullOrEmpty(command) == false)
             {
