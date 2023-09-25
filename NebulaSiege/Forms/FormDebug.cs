@@ -9,20 +9,19 @@ namespace NebulaSiege.Forms
     public partial class FormDebug : Form
     {
         private readonly EngineCore _core;
-        private List<string> _commandHistory = new();
+        private readonly List<string> _commandHistory = new();
         private int _commandHistoryIndex = 0;
+        private readonly ComboBox _comboBoxAutoComplete = new();
 
         public FormDebug() => InitializeComponent();
 
         private void FormDebug_Load(object sender, EventArgs e) { }
 
-        ComboBox comboBoxAutoComplete = new();
-
         internal FormDebug(EngineCore core)
         {
             InitializeComponent();
 
-            splitContainerBody.Panel2.Controls.Add(comboBoxAutoComplete);
+            splitContainerBody.Panel2.Controls.Add(_comboBoxAutoComplete);
 
             textBoxInput.Font = new Font("Courier New", 10, FontStyle.Regular);
             textBoxOutput.Font = new Font("Courier New", 10, FontStyle.Regular);
@@ -46,14 +45,21 @@ namespace NebulaSiege.Forms
         {
             if (keyData == Keys.Tab)
             {
-                if (comboBoxAutoComplete.Items.Count > 0)
+                if (_comboBoxAutoComplete.Items.Count > 0)
                 {
-                    textBoxInput.Focus();
-                    textBoxInput.Text = comboBoxAutoComplete.Items[0].ToString();
+                    if (string.IsNullOrEmpty(_comboBoxAutoComplete.SelectedText) == false)
+                    {
+                        textBoxInput.Text = _comboBoxAutoComplete.SelectedText;
+                    }
+                    else
+                    {
+                        textBoxInput.Text = _comboBoxAutoComplete.Items[0].ToString();
+                    }
                     textBoxInput.SelectionStart = textBoxInput.Text.Length;
                     textBoxInput.SelectionLength = 0;
-                    comboBoxAutoComplete.DroppedDown = false;
+                    _comboBoxAutoComplete.DroppedDown = false;
                     Cursor.Current = Cursors.Default;
+                    textBoxInput.Focus();
                 }
                 return true;
             }
@@ -64,7 +70,7 @@ namespace NebulaSiege.Forms
         {
             if (e.KeyCode == Keys.Escape)
             {
-                comboBoxAutoComplete.DroppedDown = false;
+                _comboBoxAutoComplete.DroppedDown = false;
                 Cursor.Current = Cursors.Default;
                 textBoxInput.Focus();
             }
@@ -76,30 +82,31 @@ namespace NebulaSiege.Forms
                     return;
                 }
 
-                comboBoxAutoComplete.Items.Clear();
+                _comboBoxAutoComplete.Items.Clear();
                 foreach (var command in _core.Debug.CommandParser.Commands)
                 {
                     if (command.Name.ToLower().StartsWith(input))
                     {
-                        comboBoxAutoComplete.Items.Add(command.Name);
+                        _comboBoxAutoComplete.Items.Add(command.Name);
                     }
                 }
 
-                if (comboBoxAutoComplete.Items.Count == 1)
+                if (_comboBoxAutoComplete.Items.Count == 1)
                 {
                     //No need to suggest a full match.
-                    if (comboBoxAutoComplete.Items[0].ToString().ToLower() == input)
+                    if (_comboBoxAutoComplete.Items[0].ToString().ToLower() == input)
                     {
-                        comboBoxAutoComplete.Items.Clear();
+                        _comboBoxAutoComplete.Items.Clear();
                     }
                 }
 
-                comboBoxAutoComplete.DroppedDown = comboBoxAutoComplete.Items.Count > 0;
+                _comboBoxAutoComplete.DroppedDown = _comboBoxAutoComplete.Items.Count > 0;
                 Cursor.Current = Cursors.Default;
             }
-            else if (comboBoxAutoComplete.DroppedDown == true)
+            else if (e.KeyCode == Keys.Down && _comboBoxAutoComplete.DroppedDown == true)
             {
-                comboBoxAutoComplete.Focus();
+                _comboBoxAutoComplete.Focus();
+                SendKeys.Send("{DOWN}");
             }
             else
             {
@@ -144,7 +151,7 @@ namespace NebulaSiege.Forms
         {
             if (textBoxOutput.InvokeRequired)
             {
-                textBoxOutput.Invoke(new Action(() => textBoxOutput.Clear()));
+                textBoxOutput.Invoke(new Action(textBoxOutput.Clear));
             }
             else
             {

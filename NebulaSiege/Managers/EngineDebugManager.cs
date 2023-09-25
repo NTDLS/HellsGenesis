@@ -1,6 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Debug;
 using NebulaSiege.Forms;
+using NebulaSiege.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,28 +16,39 @@ namespace NebulaSiege.Managers
     {
         private static string[] _commandPrototypes = {
             "Cls||Clears the debug screen.",
-
-            "Display-Framerate-Get||Gets the currently configured target framerate.",
-            "Display-Framerate-Set|rate:Required:Numeric|Sets the target framerate.",
-            "Display-Metrics||Displays various display metrics.",
             "Help||Displays this help.",
 
-            "Sprite-AngleTo|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric|Gets the angle (in degrees) that a sprite is pointing.",
-            "Sprite-IsPointingAt|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric,toleranceDegrees:Optional=10:Numeric,maxDistance:Optional=10000:Numeric|Determines if one sprite is pointing at another.",
-            "Sprite-IsPointingAway|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric,toleranceDegrees:Optional=10:Numeric,maxDistance:Optional=10000:Numeric|Determines if one sprite is pointing aways from another",
-            "Sprite-DistanceTo|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric|Returns the distance from one sprite to another.",
-            "Sprite-AngleInDegrees|uid:Required:Numeric,value:Required:Numeric|Gets the angle (in degrees) from one sprite to another.",
+            "Display-Zoom-Reset||Resets the global zoom level to auto.",
+            "Display-Zoom-Override|level:Required:Numeric|Sets the global zoom level.",
+            "Display-Zoom-Get||Gets the current global zoom level.",
+            "Display-Metrics||Displays various display metrics.",
+            "Display-Framerate-Set|rate:Required:Numeric|Sets the target framerate.",
+            "Display-Framerate-Get||Gets the currently configured target framerate.",
 
+            "Engine-HighlightAll|state:Required:Boolean|Highlights all visible sprites.",
+            "Engine-Pause|state:Required:Boolean|Pauses and unpauses the engine.",
+
+            "Sprite-Enemies-DeleteAll||Deletes all enemy sprites.",
+            "Sprite-Enemies-ExplodeAll||Explodes all enemy sprites.",
+
+            "Sprite-Player-Explode||Explodes the player sprite",
+            "Sprite-Player-Inspect||Returns various metrics about the player sprite",
+
+            "Sprite-AngleInDegrees|uid:Required:Numeric,value:Required:Numeric|Gets the angle (in degrees) from one sprite to another.",
+            "Sprite-AngleTo|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric|Gets the angle (in degrees) that a sprite is pointing.",
             "Sprite-Boost|uid:Required:Numeric,value:Required:Numeric|Gets the current boost percentage for a sprite.",
+            "Sprite-DistanceTo|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric|Returns the distance from one sprite to another.",
+
             "Sprite-Explode|uid:Required:Numeric|Causes a sprite to explode.",
             "Sprite-Highlight|uid:Required:Numeric,state:Required:Boolean|Highlights a given sprite.",
             "Sprite-Inspect|uid:Required:Numeric|Returns various metrics about a given sprite.",
+            "Sprite-IsPointingAt|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric,toleranceDegrees:Optional=10:Numeric,maxDistance:Optional=10000:Numeric|Determines if one sprite is pointing at another.",
+            "Sprite-IsPointingAway|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric,toleranceDegrees:Optional=10:Numeric,maxDistance:Optional=10000:Numeric|Determines if one sprite is pointing aways from another",
             "Sprite-List|typeFilter:Optional:Criterion|Lists all sprites given an optional filter. Filter is a LIKE using !% and _.",
             "Sprite-MaxBoost|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured max boost speed.",
             "Sprite-MaxSpeed|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured native boost speed.",
             "Sprite-Move|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric|Sets a new position for a given sprite.",
             "Sprite-Move-Center|uid:Required:Numeric|Moves a given sprite to the center of the screen.",
-            "Sprite-Player-Inspect||Returns various metrics about the player sprite",
             "Sprite-Throttle|uid:Required:Numeric,value:Required:Numeric|Gets the current throttle percentage for a sprite.",
             "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean|Displays whether a given sprite is visible or not.",
         };
@@ -114,6 +126,28 @@ namespace NebulaSiege.Managers
 
         #region Physical debug command handlers.
 
+
+        public void CommandHandler_Sprite_Enemies_DeleteAll(DebugCommand command)
+        {
+            foreach (var sprite in _core.Sprites.Enemies.All())
+            {
+                sprite.QueueForDelete();
+            }
+        }
+
+        public void CommandHandler_Sprite_Enemies_ExplodeAll(DebugCommand command)
+        {
+            foreach (var sprite in _core.Sprites.Enemies.All())
+            {
+                sprite.Explode();
+            }
+        }
+
+        public void CommandHandler_Sprite_Player_Explode(DebugCommand command)
+        {
+            _core.Player.Sprite.Explode();
+        }
+
         public void CommandHandler_Cls(DebugCommand command)
         {
             formDebug.ClearText();
@@ -159,6 +193,42 @@ namespace NebulaSiege.Managers
                 + $"   SpeedFrameScalingFactor: {_core.Display.SpeedOrientedFrameScalingFactor:n4}\r\n"
                 + $"           CurrentQuadrant: {_core.Display.CurrentQuadrant.Key}";
             formDebug.WriteLine(infoText);
+        }
+
+        public void CommandHandler_Engine_HighlightAll(DebugCommand command)
+        {
+            var state = command.ParameterValue<bool>("state");
+            _core.Settings.HighlightAllSprites = state;
+        }
+
+        public void CommandHandler_Display_Zoom_Reset(DebugCommand command)
+        {
+            _core.Display.OverrideSpeedOrientedFrameScalingFactor = double.NaN;
+        }
+
+        public void CommandHandler_Display_Zoom_Override(DebugCommand command)
+        {
+            var level = command.ParameterValue<double>("level");
+            _core.Display.OverrideSpeedOrientedFrameScalingFactor = level.Box(-1, 1);
+        }
+
+        public void CommandHandler_Display_Zoom_Get(DebugCommand command)
+        {
+            formDebug.WriteLine($"{_core.Display.SpeedOrientedFrameScalingFactor():n4}");
+        }
+
+        public void CommandHandler_Engine_Pause(DebugCommand command)
+        {
+            var state = command.ParameterValue<bool>("state");
+
+            if (state == true && _core.IsPaused() == false)
+            {
+                _core.Pause();
+            }
+            else if (state == false && _core.IsPaused() == true)
+            {
+                _core.Resume();
+            }
         }
 
         public void CommandHandler_Display_Framerate_Set(DebugCommand command)

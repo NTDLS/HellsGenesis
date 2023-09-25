@@ -23,8 +23,15 @@ namespace NebulaSiege.Managers
         public NsFrameCounter GameLoopCounter { get; private set; } = new();
         public Control DrawingSurface { get; private set; }
 
+        public double OverrideSpeedOrientedFrameScalingFactor { get; set; } = double.NaN;
+
         public double SpeedOrientedFrameScalingFactor()
         {
+            if (OverrideSpeedOrientedFrameScalingFactor is not double.NaN)
+            {
+                return OverrideSpeedOrientedFrameScalingFactor;
+            }
+
             double weightedThrottlePercent = (
                     _core.Player.Sprite.Velocity.ThrottlePercentage * 0.60 //n-percent of the zoom is throttle.
                     + _core.Player.Sprite.Velocity.BoostPercentage * 0.40  //n-percent of the zoom is boost.

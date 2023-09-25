@@ -7,9 +7,9 @@ using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons.Munitions;
 using SharpDX.Mathematics.Interop;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace NebulaSiege.Sprites
 {
