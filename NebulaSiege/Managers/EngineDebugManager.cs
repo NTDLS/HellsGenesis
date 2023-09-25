@@ -24,6 +24,12 @@ namespace NebulaSiege.Managers
             "Display-Metrics||Displays various display metrics.",
             "Display-Framerate-Set|rate:Required:Numeric|Sets the target framerate.",
             "Display-Framerate-Get||Gets the currently configured target framerate.",
+            "Display-Adapters||List available video adapters.",
+
+            "Display-BackgroundOffset-Get||Gets the current background offset.",
+            "Display-BackgroundOffset-Set|x:Required:Numeric,y:Required:Numeric|Sets the current background offset.",
+            "Display-BackgroundOffset-CenterOn|spriteUID:Required:Numeric|Centers the background offset on a given sprite.",
+            "Display-Follow|spriteUid:Required:Numeric|Causes the camera to follow a sprite.",
 
             "Engine-HighlightAll|state:Required:Boolean|Highlights all visible sprites.",
             "Engine-Pause|state:Required:Boolean|Pauses and unpauses the engine.",
@@ -128,6 +134,75 @@ namespace NebulaSiege.Managers
 
         #region Physical debug command handlers.
 
+        //"Display-BackgroundOffset-Get||Gets the current background offset.",
+        //"Display-BackgroundOffset-Set|x:Required:Numeric,y:Required:Numeric|Sets the current background offset.",
+        //"Display-BackgroundOffset-CenterOn|spriteUID:Required:Numeric|Centers the background offset on a given sprite.",
+
+        public void CommandHandler_Display_BackgroundOffset_Get(DebugCommand command)
+        {
+            formDebug.WriteLine($"{_core.Display.BackgroundOffset}", System.Drawing.Color.Black);
+        }
+
+        public void CommandHandler_Display_BackgroundOffset_Set(DebugCommand command)
+        {
+            var x = command.ParameterValue<double>("x");
+            var y = command.ParameterValue<double>("y");
+
+            var deltaX = _core.Display.BackgroundOffset.X - x;
+            var deltaY = _core.Display.BackgroundOffset.Y - y;
+
+            foreach (var sprite in _core.Sprites.Collection)
+            {
+                if (sprite.IsFixedPosition == false)
+                {
+                    sprite.X += deltaX;
+                    sprite.Y += deltaY;
+                }
+            }
+
+            _core.Display.BackgroundOffset.X = x;
+            _core.Display.BackgroundOffset.Y = y;
+        }
+
+        public void CommandHandler_Display_Follow(DebugCommand command)
+        {
+            var spriteUID = command.ParameterValue<double>("spriteUID");
+            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == spriteUID).FirstOrDefault();
+
+            if (baseSprite != null)
+            {
+                _core.Display.SpriteToFollow = baseSprite;
+            }
+        }
+
+        public void CommandHandler_Display_BackgroundOffset_CenterOn(DebugCommand command)
+        {
+            var spriteUID = command.ParameterValue<double>("spriteUID");
+            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == spriteUID).FirstOrDefault();
+            if (baseSprite != null)
+            {
+                var deltaX = (_core.Display.TotalCanvasSize.Width / 2) - baseSprite.X;
+                var deltaY = (_core.Display.TotalCanvasSize.Height / 2) - baseSprite.Y;
+
+                foreach (var sprite in _core.Sprites.Collection)
+                {
+                    if (sprite.IsFixedPosition == false)
+                    {
+                        sprite.X += deltaX;
+                        sprite.Y += deltaY;
+                    }
+                }
+
+                _core.Display.BackgroundOffset.X = baseSprite.X;
+                _core.Display.BackgroundOffset.Y = baseSprite.Y;
+            }
+        }
+
+        public void CommandHandler_Display_Adapters(DebugCommand command)
+        {
+            var text = _core.DirectX.GetGraphicsAdaptersInfo();
+            formDebug.Write(text, System.Drawing.Color.Black);
+        }
 
         public void CommandHandler_Sprite_Enemies_DeleteAll(DebugCommand command)
         {
@@ -185,15 +260,15 @@ namespace NebulaSiege.Managers
         public void CommandHandler_Display_Metrics(DebugCommand command)
         {
             var infoText =
-                  $"          BackgroundOffset: X:{_core.Display.BackgroundOffset.X:n2}, Y:{_core.Display.BackgroundOffset.X:n2}\r\n"
-                + $"             BaseDrawScale: {_core.Display.BaseDrawScale:n4}\r\n"
-                + $"              OverdrawSize: W:{_core.Display.OverdrawSize.Width:n0}, H{_core.Display.OverdrawSize.Height:n0}\r\n"
-                + $"         NatrualScreenSize: W:{_core.Display.NatrualScreenSize.Width:n0}, H{_core.Display.NatrualScreenSize.Height:n0}\r\n"
-                + $"           TotalCanvasSize: W:{_core.Display.TotalCanvasSize.Width:n0}, H{_core.Display.TotalCanvasSize.Height:n0}\r\n"
-                + $"         TotalCanvasBounds: X:{_core.Display.TotalCanvasBounds.X:n0}, Y:{_core.Display.TotalCanvasBounds.Y:n0} / W:{_core.Display.TotalCanvasBounds.Width:n0}, H:{_core.Display.TotalCanvasBounds.Height:n0}\r\n"
-                + $"       NatrualScreenBounds: X:{_core.Display.NatrualScreenBounds.X:n0}, Y:{_core.Display.NatrualScreenBounds.Y:n0} / W:{_core.Display.NatrualScreenBounds.Width:n0}, H:{_core.Display.NatrualScreenBounds.Height:n0}\r\n"
-                + $"   SpeedFrameScalingFactor: {_core.Display.SpeedOrientedFrameScalingFactor:n4}\r\n"
-                + $"           CurrentQuadrant: {_core.Display.CurrentQuadrant.Key}";
+                  $"          Background Offset: {_core.Display.BackgroundOffset}\r\n"
+                + $"            Base Draw Scale: {_core.Display.BaseDrawScale:n4}\r\n"
+                + $"              Overdraw Size: {_core.Display.OverdrawSize}\r\n"
+                + $"        Natrual Screen Size: {_core.Display.NatrualScreenSize}\r\n"
+                + $"          Total Canvas Size: {_core.Display.TotalCanvasSize}\r\n"
+                + $"        Total Canvas Bounds: {_core.Display.TotalCanvasBounds}\r\n"
+                + $"      Natrual Screen Bounds: {_core.Display.NatrualScreenBounds}\r\n"
+                + $" Speed Frame Scaling Factor: {_core.Display.SpeedOrientedFrameScalingFactor():n4}\r\n"
+                + $"           Current Quadrant: {_core.Display.CurrentQuadrant.Key}";
             formDebug.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
@@ -443,7 +518,7 @@ namespace NebulaSiege.Managers
 
             foreach (var sprite in sprites)
             {
-                formDebug.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}", System.Drawing.Color.Black);
+                formDebug.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}, Position: {sprite.Location}", System.Drawing.Color.Black);
             }
         }
 

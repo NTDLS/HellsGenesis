@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace NebulaSiege.Forms
@@ -22,6 +23,8 @@ namespace NebulaSiege.Forms
             InitializeComponent();
 
             splitContainerBody.Panel2.Controls.Add(_comboBoxAutoComplete);
+            _comboBoxAutoComplete.Size = textBoxInput.Size;
+            _comboBoxAutoComplete.Location = textBoxInput.Location;
 
             textBoxInput.Font = new Font("Courier New", 10, FontStyle.Regular);
             richTextBoxOutput.Font = new Font("Courier New", 10, FontStyle.Regular);
@@ -85,14 +88,15 @@ namespace NebulaSiege.Forms
                     return;
                 }
 
+                _comboBoxAutoComplete.DroppedDown = false;
                 _comboBoxAutoComplete.Items.Clear();
-                foreach (var command in _core.Debug.CommandParser.Commands)
-                {
-                    if (command.Name.ToLower().StartsWith(input))
-                    {
-                        _comboBoxAutoComplete.Items.Add(command.Name);
-                    }
-                }
+                var filteredAndSorted = _core.Debug.CommandParser.Commands
+                            .Where(str => str.NameLowered.Contains(input))
+                            .OrderBy(str => !str.NameLowered.StartsWith(input)) // Sort by whether it starts with 'test'
+                            .ThenBy(str => str.NameLowered) // Then sort alphabetically
+                            .Select(o => o.Name).ToArray();
+
+                _comboBoxAutoComplete.Items.AddRange(filteredAndSorted);
 
                 if (_comboBoxAutoComplete.Items.Count == 1)
                 {

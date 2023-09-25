@@ -1,14 +1,25 @@
-﻿using NebulaSiege.Utility;
+﻿using NebulaSiege.Properties;
+using NebulaSiege.Utility;
+using Newtonsoft.Json.Linq;
+using ProtoBuf.Serializers;
 using SharpDX;
 using SharpDX.Direct2D1;
+using SharpDX.Direct3D;
 using SharpDX.DirectWrite;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
+using SharpDX.X3DAudio;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using static System.ComponentModel.Design.ObjectSelectorEditor;
+using static System.Windows.Forms.Design.AxImporter;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Text;
 
 namespace NebulaSiege.Engine.GraphicsProcessing
 {
@@ -58,6 +69,23 @@ namespace NebulaSiege.Engine.GraphicsProcessing
         {
             ScreenRenderTarget?.Dispose();
             ScreenRenderTarget?.Dispose();
+        }
+
+        public string GetGraphicsAdaptersInfo()
+        {
+            var text = new StringBuilder();
+            using (var factory = new SharpDX.DXGI.Factory1())
+            {
+                foreach (var adapter in factory.Adapters)
+                {
+                    string adapterName = adapter.Description.Description;
+                    var videoMemory = adapter.Description.DedicatedVideoMemory / 1024.0 / 1024.0;
+
+                    text.AppendLine($"\"{adapterName}\" : Dedicated Video Memory {videoMemory:n2}MB");
+                }
+            }
+
+            return text.ToString();
         }
 
         public void ApplyScaling(float scale)

@@ -1,6 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
 using System;
@@ -19,7 +20,24 @@ namespace NebulaSiege.Managers
 
         public Dictionary<Point, HgQuadrant> Quadrants { get; private set; } = new();
         public HgQuadrant CurrentQuadrant { get; set; }
-        public NsPoint BackgroundOffset { get; private set; } = new(); //Offset of background, all cals must take into account.
+
+        NsPoint _backgroundOffset = new NsPoint(); //Offset of background, all calls must take into account.
+
+        public _SpriteBase SpriteToFollow { get; set; } = null;
+
+
+        public NsPoint BackgroundOffset
+        {
+            get
+            {
+                if (SpriteToFollow != null)
+                {
+                    return SpriteToFollow.Location;
+                }
+                return _backgroundOffset;
+            }
+        }
+
         public NsFrameCounter GameLoopCounter { get; private set; } = new();
         public Control DrawingSurface { get; private set; }
 
