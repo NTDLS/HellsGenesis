@@ -29,7 +29,6 @@ namespace NebulaSiege.Managers
             "Display-BackgroundOffset-Get||Gets the current background offset.",
             "Display-BackgroundOffset-Set|x:Required:Numeric,y:Required:Numeric|Sets the current background offset.",
             "Display-BackgroundOffset-CenterOn|spriteUID:Required:Numeric|Centers the background offset on a given sprite.",
-            "Display-Follow|spriteUid:Required:Numeric|Causes the camera to follow a sprite.",
 
             "Engine-HighlightAll|state:Required:Boolean|Highlights all visible sprites.",
             "Engine-Pause|state:Required:Boolean|Pauses and unpauses the engine.",
@@ -134,10 +133,6 @@ namespace NebulaSiege.Managers
 
         #region Physical debug command handlers.
 
-        //"Display-BackgroundOffset-Get||Gets the current background offset.",
-        //"Display-BackgroundOffset-Set|x:Required:Numeric,y:Required:Numeric|Sets the current background offset.",
-        //"Display-BackgroundOffset-CenterOn|spriteUID:Required:Numeric|Centers the background offset on a given sprite.",
-
         public void CommandHandler_Display_BackgroundOffset_Get(DebugCommand command)
         {
             formDebug.WriteLine($"{_core.Display.BackgroundOffset}", System.Drawing.Color.Black);
@@ -162,17 +157,6 @@ namespace NebulaSiege.Managers
 
             _core.Display.BackgroundOffset.X = x;
             _core.Display.BackgroundOffset.Y = y;
-        }
-
-        public void CommandHandler_Display_Follow(DebugCommand command)
-        {
-            var spriteUID = command.ParameterValue<double>("spriteUID");
-            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == spriteUID).FirstOrDefault();
-
-            if (baseSprite != null)
-            {
-                _core.Display.SpriteToFollow = baseSprite;
-            }
         }
 
         public void CommandHandler_Display_BackgroundOffset_CenterOn(DebugCommand command)
@@ -267,8 +251,7 @@ namespace NebulaSiege.Managers
                 + $"          Total Canvas Size: {_core.Display.TotalCanvasSize}\r\n"
                 + $"        Total Canvas Bounds: {_core.Display.TotalCanvasBounds}\r\n"
                 + $"      Natrual Screen Bounds: {_core.Display.NatrualScreenBounds}\r\n"
-                + $" Speed Frame Scaling Factor: {_core.Display.SpeedOrientedFrameScalingFactor():n4}\r\n"
-                + $"           Current Quadrant: {_core.Display.CurrentQuadrant.Key}";
+                + $" Speed Frame Scaling Factor: {_core.Display.SpeedOrientedFrameScalingFactor():n4}";
             formDebug.WriteLine(infoText, System.Drawing.Color.Black);
         }
 

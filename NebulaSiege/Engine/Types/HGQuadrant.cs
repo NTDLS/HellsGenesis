@@ -12,5 +12,7 @@ namespace NebulaSiege.Engine.Types
             Key = key;
             Bounds = bounds;
         }
+
+        public override string ToString() => Key.ToString();
     }
 }

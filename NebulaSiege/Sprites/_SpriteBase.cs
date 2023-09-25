@@ -62,13 +62,11 @@ namespace NebulaSiege.Sprites
         public RectangleF VisibleBounds => new Rectangle((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
         public RectangleF Bounds => new((float)_location.X, (float)_location.Y, Size.Width, Size.Height);
         public Rectangle BoundsI => new((int)_location.X, (int)_location.Y, Size.Width, Size.Height);
+        public HgQuadrant Quadrant => _core.Display.GetQuadrant(X + _core.Display.BackgroundOffset.X, Y + _core.Display.BackgroundOffset.Y);
 
         public HgVelocity Velocity
         {
-            get
-            {
-                return _velocity;
-            }
+            get => _velocity;
             set
             {
                 _velocity = value;
@@ -106,7 +104,8 @@ namespace NebulaSiege.Sprites
                 + $"            Is Locked On: {IsLockedOn}\r\n"
                 + $"     Is Locked On (Soft): {IsLockedOnSoft:n0}\r\n"
                 + $"In Current Scaled Bounds: {IsWithinCurrentScaledScreenBounds}\r\n"
-                + $"           VisibleBounds: {VisibleBounds}\r\n";
+                + $"               Quandrant: {Quadrant}\r\n"
+                + $"          Visible Bounds: {VisibleBounds}\r\n";
         }
 
         public void SetHullHealth(int points)

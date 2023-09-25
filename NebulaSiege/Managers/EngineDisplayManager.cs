@@ -19,25 +19,7 @@ namespace NebulaSiege.Managers
         private readonly EngineCore _core;
 
         public Dictionary<Point, HgQuadrant> Quadrants { get; private set; } = new();
-        public HgQuadrant CurrentQuadrant { get; set; }
-
-        NsPoint _backgroundOffset = new NsPoint(); //Offset of background, all calls must take into account.
-
-        public _SpriteBase SpriteToFollow { get; set; } = null;
-
-
-        public NsPoint BackgroundOffset
-        {
-            get
-            {
-                if (SpriteToFollow != null)
-                {
-                    return SpriteToFollow.Location;
-                }
-                return _backgroundOffset;
-            }
-        }
-
+        public NsPoint BackgroundOffset { get; private set; } = new();
         public NsFrameCounter GameLoopCounter { get; private set; } = new();
         public Control DrawingSurface { get; private set; }
 

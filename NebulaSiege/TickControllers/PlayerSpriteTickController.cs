@@ -244,10 +244,6 @@ namespace NebulaSiege.Controller
             Core.Display.BackgroundOffset.X += displacementVector.X;
             Core.Display.BackgroundOffset.Y += displacementVector.Y;
 
-            Core.Display.CurrentQuadrant = Core.Display.GetQuadrant(
-                Sprite.X + Core.Display.BackgroundOffset.X,
-                Sprite.Y + Core.Display.BackgroundOffset.Y);
-
             if (Sprite.Velocity.RecoilPercentage > 0)
             {
                 Sprite.Velocity.RecoilPercentage -= Sprite.Velocity.RecoilPercentage * 0.10;
