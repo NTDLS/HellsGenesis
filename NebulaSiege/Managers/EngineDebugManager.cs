@@ -90,19 +90,21 @@ namespace NebulaSiege.Managers
             {
                 try
                 {
-                    formDebug.WriteLine($"> {command}:");
+                    formDebug.WriteLine($"Executing ↓ \"{command}\":", System.Drawing.Color.Blue);
 
                     var parsedCommand = CommandParser.Parse(command);
 
                     var methodToExecute = _hardDebugMethods
-                        .Where(o => o.Name.ToLower() == parsedCommand.PhysicalFunctionKey).FirstOrDefault() ?? throw new Exception($"Physical function '{parsedCommand.PhysicalFunctionKey}' is not implemented.");
+                        .Where(o => o.Name.ToLower() == parsedCommand.PhysicalFunctionKey).FirstOrDefault()
+                        ?? throw new Exception($"Physical function '{parsedCommand.PhysicalFunctionKey}' is not implemented.");
 
                     methodToExecute?.Invoke(this, new object[] { parsedCommand });
                 }
                 catch (Exception ex)
                 {
-                    formDebug.WriteLine(ex.Message);
+                    formDebug.WriteLine(ex.Message, System.Drawing.Color.DarkRed);
                 }
+                formDebug.WriteLine($"Complete  ↑", System.Drawing.Color.Blue);
             }
         }
 
@@ -176,7 +178,7 @@ namespace NebulaSiege.Managers
 
                     text += $"\t{cmdParam.Name}, {cmdParam.CommandParameterType}{optionalText}\r\n";
                 }
-                formDebug.Write(text);
+                formDebug.Write(text, System.Drawing.Color.Black);
             }
         }
 
@@ -192,7 +194,7 @@ namespace NebulaSiege.Managers
                 + $"       NatrualScreenBounds: X:{_core.Display.NatrualScreenBounds.X:n0}, Y:{_core.Display.NatrualScreenBounds.Y:n0} / W:{_core.Display.NatrualScreenBounds.Width:n0}, H:{_core.Display.NatrualScreenBounds.Height:n0}\r\n"
                 + $"   SpeedFrameScalingFactor: {_core.Display.SpeedOrientedFrameScalingFactor:n4}\r\n"
                 + $"           CurrentQuadrant: {_core.Display.CurrentQuadrant.Key}";
-            formDebug.WriteLine(infoText);
+            formDebug.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Engine_HighlightAll(DebugCommand command)
@@ -214,7 +216,7 @@ namespace NebulaSiege.Managers
 
         public void CommandHandler_Display_Zoom_Get(DebugCommand command)
         {
-            formDebug.WriteLine($"{_core.Display.SpeedOrientedFrameScalingFactor():n4}");
+            formDebug.WriteLine($"{_core.Display.SpeedOrientedFrameScalingFactor():n4}", System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Engine_Pause(DebugCommand command)
@@ -244,12 +246,12 @@ namespace NebulaSiege.Managers
                 + $"  Avg: {_core.Display.GameLoopCounter.AverageFrameRate:n4}\r\n"
                 + $"  Min: {_core.Display.GameLoopCounter.FrameRateMin:n4}\r\n"
                 + $"  Max: {_core.Display.GameLoopCounter.FrameRateMax:n4}";
-            formDebug.WriteLine(infoText);
+            formDebug.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Player_Inspect(DebugCommand command)
         {
-            formDebug.WriteLine(_core.Player.Sprite.GetInspectionText());
+            formDebug.WriteLine(_core.Player.Sprite.GetInspectionText(), System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Inspect(DebugCommand command)
@@ -258,7 +260,7 @@ namespace NebulaSiege.Managers
             var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
-                formDebug.WriteLine(sprite.GetInspectionText());
+                formDebug.WriteLine(sprite.GetInspectionText(), System.Drawing.Color.Black);
             }
         }
 
@@ -285,7 +287,7 @@ namespace NebulaSiege.Managers
             if (baseSprite != null && targetSprite != null)
             {
                 var result = baseSprite.IsPointingAt(targetSprite, toleranceDegrees, maxDistance);
-                formDebug.WriteLine($"IsPointingAt: {result}");
+                formDebug.WriteLine($"IsPointingAt: {result}", System.Drawing.Color.Black);
             }
         }
 
@@ -302,7 +304,7 @@ namespace NebulaSiege.Managers
             if (baseSprite != null && targetSprite != null)
             {
                 var result = baseSprite.IsPointingAway(targetSprite, toleranceDegrees, maxDistance);
-                formDebug.WriteLine($"IsPointingAt: {result}");
+                formDebug.WriteLine($"IsPointingAt: {result}", System.Drawing.Color.Black);
             }
         }
 
@@ -318,7 +320,7 @@ namespace NebulaSiege.Managers
             if (baseSprite != null && targetSprite != null)
             {
                 var result = baseSprite.DistanceTo(targetSprite);
-                formDebug.WriteLine($"DistanceTo: {result:n4}");
+                formDebug.WriteLine($"DistanceTo: {result:n4}", System.Drawing.Color.Black);
             }
         }
 
@@ -333,7 +335,7 @@ namespace NebulaSiege.Managers
             if (baseSprite != null && targetSprite != null)
             {
                 var result = baseSprite.AngleTo(targetSprite);
-                formDebug.WriteLine($"AngleTo: {result:n4}");
+                formDebug.WriteLine($"AngleTo: {result:n4}", System.Drawing.Color.Black);
             }
         }
 
@@ -441,7 +443,7 @@ namespace NebulaSiege.Managers
 
             foreach (var sprite in sprites)
             {
-                formDebug.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}");
+                formDebug.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}", System.Drawing.Color.Black);
             }
         }
 

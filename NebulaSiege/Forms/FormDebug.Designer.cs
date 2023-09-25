@@ -30,9 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDebug));
             splitContainerBody = new System.Windows.Forms.SplitContainer();
-            textBoxOutput = new System.Windows.Forms.TextBox();
-            buttonExecute = new System.Windows.Forms.Button();
+            richTextBoxOutput = new System.Windows.Forms.RichTextBox();
             textBoxInput = new System.Windows.Forms.TextBox();
+            buttonExecute = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)splitContainerBody).BeginInit();
             splitContainerBody.Panel1.SuspendLayout();
             splitContainerBody.Panel2.SuspendLayout();
@@ -50,7 +50,7 @@
             // 
             // splitContainerBody.Panel1
             // 
-            splitContainerBody.Panel1.Controls.Add(textBoxOutput);
+            splitContainerBody.Panel1.Controls.Add(richTextBoxOutput);
             // 
             // splitContainerBody.Panel2
             // 
@@ -60,16 +60,23 @@
             splitContainerBody.SplitterDistance = 470;
             splitContainerBody.TabIndex = 0;
             // 
-            // textBoxOutput
+            // richTextBoxOutput
             // 
-            textBoxOutput.Dock = System.Windows.Forms.DockStyle.Fill;
-            textBoxOutput.Location = new System.Drawing.Point(0, 0);
-            textBoxOutput.Multiline = true;
-            textBoxOutput.Name = "textBoxOutput";
-            textBoxOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            textBoxOutput.Size = new System.Drawing.Size(955, 470);
-            textBoxOutput.TabIndex = 2;
-            textBoxOutput.WordWrap = false;
+            richTextBoxOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            richTextBoxOutput.Location = new System.Drawing.Point(0, 0);
+            richTextBoxOutput.Name = "richTextBoxOutput";
+            richTextBoxOutput.Size = new System.Drawing.Size(955, 470);
+            richTextBoxOutput.TabIndex = 0;
+            richTextBoxOutput.Text = "";
+            // 
+            // textBoxInput
+            // 
+            textBoxInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            textBoxInput.Location = new System.Drawing.Point(0, 0);
+            textBoxInput.Name = "textBoxInput";
+            textBoxInput.Size = new System.Drawing.Size(880, 23);
+            textBoxInput.TabIndex = 0;
+            textBoxInput.TabStop = false;
             // 
             // buttonExecute
             // 
@@ -82,15 +89,6 @@
             buttonExecute.UseVisualStyleBackColor = true;
             buttonExecute.Click += ButtonExecute_Click;
             // 
-            // textBoxInput
-            // 
-            textBoxInput.Dock = System.Windows.Forms.DockStyle.Fill;
-            textBoxInput.Location = new System.Drawing.Point(0, 0);
-            textBoxInput.Name = "textBoxInput";
-            textBoxInput.Size = new System.Drawing.Size(880, 23);
-            textBoxInput.TabIndex = 0;
-            textBoxInput.TabStop = false;
-            // 
             // FormDebug
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -102,7 +100,6 @@
             Text = "Nebula Siege : Debug";
             Load += FormDebug_Load;
             splitContainerBody.Panel1.ResumeLayout(false);
-            splitContainerBody.Panel1.PerformLayout();
             splitContainerBody.Panel2.ResumeLayout(false);
             splitContainerBody.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainerBody).EndInit();
@@ -113,8 +110,8 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainerBody;
-        private System.Windows.Forms.TextBox textBoxOutput;
         private System.Windows.Forms.Button buttonExecute;
         private System.Windows.Forms.TextBox textBoxInput;
+        private System.Windows.Forms.RichTextBox richTextBoxOutput;
     }
 }

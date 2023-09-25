@@ -24,7 +24,7 @@ namespace NebulaSiege.Forms
             splitContainerBody.Panel2.Controls.Add(_comboBoxAutoComplete);
 
             textBoxInput.Font = new Font("Courier New", 10, FontStyle.Regular);
-            textBoxOutput.Font = new Font("Courier New", 10, FontStyle.Regular);
+            richTextBoxOutput.Font = new Font("Courier New", 10, FontStyle.Regular);
 
             AcceptButton = buttonExecute;
 
@@ -43,25 +43,28 @@ namespace NebulaSiege.Forms
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.Tab)
+            if (_comboBoxAutoComplete.Focused)
             {
-                if (_comboBoxAutoComplete.Items.Count > 0)
+                if (keyData == Keys.Tab || keyData == Keys.Enter)
                 {
-                    if (string.IsNullOrEmpty(_comboBoxAutoComplete.SelectedText) == false)
+                    if (_comboBoxAutoComplete.Items.Count > 0)
                     {
-                        textBoxInput.Text = _comboBoxAutoComplete.SelectedText;
+                        if (string.IsNullOrEmpty(_comboBoxAutoComplete.SelectedText) == false)
+                        {
+                            textBoxInput.Text = _comboBoxAutoComplete.SelectedText;
+                        }
+                        else
+                        {
+                            textBoxInput.Text = _comboBoxAutoComplete.Items[0].ToString();
+                        }
+                        textBoxInput.SelectionStart = textBoxInput.Text.Length;
+                        textBoxInput.SelectionLength = 0;
+                        _comboBoxAutoComplete.DroppedDown = false;
+                        Cursor.Current = Cursors.Default;
+                        textBoxInput.Focus();
                     }
-                    else
-                    {
-                        textBoxInput.Text = _comboBoxAutoComplete.Items[0].ToString();
-                    }
-                    textBoxInput.SelectionStart = textBoxInput.Text.Length;
-                    textBoxInput.SelectionLength = 0;
-                    _comboBoxAutoComplete.DroppedDown = false;
-                    Cursor.Current = Cursors.Default;
-                    textBoxInput.Focus();
+                    return true;
                 }
-                return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
@@ -149,40 +152,56 @@ namespace NebulaSiege.Forms
 
         public void ClearText()
         {
-            if (textBoxOutput.InvokeRequired)
+            if (richTextBoxOutput.InvokeRequired)
             {
-                textBoxOutput.Invoke(new Action(textBoxOutput.Clear));
+                richTextBoxOutput.Invoke(new Action(richTextBoxOutput.Clear));
             }
             else
             {
-                textBoxOutput.Clear();
+                richTextBoxOutput.Clear();
             }
         }
 
-        public void Write(string text)
+        public void WriteLine(string text, Color color)
         {
-            if (textBoxOutput.InvokeRequired)
+            if (InvokeRequired)
             {
-                textBoxOutput.Invoke(new Action(() => textBoxOutput.AppendText(text)));
+                Invoke(new Action<string, Color>(WriteLine), text, color);
+                return;
             }
-            else
-            {
-                textBoxOutput.AppendText(text);
-            }
+
+            richTextBoxOutput.SuspendLayout();
+            richTextBoxOutput.SelectionStart = richTextBoxOutput.TextLength;
+            richTextBoxOutput.SelectionLength = 0;
+
+            richTextBoxOutput.SelectionColor = color;
+            richTextBoxOutput.AppendText($"{text}\r\n");
+            richTextBoxOutput.SelectionColor = richTextBoxOutput.ForeColor;
+
+            richTextBoxOutput.SelectionStart = richTextBoxOutput.Text.Length;
+            richTextBoxOutput.ScrollToCaret();
+            richTextBoxOutput.ResumeLayout();
         }
 
-        public void WriteLine(string text)
+        public void Write(string text, Color color)
         {
-            text += "\r\n";
+            if (InvokeRequired)
+            {
+                Invoke(new Action<string, Color>(Write), text, color);
+                return;
+            }
 
-            if (textBoxOutput.InvokeRequired)
-            {
-                textBoxOutput.Invoke(new Action(() => textBoxOutput.AppendText(text)));
-            }
-            else
-            {
-                textBoxOutput.AppendText(text);
-            }
+            richTextBoxOutput.SuspendLayout();
+            richTextBoxOutput.SelectionStart = richTextBoxOutput.TextLength;
+            richTextBoxOutput.SelectionLength = 0;
+
+            richTextBoxOutput.SelectionColor = color;
+            richTextBoxOutput.AppendText($"{text}");
+            richTextBoxOutput.SelectionColor = richTextBoxOutput.ForeColor;
+
+            richTextBoxOutput.SelectionStart = richTextBoxOutput.Text.Length;
+            richTextBoxOutput.ScrollToCaret();
+            richTextBoxOutput.ResumeLayout();
         }
     }
 }
