@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace NebulaSiege.Forms
 {
@@ -94,7 +93,7 @@ namespace NebulaSiege.Forms
             if (listViewCommands.SelectedItems.Count > 0)
             {
                 ListViewItem selectedItem = listViewCommands.SelectedItems[0];
-                textBoxCommand.Text =  selectedItem.Text;
+                textBoxCommand.Text = selectedItem.Text;
             }
         }
 
