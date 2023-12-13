@@ -8,6 +8,15 @@ For the first first 3 years, this was rendering with GDI+ which was for the chal
 Version 0.0.1.0 Gameplay: (I've made progress since this video)
 https://www.youtube.com/watch?v=Kd-aEshWiNg
 
-![image](https://user-images.githubusercontent.com/11428567/118584633-604a6400-b765-11eb-8d98-222c02e796d3.png)
-![image](https://user-images.githubusercontent.com/11428567/118584646-680a0880-b765-11eb-822c-6fe38f498ebc.png)
-![image](https://user-images.githubusercontent.com/11428567/118584654-6c362600-b765-11eb-9939-c2b131e7fe4d.png)
+**Welcome Screen**
+
+![image](https://github.com/NTDLS/NebulaSiege/assets/11428567/ac877976-a9da-461e-bcdc-3ef0354ca3af)
+
+**Ship Class Selection**
+
+![image](https://github.com/NTDLS/NebulaSiege/assets/11428567/de754036-2e2a-48ff-9ef9-a4f8e7364d98)
+
+**Early Gameplay**
+
+![image](https://github.com/NTDLS/NebulaSiege/assets/11428567/89468ceb-6645-41fb-856d-ad6b732b11bc)
+
