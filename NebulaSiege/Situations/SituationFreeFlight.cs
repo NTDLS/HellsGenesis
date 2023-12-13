@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace NebulaSiege.Situations
 {
-    internal class SituationFreeFlight : _SituationBase
+    internal class SituationFreeFlight : SituationBase
     {
         public SituationFreeFlight(EngineCore core)
             : base(core, "Free Flight")

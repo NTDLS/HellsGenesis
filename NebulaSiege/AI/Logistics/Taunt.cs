@@ -19,7 +19,7 @@ namespace NebulaSiege.AI.Logistics
 
         private readonly EngineCore _core;
         private readonly _SpriteShipBase _owner;
-        private readonly _SpriteBase _observedObject;
+        private readonly SpriteBase _observedObject;
 
         #region "Enumerations".
 
@@ -78,7 +78,7 @@ namespace NebulaSiege.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public Taunt(EngineCore core, _SpriteShipBase owner, _SpriteBase observedObject)
+        public Taunt(EngineCore core, _SpriteShipBase owner, SpriteBase observedObject)
         {
             _core = core;
             _owner = owner;
@@ -91,7 +91,7 @@ namespace NebulaSiege.AI.Logistics
             SetNeuralNetwork();
         }
 
-        private void Owner_OnHit(_SpriteBase sender, HgDamageType damageType, int damageAmount)
+        private void Owner_OnHit(SpriteBase sender, HgDamageType damageType, int damageAmount)
         {
             if (sender.HullHealth <= 10)
             {
@@ -288,12 +288,15 @@ namespace NebulaSiege.AI.Logistics
                     Network.BackPropagate(TrainingScenerio(0.25, 0.5), TrainingDecision(0, 1, 0.6));
                     Network.BackPropagate(TrainingScenerio(0.25, -0.5), TrainingDecision(0, 1, 0.6));
 
-                    //Very far from observed object, get closer.
-                    Network.BackPropagate(TrainingScenerio(1, 0), TrainingDecision(2, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(1, -1), TrainingDecision(2, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(1, 1), TrainingDecision(2, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(1, 0.5), TrainingDecision(2, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(1, -0.5), TrainingDecision(2, 0, 0));
+                    for (int i = 0; i < 3; i++)
+                    {
+                        //Very far from observed object, get closer.
+                        Network.BackPropagate(TrainingScenerio(i + 1, 0), TrainingDecision(2, 0, 0));
+                        Network.BackPropagate(TrainingScenerio(i + 1, -1), TrainingDecision(2, 0, 0));
+                        Network.BackPropagate(TrainingScenerio(i + 1, 1), TrainingDecision(2, 0, 0));
+                        Network.BackPropagate(TrainingScenerio(i + 1, 0.5), TrainingDecision(2, 0, 0));
+                        Network.BackPropagate(TrainingScenerio(i + 1, -0.5), TrainingDecision(2, 0, 0));
+                    }
 
                     //Pretty far from observed object, get closer.
                     Network.BackPropagate(TrainingScenerio(0.75, 0), TrainingDecision(1, 0, 0));

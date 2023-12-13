@@ -3,7 +3,7 @@ using System.IO;
 
 namespace NebulaSiege.Sprites
 {
-    internal class SpriteRadarPositionIndicator : _SpriteBase
+    internal class SpriteRadarPositionIndicator : SpriteBase
     {
         private const string _assetPath = @"Graphics\Radar Indicator\";
         private readonly string _assetFile = "16x16.png";

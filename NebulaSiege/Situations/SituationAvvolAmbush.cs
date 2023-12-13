@@ -1,13 +1,13 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
-using NebulaSiege.Sprites.Enemies;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Sprites.Enemies.Peons;
 using NebulaSiege.Utility;
 using System.Collections.Generic;
 
 namespace NebulaSiege.Situations
 {
-    internal class SituationPhoenixAmbush : _SituationBase
+    internal class SituationPhoenixAmbush : SituationBase
     {
         public SituationPhoenixAmbush(EngineCore core)
             : base(core, "Phoenix Ambush")
@@ -35,7 +35,7 @@ namespace NebulaSiege.Situations
 
         private void AddFreshEnemiesCallback(EngineCore core, NsEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Sprites.OfType<_SpriteEnemyBase>().Count == 0)
+            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {

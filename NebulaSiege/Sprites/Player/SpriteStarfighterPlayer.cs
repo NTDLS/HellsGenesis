@@ -1,11 +1,12 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Loudouts;
+using NebulaSiege.Sprites.Player.BaseClasses;
 using NebulaSiege.Weapons;
 using System.Drawing;
 
 namespace NebulaSiege.Sprites.Player
 {
-    internal class SpriteStarfighterPlayer : _SpritePlayerBase
+    internal class SpriteStarfighterPlayer : SpritePlayerBase
     {
         public SpriteStarfighterPlayer(EngineCore core)
             : base(core)

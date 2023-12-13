@@ -5,7 +5,7 @@ using System.IO;
 
 namespace NebulaSiege.Sprites
 {
-    internal class SpriteRandomShipPartParticle : _SpriteParticleBase
+    internal class SpriteRandomShipPartParticle : SpriteParticleBase
     {
         private const string _assetPath = @"Graphics\Fragments";
         private readonly int _imageCount = 1488;

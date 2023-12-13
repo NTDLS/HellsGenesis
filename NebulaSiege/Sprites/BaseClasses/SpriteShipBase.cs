@@ -11,7 +11,7 @@ namespace NebulaSiege.Sprites
     /// <summary>
     /// The ship base is a ship object that moves, can be hit, explodes and can be the subject of locking weapons.
     /// </summary>
-    internal class _SpriteShipBase : _SpriteBase
+    internal class _SpriteShipBase : SpriteBase
     {
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
@@ -81,7 +81,7 @@ namespace NebulaSiege.Sprites
         /// <param name="munition">The munition object that is being tested for.</param>
         /// <param name="hitTestPosition">The position to test for hit.</param>
         /// <returns></returns>
-        public virtual bool TryMunitionHit(NsPoint displacementVector, _MunitionBase munition, NsPoint hitTestPosition)
+        public virtual bool TryMunitionHit(NsPoint displacementVector, MunitionBase munition, NsPoint hitTestPosition)
         {
             if (Intersects(hitTestPosition))
             {

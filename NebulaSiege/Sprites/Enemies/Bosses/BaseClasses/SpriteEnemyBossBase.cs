@@ -1,13 +1,14 @@
 ﻿using NebulaSiege.Engine;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
 
-namespace NebulaSiege.Sprites.Enemies.Bosses
+namespace NebulaSiege.Sprites.Enemies.Bosses.BaseClasses
 {
     /// <summary>
     /// Boss enemies are specialized enemy types, typically have destructible/moving components.
     /// </summary>
-    internal class _SpriteEnemyBossBase : _SpriteEnemyBase
+    internal class SpriteEnemyBossBase : SpriteEnemyBase
     {
-        public _SpriteEnemyBossBase(EngineCore core, int hullHealth, int bountyMultiplier)
+        public SpriteEnemyBossBase(EngineCore core, int hullHealth, int bountyMultiplier)
             : base(core, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;

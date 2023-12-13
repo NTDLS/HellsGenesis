@@ -2,12 +2,12 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Managers;
 using NebulaSiege.Sprites;
-using NebulaSiege.TickControllers;
+using NebulaSiege.TickControllers.BaseClasses;
 using System.Drawing;
 
 namespace NebulaSiege.Controller
 {
-    internal class AnimationSpriteTickController : _SpriteTickControllerBase<SpriteAnimation>
+    internal class AnimationSpriteTickController : SpriteTickControllerBase<SpriteAnimation>
     {
         public AnimationSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)
@@ -28,7 +28,7 @@ namespace NebulaSiege.Controller
         /// </summary>
         /// <param name="animation"></param>
         /// <param name="defaultPosition"></param>
-        public void InsertAt(SpriteAnimation animation, _SpriteBase defaultPosition)
+        public void InsertAt(SpriteAnimation animation, SpriteBase defaultPosition)
         {
             lock (SpriteManager.Collection)
             {

@@ -2,20 +2,21 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons.BaseClasses;
 using System.Drawing;
 using System.IO;
 
 namespace NebulaSiege.Weapons.Munitions
 {
-    internal class MunitionScramsMissile : _GuidedMunitionBase
+    internal class MunitionScramsMissile : GuidedMunitionBase
     {
         private const string imagePath = @"Graphics\Weapon\ScramsMissile.png";
         private const string _assetPathHitExplosionAnimation = @"Graphics\Animation\Explode\Hit Explosion 22x22\";
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public MunitionScramsMissile(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom,
-             _SpriteBase lockedTarget = null, NsPoint xyOffset = null)
+        public MunitionScramsMissile(EngineCore core, WeaponBase weapon, SpriteBase firedFrom,
+             SpriteBase lockedTarget = null, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             MaxGuidedObservationAngleDegrees = 90;

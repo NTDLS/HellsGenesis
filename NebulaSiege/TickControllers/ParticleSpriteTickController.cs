@@ -2,12 +2,12 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Managers;
 using NebulaSiege.Sprites;
-using NebulaSiege.TickControllers;
+using NebulaSiege.TickControllers.BaseClasses;
 using NebulaSiege.Utility;
 
 namespace NebulaSiege.Controller
 {
-    internal class ParticleSpriteTickController : _SpriteTickControllerBase<_SpriteParticleBase>
+    internal class ParticleSpriteTickController : SpriteTickControllerBase<SpriteParticleBase>
     {
         public ParticleSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)
@@ -32,7 +32,7 @@ namespace NebulaSiege.Controller
             }
         }
 
-        public void CreateRandomShipPartParticlesAt(_SpriteBase sprite, int count)
+        public void CreateRandomShipPartParticlesAt(SpriteBase sprite, int count)
         {
             for (int i = 0; i < count; i++)
             {
@@ -42,7 +42,7 @@ namespace NebulaSiege.Controller
             }
         }
 
-        public SpriteRandomShipPartParticle CreateRandomShipPartParticleAt(_SpriteBase sprite)
+        public SpriteRandomShipPartParticle CreateRandomShipPartParticleAt(SpriteBase sprite)
         {
             lock (SpriteManager.Collection)
             {

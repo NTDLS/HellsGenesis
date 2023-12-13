@@ -1,20 +1,21 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Utility;
 using System;
 using System.Drawing;
 
-namespace NebulaSiege.Sprites.Enemies.Peons
+namespace NebulaSiege.Sprites.Enemies.Peons.BaseClasses
 {
     /// <summary>
     /// Base class for "Peon" enemies. These guys are basically all the same in theit functionality and animations.
     /// </summary>
-    internal class _SpriteEnemyPeonBase : _SpriteEnemyBase
+    internal class SpriteEnemyPeonBase : SpriteEnemyBase
     {
         public SpriteAnimation ThrustAnimation { get; internal set; }
         public SpriteAnimation BoostAnimation { get; internal set; }
 
-        public _SpriteEnemyPeonBase(EngineCore core, int hullHealth, int bountyMultiplier)
+        public SpriteEnemyPeonBase(EngineCore core, int hullHealth, int bountyMultiplier)
             : base(core, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;
@@ -60,7 +61,7 @@ namespace NebulaSiege.Sprites.Enemies.Peons
             }
         }
 
-        private void EnemyBase_OnVisibilityChanged(_SpriteBase sender)
+        private void EnemyBase_OnVisibilityChanged(SpriteBase sender)
         {
             if (ThrustAnimation != null)
             {

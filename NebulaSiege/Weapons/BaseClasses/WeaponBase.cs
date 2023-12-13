@@ -7,16 +7,16 @@ using NebulaSiege.Weapons.Munitions;
 using System;
 using System.Collections.Generic;
 
-namespace NebulaSiege.Weapons
+namespace NebulaSiege.Weapons.BaseClasses
 {
     /// <summary>
     /// A weapon is a "device" that fires a "munition" (_MunitionBase). It must be owned by another sprite.
     /// </summary>
-    internal class _WeaponBase
+    internal class WeaponBase
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected EngineCore _core;
-        protected _SpriteBase _owner;
+        protected SpriteBase _owner;
 
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected NsAudioClip _fireSound;
@@ -40,21 +40,21 @@ namespace NebulaSiege.Weapons
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
         public bool CanLockOn { get; set; } = false;
-        public List<_SpriteBase> LockedOnObjects { get; set; } = new();
+        public List<SpriteBase> LockedOnObjects { get; set; } = new();
         public double MaxLockOnAngle { get; set; } = 10;
         public double MaxLocks { get; set; } = 1;
         public double MinLockDistance { get; set; } = 50;
         public double MaxLockDistance { get; set; } = 100;
         public bool ExplodesOnImpact { get; set; } = false;
 
-        public _WeaponBase(EngineCore core, string name, string soundPath, float soundVolume)
+        public WeaponBase(EngineCore core, string name, string soundPath, float soundVolume)
         {
             _core = core;
             _fireSound = _core.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
         }
 
-        public _WeaponBase(EngineCore core, _SpriteShipBase owner, string name, string soundPath, float soundVolume)
+        public WeaponBase(EngineCore core, _SpriteShipBase owner, string name, string soundPath, float soundVolume)
         {
             _owner = owner;
             _core = core;
@@ -62,7 +62,7 @@ namespace NebulaSiege.Weapons
             Name = name;
         }
 
-        public virtual _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase lockedTarget = null)
+        public virtual MunitionBase CreateMunition(NsPoint xyOffset, SpriteBase lockedTarget = null)
         {
             if (_owner == null)
             {
@@ -72,7 +72,7 @@ namespace NebulaSiege.Weapons
 
         }
 
-        public virtual bool ApplyWeaponsLock(NsPoint displacementVector, _SpriteBase wouldFireAt)
+        public virtual bool ApplyWeaponsLock(NsPoint displacementVector, SpriteBase wouldFireAt)
         {
             if (_owner == null)
             {

@@ -4,7 +4,7 @@ using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Loudouts;
 using NebulaSiege.Managers;
 using NebulaSiege.Utility;
-using NebulaSiege.Weapons;
+using NebulaSiege.Weapons.BaseClasses;
 using NebulaSiege.Weapons.Munitions;
 using Newtonsoft.Json;
 using System;
@@ -12,12 +12,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace NebulaSiege.Sprites.Player
+namespace NebulaSiege.Sprites.Player.BaseClasses
 {
     /// <summary>
     /// The player base is a sub-class of the ship base. It is only used by the Player and as a model for menu selections.
     /// </summary>
-    internal class _SpritePlayerBase : _SpriteShipBase
+    internal class SpritePlayerBase : _SpriteShipBase
     {
         public HgPlayerClass ShipClass { get; set; }
         public PlayerShipLoadout Loadout { get; private set; }
@@ -40,12 +40,12 @@ namespace NebulaSiege.Sprites.Player
         public SpriteAnimation ThrustAnimation { get; private set; }
         public SpriteAnimation BoostAnimation { get; private set; }
 
-        public _WeaponBase PrimaryWeapon { get; private set; }
-        private readonly List<_WeaponBase> _secondaryWeapons = new();
-        public _WeaponBase SelectedSecondaryWeapon { get; private set; }
+        public WeaponBase PrimaryWeapon { get; private set; }
+        private readonly List<WeaponBase> _secondaryWeapons = new();
+        public WeaponBase SelectedSecondaryWeapon { get; private set; }
 
 
-        public _SpritePlayerBase(EngineCore core)
+        public SpritePlayerBase(EngineCore core)
             : base(core)
         {
             OnHit += SpritePlayer_OnHit;
@@ -253,7 +253,7 @@ namespace NebulaSiege.Sprites.Player
             }
         }
 
-        public override bool TryMunitionHit(NsPoint displacementVector, _MunitionBase munition, NsPoint hitTestPosition)
+        public override bool TryMunitionHit(NsPoint displacementVector, MunitionBase munition, NsPoint hitTestPosition)
         {
             if (munition.FiredFromType == HgFiredFromType.Enemy)
             {
@@ -267,7 +267,7 @@ namespace NebulaSiege.Sprites.Player
             return false;
         }
 
-        private void SpritePlayer_OnHit(_SpriteBase sender, HgDamageType damageType, int damageAmount)
+        private void SpritePlayer_OnHit(SpriteBase sender, HgDamageType damageType, int damageAmount)
         {
             if (damageType == HgDamageType.Shield)
             {
@@ -311,7 +311,7 @@ namespace NebulaSiege.Sprites.Player
             }
             else
             {
-                var weapon = NsReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
+                var weapon = NsReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _core, this });
                 weapon.RoundQuantity += munitionCount;
                 PrimaryWeapon = weapon;
 
@@ -330,7 +330,7 @@ namespace NebulaSiege.Sprites.Player
 
             if (weapon == null)
             {
-                weapon = NsReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
+                weapon = NsReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _core, this });
                 weapon.RoundQuantity += munitionCount;
                 _secondaryWeapons.Add(weapon);
             }
@@ -349,7 +349,7 @@ namespace NebulaSiege.Sprites.Player
         /// Adds a new primary weapon or adds its ammo to the current of its type.
         /// </summary>
         /// <param name="weapon"></param>
-        public void SetPrimaryWeapon<T>(int munitionCount) where T : _WeaponBase
+        public void SetPrimaryWeapon<T>(int munitionCount) where T : WeaponBase
         {
             if (PrimaryWeapon is T)
             {
@@ -366,7 +366,7 @@ namespace NebulaSiege.Sprites.Player
         /// Adds a new secondary weapon or adds its ammo to the current of its type.
         /// </summary>
         /// <param name="weapon"></param>
-        public void AddSecondaryWeapon<T>(int munitionCount) where T : _WeaponBase
+        public void AddSecondaryWeapon<T>(int munitionCount) where T : WeaponBase
         {
             var weapon = GetSecondaryWeaponOfType<T>();
             if (weapon == null)
@@ -389,9 +389,9 @@ namespace NebulaSiege.Sprites.Player
         public int TotalAvailableSecondaryWeaponRounds() => (from o in _secondaryWeapons select o.RoundQuantity).Sum();
         public int TotalSecondaryWeaponFiredRounds() => (from o in _secondaryWeapons select o.RoundsFired).Sum();
 
-        public _WeaponBase SelectPreviousAvailableUsableSecondaryWeapon()
+        public WeaponBase SelectPreviousAvailableUsableSecondaryWeapon()
         {
-            _WeaponBase previousWeapon = null;
+            WeaponBase previousWeapon = null;
 
             foreach (var weapon in _secondaryWeapons)
             {
@@ -411,7 +411,7 @@ namespace NebulaSiege.Sprites.Player
             return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
 
-        public _WeaponBase SelectNextAvailableUsableSecondaryWeapon()
+        public WeaponBase SelectNextAvailableUsableSecondaryWeapon()
         {
             bool selectNextWeapon = false;
 
@@ -432,19 +432,19 @@ namespace NebulaSiege.Sprites.Player
             return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
 
-        public bool HasSecondaryWeapon<T>() where T : _WeaponBase
+        public bool HasSecondaryWeapon<T>() where T : WeaponBase
         {
             var existingWeapon = (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
             return existingWeapon != null;
         }
 
-        public bool HasSecondaryWeaponAndAmmo<T>() where T : _WeaponBase
+        public bool HasSecondaryWeaponAndAmmo<T>() where T : WeaponBase
         {
             var existingWeapon = (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
             return existingWeapon != null && existingWeapon.RoundQuantity > 0;
         }
 
-        public bool HasPrimaryWeaponAndAmmo<T>() where T : _WeaponBase
+        public bool HasPrimaryWeaponAndAmmo<T>() where T : WeaponBase
         {
             if (PrimaryWeapon is T)
             {
@@ -468,7 +468,7 @@ namespace NebulaSiege.Sprites.Player
             return SelectedSecondaryWeapon != null && SelectedSecondaryWeapon.RoundQuantity > 0;
         }
 
-        public _WeaponBase SelectLastAvailableUsableSecondaryWeapon()
+        public WeaponBase SelectLastAvailableUsableSecondaryWeapon()
         {
             var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).LastOrDefault();
             if (existingWeapon != null)
@@ -482,7 +482,7 @@ namespace NebulaSiege.Sprites.Player
             return SelectedSecondaryWeapon;
         }
 
-        public _WeaponBase SelectFirstAvailableUsableSecondaryWeapon()
+        public WeaponBase SelectFirstAvailableUsableSecondaryWeapon()
         {
             var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).FirstOrDefault();
             if (existingWeapon != null)
@@ -496,12 +496,12 @@ namespace NebulaSiege.Sprites.Player
             return SelectedSecondaryWeapon;
         }
 
-        public _WeaponBase GetSecondaryWeaponOfType<T>() where T : _WeaponBase
+        public WeaponBase GetSecondaryWeaponOfType<T>() where T : WeaponBase
         {
             return (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
         }
 
-        public _WeaponBase SelectSecondaryWeapon<T>() where T : _WeaponBase
+        public WeaponBase SelectSecondaryWeapon<T>() where T : WeaponBase
         {
             SelectedSecondaryWeapon = GetSecondaryWeaponOfType<T>();
             return SelectedSecondaryWeapon;

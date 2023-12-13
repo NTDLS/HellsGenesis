@@ -2,6 +2,7 @@
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Loudouts;
+using NebulaSiege.Sprites.Enemies.Peons.BaseClasses;
 using NebulaSiege.Utility;
 using NebulaSiege.Weapons;
 using System;
@@ -10,7 +11,7 @@ using System.IO;
 
 namespace NebulaSiege.Sprites.Enemies.Peons
 {
-    internal class SpriteEnemyPhoenix : _SpriteEnemyPeonBase
+    internal class SpriteEnemyPhoenix : SpriteEnemyPeonBase
     {
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;

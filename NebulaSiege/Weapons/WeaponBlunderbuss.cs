@@ -2,11 +2,12 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons.BaseClasses;
 using NebulaSiege.Weapons.Munitions;
 
 namespace NebulaSiege.Weapons
 {
-    internal class WeaponBlunderbuss : _WeaponBase
+    internal class WeaponBlunderbuss : WeaponBase
     {
         static new string Name { get; } = "Blunderbuss";
         private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
@@ -51,7 +52,7 @@ namespace NebulaSiege.Weapons
             return false;
         }
 
-        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(NsPoint xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionBlunderbuss(_core, this, _owner, xyOffset);
         }

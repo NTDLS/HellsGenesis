@@ -1,12 +1,13 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Sprites.PowerUp.BaseClasses;
 using NebulaSiege.Utility;
 using System.Drawing;
 using System.IO;
 
 namespace NebulaSiege.Sprites.PowerUp
 {
-    internal class SpritePowerUpAmmo : _SpritePowerUpBase
+    internal class SpritePowerUpAmmo : SpritePowerUpBase
     {
         private const string _assetPath = @"Graphics\PowerUp\Ammo\";
         private readonly int imageCount = 3;

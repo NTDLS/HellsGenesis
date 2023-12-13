@@ -5,7 +5,7 @@ using System.IO;
 
 namespace NebulaSiege.Sprites
 {
-    internal class SpriteStar : _SpriteBase
+    internal class SpriteStar : SpriteBase
     {
         private const string _assetPath = @"Graphics\Star\";
         private readonly int _imageCount = 5;

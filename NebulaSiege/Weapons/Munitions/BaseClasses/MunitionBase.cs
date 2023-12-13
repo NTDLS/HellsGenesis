@@ -2,9 +2,10 @@
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
-using NebulaSiege.Sprites.Enemies;
-using NebulaSiege.Sprites.Player;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
+using NebulaSiege.Sprites.Player.BaseClasses;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons.BaseClasses;
 using System;
 
 namespace NebulaSiege.Weapons.Munitions
@@ -12,15 +13,15 @@ namespace NebulaSiege.Weapons.Munitions
     /// <summary>
     /// The munition base is the base for all bullets/projectiles/etc.
     /// </summary>
-    internal class _MunitionBase : _SpriteBase
+    internal class MunitionBase : SpriteBase
     {
         public HgFiredFromType FiredFromType { get; private set; }
-        public _WeaponBase Weapon { get; private set; }
+        public WeaponBase Weapon { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
         public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
 
-        public _MunitionBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath, NsPoint xyOffset = null)
+        public MunitionBase(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, string imagePath, NsPoint xyOffset = null)
             : base(core)
         {
             Initialize(imagePath);
@@ -54,11 +55,11 @@ namespace NebulaSiege.Weapons.Munitions
 
             Location = firedFrom.Location + (xyOffset ?? NsPoint.Zero);
 
-            if (firedFrom is _SpriteEnemyBase)
+            if (firedFrom is SpriteEnemyBase)
             {
                 FiredFromType = HgFiredFromType.Enemy;
             }
-            else if (firedFrom is _SpritePlayerBase)
+            else if (firedFrom is SpritePlayerBase)
             {
                 FiredFromType = HgFiredFromType.Player;
             }

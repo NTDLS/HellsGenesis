@@ -1,5 +1,6 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Menus.BaseClasses;
 using NebulaSiege.Sprites;
 
 
@@ -8,7 +9,7 @@ namespace NebulaSiege.Menus
     /// <summary>
     /// The menu that is shows when the game is first started.
     /// </summary>
-    internal class MenuStartNewGame : _MenuBase
+    internal class MenuStartNewGame : MenuBase
     {
         public MenuStartNewGame(EngineCore core)
             : base(core)

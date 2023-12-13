@@ -1,11 +1,12 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Loudouts;
+using NebulaSiege.Sprites.Player.BaseClasses;
 using NebulaSiege.Weapons;
 using System.Drawing;
 
 namespace NebulaSiege.Sprites.Player
 {
-    internal class SpriteReaverPlayer : _SpritePlayerBase
+    internal class SpriteReaverPlayer : SpritePlayerBase
     {
         public SpriteReaverPlayer(EngineCore core)
             : base(core)

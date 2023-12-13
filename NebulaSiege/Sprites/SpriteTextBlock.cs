@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace NebulaSiege.Sprites
 {
-    internal class SpriteTextBlock : _SpriteBase
+    internal class SpriteTextBlock : SpriteBase
     {
         private Size _size = Size.Empty;
         private string _text;

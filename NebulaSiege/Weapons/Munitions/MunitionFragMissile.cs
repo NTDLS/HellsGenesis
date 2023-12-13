@@ -2,12 +2,13 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons.BaseClasses;
 using System.Drawing;
 using System.IO;
 
 namespace NebulaSiege.Weapons.Munitions
 {
-    internal class MunitionFragMissile : _SeekingMunitionBase
+    internal class MunitionFragMissile : SeekingMunitionBase
     {
         private const string imagePath = @"Graphics\Weapon\FragMissile.png";
 
@@ -15,7 +16,7 @@ namespace NebulaSiege.Weapons.Munitions
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public MunitionFragMissile(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, NsPoint xyOffset = null)
+        public MunitionFragMissile(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, xyOffset)
         {
             MaxSeekingObservationDistance = 1000;

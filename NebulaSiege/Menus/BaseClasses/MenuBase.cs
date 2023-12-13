@@ -7,12 +7,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace NebulaSiege.Menus
+namespace NebulaSiege.Menus.BaseClasses
 {
     /// <summary>
     /// A menu instance. Allows for setting title text, adding items and managing selections.
     /// </summary>
-    internal class _MenuBase
+    internal class MenuBase
     {
         protected EngineCore _core;
         private DateTime _lastInputHandled = DateTime.UtcNow;
@@ -28,7 +28,7 @@ namespace NebulaSiege.Menus
             ReadyForDeletion = true;
         }
 
-        public _MenuBase(EngineCore core)
+        public MenuBase(EngineCore core)
         {
             _core = core;
         }

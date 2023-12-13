@@ -1,12 +1,13 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Sprites.PowerUp.BaseClasses;
 using NebulaSiege.Utility;
 using System.Drawing;
 using System.IO;
 
 namespace NebulaSiege.Sprites.PowerUp
 {
-    internal class SpritePowerUpRepair : _SpritePowerUpBase
+    internal class SpritePowerUpRepair : SpritePowerUpBase
     {
         private const string _assetPath = @"Graphics\PowerUp\Repair\";
         private readonly int imageCount = 3;

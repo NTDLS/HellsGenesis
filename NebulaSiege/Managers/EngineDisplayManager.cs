@@ -1,7 +1,6 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
-using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
 using System;

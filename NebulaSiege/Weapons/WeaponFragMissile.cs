@@ -2,11 +2,12 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons.BaseClasses;
 using NebulaSiege.Weapons.Munitions;
 
 namespace NebulaSiege.Weapons
 {
-    internal class WeaponFragMissile : _WeaponBase
+    internal class WeaponFragMissile : WeaponBase
     {
         static new string Name { get; } = "Frag Missile";
         private const string soundPath = @"Sounds\Weapons\FragMissile.wav";
@@ -31,7 +32,7 @@ namespace NebulaSiege.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(NsPoint xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionFragMissile(_core, this, _owner, xyOffset);
         }

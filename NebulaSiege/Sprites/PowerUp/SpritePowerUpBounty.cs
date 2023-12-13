@@ -1,12 +1,13 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Sprites.PowerUp.BaseClasses;
 using NebulaSiege.Utility;
 using System.Drawing;
 using System.IO;
 
 namespace NebulaSiege.Sprites.PowerUp
 {
-    internal class SpritePowerUpBounty : _SpritePowerUpBase
+    internal class SpritePowerUpBounty : SpritePowerUpBase
     {
         private const string _assetPath = @"Graphics\PowerUp\Bounty\";
         private readonly int imageCount = 3;

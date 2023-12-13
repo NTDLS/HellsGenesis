@@ -20,7 +20,7 @@ namespace NebulaSiege.Sprites
             Velocity = new HgVelocity();
         }
 
-        public override bool TryMunitionHit(NsPoint displacementVector, _MunitionBase munition, NsPoint hitTestPosition)
+        public override bool TryMunitionHit(NsPoint displacementVector, MunitionBase munition, NsPoint hitTestPosition)
         {
             if (munition.FiredFromType == HgFiredFromType.Player)
             {

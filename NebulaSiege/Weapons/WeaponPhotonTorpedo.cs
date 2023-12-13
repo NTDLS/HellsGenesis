@@ -1,11 +1,12 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
+using NebulaSiege.Weapons.BaseClasses;
 using NebulaSiege.Weapons.Munitions;
 
 namespace NebulaSiege.Weapons
 {
-    internal class WeaponPhotonTorpedo : _WeaponBase
+    internal class WeaponPhotonTorpedo : WeaponBase
     {
         static new string Name { get; } = "Photon Torpedo";
         private const string soundPath = @"Sounds\Weapons\PhotonTorpedo.wav";
@@ -23,7 +24,7 @@ namespace NebulaSiege.Weapons
             FireDelayMilliseconds = 500;
         }
 
-        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(NsPoint xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionPhotonTorpedo(_core, this, _owner, xyOffset);
         }

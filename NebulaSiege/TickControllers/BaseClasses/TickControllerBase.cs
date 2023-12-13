@@ -1,10 +1,10 @@
-﻿namespace NebulaSiege.TickControllers
+﻿namespace NebulaSiege.TickControllers.BaseClasses
 {
     /// <summary>
     /// All tick-controllers are derived from this class. They control the "movement of time" for all objects..
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal interface _TickControllerBase<T> where T : class
+    internal interface TickControllerBase<T> where T : class
     {
     }
 }

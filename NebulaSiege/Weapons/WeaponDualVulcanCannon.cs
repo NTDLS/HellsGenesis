@@ -2,11 +2,12 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons.BaseClasses;
 using NebulaSiege.Weapons.Munitions;
 
 namespace NebulaSiege.Weapons
 {
-    internal class WeaponDualVulcanCannon : _WeaponBase
+    internal class WeaponDualVulcanCannon : WeaponBase
     {
         static new string Name { get; } = "Dual Vulcan Cannon";
         private const string soundPath = @"Sounds\Weapons\DualVulcanCannon.wav";
@@ -55,7 +56,7 @@ namespace NebulaSiege.Weapons
             return false;
         }
 
-        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(NsPoint xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionVulcanCannon(_core, this, _owner, xyOffset);
         }

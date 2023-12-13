@@ -1,11 +1,12 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
+using NebulaSiege.Weapons.BaseClasses;
 using NebulaSiege.Weapons.Munitions;
 
 namespace NebulaSiege.Weapons
 {
-    internal class WeaponScattershot : _WeaponBase
+    internal class WeaponScattershot : WeaponBase
     {
         static new string Name { get; } = "Scattershot";
         private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
@@ -27,7 +28,7 @@ namespace NebulaSiege.Weapons
             RecoilAmount = 0.01;
         }
 
-        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(NsPoint xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionScattershot(_core, this, _owner, xyOffset);
         }

@@ -2,12 +2,12 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Managers;
 using NebulaSiege.Sprites;
-using NebulaSiege.TickControllers;
+using NebulaSiege.TickControllers.BaseClasses;
 using NebulaSiege.Utility;
 
 namespace NebulaSiege.Controller
 {
-    internal class StarSpriteTickController : _SpriteTickControllerBase<SpriteStar>
+    internal class StarSpriteTickController : SpriteTickControllerBase<SpriteStar>
     {
         public StarSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)

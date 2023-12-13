@@ -1,7 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
-using NebulaSiege.Sprites.Enemies;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons.Munitions;
@@ -16,7 +16,7 @@ namespace NebulaSiege.Sprites
     /// <summary>
     /// Represents a single item that can be rendered to the screen. All on-screen objects are derived from this class.
     /// </summary>
-    internal class _SpriteBase
+    internal class SpriteBase
     {
         protected EngineCore _core;
 
@@ -243,22 +243,22 @@ namespace NebulaSiege.Sprites
 
         #region Events.
 
-        public delegate void HitEvent(_SpriteBase sender, HgDamageType damageType, int damageAmount);
+        public delegate void HitEvent(SpriteBase sender, HgDamageType damageType, int damageAmount);
         public event HitEvent OnHit;
 
-        public delegate void QueuedForDeleteEvent(_SpriteBase sender);
+        public delegate void QueuedForDeleteEvent(SpriteBase sender);
         public event QueuedForDeleteEvent OnQueuedForDelete;
 
-        public delegate void VisibilityChangedEvent(_SpriteBase sender);
+        public delegate void VisibilityChangedEvent(SpriteBase sender);
         public event VisibilityChangedEvent OnVisibilityChanged;
 
 
-        public delegate void ExplodeEvent(_SpriteBase sender);
+        public delegate void ExplodeEvent(SpriteBase sender);
         public event ExplodeEvent OnExplode;
 
         #endregion
 
-        public _SpriteBase(EngineCore core, string name = "")
+        public SpriteBase(EngineCore core, string name = "")
         {
             _core = core;
             SpriteTag = name;
@@ -309,7 +309,7 @@ namespace NebulaSiege.Sprites
 
         #region Intersections.
 
-        public bool Intersects(_SpriteBase otherObject)
+        public bool Intersects(SpriteBase otherObject)
         {
             if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
@@ -318,7 +318,7 @@ namespace NebulaSiege.Sprites
             return false;
         }
 
-        public bool IntersectsWithTrajectory(_SpriteBase otherObject)
+        public bool IntersectsWithTrajectory(SpriteBase otherObject)
         {
             if (Visable && otherObject.Visable)
             {
@@ -343,7 +343,7 @@ namespace NebulaSiege.Sprites
         /// Intersect detection with another object using adjusted "hit box" size.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(_SpriteBase otherObject, NsPoint sizeAdjust)
+        public bool Intersects(SpriteBase otherObject, NsPoint sizeAdjust)
         {
             if (Visable && otherObject.Visable && !ReadyForDeletion && !otherObject.ReadyForDeletion)
             {
@@ -362,7 +362,7 @@ namespace NebulaSiege.Sprites
         /// Intersect detection with another object using adjusted "hit box" size.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(_SpriteBase with, int variance = 0)
+        public bool Intersects(SpriteBase with, int variance = 0)
         {
             var alteredHitBox = new RectangleF(
                 (float)(with.Bounds.X - variance),
@@ -402,9 +402,9 @@ namespace NebulaSiege.Sprites
         /// Gets a list of all ov this objects intersections.
         /// </summary>
         /// <returns></returns>
-        public List<_SpriteBase> Intersections()
+        public List<SpriteBase> Intersections()
         {
-            var intersections = new List<_SpriteBase>();
+            var intersections = new List<SpriteBase>();
 
             foreach (var intersection in _core.Sprites.Collection)
             {
@@ -456,7 +456,7 @@ namespace NebulaSiege.Sprites
         /// Hits this object with a given munition.
         /// </summary>
         /// <returns></returns>
-        public virtual void Hit(_MunitionBase munition)
+        public virtual void Hit(MunitionBase munition)
         {
             Hit(munition?.Weapon?.Damage ?? 0);
         }
@@ -485,7 +485,7 @@ namespace NebulaSiege.Sprites
         /// <summary>
         /// Instantly points an object at another object and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        public void PointAtAndGoto(_SpriteBase obj, double? velocity = null)
+        public void PointAtAndGoto(SpriteBase obj, double? velocity = null)
         {
             Velocity.Angle.Degrees = NsPoint.AngleTo(Location, obj.Location);
 
@@ -499,7 +499,7 @@ namespace NebulaSiege.Sprites
         /// Rotates the object towards the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(_SpriteBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateTo(SpriteBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = DeltaAngle(obj);
 
@@ -523,7 +523,7 @@ namespace NebulaSiege.Sprites
         /// Rotates the object towards the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(_SpriteBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateTo(SpriteBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = DeltaAngle(obj);
 
@@ -619,7 +619,7 @@ namespace NebulaSiege.Sprites
         /// Rotates the object from the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateFrom(_SpriteBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateFrom(SpriteBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = obj.DeltaAngle(this);
 
@@ -643,7 +643,7 @@ namespace NebulaSiege.Sprites
         /// Rotates the object from the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateFrom(_SpriteBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateFrom(SpriteBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = obj.DeltaAngle(this);
 
@@ -698,13 +698,13 @@ namespace NebulaSiege.Sprites
         /// Calculates the difference in heading angle from one object to get to another between 0-259.
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngle360(_SpriteBase toObj) => HgMath.DeltaAngle360(this, toObj);
+        public double DeltaAngle360(SpriteBase toObj) => HgMath.DeltaAngle360(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngle(_SpriteBase toObj) => HgMath.DeltaAngle(this, toObj);
+        public double DeltaAngle(SpriteBase toObj) => HgMath.DeltaAngle(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
@@ -716,23 +716,23 @@ namespace NebulaSiege.Sprites
         /// Calculates the angle in degrees to another object,
         /// </summary>
         /// <returns></returns>
-        public double AngleTo(_SpriteBase atObj) => HgMath.AngleTo(this, atObj);
+        public double AngleTo(SpriteBase atObj) => HgMath.AngleTo(this, atObj);
 
         /// Calculates the angle in degrees to a location.
         public double AngleTo(NsPoint location) => HgMath.AngleTo(this, location);
 
-        public bool IsPointingAt(_SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
+        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
             => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
 
-        public bool IsPointingAt(_SpriteBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
 
-        public bool IsPointingAt(_SpriteBase atObj, double toleranceDegrees) => HgMath.IsPointingAt(this, atObj, toleranceDegrees);
+        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees) => HgMath.IsPointingAt(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(_SpriteBase atObj, double toleranceDegrees) => HgMath.IsPointingAway(this, atObj, toleranceDegrees);
+        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees) => HgMath.IsPointingAway(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(_SpriteBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public double DistanceTo(_SpriteBase to) => NsPoint.DistanceTo(Location, to.Location);
+        public double DistanceTo(SpriteBase to) => NsPoint.DistanceTo(Location, to.Location);
 
         public double DistanceTo(NsPoint to) => NsPoint.DistanceTo(Location, to);
 
@@ -796,17 +796,17 @@ namespace NebulaSiege.Sprites
         {
             if (_isVisible && _image != null)
             {
-                if (this is _SpriteEnemyBase)
+                if (this is SpriteEnemyBase)
                 {
                     _core.DirectX.FillTriangleAt(renderTarget, x, y, 3, _core.DirectX.Materials.Brushes.WhiteSmoke);
                 }
-                else if (this is _MunitionBase)
+                else if (this is MunitionBase)
                 {
                     float size;
 
                     RawColor4 color = _core.DirectX.Materials.Raw.Blue;
 
-                    var munition = this as _MunitionBase;
+                    var munition = this as MunitionBase;
                     if (munition.FiredFromType == HgFiredFromType.Enemy)
                     {
                         color = _core.DirectX.Materials.Raw.Red;

@@ -1,11 +1,12 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Loudouts;
+using NebulaSiege.Sprites.Player.BaseClasses;
 using NebulaSiege.Weapons;
 using System.Drawing;
 
 namespace NebulaSiege.Sprites.Player
 {
-    internal class SpriteSerpentPlayer : _SpritePlayerBase
+    internal class SpriteSerpentPlayer : SpritePlayerBase
     {
         public SpriteSerpentPlayer(EngineCore core)
             : base(core)

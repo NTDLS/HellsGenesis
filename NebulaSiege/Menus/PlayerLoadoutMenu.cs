@@ -1,7 +1,8 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Menus.BaseClasses;
 using NebulaSiege.Sprites;
-using NebulaSiege.Sprites.Player;
+using NebulaSiege.Sprites.Player.BaseClasses;
 using NebulaSiege.Utility;
 using System.Linq;
 using System.Threading;
@@ -11,11 +12,11 @@ namespace NebulaSiege.Menus
     /// <summary>
     /// The menu that is displayed at game start to allow the player to select a loadout.
     /// </summary>
-    internal class PlayerLoadoutMenu : _MenuBase
+    internal class PlayerLoadoutMenu : MenuBase
     {
         private readonly SpriteMenuItem _shipBlurb;
         private Timer _animationTimer;
-        private _SpritePlayerBase _selectedSprite;
+        private SpritePlayerBase _selectedSprite;
 
         public PlayerLoadoutMenu(EngineCore core)
             : base(core)
@@ -36,7 +37,7 @@ namespace NebulaSiege.Menus
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
             //Use reflection to get a list of possible player types.
-            var playerTypes = NsReflection.GetSubClassesOf<_SpritePlayerBase>().OrderBy(o => o.Name).ToList();
+            var playerTypes = NsReflection.GetSubClassesOf<SpritePlayerBase>().OrderBy(o => o.Name).ToList();
 
             //Move the debug player to the top of the list.
             var debugPlayer = playerTypes.Where(o => o.Name.Contains("Debug")).FirstOrDefault();
@@ -48,7 +49,7 @@ namespace NebulaSiege.Menus
 
             foreach (var playerType in playerTypes)
             {
-                var playerTypeInstance = NsReflection.CreateInstanceFromType<_SpritePlayerBase>(playerType, new object[] { core });
+                var playerTypeInstance = NsReflection.CreateInstanceFromType<SpritePlayerBase>(playerType, new object[] { core });
                 playerTypeInstance.SpriteTag = "MENU_SHIP_SELECT";
                 playerTypeInstance.Velocity.Angle.Degrees = 45;
                 playerTypeInstance.ThrustAnimation.Visable = true;
@@ -84,7 +85,7 @@ namespace NebulaSiege.Menus
 
         public override void SelectionChanged(SpriteMenuItem item)
         {
-            _selectedSprite = _core.Sprites.Collection.OfType<_SpritePlayerBase>()
+            _selectedSprite = _core.Sprites.Collection.OfType<SpritePlayerBase>()
                 .Where(o => o.SpriteTag == "MENU_SHIP_SELECT" && o.ShipClass.ToString() == item.Key).First();
 
             _shipBlurb.Text = _selectedSprite.GetLoadoutHelpText();
@@ -95,7 +96,7 @@ namespace NebulaSiege.Menus
             _animationTimer.Change(Timeout.Infinite, Timeout.Infinite);
             _animationTimer.Dispose();
 
-            var selectedSprite = _core.Sprites.Collection.OfType<_SpritePlayerBase>()
+            var selectedSprite = _core.Sprites.Collection.OfType<SpritePlayerBase>()
                 .Where(o => o.SpriteTag == "MENU_SHIP_SELECT" && o.ShipClass.ToString() == item.Key).First();
 
             _core.Player.Sprite.ResetLoadout(selectedSprite.Loadout);

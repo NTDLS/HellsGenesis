@@ -2,6 +2,7 @@
 using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Loudouts;
+using NebulaSiege.Sprites.Enemies.Peons.BaseClasses;
 using NebulaSiege.Utility;
 using NebulaSiege.Weapons;
 using System;
@@ -13,7 +14,7 @@ namespace NebulaSiege.Sprites.Enemies.Peons
     /// <summary>
     /// Debugging enemy unit - a scary sight to see.
     /// </summary>
-    internal class SpriteEnemyDebug : _SpriteEnemyPeonBase
+    internal class SpriteEnemyDebug : SpriteEnemyPeonBase
     {
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;

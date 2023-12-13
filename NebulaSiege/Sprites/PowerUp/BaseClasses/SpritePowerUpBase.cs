@@ -5,12 +5,12 @@ using System;
 using System.Drawing;
 using System.Linq;
 
-namespace NebulaSiege.Sprites.PowerUp
+namespace NebulaSiege.Sprites.PowerUp.BaseClasses
 {
     /// <summary>
     /// Represents a "power-up" that the player can pick up to gain some ability / stat-improvement.
     /// </summary>
-    internal class _SpritePowerUpBase : _SpriteBase
+    internal class SpritePowerUpBase : SpriteBase
     {
         private const string _assetHitAnimationPath = @"Graphics\Animation\PowerUp\";
         private readonly string[] _assetHitAnimationFiles = {
@@ -39,7 +39,7 @@ namespace NebulaSiege.Sprites.PowerUp
             }
         }
 
-        public _SpritePowerUpBase(EngineCore core)
+        public SpritePowerUpBase(EngineCore core)
             : base(core)
         {
             Initialize();

@@ -1,14 +1,14 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Situations;
-using NebulaSiege.TickControllers;
+using NebulaSiege.TickControllers.BaseClasses;
 using System.Collections.Generic;
 
 namespace NebulaSiege.Controller
 {
-    internal class SituationTickController : _UnvectoredTickControllerBase<_SituationBase>
+    internal class SituationTickController : UnvectoredTickControllerBase<SituationBase>
     {
-        public _SituationBase CurrentSituation { get; private set; }
-        public List<_SituationBase> Situations { get; private set; } = new();
+        public SituationBase CurrentSituation { get; private set; }
+        public List<SituationBase> Situations { get; private set; } = new();
 
         public SituationTickController(EngineCore core)
             : base(core)

@@ -1,12 +1,12 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
-using NebulaSiege.Sprites.Enemies;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Sprites.Enemies.Peons;
 using NebulaSiege.Utility;
 
 namespace NebulaSiege.Situations
 {
-    internal class SituationScinzadSkirmish : _SituationBase
+    internal class SituationScinzadSkirmish : SituationBase
     {
         public SituationScinzadSkirmish(EngineCore core)
             : base(core, "Scinzad Skirmish")
@@ -32,7 +32,7 @@ namespace NebulaSiege.Situations
 
         private void AddFreshEnemiesCallback(EngineCore core, NsEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Sprites.OfType<_SpriteEnemyBase>().Count == 0)
+            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {

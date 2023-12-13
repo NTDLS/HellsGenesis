@@ -1,6 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Loudouts;
+using NebulaSiege.Sprites.Enemies.Peons.BaseClasses;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons;
@@ -12,7 +13,7 @@ namespace NebulaSiege.Sprites.Enemies.Peons
     /// <summary>
     /// 100% traditional weapons, they enforce their distance and are are moddled to provoke dog fighting. These are fast units.
     /// </summary>
-    internal class SpriteEnemyScinzad : _SpriteEnemyPeonBase
+    internal class SpriteEnemyScinzad : SpriteEnemyPeonBase
     {
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;

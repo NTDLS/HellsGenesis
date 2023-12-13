@@ -18,7 +18,7 @@ namespace NebulaSiege.AI.Logistics
 
         private readonly EngineCore _core;
         private readonly _SpriteShipBase _owner;
-        private readonly _SpriteBase _observedObject;
+        private readonly SpriteBase _observedObject;
 
         #region I/O Enumerations.
 
@@ -60,7 +60,7 @@ namespace NebulaSiege.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public Meander(EngineCore core, _SpriteShipBase owner, _SpriteBase observedObject)
+        public Meander(EngineCore core, _SpriteShipBase owner, SpriteBase observedObject)
         {
             _core = core;
             _owner = owner;

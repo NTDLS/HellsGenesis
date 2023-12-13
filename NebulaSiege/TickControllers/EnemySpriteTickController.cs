@@ -1,14 +1,14 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Managers;
-using NebulaSiege.Sprites.Enemies;
-using NebulaSiege.TickControllers;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
+using NebulaSiege.TickControllers.BaseClasses;
 using NebulaSiege.Utility;
 using System;
 
 namespace NebulaSiege.Controller
 {
-    internal class EnemySpriteTickController : _SpriteTickControllerBase<_SpriteEnemyBase>
+    internal class EnemySpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
     {
         public EnemySpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)
@@ -44,12 +44,12 @@ namespace NebulaSiege.Controller
             }
         }
 
-        public T Create<T>() where T : _SpriteEnemyBase
+        public T Create<T>() where T : SpriteEnemyBase
         {
             lock (SpriteManager.Collection)
             {
                 object[] param = { Core };
-                _SpriteEnemyBase obj = (_SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
+                SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
                 obj.Location = Core.Display.RandomOffScreenLocation();
                 obj.Velocity.MaxSpeed = HgRandom.Generator.Next(Core.Settings.MinEnemySpeed, Core.Settings.MaxEnemySpeed);

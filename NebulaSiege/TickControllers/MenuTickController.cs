@@ -1,13 +1,13 @@
 ﻿using NebulaSiege.Engine;
-using NebulaSiege.Menus;
-using NebulaSiege.TickControllers;
+using NebulaSiege.Menus.BaseClasses;
+using NebulaSiege.TickControllers.BaseClasses;
 using System.Collections.Generic;
 
 namespace NebulaSiege.Controller
 {
-    internal class MenuTickHandler : _UnvectoredTickControllerBase<_MenuBase>
+    internal class MenuTickHandler : UnvectoredTickControllerBase<MenuBase>
     {
-        public List<_MenuBase> Collection { get; private set; } = new();
+        public List<MenuBase> Collection { get; private set; } = new();
 
         public MenuTickHandler(EngineCore core)
             : base(core)
@@ -47,7 +47,7 @@ namespace NebulaSiege.Controller
             }
         }
 
-        public void Insert(_MenuBase menu)
+        public void Insert(MenuBase menu)
         {
             lock (Collection)
             {
@@ -55,7 +55,7 @@ namespace NebulaSiege.Controller
             }
         }
 
-        public void Delete(_MenuBase menu)
+        public void Delete(MenuBase menu)
         {
             lock (Collection)
             {

@@ -6,7 +6,7 @@ using static NebulaSiege.Engine.Types.NsEngineCallbackEvent;
 
 namespace NebulaSiege.Situations
 {
-    internal class _SituationBase
+    internal class SituationBase
     {
         protected EngineCore _core;
         protected List<NsEngineCallbackEvent> Events = new();
@@ -17,7 +17,7 @@ namespace NebulaSiege.Situations
         public int TotalWaves { get; set; } = 1;
         public HgSituationState State { get; protected set; } = HgSituationState.NotStarted;
 
-        public _SituationBase(EngineCore core, string name)
+        public SituationBase(EngineCore core, string name)
         {
             _core = core;
             Name = name;

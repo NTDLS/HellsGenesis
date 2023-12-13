@@ -1,7 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
-using NebulaSiege.Menus;
+using NebulaSiege.Menus.BaseClasses;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 
@@ -9,7 +9,7 @@ namespace NebulaSiege.Sprites
 {
     internal class SpriteMenuItem : SpriteTextBlock
     {
-        public _MenuBase Menu { get; private set; }
+        public MenuBase Menu { get; private set; }
 
         private bool _selected = false;
 
@@ -33,7 +33,7 @@ namespace NebulaSiege.Sprites
 
         public HgMenuItemType ItemType { get; set; }
 
-        public SpriteMenuItem(EngineCore core, _MenuBase menu, TextFormat format, SolidColorBrush color, NsPoint location)
+        public SpriteMenuItem(EngineCore core, MenuBase menu, TextFormat format, SolidColorBrush color, NsPoint location)
             : base(core, format, color, location, true)
         {
             Menu = menu;

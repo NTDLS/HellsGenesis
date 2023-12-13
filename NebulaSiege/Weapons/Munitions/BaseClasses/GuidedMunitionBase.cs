@@ -2,20 +2,21 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility.ExtensionMethods;
+using NebulaSiege.Weapons.BaseClasses;
 
 namespace NebulaSiege.Weapons.Munitions
 {
     /// <summary>
     /// Guided munitions need to be locked onto a target before they are fired. They will adjust heading within given parameters to hit the locked target.
     /// </summary>
-    internal class _GuidedMunitionBase : _MunitionBase
+    internal class GuidedMunitionBase : MunitionBase
     {
         public int MaxGuidedObservationAngleDegrees { get; set; } = 90;
         public int GuidedRotationRateInDegrees { get; set; } = 3;
-        public _SpriteBase LockedTarget { get; private set; }
+        public SpriteBase LockedTarget { get; private set; }
 
-        public _GuidedMunitionBase(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, string imagePath,
-             _SpriteBase lockedTarget = null, NsPoint xyOffset = null)
+        public GuidedMunitionBase(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
+             SpriteBase lockedTarget = null, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, xyOffset)
         {
             LockedTarget = lockedTarget;

@@ -1,14 +1,14 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
-using NebulaSiege.Sprites.Enemies;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Sprites.Enemies.Peons;
 using NebulaSiege.Utility;
 using System.Linq;
 
 namespace NebulaSiege.Situations
 {
-    internal class SituationIrlenFormations : _SituationBase
+    internal class SituationIrlenFormations : SituationBase
     {
         public SituationIrlenFormations(EngineCore core)
             : base(core, "Irlen Formations")
@@ -56,7 +56,7 @@ namespace NebulaSiege.Situations
 
         private void AdvanceWaveCallback(EngineCore core, NsEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Sprites.OfType<_SpriteEnemyBase>().Count == 0 && !waitingOnPopulation)
+            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !waitingOnPopulation)
             {
                 if (CurrentWave == TotalWaves && waitingOnPopulation != true)
                 {

@@ -1,7 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
-using NebulaSiege.Sprites.Enemies;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -52,9 +52,9 @@ namespace NebulaSiege.Managers
             #region Debug stuff.
             if (key == Keys.Delete)
             {
-                if (_core.Sprites.OfType<_SpriteEnemyBase>().Count > 0)
+                if (_core.Sprites.OfType<SpriteEnemyBase>().Count > 0)
                 {
-                    _core.Sprites.OfType<_SpriteEnemyBase>()[0].Explode();
+                    _core.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
                 }
             }
             else if (key == Keys.Oem3) //~

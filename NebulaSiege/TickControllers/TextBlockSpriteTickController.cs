@@ -2,14 +2,14 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Managers;
 using NebulaSiege.Sprites;
-using NebulaSiege.TickControllers;
+using NebulaSiege.TickControllers.BaseClasses;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using System.Linq;
 
 namespace NebulaSiege.Controller
 {
-    internal class TextBlockSpriteTickController : _SpriteTickControllerBase<SpriteTextBlock>
+    internal class TextBlockSpriteTickController : SpriteTickControllerBase<SpriteTextBlock>
     {
         public TextBlockSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)

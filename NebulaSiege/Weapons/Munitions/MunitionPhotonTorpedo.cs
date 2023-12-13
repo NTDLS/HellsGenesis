@@ -1,14 +1,15 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
+using NebulaSiege.Weapons.BaseClasses;
 
 namespace NebulaSiege.Weapons.Munitions
 {
-    internal class MunitionPhotonTorpedo : _EnergyMunitionBase
+    internal class MunitionPhotonTorpedo : EnergyMunitionBase
     {
         private const string imagePath = @"Graphics\Weapon\PhotonTorpedo.png";
 
-        public MunitionPhotonTorpedo(EngineCore core, _WeaponBase weapon, _SpriteBase firedFrom, NsPoint xyOffset = null)
+        public MunitionPhotonTorpedo(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, NsPoint xyOffset = null)
             : base(core, weapon, firedFrom, imagePath, xyOffset)
         {
             Initialize(imagePath);

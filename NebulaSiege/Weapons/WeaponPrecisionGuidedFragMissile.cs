@@ -2,11 +2,12 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons.BaseClasses;
 using NebulaSiege.Weapons.Munitions;
 
 namespace NebulaSiege.Weapons
 {
-    internal class WeaponPrecisionGuidedFragMissile : _WeaponBase
+    internal class WeaponPrecisionGuidedFragMissile : WeaponBase
     {
         static new string Name { get; } = "Precision Guided Frag Missile";
         private const string soundPath = @"Sounds\Weapons\GuidedFragMissile.wav";
@@ -35,7 +36,7 @@ namespace NebulaSiege.Weapons
             ExplodesOnImpact = true;
         }
 
-        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(NsPoint xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionGuidedFragMissile(_core, this, _owner, targetOfLock, xyOffset);
         }

@@ -1,24 +1,14 @@
-﻿using NebulaSiege.Properties;
-using NebulaSiege.Utility;
-using Newtonsoft.Json.Linq;
-using ProtoBuf.Serializers;
+﻿using NebulaSiege.Utility;
 using SharpDX;
 using SharpDX.Direct2D1;
-using SharpDX.Direct3D;
 using SharpDX.DirectWrite;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
-using SharpDX.X3DAudio;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
-using static System.Windows.Forms.Design.AxImporter;
-using System.Reflection;
-using System.Windows.Forms;
 using System.Text;
 
 namespace NebulaSiege.Engine.GraphicsProcessing

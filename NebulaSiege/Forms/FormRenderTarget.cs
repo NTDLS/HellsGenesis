@@ -1,7 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
-using NebulaSiege.Sprites.Enemies;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -14,7 +14,7 @@ namespace NebulaSiege
 {
     public partial class FormRenderTarget : Form
     {
-        readonly List<_SpriteBase> highlightedSprites = new();
+        readonly List<SpriteBase> highlightedSprites = new();
         private readonly ToolTip _interrogationTip = new ToolTip();
 
         private readonly EngineCore _core;
@@ -127,7 +127,7 @@ namespace NebulaSiege
                     var menu = new ContextMenuStrip();
 
                     menu.ItemClicked += Menu_ItemClicked;
-                    if (sprite is _SpriteEnemyBase)
+                    if (sprite is SpriteEnemyBase)
                     {
                         menu.Items.Add("Save Brain").Tag = sprite;
                         menu.Items.Add("View Brain").Tag = sprite;
@@ -145,9 +145,9 @@ namespace NebulaSiege
                     text.AppendLine($"UID: {sprite.UID}");
                     text.AppendLine($"X,Y: {sprite.X:n2},{sprite.Y:n2}");
 
-                    if (sprite is _SpriteEnemyBase)
+                    if (sprite is SpriteEnemyBase)
                     {
-                        var enemy = (_SpriteEnemyBase)sprite;
+                        var enemy = (SpriteEnemyBase)sprite;
 
                         text.AppendLine($"Hit Points: {enemy.HullHealth:n0}");
                         text.AppendLine($"Is Locked-on: {enemy.IsLockedOn}");
@@ -179,7 +179,7 @@ namespace NebulaSiege
 
             menu.Close();
 
-            var sprite = e.ClickedItem?.Tag as _SpriteBase;
+            var sprite = e.ClickedItem?.Tag as SpriteBase;
             if (sprite == null) return;
 
             if (e.ClickedItem?.Text == "Delete")
@@ -188,9 +188,9 @@ namespace NebulaSiege
             }
             else if (e.ClickedItem?.Text == "Save Brain")
             {
-                if (sprite is _SpriteEnemyBase)
+                if (sprite is SpriteEnemyBase)
                 {
-                    var enemy = (_SpriteEnemyBase)sprite;
+                    var enemy = (SpriteEnemyBase)sprite;
 
                     bool wasPaused = _core.IsPaused();
                     if (wasPaused == false)
@@ -218,9 +218,9 @@ namespace NebulaSiege
             }
             else if (e.ClickedItem?.Text == "View Brain")
             {
-                if (sprite is _SpriteEnemyBase)
+                if (sprite is SpriteEnemyBase)
                 {
-                    var enemy = (_SpriteEnemyBase)sprite;
+                    var enemy = (SpriteEnemyBase)sprite;
 
                     bool wasPaused = _core.IsPaused();
                     if (wasPaused == false)

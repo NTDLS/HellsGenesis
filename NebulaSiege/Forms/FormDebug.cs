@@ -12,30 +12,41 @@ namespace NebulaSiege.Forms
         private readonly EngineCore _core;
         private readonly List<string> _commandHistory = new();
         private int _commandHistoryIndex = 0;
-        private readonly ComboBox _comboBoxAutoComplete = new();
 
         public FormDebug() => InitializeComponent();
 
-        private void FormDebug_Load(object sender, EventArgs e) { }
+        private void FormDebug_Load(object sender, EventArgs e)
+        {
+            foreach (var command in _core.Debug.CommandParser.Commands)
+            {
+                var item = new ListViewItem(command.Name);
+                item.SubItems.Add(command.Description);
+                listViewCommands.Items.Add(item);
+            }
+
+            var suggestions = _core.Debug.CommandParser.Commands.Select(o => o.Name).ToArray();
+
+            AutoCompleteStringCollection allowedTypes = new AutoCompleteStringCollection();
+            allowedTypes.AddRange(suggestions);
+            textBoxCommand.AutoCompleteCustomSource = allowedTypes;
+            textBoxCommand.AutoCompleteMode = AutoCompleteMode.Suggest;
+            textBoxCommand.AutoCompleteSource = AutoCompleteSource.CustomSource;
+        }
 
         internal FormDebug(EngineCore core)
         {
             InitializeComponent();
 
-            splitContainerBody.Panel2.Controls.Add(_comboBoxAutoComplete);
-            _comboBoxAutoComplete.Size = textBoxInput.Size;
-            _comboBoxAutoComplete.Location = textBoxInput.Location;
-
-            textBoxInput.Font = new Font("Courier New", 10, FontStyle.Regular);
+            textBoxCommand.Font = new Font("Courier New", 10, FontStyle.Regular);
             richTextBoxOutput.Font = new Font("Courier New", 10, FontStyle.Regular);
 
             AcceptButton = buttonExecute;
 
             _core = core;
 
-            Shown += (object sender, EventArgs e) => textBoxInput.Focus();
+            Shown += (object sender, EventArgs e) => textBoxCommand.Focus();
 
-            textBoxInput.KeyUp += TextBoxInput_KeyUp;
+            textBoxCommand.KeyUp += textBoxCommand_KeyUp;
 
             FormClosing += (object sender, FormClosingEventArgs e) =>
             {
@@ -44,106 +55,34 @@ namespace NebulaSiege.Forms
             };
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        private void textBoxCommand_KeyUp(object sender, KeyEventArgs e)
         {
-            if (_comboBoxAutoComplete.Focused)
+            if (e.KeyCode == Keys.Up)
             {
-                if (keyData == Keys.Tab || keyData == Keys.Enter)
+                if (_commandHistoryIndex > 0)
                 {
-                    if (_comboBoxAutoComplete.Items.Count > 0)
-                    {
-                        if (string.IsNullOrEmpty(_comboBoxAutoComplete.SelectedText) == false)
-                        {
-                            textBoxInput.Text = _comboBoxAutoComplete.SelectedText;
-                        }
-                        else
-                        {
-                            textBoxInput.Text = _comboBoxAutoComplete.Items[0].ToString();
-                        }
-                        textBoxInput.SelectionStart = textBoxInput.Text.Length;
-                        textBoxInput.SelectionLength = 0;
-                        _comboBoxAutoComplete.DroppedDown = false;
-                        Cursor.Current = Cursors.Default;
-                        textBoxInput.Focus();
-                    }
-                    return true;
+                    _commandHistoryIndex--;
+                    textBoxCommand.Text = _commandHistory[_commandHistoryIndex];
+                    textBoxCommand.SelectionStart = textBoxCommand.Text.Length;
+                    textBoxCommand.SelectionLength = 0;
                 }
             }
-            return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        private void TextBoxInput_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
+            else if (e.KeyCode == Keys.Down)
             {
-                _comboBoxAutoComplete.DroppedDown = false;
-                Cursor.Current = Cursors.Default;
-                textBoxInput.Focus();
-            }
-            else if ((e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z) || e.KeyCode == Keys.Back || e.KeyCode == Keys.OemMinus)
-            {
-                string input = textBoxInput.Text.ToLower();
-                if (input.Length <= 0)
+                if (_commandHistoryIndex <= _commandHistory.Count - 1)
                 {
-                    return;
-                }
-
-                _comboBoxAutoComplete.DroppedDown = false;
-                _comboBoxAutoComplete.Items.Clear();
-                var filteredAndSorted = _core.Debug.CommandParser.Commands
-                            .Where(str => str.NameLowered.Contains(input))
-                            .OrderBy(str => !str.NameLowered.StartsWith(input)) // Sort by whether it starts with 'test'
-                            .ThenBy(str => str.NameLowered) // Then sort alphabetically
-                            .Select(o => o.Name).ToArray();
-
-                _comboBoxAutoComplete.Items.AddRange(filteredAndSorted);
-
-                if (_comboBoxAutoComplete.Items.Count == 1)
-                {
-                    //No need to suggest a full match.
-                    if (_comboBoxAutoComplete.Items[0].ToString().ToLower() == input)
-                    {
-                        _comboBoxAutoComplete.Items.Clear();
-                    }
-                }
-
-                _comboBoxAutoComplete.DroppedDown = _comboBoxAutoComplete.Items.Count > 0;
-                Cursor.Current = Cursors.Default;
-            }
-            else if (e.KeyCode == Keys.Down && _comboBoxAutoComplete.DroppedDown == true)
-            {
-                _comboBoxAutoComplete.Focus();
-                SendKeys.Send("{DOWN}");
-            }
-            else
-            {
-                if (e.KeyCode == Keys.Up)
-                {
-                    if (_commandHistoryIndex > 0)
-                    {
-                        _commandHistoryIndex--;
-                        textBoxInput.Text = _commandHistory[_commandHistoryIndex];
-                        textBoxInput.SelectionStart = textBoxInput.Text.Length;
-                        textBoxInput.SelectionLength = 0;
-                    }
-                }
-                else if (e.KeyCode == Keys.Down)
-                {
-                    if (_commandHistoryIndex <= _commandHistory.Count - 1)
-                    {
-                        textBoxInput.Text = _commandHistory[_commandHistoryIndex];
-                        _commandHistoryIndex++;
-                        textBoxInput.SelectionStart = textBoxInput.Text.Length;
-                        textBoxInput.SelectionLength = 0;
-                    }
+                    textBoxCommand.Text = _commandHistory[_commandHistoryIndex];
+                    _commandHistoryIndex++;
+                    textBoxCommand.SelectionStart = textBoxCommand.Text.Length;
+                    textBoxCommand.SelectionLength = 0;
                 }
             }
         }
 
         private void ButtonExecute_Click(object sender, EventArgs e)
         {
-            var command = textBoxInput.Text.Trim();
-            textBoxInput.Text = "";
+            var command = textBoxCommand.Text.Trim();
+            textBoxCommand.Text = "";
 
             if (string.IsNullOrEmpty(command) == false)
             {

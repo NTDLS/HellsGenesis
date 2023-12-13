@@ -6,13 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NebulaSiege.TickControllers
+namespace NebulaSiege.TickControllers.BaseClasses
 {
     /// <summary>
     /// Tick managers which update their sprites using the supplied 2D vector.
     /// Also contains various factory methods.
     /// </summary>
-    internal class _SpriteTickControllerBase<T> : _TickControllerBase<T> where T : _SpriteBase
+    internal class SpriteTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
     {
         public EngineCore Core { get; private set; }
         public EngineSpriteManager SpriteManager { get; private set; }
@@ -25,7 +25,7 @@ namespace NebulaSiege.TickControllers
 
         public virtual void ExecuteWorldClockTick(NsPoint displacementVector) { }
 
-        public _SpriteTickControllerBase(EngineCore core, EngineSpriteManager manager)
+        public SpriteTickControllerBase(EngineCore core, EngineSpriteManager manager)
         {
             Core = core;
             SpriteManager = manager;

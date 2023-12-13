@@ -9,7 +9,7 @@ using System.Drawing;
 
 namespace NebulaSiege.Sprites
 {
-    internal class SpriteAnimation : _SpriteBase
+    internal class SpriteAnimation : SpriteBase
     {
         private readonly SharpDX.Direct2D1.Bitmap _sheetImage;
         private readonly int _frameCount;

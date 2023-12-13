@@ -1,6 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Loudouts;
+using NebulaSiege.Sprites.Enemies.Bosses.BaseClasses;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons;
@@ -10,7 +11,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
     /// <summary>
     /// 100% Experimental
     /// </summary>
-    internal class SpriteEnemyRepulsor : _SpriteEnemyBossBase
+    internal class SpriteEnemyRepulsor : SpriteEnemyBossBase
     {
         public const int hullHealth = 100;
         public const int bountyMultiplier = 15;

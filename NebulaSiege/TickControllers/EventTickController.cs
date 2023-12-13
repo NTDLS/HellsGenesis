@@ -1,14 +1,14 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Menus;
-using NebulaSiege.TickControllers;
+using NebulaSiege.TickControllers.BaseClasses;
 using System;
 using System.Collections.Generic;
 using static NebulaSiege.Engine.Types.NsEngineCallbackEvent;
 
 namespace NebulaSiege.Controller
 {
-    internal class EventTickController : _UnvectoredTickControllerBase<NsEngineCallbackEvent>
+    internal class EventTickController : UnvectoredTickControllerBase<NsEngineCallbackEvent>
     {
         public List<NsEngineCallbackEvent> Collection { get; private set; } = new();
 

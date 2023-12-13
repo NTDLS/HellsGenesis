@@ -2,16 +2,16 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Managers;
 using NebulaSiege.Sprites;
-using NebulaSiege.Sprites.Enemies.Bosses;
-using NebulaSiege.Sprites.Enemies.Peons;
-using NebulaSiege.TickControllers;
-using NebulaSiege.Weapons;
+using NebulaSiege.Sprites.Enemies.Bosses.BaseClasses;
+using NebulaSiege.Sprites.Enemies.Peons.BaseClasses;
+using NebulaSiege.TickControllers.BaseClasses;
+using NebulaSiege.Weapons.BaseClasses;
 using NebulaSiege.Weapons.Munitions;
 using System.Collections.Generic;
 
 namespace NebulaSiege.Controller
 {
-    internal class MunitionSpriteTickController : _SpriteTickControllerBase<_MunitionBase>
+    internal class MunitionSpriteTickController : SpriteTickControllerBase<MunitionBase>
     {
         public MunitionSpriteTickController(EngineCore core, EngineSpriteManager manager)
             : base(core, manager)
@@ -25,11 +25,11 @@ namespace NebulaSiege.Controller
                 Core.Player.Sprite
             };
 
-            objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<_SpriteEnemyBossBase>());
-            objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<_SpriteEnemyPeonBase>());
+            objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyBossBase>());
+            objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyPeonBase>());
             objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
 
-            foreach (var munition in VisibleOfType<_MunitionBase>())
+            foreach (var munition in VisibleOfType<MunitionBase>())
             {
                 munition.ApplyMotion(displacementVector); //Move the munition.
 
@@ -47,7 +47,7 @@ namespace NebulaSiege.Controller
         ///     betwwen where it ended up and where it should have come from given its velocity.
         /// </summary>
         /// <returns></returns>
-        public bool TestObjectCollisionsAlongMunitionPath(_MunitionBase munition, List<_SpriteShipBase> objectsThatCanBeHit, NsPoint displacementVector)
+        public bool TestObjectCollisionsAlongMunitionPath(MunitionBase munition, List<_SpriteShipBase> objectsThatCanBeHit, NsPoint displacementVector)
         {
             var hitTestPosition = munition.Location.ToWriteableCopy(); //Grab the new location of the munition.
 
@@ -69,7 +69,7 @@ namespace NebulaSiege.Controller
             return false;
         }
 
-        public _MunitionBase Create(_WeaponBase weapon, NsPoint xyOffset = null)
+        public MunitionBase Create(WeaponBase weapon, NsPoint xyOffset = null)
         {
             lock (SpriteManager.Collection)
             {
@@ -79,7 +79,7 @@ namespace NebulaSiege.Controller
             }
         }
 
-        public _MunitionBase CreateLocked(_WeaponBase weapon, _SpriteBase lockedTarget, NsPoint xyOffset = null)
+        public MunitionBase CreateLocked(WeaponBase weapon, SpriteBase lockedTarget, NsPoint xyOffset = null)
         {
             lock (SpriteManager.Collection)
             {

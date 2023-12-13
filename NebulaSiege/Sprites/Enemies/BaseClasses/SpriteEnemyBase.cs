@@ -4,21 +4,22 @@ using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Loudouts;
 using NebulaSiege.Managers;
 using NebulaSiege.Sprites.PowerUp;
+using NebulaSiege.Sprites.PowerUp.BaseClasses;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
-using NebulaSiege.Weapons;
+using NebulaSiege.Weapons.BaseClasses;
 using NebulaSiege.Weapons.Munitions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NebulaSiege.Sprites.Enemies
+namespace NebulaSiege.Sprites.Enemies.BaseClasses
 {
     /// <summary>
     /// The enemy base is a sub-class of the ship base. It is used by Peon and Boss enemies.
     /// </summary>
-    internal class _SpriteEnemyBase : _SpriteShipBase
+    internal class SpriteEnemyBase : _SpriteShipBase
     {
         public HgEnemyClass ShipClass { get; set; }
         public EnemyShipLoadout Loadout { get; set; }
@@ -27,10 +28,10 @@ namespace NebulaSiege.Sprites.Enemies
         public int CollisionDamage { get; set; } = 25;
         public int BountyWorth { get; private set; } = 25;
         public bool IsHostile { get; set; } = true;
-        public List<_WeaponBase> Weapons { get; private set; } = new();
+        public List<WeaponBase> Weapons { get; private set; } = new();
 
 
-        public _SpriteEnemyBase(EngineCore core, int hullHealth, int bountyMultiplier)
+        public SpriteEnemyBase(EngineCore core, int hullHealth, int bountyMultiplier)
                 : base(core)
         {
             Velocity.ThrottlePercentage = 1;
@@ -60,7 +61,7 @@ namespace NebulaSiege.Sprites.Enemies
             {
                 int random = HgRandom.Between(0, 4);
 
-                _SpritePowerUpBase powerUp = null;
+                SpritePowerUpBase powerUp = null;
 
                 switch (random)
                 {
@@ -158,7 +159,7 @@ namespace NebulaSiege.Sprites.Enemies
             }
         }
 
-        public override bool TryMunitionHit(NsPoint displacementVector, _MunitionBase munition, NsPoint hitTestPosition)
+        public override bool TryMunitionHit(NsPoint displacementVector, MunitionBase munition, NsPoint hitTestPosition)
         {
             if (munition.FiredFromType == HgFiredFromType.Player)
             {
@@ -291,7 +292,7 @@ namespace NebulaSiege.Sprites.Enemies
 
             if (weapon == null)
             {
-                weapon = NsReflection.CreateInstanceFromType<_WeaponBase>(weaponType, new object[] { _core, this });
+                weapon = NsReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _core, this });
                 weapon.RoundQuantity += munitionCount;
                 Weapons.Add(weapon);
             }
@@ -301,7 +302,7 @@ namespace NebulaSiege.Sprites.Enemies
             }
         }
 
-        public void AddWeapon<T>(int munitionCount) where T : _WeaponBase
+        public void AddWeapon<T>(int munitionCount) where T : WeaponBase
         {
             var weapon = GetWeaponOfType<T>();
             if (weapon == null)
@@ -319,25 +320,25 @@ namespace NebulaSiege.Sprites.Enemies
         public int TotalAvailableWeaponRounds() => (from o in Weapons select o.RoundQuantity).Sum();
         public int TotalWeaponFiredRounds() => (from o in Weapons select o.RoundsFired).Sum();
 
-        public bool HasWeapon<T>() where T : _WeaponBase
+        public bool HasWeapon<T>() where T : WeaponBase
         {
             var existingWeapon = (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
             return existingWeapon != null;
         }
 
-        public bool HasWeaponAndAmmo<T>() where T : _WeaponBase
+        public bool HasWeaponAndAmmo<T>() where T : WeaponBase
         {
             var existingWeapon = (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
             return existingWeapon != null && existingWeapon.RoundQuantity > 0;
         }
 
-        public bool FireWeapon<T>() where T : _WeaponBase
+        public bool FireWeapon<T>() where T : WeaponBase
         {
             var weapon = GetWeaponOfType<T>();
             return weapon?.Fire() == true;
         }
 
-        public _WeaponBase GetWeaponOfType<T>() where T : _WeaponBase
+        public WeaponBase GetWeaponOfType<T>() where T : WeaponBase
         {
             return (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
         }

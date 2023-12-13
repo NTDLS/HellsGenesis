@@ -3,9 +3,10 @@ using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus;
 using NebulaSiege.Sprites;
-using NebulaSiege.Sprites.Enemies;
+using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Sprites.Player;
-using NebulaSiege.Sprites.PowerUp;
+using NebulaSiege.Sprites.Player.BaseClasses;
+using NebulaSiege.Sprites.PowerUp.BaseClasses;
 using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons.Munitions;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace NebulaSiege.Managers
 
         #region Sprites and their factories.
 
-        internal List<_SpriteBase> Collection { get; private set; } = new();
+        internal List<SpriteBase> Collection { get; private set; } = new();
 
         public AnimationSpriteTickController Animations { get; set; }
         public AttachmentSpriteTickController Attachments { get; set; }
@@ -120,7 +121,7 @@ namespace NebulaSiege.Managers
             Animations.DeleteAll();
         }
 
-        public T GetSpriteByTag<T>(string name) where T : _SpriteBase
+        public T GetSpriteByTag<T>(string name) where T : SpriteBase
         {
             lock (Collection)
             {
@@ -158,11 +159,11 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public List<_SpriteBase> Intersections(_SpriteBase with)
+        public List<SpriteBase> Intersections(SpriteBase with)
         {
             lock (Collection)
             {
-                var objs = new List<_SpriteBase>();
+                var objs = new List<SpriteBase>();
 
                 foreach (var obj in Collection.Where(o => o.Visable == true))
                 {
@@ -178,14 +179,14 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public List<_SpriteBase> Intersections(double x, double y, double width, double height)
+        public List<SpriteBase> Intersections(double x, double y, double width, double height)
             => Intersections(new NsPoint(x, y), new NsPoint(width, height));
 
-        public List<_SpriteBase> Intersections(NsPoint location, NsPoint size)
+        public List<SpriteBase> Intersections(NsPoint location, NsPoint size)
         {
             lock (Collection)
             {
-                var objs = new List<_SpriteBase>();
+                var objs = new List<SpriteBase>();
 
                 foreach (var obj in Collection.Where(o => o.Visable == true))
                 {
@@ -198,7 +199,7 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public _SpritePlayerBase InsertPlayer(_SpritePlayerBase sprite)
+        public SpritePlayerBase InsertPlayer(SpritePlayerBase sprite)
         {
             lock (Collection)
             {
@@ -258,7 +259,7 @@ namespace NebulaSiege.Managers
                             && y < _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
                             )
                         {
-                            if ((sprite is _SpriteEnemyBase || sprite is _MunitionBase || sprite is _SpritePowerUpBase) && sprite.Visable == true)
+                            if ((sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerUpBase) && sprite.Visable == true)
                             {
                                 sprite.RenderRadar(renderTarget, x, y);
                             }

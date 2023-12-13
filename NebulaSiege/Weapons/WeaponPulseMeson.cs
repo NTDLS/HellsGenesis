@@ -2,11 +2,12 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
+using NebulaSiege.Weapons.BaseClasses;
 using NebulaSiege.Weapons.Munitions;
 
 namespace NebulaSiege.Weapons
 {
-    internal class WeaponPulseMeson : _WeaponBase
+    internal class WeaponPulseMeson : WeaponBase
     {
         static new string Name { get; } = "Pulse Meson";
         private const string soundPath = @"Sounds\Weapons\PulseMeson.wav";
@@ -33,7 +34,7 @@ namespace NebulaSiege.Weapons
             RecoilAmount = 0.65;
         }
 
-        public override _MunitionBase CreateMunition(NsPoint xyOffset, _SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(NsPoint xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionPulseMeson(_core, this, _owner, xyOffset);
         }
