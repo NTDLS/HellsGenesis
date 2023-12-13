@@ -35,7 +35,6 @@
             listViewCommands = new System.Windows.Forms.ListView();
             columnHeaderName = new System.Windows.Forms.ColumnHeader();
             columnHeaderDescription = new System.Windows.Forms.ColumnHeader();
-            columnHeaderParameters = new System.Windows.Forms.ColumnHeader();
             textBoxCommand = new System.Windows.Forms.TextBox();
             buttonExecute = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)splitContainerBody).BeginInit();
@@ -65,8 +64,8 @@
             // 
             splitContainerBody.Panel2.Controls.Add(textBoxCommand);
             splitContainerBody.Panel2.Controls.Add(buttonExecute);
-            splitContainerBody.Size = new System.Drawing.Size(986, 538);
-            splitContainerBody.SplitterDistance = 507;
+            splitContainerBody.Size = new System.Drawing.Size(1039, 563);
+            splitContainerBody.SplitterDistance = 532;
             splitContainerBody.TabIndex = 0;
             // 
             // splitContainer1
@@ -82,8 +81,8 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.Controls.Add(listViewCommands);
-            splitContainer1.Size = new System.Drawing.Size(986, 507);
-            splitContainer1.SplitterDistance = 681;
+            splitContainer1.Size = new System.Drawing.Size(1039, 532);
+            splitContainer1.SplitterDistance = 683;
             splitContainer1.TabIndex = 1;
             // 
             // richTextBoxOutput
@@ -91,17 +90,22 @@
             richTextBoxOutput.Dock = System.Windows.Forms.DockStyle.Fill;
             richTextBoxOutput.Location = new System.Drawing.Point(0, 0);
             richTextBoxOutput.Name = "richTextBoxOutput";
-            richTextBoxOutput.Size = new System.Drawing.Size(681, 507);
+            richTextBoxOutput.Size = new System.Drawing.Size(683, 532);
             richTextBoxOutput.TabIndex = 0;
             richTextBoxOutput.Text = "";
             // 
             // listViewCommands
             // 
-            listViewCommands.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { columnHeaderName, columnHeaderDescription, columnHeaderParameters });
+            listViewCommands.Activation = System.Windows.Forms.ItemActivation.OneClick;
+            listViewCommands.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] { columnHeaderName, columnHeaderDescription });
             listViewCommands.Dock = System.Windows.Forms.DockStyle.Fill;
+            listViewCommands.FullRowSelect = true;
+            listViewCommands.GridLines = true;
+            listViewCommands.HideSelection = true;
             listViewCommands.Location = new System.Drawing.Point(0, 0);
             listViewCommands.Name = "listViewCommands";
-            listViewCommands.Size = new System.Drawing.Size(301, 507);
+            listViewCommands.ShowItemToolTips = true;
+            listViewCommands.Size = new System.Drawing.Size(352, 532);
             listViewCommands.TabIndex = 0;
             listViewCommands.UseCompatibleStateImageBehavior = false;
             listViewCommands.View = System.Windows.Forms.View.Details;
@@ -109,27 +113,25 @@
             // columnHeaderName
             // 
             columnHeaderName.Text = "Name";
+            columnHeaderName.Width = 225;
             // 
             // columnHeaderDescription
             // 
             columnHeaderDescription.Text = "Description";
-            // 
-            // columnHeaderParameters
-            // 
-            columnHeaderParameters.Text = "Parameters";
+            columnHeaderDescription.Width = 500;
             // 
             // textBoxCommand
             // 
             textBoxCommand.Dock = System.Windows.Forms.DockStyle.Fill;
             textBoxCommand.Location = new System.Drawing.Point(0, 0);
             textBoxCommand.Name = "textBoxCommand";
-            textBoxCommand.Size = new System.Drawing.Size(911, 23);
+            textBoxCommand.Size = new System.Drawing.Size(964, 23);
             textBoxCommand.TabIndex = 2;
             // 
             // buttonExecute
             // 
             buttonExecute.Dock = System.Windows.Forms.DockStyle.Right;
-            buttonExecute.Location = new System.Drawing.Point(911, 0);
+            buttonExecute.Location = new System.Drawing.Point(964, 0);
             buttonExecute.Name = "buttonExecute";
             buttonExecute.Size = new System.Drawing.Size(75, 27);
             buttonExecute.TabIndex = 1;
@@ -141,7 +143,7 @@
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(986, 538);
+            ClientSize = new System.Drawing.Size(1039, 563);
             Controls.Add(splitContainerBody);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "FormDebug";
@@ -168,7 +170,6 @@
         private System.Windows.Forms.ListView listViewCommands;
         private System.Windows.Forms.ColumnHeader columnHeaderName;
         private System.Windows.Forms.ColumnHeader columnHeaderDescription;
-        private System.Windows.Forms.ColumnHeader columnHeaderParameters;
         private System.Windows.Forms.TextBox textBoxCommand;
     }
 }

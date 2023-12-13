@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace NebulaSiege.Forms
 {
@@ -20,13 +22,44 @@ namespace NebulaSiege.Forms
             foreach (var command in _core.Debug.CommandParser.Commands)
             {
                 var item = new ListViewItem(command.Name);
+
+                var toolTipText = new StringBuilder($"{command.Name} (");
+
+                foreach (var param in command.Parameters)
+                {
+                    if (param.IsRequired)
+                    {
+                        toolTipText.Append($"{param.CommandParameterType} [{param.Name}]");
+                    }
+                    else
+                    {
+                        toolTipText.Append($"{param.CommandParameterType} {param.Name}");
+                    }
+
+                    if (string.IsNullOrEmpty(param.DefaultValue) == false)
+                    {
+                        toolTipText.Append($" = '{param.DefaultValue}'");
+                    }
+
+                    toolTipText.Append(", ");
+                }
+
+                if (command.Parameters.Count > 0)
+                {
+                    toolTipText.Length -= 2;
+                }
+
+                toolTipText.AppendLine(")");
+                toolTipText.Append(command.Description);
+
+                item.ToolTipText = toolTipText.ToString().Trim();
                 item.SubItems.Add(command.Description);
                 listViewCommands.Items.Add(item);
             }
 
             var suggestions = _core.Debug.CommandParser.Commands.Select(o => o.Name).ToArray();
 
-            AutoCompleteStringCollection allowedTypes = new AutoCompleteStringCollection();
+            var allowedTypes = new AutoCompleteStringCollection();
             allowedTypes.AddRange(suggestions);
             textBoxCommand.AutoCompleteCustomSource = allowedTypes;
             textBoxCommand.AutoCompleteMode = AutoCompleteMode.Suggest;
@@ -47,12 +80,22 @@ namespace NebulaSiege.Forms
             Shown += (object sender, EventArgs e) => textBoxCommand.Focus();
 
             textBoxCommand.KeyUp += textBoxCommand_KeyUp;
+            listViewCommands.MouseDoubleClick += ListViewCommands_MouseDoubleClick;
 
             FormClosing += (object sender, FormClosingEventArgs e) =>
             {
                 core.Debug.ToggleVisibility();
                 e.Cancel = true;
             };
+        }
+
+        private void ListViewCommands_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (listViewCommands.SelectedItems.Count > 0)
+            {
+                ListViewItem selectedItem = listViewCommands.SelectedItems[0];
+                textBoxCommand.Text =  selectedItem.Text;
+            }
         }
 
         private void textBoxCommand_KeyUp(object sender, KeyEventArgs e)
