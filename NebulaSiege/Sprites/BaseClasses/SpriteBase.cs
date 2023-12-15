@@ -1,5 +1,4 @@
-﻿using NebulaSiege.AI;
-using NebulaSiege.Engine;
+﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites.Enemies.BaseClasses;
@@ -487,7 +486,7 @@ namespace NebulaSiege.Sprites
         /// </summary>
         public void PointAtAndGoto(NsPoint location, double? velocity = null)
         {
-            Velocity.Angle.Degrees = NsPoint.AngleTo(Location, location);
+            Velocity.Angle.Degrees = NsPoint.AngleTo360(Location, location);
             if (velocity != null)
             {
                 Velocity.MaxSpeed = (double)velocity;
@@ -499,7 +498,7 @@ namespace NebulaSiege.Sprites
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, double? velocity = null)
         {
-            Velocity.Angle.Degrees = NsPoint.AngleTo(Location, obj.Location);
+            Velocity.Angle.Degrees = NsPoint.AngleTo360(Location, obj.Location);
 
             if (velocity != null)
             {
@@ -728,10 +727,10 @@ namespace NebulaSiege.Sprites
         /// Calculates the angle in degrees to another object,
         /// </summary>
         /// <returns></returns>
-        public double AngleTo(SpriteBase atObj) => HgMath.AngleTo(this, atObj);
+        public double AngleTo(SpriteBase atObj) => HgMath.AngleTo360(this, atObj);
 
         /// Calculates the angle in degrees to a location.
-        public double AngleTo(NsPoint location) => HgMath.AngleTo(this, location);
+        public double AngleTo(NsPoint location) => HgMath.AngleTo360(this, location);
 
         public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
             => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);

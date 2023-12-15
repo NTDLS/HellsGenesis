@@ -80,7 +80,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
             {
                 if (_leftGun?.IsDead == false)
                 {
-                    var pointLeft = HgMath.AngleFromPointAtDistance(Velocity.Angle - 90, new NsPoint(25, 25));
+                    var pointLeft = HgMath.PointFromAngleAtDistance360(Velocity.Angle - 90, new NsPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _leftGun.X = X + pointLeft.X;
                     _leftGun.Y = Y + pointLeft.Y;
@@ -88,7 +88,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
 
                 if (_rightGun?.IsDead == false)
                 {
-                    var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 90, new NsPoint(25, 25));
+                    var pointRight = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 90, new NsPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _rightGun.X = X + pointRight.X;
                     _rightGun.Y = Y + pointRight.Y;
@@ -96,7 +96,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
 
                 if (_thrust?.IsDead == false)
                 {
-                    var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new NsPoint(35, 35));
+                    var pointRight = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new NsPoint(35, 35));
                     _thrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _thrust.X = X + pointRight.X;
                     _thrust.Y = Y + pointRight.Y;

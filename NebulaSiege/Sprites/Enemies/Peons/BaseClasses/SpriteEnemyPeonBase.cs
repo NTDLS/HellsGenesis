@@ -47,14 +47,14 @@ namespace NebulaSiege.Sprites.Enemies.Peons.BaseClasses
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new NsPoint(20, 20));
+                var pointRight = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new NsPoint(20, 20));
                 ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                 ThrustAnimation.X = X + pointRight.X;
                 ThrustAnimation.Y = Y + pointRight.Y;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointRight = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new NsPoint(20, 20));
+                var pointRight = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new NsPoint(20, 20));
                 BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                 BoostAnimation.X = X + pointRight.X;
                 BoostAnimation.Y = Y + pointRight.Y;

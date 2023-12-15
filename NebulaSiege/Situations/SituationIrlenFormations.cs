@@ -91,7 +91,7 @@ namespace NebulaSiege.Situations
 
         private void CreateTriangleFormation(NsPoint baseLocation, double spacing, int depth)
         {
-            double angle = HgMath.AngleTo(baseLocation, _core.Player.Sprite);
+            double angle = HgMath.AngleTo360(baseLocation, _core.Player.Sprite);
 
             for (int col = 0; col < depth; col++)
             {

@@ -233,7 +233,7 @@ namespace NebulaSiege.Sprites.Enemies.BaseClasses
 
                     double requiredAngle = _core.Player.Sprite.AngleTo(this);
 
-                    var offset = HgMath.AngleFromPointAtDistance(new NsAngle(requiredAngle), new NsPoint(200, 200));
+                    var offset = HgMath.PointFromAngleAtDistance360(new NsAngle(requiredAngle), new NsPoint(200, 200));
 
                     RadarPositionText.Location = _core.Player.Sprite.Location + offset + new NsPoint(25, 25);
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;

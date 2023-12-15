@@ -1,6 +1,5 @@
 ﻿using NebulaSiege.Engine.Types.Geometry;
 using NTDLS.Determinet;
-using NTDLS.Determinet.Types;
 
 namespace NebulaSiege.AI
 {

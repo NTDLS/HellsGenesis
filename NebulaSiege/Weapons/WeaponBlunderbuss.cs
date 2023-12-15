@@ -39,7 +39,7 @@ namespace NebulaSiege.Weapons
                 {
                     if (RoundQuantity > 0)
                     {
-                        var pointRight = HgMath.AngleFromPointAtDistance(_owner.Velocity.Angle + 90, new NsPoint(i, i));
+                        var pointRight = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new NsPoint(i, i));
                         _core.Sprites.Munitions.Create(this, pointRight);
                         RoundQuantity--;
                     }

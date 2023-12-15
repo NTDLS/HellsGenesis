@@ -234,7 +234,7 @@ namespace NebulaSiege.Sprites.Player.BaseClasses
             {
                 if (Visable)
                 {
-                    var pointBehind = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new NsPoint(20, 20));
+                    var pointBehind = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new NsPoint(20, 20));
                     ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                     ThrustAnimation.X = X + pointBehind.X;
                     ThrustAnimation.Y = Y + pointBehind.Y;
@@ -245,7 +245,7 @@ namespace NebulaSiege.Sprites.Player.BaseClasses
             {
                 if (Visable)
                 {
-                    var pointBehind = HgMath.AngleFromPointAtDistance(Velocity.Angle + 180, new NsPoint(20, 20));
+                    var pointBehind = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new NsPoint(20, 20));
                     BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                     BoostAnimation.X = X + pointBehind.X;
                     BoostAnimation.Y = Y + pointBehind.Y;

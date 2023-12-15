@@ -103,7 +103,7 @@ namespace NebulaSiege.Engine.Types.Geometry
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public static double AngleTo(NsPoint from, NsPoint to)
+        public static double AngleTo360(NsPoint from, NsPoint to)
         {
             var radians = Math.Atan2(to.Y - from.Y, to.X - from.X);
             return (NsAngle.RadiansToDegrees(radians) + 360.0 + NsAngle.AngleOffsetDegrees) % 360.0;
