@@ -6,6 +6,7 @@ using NebulaSiege.Utility.ExtensionMethods;
 using NTDLS.Determinet;
 using NTDLS.Determinet.Types;
 using System;
+using System.Diagnostics;
 
 namespace NebulaSiege.AI.Logistics
 {
@@ -100,6 +101,8 @@ namespace NebulaSiege.AI.Logistics
 
         private void SetCurrentActivity(AIActivity state)
         {
+            Debug.WriteLine(state);
+
             switch (state)
             {
                 case AIActivity.EvasiveLoop:
@@ -256,6 +259,8 @@ namespace NebulaSiege.AI.Logistics
             aiParams.Set(AIInputs.AngleToObservedObjectIn6thRadians,
                 angleToIn6thRadians.SplitToNegative(Math.PI / 6));
 
+            Debug.WriteLine(angleToIn6thRadians);
+
             return aiParams;
         }
 
@@ -288,7 +293,7 @@ namespace NebulaSiege.AI.Logistics
 
             for (int epoch = 0; epoch < 10000; epoch++)
             {
-                for (double angleIn10thRadians = -1; angleIn10thRadians < 1; angleIn10thRadians += 0.1)
+                for (double angleIn10thRadians = -0.5; angleIn10thRadians < 0.5; angleIn10thRadians += 0.1)
                 {
                     double absAngleIn10thRadians = Math.Abs(angleIn10thRadians);
 
