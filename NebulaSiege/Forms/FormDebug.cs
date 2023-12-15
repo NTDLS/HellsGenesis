@@ -18,7 +18,7 @@ namespace NebulaSiege.Forms
 
         private void FormDebug_Load(object sender, EventArgs e)
         {
-            foreach (var command in _core.Debug.CommandParser.Commands)
+            foreach (var command in _core.Debug.CommandParser.Commands.OrderBy(o=>o.Name))
             {
                 var item = new ListViewItem(command.Name);
 
@@ -93,7 +93,7 @@ namespace NebulaSiege.Forms
             if (listViewCommands.SelectedItems.Count > 0)
             {
                 ListViewItem selectedItem = listViewCommands.SelectedItems[0];
-                textBoxCommand.Text = selectedItem.Text;
+                textBoxCommand.Text =  selectedItem.Text;
             }
         }
 

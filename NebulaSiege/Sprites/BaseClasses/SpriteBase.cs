@@ -1,4 +1,5 @@
-﻿using NebulaSiege.Engine;
+﻿using NebulaSiege.AI;
+using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites.Enemies.BaseClasses;
@@ -76,9 +77,19 @@ namespace NebulaSiege.Sprites
 
         public string GetInspectionText()
         {
+            string extraInfo = string.Empty;
+
+            if (this is SpriteEnemyBase enemy)
+            {
+                extraInfo =
+                      $"           AI Controller: {enemy.CurrentAIController}\r\n"
+                    + $"              Is Hostile: {enemy.IsHostile}\r\n";
+            }
+
             return
                   $">                    UID: {UID}y\r\n"
                 + $"                   Owner: {OwnerUID:n0}\r\n"
+                + $"                    Name: {GetType().Name}\r\n"
                 + $"                     Tag: {SpriteTag:n0}\r\n"
                 + $"             Is Visable?: {Visable:n0}\r\n"
                 + $"                    Size: {Size:n0}\r\n"
@@ -90,6 +101,7 @@ namespace NebulaSiege.Sprites
                 + $"                          {Velocity.Angle.Degrees:n2}deg\r\n"
                 + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
                 + $"                          {Velocity.Angle.RadiansUnadjusted:n2}rad unadjusted\r\n"
+                + extraInfo
                 + $"              Virtual XY: X:{X + _core.Display.BackgroundOffset.X:n0}, Y:{Y + _core.Display.BackgroundOffset.Y:n0}\r\n"
                 + $"       Background Offset: {_core.Display.BackgroundOffset}\r\n"
                 + $"                  Thrust: {(Velocity.ThrottlePercentage * 100):n2}\r\n"

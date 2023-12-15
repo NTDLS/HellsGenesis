@@ -16,7 +16,7 @@ namespace NebulaSiege.Managers
     {
         private static string[] _commandPrototypes = {
             "Cls||Clears the debug screen.",
-            "Help||Displays this help.",
+            "Help|command:Optional:Criterion|Displays help for all or a given command.",
 
             "Display-Zoom-Reset||Resets the global zoom level to auto.",
             "Display-Zoom-Override|level:Required:Numeric|Sets the global zoom level.",
@@ -216,9 +216,22 @@ namespace NebulaSiege.Managers
 
         public void CommandHandler_Help(DebugCommand command)
         {
-            foreach (var cmd in CommandParser.Commands.OrderBy(o => o.Name))
+            var commands = CommandParser.Commands.OrderBy(o => o.Name).ToList();
+
+            var typeFilter = command.ParameterValue<DebugCommandParameterCriterion>("command");
+            if (typeFilter != null)
             {
-                string text = $"{cmd.Name} - {cmd.Description}\r\n";
+                commands = commands.Where(o => DebugCommandParameter.IsMatchLike(o.Name, typeFilter.Value, typeFilter.IsNotCriteria)).ToList();
+            }
+
+            foreach (var cmd in commands)
+            {
+                string text = $" > {cmd.Name} - {cmd.Description}\r\n";
+
+                if (cmd.Parameters.Count > 0)
+                {
+                    text += "    Parameters: { \r\n";
+                }
 
                 foreach (var cmdParam in cmd.Parameters)
                 {
@@ -235,8 +248,14 @@ namespace NebulaSiege.Managers
                         optionalText += ")";
                     }
 
-                    text += $"\t{cmdParam.Name}, {cmdParam.CommandParameterType}{optionalText}\r\n";
+                    text += $"        {cmdParam.Name}, {cmdParam.CommandParameterType}{optionalText}\r\n";
                 }
+
+                if (cmd.Parameters.Count > 0)
+                {
+                    text += "    }\r\n";
+                }
+
                 formDebug.Write(text, System.Drawing.Color.Black);
             }
         }
