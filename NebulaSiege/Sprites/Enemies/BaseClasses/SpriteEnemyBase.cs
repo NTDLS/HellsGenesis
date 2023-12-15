@@ -23,7 +23,7 @@ namespace NebulaSiege.Sprites.Enemies.BaseClasses
     {
         public HgEnemyClass ShipClass { get; set; }
         public EnemyShipLoadout Loadout { get; set; }
-        public IAIController DefaultAIController { get; set; }
+        public IAIController CurrentAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
         public int CollisionDamage { get; set; } = 25;
         public int BountyWorth { get; private set; } = 25;
@@ -275,9 +275,9 @@ namespace NebulaSiege.Sprites.Enemies.BaseClasses
         internal void AddAIController(IAIController controller)
             => AIControllers.Add(controller.GetType(), controller);
 
-        internal void SetDefaultAIController(IAIController value)
+        internal void SetCurrentAIController(IAIController value)
         {
-            DefaultAIController = value;
+            CurrentAIController = value;
         }
 
         #region Weapons selection and evaluation.

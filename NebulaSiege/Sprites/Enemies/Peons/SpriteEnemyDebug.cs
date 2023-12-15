@@ -65,7 +65,7 @@ namespace NebulaSiege.Sprites.Enemies.Peons
 
             //if (HgRandom.FlipCoin())
             //{
-            SetDefaultAIController(AIControllers[typeof(Taunt)]);
+            SetCurrentAIController(AIControllers[typeof(Taunt)]);
             //}
             //else
             //{
@@ -74,7 +74,7 @@ namespace NebulaSiege.Sprites.Enemies.Peons
 
             behaviorChangeThresholdMiliseconds = HgRandom.Between(2000, 10000);
 
-            SetDefaultAIController(AIControllers[typeof(Taunt)]);
+            SetCurrentAIController(AIControllers[typeof(Taunt)]);
         }
 
         #region Artificial Intelligence.
@@ -100,7 +100,7 @@ namespace NebulaSiege.Sprites.Enemies.Peons
                 if (HgRandom.ChanceIn(2))
                 {
                 */
-                SetDefaultAIController(AIControllers[typeof(Taunt)]);
+                SetCurrentAIController(AIControllers[typeof(Taunt)]);
                 /*
                 }
                 else if (HgRandom.ChanceIn(2))
@@ -133,7 +133,7 @@ namespace NebulaSiege.Sprites.Enemies.Peons
                 }
             }
 
-            DefaultAIController?.ApplyIntelligence(displacementVector);
+            CurrentAIController?.ApplyIntelligence(displacementVector);
         }
 
         #endregion

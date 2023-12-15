@@ -9,7 +9,6 @@ using System;
 
 namespace NebulaSiege.AI.Logistics
 {
-
     /// <summary>
     /// Finite-state-machine where AI decides the states. "Taunt" keeps an object swooping in and out. Very near and somewhat aggressively.
     /// </summary>
@@ -165,16 +164,14 @@ namespace NebulaSiege.AI.Logistics
                 _lastDecisionTime = now;
             }
 
-            //We are evading, dont make any other decisions until evasion is complete.
             if (_currentAction == ActionState.EvasiveLoop)
             {
                 if (_owner.RotateTo(_evasiveLoopTargetAngle.Degrees, _evasiveLoopDirection, 1, 30) == false)
                 {
                     AlterActionState(ActionState.Escape);
                 }
-                return;
             }
-            if (_currentAction == ActionState.Escape)
+            else if (_currentAction == ActionState.Escape)
             {
                 double distanceToPlayer = _owner.DistanceTo(_observedObject);
                 if (distanceToPlayer < 500)
@@ -188,9 +185,6 @@ namespace NebulaSiege.AI.Logistics
                         _owner.Velocity.Angle.Degrees--;
                     }
                 }
-
-                //Just get away.
-                return;
             }
             else if (_currentAction == ActionState.TransitionToApproach)
             {
@@ -225,6 +219,12 @@ namespace NebulaSiege.AI.Logistics
                 if (distanceTo > _idealMaxDistance)
                 {
                     _owner.Velocity.AvailableBoost = 100;
+                }
+
+                //The player has evaded the aproach, try TransitionToApproach again.
+                if (_owner.IsPointingAway(_observedObject, 45))
+                {
+                    AlterActionState(ActionState.TransitionToApproach);
                 }
 
                 if (distanceTo < _idealMinDistance)
@@ -262,7 +262,7 @@ namespace NebulaSiege.AI.Logistics
                     });
 
                 //Where the magic happens.
-                Network.Layers.AddIntermediate(ActivationType.Sigmoid, 8);
+                Network.Layers.AddIntermediate(ActivationType.Sigmoid, 16);
 
                 //Decision outputs
                 Network.Layers.AddOutput(
@@ -272,7 +272,7 @@ namespace NebulaSiege.AI.Logistics
                         AIOutputs.SpeedAdjust
                     });
 
-                for (int epoch = 0; epoch < 5000; epoch++)
+                for (int epoch = 0; epoch < 10000; epoch++)
                 {
                     //Very close to observed object, get away.
                     Network.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0, 1, 1));
@@ -288,15 +288,12 @@ namespace NebulaSiege.AI.Logistics
                     Network.BackPropagate(TrainingScenerio(0.25, 0.5), TrainingDecision(0, 1, 0.6));
                     Network.BackPropagate(TrainingScenerio(0.25, -0.5), TrainingDecision(0, 1, 0.6));
 
-                    for (int i = 0; i < 3; i++)
-                    {
-                        //Very far from observed object, get closer.
-                        Network.BackPropagate(TrainingScenerio(i + 1, 0), TrainingDecision(2, 0, 0));
-                        Network.BackPropagate(TrainingScenerio(i + 1, -1), TrainingDecision(2, 0, 0));
-                        Network.BackPropagate(TrainingScenerio(i + 1, 1), TrainingDecision(2, 0, 0));
-                        Network.BackPropagate(TrainingScenerio(i + 1, 0.5), TrainingDecision(2, 0, 0));
-                        Network.BackPropagate(TrainingScenerio(i + 1, -0.5), TrainingDecision(2, 0, 0));
-                    }
+                    //Very far from observed object, get closer.
+                    Network.BackPropagate(TrainingScenerio(1, 0), TrainingDecision(2, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(1, -1), TrainingDecision(2, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(1, 1), TrainingDecision(2, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(1, 0.5), TrainingDecision(2, 0, 0));
+                    Network.BackPropagate(TrainingScenerio(1, -0.5), TrainingDecision(2, 0, 0));
 
                     //Pretty far from observed object, get closer.
                     Network.BackPropagate(TrainingScenerio(0.75, 0), TrainingDecision(1, 0, 0));
