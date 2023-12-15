@@ -41,12 +41,12 @@ namespace NebulaSiege.AI.Logistics
 
         public enum AIInputs
         {
-            DistanceFromObservedObject,
+            DistanceFromObject,
             /// <summary>
             /// This should be the angle to the ObservedObject (likely the player) in relation to the nose of the enemy ship expressed in 1/6th radians split in half.
             /// 0 is pointing at the player, ~0.26 is 90° to the right, ~0.523 is 180° and -0.26 is 270° to the left.
             /// </summary>
-            AngleToObservedObjectIn6thRadians
+            AngleToObject
         }
 
         public enum AIOutputs
@@ -61,12 +61,13 @@ namespace NebulaSiege.AI.Logistics
         #region Instance parameters.
 
         private AIActivity _currentActivity = AIActivity.None;
-        private readonly double _idealMaxDistance = 1000;
+        private readonly double _idealMaxDistance = 1500;
         private readonly double _idealMinDistance = 500;
         private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
         private readonly int _millisecondsBetweenDecisions = 2000;
         private readonly NsNormalizedAngle _evasiveLoopTargetAngle = new();
         private HgRelativeDirection _evasiveLoopDirection;
+        private double _departureAngle = 0;
 
         #endregion
 
@@ -101,7 +102,7 @@ namespace NebulaSiege.AI.Logistics
 
         private void SetCurrentActivity(AIActivity state)
         {
-            Debug.WriteLine(state);
+            Debug.WriteLine($"Activity: {state}");
 
             switch (state)
             {
@@ -113,6 +114,10 @@ namespace NebulaSiege.AI.Logistics
                     break;
                 case AIActivity.TransitionToDepart:
                     {
+                        var deltaAngle = _owner.DeltaAngle(_observedObject);
+                        if (deltaAngle < 0) _departureAngle = -0.2;
+                        if (deltaAngle > 0) _departureAngle = 0.2;
+
                         _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, 100);
                         break;
                     }
@@ -201,13 +206,13 @@ namespace NebulaSiege.AI.Logistics
             else if (_currentActivity == AIActivity.TransitionToDepart)
             {
                 var distanceToObservedObject = _owner.DistanceTo(_observedObject);
-                double augmentationDegrees = 0.2;
+                double augmentationDegrees = _departureAngle;
 
                 //We are making the transition to our depart angle, but if we get too close then make the angle more agressive.
                 double percentOfAllowableCloseness = (100 / distanceToObservedObject);
                 if (percentOfAllowableCloseness.IsBetween(0, 1))
                 {
-                    augmentationDegrees += percentOfAllowableCloseness;
+                    augmentationDegrees += _departureAngle;
                 }
 
                 _owner.RotateTo(_observedObject, augmentationDegrees, 20);
@@ -252,14 +257,14 @@ namespace NebulaSiege.AI.Logistics
 
             var distance = _owner.DistanceTo(_observedObject);
             var percentageOfCloseness = (distance / _idealMaxDistance).Box(0, 1);
-            aiParams.Set(AIInputs.DistanceFromObservedObject, percentageOfCloseness);
+            aiParams.Set(AIInputs.DistanceFromObject, percentageOfCloseness);
 
             var deltaAngle = _owner.DeltaAngle(_observedObject);
-            var angleToIn6thRadians = NsAngle.DegreesToRadians(deltaAngle) / 6.0;
-            aiParams.Set(AIInputs.AngleToObservedObjectIn6thRadians,
-                angleToIn6thRadians.SplitToNegative(Math.PI / 6));
 
-            Debug.WriteLine(angleToIn6thRadians);
+            Debug.WriteLine($"Distance:{percentageOfCloseness:n2}, Angle: {deltaAngle / 180.0:n2}");
+
+            aiParams.Set(AIInputs.AngleToObject, deltaAngle / 180.0);
+
 
             return aiParams;
         }
@@ -268,7 +273,7 @@ namespace NebulaSiege.AI.Logistics
         {
             var network = new DniNeuralNetwork()
             {
-                LearningRate = 0.01
+                LearningRate = 0.025
             };
 
             #region New neural network and training.
@@ -276,8 +281,8 @@ namespace NebulaSiege.AI.Logistics
             //Vision inputs.
             network.Layers.AddInput(ActivationType.LeakyReLU,
                 new object[] {
-                        AIInputs.DistanceFromObservedObject,
-                        AIInputs.AngleToObservedObjectIn6thRadians
+                        AIInputs.DistanceFromObject,
+                        AIInputs.AngleToObject
                 });
 
             //Where the magic happens.
@@ -293,47 +298,46 @@ namespace NebulaSiege.AI.Logistics
 
             for (int epoch = 0; epoch < 10000; epoch++)
             {
-                for (double angleIn10thRadians = -0.5; angleIn10thRadians < 0.5; angleIn10thRadians += 0.1)
+                //Object in front of observed object:
+                for (double angleToObject = -0.25; angleToObject < 0.25; angleToObject += 0.1)
                 {
-                    double absAngleIn10thRadians = Math.Abs(angleIn10thRadians);
+                    //Somewhat close and very close to observed object, get away.
+                    network.BackPropagate(TrainingScenerio(0.25, angleToObject), TrainingDecision(0, 1, 0.6));
+                    network.BackPropagate(TrainingScenerio(0, angleToObject), TrainingDecision(0, 1, 1));
+                }
 
-                    //Very close to observed object, probably get away.
-                    network.BackPropagate(
-                        TrainingScenerio(0, angleIn10thRadians),
-                        TrainingDecision(0, absAngleIn10thRadians * 1.5, 1));
+                //Object behind observed object:
+                for (double angleToObject = -0.75; angleToObject < 0.75; angleToObject += 0.1)
+                {
+                    //Somewhat close and very close to observed object, get away.
+                    network.BackPropagate(TrainingScenerio(0.25, angleToObject), TrainingDecision(0, 1, 0.6));
+                    network.BackPropagate(TrainingScenerio(0, angleToObject), TrainingDecision(0, 1, 1));
+                }
 
-                    //Somewhat close to observed object, maybe get away.
-                    network.BackPropagate(
-                        TrainingScenerio(0.25, angleIn10thRadians),
-                        TrainingDecision(0, absAngleIn10thRadians * 1, 0.6));
-
-                    //Very far from observed object, probably get closer.
-                    network.BackPropagate(
-                        TrainingScenerio(1, angleIn10thRadians),
-                        TrainingDecision((1 - absAngleIn10thRadians) * 1.5, 0, 0));
-
-                    //Somewhat far from observed object, maybe get closer.
-                    network.BackPropagate(
-                        TrainingScenerio(0.75, angleIn10thRadians),
-                        TrainingDecision((1 - absAngleIn10thRadians) * 1, 0, 0));
+                //Object at any angle from observed object, but far away:
+                for (double angleToObject = -1; angleToObject < 1; angleToObject += 0.1)
+                {
+                    //Somewhat far and very far to observed object, get closer.
+                    network.BackPropagate(TrainingScenerio(0.75, angleToObject), TrainingDecision(1, 0, 0));
+                    network.BackPropagate(TrainingScenerio(1, angleToObject), TrainingDecision(1, 0, 0));
                 }
             }
 
-            static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservedObject, double angleToObservedObjectIn10thRadians)
+            static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObject, double angleToObject)
             {
                 var param = new DniNamedInterfaceParameters();
 
-                param.Set(AIInputs.DistanceFromObservedObject, distanceFromObservedObject);
-                param.Set(AIInputs.AngleToObservedObjectIn6thRadians, angleToObservedObjectIn10thRadians);
+                param.Set(AIInputs.DistanceFromObject, distanceFromObject);
+                param.Set(AIInputs.AngleToObject, angleToObject);
                 return param;
             }
 
-            static DniNamedInterfaceParameters TrainingDecision(double transitionToObservedObject,
-                double transitionFromObservedObject, double speedAdjust)
+            static DniNamedInterfaceParameters TrainingDecision(double transitionToObject,
+                double transitionFromObject, double speedAdjust)
             {
                 var param = new DniNamedInterfaceParameters();
-                param.Set(AIOutputs.TransitionToObservedObject, transitionToObservedObject);
-                param.Set(AIOutputs.TransitionFromObservedObject, transitionFromObservedObject);
+                param.Set(AIOutputs.TransitionToObservedObject, transitionToObject);
+                param.Set(AIOutputs.TransitionFromObservedObject, transitionFromObject);
                 param.Set(AIOutputs.SpeedAdjust, speedAdjust);
                 return param;
             }
