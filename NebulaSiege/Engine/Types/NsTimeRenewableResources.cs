@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace NebulaSiege.Engine.Types
 {
     /// <summary>
-    /// Keeps track of a collection time-renewable-resources such as "boost amount".
+    /// Keeps track of a collection of time-renewable-resources such as "boost amount" or health.
     /// </summary>
     internal class NsTimeRenewableResources
     {

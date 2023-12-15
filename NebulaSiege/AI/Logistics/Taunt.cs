@@ -27,7 +27,7 @@ namespace NebulaSiege.AI.Logistics
             public static string Boost = "IAIController_Taunt_Boost";
         }
 
-        private enum ActionState
+        private enum AIActivity
         {
             None,
             TransitionToApproach,
@@ -59,12 +59,12 @@ namespace NebulaSiege.AI.Logistics
 
         #region Instance parameters.
 
-        private ActionState _currentAction = ActionState.None;
+        private AIActivity _currentActivity = AIActivity.None;
         private readonly double _idealMaxDistance = 1000;
         private readonly double _idealMinDistance = 500;
         private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
         private readonly int _millisecondsBetweenDecisions = 2000;
-        private NsNormalizedAngle _evasiveLoopTargetAngle = new();
+        private readonly NsNormalizedAngle _evasiveLoopTargetAngle = new();
         private HgRelativeDirection _evasiveLoopDirection;
 
         #endregion
@@ -87,35 +87,35 @@ namespace NebulaSiege.AI.Logistics
 
             _owner.RenewableResources.CreateResource(RenewableResources.Boost, 800, 0, 10);
 
-            SetNeuralNetwork();
+            Network = _core.Assets.GetNeuralNetwork(_assetPath) ?? TrainNetwork();
         }
 
         private void Owner_OnHit(SpriteBase sender, HgDamageType damageType, int damageAmount)
         {
             if (sender.HullHealth <= 10)
             {
-                AlterActionState(ActionState.EvasiveLoop);
+                SetCurrentActivity(AIActivity.EvasiveLoop);
             }
         }
 
-        private void AlterActionState(ActionState state)
+        private void SetCurrentActivity(AIActivity state)
         {
             switch (state)
             {
-                case ActionState.EvasiveLoop:
+                case AIActivity.EvasiveLoop:
                     _evasiveLoopTargetAngle.Degrees = _owner.Velocity.Angle.Degrees + 180;
                     _evasiveLoopDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
                     _owner.Velocity.ThrottlePercentage = 1.0;
                     _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, 250);
                     break;
-                case ActionState.TransitionToDepart:
+                case AIActivity.TransitionToDepart:
                     {
                         _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, 100);
                         break;
                     }
             }
 
-            _currentAction = state;
+            _currentActivity = state;
         }
 
         public void ApplyIntelligence(NsPoint displacementVector)
@@ -124,11 +124,11 @@ namespace NebulaSiege.AI.Logistics
             var elapsedTimeSinceLastDecision = (now - (DateTime)_lastDecisionTime).TotalMilliseconds;
 
             //If its been awhile since we thought about anything, do some thinking.
-            if (elapsedTimeSinceLastDecision >= _millisecondsBetweenDecisions && _currentAction == ActionState.None)
+            if (elapsedTimeSinceLastDecision >= _millisecondsBetweenDecisions && _currentActivity == AIActivity.None)
             {
                 var decidingFactors = GatherInputs(); //Gather inputs.
                 var decisions = Network.FeedForward(decidingFactors); //Make decisions.
-                                                                      //Execute on those ↑ decisions:...
+
                 var speedAdjust = decisions.Get(AIOutputs.SpeedAdjust);
                 if (speedAdjust >= 0.5)
                 {
@@ -139,39 +139,39 @@ namespace NebulaSiege.AI.Logistics
                     _owner.Velocity.ThrottlePercentage = (_owner.Velocity.ThrottlePercentage - 0.01).Box(0.5, 1);
                 }
 
-                if (_currentAction == ActionState.None) //We're just cruising, make a decision about the next state.
+                if (_currentActivity == AIActivity.None) //We're just cruising, make a decision about the next state.
                 {
-                    bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.99;
-                    bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.99;
+                    bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.90;
+                    bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.90;
 
                     if (transitionToObservedObject && transitionFromObservedObject)
                     {
-                        AlterActionState(ActionState.None);
+                        SetCurrentActivity(AIActivity.None); //Indecision... just cruise.
                     }
                     else if (transitionToObservedObject)
                     {
-                        AlterActionState(ActionState.TransitionToApproach);
+                        SetCurrentActivity(AIActivity.TransitionToApproach);
                     }
                     else if (transitionFromObservedObject)
                     {
-                        AlterActionState(ActionState.TransitionToDepart);
+                        SetCurrentActivity(AIActivity.TransitionToDepart);
                     }
                     else
                     {
-                        AlterActionState(ActionState.None);
+                        SetCurrentActivity(AIActivity.None);
                     }
                 }
                 _lastDecisionTime = now;
             }
 
-            if (_currentAction == ActionState.EvasiveLoop)
+            if (_currentActivity == AIActivity.EvasiveLoop)
             {
                 if (_owner.RotateTo(_evasiveLoopTargetAngle.Degrees, _evasiveLoopDirection, 1, 30) == false)
                 {
-                    AlterActionState(ActionState.Escape);
+                    SetCurrentActivity(AIActivity.Escape);
                 }
             }
-            else if (_currentAction == ActionState.Escape)
+            else if (_currentActivity == AIActivity.Escape)
             {
                 double distanceToPlayer = _owner.DistanceTo(_observedObject);
                 if (distanceToPlayer < 500)
@@ -186,14 +186,14 @@ namespace NebulaSiege.AI.Logistics
                     }
                 }
             }
-            else if (_currentAction == ActionState.TransitionToApproach)
+            else if (_currentActivity == AIActivity.TransitionToApproach)
             {
                 if (_owner.RotateTo(_observedObject, 1, 10) == false)
                 {
-                    AlterActionState(ActionState.Approaching);
+                    SetCurrentActivity(AIActivity.Approaching);
                 }
             }
-            else if (_currentAction == ActionState.TransitionToDepart)
+            else if (_currentActivity == AIActivity.TransitionToDepart)
             {
                 var distanceToObservedObject = _owner.DistanceTo(_observedObject);
                 double augmentationDegrees = 0.2;
@@ -209,10 +209,10 @@ namespace NebulaSiege.AI.Logistics
 
                 if (distanceToObservedObject > _idealMinDistance)
                 {
-                    AlterActionState(ActionState.Departing);
+                    SetCurrentActivity(AIActivity.Departing);
                 }
             }
-            else if (_currentAction == ActionState.Approaching)
+            else if (_currentActivity == AIActivity.Approaching)
             {
                 var distanceTo = _owner.DistanceTo(_observedObject);
 
@@ -224,106 +224,20 @@ namespace NebulaSiege.AI.Logistics
                 //The player has evaded the aproach, try TransitionToApproach again.
                 if (_owner.IsPointingAway(_observedObject, 45))
                 {
-                    AlterActionState(ActionState.TransitionToApproach);
+                    SetCurrentActivity(AIActivity.TransitionToApproach);
                 }
 
                 if (distanceTo < _idealMinDistance)
                 {
-                    AlterActionState(ActionState.None);
+                    SetCurrentActivity(AIActivity.None);
                 }
             }
-            else if (_currentAction == ActionState.Departing)
+            else if (_currentActivity == AIActivity.Departing)
             {
                 if (_owner.DistanceTo(_observedObject) > _idealMaxDistance)
                 {
-                    AlterActionState(ActionState.None);
+                    SetCurrentActivity(AIActivity.None);
                 }
-            }
-        }
-
-        private void SetNeuralNetwork()
-        {
-            Network = _core.Assets.GetNeuralNetwork(_assetPath);
-
-            if (Network == null)
-            {
-                Network = new DniNeuralNetwork
-                {
-                    LearningRate = 0.01
-                };
-
-                #region New neural network and training.
-
-                //Vision inputs.
-                Network.Layers.AddInput(ActivationType.LeakyReLU,
-                    new object[] {
-                        AIInputs.DistanceFromObservedObject,
-                        AIInputs.AngleToObservedObjectIn6thRadians
-                    });
-
-                //Where the magic happens.
-                Network.Layers.AddIntermediate(ActivationType.Sigmoid, 16);
-
-                //Decision outputs
-                Network.Layers.AddOutput(
-                    new object[] {
-                        AIOutputs.TransitionToObservedObject,
-                        AIOutputs.TransitionFromObservedObject,
-                        AIOutputs.SpeedAdjust
-                    });
-
-                for (int epoch = 0; epoch < 10000; epoch++)
-                {
-                    //Very close to observed object, get away.
-                    Network.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0, 1, 1));
-                    Network.BackPropagate(TrainingScenerio(0, -1), TrainingDecision(0, 1, 1));
-                    Network.BackPropagate(TrainingScenerio(0, 1), TrainingDecision(0, 1, 1));
-                    Network.BackPropagate(TrainingScenerio(0, 0.5), TrainingDecision(0, 1, 1));
-                    Network.BackPropagate(TrainingScenerio(0, -0.5), TrainingDecision(0, 1, 1));
-
-                    //Pretty close to observed object, get away.
-                    Network.BackPropagate(TrainingScenerio(0.25, 0), TrainingDecision(0, 1, 0.6));
-                    Network.BackPropagate(TrainingScenerio(0.25, -1), TrainingDecision(0, 1, 0.6));
-                    Network.BackPropagate(TrainingScenerio(0.25, 1), TrainingDecision(0, 1, 0.6));
-                    Network.BackPropagate(TrainingScenerio(0.25, 0.5), TrainingDecision(0, 1, 0.6));
-                    Network.BackPropagate(TrainingScenerio(0.25, -0.5), TrainingDecision(0, 1, 0.6));
-
-                    //Very far from observed object, get closer.
-                    Network.BackPropagate(TrainingScenerio(1, 0), TrainingDecision(2, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(1, -1), TrainingDecision(2, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(1, 1), TrainingDecision(2, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(1, 0.5), TrainingDecision(2, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(1, -0.5), TrainingDecision(2, 0, 0));
-
-                    //Pretty far from observed object, get closer.
-                    Network.BackPropagate(TrainingScenerio(0.75, 0), TrainingDecision(1, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(0.75, -1), TrainingDecision(1, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(0.75, 1), TrainingDecision(1, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(0.75, 0.5), TrainingDecision(1, 0, 0));
-                    Network.BackPropagate(TrainingScenerio(0.75, -0.5), TrainingDecision(1, 0, 0));
-                }
-
-                static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservedObject, double angleToObservedObjectIn10thRadians)
-                {
-                    var param = new DniNamedInterfaceParameters();
-
-                    param.Set(AIInputs.DistanceFromObservedObject, distanceFromObservedObject);
-                    param.Set(AIInputs.AngleToObservedObjectIn6thRadians, angleToObservedObjectIn10thRadians);
-                    return param;
-                }
-
-                static DniNamedInterfaceParameters TrainingDecision(double transitionToObservedObject,
-                    double transitionFromObservedObject, double speedAdjust)
-                {
-                    var param = new DniNamedInterfaceParameters();
-                    param.Set(AIOutputs.TransitionToObservedObject, transitionToObservedObject);
-                    param.Set(AIOutputs.TransitionFromObservedObject, transitionFromObservedObject);
-                    param.Set(AIOutputs.SpeedAdjust, speedAdjust);
-                    return param;
-                }
-                #endregion
-
-                _core.Assets.PutText(_assetPath, Network.Serialize());
             }
         }
 
@@ -333,17 +247,94 @@ namespace NebulaSiege.AI.Logistics
 
             var distance = _owner.DistanceTo(_observedObject);
             var percentageOfCloseness = (distance / _idealMaxDistance).Box(0, 1);
-
             aiParams.Set(AIInputs.DistanceFromObservedObject, percentageOfCloseness);
 
             var deltaAngle = _owner.DeltaAngle(_observedObject);
-
             var angleToIn6thRadians = NsAngle.DegreesToRadians(deltaAngle) / 6.0;
-
             aiParams.Set(AIInputs.AngleToObservedObjectIn6thRadians,
                 angleToIn6thRadians.SplitToNegative(Math.PI / 6));
 
             return aiParams;
+        }
+
+        private DniNeuralNetwork TrainNetwork()
+        {
+            var network = new DniNeuralNetwork()
+            {
+                LearningRate = 0.01
+            };
+
+            #region New neural network and training.
+
+            //Vision inputs.
+            network.Layers.AddInput(ActivationType.LeakyReLU,
+                new object[] {
+                        AIInputs.DistanceFromObservedObject,
+                        AIInputs.AngleToObservedObjectIn6thRadians
+                });
+
+            //Where the magic happens.
+            network.Layers.AddIntermediate(ActivationType.Sigmoid, 16);
+
+            //Decision outputs
+            network.Layers.AddOutput(
+                new object[] {
+                        AIOutputs.TransitionToObservedObject,
+                        AIOutputs.TransitionFromObservedObject,
+                        AIOutputs.SpeedAdjust
+                });
+
+            for (int epoch = 0; epoch < 10000; epoch++)
+            {
+                for (double angle10thRadians = -1; angle10thRadians < 1; angle10thRadians += 0.1)
+                {
+                    double absAngle10thRadians = (Math.Abs(angle10thRadians) / 1);
+
+                    //Very close to observed object, probably get away.
+                    network.BackPropagate(
+                        TrainingScenerio(0, angle10thRadians),
+                        TrainingDecision(0, absAngle10thRadians * 2, 1));
+
+                    //Somewhat close to observed object, maybe get away.
+                    network.BackPropagate(
+                        TrainingScenerio(0.25, angle10thRadians),
+                        TrainingDecision(0, absAngle10thRadians * 1, 0.6));
+
+                    //Very far from observed object, probably get closer.
+                    network.BackPropagate(
+                        TrainingScenerio(1, angle10thRadians),
+                        TrainingDecision((1 - absAngle10thRadians) * 2, 0, 0));
+
+                    //Somewhat far from observed object, maybe get closer.
+                    network.BackPropagate(
+                        TrainingScenerio(0.75, angle10thRadians),
+                        TrainingDecision((1 - absAngle10thRadians) * 1, 0, 0));
+                }
+            }
+
+            static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservedObject, double angleToObservedObjectIn10thRadians)
+            {
+                var param = new DniNamedInterfaceParameters();
+
+                param.Set(AIInputs.DistanceFromObservedObject, distanceFromObservedObject);
+                param.Set(AIInputs.AngleToObservedObjectIn6thRadians, angleToObservedObjectIn10thRadians);
+                return param;
+            }
+
+            static DniNamedInterfaceParameters TrainingDecision(double transitionToObservedObject,
+                double transitionFromObservedObject, double speedAdjust)
+            {
+                var param = new DniNamedInterfaceParameters();
+                param.Set(AIOutputs.TransitionToObservedObject, transitionToObservedObject);
+                param.Set(AIOutputs.TransitionFromObservedObject, transitionFromObservedObject);
+                param.Set(AIOutputs.SpeedAdjust, speedAdjust);
+                return param;
+            }
+            #endregion
+
+            _core.Assets.PutText(_assetPath, network.Serialize());
+
+            return network;
         }
     }
 }
