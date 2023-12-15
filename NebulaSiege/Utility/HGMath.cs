@@ -55,7 +55,7 @@ namespace NebulaSiege.Utility
         /// <summary>
         /// Calculates a point at a given angle and a given distance.
         /// </summary>
-        /// <param name="angle">The angle which the point should move to.</param>
+        /// <param name="angle">The angle which the point should move to in the range of 0-360.</param>
         /// <param name="distance">The distance to the given angle the point should be at.</param>
         /// <returns>The calculated point at the given distance towards the given angle.</returns>
         public static NsPoint PointFromAngleAtDistance360(NsAngle angle, NsPoint distance)

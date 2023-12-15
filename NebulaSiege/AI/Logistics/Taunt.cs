@@ -141,12 +141,14 @@ namespace NebulaSiege.AI.Logistics
 
                 if (_currentActivity == AIActivity.None) //We're just cruising, make a decision about the next state.
                 {
-                    bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) > 0.90;
-                    bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) > 0.90;
+                    double positiveThreshold = 0.9;
+
+                    bool transitionToObservedObject = decisions.Get(AIOutputs.TransitionToObservedObject) >= positiveThreshold;
+                    bool transitionFromObservedObject = decisions.Get(AIOutputs.TransitionFromObservedObject) >= positiveThreshold;
 
                     if (transitionToObservedObject && transitionFromObservedObject)
                     {
-                        SetCurrentActivity(AIActivity.None); //Indecision... just cruise.
+                        SetCurrentActivity(AIActivity.None); //Indecision... just cruise I suppose.
                     }
                     else if (transitionToObservedObject)
                     {
@@ -286,29 +288,29 @@ namespace NebulaSiege.AI.Logistics
 
             for (int epoch = 0; epoch < 10000; epoch++)
             {
-                for (double angle10thRadians = -1; angle10thRadians < 1; angle10thRadians += 0.1)
+                for (double angleIn10thRadians = -1; angleIn10thRadians < 1; angleIn10thRadians += 0.1)
                 {
-                    double absAngle10thRadians = (Math.Abs(angle10thRadians) / 1);
+                    double absAngleIn10thRadians = Math.Abs(angleIn10thRadians);
 
                     //Very close to observed object, probably get away.
                     network.BackPropagate(
-                        TrainingScenerio(0, angle10thRadians),
-                        TrainingDecision(0, absAngle10thRadians * 2, 1));
+                        TrainingScenerio(0, angleIn10thRadians),
+                        TrainingDecision(0, absAngleIn10thRadians * 1.5, 1));
 
                     //Somewhat close to observed object, maybe get away.
                     network.BackPropagate(
-                        TrainingScenerio(0.25, angle10thRadians),
-                        TrainingDecision(0, absAngle10thRadians * 1, 0.6));
+                        TrainingScenerio(0.25, angleIn10thRadians),
+                        TrainingDecision(0, absAngleIn10thRadians * 1, 0.6));
 
                     //Very far from observed object, probably get closer.
                     network.BackPropagate(
-                        TrainingScenerio(1, angle10thRadians),
-                        TrainingDecision((1 - absAngle10thRadians) * 2, 0, 0));
+                        TrainingScenerio(1, angleIn10thRadians),
+                        TrainingDecision((1 - absAngleIn10thRadians) * 1.5, 0, 0));
 
                     //Somewhat far from observed object, maybe get closer.
                     network.BackPropagate(
-                        TrainingScenerio(0.75, angle10thRadians),
-                        TrainingDecision((1 - absAngle10thRadians) * 1, 0, 0));
+                        TrainingScenerio(0.75, angleIn10thRadians),
+                        TrainingDecision((1 - absAngleIn10thRadians) * 1, 0, 0));
                 }
             }
 
