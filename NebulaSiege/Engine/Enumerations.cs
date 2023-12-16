@@ -68,12 +68,6 @@
         LoopedPlay
     };
 
-    public enum HgKeyPressState
-    {
-        Up,
-        Down
-    }
-
     public enum HgDamageType
     {
         Unspecified,
@@ -96,6 +90,11 @@
 
     public enum HgPlayerKey
     {
+        AltSpeedBoost,
+        AltForward,
+        AltRotateClockwise,
+        AltRotateCounterClockwise,
+
         SpeedBoost,
         Forward,
         Reverse,

@@ -61,7 +61,7 @@ namespace NebulaSiege.Forms
             var allowedTypes = new AutoCompleteStringCollection();
             allowedTypes.AddRange(suggestions);
             textBoxCommand.AutoCompleteCustomSource = allowedTypes;
-            textBoxCommand.AutoCompleteMode = AutoCompleteMode.Suggest;
+            textBoxCommand.AutoCompleteMode = AutoCompleteMode.Append;
             textBoxCommand.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
 

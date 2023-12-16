@@ -69,7 +69,7 @@ namespace NebulaSiege
 
             drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
             drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
-            drawingSurface.KeyDown += FormRenderTarget_KeyDown;
+
             drawingSurface.KeyUp += FormRenderTarget_KeyUp;
 
             if (settings.EnableSpriteInterrogation)
@@ -251,37 +251,13 @@ namespace NebulaSiege
 
         #endregion
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if ((keyData & Keys.KeyCode) == Keys.Left) _core.Input.KeyStateChanged(HgPlayerKey.Left, HgKeyPressState.Down);
-            else if ((keyData & Keys.KeyCode) == Keys.Right) _core.Input.KeyStateChanged(HgPlayerKey.Right, HgKeyPressState.Down);
-            else if ((keyData & Keys.KeyCode) == Keys.Up) _core.Input.KeyStateChanged(HgPlayerKey.Up, HgKeyPressState.Down);
-            else if ((keyData & Keys.KeyCode) == Keys.Down) _core.Input.KeyStateChanged(HgPlayerKey.Down, HgKeyPressState.Down);
-            else return base.ProcessCmdKey(ref msg, keyData);
-
-            _core.Input.HandleSingleKeyPress((keyData & Keys.KeyCode));
-
-            return true; // Mark the key as handled
-        }
-
-        private void FormRenderTarget_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, HgKeyPressState.Down);
-            if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(HgPlayerKey.Forward, HgKeyPressState.Down);
-            if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(HgPlayerKey.RotateCounterClockwise, HgKeyPressState.Down);
-            if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(HgPlayerKey.Reverse, HgKeyPressState.Down);
-            if (e.KeyCode == Keys.D) _core.Input.KeyStateChanged(HgPlayerKey.RotateClockwise, HgKeyPressState.Down);
-            if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(HgPlayerKey.PrimaryFire, HgKeyPressState.Down);
-            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(HgPlayerKey.SecondaryFire, HgKeyPressState.Down);
-            if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(HgPlayerKey.Escape, HgKeyPressState.Down);
-            if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(HgPlayerKey.Enter, HgKeyPressState.Down);
-
-            _core.Input.HandleSingleKeyPress(e.KeyCode);
-        }
-
         private void FormRenderTarget_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
+            if (e.KeyCode == Keys.Oem3)
+            {
+                _core.Debug.ToggleVisibility();
+            }
+            else if (e.KeyCode == Keys.Escape)
             {
                 _core.Pause();
 
@@ -294,20 +270,6 @@ namespace NebulaSiege
                     _core.Resume();
                 }
             }
-
-            if (e.KeyCode == Keys.ShiftKey) _core.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.W) _core.Input.KeyStateChanged(HgPlayerKey.Forward, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.A) _core.Input.KeyStateChanged(HgPlayerKey.RotateCounterClockwise, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.S) _core.Input.KeyStateChanged(HgPlayerKey.Reverse, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.D) _core.Input.KeyStateChanged(HgPlayerKey.RotateClockwise, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.Space) _core.Input.KeyStateChanged(HgPlayerKey.PrimaryFire, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.ControlKey) _core.Input.KeyStateChanged(HgPlayerKey.SecondaryFire, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.Escape) _core.Input.KeyStateChanged(HgPlayerKey.Escape, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.Left) _core.Input.KeyStateChanged(HgPlayerKey.Left, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.Right) _core.Input.KeyStateChanged(HgPlayerKey.Right, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.Up) _core.Input.KeyStateChanged(HgPlayerKey.Up, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.Down) _core.Input.KeyStateChanged(HgPlayerKey.Down, HgKeyPressState.Up);
-            if (e.KeyCode == Keys.Enter) _core.Input.KeyStateChanged(HgPlayerKey.Enter, HgKeyPressState.Up);
         }
 
         protected override void OnPaintBackground(PaintEventArgs pevent)

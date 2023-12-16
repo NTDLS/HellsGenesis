@@ -112,6 +112,8 @@ namespace NebulaSiege.Engine
             _core.Situations.ExecuteWorldClockTick();
             _core.Events.ExecuteWorldClockTick();
 
+            _core.Input.Snapshot();
+
             var displacementVector = _core.Player.ExecuteWorldClockTick();
 
             _core.Sprites.Enemies.ExecuteWorldClockTick(displacementVector);
