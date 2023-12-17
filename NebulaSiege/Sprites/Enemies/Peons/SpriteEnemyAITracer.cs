@@ -58,8 +58,15 @@ namespace NebulaSiege.Sprites.Enemies.Peons
 
         public override void ApplyMotion(NsPoint displacementVector)
         {
-            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
-            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
+            var thrustVector = Velocity.MaxSpeed * (Velocity.ThrottlePercentage + -Velocity.RecoilPercentage);
+
+            if (Velocity.BoostPercentage > 0)
+            {
+                thrustVector += Velocity.MaxBoost * Velocity.BoostPercentage;
+            }
+
+            X += Velocity.Angle.X * thrustVector - displacementVector.X;
+            Y += Velocity.Angle.Y * thrustVector - displacementVector.Y;
 
             //base.UpdateThrustAnimationPositions();
         }

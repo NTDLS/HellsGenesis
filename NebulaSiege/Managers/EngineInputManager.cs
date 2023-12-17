@@ -2,6 +2,7 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Sprites.Enemies.BaseClasses;
+using NebulaSiege.Utility;
 using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
@@ -110,7 +111,7 @@ namespace NebulaSiege.Managers
             #endregion
             else if (keys.IsPressed(Key.F1))
             {
-                //HgDevelopmentTools.ParticleBlast(_core, 50);
+                NsDevelopmentTools.ParticleBlast(_core, 50);
                 //HgDevelopmentTools.CreateImageSizeVariants(@"..\..\..\Assets\Graphics\Fragments");
                 //_core.Sprites.NewGame();
                 //_core.Sprites.ResetAndShowPlayer();
