@@ -38,9 +38,8 @@ namespace NebulaSiege.Managers
         {
             var keys = Keyboard.GetCurrentState();
 
-            _core.Input.KeyStateChanged(HgPlayerKey.AltSpeedBoost, keys.IsPressed(Key.LeftControl));
-
             _core.Input.KeyStateChanged(HgPlayerKey.AltForward, keys.IsPressed(Key.Home));
+            _core.Input.KeyStateChanged(HgPlayerKey.AltSpeedBoost, keys.IsPressed(Key.LeftControl));
             _core.Input.KeyStateChanged(HgPlayerKey.AltRotateCounterClockwise, keys.IsPressed(Key.Delete));
             _core.Input.KeyStateChanged(HgPlayerKey.AltRotateClockwise, keys.IsPressed(Key.PageDown));
             _core.Input.KeyStateChanged(HgPlayerKey.AltPrimaryFire, keys.IsPressed(Key.LeftAlt));
