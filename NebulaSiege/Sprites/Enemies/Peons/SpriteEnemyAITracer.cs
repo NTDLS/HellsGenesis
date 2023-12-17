@@ -67,8 +67,6 @@ namespace NebulaSiege.Sprites.Enemies.Peons
 
             X += Velocity.Angle.X * thrustVector - displacementVector.X;
             Y += Velocity.Angle.Y * thrustVector - displacementVector.Y;
-
-            //base.UpdateThrustAnimationPositions();
         }
 
         public override void ApplyIntelligence(NsPoint displacementVector)

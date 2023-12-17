@@ -1,10 +1,7 @@
 ﻿using NebulaSiege.Engine;
-using NebulaSiege.Engine.Types.Geometry;
-using NebulaSiege.Sprites;
 using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Utility;
 using SharpDX.DirectInput;
-using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -58,8 +55,6 @@ namespace NebulaSiege.Managers
             _core.Input.KeyStateChanged(HgPlayerKey.Up, keys.IsPressed(Key.Up));
             _core.Input.KeyStateChanged(HgPlayerKey.Down, keys.IsPressed(Key.Down));
             _core.Input.KeyStateChanged(HgPlayerKey.Enter, keys.IsPressed(Key.Return));
-
-            _core.Input.HandleSingleKeyPress(keys);
         }
 
         public bool IsKeyPressed(HgPlayerKey key)
@@ -89,42 +84,39 @@ namespace NebulaSiege.Managers
             }
         }
 
-        DateTime lastSingleKeyPressEvent = DateTime.UtcNow;
-
-        public void HandleSingleKeyPress(KeyboardState keys)
+        public void HandleSingleKeyPress(Keys key)
         {
-            if ((DateTime.UtcNow - lastSingleKeyPressEvent).TotalMilliseconds < 100)
+            if (key == Keys.Oem3)
             {
-                return;
+                _core.Debug.ToggleVisibility();
             }
-            lastSingleKeyPressEvent = DateTime.UtcNow;
 
-            #region Debug stuff.
-
-            if (keys.IsPressed(Key.Delete))
+            else if (key == Keys.P)
+            {
+                _core.TogglePause();
+            }
+            else if (key == Keys.Delete)
             {
                 if (_core.Sprites.OfType<SpriteEnemyBase>().Count > 0)
                 {
                     _core.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
                 }
             }
-            #endregion
-            else if (keys.IsPressed(Key.F1))
+            else if (key == Keys.F1)
             {
-                NsDevelopmentTools.ParticleBlast(_core, 50);
+                NsDevelopmentTools.ParticleBlast(_core, 50, _core.Player.Sprite);
                 //HgDevelopmentTools.CreateImageSizeVariants(@"..\..\..\Assets\Graphics\Fragments");
                 //_core.Sprites.NewGame();
                 //_core.Sprites.ResetAndShowPlayer();
             }
-
-            if (keys.IsPressed(Key.Left))
+            else if (key == Keys.Left)
             {
                 if (_core.Player?.Sprite?.Visable == true)
                 {
                     _core.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
                 }
             }
-            else if (keys.IsPressed(Key.Right))
+            else if (key == Keys.Right)
             {
                 if (_core.Player?.Sprite?.Visable == true)
                 {

@@ -1,5 +1,6 @@
 ﻿using NAudio.Wave;
 using NebulaSiege.Engine;
+using NebulaSiege.Sprites;
 using System;
 using System.Drawing;
 using System.IO;
@@ -42,10 +43,10 @@ namespace NebulaSiege.Utility
         /// Tests dumping particles at a given position.
         /// </summary>
         /// <param name="core"></param>
-        public static void ParticleBlast(EngineCore core, int particleCount)
+        public static void ParticleBlast(EngineCore core, int particleCount, SpriteBase at)
         {
-            double X = core.Player.Sprite.X;
-            double Y = core.Player.Sprite.Y;
+            double X = at.X;
+            double Y = at.Y;
 
             for (int i = 0; i < particleCount; i++)
             {
