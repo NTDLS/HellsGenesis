@@ -45,6 +45,7 @@
     public enum HgEnemyClass
     {
         Debug,
+        AITracer,
         Irlen,
         Phoenix,
         Scinzad,
@@ -90,6 +91,7 @@
 
     public enum HgPlayerKey
     {
+        AltPrimaryFire,
         AltSpeedBoost,
         AltForward,
         AltRotateClockwise,

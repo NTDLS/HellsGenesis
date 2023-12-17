@@ -5,6 +5,7 @@ using NebulaSiege.Sprites.Enemies.Peons.BaseClasses;
 using NebulaSiege.Utility;
 using NebulaSiege.Utility.ExtensionMethods;
 using NebulaSiege.Weapons;
+using System;
 using System.Drawing;
 using System.IO;
 
@@ -19,13 +20,19 @@ namespace NebulaSiege.Sprites.Enemies.Peons
         private readonly int imageCount = 1;
         private readonly int selectedImageIndex = 0;
 
+        private StreamWriter _trainingDataDumpFile;
+
         public SpriteEnemyAITracer(EngineCore core)
             : base(core, hullHealth, bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            ShipClass = HgEnemyClass.Phoenix;
+            string trainingDataDumpFilePath = $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt";
+
+            _trainingDataDumpFile = new StreamWriter(trainingDataDumpFilePath);
+
+            ShipClass = HgEnemyClass.AITracer;
 
             this.Velocity.BoostPercentage = 0;
             this.Velocity.ThrottlePercentage = 0;
@@ -44,17 +51,15 @@ namespace NebulaSiege.Sprites.Enemies.Peons
                     ShieldHealth = 10,
                 };
 
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 100000));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 100000));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 100000));
 
                 SaveLoadoutToFile(loadout);
             }
 
             ResetLoadout(loadout);
         }
-
-        #region Artificial Intelligence.
 
         public override void ApplyMotion(NsPoint displacementVector)
         {
@@ -71,40 +76,44 @@ namespace NebulaSiege.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(NsPoint displacementVector)
         {
+            _trainingDataDumpFile.WriteLine(
+                      $"{AngleTo(_core.Player.Sprite):n4},"
+                    + $"{_core.Player.Sprite.Velocity.ThrottlePercentage:n4},"
+                    + $"{_core.Player.Sprite.Velocity.BoostPercentage:n4},"
+                    + $"{_core.Player.Sprite.Velocity.Angle.Degrees:42},"
+                    + $"{Velocity.Angle.Degrees:n4},"
+                    + $"{Velocity.ThrottlePercentage:n4},"
+                    + $"{Velocity.BoostPercentage:n4},"
+                );
+
             if (Visable)
             {
-                /*
-                  if (_core.Input.IsKeyPressed(HgPlayerKey.AltPrimaryFire))
-                  {
-                      if (PrimaryWeapon != null && PrimaryWeapon.Fire())
-                      {
-                          if (PrimaryWeapon?.RoundQuantity == 25)
-                          {
-                              AmmoLowSound.Play();
-                          }
-                          if (PrimaryWeapon?.RoundQuantity == 0)
-                          {
-                              AmmoEmptySound.Play();
-                          }
-                      }
-                  }
 
-                  if (_core.Input.IsKeyPressed(HgPlayerKey.AltSecondaryFire))
-                  {
-                      if (SelectedSecondaryWeapon != null && SelectedSecondaryWeapon.Fire())
-                      {
-                          if (SelectedSecondaryWeapon?.RoundQuantity == 25)
-                          {
-                              AmmoLowSound.Play();
-                          }
-                          if (SelectedSecondaryWeapon?.RoundQuantity == 0)
-                          {
-                              AmmoEmptySound.Play();
-                              SelectFirstAvailableUsableSecondaryWeapon();
-                          }
-                      }
-                  }
-                  */
+                if (_core.Input.IsKeyPressed(HgPlayerKey.AltPrimaryFire))
+                {
+                    if (HasWeaponAndAmmo<WeaponVulcanCannon>())
+                    {
+                        FireWeapon<WeaponVulcanCannon>();
+                    }
+                }
+
+                /*
+                if (_core.Input.IsKeyPressed(HgPlayerKey.AltSecondaryFire))
+                {
+                    if (SelectedSecondaryWeapon != null && SelectedSecondaryWeapon.Fire())
+                    {
+                        if (SelectedSecondaryWeapon?.RoundQuantity == 25)
+                        {
+                            AmmoLowSound.Play();
+                        }
+                        if (SelectedSecondaryWeapon?.RoundQuantity == 0)
+                        {
+                            AmmoEmptySound.Play();
+                            SelectFirstAvailableUsableSecondaryWeapon();
+                        }
+                    }
+                }
+                */
 
                 //Make player boost "build up" and fade-in.
                 if (_core.Input.IsKeyPressed(HgPlayerKey.AltSpeedBoost) && _core.Input.IsKeyPressed(HgPlayerKey.AltForward)
@@ -235,6 +244,5 @@ namespace NebulaSiege.Sprites.Enemies.Peons
 
             RenewableResources.RenewAllResources();
         }
-        #endregion
     }
 }

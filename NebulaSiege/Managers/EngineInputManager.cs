@@ -3,6 +3,7 @@ using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Utility;
 using SharpDX.DirectInput;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace NebulaSiege.Managers
@@ -37,10 +38,12 @@ namespace NebulaSiege.Managers
         {
             var keys = Keyboard.GetCurrentState();
 
-            _core.Input.KeyStateChanged(HgPlayerKey.AltSpeedBoost, keys.IsPressed(Key.NumberPad0));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltForward, keys.IsPressed(Key.NumberPad8));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltRotateCounterClockwise, keys.IsPressed(Key.NumberPad7));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltRotateClockwise, keys.IsPressed(Key.NumberPad9));
+            _core.Input.KeyStateChanged(HgPlayerKey.AltSpeedBoost, keys.IsPressed(Key.LeftControl));
+
+            _core.Input.KeyStateChanged(HgPlayerKey.AltForward, keys.IsPressed(Key.Home));
+            _core.Input.KeyStateChanged(HgPlayerKey.AltRotateCounterClockwise, keys.IsPressed(Key.Delete));
+            _core.Input.KeyStateChanged(HgPlayerKey.AltRotateClockwise, keys.IsPressed(Key.PageDown));
+            _core.Input.KeyStateChanged(HgPlayerKey.AltPrimaryFire, keys.IsPressed(Key.LeftAlt));
 
             _core.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, keys.IsPressed(Key.LeftShift));
             _core.Input.KeyStateChanged(HgPlayerKey.Forward, keys.IsPressed(Key.W));
@@ -95,14 +98,14 @@ namespace NebulaSiege.Managers
             {
                 _core.TogglePause();
             }
-            else if (key == Keys.Delete)
+            else if (key == Keys.F1)
             {
                 if (_core.Sprites.OfType<SpriteEnemyBase>().Count > 0)
                 {
                     _core.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
                 }
             }
-            else if (key == Keys.F1)
+            else if (key == Keys.F2)
             {
                 NsDevelopmentTools.ParticleBlast(_core, 50, _core.Player.Sprite);
                 //HgDevelopmentTools.CreateImageSizeVariants(@"..\..\..\Assets\Graphics\Fragments");
