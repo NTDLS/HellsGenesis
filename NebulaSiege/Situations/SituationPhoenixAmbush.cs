@@ -10,7 +10,10 @@ namespace NebulaSiege.Situations
     internal class SituationPhoenixAmbush : SituationBase
     {
         public SituationPhoenixAmbush(EngineCore core)
-            : base(core, "Phoenix Ambush")
+            : base(core,
+                  "Phoenix Ambush",
+                  "We're safe now - or are we? Its an AMBUSH!"
+                  )
         {
             TotalWaves = 5;
         }

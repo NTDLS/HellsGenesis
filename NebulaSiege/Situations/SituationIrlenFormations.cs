@@ -11,7 +11,10 @@ namespace NebulaSiege.Situations
     internal class SituationIrlenFormations : SituationBase
     {
         public SituationIrlenFormations(EngineCore core)
-            : base(core, "Irlen Formations")
+            : base(core,
+                  "Irlen Formations",
+                  "They fly in formation, which look like easy targets...."
+                  )
         {
             TotalWaves = 5;
         }
@@ -37,7 +40,7 @@ namespace NebulaSiege.Situations
             {
                 if (formationIrlens.Exists(o => o.IsWithinCurrentScaledScreenBounds == true) == false)
                 {
-                    double angleToPlayer = formationIrlens.First().AngleTo(_core.Player.Sprite);
+                    double angleToPlayer = formationIrlens.First().AngleTo360(_core.Player.Sprite);
 
                     foreach (SpriteEnemyIrlen enemy in formationIrlens)
                     {

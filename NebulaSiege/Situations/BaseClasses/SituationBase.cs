@@ -13,14 +13,16 @@ namespace NebulaSiege.Situations
 
         public Guid UID { get; private set; } = Guid.NewGuid();
         public string Name { get; set; }
+        public string Description { get; set; }
         public int CurrentWave { get; set; } = 0;
         public int TotalWaves { get; set; } = 1;
         public HgSituationState State { get; protected set; } = HgSituationState.NotStarted;
 
-        public SituationBase(EngineCore core, string name)
+        public SituationBase(EngineCore core, string name, string description)
         {
             _core = core;
             Name = name;
+            Description = description;
         }
 
         public virtual void EndSituation()

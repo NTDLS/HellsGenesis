@@ -75,7 +75,7 @@ namespace NebulaSiege.Controller
                                     {
                                         if (enemy.IsPointingAway(Sprite, 50))
                                         {
-                                            var angleTo = Sprite.AngleTo(enemy);
+                                            var angleTo = Sprite.AngleTo360(enemy);
                                             Sprite.Velocity.Angle.Degrees = angleTo;
                                         }
                                     }

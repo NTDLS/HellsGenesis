@@ -77,6 +77,44 @@ namespace NebulaSiege.Utility
         }
 
         /// <summary>
+        /// Calculates the angle of one objects location to another location from 1-180 to -1-180.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="to">The object to which the calculation is based.</param>
+        /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
+        public static double AngleTo(SpriteBase from, SpriteBase to)
+        {
+            var angle360 = NsPoint.AngleTo360(from.Location, to.Location);
+            if (angle360 > 180)
+            {
+                angle360 -= 180;
+                angle360 = 180 - angle360;
+                angle360 *= -1;
+            }
+
+            return -angle360;
+        }
+
+        /// <summary>
+        /// Calculates the angle of one objects location to another location from 1-180 to -1-180.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="to">The point to which the calculation is based.</param>
+        /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
+        public static double AngleTo(SpriteBase from, NsPoint to)
+        {
+            var angle360 = NsPoint.AngleTo360(from.Location, to);
+            if (angle360 > 180)
+            {
+                angle360 -= 180;
+                angle360 = 180 - angle360;
+                angle360 *= -1;
+            }
+
+            return -angle360;
+        }
+
+        /// <summary>
         /// Calculates the angle of one objects location to another location from 0 - 360.
         /// </summary>
         /// <param name="from">The object from which the calcualtion is based.</param>
@@ -91,7 +129,7 @@ namespace NebulaSiege.Utility
         /// Calculates the angle of one objects location to another location from 0 - 360.
         /// </summary>
         /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The object to which the calculation is based.</param>
+        /// <param name="to">The point to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static double AngleTo360(SpriteBase from, NsPoint to)
         {

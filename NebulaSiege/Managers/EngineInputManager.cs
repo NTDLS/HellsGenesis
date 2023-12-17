@@ -3,7 +3,6 @@ using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Utility;
 using SharpDX.DirectInput;
 using System.Collections.Generic;
-using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
 namespace NebulaSiege.Managers

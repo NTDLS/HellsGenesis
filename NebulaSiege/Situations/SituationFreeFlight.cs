@@ -7,7 +7,9 @@ namespace NebulaSiege.Situations
     internal class SituationFreeFlight : SituationBase
     {
         public SituationFreeFlight(EngineCore core)
-            : base(core, "Free Flight")
+            : base(core,
+                  "Free Flight",
+                  "Theres nothing in this quadrant or the next that will threaten us.")
         {
             TotalWaves = 5;
         }

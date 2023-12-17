@@ -9,7 +9,11 @@ namespace NebulaSiege.Situations
     internal class SituationDebuggingGalore : SituationBase
     {
         public SituationDebuggingGalore(EngineCore core)
-            : base(core, "Debugging Galore")
+            : base(core,
+                  "Debugging Galore",
+                  "The situation is dire, the explosions here typically\r\n"
+                  + "cause the entire universe to end - as well as the program."
+                  )
         {
             TotalWaves = 100;
         }

@@ -36,7 +36,7 @@ namespace NebulaSiege.Sprites
 
         public override void ApplyMotion(NsPoint displacementVector)
         {
-            Velocity.Angle.Degrees = AngleTo(_core.Player.Sprite);
+            Velocity.Angle.Degrees = AngleTo360(_core.Player.Sprite);
             base.ApplyMotion(displacementVector);
         }
     }

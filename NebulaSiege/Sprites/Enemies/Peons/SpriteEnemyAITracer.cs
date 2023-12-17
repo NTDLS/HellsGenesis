@@ -20,7 +20,13 @@ namespace NebulaSiege.Sprites.Enemies.Peons
         private readonly int imageCount = 1;
         private readonly int selectedImageIndex = 0;
 
-        private StreamWriter _trainingDataDumpFile;
+        private readonly StreamWriter _trainingDataDumpFile;
+
+        ~SpriteEnemyAITracer()
+        {
+            _trainingDataDumpFile.Close();
+            _trainingDataDumpFile.Dispose();
+        }
 
         public SpriteEnemyAITracer(EngineCore core)
             : base(core, hullHealth, bountyMultiplier)
@@ -32,10 +38,21 @@ namespace NebulaSiege.Sprites.Enemies.Peons
 
             _trainingDataDumpFile = new StreamWriter(trainingDataDumpFilePath);
 
+            _trainingDataDumpFile.WriteLine(
+                      "Angle_To_Player,"
+                    + "Distance_To_Player,"
+                    + "Player_Throttle_Percentage,"
+                    + "Player_Boost_Percentage,"
+                    + "Player_Angle,"
+                    + "Enemy_Angle,"
+                    + "Enemy_Throttle_Percentage,"
+                    + "Enemy_Boost_Percentage"
+                );
+
             ShipClass = HgEnemyClass.AITracer;
 
-            this.Velocity.BoostPercentage = 0;
-            this.Velocity.ThrottlePercentage = 0;
+            Velocity.BoostPercentage = 0;
+            Velocity.ThrottlePercentage = 0;
 
             //Load the loadout from file or create a new one if it does not exist.
             EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
@@ -78,12 +95,13 @@ namespace NebulaSiege.Sprites.Enemies.Peons
         {
             _trainingDataDumpFile.WriteLine(
                       $"{AngleTo(_core.Player.Sprite):n4},"
+                    + $"{DistanceTo(_core.Player.Sprite):n4},"
                     + $"{_core.Player.Sprite.Velocity.ThrottlePercentage:n4},"
                     + $"{_core.Player.Sprite.Velocity.BoostPercentage:n4},"
                     + $"{_core.Player.Sprite.Velocity.Angle.Degrees:42},"
                     + $"{Velocity.Angle.Degrees:n4},"
                     + $"{Velocity.ThrottlePercentage:n4},"
-                    + $"{Velocity.BoostPercentage:n4},"
+                    + $"{Velocity.BoostPercentage:n4}"
                 );
 
             if (Visable)

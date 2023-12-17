@@ -2,6 +2,7 @@
 using NebulaSiege.Situations;
 using NebulaSiege.TickControllers.BaseClasses;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NebulaSiege.Controller
 {
@@ -47,10 +48,45 @@ namespace NebulaSiege.Controller
                 ClearScenarios();
 
                 Situations.Add(new SituationDebuggingGalore(Core));
-                //Situations.Add(new SituationScinzadSkirmish(Core));
-                //Situations.Add(new SituationIrlenFormations(Core));
-                //Situations.Add(new SituationPhoenixAmbush(Core));
+                Situations.Add(new SituationIrlenFormations(Core));
+                Situations.Add(new SituationPhoenixAmbush(Core));
+                Situations.Add(new SituationScinzadSkirmish(Core));
+                Situations.Add(new SituationFreeFlight(Core));
             }
+        }
+
+        public bool Select(string situationName)
+        {
+            lock (Situations)
+            {
+                if (CurrentSituation != null)
+                {
+                    Situations.Remove(CurrentSituation);
+                }
+
+                var selectedSituation = Situations.Where(o => o.Name == situationName).FirstOrDefault();
+
+                if (selectedSituation != null)
+                {
+                    CurrentSituation = selectedSituation;
+                }
+                else
+                {
+                    CurrentSituation = null;
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool StartCurrent()
+        {
+            if (CurrentSituation != null)
+            {
+                CurrentSituation.BeginSituation();
+                return true;
+            }
+            return false;
         }
 
         /// <summary>

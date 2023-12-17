@@ -9,7 +9,10 @@ namespace NebulaSiege.Situations
     internal class SituationScinzadSkirmish : SituationBase
     {
         public SituationScinzadSkirmish(EngineCore core)
-            : base(core, "Scinzad Skirmish")
+            : base(core,
+                  "Scinzad Skirmish",
+                  "Its not a skirmish, its a space aged dog fight."
+                  )
         {
             TotalWaves = 5;
         }

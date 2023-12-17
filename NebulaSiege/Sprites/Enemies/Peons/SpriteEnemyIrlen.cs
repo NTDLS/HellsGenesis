@@ -51,7 +51,7 @@ namespace NebulaSiege.Sprites.Enemies.Peons
             ResetLoadout(loadout);
 
 
-            Velocity.Angle.Degrees = AngleTo(_core.Player.Sprite);
+            Velocity.Angle.Degrees = AngleTo360(_core.Player.Sprite);
 
             initialHullHealth = HullHealth;
         }

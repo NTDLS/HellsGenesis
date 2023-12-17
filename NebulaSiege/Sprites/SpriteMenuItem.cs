@@ -9,6 +9,11 @@ namespace NebulaSiege.Sprites
 {
     internal class SpriteMenuItem : SpriteTextBlock
     {
+        /// <summary>
+        /// User object associated with the menu item.
+        /// </summary>
+        public object UserData { get; set; }
+
         public MenuBase Menu { get; private set; }
 
         private bool _selected = false;

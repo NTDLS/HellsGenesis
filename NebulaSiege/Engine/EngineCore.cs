@@ -88,6 +88,13 @@ namespace NebulaSiege.Engine
             return JsonConvert.DeserializeObject<EngineSettings>(engineSettingsText);
         }
 
+        public void StartGame()
+        {
+            Sprites.PlayerStatsText.Visable = true;
+            Sprites.DeleteAll();
+            Situations.StartCurrent();
+        }
+
         public static void SaveSettings(EngineSettings settings)
         {
             EngineAssetManager.PutUserText("Engine.Settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));

@@ -724,13 +724,20 @@ namespace NebulaSiege.Sprites
         public double DeltaAngle(NsPoint toLocation) => HgMath.DeltaAngle(this, toLocation);
 
         /// <summary>
-        /// Calculates the angle in degrees to another object,
+        /// Calculates the angle in degrees to another object between 0-259.
         /// </summary>
         /// <returns></returns>
-        public double AngleTo(SpriteBase atObj) => HgMath.AngleTo360(this, atObj);
+        public double AngleTo360(SpriteBase atObj) => HgMath.AngleTo360(this, atObj);
+
+        /// <summary>
+        /// Calculates the angle in degrees to another object between 1-180 and -1-180
+        /// </summary>
+        /// <returns></returns>
+        public double AngleTo(SpriteBase atObj) => HgMath.AngleTo(this, atObj);
+
 
         /// Calculates the angle in degrees to a location.
-        public double AngleTo(NsPoint location) => HgMath.AngleTo360(this, location);
+        public double AngleTo360(NsPoint location) => HgMath.AngleTo360(this, location);
 
         public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
             => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);

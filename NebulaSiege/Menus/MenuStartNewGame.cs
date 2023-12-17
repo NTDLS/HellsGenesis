@@ -58,7 +58,7 @@ namespace NebulaSiege.Menus
 
         public override void ExecuteSelection(SpriteMenuItem item)
         {
-            _core.Menus.Insert(new PlayerLoadoutMenu(_core));
+            _core.Menus.Insert(new SituationSelectMenu(_core));
         }
     }
 }

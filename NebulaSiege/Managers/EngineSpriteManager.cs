@@ -101,18 +101,6 @@ namespace NebulaSiege.Managers
             }
         }
 
-        public void NewGame()
-        {
-            lock (Collection)
-            {
-                _core.Situations.Reset();
-                PlayerStatsText.Visable = true;
-                DeleteAll();
-
-                _core.Situations.AdvanceSituation();
-            }
-        }
-
         public void DeleteAll()
         {
             Powerups.DeleteAll();

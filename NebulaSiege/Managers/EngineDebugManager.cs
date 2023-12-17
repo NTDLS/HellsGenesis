@@ -411,7 +411,7 @@ namespace NebulaSiege.Managers
 
             if (baseSprite != null && targetSprite != null)
             {
-                var result = baseSprite.AngleTo(targetSprite);
+                var result = baseSprite.AngleTo360(targetSprite);
                 formDebug.WriteLine($"AngleTo: {result:n4}", System.Drawing.Color.Black);
             }
         }

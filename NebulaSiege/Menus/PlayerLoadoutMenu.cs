@@ -58,6 +58,8 @@ namespace NebulaSiege.Menus
                 var menuItem = CreateAndAddMenuItem(new NsPoint(offsetX + 25, offsetY), playerTypeInstance.Loadout.Name, playerTypeInstance.Loadout.Name);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
+                menuItem.UserData = playerTypeInstance;
+
                 var shipIcon = _core.Sprites.InsertPlayer(playerTypeInstance);
 
                 if (playerTypeInstance.Loadout.Name == "Debug")
@@ -85,10 +87,11 @@ namespace NebulaSiege.Menus
 
         public override void SelectionChanged(SpriteMenuItem item)
         {
-            _selectedSprite = _core.Sprites.Collection.OfType<SpritePlayerBase>()
-                .Where(o => o.SpriteTag == "MENU_SHIP_SELECT" && o.ShipClass.ToString() == item.Key).First();
-
-            _shipBlurb.Text = _selectedSprite.GetLoadoutHelpText();
+            if (item.UserData is SpritePlayerBase selectedSprite)
+            {
+                _shipBlurb.Text = selectedSprite.GetLoadoutHelpText();
+                _selectedSprite = selectedSprite;
+            }
         }
 
         public override void ExecuteSelection(SpriteMenuItem item)
@@ -96,12 +99,12 @@ namespace NebulaSiege.Menus
             _animationTimer.Change(Timeout.Infinite, Timeout.Infinite);
             _animationTimer.Dispose();
 
-            var selectedSprite = _core.Sprites.Collection.OfType<SpritePlayerBase>()
-                .Where(o => o.SpriteTag == "MENU_SHIP_SELECT" && o.ShipClass.ToString() == item.Key).First();
-
-            _core.Player.Sprite.ResetLoadout(selectedSprite.Loadout);
-            _core.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
-            _core.Sprites.NewGame();
+            if (item.UserData is SpritePlayerBase selectedSprite)
+            {
+                _core.Player.Sprite.ResetLoadout(selectedSprite.Loadout);
+                _core.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
+                _core.StartGame();
+            }
         }
     }
 }

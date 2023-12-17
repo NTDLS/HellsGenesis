@@ -133,7 +133,7 @@ namespace NebulaSiege.Sprites.Enemies.Bosses
                 if (_turret.IsDead == false)
                 {
                     var pointRight = HgMath.PointFromAngleAtDistance360(Velocity.Angle, new NsPoint(0, 0));
-                    _turret.Velocity.Angle.Degrees = AngleTo(_core.Player.Sprite);
+                    _turret.Velocity.Angle.Degrees = AngleTo360(_core.Player.Sprite);
                     _turret.X = X + pointRight.X;
                     _turret.Y = Y + pointRight.Y;
                 }
