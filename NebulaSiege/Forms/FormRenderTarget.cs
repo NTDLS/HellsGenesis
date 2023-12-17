@@ -2,6 +2,7 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Sprites;
 using NebulaSiege.Sprites.Enemies.BaseClasses;
+using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -256,6 +257,10 @@ namespace NebulaSiege
             if (e.KeyCode == Keys.Oem3)
             {
                 _core.Debug.ToggleVisibility();
+            }
+            else if (e.KeyCode == Keys.P)
+            {
+                _core.TogglePause();
             }
             else if (e.KeyCode == Keys.Escape)
             {
