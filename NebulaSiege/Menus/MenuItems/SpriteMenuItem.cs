@@ -48,6 +48,8 @@ namespace NebulaSiege.Menus.MenuItems
             Menu = menu;
             Visable = true;
             Velocity = new HgVelocity();
+
+
         }
     }
 }

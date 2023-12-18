@@ -2,6 +2,7 @@
 using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Utility;
 using SharpDX.DirectInput;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
@@ -13,10 +14,25 @@ namespace NebulaSiege.Managers
     internal class EngineInputManager
     {
         private readonly EngineCore _core;
-        private readonly Dictionary<HgPlayerKey, bool> _keyStates = new();
+        private readonly Dictionary<HgPlayerKey, bool> _playerKeyStates = new();
+        private bool _collectDetailedKeyInformation = false;
+
+        public string TypedString { get; private set; }
 
         public DirectInput DirectInput { get; private set; }
         public Keyboard Keyboard { get; private set; }
+
+        private readonly Dictionary<Key, bool> _allKeyStates = new();
+
+        /// <summary>
+        /// Contains a list of keys that have been pressed and then released.
+        /// </summary>
+        public List<Key> CycledKeys { get; private set; } = new();
+
+        /// <summary>
+        /// Contains a list of all keys that are currently down.
+        /// </summary>
+        public List<Key> PressedKeys { get; private set; } = new();
 
         public EngineInputManager(EngineCore core)
         {
@@ -33,36 +49,169 @@ namespace NebulaSiege.Managers
             Keyboard.Dispose();
         }
 
+        public void CollectDetailedKeyInformation(bool state)
+        {
+            if (state != _collectDetailedKeyInformation) //Clear any residual state information.
+            {
+                TypedString = string.Empty;
+                CycledKeys.Clear();
+                PressedKeys.Clear();
+            }
+            _collectDetailedKeyInformation = state;
+        }
+
+        public bool IsModifierKey(Key key)
+        {
+            return key == Key.LeftAlt || key == Key.RightAlt ||
+                   key == Key.LeftControl || key == Key.RightControl ||
+                   key == Key.LeftShift || key == Key.RightShift ||
+                   key == Key.LeftWindowsKey || key == Key.RightWindowsKey;
+        }
+
         public void Snapshot()
         {
-            var keys = Keyboard.GetCurrentState();
+            var keyboardState = Keyboard.GetCurrentState();
 
-            _core.Input.KeyStateChanged(HgPlayerKey.AltForward, keys.IsPressed(Key.Home));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltSpeedBoost, keys.IsPressed(Key.LeftControl));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltRotateCounterClockwise, keys.IsPressed(Key.Delete));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltRotateClockwise, keys.IsPressed(Key.PageDown));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltPrimaryFire, keys.IsPressed(Key.LeftAlt));
+            _core.Input.KeyStateChanged(HgPlayerKey.AltForward, keyboardState.IsPressed(Key.Home));
+            _core.Input.KeyStateChanged(HgPlayerKey.AltSpeedBoost, keyboardState.IsPressed(Key.LeftControl));
+            _core.Input.KeyStateChanged(HgPlayerKey.AltRotateCounterClockwise, keyboardState.IsPressed(Key.Delete));
+            _core.Input.KeyStateChanged(HgPlayerKey.AltRotateClockwise, keyboardState.IsPressed(Key.PageDown));
+            _core.Input.KeyStateChanged(HgPlayerKey.AltPrimaryFire, keyboardState.IsPressed(Key.LeftAlt));
 
-            _core.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, keys.IsPressed(Key.LeftShift));
-            _core.Input.KeyStateChanged(HgPlayerKey.Forward, keys.IsPressed(Key.W));
-            _core.Input.KeyStateChanged(HgPlayerKey.RotateCounterClockwise, keys.IsPressed(Key.A));
-            _core.Input.KeyStateChanged(HgPlayerKey.Reverse, keys.IsPressed(Key.S));
-            _core.Input.KeyStateChanged(HgPlayerKey.RotateClockwise, keys.IsPressed(Key.D));
-            _core.Input.KeyStateChanged(HgPlayerKey.PrimaryFire, keys.IsPressed(Key.Space));
-            _core.Input.KeyStateChanged(HgPlayerKey.SecondaryFire, keys.IsPressed(Key.RightControl));
-            _core.Input.KeyStateChanged(HgPlayerKey.Escape, keys.IsPressed(Key.Escape));
-            _core.Input.KeyStateChanged(HgPlayerKey.Left, keys.IsPressed(Key.Left));
-            _core.Input.KeyStateChanged(HgPlayerKey.Right, keys.IsPressed(Key.Right));
-            _core.Input.KeyStateChanged(HgPlayerKey.Up, keys.IsPressed(Key.Up));
-            _core.Input.KeyStateChanged(HgPlayerKey.Down, keys.IsPressed(Key.Down));
-            _core.Input.KeyStateChanged(HgPlayerKey.Enter, keys.IsPressed(Key.Return));
+            _core.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
+            _core.Input.KeyStateChanged(HgPlayerKey.Forward, keyboardState.IsPressed(Key.W));
+            _core.Input.KeyStateChanged(HgPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
+            _core.Input.KeyStateChanged(HgPlayerKey.Reverse, keyboardState.IsPressed(Key.S));
+            _core.Input.KeyStateChanged(HgPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D));
+            _core.Input.KeyStateChanged(HgPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space));
+            _core.Input.KeyStateChanged(HgPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
+            _core.Input.KeyStateChanged(HgPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
+            _core.Input.KeyStateChanged(HgPlayerKey.Left, keyboardState.IsPressed(Key.Left));
+            _core.Input.KeyStateChanged(HgPlayerKey.Right, keyboardState.IsPressed(Key.Right));
+            _core.Input.KeyStateChanged(HgPlayerKey.Up, keyboardState.IsPressed(Key.Up));
+            _core.Input.KeyStateChanged(HgPlayerKey.Down, keyboardState.IsPressed(Key.Down));
+            _core.Input.KeyStateChanged(HgPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
+
+            if (_collectDetailedKeyInformation)
+            {
+                CycledKeys.Clear();
+
+                PressedKeys.Clear();
+                PressedKeys.AddRange(keyboardState.PressedKeys);
+
+                foreach (var key in Enum.GetValues(typeof(Key)))
+                {
+                    var currentKey = (Key)key;
+                    var isPressed = keyboardState.IsPressed(currentKey);
+
+                    if (isPressed && !_allKeyStates.ContainsKey(currentKey))
+                    {
+                        _allKeyStates[currentKey] = true;
+
+                        CycledKeys.Add(currentKey);
+                    }
+                    else if (!isPressed && _allKeyStates.ContainsKey(currentKey))
+                    {
+                        _allKeyStates.Remove(currentKey);
+                    }
+                }
+
+                bool shouldBeCaps = Control.IsKeyLocked(Keys.CapsLock);
+                bool shiftKeyDown = _core.Input.PressedKeys.Contains(Key.LeftShift) || _core.Input.PressedKeys.Contains(Key.RightShift);
+                if (shiftKeyDown)
+                {
+                    shouldBeCaps = !shouldBeCaps;
+                }
+
+                TypedString = string.Empty;
+
+                foreach (var key in _core.Input.CycledKeys)
+                {
+                    if (key == Key.Space)
+                    {
+                        TypedString = " ";
+                    }
+                    else if (!_core.Input.IsModifierKey(key))
+                    {
+                        char? singleChar = null;
+
+                        #region Key mappings.... :(
+
+                        switch (key)
+                        {
+                            case Key.Space: singleChar = ' '; break;
+
+                            case Key.Minus: singleChar = shiftKeyDown ? '_' : '-'; break;
+                            case Key.Equals: singleChar = shiftKeyDown ? '+' : '='; break;
+                            case Key.Backslash: singleChar = shiftKeyDown ? '|' : '\\'; break;
+                            case Key.Slash: singleChar = shiftKeyDown ? '?' : '/'; break;
+                            case Key.Semicolon: singleChar = shiftKeyDown ? ':' : ';'; break;
+                            case Key.Apostrophe: singleChar = shiftKeyDown ? '\"' : '\''; break;
+                            case Key.LeftBracket: singleChar = shiftKeyDown ? '[' : '{'; break;
+                            case Key.RightBracket: singleChar = shiftKeyDown ? ']' : '}'; break;
+                            case Key.Comma: singleChar = shiftKeyDown ? '<' : ','; break;
+                            case Key.Period: singleChar = shiftKeyDown ? '>' : '.'; break;
+
+                            case Key.D0: singleChar = singleChar = shiftKeyDown ? ')' : '0'; break;
+                            case Key.D1: singleChar = singleChar = shiftKeyDown ? '!' : '1'; break;
+                            case Key.D2: singleChar = singleChar = shiftKeyDown ? '@' : '2'; break;
+                            case Key.D3: singleChar = singleChar = shiftKeyDown ? '#' : '3'; break;
+                            case Key.D4: singleChar = singleChar = shiftKeyDown ? '$' : '4'; break;
+                            case Key.D5: singleChar = singleChar = shiftKeyDown ? '%' : '5'; break;
+                            case Key.D6: singleChar = singleChar = shiftKeyDown ? '^' : '6'; break;
+                            case Key.D7: singleChar = singleChar = shiftKeyDown ? '&' : '7'; break;
+                            case Key.D8: singleChar = singleChar = shiftKeyDown ? '*' : '8'; break;
+                            case Key.D9: singleChar = singleChar = shiftKeyDown ? '(' : '9'; break;
+
+                            case Key.A: singleChar = 'A'; break;
+                            case Key.B: singleChar = 'C'; break;
+                            case Key.C: singleChar = 'C'; break;
+                            case Key.D: singleChar = 'D'; break;
+                            case Key.E: singleChar = 'E'; break;
+                            case Key.F: singleChar = 'F'; break;
+                            case Key.G: singleChar = 'G'; break;
+                            case Key.H: singleChar = 'H'; break;
+                            case Key.I: singleChar = 'I'; break;
+                            case Key.J: singleChar = 'J'; break;
+                            case Key.K: singleChar = 'K'; break;
+                            case Key.L: singleChar = 'L'; break;
+                            case Key.M: singleChar = 'M'; break;
+                            case Key.N: singleChar = 'N'; break;
+                            case Key.O: singleChar = 'O'; break;
+                            case Key.P: singleChar = 'P'; break;
+                            case Key.Q: singleChar = 'Q'; break;
+                            case Key.R: singleChar = 'R'; break;
+                            case Key.S: singleChar = 'S'; break;
+                            case Key.T: singleChar = 'T'; break;
+                            case Key.U: singleChar = 'U'; break;
+                            case Key.V: singleChar = 'V'; break;
+                            case Key.W: singleChar = 'W'; break;
+                            case Key.X: singleChar = 'X'; break;
+                            case Key.Y: singleChar = 'Y'; break;
+                            case Key.Z: singleChar = 'Z'; break;
+                            default: break;
+                        }
+                        #endregion
+
+                        if (singleChar != null)
+                        {
+                            if (!shouldBeCaps)
+                            {
+                                singleChar = char.ToLowerInvariant((char)singleChar);
+                            }
+                        }
+
+                        TypedString += singleChar;
+                    }
+                }
+            }
         }
 
         public bool IsKeyPressed(HgPlayerKey key)
         {
-            if (_keyStates.ContainsKey(key))
+            if (_playerKeyStates.ContainsKey(key))
             {
-                return _keyStates[key];
+                return _playerKeyStates[key];
             }
 
             return false;
@@ -75,13 +224,13 @@ namespace NebulaSiege.Managers
         /// <param name="state"></param>
         public void KeyStateChanged(HgPlayerKey key, bool state, Keys? other = null)
         {
-            if (_keyStates.ContainsKey(key))
+            if (_playerKeyStates.ContainsKey(key))
             {
-                _keyStates[key] = state;
+                _playerKeyStates[key] = state;
             }
             else
             {
-                _keyStates.Add(key, state);
+                _playerKeyStates.Add(key, state);
             }
         }
 

@@ -1,11 +1,13 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus.MenuItems;
+using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NebulaSiege.Menus.BaseClasses
 {
@@ -108,7 +110,7 @@ namespace NebulaSiege.Menus.BaseClasses
 
         public SpriteMenuItem CreateAndAddSelectableTextInput(NsPoint location, string key, string text = "")
         {
-            var item = new SpriteMenuItem(_core, this, _core.Rendering.TextFormats.MenuItem, _core.Rendering.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuSelectableTextInput(_core, this, _core.Rendering.TextFormats.MenuItem, _core.Rendering.Materials.Brushes.OrangeRed, location)
             {
                 Key = key,
                 Text = text,
@@ -134,7 +136,30 @@ namespace NebulaSiege.Menus.BaseClasses
                 return;
             }
 
-            if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds < 150)
+            var selectedTextInput = (from o in Items where o.ItemType == HgMenuItemType.SelectableTextInput && o.Selected == true select o).FirstOrDefault();
+
+            _core.Input.CollectDetailedKeyInformation(selectedTextInput != null);
+
+            if (selectedTextInput != null)
+            {
+                if (_core.Input.PressedKeys.Contains(Key.Back))
+                {
+                    if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds >= 100)
+                    {
+                        _lastInputHandled = DateTime.UtcNow;
+
+                        if (selectedTextInput.Text.Length > 0)
+                        {
+                            selectedTextInput.Text = selectedTextInput.Text.Substring(0, selectedTextInput.Text.Length - 1);
+                        }
+                    }
+                    return;
+                }
+
+                selectedTextInput.Text += _core.Input.TypedString;
+            }
+
+            if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds < 200)
             {
                 return; //We have to keep the menues from going crazy.
             }
