@@ -202,7 +202,7 @@ namespace NebulaSiege.Managers
                     return value as SharpDX.Direct2D1.Bitmap;
                 }
 
-                var result = _core.DirectX.GetBitmap(assetAbsolutePath);
+                var result = _core.Rendering.GetBitmap(assetAbsolutePath);
                 _collection.Add(key, result);
                 return result;
             }
@@ -228,7 +228,7 @@ namespace NebulaSiege.Managers
                     return value as SharpDX.Direct2D1.Bitmap;
                 }
 
-                var result = _core.DirectX.GetBitmap(assetAbsolutePath, newWidth, newHeight);
+                var result = _core.Rendering.GetBitmap(assetAbsolutePath, newWidth, newHeight);
                 _collection.Add(key, result);
                 return result;
             }

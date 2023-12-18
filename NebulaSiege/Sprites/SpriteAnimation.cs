@@ -96,7 +96,7 @@ namespace NebulaSiege.Sprites
                 _currentColumn * _frameSize.Width + _frameSize.Width,
                 _currentRow * _frameSize.Height + _frameSize.Height);
 
-            _core.DirectX.DrawBitmapAt(
+            _core.Rendering.DrawBitmapAt(
                 renderTarget,
                 _sheetImage,
                 X - _frameSize.Width / 2.0,

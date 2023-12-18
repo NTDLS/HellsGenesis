@@ -184,7 +184,7 @@ namespace NebulaSiege.Managers
 
         public void CommandHandler_Display_Adapters(DebugCommand command)
         {
-            var text = _core.DirectX.GetGraphicsAdaptersInfo();
+            var text = _core.Rendering.GetGraphicsAdaptersInfo();
             formDebug.Write(text, System.Drawing.Color.Black);
         }
 

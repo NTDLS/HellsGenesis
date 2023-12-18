@@ -21,9 +21,9 @@ namespace NebulaSiege.Engine
         public EngineAudioManager Audio { get; private set; }
         public EngineAssetManager Assets { get; private set; }
         public EngineDebugManager Debug { get; private set; }
-        public MenuTickHandler Menus { get; private set; }
+        public MenuTickController Menus { get; private set; }
 
-        public DirectX DirectX { get; private set; }
+        public EngineRendering Rendering { get; private set; }
         public EngineSettings Settings { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
@@ -65,9 +65,9 @@ namespace NebulaSiege.Engine
             Situations = new SituationTickController(this);
             Events = new EventTickController(this);
             Audio = new EngineAudioManager(this);
-            Menus = new MenuTickHandler(this);
+            Menus = new MenuTickController(this);
             Player = new PlayerSpriteTickController(this);
-            DirectX = new DirectX(this);
+            Rendering = new EngineRendering(this);
             Debug = new EngineDebugManager(this);
 
             _worldClock = new EngineWorldClock(this);
@@ -88,6 +88,13 @@ namespace NebulaSiege.Engine
             return JsonConvert.DeserializeObject<EngineSettings>(engineSettingsText);
         }
 
+        public void ResetGame()
+        {
+            Sprites.PlayerStatsText.Visable = true;
+            Sprites.DeleteAll();
+            Situations.Reset();
+        }
+
         public void StartGame()
         {
             Sprites.PlayerStatsText.Visable = true;
@@ -104,26 +111,26 @@ namespace NebulaSiege.Engine
         {
             try
             {
-                DirectX.ScreenRenderTarget.BeginDraw();
-                DirectX.IntermediateRenderTarget.BeginDraw();
+                Rendering.ScreenRenderTarget.BeginDraw();
+                Rendering.IntermediateRenderTarget.BeginDraw();
 
-                DirectX.ScreenRenderTarget.Clear(DirectX.Materials.Raw.Black);
+                Rendering.ScreenRenderTarget.Clear(Rendering.Materials.Raw.Black);
 
-                DirectX.IntermediateRenderTarget.Clear(DirectX.Materials.Raw.Black);
-                Sprites.RenderPreScaling(DirectX.IntermediateRenderTarget);
-                DirectX.IntermediateRenderTarget.EndDraw();
+                Rendering.IntermediateRenderTarget.Clear(Rendering.Materials.Raw.Black);
+                Sprites.RenderPreScaling(Rendering.IntermediateRenderTarget);
+                Rendering.IntermediateRenderTarget.EndDraw();
 
                 if (Settings.AutoZoomWhenMoving)
                 {
-                    DirectX.ApplyScaling((float)Display.SpeedOrientedFrameScalingFactor());
+                    Rendering.ApplyScaling((float)Display.SpeedOrientedFrameScalingFactor());
                 }
                 else
                 {
-                    DirectX.ApplyScaling((float)Display.BaseDrawScale);
+                    Rendering.ApplyScaling((float)Display.BaseDrawScale);
                 }
-                Sprites.RenderPostScaling(DirectX.ScreenRenderTarget);
+                Sprites.RenderPostScaling(Rendering.ScreenRenderTarget);
 
-                DirectX.ScreenRenderTarget.EndDraw();
+                Rendering.ScreenRenderTarget.EndDraw();
             }
             catch
             {
@@ -157,7 +164,7 @@ namespace NebulaSiege.Engine
                 _worldClock.Stop();
                 Sprites.Stop();
                 OnStop?.Invoke(this);
-                DirectX.Cleanup();
+                Rendering.Cleanup();
             }
         }
 

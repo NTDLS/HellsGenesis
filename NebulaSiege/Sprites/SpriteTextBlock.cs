@@ -24,7 +24,7 @@ namespace NebulaSiege.Sprites
             set
             {
                 _text = value;
-                var size = _core.DirectX.GetTextSize(_text, Format);
+                var size = _core.Rendering.GetTextSize(_text, Format);
                 _size = new Size((int)size.Width, (int)size.Height);
             }
         }
@@ -45,7 +45,7 @@ namespace NebulaSiege.Sprites
         {
             if (Visable)
             {
-                _core.DirectX.DrawTextAt(renderTarget, (float)X, (float)Y, 0, _text ?? string.Empty, Format, Color);
+                _core.Rendering.DrawTextAt(renderTarget, (float)X, (float)Y, 0, _text ?? string.Empty, Format, Color);
             }
         }
     }

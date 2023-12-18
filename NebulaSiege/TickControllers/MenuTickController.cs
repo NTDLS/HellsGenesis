@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace NebulaSiege.Controller
 {
-    internal class MenuTickHandler : UnvectoredTickControllerBase<MenuBase>
+    internal class MenuTickController : UnvectoredTickControllerBase<MenuBase>
     {
         public List<MenuBase> Collection { get; private set; } = new();
 
-        public MenuTickHandler(EngineCore core)
+        public MenuTickController(EngineCore core)
             : base(core)
         {
         }

@@ -43,8 +43,8 @@ namespace NebulaSiege.Sprites.Enemies.BaseClasses
             RadarPositionIndicator = _core.Sprites.RadarPositions.Create();
             RadarPositionIndicator.Visable = false;
             RadarPositionText = _core.Sprites.TextBlocks.CreateRadarPosition(
-                core.DirectX.TextFormats.RadarPositionIndicator,
-                core.DirectX.Materials.Brushes.Red, new NsPoint());
+                core.Rendering.TextFormats.RadarPositionIndicator,
+                core.Rendering.Materials.Brushes.Red, new NsPoint());
         }
 
         public virtual void BeforeCreate() { }

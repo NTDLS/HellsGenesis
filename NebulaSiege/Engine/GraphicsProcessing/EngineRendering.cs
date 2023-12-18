@@ -13,7 +13,7 @@ using System.Text;
 
 namespace NebulaSiege.Engine.GraphicsProcessing
 {
-    internal class DirectX
+    internal class EngineRendering
     {
         private readonly EngineCore _core;
 
@@ -25,7 +25,7 @@ namespace NebulaSiege.Engine.GraphicsProcessing
         private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(SharpDX.Direct2D1.FactoryType.SingleThreaded);
         private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
 
-        public DirectX(EngineCore core)
+        public EngineRendering(EngineCore core)
         {
             _core = core;
 

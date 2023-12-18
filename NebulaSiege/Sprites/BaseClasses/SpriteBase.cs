@@ -801,7 +801,7 @@ namespace NebulaSiege.Sprites
                 {
                     var rectangle = new RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
 
-                    _core.DirectX.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), Velocity.Angle.Degrees, _core.DirectX.Materials.Raw.Red, 0, 1);
+                    _core.Rendering.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), Velocity.Angle.Degrees, _core.Rendering.Materials.Raw.Red, 0, 1);
                 }
             }
         }
@@ -816,22 +816,22 @@ namespace NebulaSiege.Sprites
             {
                 if (this is SpriteEnemyBase)
                 {
-                    _core.DirectX.FillTriangleAt(renderTarget, x, y, 3, _core.DirectX.Materials.Brushes.WhiteSmoke);
+                    _core.Rendering.FillTriangleAt(renderTarget, x, y, 3, _core.Rendering.Materials.Brushes.WhiteSmoke);
                 }
                 else if (this is MunitionBase)
                 {
                     float size;
 
-                    RawColor4 color = _core.DirectX.Materials.Raw.Blue;
+                    RawColor4 color = _core.Rendering.Materials.Raw.Blue;
 
                     var munition = this as MunitionBase;
                     if (munition.FiredFromType == HgFiredFromType.Enemy)
                     {
-                        color = _core.DirectX.Materials.Raw.Red;
+                        color = _core.Rendering.Materials.Raw.Red;
                     }
                     else
                     {
-                        color = _core.DirectX.Materials.Raw.Green;
+                        color = _core.Rendering.Materials.Raw.Green;
                     }
 
                     if (munition.Weapon.ExplodesOnImpact)
@@ -843,7 +843,7 @@ namespace NebulaSiege.Sprites
                         size = 1;
                     }
 
-                    _core.DirectX.FillEllipseAt(renderTarget, x, y, size, size, color);
+                    _core.Rendering.FillEllipseAt(renderTarget, x, y, size, size, color);
 
                 }
 
@@ -856,13 +856,13 @@ namespace NebulaSiege.Sprites
 
             if (RotationMode != HgRotationMode.None)
             {
-                _core.DirectX.DrawBitmapAt(renderTarget, bitmap,
+                _core.Rendering.DrawBitmapAt(renderTarget, bitmap,
                     _location.X - bitmap.Size.Width / 2.0,
                     _location.Y - bitmap.Size.Height / 2.0, angle);
             }
             else //Almost free.
             {
-                _core.DirectX.DrawBitmapAt(renderTarget, bitmap, _location.X - bitmap.Size.Width / 2.0, _location.Y - bitmap.Size.Height / 2.0);
+                _core.Rendering.DrawBitmapAt(renderTarget, bitmap, _location.X - bitmap.Size.Width / 2.0, _location.Y - bitmap.Size.Height / 2.0);
             }
         }
 

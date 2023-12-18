@@ -64,9 +64,9 @@ namespace NebulaSiege.Managers
         {
             _core.Player.Sprite = new SpriteDebugPlayer(_core) { Visable = false };
 
-            PlayerStatsText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Materials.Brushes.WhiteSmoke, new NsPoint(5, 5), true);
+            PlayerStatsText = TextBlocks.Create(_core.Rendering.TextFormats.RealtimePlayerStats, _core.Rendering.Materials.Brushes.WhiteSmoke, new NsPoint(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_core.DirectX.TextFormats.RealtimePlayerStats, _core.DirectX.Materials.Brushes.Cyan, new NsPoint(5, PlayerStatsText.Y + 100), true);
+            DebugText = TextBlocks.Create(_core.Rendering.TextFormats.RealtimePlayerStats, _core.Rendering.Materials.Brushes.Cyan, new NsPoint(5, PlayerStatsText.Y + 100), true);
 
             _core.Audio.BackgroundMusicSound.Play();
         }
@@ -208,7 +208,7 @@ namespace NebulaSiege.Managers
             {
                 var radarBgImage = _core.Assets.GetBitmap(@"Graphics\RadarTransparent.png");
 
-                _core.DirectX.DrawBitmapAt(renderTarget, radarBgImage,
+                _core.Rendering.DrawBitmapAt(renderTarget, radarBgImage,
                     _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,
                     _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height,
                     0);
@@ -255,11 +255,11 @@ namespace NebulaSiege.Managers
                     }
 
                     //Render player blip:
-                    _core.DirectX.FillEllipseAt(
+                    _core.Rendering.FillEllipseAt(
                         renderTarget,
                         _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + centerOfRadarX,
                         _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + centerOfRadarY,
-                        2, 2, _core.DirectX.Materials.Raw.Green);
+                        2, 2, _core.Rendering.Materials.Raw.Green);
                 }
             }
         }
@@ -294,7 +294,7 @@ namespace NebulaSiege.Managers
             if (_core.Settings.HighlightNatrualBounds)
             {
                 //Highlight the 1:1 frame
-                _core.DirectX.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.DirectX.Materials.Raw.Red, 0, 1);
+                _core.Rendering.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.Rendering.Materials.Raw.Red, 0, 1);
             }
         }
     }

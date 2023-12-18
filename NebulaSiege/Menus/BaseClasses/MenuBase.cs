@@ -41,7 +41,7 @@ namespace NebulaSiege.Menus.BaseClasses
 
         public SpriteMenuItem CreateAndAddTitleItem(NsPoint location, string text)
         {
-            var item = new SpriteMenuItem(_core, this, _core.DirectX.TextFormats.MenuTitle, _core.DirectX.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuItem(_core, this, _core.Rendering.TextFormats.MenuTitle, _core.Rendering.Materials.Brushes.OrangeRed, location)
             {
                 Text = text,
                 ItemType = HgMenuItemType.Title
@@ -52,7 +52,7 @@ namespace NebulaSiege.Menus.BaseClasses
 
         public SpriteMenuItem CreateAndAddTextItem(NsPoint location, string text)
         {
-            var item = new SpriteMenuItem(_core, this, _core.DirectX.TextFormats.MenuGeneral, _core.DirectX.Materials.Brushes.LawnGreen, location)
+            var item = new SpriteMenuItem(_core, this, _core.Rendering.TextFormats.MenuGeneral, _core.Rendering.Materials.Brushes.LawnGreen, location)
             {
                 Text = text,
                 ItemType = HgMenuItemType.Text
@@ -63,7 +63,7 @@ namespace NebulaSiege.Menus.BaseClasses
 
         public SpriteMenuItem CreateAndAddMenuItem(NsPoint location, string key, string text)
         {
-            var item = new SpriteMenuItem(_core, this, _core.DirectX.TextFormats.MenuItem, _core.DirectX.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuItem(_core, this, _core.Rendering.TextFormats.MenuItem, _core.Rendering.Materials.Brushes.OrangeRed, location)
             {
                 Key = key,
                 Text = text,
@@ -222,14 +222,14 @@ namespace NebulaSiege.Menus.BaseClasses
             var selectedItem = (from o in Items where o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
-                _core.DirectX.DrawRectangleAt(renderTarget,
+                _core.Rendering.DrawRectangleAt(renderTarget,
                     new SharpDX.Mathematics.Interop.RawRectangleF(
                         selectedItem.BoundsI.X,
                         selectedItem.BoundsI.Y,
                         selectedItem.BoundsI.X + selectedItem.BoundsI.Width,
                         selectedItem.BoundsI.Y + selectedItem.BoundsI.Height),
                     0,
-                    _core.DirectX.Materials.Raw.Red, 2, 2);
+                    _core.Rendering.Materials.Raw.Red, 2, 2);
             }
         }
     }

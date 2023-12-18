@@ -44,7 +44,7 @@ namespace NebulaSiege.Engine
             var textBlock = _core.Sprites.GetSpriteByTag<SpriteTextBlock>("PausedText");
             if (textBlock == null)
             {
-                textBlock = _core.Sprites.TextBlocks.Create(_core.DirectX.TextFormats.LargeBlocker, _core.DirectX.Materials.Brushes.Red, new NsPoint(100, 100), true, "PausedText");
+                textBlock = _core.Sprites.TextBlocks.Create(_core.Rendering.TextFormats.LargeBlocker, _core.Rendering.Materials.Brushes.Red, new NsPoint(100, 100), true, "PausedText");
                 textBlock.Text = "Paused";
                 textBlock.X = _core.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
                 textBlock.Y = _core.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
