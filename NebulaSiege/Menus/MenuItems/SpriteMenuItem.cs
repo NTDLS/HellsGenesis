@@ -2,18 +2,21 @@
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus.BaseClasses;
+using NebulaSiege.Sprites;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 
-namespace NebulaSiege.Sprites
+namespace NebulaSiege.Menus.MenuItems
 {
+    /// <summary>
+    /// Represents a selectable menu item.
+    /// </summary>
     internal class SpriteMenuItem : SpriteTextBlock
     {
         /// <summary>
         /// User object associated with the menu item.
         /// </summary>
         public object UserData { get; set; }
-
         public MenuBase Menu { get; private set; }
 
         private bool _selected = false;
@@ -41,6 +44,7 @@ namespace NebulaSiege.Sprites
         public SpriteMenuItem(EngineCore core, MenuBase menu, TextFormat format, SolidColorBrush color, NsPoint location)
             : base(core, format, color, location, true)
         {
+            ItemType = HgMenuItemType.Undefined;
             Menu = menu;
             Visable = true;
             Velocity = new HgVelocity();

@@ -56,7 +56,7 @@ namespace NebulaSiege
 
             _core = new EngineCore(drawingSurface);
 
-            _core.OnStop += (EngineCore sender) =>
+            _core.OnStopEngine += (EngineCore sender) =>
             {   //If the engine is stopped, close the main form.
                 Invoke((MethodInvoker)delegate
                 {
@@ -64,8 +64,8 @@ namespace NebulaSiege
                 });
             };
 
-            Shown += (object sender, EventArgs e) => _core.Start();
-            FormClosing += (sender, e) => _core.Stop();
+            Shown += (object sender, EventArgs e) => _core.StartEngine();
+            FormClosing += (sender, e) => _core.StopEngine();
 
             drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
             drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
@@ -257,15 +257,19 @@ namespace NebulaSiege
 
             if (e.KeyCode == Keys.Escape)
             {
-                _core.Pause();
+                //We do not want the escape key to inturrupt menus.
+                if (_core.Menus.VisibleMenuHandlesEscape() == false)
+                {
+                    _core.Pause();
 
-                if (MessageBox.Show("Are you sure you want to quit?", "Afraid to go on?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-                {
-                    Close();
-                }
-                else
-                {
-                    _core.Resume();
+                    if (MessageBox.Show("Are you sure you want to quit?", "Afraid to go on?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                    {
+                        Close();
+                    }
+                    else
+                    {
+                        _core.Resume();
+                    }
                 }
             }
         }

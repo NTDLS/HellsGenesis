@@ -1,7 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus.BaseClasses;
-using NebulaSiege.Sprites;
+using NebulaSiege.Menus.MenuItems;
 using NebulaSiege.Sprites.Player.BaseClasses;
 using NebulaSiege.Utility;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace NebulaSiege.Menus
 
             offsetY += itemTitle.Height;
 
-            _shipBlurb = CreateAndAddTextItem(new NsPoint(offsetX, offsetY), "");
+            _shipBlurb = CreateAndAddTextblock(new NsPoint(offsetX, offsetY), "");
             _shipBlurb.X = offsetX + 200;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
@@ -55,7 +55,7 @@ namespace NebulaSiege.Menus
                 playerTypeInstance.ThrustAnimation.Visable = true;
                 playerTypeInstance.BoostAnimation.Visable = true;
 
-                var menuItem = CreateAndAddMenuItem(new NsPoint(offsetX + 25, offsetY), playerTypeInstance.Loadout.Name, playerTypeInstance.Loadout.Name);
+                var menuItem = CreateAndAddSelectableItem(new NsPoint(offsetX + 25, offsetY), playerTypeInstance.Loadout.Name, playerTypeInstance.Loadout.Name);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
                 menuItem.UserData = playerTypeInstance;
@@ -79,7 +79,7 @@ namespace NebulaSiege.Menus
             OnExecuteSelection += PlayerLoadoutMenu_OnExecuteSelection;
             OnCleanup += PlayerLoadoutMenu_OnCleanup;
 
-            SelectableItems().First().Selected = true;
+            VisibleSelectableItems().First().Selected = true;
 
             _animationTimer = new Timer(PlayerLoadoutMenu_Tick, null, 10, 10);
         }

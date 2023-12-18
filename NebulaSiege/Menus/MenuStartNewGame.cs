@@ -1,8 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus.BaseClasses;
-using NebulaSiege.Sprites;
-
+using NebulaSiege.Menus.MenuItems;
 
 namespace NebulaSiege.Menus
 {
@@ -24,38 +23,38 @@ namespace NebulaSiege.Menus
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
-            var helpItem = CreateAndAddMenuItem(new NsPoint(offsetX, offsetY), "SINGLE_PLAYER", " Single Player ");
+            var helpItem = CreateAndAddSelectableItem(new NsPoint(offsetX, offsetY), "SINGLE_PLAYER", " Single Player ");
             helpItem.Selected = true;
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = CreateAndAddMenuItem(new NsPoint(offsetX, offsetY), "MULTI_PLAYER", " Multiplayer ");
+            helpItem = CreateAndAddSelectableItem(new NsPoint(offsetX, offsetY), "MULTI_PLAYER", " Multiplayer ");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
             offsetY += 50;
 
-            helpItem = CreateAndAddTextItem(new NsPoint(offsetX, offsetY), "Move with <W>, <A>, <S>.");
+            helpItem = CreateAndAddTextblock(new NsPoint(offsetX, offsetY), "Move with <W>, <A>, <S>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = CreateAndAddTextItem(new NsPoint(offsetX, offsetY), "Warp Drive with <SHIFT>.");
+            helpItem = CreateAndAddTextblock(new NsPoint(offsetX, offsetY), "Warp Drive with <SHIFT>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = CreateAndAddTextItem(new NsPoint(offsetX, offsetY), "Fire primary with <SPACE>.");
+            helpItem = CreateAndAddTextblock(new NsPoint(offsetX, offsetY), "Fire primary with <SPACE>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
-            helpItem = CreateAndAddTextItem(new NsPoint(offsetX, offsetY), "Fire secondary with <CTRL>.");
+            helpItem = CreateAndAddTextblock(new NsPoint(offsetX, offsetY), "Fire secondary with <CTRL>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
-            helpItem = CreateAndAddTextItem(new NsPoint(offsetX, offsetY), "Change weapons with <left> and <right> arrows.");
+            helpItem = CreateAndAddTextblock(new NsPoint(offsetX, offsetY), "Change weapons with <left> and <right> arrows.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
-            helpItem = CreateAndAddTextItem(new NsPoint(offsetX, offsetY), "Change speed with <up> and <down> arrows.");
+            helpItem = CreateAndAddTextblock(new NsPoint(offsetX, offsetY), "Change speed with <up> and <down> arrows.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 

@@ -49,11 +49,11 @@ namespace NebulaSiege.Engine
 
         #region Events.
 
-        public delegate void StartEvent(EngineCore sender);
-        public event StartEvent OnStart;
+        public delegate void StartEngineEvent(EngineCore sender);
+        public event StartEngineEvent OnStartEngine;
 
-        public delegate void StopEvent(EngineCore sender);
-        public event StopEvent OnStop;
+        public delegate void StopEngineEvent(EngineCore sender);
+        public event StopEngineEvent OnStopEngine;
 
         #endregion
 
@@ -145,7 +145,7 @@ namespace NebulaSiege.Engine
             Menus.Insert(new MenuStartNewGame(this));
         }
 
-        public void Start()
+        public void StartEngine()
         {
             if (IsRunning == false)
             {
@@ -155,18 +155,18 @@ namespace NebulaSiege.Engine
 
                 _worldClock.Start();
 
-                OnStart?.Invoke(this);
+                OnStartEngine?.Invoke(this);
             }
         }
 
-        public void Stop()
+        public void StopEngine()
         {
             if (IsRunning)
             {
                 IsRunning = false;
                 _worldClock.Stop();
                 Sprites.Stop();
-                OnStop?.Invoke(this);
+                OnStopEngine?.Invoke(this);
                 Rendering.Cleanup();
             }
         }

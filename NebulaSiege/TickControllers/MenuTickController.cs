@@ -1,13 +1,27 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Menus.BaseClasses;
 using NebulaSiege.TickControllers.BaseClasses;
+using SharpDX.Direct2D1;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace NebulaSiege.Controller
 {
     internal class MenuTickController : UnvectoredTickControllerBase<MenuBase>
     {
         public List<MenuBase> Collection { get; private set; } = new();
+
+        /// <summary>
+        /// Determines if any active menu handles the escape key.
+        /// </summary>
+        /// <returns></returns>
+        public bool VisibleMenuHandlesEscape()
+        {
+            lock (Collection)
+            {
+                return Collection.Where(o => o.HandlesEscape() == true).Any();
+            }
+        }
 
         public MenuTickController(EngineCore core)
             : base(core)
@@ -23,7 +37,7 @@ namespace NebulaSiege.Controller
             }
         }
 
-        public void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
+        public void Render(RenderTarget renderTarget)
         {
             lock (Collection)
             {

@@ -65,9 +65,11 @@
 
     public enum HgMenuItemType
     {
+        Undefined,
         Title,
-        Text,
-        Item
+        Textblock,
+        SelectableItem,
+        SelectableTextInput
     }
 
     public enum HgAnimationReplayMode

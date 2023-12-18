@@ -1,6 +1,6 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
-using NebulaSiege.Sprites;
+using NebulaSiege.Menus.MenuItems;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,9 @@ namespace NebulaSiege.Menus.BaseClasses
         public bool ReadyForDeletion { get; private set; }
         public Guid UID { get; private set; } = Guid.NewGuid();
 
-        public List<SpriteMenuItem> SelectableItems() => Items.Where(o => o.ItemType == HgMenuItemType.Item).ToList();
+        public List<SpriteMenuItem> VisibleSelectableItems() =>
+            Items.Where(o => o.Visable == true
+            && (o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput)).ToList();
 
         #region Events.
 
@@ -42,12 +44,12 @@ namespace NebulaSiege.Menus.BaseClasses
         public event ExecuteSelectionEvent OnExecuteSelection;
 
 
-        internal delegate void ExecuteEscapeEvent();
+        internal delegate void EscapeEvent();
         /// <summary>
         /// The player has hit the escape key.
         /// </summary>
         /// <param name="item"></param>
-        public event ExecuteEscapeEvent OnExecuteEscape;
+        public event EscapeEvent OnEscape;
 
         internal delegate void CleanupEvent();
         /// <summary>
@@ -65,10 +67,10 @@ namespace NebulaSiege.Menus.BaseClasses
             _core = core;
         }
 
-        public void QueueForDelete()
-        {
-            ReadyForDeletion = true;
-        }
+        public void Show() => Items.ForEach(o => o.Visable = true);
+        public void Hide() => Items.ForEach(o => o.Visable = false);
+        public bool HandlesEscape() => (OnEscape != null);
+        public void QueueForDelete() => ReadyForDeletion = true;
 
         public SpriteMenuItem CreateAndAddTitleItem(NsPoint location, string text)
         {
@@ -81,24 +83,36 @@ namespace NebulaSiege.Menus.BaseClasses
             return item;
         }
 
-        public SpriteMenuItem CreateAndAddTextItem(NsPoint location, string text)
+        public SpriteMenuItem CreateAndAddTextblock(NsPoint location, string text)
         {
             var item = new SpriteMenuItem(_core, this, _core.Rendering.TextFormats.MenuGeneral, _core.Rendering.Materials.Brushes.LawnGreen, location)
             {
                 Text = text,
-                ItemType = HgMenuItemType.Text
+                ItemType = HgMenuItemType.Textblock
             };
             AddMenuItem(item);
             return item;
         }
 
-        public SpriteMenuItem CreateAndAddMenuItem(NsPoint location, string key, string text)
+        public SpriteMenuItem CreateAndAddSelectableItem(NsPoint location, string key, string text)
         {
             var item = new SpriteMenuItem(_core, this, _core.Rendering.TextFormats.MenuItem, _core.Rendering.Materials.Brushes.OrangeRed, location)
             {
                 Key = key,
                 Text = text,
-                ItemType = HgMenuItemType.Item
+                ItemType = HgMenuItemType.SelectableItem
+            };
+            AddMenuItem(item);
+            return item;
+        }
+
+        public SpriteMenuItem CreateAndAddSelectableTextInput(NsPoint location, string key, string text = "")
+        {
+            var item = new SpriteMenuItem(_core, this, _core.Rendering.TextFormats.MenuItem, _core.Rendering.Materials.Brushes.OrangeRed, location)
+            {
+                Key = key,
+                Text = text,
+                ItemType = HgMenuItemType.SelectableTextInput
             };
             AddMenuItem(item);
             return item;
@@ -131,7 +145,7 @@ namespace NebulaSiege.Menus.BaseClasses
 
                 _lastInputHandled = DateTime.UtcNow;
 
-                var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.Item && o.Selected == true select o).FirstOrDefault();
+                var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem && o.Selected == true select o).FirstOrDefault();
                 if (selectedItem != null)
                 {
                     QueueForDelete();
@@ -149,14 +163,11 @@ namespace NebulaSiege.Menus.BaseClasses
 
                 _lastInputHandled = DateTime.UtcNow;
 
-                QueueForDelete();
-
                 //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
                 //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                 //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                 //  
-                Task.Run(() => OnExecuteEscape?.Invoke());
-
+                Task.Run(() => OnEscape?.Invoke());
             }
 
             if (_core.Input.IsKeyPressed(HgPlayerKey.Right) || _core.Input.IsKeyPressed(HgPlayerKey.Down) || _core.Input.IsKeyPressed(HgPlayerKey.Reverse) || _core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
@@ -165,7 +176,7 @@ namespace NebulaSiege.Menus.BaseClasses
 
                 int selectIndex = 0;
 
-                var items = (from o in Items where o.ItemType == HgMenuItemType.Item select o).ToList();
+                var items = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem select o).ToList();
                 if (items != null && items.Count > 0)
                 {
                     int previouslySelectedIndex = -1;
@@ -173,7 +184,7 @@ namespace NebulaSiege.Menus.BaseClasses
                     for (int i = 0; i < items.Count; i++)
                     {
                         var item = items[i];
-                        if (item.ItemType == HgMenuItemType.Item)
+                        if (item.ItemType == HgMenuItemType.SelectableItem)
                         {
                             if (item.Selected)
                             {
@@ -193,7 +204,7 @@ namespace NebulaSiege.Menus.BaseClasses
 
                     if (selectIndex != previouslySelectedIndex)
                     {
-                        var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.Item && o.Selected == true select o).FirstOrDefault();
+                        var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem && o.Selected == true select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
                             _core.Audio.Click.Play();
@@ -208,13 +219,16 @@ namespace NebulaSiege.Menus.BaseClasses
                 }
             }
 
-            if (_core.Input.IsKeyPressed(HgPlayerKey.Left) || _core.Input.IsKeyPressed(HgPlayerKey.Up) || _core.Input.IsKeyPressed(HgPlayerKey.Forward) || _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise))
+            if (_core.Input.IsKeyPressed(HgPlayerKey.Left)
+                || _core.Input.IsKeyPressed(HgPlayerKey.Up)
+                || _core.Input.IsKeyPressed(HgPlayerKey.Forward)
+                || _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise))
             {
                 _lastInputHandled = DateTime.UtcNow;
 
                 int selectIndex = 0;
 
-                var items = (from o in Items where o.ItemType == HgMenuItemType.Item select o).ToList();
+                var items = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem select o).ToList();
                 if (items != null && items.Count > 0)
                 {
                     int previouslySelectedIndex = -1;
@@ -222,7 +236,7 @@ namespace NebulaSiege.Menus.BaseClasses
                     for (int i = 0; i < items.Count; i++)
                     {
                         var item = items[i];
-                        if (item.ItemType == HgMenuItemType.Item)
+                        if (item.ItemType == HgMenuItemType.SelectableItem)
                         {
                             if (item.Selected)
                             {
@@ -242,7 +256,7 @@ namespace NebulaSiege.Menus.BaseClasses
 
                     if (selectIndex != previouslySelectedIndex)
                     {
-                        var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.Item && o.Selected == true select o).FirstOrDefault();
+                        var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem && o.Selected == true select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
                             _core.Audio.Click.Play();
@@ -260,12 +274,12 @@ namespace NebulaSiege.Menus.BaseClasses
 
         public void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            foreach (var item in Items)
+            foreach (var item in Items.Where(o => o.Visable == true))
             {
                 item.Render(renderTarget);
             }
 
-            var selectedItem = (from o in Items where o.Selected == true select o).FirstOrDefault();
+            var selectedItem = (from o in Items where o.Visable == true && o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
                 _core.Rendering.DrawRectangleAt(renderTarget,

@@ -3,15 +3,14 @@ using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus.BaseClasses;
 using NebulaSiege.Menus.MenuItems;
 
-
 namespace NebulaSiege.Menus
 {
     /// <summary>
-    /// Allows the player to select to host or join a game.
+    /// Allows user to set parameters for a hosted game.
     /// </summary>
-    internal class MenuMultiplayerHostOrJoin : MenuBase
+    internal class MenuMultiplayerHostGame : MenuBase
     {
-        public MenuMultiplayerHostOrJoin(EngineCore core)
+        public MenuMultiplayerHostGame(EngineCore core)
             : base(core)
         {
             var currentScaledScreenBounds = _core.Display.GetCurrentScaledScreenBounds();
@@ -24,36 +23,30 @@ namespace NebulaSiege.Menus
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
-            var helpItem = CreateAndAddSelectableItem(new NsPoint(offsetX, offsetY), "JOIN", " Join a Game ");
+            var helpItem = CreateAndAddTextblock(new NsPoint(offsetX, offsetY), "Name");
+            helpItem.X -= helpItem.Size.Width / 2;
+            offsetY += helpItem.Size.Height + 5;
+
+            helpItem = CreateAndAddSelectableTextInput(new NsPoint(offsetX, offsetY), "Name", "My Game Name");
             helpItem.Selected = true;
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = CreateAndAddSelectableItem(new NsPoint(offsetX, offsetY), "HOST", " Host a Game ");
-            helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += helpItem.Size.Height + 5;
-
             OnExecuteSelection += MenuMultiplayerHostOrJoin_OnExecuteSelection;
-            OnEscape += MenuMultiplayerHostOrJoin_OnEscape;
-        }
-
-        private void MenuMultiplayerHostOrJoin_OnEscape()
-        {
-            QueueForDelete();
-            _core.Menus.Insert(new MenuStartNewGame(_core));
         }
 
         private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
+            /*
             if (item.Key == "JOIN")
             {
-                //throw new NotImplementedException();
                 //_core.Menus.Insert(new SituationSelectMenu(_core));
             }
             else if (item.Key == "HOST")
             {
-                _core.Menus.Insert(new MenuMultiplayerHostGame(_core));
+                //_core.Menus.Insert(new SituationSelectMenu(_core));
             }
+            */
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus.BaseClasses;
+using NebulaSiege.Menus.MenuItems;
 using NebulaSiege.Situations.BaseClasses;
-using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
 using System.Linq;
 
@@ -29,7 +29,7 @@ namespace NebulaSiege.Menus
 
             offsetY += itemTitle.Height;
 
-            _situationBlurb = CreateAndAddTextItem(new NsPoint(offsetX, offsetY), "");
+            _situationBlurb = CreateAndAddTextblock(new NsPoint(offsetX, offsetY), "");
             _situationBlurb.X = offsetX + 300;
             _situationBlurb.Y = offsetY - _situationBlurb.Size.Height;
 
@@ -48,7 +48,7 @@ namespace NebulaSiege.Menus
             {
                 var situationInstance = NsReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { core, });
 
-                var menuItem = CreateAndAddMenuItem(new NsPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
+                var menuItem = CreateAndAddSelectableItem(new NsPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
 
                 menuItem.UserData = situationInstance;
 
@@ -59,7 +59,7 @@ namespace NebulaSiege.Menus
             OnSelectionChanged += SituationSelectMenu_OnSelectionChanged;
             OnExecuteSelection += SituationSelectMenu_OnExecuteSelection;
 
-            SelectableItems().First().Selected = true;
+            VisibleSelectableItems().First().Selected = true;
         }
 
         private void SituationSelectMenu_OnExecuteSelection(SpriteMenuItem item)
