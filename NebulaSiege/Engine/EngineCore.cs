@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace NebulaSiege.Engine
 {
+    /// <summary>
+    /// The core game engine. Containd the controllers and managers.
+    /// </summary>
     internal class EngineCore
     {
         public SituationTickController Situations { get; private set; }

@@ -3,8 +3,11 @@ using NebulaSiege.Engine.Types;
 using NebulaSiege.Levels.BaseClasses;
 using System.Collections.Generic;
 
-namespace NebulaSiege.Situation.BaseClasses
+namespace NebulaSiege.Situations.BaseClasses
 {
+    /// <summary>
+    /// Situations are collections of levels. Once each level is completed, the next one is loaded.
+    /// </summary>
     internal class SituationBase
     {
         protected EngineCore _core;
@@ -15,7 +18,7 @@ namespace NebulaSiege.Situation.BaseClasses
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public HgSituationState State { get; protected set; } = HgSituationState.NotStarted;
+        public HgSituationState State { get; protected set; } = HgSituationState.NotYetStarted;
 
         public List<LevelBase> Levels { get; protected set; } = new();
 
@@ -24,17 +27,7 @@ namespace NebulaSiege.Situation.BaseClasses
             _core = core;
             Name = name;
             Description = description;
-        }
-
-        public void ExecuteWorldClockTick()
-        {
-            if (CurrentLevel?.State == HgSituationState.Ended)
-            {
-                //if (AdvanceSituation() == false)
-                //{
-                //Core.Events.QueueTheDoorIsAjar();
-                //}
-            }
+            State = HgSituationState.NotYetStarted;
         }
 
         public void End()
@@ -46,6 +39,8 @@ namespace NebulaSiege.Situation.BaseClasses
                     obj.End();
                 }
             }
+
+            State = HgSituationState.Ended;
 
             CurrentLevel = null;
             _currentLevelIndex = 0;
@@ -65,51 +60,19 @@ namespace NebulaSiege.Situation.BaseClasses
                     CurrentLevel = Levels[_currentLevelIndex];
                     CurrentLevel.Begin();
                     _currentLevelIndex++;
+
+                    State = HgSituationState.Started;
+
                     return true;
                 }
                 else
                 {
+                    State = HgSituationState.Ended;
+
                     CurrentLevel = null;
                     return false;
                 }
             }
         }
-
-        /*
-        public virtual void End()
-        {
-            foreach (var obj in Events)
-            {
-                obj.ReadyForDeletion = true;
-            }
-
-            foreach (var obj in Levels)
-            {
-                obj.End();
-            }
-
-            State = HgSituationState.Ended;
-        }
-        */
-
-        /*
-        public virtual void BeginSituation()
-        {
-            State = HgSituationState.Running;
-        }
-
-        protected NsEngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, HgOnExecute executeCallback)
-        {
-            //Keep track of recurring events to we can delete them when we are done.
-            var obj = _core.Events.Create(timeout, executeCallback, null, HgCallbackEventMode.Recurring);
-            Events.Add(obj);
-            return obj;
-        }
-
-        protected NsEngineCallbackEvent AddSingleFireEvent(TimeSpan timeout, HgOnExecute executeCallback)
-        {
-            return _core.Events.Create(timeout, executeCallback);
-        }
-        */
     }
 }

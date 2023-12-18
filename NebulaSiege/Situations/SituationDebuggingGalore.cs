@@ -1,9 +1,13 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Levels;
-using NebulaSiege.Situation.BaseClasses;
+using NebulaSiege.Situations.BaseClasses;
 
 namespace NebulaSiege.Situations
 {
+    /// <summary>
+    /// Situations are collections of levels. Once each level is completed, the next one is loaded.
+    /// This situation is for debugging only.
+    /// </summary>
     internal class SituationDebuggingGalore : SituationBase
     {
         public SituationDebuggingGalore(EngineCore core)

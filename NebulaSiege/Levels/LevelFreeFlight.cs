@@ -5,6 +5,10 @@ using System.Collections.Generic;
 
 namespace NebulaSiege.Levels
 {
+    /// <summary>
+    /// Levels are contained inside Situations. Each level contains a set of waves that are progressed. 
+    /// This level is just a peaceful free flight.
+    /// </summary>
     internal class LevelFreeFlight : LevelBase
     {
         public LevelFreeFlight(EngineCore core)

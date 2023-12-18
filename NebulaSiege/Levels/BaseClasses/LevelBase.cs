@@ -6,6 +6,9 @@ using static NebulaSiege.Engine.Types.NsEngineCallbackEvent;
 
 namespace NebulaSiege.Levels.BaseClasses
 {
+    /// <summary>
+    /// Levels are contained inside Situations. Each level contains a set of waves that are progressed. 
+    /// </summary>
     internal class LevelBase
     {
         protected EngineCore _core;
@@ -16,7 +19,7 @@ namespace NebulaSiege.Levels.BaseClasses
         public string Description { get; set; }
         public int CurrentWave { get; set; } = 0;
         public int TotalWaves { get; set; } = 1;
-        public HgSituationState State { get; protected set; } = HgSituationState.NotStarted;
+        public HgLevelState State { get; protected set; } = HgLevelState.NotYetStarted;
 
         public LevelBase(EngineCore core, string name, string description)
         {
@@ -32,12 +35,12 @@ namespace NebulaSiege.Levels.BaseClasses
                 obj.ReadyForDeletion = true;
             }
 
-            State = HgSituationState.Ended;
+            State = HgLevelState.Ended;
         }
 
         public virtual void Begin()
         {
-            State = HgSituationState.Running;
+            State = HgLevelState.Started;
         }
 
         protected NsEngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, HgOnExecute executeCallback)

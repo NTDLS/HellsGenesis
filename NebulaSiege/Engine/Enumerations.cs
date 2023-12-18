@@ -1,9 +1,16 @@
 ﻿namespace NebulaSiege.Engine
 {
+    public enum HgLevelState
+    {
+        NotYetStarted,
+        Started,
+        Ended
+    }
+
     public enum HgSituationState
     {
-        NotStarted,
-        Running,
+        NotYetStarted,
+        Started,
         Ended
     }
 

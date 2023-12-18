@@ -1,7 +1,7 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus.BaseClasses;
-using NebulaSiege.Situation.BaseClasses;
+using NebulaSiege.Situations.BaseClasses;
 using NebulaSiege.Sprites;
 using NebulaSiege.Utility;
 using System.Linq;

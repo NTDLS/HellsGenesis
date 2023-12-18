@@ -7,6 +7,9 @@ using NebulaSiege.Utility;
 
 namespace NebulaSiege.Levels
 {
+    /// <summary>
+    /// Levels are contained inside Situations. Each level contains a set of waves that are progressed. 
+    /// </summary>
     internal class LevelPhoenixAmbush : LevelBase
     {
         public LevelPhoenixAmbush(EngineCore core)
