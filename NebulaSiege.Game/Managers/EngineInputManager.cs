@@ -158,19 +158,19 @@ namespace NebulaSiege.Game.Managers
                             case Key.Comma: singleChar = shiftKeyDown ? '<' : ','; break;
                             case Key.Period: singleChar = shiftKeyDown ? '>' : '.'; break;
 
-                            case Key.D0: singleChar = singleChar = shiftKeyDown ? ')' : '0'; break;
-                            case Key.D1: singleChar = singleChar = shiftKeyDown ? '!' : '1'; break;
-                            case Key.D2: singleChar = singleChar = shiftKeyDown ? '@' : '2'; break;
-                            case Key.D3: singleChar = singleChar = shiftKeyDown ? '#' : '3'; break;
-                            case Key.D4: singleChar = singleChar = shiftKeyDown ? '$' : '4'; break;
-                            case Key.D5: singleChar = singleChar = shiftKeyDown ? '%' : '5'; break;
-                            case Key.D6: singleChar = singleChar = shiftKeyDown ? '^' : '6'; break;
-                            case Key.D7: singleChar = singleChar = shiftKeyDown ? '&' : '7'; break;
-                            case Key.D8: singleChar = singleChar = shiftKeyDown ? '*' : '8'; break;
-                            case Key.D9: singleChar = singleChar = shiftKeyDown ? '(' : '9'; break;
+                            case Key.D0: singleChar = shiftKeyDown ? ')' : '0'; break;
+                            case Key.D1: singleChar = shiftKeyDown ? '!' : '1'; break;
+                            case Key.D2: singleChar = shiftKeyDown ? '@' : '2'; break;
+                            case Key.D3: singleChar = shiftKeyDown ? '#' : '3'; break;
+                            case Key.D4: singleChar = shiftKeyDown ? '$' : '4'; break;
+                            case Key.D5: singleChar = shiftKeyDown ? '%' : '5'; break;
+                            case Key.D6: singleChar = shiftKeyDown ? '^' : '6'; break;
+                            case Key.D7: singleChar = shiftKeyDown ? '&' : '7'; break;
+                            case Key.D8: singleChar = shiftKeyDown ? '*' : '8'; break;
+                            case Key.D9: singleChar = shiftKeyDown ? '(' : '9'; break;
 
                             case Key.A: singleChar = 'A'; break;
-                            case Key.B: singleChar = 'C'; break;
+                            case Key.B: singleChar = 'B'; break;
                             case Key.C: singleChar = 'C'; break;
                             case Key.D: singleChar = 'D'; break;
                             case Key.E: singleChar = 'E'; break;

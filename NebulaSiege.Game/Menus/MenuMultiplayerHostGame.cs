@@ -3,6 +3,7 @@ using NebulaSiege.Game.Engine;
 using NebulaSiege.Game.Engine.Types.Geometry;
 using NebulaSiege.Game.Menus.BaseClasses;
 using NebulaSiege.Game.Sprites.MenuItems;
+using System.Windows.Forms;
 
 namespace NebulaSiege.Game.Menus
 {
@@ -11,6 +12,9 @@ namespace NebulaSiege.Game.Menus
     /// </summary>
     internal class MenuMultiplayerHostGame : MenuBase
     {
+        SpriteMenuSelectableTextInput textBoxName;
+        SpriteMenuSelectableTextInput textBoxMaxPlayers;
+
         public MenuMultiplayerHostGame(EngineCore core)
             : base(core)
         {
@@ -28,10 +32,14 @@ namespace NebulaSiege.Game.Menus
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = CreateAndAddSelectableTextInput(new NsPoint(offsetX, offsetY), "Name", "My Game Name");
-            helpItem.Selected = true;
-            helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += helpItem.Size.Height + 5;
+            textBoxName = CreateAndAddSelectableTextInput(new NsPoint(offsetX, offsetY), "Name", "My Game Name");
+            textBoxName.Selected = true;
+            textBoxName.X -= textBoxName.Size.Width / 2;
+            offsetY += textBoxName.Size.Height + 5;
+
+            textBoxMaxPlayers = CreateAndAddSelectableTextInput(new NsPoint(offsetX, offsetY), "MaxPlayers", "100");
+            textBoxMaxPlayers.X -= textBoxMaxPlayers.Size.Width / 2;
+            offsetY += textBoxMaxPlayers.Size.Height + 5;
 
             helpItem = CreateAndAddSelectableItem(new NsPoint(offsetX, offsetY), "Start", " Start ");
             helpItem.X -= helpItem.Size.Width / 2;
@@ -42,9 +50,14 @@ namespace NebulaSiege.Game.Menus
 
         private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
-            var nameTextBox = MenuItemByKey<SpriteMenuSelectableTextInput>("Name");
+            //var nameTextBox = MenuItemByKey<SpriteMenuSelectableTextInput>("Name");
 
-            var configuration = new NsGameHost(nameTextBox.Text, 100);
+            if (!int.TryParse(textBoxMaxPlayers.Text, out int maxPlayers))
+            {
+                //return false;
+            }
+
+            var configuration = new NsGameHost(textBoxName.Text, maxPlayers);
             _core.ServerClient.GameHost.Create(configuration);
 
             //SpriteMenuSelectableTextInput
