@@ -4,5 +4,14 @@
     {
         public Guid SessionId { get; set; }
         public DateTime ServerTimeUTC { get; set; }
+
+        public NsActionResponsePing()
+        {
+        }
+
+        public NsActionResponsePing(Exception ex)
+            : base(ex)
+        {
+        }
     }
 }

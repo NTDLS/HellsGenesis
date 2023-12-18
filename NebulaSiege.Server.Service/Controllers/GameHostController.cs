@@ -11,7 +11,7 @@ namespace NebulaSiege.Server.Service.Controllers
     public class GameHostController
     {
         [HttpPost]
-        [Route("{sessionId}/ExecuteProcedure")]
+        [Route("{sessionId}/Create")]
         public NsActionResponse Create(Guid sessionId, [FromBody] string value)
         {
             try
@@ -26,6 +26,27 @@ namespace NebulaSiege.Server.Service.Controllers
             catch (Exception ex)
             {
                 return new NsActionResponseException(ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("{sessionId}/GetList")]
+        public NsActionResponseHostList GetList(Guid sessionId, [FromBody] string value)
+        {
+            try
+            {
+                var session = Program.Core.Sessions.Upsert(sessionId);
+                var gameHostFilter = JsonConvert.DeserializeObject<NsGameHostFilter>(value);
+                NsUtility.EnsureNotNull(gameHostFilter);
+
+                return new NsActionResponseHostList()
+                {
+                    Collection = Program.Core.GameHost.GetList(sessionId, gameHostFilter)
+                };
+            }
+            catch (Exception ex)
+            {
+                return new NsActionResponseHostList(ex);
             }
         }
     }

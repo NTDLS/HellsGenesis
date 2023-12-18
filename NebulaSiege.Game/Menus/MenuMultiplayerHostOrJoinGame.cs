@@ -19,7 +19,7 @@ namespace NebulaSiege.Game.Menus
             double offsetX = _core.Display.TotalCanvasSize.Width / 2;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new NsPoint(offsetX, offsetY), "Nebula Siege");
+            var itemTitle = CreateAndAddTitleItem(new NsPoint(offsetX, offsetY), "Multiplayer");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
@@ -47,8 +47,7 @@ namespace NebulaSiege.Game.Menus
         {
             if (item.Key == "JOIN")
             {
-                //throw new NotImplementedException();
-                //_core.Menus.Insert(new SituationSelectMenu(_core));
+                _core.Menus.Insert(new MenuMultiplayerJoinGame(_core));
             }
             else if (item.Key == "HOST")
             {

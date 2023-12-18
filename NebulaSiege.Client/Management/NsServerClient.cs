@@ -20,12 +20,9 @@ namespace NebulaSiege.Client.Management
             using var response = _client.Connection.GetAsync(url);
             string resultText = response.Result.Content.ReadAsStringAsync().Result;
             var result = JsonConvert.DeserializeObject<NsActionResponsePing>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new NsAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
 
-            return result;
+            return JsonConvert.DeserializeObject<NsActionResponsePing>(resultText)
+                ?? new NsActionResponsePing(new Exception("Invalid response."));
         }
 
         public NsActionResponse CloseSession()
@@ -34,13 +31,9 @@ namespace NebulaSiege.Client.Management
 
             using var response = _client.Connection.GetAsync(url);
             string resultText = response.Result.Content.ReadAsStringAsync().Result;
-            var result = JsonConvert.DeserializeObject<NsActionResponse>(resultText);
-            if (result == null || result.Success == false)
-            {
-                throw new NsAPIResponseException(result == null ? "Invalid response" : result.ExceptionText);
-            }
 
-            return result;
+            return JsonConvert.DeserializeObject<NsActionResponse>(resultText)
+                ?? new NsActionResponseException("Invalid response.");
         }
 
     }

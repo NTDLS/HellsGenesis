@@ -11,11 +11,13 @@ namespace NebulaSiege.Server.Items
         /// </summary>
         public Guid OwnerSessionId { get; set; }
 
+        public Guid UID { get; set; }
         public string Name { get; set; }
         public int MaxPlayers { get; set; }
 
         public GameHost(Guid ownerSessionId, NsGameHost configuration)
         {
+            UID = Guid.NewGuid();
             OwnerSessionId = ownerSessionId;
             Name = configuration.Name;
             MaxPlayers = configuration.MaxPlayers;

@@ -1,4 +1,5 @@
-﻿using NebulaSiege.Game.Controller;
+﻿using NebulaSiege.Client;
+using NebulaSiege.Game.Controller;
 using NebulaSiege.Game.Engine.GraphicsProcessing;
 using NebulaSiege.Game.Engine.Types;
 using NebulaSiege.Game.Managers;
@@ -14,6 +15,20 @@ namespace NebulaSiege.Game.Engine
     /// </summary>
     internal class EngineCore
     {
+        public NsClient _serverClient = null;
+        public NsClient ServerClient
+        {
+            get
+            {
+                if (_serverClient == null)
+                {
+                    _serverClient = new NsClient(Constants.ServerAddress);
+                }
+
+                return _serverClient;
+            }
+        }
+
         public SituationTickController Situations { get; private set; }
         public EventTickController Events { get; private set; }
         public PlayerSpriteTickController Player { get; private set; }

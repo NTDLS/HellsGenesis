@@ -26,5 +26,26 @@ namespace NebulaSiege.Server.Engine
                 return gameHost;
             });
         }
+
+        public List<NsGameHost> GetList(Guid ownerSessionId, NsGameHostFilter gameHostFilter)
+        {
+            return _hosts.Use(o =>
+            {
+                //TODO: What kind of filters should be add??
+
+                var collection = new List<NsGameHost>();
+
+                foreach (var item in o)
+                {
+                    collection.Add(new NsGameHost()
+                    {
+                        UID = item.UID,
+                        Name = item.Name,
+                        MaxPlayers = item.MaxPlayers,
+                    });
+                }
+                return collection;
+            });
+        }
     }
 }

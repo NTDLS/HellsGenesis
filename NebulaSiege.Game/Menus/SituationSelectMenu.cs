@@ -23,7 +23,7 @@ namespace NebulaSiege.Game.Menus
             double offsetX = currentScaledScreenBounds.X + 40;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new NsPoint(offsetX, offsetY), "Select a Situation");
+            var itemTitle = CreateAndAddTitleItem(new NsPoint(offsetX, offsetY), "Whats the Situation?");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 

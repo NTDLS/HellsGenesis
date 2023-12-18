@@ -1,4 +1,5 @@
 ﻿using NebulaSiege.Client.Management;
+using NebulaSiege.Client.Payloads;
 using NebulaSiege.Shared;
 using NebulaSiege.Shared.Exceptions;
 using System.Diagnostics;
@@ -22,6 +23,7 @@ namespace NebulaSiege.Client
 
         public Guid SessionId { get; private set; }
         public NsServerClient Server { get; private set; }
+        public NsGameHostClient GameHost { get; private set; }
 
         private object _pingLock = new();
         private HttpClient? _connection = null;
@@ -35,8 +37,8 @@ namespace NebulaSiege.Client
         {
             BaseAddress = baseAddress;
 
-
             Server = new NsServerClient(this);
+            GameHost = new NsGameHostClient(this);
 
             Connect();
         }
@@ -51,6 +53,7 @@ namespace NebulaSiege.Client
             Timeout = timeout;
 
             Server = new NsServerClient(this);
+            GameHost = new NsGameHostClient(this);
 
             Connect();
         }

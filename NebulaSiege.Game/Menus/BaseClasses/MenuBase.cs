@@ -22,6 +22,11 @@ namespace NebulaSiege.Game.Menus.BaseClasses
         public bool QueuedForDeletion { get; private set; }
         public Guid UID { get; private set; } = Guid.NewGuid();
 
+        public T MenuItemByKey<T>(string key) where T : SpriteMenuItem
+        {
+            return Items.Where(o => o.Key == key).First() as T;
+        }
+
         public List<SpriteMenuItem> VisibleSelectableItems() =>
             Items.Where(o => o.Visable == true
             && (o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput)).ToList();
@@ -107,7 +112,7 @@ namespace NebulaSiege.Game.Menus.BaseClasses
             return item;
         }
 
-        public SpriteMenuItem CreateAndAddSelectableTextInput(NsPoint location, string key, string text = "")
+        public SpriteMenuSelectableTextInput CreateAndAddSelectableTextInput(NsPoint location, string key, string text = "")
         {
             var item = new SpriteMenuSelectableTextInput(_core, this, _core.Rendering.TextFormats.MenuItem, _core.Rendering.Materials.Brushes.OrangeRed, location)
             {
@@ -197,13 +202,18 @@ namespace NebulaSiege.Game.Menus.BaseClasses
                 Task.Run(() => OnEscape?.Invoke());
             }
 
-            if (_core.Input.IsKeyPressed(HgPlayerKey.Right) || _core.Input.IsKeyPressed(HgPlayerKey.Down) || _core.Input.IsKeyPressed(HgPlayerKey.Reverse) || _core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
+            if (_core.Input.IsKeyPressed(HgPlayerKey.Right)
+                || _core.Input.IsKeyPressed(HgPlayerKey.Down)
+                || _core.Input.IsKeyPressed(HgPlayerKey.Reverse)
+                || _core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
             {
                 _lastInputHandled = DateTime.UtcNow;
 
                 int selectIndex = 0;
 
-                var items = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem select o).ToList();
+                var items = (from o in Items
+                             where o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput
+                             select o).ToList();
                 if (items != null && items.Count > 0)
                 {
                     int previouslySelectedIndex = -1;
@@ -211,7 +221,7 @@ namespace NebulaSiege.Game.Menus.BaseClasses
                     for (int i = 0; i < items.Count; i++)
                     {
                         var item = items[i];
-                        if (item.ItemType == HgMenuItemType.SelectableItem)
+                        if (item.ItemType == HgMenuItemType.SelectableItem || item.ItemType == HgMenuItemType.SelectableTextInput)
                         {
                             if (item.Selected)
                             {
@@ -231,7 +241,9 @@ namespace NebulaSiege.Game.Menus.BaseClasses
 
                     if (selectIndex != previouslySelectedIndex)
                     {
-                        var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem && o.Selected == true select o).FirstOrDefault();
+                        var selectedItem = (from o in Items
+                                            where (o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput) && o.Selected == true
+                                            select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
                             _core.Audio.Click.Play();
@@ -255,7 +267,9 @@ namespace NebulaSiege.Game.Menus.BaseClasses
 
                 int selectIndex = 0;
 
-                var items = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem select o).ToList();
+                var items = (from o in Items
+                             where o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput
+                             select o).ToList();
                 if (items != null && items.Count > 0)
                 {
                     int previouslySelectedIndex = -1;
@@ -263,7 +277,7 @@ namespace NebulaSiege.Game.Menus.BaseClasses
                     for (int i = 0; i < items.Count; i++)
                     {
                         var item = items[i];
-                        if (item.ItemType == HgMenuItemType.SelectableItem)
+                        if (item.ItemType == HgMenuItemType.SelectableItem || item.ItemType == HgMenuItemType.SelectableTextInput)
                         {
                             if (item.Selected)
                             {
@@ -283,7 +297,9 @@ namespace NebulaSiege.Game.Menus.BaseClasses
 
                     if (selectIndex != previouslySelectedIndex)
                     {
-                        var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem && o.Selected == true select o).FirstOrDefault();
+                        var selectedItem = (from o in Items
+                                            where (o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput) && o.Selected == true
+                                            select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
                             _core.Audio.Click.Play();
