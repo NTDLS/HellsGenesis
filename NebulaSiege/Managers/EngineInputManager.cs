@@ -16,26 +16,25 @@ namespace NebulaSiege.Managers
         private readonly EngineCore _core;
         private readonly Dictionary<HgPlayerKey, bool> _playerKeyStates = new();
         private bool _collectDetailedKeyInformation = false;
+        private readonly Dictionary<Key, bool> _allKeyStates = new();
+
+        public DirectInput DirectInput { get; private set; }
+        public Keyboard Keyboard { get; private set; }
 
         /// <summary>
         /// Any string that was typed by the user. Must enable via a call to CollectDetailedKeyInformation().
         /// </summary>
         public string TypedString { get; private set; }
 
-        public DirectInput DirectInput { get; private set; }
-        public Keyboard Keyboard { get; private set; }
-
-        private readonly Dictionary<Key, bool> _allKeyStates = new();
-
         /// <summary>
-        /// Contains a list of keys that have been pressed and then released.
+        /// Contains a list of keys that have been pressed and then released (cycled).
         /// Must enable via a call to CollectDetailedKeyInformation().
         /// </summary>
         public List<Key> CycledKeys { get; private set; } = new();
 
         /// <summary>
-        /// Contains a list of all keys that are currently down.
-        ///  Must enable via a call to CollectDetailedKeyInformation().
+        /// Contains a list of all keys that are currently pressed down.
+        /// Must enable via a call to CollectDetailedKeyInformation().
         /// </summary>
         public List<Key> DepressedKeys { get; private set; } = new();
 
