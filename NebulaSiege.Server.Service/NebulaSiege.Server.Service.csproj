@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Company>NetworkDLS</Company>
+    <Copyright>Copyright © 2023 NetworkDLS</Copyright>
+    <Version>0.6.0.0</Version>
+    <Authors>NetworkDLS</Authors>
+    <ApplicationIcon>NebulaSiege.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="C:\Users\ntdls\.nuget\packages\NebulaSiegee.client\1.1.1\contentFiles\any\net8.0\NebulaSiegee.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="NebulaSiege.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NebulaSiege.Client\NebulaSiege.Client.csproj" />
+    <ProjectReference Include="..\NebulaSiege.Server\NebulaSiege.Server.csproj" />
+    <ProjectReference Include="..\NebulaSiege.Shared\NebulaSiege.Shared.csproj" />
+  </ItemGroup>
+
+</Project>

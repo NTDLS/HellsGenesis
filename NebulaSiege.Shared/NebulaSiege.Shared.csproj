@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Company>NetworkDLS</Company>
+    <Copyright>Copyright © 2023 NetworkDLS</Copyright>
+    <AssemblyVersion>1.1.1</AssemblyVersion>
+    <FileVersion>1.1.1</FileVersion>
+    <VersionPrefix>1.1.1</VersionPrefix>
+    <Authors>NetworkDLS</Authors>
+    <ApplicationIcon>NebulaSiege.ico</ApplicationIcon>
+    <Title>NebulaSiege.Client</Title>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="NebulaSiege.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+</Project>
