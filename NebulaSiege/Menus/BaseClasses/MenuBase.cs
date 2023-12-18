@@ -23,21 +23,52 @@ namespace NebulaSiege.Menus.BaseClasses
 
         public List<SpriteMenuItem> SelectableItems() => Items.Where(o => o.ItemType == HgMenuItemType.Item).ToList();
 
-        public void QueueForDelete()
-        {
-            ReadyForDeletion = true;
-        }
+        #region Events.
+
+        public delegate void SelectionChangedEvent(SpriteMenuItem item);
+        /// <summary>
+        /// The player moved the selection cursor.
+        /// </summary>
+        /// <param name="item"></param>
+        public event SelectionChangedEvent OnSelectionChanged;
+
+        public void InvokeSelectionChanged(SpriteMenuItem item) => OnSelectionChanged?.Invoke(item);
+
+        public delegate void ExecuteSelectionEvent(SpriteMenuItem item);
+        /// <summary>
+        /// The player hit enter to select the currently highlighted menu item.
+        /// </summary>
+        /// <param name="item"></param>
+        public event ExecuteSelectionEvent OnExecuteSelection;
+
+
+        internal delegate void ExecuteEscapeEvent();
+        /// <summary>
+        /// The player has hit the escape key.
+        /// </summary>
+        /// <param name="item"></param>
+        public event ExecuteEscapeEvent OnExecuteEscape;
+
+        internal delegate void CleanupEvent();
+        /// <summary>
+        /// Called when the menu is being destroyed. This is a good place to cleanup.
+        /// </summary>
+        /// <param name="item"></param>
+        public event CleanupEvent OnCleanup;
+
+        public void InvokeCleanup() => OnCleanup?.Invoke();
+
+        #endregion
 
         public MenuBase(EngineCore core)
         {
             _core = core;
         }
 
-        public virtual void Cleanup() { }
-
-        public virtual void ExecuteSelection(SpriteMenuItem item) { }
-
-        public virtual void SelectionChanged(SpriteMenuItem item) { }
+        public void QueueForDelete()
+        {
+            ReadyForDeletion = true;
+        }
 
         public SpriteMenuItem CreateAndAddTitleItem(NsPoint location, string text)
         {
@@ -109,8 +140,23 @@ namespace NebulaSiege.Menus.BaseClasses
                     //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                     //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                     //  
-                    Task.Run(() => ExecuteSelection(selectedItem));
+                    Task.Run(() => OnExecuteSelection?.Invoke(selectedItem));
                 }
+            }
+            else if (_core.Input.IsKeyPressed(HgPlayerKey.Escape))
+            {
+                _core.Audio.Click.Play();
+
+                _lastInputHandled = DateTime.UtcNow;
+
+                QueueForDelete();
+
+                //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
+                //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
+                //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
+                //  
+                Task.Run(() => OnExecuteEscape?.Invoke());
+
             }
 
             if (_core.Input.IsKeyPressed(HgPlayerKey.Right) || _core.Input.IsKeyPressed(HgPlayerKey.Down) || _core.Input.IsKeyPressed(HgPlayerKey.Reverse) || _core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
@@ -156,7 +202,7 @@ namespace NebulaSiege.Menus.BaseClasses
                             //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                             //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                             //  
-                            Task.Run(() => SelectionChanged(selectedItem));
+                            Task.Run(() => OnSelectionChanged?.Invoke(selectedItem));
                         }
                     }
                 }
@@ -205,7 +251,7 @@ namespace NebulaSiege.Menus.BaseClasses
                             //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                             //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                             //  
-                            Task.Run(() => SelectionChanged(selectedItem));
+                            Task.Run(() => OnSelectionChanged?.Invoke(selectedItem));
                         }
                     }
                 }

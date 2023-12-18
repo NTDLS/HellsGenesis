@@ -75,17 +75,33 @@ namespace NebulaSiege.Menus
                 offsetY += 50;
             }
 
+            OnSelectionChanged += PlayerLoadoutMenu_OnSelectionChanged;
+            OnExecuteSelection += PlayerLoadoutMenu_OnExecuteSelection;
+            OnCleanup += PlayerLoadoutMenu_OnCleanup;
+
             SelectableItems().First().Selected = true;
 
             _animationTimer = new Timer(PlayerLoadoutMenu_Tick, null, 10, 10);
         }
 
-        private void PlayerLoadoutMenu_Tick(object sender)
+        private void PlayerLoadoutMenu_OnCleanup()
         {
-            _selectedSprite?.Rotate(1);
+            _core.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
         }
 
-        public override void SelectionChanged(SpriteMenuItem item)
+        private void PlayerLoadoutMenu_OnExecuteSelection(SpriteMenuItem item)
+        {
+            _animationTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            _animationTimer.Dispose();
+
+            if (item.UserData is SpritePlayerBase selectedSprite)
+            {
+                _core.Player.Sprite.ResetLoadout(selectedSprite.Loadout);
+                _core.StartGame();
+            }
+        }
+
+        private void PlayerLoadoutMenu_OnSelectionChanged(SpriteMenuItem item)
         {
             if (item.UserData is SpritePlayerBase selectedSprite)
             {
@@ -94,17 +110,9 @@ namespace NebulaSiege.Menus
             }
         }
 
-        public override void ExecuteSelection(SpriteMenuItem item)
+        private void PlayerLoadoutMenu_Tick(object sender)
         {
-            _animationTimer.Change(Timeout.Infinite, Timeout.Infinite);
-            _animationTimer.Dispose();
-
-            if (item.UserData is SpritePlayerBase selectedSprite)
-            {
-                _core.Player.Sprite.ResetLoadout(selectedSprite.Loadout);
-                _core.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
-                _core.StartGame();
-            }
+            _selectedSprite?.Rotate(1);
         }
     }
 }

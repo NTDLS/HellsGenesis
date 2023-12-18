@@ -7,7 +7,7 @@ using NebulaSiege.Sprites;
 namespace NebulaSiege.Menus
 {
     /// <summary>
-    /// The menu that is shows when the game is first started.
+    /// The menu that is shows when the game is first started, allows to to select single or multiplayer.
     /// </summary>
     internal class MenuStartNewGame : MenuBase
     {
@@ -24,10 +24,16 @@ namespace NebulaSiege.Menus
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
-            var helpItem = CreateAndAddMenuItem(new NsPoint(offsetX, offsetY), "ENTER", " Press -ENTER- to start ");
+            var helpItem = CreateAndAddMenuItem(new NsPoint(offsetX, offsetY), "SINGLE_PLAYER", " Single Player ");
             helpItem.Selected = true;
             helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += itemTitle.Size.Height + 5;
+            offsetY += helpItem.Size.Height + 5;
+
+            helpItem = CreateAndAddMenuItem(new NsPoint(offsetX, offsetY), "MULTI_PLAYER", " Multiplayer ");
+            helpItem.X -= helpItem.Size.Width / 2;
+            offsetY += helpItem.Size.Height + 5;
+
+            offsetY += 50;
 
             helpItem = CreateAndAddTextItem(new NsPoint(offsetX, offsetY), "Move with <W>, <A>, <S>.");
             helpItem.X -= helpItem.Size.Width / 2;
@@ -54,12 +60,20 @@ namespace NebulaSiege.Menus
             offsetY += helpItem.Size.Height + 10;
 
             //itemYes.Selected = true;
+
+            OnExecuteSelection += MenuStartNewGame_OnExecuteSelection;
         }
 
-        public override void ExecuteSelection(SpriteMenuItem item)
+        private void MenuStartNewGame_OnExecuteSelection(SpriteMenuItem item)
         {
-            _core.ResetGame();
-            _core.Menus.Insert(new SituationSelectMenu(_core));
+            if (item.Key == "SINGLE_PLAYER")
+            {
+                _core.Menus.Insert(new SituationSelectMenu(_core));
+            }
+            else if (item.Key == "MULTI_PLAYER")
+            {
+                _core.Menus.Insert(new MenuMultiplayerHostOrJoin(_core));
+            }
         }
     }
 }

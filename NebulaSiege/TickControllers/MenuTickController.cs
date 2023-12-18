@@ -59,7 +59,7 @@ namespace NebulaSiege.Controller
         {
             lock (Collection)
             {
-                menu.Cleanup();
+                menu.InvokeCleanup();
                 Collection.Remove(menu);
             }
         }

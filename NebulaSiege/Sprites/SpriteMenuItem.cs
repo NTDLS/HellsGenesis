@@ -28,7 +28,7 @@ namespace NebulaSiege.Sprites
             {
                 if (_selected != value)
                 {
-                    Menu.SelectionChanged(this);
+                    Menu.InvokeSelectionChanged(this);
                 }
                 _selected = value;
             }

@@ -56,23 +56,27 @@ namespace NebulaSiege.Menus
                 offsetY += 50;
             }
 
+            OnSelectionChanged += SituationSelectMenu_OnSelectionChanged;
+            OnExecuteSelection += SituationSelectMenu_OnExecuteSelection;
+
             SelectableItems().First().Selected = true;
         }
 
-        public override void SelectionChanged(SpriteMenuItem item)
+        private void SituationSelectMenu_OnExecuteSelection(SpriteMenuItem item)
+        {
+            if (item.UserData is SituationBase situation)
+            {
+                _core.ResetGame();
+                _core.Situations.Select(situation.GetType().Name);
+                _core.Menus.Insert(new PlayerLoadoutMenu(_core));
+            }
+        }
+
+        private void SituationSelectMenu_OnSelectionChanged(SpriteMenuItem item)
         {
             if (item.UserData is SituationBase situation)
             {
                 _situationBlurb.Text = situation.Description;
-            }
-        }
-
-        public override void ExecuteSelection(SpriteMenuItem item)
-        {
-            if (item.UserData is SituationBase situation)
-            {
-                _core.Situations.Select(situation.GetType().Name);
-                _core.Menus.Insert(new PlayerLoadoutMenu(_core));
             }
         }
     }
