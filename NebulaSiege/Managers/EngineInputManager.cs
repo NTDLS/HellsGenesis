@@ -17,6 +17,9 @@ namespace NebulaSiege.Managers
         private readonly Dictionary<HgPlayerKey, bool> _playerKeyStates = new();
         private bool _collectDetailedKeyInformation = false;
 
+        /// <summary>
+        /// Any string that was typed by the user. Must enable via a call to CollectDetailedKeyInformation().
+        /// </summary>
         public string TypedString { get; private set; }
 
         public DirectInput DirectInput { get; private set; }
@@ -26,13 +29,15 @@ namespace NebulaSiege.Managers
 
         /// <summary>
         /// Contains a list of keys that have been pressed and then released.
+        /// Must enable via a call to CollectDetailedKeyInformation().
         /// </summary>
         public List<Key> CycledKeys { get; private set; } = new();
 
         /// <summary>
         /// Contains a list of all keys that are currently down.
+        ///  Must enable via a call to CollectDetailedKeyInformation().
         /// </summary>
-        public List<Key> PressedKeys { get; private set; } = new();
+        public List<Key> DepressedKeys { get; private set; } = new();
 
         public EngineInputManager(EngineCore core)
         {
@@ -55,7 +60,7 @@ namespace NebulaSiege.Managers
             {
                 TypedString = string.Empty;
                 CycledKeys.Clear();
-                PressedKeys.Clear();
+                DepressedKeys.Clear();
             }
             _collectDetailedKeyInformation = state;
         }
@@ -92,12 +97,14 @@ namespace NebulaSiege.Managers
             _core.Input.KeyStateChanged(HgPlayerKey.Down, keyboardState.IsPressed(Key.Down));
             _core.Input.KeyStateChanged(HgPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
 
+            //I beleive that this information may be taxing to gather.
+            //Regardless we don't typically need is to require any code that uses it to enable it.
             if (_collectDetailedKeyInformation)
             {
                 CycledKeys.Clear();
 
-                PressedKeys.Clear();
-                PressedKeys.AddRange(keyboardState.PressedKeys);
+                DepressedKeys.Clear();
+                DepressedKeys.AddRange(keyboardState.PressedKeys);
 
                 foreach (var key in Enum.GetValues(typeof(Key)))
                 {
@@ -117,7 +124,7 @@ namespace NebulaSiege.Managers
                 }
 
                 bool shouldBeCaps = Control.IsKeyLocked(Keys.CapsLock);
-                bool shiftKeyDown = _core.Input.PressedKeys.Contains(Key.LeftShift) || _core.Input.PressedKeys.Contains(Key.RightShift);
+                bool shiftKeyDown = _core.Input.DepressedKeys.Contains(Key.LeftShift) || _core.Input.DepressedKeys.Contains(Key.RightShift);
                 if (shiftKeyDown)
                 {
                     shouldBeCaps = !shouldBeCaps;

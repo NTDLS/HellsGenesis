@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace NebulaSiege.Menus.BaseClasses
 {
@@ -142,7 +141,7 @@ namespace NebulaSiege.Menus.BaseClasses
 
             if (selectedTextInput != null)
             {
-                if (_core.Input.PressedKeys.Contains(Key.Back))
+                if (_core.Input.DepressedKeys.Contains(Key.Back))
                 {
                     if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds >= 100)
                     {
