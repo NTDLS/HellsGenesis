@@ -2,6 +2,7 @@
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus.MenuItems;
 using SharpDX.DirectInput;
+using SharpDX.X3DAudio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -135,27 +136,30 @@ namespace NebulaSiege.Menus.BaseClasses
                 return;
             }
 
-            var selectedTextInput = (from o in Items where o.ItemType == HgMenuItemType.SelectableTextInput && o.Selected == true select o).FirstOrDefault();
+            var selectedTextInput = Items.OfType<SpriteMenuSelectableTextInput>().Where(o => o.Selected).FirstOrDefault();
 
             _core.Input.CollectDetailedKeyInformation(selectedTextInput != null);
 
+            //Text typing is not subject to _lastInputHandled limits because it is based on cycled keys, not depressed keys.
             if (selectedTextInput != null)
             {
+                //Since we do allow for backspace repetitions, we will enforce a _lastInputHandled limit.
                 if (_core.Input.DepressedKeys.Contains(Key.Back))
                 {
                     if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds >= 100)
                     {
                         _lastInputHandled = DateTime.UtcNow;
-
-                        if (selectedTextInput.Text.Length > 0)
-                        {
-                            selectedTextInput.Text = selectedTextInput.Text.Substring(0, selectedTextInput.Text.Length - 1);
-                        }
+                        selectedTextInput.Backspace();
+                        _core.Audio.Click.Play();
                     }
                     return;
                 }
 
-                selectedTextInput.Text += _core.Input.TypedString;
+                if (_core.Input.TypedString.Length > 0)
+                {
+                    _core.Audio.Click.Play();
+                    selectedTextInput.Append(_core.Input.TypedString);
+                }
             }
 
             if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds < 200)
