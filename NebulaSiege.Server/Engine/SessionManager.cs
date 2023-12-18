@@ -1,10 +1,13 @@
-﻿namespace NebulaSiege.Server.Engine
+﻿using NebulaSiege.Server.Items;
+using NTDLS.Semaphore;
+
+namespace NebulaSiege.Server.Engine
 {
     public class SessionManager
     {
         private readonly ServerCore _core;
 
-        readonly List<Session> _sessions = new();
+        readonly PessimisticSemaphore<List<Session>> _sessions = new();
 
         public SessionManager(ServerCore core)
         {
@@ -13,9 +16,9 @@
 
         public Session Upsert(Guid sessionId)
         {
-            lock (_sessions)
+            return _sessions.Use(o =>
             {
-                var sesson = _sessions.FirstOrDefault(s => s.SessionId == sessionId);
+                var sesson = o.FirstOrDefault(s => s.SessionId == sessionId);
                 if (sesson != null)
                 {
                     sesson.LastSeenDatetime = DateTime.UtcNow;
@@ -27,9 +30,9 @@
                     LastSeenDatetime = DateTime.UtcNow
                 };
 
-                _sessions.Add(sesson);
+                o.Add(sesson);
                 return sesson;
-            }
+            });
         }
     }
 }

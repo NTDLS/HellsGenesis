@@ -1,4 +1,4 @@
-﻿namespace NebulaSiege.Server
+﻿namespace NebulaSiege.Server.Items
 {
     public class Session
     {

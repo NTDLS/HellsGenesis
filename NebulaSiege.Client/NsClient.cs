@@ -8,7 +8,6 @@ namespace NebulaSiege.Client
     public class NsClient : IDisposable
     {
         public bool IsConnected => _connection != null;
-        public string ClientName { get; private set; }
         public string BaseAddress { get; private set; }
         public TimeSpan Timeout { get; private set; } = new TimeSpan(0, 8, 0, 0, 0);
 
@@ -29,23 +28,13 @@ namespace NebulaSiege.Client
         private Thread? _keepAliveThread = null;
 
         /// <summary>
-        /// This is the process id of the session on the server. This is populated with each call to Client.Server.Ping().
-        /// </summary>
-        public ulong ServerProcessId { get; internal set; }
-
-        /// <summary>
         /// Connects to the server using a URL.
         /// </summary>
         /// <param name="baseAddress">Base address should be in the form http://host:port/</param>
-        public NsClient(string baseAddress, string clientName = "")
+        public NsClient(string baseAddress)
         {
             BaseAddress = baseAddress;
-            ClientName = clientName;
 
-            if (string.IsNullOrWhiteSpace(ClientName))
-            {
-                ClientName = Process.GetCurrentProcess().ProcessName;
-            }
 
             Server = new NsServerClient(this);
 
@@ -56,16 +45,10 @@ namespace NebulaSiege.Client
         /// Connects to the server using a URL and a non-default timeout.
         /// </summary>
         /// <param name="baseAddress">Base address should be in the form http://host:port/</param>
-        public NsClient(string baseAddress, TimeSpan timeout, string clientName = "")
+        public NsClient(string baseAddress, TimeSpan timeout)
         {
             BaseAddress = baseAddress;
-            ClientName = clientName;
             Timeout = timeout;
-
-            if (string.IsNullOrWhiteSpace(ClientName))
-            {
-                ClientName = Process.GetCurrentProcess().ProcessName;
-            }
 
             Server = new NsServerClient(this);
 
@@ -105,7 +88,6 @@ namespace NebulaSiege.Client
                 }
 
                 _connection = null;
-                ServerProcessId = 0;
                 throw;
             }
         }
@@ -141,7 +123,6 @@ namespace NebulaSiege.Client
             finally
             {
                 _connection = null;
-                ServerProcessId = 0;
             }
         }
 

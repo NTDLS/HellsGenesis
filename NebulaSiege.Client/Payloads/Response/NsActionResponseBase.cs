@@ -1,15 +1,15 @@
-﻿namespace NebulaSiege.Client.Payloads
+﻿namespace NebulaSiege.Client.Payloads.Response
 {
-    public class NsBaseActionResponse
+    public class NsActionResponseBase
     {
         public bool Success { get; set; } = true;
         public string? ExceptionText { get; set; }
 
-        public NsBaseActionResponse()
+        public NsActionResponseBase()
         {
         }
 
-        public NsBaseActionResponse(Exception ex)
+        public NsActionResponseBase(Exception ex)
         {
             ExceptionText = ex.Message;
             Success = false;

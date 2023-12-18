@@ -1,6 +1,6 @@
 ﻿using static NebulaSiege.Shared.NsConstants;
 
-namespace NebulaSiege.Server.Logging
+namespace NebulaSiege.Server.Items
 {
     public class LogEntry
     {

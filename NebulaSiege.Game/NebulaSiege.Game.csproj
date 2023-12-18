@@ -30,6 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NebulaSiege.Client\NebulaSiege.Client.csproj" />
+    <ProjectReference Include="..\NebulaSiege.Shared\NebulaSiege.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

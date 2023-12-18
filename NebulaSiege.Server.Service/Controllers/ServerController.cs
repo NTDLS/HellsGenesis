@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NebulaSiege.Client.Payloads;
+using NebulaSiege.Client.Payloads.Response;
 
 namespace NebulaSiege.Server.Service.Controllers
 {
