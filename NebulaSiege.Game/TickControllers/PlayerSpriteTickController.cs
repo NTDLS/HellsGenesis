@@ -1,18 +1,23 @@
 ﻿using NebulaSiege.Game.Engine;
+using NebulaSiege.Game.Engine.Types;
 using NebulaSiege.Game.Engine.Types.Geometry;
 using NebulaSiege.Game.Sprites.Player.BaseClasses;
 using NebulaSiege.Game.TickControllers.BaseClasses;
 using NebulaSiege.Game.Utility.ExtensionMethods;
+using NebulaSiege.Shared.MultiplayerEvents;
 
 namespace NebulaSiege.Game.Controller
 {
     internal class PlayerSpriteTickController : PlayerTickControllerBase<SpritePlayerBase>
     {
+        private readonly EngineCore _core;
+
         public SpritePlayerBase Sprite { get; set; }
 
         public PlayerSpriteTickController(EngineCore core)
             : base(core)
         {
+            _core = core;
         }
 
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
@@ -254,6 +259,16 @@ namespace NebulaSiege.Game.Controller
             }
 
             Sprite.RenewableResources.RenewAllResources();
+
+            if (displacementVector.X > 0 && displacementVector.Y > 0)
+            {
+                _core.MultiplayerNotify(new MultiplayerEventPositionChanged()
+                {
+                    X = displacementVector.X,
+                    Y = displacementVector.Y,
+                    AngleDegrees = Sprite.Velocity.Angle.Degrees
+                });
+            }
 
             return displacementVector;
         }

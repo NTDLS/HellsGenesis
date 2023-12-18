@@ -92,14 +92,14 @@ namespace NebulaSiege.Server.Service
 
                 app.UseAuthorization();
                 app.MapControllers();
-                app.RunAsync(Configuration.BaseAddress);
+                app.RunAsync(Configuration.BaseManagementAddress);
 
                 if (app.Environment.IsDevelopment())
                 {
-                    //System.Diagnostics.Process.Start("explorer", $"{Configuration.BaseAddress}swagger/index.html");
+                    //System.Diagnostics.Process.Start("explorer", $"{Configuration.BaseManagementAddress}swagger/index.html");
                 }
 
-                Core.Log.Write($"Listening on {Configuration.BaseAddress}.");
+                Core.Log.Write($"Listening on {Configuration.BaseManagementAddress}.");
 
                 while (true)
                 {

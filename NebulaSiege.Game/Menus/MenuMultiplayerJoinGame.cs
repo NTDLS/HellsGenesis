@@ -29,7 +29,7 @@ namespace NebulaSiege.Game.Menus
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            var gameHosts = _core.ServerClient.GameHost.GetList(new NsGameHostFilter());
+            var gameHosts = _core.ManagementServiceClient.GameHost.GetList(new NsGameHostFilter());
 
             foreach (var gameHost in gameHosts.Collection)
             {
@@ -49,6 +49,8 @@ namespace NebulaSiege.Game.Menus
 
         private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
+            _core.Menus.Insert(new SituationSelectMenu(_core));
+
             /*
             if (item.Key == "JOIN")
             {

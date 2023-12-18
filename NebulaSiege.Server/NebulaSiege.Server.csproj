@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.2.3" />
     <PackageReference Include="NTDLS.Semaphore" Version="3.1.0" />
     <PackageReference Include="Topshelf" Version="4.3.0" />
   </ItemGroup>

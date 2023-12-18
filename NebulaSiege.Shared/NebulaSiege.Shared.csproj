@@ -22,5 +22,6 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.2.3" />
   </ItemGroup>
 </Project>

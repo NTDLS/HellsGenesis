@@ -4,7 +4,9 @@ using NebulaSiege.Game.Engine.GraphicsProcessing;
 using NebulaSiege.Game.Engine.Types;
 using NebulaSiege.Game.Managers;
 using NebulaSiege.Game.Menus;
+using NebulaSiege.Shared.MultiplayerEvents;
 using Newtonsoft.Json;
+using NTDLS.ReliableMessaging;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -15,17 +17,33 @@ namespace NebulaSiege.Game.Engine
     /// </summary>
     internal class EngineCore
     {
-        public NsClient _serverClient = null;
-        public NsClient ServerClient
+        public HgPlayMode PlayMode { get; private set; }
+
+        private NsClient _managementServiceClient = null;
+        public NsClient ManagementServiceClient
         {
             get
             {
-                if (_serverClient == null)
+                _managementServiceClient ??= new NsClient(Constants.ServerAddress);
+                return _managementServiceClient;
+            }
+        }
+
+        private MessageClient _messageClient;
+        public MessageClient MessageClient
+        {
+            get
+            {
+                if (_messageClient == null)
                 {
-                    _serverClient = new NsClient(Constants.ServerAddress);
+                    _messageClient = new MessageClient();
+                    _messageClient.Connect(Constants.DataAddress, Constants.DataPort);
                 }
 
-                return _serverClient;
+                _messageClient.Notify(new MultiplayerEventPositionChanged());
+
+
+                return _messageClient;
             }
         }
 
@@ -106,6 +124,14 @@ namespace NebulaSiege.Game.Engine
             return JsonConvert.DeserializeObject<EngineSettings>(engineSettingsText);
         }
 
+        public void MultiplayerNotify(MultiplayerEventBase multiplayerEvent)
+        {
+            if (PlayMode == HgPlayMode.MutiPlayer && MessageClient?.IsConnected == true)
+            {
+                MessageClient?.Notify(multiplayerEvent);
+            }
+        }
+
         public void ResetGame()
         {
             Sprites.PlayerStatsText.Visable = true;
@@ -113,8 +139,14 @@ namespace NebulaSiege.Game.Engine
             Sprites.DeleteAll();
         }
 
+        public void SetPlayMode(HgPlayMode playMode)
+        {
+            PlayMode = playMode;
+        }
+
         public void StartGame()
         {
+
             Sprites.PlayerStatsText.Visable = true;
             Sprites.DeleteAll();
             Situations.AdvanceLevel();

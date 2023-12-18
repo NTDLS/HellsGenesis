@@ -1,5 +1,11 @@
 ﻿namespace NebulaSiege.Game.Engine
 {
+    public enum HgPlayMode
+    {
+        SinglePlayer,
+        MutiPlayer
+    }
+
     public enum HgLevelState
     {
         NotYetStarted,

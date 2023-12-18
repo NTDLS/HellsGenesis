@@ -6,6 +6,7 @@ using NebulaSiege.Game.Managers;
 using NebulaSiege.Game.Utility;
 using NebulaSiege.Game.Weapons.BaseClasses;
 using NebulaSiege.Game.Weapons.Munitions;
+using NebulaSiege.Shared.MultiplayerEvents;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,6 @@ namespace NebulaSiege.Game.Sprites.Player.BaseClasses
         private readonly List<WeaponBase> _secondaryWeapons = new();
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
 
-
         public SpritePlayerBase(EngineCore core)
             : base(core)
         {
@@ -76,8 +76,31 @@ namespace NebulaSiege.Game.Sprites.Player.BaseClasses
             }
         }
 
-        public override void RotationChanged() => UpdateThrustAnimationPositions();
-        public override void PositionChanged() => UpdateThrustAnimationPositions();
+        public override void RotationChanged()
+        {
+            _core.MultiplayerNotify(new MultiplayerEventPositionChanged()
+            {
+                X = X,
+                Y = Y,
+                AngleDegrees = Velocity.Angle.Degrees
+            });
+
+            UpdateThrustAnimationPositions();
+        }
+
+        public override void PositionChanged()
+        {
+            //The player position does not change, only the background offset changes... hmmmm. :/
+            /*
+            _core.MultiplayerNotify(new MultiplayerEventPositionChanged()
+            {
+                X = X,
+                Y = Y,
+                AngleDegrees = Velocity.Angle.Degrees
+            });
+            */
+            UpdateThrustAnimationPositions();
+        }
 
         public string GetLoadoutHelpText()
         {
@@ -508,6 +531,5 @@ namespace NebulaSiege.Game.Sprites.Player.BaseClasses
         }
 
         #endregion
-
     }
 }

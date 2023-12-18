@@ -5,7 +5,12 @@
         /// <summary>
         /// The base listening URL for the web-services.
         /// </summary>
-        public string BaseAddress { get; set; } = string.Empty;
+        public string BaseManagementAddress { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The listen port for data exchange.
+        /// </summary>
+        public int DataPort { get; set; }
 
         /// <summary>
         /// Causes the server to write super-verbose information about almost every internal operation.

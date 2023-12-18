@@ -67,10 +67,12 @@ namespace NebulaSiege.Game.Menus
         {
             if (item.Key == "SINGLE_PLAYER")
             {
+                _core.SetPlayMode(HgPlayMode.SinglePlayer);
                 _core.Menus.Insert(new SituationSelectMenu(_core));
             }
             else if (item.Key == "MULTI_PLAYER")
             {
+                _core.SetPlayMode(HgPlayMode.MutiPlayer);
                 _core.Menus.Insert(new MenuMultiplayerHostOrJoin(_core));
             }
         }

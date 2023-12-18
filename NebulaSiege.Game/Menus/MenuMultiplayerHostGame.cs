@@ -58,7 +58,9 @@ namespace NebulaSiege.Game.Menus
             }
 
             var configuration = new NsGameHost(textBoxName.Text, maxPlayers);
-            _core.ServerClient.GameHost.Create(configuration);
+            _core.ManagementServiceClient.GameHost.Create(configuration);
+
+            _core.Menus.Insert(new SituationSelectMenu(_core));
 
             //SpriteMenuSelectableTextInput
 
