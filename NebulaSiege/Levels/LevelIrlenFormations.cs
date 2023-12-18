@@ -1,16 +1,17 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
 using NebulaSiege.Engine.Types.Geometry;
+using NebulaSiege.Levels.BaseClasses;
 using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Sprites.Enemies.Peons;
 using NebulaSiege.Utility;
 using System.Linq;
 
-namespace NebulaSiege.Situations
+namespace NebulaSiege.Levels
 {
-    internal class SituationIrlenFormations : SituationBase
+    internal class LevelIrlenFormations : LevelBase
     {
-        public SituationIrlenFormations(EngineCore core)
+        public LevelIrlenFormations(EngineCore core)
             : base(core,
                   "Irlen Formations",
                   "They fly in formation, which look like easy targets...."
@@ -19,9 +20,9 @@ namespace NebulaSiege.Situations
             TotalWaves = 5;
         }
 
-        public override void BeginSituation()
+        public override void Begin()
         {
-            base.BeginSituation();
+            base.Begin();
 
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 1), AdvanceWaveCallback);
@@ -63,7 +64,7 @@ namespace NebulaSiege.Situations
             {
                 if (CurrentWave == TotalWaves && waitingOnPopulation != true)
                 {
-                    EndSituation();
+                    End();
                     return;
                 }
 

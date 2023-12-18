@@ -160,7 +160,8 @@ namespace NebulaSiege.Engine
 
             if (_core.Situations.CurrentSituation != null)
             {
-                situation = $"{_core.Situations.CurrentSituation.Name} (Wave {_core.Situations.CurrentSituation.CurrentWave} of {_core.Situations.CurrentSituation.TotalWaves})";
+                //situation = $"{_core.Situations.CurrentSituation.Name} (Wave {_core.Situations.CurrentSituation.CurrentWave} of {_core.Situations.CurrentSituation.TotalWaves})";
+                situation = $"{_core.Situations.CurrentSituation.Name}";
             }
 
             double boostRebuildPercent = (_core.Player.Sprite.Velocity.AvailableBoost / _core.Settings.PlayerBoostRebuildFloor) * 100.0;

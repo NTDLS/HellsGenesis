@@ -4,9 +4,9 @@ using System;
 using System.Collections.Generic;
 using static NebulaSiege.Engine.Types.NsEngineCallbackEvent;
 
-namespace NebulaSiege.Situations
+namespace NebulaSiege.Levels.BaseClasses
 {
-    internal class SituationBase
+    internal class LevelBase
     {
         protected EngineCore _core;
         protected List<NsEngineCallbackEvent> Events = new();
@@ -18,14 +18,14 @@ namespace NebulaSiege.Situations
         public int TotalWaves { get; set; } = 1;
         public HgSituationState State { get; protected set; } = HgSituationState.NotStarted;
 
-        public SituationBase(EngineCore core, string name, string description)
+        public LevelBase(EngineCore core, string name, string description)
         {
             _core = core;
             Name = name;
             Description = description;
         }
 
-        public virtual void EndSituation()
+        public virtual void End()
         {
             foreach (var obj in Events)
             {
@@ -35,7 +35,7 @@ namespace NebulaSiege.Situations
             State = HgSituationState.Ended;
         }
 
-        public virtual void BeginSituation()
+        public virtual void Begin()
         {
             State = HgSituationState.Running;
         }

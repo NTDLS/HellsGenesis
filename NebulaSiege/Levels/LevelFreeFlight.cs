@@ -1,12 +1,13 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
+using NebulaSiege.Levels.BaseClasses;
 using System.Collections.Generic;
 
-namespace NebulaSiege.Situations
+namespace NebulaSiege.Levels
 {
-    internal class SituationFreeFlight : SituationBase
+    internal class LevelFreeFlight : LevelBase
     {
-        public SituationFreeFlight(EngineCore core)
+        public LevelFreeFlight(EngineCore core)
             : base(core,
                   "Free Flight",
                   "Theres nothing in this quadrant or the next that will threaten us.")
@@ -16,9 +17,9 @@ namespace NebulaSiege.Situations
 
         readonly List<NsEngineCallbackEvent> events = new List<NsEngineCallbackEvent>();
 
-        public override void BeginSituation()
+        public override void Begin()
         {
-            base.BeginSituation();
+            base.Begin();
 
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
         }

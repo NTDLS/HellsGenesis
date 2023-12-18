@@ -1,28 +1,26 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types;
+using NebulaSiege.Levels.BaseClasses;
 using NebulaSiege.Sprites.Enemies.BaseClasses;
 using NebulaSiege.Sprites.Enemies.Peons;
 using NebulaSiege.Utility;
-using System.Collections.Generic;
 
-namespace NebulaSiege.Situations
+namespace NebulaSiege.Levels
 {
-    internal class SituationPhoenixAmbush : SituationBase
+    internal class LevelScinzadSkirmish : LevelBase
     {
-        public SituationPhoenixAmbush(EngineCore core)
+        public LevelScinzadSkirmish(EngineCore core)
             : base(core,
-                  "Phoenix Ambush",
-                  "We're safe now - or are we? Its an AMBUSH!"
+                  "Scinzad Skirmish",
+                  "Its not a skirmish, its a space aged dog fight."
                   )
         {
             TotalWaves = 5;
         }
 
-        readonly List<NsEngineCallbackEvent> events = new List<NsEngineCallbackEvent>();
-
-        public override void BeginSituation()
+        public override void Begin()
         {
-            base.BeginSituation();
+            base.Begin();
 
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 0, 5000), AddFreshEnemiesCallback);
@@ -42,7 +40,7 @@ namespace NebulaSiege.Situations
             {
                 if (CurrentWave == TotalWaves)
                 {
-                    EndSituation();
+                    End();
                     return;
                 }
 
@@ -61,7 +59,7 @@ namespace NebulaSiege.Situations
 
         private void AddEnemyCallback(EngineCore core, NsEngineCallbackEvent sender, object refObj)
         {
-            _core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _core.Sprites.Enemies.Create<SpriteEnemyScinzad>();
         }
     }
 }

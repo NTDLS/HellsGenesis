@@ -1,120 +1,37 @@
 ﻿using NebulaSiege.Engine;
-using NebulaSiege.Situations;
+using NebulaSiege.Situation.BaseClasses;
 using NebulaSiege.TickControllers.BaseClasses;
-using System.Collections.Generic;
+using NebulaSiege.Utility;
 using System.Linq;
 
 namespace NebulaSiege.Controller
 {
     internal class SituationTickController : UnvectoredTickControllerBase<SituationBase>
     {
+        private readonly EngineCore _core;
         public SituationBase CurrentSituation { get; private set; }
-        public List<SituationBase> Situations { get; private set; } = new();
 
         public SituationTickController(EngineCore core)
             : base(core)
         {
+            _core = core;
         }
 
-        public override void ExecuteWorldClockTick()
+        public void Select(string name)
         {
-            if (CurrentSituation?.State == HgSituationState.Ended)
-            {
-                if (AdvanceSituation() == false)
-                {
-                    Core.Events.QueueTheDoorIsAjar();
-                }
-            }
+            var situationTypes = NsReflection.GetSubClassesOf<SituationBase>();
+            var situationType = situationTypes.Where(o => o.Name == name).First();
+            CurrentSituation = NsReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { _core, });
         }
 
-        public void ClearScenarios()
+        public bool AdvanceLevel()
         {
-            lock (Situations)
-            {
-                foreach (var obj in Situations)
-                {
-                    obj.EndSituation();
-                }
-            }
-
-            CurrentSituation = null;
-            Situations.Clear();
+            return CurrentSituation?.Advance() ?? false;
         }
 
-        public void Reset()
+        public void End()
         {
-            lock (Situations)
-            {
-                ClearScenarios();
-
-                Situations.Add(new SituationDebuggingGalore(Core));
-                Situations.Add(new SituationIrlenFormations(Core));
-                Situations.Add(new SituationPhoenixAmbush(Core));
-                Situations.Add(new SituationScinzadSkirmish(Core));
-                Situations.Add(new SituationFreeFlight(Core));
-            }
-        }
-
-        public bool Select(string situationName)
-        {
-            lock (Situations)
-            {
-                if (CurrentSituation != null)
-                {
-                    Situations.Remove(CurrentSituation);
-                }
-
-                var selectedSituation = Situations.Where(o => o.Name == situationName).FirstOrDefault();
-
-                if (selectedSituation != null)
-                {
-                    CurrentSituation = selectedSituation;
-                }
-                else
-                {
-                    CurrentSituation = null;
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public bool StartCurrent()
-        {
-            if (CurrentSituation != null)
-            {
-                CurrentSituation.BeginSituation();
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Returns true of the situation is advanced, returns FALSE if we have have no more situations in the queue.
-        /// </summary>
-        /// <returns></returns>
-        public bool AdvanceSituation()
-        {
-            lock (Situations)
-            {
-                if (CurrentSituation != null)
-                {
-                    Situations.Remove(CurrentSituation);
-                }
-
-                if (Situations.Count > 0)
-                {
-                    Core.Player.Hide();
-                    CurrentSituation = Situations[0];
-                    CurrentSituation.BeginSituation();
-                }
-                else
-                {
-                    CurrentSituation = null;
-                    return false;
-                }
-            }
-            return true;
+            CurrentSituation?.End();
         }
     }
 }

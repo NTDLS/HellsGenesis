@@ -1,9 +1,8 @@
 ﻿using NebulaSiege.Engine;
 using NebulaSiege.Engine.Types.Geometry;
 using NebulaSiege.Menus.BaseClasses;
-using NebulaSiege.Situations;
+using NebulaSiege.Situation.BaseClasses;
 using NebulaSiege.Sprites;
-using NebulaSiege.Sprites.Player.BaseClasses;
 using NebulaSiege.Utility;
 using System.Linq;
 
@@ -15,7 +14,6 @@ namespace NebulaSiege.Menus
     internal class SituationSelectMenu : MenuBase
     {
         private readonly SpriteMenuItem _situationBlurb;
-        private SpritePlayerBase _selectedSprite;
 
         public SituationSelectMenu(EngineCore core)
             : base(core)
@@ -46,9 +44,9 @@ namespace NebulaSiege.Menus
                 situationTypes.Insert(0, situations);
             }
 
-            foreach (var playerType in situationTypes)
+            foreach (var situationType in situationTypes)
             {
-                var situationInstance = NsReflection.CreateInstanceFromType<SituationBase>(playerType, new object[] { core, });
+                var situationInstance = NsReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { core, });
 
                 var menuItem = CreateAndAddMenuItem(new NsPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
 
@@ -73,9 +71,7 @@ namespace NebulaSiege.Menus
         {
             if (item.UserData is SituationBase situation)
             {
-                _core.Situations.Reset();
-
-                _core.Situations.Select(situation.Name);
+                _core.Situations.Select(situation.GetType().Name);
                 _core.Menus.Insert(new PlayerLoadoutMenu(_core));
             }
         }

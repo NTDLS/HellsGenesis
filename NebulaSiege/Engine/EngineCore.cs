@@ -91,15 +91,15 @@ namespace NebulaSiege.Engine
         public void ResetGame()
         {
             Sprites.PlayerStatsText.Visable = true;
+            Situations.End();
             Sprites.DeleteAll();
-            Situations.Reset();
         }
 
         public void StartGame()
         {
             Sprites.PlayerStatsText.Visable = true;
             Sprites.DeleteAll();
-            Situations.StartCurrent();
+            Situations.AdvanceLevel();
         }
 
         public static void SaveSettings(EngineSettings settings)
