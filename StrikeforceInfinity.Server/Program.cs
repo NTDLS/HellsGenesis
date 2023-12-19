@@ -1,8 +1,9 @@
+using Microsoft.Extensions.Configuration;
 using StrikeforceInfinity.Server.Engine;
 using StrikeforceInfinity.Shared;
 using Topshelf;
 
-namespace StrikeforceInfinity.Server.Service
+namespace StrikeforceInfinity.Server
 {
     public class Program
     {
@@ -25,9 +26,8 @@ namespace StrikeforceInfinity.Server.Service
                 {
                     IConfiguration config = new ConfigurationBuilder()
                                  .AddJsonFile("appsettings.json")
-                                 .AddEnvironmentVariables()
+                                 //.AddEnvironmentVariables()
                                  .Build();
-
 
                     // Get values from the config given their key and their target type.
                     _settings = config.GetRequiredSection("Settings").Get<StrikeforceInfinitySettings>();
@@ -43,8 +43,8 @@ namespace StrikeforceInfinity.Server.Service
 
         public class NsService
         {
-            private SemaphoreSlim _semaphoreToRequestStop;
-            private Thread _thread;
+            private readonly SemaphoreSlim _semaphoreToRequestStop;
+            private readonly Thread _thread;
 
             public NsService()
             {
@@ -67,46 +67,13 @@ namespace StrikeforceInfinity.Server.Service
             {
                 Core.Start();
 
-                // Add services to the container.
-                var builder = WebApplication.CreateBuilder();
-                builder.Services.AddControllers();
-                builder.Services.AddEndpointsApiExplorer();
-                builder.Services.AddSwaggerGen();
-
-                builder.Services.AddControllers(options =>
-                {
-                    options.InputFormatters.Add(new TextPlainInputFormatter());
-                });
-
-                builder.Logging.ClearProviders();
-                builder.Logging.SetMinimumLevel(LogLevel.Warning);
-
-                var app = builder.Build();
-
-                // Configure the HTTP request pipeline.
-                if (app.Environment.IsDevelopment())
-                {
-                    app.UseSwagger();
-                    app.UseSwaggerUI();
-                }
-
-                app.UseAuthorization();
-                app.MapControllers();
-                app.RunAsync(Configuration.BaseManagementAddress);
-
-                if (app.Environment.IsDevelopment())
-                {
-                    //System.Diagnostics.Process.Start("explorer", $"{Configuration.BaseManagementAddress}swagger/index.html");
-                }
-
-                Core.Log.Write($"Listening on {Configuration.BaseManagementAddress}.");
+                Core.Log.Write($"Listening on {Configuration.DataPort}.");
 
                 while (true)
                 {
                     if (_semaphoreToRequestStop.Wait(500))
                     {
                         Core.Log.Write($"Stopping...");
-                        app.StopAsync();
                         Core.Stop();
                         break;
                     }

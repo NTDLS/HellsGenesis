@@ -14,10 +14,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Server"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Shared", "StrikeforceInfinity.Shared\StrikeforceInfinity.Shared.csproj", "{DD34E270-9942-4E5A-A88E-9A467F05FB6D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{427DD75D-90A4-4E61-81EF-574DD8057AB7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{FB1627CE-6B20-434B-8123-F2A4FACECCAB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,10 +35,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{2501CC2B-281E-4C07-927E-60002C103E1C} = {427DD75D-90A4-4E61-81EF-574DD8057AB7}
-		{DD34E270-9942-4E5A-A88E-9A467F05FB6D} = {FB1627CE-6B20-434B-8123-F2A4FACECCAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99D468A4-85E5-41AA-912F-A2435A154952}
