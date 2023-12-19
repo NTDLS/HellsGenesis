@@ -3,9 +3,9 @@
 namespace StrikeforceInfinity.Shared.ServerMessages.Messages
 {
     /// <summary>
-    /// Tells the server that a player has changed position, velocity and or angle.
+    /// Tells the server where exactly a player is, which direction they are facing and how fast they are going.
     /// </summary>
-    public class SiPlayerPositionChanged : IFramePayloadNotification
+    public class SiPlayerAbsoluteState : IFramePayloadNotification
     {
         public double X { get; set; }
         public double Y { get; set; }

@@ -7,7 +7,6 @@ using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Weapons.BaseClasses;
 using StrikeforceInfinity.Game.Weapons.Munitions;
-using StrikeforceInfinity.Shared.ServerMessages.Messages;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -76,31 +75,10 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
             }
         }
 
-        public override void RotationChanged()
-        {
-            _core.MultiplayerNotify(new SiPlayerPositionChanged()
-            {
-                X = X,
-                Y = Y,
-                AngleDegrees = Velocity.Angle.Degrees
-            });
+        public override void RotationChanged() => UpdateThrustAnimationPositions();
 
-            UpdateThrustAnimationPositions();
-        }
-
-        public override void PositionChanged()
-        {
-            //The player position does not change, only the background offset changes... hmmmm. :/
-            /*
-            _core.MultiplayerNotify(new MultiplayerEventPositionChanged()
-            {
-                X = X,
-                Y = Y,
-                AngleDegrees = Velocity.Angle.Degrees
-            });
-            */
-            UpdateThrustAnimationPositions();
-        }
+        //The player position does not change, only the background offset changes... hmmmm. :/
+        public override void PositionChanged() => UpdateThrustAnimationPositions();
 
         public string GetLoadoutHelpText()
         {

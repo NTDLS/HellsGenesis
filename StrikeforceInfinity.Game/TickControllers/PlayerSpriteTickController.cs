@@ -21,6 +21,8 @@ namespace StrikeforceInfinity.Game.Controller
 
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
 
+        private readonly SiPlayerAbsoluteState _playerAbsoluteState = new();
+
         /// <summary>
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
@@ -259,14 +261,19 @@ namespace StrikeforceInfinity.Game.Controller
 
             Sprite.RenewableResources.RenewAllResources();
 
-            if (displacementVector.X > 0 && displacementVector.Y > 0)
+            if (_core.PlayMode == HgPlayMode.MutiPlayer)
             {
-                _core.MultiplayerNotify(new SiPlayerPositionChanged()
+                if (displacementVector.X != 0 && displacementVector.Y != 0
+                    && Sprite.Velocity.Angle.Degrees != _playerAbsoluteState.AngleDegrees)
                 {
-                    X = displacementVector.X,
-                    Y = displacementVector.Y,
-                    AngleDegrees = Sprite.Velocity.Angle.Degrees
-                });
+                    _playerAbsoluteState.X = _core.Display.BackgroundOffset.X;
+                    _playerAbsoluteState.Y = _core.Display.BackgroundOffset.Y;
+                    _playerAbsoluteState.AngleDegrees = Sprite.Velocity.Angle.Degrees;
+                    _playerAbsoluteState.BoostPercentage = Sprite.Velocity.BoostPercentage;
+                    _playerAbsoluteState.ThrottlePercentage = Sprite.Velocity.ThrottlePercentage;
+
+                    _core.MultiplayerNotify(_playerAbsoluteState);
+                }
             }
 
             return displacementVector;

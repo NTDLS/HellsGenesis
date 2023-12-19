@@ -70,13 +70,17 @@ namespace StrikeforceInfinity.Server.Engine
 
         private void MessageServer_OnNotificationReceived(MessageServer server, Guid connectionId, IFramePayloadNotification payload)
         {
-            if (payload is SiPlayerPositionChanged position)
+            if (payload is SiPlayerAbsoluteState position)
             {
                 Console.WriteLine($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
             }
             else if (payload is SiRegisterForGameHost register)
             {
                 Console.WriteLine($"ConnectionId: '{connectionId}' registered for GameHost: '{register.GameHostUID}'");
+            }
+            else if (payload is SiHello hello)
+            {
+                Console.WriteLine($"ConnectionId: '{connectionId}' says 'HI'!");
             }
             else
             {

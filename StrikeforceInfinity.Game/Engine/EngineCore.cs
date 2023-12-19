@@ -39,7 +39,7 @@ namespace StrikeforceInfinity.Game.Engine
                     }
                 }
 
-                _messageClient.Notify(new SiPlayerPositionChanged());
+                _messageClient.Notify(new SiPlayerAbsoluteState());
 
                 return _messageClient;
             }
