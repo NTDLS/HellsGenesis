@@ -10,7 +10,7 @@ https://www.youtube.com/watch?v=Kd-aEshWiNg
 
 **Welcome Screen**
 
-![image](https://github.com/NTDLS/StrikeforceInfinity/assets/11428567/ac877976-a9da-461e-bcdc-3ef0354ca3af)
+![image](https://github.com/NTDLS/StrikeforceInfinity/assets/11428567/c57c3611-9f39-4b21-a1ec-60910d563280)
 
 **Ship Class Selection**
 
