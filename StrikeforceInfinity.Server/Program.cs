@@ -26,15 +26,10 @@ namespace StrikeforceInfinity.Server
                 {
                     IConfiguration config = new ConfigurationBuilder()
                                  .AddJsonFile("appsettings.json")
-                                 //.AddEnvironmentVariables()
                                  .Build();
 
-                    // Get values from the config given their key and their target type.
-                    _settings = config.GetRequiredSection("Settings").Get<StrikeforceInfinitySettings>();
-                    if (_settings == null)
-                    {
-                        throw new Exception("Failed to load settings");
-                    }
+                    _settings = config.GetRequiredSection("Settings").Get<StrikeforceInfinitySettings>()
+                        ?? throw new Exception("Failed to load settings");
                 }
 
                 return _settings;

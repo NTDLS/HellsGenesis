@@ -35,4 +35,10 @@
   <ItemGroup>
     <ProjectReference Include="..\StrikeforceInfinity.Shared\StrikeforceInfinity.Shared.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
