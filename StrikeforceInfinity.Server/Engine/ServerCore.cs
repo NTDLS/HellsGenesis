@@ -1,5 +1,6 @@
 ﻿using NTDLS.ReliableMessaging;
 using NTDLS.StreamFraming.Payloads;
+using StrikeforceInfinity.Server.Engine.Managers;
 using StrikeforceInfinity.Shared;
 using StrikeforceInfinity.Shared.Payload;
 using StrikeforceInfinity.Shared.ServerMessages.Messages;
@@ -15,7 +16,7 @@ namespace StrikeforceInfinity.Server.Engine
 
         public SiSettings Settings { get; private set; }
 
-        MessageServer _messageServer = new();
+        readonly MessageServer _messageServer = new();
 
         public ServerCore(SiSettings settings)
         {
@@ -37,7 +38,7 @@ namespace StrikeforceInfinity.Server.Engine
             _messageServer.Start(Settings.DataPort);
 
             _messageServer.OnConnected += MessageServer_OnConnected;
-            _messageServer.OnDisconnected += _messageServer_OnDisconnected;
+            _messageServer.OnDisconnected += MessageServer_OnDisconnected;
             _messageServer.OnNotificationReceived += MessageServer_OnNotificationReceived;
             _messageServer.OnQueryReceived += MessageServer_OnQueryReceived;
         }
@@ -77,13 +78,34 @@ namespace StrikeforceInfinity.Server.Engine
 
         private void MessageServer_OnNotificationReceived(MessageServer server, Guid connectionId, IFramePayloadNotification payload)
         {
+            var session = Sessions.GetByConnectionId(connectionId);
+            if (session == null)
+            {
+                Log.Exception($"The session was not found '{connectionId}'.");
+                return;
+            }
+
             if (payload is SiPlayerAbsoluteState position)
             {
-                Console.WriteLine($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
+                Log.Trace($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
             }
             else if (payload is SiRegisterForGameHost register)
             {
-                Console.WriteLine($"ConnectionId: '{connectionId}' registered for GameHost: '{register.GameHostUID}'");
+                Log.Trace($"ConnectionId: '{connectionId}' registered for GameHost: '{register.GameHostUID}'");
+
+                var gameHost = GameHost.GetByGameHostUID(register.GameHostUID);
+                if (gameHost != null)
+                {
+                    gameHost.Register(connectionId);
+                    session.SetCurrentGameHost(register.GameHostUID);
+                }
+                else
+                {
+                    Log.Exception($"The game host was not found '{register.GameHostUID}'.");
+                }
+            }
+            else if (payload is SiReadyToPlay)
+            {
             }
             else
             {
@@ -94,13 +116,13 @@ namespace StrikeforceInfinity.Server.Engine
         private void MessageServer_OnConnected(MessageServer server, Guid connectionId)
         {
             Sessions.Establish(connectionId);
-            Console.WriteLine($"Accepted Connection: '{connectionId}'");
+            Log.Trace($"Accepted Connection: '{connectionId}'");
         }
 
-        private void _messageServer_OnDisconnected(MessageServer server, Guid connectionId)
+        private void MessageServer_OnDisconnected(MessageServer server, Guid connectionId)
         {
             Sessions.Remove(connectionId);
-            Console.WriteLine($"Disconnected Connection: '{connectionId}'");
+            Log.Trace($"Disconnected Connection: '{connectionId}'");
         }
 
         public void Stop()

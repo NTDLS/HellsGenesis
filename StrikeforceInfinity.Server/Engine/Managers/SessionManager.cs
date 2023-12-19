@@ -1,24 +1,33 @@
 ﻿using NTDLS.Semaphore;
 using StrikeforceInfinity.Server.Engine.Objects;
 
-namespace StrikeforceInfinity.Server.Engine
+namespace StrikeforceInfinity.Server.Engine.Managers
 {
     internal class SessionManager
     {
         private readonly ServerCore _serverCore;
 
-        readonly PessimisticSemaphore<List<Session>> _sessions = new();
+        readonly PessimisticSemaphore<Dictionary<Guid, Session>> _sessions = new();
 
         public SessionManager(ServerCore serverCore)
         {
             _serverCore = serverCore;
         }
 
+        public Session? GetByConnectionId(Guid connectionId)
+        {
+            return _sessions.Use(o =>
+            {
+                o.TryGetValue(connectionId, out var session);
+                return session;
+            });
+        }
+
         public void Remove(Guid connectionId)
         {
             _sessions.Use(o =>
             {
-                o.RemoveAll(o => o.ConnectionId == connectionId);
+                o.Remove(connectionId);
             });
         }
 
@@ -31,7 +40,7 @@ namespace StrikeforceInfinity.Server.Engine
                     LastSeenDatetime = DateTime.UtcNow
                 };
 
-                o.Add(sesson);
+                o.Add(connectionId, sesson);
 
                 return sesson;
             });

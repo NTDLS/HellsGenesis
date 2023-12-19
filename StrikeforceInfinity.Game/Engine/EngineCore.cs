@@ -164,6 +164,8 @@ namespace StrikeforceInfinity.Game.Engine
             Sprites.PlayerStatsText.Visable = true;
             Sprites.DeleteAll();
             Situations.AdvanceLevel();
+
+            MultiplayerNotify(new SiReadyToPlay());
         }
 
         public static void SaveSettings(EngineSettings settings)

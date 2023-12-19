@@ -4,7 +4,7 @@ using StrikeforceInfinity.Shared.Exceptions;
 using System.Text;
 using static StrikeforceInfinity.Shared.SiConstants;
 
-namespace StrikeforceInfinity.Server.Engine
+namespace StrikeforceInfinity.Server.Engine.Managers
 {
     /// <summary>
     /// Public core class methods for locking, reading, writing and managing tasks related to logging.
@@ -21,9 +21,12 @@ namespace StrikeforceInfinity.Server.Engine
             CycleLog();
         }
 
+        public void Exception(string message) => Write(new LogEntry(message) { Severity = SiLogSeverity.Exception });
+        public void Exception(string message, Exception ex) => Write(new LogEntry(message) { Severity = SiLogSeverity.Exception, Exception = ex });
+        public void Exception(Exception ex) => Write(new LogEntry(ex.Message) { Severity = SiLogSeverity.Exception, Exception = ex });
+
         public void Write(string message) => Write(new LogEntry(message) { Severity = SiLogSeverity.Verbose });
         public void Trace(string message) => Write(new LogEntry(message) { Severity = SiLogSeverity.Trace });
-        public void Write(string message, Exception ex) => Write(new LogEntry(message) { Exception = ex, Severity = SiLogSeverity.Exception });
         public void Write(string message, SiLogSeverity severity) => Write(new LogEntry(message) { Severity = severity });
 
         public void Start()
