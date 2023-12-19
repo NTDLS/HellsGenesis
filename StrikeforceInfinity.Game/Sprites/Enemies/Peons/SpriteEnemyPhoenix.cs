@@ -28,6 +28,13 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
             ShipClass = HgEnemyClass.Phoenix;
 
+            if (IsMultiplayDrone)
+            {
+                //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
+                //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
+                return;
+            }
+
             //Load the loadout from file or create a new one if it does not exist.
             EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
             if (loadout == null)
@@ -51,28 +58,20 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
             ResetLoadout(loadout);
 
-            if (IsMultiplayDrone == true)
-            {
-                Velocity.ThrottlePercentage = 0;
-                Velocity.BoostPercentage = 0;
-            }
-            else
-            {
-                //AddAIController(new HostileEngagement(_gameCore, this, _gameCore.Player.Sprite));
-                AddAIController(new Taunt(_gameCore, this, _gameCore.Player.Sprite));
-                //AddAIController(new Meander(_gameCore, this, _gameCore.Player.Sprite));
+            //AddAIController(new HostileEngagement(_gameCore, this, _gameCore.Player.Sprite));
+            AddAIController(new Taunt(_gameCore, this, _gameCore.Player.Sprite));
+            //AddAIController(new Meander(_gameCore, this, _gameCore.Player.Sprite));
 
-                //if (HgRandom.FlipCoin())
-                //{
-                SetCurrentAIController(AIControllers[typeof(Taunt)]);
-                //}
-                //else
-                //{
-                //    SetDefaultAIController(AIControllers[typeof(Meander)]);
-                //}
+            //if (HgRandom.FlipCoin())
+            //{
+            SetCurrentAIController(AIControllers[typeof(Taunt)]);
+            //}
+            //else
+            //{
+            //    SetDefaultAIController(AIControllers[typeof(Meander)]);
+            //}
 
-                behaviorChangeThresholdMiliseconds = HgRandom.Between(2000, 10000);
-            }
+            behaviorChangeThresholdMiliseconds = HgRandom.Between(2000, 10000);
         }
 
         #region Artificial Intelligence.
@@ -93,7 +92,6 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 //This is debug code, should not really exit here.
                 return;
             }
-
 
             double distanceToPlayer = HgMath.DistanceTo(this, _gameCore.Player.Sprite);
 

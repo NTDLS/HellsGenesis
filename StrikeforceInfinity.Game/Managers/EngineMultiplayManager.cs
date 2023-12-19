@@ -1,6 +1,7 @@
 ﻿using NTDLS.ReliableMessaging;
 using NTDLS.StreamFraming.Payloads;
 using StrikeforceInfinity.Game.Engine;
+using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Sprites.Enemies.Peons;
 using StrikeforceInfinity.Shared.Messages.Notify;
 using StrikeforceInfinity.Shared.Messages.Query;
@@ -110,6 +111,8 @@ namespace StrikeforceInfinity.Game.Managers
                     sprite.X = spriteInfo.State.X;
                     sprite.Y = spriteInfo.State.Y;
                     sprite.Velocity.Angle.Degrees = spriteInfo.State.AngleDegrees;
+                    sprite.Velocity.ThrottlePercentage = spriteInfo.State.ThrottlePercentage;
+                    sprite.Velocity.BoostPercentage = spriteInfo.State.BoostPercentage;
 
                     if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerHost)
                     {

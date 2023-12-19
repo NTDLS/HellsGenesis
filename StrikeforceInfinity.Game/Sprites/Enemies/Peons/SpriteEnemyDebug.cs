@@ -31,6 +31,13 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
             ShipClass = HgEnemyClass.Debug;
 
+            if (IsMultiplayDrone)
+            {
+                //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
+                //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
+                return;
+            }
+
             //Load the loadout from file or create a new one if it does not exist.
             EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
             if (loadout == null)
@@ -84,6 +91,11 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
+            if (IsMultiplayDrone)
+            {
+                return;
+            }
+
             double distanceToPlayer = HgMath.DistanceTo(this, _gameCore.Player.Sprite);
 
             base.ApplyIntelligence(displacementVector);
