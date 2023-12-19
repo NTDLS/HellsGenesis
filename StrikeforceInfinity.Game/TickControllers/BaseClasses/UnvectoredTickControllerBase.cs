@@ -8,13 +8,13 @@ namespace StrikeforceInfinity.Game.TickControllers.BaseClasses
     /// </summary>
     internal class UnvectoredTickControllerBase<T> : TickControllerBase<T> where T : class
     {
-        public EngineCore Core { get; private set; }
+        public EngineCore GameCore { get; private set; }
 
         public virtual void ExecuteWorldClockTick() { }
 
-        public UnvectoredTickControllerBase(EngineCore core)
+        public UnvectoredTickControllerBase(EngineCore gameCore)
         {
-            Core = core;
+            GameCore = gameCore;
         }
     }
 }

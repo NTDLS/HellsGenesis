@@ -10,8 +10,8 @@ namespace StrikeforceInfinity.Game.Controller
 {
     internal class AttachmentSpriteTickController : SpriteTickControllerBase<SpriteAttachment>
     {
-        public AttachmentSpriteTickController(EngineCore core, EngineSpriteManager manager)
-            : base(core, manager)
+        public AttachmentSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+            : base(gameCore, manager)
         {
         }
 
@@ -38,7 +38,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (SpriteManager.Collection)
             {
-                var obj = new SpriteAttachment(Core, imagePath, size)
+                var obj = new SpriteAttachment(GameCore, imagePath, size)
                 {
                     OwnerUID = ownerUID
                 };

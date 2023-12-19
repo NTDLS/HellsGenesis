@@ -11,8 +11,8 @@ namespace StrikeforceInfinity.Game.Levels
     /// </summary>
     internal class LevelFreeFlight : LevelBase
     {
-        public LevelFreeFlight(EngineCore core)
-            : base(core,
+        public LevelFreeFlight(EngineCore gameCore)
+            : base(gameCore,
                   "Free Flight",
                   "Theres nothing in this quadrant or the next that will threaten us.")
         {
@@ -28,9 +28,9 @@ namespace StrikeforceInfinity.Game.Levels
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
         }
 
-        private void FirstShowPlayerCallback(EngineCore core, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            _core.Player.ResetAndShow();
+            _gameCore.Player.ResetAndShow();
         }
     }
 }

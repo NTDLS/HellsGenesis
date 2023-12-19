@@ -15,7 +15,7 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
     /// </summary>
     internal class MenuBase
     {
-        protected EngineCore _core;
+        protected EngineCore _gameCore;
         private DateTime _lastInputHandled = DateTime.UtcNow;
 
         public List<SpriteMenuItem> Items { get; private set; } = new();
@@ -68,9 +68,9 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
 
         #endregion
 
-        public MenuBase(EngineCore core)
+        public MenuBase(EngineCore gameCore)
         {
-            _core = core;
+            _gameCore = gameCore;
         }
 
         //public void Show() => Items.ForEach(o => o.Visable = true);
@@ -80,7 +80,7 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
 
         public SpriteMenuItem CreateAndAddTitleItem(SiPoint location, string text)
         {
-            var item = new SpriteMenuItem(_core, this, _core.Rendering.TextFormats.MenuTitle, _core.Rendering.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuItem(_gameCore, this, _gameCore.Rendering.TextFormats.MenuTitle, _gameCore.Rendering.Materials.Brushes.OrangeRed, location)
             {
                 Text = text,
                 ItemType = HgMenuItemType.Title
@@ -91,7 +91,7 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
 
         public SpriteMenuItem CreateAndAddTextblock(SiPoint location, string text)
         {
-            var item = new SpriteMenuItem(_core, this, _core.Rendering.TextFormats.MenuGeneral, _core.Rendering.Materials.Brushes.LawnGreen, location)
+            var item = new SpriteMenuItem(_gameCore, this, _gameCore.Rendering.TextFormats.MenuGeneral, _gameCore.Rendering.Materials.Brushes.LawnGreen, location)
             {
                 Text = text,
                 ItemType = HgMenuItemType.Textblock
@@ -102,7 +102,7 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
 
         public SpriteMenuItem CreateAndAddSelectableItem(SiPoint location, string key, string text)
         {
-            var item = new SpriteMenuItem(_core, this, _core.Rendering.TextFormats.MenuItem, _core.Rendering.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuItem(_gameCore, this, _gameCore.Rendering.TextFormats.MenuItem, _gameCore.Rendering.Materials.Brushes.OrangeRed, location)
             {
                 Key = key,
                 Text = text,
@@ -114,7 +114,7 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
 
         public SpriteMenuSelectableTextInput CreateAndAddSelectableTextInput(SiPoint location, string key, string text = "")
         {
-            var item = new SpriteMenuSelectableTextInput(_core, this, _core.Rendering.TextFormats.MenuItem, _core.Rendering.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuSelectableTextInput(_gameCore, this, _gameCore.Rendering.TextFormats.MenuItem, _gameCore.Rendering.Materials.Brushes.OrangeRed, location)
             {
                 Key = key,
                 Text = text,
@@ -126,7 +126,7 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
 
         public void AddMenuItem(SpriteMenuItem item)
         {
-            lock (_core.Menus.Collection)
+            lock (_gameCore.Menus.Collection)
             {
                 Items.Add(item);
             }
@@ -142,27 +142,27 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
 
             var selectedTextInput = Items.OfType<SpriteMenuSelectableTextInput>().Where(o => o.Selected).FirstOrDefault();
 
-            _core.Input.CollectDetailedKeyInformation(selectedTextInput != null);
+            _gameCore.Input.CollectDetailedKeyInformation(selectedTextInput != null);
 
             //Text typing is not subject to _lastInputHandled limits because it is based on cycled keys, not depressed keys.
             if (selectedTextInput != null)
             {
                 //Since we do allow for backspace repetitions, we will enforce a _lastInputHandled limit.
-                if (_core.Input.DepressedKeys.Contains(Key.Back))
+                if (_gameCore.Input.DepressedKeys.Contains(Key.Back))
                 {
                     if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds >= 100)
                     {
                         _lastInputHandled = DateTime.UtcNow;
                         selectedTextInput.Backspace();
-                        _core.Audio.Click.Play();
+                        _gameCore.Audio.Click.Play();
                     }
                     return;
                 }
 
-                if (_core.Input.TypedString.Length > 0)
+                if (_gameCore.Input.TypedString.Length > 0)
                 {
-                    _core.Audio.Click.Play();
-                    selectedTextInput.Append(_core.Input.TypedString);
+                    _gameCore.Audio.Click.Play();
+                    selectedTextInput.Append(_gameCore.Input.TypedString);
                 }
             }
 
@@ -171,9 +171,9 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
                 return; //We have to keep the menues from going crazy.
             }
 
-            if (_core.Input.IsKeyPressed(HgPlayerKey.Enter))
+            if (_gameCore.Input.IsKeyPressed(HgPlayerKey.Enter))
             {
-                _core.Audio.Click.Play();
+                _gameCore.Audio.Click.Play();
 
                 _lastInputHandled = DateTime.UtcNow;
 
@@ -189,9 +189,9 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
                     Task.Run(() => OnExecuteSelection?.Invoke(selectedItem));
                 }
             }
-            else if (_core.Input.IsKeyPressed(HgPlayerKey.Escape))
+            else if (_gameCore.Input.IsKeyPressed(HgPlayerKey.Escape))
             {
-                _core.Audio.Click.Play();
+                _gameCore.Audio.Click.Play();
 
                 _lastInputHandled = DateTime.UtcNow;
 
@@ -202,10 +202,10 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
                 Task.Run(() => OnEscape?.Invoke());
             }
 
-            if (_core.Input.IsKeyPressed(HgPlayerKey.Right)
-                || _core.Input.IsKeyPressed(HgPlayerKey.Down)
-                //|| _core.Input.IsKeyPressed(HgPlayerKey.Reverse)
-                //|| _core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise)
+            if (_gameCore.Input.IsKeyPressed(HgPlayerKey.Right)
+                || _gameCore.Input.IsKeyPressed(HgPlayerKey.Down)
+                //|| _gameCore.Input.IsKeyPressed(HgPlayerKey.Reverse)
+                //|| _gameCore.Input.IsKeyPressed(HgPlayerKey.RotateClockwise)
                 )
             {
                 _lastInputHandled = DateTime.UtcNow;
@@ -247,7 +247,7 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
                                             select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
-                            _core.Audio.Click.Play();
+                            _gameCore.Audio.Click.Play();
 
                             //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
                             //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
@@ -259,10 +259,10 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
                 }
             }
 
-            if (_core.Input.IsKeyPressed(HgPlayerKey.Left)
-                || _core.Input.IsKeyPressed(HgPlayerKey.Up)
-                //|| _core.Input.IsKeyPressed(HgPlayerKey.Forward)
-                //|| _core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise)
+            if (_gameCore.Input.IsKeyPressed(HgPlayerKey.Left)
+                || _gameCore.Input.IsKeyPressed(HgPlayerKey.Up)
+                //|| _gameCore.Input.IsKeyPressed(HgPlayerKey.Forward)
+                //|| _gameCore.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise)
                 )
             {
                 _lastInputHandled = DateTime.UtcNow;
@@ -304,7 +304,7 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
                                             select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
-                            _core.Audio.Click.Play();
+                            _gameCore.Audio.Click.Play();
 
                             //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
                             //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
@@ -327,14 +327,14 @@ namespace StrikeforceInfinity.Game.Menus.BaseClasses
             var selectedItem = (from o in Items where o.Visable == true && o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
-                _core.Rendering.DrawRectangleAt(renderTarget,
+                _gameCore.Rendering.DrawRectangleAt(renderTarget,
                     new SharpDX.Mathematics.Interop.RawRectangleF(
                         selectedItem.BoundsI.X,
                         selectedItem.BoundsI.Y,
                         selectedItem.BoundsI.X + selectedItem.BoundsI.Width,
                         selectedItem.BoundsI.Y + selectedItem.BoundsI.Height),
                     0,
-                    _core.Rendering.Materials.Raw.Red, 2, 2);
+                    _gameCore.Rendering.Materials.Raw.Red, 2, 2);
             }
         }
     }

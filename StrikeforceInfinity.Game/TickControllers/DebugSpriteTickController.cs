@@ -8,35 +8,35 @@ namespace StrikeforceInfinity.Game.Controller
 {
     internal class DebugSpriteTickController : SpriteTickControllerBase<SpriteDebug>
     {
-        public DebugSpriteTickController(EngineCore core, EngineSpriteManager manager)
-            : base(core, manager)
+        public DebugSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+            : base(gameCore, manager)
         {
         }
 
         public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
             /*
-            if (Core.Player.Sprite != null)
+            if (GameCore.Player.Sprite != null)
             {
-                var anchor = Core.Sprites.Debugs.ByTag("Anchor");
+                var anchor = GameCore.Sprites.Debugs.ByTag("Anchor");
                 if (anchor == null)
                 {
-                    Core.Sprites.Debugs.CreateAtCenterScreen("Anchor");
-                    anchor = Core.Sprites.Debugs.ByTag("Anchor");
+                    GameCore.Sprites.Debugs.CreateAtCenterScreen("Anchor");
+                    anchor = GameCore.Sprites.Debugs.ByTag("Anchor");
                 }
 
-                var pointer = Core.Sprites.Debugs.ByTag("Pointer");
+                var pointer = GameCore.Sprites.Debugs.ByTag("Pointer");
                 if (pointer == null)
                 {
-                    Core.Sprites.Debugs.CreateAtCenterScreen("Pointer");
-                    pointer = Core.Sprites.Debugs.ByTag("Pointer");
+                    GameCore.Sprites.Debugs.CreateAtCenterScreen("Pointer");
+                    pointer = GameCore.Sprites.Debugs.ByTag("Pointer");
                 }
 
-                double requiredAngle = Core.Player.Sprite.AngleTo(anchor);
+                double requiredAngle = GameCore.Player.Sprite.AngleTo(anchor);
                 var offset = HgMath.AngleFromPointAtDistance(new HgAngle(requiredAngle), new HgPoint(200, 200));
                 pointer.Velocity.Angle.Degrees = requiredAngle;
-                pointer.Location = Core.Player.Sprite.Location + offset;
-                anchor.Velocity.Angle.Degrees = anchor.AngleTo(Core.Player.Sprite);
+                pointer.Location = GameCore.Player.Sprite.Location + offset;
+                anchor.Velocity.Angle.Degrees = anchor.AngleTo(GameCore.Player.Sprite);
             }
             */
 

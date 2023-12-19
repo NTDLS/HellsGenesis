@@ -9,7 +9,7 @@ namespace StrikeforceInfinity.Game.Engine.Types
     /// </summary>
     internal class SiEngineCallbackEvent
     {
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         private readonly object _referenceObject = null;
         private readonly TimeSpan _countdown;
         private readonly HgOnExecute _onExecute;
@@ -27,7 +27,7 @@ namespace StrikeforceInfinity.Game.Engine.Types
         /// <param name="core">Engine core</param>
         /// <param name="sender">The event that is being triggered</param>
         /// <param name="refObj">An optional object passed by the user code</param>
-        public delegate void HgOnExecute(EngineCore core, SiEngineCallbackEvent sender, object refObj);
+        public delegate void HgOnExecute(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj);
 
         public enum HgCallbackEventMode
         {
@@ -41,11 +41,11 @@ namespace StrikeforceInfinity.Game.Engine.Types
             Asynchronous
         }
 
-        public SiEngineCallbackEvent(EngineCore core, TimeSpan countdown, HgOnExecute executeCallback, object refObj,
+        public SiEngineCallbackEvent(EngineCore gameCore, TimeSpan countdown, HgOnExecute executeCallback, object refObj,
             HgCallbackEventMode callbackEventMode = HgCallbackEventMode.OneTime,
             HgCallbackEventAsync callbackEventAsync = HgCallbackEventAsync.Synchronous)
         {
-            _core = core;
+            _gameCore = gameCore;
             _referenceObject = refObj;
             _countdown = countdown;
             _onExecute = executeCallback;
@@ -55,18 +55,18 @@ namespace StrikeforceInfinity.Game.Engine.Types
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(EngineCore core, TimeSpan countdown, HgOnExecute executeCallback, object refObj)
+        public SiEngineCallbackEvent(EngineCore gameCore, TimeSpan countdown, HgOnExecute executeCallback, object refObj)
         {
-            _core = core;
+            _gameCore = gameCore;
             _countdown = countdown;
             _onExecute = executeCallback;
             _startedTime = DateTime.UtcNow;
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(EngineCore core, TimeSpan countdown, HgOnExecute executeCallback)
+        public SiEngineCallbackEvent(EngineCore gameCore, TimeSpan countdown, HgOnExecute executeCallback)
         {
-            _core = core;
+            _gameCore = gameCore;
             _countdown = countdown;
             _onExecute = executeCallback;
             _startedTime = DateTime.UtcNow;
@@ -97,12 +97,12 @@ namespace StrikeforceInfinity.Game.Engine.Types
                     {
                         new Thread(() =>
                         {
-                            _onExecute(_core, this, _referenceObject);
+                            _onExecute(_gameCore, this, _referenceObject);
                         }).Start();
                     }
                     else
                     {
-                        _onExecute(_core, this, _referenceObject);
+                        _onExecute(_gameCore, this, _referenceObject);
                     }
 
                     if (_callbackEventMode == HgCallbackEventMode.Recurring)

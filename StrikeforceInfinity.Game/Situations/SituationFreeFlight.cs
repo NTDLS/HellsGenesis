@@ -10,12 +10,12 @@ namespace StrikeforceInfinity.Game.Situations
     /// </summary>
     internal class SituationFreeFlight : SituationBase
     {
-        public SituationFreeFlight(EngineCore core)
-            : base(core,
+        public SituationFreeFlight(EngineCore gameCore)
+            : base(gameCore,
                   "Free Flight",
                   "Theres nothing in this quadrant or the next that will threaten us.")
         {
-            Levels.Add(new LevelFreeFlight(core));
+            Levels.Add(new LevelFreeFlight(gameCore));
         }
     }
 }

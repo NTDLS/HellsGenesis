@@ -21,8 +21,8 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
         public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
 
-        public MunitionBase(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
-            : base(core)
+        public MunitionBase(EngineCore gameCore, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
+            : base(gameCore)
         {
             Initialize(imagePath);
 
@@ -78,10 +78,10 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            if (X < -_core.Settings.MunitionSceneDistanceLimit
-                || X >= _core.Display.TotalCanvasSize.Width + _core.Settings.MunitionSceneDistanceLimit
-                || Y < -_core.Settings.MunitionSceneDistanceLimit
-                || Y >= _core.Display.TotalCanvasSize.Height + _core.Settings.MunitionSceneDistanceLimit)
+            if (X < -_gameCore.Settings.MunitionSceneDistanceLimit
+                || X >= _gameCore.Display.TotalCanvasSize.Width + _gameCore.Settings.MunitionSceneDistanceLimit
+                || Y < -_gameCore.Settings.MunitionSceneDistanceLimit
+                || Y >= _gameCore.Display.TotalCanvasSize.Height + _gameCore.Settings.MunitionSceneDistanceLimit)
             {
                 QueueForDelete();
                 return;

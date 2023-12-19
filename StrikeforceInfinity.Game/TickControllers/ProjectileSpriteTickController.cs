@@ -13,8 +13,8 @@ namespace StrikeforceInfinity.Game.Controller
 {
     internal class MunitionSpriteTickController : SpriteTickControllerBase<MunitionBase>
     {
-        public MunitionSpriteTickController(EngineCore core, EngineSpriteManager manager)
-            : base(core, manager)
+        public MunitionSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+            : base(gameCore, manager)
         {
         }
 
@@ -22,7 +22,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             var objectsThatCanBeHit = new List<_SpriteShipBase>
             {
-                Core.Player.Sprite
+                GameCore.Player.Sprite
             };
 
             objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyBossBase>());

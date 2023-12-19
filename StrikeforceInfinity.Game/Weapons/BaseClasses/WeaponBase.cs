@@ -15,7 +15,7 @@ namespace StrikeforceInfinity.Game.Weapons.BaseClasses
     internal class WeaponBase
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
-        protected EngineCore _core;
+        protected EngineCore _gameCore;
         protected SpriteBase _owner;
 
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
@@ -47,18 +47,18 @@ namespace StrikeforceInfinity.Game.Weapons.BaseClasses
         public double MaxLockDistance { get; set; } = 100;
         public bool ExplodesOnImpact { get; set; } = false;
 
-        public WeaponBase(EngineCore core, string name, string soundPath, float soundVolume)
+        public WeaponBase(EngineCore gameCore, string name, string soundPath, float soundVolume)
         {
-            _core = core;
-            _fireSound = _core.Assets.GetAudio(soundPath, soundVolume);
+            _gameCore = gameCore;
+            _fireSound = _gameCore.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
         }
 
-        public WeaponBase(EngineCore core, _SpriteShipBase owner, string name, string soundPath, float soundVolume)
+        public WeaponBase(EngineCore gameCore, _SpriteShipBase owner, string name, string soundPath, float soundVolume)
         {
             _owner = owner;
-            _core = core;
-            _fireSound = _core.Assets.GetAudio(soundPath, soundVolume);
+            _gameCore = gameCore;
+            _fireSound = _gameCore.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
         }
 
@@ -121,7 +121,7 @@ namespace StrikeforceInfinity.Game.Weapons.BaseClasses
                 RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
-                _core.Sprites.Munitions.Create(this);
+                _gameCore.Sprites.Munitions.Create(this);
 
                 ApplyRecoil();
 
@@ -134,7 +134,7 @@ namespace StrikeforceInfinity.Game.Weapons.BaseClasses
         public void ApplyRecoil()
         {
             _owner.Velocity.RecoilPercentage += RecoilAmount;
-            _owner.Velocity.RecoilPercentage.Box(0, _core.Settings.MaxRecoilPercentage);
+            _owner.Velocity.RecoilPercentage.Box(0, _gameCore.Settings.MaxRecoilPercentage);
         }
 
         public virtual void Hit()

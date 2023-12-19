@@ -28,8 +28,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
             _trainingDataDumpFile.Dispose();
         }
 
-        public SpriteEnemyAITracer(EngineCore core)
-            : base(core, hullHealth, bountyMultiplier)
+        public SpriteEnemyAITracer(EngineCore gameCore)
+            : base(gameCore, hullHealth, bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
@@ -94,11 +94,11 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
             _trainingDataDumpFile.WriteLine(
-                      $"{AngleTo(_core.Player.Sprite):n4},"
-                    + $"{DistanceTo(_core.Player.Sprite):n4},"
-                    + $"{_core.Player.Sprite.Velocity.ThrottlePercentage:n4},"
-                    + $"{_core.Player.Sprite.Velocity.BoostPercentage:n4},"
-                    + $"{_core.Player.Sprite.Velocity.Angle.Degrees:42},"
+                      $"{AngleTo(_gameCore.Player.Sprite):n4},"
+                    + $"{DistanceTo(_gameCore.Player.Sprite):n4},"
+                    + $"{_gameCore.Player.Sprite.Velocity.ThrottlePercentage:n4},"
+                    + $"{_gameCore.Player.Sprite.Velocity.BoostPercentage:n4},"
+                    + $"{_gameCore.Player.Sprite.Velocity.Angle.Degrees:42},"
                     + $"{Velocity.Angle.Degrees:n4},"
                     + $"{Velocity.ThrottlePercentage:n4},"
                     + $"{Velocity.BoostPercentage:n4}"
@@ -107,7 +107,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
             if (Visable)
             {
 
-                if (_core.Input.IsKeyPressed(HgPlayerKey.AltPrimaryFire))
+                if (_gameCore.Input.IsKeyPressed(HgPlayerKey.AltPrimaryFire))
                 {
                     if (HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
@@ -116,7 +116,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 }
 
                 /*
-                if (_core.Input.IsKeyPressed(HgPlayerKey.AltSecondaryFire))
+                if (_gameCore.Input.IsKeyPressed(HgPlayerKey.AltSecondaryFire))
                 {
                     if (SelectedSecondaryWeapon != null && SelectedSecondaryWeapon.Fire())
                     {
@@ -134,13 +134,13 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 */
 
                 //Make player boost "build up" and fade-in.
-                if (_core.Input.IsKeyPressed(HgPlayerKey.AltSpeedBoost) && _core.Input.IsKeyPressed(HgPlayerKey.AltForward)
+                if (_gameCore.Input.IsKeyPressed(HgPlayerKey.AltSpeedBoost) && _gameCore.Input.IsKeyPressed(HgPlayerKey.AltForward)
                     && Velocity.AvailableBoost > 0 && Velocity.BoostRebuilding == false)
                 {
                     if (Velocity.BoostPercentage < 1.0)
                     {
                         double boostToAdd = Velocity.BoostPercentage > 0
-                            ? _core.Settings.PlayerThrustRampUp * (1 - Velocity.BoostPercentage) : _core.Settings.PlayerThrustRampUp;
+                            ? _gameCore.Settings.PlayerThrustRampUp * (1 - Velocity.BoostPercentage) : _gameCore.Settings.PlayerThrustRampUp;
                         Velocity.BoostPercentage += boostToAdd;
                     }
 
@@ -155,17 +155,17 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                     //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
                     if (Velocity.BoostPercentage > 0)
                     {
-                        Velocity.BoostPercentage -= _core.Settings.PlayerThrustRampDown;
+                        Velocity.BoostPercentage -= _gameCore.Settings.PlayerThrustRampDown;
                         if (Velocity.BoostPercentage < 0.01)
                         {
                             Velocity.BoostPercentage = 0;
                         }
                     }
-                    if (_core.Input.IsKeyPressed(HgPlayerKey.AltSpeedBoost) == false && Velocity.AvailableBoost < _core.Settings.MaxPlayerBoostAmount)
+                    if (_gameCore.Input.IsKeyPressed(HgPlayerKey.AltSpeedBoost) == false && Velocity.AvailableBoost < _gameCore.Settings.MaxPlayerBoostAmount)
                     {
-                        Velocity.AvailableBoost = (Velocity.AvailableBoost + 5).Box(0, _core.Settings.MaxPlayerBoostAmount);
+                        Velocity.AvailableBoost = (Velocity.AvailableBoost + 5).Box(0, _gameCore.Settings.MaxPlayerBoostAmount);
 
-                        if (Velocity.BoostRebuilding && Velocity.AvailableBoost >= _core.Settings.PlayerBoostRebuildFloor)
+                        if (Velocity.BoostRebuilding && Velocity.AvailableBoost >= _gameCore.Settings.PlayerBoostRebuildFloor)
                         {
                             Velocity.BoostRebuilding = false;
                         }
@@ -173,7 +173,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 }
 
                 //Make player thrust "build up" and fade-in.
-                if (_core.Input.IsKeyPressed(HgPlayerKey.AltForward))
+                if (_gameCore.Input.IsKeyPressed(HgPlayerKey.AltForward))
                 {
                     if (Velocity.ThrottlePercentage < 1.0)
                     {
@@ -183,7 +183,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                         //  of throttle will take a while. We do the reverse of this to stop. Stopping fast at first and slowly-slowly slowing to a stop.
 
                         double thrustToAdd = Velocity.ThrottlePercentage > 0
-                        ? _core.Settings.PlayerThrustRampUp * (1 - Velocity.ThrottlePercentage) : _core.Settings.PlayerThrustRampUp;
+                        ? _gameCore.Settings.PlayerThrustRampUp * (1 - Velocity.ThrottlePercentage) : _gameCore.Settings.PlayerThrustRampUp;
 
                         Velocity.ThrottlePercentage += thrustToAdd;
                     }
@@ -195,7 +195,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                     {
                         //Ramp down to a stop:
                         double thrustToRemove = Velocity.ThrottlePercentage < 1
-                        ? _core.Settings.PlayerThrustRampDown * Velocity.ThrottlePercentage : _core.Settings.PlayerThrustRampDown;
+                        ? _gameCore.Settings.PlayerThrustRampDown * Velocity.ThrottlePercentage : _gameCore.Settings.PlayerThrustRampDown;
                         Velocity.ThrottlePercentage -= thrustToRemove;
 
                         if (Velocity.ThrottlePercentage < 0.01)
@@ -208,7 +208,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                     {
                         //Ramp up to a stop:
                         double thrustToRemove = Velocity.ThrottlePercentage * -1 < 1
-                        ? _core.Settings.PlayerThrustRampDown * (1 - Velocity.ThrottlePercentage * -1) : _core.Settings.PlayerThrustRampDown;
+                        ? _gameCore.Settings.PlayerThrustRampDown * (1 - Velocity.ThrottlePercentage * -1) : _gameCore.Settings.PlayerThrustRampDown;
 
                         Velocity.ThrottlePercentage += thrustToRemove;
                         if (Velocity.ThrottlePercentage > 0)
@@ -222,8 +222,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 if (BoostAnimation != null)
                 {
                     BoostAnimation.Visable =
-                        _core.Input.IsKeyPressed(HgPlayerKey.AltSpeedBoost)
-                        && _core.Input.IsKeyPressed(HgPlayerKey.AltForward)
+                        _gameCore.Input.IsKeyPressed(HgPlayerKey.AltSpeedBoost)
+                        && _gameCore.Input.IsKeyPressed(HgPlayerKey.AltForward)
                     && Velocity.AvailableBoost > 0 && Velocity.BoostRebuilding == false;
                 }
 
@@ -235,17 +235,17 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
                 if (ThrustAnimation != null)
                 {
-                    ThrustAnimation.Visable = _core.Input.IsKeyPressed(HgPlayerKey.AltForward);
+                    ThrustAnimation.Visable = _gameCore.Input.IsKeyPressed(HgPlayerKey.AltForward);
                 }
 
                 //We are going to restrict the rotation speed to a percentage of thrust.
-                var rotationSpeed = _core.Settings.MaxPlayerRotationSpeedDegrees * Velocity.ThrottlePercentage;
+                var rotationSpeed = _gameCore.Settings.MaxPlayerRotationSpeedDegrees * Velocity.ThrottlePercentage;
 
-                if (_core.Input.IsKeyPressed(HgPlayerKey.AltRotateCounterClockwise))
+                if (_gameCore.Input.IsKeyPressed(HgPlayerKey.AltRotateCounterClockwise))
                 {
                     Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0));
                 }
-                else if (_core.Input.IsKeyPressed(HgPlayerKey.AltRotateClockwise))
+                else if (_gameCore.Input.IsKeyPressed(HgPlayerKey.AltRotateClockwise))
                 {
                     Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
                 }

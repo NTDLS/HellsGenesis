@@ -44,25 +44,25 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
         private readonly List<WeaponBase> _secondaryWeapons = new();
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
 
-        public SpritePlayerBase(EngineCore core)
-            : base(core)
+        public SpritePlayerBase(EngineCore gameCore)
+            : base(gameCore)
         {
             OnHit += SpritePlayer_OnHit;
 
-            AmmoLowSound = _core.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);
-            SystemsFailingSound = _core.Assets.GetAudio(@"Sounds\Ship\Systems Failing.wav", 0.75f);
-            HullBreachedSound = _core.Assets.GetAudio(@"Sounds\Ship\Hull Breached.wav", 0.75f);
-            IntegrityLowSound = _core.Assets.GetAudio(@"Sounds\Ship\Integrity Low.wav", 0.75f);
-            ShieldFailSound = _core.Assets.GetAudio(@"Sounds\Ship\Shield Fail.wav", 0.75f);
-            ShieldDownSound = _core.Assets.GetAudio(@"Sounds\Ship\Shield Down.wav", 0.75f);
-            ShieldMaxSound = _core.Assets.GetAudio(@"Sounds\Ship\Shield Max.wav", 0.75f);
-            ShieldNominalSound = _core.Assets.GetAudio(@"Sounds\Ship\Shield Nominal.wav", 0.75f);
-            AllSystemsGoSound = _core.Assets.GetAudio(@"Sounds\Ship\All Systems Go.wav", 0.75f);
-            AmmoLowSound = _core.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);
-            AmmoEmptySound = _core.Assets.GetAudio(@"Sounds\Ship\Ammo Empty.wav", 0.75f);
-            ShipEngineRoarSound = _core.Assets.GetAudio(@"Sounds\Ship\Engine Roar.wav", 0.5f, true);
-            ShipEngineIdleSound = _core.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
-            ShipEngineBoostSound = _core.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
+            AmmoLowSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);
+            SystemsFailingSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Systems Failing.wav", 0.75f);
+            HullBreachedSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Hull Breached.wav", 0.75f);
+            IntegrityLowSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Integrity Low.wav", 0.75f);
+            ShieldFailSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Shield Fail.wav", 0.75f);
+            ShieldDownSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Shield Down.wav", 0.75f);
+            ShieldMaxSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Shield Max.wav", 0.75f);
+            ShieldNominalSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Shield Nominal.wav", 0.75f);
+            AllSystemsGoSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\All Systems Go.wav", 0.75f);
+            AmmoLowSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);
+            AmmoEmptySound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Ammo Empty.wav", 0.75f);
+            ShipEngineRoarSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Engine Roar.wav", 0.5f, true);
+            ShipEngineIdleSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
+            ShipEngineBoostSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
         }
 
         public override void VisibilityChanged()
@@ -152,13 +152,13 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
 
             IsDead = false;
 
-            X = _core.Display.TotalCanvasSize.Width / 2;
-            Y = _core.Display.TotalCanvasSize.Height / 2;
+            X = _gameCore.Display.TotalCanvasSize.Width / 2;
+            Y = _gameCore.Display.TotalCanvasSize.Height / 2;
 
             Velocity.Angle = new SiAngle(45);
 
             Velocity.ThrottlePercentage = 0;
-            Velocity.AvailableBoost = _core.Settings.MaxPlayerBoostAmount;
+            Velocity.AvailableBoost = _gameCore.Settings.MaxPlayerBoostAmount;
 
             #region Reset loadout.
 
@@ -182,7 +182,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
 
         public override void AddShieldHealth(int pointsToAdd)
         {
-            if (ShieldHealth < _core.Settings.MaxShieldPoints && ShieldHealth + pointsToAdd >= _core.Settings.MaxShieldPoints)
+            if (ShieldHealth < _gameCore.Settings.MaxShieldPoints && ShieldHealth + pointsToAdd >= _gameCore.Settings.MaxShieldPoints)
             {
                 ShieldMaxSound.Play(); //If we didnt have full shields but now we do, tell the player.
             }
@@ -202,13 +202,13 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
                         DeleteSpriteAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    ThrustAnimation = new SpriteAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
+                    ThrustAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
                     {
                         IsFixedPosition = true,
                         Visable = false
                     };
                     ThrustAnimation.Reset();
-                    _core.Sprites.Animations.InsertAt(ThrustAnimation, this);
+                    _gameCore.Sprites.Animations.InsertAt(ThrustAnimation, this);
                     ThrustAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
                 }
 
@@ -220,13 +220,13 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
                         DeleteSpriteAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    BoostAnimation = new SpriteAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
+                    BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
                     {
                         IsFixedPosition = true,
                         Visable = false
                     };
                     BoostAnimation.Reset();
-                    _core.Sprites.Animations.InsertAt(BoostAnimation, this);
+                    _gameCore.Sprites.Animations.InsertAt(BoostAnimation, this);
                     BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
                 }
             }
@@ -312,7 +312,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
             }
             else
             {
-                var weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _core, this });
+                var weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameCore, this });
                 weapon.RoundQuantity += munitionCount;
                 PrimaryWeapon = weapon;
 
@@ -331,7 +331,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
 
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _core, this });
+                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameCore, this });
                 weapon.RoundQuantity += munitionCount;
                 _secondaryWeapons.Add(weapon);
             }
@@ -358,7 +358,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
             }
             else
             {
-                PrimaryWeapon = SiReflection.CreateInstanceOf<T>(new object[] { _core, this });
+                PrimaryWeapon = SiReflection.CreateInstanceOf<T>(new object[] { _gameCore, this });
                 PrimaryWeapon.RoundQuantity += munitionCount;
             }
         }
@@ -372,7 +372,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
             var weapon = GetSecondaryWeaponOfType<T>();
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _core, this });
+                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _gameCore, this });
                 weapon.RoundQuantity += munitionCount;
                 _secondaryWeapons.Add(weapon);
             }

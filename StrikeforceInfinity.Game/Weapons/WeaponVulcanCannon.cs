@@ -12,11 +12,11 @@ namespace StrikeforceInfinity.Game.Weapons
         private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponVulcanCannon(EngineCore core, _SpriteShipBase owner)
-            : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+        public WeaponVulcanCannon(EngineCore gameCore, _SpriteShipBase owner)
+            : base(gameCore, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponVulcanCannon(EngineCore core)
-            : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
+        public WeaponVulcanCannon(EngineCore gameCore)
+            : base(gameCore, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()
         {
@@ -30,7 +30,7 @@ namespace StrikeforceInfinity.Game.Weapons
 
         public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
         {
-            return new MunitionVulcanCannon(_core, this, _owner, xyOffset);
+            return new MunitionVulcanCannon(_gameCore, this, _owner, xyOffset);
         }
     }
 }

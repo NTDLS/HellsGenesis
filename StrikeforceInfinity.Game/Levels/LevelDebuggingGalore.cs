@@ -13,8 +13,8 @@ namespace StrikeforceInfinity.Game.Levels
     /// </summary>
     internal class LevelDebuggingGalore : LevelBase
     {
-        public LevelDebuggingGalore(EngineCore core)
-            : base(core,
+        public LevelDebuggingGalore(EngineCore gameCore)
+            : base(gameCore,
                   "Debugging Galore",
                   "The level is dire, the explosions here typically\r\n"
                   + "cause the entire universe to end - as well as the program."
@@ -30,19 +30,19 @@ namespace StrikeforceInfinity.Game.Levels
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 0, 5000), AddFreshEnemiesCallback);
 
-            _core.Player.Sprite.AddHullHealth(100);
-            _core.Player.Sprite.AddShieldHealth(10);
+            _gameCore.Player.Sprite.AddHullHealth(100);
+            _gameCore.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void FirstShowPlayerCallback(EngineCore core, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            _core.Player.ResetAndShow();
-            _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddEnemyCallback);
+            _gameCore.Player.ResetAndShow();
+            _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddEnemyCallback);
         }
 
-        private void AddFreshEnemiesCallback(EngineCore core, SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0)
+            if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {
@@ -55,44 +55,44 @@ namespace StrikeforceInfinity.Game.Levels
 
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    _core.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddEnemyCallback);
+                    _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddEnemyCallback);
                 }
 
-                _core.Audio.RadarBlipsSound.Play();
+                _gameCore.Audio.RadarBlipsSound.Play();
 
                 CurrentWave++;
             }
         }
 
-        private void AddEnemyCallback(EngineCore core, SiEngineCallbackEvent sender, object refObj)
+        private void AddEnemyCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            //_core.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_core.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_core.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_core.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
 
-            _core.Sprites.Enemies.Create<SpriteEnemyAITracer>();
+            _gameCore.Sprites.Enemies.Create<SpriteEnemyAITracer>();
 
-            //_core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_core.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
 
-            //_core.Sprites.Debugs.CreateAtCenterScreen();
-            //_core.Sprites.Enemies.Create<SpriteEnemyDebug>();
-            //_core.Sprites.Enemies.Create<EnemyDebug>();
-            //_core.Sprites.Enemies.Create<EnemyDebug>();
-            //_core.Sprites.Enemies.Create<EnemyDebug>();
-            //_core.Sprites.Enemies.Create<EnemyDebug>();
-            //_core.Sprites.Enemies.Create<EnemyDebug>();
-            //_core.Sprites.Enemies.Create<EnemyPhoenix>();
-            //_core.Sprites.Enemies.Create<EnemyPhoenix>();
-            //_core.Sprites.Enemies.Create<EnemyPhoenix>();
-            //_core.Sprites.Enemies.Create<EnemyDevastator>();
-            //_core.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_core.Sprites.Enemies.Create<EnemySpectre>();
-            //_core.Sprites.Enemies.Create<EnemyDevastator>();
-            //_core.Sprites.Enemies.Create<EnemyDevastator>();
+            //_gameCore.Sprites.Debugs.CreateAtCenterScreen();
+            //_gameCore.Sprites.Enemies.Create<SpriteEnemyDebug>();
+            //_gameCore.Sprites.Enemies.Create<EnemyDebug>();
+            //_gameCore.Sprites.Enemies.Create<EnemyDebug>();
+            //_gameCore.Sprites.Enemies.Create<EnemyDebug>();
+            //_gameCore.Sprites.Enemies.Create<EnemyDebug>();
+            //_gameCore.Sprites.Enemies.Create<EnemyDebug>();
+            //_gameCore.Sprites.Enemies.Create<EnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<EnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<EnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<EnemyDevastator>();
+            //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_gameCore.Sprites.Enemies.Create<EnemySpectre>();
+            //_gameCore.Sprites.Enemies.Create<EnemyDevastator>();
+            //_gameCore.Sprites.Enemies.Create<EnemyDevastator>();
         }
     }
 }

@@ -11,12 +11,12 @@ namespace StrikeforceInfinity.Game.Menus
     /// </summary>
     internal class MenuMultiplayerHostOrJoin : MenuBase
     {
-        public MenuMultiplayerHostOrJoin(EngineCore core)
-            : base(core)
+        public MenuMultiplayerHostOrJoin(EngineCore gameCore)
+            : base(gameCore)
         {
-            var currentScaledScreenBounds = _core.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = _core.Display.TotalCanvasSize.Width / 2;
+            double offsetX = _gameCore.Display.TotalCanvasSize.Width / 2;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Multiplayer");
@@ -40,18 +40,18 @@ namespace StrikeforceInfinity.Game.Menus
         private void MenuMultiplayerHostOrJoin_OnEscape()
         {
             QueueForDelete();
-            _core.Menus.Insert(new MenuStartNewGame(_core));
+            _gameCore.Menus.Insert(new MenuStartNewGame(_gameCore));
         }
 
         private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
             if (item.Key == "JOIN")
             {
-                _core.Menus.Insert(new MenuMultiplayerJoinGame(_core));
+                _gameCore.Menus.Insert(new MenuMultiplayerJoinGame(_gameCore));
             }
             else if (item.Key == "HOST")
             {
-                _core.Menus.Insert(new MenuMultiplayerHostGame(_core));
+                _gameCore.Menus.Insert(new MenuMultiplayerHostGame(_gameCore));
             }
         }
     }

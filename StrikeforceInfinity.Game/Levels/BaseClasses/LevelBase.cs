@@ -11,7 +11,7 @@ namespace StrikeforceInfinity.Game.Levels.BaseClasses
     /// </summary>
     internal class LevelBase
     {
-        protected EngineCore _core;
+        protected EngineCore _gameCore;
         protected List<SiEngineCallbackEvent> Events = new();
 
         public Guid UID { get; private set; } = Guid.NewGuid();
@@ -21,9 +21,9 @@ namespace StrikeforceInfinity.Game.Levels.BaseClasses
         public int TotalWaves { get; set; } = 1;
         public HgLevelState State { get; protected set; } = HgLevelState.NotYetStarted;
 
-        public LevelBase(EngineCore core, string name, string description)
+        public LevelBase(EngineCore gameCore, string name, string description)
         {
-            _core = core;
+            _gameCore = gameCore;
             Name = name;
             Description = description;
         }
@@ -46,14 +46,14 @@ namespace StrikeforceInfinity.Game.Levels.BaseClasses
         protected SiEngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, HgOnExecute executeCallback)
         {
             //Keep track of recurring events to we can delete them when we are done.
-            var obj = _core.Events.Create(timeout, executeCallback, null, HgCallbackEventMode.Recurring);
+            var obj = _gameCore.Events.Create(timeout, executeCallback, null, HgCallbackEventMode.Recurring);
             Events.Add(obj);
             return obj;
         }
 
         protected SiEngineCallbackEvent AddSingleFireEvent(TimeSpan timeout, HgOnExecute executeCallback)
         {
-            return _core.Events.Create(timeout, executeCallback);
+            return _gameCore.Events.Create(timeout, executeCallback);
         }
     }
 }

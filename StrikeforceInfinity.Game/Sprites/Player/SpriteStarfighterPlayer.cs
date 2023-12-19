@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites.Player
 {
     internal class SpriteStarfighterPlayer : SpritePlayerBase
     {
-        public SpriteStarfighterPlayer(EngineCore core)
-            : base(core)
+        public SpriteStarfighterPlayer(EngineCore gameCore)
+            : base(gameCore)
         {
             ShipClass = HgPlayerClass.Starfighter;
 

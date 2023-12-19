@@ -9,8 +9,8 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
     {
         private const string imagePath = @"Graphics\Weapon\Blunderbuss.png";
 
-        public MunitionBlunderbuss(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
-            : base(core, weapon, firedFrom, imagePath, xyOffset)
+        public MunitionBlunderbuss(EngineCore gameCore, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
+            : base(gameCore, weapon, firedFrom, imagePath, xyOffset)
         {
             Initialize(imagePath);
         }

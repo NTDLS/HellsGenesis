@@ -19,7 +19,7 @@ namespace StrikeforceInfinity.Game.Managers
     /// </summary>
     internal class EngineSpriteManager
     {
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         private SiPoint _radarScale;
         private SiPoint _radarOffset;
 
@@ -44,31 +44,31 @@ namespace StrikeforceInfinity.Game.Managers
 
         #endregion
 
-        public EngineSpriteManager(EngineCore core)
+        public EngineSpriteManager(EngineCore gameCore)
         {
-            _core = core;
+            _gameCore = gameCore;
 
-            Animations = new AnimationSpriteTickController(_core, this);
-            Attachments = new AttachmentSpriteTickController(_core, this);
-            Munitions = new MunitionSpriteTickController(_core, this);
-            Debugs = new DebugSpriteTickController(_core, this);
-            Enemies = new EnemySpriteTickController(_core, this);
-            Particles = new ParticleSpriteTickController(_core, this);
-            Powerups = new PowerupSpriteTickController(_core, this);
-            RadarPositions = new RadarPositionSpriteTickController(_core, this);
-            Stars = new StarSpriteTickController(_core, this);
-            TextBlocks = new TextBlockSpriteTickController(_core, this);
+            Animations = new AnimationSpriteTickController(_gameCore, this);
+            Attachments = new AttachmentSpriteTickController(_gameCore, this);
+            Munitions = new MunitionSpriteTickController(_gameCore, this);
+            Debugs = new DebugSpriteTickController(_gameCore, this);
+            Enemies = new EnemySpriteTickController(_gameCore, this);
+            Particles = new ParticleSpriteTickController(_gameCore, this);
+            Powerups = new PowerupSpriteTickController(_gameCore, this);
+            RadarPositions = new RadarPositionSpriteTickController(_gameCore, this);
+            Stars = new StarSpriteTickController(_gameCore, this);
+            TextBlocks = new TextBlockSpriteTickController(_gameCore, this);
         }
 
         public void Start()
         {
-            _core.Player.Sprite = new SpriteDebugPlayer(_core) { Visable = false };
+            _gameCore.Player.Sprite = new SpriteDebugPlayer(_gameCore) { Visable = false };
 
-            PlayerStatsText = TextBlocks.Create(_core.Rendering.TextFormats.RealtimePlayerStats, _core.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
+            PlayerStatsText = TextBlocks.Create(_gameCore.Rendering.TextFormats.RealtimePlayerStats, _gameCore.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_core.Rendering.TextFormats.RealtimePlayerStats, _core.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
+            DebugText = TextBlocks.Create(_gameCore.Rendering.TextFormats.RealtimePlayerStats, _gameCore.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
 
-            _core.Audio.BackgroundMusicSound.Play();
+            _gameCore.Audio.BackgroundMusicSound.Play();
         }
 
         public void Stop()
@@ -79,24 +79,24 @@ namespace StrikeforceInfinity.Game.Managers
         {
             lock (Collection)
             {
-                _core.Sprites.Collection.Where(o => o.QueuedForDeletion).ToList().ForEach(p => p.Cleanup());
-                _core.Sprites.Collection.RemoveAll(o => o.QueuedForDeletion);
+                _gameCore.Sprites.Collection.Where(o => o.QueuedForDeletion).ToList().ForEach(p => p.Cleanup());
+                _gameCore.Sprites.Collection.RemoveAll(o => o.QueuedForDeletion);
 
-                for (int i = 0; i < _core.Events.Collection.Count; i++)
+                for (int i = 0; i < _gameCore.Events.Collection.Count; i++)
                 {
-                    if (_core.Events.Collection[i].QueuedForDeletion)
+                    if (_gameCore.Events.Collection[i].QueuedForDeletion)
                     {
-                        _core.Events.Delete(_core.Events.Collection[i]);
+                        _gameCore.Events.Delete(_gameCore.Events.Collection[i]);
                     }
                 }
 
-                _core.Menus.CleanupDeletedObjects();
+                _gameCore.Menus.CleanupDeletedObjects();
 
-                if (_core.Player.Sprite.IsDead)
+                if (_gameCore.Player.Sprite.IsDead)
                 {
-                    _core.Player.Sprite.Visable = false;
-                    _core.Player.Sprite.IsDead = false;
-                    _core.Menus.Insert(new MenuStartNewGame(_core));
+                    _gameCore.Player.Sprite.Visable = false;
+                    _gameCore.Player.Sprite.IsDead = false;
+                    _gameCore.Menus.Insert(new MenuStartNewGame(_gameCore));
                 }
             }
         }
@@ -121,7 +121,7 @@ namespace StrikeforceInfinity.Game.Managers
         {
             lock (Collection)
             {
-                return _core.Sprites.Collection.Where(o => o is T).Select(o => o as T).ToList();
+                return _gameCore.Sprites.Collection.Where(o => o is T).Select(o => o as T).ToList();
             }
         }
 
@@ -129,7 +129,7 @@ namespace StrikeforceInfinity.Game.Managers
         {
             lock (Collection)
             {
-                return _core.Sprites.Collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList();
+                return _gameCore.Sprites.Collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList();
             }
         }
 
@@ -206,32 +206,32 @@ namespace StrikeforceInfinity.Game.Managers
 
             if (RenderRadar)
             {
-                var radarBgImage = _core.Assets.GetBitmap(@"Graphics\RadarTransparent.png");
+                var radarBgImage = _gameCore.Assets.GetBitmap(@"Graphics\RadarTransparent.png");
 
-                _core.Rendering.DrawBitmapAt(renderTarget, radarBgImage,
-                    _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,
-                    _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height,
+                _gameCore.Rendering.DrawBitmapAt(renderTarget, radarBgImage,
+                    _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,
+                    _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height,
                     0);
 
                 double radarDistance = 8;
 
                 if (_radarScale == null)
                 {
-                    double radarVisionWidth = _core.Display.TotalCanvasSize.Width * radarDistance;
-                    double radarVisionHeight = _core.Display.TotalCanvasSize.Height * radarDistance;
+                    double radarVisionWidth = _gameCore.Display.TotalCanvasSize.Width * radarDistance;
+                    double radarVisionHeight = _gameCore.Display.TotalCanvasSize.Height * radarDistance;
 
                     _radarScale = new SiPoint(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
                     _radarOffset = new SiPoint(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
                 }
 
-                if (_core.Player.Sprite is not null && _core.Player.Sprite.Visable)
+                if (_gameCore.Player.Sprite is not null && _gameCore.Player.Sprite.Visable)
                 {
                     double centerOfRadarX = (int)(radarBgImage.Size.Width / 2.0) - 2.0; //Subtract half the dot size.
                     double centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0) - 2.0; //Subtract half the dot size.
 
                     _radarOffset = new SiPoint(
-                            _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _core.Player.Sprite.X * _radarScale.X),
-                            _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _core.Player.Sprite.Y * _radarScale.Y)
+                            _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _gameCore.Player.Sprite.X * _radarScale.X),
+                            _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _gameCore.Player.Sprite.Y * _radarScale.Y)
                         );
 
                     //Render radar:
@@ -241,10 +241,10 @@ namespace StrikeforceInfinity.Game.Managers
                         int x = (int)(_radarOffset.X + sprite.X * _radarScale.X);
                         int y = (int)(_radarOffset.Y + sprite.Y * _radarScale.Y);
 
-                        if (x > _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
-                            && x < _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
-                            && y > _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
-                            && y < _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
+                        if (x > _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
+                            && x < _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
+                            && y > _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
+                            && y < _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
                             )
                         {
                             if ((sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerUpBase) && sprite.Visable == true)
@@ -255,11 +255,11 @@ namespace StrikeforceInfinity.Game.Managers
                     }
 
                     //Render player blip:
-                    _core.Rendering.FillEllipseAt(
+                    _gameCore.Rendering.FillEllipseAt(
                         renderTarget,
-                        _core.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + centerOfRadarX,
-                        _core.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + centerOfRadarY,
-                        2, 2, _core.Rendering.Materials.Raw.Green);
+                        _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + centerOfRadarX,
+                        _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + centerOfRadarY,
+                        2, 2, _gameCore.Rendering.Materials.Raw.Green);
                 }
             }
         }
@@ -288,13 +288,13 @@ namespace StrikeforceInfinity.Game.Managers
                 }
             }
 
-            _core.Player.Sprite?.Render(renderTarget);
-            _core.Menus.Render(renderTarget);
+            _gameCore.Player.Sprite?.Render(renderTarget);
+            _gameCore.Menus.Render(renderTarget);
 
-            if (_core.Settings.HighlightNatrualBounds)
+            if (_gameCore.Settings.HighlightNatrualBounds)
             {
                 //Highlight the 1:1 frame
-                _core.Rendering.DrawRectangleAt(renderTarget, _core.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _core.Rendering.Materials.Raw.Red, 0, 1);
+                _gameCore.Rendering.DrawRectangleAt(renderTarget, _gameCore.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
             }
         }
     }

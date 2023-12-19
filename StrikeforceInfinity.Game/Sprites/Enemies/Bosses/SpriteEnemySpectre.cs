@@ -25,8 +25,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
 
         readonly string _imagesPath = @"Graphics\Enemy\Spectre\";
 
-        public SpriteEnemySpectre(EngineCore core)
-            : base(core, hullHealth, bountyMultiplier)
+        public SpriteEnemySpectre(EngineCore gameCore)
+            : base(gameCore, hullHealth, bountyMultiplier)
         {
             _leftGun = Attach(_imagesPath + "Gun.Left.png", true, 3);
             _rightGun = Attach(_imagesPath + "Gun.Right.png", true, 3);
@@ -142,7 +142,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
         {
             base.ApplyIntelligence(displacementVector);
 
-            double distanceToPlayer = HgMath.DistanceTo(this, _core.Player.Sprite);
+            double distanceToPlayer = HgMath.DistanceTo(this, _gameCore.Player.Sprite);
 
             //We have no engines. :(
             if (_leftThrust.IsDead && _rightThrust.IsDead)
@@ -173,7 +173,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
                 }
 
                 //Keep pointing at the player.
-                var deltaAngle = DeltaAngle(_core.Player.Sprite);
+                var deltaAngle = DeltaAngle(_gameCore.Player.Sprite);
 
                 if (deltaAngle.IsNotBetween(-10, 10))
                 {
@@ -210,7 +210,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
-                    PointAtAndGoto(_core.Player.Sprite);
+                    PointAtAndGoto(_gameCore.Player.Sprite);
                 }
                 else
                 {
@@ -222,7 +222,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
 
             if (mode == AIMode.Tailing)
             {
-                PointAtAndGoto(_core.Player.Sprite);
+                PointAtAndGoto(_gameCore.Player.Sprite);
 
                 //Stay on the players tail.
                 if (distanceToPlayer > distanceToKeep + 300)
@@ -275,7 +275,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_core.Player.Sprite);
+                var deltaAngle = DeltaAngle(_gameCore.Player.Sprite);
 
                 if (deltaAngle.IsNotBetween(-10, 10))
                 {
@@ -301,7 +301,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             if (FireWeapon<WeaponDualVulcanCannon>())
@@ -312,7 +312,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             if (FireWeapon<WeaponVulcanCannon>())

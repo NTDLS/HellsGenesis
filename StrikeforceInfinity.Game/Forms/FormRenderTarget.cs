@@ -17,7 +17,7 @@ namespace StrikeforceInfinity.Game
         readonly List<SpriteBase> highlightedSprites = new();
         private readonly ToolTip _interrogationTip = new ToolTip();
 
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         private readonly bool _fullScreen = false;
 
         public FormRenderTarget()
@@ -54,9 +54,9 @@ namespace StrikeforceInfinity.Game
             };
             Controls.Add(drawingSurface);
 
-            _core = new EngineCore(drawingSurface);
+            _gameCore = new EngineCore(drawingSurface);
 
-            _core.OnStopEngine += (EngineCore sender) =>
+            _gameCore.OnStopEngine += (EngineCore sender) =>
             {   //If the engine is stopped, close the main form.
                 Invoke((MethodInvoker)delegate
                 {
@@ -64,8 +64,8 @@ namespace StrikeforceInfinity.Game
                 });
             };
 
-            Shown += (object sender, EventArgs e) => _core.StartEngine();
-            FormClosing += (sender, e) => _core.StopEngine();
+            Shown += (object sender, EventArgs e) => _gameCore.StartEngine();
+            FormClosing += (sender, e) => _gameCore.StopEngine();
 
             drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
             drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
@@ -82,10 +82,10 @@ namespace StrikeforceInfinity.Game
         #region Debug interactions.
         private void FormRenderTarget_MouseMove(object sender, MouseEventArgs e)
         {
-            double x = e.X + _core.Display.OverdrawSize.Width / 2;
-            double y = e.Y + _core.Display.OverdrawSize.Height / 2;
+            double x = e.X + _gameCore.Display.OverdrawSize.Width / 2;
+            double y = e.Y + _gameCore.Display.OverdrawSize.Height / 2;
 
-            //Debug.Print($"x{x:n1}, y{y:n1} => Player x{_core.Player.Sprite.X:n1},x{_core.Player.Sprite.Y:n1}");
+            //Debug.Print($"x{x:n1}, y{y:n1} => Player x{_gameCore.Player.Sprite.X:n1},x{_gameCore.Player.Sprite.Y:n1}");
 
             foreach (var sprite in highlightedSprites)
             {
@@ -94,10 +94,10 @@ namespace StrikeforceInfinity.Game
 
             highlightedSprites.Clear();
 
-            var sprites = _core.Sprites.Intersections(new SiPoint(x, y), new SiPoint(1, 1));
-            if (_core.Player.Sprite.Intersects(new SiPoint(x, y), new SiPoint(1, 1)))
+            var sprites = _gameCore.Sprites.Intersections(new SiPoint(x, y), new SiPoint(1, 1));
+            if (_gameCore.Player.Sprite.Intersects(new SiPoint(x, y), new SiPoint(1, 1)))
             {
-                sprites.Add(_core.Player.Sprite);
+                sprites.Add(_gameCore.Player.Sprite);
             }
 
             foreach (var sprite in sprites)
@@ -109,13 +109,13 @@ namespace StrikeforceInfinity.Game
 
         private void FormRenderTarget_MouseDown(object sender, MouseEventArgs e)
         {
-            double x = e.X + _core.Display.OverdrawSize.Width / 2;
-            double y = e.Y + _core.Display.OverdrawSize.Height / 2;
+            double x = e.X + _gameCore.Display.OverdrawSize.Width / 2;
+            double y = e.Y + _gameCore.Display.OverdrawSize.Height / 2;
 
-            var sprites = _core.Sprites.Intersections(new SiPoint(x, y), new SiPoint(1, 1));
-            if (_core.Player.Sprite.Intersects(new SiPoint(x, y), new SiPoint(1, 1)))
+            var sprites = _gameCore.Sprites.Intersections(new SiPoint(x, y), new SiPoint(1, 1));
+            if (_gameCore.Player.Sprite.Intersects(new SiPoint(x, y), new SiPoint(1, 1)))
             {
-                sprites.Add(_core.Player.Sprite);
+                sprites.Add(_gameCore.Player.Sprite);
             }
 
             var sprite = sprites.FirstOrDefault();
@@ -135,7 +135,7 @@ namespace StrikeforceInfinity.Game
                     menu.Items.Add("Delete").Tag = sprite;
 
                     var location = new Point((int)e.X + 10, (int)e.Y);
-                    menu.Show(_core.Display.DrawingSurface, location);
+                    menu.Show(_gameCore.Display.DrawingSurface, location);
                 }
                 else if (e.Button == MouseButtons.Left)
                 {
@@ -166,7 +166,7 @@ namespace StrikeforceInfinity.Game
                     if (text.Length > 0)
                     {
                         var location = new Point((int)e.X, (int)e.Y - sprite.Size.Height);
-                        _interrogationTip.Show(text.ToString(), _core.Display.DrawingSurface, location, 5000);
+                        _interrogationTip.Show(text.ToString(), _gameCore.Display.DrawingSurface, location, 5000);
                     }
                 }
             }
@@ -192,10 +192,10 @@ namespace StrikeforceInfinity.Game
                 {
                     var enemy = (SpriteEnemyBase)sprite;
 
-                    bool wasPaused = _core.IsPaused();
+                    bool wasPaused = _gameCore.IsPaused();
                     if (wasPaused == false)
                     {
-                        _core.TogglePause();
+                        _gameCore.TogglePause();
                     }
 
                     using (var fbd = new FolderBrowserDialog())
@@ -212,7 +212,7 @@ namespace StrikeforceInfinity.Game
 
                     if (wasPaused == false)
                     {
-                        _core.TogglePause();
+                        _gameCore.TogglePause();
                     }
                 }
             }
@@ -222,10 +222,10 @@ namespace StrikeforceInfinity.Game
                 {
                     var enemy = (SpriteEnemyBase)sprite;
 
-                    bool wasPaused = _core.IsPaused();
+                    bool wasPaused = _gameCore.IsPaused();
                     if (wasPaused == false)
                     {
-                        _core.TogglePause();
+                        _gameCore.TogglePause();
                     }
 
                     var builder = new StringBuilder();
@@ -243,7 +243,7 @@ namespace StrikeforceInfinity.Game
 
                     if (wasPaused == false)
                     {
-                        _core.TogglePause();
+                        _gameCore.TogglePause();
                     }
                 }
             }
@@ -253,14 +253,14 @@ namespace StrikeforceInfinity.Game
 
         private void FormRenderTarget_KeyUp(object sender, KeyEventArgs e)
         {
-            _core.Input.HandleSingleKeyPress(e.KeyCode);
+            _gameCore.Input.HandleSingleKeyPress(e.KeyCode);
 
             if (e.KeyCode == Keys.Escape)
             {
                 //We do not want the escape key to inturrupt menus.
-                if (_core.Menus.VisibleMenuHandlesEscape() == false)
+                if (_gameCore.Menus.VisibleMenuHandlesEscape() == false)
                 {
-                    _core.Pause();
+                    _gameCore.Pause();
 
                     if (MessageBox.Show("Are you sure you want to quit?", "Afraid to go on?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                     {
@@ -268,7 +268,7 @@ namespace StrikeforceInfinity.Game
                     }
                     else
                     {
-                        _core.Resume();
+                        _gameCore.Resume();
                     }
                 }
             }

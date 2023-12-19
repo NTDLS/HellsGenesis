@@ -9,8 +9,8 @@ namespace StrikeforceInfinity.Game.Controller
 {
     internal class AnimationSpriteTickController : SpriteTickControllerBase<SpriteAnimation>
     {
-        public AnimationSpriteTickController(EngineCore core, EngineSpriteManager manager)
-            : base(core, manager)
+        public AnimationSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+            : base(gameCore, manager)
         {
         }
 
@@ -43,7 +43,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (SpriteManager.Collection)
             {
-                SpriteAnimation obj = new SpriteAnimation(Core, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
+                SpriteAnimation obj = new SpriteAnimation(GameCore, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
                 SpriteManager.Collection.Add(obj);
                 return obj;
             }

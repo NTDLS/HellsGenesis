@@ -10,8 +10,8 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
     /// </summary>
     internal class ProjectileMunitionBase : MunitionBase
     {
-        public ProjectileMunitionBase(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
-            : base(core, weapon, firedFrom, imagePath, xyOffset)
+        public ProjectileMunitionBase(EngineCore gameCore, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
+            : base(gameCore, weapon, firedFrom, imagePath, xyOffset)
         {
         }
     }

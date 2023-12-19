@@ -9,10 +9,10 @@ namespace StrikeforceInfinity.Game.Sprites
         /// </summary>
         /// <param name="core"></param>
         /// <param name="name"></param>
-        public SpriteParticleBase(EngineCore core, string name = "")
-            : base(core, name)
+        public SpriteParticleBase(EngineCore gameCore, string name = "")
+            : base(gameCore, name)
         {
-            _core = core;
+            _gameCore = gameCore;
         }
     }
 }

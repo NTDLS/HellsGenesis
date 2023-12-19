@@ -40,8 +40,8 @@ namespace StrikeforceInfinity.Game.Sprites.MenuItems
 
         public HgMenuItemType ItemType { get; set; }
 
-        public SpriteMenuItem(EngineCore core, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location)
-            : base(core, format, color, location, true)
+        public SpriteMenuItem(EngineCore gameCore, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location)
+            : base(gameCore, format, color, location, true)
         {
             ItemType = HgMenuItemType.Undefined;
             Menu = menu;

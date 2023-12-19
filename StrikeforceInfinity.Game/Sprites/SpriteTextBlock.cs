@@ -24,15 +24,15 @@ namespace StrikeforceInfinity.Game.Sprites
             set
             {
                 _text = value;
-                var size = _core.Rendering.GetTextSize(_text, Format);
+                var size = _gameCore.Rendering.GetTextSize(_text, Format);
                 _size = new Size((int)size.Width, (int)size.Height);
             }
         }
 
         #endregion
 
-        public SpriteTextBlock(EngineCore core, TextFormat format, SolidColorBrush color, SiPoint location, bool isFixedPosition)
-            : base(core)
+        public SpriteTextBlock(EngineCore gameCore, TextFormat format, SolidColorBrush color, SiPoint location, bool isFixedPosition)
+            : base(gameCore)
         {
             IsFixedPosition = isFixedPosition;
             Location = new SiPoint(location);
@@ -45,7 +45,7 @@ namespace StrikeforceInfinity.Game.Sprites
         {
             if (Visable)
             {
-                _core.Rendering.DrawTextAt(renderTarget, (float)X, (float)Y, 0, _text ?? string.Empty, Format, Color);
+                _gameCore.Rendering.DrawTextAt(renderTarget, (float)X, (float)Y, 0, _text ?? string.Empty, Format, Color);
             }
         }
     }

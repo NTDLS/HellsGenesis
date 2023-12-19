@@ -20,8 +20,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 
-        public SpriteEnemyPhoenix(EngineCore core)
-            : base(core, hullHealth, bountyMultiplier)
+        public SpriteEnemyPhoenix(EngineCore gameCore)
+            : base(gameCore, hullHealth, bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
@@ -52,9 +52,9 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
             ResetLoadout(loadout);
 
 
-            //AddAIController(new HostileEngagement(_core, this, _core.Player.Sprite));
-            AddAIController(new Taunt(_core, this, _core.Player.Sprite));
-            //AddAIController(new Meander(_core, this, _core.Player.Sprite));
+            //AddAIController(new HostileEngagement(_gameCore, this, _gameCore.Player.Sprite));
+            AddAIController(new Taunt(_gameCore, this, _gameCore.Player.Sprite));
+            //AddAIController(new Meander(_gameCore, this, _gameCore.Player.Sprite));
 
             //if (HgRandom.FlipCoin())
             //{
@@ -75,7 +75,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            double distanceToPlayer = HgMath.DistanceTo(this, _core.Player.Sprite);
+            double distanceToPlayer = HgMath.DistanceTo(this, _gameCore.Player.Sprite);
 
             base.ApplyIntelligence(displacementVector);
 
@@ -107,7 +107,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponDualVulcanCannon>();
@@ -115,7 +115,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponVulcanCannon>();

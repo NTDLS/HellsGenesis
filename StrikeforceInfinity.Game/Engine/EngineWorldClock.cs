@@ -10,14 +10,14 @@ namespace StrikeforceInfinity.Game.Engine
     /// </summary>
     internal class EngineWorldClock
     {
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         private bool _shutdown = false;
         private bool _pause = false;
         private readonly Thread _graphicsThread;
 
-        public EngineWorldClock(EngineCore core)
+        public EngineWorldClock(EngineCore gameCore)
         {
-            _core = core;
+            _gameCore = gameCore;
             _graphicsThread = new Thread(GraphicsThreadProc);
         }
 
@@ -41,13 +41,13 @@ namespace StrikeforceInfinity.Game.Engine
         {
             _pause = !_pause;
 
-            var textBlock = _core.Sprites.GetSpriteByTag<SpriteTextBlock>("PausedText");
+            var textBlock = _gameCore.Sprites.GetSpriteByTag<SpriteTextBlock>("PausedText");
             if (textBlock == null)
             {
-                textBlock = _core.Sprites.TextBlocks.Create(_core.Rendering.TextFormats.LargeBlocker, _core.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText");
+                textBlock = _gameCore.Sprites.TextBlocks.Create(_gameCore.Rendering.TextFormats.LargeBlocker, _gameCore.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText");
                 textBlock.Text = "Paused";
-                textBlock.X = _core.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
-                textBlock.Y = _core.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
+                textBlock.X = _gameCore.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
+                textBlock.Y = _gameCore.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
             }
 
             textBlock.Visable = _pause;
@@ -69,9 +69,9 @@ namespace StrikeforceInfinity.Game.Engine
         {
             #region Add initial stars.
 
-            for (int i = 0; i < _core.Settings.InitialFrameStarCount; i++)
+            for (int i = 0; i < _gameCore.Settings.InitialFrameStarCount; i++)
             {
-                _core.Sprites.Stars.Create();
+                _gameCore.Sprites.Stars.Create();
             }
 
             #endregion
@@ -80,14 +80,14 @@ namespace StrikeforceInfinity.Game.Engine
 
             while (_shutdown == false)
             {
-                var targetFrameDuration = 1000000 / _core.Settings.FrameLimiter; //1000000 / n-frames/second.
+                var targetFrameDuration = 1000000 / _gameCore.Settings.FrameLimiter; //1000000 / n-frames/second.
                 timer.Restart();
 
-                _core.Display.GameLoopCounter.Calculate();
+                _gameCore.Display.GameLoopCounter.Calculate();
 
-                lock (_core.Menus.Collection)
-                    lock (_core.Player.Sprite)
-                        lock (_core.Sprites.Collection)
+                lock (_gameCore.Menus.Collection)
+                    lock (_gameCore.Player.Sprite)
+                        lock (_gameCore.Sprites.Collection)
                         {
                             if (_pause == false)
                             {
@@ -96,9 +96,9 @@ namespace StrikeforceInfinity.Game.Engine
                                 AfterExecuteWorldClockTick(displacementVector);
                             }
 
-                            _core.Debug.ProcessCommand();
+                            _gameCore.Debug.ProcessCommand();
 
-                            _core.Render();
+                            _gameCore.Render();
                             timer.Stop();
                         }
 
@@ -120,26 +120,26 @@ namespace StrikeforceInfinity.Game.Engine
 
         private SiPoint ExecuteWorldClockTick()
         {
-            _core.Menus.ExecuteWorldClockTick();
-            _core.Situations.ExecuteWorldClockTick();
-            _core.Events.ExecuteWorldClockTick();
+            _gameCore.Menus.ExecuteWorldClockTick();
+            _gameCore.Situations.ExecuteWorldClockTick();
+            _gameCore.Events.ExecuteWorldClockTick();
 
-            _core.Input.Snapshot();
+            _gameCore.Input.Snapshot();
 
-            var displacementVector = _core.Player.ExecuteWorldClockTick();
+            var displacementVector = _gameCore.Player.ExecuteWorldClockTick();
 
-            _core.Sprites.Enemies.ExecuteWorldClockTick(displacementVector);
-            _core.Sprites.Particles.ExecuteWorldClockTick(displacementVector);
-            _core.Sprites.Munitions.ExecuteWorldClockTick(displacementVector);
-            _core.Sprites.Stars.ExecuteWorldClockTick(displacementVector);
-            _core.Sprites.Animations.ExecuteWorldClockTick(displacementVector);
-            _core.Sprites.TextBlocks.ExecuteWorldClockTick(displacementVector);
-            _core.Sprites.Powerups.ExecuteWorldClockTick(displacementVector);
-            _core.Sprites.Debugs.ExecuteWorldClockTick(displacementVector);
+            _gameCore.Sprites.Enemies.ExecuteWorldClockTick(displacementVector);
+            _gameCore.Sprites.Particles.ExecuteWorldClockTick(displacementVector);
+            _gameCore.Sprites.Munitions.ExecuteWorldClockTick(displacementVector);
+            _gameCore.Sprites.Stars.ExecuteWorldClockTick(displacementVector);
+            _gameCore.Sprites.Animations.ExecuteWorldClockTick(displacementVector);
+            _gameCore.Sprites.TextBlocks.ExecuteWorldClockTick(displacementVector);
+            _gameCore.Sprites.Powerups.ExecuteWorldClockTick(displacementVector);
+            _gameCore.Sprites.Debugs.ExecuteWorldClockTick(displacementVector);
 
-            _core.Sprites.RadarPositions.ExecuteWorldClockTick();
+            _gameCore.Sprites.RadarPositions.ExecuteWorldClockTick();
 
-            _core.Sprites.CleanupDeletedObjects();
+            _gameCore.Sprites.CleanupDeletedObjects();
 
             return displacementVector;
         }
@@ -150,29 +150,29 @@ namespace StrikeforceInfinity.Game.Engine
 
         private void AfterExecuteWorldClockTick(SiPoint displacementVector)
         {
-            if (_core.Player.Sprite.Visable == false)
+            if (_gameCore.Player.Sprite.Visable == false)
             {
-                _core.Player.Sprite.ShipEngineIdleSound.Stop();
-                _core.Player.Sprite.ShipEngineRoarSound.Stop();
+                _gameCore.Player.Sprite.ShipEngineIdleSound.Stop();
+                _gameCore.Player.Sprite.ShipEngineRoarSound.Stop();
             }
 
-            if (_core.Situations?.CurrentSituation?.State == HgSituationState.Started)
+            if (_gameCore.Situations?.CurrentSituation?.State == HgSituationState.Started)
             {
-                //situation = $"{_core.Situations.CurrentSituation.Name} (Wave {_core.Situations.CurrentSituation.CurrentWave} of {_core.Situations.CurrentSituation.TotalWaves})";
-                string situation = $"{_core.Situations.CurrentSituation.Name}";
+                //situation = $"{_gameCore.Situations.CurrentSituation.Name} (Wave {_gameCore.Situations.CurrentSituation.CurrentWave} of {_gameCore.Situations.CurrentSituation.TotalWaves})";
+                string situation = $"{_gameCore.Situations.CurrentSituation.Name}";
 
-                double boostRebuildPercent = (_core.Player.Sprite.Velocity.AvailableBoost / _core.Settings.PlayerBoostRebuildFloor) * 100.0;
+                double boostRebuildPercent = (_gameCore.Player.Sprite.Velocity.AvailableBoost / _gameCore.Settings.PlayerBoostRebuildFloor) * 100.0;
 
-                _core.Sprites.PlayerStatsText.Text =
+                _gameCore.Sprites.PlayerStatsText.Text =
                       $" Situation: {situation}\r\n"
-                    + $"      Hull: {_core.Player.Sprite.HullHealth:n0} (Shields: {_core.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_core.Player.Sprite.Bounty}\r\n"
-                    + $"      Warp: {((_core.Player.Sprite.Velocity.AvailableBoost / _core.Settings.MaxPlayerBoostAmount) * 100.0):n1}%"
-                        + (_core.Player.Sprite.Velocity.BoostRebuilding ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
-                    + $"Pri-Weapon: {_core.Player.Sprite.PrimaryWeapon?.Name} x{_core.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
-                    + $"Sec-Weapon: {_core.Player.Sprite.SelectedSecondaryWeapon?.Name} x{_core.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
+                    + $"      Hull: {_gameCore.Player.Sprite.HullHealth:n0} (Shields: {_gameCore.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_gameCore.Player.Sprite.Bounty}\r\n"
+                    + $"      Warp: {((_gameCore.Player.Sprite.Velocity.AvailableBoost / _gameCore.Settings.MaxPlayerBoostAmount) * 100.0):n1}%"
+                        + (_gameCore.Player.Sprite.Velocity.BoostRebuilding ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
+                    + $"Pri-Weapon: {_gameCore.Player.Sprite.PrimaryWeapon?.Name} x{_gameCore.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
+                    + $"Sec-Weapon: {_gameCore.Player.Sprite.SelectedSecondaryWeapon?.Name} x{_gameCore.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
             }
 
-            //_core.Sprites.DebugText.Text = "Anything we need to know about?";
+            //_gameCore.Sprites.DebugText.Text = "Anything we need to know about?";
         }
     }
 }

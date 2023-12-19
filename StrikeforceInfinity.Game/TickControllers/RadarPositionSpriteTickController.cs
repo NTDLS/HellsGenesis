@@ -13,8 +13,8 @@ namespace StrikeforceInfinity.Game.Controller
     {
         private readonly EngineSpriteManager _manager;
 
-        public RadarPositionSpriteTickController(EngineCore core, EngineSpriteManager manager)
-            : base(core)
+        public RadarPositionSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+            : base(gameCore)
         {
             _manager = manager;
         }
@@ -25,7 +25,7 @@ namespace StrikeforceInfinity.Game.Controller
             {
                 var accountedFor = new HashSet<SpriteRadarPositionTextBlock>();
                 var groups = new List<List<SpriteRadarPositionTextBlock>>();
-                var radarTexts = Core.Sprites.VisibleOfType<SpriteRadarPositionTextBlock>();
+                var radarTexts = GameCore.Sprites.VisibleOfType<SpriteRadarPositionTextBlock>();
 
                 foreach (var parent in radarTexts)
                 {
@@ -78,7 +78,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (_manager.Collection)
             {
-                var obj = new SpriteRadarPositionIndicator(Core);
+                var obj = new SpriteRadarPositionIndicator(GameCore);
                 _manager.Collection.Add(obj);
                 return obj;
             }

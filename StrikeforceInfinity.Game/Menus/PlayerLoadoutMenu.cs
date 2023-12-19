@@ -18,10 +18,10 @@ namespace StrikeforceInfinity.Game.Menus
         private Timer _animationTimer;
         private SpritePlayerBase _selectedSprite;
 
-        public PlayerLoadoutMenu(EngineCore core)
-            : base(core)
+        public PlayerLoadoutMenu(EngineCore gameCore)
+            : base(gameCore)
         {
-            var currentScaledScreenBounds = _core.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
 
             double offsetX = currentScaledScreenBounds.X + 40;
             double offsetY = currentScaledScreenBounds.Y + 100;
@@ -49,7 +49,7 @@ namespace StrikeforceInfinity.Game.Menus
 
             foreach (var playerType in playerTypes)
             {
-                var playerTypeInstance = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerType, new object[] { core });
+                var playerTypeInstance = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerType, new object[] { gameCore });
                 playerTypeInstance.SpriteTag = "MENU_SHIP_SELECT";
                 playerTypeInstance.Velocity.Angle.Degrees = 45;
                 playerTypeInstance.ThrustAnimation.Visable = true;
@@ -60,7 +60,7 @@ namespace StrikeforceInfinity.Game.Menus
 
                 menuItem.UserData = playerTypeInstance;
 
-                var shipIcon = _core.Sprites.InsertPlayer(playerTypeInstance);
+                var shipIcon = _gameCore.Sprites.InsertPlayer(playerTypeInstance);
 
                 if (playerTypeInstance.Loadout.Name == "Debug")
                 {
@@ -86,7 +86,7 @@ namespace StrikeforceInfinity.Game.Menus
 
         private void PlayerLoadoutMenu_OnCleanup()
         {
-            _core.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
+            _gameCore.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
         }
 
         private void PlayerLoadoutMenu_OnExecuteSelection(SpriteMenuItem item)
@@ -96,8 +96,8 @@ namespace StrikeforceInfinity.Game.Menus
 
             if (item.UserData is SpritePlayerBase selectedSprite)
             {
-                _core.Player.Sprite.ResetLoadout(selectedSprite.Loadout);
-                _core.StartGame();
+                _gameCore.Player.Sprite.ResetLoadout(selectedSprite.Loadout);
+                _gameCore.StartGame();
             }
         }
 

@@ -13,11 +13,11 @@ namespace StrikeforceInfinity.Game.Weapons
         private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponBlunderbuss(EngineCore core, _SpriteShipBase owner)
-            : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+        public WeaponBlunderbuss(EngineCore gameCore, _SpriteShipBase owner)
+            : base(gameCore, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponBlunderbuss(EngineCore core)
-            : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
+        public WeaponBlunderbuss(EngineCore gameCore)
+            : base(gameCore, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()
         {
@@ -40,7 +40,7 @@ namespace StrikeforceInfinity.Game.Weapons
                     if (RoundQuantity > 0)
                     {
                         var pointRight = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(i, i));
-                        _core.Sprites.Munitions.Create(this, pointRight);
+                        _gameCore.Sprites.Munitions.Create(this, pointRight);
                         RoundQuantity--;
                     }
                 }
@@ -54,7 +54,7 @@ namespace StrikeforceInfinity.Game.Weapons
 
         public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
         {
-            return new MunitionBlunderbuss(_core, this, _owner, xyOffset);
+            return new MunitionBlunderbuss(_gameCore, this, _owner, xyOffset);
         }
     }
 }

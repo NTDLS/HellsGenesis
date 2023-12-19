@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites.Player
 {
     internal class SpriteCruiserPlayer : SpritePlayerBase
     {
-        public SpriteCruiserPlayer(EngineCore core)
-            : base(core)
+        public SpriteCruiserPlayer(EngineCore gameCore)
+            : base(gameCore)
         {
             ShipClass = HgPlayerClass.Cruiser;
 

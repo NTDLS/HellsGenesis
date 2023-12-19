@@ -9,8 +9,8 @@ namespace StrikeforceInfinity.Game.Controller
 {
     internal class PowerupSpriteTickController : SpriteTickControllerBase<SpritePowerUpBase>
     {
-        public PowerupSpriteTickController(EngineCore core, EngineSpriteManager manager)
-            : base(core, manager)
+        public PowerupSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+            : base(gameCore, manager)
         {
         }
 
@@ -27,7 +27,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (SpriteManager.Collection)
             {
-                object[] param = { Core };
+                object[] param = { GameCore };
                 var obj = (SpritePowerUpBase)Activator.CreateInstance(typeof(T), param);
                 obj.Location = new SiPoint(x, y);
                 SpriteManager.Collection.Add(obj);

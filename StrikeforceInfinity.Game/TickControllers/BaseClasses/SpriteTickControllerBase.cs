@@ -14,7 +14,7 @@ namespace StrikeforceInfinity.Game.TickControllers.BaseClasses
     /// </summary>
     internal class SpriteTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
     {
-        public EngineCore Core { get; private set; }
+        public EngineCore GameCore { get; private set; }
         public EngineSpriteManager SpriteManager { get; private set; }
 
         public List<subType> VisibleOfType<subType>() where subType : T => SpriteManager.VisibleOfType<subType>();
@@ -25,9 +25,9 @@ namespace StrikeforceInfinity.Game.TickControllers.BaseClasses
 
         public virtual void ExecuteWorldClockTick(SiPoint displacementVector) { }
 
-        public SpriteTickControllerBase(EngineCore core, EngineSpriteManager manager)
+        public SpriteTickControllerBase(EngineCore gameCore, EngineSpriteManager manager)
         {
-            Core = core;
+            GameCore = gameCore;
             SpriteManager = manager;
         }
 
@@ -51,7 +51,7 @@ namespace StrikeforceInfinity.Game.TickControllers.BaseClasses
         {
             lock (SpriteManager.Collection)
             {
-                T obj = (T)Activator.CreateInstance(typeof(T), Core);
+                T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
                 obj.X = x;
                 obj.Y = y;
                 obj.SpriteTag = name; SpriteManager.Collection.Add(obj);
@@ -63,9 +63,9 @@ namespace StrikeforceInfinity.Game.TickControllers.BaseClasses
         {
             lock (SpriteManager.Collection)
             {
-                T obj = (T)Activator.CreateInstance(typeof(T), Core);
-                obj.X = Core.Display.TotalCanvasSize.Width / 2;
-                obj.Y = Core.Display.TotalCanvasSize.Height / 2;
+                T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
+                obj.X = GameCore.Display.TotalCanvasSize.Width / 2;
+                obj.Y = GameCore.Display.TotalCanvasSize.Height / 2;
 
                 obj.SpriteTag = name;
 
@@ -78,7 +78,7 @@ namespace StrikeforceInfinity.Game.TickControllers.BaseClasses
         {
             lock (SpriteManager.Collection)
             {
-                T obj = (T)Activator.CreateInstance(typeof(T), Core);
+                T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
                 obj.X = x;
                 obj.Y = y;
                 SpriteManager.Collection.Add(obj);
@@ -90,7 +90,7 @@ namespace StrikeforceInfinity.Game.TickControllers.BaseClasses
         {
             lock (SpriteManager.Collection)
             {
-                T obj = (T)Activator.CreateInstance(typeof(T), Core);
+                T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
                 SpriteManager.Collection.Add(obj);
                 return obj;
             }
@@ -100,7 +100,7 @@ namespace StrikeforceInfinity.Game.TickControllers.BaseClasses
         {
             lock (SpriteManager.Collection)
             {
-                T obj = (T)Activator.CreateInstance(typeof(T), Core);
+                T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
                 obj.SpriteTag = name;
                 SpriteManager.Collection.Add(obj);
                 return obj;

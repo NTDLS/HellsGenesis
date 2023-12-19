@@ -12,7 +12,7 @@ namespace StrikeforceInfinity.Game.Managers
     /// </summary>
     internal class EngineAssetManager
     {
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         private readonly Dictionary<string, object> _collection = new();
 
 #if DEBUG
@@ -20,9 +20,9 @@ namespace StrikeforceInfinity.Game.Managers
 #else
         private readonly string assetRawPath = @".\Assets";
 #endif
-        public EngineAssetManager(EngineCore core)
+        public EngineAssetManager(EngineCore gameCore)
         {
-            _core = core;
+            _gameCore = gameCore;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace StrikeforceInfinity.Game.Managers
                     return (value as DniNeuralNetwork).Clone();
                 }
 
-                var json = _core.Assets.GetText(assetRelativePath);
+                var json = _gameCore.Assets.GetText(assetRelativePath);
                 if (string.IsNullOrEmpty(json) == false)
                 {
                     var network = DniNeuralNetwork.LoadFromText(json);
@@ -202,7 +202,7 @@ namespace StrikeforceInfinity.Game.Managers
                     return value as SharpDX.Direct2D1.Bitmap;
                 }
 
-                var result = _core.Rendering.GetBitmap(assetAbsolutePath);
+                var result = _gameCore.Rendering.GetBitmap(assetAbsolutePath);
                 _collection.Add(key, result);
                 return result;
             }
@@ -228,7 +228,7 @@ namespace StrikeforceInfinity.Game.Managers
                     return value as SharpDX.Direct2D1.Bitmap;
                 }
 
-                var result = _core.Rendering.GetBitmap(assetAbsolutePath, newWidth, newHeight);
+                var result = _gameCore.Rendering.GetBitmap(assetAbsolutePath, newWidth, newHeight);
                 _collection.Add(key, result);
                 return result;
             }

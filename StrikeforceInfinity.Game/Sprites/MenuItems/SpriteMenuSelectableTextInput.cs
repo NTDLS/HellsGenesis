@@ -14,8 +14,8 @@ namespace StrikeforceInfinity.Game.Sprites.MenuItems
     {
         public int CharacterLimit { get; set; }
 
-        public SpriteMenuSelectableTextInput(EngineCore core, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location, int characterLimit = 100)
-            : base(core, menu, format, color, location)
+        public SpriteMenuSelectableTextInput(EngineCore gameCore, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location, int characterLimit = 100)
+            : base(gameCore, menu, format, color, location)
         {
             ItemType = HgMenuItemType.SelectableTextInput;
             Visable = true;

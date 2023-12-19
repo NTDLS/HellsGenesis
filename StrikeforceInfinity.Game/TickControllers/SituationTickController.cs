@@ -8,20 +8,20 @@ namespace StrikeforceInfinity.Game.Controller
 {
     internal class SituationTickController : UnvectoredTickControllerBase<SituationBase>
     {
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         public SituationBase CurrentSituation { get; private set; }
 
-        public SituationTickController(EngineCore core)
-            : base(core)
+        public SituationTickController(EngineCore gameCore)
+            : base(gameCore)
         {
-            _core = core;
+            _gameCore = gameCore;
         }
 
         public void Select(string name)
         {
             var situationTypes = SiReflection.GetSubClassesOf<SituationBase>();
             var situationType = situationTypes.Where(o => o.Name == name).First();
-            CurrentSituation = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { _core, });
+            CurrentSituation = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { _gameCore, });
         }
 
         public bool AdvanceLevel()

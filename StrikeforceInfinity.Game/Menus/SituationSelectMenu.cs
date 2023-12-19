@@ -15,10 +15,10 @@ namespace StrikeforceInfinity.Game.Menus
     {
         private readonly SpriteMenuItem _situationBlurb;
 
-        public SituationSelectMenu(EngineCore core)
-            : base(core)
+        public SituationSelectMenu(EngineCore gameCore)
+            : base(gameCore)
         {
-            var currentScaledScreenBounds = _core.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
 
             double offsetX = currentScaledScreenBounds.X + 40;
             double offsetY = currentScaledScreenBounds.Y + 100;
@@ -46,7 +46,7 @@ namespace StrikeforceInfinity.Game.Menus
 
             foreach (var situationType in situationTypes)
             {
-                var situationInstance = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { core, });
+                var situationInstance = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { gameCore, });
 
                 var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
 
@@ -66,9 +66,9 @@ namespace StrikeforceInfinity.Game.Menus
         {
             if (item.UserData is SituationBase situation)
             {
-                _core.ResetGame();
-                _core.Situations.Select(situation.GetType().Name);
-                _core.Menus.Insert(new PlayerLoadoutMenu(_core));
+                _gameCore.ResetGame();
+                _gameCore.Situations.Select(situation.GetType().Name);
+                _gameCore.Menus.Insert(new PlayerLoadoutMenu(_gameCore));
             }
         }
 

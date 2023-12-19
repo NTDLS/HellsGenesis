@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites.Player
 {
     internal class SpriteDreadnaughtPlayer : SpritePlayerBase
     {
-        public SpriteDreadnaughtPlayer(EngineCore core)
-            : base(core)
+        public SpriteDreadnaughtPlayer(EngineCore gameCore)
+            : base(gameCore)
         {
             ShipClass = HgPlayerClass.Dreadnaught;
 

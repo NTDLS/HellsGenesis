@@ -16,8 +16,8 @@ namespace StrikeforceInfinity.Game.Sprites
         private HgRelativeDirection _rotationDirection;
         private SiAngle _travelAngle = new();
 
-        public SpriteRandomShipPartParticle(EngineCore core, double x, double y)
-            : base(core)
+        public SpriteRandomShipPartParticle(EngineCore gameCore, double x, double y)
+            : base(gameCore)
         {
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % _imageCount;
 
@@ -33,7 +33,7 @@ namespace StrikeforceInfinity.Game.Sprites
             Velocity.ThrottlePercentage = 100;
             Velocity.MaxSpeed = HgRandom.Between(1.0, 4.0);
 
-            _core = core;
+            _gameCore = gameCore;
         }
 
         public override void ApplyMotion(SiPoint displacementVector)
@@ -50,7 +50,7 @@ namespace StrikeforceInfinity.Game.Sprites
                 Velocity.Angle.Degrees -= _rotationSpeed;
             }
 
-            if (_core.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
+            if (_gameCore.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
             {
                 QueueForDelete();
             }

@@ -17,7 +17,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
     {
         private const string _assetPath = @"Data\AI\Logistics\Taunt.txt";
 
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         private readonly _SpriteShipBase _owner;
         private readonly SpriteBase _observedObject;
 
@@ -79,9 +79,9 @@ namespace StrikeforceInfinity.Game.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public Taunt(EngineCore core, _SpriteShipBase owner, SpriteBase observedObject)
+        public Taunt(EngineCore gameCore, _SpriteShipBase owner, SpriteBase observedObject)
         {
-            _core = core;
+            _gameCore = gameCore;
             _owner = owner;
             _observedObject = observedObject;
 
@@ -89,7 +89,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
 
             _owner.RenewableResources.CreateResource(RenewableResources.Boost, 800, 0, 10);
 
-            Network = _core.Assets.GetNeuralNetwork(_assetPath) ?? TrainNetwork();
+            Network = _gameCore.Assets.GetNeuralNetwork(_assetPath) ?? TrainNetwork();
         }
 
         private void Owner_OnHit(SpriteBase sender, HgDamageType damageType, int damageAmount)
@@ -343,7 +343,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
             }
             #endregion
 
-            _core.Assets.PutText(_assetPath, network.Serialize());
+            _gameCore.Assets.PutText(_assetPath, network.Serialize());
 
             return network;
         }

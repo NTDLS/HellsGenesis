@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites.Player
 {
     internal class SpriteFrigatePlayer : SpritePlayerBase
     {
-        public SpriteFrigatePlayer(EngineCore core)
-            : base(core)
+        public SpriteFrigatePlayer(EngineCore gameCore)
+            : base(gameCore)
         {
             ShipClass = HgPlayerClass.Frigate;
 

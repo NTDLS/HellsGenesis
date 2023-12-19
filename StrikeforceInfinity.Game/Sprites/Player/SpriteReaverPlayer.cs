@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites.Player
 {
     internal class SpriteReaverPlayer : SpritePlayerBase
     {
-        public SpriteReaverPlayer(EngineCore core)
-            : base(core)
+        public SpriteReaverPlayer(EngineCore gameCore)
+            : base(gameCore)
         {
             ShipClass = HgPlayerClass.Reaver;
 

@@ -15,7 +15,7 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
 {
     internal class EngineRendering
     {
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
 
         public SharpDX.Direct2D1.BitmapRenderTarget IntermediateRenderTarget { get; private set; }
         public WindowRenderTarget ScreenRenderTarget { get; private set; }
@@ -25,16 +25,16 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
         private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(SharpDX.Direct2D1.FactoryType.SingleThreaded);
         private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
 
-        public EngineRendering(EngineCore core)
+        public EngineRendering(EngineCore gameCore)
         {
-            _core = core;
+            _gameCore = gameCore;
 
             var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
             var renderTargetProperties = new RenderTargetProperties(pixelFormat);
             var renderProperties = new HwndRenderTargetProperties
             {
-                Hwnd = core.Display.DrawingSurface.Handle,
-                PixelSize = new Size2(core.Display.NatrualScreenSize.Width, core.Display.NatrualScreenSize.Height),
+                Hwnd = gameCore.Display.DrawingSurface.Handle,
+                PixelSize = new Size2(gameCore.Display.NatrualScreenSize.Width, gameCore.Display.NatrualScreenSize.Height),
                 PresentOptions = PresentOptions.Immediately
             };
 
@@ -44,7 +44,7 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
                 TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Cleartype
             };
 
-            var intermediateRenderTargetSize = new Size2F(_core.Display.TotalCanvasSize.Width, _core.Display.TotalCanvasSize.Height);
+            var intermediateRenderTargetSize = new Size2F(_gameCore.Display.TotalCanvasSize.Width, _gameCore.Display.TotalCanvasSize.Height);
             IntermediateRenderTarget = new SharpDX.Direct2D1.BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
             {
                 AntialiasMode = AntialiasMode.PerPrimitive,
@@ -81,7 +81,7 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
         public void ApplyScaling(float scale)
         {
             var sourceRect = CalculateCenterCopyRectangle(IntermediateRenderTarget.Size, scale);
-            var destRect = new RawRectangleF(0, 0, _core.Display.NatrualScreenSize.Width, _core.Display.NatrualScreenSize.Height);
+            var destRect = new RawRectangleF(0, 0, _gameCore.Display.NatrualScreenSize.Width, _gameCore.Display.NatrualScreenSize.Height);
             ScreenRenderTarget.DrawBitmap(IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
         }
 
@@ -347,8 +347,8 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
         private RawMatrix3x2 GetScalingMatrix(double zoomFactor)
         {
             // Calculate the new center point (assuming your image dimensions are known)
-            float centerX = _core.Display.TotalCanvasSize.Width / 2.0f;
-            float centerY = _core.Display.TotalCanvasSize.Height / 2.0f;
+            float centerX = _gameCore.Display.TotalCanvasSize.Width / 2.0f;
+            float centerY = _gameCore.Display.TotalCanvasSize.Height / 2.0f;
 
             // Calculate the scaling transformation matrix
             var scalingMatrix = new RawMatrix3x2(

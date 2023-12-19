@@ -10,7 +10,7 @@ namespace StrikeforceInfinity.Game.Forms
 {
     public partial class FormDebug : Form
     {
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         private readonly List<string> _commandHistory = new();
         private int _commandHistoryIndex = 0;
 
@@ -18,7 +18,7 @@ namespace StrikeforceInfinity.Game.Forms
 
         private void FormDebug_Load(object sender, EventArgs e)
         {
-            foreach (var command in _core.Debug.CommandParser.Commands.OrderBy(o => o.Name))
+            foreach (var command in _gameCore.Debug.CommandParser.Commands.OrderBy(o => o.Name))
             {
                 var item = new ListViewItem(command.Name);
 
@@ -56,7 +56,7 @@ namespace StrikeforceInfinity.Game.Forms
                 listViewCommands.Items.Add(item);
             }
 
-            var suggestions = _core.Debug.CommandParser.Commands.Select(o => o.Name).ToArray();
+            var suggestions = _gameCore.Debug.CommandParser.Commands.Select(o => o.Name).ToArray();
 
             var allowedTypes = new AutoCompleteStringCollection();
             allowedTypes.AddRange(suggestions);
@@ -65,7 +65,7 @@ namespace StrikeforceInfinity.Game.Forms
             textBoxCommand.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
 
-        internal FormDebug(EngineCore core)
+        internal FormDebug(EngineCore gameCore)
         {
             InitializeComponent();
 
@@ -74,7 +74,7 @@ namespace StrikeforceInfinity.Game.Forms
 
             AcceptButton = buttonExecute;
 
-            _core = core;
+            _gameCore = gameCore;
 
             Shown += (object sender, EventArgs e) => textBoxCommand.Focus();
 
@@ -83,7 +83,7 @@ namespace StrikeforceInfinity.Game.Forms
 
             FormClosing += (object sender, FormClosingEventArgs e) =>
             {
-                core.Debug.ToggleVisibility();
+                gameCore.Debug.ToggleVisibility();
                 e.Cancel = true;
             };
         }
@@ -131,7 +131,7 @@ namespace StrikeforceInfinity.Game.Forms
                 _commandHistory.Add(command);
                 _commandHistoryIndex = _commandHistory.Count;
 
-                _core.Debug.EnqueueCommand(command);
+                _gameCore.Debug.EnqueueCommand(command);
             }
         }
 

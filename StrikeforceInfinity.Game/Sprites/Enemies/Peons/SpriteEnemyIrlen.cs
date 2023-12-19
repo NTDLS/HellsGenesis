@@ -19,8 +19,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 
-        public SpriteEnemyIrlen(EngineCore core)
-            : base(core, hullHealth, bountyMultiplier)
+        public SpriteEnemyIrlen(EngineCore gameCore)
+            : base(gameCore, hullHealth, bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
@@ -51,7 +51,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
             ResetLoadout(loadout);
 
 
-            Velocity.Angle.Degrees = AngleTo360(_core.Player.Sprite);
+            Velocity.Angle.Degrees = AngleTo360(_gameCore.Player.Sprite);
 
             initialHullHealth = HullHealth;
         }
@@ -79,7 +79,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
         {
             base.ApplyIntelligence(displacementVector);
 
-            double distanceToPlayer = HgMath.DistanceTo(this, _core.Player.Sprite);
+            double distanceToPlayer = HgMath.DistanceTo(this, _gameCore.Player.Sprite);
 
             if (Mode == AIMode.InFormation)
             {
@@ -97,7 +97,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
-                    PointAtAndGoto(_core.Player.Sprite);
+                    PointAtAndGoto(_gameCore.Player.Sprite);
                 }
                 else
                 {
@@ -131,7 +131,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
             if (Mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_core.Player.Sprite);
+                var deltaAngle = DeltaAngle(_gameCore.Player.Sprite);
 
                 if (deltaAngle.IsNotBetween(-10, 10))
                 {
@@ -157,7 +157,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponDualVulcanCannon>();
@@ -165,7 +165,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_core.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponVulcanCannon>();

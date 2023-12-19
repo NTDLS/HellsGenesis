@@ -9,8 +9,8 @@ namespace StrikeforceInfinity.Game.Controller
 {
     internal class StarSpriteTickController : SpriteTickControllerBase<SpriteStar>
     {
-        public StarSpriteTickController(EngineCore core, EngineSpriteManager manager)
-            : base(core, manager)
+        public StarSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+            : base(gameCore, manager)
         {
         }
 
@@ -20,14 +20,14 @@ namespace StrikeforceInfinity.Game.Controller
             {
                 #region Add new stars...
 
-                if (SpriteManager.VisibleOfType<SpriteStar>().Count < Core.Settings.DeltaFrameTargetStarCount) //Never wan't more than n stars.
+                if (SpriteManager.VisibleOfType<SpriteStar>().Count < GameCore.Settings.DeltaFrameTargetStarCount) //Never wan't more than n stars.
                 {
                     if (displacementVector.X > 0)
                     {
                         if (HgRandom.PercentChance(20))
                         {
-                            int x = HgRandom.Generator.Next(Core.Display.TotalCanvasSize.Width - (int)displacementVector.X, Core.Display.TotalCanvasSize.Width);
-                            int y = HgRandom.Generator.Next(0, Core.Display.TotalCanvasSize.Height);
+                            int x = HgRandom.Generator.Next(GameCore.Display.TotalCanvasSize.Width - (int)displacementVector.X, GameCore.Display.TotalCanvasSize.Width);
+                            int y = HgRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Height);
                             SpriteManager.Stars.Create(x, y);
                         }
 
@@ -37,7 +37,7 @@ namespace StrikeforceInfinity.Game.Controller
                         if (HgRandom.PercentChance(20))
                         {
                             int x = HgRandom.Generator.Next(0, (int)-displacementVector.X);
-                            int y = HgRandom.Generator.Next(0, Core.Display.TotalCanvasSize.Height);
+                            int y = HgRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Height);
                             SpriteManager.Stars.Create(x, y);
                         }
 
@@ -46,8 +46,8 @@ namespace StrikeforceInfinity.Game.Controller
                     {
                         if (HgRandom.PercentChance(20))
                         {
-                            int x = HgRandom.Generator.Next(0, Core.Display.TotalCanvasSize.Width);
-                            int y = HgRandom.Generator.Next(Core.Display.TotalCanvasSize.Height - (int)displacementVector.Y, Core.Display.TotalCanvasSize.Height);
+                            int x = HgRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Width);
+                            int y = HgRandom.Generator.Next(GameCore.Display.TotalCanvasSize.Height - (int)displacementVector.Y, GameCore.Display.TotalCanvasSize.Height);
                             SpriteManager.Stars.Create(x, y);
                         }
 
@@ -57,7 +57,7 @@ namespace StrikeforceInfinity.Game.Controller
 
                         if (HgRandom.PercentChance(20))
                         {
-                            int x = HgRandom.Generator.Next(0, Core.Display.TotalCanvasSize.Width);
+                            int x = HgRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Width);
                             int y = HgRandom.Generator.Next(0, (int)-displacementVector.Y);
                             SpriteManager.Stars.Create(x, y);
                         }
@@ -71,7 +71,7 @@ namespace StrikeforceInfinity.Game.Controller
                 {
                     star.ApplyMotion(displacementVector);
 
-                    if (Core.Display.TotalCanvasBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
+                    if (GameCore.Display.TotalCanvasBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
                     {
                         star.QueueForDelete();
                     }

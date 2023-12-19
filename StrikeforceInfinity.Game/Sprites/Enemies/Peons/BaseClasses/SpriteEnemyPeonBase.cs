@@ -15,8 +15,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons.BaseClasses
         public SpriteAnimation ThrustAnimation { get; internal set; }
         public SpriteAnimation BoostAnimation { get; internal set; }
 
-        public SpriteEnemyPeonBase(EngineCore core, int hullHealth, int bountyMultiplier)
-            : base(core, hullHealth, bountyMultiplier)
+        public SpriteEnemyPeonBase(EngineCore gameCore, int hullHealth, int bountyMultiplier)
+            : base(gameCore, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
@@ -30,13 +30,13 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons.BaseClasses
                 ReplayDelay = new TimeSpan(0)
             };
 
-            ThrustAnimation = new SpriteAnimation(_core, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode);
+            ThrustAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode);
             ThrustAnimation.Reset();
-            _core.Sprites.Animations.InsertAt(ThrustAnimation, this);
+            _gameCore.Sprites.Animations.InsertAt(ThrustAnimation, this);
 
-            BoostAnimation = new SpriteAnimation(_core, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode);
+            BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode);
             BoostAnimation.Reset();
-            _core.Sprites.Animations.InsertAt(BoostAnimation, this);
+            _gameCore.Sprites.Animations.InsertAt(BoostAnimation, this);
 
             UpdateThrustAnimationPositions();
         }

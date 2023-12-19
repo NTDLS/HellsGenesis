@@ -15,8 +15,8 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
         public int MaxSeekingObservationAngleDegrees { get; set; } = 20;
         public int SeekingRotationRateInDegrees { get; set; } = 4;
 
-        public SeekingMunitionBase(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
-            : base(core, weapon, firedFrom, imagePath, xyOffset)
+        public SeekingMunitionBase(EngineCore gameCore, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
+            : base(gameCore, weapon, firedFrom, imagePath, xyOffset)
         {
         }
 
@@ -24,9 +24,9 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
         {
             if (FiredFromType == HgFiredFromType.Enemy)
             {
-                if (DistanceTo(_core.Player.Sprite) < MaxSeekingObservationDistance)
+                if (DistanceTo(_gameCore.Player.Sprite) < MaxSeekingObservationDistance)
                 {
-                    var deltaAngle = DeltaAngle(_core.Player.Sprite);
+                    var deltaAngle = DeltaAngle(_gameCore.Player.Sprite);
 
                     if (Math.Abs((double)deltaAngle) < MaxSeekingObservationAngleDegrees)
                     {
@@ -45,7 +45,7 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
             {
                 double? smallestAngle = null;
 
-                foreach (var enemy in _core.Sprites.Enemies.Visible())
+                foreach (var enemy in _gameCore.Sprites.Enemies.Visible())
                 {
                     if (DistanceTo(enemy) < MaxSeekingObservationDistance)
                     {

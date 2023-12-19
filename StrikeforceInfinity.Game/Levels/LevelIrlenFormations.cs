@@ -14,8 +14,8 @@ namespace StrikeforceInfinity.Game.Levels
     /// </summary>
     internal class LevelIrlenFormations : LevelBase
     {
-        public LevelIrlenFormations(EngineCore core)
-            : base(core,
+        public LevelIrlenFormations(EngineCore gameCore)
+            : base(gameCore,
                   "Irlen Formations",
                   "They fly in formation, which look like easy targets...."
                   )
@@ -31,20 +31,20 @@ namespace StrikeforceInfinity.Game.Levels
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 1), AdvanceWaveCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 5), RedirectFormationCallback);
 
-            _core.Player.Sprite.AddHullHealth(100);
-            _core.Player.Sprite.AddShieldHealth(10);
+            _gameCore.Player.Sprite.AddHullHealth(100);
+            _gameCore.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void RedirectFormationCallback(EngineCore core, SiEngineCallbackEvent sender, object refObj)
+        private void RedirectFormationCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            var formationIrlens = _core.Sprites.Enemies.VisibleOfType<SpriteEnemyIrlen>()
+            var formationIrlens = _gameCore.Sprites.Enemies.VisibleOfType<SpriteEnemyIrlen>()
                 .Where(o => o.Mode == SpriteEnemyIrlen.AIMode.InFormation).ToList();
 
             if (formationIrlens.Count > 0)
             {
                 if (formationIrlens.Exists(o => o.IsWithinCurrentScaledScreenBounds == true) == false)
                 {
-                    double angleToPlayer = formationIrlens.First().AngleTo360(_core.Player.Sprite);
+                    double angleToPlayer = formationIrlens.First().AngleTo360(_gameCore.Player.Sprite);
 
                     foreach (SpriteEnemyIrlen enemy in formationIrlens)
                     {
@@ -54,16 +54,16 @@ namespace StrikeforceInfinity.Game.Levels
             }
         }
 
-        private void FirstShowPlayerCallback(EngineCore core, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            _core.Player.ResetAndShow();
+            _gameCore.Player.ResetAndShow();
         }
 
         bool waitingOnPopulation = false;
 
-        private void AdvanceWaveCallback(EngineCore core, SiEngineCallbackEvent sender, object refObj)
+        private void AdvanceWaveCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            if (_core.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !waitingOnPopulation)
+            if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !waitingOnPopulation)
             {
                 if (CurrentWave == TotalWaves && waitingOnPopulation != true)
                 {
@@ -72,22 +72,22 @@ namespace StrikeforceInfinity.Game.Levels
                 }
 
                 waitingOnPopulation = true;
-                _core.Events.Create(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
+                _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
                 CurrentWave++;
             }
         }
 
-        private void AddFreshEnemiesCallback(EngineCore core, SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            SiPoint baseLocation = _core.Display.RandomOffScreenLocation();
+            SiPoint baseLocation = _gameCore.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave * 5);
-            _core.Audio.RadarBlipsSound.Play();
+            _gameCore.Audio.RadarBlipsSound.Play();
             waitingOnPopulation = false;
         }
 
         private SpriteEnemyIrlen AddOneEnemyAt(double x, double y, double angle)
         {
-            var enemy = _core.Sprites.Enemies.Create<SpriteEnemyIrlen>();
+            var enemy = _gameCore.Sprites.Enemies.Create<SpriteEnemyIrlen>();
             enemy.X = x;
             enemy.Y = y;
             enemy.Velocity.ThrottlePercentage = 0.8;
@@ -98,7 +98,7 @@ namespace StrikeforceInfinity.Game.Levels
 
         private void CreateTriangleFormation(SiPoint baseLocation, double spacing, int depth)
         {
-            double angle = HgMath.AngleTo360(baseLocation, _core.Player.Sprite);
+            double angle = HgMath.AngleTo360(baseLocation, _gameCore.Player.Sprite);
 
             for (int col = 0; col < depth; col++)
             {

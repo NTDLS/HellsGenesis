@@ -10,8 +10,8 @@ namespace StrikeforceInfinity.Game.Sprites
     {
         public bool TakesDamage { get; set; }
 
-        public SpriteAttachment(EngineCore core, string imagePath, Size? size = null)
-            : base(core)
+        public SpriteAttachment(EngineCore gameCore, string imagePath, Size? size = null)
+            : base(gameCore)
         {
             Initialize(imagePath, size);
 

@@ -31,8 +31,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
         public List<WeaponBase> Weapons { get; private set; } = new();
 
 
-        public SpriteEnemyBase(EngineCore core, int hullHealth, int bountyMultiplier)
-                : base(core)
+        public SpriteEnemyBase(EngineCore gameCore, int hullHealth, int bountyMultiplier)
+                : base(gameCore)
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
@@ -40,11 +40,11 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
             SetHullHealth(hullHealth);
             BountyWorth = HullHealth * bountyMultiplier;
 
-            RadarPositionIndicator = _core.Sprites.RadarPositions.Create();
+            RadarPositionIndicator = _gameCore.Sprites.RadarPositions.Create();
             RadarPositionIndicator.Visable = false;
-            RadarPositionText = _core.Sprites.TextBlocks.CreateRadarPosition(
-                core.Rendering.TextFormats.RadarPositionIndicator,
-                core.Rendering.Materials.Brushes.Red, new SiPoint());
+            RadarPositionText = _gameCore.Sprites.TextBlocks.CreateRadarPosition(
+                gameCore.Rendering.TextFormats.RadarPositionIndicator,
+                gameCore.Rendering.Materials.Brushes.Red, new SiPoint());
         }
 
         public virtual void BeforeCreate() { }
@@ -55,7 +55,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
 
         public override void Explode()
         {
-            _core.Player.Sprite.Bounty += BountyWorth;
+            _gameCore.Player.Sprite.Bounty += BountyWorth;
 
             if (HgRandom.PercentChance(5))
             {
@@ -66,26 +66,26 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
                 switch (random)
                 {
                     case 0:
-                        powerUp = new SpritePowerUpAmmo(_core);
+                        powerUp = new SpritePowerUpAmmo(_gameCore);
                         break;
                     case 1:
-                        powerUp = new SpritePowerUpBoost(_core);
+                        powerUp = new SpritePowerUpBoost(_gameCore);
                         break;
                     case 2:
-                        powerUp = new SpritePowerUpBounty(_core);
+                        powerUp = new SpritePowerUpBounty(_gameCore);
                         break;
                     case 3:
-                        powerUp = new SpritePowerUpRepair(_core);
+                        powerUp = new SpritePowerUpRepair(_gameCore);
                         break;
                     case 4:
-                        powerUp = new SpritePowerUpSheild(_core);
+                        powerUp = new SpritePowerUpSheild(_gameCore);
                         break;
                 }
 
                 if (powerUp != null)
                 {
                     powerUp.Location = Location;
-                    _core.Sprites.Powerups.Insert(powerUp);
+                    _gameCore.Sprites.Powerups.Insert(powerUp);
                 }
             }
             base.Explode();
@@ -178,10 +178,10 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            if (X < -_core.Settings.EnemySceneDistanceLimit
-                || X >= _core.Display.NatrualScreenSize.Width + _core.Settings.EnemySceneDistanceLimit
-                || Y < -_core.Settings.EnemySceneDistanceLimit
-                || Y >= _core.Display.NatrualScreenSize.Height + _core.Settings.EnemySceneDistanceLimit)
+            if (X < -_gameCore.Settings.EnemySceneDistanceLimit
+                || X >= _gameCore.Display.NatrualScreenSize.Width + _gameCore.Settings.EnemySceneDistanceLimit
+                || Y < -_gameCore.Settings.EnemySceneDistanceLimit
+                || Y >= _gameCore.Display.NatrualScreenSize.Height + _gameCore.Settings.EnemySceneDistanceLimit)
             {
                 QueueForDelete();
                 return;
@@ -192,7 +192,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
             {
                 if (Velocity.BoostPercentage < 1.0) //Ramp up the boost until it is at 100%
                 {
-                    Velocity.BoostPercentage += _core.Settings.EnemyThrustRampUp;
+                    Velocity.BoostPercentage += _gameCore.Settings.EnemyThrustRampUp;
                 }
                 Velocity.AvailableBoost -= Velocity.MaxBoost * Velocity.BoostPercentage; //Consume boost.
 
@@ -203,7 +203,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
             }
             else if (Velocity.BoostPercentage > 0) //Ramp down the boost.
             {
-                Velocity.BoostPercentage -= _core.Settings.EnemyThrustRampDown;
+                Velocity.BoostPercentage -= _gameCore.Settings.EnemyThrustRampDown;
                 if (Velocity.BoostPercentage < 0)
                 {
                     Velocity.BoostPercentage = 0;
@@ -224,21 +224,21 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
 
             if (RadarPositionIndicator != null)
             {
-                if (_core.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds, -50) == false)
+                if (_gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds, -50) == false)
                 {
-                    RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_core.Player.Sprite));
+                    RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_gameCore.Player.Sprite));
 
                     RadarPositionText.Visable = true;
                     RadarPositionIndicator.Visable = true;
 
-                    double requiredAngle = _core.Player.Sprite.AngleTo360(this);
+                    double requiredAngle = _gameCore.Player.Sprite.AngleTo360(this);
 
                     var offset = HgMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle), new SiPoint(200, 200));
 
-                    RadarPositionText.Location = _core.Player.Sprite.Location + offset + new SiPoint(25, 25);
+                    RadarPositionText.Location = _gameCore.Player.Sprite.Location + offset + new SiPoint(25, 25);
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
 
-                    RadarPositionIndicator.Location = _core.Player.Sprite.Location + offset;
+                    RadarPositionIndicator.Location = _gameCore.Player.Sprite.Location + offset;
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
                 }
                 else
@@ -260,11 +260,11 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
 
         public virtual void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (Weapons != null && _core.Player.Sprite != null)
+            if (Weapons != null && _gameCore.Player.Sprite != null)
             {
                 foreach (var weapon in Weapons)
                 {
-                    if (weapon.ApplyWeaponsLock(displacementVector, _core.Player.Sprite)) //Enemy lock-on to Player. :O
+                    if (weapon.ApplyWeaponsLock(displacementVector, _gameCore.Player.Sprite)) //Enemy lock-on to Player. :O
                     {
                         break;
                     }
@@ -292,7 +292,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
 
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _core, this });
+                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameCore, this });
                 weapon.RoundQuantity += munitionCount;
                 Weapons.Add(weapon);
             }
@@ -307,7 +307,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
             var weapon = GetWeaponOfType<T>();
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _core, this });
+                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _gameCore, this });
                 weapon.RoundQuantity += munitionCount;
                 Weapons.Add(weapon);
             }

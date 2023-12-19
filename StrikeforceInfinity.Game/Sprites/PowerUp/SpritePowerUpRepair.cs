@@ -15,8 +15,8 @@ namespace StrikeforceInfinity.Game.Sprites.PowerUp
 
         private readonly int _powerUpAmount = 100;
 
-        public SpritePowerUpRepair(EngineCore core)
-            : base(core)
+        public SpritePowerUpRepair(EngineCore gameCore)
+            : base(gameCore)
         {
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
@@ -25,9 +25,9 @@ namespace StrikeforceInfinity.Game.Sprites.PowerUp
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (Intersects(_core.Player.Sprite))
+            if (Intersects(_gameCore.Player.Sprite))
             {
-                _core.Player.Sprite.AddHullHealth(_powerUpAmount);
+                _gameCore.Player.Sprite.AddHullHealth(_powerUpAmount);
                 Explode();
             }
             else if (AgeInMiliseconds > TimeToLive)

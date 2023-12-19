@@ -15,11 +15,11 @@ namespace StrikeforceInfinity.Game.Weapons
 
         private bool _toggle = false;
 
-        public WeaponScramsMissile(EngineCore core, _SpriteShipBase owner)
-            : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+        public WeaponScramsMissile(EngineCore gameCore, _SpriteShipBase owner)
+            : base(gameCore, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponScramsMissile(EngineCore core)
-            : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
+        public WeaponScramsMissile(EngineCore gameCore)
+            : base(gameCore, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()
         {
@@ -38,7 +38,7 @@ namespace StrikeforceInfinity.Game.Weapons
 
         public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
         {
-            return new MunitionGuidedFragMissile(_core, this, _owner, targetOfLock, xyOffset);
+            return new MunitionGuidedFragMissile(_gameCore, this, _owner, targetOfLock, xyOffset);
         }
 
         public override bool Fire()
@@ -53,12 +53,12 @@ namespace StrikeforceInfinity.Game.Weapons
                     if (_toggle)
                     {
                         var pointRight = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(10, 10));
-                        _core.Sprites.Munitions.Create(this, pointRight);
+                        _gameCore.Sprites.Munitions.Create(this, pointRight);
                     }
                     else
                     {
                         var pointLeft = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(10, 10));
-                        _core.Sprites.Munitions.Create(this, pointLeft);
+                        _gameCore.Sprites.Munitions.Create(this, pointLeft);
                     }
 
                     _toggle = !_toggle;
@@ -70,12 +70,12 @@ namespace StrikeforceInfinity.Game.Weapons
                         if (_toggle)
                         {
                             var pointRight = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(10, 10));
-                            _core.Sprites.Munitions.CreateLocked(this, lockedOn, pointRight);
+                            _gameCore.Sprites.Munitions.CreateLocked(this, lockedOn, pointRight);
                         }
                         else
                         {
                             var pointLeft = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(10, 10));
-                            _core.Sprites.Munitions.CreateLocked(this, lockedOn, pointLeft);
+                            _gameCore.Sprites.Munitions.CreateLocked(this, lockedOn, pointLeft);
                         }
                         _toggle = !_toggle;
                     }

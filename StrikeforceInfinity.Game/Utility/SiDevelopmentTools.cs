@@ -43,14 +43,14 @@ namespace StrikeforceInfinity.Game.Utility
         /// Tests dumping particles at a given position.
         /// </summary>
         /// <param name="core"></param>
-        public static void ParticleBlast(EngineCore core, int particleCount, SpriteBase at)
+        public static void ParticleBlast(EngineCore gameCore, int particleCount, SpriteBase at)
         {
             double X = at.X;
             double Y = at.Y;
 
             for (int i = 0; i < particleCount; i++)
             {
-                var obj = core.Sprites.Particles.CreateRandomShipPartParticleAt(X + HgRandom.Between(-20, 20), Y + HgRandom.Between(-20, 20));
+                var obj = gameCore.Sprites.Particles.CreateRandomShipPartParticleAt(X + HgRandom.Between(-20, 20), Y + HgRandom.Between(-20, 20));
                 obj.Visable = true;
             }
         }

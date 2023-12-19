@@ -58,7 +58,7 @@ namespace StrikeforceInfinity.Game.Managers
             "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean|Displays whether a given sprite is visible or not.",
         };
 
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         private readonly Stack<string> _commandStack = new();
         private readonly FormDebug formDebug;
         public DebugCommandParser CommandParser { get; } = new(_commandPrototypes);
@@ -66,10 +66,10 @@ namespace StrikeforceInfinity.Game.Managers
 
         public bool IsVisible { get; private set; } = false;
 
-        public EngineDebugManager(EngineCore core)
+        public EngineDebugManager(EngineCore gameCore)
         {
-            _core = core;
-            formDebug = new FormDebug(_core);
+            _gameCore = gameCore;
+            formDebug = new FormDebug(_gameCore);
             _hardDebugMethods = GetMethodsWithOnlyDebugCommandParameter();
         }
 
@@ -135,7 +135,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void CommandHandler_Display_BackgroundOffset_Get(DebugCommand command)
         {
-            formDebug.WriteLine($"{_core.Display.BackgroundOffset}", System.Drawing.Color.Black);
+            formDebug.WriteLine($"{_gameCore.Display.BackgroundOffset}", System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Display_BackgroundOffset_Set(DebugCommand command)
@@ -143,10 +143,10 @@ namespace StrikeforceInfinity.Game.Managers
             var x = command.ParameterValue<double>("x");
             var y = command.ParameterValue<double>("y");
 
-            var deltaX = _core.Display.BackgroundOffset.X - x;
-            var deltaY = _core.Display.BackgroundOffset.Y - y;
+            var deltaX = _gameCore.Display.BackgroundOffset.X - x;
+            var deltaY = _gameCore.Display.BackgroundOffset.Y - y;
 
-            foreach (var sprite in _core.Sprites.Collection)
+            foreach (var sprite in _gameCore.Sprites.Collection)
             {
                 if (sprite.IsFixedPosition == false)
                 {
@@ -155,20 +155,20 @@ namespace StrikeforceInfinity.Game.Managers
                 }
             }
 
-            _core.Display.BackgroundOffset.X = x;
-            _core.Display.BackgroundOffset.Y = y;
+            _gameCore.Display.BackgroundOffset.X = x;
+            _gameCore.Display.BackgroundOffset.Y = y;
         }
 
         public void CommandHandler_Display_BackgroundOffset_CenterOn(DebugCommand command)
         {
             var spriteUID = command.ParameterValue<double>("spriteUID");
-            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == spriteUID).FirstOrDefault();
+            var baseSprite = _gameCore.Sprites.Collection.Where(o => o.UID == spriteUID).FirstOrDefault();
             if (baseSprite != null)
             {
-                var deltaX = (_core.Display.TotalCanvasSize.Width / 2) - baseSprite.X;
-                var deltaY = (_core.Display.TotalCanvasSize.Height / 2) - baseSprite.Y;
+                var deltaX = (_gameCore.Display.TotalCanvasSize.Width / 2) - baseSprite.X;
+                var deltaY = (_gameCore.Display.TotalCanvasSize.Height / 2) - baseSprite.Y;
 
-                foreach (var sprite in _core.Sprites.Collection)
+                foreach (var sprite in _gameCore.Sprites.Collection)
                 {
                     if (sprite.IsFixedPosition == false)
                     {
@@ -177,20 +177,20 @@ namespace StrikeforceInfinity.Game.Managers
                     }
                 }
 
-                _core.Display.BackgroundOffset.X = baseSprite.X;
-                _core.Display.BackgroundOffset.Y = baseSprite.Y;
+                _gameCore.Display.BackgroundOffset.X = baseSprite.X;
+                _gameCore.Display.BackgroundOffset.Y = baseSprite.Y;
             }
         }
 
         public void CommandHandler_Display_Adapters(DebugCommand command)
         {
-            var text = _core.Rendering.GetGraphicsAdaptersInfo();
+            var text = _gameCore.Rendering.GetGraphicsAdaptersInfo();
             formDebug.Write(text, System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Enemies_DeleteAll(DebugCommand command)
         {
-            foreach (var sprite in _core.Sprites.Enemies.All())
+            foreach (var sprite in _gameCore.Sprites.Enemies.All())
             {
                 sprite.QueueForDelete();
             }
@@ -198,7 +198,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void CommandHandler_Sprite_Enemies_ExplodeAll(DebugCommand command)
         {
-            foreach (var sprite in _core.Sprites.Enemies.All())
+            foreach (var sprite in _gameCore.Sprites.Enemies.All())
             {
                 sprite.Explode();
             }
@@ -206,7 +206,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void CommandHandler_Sprite_Player_Explode(DebugCommand command)
         {
-            _core.Player.Sprite.Explode();
+            _gameCore.Player.Sprite.Explode();
         }
 
         public void CommandHandler_Cls(DebugCommand command)
@@ -263,78 +263,78 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Display_Metrics(DebugCommand command)
         {
             var infoText =
-                  $"          Background Offset: {_core.Display.BackgroundOffset}\r\n"
-                + $"            Base Draw Scale: {_core.Display.BaseDrawScale:n4}\r\n"
-                + $"              Overdraw Size: {_core.Display.OverdrawSize}\r\n"
-                + $"        Natrual Screen Size: {_core.Display.NatrualScreenSize}\r\n"
-                + $"          Total Canvas Size: {_core.Display.TotalCanvasSize}\r\n"
-                + $"        Total Canvas Bounds: {_core.Display.TotalCanvasBounds}\r\n"
-                + $"      Natrual Screen Bounds: {_core.Display.NatrualScreenBounds}\r\n"
-                + $" Speed Frame Scaling Factor: {_core.Display.SpeedOrientedFrameScalingFactor():n4}";
+                  $"          Background Offset: {_gameCore.Display.BackgroundOffset}\r\n"
+                + $"            Base Draw Scale: {_gameCore.Display.BaseDrawScale:n4}\r\n"
+                + $"              Overdraw Size: {_gameCore.Display.OverdrawSize}\r\n"
+                + $"        Natrual Screen Size: {_gameCore.Display.NatrualScreenSize}\r\n"
+                + $"          Total Canvas Size: {_gameCore.Display.TotalCanvasSize}\r\n"
+                + $"        Total Canvas Bounds: {_gameCore.Display.TotalCanvasBounds}\r\n"
+                + $"      Natrual Screen Bounds: {_gameCore.Display.NatrualScreenBounds}\r\n"
+                + $" Speed Frame Scaling Factor: {_gameCore.Display.SpeedOrientedFrameScalingFactor():n4}";
             formDebug.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Engine_HighlightAll(DebugCommand command)
         {
             var state = command.ParameterValue<bool>("state");
-            _core.Settings.HighlightAllSprites = state;
+            _gameCore.Settings.HighlightAllSprites = state;
         }
 
         public void CommandHandler_Display_Zoom_Reset(DebugCommand command)
         {
-            _core.Display.OverrideSpeedOrientedFrameScalingFactor = double.NaN;
+            _gameCore.Display.OverrideSpeedOrientedFrameScalingFactor = double.NaN;
         }
 
         public void CommandHandler_Display_Zoom_Override(DebugCommand command)
         {
             var level = command.ParameterValue<double>("level");
-            _core.Display.OverrideSpeedOrientedFrameScalingFactor = level.Box(-1, 1);
+            _gameCore.Display.OverrideSpeedOrientedFrameScalingFactor = level.Box(-1, 1);
         }
 
         public void CommandHandler_Display_Zoom_Get(DebugCommand command)
         {
-            formDebug.WriteLine($"{_core.Display.SpeedOrientedFrameScalingFactor():n4}", System.Drawing.Color.Black);
+            formDebug.WriteLine($"{_gameCore.Display.SpeedOrientedFrameScalingFactor():n4}", System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Engine_Pause(DebugCommand command)
         {
             var state = command.ParameterValue<bool>("state");
 
-            if (state == true && _core.IsPaused() == false)
+            if (state == true && _gameCore.IsPaused() == false)
             {
-                _core.Pause();
+                _gameCore.Pause();
             }
-            else if (state == false && _core.IsPaused() == true)
+            else if (state == false && _gameCore.IsPaused() == true)
             {
-                _core.Resume();
+                _gameCore.Resume();
             }
         }
 
         public void CommandHandler_Display_Framerate_Set(DebugCommand command)
         {
             var rate = command.ParameterValue<double>("rate");
-            _core.Settings.FrameLimiter = rate;
+            _gameCore.Settings.FrameLimiter = rate;
         }
 
         public void CommandHandler_Display_Framerate_Get(DebugCommand command)
         {
             var infoText =
-                  $"Limit: {_core.Settings.FrameLimiter:n4}\r\n"
-                + $"  Avg: {_core.Display.GameLoopCounter.AverageFrameRate:n4}\r\n"
-                + $"  Min: {_core.Display.GameLoopCounter.FrameRateMin:n4}\r\n"
-                + $"  Max: {_core.Display.GameLoopCounter.FrameRateMax:n4}";
+                  $"Limit: {_gameCore.Settings.FrameLimiter:n4}\r\n"
+                + $"  Avg: {_gameCore.Display.GameLoopCounter.AverageFrameRate:n4}\r\n"
+                + $"  Min: {_gameCore.Display.GameLoopCounter.FrameRateMin:n4}\r\n"
+                + $"  Max: {_gameCore.Display.GameLoopCounter.FrameRateMax:n4}";
             formDebug.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Player_Inspect(DebugCommand command)
         {
-            formDebug.WriteLine(_core.Player.Sprite.GetInspectionText(), System.Drawing.Color.Black);
+            formDebug.WriteLine(_gameCore.Player.Sprite.GetInspectionText(), System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Inspect(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
                 formDebug.WriteLine(sprite.GetInspectionText(), System.Drawing.Color.Black);
@@ -344,7 +344,7 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Sprite_Explode(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
                 sprite.Explode();
@@ -358,8 +358,8 @@ namespace StrikeforceInfinity.Game.Managers
             var toleranceDegrees = command.ParameterValue<double>("toleranceDegrees");
             var maxDistance = command.ParameterValue<double>("maxDistance");
 
-            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
-            var targetSprite = _core.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
+            var baseSprite = _gameCore.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
+            var targetSprite = _gameCore.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
 
             if (baseSprite != null && targetSprite != null)
             {
@@ -375,8 +375,8 @@ namespace StrikeforceInfinity.Game.Managers
             var toleranceDegrees = command.ParameterValue<double>("toleranceDegrees", 10);
             var maxDistance = command.ParameterValue<double>("maxDistance", 1000);
 
-            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
-            var targetSprite = _core.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
+            var baseSprite = _gameCore.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
+            var targetSprite = _gameCore.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
 
             if (baseSprite != null && targetSprite != null)
             {
@@ -391,8 +391,8 @@ namespace StrikeforceInfinity.Game.Managers
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
 
-            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
-            var targetSprite = _core.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
+            var baseSprite = _gameCore.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
+            var targetSprite = _gameCore.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
 
             if (baseSprite != null && targetSprite != null)
             {
@@ -406,8 +406,8 @@ namespace StrikeforceInfinity.Game.Managers
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
 
-            var baseSprite = _core.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
-            var targetSprite = _core.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
+            var baseSprite = _gameCore.Sprites.Collection.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
+            var targetSprite = _gameCore.Sprites.Collection.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
 
             if (baseSprite != null && targetSprite != null)
             {
@@ -419,7 +419,7 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Sprite_AngleInDegrees(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
                 sprite.Velocity.Angle.Degrees = command.ParameterValue<double>("value");
@@ -429,7 +429,7 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Sprite_Boost(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
                 sprite.Velocity.BoostPercentage = command.ParameterValue<double>("value");
@@ -439,7 +439,7 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Sprite_Throttle(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
                 sprite.Velocity.ThrottlePercentage = command.ParameterValue<double>("value");
@@ -449,7 +449,7 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Sprite_MaxBoost(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
                 sprite.Velocity.MaxBoost = command.ParameterValue<double>("value");
@@ -459,7 +459,7 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Sprite_MaxSpeed(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
                 sprite.Velocity.MaxSpeed = command.ParameterValue<double>("value");
@@ -469,7 +469,7 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Sprite_Highlight(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
                 sprite.Highlight = command.ParameterValue<bool>("state");
@@ -479,7 +479,7 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Sprite_Visible(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
                 sprite.Visable = command.ParameterValue<bool>("state");
@@ -489,7 +489,7 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Sprite_Move(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
                 sprite.X = command.ParameterValue<double>("x");
@@ -500,17 +500,17 @@ namespace StrikeforceInfinity.Game.Managers
         public void CommandHandler_Sprite_Move_Center(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            var sprite = _core.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
+            var sprite = _gameCore.Sprites.Collection.Where(o => o.UID == uid).FirstOrDefault();
             if (sprite != null)
             {
-                sprite.X = _core.Display.TotalCanvasSize.Width / 2;
-                sprite.Y = _core.Display.TotalCanvasSize.Height / 2;
+                sprite.X = _gameCore.Display.TotalCanvasSize.Width / 2;
+                sprite.Y = _gameCore.Display.TotalCanvasSize.Height / 2;
             }
         }
 
         public void CommandHandler_Sprite_List(DebugCommand command)
         {
-            var sprites = _core.Sprites.Collection.ToList();
+            var sprites = _gameCore.Sprites.Collection.ToList();
 
             var typeFilter = command.ParameterValue<DebugCommandParameterCriterion>("typeFilter");
             if (typeFilter != null)

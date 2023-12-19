@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites.Player
 {
     internal class SpriteDestroyerPlayer : SpritePlayerBase
     {
-        public SpriteDestroyerPlayer(EngineCore core)
-            : base(core)
+        public SpriteDestroyerPlayer(EngineCore gameCore)
+            : base(gameCore)
         {
             ShipClass = HgPlayerClass.Destroyer;
 

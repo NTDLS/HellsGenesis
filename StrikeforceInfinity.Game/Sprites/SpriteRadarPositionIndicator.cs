@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites
         private const string _assetPath = @"Graphics\Radar Indicator\";
         private readonly string _assetFile = "16x16.png";
 
-        public SpriteRadarPositionIndicator(EngineCore core)
-            : base(core)
+        public SpriteRadarPositionIndicator(EngineCore gameCore)
+            : base(gameCore)
         {
             Initialize(Path.Combine(_assetPath, _assetFile));
 

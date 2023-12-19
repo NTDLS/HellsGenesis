@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites
 {
     internal class SpriteRadarPositionTextBlock : SpriteTextBlock
     {
-        public SpriteRadarPositionTextBlock(EngineCore core, TextFormat format, SolidColorBrush color, SiPoint location)
-            : base(core, format, color, location, false)
+        public SpriteRadarPositionTextBlock(EngineCore gameCore, TextFormat format, SolidColorBrush color, SiPoint location)
+            : base(gameCore, format, color, location, false)
         {
             Visable = false;
             Velocity = new HgVelocity();

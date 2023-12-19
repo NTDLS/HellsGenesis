@@ -11,14 +11,14 @@ namespace StrikeforceInfinity.Game.Sprites
         private readonly int _imageCount = 5;
         private readonly int selectedImageIndex = 0;
 
-        public SpriteStar(EngineCore core)
-            : base(core)
+        public SpriteStar(EngineCore gameCore)
+            : base(gameCore)
         {
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % _imageCount;
             Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
-            X = HgRandom.Generator.Next(0, core.Display.TotalCanvasSize.Width);
-            Y = HgRandom.Generator.Next(0, core.Display.TotalCanvasSize.Height);
+            X = HgRandom.Generator.Next(0, gameCore.Display.TotalCanvasSize.Width);
+            Y = HgRandom.Generator.Next(0, gameCore.Display.TotalCanvasSize.Height);
 
             Velocity.MaxSpeed = 3;
 
@@ -37,7 +37,7 @@ namespace StrikeforceInfinity.Game.Sprites
             X -= displacementVector.X * Velocity.MaxSpeed * Velocity.ThrottlePercentage;
             Y -= displacementVector.Y * Velocity.MaxSpeed * Velocity.ThrottlePercentage;
 
-            if (_core.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
+            if (_gameCore.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
             {
                 QueueForDelete();
             }

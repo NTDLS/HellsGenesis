@@ -17,8 +17,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
         private readonly int imageCount = 6;
         private readonly int selectedImageIndex = 0;
 
-        public SpriteEnemyUves(EngineCore core)
-            : base(core, hullHealth, bountyMultiplier)
+        public SpriteEnemyUves(EngineCore gameCore)
+            : base(gameCore, hullHealth, bountyMultiplier)
         {
             selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));

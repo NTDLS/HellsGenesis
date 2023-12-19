@@ -8,7 +8,7 @@ namespace StrikeforceInfinity.Game.TickControllers.BaseClasses
     /// </summary>
     internal class PlayerTickControllerBase<T> : TickControllerBase<T> where T : class
     {
-        public EngineCore Core { get; private set; }
+        public EngineCore GameCore { get; private set; }
 
         /// <summary>
         /// Moves the player and returns the direction and amount of movment which was applied.
@@ -16,9 +16,9 @@ namespace StrikeforceInfinity.Game.TickControllers.BaseClasses
         /// <returns>Returns the direction and amount of movement that the player has moved in the current tick.</returns>
         public virtual SiPoint ExecuteWorldClockTick() => new SiPoint();
 
-        public PlayerTickControllerBase(EngineCore core)
+        public PlayerTickControllerBase(EngineCore gameCore)
         {
-            Core = core;
+            GameCore = gameCore;
         }
     }
 }

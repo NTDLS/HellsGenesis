@@ -16,7 +16,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
     {
         private const string _assetPath = @"Data\Data\AI\Logistics\FlyBy.txt";
 
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         private readonly _SpriteShipBase _owner;
         private readonly SpriteBase _observedObject;
 
@@ -66,9 +66,9 @@ namespace StrikeforceInfinity.Game.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public HostileEngagement(EngineCore core, _SpriteShipBase owner, SpriteBase observedObject)
+        public HostileEngagement(EngineCore gameCore, _SpriteShipBase owner, SpriteBase observedObject)
         {
-            _core = core;
+            _gameCore = gameCore;
             _owner = owner;
             _observedObject = observedObject;
 
@@ -334,7 +334,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
                 return;
             }
 
-            var networkJson = _core.Assets.GetText(_assetPath);
+            var networkJson = _gameCore.Assets.GetText(_assetPath);
             if (string.IsNullOrEmpty(networkJson) == false)
             {
                 var loadedNetwork = DniNeuralNetwork.LoadFromText(networkJson);

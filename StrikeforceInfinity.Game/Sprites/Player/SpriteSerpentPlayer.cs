@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites.Player
 {
     internal class SpriteSerpentPlayer : SpritePlayerBase
     {
-        public SpriteSerpentPlayer(EngineCore core)
-            : base(core)
+        public SpriteSerpentPlayer(EngineCore gameCore)
+            : base(gameCore)
         {
             ShipClass = HgPlayerClass.Serpent;
 

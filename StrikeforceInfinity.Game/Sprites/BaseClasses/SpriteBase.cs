@@ -18,7 +18,7 @@ namespace StrikeforceInfinity.Game.Sprites
     /// </summary>
     internal class SpriteBase
     {
-        protected EngineCore _core;
+        protected EngineCore _gameCore;
 
         private SharpDX.Direct2D1.Bitmap _image;
 
@@ -49,7 +49,7 @@ namespace StrikeforceInfinity.Game.Sprites
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
-        public bool IsWithinCurrentScaledScreenBounds => _core.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds);
+        public bool IsWithinCurrentScaledScreenBounds => _gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds);
         public bool Highlight { get; set; } = false;
         public HgRotationMode RotationMode { get; set; }
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
@@ -62,7 +62,7 @@ namespace StrikeforceInfinity.Game.Sprites
         public RectangleF VisibleBounds => new Rectangle((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
         public RectangleF Bounds => new((float)_location.X, (float)_location.Y, Size.Width, Size.Height);
         public Rectangle BoundsI => new((int)_location.X, (int)_location.Y, Size.Width, Size.Height);
-        public HgQuadrant Quadrant => _core.Display.GetQuadrant(X + _core.Display.BackgroundOffset.X, Y + _core.Display.BackgroundOffset.Y);
+        public HgQuadrant Quadrant => _gameCore.Display.GetQuadrant(X + _gameCore.Display.BackgroundOffset.X, Y + _gameCore.Display.BackgroundOffset.Y);
 
         public HgVelocity Velocity
         {
@@ -101,8 +101,8 @@ namespace StrikeforceInfinity.Game.Sprites
                 + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
                 + $"                          {Velocity.Angle.RadiansUnadjusted:n2}rad unadjusted\r\n"
                 + extraInfo
-                + $"              Virtual XY: X:{X + _core.Display.BackgroundOffset.X:n0}, Y:{Y + _core.Display.BackgroundOffset.Y:n0}\r\n"
-                + $"       Background Offset: {_core.Display.BackgroundOffset}\r\n"
+                + $"              Virtual XY: X:{X + _gameCore.Display.BackgroundOffset.X:n0}, Y:{Y + _gameCore.Display.BackgroundOffset.Y:n0}\r\n"
+                + $"       Background Offset: {_gameCore.Display.BackgroundOffset}\r\n"
                 + $"                  Thrust: {(Velocity.ThrottlePercentage * 100):n2}\r\n"
                 + $"                   Boost: {(Velocity.BoostPercentage * 100):n2}\r\n"
                 + $"                  Recoil: {(Velocity.RecoilPercentage * 100):n2}\r\n"
@@ -131,7 +131,7 @@ namespace StrikeforceInfinity.Game.Sprites
         /// <returns></returns>
         public SpriteAttachment Attach(string imagePath, bool takesDamage = false, int hullHealth = 1)
         {
-            var attachment = _core.Sprites.Attachments.Create(imagePath, null, UID);
+            var attachment = _gameCore.Sprites.Attachments.Create(imagePath, null, UID);
             attachment.TakesDamage = takesDamage;
             attachment.SetHullHealth(hullHealth);
             Attachments.Add(attachment);
@@ -141,7 +141,7 @@ namespace StrikeforceInfinity.Game.Sprites
         public virtual void AddHullHealth(int pointsToAdd)
         {
             HullHealth += pointsToAdd;
-            HullHealth = HullHealth.Box(0, _core.Settings.MaxHullHealth);
+            HullHealth = HullHealth.Box(0, _gameCore.Settings.MaxHullHealth);
         }
 
         public virtual void SetShieldHealth(int points)
@@ -153,7 +153,7 @@ namespace StrikeforceInfinity.Game.Sprites
         public virtual void AddShieldHealth(int pointsToAdd)
         {
             ShieldHealth += pointsToAdd;
-            ShieldHealth = ShieldHealth.Box(1, _core.Settings.MaxShieldPoints);
+            ShieldHealth = ShieldHealth.Box(1, _gameCore.Settings.MaxShieldPoints);
         }
 
         public bool IsLockedOn //The object is the subject of a foreign weapons lock.
@@ -166,7 +166,7 @@ namespace StrikeforceInfinity.Game.Sprites
             {
                 if (_isLockedOn == false && value == true)
                 {
-                    _core.Audio.LockedOnBlip.Play();
+                    _gameCore.Audio.LockedOnBlip.Play();
                 }
                 _isLockedOn = value;
             }
@@ -269,13 +269,13 @@ namespace StrikeforceInfinity.Game.Sprites
 
         #endregion
 
-        public SpriteBase(EngineCore core, string name = "")
+        public SpriteBase(EngineCore gameCore, string name = "")
         {
-            _core = core;
+            _gameCore = gameCore;
             SpriteTag = name;
             RotationMode = HgRotationMode.Rotate;
             Velocity = new HgVelocity();
-            Highlight = _core.Settings.HighlightAllSprites;
+            Highlight = _gameCore.Settings.HighlightAllSprites;
         }
 
         public virtual void Initialize(string imagePath = null, Size? size = null)
@@ -303,13 +303,13 @@ namespace StrikeforceInfinity.Game.Sprites
 
         public void SetImage(string imagePath)
         {
-            _image = _core.Assets.GetBitmap(imagePath);
+            _image = _gameCore.Assets.GetBitmap(imagePath);
             _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
         public void SetImage(string imagePath, Size size)
         {
-            _image = _core.Assets.GetBitmap(imagePath, size.Width, size.Height);
+            _image = _gameCore.Assets.GetBitmap(imagePath, size.Width, size.Height);
             _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
@@ -417,7 +417,7 @@ namespace StrikeforceInfinity.Game.Sprites
         {
             var intersections = new List<SpriteBase>();
 
-            foreach (var intersection in _core.Sprites.Collection)
+            foreach (var intersection in _gameCore.Sprites.Collection)
             {
                 if (intersection != this && intersection.Visable && intersection is not SpriteTextBlock)
                 {
@@ -697,7 +697,7 @@ namespace StrikeforceInfinity.Game.Sprites
             if (_hitExplosionAnimation != null)
             {
                 _hitExplosionAnimation.Reset();
-                _core.Sprites.Animations.InsertAt(_hitExplosionAnimation, this);
+                _gameCore.Sprites.Animations.InsertAt(_hitExplosionAnimation, this);
             }
         }
 
@@ -801,7 +801,7 @@ namespace StrikeforceInfinity.Game.Sprites
                 {
                     var rectangle = new RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
 
-                    _core.Rendering.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), Velocity.Angle.Degrees, _core.Rendering.Materials.Raw.Red, 0, 1);
+                    _gameCore.Rendering.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), Velocity.Angle.Degrees, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
                 }
             }
         }
@@ -816,22 +816,22 @@ namespace StrikeforceInfinity.Game.Sprites
             {
                 if (this is SpriteEnemyBase)
                 {
-                    _core.Rendering.FillTriangleAt(renderTarget, x, y, 3, _core.Rendering.Materials.Brushes.WhiteSmoke);
+                    _gameCore.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameCore.Rendering.Materials.Brushes.WhiteSmoke);
                 }
                 else if (this is MunitionBase)
                 {
                     float size;
 
-                    RawColor4 color = _core.Rendering.Materials.Raw.Blue;
+                    RawColor4 color = _gameCore.Rendering.Materials.Raw.Blue;
 
                     var munition = this as MunitionBase;
                     if (munition.FiredFromType == HgFiredFromType.Enemy)
                     {
-                        color = _core.Rendering.Materials.Raw.Red;
+                        color = _gameCore.Rendering.Materials.Raw.Red;
                     }
                     else
                     {
-                        color = _core.Rendering.Materials.Raw.Green;
+                        color = _gameCore.Rendering.Materials.Raw.Green;
                     }
 
                     if (munition.Weapon.ExplodesOnImpact)
@@ -843,7 +843,7 @@ namespace StrikeforceInfinity.Game.Sprites
                         size = 1;
                     }
 
-                    _core.Rendering.FillEllipseAt(renderTarget, x, y, size, size, color);
+                    _gameCore.Rendering.FillEllipseAt(renderTarget, x, y, size, size, color);
 
                 }
 
@@ -856,13 +856,13 @@ namespace StrikeforceInfinity.Game.Sprites
 
             if (RotationMode != HgRotationMode.None)
             {
-                _core.Rendering.DrawBitmapAt(renderTarget, bitmap,
+                _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap,
                     _location.X - bitmap.Size.Width / 2.0,
                     _location.Y - bitmap.Size.Height / 2.0, angle);
             }
             else //Almost free.
             {
-                _core.Rendering.DrawBitmapAt(renderTarget, bitmap, _location.X - bitmap.Size.Width / 2.0, _location.Y - bitmap.Size.Height / 2.0);
+                _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap, _location.X - bitmap.Size.Width / 2.0, _location.Y - bitmap.Size.Height / 2.0);
             }
         }
 

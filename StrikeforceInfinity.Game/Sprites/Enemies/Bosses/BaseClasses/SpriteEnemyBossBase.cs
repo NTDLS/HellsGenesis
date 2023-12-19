@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses.BaseClasses
     /// </summary>
     internal class SpriteEnemyBossBase : SpriteEnemyBase
     {
-        public SpriteEnemyBossBase(EngineCore core, int hullHealth, int bountyMultiplier)
-            : base(core, hullHealth, bountyMultiplier)
+        public SpriteEnemyBossBase(EngineCore gameCore, int hullHealth, int bountyMultiplier)
+            : base(gameCore, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
@@ -19,7 +19,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses.BaseClasses
         {
             _explodeSound?.Play();
             _explosionAnimation?.Reset();
-            _core.Sprites.Animations.InsertAt(_explosionAnimation, this);
+            _gameCore.Sprites.Animations.InsertAt(_explosionAnimation, this);
 
             CreateParticlesExplosion();
 

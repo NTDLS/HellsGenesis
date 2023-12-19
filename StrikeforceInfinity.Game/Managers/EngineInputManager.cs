@@ -13,7 +13,7 @@ namespace StrikeforceInfinity.Game.Managers
     /// </summary>
     internal class EngineInputManager
     {
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
         private readonly Dictionary<HgPlayerKey, bool> _playerKeyStates = new();
         private bool _collectDetailedKeyInformation = false;
         private readonly Dictionary<Key, bool> _allKeyStates = new();
@@ -38,9 +38,9 @@ namespace StrikeforceInfinity.Game.Managers
         /// </summary>
         public List<Key> DepressedKeys { get; private set; } = new();
 
-        public EngineInputManager(EngineCore core)
+        public EngineInputManager(EngineCore gameCore)
         {
-            _core = core;
+            _gameCore = gameCore;
 
             DirectInput = new();
             Keyboard = new Keyboard(DirectInput);
@@ -76,25 +76,25 @@ namespace StrikeforceInfinity.Game.Managers
         {
             var keyboardState = Keyboard.GetCurrentState();
 
-            _core.Input.KeyStateChanged(HgPlayerKey.AltForward, keyboardState.IsPressed(Key.Home));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltSpeedBoost, keyboardState.IsPressed(Key.LeftControl));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltRotateCounterClockwise, keyboardState.IsPressed(Key.Delete));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltRotateClockwise, keyboardState.IsPressed(Key.PageDown));
-            _core.Input.KeyStateChanged(HgPlayerKey.AltPrimaryFire, keyboardState.IsPressed(Key.LeftAlt));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.AltForward, keyboardState.IsPressed(Key.Home));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.AltSpeedBoost, keyboardState.IsPressed(Key.LeftControl));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.AltRotateCounterClockwise, keyboardState.IsPressed(Key.Delete));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.AltRotateClockwise, keyboardState.IsPressed(Key.PageDown));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.AltPrimaryFire, keyboardState.IsPressed(Key.LeftAlt));
 
-            _core.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
-            _core.Input.KeyStateChanged(HgPlayerKey.Forward, keyboardState.IsPressed(Key.W));
-            _core.Input.KeyStateChanged(HgPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
-            _core.Input.KeyStateChanged(HgPlayerKey.Reverse, keyboardState.IsPressed(Key.S));
-            _core.Input.KeyStateChanged(HgPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D));
-            _core.Input.KeyStateChanged(HgPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space));
-            _core.Input.KeyStateChanged(HgPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
-            _core.Input.KeyStateChanged(HgPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
-            _core.Input.KeyStateChanged(HgPlayerKey.Left, keyboardState.IsPressed(Key.Left));
-            _core.Input.KeyStateChanged(HgPlayerKey.Right, keyboardState.IsPressed(Key.Right));
-            _core.Input.KeyStateChanged(HgPlayerKey.Up, keyboardState.IsPressed(Key.Up));
-            _core.Input.KeyStateChanged(HgPlayerKey.Down, keyboardState.IsPressed(Key.Down));
-            _core.Input.KeyStateChanged(HgPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.Forward, keyboardState.IsPressed(Key.W));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.Reverse, keyboardState.IsPressed(Key.S));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.Left, keyboardState.IsPressed(Key.Left));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.Right, keyboardState.IsPressed(Key.Right));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.Up, keyboardState.IsPressed(Key.Up));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.Down, keyboardState.IsPressed(Key.Down));
+            _gameCore.Input.KeyStateChanged(HgPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
 
             //I beleive that this information may be taxing to gather.
             //Regardless we don't typically need is to require any code that uses it to enable it.
@@ -123,7 +123,7 @@ namespace StrikeforceInfinity.Game.Managers
                 }
 
                 bool shouldBeCaps = Control.IsKeyLocked(Keys.CapsLock);
-                bool shiftKeyDown = _core.Input.DepressedKeys.Contains(Key.LeftShift) || _core.Input.DepressedKeys.Contains(Key.RightShift);
+                bool shiftKeyDown = _gameCore.Input.DepressedKeys.Contains(Key.LeftShift) || _gameCore.Input.DepressedKeys.Contains(Key.RightShift);
                 if (shiftKeyDown)
                 {
                     shouldBeCaps = !shouldBeCaps;
@@ -131,13 +131,13 @@ namespace StrikeforceInfinity.Game.Managers
 
                 TypedString = string.Empty;
 
-                foreach (var key in _core.Input.CycledKeys)
+                foreach (var key in _gameCore.Input.CycledKeys)
                 {
                     if (key == Key.Space)
                     {
                         TypedString = " ";
                     }
-                    else if (!_core.Input.IsModifierKey(key))
+                    else if (!_gameCore.Input.IsModifierKey(key))
                     {
                         char? singleChar = null;
 
@@ -244,39 +244,39 @@ namespace StrikeforceInfinity.Game.Managers
         {
             if (key == Keys.Oem3)
             {
-                _core.Debug.ToggleVisibility();
+                _gameCore.Debug.ToggleVisibility();
             }
 
             else if (key == Keys.P)
             {
-                _core.TogglePause();
+                _gameCore.TogglePause();
             }
             else if (key == Keys.F1)
             {
-                if (_core.Sprites.OfType<SpriteEnemyBase>().Count > 0)
+                if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count > 0)
                 {
-                    _core.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
+                    _gameCore.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
                 }
             }
             else if (key == Keys.F2)
             {
-                SiDevelopmentTools.ParticleBlast(_core, 50, _core.Player.Sprite);
+                SiDevelopmentTools.ParticleBlast(_gameCore, 50, _gameCore.Player.Sprite);
                 //HgDevelopmentTools.CreateImageSizeVariants(@"..\..\..\Assets\Graphics\Fragments");
-                //_core.Sprites.NewGame();
-                //_core.Sprites.ResetAndShowPlayer();
+                //_gameCore.Sprites.NewGame();
+                //_gameCore.Sprites.ResetAndShowPlayer();
             }
             else if (key == Keys.Left)
             {
-                if (_core.Player?.Sprite?.Visable == true)
+                if (_gameCore.Player?.Sprite?.Visable == true)
                 {
-                    _core.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
+                    _gameCore.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
                 }
             }
             else if (key == Keys.Right)
             {
-                if (_core.Player?.Sprite?.Visable == true)
+                if (_gameCore.Player?.Sprite?.Visable == true)
                 {
-                    _core.Player?.Sprite?.SelectNextAvailableUsableSecondaryWeapon();
+                    _gameCore.Player?.Sprite?.SelectNextAvailableUsableSecondaryWeapon();
                 }
             }
         }

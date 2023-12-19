@@ -8,8 +8,8 @@ namespace StrikeforceInfinity.Game.Sprites.Player
 {
     internal class SpriteDebugPlayer : SpritePlayerBase
     {
-        public SpriteDebugPlayer(EngineCore core)
-            : base(core)
+        public SpriteDebugPlayer(EngineCore gameCore)
+            : base(gameCore)
         {
             ShipClass = HgPlayerClass.Debug;
 

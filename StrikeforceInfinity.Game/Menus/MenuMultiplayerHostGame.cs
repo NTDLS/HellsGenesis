@@ -15,12 +15,12 @@ namespace StrikeforceInfinity.Game.Menus
         SpriteMenuSelectableTextInput textBoxName;
         SpriteMenuSelectableTextInput textBoxMaxPlayers;
 
-        public MenuMultiplayerHostGame(EngineCore core)
-            : base(core)
+        public MenuMultiplayerHostGame(EngineCore gameCore)
+            : base(gameCore)
         {
-            var currentScaledScreenBounds = _core.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = _core.Display.TotalCanvasSize.Width / 2;
+            double offsetX = _gameCore.Display.TotalCanvasSize.Width / 2;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Host a Game");
@@ -62,22 +62,22 @@ namespace StrikeforceInfinity.Game.Menus
                 Configuration = new SiGameHost(textBoxName.Text, maxPlayers)
             };
 
-            var reply = _core.MessageClient.Query<SiCreateGameHostReply>(query).Result;
+            var reply = _gameCore.MessageClient.Query<SiCreateGameHostReply>(query).Result;
 
-            _core.SetGameHostUID(reply.UID);
+            _gameCore.SetGameHostUID(reply.UID);
 
-            _core.Menus.Insert(new SituationSelectMenu(_core));
+            _gameCore.Menus.Insert(new SituationSelectMenu(_gameCore));
 
             //SpriteMenuSelectableTextInput
 
             /*
             if (item.Key == "JOIN")
             {
-                //_core.Menus.Insert(new SituationSelectMenu(_core));
+                //_gameCore.Menus.Insert(new SituationSelectMenu(_gameCore));
             }
             else if (item.Key == "HOST")
             {
-                //_core.Menus.Insert(new SituationSelectMenu(_core));
+                //_gameCore.Menus.Insert(new SituationSelectMenu(_gameCore));
             }
             */
         }

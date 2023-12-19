@@ -10,7 +10,7 @@ namespace StrikeforceInfinity.Game.Situations.BaseClasses
     /// </summary>
     internal class SituationBase
     {
-        protected EngineCore _core;
+        protected EngineCore _gameCore;
         protected List<SiEngineCallbackEvent> Events = new();
 
         public LevelBase CurrentLevel { get; protected set; }
@@ -22,9 +22,9 @@ namespace StrikeforceInfinity.Game.Situations.BaseClasses
 
         public List<LevelBase> Levels { get; protected set; } = new();
 
-        public SituationBase(EngineCore core, string name, string description)
+        public SituationBase(EngineCore gameCore, string name, string description)
         {
-            _core = core;
+            _gameCore = gameCore;
             Name = name;
             Description = description;
             State = HgSituationState.NotYetStarted;
@@ -56,7 +56,7 @@ namespace StrikeforceInfinity.Game.Situations.BaseClasses
             {
                 if (_currentLevelIndex < Levels.Count)
                 {
-                    _core.Player.Hide();
+                    _gameCore.Player.Hide();
                     CurrentLevel = Levels[_currentLevelIndex];
                     CurrentLevel.Begin();
                     _currentLevelIndex++;

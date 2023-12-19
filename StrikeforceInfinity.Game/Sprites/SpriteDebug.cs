@@ -7,8 +7,8 @@ namespace StrikeforceInfinity.Game.Sprites
 {
     internal class SpriteDebug : _SpriteShipBase
     {
-        public SpriteDebug(EngineCore core)
-            : base(core)
+        public SpriteDebug(EngineCore gameCore)
+            : base(gameCore)
         {
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
             X = 0;
@@ -16,8 +16,8 @@ namespace StrikeforceInfinity.Game.Sprites
             Velocity = new HgVelocity();
         }
 
-        public SpriteDebug(EngineCore core, double x, double y)
-            : base(core)
+        public SpriteDebug(EngineCore gameCore, double x, double y)
+            : base(gameCore)
         {
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
             X = x;
@@ -25,8 +25,8 @@ namespace StrikeforceInfinity.Game.Sprites
             Velocity = new HgVelocity();
         }
 
-        public SpriteDebug(EngineCore core, double x, double y, string imagePath)
-            : base(core)
+        public SpriteDebug(EngineCore gameCore, double x, double y, string imagePath)
+            : base(gameCore)
         {
             Initialize(imagePath);
             X = x;
@@ -36,7 +36,7 @@ namespace StrikeforceInfinity.Game.Sprites
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            Velocity.Angle.Degrees = AngleTo360(_core.Player.Sprite);
+            Velocity.Angle.Degrees = AngleTo360(_gameCore.Player.Sprite);
             base.ApplyMotion(displacementVector);
         }
     }

@@ -11,8 +11,8 @@ namespace StrikeforceInfinity.Game.Controller
 {
     internal class TextBlockSpriteTickController : SpriteTickControllerBase<SpriteTextBlock>
     {
-        public TextBlockSpriteTickController(EngineCore core, EngineSpriteManager manager)
-            : base(core, manager)
+        public TextBlockSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+            : base(gameCore, manager)
         {
         }
 
@@ -30,7 +30,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (SpriteManager.Collection)
             {
-                var obj = new SpriteRadarPositionTextBlock(Core, format, color, location);
+                var obj = new SpriteRadarPositionTextBlock(GameCore, format, color, location);
                 SpriteManager.Collection.Add(obj);
                 return obj;
             }
@@ -40,7 +40,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (SpriteManager.Collection)
             {
-                var obj = new SpriteTextBlock(Core, format, color, location, isPositionStatic);
+                var obj = new SpriteTextBlock(GameCore, format, color, location, isPositionStatic);
                 SpriteManager.Collection.Add(obj);
                 return obj;
             }
@@ -50,7 +50,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (SpriteManager.Collection)
             {
-                var obj = new SpriteTextBlock(Core, format, color, location, isPositionStatic);
+                var obj = new SpriteTextBlock(GameCore, format, color, location, isPositionStatic);
                 obj.SpriteTag = name;
                 SpriteManager.Collection.Add(obj);
                 return obj;

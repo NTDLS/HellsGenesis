@@ -48,8 +48,8 @@ namespace StrikeforceInfinity.Game.Sprites
             public bool DeleteSpriteAfterPlay;
         }
 
-        public SpriteAnimation(EngineCore core, string spriteSheetFileName, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
-            : base(core)
+        public SpriteAnimation(EngineCore gameCore, string spriteSheetFileName, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
+            : base(gameCore)
         {
             _playMode = playMode;
 
@@ -64,7 +64,7 @@ namespace StrikeforceInfinity.Game.Sprites
             }
 
             _frameDelayMilliseconds = frameDelayMilliseconds;
-            _sheetImage = _core.Assets.GetBitmap(spriteSheetFileName);
+            _sheetImage = _gameCore.Assets.GetBitmap(spriteSheetFileName);
 
             _frameSize = (Size)frameSize;
             _rows = (int)(_sheetImage.Size.Height / ((Size)frameSize).Height);
@@ -96,7 +96,7 @@ namespace StrikeforceInfinity.Game.Sprites
                 _currentColumn * _frameSize.Width + _frameSize.Width,
                 _currentRow * _frameSize.Height + _frameSize.Height);
 
-            _core.Rendering.DrawBitmapAt(
+            _gameCore.Rendering.DrawBitmapAt(
                 renderTarget,
                 _sheetImage,
                 X - _frameSize.Width / 2.0,

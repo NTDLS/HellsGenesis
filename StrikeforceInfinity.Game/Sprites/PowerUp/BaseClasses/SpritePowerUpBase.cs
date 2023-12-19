@@ -39,16 +39,16 @@ namespace StrikeforceInfinity.Game.Sprites.PowerUp.BaseClasses
             }
         }
 
-        public SpritePowerUpBase(EngineCore core)
-            : base(core)
+        public SpritePowerUpBase(EngineCore gameCore)
+            : base(gameCore)
         {
             Initialize();
 
             int _hitImageIndex = HgRandom.Between(0, _assetHitAnimationFiles.Count());
-            _hitAnimation = new SpriteAnimation(_core, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
+            _hitAnimation = new SpriteAnimation(_gameCore, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
 
             int _soundIndex = HgRandom.Between(0, _assetExplosionSoundFiles.Count());
-            _explodeSound = _core.Assets.GetAudio(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
+            _explodeSound = _gameCore.Assets.GetAudio(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
 
             RadarDotSize = new SiPoint(4, 4);
         }
@@ -62,13 +62,13 @@ namespace StrikeforceInfinity.Game.Sprites.PowerUp.BaseClasses
         {
             _explodeSound.Play();
             _hitAnimation.Reset();
-            _core.Sprites.Animations.InsertAt(_hitAnimation, this);
+            _gameCore.Sprites.Animations.InsertAt(_hitAnimation, this);
             QueueForDelete();
         }
 
         public virtual void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (Intersects(_core.Player.Sprite))
+            if (Intersects(_gameCore.Player.Sprite))
             {
                 Explode();
             }

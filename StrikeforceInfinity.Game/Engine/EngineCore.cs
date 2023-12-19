@@ -201,7 +201,7 @@ namespace StrikeforceInfinity.Game.Engine
             }
         }
 
-        private void NewGameMenuCallback(EngineCore core, SiEngineCallbackEvent sender, object refObj)
+        private void NewGameMenuCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             Menus.Insert(new MenuStartNewGame(this));
         }

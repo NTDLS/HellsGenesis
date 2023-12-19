@@ -10,14 +10,14 @@ namespace StrikeforceInfinity.Game.Controller
 {
     internal class PlayerSpriteTickController : PlayerTickControllerBase<SpritePlayerBase>
     {
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
 
         public SpritePlayerBase Sprite { get; set; }
 
-        public PlayerSpriteTickController(EngineCore core)
-            : base(core)
+        public PlayerSpriteTickController(EngineCore gameCore)
+            : base(gameCore)
         {
-            _core = core;
+            _gameCore = gameCore;
         }
 
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
@@ -34,7 +34,7 @@ namespace StrikeforceInfinity.Game.Controller
 
             if (Sprite.Visable)
             {
-                if (Core.Input.IsKeyPressed(HgPlayerKey.PrimaryFire))
+                if (GameCore.Input.IsKeyPressed(HgPlayerKey.PrimaryFire))
                 {
                     if (Sprite.PrimaryWeapon != null && Sprite.PrimaryWeapon.Fire())
                     {
@@ -49,7 +49,7 @@ namespace StrikeforceInfinity.Game.Controller
                     }
                 }
 
-                if (Core.Input.IsKeyPressed(HgPlayerKey.SecondaryFire))
+                if (GameCore.Input.IsKeyPressed(HgPlayerKey.SecondaryFire))
                 {
                     if (Sprite.SelectedSecondaryWeapon != null && Sprite.SelectedSecondaryWeapon.Fire())
                     {
@@ -65,14 +65,14 @@ namespace StrikeforceInfinity.Game.Controller
                     }
                 }
 
-                if (Core.Settings.LockPlayerAngleToNearbyEnemy)
+                if (GameCore.Settings.LockPlayerAngleToNearbyEnemy)
                 {
                     #region //This needs some work. It works, but its odd - the movement is rigid.
-                    if (Core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise) == false && Core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise) == false)
+                    if (GameCore.Input.IsKeyPressed(HgPlayerKey.RotateClockwise) == false && GameCore.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise) == false)
                     {
                         if (_allowLockPlayerAngleToNearbyEnemy)
                         {
-                            var enemies = Core.Sprites.Enemies.Visible();
+                            var enemies = GameCore.Sprites.Enemies.Visible();
                             foreach (var enemy in enemies)
                             {
                                 var distanceTo = Sprite.DistanceTo(enemy);
@@ -99,13 +99,13 @@ namespace StrikeforceInfinity.Game.Controller
                 }
 
                 //Make player boost "build up" and fade-in.
-                if (Core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) && Core.Input.IsKeyPressed(HgPlayerKey.Forward)
+                if (GameCore.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) && GameCore.Input.IsKeyPressed(HgPlayerKey.Forward)
                     && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false)
                 {
                     if (Sprite.Velocity.BoostPercentage < 1.0)
                     {
                         double boostToAdd = Sprite.Velocity.BoostPercentage > 0
-                            ? Core.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.BoostPercentage) : Core.Settings.PlayerThrustRampUp;
+                            ? GameCore.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.BoostPercentage) : GameCore.Settings.PlayerThrustRampUp;
 
                         Sprite.Velocity.BoostPercentage += boostToAdd;
                     }
@@ -121,18 +121,18 @@ namespace StrikeforceInfinity.Game.Controller
                     //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
                     if (Sprite.Velocity.BoostPercentage > 0)
                     {
-                        Sprite.Velocity.BoostPercentage -= Core.Settings.PlayerThrustRampDown;
+                        Sprite.Velocity.BoostPercentage -= GameCore.Settings.PlayerThrustRampDown;
                         if (Sprite.Velocity.BoostPercentage < 0.01)
                         {
                             Sprite.Velocity.BoostPercentage = 0;
                         }
                     }
 
-                    if (Core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < Core.Settings.MaxPlayerBoostAmount)
+                    if (GameCore.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < GameCore.Settings.MaxPlayerBoostAmount)
                     {
-                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Box(0, Core.Settings.MaxPlayerBoostAmount);
+                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Box(0, GameCore.Settings.MaxPlayerBoostAmount);
 
-                        if (Sprite.Velocity.BoostRebuilding && Sprite.Velocity.AvailableBoost >= Core.Settings.PlayerBoostRebuildFloor)
+                        if (Sprite.Velocity.BoostRebuilding && Sprite.Velocity.AvailableBoost >= GameCore.Settings.PlayerBoostRebuildFloor)
                         {
                             Sprite.Velocity.BoostRebuilding = false;
                         }
@@ -140,7 +140,7 @@ namespace StrikeforceInfinity.Game.Controller
                 }
 
                 //Make player thrust "build up" and fade-in.
-                if (Core.Input.IsKeyPressed(HgPlayerKey.Forward))
+                if (GameCore.Input.IsKeyPressed(HgPlayerKey.Forward))
                 {
                     if (Sprite.Velocity.ThrottlePercentage < 1.0)
                     {
@@ -150,7 +150,7 @@ namespace StrikeforceInfinity.Game.Controller
                         //  of throttle will take a while. We do the reverse of this to stop. Stopping fast at first and slowly-slowly slowing to a stop.
 
                         double thrustToAdd = Sprite.Velocity.ThrottlePercentage > 0
-                            ? Core.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ThrottlePercentage) : Core.Settings.PlayerThrustRampUp;
+                            ? GameCore.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ThrottlePercentage) : GameCore.Settings.PlayerThrustRampUp;
 
                         Sprite.Velocity.ThrottlePercentage += thrustToAdd;
                     }
@@ -162,7 +162,7 @@ namespace StrikeforceInfinity.Game.Controller
                     {
                         //Ramp down to a stop:
                         double thrustToRemove = Sprite.Velocity.ThrottlePercentage < 1
-                            ? Core.Settings.PlayerThrustRampDown * Sprite.Velocity.ThrottlePercentage : Core.Settings.PlayerThrustRampDown;
+                            ? GameCore.Settings.PlayerThrustRampDown * Sprite.Velocity.ThrottlePercentage : GameCore.Settings.PlayerThrustRampDown;
 
                         Sprite.Velocity.ThrottlePercentage -= thrustToRemove;
 
@@ -176,7 +176,7 @@ namespace StrikeforceInfinity.Game.Controller
                     {
                         //Ramp up to a stop:
                         double thrustToRemove = Sprite.Velocity.ThrottlePercentage * -1 < 1
-                            ? Core.Settings.PlayerThrustRampDown * (1 - Sprite.Velocity.ThrottlePercentage * -1) : Core.Settings.PlayerThrustRampDown;
+                            ? GameCore.Settings.PlayerThrustRampDown * (1 - Sprite.Velocity.ThrottlePercentage * -1) : GameCore.Settings.PlayerThrustRampDown;
 
                         Sprite.Velocity.ThrottlePercentage += thrustToRemove;
                         if (Sprite.Velocity.ThrottlePercentage > 0)
@@ -190,8 +190,8 @@ namespace StrikeforceInfinity.Game.Controller
                 if (Sprite.BoostAnimation != null)
                 {
                     Sprite.BoostAnimation.Visable =
-                        Core.Input.IsKeyPressed(HgPlayerKey.SpeedBoost)
-                        && Core.Input.IsKeyPressed(HgPlayerKey.Forward)
+                        GameCore.Input.IsKeyPressed(HgPlayerKey.SpeedBoost)
+                        && GameCore.Input.IsKeyPressed(HgPlayerKey.Forward)
                         && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false;
                 }
 
@@ -203,7 +203,7 @@ namespace StrikeforceInfinity.Game.Controller
 
                 if (Sprite.ThrustAnimation != null)
                 {
-                    Sprite.ThrustAnimation.Visable = Core.Input.IsKeyPressed(HgPlayerKey.Forward);
+                    Sprite.ThrustAnimation.Visable = GameCore.Input.IsKeyPressed(HgPlayerKey.Forward);
                 }
 
                 var thrustVector = Sprite.Velocity.MaxSpeed * (Sprite.Velocity.ThrottlePercentage + -Sprite.Velocity.RecoilPercentage);
@@ -235,21 +235,21 @@ namespace StrikeforceInfinity.Game.Controller
                 }
 
                 //We are going to restrict the rotation speed to a percentage of thrust.
-                var rotationSpeed = Core.Settings.MaxPlayerRotationSpeedDegrees * Sprite.Velocity.ThrottlePercentage;
+                var rotationSpeed = GameCore.Settings.MaxPlayerRotationSpeedDegrees * Sprite.Velocity.ThrottlePercentage;
 
-                if (Core.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise))
+                if (GameCore.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise))
                 {
                     Sprite.Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0));
                 }
-                else if (Core.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
+                else if (GameCore.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
                 {
                     Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
                 }
             }
 
             //Scroll the background.
-            Core.Display.BackgroundOffset.X += displacementVector.X;
-            Core.Display.BackgroundOffset.Y += displacementVector.Y;
+            GameCore.Display.BackgroundOffset.X += displacementVector.X;
+            GameCore.Display.BackgroundOffset.Y += displacementVector.Y;
 
             if (Sprite.Velocity.RecoilPercentage > 0)
             {
@@ -262,18 +262,18 @@ namespace StrikeforceInfinity.Game.Controller
 
             Sprite.RenewableResources.RenewAllResources();
 
-            if (_core.PlayMode == HgPlayMode.MutiPlayer)
+            if (_gameCore.PlayMode == HgPlayMode.MutiPlayer)
             {
-                if ((DateTime.UtcNow - _playerAbsoluteState.Timestamp).TotalMilliseconds >= _core.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
+                if ((DateTime.UtcNow - _playerAbsoluteState.Timestamp).TotalMilliseconds >= _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
                 {
                     _playerAbsoluteState.Timestamp = DateTime.UtcNow;
-                    _playerAbsoluteState.X = _core.Display.BackgroundOffset.X;
-                    _playerAbsoluteState.Y = _core.Display.BackgroundOffset.Y;
+                    _playerAbsoluteState.X = _gameCore.Display.BackgroundOffset.X;
+                    _playerAbsoluteState.Y = _gameCore.Display.BackgroundOffset.Y;
                     _playerAbsoluteState.AngleDegrees = Sprite.Velocity.Angle.Degrees;
                     _playerAbsoluteState.BoostPercentage = Sprite.Velocity.BoostPercentage;
                     _playerAbsoluteState.ThrottlePercentage = Sprite.Velocity.ThrottlePercentage;
 
-                    _core.MultiplayerNotify(_playerAbsoluteState);
+                    _gameCore.MultiplayerNotify(_playerAbsoluteState);
                 }
             }
 
@@ -284,7 +284,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             Sprite.Reset();
 
-            Core.Sprites.RenderRadar = true;
+            GameCore.Sprites.RenderRadar = true;
             Sprite.Visable = true;
             Sprite.ShipEngineIdleSound.Play();
             Sprite.AllSystemsGoSound.Play();
@@ -293,7 +293,7 @@ namespace StrikeforceInfinity.Game.Controller
         public void Hide()
         {
             Sprite.Visable = false;
-            Core.Sprites.RenderRadar = false;
+            GameCore.Sprites.RenderRadar = false;
             Sprite.ShipEngineIdleSound.Stop();
             Sprite.ShipEngineRoarSound.Stop();
         }

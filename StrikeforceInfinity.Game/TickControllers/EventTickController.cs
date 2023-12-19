@@ -12,8 +12,8 @@ namespace StrikeforceInfinity.Game.Controller
     {
         public List<SiEngineCallbackEvent> Collection { get; private set; } = new();
 
-        public EventTickController(EngineCore core)
-            : base(core)
+        public EventTickController(EngineCore gameCore)
+            : base(gameCore)
         {
         }
 
@@ -36,8 +36,8 @@ namespace StrikeforceInfinity.Game.Controller
         {
             Create(new TimeSpan(0, 0, 0, 5), (core, sender, refObj) =>
             {
-                core.Audio.DoorIsAjarSound.Play();
-                core.Menus.Insert(new MenuStartNewGame(core));
+                GameCore.Audio.DoorIsAjarSound.Play();
+                GameCore.Menus.Insert(new MenuStartNewGame(core));
             });
         }
 
@@ -49,7 +49,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (Collection)
             {
-                var obj = new SiEngineCallbackEvent(Core, countdown, executeCallback, refObj, callbackEventMode, callbackEventAsync);
+                var obj = new SiEngineCallbackEvent(GameCore, countdown, executeCallback, refObj, callbackEventMode, callbackEventAsync);
                 Collection.Add(obj);
                 return obj;
             }
@@ -59,7 +59,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (Collection)
             {
-                var obj = new SiEngineCallbackEvent(Core, countdown, executeCallback, refObj);
+                var obj = new SiEngineCallbackEvent(GameCore, countdown, executeCallback, refObj);
                 Collection.Add(obj);
                 return obj;
             }
@@ -69,7 +69,7 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (Collection)
             {
-                var obj = new SiEngineCallbackEvent(Core, countdown, executeCallback);
+                var obj = new SiEngineCallbackEvent(GameCore, countdown, executeCallback);
                 Collection.Add(obj);
                 return obj;
             }

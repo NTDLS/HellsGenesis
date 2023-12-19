@@ -10,16 +10,16 @@ namespace StrikeforceInfinity.Game.Controller
 {
     internal class EnemySpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
     {
-        public EnemySpriteTickController(EngineCore core, EngineSpriteManager manager)
-            : base(core, manager)
+        public EnemySpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+            : base(gameCore, manager)
         {
         }
 
         public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
-            if (Core.Player.Sprite != null)
+            if (GameCore.Player.Sprite != null)
             {
-                Core.Player.Sprite.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
+                GameCore.Player.Sprite.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
             }
 
             foreach (var enemy in Visible())
@@ -29,13 +29,13 @@ namespace StrikeforceInfinity.Game.Controller
                     weapon.LockedOnObjects.Clear();
                 }
 
-                if (Core.Player.Sprite.Visable)
+                if (GameCore.Player.Sprite.Visable)
                 {
                     enemy.ApplyIntelligence(displacementVector);
 
-                    if (Core.Player.Sprite.SelectedSecondaryWeapon != null)
+                    if (GameCore.Player.Sprite.SelectedSecondaryWeapon != null)
                     {
-                        Core.Player.Sprite.SelectedSecondaryWeapon.ApplyWeaponsLock(displacementVector, enemy); //Player lock-on to enemy. :D
+                        GameCore.Player.Sprite.SelectedSecondaryWeapon.ApplyWeaponsLock(displacementVector, enemy); //Player lock-on to enemy. :D
                     }
                 }
 
@@ -48,11 +48,11 @@ namespace StrikeforceInfinity.Game.Controller
         {
             lock (SpriteManager.Collection)
             {
-                object[] param = { Core };
+                object[] param = { GameCore };
                 SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
-                obj.Location = Core.Display.RandomOffScreenLocation();
-                obj.Velocity.MaxSpeed = HgRandom.Generator.Next(Core.Settings.MinEnemySpeed, Core.Settings.MaxEnemySpeed);
+                obj.Location = GameCore.Display.RandomOffScreenLocation();
+                obj.Velocity.MaxSpeed = HgRandom.Generator.Next(GameCore.Settings.MinEnemySpeed, GameCore.Settings.MaxEnemySpeed);
                 obj.Velocity.Angle.Degrees = HgRandom.Generator.Next(0, 360);
 
                 obj.BeforeCreate();

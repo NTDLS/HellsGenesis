@@ -13,11 +13,11 @@ namespace StrikeforceInfinity.Game.Weapons
         private const string soundPath = @"Sounds\Weapons\DualVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponDualVulcanCannon(EngineCore core, _SpriteShipBase owner)
-            : base(core, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+        public WeaponDualVulcanCannon(EngineCore gameCore, _SpriteShipBase owner)
+            : base(gameCore, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponDualVulcanCannon(EngineCore core)
-            : base(core, Name, soundPath, soundVolumne) => InitializeWeapon();
+        public WeaponDualVulcanCannon(EngineCore gameCore)
+            : base(gameCore, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()
         {
@@ -38,14 +38,14 @@ namespace StrikeforceInfinity.Game.Weapons
                 if (RoundQuantity > 0)
                 {
                     var pointRight = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(5, 5));
-                    _core.Sprites.Munitions.Create(this, pointRight);
+                    _gameCore.Sprites.Munitions.Create(this, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0)
                 {
                     var pointLeft = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(5, 5));
-                    _core.Sprites.Munitions.Create(this, pointLeft);
+                    _gameCore.Sprites.Munitions.Create(this, pointLeft);
                     RoundQuantity--;
                 }
 
@@ -58,7 +58,7 @@ namespace StrikeforceInfinity.Game.Weapons
 
         public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
         {
-            return new MunitionVulcanCannon(_core, this, _owner, xyOffset);
+            return new MunitionVulcanCannon(_gameCore, this, _owner, xyOffset);
         }
     }
 }

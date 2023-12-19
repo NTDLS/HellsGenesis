@@ -16,15 +16,15 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public MunitionThunderstrikeMissile(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
-            : base(core, weapon, firedFrom, imagePath, xyOffset)
+        public MunitionThunderstrikeMissile(EngineCore gameCore, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
+            : base(gameCore, weapon, firedFrom, imagePath, xyOffset)
         {
             MaxSeekingObservationDistance = 1000;
             MaxSeekingObservationAngleDegrees = 20;
             SeekingRotationRateInDegrees = 4;
 
             _selectedHitExplosionAnimationIndex = HgRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
-            _hitExplosionAnimation = new SpriteAnimation(_core, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(66, 66));
+            _hitExplosionAnimation = new SpriteAnimation(_gameCore, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(66, 66));
         }
     }
 }

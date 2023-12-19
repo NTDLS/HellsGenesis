@@ -15,9 +15,9 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
         public int GuidedRotationRateInDegrees { get; set; } = 3;
         public SpriteBase LockedTarget { get; private set; }
 
-        public GuidedMunitionBase(EngineCore core, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
+        public GuidedMunitionBase(EngineCore gameCore, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
              SpriteBase lockedTarget = null, SiPoint xyOffset = null)
-            : base(core, weapon, firedFrom, imagePath, xyOffset)
+            : base(gameCore, weapon, firedFrom, imagePath, xyOffset)
         {
             LockedTarget = lockedTarget;
         }

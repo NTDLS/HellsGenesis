@@ -10,15 +10,15 @@ namespace StrikeforceInfinity.Game.Situations
     /// </summary>
     internal class SituationDebuggingGalore : SituationBase
     {
-        public SituationDebuggingGalore(EngineCore core)
-            : base(core,
+        public SituationDebuggingGalore(EngineCore gameCore)
+            : base(gameCore,
                   "Debugging Galore",
                   "The situation is dire and the explosions here typically\r\n"
                   + "cause the entire universe to end - as well as the program."
                   )
         {
-            Levels.Add(new LevelDebuggingGalore(core));
-            Levels.Add(new LevelFreeFlight(core));
+            Levels.Add(new LevelDebuggingGalore(gameCore));
+            Levels.Add(new LevelFreeFlight(gameCore));
         }
     }
 }

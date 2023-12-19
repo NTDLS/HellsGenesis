@@ -23,8 +23,8 @@ namespace StrikeforceInfinity.Game.Controller
             }
         }
 
-        public MenuTickController(EngineCore core)
-            : base(core)
+        public MenuTickController(EngineCore gameCore)
+            : base(gameCore)
         {
         }
 

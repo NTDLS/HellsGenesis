@@ -10,7 +10,7 @@ namespace StrikeforceInfinity.Game.Managers
     /// </summary>
     internal class EngineAudioManager
     {
-        private readonly EngineCore _core;
+        private readonly EngineCore _gameCore;
 
         public SiAudioClip BackgroundMusicSound { get; private set; }
         public SiAudioClip RadarBlipsSound { get; private set; }
@@ -18,15 +18,15 @@ namespace StrikeforceInfinity.Game.Managers
         public SiAudioClip LockedOnBlip { get; private set; }
         public SiAudioClip Click { get; private set; }
 
-        public EngineAudioManager(EngineCore core)
+        public EngineAudioManager(EngineCore gameCore)
         {
-            _core = core;
+            _gameCore = gameCore;
 
-            Click = _core.Assets.GetAudio(@"Sounds\Other\Click.wav", 0.70f, false);
-            DoorIsAjarSound = _core.Assets.GetAudio(@"Sounds\Ship\Door Is Ajar.wav", 0.50f, false);
-            RadarBlipsSound = _core.Assets.GetAudio(@"Sounds\Ship\Radar Blips.wav", 0.20f, false);
-            LockedOnBlip = _core.Assets.GetAudio(@"Sounds\Ship\Locked On.wav", 0.20f, false);
-            BackgroundMusicSound = _core.Assets.GetAudio(@"Sounds\Music\Background.wav", 0.25f, true);
+            Click = _gameCore.Assets.GetAudio(@"Sounds\Other\Click.wav", 0.70f, false);
+            DoorIsAjarSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Door Is Ajar.wav", 0.50f, false);
+            RadarBlipsSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Radar Blips.wav", 0.20f, false);
+            LockedOnBlip = _gameCore.Assets.GetAudio(@"Sounds\Ship\Locked On.wav", 0.20f, false);
+            BackgroundMusicSound = _gameCore.Assets.GetAudio(@"Sounds\Music\Background.wav", 0.25f, true);
         }
 
         public void PlayRandomExplosion()
@@ -34,7 +34,7 @@ namespace StrikeforceInfinity.Game.Managers
             const string _assetExplosionSoundPath = @"Sounds\Explode\";
             int explosionSoundCount = 4;
             int selectedExplosionSoundIndex = HgRandom.Generator.Next(0, 1000) % explosionSoundCount;
-            var explodeSound = _core.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{selectedExplosionSoundIndex}.wav"), 1.0f);
+            var explodeSound = _gameCore.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{selectedExplosionSoundIndex}.wav"), 1.0f);
             explodeSound?.Play();
         }
     }
