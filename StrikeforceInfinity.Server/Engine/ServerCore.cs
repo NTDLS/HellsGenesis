@@ -1,8 +1,8 @@
-﻿using StrikeforceInfinity.Client.Payloads;
+﻿using NTDLS.ReliableMessaging;
+using NTDLS.StreamFraming.Payloads;
+using StrikeforceInfinity.Client.Payloads;
 using StrikeforceInfinity.Shared;
 using StrikeforceInfinity.Shared.MultiplayerEvents;
-using NTDLS.ReliableMessaging;
-using NTDLS.StreamFraming.Payloads;
 using System.Diagnostics;
 
 namespace StrikeforceInfinity.Server.Engine
@@ -42,9 +42,13 @@ namespace StrikeforceInfinity.Server.Engine
 
         private void MessageServer_OnNotificationReceived(MessageServer server, Guid connectionId, IFramePayloadNotification payload)
         {
-            if (payload is MultiplayerEventPositionChanged  position)
+            if (payload is MultiplayerEventPositionChanged position)
             {
                 Debug.WriteLine($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
+            }
+            else if (payload is MultiplayerEventRegister register)
+            {
+                //Debug.WriteLine($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
             }
         }
 

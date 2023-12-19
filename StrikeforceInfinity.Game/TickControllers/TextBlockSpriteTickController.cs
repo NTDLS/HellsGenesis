@@ -1,10 +1,10 @@
-﻿using StrikeforceInfinity.Game.Engine;
+﻿using SharpDX.Direct2D1;
+using SharpDX.DirectWrite;
+using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Sprites;
 using StrikeforceInfinity.Game.TickControllers.BaseClasses;
-using SharpDX.Direct2D1;
-using SharpDX.DirectWrite;
 using System.Linq;
 
 namespace StrikeforceInfinity.Game.Controller

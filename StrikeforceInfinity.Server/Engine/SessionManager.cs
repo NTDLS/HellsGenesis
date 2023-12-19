@@ -1,5 +1,5 @@
-﻿using StrikeforceInfinity.Server.Items;
-using NTDLS.Semaphore;
+﻿using NTDLS.Semaphore;
+using StrikeforceInfinity.Server.Items;
 
 namespace StrikeforceInfinity.Server.Engine
 {

@@ -1,10 +1,10 @@
-﻿using StrikeforceInfinity.Game.Engine;
+﻿using NTDLS.Determinet;
+using NTDLS.Determinet.Types;
+using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Sprites;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
-using NTDLS.Determinet;
-using NTDLS.Determinet.Types;
 using System;
 using System.Diagnostics;
 

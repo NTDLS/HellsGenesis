@@ -1,7 +1,7 @@
-﻿using StrikeforceInfinity.Game.Engine;
-using StrikeforceInfinity.Game.Engine.Types.Geometry;
-using SharpDX.Direct2D1;
+﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
+using StrikeforceInfinity.Game.Engine;
+using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using System.Drawing;
 
 namespace StrikeforceInfinity.Game.Sprites

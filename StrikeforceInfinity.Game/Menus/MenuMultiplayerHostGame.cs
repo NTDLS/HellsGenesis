@@ -3,7 +3,6 @@ using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
-using System.Windows.Forms;
 
 namespace StrikeforceInfinity.Game.Menus
 {

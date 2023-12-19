@@ -1,11 +1,11 @@
-﻿using StrikeforceInfinity.Game.Engine;
+﻿using SharpDX.Mathematics.Interop;
+using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
 using StrikeforceInfinity.Game.Weapons.Munitions;
-using SharpDX.Mathematics.Interop;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

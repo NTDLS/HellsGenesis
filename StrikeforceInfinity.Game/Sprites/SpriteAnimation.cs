@@ -1,9 +1,9 @@
-﻿using StrikeforceInfinity.Game.Engine;
-using StrikeforceInfinity.Game.Engine.Types;
-using StrikeforceInfinity.Game.Engine.Types.Geometry;
-using SharpDX;
+﻿using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
+using StrikeforceInfinity.Game.Engine;
+using StrikeforceInfinity.Game.Engine.Types;
+using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using System;
 using System.Drawing;
 

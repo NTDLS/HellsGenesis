@@ -2,7 +2,7 @@
 
 namespace StrikeforceInfinity.Shared.MultiplayerEvents
 {
-    public class MultiplayerEventBase: IFramePayloadNotification
+    public class MultiplayerEventBase : IFramePayloadNotification
     {
     }
 }

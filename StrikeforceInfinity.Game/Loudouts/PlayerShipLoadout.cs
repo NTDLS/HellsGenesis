@@ -1,6 +1,6 @@
-﻿using StrikeforceInfinity.Game.Engine;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using StrikeforceInfinity.Game.Engine;
 using System.Collections.Generic;
 
 namespace StrikeforceInfinity.Game.Loudouts

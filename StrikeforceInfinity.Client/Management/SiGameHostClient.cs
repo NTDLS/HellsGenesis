@@ -1,6 +1,6 @@
-﻿using StrikeforceInfinity.Client.Payloads;
+﻿using Newtonsoft.Json;
+using StrikeforceInfinity.Client.Payloads;
 using StrikeforceInfinity.Client.Payloads.Response;
-using Newtonsoft.Json;
 using System.Text;
 
 namespace StrikeforceInfinity.Client.Management

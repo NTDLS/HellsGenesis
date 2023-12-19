@@ -1,6 +1,6 @@
-﻿using StrikeforceInfinity.Client.Payloads;
+﻿using NTDLS.Semaphore;
+using StrikeforceInfinity.Client.Payloads;
 using StrikeforceInfinity.Server.Items;
-using NTDLS.Semaphore;
 
 namespace StrikeforceInfinity.Server.Engine
 {

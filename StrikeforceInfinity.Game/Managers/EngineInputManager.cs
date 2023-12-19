@@ -1,7 +1,7 @@
-﻿using StrikeforceInfinity.Game.Engine;
+﻿using SharpDX.DirectInput;
+using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses;
 using StrikeforceInfinity.Game.Utility;
-using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;

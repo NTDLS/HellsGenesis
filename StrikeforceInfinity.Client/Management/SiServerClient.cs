@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using StrikeforceInfinity.Shared.Exceptions;
 using StrikeforceInfinity.Client.Payloads.Response;
 
 namespace StrikeforceInfinity.Client.Management

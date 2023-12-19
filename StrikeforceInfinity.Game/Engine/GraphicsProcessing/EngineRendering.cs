@@ -1,10 +1,10 @@
-﻿using StrikeforceInfinity.Game.Utility;
-using SharpDX;
+﻿using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
+using StrikeforceInfinity.Game.Utility;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;

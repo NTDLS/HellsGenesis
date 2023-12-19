@@ -1,4 +1,5 @@
-﻿using StrikeforceInfinity.Game.Engine;
+﻿using Newtonsoft.Json;
+using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Loudouts;
@@ -7,7 +8,6 @@ using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Weapons.BaseClasses;
 using StrikeforceInfinity.Game.Weapons.Munitions;
 using StrikeforceInfinity.Shared.MultiplayerEvents;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

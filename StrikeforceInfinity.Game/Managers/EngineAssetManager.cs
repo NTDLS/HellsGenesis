@@ -1,6 +1,6 @@
-﻿using StrikeforceInfinity.Game.Engine;
+﻿using NTDLS.Determinet;
+using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types;
-using NTDLS.Determinet;
 using System;
 using System.Collections.Generic;
 using System.IO;

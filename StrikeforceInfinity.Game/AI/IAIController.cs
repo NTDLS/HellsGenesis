@@ -1,5 +1,5 @@
-﻿using StrikeforceInfinity.Game.Engine.Types.Geometry;
-using NTDLS.Determinet;
+﻿using NTDLS.Determinet;
+using StrikeforceInfinity.Game.Engine.Types.Geometry;
 
 namespace StrikeforceInfinity.Game.AI
 {

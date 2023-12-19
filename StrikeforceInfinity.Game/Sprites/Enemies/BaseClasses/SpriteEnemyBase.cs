@@ -1,4 +1,5 @@
-﻿using StrikeforceInfinity.Game.AI;
+﻿using Newtonsoft.Json;
+using StrikeforceInfinity.Game.AI;
 using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Loudouts;
@@ -9,7 +10,6 @@ using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
 using StrikeforceInfinity.Game.Weapons.BaseClasses;
 using StrikeforceInfinity.Game.Weapons.Munitions;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;

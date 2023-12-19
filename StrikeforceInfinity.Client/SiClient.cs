@@ -1,8 +1,6 @@
 ﻿using StrikeforceInfinity.Client.Management;
-using StrikeforceInfinity.Client.Payloads;
 using StrikeforceInfinity.Shared;
 using StrikeforceInfinity.Shared.Exceptions;
-using System.Diagnostics;
 
 namespace StrikeforceInfinity.Client
 {

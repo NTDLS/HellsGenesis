@@ -1,12 +1,12 @@
-﻿using StrikeforceInfinity.Client;
+﻿using Newtonsoft.Json;
+using NTDLS.ReliableMessaging;
+using StrikeforceInfinity.Client;
 using StrikeforceInfinity.Game.Controller;
 using StrikeforceInfinity.Game.Engine.GraphicsProcessing;
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Menus;
 using StrikeforceInfinity.Shared.MultiplayerEvents;
-using Newtonsoft.Json;
-using NTDLS.ReliableMessaging;
 using System.Drawing;
 using System.Windows.Forms;
 

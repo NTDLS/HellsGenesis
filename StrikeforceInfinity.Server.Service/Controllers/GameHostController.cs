@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using StrikeforceInfinity.Client.Payloads;
 using StrikeforceInfinity.Client.Payloads.Response;
 using StrikeforceInfinity.Shared;
-using Newtonsoft.Json;
 
 namespace StrikeforceInfinity.Server.Service.Controllers
 {

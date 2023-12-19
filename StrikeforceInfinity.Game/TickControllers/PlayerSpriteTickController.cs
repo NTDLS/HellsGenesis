@@ -1,5 +1,4 @@
 ﻿using StrikeforceInfinity.Game.Engine;
-using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
 using StrikeforceInfinity.Game.TickControllers.BaseClasses;

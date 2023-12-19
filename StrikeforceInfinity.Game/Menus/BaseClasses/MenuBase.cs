@@ -1,7 +1,7 @@
-﻿using StrikeforceInfinity.Game.Engine;
+﻿using SharpDX.DirectInput;
+using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
-using SharpDX.DirectInput;
 using System;
 using System.Collections.Generic;
 using System.Linq;
