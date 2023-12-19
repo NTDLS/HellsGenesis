@@ -1,6 +1,6 @@
 ﻿namespace StrikeforceInfinity.Shared
 {
-    public class StrikeforceInfinitySettings
+    public class SiSettings
     {
         /// <summary>
         /// The listen port for data exchange.

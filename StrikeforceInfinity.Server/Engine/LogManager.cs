@@ -1,4 +1,4 @@
-﻿using StrikeforceInfinity.Server.Items;
+﻿using StrikeforceInfinity.Server.Engine.Objects;
 using StrikeforceInfinity.Shared;
 using StrikeforceInfinity.Shared.Exceptions;
 using System.Text;

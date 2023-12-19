@@ -1,5 +1,5 @@
 ﻿using NTDLS.Semaphore;
-using StrikeforceInfinity.Server.Items;
+using StrikeforceInfinity.Server.Engine.Objects;
 
 namespace StrikeforceInfinity.Server.Engine
 {
@@ -14,23 +14,25 @@ namespace StrikeforceInfinity.Server.Engine
             _core = core;
         }
 
-        public Session Upsert(Guid sessionId)
+        public void Remove(Guid connectionId)
+        {
+            _sessions.Use(o =>
+            {
+                o.RemoveAll(o => o.ConnectionId == connectionId);
+            });
+        }
+
+        public Session Establish(Guid connectionId)
         {
             return _sessions.Use(o =>
             {
-                var sesson = o.FirstOrDefault(s => s.SessionId == sessionId);
-                if (sesson != null)
-                {
-                    sesson.LastSeenDatetime = DateTime.UtcNow;
-                    return sesson;
-                }
-
-                sesson = new Session(sessionId)
+                var sesson = new Session(connectionId)
                 {
                     LastSeenDatetime = DateTime.UtcNow
                 };
 
                 o.Add(sesson);
+
                 return sesson;
             });
         }

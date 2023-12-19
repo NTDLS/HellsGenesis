@@ -17,8 +17,8 @@ namespace StrikeforceInfinity.Server
             }
         }
 
-        private static StrikeforceInfinitySettings? _settings = null;
-        public static StrikeforceInfinitySettings Configuration
+        private static SiSettings? _settings = null;
+        public static SiSettings Configuration
         {
             get
             {
@@ -28,7 +28,7 @@ namespace StrikeforceInfinity.Server
                                  .AddJsonFile("appsettings.json")
                                  .Build();
 
-                    _settings = config.GetRequiredSection("Settings").Get<StrikeforceInfinitySettings>()
+                    _settings = config.GetRequiredSection("Settings").Get<SiSettings>()
                         ?? throw new Exception("Failed to load settings");
                 }
 

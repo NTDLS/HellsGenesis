@@ -1,4 +1,4 @@
-﻿namespace StrikeforceInfinity.Server.Items
+﻿namespace StrikeforceInfinity.Server.Engine.Objects
 {
     public class GameHost
     {

@@ -1,6 +1,6 @@
 ﻿using static StrikeforceInfinity.Shared.SiConstants;
 
-namespace StrikeforceInfinity.Server.Items
+namespace StrikeforceInfinity.Server.Engine.Objects
 {
     public class LogEntry
     {

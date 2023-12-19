@@ -13,11 +13,11 @@ namespace StrikeforceInfinity.Server.Engine
         public SessionManager Sessions { get; private set; }
         public GameHostManager GameHost { get; private set; }
 
-        public StrikeforceInfinitySettings Settings { get; private set; }
+        public SiSettings Settings { get; private set; }
 
         MessageServer _messageServer = new();
 
-        public ServerCore(StrikeforceInfinitySettings settings)
+        public ServerCore(SiSettings settings)
         {
             Settings = settings;
 
@@ -86,11 +86,13 @@ namespace StrikeforceInfinity.Server.Engine
 
         private void MessageServer_OnConnected(MessageServer server, Guid connectionId)
         {
+            Sessions.Establish(connectionId);
             Console.WriteLine($"Accepted Connection: '{connectionId}'");
         }
 
         private void _messageServer_OnDisconnected(MessageServer server, Guid connectionId)
         {
+            Sessions.Remove(connectionId);
             Console.WriteLine($"Disconnected Connection: '{connectionId}'");
         }
 
