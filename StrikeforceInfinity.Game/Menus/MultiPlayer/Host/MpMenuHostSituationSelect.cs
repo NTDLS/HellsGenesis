@@ -71,8 +71,6 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
                 _gameCore.Situations.Select(situation.GetType().Name);
                 _gameCore.Menus.Insert(new MpMenuHostSelectLoadout(_gameCore));
             }
-
-            _gameCore.Menus.Insert(new MpMenuHostLobbyWait(_gameCore));
         }
 
         private void SituationSelectMenu_OnSelectionChanged(SpriteMenuItem item)

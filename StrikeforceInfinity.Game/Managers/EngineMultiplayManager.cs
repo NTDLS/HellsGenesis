@@ -66,8 +66,6 @@ namespace StrikeforceInfinity.Game.Managers
             {
                 Notify(new SiRegisterToLobby(GameHostUID));
             }
-
-            ReadyToPlay();
         }
 
         public void ReadyToPlay()

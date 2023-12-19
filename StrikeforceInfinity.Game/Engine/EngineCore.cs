@@ -95,7 +95,7 @@ namespace StrikeforceInfinity.Game.Engine
 
         public void ResetGame()
         {
-            Sprites.PlayerStatsText.Visable = true;
+            Sprites.PlayerStatsText.Visable = false;
             Situations.End();
             Sprites.DeleteAll();
         }
