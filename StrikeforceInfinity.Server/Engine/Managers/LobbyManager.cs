@@ -4,49 +4,49 @@ using StrikeforceInfinity.Shared.Payload;
 
 namespace StrikeforceInfinity.Server.Engine.Managers
 {
-    internal class GameHostManager
+    internal class LobbyManager
     {
         private readonly ServerCore _serverCore;
-        readonly PessimisticSemaphore<Dictionary<Guid, GameHost>> _collection = new();
+        readonly PessimisticSemaphore<Dictionary<Guid, Lobby>> _collection = new();
 
-        public GameHostManager(ServerCore serverCore)
+        public LobbyManager(ServerCore serverCore)
         {
             _serverCore = serverCore;
         }
 
-        public GameHost Create(Guid connectionId, SiGameHost configuration)
+        public Lobby Create(Guid connectionId, SiLobbyConfiguration configuration)
         {
             return _collection.Use(o =>
             {
-                var gameHost = new GameHost(connectionId, configuration.Name, configuration.MaxPlayers);
+                var lobby = new Lobby(connectionId, configuration.Name, configuration.MaxPlayers);
                 {
                 };
 
-                o.Add(gameHost.UID, gameHost);
-                return gameHost;
+                o.Add(lobby.UID, lobby);
+                return lobby;
             });
         }
 
-        public GameHost? GetByGameHostUID(Guid gameHostUID)
+        public Lobby? GetByLobbyUID(Guid lobbyUID)
         {
             return _collection.Use(o =>
             {
-                o.TryGetValue(gameHostUID, out var gameHost);
-                return gameHost;
+                o.TryGetValue(lobbyUID, out var lobby);
+                return lobby;
             });
         }
 
-        public List<SiGameHost> GetList(Guid connectionId)
+        public List<SiLobbyConfiguration> GetList(Guid connectionId)
         {
             return _collection.Use(o =>
             {
                 //TODO: What kind of filters should be add??
 
-                var collection = new List<SiGameHost>();
+                var collection = new List<SiLobbyConfiguration>();
 
                 foreach (var item in o)
                 {
-                    collection.Add(new SiGameHost()
+                    collection.Add(new SiLobbyConfiguration()
                     {
                         UID = item.Value.UID,
                         Name = item.Value.Name,

@@ -3,7 +3,7 @@ using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
 using StrikeforceInfinity.Game.TickControllers.BaseClasses;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
-using StrikeforceInfinity.Shared.ServerMessages.Messages;
+using StrikeforceInfinity.Shared.Messages.Notify;
 using System;
 
 namespace StrikeforceInfinity.Game.Controller
@@ -266,6 +266,7 @@ namespace StrikeforceInfinity.Game.Controller
             {
                 if ((DateTime.UtcNow - _playerAbsoluteState.Timestamp).TotalMilliseconds >= _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
                 {
+                    _playerAbsoluteState.SpriteUID = Sprite.MultiplayUID;
                     _playerAbsoluteState.Timestamp = DateTime.UtcNow;
                     _playerAbsoluteState.X = _gameCore.Display.BackgroundOffset.X;
                     _playerAbsoluteState.Y = _gameCore.Display.BackgroundOffset.Y;

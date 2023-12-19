@@ -2,9 +2,8 @@
 using NTDLS.StreamFraming.Payloads;
 using StrikeforceInfinity.Server.Engine.Managers;
 using StrikeforceInfinity.Shared;
-using StrikeforceInfinity.Shared.Payload;
-using StrikeforceInfinity.Shared.ServerMessages.Messages;
-using StrikeforceInfinity.Shared.ServerMessages.Queires;
+using StrikeforceInfinity.Shared.Messages.Notify;
+using StrikeforceInfinity.Shared.Messages.Query;
 
 namespace StrikeforceInfinity.Server.Engine
 {
@@ -12,8 +11,7 @@ namespace StrikeforceInfinity.Server.Engine
     {
         public LogManager Log { get; private set; }
         public SessionManager Sessions { get; private set; }
-        public GameHostManager GameHost { get; private set; }
-
+        public LobbyManager Lobbies { get; private set; }
         public SiSettings Settings { get; private set; }
 
         readonly MessageServer _messageServer = new();
@@ -24,16 +22,16 @@ namespace StrikeforceInfinity.Server.Engine
 
             Log = new LogManager(this);
             Sessions = new SessionManager(this);
-            GameHost = new GameHostManager(this);
+            Lobbies = new LobbyManager(this);
         }
 
         public void Start()
         {
-            GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #1", 10));
-            GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #2", 20));
-            GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #3", 30));
-            GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #4", 40));
-            GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #5", 50));
+            //GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #1", 10));
+            //GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #2", 20));
+            //GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #3", 30));
+            //GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #4", 40));
+            //GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #5", 50));
 
             _messageServer.Start(Settings.DataPort);
 
@@ -45,20 +43,20 @@ namespace StrikeforceInfinity.Server.Engine
 
         private IFramePayloadQueryReply MessageServer_OnQueryReceived(MessageServer server, Guid connectionId, IFramePayloadQuery payload)
         {
-            if (payload is SiCreateGameHost createGameHost)
+            if (payload is SiCreateLobby createGameHost)
             {
-                var gameHost = GameHost.Create(connectionId, createGameHost.Configuration);
+                var gameHost = Lobbies.Create(connectionId, createGameHost.Configuration);
 
-                return new SiCreateGameHostReply()
+                return new SiCreateLobbyReply()
                 {
                     UID = gameHost.UID
                 };
             }
-            else if (payload is SiListGameHosts listGameHosts)
+            else if (payload is SiListLobbies listGameHosts)
             {
-                var gameHost = GameHost.GetList(connectionId);
+                var gameHost = Lobbies.GetList(connectionId);
 
-                return new SiListGameHostsReply()
+                return new SiListLobbiesReply()
                 {
                     Collection = gameHost
                 };
@@ -87,25 +85,39 @@ namespace StrikeforceInfinity.Server.Engine
 
             if (payload is SiPlayerAbsoluteState position)
             {
-                Log.Trace($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
+                //Log.Trace($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
             }
-            else if (payload is SiRegisterToGameHost register)
+            else if (payload is SiRegisterToLobby register)
             {
-                Log.Trace($"ConnectionId: '{connectionId}' registered for GameHost: '{register.GameHostUID}'");
+                Log.Trace($"ConnectionId: '{connectionId}' registered for lobby: '{register.LobbyUID}'");
 
-                var gameHost = GameHost.GetByGameHostUID(register.GameHostUID);
-                if (gameHost != null)
+                var lobby = Lobbies.GetByLobbyUID(register.LobbyUID);
+                if (lobby == null)
                 {
-                    gameHost.Register(connectionId);
-                    session.SetCurrentGameHost(register.GameHostUID);
+                    Log.Exception($"The game host was not found '{register.LobbyUID}'.");
+                    return;
                 }
-                else
-                {
-                    Log.Exception($"The game host was not found '{register.GameHostUID}'.");
-                }
+
+                lobby.Register(connectionId);
+                session.SetCurrentLobby(register.LobbyUID);
             }
             else if (payload is SiReadyToPlay)
             {
+                var gameHost = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
+
+                if (gameHost == null)
+                {
+                    Log.Exception($"The game host was not found '{session.CurrentLobbyUID}'.");
+                    return;
+                }
+
+                //Record that the connection is ready to start. FlagConnectionAsReady() returns true if all connections are ready.
+                if (gameHost.FlagConnectionAsReady(connectionId))
+                {
+                    //All connections are ready to start, request the scenario configuration from the game host owner.
+
+                    _messageServer.Query<SiRequestLayoutFromLobbyOwnerReply>(gameHost.OwnerConnectionId, new SiRequestLayoutFromLobbyOwner());
+                }
             }
             else
             {

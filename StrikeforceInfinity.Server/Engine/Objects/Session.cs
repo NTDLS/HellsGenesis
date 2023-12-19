@@ -6,9 +6,9 @@
         public Guid ConnectionId { get; set; }
 
         /// <summary>
-        /// The game host that the connection is registered for, if any.
+        /// The lobby that the connection is registered for, if any.
         /// </summary>
-        public Guid CurrentGameHost { get; set; }
+        public Guid CurrentLobbyUID { get; set; }
 
         public Session(Guid sessionId)
         {
@@ -17,12 +17,12 @@
         }
 
         /// <summary>
-        /// Keep track of which game host the connection was last associated with so that we can easily deregister.
+        /// Keep track of which lobby the connection was last associated with so that we can easily deregister.
         /// </summary>
-        /// <param name="gameHostUID"></param>
-        public void SetCurrentGameHost(Guid gameHostUID)
+        /// <param name="gameLobbyUID"></param>
+        public void SetCurrentLobby(Guid lobbyUID)
         {
-            CurrentGameHost = gameHostUID;
+            CurrentLobbyUID = lobbyUID;
         }
     }
 }

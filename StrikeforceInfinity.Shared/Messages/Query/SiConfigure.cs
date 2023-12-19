@@ -1,6 +1,6 @@
 ﻿using NTDLS.StreamFraming.Payloads;
 
-namespace StrikeforceInfinity.Shared.ServerMessages.Queires
+namespace StrikeforceInfinity.Shared.Messages.Query
 {
     /// <summary>
     /// The client has connected to the server and is requesting any configuration.

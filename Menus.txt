@@ -1,0 +1,12 @@
+> MenuStartNewGame
+	> SpMenuSituationSelect
+		> SpMenuSelectLoadout
+			> StartGame!
+	> MpMenuCreateOrJoinLobby
+		> MpMenuClientJoinLobby
+			> MpMenuClientLobbyWait
+		> MpMenuHostCreateLobby
+			> MpMenuHostSituationSelect
+				> MpMenuHostSelectLoadout
+					> MpMenuHostLobbyWait
+						> StartGame!

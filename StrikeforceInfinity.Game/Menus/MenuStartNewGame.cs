@@ -2,6 +2,8 @@
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
+using StrikeforceInfinity.Menus.MultiPlayer;
+using StrikeforceInfinity.Menus.SinglePlayer;
 
 namespace StrikeforceInfinity.Game.Menus
 {
@@ -68,12 +70,12 @@ namespace StrikeforceInfinity.Game.Menus
             if (item.Key == "SINGLE_PLAYER")
             {
                 _gameCore.Multiplay.SetPlayMode(HgPlayMode.SinglePlayer);
-                _gameCore.Menus.Insert(new SituationSelectMenu(_gameCore));
+                _gameCore.Menus.Insert(new SpMenuSituationSelect(_gameCore));
             }
             else if (item.Key == "MULTI_PLAYER")
             {
-                _gameCore.Multiplay.Configure();
-                _gameCore.Menus.Insert(new MenuMultiplayerHostOrJoin(_gameCore));
+                _gameCore.Multiplay.GetSettingsFromServer();
+                _gameCore.Menus.Insert(new MpMenuCreateOrJoinLobby(_gameCore));
             }
         }
     }

@@ -1,9 +1,9 @@
 ﻿using NTDLS.ReliableMessaging;
 using NTDLS.StreamFraming.Payloads;
 using StrikeforceInfinity.Game.Engine;
+using StrikeforceInfinity.Shared.Messages.Notify;
+using StrikeforceInfinity.Shared.Messages.Query;
 using StrikeforceInfinity.Shared.Payload;
-using StrikeforceInfinity.Shared.ServerMessages.Messages;
-using StrikeforceInfinity.Shared.ServerMessages.Queires;
 using System;
 using System.Collections.Generic;
 
@@ -33,6 +33,7 @@ namespace StrikeforceInfinity.Game.Managers
                             var messageClient = new MessageClient();
 
                             messageClient.OnNotificationReceived += MessageClient_OnNotificationReceived;
+                            messageClient.OnQueryReceived += MessageClient_OnQueryReceived;
 
                             messageClient.Connect(Constants.DataAddress, Constants.DataPort);
                             _messageClient = messageClient;
@@ -49,28 +50,21 @@ namespace StrikeforceInfinity.Game.Managers
             _gameCore = gameCore;
         }
 
-        public void Configure()
+        public void GetSettingsFromServer()
         {
             //Tell the server hello and request any settings that the server wants to enforce on the client.
             var reply = MessageClient.Query<SiConfigureReply>(new SiConfigure()).Result;
             _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs = reply.PlayerAbsoluteStateDelayMs;
         }
 
-        public void SetPlayMode(HgPlayMode playMode)
-        {
-            PlayMode = playMode;
-        }
-
-        public void SetGameHostUID(Guid uid)
-        {
-            GameHostUID = uid;
-        }
+        public void SetPlayMode(HgPlayMode playMode) => PlayMode = playMode;
+        public void SetGameHostUID(Guid uid) => GameHostUID = uid;
 
         public void Register()
         {
             if (PlayMode != HgPlayMode.SinglePlayer)
             {
-                Notify(new SiRegisterToGameHost(GameHostUID));
+                Notify(new SiRegisterToLobby(GameHostUID));
             }
 
             ReadyToPlay();
@@ -84,27 +78,50 @@ namespace StrikeforceInfinity.Game.Managers
             }
         }
 
-        public void CreateHost(SiGameHost gameHostConfiguration)
+        public void CreateHost(SiLobbyConfiguration gameHostConfiguration)
         {
-            var query = new SiCreateGameHost()
+            var query = new SiCreateLobby()
             {
                 Configuration = gameHostConfiguration
             };
 
-            var reply = MessageClient.Query<SiCreateGameHostReply>(query).Result;
+            var reply = MessageClient.Query<SiCreateLobbyReply>(query).Result;
 
             SetGameHostUID(reply.UID);
         }
 
-        public List<SiGameHost> GetHostList()
+        public List<SiLobbyConfiguration> GetHostList()
         {
-            var reply = MessageClient.Query<SiListGameHostsReply>(new SiListGameHosts()).Result;
+            var reply = MessageClient.Query<SiListLobbiesReply>(new SiListLobbies()).Result;
             return reply.Collection;
         }
 
         private void MessageClient_OnNotificationReceived(MessageClient client, Guid connectionId, IFramePayloadNotification payload)
         {
+            if (false)
+            {
+            }
+            else
+            {
+                throw new NotImplementedException("The client notification is not implemented.");
+            }
+        }
 
+        private IFramePayloadQueryReply MessageClient_OnQueryReceived(MessageClient client, Guid connectionId, IFramePayloadQuery payload)
+        {
+            if (payload is SiRequestLayoutFromLobbyOwner)
+            {
+                var sprites = new List<SiSpriteInfo>();
+
+                return new SiRequestLayoutFromLobbyOwnerReply()
+                {
+                    Sprites = sprites
+                };
+            }
+            else
+            {
+                throw new NotImplementedException("The client query is not implemented.");
+            }
         }
 
         public void Notify(IFramePayloadNotification multiplayerEvent)
@@ -114,6 +131,5 @@ namespace StrikeforceInfinity.Game.Managers
                 MessageClient?.Notify(multiplayerEvent);
             }
         }
-
     }
 }

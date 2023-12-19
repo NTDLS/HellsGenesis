@@ -45,6 +45,7 @@ namespace StrikeforceInfinity.Game.Sprites
 
         public string SpriteTag { get; set; }
         public uint UID { get; private set; } = EngineCore.GetNextSequentialId();
+        public Guid MultiplayUID { get; private set; }
         public uint OwnerUID { get; set; }
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);

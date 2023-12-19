@@ -7,18 +7,18 @@ using StrikeforceInfinity.Game.Utility;
 using System.Linq;
 using System.Threading;
 
-namespace StrikeforceInfinity.Game.Menus
+namespace StrikeforceInfinity.Menus.SinglePlayer
 {
     /// <summary>
     /// The menu that is displayed at game start to allow the player to select a loadout.
     /// </summary>
-    internal class PlayerLoadoutMenu : MenuBase
+    internal class SpMenuSelectLoadout : MenuBase
     {
         private readonly SpriteMenuItem _shipBlurb;
         private Timer _animationTimer;
         private SpritePlayerBase _selectedSprite;
 
-        public PlayerLoadoutMenu(EngineCore gameCore)
+        public SpMenuSelectLoadout(EngineCore gameCore)
             : base(gameCore)
         {
             var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();

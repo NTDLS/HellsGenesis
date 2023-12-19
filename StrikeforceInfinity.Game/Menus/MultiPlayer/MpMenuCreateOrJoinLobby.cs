@@ -1,16 +1,19 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
+using StrikeforceInfinity.Game.Menus;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
+using StrikeforceInfinity.Menus.MultiPlayer.Client;
+using StrikeforceInfinity.Menus.MultiPlayer.Host;
 
-namespace StrikeforceInfinity.Game.Menus
+namespace StrikeforceInfinity.Menus.MultiPlayer
 {
     /// <summary>
     /// Allows the player to select to host or join a game.
     /// </summary>
-    internal class MenuMultiplayerHostOrJoin : MenuBase
+    internal class MpMenuCreateOrJoinLobby : MenuBase
     {
-        public MenuMultiplayerHostOrJoin(EngineCore gameCore)
+        public MpMenuCreateOrJoinLobby(EngineCore gameCore)
             : base(gameCore)
         {
             var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
@@ -47,12 +50,12 @@ namespace StrikeforceInfinity.Game.Menus
             if (item.Key == "JOIN")
             {
                 _gameCore.Multiplay.SetPlayMode(HgPlayMode.MutiPlayerClient);
-                _gameCore.Menus.Insert(new MenuMultiplayerJoinGame(_gameCore));
+                _gameCore.Menus.Insert(new MpMenuClientJoinLobby(_gameCore));
             }
             else if (item.Key == "HOST")
             {
                 _gameCore.Multiplay.SetPlayMode(HgPlayMode.MutiPlayerHost);
-                _gameCore.Menus.Insert(new MenuMultiplayerHostGame(_gameCore));
+                _gameCore.Menus.Insert(new MpMenuHostCreateLobby(_gameCore));
             }
         }
     }

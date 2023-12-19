@@ -4,17 +4,17 @@ using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
 using StrikeforceInfinity.Shared.Payload;
 
-namespace StrikeforceInfinity.Game.Menus
+namespace StrikeforceInfinity.Menus.MultiPlayer.Host
 {
     /// <summary>
     /// Allows user to set parameters for a hosted game.
     /// </summary>
-    internal class MenuMultiplayerHostGame : MenuBase
+    internal class MpMenuHostCreateLobby : MenuBase
     {
         SpriteMenuSelectableTextInput textBoxName;
         SpriteMenuSelectableTextInput textBoxMaxPlayers;
 
-        public MenuMultiplayerHostGame(EngineCore gameCore)
+        public MpMenuHostCreateLobby(EngineCore gameCore)
             : base(gameCore)
         {
             var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
@@ -49,29 +49,15 @@ namespace StrikeforceInfinity.Game.Menus
 
         private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
-            //var nameTextBox = MenuItemByKey<SpriteMenuSelectableTextInput>("Name");
-
             if (!int.TryParse(textBoxMaxPlayers.Text, out int maxPlayers))
             {
                 //return false;
             }
 
-            _gameCore.Multiplay.CreateHost(new SiGameHost(textBoxName.Text, maxPlayers));
+            //Create the game host on the server.
+            _gameCore.Multiplay.CreateHost(new SiLobbyConfiguration(textBoxName.Text, maxPlayers));
 
-            _gameCore.Menus.Insert(new SituationSelectMenu(_gameCore));
-
-            //SpriteMenuSelectableTextInput
-
-            /*
-            if (item.Key == "JOIN")
-            {
-                //_gameCore.Menus.Insert(new SituationSelectMenu(_gameCore));
-            }
-            else if (item.Key == "HOST")
-            {
-                //_gameCore.Menus.Insert(new SituationSelectMenu(_gameCore));
-            }
-            */
+            _gameCore.Menus.Insert(new MpMenuHostSituationSelect(_gameCore));
         }
     }
 }

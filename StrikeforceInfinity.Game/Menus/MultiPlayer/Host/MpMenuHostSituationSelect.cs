@@ -4,18 +4,19 @@ using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Situations.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
 using StrikeforceInfinity.Game.Utility;
+using StrikeforceInfinity.Menus.SinglePlayer;
 using System.Linq;
 
-namespace StrikeforceInfinity.Game.Menus
+namespace StrikeforceInfinity.Menus.MultiPlayer.Host
 {
     /// <summary>
     /// The menu that is displayed at game start to allow the player to select a situation.
     /// </summary>
-    internal class SituationSelectMenu : MenuBase
+    internal class MpMenuHostSituationSelect : MenuBase
     {
         private readonly SpriteMenuItem _situationBlurb;
 
-        public SituationSelectMenu(EngineCore gameCore)
+        public MpMenuHostSituationSelect(EngineCore gameCore)
             : base(gameCore)
         {
             var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
@@ -68,8 +69,10 @@ namespace StrikeforceInfinity.Game.Menus
             {
                 _gameCore.ResetGame();
                 _gameCore.Situations.Select(situation.GetType().Name);
-                _gameCore.Menus.Insert(new PlayerLoadoutMenu(_gameCore));
+                _gameCore.Menus.Insert(new MpMenuHostSelectLoadout(_gameCore));
             }
+
+            _gameCore.Menus.Insert(new MpMenuHostLobbyWait(_gameCore));
         }
 
         private void SituationSelectMenu_OnSelectionChanged(SpriteMenuItem item)
