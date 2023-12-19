@@ -3,7 +3,6 @@ using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
 
-
 namespace StrikeforceInfinity.Game.Menus
 {
     /// <summary>
@@ -47,10 +46,12 @@ namespace StrikeforceInfinity.Game.Menus
         {
             if (item.Key == "JOIN")
             {
+                _gameCore.SetPlayMode(HgPlayMode.MutiPlayerClient);
                 _gameCore.Menus.Insert(new MenuMultiplayerJoinGame(_gameCore));
             }
             else if (item.Key == "HOST")
             {
+                _gameCore.SetPlayMode(HgPlayMode.MutiPlayerHost);
                 _gameCore.Menus.Insert(new MenuMultiplayerHostGame(_gameCore));
             }
         }

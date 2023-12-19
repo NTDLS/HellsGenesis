@@ -89,7 +89,7 @@ namespace StrikeforceInfinity.Server.Engine
             {
                 Log.Trace($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
             }
-            else if (payload is SiRegisterForGameHost register)
+            else if (payload is SiRegisterToGameHost register)
             {
                 Log.Trace($"ConnectionId: '{connectionId}' registered for GameHost: '{register.GameHostUID}'");
 

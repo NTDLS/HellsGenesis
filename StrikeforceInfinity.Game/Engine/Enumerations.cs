@@ -3,7 +3,8 @@
     public enum HgPlayMode
     {
         SinglePlayer,
-        MutiPlayer
+        MutiPlayerHost,
+        MutiPlayerClient
     }
 
     public enum HgLevelState

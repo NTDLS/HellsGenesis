@@ -22,15 +22,15 @@ namespace StrikeforceInfinity.Game.Engine
         public HgPlayMode PlayMode { get; private set; }
         public Guid GameHostUID { get; private set; }
 
-        private readonly object _messageClientLock = new();
         private MessageClient _messageClient;
         public MessageClient MessageClient
         {
             get
             {
+                #region Message Client Creation and Connectivity.
                 if (_messageClient == null)
                 {
-                    lock (_messageClientLock)
+                    lock (this)
                     {
                         if (_messageClient == null)
                         {
@@ -40,7 +40,7 @@ namespace StrikeforceInfinity.Game.Engine
                         }
                     }
                 }
-
+                #endregion
                 return _messageClient;
             }
         }
@@ -124,7 +124,7 @@ namespace StrikeforceInfinity.Game.Engine
 
         public void MultiplayerNotify(IFramePayloadNotification multiplayerEvent)
         {
-            if (PlayMode == HgPlayMode.MutiPlayer && MessageClient?.IsConnected == true)
+            if ((PlayMode == HgPlayMode.MutiPlayerHost || PlayMode == HgPlayMode.MutiPlayerClient) && MessageClient?.IsConnected == true)
             {
                 MessageClient?.Notify(multiplayerEvent);
             }
@@ -140,13 +140,13 @@ namespace StrikeforceInfinity.Game.Engine
         public void SetPlayMode(HgPlayMode playMode)
         {
             PlayMode = playMode;
+        }
 
-            if (playMode == HgPlayMode.MutiPlayer)
-            {
-                //Tell the server hello and request any settings that the server wants to enforce on the client.
-                var reply = MessageClient.Query<SiConfigureReply>(new SiConfigure()).Result;
-                Settings.Multiplayer.PlayerAbsoluteStateDelayMs = reply.PlayerAbsoluteStateDelayMs;
-            }
+        public void ConfigureMultiplay()
+        {
+            //Tell the server hello and request any settings that the server wants to enforce on the client.
+            var reply = MessageClient.Query<SiConfigureReply>(new SiConfigure()).Result;
+            Settings.Multiplayer.PlayerAbsoluteStateDelayMs = reply.PlayerAbsoluteStateDelayMs;
         }
 
         public void SetGameHostUID(Guid uid)
@@ -156,16 +156,19 @@ namespace StrikeforceInfinity.Game.Engine
 
         public void StartGame()
         {
-            if (PlayMode == HgPlayMode.MutiPlayer)
+            if (PlayMode != HgPlayMode.SinglePlayer)
             {
-                MultiplayerNotify(new SiRegisterForGameHost(GameHostUID));
+                MultiplayerNotify(new SiRegisterToGameHost(GameHostUID));
             }
 
             Sprites.PlayerStatsText.Visable = true;
             Sprites.DeleteAll();
             Situations.AdvanceLevel();
 
-            MultiplayerNotify(new SiReadyToPlay());
+            if (PlayMode != HgPlayMode.SinglePlayer)
+            {
+                MultiplayerNotify(new SiReadyToPlay());
+            }
         }
 
         public static void SaveSettings(EngineSettings settings)
