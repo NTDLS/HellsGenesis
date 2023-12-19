@@ -22,7 +22,7 @@ namespace StrikeforceInfinity.Game.Controller
 
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
 
-        private readonly SiPlayerAbsoluteState _playerAbsoluteState = new();
+        private readonly SiSpriteAbsoluteState _playerAbsoluteState = new();
 
         /// <summary>
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
@@ -266,7 +266,7 @@ namespace StrikeforceInfinity.Game.Controller
             {
                 if ((DateTime.UtcNow - _playerAbsoluteState.Timestamp).TotalMilliseconds >= _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
                 {
-                    _playerAbsoluteState.SpriteUID = Sprite.MultiplayUID;
+                    _playerAbsoluteState.MultiplayUID = Sprite.MultiplayUID;
                     _playerAbsoluteState.Timestamp = DateTime.UtcNow;
                     _playerAbsoluteState.X = _gameCore.Display.BackgroundOffset.X;
                     _playerAbsoluteState.Y = _gameCore.Display.BackgroundOffset.Y;

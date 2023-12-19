@@ -20,6 +20,26 @@ namespace StrikeforceInfinity.Game.Sprites
     {
         protected EngineCore _gameCore;
 
+        #region Multiplay.
+
+        /// <summary>
+        /// If true, this ship is controlled by messages from the server and not by local AI.
+        /// </summary>
+        public bool IsMultiplayDrone { get; set; }
+
+        /// <summary>
+        /// If true, this ship is controlled by local AI and the actions are sent to the server to control the "IsMultiplayDrone"
+        /// sprite with a matching MultiplayUID
+        /// </summary>
+        public bool IsMultiplayModel { get; set; }
+
+        /// <summary>
+        /// The UID of this sprite. Each connected client has a sprite with the same mathcing UID.
+        /// </summary>
+        public Guid MultiplayUID { get; set; }
+
+        #endregion
+
         private SharpDX.Direct2D1.Bitmap _image;
 
         protected SharpDX.Direct2D1.Bitmap _lockedOnImage;
@@ -45,7 +65,6 @@ namespace StrikeforceInfinity.Game.Sprites
 
         public string SpriteTag { get; set; }
         public uint UID { get; private set; } = EngineCore.GetNextSequentialId();
-        public Guid MultiplayUID { get; private set; }
         public uint OwnerUID { get; set; }
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);

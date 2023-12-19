@@ -2,7 +2,6 @@
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Levels.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses;
-using StrikeforceInfinity.Game.Sprites.Enemies.Peons;
 using StrikeforceInfinity.Game.Utility;
 
 namespace StrikeforceInfinity.Game.Levels
@@ -71,8 +70,8 @@ namespace StrikeforceInfinity.Game.Levels
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
 
-            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
 

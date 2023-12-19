@@ -62,5 +62,30 @@ namespace StrikeforceInfinity.Game.Controller
                 return (T)obj;
             }
         }
+
+        public SpriteEnemyBase CreateByNameType(string typeFullName)
+        {
+            lock (SpriteManager.Collection)
+            {
+                Type type = Type.GetType(typeFullName);
+                if (type == null)
+                {
+                    throw new ArgumentException($"Type with FullName '{typeFullName}' not found.");
+                }
+
+                object[] param = { GameCore };
+                SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(type, param);
+
+                obj.Location = GameCore.Display.RandomOffScreenLocation();
+                obj.Velocity.MaxSpeed = HgRandom.Generator.Next(GameCore.Settings.MinEnemySpeed, GameCore.Settings.MaxEnemySpeed);
+                obj.Velocity.Angle.Degrees = HgRandom.Generator.Next(0, 360);
+
+                obj.BeforeCreate();
+                SpriteManager.Collection.Add(obj);
+                obj.AfterCreate();
+
+                return obj;
+            }
+        }
     }
 }

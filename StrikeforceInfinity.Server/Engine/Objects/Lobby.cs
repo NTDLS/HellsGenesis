@@ -70,6 +70,18 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         }
 
         /// <summary>
+        /// Gets the list of all registered connection ids.
+        /// </summary>
+        /// <param name="connectionId"></param>
+        public List<Guid> RegisteredConnections()
+        {
+            return _registeredClients.Use(o =>
+            {
+                return o.Select(o => o.Key).ToList();
+            });
+        }
+
+        /// <summary>
         /// Tells the server that the connections is ready to start the game.
         /// </summary>
         /// <param name="connectionId"></param>

@@ -3,11 +3,11 @@
 namespace StrikeforceInfinity.Shared.Messages.Notify
 {
     /// <summary>
-    /// Tells the server where exactly a player is, which direction they are facing and how fast they are going.
+    /// Tells the server where exactly a sprite is, which direction they are facing and how fast they are going.
     /// </summary>
-    public class SiPlayerAbsoluteState : IFramePayloadNotification
+    public class SiSpriteAbsoluteState : IFramePayloadNotification
     {
-        public Guid SpriteUID { get; set; }
+        public Guid MultiplayUID { get; set; }
         public DateTime Timestamp { get; set; }
         public double X { get; set; }
         public double Y { get; set; }

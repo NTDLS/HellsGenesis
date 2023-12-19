@@ -83,7 +83,7 @@ namespace StrikeforceInfinity.Server.Engine
                 return;
             }
 
-            if (payload is SiPlayerAbsoluteState position)
+            if (payload is SiSpriteAbsoluteState position)
             {
                 Log.Trace($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
             }
@@ -118,7 +118,26 @@ namespace StrikeforceInfinity.Server.Engine
                 {
                     //All connections are ready to start, request the scenario configuration from the lobby owner.
 
-                    _messageServer.Query<SiRequestLayoutFromLobbyOwnerReply>(lobby.OwnerConnectionId, new SiRequestLayoutFromLobbyOwner());
+                    var layout = _messageServer.Query<SiRequestLayoutFromLobbyOwnerReply>(
+                        lobby.OwnerConnectionId, new SiRequestLayoutFromLobbyOwner()).ContinueWith(o =>
+                        {
+                            if (o.Result == null)
+                            {
+                                Log.Exception($"The layout was empty.");
+                                return;
+                            }
+
+                            var layoutDirective = new SiLayoutDirective()
+                            {
+                                Sprites = o.Result.Sprites
+                            };
+
+                            var registeredConnectionIds = lobby.RegisteredConnections();
+                            foreach (var registeredConnectionId in registeredConnectionIds)
+                            {
+                                _messageServer.Notify(registeredConnectionId, layoutDirective);
+                            }
+                        });
                 }
             }
             else

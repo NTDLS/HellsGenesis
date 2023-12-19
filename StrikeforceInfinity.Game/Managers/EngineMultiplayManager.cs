@@ -1,16 +1,19 @@
 ﻿using NTDLS.ReliableMessaging;
 using NTDLS.StreamFraming.Payloads;
 using StrikeforceInfinity.Game.Engine;
+using StrikeforceInfinity.Game.Sprites.Enemies.Peons;
 using StrikeforceInfinity.Shared.Messages.Notify;
 using StrikeforceInfinity.Shared.Messages.Query;
 using StrikeforceInfinity.Shared.Payload;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
+using System.Windows.Forms;
 
 namespace StrikeforceInfinity.Game.Managers
 {
     /// <summary>
-    /// 
+    /// Contains everything you need to manage multiplayer functionality.
     /// </summary>
     internal class EngineMultiplayManager
     {
@@ -96,8 +99,27 @@ namespace StrikeforceInfinity.Game.Managers
 
         private void MessageClient_OnNotificationReceived(MessageClient client, Guid connectionId, IFramePayloadNotification payload)
         {
-            if (false)
+            if (payload is SiLayoutDirective layoutDirective)
             {
+                //The server is telling us to initialize the layout using the supplied sprites snd their states.
+
+                foreach (var spriteInfo in layoutDirective.Sprites)
+                {
+                    var sprite = _gameCore.Sprites.Enemies.CreateByNameType(spriteInfo.FullTypeName);
+                    sprite.MultiplayUID = spriteInfo.State.MultiplayUID;
+                    sprite.X = spriteInfo.State.X;
+                    sprite.Y = spriteInfo.State.Y;
+                    sprite.Velocity.Angle.Degrees = spriteInfo.State.AngleDegrees;
+
+                    if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerHost)
+                    {
+                        sprite.IsMultiplayModel = true; //Only for the lobby owner.
+                    }
+                    else
+                    {
+                        sprite.IsMultiplayDrone = true; //Only for the non-lobby owners.
+                    }
+                }
             }
             else
             {
@@ -109,7 +131,22 @@ namespace StrikeforceInfinity.Game.Managers
         {
             if (payload is SiRequestLayoutFromLobbyOwner)
             {
-                var sprites = new List<SiSpriteInfo>();
+                var sprites = new List<SiSpriteInfo>
+                {
+                    //Debugging code to add a few sprites to each connected client.
+                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
+                    {
+                        State = new SiSpriteAbsoluteState() { X = 100, Y = 100 }
+                    },
+                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
+                    {
+                        State = new SiSpriteAbsoluteState() { X = 200, Y = 200 }
+                    },
+                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
+                    {
+                        State = new SiSpriteAbsoluteState() { X = 300, Y = 300 }
+                    }
+                };
 
                 return new SiRequestLayoutFromLobbyOwnerReply()
                 {
