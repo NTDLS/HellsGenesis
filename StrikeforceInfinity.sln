@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5E60224E-A4A6-47B6-A293-F24A5EFE403F}"
+	ProjectSection(SolutionItems) = preProject
+		ToDo.txt = ToDo.txt
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Game", "StrikeforceInfinity.Game\StrikeforceInfinity.Game.csproj", "{6A6E6F4E-D794-4211-B5C5-A6292432476E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Server.Service", "StrikeforceInfinity.Server.Service\StrikeforceInfinity.Server.Service.csproj", "{DB2C2C28-C5DF-4307-9155-B59E3AA82740}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Client", "StrikeforceInfinity.Client\StrikeforceInfinity.Client.csproj", "{04BE9C8C-D653-4CBD-9924-7F40C59A4162}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Server", "StrikeforceInfinity.Server\StrikeforceInfinity.Server.csproj", "{2501CC2B-281E-4C07-927E-60002C103E1C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Shared", "StrikeforceInfinity.Shared\StrikeforceInfinity.Shared.csproj", "{DD34E270-9942-4E5A-A88E-9A467F05FB6D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{427DD75D-90A4-4E61-81EF-574DD8057AB7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{FB1627CE-6B20-434B-8123-F2A4FACECCAB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A6E6F4E-D794-4211-B5C5-A6292432476E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A6E6F4E-D794-4211-B5C5-A6292432476E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A6E6F4E-D794-4211-B5C5-A6292432476E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A6E6F4E-D794-4211-B5C5-A6292432476E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB2C2C28-C5DF-4307-9155-B59E3AA82740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB2C2C28-C5DF-4307-9155-B59E3AA82740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB2C2C28-C5DF-4307-9155-B59E3AA82740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB2C2C28-C5DF-4307-9155-B59E3AA82740}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04BE9C8C-D653-4CBD-9924-7F40C59A4162}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04BE9C8C-D653-4CBD-9924-7F40C59A4162}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04BE9C8C-D653-4CBD-9924-7F40C59A4162}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04BE9C8C-D653-4CBD-9924-7F40C59A4162}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2501CC2B-281E-4C07-927E-60002C103E1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2501CC2B-281E-4C07-927E-60002C103E1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2501CC2B-281E-4C07-927E-60002C103E1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2501CC2B-281E-4C07-927E-60002C103E1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{DB2C2C28-C5DF-4307-9155-B59E3AA82740} = {427DD75D-90A4-4E61-81EF-574DD8057AB7}
+		{04BE9C8C-D653-4CBD-9924-7F40C59A4162} = {FB1627CE-6B20-434B-8123-F2A4FACECCAB}
+		{2501CC2B-281E-4C07-927E-60002C103E1C} = {427DD75D-90A4-4E61-81EF-574DD8057AB7}
+		{DD34E270-9942-4E5A-A88E-9A467F05FB6D} = {FB1627CE-6B20-434B-8123-F2A4FACECCAB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {99D468A4-85E5-41AA-912F-A2435A154952}
+	EndGlobalSection
+EndGlobal

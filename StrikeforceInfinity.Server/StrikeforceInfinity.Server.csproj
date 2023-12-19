@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Company>NetworkDLS</Company>
+    <Copyright>Copyright © 2023 NetworkDLS</Copyright>
+    <AssemblyVersion>1.1.1</AssemblyVersion>
+    <FileVersion>1.1.1</FileVersion>
+    <VersionPrefix>1.1.1</VersionPrefix>
+    <Authors>NetworkDLS</Authors>
+    <ApplicationIcon>StrikeforceInfinity.ico</ApplicationIcon>
+    <Title>StrikeforceInfinity.Client</Title>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="StrikeforceInfinity.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.2.3" />
+    <PackageReference Include="NTDLS.Semaphore" Version="3.1.0" />
+    <PackageReference Include="Topshelf" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StrikeforceInfinity.Client\StrikeforceInfinity.Client.csproj" />
+    <ProjectReference Include="..\StrikeforceInfinity.Shared\StrikeforceInfinity.Shared.csproj" />
+  </ItemGroup>
+</Project>
