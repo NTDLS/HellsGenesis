@@ -2,7 +2,7 @@
 
 namespace StrikeforceInfinity.Server.Engine.Objects
 {
-    public class LogEntry
+    internal class LogEntry
     {
         public DateTime DateTime { get; set; }
         public string? Message { get; set; }

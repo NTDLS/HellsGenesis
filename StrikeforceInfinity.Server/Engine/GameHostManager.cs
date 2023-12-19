@@ -4,7 +4,7 @@ using StrikeforceInfinity.Shared.Payload;
 
 namespace StrikeforceInfinity.Server.Engine
 {
-    public class GameHostManager
+    internal class GameHostManager
     {
         private readonly ServerCore _serverCore;
         readonly PessimisticSemaphore<List<GameHost>> _hosts = new();

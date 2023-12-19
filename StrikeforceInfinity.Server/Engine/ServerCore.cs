@@ -7,7 +7,7 @@ using StrikeforceInfinity.Shared.ServerMessages.Queires;
 
 namespace StrikeforceInfinity.Server.Engine
 {
-    public class ServerCore
+    internal class ServerCore
     {
         public LogManager Log { get; private set; }
         public SessionManager Sessions { get; private set; }

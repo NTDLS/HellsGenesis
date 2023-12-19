@@ -3,7 +3,7 @@ using StrikeforceInfinity.Server.Engine.Objects;
 
 namespace StrikeforceInfinity.Server.Engine
 {
-    public class SessionManager
+    internal class SessionManager
     {
         private readonly ServerCore _serverCore;
 

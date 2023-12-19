@@ -9,7 +9,7 @@ namespace StrikeforceInfinity.Server.Engine
     /// <summary>
     /// Public core class methods for locking, reading, writing and managing tasks related to logging.
     /// </summary>
-    public class LogManager
+    internal class LogManager
     {
         private readonly ServerCore _serverCore;
         private StreamWriter? _fileHandle = null;

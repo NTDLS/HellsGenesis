@@ -1,6 +1,6 @@
 ﻿namespace StrikeforceInfinity.Server.Engine.Objects
 {
-    public class Session
+    internal class Session
     {
         public DateTime LastSeenDatetime { get; set; }
         public Guid ConnectionId { get; set; }

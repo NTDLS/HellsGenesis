@@ -8,7 +8,7 @@ namespace StrikeforceInfinity.Server
     public class Program
     {
         private static ServerCore? _serverCore = null;
-        public static ServerCore ServerCore
+        private static ServerCore ServerCore
         {
             get
             {
