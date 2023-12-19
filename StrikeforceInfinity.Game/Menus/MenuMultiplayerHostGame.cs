@@ -3,7 +3,6 @@ using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
 using StrikeforceInfinity.Shared.Payload;
-using StrikeforceInfinity.Shared.ServerMessages.Queires;
 
 namespace StrikeforceInfinity.Game.Menus
 {

@@ -1,12 +1,9 @@
 ﻿using Newtonsoft.Json;
-using NTDLS.ReliableMessaging;
 using StrikeforceInfinity.Game.Controller;
 using StrikeforceInfinity.Game.Engine.GraphicsProcessing;
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Menus;
-using StrikeforceInfinity.Shared.ServerMessages.Messages;
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -17,9 +14,6 @@ namespace StrikeforceInfinity.Game.Engine
     /// </summary>
     internal class EngineCore
     {
-        public HgPlayMode PlayMode { get; private set; }
-        public Guid GameHostUID { get; private set; }
-
         public SituationTickController Situations { get; private set; }
         public EventTickController Events { get; private set; }
         public PlayerSpriteTickController Player { get; private set; }
@@ -99,8 +93,6 @@ namespace StrikeforceInfinity.Game.Engine
             return JsonConvert.DeserializeObject<EngineSettings>(engineSettingsText);
         }
 
-
-
         public void ResetGame()
         {
             Sprites.PlayerStatsText.Visable = true;
@@ -108,31 +100,15 @@ namespace StrikeforceInfinity.Game.Engine
             Sprites.DeleteAll();
         }
 
-        public void SetPlayMode(HgPlayMode playMode)
-        {
-            PlayMode = playMode;
-        }
-
-        public void SetGameHostUID(Guid uid)
-        {
-            GameHostUID = uid;
-        }
-
         public void StartGame()
         {
-            if (PlayMode != HgPlayMode.SinglePlayer)
-            {
-                Multiplay.Notify(new SiRegisterToGameHost(GameHostUID));
-            }
+            Multiplay.Register();
 
             Sprites.PlayerStatsText.Visable = true;
             Sprites.DeleteAll();
             Situations.AdvanceLevel();
 
-            if (PlayMode != HgPlayMode.SinglePlayer)
-            {
-                Multiplay.Notify(new SiReadyToPlay());
-            }
+            Multiplay.ReadyToPlay();
         }
 
         public static void SaveSettings(EngineSettings settings)

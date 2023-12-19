@@ -2,7 +2,6 @@
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
-using StrikeforceInfinity.Shared.ServerMessages.Queires;
 using System;
 using System.Linq;
 
@@ -49,7 +48,7 @@ namespace StrikeforceInfinity.Game.Menus
 
         private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
-            _gameCore.SetGameHostUID(Guid.Parse(item.Key));
+            _gameCore.Multiplay.SetGameHostUID(Guid.Parse(item.Key));
 
             _gameCore.Menus.Insert(new SituationSelectMenu(_gameCore));
 

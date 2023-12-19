@@ -262,7 +262,7 @@ namespace StrikeforceInfinity.Game.Controller
 
             Sprite.RenewableResources.RenewAllResources();
 
-            if (_gameCore.PlayMode != HgPlayMode.SinglePlayer)
+            if (_gameCore.Multiplay.PlayMode != HgPlayMode.SinglePlayer)
             {
                 if ((DateTime.UtcNow - _playerAbsoluteState.Timestamp).TotalMilliseconds >= _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
                 {

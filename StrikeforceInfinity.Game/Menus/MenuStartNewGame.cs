@@ -67,7 +67,7 @@ namespace StrikeforceInfinity.Game.Menus
         {
             if (item.Key == "SINGLE_PLAYER")
             {
-                _gameCore.SetPlayMode(HgPlayMode.SinglePlayer);
+                _gameCore.Multiplay.SetPlayMode(HgPlayMode.SinglePlayer);
                 _gameCore.Menus.Insert(new SituationSelectMenu(_gameCore));
             }
             else if (item.Key == "MULTI_PLAYER")

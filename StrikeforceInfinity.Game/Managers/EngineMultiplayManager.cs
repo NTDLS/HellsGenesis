@@ -2,6 +2,7 @@
 using NTDLS.StreamFraming.Payloads;
 using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Shared.Payload;
+using StrikeforceInfinity.Shared.ServerMessages.Messages;
 using StrikeforceInfinity.Shared.ServerMessages.Queires;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,10 @@ namespace StrikeforceInfinity.Game.Managers
     /// </summary>
     internal class EngineMultiplayManager
     {
-        private readonly EngineCore _gameCore;
+        public HgPlayMode PlayMode { get; private set; }
+        public Guid GameHostUID { get; private set; }
 
+        private readonly EngineCore _gameCore;
         private MessageClient _messageClient;
         private MessageClient MessageClient
         {
@@ -53,6 +56,34 @@ namespace StrikeforceInfinity.Game.Managers
             _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs = reply.PlayerAbsoluteStateDelayMs;
         }
 
+        public void SetPlayMode(HgPlayMode playMode)
+        {
+            PlayMode = playMode;
+        }
+
+        public void SetGameHostUID(Guid uid)
+        {
+            GameHostUID = uid;
+        }
+
+        public void Register()
+        {
+            if (PlayMode != HgPlayMode.SinglePlayer)
+            {
+                Notify(new SiRegisterToGameHost(GameHostUID));
+            }
+
+            ReadyToPlay();
+        }
+
+        public void ReadyToPlay()
+        {
+            if (PlayMode != HgPlayMode.SinglePlayer)
+            {
+                Notify(new SiReadyToPlay());
+            }
+        }
+
         public void CreateHost(SiGameHost gameHostConfiguration)
         {
             var query = new SiCreateGameHost()
@@ -62,7 +93,7 @@ namespace StrikeforceInfinity.Game.Managers
 
             var reply = MessageClient.Query<SiCreateGameHostReply>(query).Result;
 
-            _gameCore.SetGameHostUID(reply.UID);
+            SetGameHostUID(reply.UID);
         }
 
         public List<SiGameHost> GetHostList()
@@ -78,12 +109,11 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void Notify(IFramePayloadNotification multiplayerEvent)
         {
-            if ((_gameCore.PlayMode == HgPlayMode.MutiPlayerHost || _gameCore.PlayMode == HgPlayMode.MutiPlayerClient) && MessageClient?.IsConnected == true)
+            if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
             {
                 MessageClient?.Notify(multiplayerEvent);
             }
         }
-
 
     }
 }
