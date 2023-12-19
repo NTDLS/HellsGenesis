@@ -6,12 +6,12 @@ namespace StrikeforceInfinity.Server.Engine
 {
     public class GameHostManager
     {
-        private readonly ServerCore _core;
+        private readonly ServerCore _serverCore;
         readonly PessimisticSemaphore<List<GameHost>> _hosts = new();
 
-        public GameHostManager(ServerCore core)
+        public GameHostManager(ServerCore serverCore)
         {
-            _core = core;
+            _serverCore = serverCore;
         }
 
         public GameHost Create(Guid connectionId, SiGameHost configuration)

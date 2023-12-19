@@ -11,13 +11,13 @@ namespace StrikeforceInfinity.Server.Engine
     /// </summary>
     public class LogManager
     {
-        private readonly ServerCore _core;
+        private readonly ServerCore _serverCore;
         private StreamWriter? _fileHandle = null;
         private DateTime _recycledTime = DateTime.MinValue;
 
-        public LogManager(ServerCore core)
+        public LogManager(ServerCore serverCore)
         {
-            _core = core;
+            _serverCore = serverCore;
             CycleLog();
         }
 
@@ -59,7 +59,7 @@ namespace StrikeforceInfinity.Server.Engine
         {
             try
             {
-                if (entry.Severity == SiLogSeverity.Trace && _core.Settings.WriteTraceData == false)
+                if (entry.Severity == SiLogSeverity.Trace && _serverCore.Settings.WriteTraceData == false)
                 {
                     return;
                 }
@@ -137,7 +137,7 @@ namespace StrikeforceInfinity.Server.Engine
 
                     _fileHandle.WriteLine(message.ToString());
 
-                    if (_core.Settings.FlushLog)
+                    if (_serverCore.Settings.FlushLog)
                     {
                         _fileHandle.Flush();
                     }
@@ -198,8 +198,8 @@ namespace StrikeforceInfinity.Server.Engine
                         Close();
 
                         _recycledTime = DateTime.Now;
-                        string fileName = _core.Settings.LogDirectory + "\\" + $"{_recycledTime.Year}_{_recycledTime.Month:00}_{_recycledTime.Day:00}.txt";
-                        Directory.CreateDirectory(_core.Settings.LogDirectory);
+                        string fileName = _serverCore.Settings.LogDirectory + "\\" + $"{_recycledTime.Year}_{_recycledTime.Month:00}_{_recycledTime.Day:00}.txt";
+                        Directory.CreateDirectory(_serverCore.Settings.LogDirectory);
                         _fileHandle = new StreamWriter(fileName, true);
                     }
                 }

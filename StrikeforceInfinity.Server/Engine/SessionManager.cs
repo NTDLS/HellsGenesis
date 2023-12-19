@@ -5,13 +5,13 @@ namespace StrikeforceInfinity.Server.Engine
 {
     public class SessionManager
     {
-        private readonly ServerCore _core;
+        private readonly ServerCore _serverCore;
 
         readonly PessimisticSemaphore<List<Session>> _sessions = new();
 
-        public SessionManager(ServerCore core)
+        public SessionManager(ServerCore serverCore)
         {
-            _core = core;
+            _serverCore = serverCore;
         }
 
         public void Remove(Guid connectionId)

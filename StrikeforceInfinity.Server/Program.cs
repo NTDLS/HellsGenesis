@@ -7,13 +7,13 @@ namespace StrikeforceInfinity.Server
 {
     public class Program
     {
-        private static ServerCore? _core = null;
-        public static ServerCore Core
+        private static ServerCore? _serverCore = null;
+        public static ServerCore ServerCore
         {
             get
             {
-                _core ??= new ServerCore(Configuration);
-                return _core;
+                _serverCore ??= new ServerCore(Configuration);
+                return _serverCore;
             }
         }
 
@@ -60,16 +60,16 @@ namespace StrikeforceInfinity.Server
 
             private void DoWork()
             {
-                Core.Start();
+                ServerCore.Start();
 
-                Core.Log.Write($"Listening on {Configuration.DataPort}.");
+                ServerCore.Log.Write($"Listening on {Configuration.DataPort}.");
 
                 while (true)
                 {
                     if (_semaphoreToRequestStop.Wait(500))
                     {
-                        Core.Log.Write($"Stopping...");
-                        Core.Stop();
+                        ServerCore.Log.Write($"Stopping...");
+                        ServerCore.Stop();
                         break;
                     }
                 }
