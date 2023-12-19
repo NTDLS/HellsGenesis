@@ -76,12 +76,6 @@ namespace StrikeforceInfinity.Game.Managers
         {
             var keyboardState = Keyboard.GetCurrentState();
 
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.AltForward, keyboardState.IsPressed(Key.Home));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.AltSpeedBoost, keyboardState.IsPressed(Key.LeftControl));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.AltRotateCounterClockwise, keyboardState.IsPressed(Key.Delete));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.AltRotateClockwise, keyboardState.IsPressed(Key.PageDown));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.AltPrimaryFire, keyboardState.IsPressed(Key.LeftAlt));
-
             _gameCore.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
             _gameCore.Input.KeyStateChanged(HgPlayerKey.Forward, keyboardState.IsPressed(Key.W));
             _gameCore.Input.KeyStateChanged(HgPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));

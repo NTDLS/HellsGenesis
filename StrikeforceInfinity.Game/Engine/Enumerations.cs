@@ -106,12 +106,6 @@
 
     public enum HgPlayerKey
     {
-        AltPrimaryFire,
-        AltSpeedBoost,
-        AltForward,
-        AltRotateClockwise,
-        AltRotateCounterClockwise,
-
         SpeedBoost,
         Forward,
         Reverse,

@@ -71,10 +71,8 @@ namespace StrikeforceInfinity.Game.Levels
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
 
-            _gameCore.Sprites.Enemies.Create<SpriteEnemyAITracer>();
-
-            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
 
