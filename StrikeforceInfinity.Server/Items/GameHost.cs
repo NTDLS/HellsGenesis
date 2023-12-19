@@ -1,6 +1,4 @@
-﻿using StrikeforceInfinity.Client.Payloads;
-
-namespace StrikeforceInfinity.Server.Items
+﻿namespace StrikeforceInfinity.Server.Items
 {
     public class GameHost
     {
@@ -15,12 +13,12 @@ namespace StrikeforceInfinity.Server.Items
         public string Name { get; set; }
         public int MaxPlayers { get; set; }
 
-        public GameHost(Guid ownerSessionId, SiGameHost configuration)
+        public GameHost(Guid ownerSessionId, string name, int maxPlayers)
         {
             UID = Guid.NewGuid();
             OwnerSessionId = ownerSessionId;
-            Name = configuration.Name;
-            MaxPlayers = configuration.MaxPlayers;
+            Name = name;
+            MaxPlayers = maxPlayers;
         }
     }
 }

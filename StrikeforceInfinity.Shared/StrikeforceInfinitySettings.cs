@@ -3,11 +3,6 @@
     public class StrikeforceInfinitySettings
     {
         /// <summary>
-        /// The base listening URL for the web-services.
-        /// </summary>
-        public string BaseManagementAddress { get; set; } = string.Empty;
-
-        /// <summary>
         /// The listen port for data exchange.
         /// </summary>
         public int DataPort { get; set; }

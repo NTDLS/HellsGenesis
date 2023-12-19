@@ -1,9 +1,11 @@
-﻿namespace StrikeforceInfinity.Shared.MultiplayerEvents
+﻿using NTDLS.StreamFraming.Payloads;
+
+namespace StrikeforceInfinity.Shared.ServerMessages.Messages
 {
     /// <summary>
     /// Tells the server that a player has changed position, velocity and or angle.
     /// </summary>
-    public class MultiplayerEventPositionChanged : MultiplayerEventBase
+    public class SiPlayerPositionChanged : IFramePayloadNotification
     {
         public double X { get; set; }
         public double Y { get; set; }

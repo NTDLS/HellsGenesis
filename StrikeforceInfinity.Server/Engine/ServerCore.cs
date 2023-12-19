@@ -1,9 +1,9 @@
 ﻿using NTDLS.ReliableMessaging;
 using NTDLS.StreamFraming.Payloads;
-using StrikeforceInfinity.Client.Payloads;
 using StrikeforceInfinity.Shared;
-using StrikeforceInfinity.Shared.MultiplayerEvents;
-using System.Diagnostics;
+using StrikeforceInfinity.Shared.Payload;
+using StrikeforceInfinity.Shared.ServerMessages.Messages;
+using StrikeforceInfinity.Shared.ServerMessages.Queires;
 
 namespace StrikeforceInfinity.Server.Engine
 {
@@ -39,17 +39,48 @@ namespace StrikeforceInfinity.Server.Engine
             _messageServer.OnConnected += MessageServer_OnConnected;
             _messageServer.OnDisconnected += _messageServer_OnDisconnected;
             _messageServer.OnNotificationReceived += MessageServer_OnNotificationReceived;
+            _messageServer.OnQueryReceived += MessageServer_OnQueryReceived;
+        }
+
+        private IFramePayloadQueryReply MessageServer_OnQueryReceived(MessageServer server, Guid connectionId, IFramePayloadQuery payload)
+        {
+            if (payload is SiCreateGameHost createGameHost)
+            {
+                var gameHost = GameHost.Create(connectionId, createGameHost.Configuration);
+
+                return new SiCreateGameHostReply()
+                {
+                    UID = gameHost.UID
+                };
+            }
+            else if (payload is SiListGameHosts listGameHosts)
+            {
+                var gameHost = GameHost.GetList(connectionId);
+
+                return new SiListGameHostsReply()
+                {
+                    Collection = gameHost
+                };
+            }
+            else
+            {
+                throw new NotImplementedException("The server query is not implemented.");
+            }
         }
 
         private void MessageServer_OnNotificationReceived(MessageServer server, Guid connectionId, IFramePayloadNotification payload)
         {
-            if (payload is MultiplayerEventPositionChanged position)
+            if (payload is SiPlayerPositionChanged position)
             {
                 Console.WriteLine($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
             }
-            else if (payload is MultiplayerEventRegister register)
+            else if (payload is SiRegisterForGameHost register)
             {
                 Console.WriteLine($"ConnectionId: '{connectionId}' registered for GameHost: '{register.GameHostUID}'");
+            }
+            else
+            {
+                throw new NotImplementedException("The server notification is not implemented.");
             }
         }
 

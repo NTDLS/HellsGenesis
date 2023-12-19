@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
 using NTDLS.ReliableMessaging;
-using StrikeforceInfinity.Client;
+using NTDLS.StreamFraming.Payloads;
 using StrikeforceInfinity.Game.Controller;
 using StrikeforceInfinity.Game.Engine.GraphicsProcessing;
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Menus;
-using StrikeforceInfinity.Shared.MultiplayerEvents;
+using StrikeforceInfinity.Shared.ServerMessages.Messages;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -20,16 +20,6 @@ namespace StrikeforceInfinity.Game.Engine
     {
         public HgPlayMode PlayMode { get; private set; }
         public Guid GameHostUID { get; private set; }
-
-        private SiClient _managementServiceClient = null;
-        public SiClient ManagementServiceClient
-        {
-            get
-            {
-                _managementServiceClient ??= new SiClient(Constants.ServerAddress);
-                return _managementServiceClient;
-            }
-        }
 
         private object _messageClientLock = new object();
         private MessageClient _messageClient;
@@ -49,7 +39,7 @@ namespace StrikeforceInfinity.Game.Engine
                     }
                 }
 
-                _messageClient.Notify(new MultiplayerEventPositionChanged());
+                _messageClient.Notify(new SiPlayerPositionChanged());
 
                 return _messageClient;
             }
@@ -132,7 +122,7 @@ namespace StrikeforceInfinity.Game.Engine
             return JsonConvert.DeserializeObject<EngineSettings>(engineSettingsText);
         }
 
-        public void MultiplayerNotify(MultiplayerEventBase multiplayerEvent)
+        public void MultiplayerNotify(IFramePayloadNotification multiplayerEvent)
         {
             if (PlayMode == HgPlayMode.MutiPlayer && MessageClient?.IsConnected == true)
             {
@@ -161,7 +151,7 @@ namespace StrikeforceInfinity.Game.Engine
         {
             if (PlayMode == HgPlayMode.MutiPlayer)
             {
-                MultiplayerNotify(new MultiplayerEventRegister(GameHostUID));
+                MultiplayerNotify(new SiRegisterForGameHost(GameHostUID));
             }
 
             Sprites.PlayerStatsText.Visable = true;

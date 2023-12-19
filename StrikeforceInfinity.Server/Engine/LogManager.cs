@@ -21,10 +21,10 @@ namespace StrikeforceInfinity.Server.Engine
             CycleLog();
         }
 
-        public void Write(string message) => Write(new LogEntry(message) { Severity = NsLogSeverity.Verbose });
-        public void Trace(string message) => Write(new LogEntry(message) { Severity = NsLogSeverity.Trace });
-        public void Write(string message, Exception ex) => Write(new LogEntry(message) { Exception = ex, Severity = NsLogSeverity.Exception });
-        public void Write(string message, NsLogSeverity severity) => Write(new LogEntry(message) { Severity = severity });
+        public void Write(string message) => Write(new LogEntry(message) { Severity = SiLogSeverity.Verbose });
+        public void Trace(string message) => Write(new LogEntry(message) { Severity = SiLogSeverity.Trace });
+        public void Write(string message, Exception ex) => Write(new LogEntry(message) { Exception = ex, Severity = SiLogSeverity.Exception });
+        public void Write(string message, SiLogSeverity severity) => Write(new LogEntry(message) { Severity = severity });
 
         public void Start()
         {
@@ -59,7 +59,7 @@ namespace StrikeforceInfinity.Server.Engine
         {
             try
             {
-                if (entry.Severity == NsLogSeverity.Trace && _core.Settings.WriteTraceData == false)
+                if (entry.Severity == SiLogSeverity.Trace && _core.Settings.WriteTraceData == false)
                 {
                     return;
                 }
@@ -112,15 +112,15 @@ namespace StrikeforceInfinity.Server.Engine
                         }
                     }
 
-                    if (entry.Severity == NsLogSeverity.Warning)
+                    if (entry.Severity == SiLogSeverity.Warning)
                     {
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
                     }
-                    else if (entry.Severity == NsLogSeverity.Exception)
+                    else if (entry.Severity == SiLogSeverity.Exception)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
-                    else if (entry.Severity == NsLogSeverity.Verbose)
+                    else if (entry.Severity == SiLogSeverity.Verbose)
                     {
                         Console.ForegroundColor = ConsoleColor.White;
                     }

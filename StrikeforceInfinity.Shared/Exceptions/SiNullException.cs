@@ -6,14 +6,14 @@ namespace StrikeforceInfinity.Shared.Exceptions
     {
         public SiNullException()
         {
-            Severity = NsLogSeverity.Warning;
+            Severity = SiLogSeverity.Warning;
         }
 
         public SiNullException(string message)
             : base($"Null exception: {message}.")
 
         {
-            Severity = NsLogSeverity.Exception;
+            Severity = SiLogSeverity.Exception;
         }
     }
 }

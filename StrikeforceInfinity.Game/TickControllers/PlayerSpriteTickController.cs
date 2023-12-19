@@ -3,7 +3,7 @@ using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
 using StrikeforceInfinity.Game.TickControllers.BaseClasses;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
-using StrikeforceInfinity.Shared.MultiplayerEvents;
+using StrikeforceInfinity.Shared.ServerMessages.Messages;
 
 namespace StrikeforceInfinity.Game.Controller
 {
@@ -261,7 +261,7 @@ namespace StrikeforceInfinity.Game.Controller
 
             if (displacementVector.X > 0 && displacementVector.Y > 0)
             {
-                _core.MultiplayerNotify(new MultiplayerEventPositionChanged()
+                _core.MultiplayerNotify(new SiPlayerPositionChanged()
                 {
                     X = displacementVector.X,
                     Y = displacementVector.Y,

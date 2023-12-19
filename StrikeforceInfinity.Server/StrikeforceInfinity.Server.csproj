@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StrikeforceInfinity.Client\StrikeforceInfinity.Client.csproj" />
     <ProjectReference Include="..\StrikeforceInfinity.Shared\StrikeforceInfinity.Shared.csproj" />
   </ItemGroup>
 </Project>

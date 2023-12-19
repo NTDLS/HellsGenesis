@@ -1,9 +1,9 @@
-﻿using StrikeforceInfinity.Client.Payloads;
-using StrikeforceInfinity.Game.Engine;
+﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
-using System;
+using StrikeforceInfinity.Shared.Payload;
+using StrikeforceInfinity.Shared.ServerMessages.Queires;
 
 namespace StrikeforceInfinity.Game.Menus
 {
@@ -57,10 +57,14 @@ namespace StrikeforceInfinity.Game.Menus
                 //return false;
             }
 
-            var configuration = new SiGameHost(textBoxName.Text, maxPlayers);
-            var gameHostResponse = _core.ManagementServiceClient.GameHost.Create(configuration);
+            var query = new SiCreateGameHost()
+            {
+                Configuration = new SiGameHost(textBoxName.Text, maxPlayers)
+            };
 
-            _core.SetGameHostUID(gameHostResponse.GameHost.UID);
+            var reply = _core.MessageClient.Query<SiCreateGameHostReply>(query).Result;
+
+            _core.SetGameHostUID(reply.UID);
 
             _core.Menus.Insert(new SituationSelectMenu(_core));
 

@@ -2,9 +2,9 @@
 {
     public static class SiConstants
     {
-        public static string FriendlyName = "StrikeforceInfinity";
+        public static string FriendlyName = "Strikeforce Infinity";
 
-        public enum NsLogSeverity
+        public enum SiLogSeverity
         {
             Trace = 0, //Super-verbose, debug-like information.
             Verbose = 1, //General status messages.

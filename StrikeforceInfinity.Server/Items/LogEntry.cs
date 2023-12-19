@@ -7,7 +7,7 @@ namespace StrikeforceInfinity.Server.Items
         public DateTime DateTime { get; set; }
         public string? Message { get; set; }
         public Exception? Exception { get; set; }
-        public NsLogSeverity? Severity { get; set; }
+        public SiLogSeverity? Severity { get; set; }
 
         public LogEntry()
         {

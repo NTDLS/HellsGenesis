@@ -6,14 +6,14 @@ namespace StrikeforceInfinity.Shared.Exceptions
     {
         public SiAssertException()
         {
-            Severity = NsLogSeverity.Warning;
+            Severity = SiLogSeverity.Warning;
         }
 
         public SiAssertException(string message)
             : base($"Assert exception: {message}.")
 
         {
-            Severity = NsLogSeverity.Exception;
+            Severity = SiLogSeverity.Exception;
         }
     }
 }

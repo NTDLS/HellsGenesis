@@ -1,6 +1,6 @@
 ﻿using NTDLS.Semaphore;
-using StrikeforceInfinity.Client.Payloads;
 using StrikeforceInfinity.Server.Items;
+using StrikeforceInfinity.Shared.Payload;
 
 namespace StrikeforceInfinity.Server.Engine
 {
@@ -14,11 +14,11 @@ namespace StrikeforceInfinity.Server.Engine
             _core = core;
         }
 
-        public GameHost Create(Guid ownerSessionId, SiGameHost configuration)
+        public GameHost Create(Guid connectionId, SiGameHost configuration)
         {
             return _hosts.Use(o =>
             {
-                var gameHost = new GameHost(ownerSessionId, configuration);
+                var gameHost = new GameHost(connectionId, configuration.Name, configuration.MaxPlayers);
                 {
                 };
 
@@ -27,7 +27,7 @@ namespace StrikeforceInfinity.Server.Engine
             });
         }
 
-        public List<SiGameHost> GetList(Guid ownerSessionId, SiGameHostFilter gameHostFilter)
+        public List<SiGameHost> GetList(Guid connectionId)
         {
             return _hosts.Use(o =>
             {

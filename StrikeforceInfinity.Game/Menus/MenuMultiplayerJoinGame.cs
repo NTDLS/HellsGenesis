@@ -1,8 +1,8 @@
-﻿using StrikeforceInfinity.Client.Payloads;
-using StrikeforceInfinity.Game.Engine;
+﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
+using StrikeforceInfinity.Shared.ServerMessages.Queires;
 using System;
 using System.Linq;
 
@@ -30,9 +30,9 @@ namespace StrikeforceInfinity.Game.Menus
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            var gameHosts = _core.ManagementServiceClient.GameHost.GetList(new SiGameHostFilter());
+            var reply = _core.MessageClient.Query<SiListGameHostsReply>(new SiListGameHosts()).Result;
 
-            foreach (var gameHost in gameHosts.Collection)
+            foreach (var gameHost in reply.Collection)
             {
                 helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), gameHost.UID.ToString(), gameHost.Name);
                 helpItem.X -= helpItem.Size.Width / 2;

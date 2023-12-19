@@ -10,32 +10,6 @@ namespace StrikeforceInfinity.Server.Service.Controllers
     [Route("api/[controller]")]
     public class GameHostController
     {
-        [HttpPost]
-        [Route("{sessionId}/Create")]
-        public SiActionResponseHost Create(Guid sessionId, [FromBody] string value)
-        {
-            try
-            {
-                var session = Program.Core.Sessions.Upsert(sessionId);
-                var configuration = JsonConvert.DeserializeObject<SiGameHost>(value);
-                SiUtility.EnsureNotNull(configuration);
-                var gameHost = Program.Core.GameHost.Create(sessionId, configuration);
-
-                return new SiActionResponseHost()
-                {
-                    GameHost = new SiGameHost
-                    {
-                        Name = gameHost.Name,
-                        MaxPlayers = gameHost.MaxPlayers,
-                        UID = gameHost.UID
-                    }
-                };
-            }
-            catch (Exception ex)
-            {
-                return new SiActionResponseHost(ex);
-            }
-        }
 
         [HttpPost]
         [Route("{sessionId}/GetList")]

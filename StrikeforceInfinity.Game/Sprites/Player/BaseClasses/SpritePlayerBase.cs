@@ -7,7 +7,7 @@ using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Weapons.BaseClasses;
 using StrikeforceInfinity.Game.Weapons.Munitions;
-using StrikeforceInfinity.Shared.MultiplayerEvents;
+using StrikeforceInfinity.Shared.ServerMessages.Messages;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -78,7 +78,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
 
         public override void RotationChanged()
         {
-            _core.MultiplayerNotify(new MultiplayerEventPositionChanged()
+            _core.MultiplayerNotify(new SiPlayerPositionChanged()
             {
                 X = X,
                 Y = Y,
