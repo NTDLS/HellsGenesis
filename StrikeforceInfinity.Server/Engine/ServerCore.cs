@@ -27,12 +27,6 @@ namespace StrikeforceInfinity.Server.Engine
 
         public void Start()
         {
-            //GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #1", 10));
-            //GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #2", 20));
-            //GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #3", 30));
-            //GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #4", 40));
-            //GameHost.Create(Guid.Empty, new SiGameHost("Canned Game Host #5", 50));
-
             _messageServer.Start(Settings.DataPort);
 
             _messageServer.OnConnected += MessageServer_OnConnected;
@@ -43,26 +37,32 @@ namespace StrikeforceInfinity.Server.Engine
 
         private IFramePayloadQueryReply MessageServer_OnQueryReceived(MessageServer server, Guid connectionId, IFramePayloadQuery payload)
         {
-            if (payload is SiCreateLobby createGameHost)
+            if (payload is SiCreateLobby createLobby)
             {
-                var gameHost = Lobbies.Create(connectionId, createGameHost.Configuration);
+                Log.Verbose($"ConnectionId: '{connectionId}' creating lobby '{createLobby.Configuration.Name}'.");
+
+                var lobby = Lobbies.Create(connectionId, createLobby.Configuration);
 
                 return new SiCreateLobbyReply()
                 {
-                    UID = gameHost.UID
+                    UID = lobby.UID
                 };
             }
-            else if (payload is SiListLobbies listGameHosts)
+            else if (payload is SiListLobbies listLobbies)
             {
-                var gameHost = Lobbies.GetList(connectionId);
+                Log.Verbose($"ConnectionId: '{connectionId}' requested lobby list.");
+
+                var lobbies = Lobbies.GetList(connectionId);
 
                 return new SiListLobbiesReply()
                 {
-                    Collection = gameHost
+                    Collection = lobbies
                 };
             }
             else if (payload is SiConfigure establish)
             {
+                Log.Verbose($"ConnectionId: '{connectionId}' requested configuration.");
+
                 return new SiConfigureReply()
                 {
                     PlayerAbsoluteStateDelayMs = Settings.PlayerAbsoluteStateDelayMs
@@ -85,16 +85,16 @@ namespace StrikeforceInfinity.Server.Engine
 
             if (payload is SiPlayerAbsoluteState position)
             {
-                //Log.Trace($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
+                Log.Trace($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
             }
             else if (payload is SiRegisterToLobby register)
             {
-                Log.Trace($"ConnectionId: '{connectionId}' registered for lobby: '{register.LobbyUID}'");
+                Log.Verbose($"ConnectionId: '{connectionId}' registered for lobby: '{register.LobbyUID}'");
 
                 var lobby = Lobbies.GetByLobbyUID(register.LobbyUID);
                 if (lobby == null)
                 {
-                    Log.Exception($"The game host was not found '{register.LobbyUID}'.");
+                    Log.Exception($"The lobby was not found '{register.LobbyUID}'.");
                     return;
                 }
 
@@ -103,20 +103,22 @@ namespace StrikeforceInfinity.Server.Engine
             }
             else if (payload is SiReadyToPlay)
             {
-                var gameHost = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
+                Log.Verbose($"ConnectionId: '{connectionId}' is ready to play.");
 
-                if (gameHost == null)
+                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
+
+                if (lobby == null)
                 {
-                    Log.Exception($"The game host was not found '{session.CurrentLobbyUID}'.");
+                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
                     return;
                 }
 
                 //Record that the connection is ready to start. FlagConnectionAsReady() returns true if all connections are ready.
-                if (gameHost.FlagConnectionAsReady(connectionId))
+                if (lobby.FlagConnectionAsReady(connectionId))
                 {
-                    //All connections are ready to start, request the scenario configuration from the game host owner.
+                    //All connections are ready to start, request the scenario configuration from the lobby owner.
 
-                    _messageServer.Query<SiRequestLayoutFromLobbyOwnerReply>(gameHost.OwnerConnectionId, new SiRequestLayoutFromLobbyOwner());
+                    _messageServer.Query<SiRequestLayoutFromLobbyOwnerReply>(lobby.OwnerConnectionId, new SiRequestLayoutFromLobbyOwner());
                 }
             }
             else
@@ -128,13 +130,13 @@ namespace StrikeforceInfinity.Server.Engine
         private void MessageServer_OnConnected(MessageServer server, Guid connectionId)
         {
             Sessions.Establish(connectionId);
-            Log.Trace($"Accepted Connection: '{connectionId}'");
+            Log.Verbose($"Accepted Connection: '{connectionId}'");
         }
 
         private void MessageServer_OnDisconnected(MessageServer server, Guid connectionId)
         {
             Sessions.Remove(connectionId);
-            Log.Trace($"Disconnected Connection: '{connectionId}'");
+            Log.Verbose($"Disconnected Connection: '{connectionId}'");
         }
 
         public void Stop()

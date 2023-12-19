@@ -27,6 +27,7 @@ namespace StrikeforceInfinity.Server.Engine.Managers
 
         public void Write(string message) => Write(new LogEntry(message) { Severity = SiLogSeverity.Verbose });
         public void Trace(string message) => Write(new LogEntry(message) { Severity = SiLogSeverity.Trace });
+        public void Verbose(string message) => Write(new LogEntry(message) { Severity = SiLogSeverity.Verbose });
         public void Write(string message, SiLogSeverity severity) => Write(new LogEntry(message) { Severity = severity });
 
         public void Start()
