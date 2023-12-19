@@ -62,6 +62,13 @@ namespace StrikeforceInfinity.Server.Engine
                     Collection = gameHost
                 };
             }
+            else if (payload is SiConfigure establish)
+            {
+                return new SiConfigureReply()
+                {
+                    PlayerAbsoluteStateDelayMs = Settings.PlayerAbsoluteStateDelayMs
+                };
+            }
             else
             {
                 throw new NotImplementedException("The server query is not implemented.");
@@ -77,10 +84,6 @@ namespace StrikeforceInfinity.Server.Engine
             else if (payload is SiRegisterForGameHost register)
             {
                 Console.WriteLine($"ConnectionId: '{connectionId}' registered for GameHost: '{register.GameHostUID}'");
-            }
-            else if (payload is SiHello hello)
-            {
-                Console.WriteLine($"ConnectionId: '{connectionId}' says 'HI'!");
             }
             else
             {

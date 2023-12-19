@@ -7,6 +7,7 @@ using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Menus;
 using StrikeforceInfinity.Shared.ServerMessages.Messages;
+using StrikeforceInfinity.Shared.ServerMessages.Queires;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -21,7 +22,7 @@ namespace StrikeforceInfinity.Game.Engine
         public HgPlayMode PlayMode { get; private set; }
         public Guid GameHostUID { get; private set; }
 
-        private object _messageClientLock = new object();
+        private readonly object _messageClientLock = new();
         private MessageClient _messageClient;
         public MessageClient MessageClient
         {
@@ -33,13 +34,12 @@ namespace StrikeforceInfinity.Game.Engine
                     {
                         if (_messageClient == null)
                         {
-                            _messageClient = new MessageClient();
-                            _messageClient.Connect(Constants.DataAddress, Constants.DataPort);
+                            var messageClient = new MessageClient();
+                            messageClient.Connect(Constants.DataAddress, Constants.DataPort);
+                            _messageClient = messageClient;
                         }
                     }
                 }
-
-                _messageClient.Notify(new SiPlayerAbsoluteState());
 
                 return _messageClient;
             }
@@ -140,6 +140,13 @@ namespace StrikeforceInfinity.Game.Engine
         public void SetPlayMode(HgPlayMode playMode)
         {
             PlayMode = playMode;
+
+            if (playMode == HgPlayMode.MutiPlayer)
+            {
+                //Tell the server hello and request any settings that the server wants to enforce on the client.
+                var reply = MessageClient.Query<SiConfigureReply>(new SiConfigure()).Result;
+                Settings.Multiplayer.PlayerAbsoluteStateDelayMs = reply.PlayerAbsoluteStateDelayMs;
+            }
         }
 
         public void SetGameHostUID(Guid uid)

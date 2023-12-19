@@ -4,6 +4,7 @@ using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
 using StrikeforceInfinity.Game.TickControllers.BaseClasses;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
 using StrikeforceInfinity.Shared.ServerMessages.Messages;
+using System;
 
 namespace StrikeforceInfinity.Game.Controller
 {
@@ -263,9 +264,9 @@ namespace StrikeforceInfinity.Game.Controller
 
             if (_core.PlayMode == HgPlayMode.MutiPlayer)
             {
-                if (displacementVector.X != 0 && displacementVector.Y != 0
-                    && Sprite.Velocity.Angle.Degrees != _playerAbsoluteState.AngleDegrees)
+                if ((DateTime.UtcNow - _playerAbsoluteState.Timestamp).TotalMilliseconds >= _core.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
                 {
+                    _playerAbsoluteState.Timestamp = DateTime.UtcNow;
                     _playerAbsoluteState.X = _core.Display.BackgroundOffset.X;
                     _playerAbsoluteState.Y = _core.Display.BackgroundOffset.Y;
                     _playerAbsoluteState.AngleDegrees = Sprite.Velocity.Angle.Degrees;

@@ -8,6 +8,11 @@
         public int DataPort { get; set; }
 
         /// <summary>
+        /// The amount of time in milliseconds between updates of player absolute state to the server.
+        /// </summary>
+        public int PlayerAbsoluteStateDelayMs { get; set; }
+
+        /// <summary>
         /// Causes the server to write super-verbose information about almost every internal operation.
         /// </summary>
         public bool WriteTraceData { get; set; }

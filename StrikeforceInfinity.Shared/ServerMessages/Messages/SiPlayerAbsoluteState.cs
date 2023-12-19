@@ -7,6 +7,7 @@ namespace StrikeforceInfinity.Shared.ServerMessages.Messages
     /// </summary>
     public class SiPlayerAbsoluteState : IFramePayloadNotification
     {
+        public DateTime Timestamp { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
         public double AngleDegrees { get; set; }
