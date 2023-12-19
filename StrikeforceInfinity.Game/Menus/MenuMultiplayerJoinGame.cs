@@ -30,9 +30,8 @@ namespace StrikeforceInfinity.Game.Menus
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            var reply = _gameCore.MessageClient.Query<SiListGameHostsReply>(new SiListGameHosts()).Result;
-
-            foreach (var gameHost in reply.Collection)
+            var gameHosts = _gameCore.Multiplay.GetHostList();
+            foreach (var gameHost in gameHosts)
             {
                 helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), gameHost.UID.ToString(), gameHost.Name);
                 helpItem.X -= helpItem.Size.Width / 2;

@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
 using NTDLS.ReliableMessaging;
-using NTDLS.StreamFraming.Payloads;
 using StrikeforceInfinity.Game.Controller;
 using StrikeforceInfinity.Game.Engine.GraphicsProcessing;
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Menus;
 using StrikeforceInfinity.Shared.ServerMessages.Messages;
-using StrikeforceInfinity.Shared.ServerMessages.Queires;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -22,33 +20,11 @@ namespace StrikeforceInfinity.Game.Engine
         public HgPlayMode PlayMode { get; private set; }
         public Guid GameHostUID { get; private set; }
 
-        private MessageClient _messageClient;
-        public MessageClient MessageClient
-        {
-            get
-            {
-                #region Message Client Creation and Connectivity.
-                if (_messageClient == null)
-                {
-                    lock (this)
-                    {
-                        if (_messageClient == null)
-                        {
-                            var messageClient = new MessageClient();
-                            messageClient.Connect(Constants.DataAddress, Constants.DataPort);
-                            _messageClient = messageClient;
-                        }
-                    }
-                }
-                #endregion
-                return _messageClient;
-            }
-        }
-
         public SituationTickController Situations { get; private set; }
         public EventTickController Events { get; private set; }
         public PlayerSpriteTickController Player { get; private set; }
 
+        public EngineMultiplayManager Multiplay { get; private set; }
         public EngineInputManager Input { get; private set; }
         public EngineDisplayManager Display { get; private set; }
         public EngineSpriteManager Sprites { get; private set; } //Also contains all of the sprite tick controllers.
@@ -103,6 +79,7 @@ namespace StrikeforceInfinity.Game.Engine
             Player = new PlayerSpriteTickController(this);
             Rendering = new EngineRendering(this);
             Debug = new EngineDebugManager(this);
+            Multiplay = new EngineMultiplayManager(this);
 
             _worldClock = new EngineWorldClock(this);
 
@@ -122,13 +99,7 @@ namespace StrikeforceInfinity.Game.Engine
             return JsonConvert.DeserializeObject<EngineSettings>(engineSettingsText);
         }
 
-        public void MultiplayerNotify(IFramePayloadNotification multiplayerEvent)
-        {
-            if ((PlayMode == HgPlayMode.MutiPlayerHost || PlayMode == HgPlayMode.MutiPlayerClient) && MessageClient?.IsConnected == true)
-            {
-                MessageClient?.Notify(multiplayerEvent);
-            }
-        }
+
 
         public void ResetGame()
         {
@@ -142,13 +113,6 @@ namespace StrikeforceInfinity.Game.Engine
             PlayMode = playMode;
         }
 
-        public void ConfigureMultiplay()
-        {
-            //Tell the server hello and request any settings that the server wants to enforce on the client.
-            var reply = MessageClient.Query<SiConfigureReply>(new SiConfigure()).Result;
-            Settings.Multiplayer.PlayerAbsoluteStateDelayMs = reply.PlayerAbsoluteStateDelayMs;
-        }
-
         public void SetGameHostUID(Guid uid)
         {
             GameHostUID = uid;
@@ -158,7 +122,7 @@ namespace StrikeforceInfinity.Game.Engine
         {
             if (PlayMode != HgPlayMode.SinglePlayer)
             {
-                MultiplayerNotify(new SiRegisterToGameHost(GameHostUID));
+                Multiplay.Notify(new SiRegisterToGameHost(GameHostUID));
             }
 
             Sprites.PlayerStatsText.Visable = true;
@@ -167,7 +131,7 @@ namespace StrikeforceInfinity.Game.Engine
 
             if (PlayMode != HgPlayMode.SinglePlayer)
             {
-                MultiplayerNotify(new SiReadyToPlay());
+                Multiplay.Notify(new SiReadyToPlay());
             }
         }
 

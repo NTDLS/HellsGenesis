@@ -72,7 +72,7 @@ namespace StrikeforceInfinity.Game.Menus
             }
             else if (item.Key == "MULTI_PLAYER")
             {
-                _gameCore.ConfigureMultiplay();
+                _gameCore.Multiplay.Configure();
                 _gameCore.Menus.Insert(new MenuMultiplayerHostOrJoin(_gameCore));
             }
         }

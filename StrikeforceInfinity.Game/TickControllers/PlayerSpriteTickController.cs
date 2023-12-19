@@ -273,7 +273,7 @@ namespace StrikeforceInfinity.Game.Controller
                     _playerAbsoluteState.BoostPercentage = Sprite.Velocity.BoostPercentage;
                     _playerAbsoluteState.ThrottlePercentage = Sprite.Velocity.ThrottlePercentage;
 
-                    _gameCore.MultiplayerNotify(_playerAbsoluteState);
+                    _gameCore.Multiplay.Notify(_playerAbsoluteState);
                 }
             }
 

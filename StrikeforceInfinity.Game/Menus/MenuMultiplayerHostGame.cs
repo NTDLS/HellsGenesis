@@ -57,14 +57,7 @@ namespace StrikeforceInfinity.Game.Menus
                 //return false;
             }
 
-            var query = new SiCreateGameHost()
-            {
-                Configuration = new SiGameHost(textBoxName.Text, maxPlayers)
-            };
-
-            var reply = _gameCore.MessageClient.Query<SiCreateGameHostReply>(query).Result;
-
-            _gameCore.SetGameHostUID(reply.UID);
+            _gameCore.Multiplay.CreateHost(new SiGameHost(textBoxName.Text, maxPlayers));
 
             _gameCore.Menus.Insert(new SituationSelectMenu(_gameCore));
 
