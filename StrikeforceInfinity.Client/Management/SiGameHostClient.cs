@@ -14,7 +14,7 @@ namespace StrikeforceInfinity.Client.Management
             _client = client;
         }
 
-        public SiActionResponse Create(SiGameHost configuration)
+        public SiActionResponseHost Create(SiGameHost configuration)
         {
             string url = $"api/GameHost/{_client.SessionId}/Create";
 
@@ -23,8 +23,8 @@ namespace StrikeforceInfinity.Client.Management
             using var response = _client.Connection.PostAsync(url, postContent);
             string resultText = response.Result.Content.ReadAsStringAsync().Result;
 
-            return JsonConvert.DeserializeObject<SiActionResponse>(resultText)
-                ?? new SiActionResponseException("Invalid response.");
+            return JsonConvert.DeserializeObject<SiActionResponseHost>(resultText)
+                ?? new SiActionResponseHost(new Exception("Invalid response."));
         }
 
         public SiActionResponseHostList GetList(SiGameHostFilter filter)

@@ -7,7 +7,7 @@ namespace StrikeforceInfinity.Server.Items
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
         /// <summary>
-        /// The sessionif of the connection that created the host.
+        /// The sessionid of the connection that created the host.
         /// </summary>
         public Guid OwnerSessionId { get; set; }
 

@@ -37,6 +37,7 @@ namespace StrikeforceInfinity.Server.Engine
             _messageServer.Start(Settings.DataPort);
 
             _messageServer.OnConnected += MessageServer_OnConnected;
+            _messageServer.OnDisconnected += _messageServer_OnDisconnected;
             _messageServer.OnNotificationReceived += MessageServer_OnNotificationReceived;
         }
 
@@ -44,16 +45,22 @@ namespace StrikeforceInfinity.Server.Engine
         {
             if (payload is MultiplayerEventPositionChanged position)
             {
-                Debug.WriteLine($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
+                Console.WriteLine($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
             }
             else if (payload is MultiplayerEventRegister register)
             {
-                //Debug.WriteLine($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
+                Console.WriteLine($"ConnectionId: '{connectionId}' registered for GameHost: '{register.GameHostUID}'");
             }
         }
 
         private void MessageServer_OnConnected(MessageServer server, Guid connectionId)
         {
+            Console.WriteLine($"Accepted Connection: '{connectionId}'");
+        }
+
+        private void _messageServer_OnDisconnected(MessageServer server, Guid connectionId)
+        {
+            Console.WriteLine($"Disconnected Connection: '{connectionId}'");
         }
 
         public void Stop()

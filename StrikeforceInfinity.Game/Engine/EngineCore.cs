@@ -7,6 +7,7 @@ using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Menus;
 using StrikeforceInfinity.Shared.MultiplayerEvents;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -18,6 +19,7 @@ namespace StrikeforceInfinity.Game.Engine
     internal class EngineCore
     {
         public HgPlayMode PlayMode { get; private set; }
+        public Guid GameHostUID { get; private set; }
 
         private SiClient _managementServiceClient = null;
         public SiClient ManagementServiceClient
@@ -29,6 +31,7 @@ namespace StrikeforceInfinity.Game.Engine
             }
         }
 
+        private object _messageClientLock = new object();
         private MessageClient _messageClient;
         public MessageClient MessageClient
         {
@@ -36,12 +39,17 @@ namespace StrikeforceInfinity.Game.Engine
             {
                 if (_messageClient == null)
                 {
-                    _messageClient = new MessageClient();
-                    _messageClient.Connect(Constants.DataAddress, Constants.DataPort);
+                    lock (_messageClientLock)
+                    {
+                        if (_messageClient == null)
+                        {
+                            _messageClient = new MessageClient();
+                            _messageClient.Connect(Constants.DataAddress, Constants.DataPort);
+                        }
+                    }
                 }
 
                 _messageClient.Notify(new MultiplayerEventPositionChanged());
-
 
                 return _messageClient;
             }
@@ -144,8 +152,17 @@ namespace StrikeforceInfinity.Game.Engine
             PlayMode = playMode;
         }
 
+        public void SetGameHostUID(Guid uid)
+        {
+            GameHostUID = uid;
+        }
+
         public void StartGame()
         {
+            if (PlayMode == HgPlayMode.MutiPlayer)
+            {
+                MultiplayerNotify(new MultiplayerEventRegister(GameHostUID));
+            }
 
             Sprites.PlayerStatsText.Visable = true;
             Sprites.DeleteAll();

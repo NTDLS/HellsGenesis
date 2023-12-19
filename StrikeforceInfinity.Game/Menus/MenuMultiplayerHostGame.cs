@@ -3,6 +3,7 @@ using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
+using System;
 
 namespace StrikeforceInfinity.Game.Menus
 {
@@ -57,7 +58,9 @@ namespace StrikeforceInfinity.Game.Menus
             }
 
             var configuration = new SiGameHost(textBoxName.Text, maxPlayers);
-            _core.ManagementServiceClient.GameHost.Create(configuration);
+            var gameHostResponse = _core.ManagementServiceClient.GameHost.Create(configuration);
+
+            _core.SetGameHostUID(gameHostResponse.GameHost.UID);
 
             _core.Menus.Insert(new SituationSelectMenu(_core));
 

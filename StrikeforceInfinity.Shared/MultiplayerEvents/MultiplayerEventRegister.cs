@@ -5,6 +5,11 @@
     /// </summary>
     public class MultiplayerEventRegister : MultiplayerEventBase
     {
-        public Guid HostUID { get; set; }
+        public Guid GameHostUID { get; set; }
+
+        public MultiplayerEventRegister(Guid gameHostUID)
+        {
+            GameHostUID = gameHostUID;            
+        }
     }
 }

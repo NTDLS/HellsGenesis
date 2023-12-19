@@ -2,6 +2,7 @@
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
+using StrikeforceInfinity.Shared.MultiplayerEvents;
 
 
 namespace StrikeforceInfinity.Game.Menus
@@ -32,6 +33,8 @@ namespace StrikeforceInfinity.Game.Menus
             helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "HOST", " Host a Game ");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
+
+            _core.MessageClient.Notify(new MultiplayerEventHello());
 
             OnExecuteSelection += MenuMultiplayerHostOrJoin_OnExecuteSelection;
             OnEscape += MenuMultiplayerHostOrJoin_OnEscape;
