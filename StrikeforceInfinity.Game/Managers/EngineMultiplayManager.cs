@@ -6,6 +6,7 @@ using StrikeforceInfinity.Shared.Messages.Query;
 using StrikeforceInfinity.Shared.Payload;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace StrikeforceInfinity.Game.Managers
     internal class EngineMultiplayManager
     {
         public HgPlayMode PlayMode { get; private set; }
-        public Guid LobbyUID { get; private set; }
+        public Guid LobbyUID { get; private set; } = Guid.Empty;
 
         private readonly EngineCore _gameCore;
         private MessageClient _messageClient;
@@ -60,6 +61,7 @@ namespace StrikeforceInfinity.Game.Managers
         }
 
         public void SetPlayMode(HgPlayMode playMode) => PlayMode = playMode;
+
         public void RegisterLobbyUID(Guid lobbyUID)
         {
             LobbyUID = lobbyUID;
@@ -69,30 +71,49 @@ namespace StrikeforceInfinity.Game.Managers
             }
         }
 
+        public void DeregisterLobbyUID()
+        {
+            if (PlayMode != HgPlayMode.SinglePlayer)
+            {
+                Notify(new SiRegisterToLobby(LobbyUID));
+            }
+            LobbyUID = Guid.Empty;
+        }
+
         public void BroadcastLevelLayout()
         {
             var spriteLayouts = new List<SiSpriteLayout>();
 
+            //--------------------------------------------------------------------------------------
+            //-- Send the enemy sprites:
+            //--------------------------------------------------------------------------------------
             var enemies = _gameCore.Sprites.Enemies.All();
-
             foreach (var enemy in enemies)
             {
-                spriteLayouts.Add(new SiSpriteLayout(enemy.GetType(), enemy.UID)
+                //Make sure the MultiplayUID matches the MultiplayUID at all other connections.
+                enemy.MultiplayUID = enemy.UID;
+
+                spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName, enemy.UID)
                 {
                     Vector = new SiSpriteVector() { X = enemy.X, Y = enemy.Y }
                 });
             }
 
-            spriteLayouts.Add(new SiSpriteLayout(_gameCore.Player.Sprite.GetType(), _gameCore.Player.Sprite.UID)
+            //--------------------------------------------------------------------------------------
+            //-- Send the human player sprite (drone):
+            //--------------------------------------------------------------------------------------
+            //Make sure the MultiplayUID matches the MultiplayUID at all other connections.
+            _gameCore.Player.Sprite.MultiplayUID = _gameCore.Player.Sprite.UID;
+            spriteLayouts.Add(new SiSpriteLayout(_gameCore.Player.Sprite.GetType().FullName + "Drone", _gameCore.Player.Sprite.UID)
             {
                 Vector = new SiSpriteVector() { X = _gameCore.Display.BackgroundOffset.X, Y = _gameCore.Display.BackgroundOffset.Y }
             });
 
+            //--------------------------------------------------------------------------------------
             MessageClient.Notify(new SiSituationLayout()
             {
                 SpriteLayouts = spriteLayouts
             });
-
         }
 
         public void SetReadyToPlay()
@@ -146,6 +167,8 @@ namespace StrikeforceInfinity.Game.Managers
 
                 foreach (var spriteInfo in layoutDirective.SpriteLayouts)
                 {
+                    Debug.WriteLine($"Adding Sprite: {spriteInfo.MultiplayUID}->'{spriteInfo.FullTypeName}'");
+
                     var sprite = _gameCore.Sprites.CreateByNameOfType(spriteInfo.FullTypeName);
                     sprite.MultiplayUID = spriteInfo.MultiplayUID;
                     sprite.X = spriteInfo.Vector.X;
@@ -167,17 +190,20 @@ namespace StrikeforceInfinity.Game.Managers
                 //TODO: Send current sprite layout...
             }
             //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiSpriteVector spriteVector)
+            else if (payload is SiSpriteVectors spriteVectors)
             {
-                //TODO: Updates sprites...
-
-                var sprite = _gameCore.Sprites.Collection.Where(o => o.MultiplayUID == spriteVector.MultiplayUID).FirstOrDefault();
-
-                if (sprite != null)
+                foreach (var spriteVector in spriteVectors.Collection)
                 {
-                    sprite.X += spriteVector.X;
-                    sprite.Y += spriteVector.Y;
-                    sprite.Velocity.Angle.Degrees += spriteVector.AngleDegrees;
+                    //TODO: Updates sprites...
+                    //Debug.WriteLine(spriteVector.MultiplayUID);
+
+                    var sprite = _gameCore.Sprites.Collection.Where(o => o.MultiplayUID == spriteVector.MultiplayUID).FirstOrDefault();
+                    if (sprite != null)
+                    {
+                        sprite.X = spriteVector.X;
+                        sprite.Y = spriteVector.Y;
+                        sprite.Velocity.Angle.Degrees = spriteVector.AngleDegrees;
+                    }
                 }
             }
             //------------------------------------------------------------------------------------------------------------------------------
@@ -196,6 +222,46 @@ namespace StrikeforceInfinity.Game.Managers
             else
             {
                 throw new NotImplementedException("The client query is not implemented.");
+            }
+        }
+
+
+        public void NotifyddddSpriteVector(IFramePayloadNotification multiplayerEvent)
+        {
+            //TODO: We should really package these into a collection instead of sending one at a time.
+
+            if (LobbyUID != Guid.Empty)
+            {
+                if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
+                {
+                    MessageClient?.Notify(multiplayerEvent);
+                }
+            }
+        }
+
+
+        readonly List<SiSpriteVector> _spriteVectors = new();
+
+        public void RecordSpriteVector(SiSpriteVector multiplayerEvent)
+        {
+            if (LobbyUID != Guid.Empty)
+            {
+                if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
+                {
+                    _spriteVectors.Add(multiplayerEvent);
+                }
+            }
+        }
+
+        public void FlushSpriteVectorsToServer()
+        {
+            if (LobbyUID != Guid.Empty && _spriteVectors.Any())
+            {
+                if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
+                {
+                    MessageClient?.Notify(new SiSpriteVectors(_spriteVectors));
+                    _spriteVectors.Clear();
+                }
             }
         }
 

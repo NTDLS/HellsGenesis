@@ -13,13 +13,9 @@ namespace StrikeforceInfinity.Shared.Payload
 
         //TODO: need to add stuff like hitpoints so the sprites can be spawned for a latecomer to the server.
 
-        public SiSpriteLayout(Type type, uint multiplayUID)
+        public SiSpriteLayout(string fullTypeName, uint multiplayUID)
         {
-            if (type.FullName == null)
-            {
-                throw new Exception("The sprite type name cannot be null.");
-            }
-            FullTypeName = type.FullName;
+            FullTypeName = fullTypeName;
             MultiplayUID = multiplayUID;
             Vector.MultiplayUID = multiplayUID;
         }

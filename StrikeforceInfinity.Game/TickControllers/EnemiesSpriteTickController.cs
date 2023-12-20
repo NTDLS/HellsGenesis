@@ -44,7 +44,7 @@ namespace StrikeforceInfinity.Game.Controller
                     }
                 }
 
-                if (_gameCore.Multiplay.PlayMode != HgPlayMode.SinglePlayer)
+                if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerHost)
                 {
                     if ((DateTime.UtcNow - _multiplaySpriteVector.Timestamp).TotalMilliseconds >= _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
                     {
@@ -56,7 +56,7 @@ namespace StrikeforceInfinity.Game.Controller
                         _multiplaySpriteVector.BoostPercentage = enemy.Velocity.BoostPercentage;
                         _multiplaySpriteVector.ThrottlePercentage = enemy.Velocity.ThrottlePercentage;
 
-                        _gameCore.Multiplay.Notify(_multiplaySpriteVector);
+                        _gameCore.Multiplay.RecordSpriteVector(_multiplaySpriteVector);
                     }
                 }
 

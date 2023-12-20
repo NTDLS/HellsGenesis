@@ -43,7 +43,7 @@ namespace StrikeforceInfinity.Game.Managers
         public RadarPositionsSpriteTickController RadarPositions { get; set; }
         public StarsSpriteTickController Stars { get; private set; }
         public TextBlocksSpriteTickController TextBlocks { get; private set; }
-        public PlayersSpriteTickController Players { get; private set; }
+        public PlayerDronesSpriteTickController PlayerDrones { get; private set; }
 
         #endregion
 
@@ -61,7 +61,7 @@ namespace StrikeforceInfinity.Game.Managers
             RadarPositions = new RadarPositionsSpriteTickController(_gameCore, this);
             Stars = new StarsSpriteTickController(_gameCore, this);
             TextBlocks = new TextBlocksSpriteTickController(_gameCore, this);
-            Players = new PlayersSpriteTickController(_gameCore, this);
+            PlayerDrones = new PlayerDronesSpriteTickController(_gameCore, this);
         }
 
         public void Start()

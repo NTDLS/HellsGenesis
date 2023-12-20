@@ -275,7 +275,7 @@ namespace StrikeforceInfinity.Game.Controller
                     _multiplaySpriteVector.BoostPercentage = Sprite.Velocity.BoostPercentage;
                     _multiplaySpriteVector.ThrottlePercentage = Sprite.Velocity.ThrottlePercentage;
 
-                    _gameCore.Multiplay.Notify(_multiplaySpriteVector);
+                    _gameCore.Multiplay.RecordSpriteVector(_multiplaySpriteVector);
                 }
             }
 

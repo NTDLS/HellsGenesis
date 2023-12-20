@@ -1,11 +1,6 @@
-﻿using NTDLS.StreamFraming.Payloads;
-
-namespace StrikeforceInfinity.Shared.Messages.Notify
+﻿namespace StrikeforceInfinity.Shared.Messages.Notify
 {
-    /// <summary>
-    /// Tells the server where exactly a sprite is, which direction they are facing and how fast they are going.
-    /// </summary>
-    public class SiSpriteVector : IFramePayloadNotification
+    public class SiSpriteVector
     {
         public uint MultiplayUID { get; set; }
         public DateTime Timestamp { get; set; }

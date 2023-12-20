@@ -141,6 +141,8 @@ namespace StrikeforceInfinity.Game.Engine
 
             _gameCore.Sprites.CleanupDeletedObjects();
 
+            _gameCore.Multiplay.FlushSpriteVectorsToServer();
+
             return displacementVector;
         }
 

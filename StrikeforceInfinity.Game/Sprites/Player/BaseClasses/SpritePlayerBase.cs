@@ -65,11 +65,6 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
             ShipEngineBoostSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
         }
 
-        public virtual void ApplyIntelligence(SiPoint displacementVector)
-        {
-            //For the player class, this is only used for multiplay.
-        }
-
         public override void VisibilityChanged()
         {
             UpdateThrustAnimationPositions();

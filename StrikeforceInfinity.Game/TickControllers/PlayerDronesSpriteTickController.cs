@@ -9,14 +9,14 @@ using System;
 namespace StrikeforceInfinity.Game.Controller
 {
     /// <summary>
-    /// This controller allows for the manipulation of all players - which includes the
-    /// local player as well as any multiplay drones.
+    /// This controller allows for the manipulation of multiplay drones.
+    /// A multiplay drone is the local clone of a remote human player ship.
     /// </summary>
-    internal class PlayersSpriteTickController : SpriteTickControllerBase<SpritePlayerBase>
+    internal class PlayerDronesSpriteTickController : SpriteTickControllerBase<SpritePlayerDroneBase>
     {
         private readonly EngineCore _gameCore;
 
-        public PlayersSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+        public PlayerDronesSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
             : base(gameCore, manager)
         {
             _gameCore = gameCore;
@@ -24,20 +24,20 @@ namespace StrikeforceInfinity.Game.Controller
 
         public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
-            foreach (var player in Visible())
+            foreach (var drone in Visible())
             {
-                player.ApplyIntelligence(displacementVector);
+                drone.ApplyIntelligence(displacementVector);
 
-                //player.ApplyMotion(displacementVector);
+                //drone.ApplyMotion(displacementVector);
             }
         }
 
-        public T Create<T>() where T : SpritePlayerBase
+        public T Create<T>() where T : SpritePlayerDroneBase
         {
             lock (SpriteManager.Collection)
             {
                 object[] param = { GameCore };
-                var obj = (SpritePlayerBase)Activator.CreateInstance(typeof(T), param);
+                var obj = (SpritePlayerDroneBase)Activator.CreateInstance(typeof(T), param);
                 obj.Location = GameCore.Display.RandomOffScreenLocation();
                 obj.Velocity.MaxSpeed = HgRandom.Generator.Next(GameCore.Settings.MinEnemySpeed, GameCore.Settings.MaxEnemySpeed);
                 obj.Velocity.Angle.Degrees = HgRandom.Generator.Next(0, 360);

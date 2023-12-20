@@ -110,9 +110,9 @@ namespace StrikeforceInfinity.Server.Engine
             }
 
             //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiSpriteVector spriteVector)
+            if (payload is SiSpriteVectors spriteVectors)
             {
-                Log.Trace($"{spriteVector.X:n1},{spriteVector.Y:n1} -> {spriteVector.AngleDegrees:n1}");
+                //Log.Trace($"{spriteVector.X:n1},{spriteVector.Y:n1} -> {spriteVector.AngleDegrees:n1}");
 
                 var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
                 if (lobby == null)
@@ -126,7 +126,14 @@ namespace StrikeforceInfinity.Server.Engine
                 registeredConnectionIds.Remove(connectionId);
                 foreach (var registeredConnectionId in registeredConnectionIds)
                 {
-                    _messageServer.Notify(registeredConnectionId, spriteVector);
+                    try
+                    {
+                        _messageServer.Notify(registeredConnectionId, spriteVectors);
+                    }
+                    catch
+                    {
+                        //TODO: Remove this connection:
+                    }
                 }
             }
             //------------------------------------------------------------------------------------------------------------------------------
