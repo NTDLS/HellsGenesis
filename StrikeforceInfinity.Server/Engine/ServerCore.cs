@@ -4,6 +4,7 @@ using StrikeforceInfinity.Server.Engine.Managers;
 using StrikeforceInfinity.Shared;
 using StrikeforceInfinity.Shared.Messages.Notify;
 using StrikeforceInfinity.Shared.Messages.Query;
+using StrikeforceInfinity.Shared.Payload;
 
 namespace StrikeforceInfinity.Server.Engine
 {
@@ -37,7 +38,27 @@ namespace StrikeforceInfinity.Server.Engine
 
         private IFramePayloadQueryReply MessageServer_OnQueryReceived(MessageServer server, Guid connectionId, IFramePayloadQuery payload)
         {
-            if (payload is SiCreateLobby createLobby)
+            if (payload is SiGetLobbyInfo getLobbyInfo)
+            {
+                Log.Verbose($"ConnectionId: '{connectionId}' getting lobby info for '{getLobbyInfo.LobyUID}'.");
+
+                var lobby = Lobbies.GetByLobbyUID(getLobbyInfo.LobyUID);
+                if (lobby == null)
+                {
+                    Log.Exception($"The lobby was not found '{getLobbyInfo.LobyUID}'.");
+                    return new SiGetLobbyInfoReply();
+                }
+
+                return new SiGetLobbyInfoReply()
+                {
+                    Info = new SiLobbyInfo
+                    {
+                        Name = lobby.Name,
+                        WaitingCount = lobby.ConnectionsWaitingInLobbyCount()
+                    }
+                };
+            }
+            else if (payload is SiCreateLobby createLobby)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' creating lobby '{createLobby.Configuration.Name}'.");
 
@@ -45,7 +66,7 @@ namespace StrikeforceInfinity.Server.Engine
 
                 return new SiCreateLobbyReply()
                 {
-                    UID = lobby.UID
+                    LobbyUID = lobby.UID
                 };
             }
             else if (payload is SiListLobbies listLobbies)
@@ -101,44 +122,49 @@ namespace StrikeforceInfinity.Server.Engine
                 lobby.Register(connectionId);
                 session.SetCurrentLobby(register.LobbyUID);
             }
-            else if (payload is SiReadyToPlay)
+            else if (payload is SiWaitingInLobby)
             {
-                Log.Verbose($"ConnectionId: '{connectionId}' is ready to play.");
+                Log.Verbose($"ConnectionId: '{connectionId}' is waiting in the lobby.");
 
                 var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
-
                 if (lobby == null)
                 {
                     Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
                     return;
                 }
 
-                //Record that the connection is ready to start. FlagConnectionAsReady() returns true if all connections are ready.
-                if (lobby.FlagConnectionAsReady(connectionId))
+                lobby.FlagConnectionAsWaitingInLobby(connectionId);
+            }
+            else if (payload is SiSituationLayout layoutDirective)
+            {
+                Log.Verbose($"ConnectionId: '{connectionId}' issued a new layout.");
+
+                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
+                if (lobby == null)
                 {
-                    //All connections are ready to start, request the scenario configuration from the lobby owner.
-
-                    var layout = _messageServer.Query<SiRequestLayoutFromLobbyOwnerReply>(
-                        lobby.OwnerConnectionId, new SiRequestLayoutFromLobbyOwner()).ContinueWith(o =>
-                        {
-                            if (o.Result == null)
-                            {
-                                Log.Exception($"The layout was empty.");
-                                return;
-                            }
-
-                            var layoutDirective = new SiLayoutDirective()
-                            {
-                                Sprites = o.Result.Sprites
-                            };
-
-                            var registeredConnectionIds = lobby.RegisteredConnections();
-                            foreach (var registeredConnectionId in registeredConnectionIds)
-                            {
-                                _messageServer.Notify(registeredConnectionId, layoutDirective);
-                            }
-                        });
+                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
+                    return;
                 }
+
+                //The owner of the lobby send a new layout, send it to all of the connections.
+                var registeredConnectionIds = lobby.RegisteredConnections();
+                foreach (var registeredConnectionId in registeredConnectionIds)
+                {
+                    _messageServer.Notify(registeredConnectionId, layoutDirective);
+                }
+            }
+            else if (payload is SiReadyToPlay)
+            {
+                Log.Verbose($"ConnectionId: '{connectionId}' is ready to play.");
+
+                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
+                if (lobby == null)
+                {
+                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
+                    return;
+                }
+
+                lobby.FlagConnectionAsReadyToPlay(connectionId);
             }
             else
             {

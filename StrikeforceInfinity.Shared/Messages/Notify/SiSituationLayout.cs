@@ -4,9 +4,10 @@ using StrikeforceInfinity.Shared.Payload;
 namespace StrikeforceInfinity.Shared.Messages.Query
 {
     /// <summary>
-    /// Notification from server to each connection that this is the layout which will be used for the game.
+    /// Notification from the lobby owner containing the situation layout.
+    /// This is then broadcast from the server to each connection.
     /// </summary>
-    public class SiLayoutDirective : IFramePayloadNotification
+    public class SiSituationLayout : IFramePayloadNotification
     {
         public List<SiSpriteInfo> Sprites { get; set; } = new();
     }

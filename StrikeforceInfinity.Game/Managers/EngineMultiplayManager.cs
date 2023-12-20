@@ -1,15 +1,13 @@
 ﻿using NTDLS.ReliableMessaging;
 using NTDLS.StreamFraming.Payloads;
 using StrikeforceInfinity.Game.Engine;
-using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Sprites.Enemies.Peons;
 using StrikeforceInfinity.Shared.Messages.Notify;
 using StrikeforceInfinity.Shared.Messages.Query;
 using StrikeforceInfinity.Shared.Payload;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace StrikeforceInfinity.Game.Managers
 {
@@ -19,7 +17,7 @@ namespace StrikeforceInfinity.Game.Managers
     internal class EngineMultiplayManager
     {
         public HgPlayMode PlayMode { get; private set; }
-        public Guid GameHostUID { get; private set; }
+        public Guid LobbyUID { get; private set; }
 
         private readonly EngineCore _gameCore;
         private MessageClient _messageClient;
@@ -62,17 +60,41 @@ namespace StrikeforceInfinity.Game.Managers
         }
 
         public void SetPlayMode(HgPlayMode playMode) => PlayMode = playMode;
-        public void SetGameHostUID(Guid uid) => GameHostUID = uid;
-
-        public void Register()
+        public void RegisterLobbyUID(Guid lobbyUID)
         {
+            LobbyUID = lobbyUID;
             if (PlayMode != HgPlayMode.SinglePlayer)
             {
-                Notify(new SiRegisterToLobby(GameHostUID));
+                Notify(new SiRegisterToLobby(LobbyUID));
             }
         }
 
-        public void ReadyToPlay()
+        public void SendLayoutFromLobbyOwner()
+        {
+            var sprites = new List<SiSpriteInfo>
+                {
+                    //Debugging code to add a few sprites to each connected client.
+                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
+                    {
+                        State = new SiSpriteAbsoluteState() { X = 100, Y = 100 }
+                    },
+                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
+                    {
+                        State = new SiSpriteAbsoluteState() { X = 200, Y = 200 }
+                    },
+                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
+                    {
+                        State = new SiSpriteAbsoluteState() { X = 300, Y = 300 }
+                    }
+                };
+
+            MessageClient.Notify(new SiSituationLayout()
+            {
+                Sprites = sprites
+            });
+        }
+
+        public void SetReadyToPlay()
         {
             if (PlayMode != HgPlayMode.SinglePlayer)
             {
@@ -80,7 +102,21 @@ namespace StrikeforceInfinity.Game.Managers
             }
         }
 
-        public void CreateHost(SiLobbyConfiguration gameHostConfiguration)
+        public void SetWaitingInLobby()
+        {
+            if (PlayMode != HgPlayMode.SinglePlayer)
+            {
+                Notify(new SiWaitingInLobby());
+            }
+        }
+
+        public async Task<SiLobbyInfo> GetLobbyInfo(Guid lobbyUID)
+        {
+            var reply = await MessageClient.Query<SiGetLobbyInfoReply>(new SiGetLobbyInfo() { LobyUID = lobbyUID });
+            return reply.Info;
+        }
+
+        public Guid CreateHost(SiLobbyConfiguration gameHostConfiguration)
         {
             var query = new SiCreateLobby()
             {
@@ -89,7 +125,7 @@ namespace StrikeforceInfinity.Game.Managers
 
             var reply = MessageClient.Query<SiCreateLobbyReply>(query).Result;
 
-            SetGameHostUID(reply.UID);
+            return reply.LobbyUID;
         }
 
         public List<SiLobbyConfiguration> GetHostList()
@@ -100,7 +136,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         private void MessageClient_OnNotificationReceived(MessageClient client, Guid connectionId, IFramePayloadNotification payload)
         {
-            if (payload is SiLayoutDirective layoutDirective)
+            if (payload is SiSituationLayout layoutDirective)
             {
                 //The server is telling us to initialize the layout using the supplied sprites snd their states.
 
@@ -132,29 +168,9 @@ namespace StrikeforceInfinity.Game.Managers
 
         private IFramePayloadQueryReply MessageClient_OnQueryReceived(MessageClient client, Guid connectionId, IFramePayloadQuery payload)
         {
-            if (payload is SiRequestLayoutFromLobbyOwner)
+            if (false)
             {
-                var sprites = new List<SiSpriteInfo>
-                {
-                    //Debugging code to add a few sprites to each connected client.
-                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
-                    {
-                        State = new SiSpriteAbsoluteState() { X = 100, Y = 100 }
-                    },
-                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
-                    {
-                        State = new SiSpriteAbsoluteState() { X = 200, Y = 200 }
-                    },
-                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
-                    {
-                        State = new SiSpriteAbsoluteState() { X = 300, Y = 300 }
-                    }
-                };
 
-                return new SiRequestLayoutFromLobbyOwnerReply()
-                {
-                    Sprites = sprites
-                };
             }
             else
             {

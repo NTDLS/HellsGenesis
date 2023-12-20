@@ -4,7 +4,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
 {
     internal class Lobby
     {
-        private readonly PessimisticSemaphore<Dictionary<Guid, RegisteredClientState>> _registeredClients = new();
+        private readonly PessimisticSemaphore<Dictionary<Guid, RegisteredConnectionState>> _registeredConnections = new();
 
         /// <summary>
         /// The date and time that the lobby was created.
@@ -45,9 +45,9 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <param name="connectionId"></param>
         public void Register(Guid connectionId)
         {
-            _registeredClients.Use(o =>
+            _registeredConnections.Use(o =>
             {
-                var state = new RegisteredClientState()
+                var state = new RegisteredConnectionState()
                 {
                     ConnectionId = connectionId
                 };
@@ -63,7 +63,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <param name="connectionId"></param>
         public void Deregister(Guid connectionId)
         {
-            _registeredClients.Use(o =>
+            _registeredConnections.Use(o =>
             {
                 o.Remove(connectionId);
             });
@@ -75,7 +75,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <param name="connectionId"></param>
         public List<Guid> RegisteredConnections()
         {
-            return _registeredClients.Use(o =>
+            return _registeredConnections.Use(o =>
             {
                 return o.Select(o => o.Key).ToList();
             });
@@ -86,9 +86,9 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// </summary>
         /// <param name="connectionId"></param>
         /// <returns>Returns true if all registered connections are ready to start.</returns>
-        public bool FlagConnectionAsReady(Guid connectionId)
+        public bool FlagConnectionAsReadyToPlay(Guid connectionId)
         {
-            return _registeredClients.Use(o =>
+            return _registeredConnections.Use(o =>
             {
                 if (o.TryGetValue(connectionId, out var state))
                 {
@@ -100,15 +100,58 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         }
 
         /// <summary>
+        /// Tells the server that the connections is waiting on the lobby.
+        /// </summary>
+        /// <param name="connectionId"></param>
+        public void FlagConnectionAsWaitingInLobby(Guid connectionId)
+        {
+            _registeredConnections.Use(o =>
+            {
+                if (o.TryGetValue(connectionId, out var state))
+                {
+                    state.IsReadyToPlay = true;
+                }
+
+                return o.Values.All(o => o.IsWaitingInLobby == true);
+            });
+        }
+
+        /// <summary>
         /// Returns true if all registered connections are ready to start.
         /// </summary>
         /// <param name="connectionId"></param>
         public bool AreAllConnectionsReady()
         {
-            return _registeredClients.Use(o =>
+            return _registeredConnections.Use(o =>
             {
                 return o.Values.All(o => o.IsReadyToPlay == true);
             });
         }
+
+        public int ConnectionsWaitingInLobbyCount()
+        {
+            return _registeredConnections.Use(o =>
+            {
+                return o.Values.Where(o => o.IsWaitingInLobby).Count();
+            });
+        }
+
+        /*
+        public int ConnectionCount()
+        {
+            return _registeredConnections.Use(o =>
+            {
+                return o.Values.Count();
+            });
+        }
+
+        public int ReadyConnectionCount()
+        {
+            return _registeredConnections.Use(o =>
+            {
+                return o.Values.Where(o => o.IsReadyToPlay).Count();
+            });
+        }
+        */
     }
 }

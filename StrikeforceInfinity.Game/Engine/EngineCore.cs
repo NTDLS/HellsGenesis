@@ -102,13 +102,9 @@ namespace StrikeforceInfinity.Game.Engine
 
         public void StartGame()
         {
-            Multiplay.Register();
-
             Sprites.PlayerStatsText.Visable = true;
             Sprites.DeleteAll();
             Situations.AdvanceLevel();
-
-            Multiplay.ReadyToPlay();
         }
 
         public static void SaveSettings(EngineSettings settings)

@@ -26,6 +26,8 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Client
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
+            _gameCore.Multiplay.SetWaitingInLobby();
+
             /*
             var gameHosts = _gameCore.Multiplay.GetHostList();
             foreach (var gameHost in gameHosts)

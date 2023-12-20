@@ -3,7 +3,8 @@
 namespace StrikeforceInfinity.Shared.Messages.Notify
 {
     /// <summary>
-    /// Tells the server that a client will be playing on a given lobby.
+    /// Tell the server that a connection has selected the lobby. This does not mean
+    /// that they have selected a loadout yet. That is denoted with a call to SetWaitingInLobby().
     /// </summary>
     public class SiRegisterToLobby : IFramePayloadNotification
     {

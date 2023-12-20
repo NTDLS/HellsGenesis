@@ -83,7 +83,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (IsMultiplayDrone) 
+            if (IsMultiplayDrone)
             {
                 return;
             }

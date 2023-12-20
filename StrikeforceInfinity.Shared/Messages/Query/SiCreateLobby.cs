@@ -13,6 +13,6 @@ namespace StrikeforceInfinity.Shared.Messages.Query
 
     public class SiCreateLobbyReply : IFramePayloadQueryReply
     {
-        public Guid UID { get; set; }
+        public Guid LobbyUID { get; set; }
     }
 }

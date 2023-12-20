@@ -48,7 +48,9 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Client
 
         private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
-            _gameCore.Multiplay.SetGameHostUID(Guid.Parse(item.Key));
+            var lobbyUID = Guid.Parse(item.Key);
+
+            _gameCore.Multiplay.RegisterLobbyUID(lobbyUID);
             _gameCore.Menus.Insert(new MpMenuClientLobbyWait(_gameCore));
         }
     }

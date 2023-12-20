@@ -2,6 +2,7 @@
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
+using System.Timers;
 
 namespace StrikeforceInfinity.Menus.MultiPlayer.Host
 {
@@ -10,6 +11,10 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
     /// </summary>
     internal class MpMenuHostLobbyWait : MenuBase
     {
+        private Timer _timer = new(1000);
+
+        SpriteMenuItem _countOfReadyPlayers;
+
         public MpMenuHostLobbyWait(EngineCore gameCore)
             : base(gameCore)
         {
@@ -22,6 +27,10 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
+
+            _countOfReadyPlayers = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "?");
+            _countOfReadyPlayers.X = offsetX + 300;
+            _countOfReadyPlayers.Y = offsetY - _countOfReadyPlayers.Size.Height;
 
             var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "START_NOW", " Start Now ");
             helpItem.Selected = true;
@@ -39,11 +48,32 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
             */
 
             OnExecuteSelection += MenuMultiplayerHostOrJoin_OnExecuteSelection;
+            OnCleanup += MpMenuHostLobbyWait_OnCleanup;
+
+            _timer.Elapsed += Timer_Elapsed;
+            _timer.Start();
+
+            _gameCore.Multiplay.SetWaitingInLobby();
+        }
+
+        private void MpMenuHostLobbyWait_OnCleanup()
+        {
+            _timer.Stop();
+            _timer.Dispose();
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            _gameCore.Multiplay.GetLobbyInfo(_gameCore.Multiplay.LobbyUID).ContinueWith(o =>
+            {
+                _countOfReadyPlayers.Text = $"{o.Result.WaitingCount:n0}";
+            });
         }
 
         private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
             _gameCore.StartGame();
+            _gameCore.Multiplay.SendLayoutFromLobbyOwner();
         }
     }
 }

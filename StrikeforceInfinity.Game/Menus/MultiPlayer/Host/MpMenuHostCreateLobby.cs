@@ -55,7 +55,9 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
             }
 
             //Create the game host on the server.
-            _gameCore.Multiplay.CreateHost(new SiLobbyConfiguration(textBoxName.Text, maxPlayers));
+            var lobbyUID = _gameCore.Multiplay.CreateHost(new SiLobbyConfiguration(textBoxName.Text, maxPlayers));
+
+            _gameCore.Multiplay.RegisterLobbyUID(lobbyUID);
 
             _gameCore.Menus.Insert(new MpMenuHostSituationSelect(_gameCore));
         }
