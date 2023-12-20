@@ -7,8 +7,10 @@ using StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.Player;
 using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.PowerUp.BaseClasses;
+using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
 using StrikeforceInfinity.Game.Weapons.Munitions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,16 +33,17 @@ namespace StrikeforceInfinity.Game.Managers
 
         internal List<SpriteBase> Collection { get; private set; } = new();
 
-        public AnimationSpriteTickController Animations { get; set; }
-        public AttachmentSpriteTickController Attachments { get; set; }
-        public MunitionSpriteTickController Munitions { get; set; }
-        public DebugSpriteTickController Debugs { get; set; }
-        public EnemySpriteTickController Enemies { get; set; }
-        public ParticleSpriteTickController Particles { get; set; }
-        public PowerupSpriteTickController Powerups { get; set; }
-        public RadarPositionSpriteTickController RadarPositions { get; set; }
-        public StarSpriteTickController Stars { get; set; }
-        public TextBlockSpriteTickController TextBlocks { get; set; }
+        public AnimationSpriteTickController Animations { get; private set; }
+        public AttachmentSpriteTickController Attachments { get; private set; }
+        public MunitionSpriteTickController Munitions { get; private set; }
+        public DebugsSpriteTickController Debugs { get; private set; }
+        public EnemiesSpriteTickController Enemies { get; private set; }
+        public ParticlesSpriteTickController Particles { get; private set; }
+        public PowerupsSpriteTickController Powerups { get; private set; }
+        public RadarPositionsSpriteTickController RadarPositions { get; set; }
+        public StarsSpriteTickController Stars { get; private set; }
+        public TextBlocksSpriteTickController TextBlocks { get; private set; }
+        public PlayersSpriteTickController Players { get; private set; }
 
         #endregion
 
@@ -51,13 +54,14 @@ namespace StrikeforceInfinity.Game.Managers
             Animations = new AnimationSpriteTickController(_gameCore, this);
             Attachments = new AttachmentSpriteTickController(_gameCore, this);
             Munitions = new MunitionSpriteTickController(_gameCore, this);
-            Debugs = new DebugSpriteTickController(_gameCore, this);
-            Enemies = new EnemySpriteTickController(_gameCore, this);
-            Particles = new ParticleSpriteTickController(_gameCore, this);
-            Powerups = new PowerupSpriteTickController(_gameCore, this);
-            RadarPositions = new RadarPositionSpriteTickController(_gameCore, this);
-            Stars = new StarSpriteTickController(_gameCore, this);
-            TextBlocks = new TextBlockSpriteTickController(_gameCore, this);
+            Debugs = new DebugsSpriteTickController(_gameCore, this);
+            Enemies = new EnemiesSpriteTickController(_gameCore, this);
+            Particles = new ParticlesSpriteTickController(_gameCore, this);
+            Powerups = new PowerupsSpriteTickController(_gameCore, this);
+            RadarPositions = new RadarPositionsSpriteTickController(_gameCore, this);
+            Stars = new StarsSpriteTickController(_gameCore, this);
+            TextBlocks = new TextBlocksSpriteTickController(_gameCore, this);
+            Players = new PlayersSpriteTickController(_gameCore, this);
         }
 
         public void Start()
@@ -73,6 +77,28 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void Stop()
         {
+        }
+
+        public SpriteBase CreateByNameOfType(string typeFullName)
+        {
+            lock (Collection)
+            {
+                var type = Type.GetType(typeFullName) ?? throw new ArgumentException($"Type with FullName '{typeFullName}' not found.");
+                object[] param = { _gameCore };
+                var obj = (SpriteBase)Activator.CreateInstance(type, param);
+
+                obj.Location = _gameCore.Display.RandomOffScreenLocation();
+                obj.Velocity.MaxSpeed = HgRandom.Generator.Next(_gameCore.Settings.MinEnemySpeed, _gameCore.Settings.MaxEnemySpeed);
+                obj.Velocity.Angle.Degrees = HgRandom.Generator.Next(0, 360);
+
+                var enemy = obj as SpriteEnemyBase;
+
+                enemy?.BeforeCreate();
+                Collection.Add(obj);
+                enemy?.AfterCreate();
+
+                return obj;
+            }
         }
 
         public void CleanupDeletedObjects()

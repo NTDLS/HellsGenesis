@@ -8,9 +8,14 @@ using System;
 
 namespace StrikeforceInfinity.Game.Controller
 {
+    /// <summary>
+    /// This is the controller for the single local player.
+    /// </summary>
     internal class PlayerSpriteTickController : PlayerTickControllerBase<SpritePlayerBase>
     {
         private readonly EngineCore _gameCore;
+        private bool _allowLockPlayerAngleToNearbyEnemy = true;
+        private readonly SiSpriteVector _multiplaySpriteVector = new();
 
         public SpritePlayerBase Sprite { get; set; }
 
@@ -19,10 +24,6 @@ namespace StrikeforceInfinity.Game.Controller
         {
             _gameCore = gameCore;
         }
-
-        private bool _allowLockPlayerAngleToNearbyEnemy = true;
-
-        private readonly SiSpriteAbsoluteState _playerAbsoluteState = new();
 
         /// <summary>
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
@@ -264,17 +265,17 @@ namespace StrikeforceInfinity.Game.Controller
 
             if (_gameCore.Multiplay.PlayMode != HgPlayMode.SinglePlayer)
             {
-                if ((DateTime.UtcNow - _playerAbsoluteState.Timestamp).TotalMilliseconds >= _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
+                if ((DateTime.UtcNow - _multiplaySpriteVector.Timestamp).TotalMilliseconds >= _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
                 {
-                    _playerAbsoluteState.MultiplayUID = Sprite.MultiplayUID;
-                    _playerAbsoluteState.Timestamp = DateTime.UtcNow;
-                    _playerAbsoluteState.X = _gameCore.Display.BackgroundOffset.X;
-                    _playerAbsoluteState.Y = _gameCore.Display.BackgroundOffset.Y;
-                    _playerAbsoluteState.AngleDegrees = Sprite.Velocity.Angle.Degrees;
-                    _playerAbsoluteState.BoostPercentage = Sprite.Velocity.BoostPercentage;
-                    _playerAbsoluteState.ThrottlePercentage = Sprite.Velocity.ThrottlePercentage;
+                    _multiplaySpriteVector.MultiplayUID = Sprite.MultiplayUID;
+                    _multiplaySpriteVector.Timestamp = DateTime.UtcNow;
+                    _multiplaySpriteVector.X = _gameCore.Display.BackgroundOffset.X;
+                    _multiplaySpriteVector.Y = _gameCore.Display.BackgroundOffset.Y;
+                    _multiplaySpriteVector.AngleDegrees = Sprite.Velocity.Angle.Degrees;
+                    _multiplaySpriteVector.BoostPercentage = Sprite.Velocity.BoostPercentage;
+                    _multiplaySpriteVector.ThrottlePercentage = Sprite.Velocity.ThrottlePercentage;
 
-                    _gameCore.Multiplay.Notify(_playerAbsoluteState);
+                    _gameCore.Multiplay.Notify(_multiplaySpriteVector);
                 }
             }
 

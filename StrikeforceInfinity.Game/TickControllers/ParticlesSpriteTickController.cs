@@ -7,9 +7,9 @@ using StrikeforceInfinity.Game.Utility;
 
 namespace StrikeforceInfinity.Game.Controller
 {
-    internal class ParticleSpriteTickController : SpriteTickControllerBase<SpriteParticleBase>
+    internal class ParticlesSpriteTickController : SpriteTickControllerBase<SpriteParticleBase>
     {
-        public ParticleSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+        public ParticlesSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
             : base(gameCore, manager)
         {
         }

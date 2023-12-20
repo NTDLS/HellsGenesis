@@ -110,9 +110,9 @@ namespace StrikeforceInfinity.Server.Engine
             }
 
             //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiSpriteAbsoluteState state)
+            if (payload is SiSpriteVector spriteVector)
             {
-                Log.Trace($"{state.X:n1},{state.Y:n1} -> {state.AngleDegrees:n1}");
+                Log.Trace($"{spriteVector.X:n1},{spriteVector.Y:n1} -> {spriteVector.AngleDegrees:n1}");
 
                 var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
                 if (lobby == null)
@@ -126,7 +126,7 @@ namespace StrikeforceInfinity.Server.Engine
                 registeredConnectionIds.Remove(connectionId);
                 foreach (var registeredConnectionId in registeredConnectionIds)
                 {
-                    _messageServer.Notify(registeredConnectionId, state);
+                    _messageServer.Notify(registeredConnectionId, spriteVector);
                 }
             }
             //------------------------------------------------------------------------------------------------------------------------------

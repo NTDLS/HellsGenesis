@@ -1,12 +1,12 @@
 ﻿using NTDLS.ReliableMessaging;
 using NTDLS.StreamFraming.Payloads;
 using StrikeforceInfinity.Game.Engine;
-using StrikeforceInfinity.Game.Sprites.Enemies.Peons;
 using StrikeforceInfinity.Shared.Messages.Notify;
 using StrikeforceInfinity.Shared.Messages.Query;
 using StrikeforceInfinity.Shared.Payload;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace StrikeforceInfinity.Game.Managers
@@ -69,29 +69,30 @@ namespace StrikeforceInfinity.Game.Managers
             }
         }
 
-        public void SendLayoutFromLobbyOwner()
+        public void BroadcastLevelLayout()
         {
-            var sprites = new List<SiSpriteInfo>
+            var spriteLayouts = new List<SiSpriteLayout>();
+
+            var enemies = _gameCore.Sprites.Enemies.All();
+
+            foreach (var enemy in enemies)
+            {
+                spriteLayouts.Add(new SiSpriteLayout(enemy.GetType(), enemy.UID)
                 {
-                    //Debugging code to add a few sprites to each connected client.
-                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
-                    {
-                        State = new SiSpriteAbsoluteState() { X = 100, Y = 100 }
-                    },
-                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
-                    {
-                        State = new SiSpriteAbsoluteState() { X = 200, Y = 200 }
-                    },
-                    new SiSpriteInfo(typeof(SpriteEnemyPhoenix))
-                    {
-                        State = new SiSpriteAbsoluteState() { X = 300, Y = 300 }
-                    }
-                };
+                    Vector = new SiSpriteVector() { X = enemy.X, Y = enemy.Y }
+                });
+            }
+
+            spriteLayouts.Add(new SiSpriteLayout(_gameCore.Player.Sprite.GetType(), _gameCore.Player.Sprite.UID)
+            {
+                Vector = new SiSpriteVector() { X = _gameCore.Display.BackgroundOffset.X, Y = _gameCore.Display.BackgroundOffset.Y }
+            });
 
             MessageClient.Notify(new SiSituationLayout()
             {
-                Sprites = sprites
+                SpriteLayouts = spriteLayouts
             });
+
         }
 
         public void SetReadyToPlay()
@@ -139,17 +140,19 @@ namespace StrikeforceInfinity.Game.Managers
             //------------------------------------------------------------------------------------------------------------------------------
             if (payload is SiSituationLayout layoutDirective)
             {
-                //The server is telling us to initialize the layout using the supplied sprites snd their states.
+                //The server is telling us to initialize the layout using the supplied sprites and their states.
 
-                foreach (var spriteInfo in layoutDirective.Sprites)
+                _gameCore.Sprites.Enemies.DeleteAll();
+
+                foreach (var spriteInfo in layoutDirective.SpriteLayouts)
                 {
-                    var sprite = _gameCore.Sprites.Enemies.CreateByNameType(spriteInfo.FullTypeName);
-                    sprite.MultiplayUID = spriteInfo.State.MultiplayUID;
-                    sprite.X = spriteInfo.State.X;
-                    sprite.Y = spriteInfo.State.Y;
-                    sprite.Velocity.Angle.Degrees = spriteInfo.State.AngleDegrees;
-                    sprite.Velocity.ThrottlePercentage = spriteInfo.State.ThrottlePercentage;
-                    sprite.Velocity.BoostPercentage = spriteInfo.State.BoostPercentage;
+                    var sprite = _gameCore.Sprites.CreateByNameOfType(spriteInfo.FullTypeName);
+                    sprite.MultiplayUID = spriteInfo.MultiplayUID;
+                    sprite.X = spriteInfo.Vector.X;
+                    sprite.Y = spriteInfo.Vector.Y;
+                    sprite.Velocity.Angle.Degrees = spriteInfo.Vector.AngleDegrees;
+                    sprite.Velocity.ThrottlePercentage = spriteInfo.Vector.ThrottlePercentage;
+                    sprite.Velocity.BoostPercentage = spriteInfo.Vector.BoostPercentage;
                     sprite.ControlledBy = _gameCore.Multiplay.PlayMode switch
                     {
                         HgPlayMode.MutiPlayerHost => HgControlledBy.LocalAI,
@@ -164,9 +167,18 @@ namespace StrikeforceInfinity.Game.Managers
                 //TODO: Send current sprite layout...
             }
             //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiSpriteAbsoluteState state)
+            else if (payload is SiSpriteVector spriteVector)
             {
                 //TODO: Updates sprites...
+
+                var sprite = _gameCore.Sprites.Collection.Where(o => o.MultiplayUID == spriteVector.MultiplayUID).FirstOrDefault();
+
+                if (sprite != null)
+                {
+                    sprite.X += spriteVector.X;
+                    sprite.Y += spriteVector.Y;
+                    sprite.Velocity.Angle.Degrees += spriteVector.AngleDegrees;
+                }
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else

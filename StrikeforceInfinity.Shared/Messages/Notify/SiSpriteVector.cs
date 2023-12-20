@@ -5,9 +5,9 @@ namespace StrikeforceInfinity.Shared.Messages.Notify
     /// <summary>
     /// Tells the server where exactly a sprite is, which direction they are facing and how fast they are going.
     /// </summary>
-    public class SiSpriteAbsoluteState : IFramePayloadNotification
+    public class SiSpriteVector : IFramePayloadNotification
     {
-        public Guid MultiplayUID { get; set; }
+        public uint MultiplayUID { get; set; }
         public DateTime Timestamp { get; set; }
         public double X { get; set; }
         public double Y { get; set; }

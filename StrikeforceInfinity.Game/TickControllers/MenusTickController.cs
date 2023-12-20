@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace StrikeforceInfinity.Game.Controller
 {
-    internal class MenuTickController : UnvectoredTickControllerBase<MenuBase>
+    internal class MenusTickController : UnvectoredTickControllerBase<MenuBase>
     {
         public List<MenuBase> Collection { get; private set; } = new();
 
@@ -23,7 +23,7 @@ namespace StrikeforceInfinity.Game.Controller
             }
         }
 
-        public MenuTickController(EngineCore gameCore)
+        public MenusTickController(EngineCore gameCore)
             : base(gameCore)
         {
         }

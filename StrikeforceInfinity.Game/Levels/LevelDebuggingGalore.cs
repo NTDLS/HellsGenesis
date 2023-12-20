@@ -2,6 +2,7 @@
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Levels.BaseClasses;
 using StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses;
+using StrikeforceInfinity.Game.Sprites.Enemies.Peons;
 using StrikeforceInfinity.Game.Utility;
 
 namespace StrikeforceInfinity.Game.Levels
@@ -36,7 +37,7 @@ namespace StrikeforceInfinity.Game.Levels
         private void FirstShowPlayerCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             _gameCore.Player.ResetAndShow();
-            _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddEnemyCallback);
+            _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddFreshEnemiesCallback);
         }
 
         private void AddFreshEnemiesCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
@@ -54,26 +55,31 @@ namespace StrikeforceInfinity.Game.Levels
 
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddEnemyCallback);
+                    AddEnemies();
                 }
 
                 _gameCore.Audio.RadarBlipsSound.Play();
 
                 CurrentWave++;
+
+                if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerHost)
+                {
+                    _gameCore.Multiplay.BroadcastLevelLayout();
+                }
             }
         }
 
-        private void AddEnemyCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void AddEnemies()
         {
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
 
-            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
 
             //_gameCore.Sprites.Debugs.CreateAtCenterScreen();
             //_gameCore.Sprites.Enemies.Create<SpriteEnemyDebug>();

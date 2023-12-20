@@ -70,6 +70,9 @@ namespace StrikeforceInfinity.Game
             drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
             drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
 
+            drawingSurface.GotFocus += (object sender, EventArgs e) => _gameCore.Display.SetIsFocused(true);
+            drawingSurface.LostFocus += (object sender, EventArgs e) => _gameCore.Display.SetIsFocused(false);
+
             drawingSurface.KeyUp += FormRenderTarget_KeyUp;
 
             if (settings.EnableSpriteInterrogation)
@@ -78,6 +81,7 @@ namespace StrikeforceInfinity.Game
                 drawingSurface.MouseMove += FormRenderTarget_MouseMove;
             }
         }
+
 
         #region Debug interactions.
         private void FormRenderTarget_MouseMove(object sender, MouseEventArgs e)

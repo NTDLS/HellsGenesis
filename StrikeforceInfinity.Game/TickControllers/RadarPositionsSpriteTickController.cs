@@ -9,11 +9,11 @@ using System.Linq;
 
 namespace StrikeforceInfinity.Game.Controller
 {
-    internal class RadarPositionSpriteTickController : UnvectoredTickControllerBase<SpriteRadarPositionTextBlock>
+    internal class RadarPositionsSpriteTickController : UnvectoredTickControllerBase<SpriteRadarPositionTextBlock>
     {
         private readonly EngineSpriteManager _manager;
 
-        public RadarPositionSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+        public RadarPositionsSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
             : base(gameCore)
         {
             _manager = manager;

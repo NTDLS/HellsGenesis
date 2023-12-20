@@ -14,10 +14,9 @@ namespace StrikeforceInfinity.Game.Engine
     /// </summary>
     internal class EngineCore
     {
-        public SituationTickController Situations { get; private set; }
-        public EventTickController Events { get; private set; }
+        public SituationsTickController Situations { get; private set; }
+        public EventsTickController Events { get; private set; }
         public PlayerSpriteTickController Player { get; private set; }
-
         public EngineMultiplayManager Multiplay { get; private set; }
         public EngineInputManager Input { get; private set; }
         public EngineDisplayManager Display { get; private set; }
@@ -25,7 +24,7 @@ namespace StrikeforceInfinity.Game.Engine
         public EngineAudioManager Audio { get; private set; }
         public EngineAssetManager Assets { get; private set; }
         public EngineDebugManager Debug { get; private set; }
-        public MenuTickController Menus { get; private set; }
+        public MenusTickController Menus { get; private set; }
 
         public EngineRendering Rendering { get; private set; }
         public EngineSettings Settings { get; private set; }
@@ -66,10 +65,10 @@ namespace StrikeforceInfinity.Game.Engine
             Assets = new EngineAssetManager(this);
             Sprites = new EngineSpriteManager(this);
             Input = new EngineInputManager(this);
-            Situations = new SituationTickController(this);
-            Events = new EventTickController(this);
+            Situations = new SituationsTickController(this);
+            Events = new EventsTickController(this);
             Audio = new EngineAudioManager(this);
-            Menus = new MenuTickController(this);
+            Menus = new MenusTickController(this);
             Player = new PlayerSpriteTickController(this);
             Rendering = new EngineRendering(this);
             Debug = new EngineDebugManager(this);

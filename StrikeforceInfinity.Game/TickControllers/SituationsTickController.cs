@@ -6,12 +6,12 @@ using System.Linq;
 
 namespace StrikeforceInfinity.Game.Controller
 {
-    internal class SituationTickController : UnvectoredTickControllerBase<SituationBase>
+    internal class SituationsTickController : UnvectoredTickControllerBase<SituationBase>
     {
         private readonly EngineCore _gameCore;
         public SituationBase CurrentSituation { get; private set; }
 
-        public SituationTickController(EngineCore gameCore)
+        public SituationsTickController(EngineCore gameCore)
             : base(gameCore)
         {
             _gameCore = gameCore;

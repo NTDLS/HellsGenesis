@@ -9,9 +9,9 @@ using System.Linq;
 
 namespace StrikeforceInfinity.Game.Controller
 {
-    internal class TextBlockSpriteTickController : SpriteTickControllerBase<SpriteTextBlock>
+    internal class TextBlocksSpriteTickController : SpriteTickControllerBase<SpriteTextBlock>
     {
-        public TextBlockSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+        public TextBlocksSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
             : base(gameCore, manager)
         {
         }

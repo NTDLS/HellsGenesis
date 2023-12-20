@@ -8,11 +8,11 @@ using static StrikeforceInfinity.Game.Engine.Types.SiEngineCallbackEvent;
 
 namespace StrikeforceInfinity.Game.Controller
 {
-    internal class EventTickController : UnvectoredTickControllerBase<SiEngineCallbackEvent>
+    internal class EventsTickController : UnvectoredTickControllerBase<SiEngineCallbackEvent>
     {
         public List<SiEngineCallbackEvent> Collection { get; private set; } = new();
 
-        public EventTickController(EngineCore gameCore)
+        public EventsTickController(EngineCore gameCore)
             : base(gameCore)
         {
         }

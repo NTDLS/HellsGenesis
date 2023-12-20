@@ -1,5 +1,4 @@
 ﻿using NTDLS.StreamFraming.Payloads;
-using StrikeforceInfinity.Shared.Payload;
 
 namespace StrikeforceInfinity.Shared.Messages.Query
 {

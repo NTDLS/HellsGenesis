@@ -7,9 +7,9 @@ using StrikeforceInfinity.Game.Utility;
 
 namespace StrikeforceInfinity.Game.Controller
 {
-    internal class StarSpriteTickController : SpriteTickControllerBase<SpriteStar>
+    internal class StarsSpriteTickController : SpriteTickControllerBase<SpriteStar>
     {
-        public StarSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+        public StarsSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
             : base(gameCore, manager)
         {
         }

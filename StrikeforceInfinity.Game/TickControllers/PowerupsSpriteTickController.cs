@@ -7,9 +7,9 @@ using System;
 
 namespace StrikeforceInfinity.Game.Controller
 {
-    internal class PowerupSpriteTickController : SpriteTickControllerBase<SpritePowerUpBase>
+    internal class PowerupsSpriteTickController : SpriteTickControllerBase<SpritePowerUpBase>
     {
-        public PowerupSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+        public PowerupsSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
             : base(gameCore, manager)
         {
         }

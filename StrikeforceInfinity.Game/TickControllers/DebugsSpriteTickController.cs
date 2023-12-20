@@ -6,9 +6,9 @@ using StrikeforceInfinity.Game.TickControllers.BaseClasses;
 
 namespace StrikeforceInfinity.Game.Controller
 {
-    internal class DebugSpriteTickController : SpriteTickControllerBase<SpriteDebug>
+    internal class DebugsSpriteTickController : SpriteTickControllerBase<SpriteDebug>
     {
-        public DebugSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+        public DebugsSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
             : base(gameCore, manager)
         {
         }

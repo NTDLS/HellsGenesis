@@ -73,7 +73,6 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
         private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
             _gameCore.StartGame();
-            _gameCore.Multiplay.SendLayoutFromLobbyOwner();
         }
     }
 }

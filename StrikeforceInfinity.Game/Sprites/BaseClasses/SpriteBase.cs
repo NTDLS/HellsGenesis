@@ -27,7 +27,7 @@ namespace StrikeforceInfinity.Game.Sprites
         /// <summary>
         /// The UID of this sprite. Each connected client has a sprite with the same mathcing UID.
         /// </summary>
-        public Guid MultiplayUID { get; set; }
+        public uint MultiplayUID { get; set; }
 
         #endregion
 
