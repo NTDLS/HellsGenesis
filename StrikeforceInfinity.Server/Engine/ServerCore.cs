@@ -110,9 +110,24 @@ namespace StrikeforceInfinity.Server.Engine
             }
 
             //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiSpriteAbsoluteState position)
+            if (payload is SiSpriteAbsoluteState state)
             {
-                Log.Trace($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
+                Log.Trace($"{state.X:n1},{state.Y:n1} -> {state.AngleDegrees:n1}");
+
+                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
+                if (lobby == null)
+                {
+                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
+                    return;
+                }
+
+                //Broadcast the absolute state to all connections except for the one that sent it.
+                var registeredConnectionIds = lobby.RegisteredConnections();
+                registeredConnectionIds.Remove(connectionId);
+                foreach (var registeredConnectionId in registeredConnectionIds)
+                {
+                    _messageServer.Notify(registeredConnectionId, state);
+                }
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiRegisterToLobby register)

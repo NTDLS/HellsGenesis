@@ -159,6 +159,16 @@ namespace StrikeforceInfinity.Game.Managers
                 }
             }
             //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiRequestSituationLayout)
+            {
+                //TODO: Send current sprite layout...
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiSpriteAbsoluteState state)
+            {
+                //TODO: Updates sprites...
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
             else
             {
                 throw new NotImplementedException("The client notification is not implemented.");
