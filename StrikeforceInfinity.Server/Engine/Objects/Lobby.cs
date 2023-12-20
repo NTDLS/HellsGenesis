@@ -109,10 +109,8 @@ namespace StrikeforceInfinity.Server.Engine.Objects
             {
                 if (o.TryGetValue(connectionId, out var state))
                 {
-                    state.IsReadyToPlay = true;
+                    state.IsWaitingInLobby = true;
                 }
-
-                return o.Values.All(o => o.IsWaitingInLobby == true);
             });
         }
 
