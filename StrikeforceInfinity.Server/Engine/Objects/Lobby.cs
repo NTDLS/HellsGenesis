@@ -114,18 +114,6 @@ namespace StrikeforceInfinity.Server.Engine.Objects
             });
         }
 
-        /// <summary>
-        /// Returns true if all registered connections are ready to start.
-        /// </summary>
-        /// <param name="connectionId"></param>
-        public bool AreAllConnectionsReady()
-        {
-            return _registeredConnections.Use(o =>
-            {
-                return o.Values.All(o => o.IsReadyToPlay == true);
-            });
-        }
-
         public int ConnectionsWaitingInLobbyCount()
         {
             return _registeredConnections.Use(o =>
@@ -135,6 +123,18 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         }
 
         /*
+        /// <summary>
+        /// Returns true if all registered connections are ready to play.
+        /// </summary>
+        /// <param name="connectionId"></param>
+        public bool AreAllConnectionsReadyToPlay()
+        {
+            return _registeredConnections.Use(o =>
+            {
+                return o.Values.All(o => o.IsReadyToPlay == true);
+            });
+        }
+
         public int ConnectionCount()
         {
             return _registeredConnections.Use(o =>

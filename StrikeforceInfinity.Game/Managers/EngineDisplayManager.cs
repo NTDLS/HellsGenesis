@@ -22,6 +22,20 @@ namespace StrikeforceInfinity.Game.Managers
         public SiFrameCounter GameLoopCounter { get; private set; } = new();
         public Control DrawingSurface { get; private set; }
 
+        public bool IsDrawingSurfaceFocused()
+        {
+            if (DrawingSurface.InvokeRequired)
+            {
+                bool result = false;
+                DrawingSurface.Invoke(new Action(() =>
+                {
+                    result = DrawingSurface.Focused;
+                }));
+                return result;
+            }
+            return DrawingSurface.Focused;
+        }
+
         public double OverrideSpeedOrientedFrameScalingFactor { get; set; } = double.NaN;
 
         public double SpeedOrientedFrameScalingFactor()

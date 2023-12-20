@@ -22,16 +22,7 @@ namespace StrikeforceInfinity.Game.Sprites
 
         #region Multiplay.
 
-        /// <summary>
-        /// If true, this ship is controlled by messages from the server and not by local AI.
-        /// </summary>
-        public bool IsMultiplayDrone { get; set; }
-
-        /// <summary>
-        /// If true, this ship is controlled by local AI and the actions are sent to the server to control the "IsMultiplayDrone"
-        /// sprite with a matching MultiplayUID
-        /// </summary>
-        public bool IsMultiplayModel { get; set; }
+        public HgControlledBy ControlledBy { get; set; }
 
         /// <summary>
         /// The UID of this sprite. Each connected client has a sprite with the same mathcing UID.

@@ -136,6 +136,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         private void MessageClient_OnNotificationReceived(MessageClient client, Guid connectionId, IFramePayloadNotification payload)
         {
+            //------------------------------------------------------------------------------------------------------------------------------
             if (payload is SiSituationLayout layoutDirective)
             {
                 //The server is telling us to initialize the layout using the supplied sprites snd their states.
@@ -149,17 +150,15 @@ namespace StrikeforceInfinity.Game.Managers
                     sprite.Velocity.Angle.Degrees = spriteInfo.State.AngleDegrees;
                     sprite.Velocity.ThrottlePercentage = spriteInfo.State.ThrottlePercentage;
                     sprite.Velocity.BoostPercentage = spriteInfo.State.BoostPercentage;
-
-                    if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerHost)
+                    sprite.ControlledBy = _gameCore.Multiplay.PlayMode switch
                     {
-                        sprite.IsMultiplayModel = true; //Only for the lobby owner.
-                    }
-                    else
-                    {
-                        sprite.IsMultiplayDrone = true; //Only for the non-lobby owners.
-                    }
+                        HgPlayMode.MutiPlayerHost => HgControlledBy.LocalAI,
+                        HgPlayMode.MutiPlayerClient => HgControlledBy.Server,
+                        _ => throw new InvalidOperationException("Unhandled PlayMode")
+                    };
                 }
             }
+            //------------------------------------------------------------------------------------------------------------------------------
             else
             {
                 throw new NotImplementedException("The client notification is not implemented.");

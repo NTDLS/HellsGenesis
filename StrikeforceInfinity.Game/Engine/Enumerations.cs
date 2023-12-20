@@ -1,5 +1,26 @@
 ﻿namespace StrikeforceInfinity.Game.Engine
 {
+
+    public enum HgControlledBy
+    {
+        /// <summary>
+        /// This sprite is controlled by local AI and the actions are sent to the
+        /// server to control the its drone clones sprite with a matching MultiplayUID.
+        /// </summary>
+        LocalAI,
+
+        /// <summary>
+        /// This sprite is controlled by a local human player.
+        /// </summary>
+        HumanPlayer,
+
+        /// <summary>
+        /// This ship is controlled by messages from the server and not by local AI and not by the local player..
+        /// </summary>
+        Server
+    }
+
+
     public enum HgPlayMode
     {
         SinglePlayer,

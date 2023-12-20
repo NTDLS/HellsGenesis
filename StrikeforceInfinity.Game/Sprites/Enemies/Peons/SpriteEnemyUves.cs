@@ -1,4 +1,5 @@
 ﻿using StrikeforceInfinity.Game.Engine;
+using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Loudouts;
 using StrikeforceInfinity.Game.Sprites.Enemies.Peons.BaseClasses;
 using StrikeforceInfinity.Game.Utility;
@@ -25,7 +26,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
             ShipClass = HgEnemyClass.Uves;
 
-            if (IsMultiplayDrone)
+            if (ControlledBy == HgControlledBy.Server)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
@@ -54,7 +55,16 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
             }
 
             ResetLoadout(loadout);
+        }
 
+        public override void ApplyIntelligence(SiPoint displacementVector)
+        {
+            if (ControlledBy == HgControlledBy.Server)
+            {
+                //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
+                //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
+                return;
+            }
         }
     }
 }

@@ -27,7 +27,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
             ShipClass = HgEnemyClass.Irlen;
 
-            if (IsMultiplayDrone)
+            if (ControlledBy == HgControlledBy.Server)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
@@ -83,8 +83,10 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (IsMultiplayDrone)
+            if (ControlledBy == HgControlledBy.Server)
             {
+                //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
+                //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
                 return;
             }
 

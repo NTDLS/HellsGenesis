@@ -38,6 +38,7 @@ namespace StrikeforceInfinity.Server.Engine
 
         private IFramePayloadQueryReply MessageServer_OnQueryReceived(MessageServer server, Guid connectionId, IFramePayloadQuery payload)
         {
+            //------------------------------------------------------------------------------------------------------------------------------
             if (payload is SiGetLobbyInfo getLobbyInfo)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' getting lobby info for '{getLobbyInfo.LobyUID}'.");
@@ -58,6 +59,7 @@ namespace StrikeforceInfinity.Server.Engine
                     }
                 };
             }
+            //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiCreateLobby createLobby)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' creating lobby '{createLobby.Configuration.Name}'.");
@@ -69,6 +71,7 @@ namespace StrikeforceInfinity.Server.Engine
                     LobbyUID = lobby.UID
                 };
             }
+            //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiListLobbies listLobbies)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' requested lobby list.");
@@ -80,6 +83,7 @@ namespace StrikeforceInfinity.Server.Engine
                     Collection = lobbies
                 };
             }
+            //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiConfigure establish)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' requested configuration.");
@@ -89,6 +93,7 @@ namespace StrikeforceInfinity.Server.Engine
                     PlayerAbsoluteStateDelayMs = Settings.PlayerAbsoluteStateDelayMs
                 };
             }
+            //------------------------------------------------------------------------------------------------------------------------------
             else
             {
                 throw new NotImplementedException("The server query is not implemented.");
@@ -104,10 +109,12 @@ namespace StrikeforceInfinity.Server.Engine
                 return;
             }
 
+            //------------------------------------------------------------------------------------------------------------------------------
             if (payload is SiSpriteAbsoluteState position)
             {
                 Log.Trace($"{position.X:n1},{position.Y:n1} -> {position.AngleDegrees:n1}");
             }
+            //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiRegisterToLobby register)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' registered for lobby: '{register.LobbyUID}'");
@@ -122,6 +129,7 @@ namespace StrikeforceInfinity.Server.Engine
                 lobby.Register(connectionId);
                 session.SetCurrentLobby(register.LobbyUID);
             }
+            //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiWaitingInLobby)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' is waiting in the lobby.");
@@ -135,6 +143,7 @@ namespace StrikeforceInfinity.Server.Engine
 
                 lobby.FlagConnectionAsWaitingInLobby(connectionId);
             }
+            //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiSituationLayout layoutDirective)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' issued a new layout.");
@@ -153,6 +162,7 @@ namespace StrikeforceInfinity.Server.Engine
                     _messageServer.Notify(registeredConnectionId, layoutDirective);
                 }
             }
+            //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiReadyToPlay)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' is ready to play.");
@@ -166,6 +176,7 @@ namespace StrikeforceInfinity.Server.Engine
 
                 lobby.FlagConnectionAsReadyToPlay(connectionId);
             }
+            //------------------------------------------------------------------------------------------------------------------------------
             else
             {
                 throw new NotImplementedException("The server notification is not implemented.");

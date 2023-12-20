@@ -74,6 +74,18 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void Snapshot()
         {
+#if DEBUG
+            if (_gameCore.Display.IsDrawingSurfaceFocused() == false)
+            {
+                //We do this so that I can have more than one instance open on the same computer 
+                //  at a time without the keyboard commands to one affecting the other.
+
+                //This is a huge peformance hit as well as a cross-thread nightmare so ONLY use it in debug mode.
+                //It also seems to screw with closing the game.
+                _playerKeyStates.Clear();
+                return;
+            }
+#endif
             var keyboardState = Keyboard.GetCurrentState();
 
             _gameCore.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
