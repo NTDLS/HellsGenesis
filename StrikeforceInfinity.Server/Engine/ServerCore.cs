@@ -1,10 +1,14 @@
 ﻿using NTDLS.ReliableMessaging;
-using NTDLS.StreamFraming.Payloads;
 using StrikeforceInfinity.Server.Engine.Managers;
 using StrikeforceInfinity.Shared;
 using StrikeforceInfinity.Shared.Messages.Notify;
 using StrikeforceInfinity.Shared.Messages.Query;
 using StrikeforceInfinity.Shared.Payload;
+using System.Net.Sockets;
+using System.Net;
+using System.Text;
+using ProtoBuf.WellKnownTypes;
+using NTDLS.StreamFraming.Payloads;
 
 namespace StrikeforceInfinity.Server.Engine
 {
@@ -34,7 +38,38 @@ namespace StrikeforceInfinity.Server.Engine
             _messageServer.OnDisconnected += MessageServer_OnDisconnected;
             _messageServer.OnNotificationReceived += MessageServer_OnNotificationReceived;
             _messageServer.OnQueryReceived += MessageServer_OnQueryReceived;
+
+            //LetsTryUDP();
         }
+
+        class UDPEnvelope
+        {
+            public Guid ConnectionId { get; set; }
+            public DateTime TimeStamp { get; set; }
+        }
+
+        /*
+        private void LetsTryUDP()
+        {
+            int port = Settings.DataPort + 1;
+            var udpListener = new UdpClient(port);
+
+            Console.WriteLine("UDP server is listening on port " + port);
+
+            var thread = new Thread(o =>
+            {
+                while (true)
+                {
+                    var clientEndPoint = new IPEndPoint(IPAddress.Any, port);
+                    var data = udpListener.Receive(ref clientEndPoint);
+                    string message = Encoding.ASCII.GetString(data);
+                    Thread.Sleep(1);
+                }
+            });
+
+            thread.Start();
+        }
+        */
 
         private IFramePayloadQueryReply MessageServer_OnQueryReceived(MessageServer server, Guid connectionId, IFramePayloadQuery payload)
         {
