@@ -1,5 +1,8 @@
 ﻿using NTDLS.ReliableMessaging;
 using NTDLS.StreamFraming.Payloads;
+using NTDLS.UDPPacketFraming;
+using NTDLS.UDPPacketFraming.Payloads;
+using StrikeforceInfinity.Engine;
 using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Shared.Messages.Notify;
 using StrikeforceInfinity.Shared.Messages.Query;
@@ -17,8 +20,13 @@ namespace StrikeforceInfinity.Game.Managers
     /// </summary>
     internal class EngineMultiplayManager
     {
+        private int _clientListenUdpPort;
+
+        public MultiplayState State { get; private set; } = new();
         public HgPlayMode PlayMode { get; private set; }
         public Guid LobbyUID { get; private set; } = Guid.Empty;
+
+        private UdpMessageManager _udpManager;
 
         private readonly EngineCore _gameCore;
         private MessageClient _messageClient;
@@ -39,6 +47,9 @@ namespace StrikeforceInfinity.Game.Managers
                             messageClient.OnQueryReceived += MessageClient_OnQueryReceived;
 
                             messageClient.Connect(Constants.DataAddress, Constants.DataPort);
+
+                            _udpManager = new UdpMessageManager(_clientListenUdpPort, UdpMessageManager_ProcessNotificationCallback);
+
                             _messageClient = messageClient;
                         }
                     }
@@ -51,13 +62,21 @@ namespace StrikeforceInfinity.Game.Managers
         public EngineMultiplayManager(EngineCore gameCore)
         {
             _gameCore = gameCore;
+            _clientListenUdpPort = UdpMessageManager.GetRandomUnusedUDPPort(5000, 8000);
         }
 
-        public void GetSettingsFromServer()
+        public void ConfigureConnection()
         {
+            var query = new SiConfigure()
+            {
+                ClientListenUdpPort = _clientListenUdpPort
+            };
+
             //Tell the server hello and request any settings that the server wants to enforce on the client.
-            var reply = MessageClient.Query<SiConfigureReply>(new SiConfigure()).Result;
-            _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs = reply.PlayerAbsoluteStateDelayMs;
+            var reply = MessageClient.Query<SiConfigureReply>(query).Result;
+
+            _gameCore.Multiplay.State.ConnectionId = reply.ConnectionId;
+            _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs = reply.PlayerAbsoluteStateDelayMs;
         }
 
         public void SetPlayMode(HgPlayMode playMode) => PlayMode = playMode;
@@ -156,6 +175,32 @@ namespace StrikeforceInfinity.Game.Managers
             return reply.Collection;
         }
 
+        private void UdpMessageManager_ProcessNotificationCallback(IUDPPayloadNotification payload)
+        {
+            //------------------------------------------------------------------------------------------------------------------------------
+            if (payload is SiSpriteVectors spriteVectors)
+            {
+                foreach (var spriteVector in spriteVectors.Collection)
+                {
+                    //TODO: Updates sprites...
+                    //Debug.WriteLine(spriteVector.MultiplayUID);
+
+                    var sprite = _gameCore.Sprites.Collection.Where(o => o.MultiplayUID == spriteVector.MultiplayUID).FirstOrDefault();
+                    if (sprite != null)
+                    {
+                        sprite.X = spriteVector.X;
+                        sprite.Y = spriteVector.Y;
+                        sprite.Velocity.Angle.Degrees = spriteVector.AngleDegrees;
+                    }
+                }
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else
+            {
+                throw new NotImplementedException("The client UPD notification is not implemented.");
+            }
+        }
+
         private void MessageClient_OnNotificationReceived(MessageClient client, Guid connectionId, IFramePayloadNotification payload)
         {
             //------------------------------------------------------------------------------------------------------------------------------
@@ -188,23 +233,6 @@ namespace StrikeforceInfinity.Game.Managers
             else if (payload is SiRequestSituationLayout)
             {
                 //TODO: Send current sprite layout...
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiSpriteVectors spriteVectors)
-            {
-                foreach (var spriteVector in spriteVectors.Collection)
-                {
-                    //TODO: Updates sprites...
-                    //Debug.WriteLine(spriteVector.MultiplayUID);
-
-                    var sprite = _gameCore.Sprites.Collection.Where(o => o.MultiplayUID == spriteVector.MultiplayUID).FirstOrDefault();
-                    if (sprite != null)
-                    {
-                        sprite.X = spriteVector.X;
-                        sprite.Y = spriteVector.Y;
-                        sprite.Velocity.Angle.Degrees = spriteVector.AngleDegrees;
-                    }
-                }
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else
@@ -257,9 +285,14 @@ namespace StrikeforceInfinity.Game.Managers
         {
             if (LobbyUID != Guid.Empty && _spriteVectors.Any())
             {
-                if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
+                if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true && _udpManager != null)
                 {
-                    MessageClient?.Notify(new SiSpriteVectors(_spriteVectors));
+                    var spriteVectors = new SiSpriteVectors(_spriteVectors);
+
+                    spriteVectors.ConnectionId = State.ConnectionId;
+
+                    //System.Diagnostics.Debug.WriteLine($"MultiplayUID: {_spriteVectors.Select(o=>o.MultiplayUID).Distinct().Count()}");
+                    _udpManager?.WriteMessage(Constants.DataAddress, Constants.DataPort, spriteVectors);
                     _spriteVectors.Clear();
                 }
             }

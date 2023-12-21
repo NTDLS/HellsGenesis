@@ -8,30 +8,10 @@ namespace PacketFraming.Server.TestHarness
 {
     internal class Program
     {
-        const int UDP_PORT = 1234;
-
-        static void Main(string[] args)
+        static void Main()
         {
-            LetsTryUDP();
-        }
+            var udpManager = new UdpMessageManager(1234, ProcessFrameNotificationCallback);
 
-        private static FrameBuffer _frameBuffer = new();
-
-        private static void LetsTryUDP()
-        {
-            var udpClient = new UdpClient(UDP_PORT);
-
-            var clientEndPoint = new IPEndPoint(IPAddress.Any, UDP_PORT);
-
-            var thread = new Thread(o =>
-            {
-                while (true)
-                {
-                    udpClient.ReadAndProcessFrames(ref clientEndPoint, _frameBuffer, ProcessFrameNotificationCallback);
-                }
-            });
-
-            thread.Start();
         }
 
         private static void ProcessFrameNotificationCallback(IUDPPayloadNotification payload)

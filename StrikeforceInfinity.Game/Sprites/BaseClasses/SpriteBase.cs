@@ -6,6 +6,7 @@ using StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
 using StrikeforceInfinity.Game.Weapons.Munitions;
+using StrikeforceInfinity.Shared.Messages.Notify;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -776,6 +777,7 @@ namespace StrikeforceInfinity.Game.Sprites
             }
         }
 
+        public virtual SiSpriteVector GetMultiplayVector() { return null; }
         public virtual void VelocityChanged() { }
         public virtual void VisibilityChanged() { }
         public virtual void PositionChanged() { }

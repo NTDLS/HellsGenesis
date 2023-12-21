@@ -36,7 +36,7 @@ namespace NTDLS.UDPPacketFraming
         /// <returns>Returns true if bytes were received.</returns>
         /// <exception cref="Exception"></exception>
         public static bool ReadAndProcessFrames(this UdpClient udpClient, ref IPEndPoint endPoint, FrameBuffer frameBuffer,
-            ProcessFrameNotificationCallback? processNotificationCallback = null)
+            ProcessFrameNotificationCallback processNotificationCallback)
         {
             if (udpClient == null)
             {
@@ -58,13 +58,37 @@ namespace NTDLS.UDPPacketFraming
         /// <param name="udpClient">The client to send the data on.</param>
         /// <param name="framePayload">The notification payload that will be sent.</param>
         /// <exception cref="Exception"></exception>
-        public static void WriteNotificationFrame(this UdpClient udpClient, string ipAddress, int port, IUDPPayloadNotification framePayload)
+        public static void WriteNotificationFrame(this UdpClient udpClient, string hostOrIPAddress, int port, IUDPPayloadNotification framePayload)
         {
             var frameBody = new FrameBody(framePayload);
-
             var frameBytes = AssembleFrame(frameBody);
+            udpClient.Send(frameBytes, frameBytes.Length, hostOrIPAddress, port);
+        }
 
-            udpClient.Send(frameBytes, frameBytes.Length, ipAddress, port);
+        /// <summary>
+        /// Sends a one-time fire-and-forget notification.
+        /// </summary>
+        /// <param name="udpClient">The client to send the data on.</param>
+        /// <param name="framePayload">The notification payload that will be sent.</param>
+        /// <exception cref="Exception"></exception>
+        public static void WriteNotificationFrame(this UdpClient udpClient, IPAddress ipAddress, int port, IUDPPayloadNotification framePayload)
+        {
+            var frameBody = new FrameBody(framePayload);
+            var frameBytes = AssembleFrame(frameBody);
+            udpClient.Send(frameBytes, frameBytes.Length, new IPEndPoint(ipAddress, port));
+        }
+
+        /// <summary>
+        /// Sends a one-time fire-and-forget notification.
+        /// </summary>
+        /// <param name="udpClient">The client to send the data on.</param>
+        /// <param name="framePayload">The notification payload that will be sent.</param>
+        /// <exception cref="Exception"></exception>
+        public static void WriteNotificationFrame(this UdpClient udpClient, IPEndPoint endpoint, IUDPPayloadNotification framePayload)
+        {
+            var frameBody = new FrameBody(framePayload);
+            var frameBytes = AssembleFrame(frameBody);
+            udpClient.Send(frameBytes, frameBytes.Length, endpoint);
         }
 
         /// <summary>
@@ -74,7 +98,7 @@ namespace NTDLS.UDPPacketFraming
         /// <param name="udpClient">The client to send the data on.</param>
         /// <param name="framePayload">The bytes will make up the body of the frame which is written.</param>
         /// <exception cref="Exception"></exception>
-        public static void WriteBytesFrame(this UdpClient udpClient, string ipAddress, int port, byte[] framePayload)
+        public static void WriteBytesFrame(this UdpClient udpClient, string hostOrIPAddress, int port, byte[] framePayload)
         {
             if (udpClient == null)
             {
@@ -83,7 +107,45 @@ namespace NTDLS.UDPPacketFraming
 
             var frameBody = new FrameBody(framePayload);
             var frameBytes = AssembleFrame(frameBody);
-            udpClient.Send(frameBytes, frameBytes.Length, ipAddress, port);
+            udpClient.Send(frameBytes, frameBytes.Length, hostOrIPAddress, port);
+        }
+
+        /// <summary>
+        /// Sends a one-time fire-and-forget byte array payload. These are and handled in processNotificationCallback().
+        /// When a raw byte array is use, all json serilization is skipped and checks for this payload type are prioritized for performance.
+        /// </summary>
+        /// <param name="udpClient">The client to send the data on.</param>
+        /// <param name="framePayload">The bytes will make up the body of the frame which is written.</param>
+        /// <exception cref="Exception"></exception>
+        public static void WriteBytesFrame(this UdpClient udpClient, IPAddress ipAddress, int port, byte[] framePayload)
+        {
+            if (udpClient == null)
+            {
+                throw new Exception("WriteBytesFrame: client can not be null.");
+            }
+
+            var frameBody = new FrameBody(framePayload);
+            var frameBytes = AssembleFrame(frameBody);
+            udpClient.Send(frameBytes, frameBytes.Length, new IPEndPoint(ipAddress, port));
+        }
+
+        /// <summary>
+        /// Sends a one-time fire-and-forget byte array payload. These are and handled in processNotificationCallback().
+        /// When a raw byte array is use, all json serilization is skipped and checks for this payload type are prioritized for performance.
+        /// </summary>
+        /// <param name="udpClient">The client to send the data on.</param>
+        /// <param name="framePayload">The bytes will make up the body of the frame which is written.</param>
+        /// <exception cref="Exception"></exception>
+        public static void WriteBytesFrame(this UdpClient udpClient, IPEndPoint endpoint, byte[] framePayload)
+        {
+            if (udpClient == null)
+            {
+                throw new Exception("WriteBytesFrame: client can not be null.");
+            }
+
+            var frameBody = new FrameBody(framePayload);
+            var frameBytes = AssembleFrame(frameBody);
+            udpClient.Send(frameBytes, frameBytes.Length, endpoint);
         }
 
         #endregion
@@ -127,7 +189,7 @@ namespace NTDLS.UDPPacketFraming
         }
 
         private static void ProcessFrameBuffer(FrameBuffer frameBuffer,
-            ProcessFrameNotificationCallback? processNotificationCallback)
+            ProcessFrameNotificationCallback processNotificationCallback)
         {
             if (frameBuffer.FrameBuilderLength + frameBuffer.ReceiveBufferUsed >= frameBuffer.FrameBuilder.Length)
             {
@@ -190,18 +252,10 @@ namespace NTDLS.UDPPacketFraming
 
                 if (framePayload is UDPFramePayloadBytes frameNotificationBytes)
                 {
-                    if (processNotificationCallback == null)
-                    {
-                        throw new Exception("ProcessFrameBuffer: A notification handler was not supplied.");
-                    }
                     processNotificationCallback(frameNotificationBytes);
                 }
                 else if (framePayload is IUDPPayloadNotification notification)
                 {
-                    if (processNotificationCallback == null)
-                    {
-                        throw new Exception("ProcessFrameBuffer: A notification handler was not supplied.");
-                    }
                     processNotificationCallback(notification);
                 }
                 else

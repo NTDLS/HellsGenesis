@@ -1,5 +1,6 @@
 ﻿using NTDLS.Semaphore;
 using StrikeforceInfinity.Server.Engine.Objects;
+using System.Net;
 
 namespace StrikeforceInfinity.Server.Engine.Managers
 {
@@ -31,13 +32,13 @@ namespace StrikeforceInfinity.Server.Engine.Managers
             });
         }
 
-        public Session Establish(Guid connectionId)
+        public Session Establish(Guid connectionId, IPAddress ipAdress)
         {
             return _sessions.Use(o =>
             {
-                var sesson = new Session(connectionId)
+                var sesson = new Session(connectionId, ipAdress)
                 {
-                    LastSeenDatetime = DateTime.UtcNow
+                    LastSeenDatetime = DateTime.UtcNow,
                 };
 
                 o.Add(connectionId, sesson);

@@ -9,8 +9,6 @@ namespace StrikeforceInfinity.Game.Engine
     /// </summary>
     internal class EngineSettings
     {
-        public EngineSettingsMultiplayer Multiplayer { get; set; } = new();
-
         public bool EnableSpriteInterrogation { get; set; } = false;
         public bool HighlightNatrualBounds { get; set; } = false;
         public bool HighlightAllSprites { get; set; } = false;

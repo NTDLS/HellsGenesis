@@ -7,11 +7,15 @@ namespace StrikeforceInfinity.Shared.Messages.Query
     /// </summary>
     public class SiConfigure : IFramePayloadQuery
     {
-        //TODO: include some types of filters here
+        public int ClientListenUdpPort { get; set; }
     }
 
     public class SiConfigureReply : IFramePayloadQueryReply
     {
+        /// <summary>
+        /// The connection id of the tcp/ip connection according to the server.
+        /// </summary>
+        public Guid ConnectionId { get; set; }
         public int PlayerAbsoluteStateDelayMs { get; set; }
     }
 }

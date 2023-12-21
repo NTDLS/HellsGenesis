@@ -31,7 +31,7 @@
   <ItemGroup>
     <PackageReference Include="NAudio.Core" Version="2.2.1" />
     <PackageReference Include="NTDLS.Determinet" Version="1.1.2" />
-    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.2.4" />
+    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.3.1" />
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
     <PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NTDLS.UDPPacketFraming\NTDLS.UDPPacketFraming.csproj" />
     <ProjectReference Include="..\StrikeforceInfinity.Shared\StrikeforceInfinity.Shared.csproj" />
   </ItemGroup>
 

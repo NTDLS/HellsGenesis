@@ -9,21 +9,32 @@ using System.Net;
 using System.Text;
 using ProtoBuf.WellKnownTypes;
 using NTDLS.StreamFraming.Payloads;
+using NTDLS.UDPPacketFraming;
+using NTDLS.UDPPacketFraming.Payloads;
+using StrikeforceInfinity.Server.Engine.Objects;
+using System.Net.Http;
 
 namespace StrikeforceInfinity.Server.Engine
 {
     internal class ServerCore
     {
+        /// <summary>
+        /// A list of IPaddress endpoints for all connections, these are used for UDP sending.
+        /// </summary>
+        private Dictionary<Guid, IPEndPoint> _activeEndpoints = new();
         public LogManager Log { get; private set; }
         public SessionManager Sessions { get; private set; }
         public LobbyManager Lobbies { get; private set; }
         public SiSettings Settings { get; private set; }
 
         readonly MessageServer _messageServer = new();
+        readonly UdpMessageManager _udpManager;
 
         public ServerCore(SiSettings settings)
         {
             Settings = settings;
+
+            _udpManager = new UdpMessageManager(Settings.DataPort, UdpMessageManager_ProcessNotificationCallback);
 
             Log = new LogManager(this);
             Sessions = new SessionManager(this);
@@ -42,96 +53,134 @@ namespace StrikeforceInfinity.Server.Engine
             //LetsTryUDP();
         }
 
-        class UDPEnvelope
+        private void UdpMessageManager_ProcessNotificationCallback(IUDPPayloadNotification payload)
         {
-            public Guid ConnectionId { get; set; }
-            public DateTime TimeStamp { get; set; }
-        }
-
-        /*
-        private void LetsTryUDP()
-        {
-            int port = Settings.DataPort + 1;
-            var udpListener = new UdpClient(port);
-
-            Console.WriteLine("UDP server is listening on port " + port);
-
-            var thread = new Thread(o =>
+            //------------------------------------------------------------------------------------------------------------------------------
+            if (payload is SiSpriteVectors spriteVectors)
             {
-                while (true)
+                var session = Sessions.GetByConnectionId(spriteVectors.ConnectionId);
+                if (session == null)
                 {
-                    var clientEndPoint = new IPEndPoint(IPAddress.Any, port);
-                    var data = udpListener.Receive(ref clientEndPoint);
-                    string message = Encoding.ASCII.GetString(data);
-                    Thread.Sleep(1);
+                    Log.Exception($"The session was not found '{spriteVectors.ConnectionId}'.");
+                    return;
                 }
-            });
 
-            thread.Start();
+                //Log.Trace($"{spriteVector.X:n1},{spriteVector.Y:n1} -> {spriteVector.AngleDegrees:n1}");
+
+                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
+                if (lobby == null)
+                {
+                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
+                    return;
+                }
+
+                //Broadcast the absolute state to all connections except for the one that sent it.
+                var registeredConnectionIds = lobby.RegisteredConnections();
+                registeredConnectionIds.Remove(spriteVectors.ConnectionId);
+                foreach (var registeredConnectionId in registeredConnectionIds)
+                {
+                    if (_activeEndpoints.TryGetValue(registeredConnectionId, out var endpoint))
+                    {
+                        try
+                        {
+                            _udpManager.WriteMessage(endpoint, spriteVectors);
+                        }
+                        catch
+                        {
+                            //TODO: Remove this connection:
+                        }
+                    }
+                }
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
         }
-        */
 
         private IFramePayloadQueryReply MessageServer_OnQueryReceived(MessageServer server, Guid connectionId, IFramePayloadQuery payload)
         {
-            //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiGetLobbyInfo getLobbyInfo)
+            try
             {
-                Log.Verbose($"ConnectionId: '{connectionId}' getting lobby info for '{getLobbyInfo.LobyUID}'.");
-
-                var lobby = Lobbies.GetByLobbyUID(getLobbyInfo.LobyUID);
-                if (lobby == null)
+                //------------------------------------------------------------------------------------------------------------------------------
+                if (payload is SiGetLobbyInfo getLobbyInfo)
                 {
-                    Log.Exception($"The lobby was not found '{getLobbyInfo.LobyUID}'.");
-                    return new SiGetLobbyInfoReply();
-                }
+                    Log.Verbose($"ConnectionId: '{connectionId}' getting lobby info for '{getLobbyInfo.LobyUID}'.");
 
-                return new SiGetLobbyInfoReply()
-                {
-                    Info = new SiLobbyInfo
+                    var lobby = Lobbies.GetByLobbyUID(getLobbyInfo.LobyUID);
+                    if (lobby == null)
                     {
-                        Name = lobby.Name,
-                        WaitingCount = lobby.ConnectionsWaitingInLobbyCount()
+                        Log.Exception($"The lobby was not found '{getLobbyInfo.LobyUID}'.");
+                        return new SiGetLobbyInfoReply();
                     }
-                };
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiCreateLobby createLobby)
-            {
-                Log.Verbose($"ConnectionId: '{connectionId}' creating lobby '{createLobby.Configuration.Name}'.");
 
-                var lobby = Lobbies.Create(connectionId, createLobby.Configuration);
-
-                return new SiCreateLobbyReply()
+                    return new SiGetLobbyInfoReply()
+                    {
+                        Info = new SiLobbyInfo
+                        {
+                            Name = lobby.Name,
+                            WaitingCount = lobby.ConnectionsWaitingInLobbyCount()
+                        }
+                    };
+                }
+                //------------------------------------------------------------------------------------------------------------------------------
+                else if (payload is SiCreateLobby createLobby)
                 {
-                    LobbyUID = lobby.UID
-                };
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiListLobbies listLobbies)
-            {
-                Log.Verbose($"ConnectionId: '{connectionId}' requested lobby list.");
+                    Log.Verbose($"ConnectionId: '{connectionId}' creating lobby '{createLobby.Configuration.Name}'.");
 
-                var lobbies = Lobbies.GetList(connectionId);
+                    var lobby = Lobbies.Create(connectionId, createLobby.Configuration);
 
-                return new SiListLobbiesReply()
+                    return new SiCreateLobbyReply()
+                    {
+                        LobbyUID = lobby.UID
+                    };
+                }
+                //------------------------------------------------------------------------------------------------------------------------------
+                else if (payload is SiListLobbies listLobbies)
                 {
-                    Collection = lobbies
-                };
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiConfigure establish)
-            {
-                Log.Verbose($"ConnectionId: '{connectionId}' requested configuration.");
+                    Log.Verbose($"ConnectionId: '{connectionId}' requested lobby list.");
 
-                return new SiConfigureReply()
+                    var lobbies = Lobbies.GetList(connectionId);
+
+                    return new SiListLobbiesReply()
+                    {
+                        Collection = lobbies
+                    };
+                }
+                //------------------------------------------------------------------------------------------------------------------------------
+                else if (payload is SiConfigure configure)
                 {
-                    PlayerAbsoluteStateDelayMs = Settings.PlayerAbsoluteStateDelayMs
-                };
+                    Log.Verbose($"ConnectionId: '{connectionId}' requested configuration.");
+
+                    var session = Sessions.GetByConnectionId(connectionId);
+                    if (session == null)
+                    {
+                        throw new Exception($"Session was not found for: '{connectionId}'.");
+                    }
+
+                    session.SetRemoteEndpointPort(configure.ClientListenUdpPort);
+
+                    if (session.Endpoint == null)
+                    {
+                        throw new Exception($"Session endpoint can not be null: '{connectionId}'.");
+                    }
+
+                    _activeEndpoints.Add(connectionId, session.Endpoint);
+
+                    return new SiConfigureReply()
+                    {
+                        ConnectionId = connectionId,
+                        PlayerAbsoluteStateDelayMs = Settings.PlayerAbsoluteStateDelayMs
+                    };
+                }
+                //------------------------------------------------------------------------------------------------------------------------------
+                else
+                {
+                    throw new NotImplementedException("The server query is not implemented.");
+                }
             }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else
+            catch (Exception ex)
             {
-                throw new NotImplementedException("The server query is not implemented.");
+                Log.Exception(ex.Message);
+                throw;
+
             }
         }
 
@@ -144,33 +193,6 @@ namespace StrikeforceInfinity.Server.Engine
                 return;
             }
 
-            //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiSpriteVectors spriteVectors)
-            {
-                //Log.Trace($"{spriteVector.X:n1},{spriteVector.Y:n1} -> {spriteVector.AngleDegrees:n1}");
-
-                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
-                if (lobby == null)
-                {
-                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
-                    return;
-                }
-
-                //Broadcast the absolute state to all connections except for the one that sent it.
-                var registeredConnectionIds = lobby.RegisteredConnections();
-                registeredConnectionIds.Remove(connectionId);
-                foreach (var registeredConnectionId in registeredConnectionIds)
-                {
-                    try
-                    {
-                        _messageServer.Notify(registeredConnectionId, spriteVectors);
-                    }
-                    catch
-                    {
-                        //TODO: Remove this connection:
-                    }
-                }
-            }
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiRegisterToLobby register)
             {
@@ -240,9 +262,16 @@ namespace StrikeforceInfinity.Server.Engine
             }
         }
 
-        private void MessageServer_OnConnected(MessageServer server, Guid connectionId)
+        private void MessageServer_OnConnected(MessageServer server, Guid connectionId, TcpClient tcpClient)
         {
-            Sessions.Establish(connectionId);
+            var remoteIPAddress = ((IPEndPoint?)tcpClient.Client.RemoteEndPoint)?.Address;
+            if (remoteIPAddress == null)
+            {
+                server.Disconnect(connectionId);
+                throw new Exception("The connection must expose an IP Address.");
+            }
+
+            var session = Sessions.Establish(connectionId, remoteIPAddress);
             Log.Verbose($"Accepted Connection: '{connectionId}'");
         }
 
@@ -250,6 +279,7 @@ namespace StrikeforceInfinity.Server.Engine
         {
             Sessions.Remove(connectionId);
             Log.Verbose($"Disconnected Connection: '{connectionId}'");
+            _activeEndpoints.Remove(connectionId);
         }
 
         public void Stop()

@@ -10,6 +10,7 @@ using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
 using StrikeforceInfinity.Game.Weapons.BaseClasses;
 using StrikeforceInfinity.Game.Weapons.Munitions;
+using StrikeforceInfinity.Shared.Messages.Notify;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
     /// </summary>
     internal class SpriteEnemyBase : _SpriteShipBase
     {
+        private readonly SiSpriteVector _multiplaySpriteVector = new();
+
         public HgEnemyClass ShipClass { get; set; }
         public EnemyShipLoadout Loadout { get; set; }
         public IAIController CurrentAIController { get; set; }
@@ -89,6 +92,29 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses
                 }
             }
             base.Explode();
+        }
+
+        public override SiSpriteVector GetMultiplayVector()
+        {
+            if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerHost)
+            {
+                if ((DateTime.UtcNow - _multiplaySpriteVector.Timestamp).TotalMilliseconds >= _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs)
+                {
+                    //System.Diagnostics.Debug.WriteLine($"MultiplayUID: {enemy.MultiplayUID}");
+
+                    _multiplaySpriteVector.MultiplayUID = MultiplayUID;
+                    _multiplaySpriteVector.Timestamp = DateTime.UtcNow;
+                    _multiplaySpriteVector.X = X;
+                    _multiplaySpriteVector.Y = Y;
+                    _multiplaySpriteVector.AngleDegrees = Velocity.Angle.Degrees;
+                    _multiplaySpriteVector.BoostPercentage = Velocity.BoostPercentage;
+                    _multiplaySpriteVector.ThrottlePercentage = Velocity.ThrottlePercentage;
+
+                    return _multiplaySpriteVector;
+                }
+            }
+
+            return null;
         }
 
         public string GetLoadoutHelpText()

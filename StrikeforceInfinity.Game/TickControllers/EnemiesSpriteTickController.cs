@@ -12,7 +12,6 @@ namespace StrikeforceInfinity.Game.Controller
     internal class EnemiesSpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
     {
         private readonly EngineCore _gameCore;
-        private readonly SiSpriteVector _multiplaySpriteVector = new();
 
         public EnemiesSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
             : base(gameCore, manager)
@@ -44,20 +43,10 @@ namespace StrikeforceInfinity.Game.Controller
                     }
                 }
 
-                if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerHost)
+                var multiplayVector = enemy.GetMultiplayVector();
+                if (multiplayVector != null)
                 {
-                    if ((DateTime.UtcNow - _multiplaySpriteVector.Timestamp).TotalMilliseconds >= _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
-                    {
-                        _multiplaySpriteVector.MultiplayUID = enemy.MultiplayUID;
-                        _multiplaySpriteVector.Timestamp = DateTime.UtcNow;
-                        _multiplaySpriteVector.X = enemy.X;
-                        _multiplaySpriteVector.Y = enemy.Y;
-                        _multiplaySpriteVector.AngleDegrees = enemy.Velocity.Angle.Degrees;
-                        _multiplaySpriteVector.BoostPercentage = enemy.Velocity.BoostPercentage;
-                        _multiplaySpriteVector.ThrottlePercentage = enemy.Velocity.ThrottlePercentage;
-
-                        _gameCore.Multiplay.RecordSpriteVector(_multiplaySpriteVector);
-                    }
+                    _gameCore.Multiplay.RecordSpriteVector(multiplayVector);
                 }
 
                 enemy.ApplyMotion(displacementVector);

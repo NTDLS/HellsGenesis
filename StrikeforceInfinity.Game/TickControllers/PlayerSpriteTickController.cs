@@ -15,7 +15,6 @@ namespace StrikeforceInfinity.Game.Controller
     {
         private readonly EngineCore _gameCore;
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
-        private readonly SiSpriteVector _multiplaySpriteVector = new();
 
         public SpritePlayerBase Sprite { get; set; }
 
@@ -263,20 +262,10 @@ namespace StrikeforceInfinity.Game.Controller
 
             Sprite.RenewableResources.RenewAllResources();
 
-            if (_gameCore.Multiplay.PlayMode != HgPlayMode.SinglePlayer)
-            {
-                if ((DateTime.UtcNow - _multiplaySpriteVector.Timestamp).TotalMilliseconds >= _gameCore.Settings.Multiplayer.PlayerAbsoluteStateDelayMs)
+            var multiplayVector = Sprite.GetMultiplayVector();
+            if (multiplayVector != null)
                 {
-                    _multiplaySpriteVector.MultiplayUID = Sprite.MultiplayUID;
-                    _multiplaySpriteVector.Timestamp = DateTime.UtcNow;
-                    _multiplaySpriteVector.X = _gameCore.Display.BackgroundOffset.X;
-                    _multiplaySpriteVector.Y = _gameCore.Display.BackgroundOffset.Y;
-                    _multiplaySpriteVector.AngleDegrees = Sprite.Velocity.Angle.Degrees;
-                    _multiplaySpriteVector.BoostPercentage = Sprite.Velocity.BoostPercentage;
-                    _multiplaySpriteVector.ThrottlePercentage = Sprite.Velocity.ThrottlePercentage;
-
-                    _gameCore.Multiplay.RecordSpriteVector(_multiplaySpriteVector);
-                }
+                _gameCore.Multiplay.RecordSpriteVector(multiplayVector);
             }
 
             return displacementVector;

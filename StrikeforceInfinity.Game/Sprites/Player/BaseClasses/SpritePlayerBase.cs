@@ -7,10 +7,12 @@ using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Weapons.BaseClasses;
 using StrikeforceInfinity.Game.Weapons.Munitions;
+using StrikeforceInfinity.Shared.Messages.Notify;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 
 namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
 {
@@ -19,6 +21,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
     /// </summary>
     internal class SpritePlayerBase : _SpriteShipBase
     {
+        private readonly SiSpriteVector _multiplaySpriteVector = new();
         public HgPlayerClass ShipClass { get; set; }
         public PlayerShipLoadout Loadout { get; private set; }
         public SiAudioClip AmmoLowSound { get; private set; }
@@ -73,6 +76,26 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
                 if (ThrustAnimation != null) ThrustAnimation.Visable = false;
                 if (BoostAnimation != null) BoostAnimation.Visable = false;
             }
+        }
+
+        public override SiSpriteVector GetMultiplayVector()
+        {
+            if (_gameCore.Multiplay.PlayMode != HgPlayMode.SinglePlayer)
+            {
+                if ((DateTime.UtcNow - _multiplaySpriteVector.Timestamp).TotalMilliseconds >= _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs)
+                {
+                    _multiplaySpriteVector.MultiplayUID = MultiplayUID;
+                    _multiplaySpriteVector.Timestamp = DateTime.UtcNow;
+                    _multiplaySpriteVector.X = _gameCore.Display.BackgroundOffset.X;
+                    _multiplaySpriteVector.Y = _gameCore.Display.BackgroundOffset.Y;
+                    _multiplaySpriteVector.AngleDegrees = Velocity.Angle.Degrees;
+                    _multiplaySpriteVector.BoostPercentage = Velocity.BoostPercentage;
+                    _multiplaySpriteVector.ThrottlePercentage = Velocity.ThrottlePercentage;
+
+                    return _multiplaySpriteVector;
+                }
+            }
+            return null;
         }
 
         public override void RotationChanged() => UpdateThrustAnimationPositions();
