@@ -4,6 +4,8 @@ using NTDLS.UDPPacketFraming;
 using NTDLS.UDPPacketFraming.Payloads;
 using StrikeforceInfinity.Engine;
 using StrikeforceInfinity.Game.Engine;
+using StrikeforceInfinity.Game.Sprites.Enemies.Peons.BaseClasses;
+using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
 using StrikeforceInfinity.Shared.Messages.Notify;
 using StrikeforceInfinity.Shared.Messages.Query;
 using StrikeforceInfinity.Shared.Payload;
@@ -190,17 +192,30 @@ namespace StrikeforceInfinity.Game.Managers
             //------------------------------------------------------------------------------------------------------------------------------
             if (payload is SiSpriteVectors spriteVectors)
             {
+                var allMultiplayUIDs = spriteVectors.Collection.Select(o => o.MultiplayUID).ToHashSet();
+
+                //Get all the sprites ahead of time. I "think" this is faster than searching in a loop.
+                var sprites = _gameCore.Sprites.Collection.Where(o => allMultiplayUIDs.Contains(o.MultiplayUID)).ToList();
+
                 foreach (var spriteVector in spriteVectors.Collection)
                 {
-                    //TODO: Updates sprites...
-                    //Debug.WriteLine(spriteVector.MultiplayUID);
-
-                    var sprite = _gameCore.Sprites.Collection.Where(o => o.MultiplayUID == spriteVector.MultiplayUID).FirstOrDefault();
+                    var sprite = sprites.Where(o => o.MultiplayUID == spriteVector.MultiplayUID).FirstOrDefault();
                     if (sprite != null)
                     {
                         sprite.X = spriteVector.X;
                         sprite.Y = spriteVector.Y;
                         sprite.Velocity.Angle.Degrees = spriteVector.AngleDegrees;
+
+                        if (sprite is SpritePlayerDroneBase playerDrone)
+                        {
+                            playerDrone.ThrustAnimation.Visable = spriteVector.ThrottlePercentage > 0;
+                            playerDrone.BoostAnimation.Visable = spriteVector.BoostPercentage > 0;
+                        }
+                        else if (sprite is SpriteEnemyPeonBase enemyPeon)
+                        {
+                            enemyPeon.ThrustAnimation.Visable = spriteVector.ThrottlePercentage > 0;
+                            enemyPeon.BoostAnimation.Visable = spriteVector.BoostPercentage > 0;
+                        }
                     }
                 }
             }

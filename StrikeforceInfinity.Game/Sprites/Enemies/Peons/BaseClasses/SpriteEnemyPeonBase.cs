@@ -75,6 +75,11 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons.BaseClasses
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
+            if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerClient)
+            {
+                return;
+            }
+
             base.ApplyMotion(displacementVector);
 
             if (ThrustAnimation != null)
