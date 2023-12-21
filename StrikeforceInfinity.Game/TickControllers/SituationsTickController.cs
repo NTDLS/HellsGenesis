@@ -1,6 +1,6 @@
 ﻿using StrikeforceInfinity.Game.Engine;
-using StrikeforceInfinity.Game.Situations.BaseClasses;
-using StrikeforceInfinity.Game.TickControllers.BaseClasses;
+using StrikeforceInfinity.Game.Situations.BasesAndInterfaces;
+using StrikeforceInfinity.Game.TickControllers.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Utility;
 using System.Linq;
 

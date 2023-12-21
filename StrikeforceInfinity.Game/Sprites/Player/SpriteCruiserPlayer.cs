@@ -1,6 +1,6 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Loudouts;
-using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
+using StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Weapons;
 using System.Drawing;
 

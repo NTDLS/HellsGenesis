@@ -4,11 +4,11 @@ using NTDLS.UDPPacketFraming;
 using NTDLS.UDPPacketFraming.Payloads;
 using StrikeforceInfinity.Engine;
 using StrikeforceInfinity.Game.Engine;
-using StrikeforceInfinity.Game.Sprites.Enemies.Peons.BaseClasses;
-using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
+using StrikeforceInfinity.Shared;
 using StrikeforceInfinity.Shared.Messages.Notify;
 using StrikeforceInfinity.Shared.Messages.Query;
 using StrikeforceInfinity.Shared.Payload;
+using StrikeforceInfinity.Sprites.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,18 +21,14 @@ namespace StrikeforceInfinity.Game.Managers
     /// <summary>
     /// Contains everything you need to manage multiplayer functionality.
     /// </summary>
-    internal class EngineMultiplayManager
+    internal class EngineMultiplayManager : IDisposable
     {
         /// <summary>
         /// This is the UDP port that the client will listen on. This is communicated to the server via ConfigureConnection().
         /// </summary>
         private readonly int _clientListenUdpPort = UdpMessageManager.GetRandomUnusedUDPPort(5000, 8000);
-        public MultiplayState State { get; private set; } = new();
-        public HgPlayMode PlayMode { get; private set; }
-        public Guid LobbyUID { get; private set; } = Guid.Empty;
-
+        private readonly List<SiSpriteVector> _spriteVectorBuffer = new();
         private UdpMessageManager _udpManager;
-
         private readonly EngineCore _gameCore;
         private MessageClient _messageClient;
         private MessageClient MessageClient
@@ -63,6 +59,10 @@ namespace StrikeforceInfinity.Game.Managers
                 return _messageClient;
             }
         }
+
+        public MultiplayState State { get; private set; } = new();
+        public HgPlayMode PlayMode { get; private set; }
+        public Guid LobbyUID { get; private set; } = Guid.Empty;
 
         public EngineMultiplayManager(EngineCore gameCore)
         {
@@ -124,7 +124,7 @@ namespace StrikeforceInfinity.Game.Managers
                 //Make sure the MultiplayUID matches the MultiplayUID at all other connections.
                 enemy.MultiplayUID = enemy.UID;
 
-                spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName, enemy.UID)
+                spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName + "Drone", enemy.UID)
                 {
                     Vector = new SiSpriteVector() { X = enemy.X, Y = enemy.Y }
                 });
@@ -197,24 +197,17 @@ namespace StrikeforceInfinity.Game.Managers
                 //Get all the sprites ahead of time. I "think" this is faster than searching in a loop.
                 var sprites = _gameCore.Sprites.Collection.Where(o => allMultiplayUIDs.Contains(o.MultiplayUID)).ToList();
 
-                foreach (var spriteVector in spriteVectors.Collection)
+                foreach (var vector in spriteVectors.Collection)
                 {
-                    var sprite = sprites.Where(o => o.MultiplayUID == spriteVector.MultiplayUID).FirstOrDefault();
+                    var sprite = sprites.Where(o => o.MultiplayUID == vector.MultiplayUID).FirstOrDefault();
                     if (sprite != null)
                     {
-                        sprite.X = spriteVector.X;
-                        sprite.Y = spriteVector.Y;
-                        sprite.Velocity.Angle.Degrees = spriteVector.AngleDegrees;
-
-                        if (sprite is SpritePlayerDroneBase playerDrone)
+                        if (sprite is ISpriteDrone playerDrone)
                         {
-                            playerDrone.ThrustAnimation.Visable = spriteVector.ThrottlePercentage > 0;
-                            playerDrone.BoostAnimation.Visable = spriteVector.BoostPercentage > 0;
+                            playerDrone.ApplyMultiPlayVector(vector);
                         }
-                        else if (sprite is SpriteEnemyPeonBase enemyPeon)
+                        else
                         {
-                            enemyPeon.ThrustAnimation.Visable = spriteVector.ThrottlePercentage > 0;
-                            enemyPeon.BoostAnimation.Visable = spriteVector.BoostPercentage > 0;
                         }
                     }
                 }
@@ -288,32 +281,30 @@ namespace StrikeforceInfinity.Game.Managers
         }
 
 
-        readonly List<SiSpriteVector> _spriteVectors = new();
-
         public void RecordSpriteVector(SiSpriteVector multiplayerEvent)
         {
             if (LobbyUID != Guid.Empty)
             {
                 if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
                 {
-                    _spriteVectors.Add(multiplayerEvent);
+                    _spriteVectorBuffer.Add(multiplayerEvent);
                 }
             }
         }
 
         public void FlushSpriteVectorsToServer()
         {
-            if (LobbyUID != Guid.Empty && _spriteVectors.Any())
+            if (LobbyUID != Guid.Empty && _spriteVectorBuffer.Any())
             {
                 if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true && _udpManager != null)
                 {
-                    var spriteVectors = new SiSpriteVectors(_spriteVectors);
+                    var spriteVectors = new SiSpriteVectors(_spriteVectorBuffer);
 
                     spriteVectors.ConnectionId = State.ConnectionId;
 
                     //System.Diagnostics.Debug.WriteLine($"MultiplayUID: {_spriteVectors.Select(o=>o.MultiplayUID).Distinct().Count()}");
                     _udpManager?.WriteMessage(Constants.DataAddress, Constants.DataPort, spriteVectors);
-                    _spriteVectors.Clear();
+                    _spriteVectorBuffer.Clear();
                 }
             }
         }
@@ -324,6 +315,12 @@ namespace StrikeforceInfinity.Game.Managers
             {
                 MessageClient?.Notify(multiplayerEvent);
             }
+        }
+
+        public void Dispose()
+        {
+            SiUtility.TryAndIgnore(() => _udpManager?.Shutdown());
+            SiUtility.TryAndIgnore(() => _messageClient?.Disconnect());
         }
     }
 }

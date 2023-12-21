@@ -1,7 +1,7 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
-using StrikeforceInfinity.Game.Menus.BaseClasses;
-using StrikeforceInfinity.Game.Situations.BaseClasses;
+using StrikeforceInfinity.Game.Menus.BasesAndInterfaces;
+using StrikeforceInfinity.Game.Situations.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Menus.SinglePlayer;

@@ -4,7 +4,7 @@ using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Sprites;
-using StrikeforceInfinity.Game.TickControllers.BaseClasses;
+using StrikeforceInfinity.Game.TickControllers.BasesAndInterfaces;
 using System.Linq;
 
 namespace StrikeforceInfinity.Game.Controller

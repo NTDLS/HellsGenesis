@@ -1,7 +1,7 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Loudouts;
-using StrikeforceInfinity.Game.Sprites.Enemies.Peons.BaseClasses;
+using StrikeforceInfinity.Game.Sprites.Enemies.Peons.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Game.Weapons;
 using System.Drawing;

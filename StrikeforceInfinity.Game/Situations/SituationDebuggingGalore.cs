@@ -1,6 +1,6 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Levels;
-using StrikeforceInfinity.Game.Situations.BaseClasses;
+using StrikeforceInfinity.Game.Situations.BasesAndInterfaces;
 
 namespace StrikeforceInfinity.Game.Situations
 {

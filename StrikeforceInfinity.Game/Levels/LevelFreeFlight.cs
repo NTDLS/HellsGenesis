@@ -1,6 +1,6 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types;
-using StrikeforceInfinity.Game.Levels.BaseClasses;
+using StrikeforceInfinity.Game.Levels.BasesAndInterfaces;
 using System.Collections.Generic;
 
 namespace StrikeforceInfinity.Game.Levels

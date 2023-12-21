@@ -1,7 +1,7 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
-using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
-using StrikeforceInfinity.Game.TickControllers.BaseClasses;
+using StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces;
+using StrikeforceInfinity.Game.TickControllers.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
 
 namespace StrikeforceInfinity.Game.Controller

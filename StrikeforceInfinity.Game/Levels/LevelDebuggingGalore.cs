@@ -1,7 +1,7 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types;
-using StrikeforceInfinity.Game.Levels.BaseClasses;
-using StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses;
+using StrikeforceInfinity.Game.Levels.BasesAndInterfaces;
+using StrikeforceInfinity.Game.Sprites.Enemies.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Sprites.Enemies.Peons;
 using StrikeforceInfinity.Game.Utility;
 

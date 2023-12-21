@@ -1,6 +1,6 @@
 ﻿using SharpDX.DirectInput;
 using StrikeforceInfinity.Game.Engine;
-using StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses;
+using StrikeforceInfinity.Game.Sprites.Enemies.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Utility;
 using System;
 using System.Collections.Generic;

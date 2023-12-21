@@ -12,12 +12,12 @@ using System.Net.Sockets;
 
 namespace StrikeforceInfinity.Server.Engine
 {
-    internal class ServerCore
+    internal class ServerCore : IDisposable
     {
         /// <summary>
         /// A list of IPaddress endpoints for all connections, these are used for UDP sending.
         /// </summary>
-        private Dictionary<Guid, IPEndPoint> _activeEndpoints = new();
+        private readonly Dictionary<Guid, IPEndPoint> _activeEndpoints = new();
         public LogManager Log { get; private set; }
         public SessionManager Sessions { get; private set; }
         public LobbyManager Lobbies { get; private set; }
@@ -267,7 +267,7 @@ namespace StrikeforceInfinity.Server.Engine
                 throw new Exception("The connection must expose an IP Address.");
             }
 
-            var session = Sessions.Establish(connectionId, remoteIPAddress);
+            Sessions.Establish(connectionId, remoteIPAddress);
             Log.Verbose($"Accepted Connection: '{connectionId}'");
         }
 
@@ -280,6 +280,12 @@ namespace StrikeforceInfinity.Server.Engine
 
         public void Stop()
         {
+        }
+
+        public void Dispose()
+        {
+            SiUtility.TryAndIgnore(() => _messageServer?.Stop());
+            SiUtility.TryAndIgnore(() => _udpManager?.Shutdown());
         }
     }
 }

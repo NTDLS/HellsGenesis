@@ -1,6 +1,6 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
-using StrikeforceInfinity.Game.Menus.BaseClasses;
+using StrikeforceInfinity.Game.Menus.BasesAndInterfaces;
 
 namespace StrikeforceInfinity.Menus.MultiPlayer.Client
 {

@@ -1,6 +1,6 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
-using StrikeforceInfinity.Game.Sprites.PowerUp.BaseClasses;
+using StrikeforceInfinity.Game.Sprites.PowerUp.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Utility;
 using System.Drawing;
 using System.IO;

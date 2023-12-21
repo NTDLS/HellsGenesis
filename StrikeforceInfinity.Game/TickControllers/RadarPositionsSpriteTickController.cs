@@ -2,7 +2,7 @@
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Sprites;
-using StrikeforceInfinity.Game.TickControllers.BaseClasses;
+using StrikeforceInfinity.Game.TickControllers.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

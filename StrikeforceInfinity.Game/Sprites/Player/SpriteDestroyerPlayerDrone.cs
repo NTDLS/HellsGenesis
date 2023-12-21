@@ -1,18 +1,24 @@
 ﻿using StrikeforceInfinity.Game.Engine;
-using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
-using System.Drawing;
+using StrikeforceInfinity.Shared.Messages.Notify;
+using StrikeforceInfinity.Sprites.BasesAndInterfaces;
 
 namespace StrikeforceInfinity.Game.Sprites.Player
 {
-    internal class SpriteDestroyerPlayerDrone : SpritePlayerDroneBase
+    internal class SpriteDestroyerPlayerDrone : SpriteDestroyerPlayer, ISpriteDrone
     {
         public SpriteDestroyerPlayerDrone(EngineCore gameCore)
             : base(gameCore)
         {
-            ShipClass = HgPlayerClass.Destroyer;
-
-            string imagePath = @$"Graphics\Player\Ships\{ShipClass}.png";
-            Initialize(imagePath, new Size(32, 32));
         }
+
+        public void ApplyMultiPlayVector(SiSpriteVector vector)
+        {
+            X = vector.X;
+            Y = vector.Y;
+            Velocity.Angle.Degrees = vector.AngleDegrees;
+            ThrustAnimation.Visable = vector.ThrottlePercentage > 0;
+            BoostAnimation.Visable = vector.BoostPercentage > 0;
+        }
+
     }
 }

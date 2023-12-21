@@ -1,7 +1,7 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Sprites;
-using StrikeforceInfinity.Game.Weapons.BaseClasses;
+using StrikeforceInfinity.Game.Weapons.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Weapons.Munitions;
 
 namespace StrikeforceInfinity.Game.Weapons

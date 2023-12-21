@@ -1,7 +1,7 @@
 ﻿using SharpDX.Direct2D1;
 using StrikeforceInfinity.Game.Engine;
-using StrikeforceInfinity.Game.Menus.BaseClasses;
-using StrikeforceInfinity.Game.TickControllers.BaseClasses;
+using StrikeforceInfinity.Game.Menus.BasesAndInterfaces;
+using StrikeforceInfinity.Game.TickControllers.BasesAndInterfaces;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -4,6 +4,7 @@ using StrikeforceInfinity.Game.Engine.GraphicsProcessing;
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Menus;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -12,7 +13,7 @@ namespace StrikeforceInfinity.Game.Engine
     /// <summary>
     /// The core game engine. Containd the controllers and managers.
     /// </summary>
-    internal class EngineCore
+    internal class EngineCore : IDisposable
     {
         public SituationsTickController Situations { get; private set; }
         public EventsTickController Events { get; private set; }
@@ -176,5 +177,10 @@ namespace StrikeforceInfinity.Game.Engine
         public void TogglePause() => _worldClock.TogglePause();
         public void Pause() => _worldClock.Pause();
         public void Resume() => _worldClock.Resume();
+
+        public void Dispose()
+        {
+            Multiplay.Dispose();
+        }
     }
 }

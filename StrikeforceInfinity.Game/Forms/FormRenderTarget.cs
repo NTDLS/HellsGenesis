@@ -1,7 +1,7 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Sprites;
-using StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses;
+using StrikeforceInfinity.Game.Sprites.Enemies.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -64,8 +64,14 @@ namespace StrikeforceInfinity.Game
                 });
             };
 
-            Shown += (object sender, EventArgs e) => _gameCore.StartEngine();
-            FormClosing += (sender, e) => _gameCore.StopEngine();
+            Shown += (object sender, EventArgs e)
+                => _gameCore.StartEngine();
+
+            FormClosed += (sender, e) =>
+            {
+                _gameCore.StopEngine();
+                _gameCore.Dispose();
+            };
 
             drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
             drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
@@ -81,7 +87,6 @@ namespace StrikeforceInfinity.Game
                 drawingSurface.MouseMove += FormRenderTarget_MouseMove;
             }
         }
-
 
         #region Debug interactions.
         private void FormRenderTarget_MouseMove(object sender, MouseEventArgs e)

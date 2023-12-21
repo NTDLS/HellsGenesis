@@ -7,6 +7,26 @@ namespace StrikeforceInfinity.Shared
 {
     public static class SiUtility
     {
+        public delegate void TryAndIgnoreProc();
+        public delegate T TryAndIgnoreProc<T>();
+
+        /// <summary>
+        /// We didnt need that exception! Did we?... DID WE?!
+        /// </summary>
+        public static void TryAndIgnore(TryAndIgnoreProc func)
+        {
+            try { func(); } catch { }
+        }
+
+        /// <summary>
+        /// We didnt need that exception! Did we?... DID WE?!
+        /// </summary>
+        public static T? TryAndIgnore<T>(TryAndIgnoreProc<T> func)
+        {
+            try { return func(); } catch { }
+            return default;
+        }
+
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static string GetCurrentMethod()
         {

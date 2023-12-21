@@ -1,7 +1,7 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Menus;
-using StrikeforceInfinity.Game.TickControllers.BaseClasses;
+using StrikeforceInfinity.Game.TickControllers.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
 using static StrikeforceInfinity.Game.Engine.Types.SiEngineCallbackEvent;

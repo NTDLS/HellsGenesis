@@ -2,10 +2,10 @@
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Sprites;
-using StrikeforceInfinity.Game.Sprites.Enemies.Bosses.BaseClasses;
-using StrikeforceInfinity.Game.Sprites.Enemies.Peons.BaseClasses;
-using StrikeforceInfinity.Game.TickControllers.BaseClasses;
-using StrikeforceInfinity.Game.Weapons.BaseClasses;
+using StrikeforceInfinity.Game.Sprites.Enemies.Bosses.BasesAndInterfaces;
+using StrikeforceInfinity.Game.Sprites.Enemies.Peons.BasesAndInterfaces;
+using StrikeforceInfinity.Game.TickControllers.BasesAndInterfaces;
+using StrikeforceInfinity.Game.Weapons.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Weapons.Munitions;
 using System.Collections.Generic;
 
