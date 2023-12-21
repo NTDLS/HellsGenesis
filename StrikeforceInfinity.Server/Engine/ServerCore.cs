@@ -192,17 +192,21 @@ namespace StrikeforceInfinity.Server.Engine
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' is deleting the lobby: '{deleteLobby.LobbyUID}'");
 
-                /* TODO: Implement lobby deletion.
-                var lobby = Lobbies.GetByLobbyUID(register.LobbyUID);
+                var lobby = Lobbies.GetByLobbyUID(deleteLobby.LobbyUID);
                 if (lobby == null)
                 {
-                    Log.Exception($"The lobby was not found '{register.LobbyUID}'.");
+                    Log.Exception($"The lobby was not found '{deleteLobby.LobbyUID}'.");
                     return;
                 }
 
-                lobby.Register(connectionId);
-                session.SetCurrentLobby(register.LobbyUID);
-                */
+                var registeredConnectionIds = lobby.RegisteredConnections();
+                foreach (var registeredConnectionId in registeredConnectionIds)
+                {
+                    _messageServer.Notify(registeredConnectionId,
+                        new SiLobbyDeleted(deleteLobby.LobbyUID));
+                }
+
+                Lobbies.Delete(deleteLobby.LobbyUID);
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiRegisterToLobby register)

@@ -4,6 +4,6 @@ namespace StrikeforceInfinity.Sprites.BasesAndInterfaces
 {
     internal interface ISpriteDrone
     {
-        public void ApplyMultiPlayVector(SiSpriteVector vector);
+        public void ApplyMultiplayVector(SiSpriteVector vector);
     }
 }

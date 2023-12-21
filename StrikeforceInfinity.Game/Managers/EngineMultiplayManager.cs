@@ -221,7 +221,7 @@ namespace StrikeforceInfinity.Game.Managers
                     {
                         if (sprite is ISpriteDrone playerDrone)
                         {
-                            playerDrone.ApplyMultiPlayVector(vector);
+                            playerDrone.ApplyMultiplayVector(vector);
                         }
                         else
                         {
@@ -239,7 +239,12 @@ namespace StrikeforceInfinity.Game.Managers
         private void MessageClient_OnNotificationReceived(MessageClient client, Guid connectionId, IFramePayloadNotification payload)
         {
             //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiSituationLayout layoutDirective)
+            if (payload is SiLobbyDeleted lobbyDeleted)
+            {
+                //TODO: The client is waiting in a lobby that no longer exists. We should do something.
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiSituationLayout layoutDirective)
             {
                 //The server is telling us to initialize the layout using the supplied sprites and their states.
 

@@ -27,6 +27,14 @@ namespace StrikeforceInfinity.Server.Engine.Managers
             });
         }
 
+        public void Delete(Guid lobbyUID)
+        {
+            _collection.Use(o =>
+            {
+                o.Remove(lobbyUID);
+            });
+        }
+
         public Lobby? GetByLobbyUID(Guid lobbyUID)
         {
             return _collection.Use(o =>

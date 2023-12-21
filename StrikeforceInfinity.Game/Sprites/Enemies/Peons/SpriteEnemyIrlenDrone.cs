@@ -10,7 +10,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
             : base(gameCore)
         {
         }
-        public void ApplyMultiPlayVector(SiSpriteVector vector)
+        public void ApplyMultiplayVector(SiSpriteVector vector)
         {
             X = vector.X;
             Y = vector.Y;

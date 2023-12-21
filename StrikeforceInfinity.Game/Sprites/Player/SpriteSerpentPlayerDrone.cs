@@ -11,7 +11,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player
         {
         }
 
-        public void ApplyMultiPlayVector(SiSpriteVector vector)
+        public void ApplyMultiplayVector(SiSpriteVector vector)
         {
             X = vector.X;
             Y = vector.Y;

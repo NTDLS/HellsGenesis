@@ -5,9 +5,7 @@ using StrikeforceInfinity.Game.Situations.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Menus.SinglePlayer;
-using StrikeforceInfinity.Shared.Payload;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace StrikeforceInfinity.Menus.MultiPlayer.Host
 {

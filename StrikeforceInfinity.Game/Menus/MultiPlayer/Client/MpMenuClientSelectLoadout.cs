@@ -5,7 +5,6 @@ using StrikeforceInfinity.Game.Sprites.MenuItems;
 using StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Menus.MultiPlayer.Client;
-using StrikeforceInfinity.Menus.MultiPlayer.Host;
 using StrikeforceInfinity.Sprites.BasesAndInterfaces;
 using System.Linq;
 using System.Threading;

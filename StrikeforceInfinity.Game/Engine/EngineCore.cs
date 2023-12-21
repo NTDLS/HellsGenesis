@@ -4,7 +4,6 @@ using StrikeforceInfinity.Game.Engine.GraphicsProcessing;
 using StrikeforceInfinity.Game.Engine.Types;
 using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Menus;
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
