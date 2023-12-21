@@ -65,7 +65,7 @@ namespace StrikeforceInfinity.Game.Menus
             OnExecuteSelection += MenuStartNewGame_OnExecuteSelection;
         }
 
-        private void MenuStartNewGame_OnExecuteSelection(SpriteMenuItem item)
+        private bool MenuStartNewGame_OnExecuteSelection(SpriteMenuItem item)
         {
             if (item.Key == "SINGLE_PLAYER")
             {
@@ -77,6 +77,7 @@ namespace StrikeforceInfinity.Game.Menus
                 _gameCore.Multiplay.ConfigureConnection();
                 _gameCore.Menus.Insert(new MpMenuCreateOrJoinLobby(_gameCore));
             }
+            return true;
         }
     }
 }

@@ -114,6 +114,21 @@ namespace StrikeforceInfinity.Server.Engine.Objects
             });
         }
 
+        /// <summary>
+        /// Tells the server that the connections has left the lobby - but is still registered.
+        /// </summary>
+        /// <param name="connectionId"></param>
+        public void FlagConnectionAsLeftInLobby(Guid connectionId)
+        {
+            _registeredConnections.Use(o =>
+            {
+                if (o.TryGetValue(connectionId, out var state))
+                {
+                    state.IsWaitingInLobby = false;
+                }
+            });
+        }
+
         public int ConnectionsWaitingInLobbyCount()
         {
             return _registeredConnections.Use(o =>

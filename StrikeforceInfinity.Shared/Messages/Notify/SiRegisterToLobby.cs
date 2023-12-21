@@ -3,14 +3,13 @@
 namespace StrikeforceInfinity.Shared.Messages.Notify
 {
     /// <summary>
-    /// Tell the server that a connection has selected the lobby. This does not mean
-    /// that they have selected a loadout yet. That is denoted with a call to SetWaitingInLobby().
+    /// Tell the server that the host has requested the lobby be deleted.
     /// </summary>
-    public class SiRegisterToLobby : IFramePayloadNotification
+    public class SiDeleteLobby : IFramePayloadNotification
     {
         public Guid LobbyUID { get; set; }
 
-        public SiRegisterToLobby(Guid lobbyUID)
+        public SiDeleteLobby(Guid lobbyUID)
         {
             LobbyUID = lobbyUID;
         }

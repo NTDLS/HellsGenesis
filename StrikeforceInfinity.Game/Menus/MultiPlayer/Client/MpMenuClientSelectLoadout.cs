@@ -4,6 +4,8 @@ using StrikeforceInfinity.Game.Menus.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
 using StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Utility;
+using StrikeforceInfinity.Menus.MultiPlayer.Client;
+using StrikeforceInfinity.Menus.MultiPlayer.Host;
 using StrikeforceInfinity.Sprites.BasesAndInterfaces;
 using System.Linq;
 using System.Threading;
@@ -13,13 +15,13 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
     /// <summary>
     /// The menu that is displayed at game start to allow the player to select a loadout.
     /// </summary>
-    internal class SpMenuSelectLoadout : MenuBase
+    internal class MpMenuClientSelectLoadout : MenuBase
     {
         private readonly SpriteMenuItem _shipBlurb;
         private Timer _animationTimer;
         private SpritePlayerBase _selectedSprite;
 
-        public SpMenuSelectLoadout(EngineCore gameCore)
+        public MpMenuClientSelectLoadout(EngineCore gameCore)
             : base(gameCore)
         {
             var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
@@ -81,17 +83,22 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
             OnSelectionChanged += PlayerLoadoutMenu_OnSelectionChanged;
             OnExecuteSelection += PlayerLoadoutMenu_OnExecuteSelection;
             OnCleanup += PlayerLoadoutMenu_OnCleanup;
-            OnEscape += SpMenuSelectLoadout_OnEscape;
+            OnEscape += MpMenuClientSelectLoadout_OnEscape;
 
             VisibleSelectableItems().First().Selected = true;
 
             _animationTimer = new Timer(PlayerLoadoutMenu_Tick, null, 10, 10);
         }
 
-        private bool SpMenuSelectLoadout_OnEscape()
+        private bool MpMenuClientSelectLoadout_OnEscape()
         {
-            _gameCore.Menus.Insert(new SpMenuSituationSelect(_gameCore));
+            _gameCore.Menus.Insert(new MpMenuClientJoinLobby(_gameCore));
             return true;
+        }
+
+        private void PlayerLoadoutMenu_Tick(object sender)
+        {
+            _selectedSprite?.Rotate(1);
         }
 
         private void PlayerLoadoutMenu_OnCleanup()
@@ -107,9 +114,9 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
             if (item.UserData is SpritePlayerBase selectedSprite)
             {
                 _gameCore.Player.Sprite.ResetLoadout(selectedSprite.Loadout);
-                _gameCore.StartGame();
             }
 
+            _gameCore.Menus.Insert(new MpMenuClientLobbyWait(_gameCore));
             return true;
         }
 
@@ -120,11 +127,6 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
                 _shipBlurb.Text = selectedSprite.GetLoadoutHelpText();
                 _selectedSprite = selectedSprite;
             }
-        }
-
-        private void PlayerLoadoutMenu_Tick(object sender)
-        {
-            _selectedSprite?.Rotate(1);
         }
     }
 }

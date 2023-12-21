@@ -5,7 +5,9 @@ using StrikeforceInfinity.Game.Situations.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Menus.SinglePlayer;
+using StrikeforceInfinity.Shared.Payload;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace StrikeforceInfinity.Menus.MultiPlayer.Host
 {
@@ -59,11 +61,23 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
 
             OnSelectionChanged += SituationSelectMenu_OnSelectionChanged;
             OnExecuteSelection += SituationSelectMenu_OnExecuteSelection;
+            OnEscape += MpMenuHostSituationSelect_OnEscape;
 
             VisibleSelectableItems().First().Selected = true;
         }
 
-        private void SituationSelectMenu_OnExecuteSelection(SpriteMenuItem item)
+        private bool MpMenuHostSituationSelect_OnEscape()
+        {
+            //Create the game host on the server.
+            var lobbyUID = _gameCore.Multiplay.LobbyUID;
+            _gameCore.Multiplay.DeregisterLobbyUID();
+            _gameCore.Multiplay.DeleteLobby(lobbyUID);
+
+            _gameCore.Menus.Insert(new MpMenuHostCreateLobby(_gameCore));
+            return true;
+        }
+
+        private bool SituationSelectMenu_OnExecuteSelection(SpriteMenuItem item)
         {
             if (item.UserData is SituationBase situation)
             {
@@ -71,6 +85,7 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
                 _gameCore.Situations.Select(situation.GetType().Name);
                 _gameCore.Menus.Insert(new MpMenuHostSelectLoadout(_gameCore));
             }
+            return true;
         }
 
         private void SituationSelectMenu_OnSelectionChanged(SpriteMenuItem item)

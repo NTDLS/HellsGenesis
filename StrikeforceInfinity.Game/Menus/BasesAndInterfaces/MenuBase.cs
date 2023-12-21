@@ -42,7 +42,12 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
 
         public void InvokeSelectionChanged(SpriteMenuItem item) => OnSelectionChanged?.Invoke(item);
 
-        public delegate void ExecuteSelectionEvent(SpriteMenuItem item);
+        /// <summary>
+        /// The player hit enter to select the currently highlighted menu item.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns>Return true to close the current menu.</returns>
+        public delegate bool ExecuteSelectionEvent(SpriteMenuItem item);
         /// <summary>
         /// The player hit enter to select the currently highlighted menu item.
         /// </summary>
@@ -50,7 +55,11 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
         public event ExecuteSelectionEvent OnExecuteSelection;
 
 
-        internal delegate void EscapeEvent();
+        /// <summary>
+        /// The player has hit the escape key.
+        /// </summary>
+        /// <returns>Return true to close the current menu.</returns>
+        internal delegate bool EscapeEvent();
         /// <summary>
         /// The player has hit the escape key.
         /// </summary>
@@ -180,13 +189,17 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                 var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem && o.Selected == true select o).FirstOrDefault();
                 if (selectedItem != null)
                 {
-                    QueueForDelete();
-
                     //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
                     //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                     //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                     //  
-                    Task.Run(() => OnExecuteSelection?.Invoke(selectedItem));
+                    Task.Run(() => OnExecuteSelection?.Invoke(selectedItem)).ContinueWith(o =>
+                    {
+                        if (o.Result == true)
+                        {
+                            QueueForDelete();
+                        }
+                    });
                 }
             }
             else if (_gameCore.Input.IsKeyPressed(HgPlayerKey.Escape))
@@ -199,7 +212,13 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                 //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                 //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                 //  
-                Task.Run(() => OnEscape?.Invoke());
+                Task.Run(() => OnEscape?.Invoke()).ContinueWith(o =>
+                {
+                    if (o.Result == true)
+                    {
+                        QueueForDelete();
+                    }
+                });
             }
 
             if (_gameCore.Input.IsKeyPressed(HgPlayerKey.Right)

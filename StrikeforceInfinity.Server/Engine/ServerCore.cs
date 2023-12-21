@@ -188,6 +188,23 @@ namespace StrikeforceInfinity.Server.Engine
             }
 
             //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiDeleteLobby deleteLobby)
+            {
+                Log.Verbose($"ConnectionId: '{connectionId}' is deleting the lobby: '{deleteLobby.LobbyUID}'");
+
+                /* TODO: Implement lobby deletion.
+                var lobby = Lobbies.GetByLobbyUID(register.LobbyUID);
+                if (lobby == null)
+                {
+                    Log.Exception($"The lobby was not found '{register.LobbyUID}'.");
+                    return;
+                }
+
+                lobby.Register(connectionId);
+                session.SetCurrentLobby(register.LobbyUID);
+                */
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiRegisterToLobby register)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' registered for lobby: '{register.LobbyUID}'");
@@ -215,6 +232,20 @@ namespace StrikeforceInfinity.Server.Engine
                 }
 
                 lobby.FlagConnectionAsWaitingInLobby(connectionId);
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiLeftLobby)
+            {
+                Log.Verbose($"ConnectionId: '{connectionId}' has left the lobby.");
+
+                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
+                if (lobby == null)
+                {
+                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
+                    return;
+                }
+
+                lobby.FlagConnectionAsLeftInLobby(connectionId);
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiSituationLayout layoutDirective)

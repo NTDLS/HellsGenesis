@@ -5,6 +5,7 @@ using StrikeforceInfinity.Game.Sprites.MenuItems;
 using StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Utility;
 using StrikeforceInfinity.Menus.MultiPlayer.Host;
+using StrikeforceInfinity.Sprites.BasesAndInterfaces;
 using System.Linq;
 using System.Threading;
 
@@ -38,7 +39,9 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
             //Use reflection to get a list of possible player types.
-            var playerTypes = SiReflection.GetSubClassesOf<SpritePlayerBase>().OrderBy(o => o.Name).ToList();
+            var playerTypes = SiReflection.GetSubClassesOf<SpritePlayerBase>()
+                .Where(o => o is not ISpriteDrone)
+                .OrderBy(o => o.Name).ToList();
 
             //Move the debug player to the top of the list.
             var debugPlayer = playerTypes.Where(o => o.Name.Contains("Debug")).FirstOrDefault();
@@ -79,10 +82,22 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
             OnSelectionChanged += PlayerLoadoutMenu_OnSelectionChanged;
             OnExecuteSelection += PlayerLoadoutMenu_OnExecuteSelection;
             OnCleanup += PlayerLoadoutMenu_OnCleanup;
+            OnEscape += MpMenuHostSelectLoadout_OnEscape;
 
             VisibleSelectableItems().First().Selected = true;
 
             _animationTimer = new Timer(PlayerLoadoutMenu_Tick, null, 10, 10);
+        }
+
+        private bool MpMenuHostSelectLoadout_OnEscape()
+        {
+            _gameCore.Menus.Insert(new MpMenuHostSituationSelect(_gameCore));
+            return true;
+        }
+
+        private void PlayerLoadoutMenu_Tick(object sender)
+        {
+            _selectedSprite?.Rotate(1);
         }
 
         private void PlayerLoadoutMenu_OnCleanup()
@@ -90,7 +105,7 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
             _gameCore.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
         }
 
-        private void PlayerLoadoutMenu_OnExecuteSelection(SpriteMenuItem item)
+        private bool PlayerLoadoutMenu_OnExecuteSelection(SpriteMenuItem item)
         {
             _animationTimer.Change(Timeout.Infinite, Timeout.Infinite);
             _animationTimer.Dispose();
@@ -101,6 +116,7 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
             }
 
             _gameCore.Menus.Insert(new MpMenuHostLobbyWait(_gameCore));
+            return true;
         }
 
         private void PlayerLoadoutMenu_OnSelectionChanged(SpriteMenuItem item)
@@ -110,11 +126,6 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
                 _shipBlurb.Text = selectedSprite.GetLoadoutHelpText();
                 _selectedSprite = selectedSprite;
             }
-        }
-
-        private void PlayerLoadoutMenu_Tick(object sender)
-        {
-            _selectedSprite?.Rotate(1);
         }
     }
 }

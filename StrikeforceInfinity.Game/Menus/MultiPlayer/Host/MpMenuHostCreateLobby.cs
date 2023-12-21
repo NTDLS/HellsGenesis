@@ -45,9 +45,16 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
             offsetY += helpItem.Size.Height + 5;
 
             OnExecuteSelection += MenuMultiplayerHostOrJoin_OnExecuteSelection;
+            OnEscape += MpMenuHostCreateLobby_OnEscape;
         }
 
-        private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
+        private bool MpMenuHostCreateLobby_OnEscape()
+        {
+            _gameCore.Menus.Insert(new MpMenuCreateOrJoinLobby(_gameCore));
+            return true;
+        }
+
+        private bool MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
             if (!int.TryParse(textBoxMaxPlayers.Text, out int maxPlayers))
             {
@@ -55,11 +62,13 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
             }
 
             //Create the game host on the server.
-            var lobbyUID = _gameCore.Multiplay.CreateHost(new SiLobbyConfiguration(textBoxName.Text, maxPlayers));
+            var lobbyUID = _gameCore.Multiplay.CreateLobby(new SiLobbyConfiguration(textBoxName.Text, maxPlayers));
 
             _gameCore.Multiplay.RegisterLobbyUID(lobbyUID);
 
             _gameCore.Menus.Insert(new MpMenuHostSituationSelect(_gameCore));
+
+            return true;
         }
     }
 }

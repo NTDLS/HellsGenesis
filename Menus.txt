@@ -4,7 +4,9 @@
 			> StartGame!
 	> MpMenuCreateOrJoinLobby
 		> MpMenuClientJoinLobby
-			> MpMenuClientLobbyWait
+			> MpMenuClientSelectLoadout
+				> MpMenuClientLobbyWait
+					> [Wait on Server to Start]!
 		> MpMenuHostCreateLobby
 			> MpMenuHostSituationSelect
 				> MpMenuHostSelectLoadout

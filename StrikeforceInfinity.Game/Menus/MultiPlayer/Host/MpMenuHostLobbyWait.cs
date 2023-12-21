@@ -2,6 +2,7 @@
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
+using StrikeforceInfinity.Menus.SinglePlayer;
 using System.Timers;
 
 namespace StrikeforceInfinity.Menus.MultiPlayer.Host
@@ -49,6 +50,8 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
 
             OnExecuteSelection += MenuMultiplayerHostOrJoin_OnExecuteSelection;
             OnCleanup += MpMenuHostLobbyWait_OnCleanup;
+            OnEscape += MpMenuHostLobbyWait_OnEscape;
+
 
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
@@ -56,10 +59,11 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
             _gameCore.Multiplay.SetWaitingInLobby();
         }
 
-        private void MpMenuHostLobbyWait_OnCleanup()
+        private bool MpMenuHostLobbyWait_OnEscape()
         {
-            _timer.Stop();
-            _timer.Dispose();
+            _gameCore.Multiplay.SetLeftLobby();
+            _gameCore.Menus.Insert(new MpMenuHostSelectLoadout(_gameCore));
+            return true;
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -70,9 +74,16 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
             });
         }
 
-        private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
+        private void MpMenuHostLobbyWait_OnCleanup()
+        {
+            _timer.Stop();
+            _timer.Dispose();
+        }
+
+        private bool MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
             _gameCore.StartGame();
+            return true;
         }
     }
 }

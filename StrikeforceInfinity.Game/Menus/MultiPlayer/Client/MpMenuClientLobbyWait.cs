@@ -1,6 +1,7 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Menus.BasesAndInterfaces;
+using StrikeforceInfinity.Menus.SinglePlayer;
 
 namespace StrikeforceInfinity.Menus.MultiPlayer.Client
 {
@@ -28,6 +29,8 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Client
 
             _gameCore.Multiplay.SetWaitingInLobby();
 
+            OnEscape += MpMenuClientLobbyWait_OnEscape;
+
             /*
             var gameHosts = _gameCore.Multiplay.GetHostList();
             foreach (var gameHost in gameHosts)
@@ -47,9 +50,17 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Client
             */
         }
 
-        /*
-        private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
+        private bool MpMenuClientLobbyWait_OnEscape()
         {
+            _gameCore.Multiplay.SetLeftLobby();
+            _gameCore.Menus.Insert(new MpMenuClientSelectLoadout(_gameCore));
+            return true;
+        }
+
+        /*
+        private bool MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
+        {
+            return true;
         }
         */
     }

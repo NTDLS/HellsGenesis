@@ -39,13 +39,13 @@ namespace StrikeforceInfinity.Menus.MultiPlayer
             OnEscape += MenuMultiplayerHostOrJoin_OnEscape;
         }
 
-        private void MenuMultiplayerHostOrJoin_OnEscape()
+        private bool MenuMultiplayerHostOrJoin_OnEscape()
         {
-            QueueForDelete();
             _gameCore.Menus.Insert(new MenuStartNewGame(_gameCore));
+            return true;
         }
 
-        private void MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
+        private bool MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
             if (item.Key == "JOIN")
             {
@@ -57,6 +57,8 @@ namespace StrikeforceInfinity.Menus.MultiPlayer
                 _gameCore.Multiplay.SetPlayMode(HgPlayMode.MutiPlayerHost);
                 _gameCore.Menus.Insert(new MpMenuHostCreateLobby(_gameCore));
             }
+
+            return true;
         }
     }
 }

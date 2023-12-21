@@ -1,5 +1,6 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
+using StrikeforceInfinity.Game.Menus;
 using StrikeforceInfinity.Game.Menus.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Situations.BasesAndInterfaces;
 using StrikeforceInfinity.Game.Sprites.MenuItems;
@@ -58,11 +59,18 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
 
             OnSelectionChanged += SituationSelectMenu_OnSelectionChanged;
             OnExecuteSelection += SituationSelectMenu_OnExecuteSelection;
+            OnEscape += SpMenuSituationSelect_OnEscape;
 
             VisibleSelectableItems().First().Selected = true;
         }
 
-        private void SituationSelectMenu_OnExecuteSelection(SpriteMenuItem item)
+        private bool SpMenuSituationSelect_OnEscape()
+        {
+            _gameCore.Menus.Insert(new MenuStartNewGame(_gameCore));
+            return true;
+        }
+
+        private bool SituationSelectMenu_OnExecuteSelection(SpriteMenuItem item)
         {
             if (item.UserData is SituationBase situation)
             {
@@ -70,6 +78,7 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
                 _gameCore.Situations.Select(situation.GetType().Name);
                 _gameCore.Menus.Insert(new SpMenuSelectLoadout(_gameCore));
             }
+            return true;
         }
 
         private void SituationSelectMenu_OnSelectionChanged(SpriteMenuItem item)

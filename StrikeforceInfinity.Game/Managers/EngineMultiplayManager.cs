@@ -93,6 +93,15 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void SetPlayMode(HgPlayMode playMode) => PlayMode = playMode;
 
+        public void DeleteLobby(Guid lobbyUID)
+        {
+            LobbyUID = lobbyUID;
+            if (PlayMode != HgPlayMode.SinglePlayer)
+            {
+                Notify(new SiDeleteLobby(LobbyUID));
+            }
+        }
+
         public void RegisterLobbyUID(Guid lobbyUID)
         {
             LobbyUID = lobbyUID;
@@ -155,6 +164,14 @@ namespace StrikeforceInfinity.Game.Managers
             }
         }
 
+        public void SetLeftLobby()
+        {
+            if (PlayMode != HgPlayMode.SinglePlayer)
+            {
+                Notify(new SiLeftLobby());
+            }
+        }
+
         public void SetWaitingInLobby()
         {
             if (PlayMode != HgPlayMode.SinglePlayer)
@@ -169,7 +186,7 @@ namespace StrikeforceInfinity.Game.Managers
             return reply.Info;
         }
 
-        public Guid CreateHost(SiLobbyConfiguration gameHostConfiguration)
+        public Guid CreateLobby(SiLobbyConfiguration gameHostConfiguration)
         {
             var query = new SiCreateLobby()
             {
