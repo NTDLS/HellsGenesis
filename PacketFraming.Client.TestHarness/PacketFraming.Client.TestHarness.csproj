@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NTDLS.PacketFraming\NTDLS.PacketFraming.csproj" />
+    <ProjectReference Include="..\NTDLS.UDPPacketFraming\NTDLS.UDPPacketFraming.csproj" />
     <ProjectReference Include="..\PacketFraming.Test.Shared\PacketFraming.Test.Shared.csproj" />
   </ItemGroup>
 

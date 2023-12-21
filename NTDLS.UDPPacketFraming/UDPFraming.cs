@@ -1,44 +1,39 @@
 ﻿using NTDLS.Semaphore;
-using NTDLS.PacketFraming.Payloads;
-using NTDLS.PacketFraming.Payloads.Concrete;
+using NTDLS.UDPPacketFraming.Payloads;
+using NTDLS.UDPPacketFraming.Payloads.Concrete;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using static NTDLS.PacketFraming.Defaults;
-using System.Net.Sockets;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Net;
+using static NTDLS.UDPPacketFraming.Defaults;
 
-namespace NTDLS.PacketFraming
+namespace NTDLS.UDPPacketFraming
 {
     /// <summary>
-    /// Stream packets (especially TCP/IP) can be fragmented or combined. Framing rebuilds what was
-    /// originally written to the stream while also providing compression, CRC checking and optional encryption.
+    /// UDP packets can be fragmented or combined. Framing rebuilds what was
+    /// originally sent while also providing compression and CRC checking.
     /// </summary>
-    public static class Framing
+    public static class UDPFraming
     {
         /// <summary>
         /// The callback that is used to notify of the receipt of a notification frame.
         /// </summary>
         /// <param name="payload">The notification payload.</param>
-        public delegate void ProcessFrameNotificationCallback(IFramePayloadNotification payload);
+        public delegate void ProcessFrameNotificationCallback(IUDPPayloadNotification payload);
 
         private static readonly PessimisticSemaphore<Dictionary<string, MethodInfo>> _reflectioncache = new();
-
 
         #region Extension methods.
 
         /// <summary>
-        /// Waits on bytes to become available on the stream, reads those bytes then parses the available frames (if any) and calls the appropriate callbacks.
+        /// Waits on bytes to become available, reads those bytes then parses the available frames (if any) and calls the appropriate callbacks.
         /// </summary>
-        /// <param name="stream">The open stream that should be read from</param>
-        /// <param name="frameBuffer">The frame buffer that will be used to receive bytes from the stream.</param>
+        /// <param name="udpClient">The UPD client to receive daata from.</param>
+        /// <param name="frameBuffer">The frame buffer that will be used to receive bytes.</param>
         /// <param name="processNotificationCallback">Optional callback to call when a notification frame is received.</param>
-        /// <returns>Returns true if the stream is healthy, returns false if disconnected.</returns>
+        /// <returns>Returns true if bytes were received.</returns>
         /// <exception cref="Exception"></exception>
         public static bool ReadAndProcessFrames(this UdpClient udpClient, ref IPEndPoint endPoint, FrameBuffer frameBuffer,
             ProcessFrameNotificationCallback? processNotificationCallback = null)
@@ -48,13 +43,7 @@ namespace NTDLS.PacketFraming
                 throw new Exception("ReadAndProcessFrames: client can not be null.");
             }
 
-            var data = udpClient.Receive(ref endPoint);
-            if (data.Length == 0)
-            {
-                return false;
-            }
-
-            if (frameBuffer.ReadStream(data))
+            if (frameBuffer.ReadData(udpClient, ref endPoint))
             {
                 ProcessFrameBuffer(frameBuffer, processNotificationCallback);
                 return true;
@@ -64,12 +53,12 @@ namespace NTDLS.PacketFraming
         }
 
         /// <summary>
-        /// Sends a one-time fire-and-forget notification to the stream.
+        /// Sends a one-time fire-and-forget notification.
         /// </summary>
-        /// <param name="stream">The open stream that will be written to.</param>
-        /// <param name="framePayload">The notification payload that will be written to the stream.</param>
+        /// <param name="udpClient">The client to send the data on.</param>
+        /// <param name="framePayload">The notification payload that will be sent.</param>
         /// <exception cref="Exception"></exception>
-        public static void WriteNotificationFrame(this UdpClient udpClient, string ipAddress, int port, IFramePayloadNotification framePayload)
+        public static void WriteNotificationFrame(this UdpClient udpClient, string ipAddress, int port, IUDPPayloadNotification framePayload)
         {
             var frameBody = new FrameBody(framePayload);
 
@@ -82,8 +71,8 @@ namespace NTDLS.PacketFraming
         /// Sends a one-time fire-and-forget byte array payload. These are and handled in processNotificationCallback().
         /// When a raw byte array is use, all json serilization is skipped and checks for this payload type are prioritized for performance.
         /// </summary>
-        /// <param name="stream">The open stream that will be written to.</param>
-        /// <param name="framePayload">The bytes will make up the body of the frame which is written to the stream.</param>
+        /// <param name="udpClient">The client to send the data on.</param>
+        /// <param name="framePayload">The bytes will make up the body of the frame which is written.</param>
         /// <exception cref="Exception"></exception>
         public static void WriteBytesFrame(this UdpClient udpClient, string ipAddress, int port, byte[] framePayload)
         {
@@ -199,7 +188,7 @@ namespace NTDLS.PacketFraming
 
                 var framePayload = ExtractFramePayload(frameBody);
 
-                if (framePayload is FramePayloadBytes frameNotificationBytes)
+                if (framePayload is UDPFramePayloadBytes frameNotificationBytes)
                 {
                     if (processNotificationCallback == null)
                     {
@@ -207,7 +196,7 @@ namespace NTDLS.PacketFraming
                     }
                     processNotificationCallback(frameNotificationBytes);
                 }
-                else if (framePayload is IFramePayloadNotification notification)
+                else if (framePayload is IUDPPayloadNotification notification)
                 {
                     if (processNotificationCallback == null)
                     {
@@ -229,11 +218,11 @@ namespace NTDLS.PacketFraming
         /// <param name="frame"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        private static IFramePayload ExtractFramePayload(FrameBody frame)
+        private static IUDPFramePayload ExtractFramePayload(FrameBody frame)
         {
             if (frame.ObjectType == "byte[]")
             {
-                return new FramePayloadBytes(frame.Bytes);
+                return new UDPFramePayloadBytes(frame.Bytes);
             }
 
             var genericToObjectMethod = _reflectioncache.Use((o) =>
@@ -249,7 +238,7 @@ namespace NTDLS.PacketFraming
 
             if (genericToObjectMethod != null)
             {
-                return (IFramePayload?)genericToObjectMethod.Invoke(null, new object[] { json })
+                return (IUDPFramePayload?)genericToObjectMethod.Invoke(null, new object[] { json })
                     ?? throw new Exception($"ExtractFramePayload: Payload can not be null.");
             }
 
@@ -263,7 +252,7 @@ namespace NTDLS.PacketFraming
 
             _reflectioncache.Use((o) => o.TryAdd(frame.ObjectType, genericToObjectMethod));
 
-            return (IFramePayload?)genericToObjectMethod.Invoke(null, new object[] { json })
+            return (IUDPFramePayload?)genericToObjectMethod.Invoke(null, new object[] { json })
                 ?? throw new Exception($"ExtractFramePayload: Payload can not be null.");
         }
     }

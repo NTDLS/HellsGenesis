@@ -1,4 +1,4 @@
-﻿namespace NTDLS.PacketFraming
+﻿namespace NTDLS.UDPPacketFraming
 {
     internal static class CRC16
     {

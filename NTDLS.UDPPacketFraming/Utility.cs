@@ -7,7 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Runtime.CompilerServices;
 
-namespace NTDLS.PacketFraming
+namespace NTDLS.UDPPacketFraming
 {
     internal static class Utility
     {

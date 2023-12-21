@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
-using NTDLS.PacketFraming.Payloads;
+using NTDLS.UDPPacketFraming.Payloads;
 using ProtoBuf;
 using System;
 using System.Text;
 
-namespace NTDLS.PacketFraming
+namespace NTDLS.UDPPacketFraming
 {
     /// <summary>
-    /// Comprises the bosy of the frame. Contains the payload and all information needed to deserialize it.
+    /// Comprises the body of the frame. Contains the payload and all information needed to deserialize it.
     /// </summary>
     [Serializable]
     [ProtoContract]
@@ -35,7 +35,7 @@ namespace NTDLS.PacketFraming
         /// Instanciates a frame payload with a serialized payload.
         /// </summary>
         /// <param name="framePayload"></param>
-        public FrameBody(IFramePayload framePayload)
+        public FrameBody(IUDPFramePayload framePayload)
         {
             ObjectType = framePayload.GetType()?.AssemblyQualifiedName ?? string.Empty;
             Bytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(framePayload));

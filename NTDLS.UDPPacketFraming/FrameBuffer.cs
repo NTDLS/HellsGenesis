@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Net.Sockets;
+using System.Net;
 
-namespace NTDLS.PacketFraming
+namespace NTDLS.UDPPacketFraming
 {
     /// <summary>
-    /// Auto-resizing frame buffer for stream receiving and stream frame reassembly.
+    /// Auto-resizing frame buffer for receiving and frame reassembly.
     /// </summary>
     public class FrameBuffer
     {
@@ -42,16 +44,16 @@ namespace NTDLS.PacketFraming
         /// </summary>
         public int FrameBuilderLength = 0;
 
-        internal bool ReadStream(byte[] stream)
+        internal bool ReadData(UdpClient udpClient, ref IPEndPoint endPoint)
         {
             try
             {
-                ReceiveBuffer = stream;
-                ReceiveBufferUsed = stream.Length;
+                ReceiveBuffer = udpClient.Receive(ref endPoint);
+                ReceiveBufferUsed = ReceiveBuffer.Length;
 
                 if (ReceiveBufferUsed == 0)
                 {
-                    return false; //Graceful stream disconnect.
+                    return false; //Graceful disconnect.
                 }
                 if (ReceiveBufferUsed == ReceiveBuffer.Length && ReceiveBufferUsed < MaxReceiveBufferSize)
                 {

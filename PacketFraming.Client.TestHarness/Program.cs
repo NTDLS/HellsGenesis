@@ -1,4 +1,4 @@
-﻿using NTDLS.PacketFraming;
+﻿using NTDLS.UDPPacketFraming;
 using PacketFraming.Test.Shared;
 using System.Net.Sockets;
 

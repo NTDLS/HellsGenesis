@@ -1,5 +1,5 @@
-﻿using NTDLS.PacketFraming;
-using NTDLS.PacketFraming.Payloads;
+﻿using NTDLS.UDPPacketFraming;
+using NTDLS.UDPPacketFraming.Payloads;
 using PacketFraming.Test.Shared;
 using System.Net;
 using System.Net.Sockets;
@@ -34,7 +34,7 @@ namespace PacketFraming.Server.TestHarness
             thread.Start();
         }
 
-        private static void ProcessFrameNotificationCallback(IFramePayloadNotification payload)
+        private static void ProcessFrameNotificationCallback(IUDPPayloadNotification payload)
         {
             if (payload is MyFirstUPDPacket myFirstUPDPacket)
             {

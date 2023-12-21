@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Server"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Shared", "StrikeforceInfinity.Shared\StrikeforceInfinity.Shared.csproj", "{DD34E270-9942-4E5A-A88E-9A467F05FB6D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTDLS.PacketFraming", "NTDLS.PacketFraming\NTDLS.PacketFraming.csproj", "{8A0F62CA-3496-48C2-93A9-64933C7BB58F}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StreamTesting", "StreamTesting", "{AD388756-3B33-4C37-92A4-B63AB984FF15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacketFraming.Client.TestHarness", "PacketFraming.Client.TestHarness\PacketFraming.Client.TestHarness.csproj", "{238BE98D-2D3F-4E31-AC18-851AAAC97FD8}"
@@ -24,6 +22,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PacketFraming.Server.TestHarness", "PacketFraming.Server.TestHarness\PacketFraming.Server.TestHarness.csproj", "{7458A060-EEA8-4D94-BA78-FD6E1A8974F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacketFraming.Test.Shared", "PacketFraming.Test.Shared\PacketFraming.Test.Shared.csproj", "{52282C6B-2550-4E0D-AC53-EC3589E9F010}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NTDLS.UDPPacketFraming", "NTDLS.UDPPacketFraming\NTDLS.UDPPacketFraming.csproj", "{2B0378E1-A6D1-4419-A101-EB81ED7FBCA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,10 +43,6 @@ Global
 		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A0F62CA-3496-48C2-93A9-64933C7BB58F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A0F62CA-3496-48C2-93A9-64933C7BB58F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A0F62CA-3496-48C2-93A9-64933C7BB58F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A0F62CA-3496-48C2-93A9-64933C7BB58F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{238BE98D-2D3F-4E31-AC18-851AAAC97FD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{238BE98D-2D3F-4E31-AC18-851AAAC97FD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{238BE98D-2D3F-4E31-AC18-851AAAC97FD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -59,6 +55,10 @@ Global
 		{52282C6B-2550-4E0D-AC53-EC3589E9F010}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52282C6B-2550-4E0D-AC53-EC3589E9F010}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52282C6B-2550-4E0D-AC53-EC3589E9F010}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B0378E1-A6D1-4419-A101-EB81ED7FBCA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B0378E1-A6D1-4419-A101-EB81ED7FBCA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B0378E1-A6D1-4419-A101-EB81ED7FBCA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B0378E1-A6D1-4419-A101-EB81ED7FBCA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +67,7 @@ Global
 		{238BE98D-2D3F-4E31-AC18-851AAAC97FD8} = {AD388756-3B33-4C37-92A4-B63AB984FF15}
 		{7458A060-EEA8-4D94-BA78-FD6E1A8974F2} = {AD388756-3B33-4C37-92A4-B63AB984FF15}
 		{52282C6B-2550-4E0D-AC53-EC3589E9F010} = {AD388756-3B33-4C37-92A4-B63AB984FF15}
+		{2B0378E1-A6D1-4419-A101-EB81ED7FBCA4} = {AD388756-3B33-4C37-92A4-B63AB984FF15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99D468A4-85E5-41AA-912F-A2435A154952}
