@@ -1,18 +1,14 @@
 ﻿using NTDLS.ReliableMessaging;
+using NTDLS.StreamFraming.Payloads;
+using NTDLS.UDPPacketFraming;
+using NTDLS.UDPPacketFraming.Payloads;
 using StrikeforceInfinity.Server.Engine.Managers;
 using StrikeforceInfinity.Shared;
 using StrikeforceInfinity.Shared.Messages.Notify;
 using StrikeforceInfinity.Shared.Messages.Query;
 using StrikeforceInfinity.Shared.Payload;
-using System.Net.Sockets;
 using System.Net;
-using System.Text;
-using ProtoBuf.WellKnownTypes;
-using NTDLS.StreamFraming.Payloads;
-using NTDLS.UDPPacketFraming;
-using NTDLS.UDPPacketFraming.Payloads;
-using StrikeforceInfinity.Server.Engine.Objects;
-using System.Net.Http;
+using System.Net.Sockets;
 
 namespace StrikeforceInfinity.Server.Engine
 {
@@ -147,7 +143,7 @@ namespace StrikeforceInfinity.Server.Engine
                 //------------------------------------------------------------------------------------------------------------------------------
                 else if (payload is SiConfigure configure)
                 {
-                    Log.Verbose($"ConnectionId: '{connectionId}' requested configuration.");
+                    Log.Verbose($"ConnectionId: '{connectionId}' configuration (v{configure.ClientVersion}).");
 
                     var session = Sessions.GetByConnectionId(connectionId);
                     if (session == null)

@@ -3,8 +3,6 @@ using StrikeforceInfinity.Game.Engine.Types.Geometry;
 using StrikeforceInfinity.Game.Sprites.Player.BaseClasses;
 using StrikeforceInfinity.Game.TickControllers.BaseClasses;
 using StrikeforceInfinity.Game.Utility.ExtensionMethods;
-using StrikeforceInfinity.Shared.Messages.Notify;
-using System;
 
 namespace StrikeforceInfinity.Game.Controller
 {
@@ -264,7 +262,7 @@ namespace StrikeforceInfinity.Game.Controller
 
             var multiplayVector = Sprite.GetMultiplayVector();
             if (multiplayVector != null)
-                {
+            {
                 _gameCore.Multiplay.RecordSpriteVector(multiplayVector);
             }
 

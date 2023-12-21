@@ -1,4 +1,5 @@
 ﻿using NTDLS.StreamFraming.Payloads;
+using StrikeforceInfinity.Shared.Payload;
 
 namespace StrikeforceInfinity.Shared.Messages.Query
 {
@@ -8,7 +9,16 @@ namespace StrikeforceInfinity.Shared.Messages.Query
     /// a notification to the server with all and applicable spites to that
     /// the newcommer can come up to speed.
     /// </summary>
-    public class SiRequestSituationLayout : IFramePayloadNotification
+    public class SiRequestCurrentSituationLayout : IFramePayloadQuery
     {
+        public SiRequestCurrentSituationLayout()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class SiRequestCurrentSituationLayoutReply : IFramePayloadQueryReply
+    {
+        public List<SiSpriteLayout> Sprites { get; set; } = new();
     }
 }

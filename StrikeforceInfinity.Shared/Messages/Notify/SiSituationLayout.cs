@@ -9,6 +9,6 @@ namespace StrikeforceInfinity.Shared.Messages.Query
     /// </summary>
     public class SiSituationLayout : IFramePayloadNotification
     {
-        public List<SiSpriteLayout> SpriteLayouts { get; set; } = new();
+        public List<SiSpriteLayout> Sprites { get; set; } = new();
     }
 }

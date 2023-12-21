@@ -1,9 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using StrikeforceInfinity.Server.Engine;
 using StrikeforceInfinity.Shared;
-using System.Net.Sockets;
-using System.Net;
-using System.Text;
 using Topshelf;
 
 namespace StrikeforceInfinity.Server

@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Security.Policy;
 
 namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
 {

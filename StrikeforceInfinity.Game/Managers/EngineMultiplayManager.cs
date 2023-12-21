@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace StrikeforceInfinity.Game.Managers
@@ -20,8 +21,10 @@ namespace StrikeforceInfinity.Game.Managers
     /// </summary>
     internal class EngineMultiplayManager
     {
-        private int _clientListenUdpPort;
-
+        /// <summary>
+        /// This is the UDP port that the client will listen on. This is communicated to the server via ConfigureConnection().
+        /// </summary>
+        private readonly int _clientListenUdpPort = UdpMessageManager.GetRandomUnusedUDPPort(5000, 8000);
         public MultiplayState State { get; private set; } = new();
         public HgPlayMode PlayMode { get; private set; }
         public Guid LobbyUID { get; private set; } = Guid.Empty;
@@ -62,13 +65,20 @@ namespace StrikeforceInfinity.Game.Managers
         public EngineMultiplayManager(EngineCore gameCore)
         {
             _gameCore = gameCore;
-            _clientListenUdpPort = UdpMessageManager.GetRandomUnusedUDPPort(5000, 8000);
         }
 
+        /// <summary>
+        /// Tells the server about the client and gets any applicable settings from the server.
+        /// </summary>
         public void ConfigureConnection()
         {
+            var assembly = Assembly.GetExecutingAssembly();
+            Version version = assembly.GetName().Version;
+
             var query = new SiConfigure()
             {
+                ClientLocalTime = DateTime.Now,
+                ClientVersion = version,
                 ClientListenUdpPort = _clientListenUdpPort
             };
 
@@ -131,7 +141,7 @@ namespace StrikeforceInfinity.Game.Managers
             //--------------------------------------------------------------------------------------
             MessageClient.Notify(new SiSituationLayout()
             {
-                SpriteLayouts = spriteLayouts
+                Sprites = spriteLayouts
             });
         }
 
@@ -210,7 +220,7 @@ namespace StrikeforceInfinity.Game.Managers
 
                 _gameCore.Sprites.Enemies.DeleteAll();
 
-                foreach (var spriteInfo in layoutDirective.SpriteLayouts)
+                foreach (var spriteInfo in layoutDirective.Sprites)
                 {
                     Debug.WriteLine($"Adding Sprite: {spriteInfo.MultiplayUID}->'{spriteInfo.FullTypeName}'");
 
@@ -228,11 +238,6 @@ namespace StrikeforceInfinity.Game.Managers
                         _ => throw new InvalidOperationException("Unhandled PlayMode")
                     };
                 }
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiRequestSituationLayout)
-            {
-                //TODO: Send current sprite layout...
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else

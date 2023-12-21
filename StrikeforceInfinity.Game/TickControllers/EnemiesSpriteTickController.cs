@@ -4,7 +4,6 @@ using StrikeforceInfinity.Game.Managers;
 using StrikeforceInfinity.Game.Sprites.Enemies.BaseClasses;
 using StrikeforceInfinity.Game.TickControllers.BaseClasses;
 using StrikeforceInfinity.Game.Utility;
-using StrikeforceInfinity.Shared.Messages.Notify;
 using System;
 
 namespace StrikeforceInfinity.Game.Controller

@@ -1,5 +1,4 @@
-﻿using StrikeforceInfinity.Engine;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace StrikeforceInfinity.Game.Engine
