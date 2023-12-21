@@ -35,7 +35,7 @@ namespace StrikeforceInfinity.Server.Engine.Managers
             CycleLog();
         }
 
-        public void Stop()
+        public void Shutdown()
         {
             Close();
         }

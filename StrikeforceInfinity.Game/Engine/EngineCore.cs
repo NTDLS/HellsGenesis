@@ -13,7 +13,7 @@ namespace StrikeforceInfinity.Game.Engine
     /// <summary>
     /// The core game engine. Containd the controllers and managers.
     /// </summary>
-    internal class EngineCore : IDisposable
+    internal class EngineCore
     {
         public SituationsTickController Situations { get; private set; }
         public EventsTickController Events { get; private set; }
@@ -161,13 +161,14 @@ namespace StrikeforceInfinity.Game.Engine
             }
         }
 
-        public void StopEngine()
+        public void ShutdownEngine()
         {
             if (IsRunning)
             {
+                Multiplay.Shutdown();
                 IsRunning = false;
-                _worldClock.Stop();
-                Sprites.Stop();
+                _worldClock.Shutdown();
+                Sprites.Shutdown();
                 OnStopEngine?.Invoke(this);
                 Rendering.Cleanup();
             }
@@ -177,10 +178,5 @@ namespace StrikeforceInfinity.Game.Engine
         public void TogglePause() => _worldClock.TogglePause();
         public void Pause() => _worldClock.Pause();
         public void Resume() => _worldClock.Resume();
-
-        public void Dispose()
-        {
-            Multiplay.Dispose();
-        }
     }
 }

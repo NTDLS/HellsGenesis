@@ -14,9 +14,8 @@ namespace StrikeforceInfinity.Game
 {
     public partial class FormRenderTarget : Form
     {
-        readonly List<SpriteBase> highlightedSprites = new();
-        private readonly ToolTip _interrogationTip = new ToolTip();
-
+        private readonly List<SpriteBase> highlightedSprites = new();
+        private readonly ToolTip _interrogationTip = new();
         private readonly EngineCore _gameCore;
         private readonly bool _fullScreen = false;
 
@@ -67,11 +66,8 @@ namespace StrikeforceInfinity.Game
             Shown += (object sender, EventArgs e)
                 => _gameCore.StartEngine();
 
-            FormClosed += (sender, e) =>
-            {
-                _gameCore.StopEngine();
-                _gameCore.Dispose();
-            };
+            FormClosed += (sender, e)
+                => _gameCore.ShutdownEngine();
 
             drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
             drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };

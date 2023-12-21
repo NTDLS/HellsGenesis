@@ -69,7 +69,7 @@ namespace StrikeforceInfinity.Server
                     if (_semaphoreToRequestStop.Wait(500))
                     {
                         ServerCore.Log.Write($"Stopping...");
-                        ServerCore.Stop();
+                        ServerCore.Shutdown();
                         break;
                     }
                 }

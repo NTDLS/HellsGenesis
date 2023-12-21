@@ -75,7 +75,7 @@ namespace StrikeforceInfinity.Game.Managers
             _gameCore.Audio.BackgroundMusicSound.Play();
         }
 
-        public void Stop()
+        public void Shutdown()
         {
         }
 

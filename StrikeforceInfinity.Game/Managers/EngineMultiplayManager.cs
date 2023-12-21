@@ -21,7 +21,7 @@ namespace StrikeforceInfinity.Game.Managers
     /// <summary>
     /// Contains everything you need to manage multiplayer functionality.
     /// </summary>
-    internal class EngineMultiplayManager : IDisposable
+    internal class EngineMultiplayManager
     {
         /// <summary>
         /// This is the UDP port that the client will listen on. This is communicated to the server via ConfigureConnection().
@@ -317,7 +317,7 @@ namespace StrikeforceInfinity.Game.Managers
             }
         }
 
-        public void Dispose()
+        public void Shutdown()
         {
             SiUtility.TryAndIgnore(() => _udpManager?.Shutdown());
             SiUtility.TryAndIgnore(() => _messageClient?.Disconnect());

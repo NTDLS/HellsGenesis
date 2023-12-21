@@ -29,7 +29,7 @@ namespace StrikeforceInfinity.Game.Engine
             _graphicsThread.Start();
         }
 
-        public void Stop()
+        public void Shutdown()
         {
             _shutdown = true;
             _graphicsThread.Join();

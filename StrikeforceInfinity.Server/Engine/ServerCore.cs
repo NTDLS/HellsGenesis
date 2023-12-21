@@ -12,19 +12,19 @@ using System.Net.Sockets;
 
 namespace StrikeforceInfinity.Server.Engine
 {
-    internal class ServerCore : IDisposable
+    internal class ServerCore
     {
         /// <summary>
         /// A list of IPaddress endpoints for all connections, these are used for UDP sending.
         /// </summary>
         private readonly Dictionary<Guid, IPEndPoint> _activeEndpoints = new();
+        private readonly MessageServer _messageServer = new();
+        private readonly UdpMessageManager _udpManager;
+
         public LogManager Log { get; private set; }
         public SessionManager Sessions { get; private set; }
         public LobbyManager Lobbies { get; private set; }
         public SiSettings Settings { get; private set; }
-
-        readonly MessageServer _messageServer = new();
-        readonly UdpMessageManager _udpManager;
 
         public ServerCore(SiSettings settings)
         {
@@ -45,8 +45,6 @@ namespace StrikeforceInfinity.Server.Engine
             _messageServer.OnDisconnected += MessageServer_OnDisconnected;
             _messageServer.OnNotificationReceived += MessageServer_OnNotificationReceived;
             _messageServer.OnQueryReceived += MessageServer_OnQueryReceived;
-
-            //LetsTryUDP();
         }
 
         private void UdpMessageManager_ProcessNotificationCallback(IUDPPayloadNotification payload)
@@ -278,11 +276,7 @@ namespace StrikeforceInfinity.Server.Engine
             _activeEndpoints.Remove(connectionId);
         }
 
-        public void Stop()
-        {
-        }
-
-        public void Dispose()
+        public void Shutdown()
         {
             SiUtility.TryAndIgnore(() => _messageServer?.Stop());
             SiUtility.TryAndIgnore(() => _udpManager?.Shutdown());
