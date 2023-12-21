@@ -1,9 +1,8 @@
 ﻿using StrikeforceInfinity.Game.Engine;
 using StrikeforceInfinity.Game.Engine.Types.Geometry;
-using static StrikeforceInfinity.Game.Sprites.SpriteAnimation;
-using System.Drawing;
 using StrikeforceInfinity.Game.Utility;
 using System;
+using System.Drawing;
 
 namespace StrikeforceInfinity.Game.Sprites.Player.BaseClasses
 {
