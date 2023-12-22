@@ -320,7 +320,7 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
 
         public void SetTransformAngle(RenderTarget renderTarget, RawRectangleF rect, double angle, RawMatrix3x2? existimMatrix = null)
         {
-            angle = HgMath.DegreesToRadians(angle);
+            angle = SiMath.DegreesToRadians(angle);
 
             float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
             float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;

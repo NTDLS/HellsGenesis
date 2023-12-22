@@ -43,9 +43,9 @@ namespace StrikeforceInfinity.Game.Controller
 
         #region Factories.
 
-        public SiEngineCallbackEvent Create(TimeSpan countdown, HgOnExecute executeCallback, object refObj,
-            HgCallbackEventMode callbackEventMode = HgCallbackEventMode.OneTime,
-            HgCallbackEventAsync callbackEventAsync = HgCallbackEventAsync.Synchronous)
+        public SiEngineCallbackEvent Create(TimeSpan countdown, SiOnExecute executeCallback, object refObj,
+            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
+            SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
         {
             lock (Collection)
             {
@@ -55,7 +55,7 @@ namespace StrikeforceInfinity.Game.Controller
             }
         }
 
-        public SiEngineCallbackEvent Create(TimeSpan countdown, HgOnExecute executeCallback, object refObj)
+        public SiEngineCallbackEvent Create(TimeSpan countdown, SiOnExecute executeCallback, object refObj)
         {
             lock (Collection)
             {
@@ -65,7 +65,7 @@ namespace StrikeforceInfinity.Game.Controller
             }
         }
 
-        public SiEngineCallbackEvent Create(TimeSpan countdown, HgOnExecute executeCallback)
+        public SiEngineCallbackEvent Create(TimeSpan countdown, SiOnExecute executeCallback)
         {
             lock (Collection)
             {

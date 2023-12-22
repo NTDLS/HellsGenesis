@@ -158,7 +158,7 @@ namespace StrikeforceInfinity.Game.Engine
                 _gameCore.Player.Sprite.ShipEngineRoarSound.Stop();
             }
 
-            if (_gameCore.Situations?.CurrentSituation?.State == HgSituationState.Started)
+            if (_gameCore.Situations?.CurrentSituation?.State == SiSituationState.Started)
             {
                 //situation = $"{_gameCore.Situations.CurrentSituation.Name} (Wave {_gameCore.Situations.CurrentSituation.CurrentWave} of {_gameCore.Situations.CurrentSituation.TotalWaves})";
                 string situation = $"{_gameCore.Situations.CurrentSituation.Name}";

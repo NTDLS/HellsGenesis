@@ -66,7 +66,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
         private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
         private readonly int _millisecondsBetweenDecisions = 2000;
         private readonly SiNormalizedAngle _evasiveLoopTargetAngle = new();
-        private HgRelativeDirection _evasiveLoopDirection;
+        private SiRelativeDirection _evasiveLoopDirection;
         private double _departureAngle = 0;
 
         #endregion
@@ -92,7 +92,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
             Network = _gameCore.Assets.GetNeuralNetwork(_assetPath) ?? TrainNetwork();
         }
 
-        private void Owner_OnHit(SpriteBase sender, HgDamageType damageType, int damageAmount)
+        private void Owner_OnHit(SpriteBase sender, SiDamageType damageType, int damageAmount)
         {
             if (sender.HullHealth <= 10)
             {
@@ -108,7 +108,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
             {
                 case AIActivity.EvasiveLoop:
                     _evasiveLoopTargetAngle.Degrees = _owner.Velocity.Angle.Degrees + 180;
-                    _evasiveLoopDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
+                    _evasiveLoopDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
                     _owner.Velocity.ThrottlePercentage = 1.0;
                     _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, 250);
                     break;
@@ -186,7 +186,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
                 double distanceToPlayer = _owner.DistanceTo(_observedObject);
                 if (distanceToPlayer < 500)
                 {
-                    if (HgRandom.FlipCoin())
+                    if (SiRandom.FlipCoin())
                     {
                         _owner.Velocity.Angle.Degrees++;
                     }

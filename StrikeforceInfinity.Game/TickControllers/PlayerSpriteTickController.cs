@@ -32,7 +32,7 @@ namespace StrikeforceInfinity.Game.Controller
 
             if (Sprite.Visable)
             {
-                if (GameCore.Input.IsKeyPressed(HgPlayerKey.PrimaryFire))
+                if (GameCore.Input.IsKeyPressed(SiPlayerKey.PrimaryFire))
                 {
                     if (Sprite.PrimaryWeapon != null && Sprite.PrimaryWeapon.Fire())
                     {
@@ -47,7 +47,7 @@ namespace StrikeforceInfinity.Game.Controller
                     }
                 }
 
-                if (GameCore.Input.IsKeyPressed(HgPlayerKey.SecondaryFire))
+                if (GameCore.Input.IsKeyPressed(SiPlayerKey.SecondaryFire))
                 {
                     if (Sprite.SelectedSecondaryWeapon != null && Sprite.SelectedSecondaryWeapon.Fire())
                     {
@@ -66,7 +66,7 @@ namespace StrikeforceInfinity.Game.Controller
                 if (GameCore.Settings.LockPlayerAngleToNearbyEnemy)
                 {
                     #region //This needs some work. It works, but its odd - the movement is rigid.
-                    if (GameCore.Input.IsKeyPressed(HgPlayerKey.RotateClockwise) == false && GameCore.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise) == false)
+                    if (GameCore.Input.IsKeyPressed(SiPlayerKey.RotateClockwise) == false && GameCore.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) == false)
                     {
                         if (_allowLockPlayerAngleToNearbyEnemy)
                         {
@@ -97,7 +97,7 @@ namespace StrikeforceInfinity.Game.Controller
                 }
 
                 //Make player boost "build up" and fade-in.
-                if (GameCore.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) && GameCore.Input.IsKeyPressed(HgPlayerKey.Forward)
+                if (GameCore.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && GameCore.Input.IsKeyPressed(SiPlayerKey.Forward)
                     && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false)
                 {
                     if (Sprite.Velocity.BoostPercentage < 1.0)
@@ -126,7 +126,7 @@ namespace StrikeforceInfinity.Game.Controller
                         }
                     }
 
-                    if (GameCore.Input.IsKeyPressed(HgPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < GameCore.Settings.MaxPlayerBoostAmount)
+                    if (GameCore.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < GameCore.Settings.MaxPlayerBoostAmount)
                     {
                         Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Box(0, GameCore.Settings.MaxPlayerBoostAmount);
 
@@ -138,7 +138,7 @@ namespace StrikeforceInfinity.Game.Controller
                 }
 
                 //Make player thrust "build up" and fade-in.
-                if (GameCore.Input.IsKeyPressed(HgPlayerKey.Forward))
+                if (GameCore.Input.IsKeyPressed(SiPlayerKey.Forward))
                 {
                     if (Sprite.Velocity.ThrottlePercentage < 1.0)
                     {
@@ -188,8 +188,8 @@ namespace StrikeforceInfinity.Game.Controller
                 if (Sprite.BoostAnimation != null)
                 {
                     Sprite.BoostAnimation.Visable =
-                        GameCore.Input.IsKeyPressed(HgPlayerKey.SpeedBoost)
-                        && GameCore.Input.IsKeyPressed(HgPlayerKey.Forward)
+                        GameCore.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
+                        && GameCore.Input.IsKeyPressed(SiPlayerKey.Forward)
                         && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false;
                 }
 
@@ -201,7 +201,7 @@ namespace StrikeforceInfinity.Game.Controller
 
                 if (Sprite.ThrustAnimation != null)
                 {
-                    Sprite.ThrustAnimation.Visable = GameCore.Input.IsKeyPressed(HgPlayerKey.Forward);
+                    Sprite.ThrustAnimation.Visable = GameCore.Input.IsKeyPressed(SiPlayerKey.Forward);
                 }
 
                 var thrustVector = Sprite.Velocity.MaxSpeed * (Sprite.Velocity.ThrottlePercentage + -Sprite.Velocity.RecoilPercentage);
@@ -235,11 +235,11 @@ namespace StrikeforceInfinity.Game.Controller
                 //We are going to restrict the rotation speed to a percentage of thrust.
                 var rotationSpeed = GameCore.Settings.MaxPlayerRotationSpeedDegrees * Sprite.Velocity.ThrottlePercentage;
 
-                if (GameCore.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise))
+                if (GameCore.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise))
                 {
                     Sprite.Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0));
                 }
-                else if (GameCore.Input.IsKeyPressed(HgPlayerKey.RotateClockwise))
+                else if (GameCore.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
                 {
                     Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
                 }

@@ -45,13 +45,13 @@ namespace StrikeforceInfinity.Game.Sprites
             _hitSound = _gameCore.Assets.GetAudio(_assetPathHitSound, 0.5f);
             _shieldHit = _gameCore.Assets.GetAudio(_assetPathshieldHit, 0.5f);
 
-            _selectedExplosionSoundIndex = HgRandom.Generator.Next(0, 1000) % _explosionSoundCount;
+            _selectedExplosionSoundIndex = SiRandom.Generator.Next(0, 1000) % _explosionSoundCount;
             _explodeSound = _gameCore.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{_selectedExplosionSoundIndex}.wav"), 1.0f);
 
-            _selectedExplosionAnimationIndex = HgRandom.Generator.Next(0, 1000) % _explosionAnimationCount;
+            _selectedExplosionAnimationIndex = SiRandom.Generator.Next(0, 1000) % _explosionAnimationCount;
             _explosionAnimation = new SpriteAnimation(_gameCore, Path.Combine(_assetPathExplosionAnimation, $"{_selectedExplosionAnimationIndex}.png"), new Size(256, 256));
 
-            _selectedHitExplosionAnimationIndex = HgRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
+            _selectedHitExplosionAnimationIndex = SiRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
             _hitExplosionAnimation = new SpriteAnimation(_gameCore, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
 
             _lockedOnImage = _gameCore.Assets.GetBitmap(_assetPathlockedOnImage);
@@ -70,7 +70,7 @@ namespace StrikeforceInfinity.Game.Sprites
 
         public void CreateParticlesExplosion()
         {
-            _gameCore.Sprites.Particles.CreateRandomShipPartParticlesAt(this, HgRandom.Between(30, 50));
+            _gameCore.Sprites.Particles.CreateRandomShipPartParticlesAt(this, SiRandom.Between(30, 50));
             _gameCore.Audio.PlayRandomExplosion();
         }
 

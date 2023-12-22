@@ -11,7 +11,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player
         public SpriteDreadnaughtPlayer(EngineCore gameCore)
             : base(gameCore)
         {
-            ShipClass = HgPlayerClass.Dreadnaught;
+            ShipClass = SiPlayerClass.Dreadnaught;
 
             string imagePath = @$"Graphics\Player\Ships\{ShipClass}.png";
             Initialize(imagePath, new Size(32, 32));

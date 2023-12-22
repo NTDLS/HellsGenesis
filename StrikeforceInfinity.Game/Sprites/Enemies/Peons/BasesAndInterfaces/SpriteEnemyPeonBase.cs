@@ -25,7 +25,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons.BasesAndInterfaces
 
             var playMode = new SpriteAnimation.PlayMode()
             {
-                Replay = HgAnimationReplayMode.LoopedPlay,
+                Replay = SiAnimationReplayMode.LoopedPlay,
                 DeleteSpriteAfterPlay = false,
                 ReplayDelay = new TimeSpan(0)
             };
@@ -47,14 +47,14 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons.BasesAndInterfaces
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointRight = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
+                var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                 ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                 ThrustAnimation.X = X + pointRight.X;
                 ThrustAnimation.Y = Y + pointRight.Y;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointRight = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
+                var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                 BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                 BoostAnimation.X = X + pointRight.X;
                 BoostAnimation.Y = Y + pointRight.Y;
@@ -75,7 +75,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons.BasesAndInterfaces
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerClient)
+            if (_gameCore.Multiplay.PlayMode == SiPlayMode.MutiPlayerClient)
             {
                 return;
             }

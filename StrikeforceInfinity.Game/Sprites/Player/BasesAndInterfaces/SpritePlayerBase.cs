@@ -21,7 +21,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces
     internal class SpritePlayerBase : _SpriteShipBase
     {
         private readonly SiSpriteVector _multiplaySpriteVector = new();
-        public HgPlayerClass ShipClass { get; set; }
+        public SiPlayerClass ShipClass { get; set; }
         public PlayerShipLoadout Loadout { get; private set; }
         public SiAudioClip AmmoLowSound { get; private set; }
         public SiAudioClip AmmoEmptySound { get; private set; }
@@ -79,7 +79,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces
 
         public override SiSpriteVector GetMultiplayVector()
         {
-            if (_gameCore.Multiplay.PlayMode != HgPlayMode.SinglePlayer)
+            if (_gameCore.Multiplay.PlayMode != SiPlayMode.SinglePlayer)
             {
                 if ((DateTime.UtcNow - _multiplaySpriteVector.Timestamp).TotalMilliseconds >= _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs)
                 {
@@ -126,7 +126,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces
             return result;
         }
 
-        public PlayerShipLoadout LoadLoadoutFromFile(HgPlayerClass shipClass)
+        public PlayerShipLoadout LoadLoadoutFromFile(SiPlayerClass shipClass)
         {
             PlayerShipLoadout loadout = null;
 
@@ -220,7 +220,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces
                 {
                     var playMode = new SpriteAnimation.PlayMode()
                     {
-                        Replay = HgAnimationReplayMode.LoopedPlay,
+                        Replay = SiAnimationReplayMode.LoopedPlay,
                         DeleteSpriteAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
@@ -238,7 +238,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces
                 {
                     var playMode = new SpriteAnimation.PlayMode()
                     {
-                        Replay = HgAnimationReplayMode.LoopedPlay,
+                        Replay = SiAnimationReplayMode.LoopedPlay,
                         DeleteSpriteAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
@@ -257,7 +257,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces
             {
                 if (Visable)
                 {
-                    var pointBehind = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
+                    var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                     ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                     ThrustAnimation.X = X + pointBehind.X;
                     ThrustAnimation.Y = Y + pointBehind.Y;
@@ -268,7 +268,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces
             {
                 if (Visable)
                 {
-                    var pointBehind = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
+                    var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                     BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
                     BoostAnimation.X = X + pointBehind.X;
                     BoostAnimation.Y = Y + pointBehind.Y;
@@ -278,7 +278,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces
 
         public override bool TryMunitionHit(SiPoint displacementVector, MunitionBase munition, SiPoint hitTestPosition)
         {
-            if (munition.FiredFromType == HgFiredFromType.Enemy)
+            if (munition.FiredFromType == SiFiredFromType.Enemy)
             {
                 if (Intersects(hitTestPosition))
                 {
@@ -290,9 +290,9 @@ namespace StrikeforceInfinity.Game.Sprites.Player.BasesAndInterfaces
             return false;
         }
 
-        private void SpritePlayer_OnHit(SpriteBase sender, HgDamageType damageType, int damageAmount)
+        private void SpritePlayer_OnHit(SpriteBase sender, SiDamageType damageType, int damageAmount)
         {
-            if (damageType == HgDamageType.Shield)
+            if (damageType == SiDamageType.Shield)
             {
                 if (ShieldHealth == 0)
                 {

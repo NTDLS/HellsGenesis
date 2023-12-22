@@ -23,7 +23,7 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
             MaxSeekingObservationAngleDegrees = 20;
             SeekingRotationRateInDegrees = 4;
 
-            _selectedHitExplosionAnimationIndex = HgRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
+            _selectedHitExplosionAnimationIndex = SiRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
             _hitExplosionAnimation = new SpriteAnimation(_gameCore, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
         }
     }

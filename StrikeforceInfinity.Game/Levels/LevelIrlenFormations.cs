@@ -98,7 +98,7 @@ namespace StrikeforceInfinity.Game.Levels
 
         private void CreateTriangleFormation(SiPoint baseLocation, double spacing, int depth)
         {
-            double angle = HgMath.AngleTo360(baseLocation, _gameCore.Player.Sprite);
+            double angle = SiMath.AngleTo360(baseLocation, _gameCore.Player.Sprite);
 
             for (int col = 0; col < depth; col++)
             {

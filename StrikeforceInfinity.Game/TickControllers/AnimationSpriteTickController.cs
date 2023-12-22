@@ -34,7 +34,7 @@ namespace StrikeforceInfinity.Game.Controller
             {
                 animation.X = defaultPosition.X;
                 animation.Y = defaultPosition.Y;
-                animation.RotationMode = HgRotationMode.Rotate;
+                animation.RotationMode = SiRotationMode.Rotate;
                 SpriteManager.Collection.Add(animation);
             }
         }

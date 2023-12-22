@@ -37,14 +37,14 @@ namespace StrikeforceInfinity.Game.Weapons
 
                 if (RoundQuantity > 0)
                 {
-                    var pointRight = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(5, 5));
+                    var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(5, 5));
                     _gameCore.Sprites.Munitions.Create(this, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0)
                 {
-                    var pointLeft = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(5, 5));
+                    var pointLeft = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(5, 5));
                     _gameCore.Sprites.Munitions.Create(this, pointLeft);
                     RoundQuantity--;
                 }

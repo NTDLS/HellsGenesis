@@ -61,7 +61,7 @@ namespace StrikeforceInfinity.Game.Managers
         }
 
         public MultiplayState State { get; private set; } = new();
-        public HgPlayMode PlayMode { get; private set; }
+        public SiPlayMode PlayMode { get; private set; }
         public Guid LobbyUID { get; private set; } = Guid.Empty;
 
         public EngineMultiplayManager(EngineCore gameCore)
@@ -91,12 +91,12 @@ namespace StrikeforceInfinity.Game.Managers
             _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs = reply.PlayerAbsoluteStateDelayMs;
         }
 
-        public void SetPlayMode(HgPlayMode playMode) => PlayMode = playMode;
+        public void SetPlayMode(SiPlayMode playMode) => PlayMode = playMode;
 
         public void DeleteLobby(Guid lobbyUID)
         {
             LobbyUID = lobbyUID;
-            if (PlayMode != HgPlayMode.SinglePlayer)
+            if (PlayMode != SiPlayMode.SinglePlayer)
             {
                 Notify(new SiDeleteLobby(LobbyUID));
             }
@@ -105,7 +105,7 @@ namespace StrikeforceInfinity.Game.Managers
         public void RegisterLobbyUID(Guid lobbyUID)
         {
             LobbyUID = lobbyUID;
-            if (PlayMode != HgPlayMode.SinglePlayer)
+            if (PlayMode != SiPlayMode.SinglePlayer)
             {
                 Notify(new SiRegisterToLobby(LobbyUID));
             }
@@ -113,7 +113,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void DeregisterLobbyUID()
         {
-            if (PlayMode != HgPlayMode.SinglePlayer)
+            if (PlayMode != SiPlayMode.SinglePlayer)
             {
                 Notify(new SiRegisterToLobby(LobbyUID));
             }
@@ -158,7 +158,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void SetReadyToPlay()
         {
-            if (PlayMode != HgPlayMode.SinglePlayer)
+            if (PlayMode != SiPlayMode.SinglePlayer)
             {
                 Notify(new SiReadyToPlay());
             }
@@ -166,7 +166,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void SetLeftLobby()
         {
-            if (PlayMode != HgPlayMode.SinglePlayer)
+            if (PlayMode != SiPlayMode.SinglePlayer)
             {
                 Notify(new SiLeftLobby());
             }
@@ -174,7 +174,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void SetWaitingInLobby()
         {
-            if (PlayMode != HgPlayMode.SinglePlayer)
+            if (PlayMode != SiPlayMode.SinglePlayer)
             {
                 Notify(new SiWaitingInLobby());
             }
@@ -182,7 +182,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         public async Task<SiLobbyInfo> GetLobbyInfo(Guid lobbyUID)
         {
-            var reply = await MessageClient.Query<SiGetLobbyInfoReply>(new SiGetLobbyInfo() { LobyUID = lobbyUID });
+            var reply = await MessageClient.Query<SiGetLobbyInfoReply>(new SiGetLobbyInfo() { LobbyUID = lobbyUID });
             return reply.Info;
         }
 
@@ -263,8 +263,8 @@ namespace StrikeforceInfinity.Game.Managers
                     sprite.Velocity.BoostPercentage = spriteInfo.Vector.BoostPercentage;
                     sprite.ControlledBy = _gameCore.Multiplay.PlayMode switch
                     {
-                        HgPlayMode.MutiPlayerHost => HgControlledBy.LocalAI,
-                        HgPlayMode.MutiPlayerClient => HgControlledBy.Server,
+                        SiPlayMode.MutiPlayerHost => SiControlledBy.LocalAI,
+                        SiPlayMode.MutiPlayerClient => SiControlledBy.Server,
                         _ => throw new InvalidOperationException("Unhandled PlayMode")
                     };
                 }
@@ -278,17 +278,24 @@ namespace StrikeforceInfinity.Game.Managers
 
         private IFramePayloadQueryReply MessageClient_OnQueryReceived(MessageClient client, Guid connectionId, IFramePayloadQuery payload)
         {
-            throw new NotImplementedException("The client query is not implemented.");
+            //------------------------------------------------------------------------------------------------------------------------------
+            if (payload is SiPing ping)
+            {
+                return new SiPingReply(ping);
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else
+            {
+                throw new NotImplementedException("The client query is not implemented.");
+            }
         }
-
-
         public void NotifyddddSpriteVector(IFramePayloadNotification multiplayerEvent)
         {
             //TODO: We should really package these into a collection instead of sending one at a time.
 
             if (LobbyUID != Guid.Empty)
             {
-                if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
+                if (PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
                 {
                     MessageClient?.Notify(multiplayerEvent);
                 }
@@ -300,7 +307,7 @@ namespace StrikeforceInfinity.Game.Managers
         {
             if (LobbyUID != Guid.Empty)
             {
-                if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
+                if (PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
                 {
                     _spriteVectorBuffer.Add(multiplayerEvent);
                 }
@@ -311,7 +318,7 @@ namespace StrikeforceInfinity.Game.Managers
         {
             if (LobbyUID != Guid.Empty && _spriteVectorBuffer.Any())
             {
-                if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true && _udpManager != null)
+                if (PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true && _udpManager != null)
                 {
                     var spriteVectors = new SiSpriteVectors(_spriteVectorBuffer);
 
@@ -326,7 +333,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         public void Notify(IFramePayloadNotification multiplayerEvent)
         {
-            if (PlayMode != HgPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
+            if (PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
             {
                 MessageClient?.Notify(multiplayerEvent);
             }

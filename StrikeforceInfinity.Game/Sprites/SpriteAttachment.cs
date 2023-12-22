@@ -17,12 +17,12 @@ namespace StrikeforceInfinity.Game.Sprites
 
             X = 0;
             Y = 0;
-            Velocity = new HgVelocity();
+            Velocity = new SiVelocity();
         }
 
         public override bool TryMunitionHit(SiPoint displacementVector, MunitionBase munition, SiPoint hitTestPosition)
         {
-            if (munition.FiredFromType == HgFiredFromType.Player)
+            if (munition.FiredFromType == SiFiredFromType.Player)
             {
                 if (Intersects(hitTestPosition))
                 {

@@ -37,7 +37,7 @@ namespace StrikeforceInfinity.Game.Levels
         private void FirstShowPlayerCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             _gameCore.Player.ResetAndShow();
-            _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddFreshEnemiesCallback);
+            _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, SiRandom.Between(0, 800)), AddFreshEnemiesCallback);
         }
 
         private void AddFreshEnemiesCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
@@ -62,7 +62,7 @@ namespace StrikeforceInfinity.Game.Levels
 
                 CurrentWave++;
 
-                if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerHost)
+                if (_gameCore.Multiplay.PlayMode == SiPlayMode.MutiPlayerHost)
                 {
                     _gameCore.Multiplay.BroadcastLevelLayout();
                 }

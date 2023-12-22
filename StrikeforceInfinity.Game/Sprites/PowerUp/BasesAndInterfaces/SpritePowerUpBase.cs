@@ -44,10 +44,10 @@ namespace StrikeforceInfinity.Game.Sprites.PowerUp.BasesAndInterfaces
         {
             Initialize();
 
-            int _hitImageIndex = HgRandom.Between(0, _assetHitAnimationFiles.Count());
+            int _hitImageIndex = SiRandom.Between(0, _assetHitAnimationFiles.Count());
             _hitAnimation = new SpriteAnimation(_gameCore, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
 
-            int _soundIndex = HgRandom.Between(0, _assetExplosionSoundFiles.Count());
+            int _soundIndex = SiRandom.Between(0, _assetExplosionSoundFiles.Count());
             _explodeSound = _gameCore.Assets.GetAudio(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
 
             RadarDotSize = new SiPoint(4, 4);

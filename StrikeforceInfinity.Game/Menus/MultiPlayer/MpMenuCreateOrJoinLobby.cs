@@ -49,12 +49,12 @@ namespace StrikeforceInfinity.Menus.MultiPlayer
         {
             if (item.Key == "JOIN")
             {
-                _gameCore.Multiplay.SetPlayMode(HgPlayMode.MutiPlayerClient);
+                _gameCore.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);
                 _gameCore.Menus.Insert(new MpMenuClientJoinLobby(_gameCore));
             }
             else if (item.Key == "HOST")
             {
-                _gameCore.Multiplay.SetPlayMode(HgPlayMode.MutiPlayerHost);
+                _gameCore.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerHost);
                 _gameCore.Menus.Insert(new MpMenuHostCreateLobby(_gameCore));
             }
 

@@ -12,9 +12,9 @@ namespace StrikeforceInfinity.Game.Engine.Types
         private readonly EngineCore _gameCore;
         private readonly object _referenceObject = null;
         private readonly TimeSpan _countdown;
-        private readonly HgOnExecute _onExecute;
-        private readonly HgCallbackEventMode _callbackEventMode;
-        private readonly HgCallbackEventAsync _callbackEventAsync;
+        private readonly SiOnExecute _onExecute;
+        private readonly SiCallbackEventMode _callbackEventMode;
+        private readonly SiCallbackEventAsync _callbackEventAsync;
         private DateTime _startedTime;
 
         public Guid UID { get; private set; }
@@ -27,23 +27,23 @@ namespace StrikeforceInfinity.Game.Engine.Types
         /// <param name="core">Engine core</param>
         /// <param name="sender">The event that is being triggered</param>
         /// <param name="refObj">An optional object passed by the user code</param>
-        public delegate void HgOnExecute(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj);
+        public delegate void SiOnExecute(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj);
 
-        public enum HgCallbackEventMode
+        public enum SiCallbackEventMode
         {
             OneTime,
             Recurring
         }
 
-        public enum HgCallbackEventAsync
+        public enum SiCallbackEventAsync
         {
             Synchronous,
             Asynchronous
         }
 
-        public SiEngineCallbackEvent(EngineCore gameCore, TimeSpan countdown, HgOnExecute executeCallback, object refObj,
-            HgCallbackEventMode callbackEventMode = HgCallbackEventMode.OneTime,
-            HgCallbackEventAsync callbackEventAsync = HgCallbackEventAsync.Synchronous)
+        public SiEngineCallbackEvent(EngineCore gameCore, TimeSpan countdown, SiOnExecute executeCallback, object refObj,
+            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
+            SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
         {
             _gameCore = gameCore;
             _referenceObject = refObj;
@@ -55,7 +55,7 @@ namespace StrikeforceInfinity.Game.Engine.Types
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(EngineCore gameCore, TimeSpan countdown, HgOnExecute executeCallback, object refObj)
+        public SiEngineCallbackEvent(EngineCore gameCore, TimeSpan countdown, SiOnExecute executeCallback, object refObj)
         {
             _gameCore = gameCore;
             _countdown = countdown;
@@ -64,7 +64,7 @@ namespace StrikeforceInfinity.Game.Engine.Types
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(EngineCore gameCore, TimeSpan countdown, HgOnExecute executeCallback)
+        public SiEngineCallbackEvent(EngineCore gameCore, TimeSpan countdown, SiOnExecute executeCallback)
         {
             _gameCore = gameCore;
             _countdown = countdown;
@@ -88,12 +88,12 @@ namespace StrikeforceInfinity.Game.Engine.Types
                 {
                     result = true;
 
-                    if (_callbackEventMode == HgCallbackEventMode.OneTime)
+                    if (_callbackEventMode == SiCallbackEventMode.OneTime)
                     {
                         QueuedForDeletion = true;
                     }
 
-                    if (_callbackEventAsync == HgCallbackEventAsync.Asynchronous)
+                    if (_callbackEventAsync == SiCallbackEventAsync.Asynchronous)
                     {
                         new Thread(() =>
                         {
@@ -105,7 +105,7 @@ namespace StrikeforceInfinity.Game.Engine.Types
                         _onExecute(_gameCore, this, _referenceObject);
                     }
 
-                    if (_callbackEventMode == HgCallbackEventMode.Recurring)
+                    if (_callbackEventMode == SiCallbackEventMode.Recurring)
                     {
                         _startedTime = DateTime.UtcNow;
                     }

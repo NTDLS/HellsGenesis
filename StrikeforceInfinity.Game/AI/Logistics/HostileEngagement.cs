@@ -49,9 +49,9 @@ namespace StrikeforceInfinity.Game.AI.Logistics
         private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
         private readonly int _millisecondsBetweenDecisions = 1000;
         private readonly SiNormalizedAngle _flybyLoopTargetAngle = new();
-        private HgRelativeDirection _flybyLoopDirection;
+        private SiRelativeDirection _flybyLoopDirection;
         private readonly SiNormalizedAngle _evasiveLoopTargetAngle = new();
-        private HgRelativeDirection _evasiveLoopDirection;
+        private SiRelativeDirection _evasiveLoopDirection;
         private double? _approachAngleToObserved = null;
 
         #endregion
@@ -77,7 +77,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
             SetNeuralNetwork();
         }
 
-        private void Owner_OnHit(SpriteBase sender, HgDamageType damageType, int damageAmount)
+        private void Owner_OnHit(SpriteBase sender, SiDamageType damageType, int damageAmount)
         {
             AlterActionState(ActionState.EvasiveLoop); //If you hit me, I will take off!
         }
@@ -88,13 +88,13 @@ namespace StrikeforceInfinity.Game.AI.Logistics
             {
                 case ActionState.EvasiveLoop:
                     _evasiveLoopTargetAngle.Degrees = _owner.Velocity.Angle.Degrees + 180;
-                    _evasiveLoopDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
+                    _evasiveLoopDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
                     _owner.Velocity.ThrottlePercentage = 1.0;
                     _owner.Velocity.AvailableBoost = 250;
                     break;
                 case ActionState.FlyBy:
-                    _flybyLoopDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
-                    if (_flybyLoopDirection == HgRelativeDirection.Right)
+                    _flybyLoopDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
+                    if (_flybyLoopDirection == SiRelativeDirection.Right)
                     {
                         _flybyLoopTargetAngle.Degrees = _owner.Velocity.Angle.Degrees + 45;
                     }
@@ -135,11 +135,11 @@ namespace StrikeforceInfinity.Game.AI.Logistics
                     AlterActionState(ActionState.TransitionToAttacking);
                 }
 
-                if (_evasiveLoopDirection == HgRelativeDirection.Right)
+                if (_evasiveLoopDirection == SiRelativeDirection.Right)
                 {
                     _owner.Velocity.Angle += 1;
                 }
-                else if (_evasiveLoopDirection == HgRelativeDirection.Left)
+                else if (_evasiveLoopDirection == SiRelativeDirection.Left)
                 {
                     _owner.Velocity.Angle -= 1;
                 }
@@ -177,11 +177,11 @@ namespace StrikeforceInfinity.Game.AI.Logistics
                     AlterActionState(ActionState.None);
                 }
 
-                if (_flybyLoopDirection == HgRelativeDirection.Right)
+                if (_flybyLoopDirection == SiRelativeDirection.Right)
                 {
                     _owner.Velocity.Angle += 2.0;
                 }
-                else if (_flybyLoopDirection == HgRelativeDirection.Left)
+                else if (_flybyLoopDirection == SiRelativeDirection.Left)
                 {
                     _owner.Velocity.Angle -= 2.0;
                 }

@@ -1,10 +1,14 @@
 ﻿using NTDLS.Semaphore;
+using StrikeforceInfinity.Shared;
+using System.Timers;
 
 namespace StrikeforceInfinity.Server.Engine.Objects
 {
     internal class Lobby
     {
-        private readonly PessimisticSemaphore<Dictionary<Guid, RegisteredConnectionState>> _registeredConnections = new();
+        private readonly ServerCore _serverCore;
+        private readonly PessimisticSemaphore<Dictionary<Guid, LobbyConnection>> _connections = new();
+        private readonly System.Timers.Timer _timer = new(1000);
 
         /// <summary>
         /// The date and time that the lobby was created.
@@ -31,12 +35,64 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// </summary>
         public int MaxPlayers { get; set; }
 
-        public Lobby(Guid ownerConnectionId, string name, int maxPlayers)
+        public Lobby(ServerCore serverCore, Guid ownerConnectionId, string name, int maxPlayers)
         {
+            _serverCore = serverCore;
             UID = Guid.NewGuid();
             OwnerConnectionId = ownerConnectionId;
             Name = name;
             MaxPlayers = maxPlayers;
+            _timer.Elapsed += Timer_Elapsed;
+            _timer.Start();
+        }
+
+        ~Lobby()
+        {
+            SiUtility.TryAndIgnore(_timer.Stop);
+            SiUtility.TryAndIgnore(_timer.Dispose);
+        }
+
+        bool _isTimerExecuting = false;
+        private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
+        {
+            if (_isTimerExecuting == false)
+            {
+                try
+                {
+                    _isTimerExecuting = true;
+
+                    var connectionIds = Connections();
+
+                    foreach (var connectionId in connectionIds)
+                    {
+                        try
+                        {
+                            //Ping from the server to the client and record the result.
+                            _serverCore.PingConnection(connectionId).ContinueWith(x =>
+                            {
+                                if (x.Result != null)
+                                {
+                                    var LatencyMs = (DateTime.UtcNow - x.Result.Timestamp).TotalMilliseconds;
+
+                                    _connections.Use(o =>
+                                    {
+                                        if (o.TryGetValue(connectionId, out var connection))
+                                        {
+                                            connection.LatencyMs = LatencyMs;
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                        catch { };
+                    }
+                }
+                catch { }
+                finally
+                {
+                    _isTimerExecuting = false;
+                }
+            }
         }
 
         /// <summary>
@@ -45,9 +101,9 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <param name="connectionId"></param>
         public void Register(Guid connectionId)
         {
-            _registeredConnections.Use(o =>
+            _connections.Use(o =>
             {
-                var state = new RegisteredConnectionState()
+                var state = new LobbyConnection()
                 {
                     ConnectionId = connectionId
                 };
@@ -63,19 +119,28 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <param name="connectionId"></param>
         public void Deregister(Guid connectionId)
         {
-            _registeredConnections.Use(o =>
+            _connections.Use(o =>
             {
                 o.Remove(connectionId);
             });
         }
 
         /// <summary>
+        /// The lobby is being deleted. Cleanup any resources.
+        /// </summary>
+        public void Cleanup()
+        {
+            SiUtility.TryAndIgnore(_timer.Stop);
+            SiUtility.TryAndIgnore(_timer.Dispose);
+        }
+
+        /// <summary>
         /// Gets the list of all registered connection ids.
         /// </summary>
         /// <param name="connectionId"></param>
-        public List<Guid> RegisteredConnections()
+        public List<Guid> Connections()
         {
-            return _registeredConnections.Use(o =>
+            return _connections.Use(o =>
             {
                 return o.Select(o => o.Key).ToList();
             });
@@ -88,7 +153,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <returns>Returns true if all registered connections are ready to start.</returns>
         public bool FlagConnectionAsReadyToPlay(Guid connectionId)
         {
-            return _registeredConnections.Use(o =>
+            return _connections.Use(o =>
             {
                 if (o.TryGetValue(connectionId, out var state))
                 {
@@ -105,7 +170,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <param name="connectionId"></param>
         public void FlagConnectionAsWaitingInLobby(Guid connectionId)
         {
-            _registeredConnections.Use(o =>
+            _connections.Use(o =>
             {
                 if (o.TryGetValue(connectionId, out var state))
                 {
@@ -120,7 +185,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <param name="connectionId"></param>
         public void FlagConnectionAsLeftInLobby(Guid connectionId)
         {
-            _registeredConnections.Use(o =>
+            _connections.Use(o =>
             {
                 if (o.TryGetValue(connectionId, out var state))
                 {
@@ -131,7 +196,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
 
         public int ConnectionsWaitingInLobbyCount()
         {
-            return _registeredConnections.Use(o =>
+            return _connections.Use(o =>
             {
                 return o.Values.Where(o => o.IsWaitingInLobby).Count();
             });
@@ -144,7 +209,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <param name="connectionId"></param>
         public bool AreAllConnectionsReadyToPlay()
         {
-            return _registeredConnections.Use(o =>
+            return _connections.Use(o =>
             {
                 return o.Values.All(o => o.IsReadyToPlay == true);
             });
@@ -152,7 +217,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
 
         public int ConnectionCount()
         {
-            return _registeredConnections.Use(o =>
+            return _connections.Use(o =>
             {
                 return o.Values.Count();
             });
@@ -160,7 +225,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
 
         public int ReadyConnectionCount()
         {
-            return _registeredConnections.Use(o =>
+            return _connections.Use(o =>
             {
                 return o.Values.Where(o => o.IsReadyToPlay).Count();
             });

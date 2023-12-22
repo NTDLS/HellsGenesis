@@ -25,12 +25,12 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
         public SpriteEnemyScinzad(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
-            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
+            selectedImageIndex = SiRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            ShipClass = HgEnemyClass.Scinzad;
+            ShipClass = SiEnemyClass.Scinzad;
 
-            if (ControlledBy == HgControlledBy.Server)
+            if (ControlledBy == SiControlledBy.Server)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
@@ -73,7 +73,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
         }
 
         private const double baseDistanceToKeep = 200;
-        private double distanceToKeep = baseDistanceToKeep * (HgRandom.Generator.NextDouble() + 1);
+        private double distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
         private const double baseFallbackDistance = 800;
         private double fallbackDistance;
         private SiAngle fallToAngle;
@@ -83,7 +83,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (ControlledBy == HgControlledBy.Server)
+            if (ControlledBy == SiControlledBy.Server)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
@@ -92,7 +92,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
             base.ApplyIntelligence(displacementVector);
 
-            double distanceToPlayer = HgMath.DistanceTo(this, _gameCore.Player.Sprite);
+            double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
 
             if (mode == AIMode.Approaching)
             {
@@ -134,8 +134,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.Between(0, 10));
-                    fallbackDistance = baseFallbackDistance * (HgRandom.Generator.NextDouble() + 1);
+                    fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
+                    fallbackDistance = baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 
@@ -179,7 +179,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 else
                 {
                     mode = AIMode.Approaching;
-                    distanceToKeep = baseDistanceToKeep * (HgRandom.Generator.NextDouble() + 1);
+                    distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 

@@ -12,7 +12,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <summary>
         /// The lobby that the connection is registered for, if any.
         /// </summary>
-        public Guid CurrentLobbyUID { get; set; }
+        public Guid LobbyUID { get; set; }
 
         public Session(Guid sessionId, IPAddress ipAdress)
         {
@@ -32,7 +32,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// <param name="gameLobbyUID"></param>
         public void SetCurrentLobby(Guid lobbyUID)
         {
-            CurrentLobbyUID = lobbyUID;
+            LobbyUID = lobbyUID;
         }
     }
 }

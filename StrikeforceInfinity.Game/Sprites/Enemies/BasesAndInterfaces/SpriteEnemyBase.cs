@@ -24,7 +24,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BasesAndInterfaces
     {
         private readonly SiSpriteVector _multiplaySpriteVector = new();
 
-        public HgEnemyClass ShipClass { get; set; }
+        public SiEnemyClass ShipClass { get; set; }
         public EnemyShipLoadout Loadout { get; set; }
         public IAIController CurrentAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
@@ -60,9 +60,9 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BasesAndInterfaces
         {
             _gameCore.Player.Sprite.Bounty += BountyWorth;
 
-            if (HgRandom.PercentChance(5))
+            if (SiRandom.PercentChance(5))
             {
-                int random = HgRandom.Between(0, 4);
+                int random = SiRandom.Between(0, 4);
 
                 SpritePowerUpBase powerUp = null;
 
@@ -96,7 +96,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BasesAndInterfaces
 
         public override SiSpriteVector GetMultiplayVector()
         {
-            if (_gameCore.Multiplay.PlayMode == HgPlayMode.MutiPlayerHost)
+            if (_gameCore.Multiplay.PlayMode == SiPlayMode.MutiPlayerHost)
             {
                 if ((DateTime.UtcNow - _multiplaySpriteVector.Timestamp).TotalMilliseconds >= _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs)
                 {
@@ -137,7 +137,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BasesAndInterfaces
             return result;
         }
 
-        public EnemyShipLoadout LoadLoadoutFromFile(HgEnemyClass shipClass)
+        public EnemyShipLoadout LoadLoadoutFromFile(SiEnemyClass shipClass)
         {
             EnemyShipLoadout loadout = null;
 
@@ -187,7 +187,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BasesAndInterfaces
 
         public override bool TryMunitionHit(SiPoint displacementVector, MunitionBase munition, SiPoint hitTestPosition)
         {
-            if (munition.FiredFromType == HgFiredFromType.Player)
+            if (munition.FiredFromType == SiFiredFromType.Player)
             {
                 if (Intersects(hitTestPosition))
                 {
@@ -259,7 +259,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.BasesAndInterfaces
 
                     double requiredAngle = _gameCore.Player.Sprite.AngleTo360(this);
 
-                    var offset = HgMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle), new SiPoint(200, 200));
+                    var offset = SiMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle), new SiPoint(200, 200));
 
                     RadarPositionText.Location = _gameCore.Player.Sprite.Location + offset + new SiPoint(25, 25);
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;

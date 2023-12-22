@@ -47,11 +47,11 @@ namespace StrikeforceInfinity.Game.Levels
                     return;
                 }
 
-                int enemyCount = HgRandom.Generator.Next(CurrentWave + 1, CurrentWave + 5);
+                int enemyCount = SiRandom.Generator.Next(CurrentWave + 1, CurrentWave + 5);
 
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, HgRandom.Between(0, 800)), AddEnemyCallback);
+                    _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, SiRandom.Between(0, 800)), AddEnemyCallback);
                 }
 
                 _gameCore.Audio.RadarBlipsSound.Play();

@@ -24,30 +24,30 @@ namespace StrikeforceInfinity.Game.Controller
                 {
                     if (displacementVector.X > 0)
                     {
-                        if (HgRandom.PercentChance(20))
+                        if (SiRandom.PercentChance(20))
                         {
-                            int x = HgRandom.Generator.Next(GameCore.Display.TotalCanvasSize.Width - (int)displacementVector.X, GameCore.Display.TotalCanvasSize.Width);
-                            int y = HgRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Height);
+                            int x = SiRandom.Generator.Next(GameCore.Display.TotalCanvasSize.Width - (int)displacementVector.X, GameCore.Display.TotalCanvasSize.Width);
+                            int y = SiRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Height);
                             SpriteManager.Stars.Create(x, y);
                         }
 
                     }
                     else if (displacementVector.X < 0)
                     {
-                        if (HgRandom.PercentChance(20))
+                        if (SiRandom.PercentChance(20))
                         {
-                            int x = HgRandom.Generator.Next(0, (int)-displacementVector.X);
-                            int y = HgRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Height);
+                            int x = SiRandom.Generator.Next(0, (int)-displacementVector.X);
+                            int y = SiRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Height);
                             SpriteManager.Stars.Create(x, y);
                         }
 
                     }
                     if (displacementVector.Y > 0)
                     {
-                        if (HgRandom.PercentChance(20))
+                        if (SiRandom.PercentChance(20))
                         {
-                            int x = HgRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Width);
-                            int y = HgRandom.Generator.Next(GameCore.Display.TotalCanvasSize.Height - (int)displacementVector.Y, GameCore.Display.TotalCanvasSize.Height);
+                            int x = SiRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Width);
+                            int y = SiRandom.Generator.Next(GameCore.Display.TotalCanvasSize.Height - (int)displacementVector.Y, GameCore.Display.TotalCanvasSize.Height);
                             SpriteManager.Stars.Create(x, y);
                         }
 
@@ -55,10 +55,10 @@ namespace StrikeforceInfinity.Game.Controller
                     else if (displacementVector.Y < 0)
                     {
 
-                        if (HgRandom.PercentChance(20))
+                        if (SiRandom.PercentChance(20))
                         {
-                            int x = HgRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Width);
-                            int y = HgRandom.Generator.Next(0, (int)-displacementVector.Y);
+                            int x = SiRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Width);
+                            int y = SiRandom.Generator.Next(0, (int)-displacementVector.Y);
                             SpriteManager.Stars.Create(x, y);
                         }
 

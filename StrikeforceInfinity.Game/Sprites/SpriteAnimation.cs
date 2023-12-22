@@ -26,9 +26,9 @@ namespace StrikeforceInfinity.Game.Sprites
 
         internal class PlayMode
         {
-            private HgAnimationReplayMode _replay;
+            private SiAnimationReplayMode _replay;
 
-            public HgAnimationReplayMode Replay
+            public SiAnimationReplayMode Replay
             {
                 get
                 {
@@ -36,7 +36,7 @@ namespace StrikeforceInfinity.Game.Sprites
                 }
                 set
                 {
-                    if (value == HgAnimationReplayMode.LoopedPlay)
+                    if (value == SiAnimationReplayMode.LoopedPlay)
                     {
                         DeleteSpriteAfterPlay = false;
                     }
@@ -58,7 +58,7 @@ namespace StrikeforceInfinity.Game.Sprites
                 _playMode = new PlayMode()
                 {
                     DeleteSpriteAfterPlay = true,
-                    Replay = HgAnimationReplayMode.SinglePlay,
+                    Replay = SiAnimationReplayMode.SinglePlay,
                     ReplayDelay = new TimeSpan(0, 0, 0, 0, frameDelayMilliseconds)
                 };
             }
@@ -72,7 +72,7 @@ namespace StrikeforceInfinity.Game.Sprites
             _frameCount = _rows * _columns;
 
             Location = new SiPoint(0, 0);
-            Velocity = new HgVelocity();
+            Velocity = new SiVelocity();
 
             _spriteSheetFileName = spriteSheetFileName;
 
@@ -129,7 +129,7 @@ namespace StrikeforceInfinity.Game.Sprites
                         return;
                     }
 
-                    if (_playMode.Replay == HgAnimationReplayMode.LoopedPlay)
+                    if (_playMode.Replay == SiAnimationReplayMode.LoopedPlay)
                     {
                         _currentFrame = 0;
                         _currentColumn = 0;

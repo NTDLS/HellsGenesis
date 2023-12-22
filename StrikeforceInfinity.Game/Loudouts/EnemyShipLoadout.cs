@@ -11,7 +11,7 @@ namespace StrikeforceInfinity.Game.Loudouts
     internal class EnemyShipLoadout
     {
         [JsonConverter(typeof(StringEnumConverter))]
-        public HgEnemyClass Class { get; set; }
+        public SiEnemyClass Class { get; set; }
         [JsonIgnore]
         public int ImageIndex => (int)Class;
         [JsonIgnore]
@@ -28,7 +28,7 @@ namespace StrikeforceInfinity.Game.Loudouts
         {
         }
 
-        public EnemyShipLoadout(HgEnemyClass shipClass)
+        public EnemyShipLoadout(SiEnemyClass shipClass)
         {
             Class = shipClass;
         }

@@ -1,6 +1,7 @@
 ﻿using NTDLS.Semaphore;
 using StrikeforceInfinity.Server.Engine.Objects;
 using StrikeforceInfinity.Shared.Payload;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StrikeforceInfinity.Server.Engine.Managers
 {
@@ -14,12 +15,14 @@ namespace StrikeforceInfinity.Server.Engine.Managers
             _serverCore = serverCore;
         }
 
+
         public Lobby Create(Guid connectionId, SiLobbyConfiguration configuration)
         {
             return _collection.Use(o =>
             {
-                var lobby = new Lobby(connectionId, configuration.Name, configuration.MaxPlayers);
+                var lobby = new Lobby(_serverCore, connectionId, configuration.Name, configuration.MaxPlayers);
                 {
+                    //...
                 };
 
                 o.Add(lobby.UID, lobby);
@@ -31,20 +34,28 @@ namespace StrikeforceInfinity.Server.Engine.Managers
         {
             _collection.Use(o =>
             {
+                if (TryGetByLobbyUID(lobbyUID, out var lobby))
+                {
+                    lobby.Cleanup();
+                }
+
                 o.Remove(lobbyUID);
             });
         }
 
-        public Lobby? GetByLobbyUID(Guid lobbyUID)
+        public bool TryGetByLobbyUID(Guid lobbyUID, [NotNullWhen(true)] out Lobby? outLobby)
         {
-            return _collection.Use(o =>
+            var result = _collection.Use(o =>
             {
                 o.TryGetValue(lobbyUID, out var lobby);
                 return lobby;
             });
+
+            outLobby = result;
+            return outLobby != null;
         }
 
-        public List<SiLobbyConfiguration> GetList(Guid connectionId)
+        public List<SiLobbyConfiguration> GetList()
         {
             return _collection.Use(o =>
             {

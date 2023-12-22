@@ -8,7 +8,7 @@ namespace StrikeforceInfinity.Shared.Messages.Query
     /// </summary>
     public class SiGetLobbyInfo : IFramePayloadQuery
     {
-        public Guid LobyUID { get; set; }
+        public Guid LobbyUID { get; set; }
     }
 
     public class SiGetLobbyInfoReply : IFramePayloadQueryReply

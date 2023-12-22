@@ -88,8 +88,8 @@ namespace StrikeforceInfinity.Game.Managers
                 var obj = (SpriteBase)Activator.CreateInstance(type, param);
 
                 obj.Location = _gameCore.Display.RandomOffScreenLocation();
-                obj.Velocity.MaxSpeed = HgRandom.Generator.Next(_gameCore.Settings.MinEnemySpeed, _gameCore.Settings.MaxEnemySpeed);
-                obj.Velocity.Angle.Degrees = HgRandom.Generator.Next(0, 360);
+                obj.Velocity.MaxSpeed = SiRandom.Generator.Next(_gameCore.Settings.MinEnemySpeed, _gameCore.Settings.MaxEnemySpeed);
+                obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
 
                 var enemy = obj as SpriteEnemyBase;
 
@@ -263,7 +263,7 @@ namespace StrikeforceInfinity.Game.Managers
                     //Render radar:
                     foreach (var sprite in Collection.Where(o => o.Visable == true))
                     {
-                        //HgPoint scale, HgPoint< double > offset
+                        //SiPoint scale, SiPoint< double > offset
                         int x = (int)(_radarOffset.X + sprite.X * _radarScale.X);
                         int y = (int)(_radarOffset.Y + sprite.Y * _radarScale.Y);
 

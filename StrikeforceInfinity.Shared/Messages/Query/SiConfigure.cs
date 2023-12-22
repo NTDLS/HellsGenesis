@@ -3,7 +3,7 @@
 namespace StrikeforceInfinity.Shared.Messages.Query
 {
     /// <summary>
-    /// The client has connected to the server and is requesting any configuration.
+    /// The client has connected and the server and client are exchanging configuration/settings.
     /// </summary>
     public class SiConfigure : IFramePayloadQuery
     {

@@ -14,7 +14,7 @@ namespace StrikeforceInfinity.Game.Managers
     internal class EngineInputManager
     {
         private readonly EngineCore _gameCore;
-        private readonly Dictionary<HgPlayerKey, bool> _playerKeyStates = new();
+        private readonly Dictionary<SiPlayerKey, bool> _playerKeyStates = new();
         private bool _collectDetailedKeyInformation = false;
         private readonly Dictionary<Key, bool> _allKeyStates = new();
 
@@ -84,19 +84,19 @@ namespace StrikeforceInfinity.Game.Managers
 
             var keyboardState = Keyboard.GetCurrentState();
 
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.Forward, keyboardState.IsPressed(Key.W));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.Reverse, keyboardState.IsPressed(Key.S));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.Left, keyboardState.IsPressed(Key.Left));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.Right, keyboardState.IsPressed(Key.Right));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.Up, keyboardState.IsPressed(Key.Up));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.Down, keyboardState.IsPressed(Key.Down));
-            _gameCore.Input.KeyStateChanged(HgPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.Reverse, keyboardState.IsPressed(Key.S));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.Left, keyboardState.IsPressed(Key.Left));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.Right, keyboardState.IsPressed(Key.Right));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.Up, keyboardState.IsPressed(Key.Up));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.Down, keyboardState.IsPressed(Key.Down));
+            _gameCore.Input.KeyStateChanged(SiPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
 
             //I beleive that this information may be taxing to gather.
             //Regardless we don't typically need is to require any code that uses it to enable it.
@@ -215,7 +215,7 @@ namespace StrikeforceInfinity.Game.Managers
             }
         }
 
-        public bool IsKeyPressed(HgPlayerKey key)
+        public bool IsKeyPressed(SiPlayerKey key)
         {
             if (_playerKeyStates.ContainsKey(key))
             {
@@ -230,7 +230,7 @@ namespace StrikeforceInfinity.Game.Managers
         /// </summary>
         /// <param name="key"></param>
         /// <param name="state"></param>
-        public void KeyStateChanged(HgPlayerKey key, bool state, Keys? other = null)
+        public void KeyStateChanged(SiPlayerKey key, bool state, Keys? other = null)
         {
             if (_playerKeyStates.ContainsKey(key))
             {
@@ -263,7 +263,7 @@ namespace StrikeforceInfinity.Game.Managers
             else if (key == Keys.F2)
             {
                 SiDevelopmentTools.ParticleBlast(_gameCore, 50, _gameCore.Player.Sprite);
-                //HgDevelopmentTools.CreateImageSizeVariants(@"..\..\..\Assets\Graphics\Fragments");
+                //SiDevelopmentTools.CreateImageSizeVariants(@"..\..\..\Assets\Graphics\Fragments");
                 //_gameCore.Sprites.NewGame();
                 //_gameCore.Sprites.ResetAndShowPlayer();
             }

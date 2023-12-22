@@ -22,12 +22,12 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
         public SpriteEnemyIrlen(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
-            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
+            selectedImageIndex = SiRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            ShipClass = HgEnemyClass.Irlen;
+            ShipClass = SiEnemyClass.Irlen;
 
-            if (ControlledBy == HgControlledBy.Server)
+            if (ControlledBy == SiControlledBy.Server)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
@@ -75,7 +75,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
         readonly int initialHullHealth = 0;
         const double baseDistanceToKeep = 100;
-        double distanceToKeep = baseDistanceToKeep * (HgRandom.Generator.NextDouble() + 1);
+        double distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
         const double baseFallbackDistance = 400;
         double fallbackDistance;
         SiAngle fallToAngle;
@@ -83,7 +83,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (ControlledBy == HgControlledBy.Server)
+            if (ControlledBy == SiControlledBy.Server)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
@@ -92,17 +92,17 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
             base.ApplyIntelligence(displacementVector);
 
-            double distanceToPlayer = HgMath.DistanceTo(this, _gameCore.Player.Sprite);
+            double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
 
             if (Mode == AIMode.InFormation)
             {
                 //Since we need to handle the entire "platoon" of formation ships all at once, a good
                 //  deal of this AI is handled by the Scenerio engine(s). (see: ScenarioIrlenFormations).
-                if (distanceToPlayer < 500 && HgRandom.PercentChance(10000) || HullHealth != initialHullHealth)
+                if (distanceToPlayer < 500 && SiRandom.PercentChance(10000) || HullHealth != initialHullHealth)
                 {
                     Mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.Between(0, 10));
-                    fallbackDistance = baseFallbackDistance * (HgRandom.Generator.NextDouble() + 1);
+                    fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
+                    fallbackDistance = baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 
@@ -115,8 +115,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 else
                 {
                     Mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.Between(0, 10));
-                    fallbackDistance = baseFallbackDistance * (HgRandom.Generator.NextDouble() + 1);
+                    fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
+                    fallbackDistance = baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 
@@ -160,7 +160,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
                 else
                 {
                     Mode = AIMode.Approaching;
-                    distanceToKeep = baseDistanceToKeep * (HgRandom.Generator.NextDouble() + 1);
+                    distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 

@@ -1,5 +1,6 @@
 ﻿using NTDLS.Semaphore;
 using StrikeforceInfinity.Server.Engine.Objects;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
 namespace StrikeforceInfinity.Server.Engine.Managers
@@ -15,13 +16,16 @@ namespace StrikeforceInfinity.Server.Engine.Managers
             _serverCore = serverCore;
         }
 
-        public Session? GetByConnectionId(Guid connectionId)
+        public bool TryGetByConnectionId(Guid connectionId, [NotNullWhen(true)] out Session? outSession)
         {
-            return _sessions.Use(o =>
+            var result = _sessions.Use(o =>
             {
                 o.TryGetValue(connectionId, out var session);
                 return session;
             });
+
+            outSession = result;
+            return outSession != null;
         }
 
         public void Remove(Guid connectionId)

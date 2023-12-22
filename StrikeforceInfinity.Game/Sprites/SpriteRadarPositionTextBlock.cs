@@ -12,7 +12,7 @@ namespace StrikeforceInfinity.Game.Sprites
             : base(gameCore, format, color, location, false)
         {
             Visable = false;
-            Velocity = new HgVelocity();
+            Velocity = new SiVelocity();
         }
 
         private double _distanceValue;

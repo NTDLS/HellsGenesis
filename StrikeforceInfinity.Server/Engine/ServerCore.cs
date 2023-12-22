@@ -47,41 +47,43 @@ namespace StrikeforceInfinity.Server.Engine
             _messageServer.OnQueryReceived += MessageServer_OnQueryReceived;
         }
 
+        public async Task<SiPing?> PingConnection(Guid connectionId)
+        {
+            var result = await _messageServer.Query<SiPingReply>(connectionId, new SiPing());
+            return result?.Ping;
+        }
+
         private void UdpMessageManager_ProcessNotificationCallback(IUDPPayloadNotification payload)
         {
             //------------------------------------------------------------------------------------------------------------------------------
             if (payload is SiSpriteVectors spriteVectors)
             {
-                var session = Sessions.GetByConnectionId(spriteVectors.ConnectionId);
-                if (session == null)
+                if (!Sessions.TryGetByConnectionId(spriteVectors.ConnectionId, out var session))
                 {
                     Log.Exception($"The session was not found '{spriteVectors.ConnectionId}'.");
                     return;
                 }
 
-                //Log.Trace($"{spriteVector.X:n1},{spriteVector.Y:n1} -> {spriteVector.AngleDegrees:n1}");
-
-                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
-                if (lobby == null)
+                if (!Lobbies.TryGetByLobbyUID(session.LobbyUID, out var lobby))
                 {
-                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
+                    Log.Exception($"The lobby was not found '{session.LobbyUID}'.");
                     return;
                 }
 
-                //Broadcast the absolute state to all connections except for the one that sent it.
-                var registeredConnectionIds = lobby.RegisteredConnections();
-                registeredConnectionIds.Remove(spriteVectors.ConnectionId);
+                //Broadcast the sprite vectors all connections except for the one that sent it.
+                var registeredConnectionIds = lobby.Connections();
+                registeredConnectionIds.Remove(spriteVectors.ConnectionId); //No need to send to the connection that sent us the vector list.
                 foreach (var registeredConnectionId in registeredConnectionIds)
                 {
-                    if (_activeEndpoints.TryGetValue(registeredConnectionId, out var endpoint))
+                    if (_activeEndpoints.TryGetValue(registeredConnectionId, out var ipEndpoint))
                     {
                         try
                         {
-                            _udpManager.WriteMessage(endpoint, spriteVectors);
+                            _udpManager.WriteMessage(ipEndpoint, spriteVectors);
                         }
                         catch
                         {
-                            //TODO: Remove this connection:
+                            //TODO: Remove this connection? Maybe track the number of errors and remove if too many occur?
                         }
                     }
                 }
@@ -96,12 +98,11 @@ namespace StrikeforceInfinity.Server.Engine
                 //------------------------------------------------------------------------------------------------------------------------------
                 if (payload is SiGetLobbyInfo getLobbyInfo)
                 {
-                    Log.Verbose($"ConnectionId: '{connectionId}' getting lobby info for '{getLobbyInfo.LobyUID}'.");
+                    Log.Verbose($"ConnectionId: '{connectionId}' getting lobby info for '{getLobbyInfo.LobbyUID}'.");
 
-                    var lobby = Lobbies.GetByLobbyUID(getLobbyInfo.LobyUID);
-                    if (lobby == null)
+                    if (!Lobbies.TryGetByLobbyUID(getLobbyInfo.LobbyUID, out var lobby))
                     {
-                        throw new Exception($"The lobby was not found '{getLobbyInfo.LobyUID}'.");
+                        throw new Exception($"The lobby was not found '{getLobbyInfo.LobbyUID}'.");
                     }
 
                     return new SiGetLobbyInfoReply()
@@ -130,7 +131,7 @@ namespace StrikeforceInfinity.Server.Engine
                 {
                     Log.Verbose($"ConnectionId: '{connectionId}' requested lobby list.");
 
-                    var lobbies = Lobbies.GetList(connectionId);
+                    var lobbies = Lobbies.GetList();
 
                     return new SiListLobbiesReply()
                     {
@@ -142,8 +143,7 @@ namespace StrikeforceInfinity.Server.Engine
                 {
                     Log.Verbose($"ConnectionId: '{connectionId}' configuration (v{configure.ClientVersion}).");
 
-                    var session = Sessions.GetByConnectionId(connectionId);
-                    if (session == null)
+                    if (!Sessions.TryGetByConnectionId(connectionId, out var session))
                     {
                         throw new Exception($"Session was not found for: '{connectionId}'.");
                     }
@@ -154,6 +154,7 @@ namespace StrikeforceInfinity.Server.Engine
                         throw new Exception($"Session endpoint can not be null: '{connectionId}'.");
                     }
 
+                    _activeEndpoints.Remove(connectionId);
                     _activeEndpoints.Add(connectionId, session.Endpoint);
 
                     return new SiConfigureReply()
@@ -177,8 +178,7 @@ namespace StrikeforceInfinity.Server.Engine
 
         private void MessageServer_OnNotificationReceived(MessageServer server, Guid connectionId, IFramePayloadNotification payload)
         {
-            var session = Sessions.GetByConnectionId(connectionId);
-            if (session == null)
+            if (!Sessions.TryGetByConnectionId(connectionId, out var session))
             {
                 Log.Exception($"The session was not found '{connectionId}'.");
                 return;
@@ -189,14 +189,13 @@ namespace StrikeforceInfinity.Server.Engine
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' is deleting the lobby: '{deleteLobby.LobbyUID}'");
 
-                var lobby = Lobbies.GetByLobbyUID(deleteLobby.LobbyUID);
-                if (lobby == null)
+                if (!Lobbies.TryGetByLobbyUID(deleteLobby.LobbyUID, out var lobby))
                 {
                     Log.Exception($"The lobby was not found '{deleteLobby.LobbyUID}'.");
                     return;
                 }
 
-                var registeredConnectionIds = lobby.RegisteredConnections();
+                var registeredConnectionIds = lobby.Connections();
                 foreach (var registeredConnectionId in registeredConnectionIds)
                 {
                     _messageServer.Notify(registeredConnectionId,
@@ -210,8 +209,7 @@ namespace StrikeforceInfinity.Server.Engine
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' registered for lobby: '{register.LobbyUID}'");
 
-                var lobby = Lobbies.GetByLobbyUID(register.LobbyUID);
-                if (lobby == null)
+                if (!Lobbies.TryGetByLobbyUID(register.LobbyUID, out var lobby))
                 {
                     Log.Exception($"The lobby was not found '{register.LobbyUID}'.");
                     return;
@@ -225,10 +223,9 @@ namespace StrikeforceInfinity.Server.Engine
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' is waiting in the lobby.");
 
-                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
-                if (lobby == null)
+                if (!Lobbies.TryGetByLobbyUID(session.LobbyUID, out var lobby))
                 {
-                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
+                    Log.Exception($"The lobby was not found '{session.LobbyUID}'.");
                     return;
                 }
 
@@ -239,10 +236,9 @@ namespace StrikeforceInfinity.Server.Engine
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' has left the lobby.");
 
-                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
-                if (lobby == null)
+                if (!Lobbies.TryGetByLobbyUID(session.LobbyUID, out var lobby))
                 {
-                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
+                    Log.Exception($"The lobby was not found '{session.LobbyUID}'.");
                     return;
                 }
 
@@ -253,15 +249,14 @@ namespace StrikeforceInfinity.Server.Engine
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' issued a new layout.");
 
-                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
-                if (lobby == null)
+                if (!Lobbies.TryGetByLobbyUID(session.LobbyUID, out var lobby))
                 {
-                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
+                    Log.Exception($"The lobby was not found '{session.LobbyUID}'.");
                     return;
                 }
 
                 //The owner of the lobby send a new layout, send it to all of the connections.
-                var registeredConnectionIds = lobby.RegisteredConnections();
+                var registeredConnectionIds = lobby.Connections();
                 foreach (var registeredConnectionId in registeredConnectionIds)
                 {
                     _messageServer.Notify(registeredConnectionId, layoutDirective);
@@ -272,10 +267,9 @@ namespace StrikeforceInfinity.Server.Engine
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' is ready to play.");
 
-                var lobby = Lobbies.GetByLobbyUID(session.CurrentLobbyUID);
-                if (lobby == null)
+                if (!Lobbies.TryGetByLobbyUID(session.LobbyUID, out var lobby))
                 {
-                    Log.Exception($"The lobby was not found '{session.CurrentLobbyUID}'.");
+                    Log.Exception($"The lobby was not found '{session.LobbyUID}'.");
                     return;
                 }
 

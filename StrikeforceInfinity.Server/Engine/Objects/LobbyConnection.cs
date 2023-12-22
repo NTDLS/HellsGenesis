@@ -1,6 +1,6 @@
 ﻿namespace StrikeforceInfinity.Server.Engine.Objects
 {
-    internal class RegisteredConnectionState
+    internal class LobbyConnection
     {
         /// <summary>
         /// The unique id for the connection as established by NTDLS.ReliableMessaging.
@@ -16,5 +16,10 @@
         /// The connection is waiting in the lobby.
         /// </summary>
         public bool IsWaitingInLobby { get; set; }
+
+        /// <summary>
+        /// The latest measured latency from the server to the client in milliseconds.
+        /// </summary>
+        public double LatencyMs { get; set; }
     }
 }

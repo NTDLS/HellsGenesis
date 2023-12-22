@@ -23,7 +23,7 @@ namespace StrikeforceInfinity.Game.Sprites
 
         #region Multiplay.
 
-        public HgControlledBy ControlledBy { get; set; }
+        public SiControlledBy ControlledBy { get; set; }
 
         /// <summary>
         /// The UID of this sprite. Each connected client has a sprite with the same mathcing UID.
@@ -48,7 +48,7 @@ namespace StrikeforceInfinity.Game.Sprites
         //private readonly int _MillisecondsBetweenHits = 200;
 
         private bool _isLockedOn = false;
-        private HgVelocity _velocity;
+        private SiVelocity _velocity;
         private bool _readyForDeletion;
         private SiPoint _location = new();
         private Size _size;
@@ -63,7 +63,7 @@ namespace StrikeforceInfinity.Game.Sprites
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
         public bool IsWithinCurrentScaledScreenBounds => _gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds);
         public bool Highlight { get; set; } = false;
-        public HgRotationMode RotationMode { get; set; }
+        public SiRotationMode RotationMode { get; set; }
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
         public int ShieldHealth { get; private set; } = 0; //Sheild hit-points, these take 1/2 damage.
         public bool IsDead { get; set; } = false;
@@ -74,9 +74,9 @@ namespace StrikeforceInfinity.Game.Sprites
         public RectangleF VisibleBounds => new Rectangle((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
         public RectangleF Bounds => new((float)_location.X, (float)_location.Y, Size.Width, Size.Height);
         public Rectangle BoundsI => new((int)_location.X, (int)_location.Y, Size.Width, Size.Height);
-        public HgQuadrant Quadrant => _gameCore.Display.GetQuadrant(X + _gameCore.Display.BackgroundOffset.X, Y + _gameCore.Display.BackgroundOffset.Y);
+        public SiQuadrant Quadrant => _gameCore.Display.GetQuadrant(X + _gameCore.Display.BackgroundOffset.X, Y + _gameCore.Display.BackgroundOffset.Y);
 
-        public HgVelocity Velocity
+        public SiVelocity Velocity
         {
             get => _velocity;
             set
@@ -266,7 +266,7 @@ namespace StrikeforceInfinity.Game.Sprites
 
         #region Events.
 
-        public delegate void HitEvent(SpriteBase sender, HgDamageType damageType, int damageAmount);
+        public delegate void HitEvent(SpriteBase sender, SiDamageType damageType, int damageAmount);
         public event HitEvent OnHit;
 
         public delegate void QueuedForDeleteEvent(SpriteBase sender);
@@ -285,8 +285,8 @@ namespace StrikeforceInfinity.Game.Sprites
         {
             _gameCore = gameCore;
             SpriteTag = name;
-            RotationMode = HgRotationMode.Rotate;
-            Velocity = new HgVelocity();
+            RotationMode = SiRotationMode.Rotate;
+            Velocity = new SiVelocity();
             Highlight = _gameCore.Settings.HighlightAllSprites;
         }
 
@@ -463,7 +463,7 @@ namespace StrikeforceInfinity.Game.Sprites
                 damage = damage > ShieldHealth ? ShieldHealth : damage; //No need to go negative with the damage.
                 ShieldHealth -= damage;
 
-                OnHit?.Invoke(this, HgDamageType.Shield, damage);
+                OnHit?.Invoke(this, SiDamageType.Shield, damage);
             }
             else
             {
@@ -471,7 +471,7 @@ namespace StrikeforceInfinity.Game.Sprites
                 damage = damage > HullHealth ? HullHealth : damage; //No need to go negative with the damage.
                 HullHealth -= damage;
 
-                OnHit?.Invoke(this, HgDamageType.Hull, damage);
+                OnHit?.Invoke(this, SiDamageType.Hull, damage);
             }
         }
 
@@ -546,17 +546,17 @@ namespace StrikeforceInfinity.Game.Sprites
         /// Rotates the object towards the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(SpriteBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateTo(SpriteBase obj, SiRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = DeltaAngle(obj);
 
             if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
             {
-                if (direction == HgRelativeDirection.Right)
+                if (direction == SiRelativeDirection.Right)
                 {
                     Velocity.Angle.Degrees += rotationAmount;
                 }
-                if (direction == HgRelativeDirection.Left)
+                if (direction == SiRelativeDirection.Left)
                 {
                     Velocity.Angle.Degrees -= rotationAmount;
                 }
@@ -594,17 +594,17 @@ namespace StrikeforceInfinity.Game.Sprites
         /// Rotates the object towards the target coordinates by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(SiPoint toLocation, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateTo(SiPoint toLocation, SiRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = DeltaAngle(toLocation);
 
             if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
             {
-                if (direction == HgRelativeDirection.Right)
+                if (direction == SiRelativeDirection.Right)
                 {
                     Velocity.Angle.Degrees += rotationAmount;
                 }
-                if (direction == HgRelativeDirection.Left)
+                if (direction == SiRelativeDirection.Left)
                 {
                     Velocity.Angle.Degrees -= rotationAmount;
                 }
@@ -618,17 +618,17 @@ namespace StrikeforceInfinity.Game.Sprites
         /// Rotates the object by the specified amount until it is pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(double toDegrees, HgRelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
+        public bool RotateTo(double toDegrees, SiRelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
         {
             toDegrees = toDegrees.DegreesNormalized();
 
             if (Velocity.Angle.DegreesNormalized.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
-                if (direction == HgRelativeDirection.Right)
+                if (direction == SiRelativeDirection.Right)
                 {
                     Velocity.Angle.Degrees += rotationAmount;
                 }
-                if (direction == HgRelativeDirection.Left)
+                if (direction == SiRelativeDirection.Left)
                 {
                     Velocity.Angle.Degrees -= rotationAmount;
                 }
@@ -666,17 +666,17 @@ namespace StrikeforceInfinity.Game.Sprites
         /// Rotates the object from the target object by the specified amount.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateFrom(SpriteBase obj, HgRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        public bool RotateFrom(SpriteBase obj, SiRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
         {
             var deltaAngle = obj.DeltaAngle(this);
 
             if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
             {
-                if (direction == HgRelativeDirection.Right)
+                if (direction == SiRelativeDirection.Right)
                 {
                     Velocity.Angle += rotationAmount;
                 }
-                if (direction == HgRelativeDirection.Left)
+                if (direction == SiRelativeDirection.Left)
                 {
                     Velocity.Angle -= rotationAmount;
                 }
@@ -721,46 +721,46 @@ namespace StrikeforceInfinity.Game.Sprites
         /// Calculates the difference in heading angle from one object to get to another between 0-259.
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngle360(SpriteBase toObj) => HgMath.DeltaAngle360(this, toObj);
+        public double DeltaAngle360(SpriteBase toObj) => SiMath.DeltaAngle360(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngle(SpriteBase toObj) => HgMath.DeltaAngle(this, toObj);
+        public double DeltaAngle(SpriteBase toObj) => SiMath.DeltaAngle(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <=>s></returns>
-        public double DeltaAngle(SiPoint toLocation) => HgMath.DeltaAngle(this, toLocation);
+        public double DeltaAngle(SiPoint toLocation) => SiMath.DeltaAngle(this, toLocation);
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 0-259.
         /// </summary>
         /// <returns></returns>
-        public double AngleTo360(SpriteBase atObj) => HgMath.AngleTo360(this, atObj);
+        public double AngleTo360(SpriteBase atObj) => SiMath.AngleTo360(this, atObj);
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double AngleTo(SpriteBase atObj) => HgMath.AngleTo(this, atObj);
+        public double AngleTo(SpriteBase atObj) => SiMath.AngleTo(this, atObj);
 
 
         /// Calculates the angle in degrees to a location.
-        public double AngleTo360(SiPoint location) => HgMath.AngleTo360(this, location);
+        public double AngleTo360(SiPoint location) => SiMath.AngleTo360(this, location);
 
         public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
-            => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
+            => SiMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees) => HgMath.IsPointingAt(this, atObj, toleranceDegrees);
+        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees) => SiMath.IsPointingAt(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees) => HgMath.IsPointingAway(this, atObj, toleranceDegrees);
+        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees) => SiMath.IsPointingAway(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => HgMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
         public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(Location, to.Location);
 
@@ -838,7 +838,7 @@ namespace StrikeforceInfinity.Game.Sprites
                     RawColor4 color = _gameCore.Rendering.Materials.Raw.Blue;
 
                     var munition = this as MunitionBase;
-                    if (munition.FiredFromType == HgFiredFromType.Enemy)
+                    if (munition.FiredFromType == SiFiredFromType.Enemy)
                     {
                         color = _gameCore.Rendering.Materials.Raw.Red;
                     }
@@ -867,7 +867,7 @@ namespace StrikeforceInfinity.Game.Sprites
         {
             float angle = (float)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
 
-            if (RotationMode != HgRotationMode.None)
+            if (RotationMode != SiRotationMode.None)
             {
                 _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap,
                     _location.X - bitmap.Size.Width / 2.0,

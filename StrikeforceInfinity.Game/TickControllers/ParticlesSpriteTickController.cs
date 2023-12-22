@@ -27,7 +27,7 @@ namespace StrikeforceInfinity.Game.Controller
             for (int i = 0; i < count; i++)
             {
                 var obj = GameCore.Sprites.Particles.CreateRandomShipPartParticleAt(
-                    x + HgRandom.Between(-20, 20), y + HgRandom.Between(-20, 20));
+                    x + SiRandom.Between(-20, 20), y + SiRandom.Between(-20, 20));
                 obj.Visable = true;
             }
         }
@@ -37,7 +37,7 @@ namespace StrikeforceInfinity.Game.Controller
             for (int i = 0; i < count; i++)
             {
                 var obj = GameCore.Sprites.Particles.CreateRandomShipPartParticleAt(
-                    sprite.X + HgRandom.Between(-20, 20), sprite.Y + HgRandom.Between(-20, 20));
+                    sprite.X + SiRandom.Between(-20, 20), sprite.Y + SiRandom.Between(-20, 20));
                 obj.Visable = true;
             }
         }

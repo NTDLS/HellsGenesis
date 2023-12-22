@@ -15,7 +15,7 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
     /// </summary>
     internal class MunitionBase : SpriteBase
     {
-        public HgFiredFromType FiredFromType { get; private set; }
+        public SiFiredFromType FiredFromType { get; private set; }
         public WeaponBase Weapon { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
         public double MilisecondsToLive { get; set; } = 4000;
@@ -34,19 +34,19 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
             double headingDegrees = firedFrom.Velocity.Angle.Degrees;
             if (weapon.AngleVarianceDegrees > 0)
             {
-                var randomNumber = HgRandom.Between(0, weapon.AngleVarianceDegrees * 100.0) / 100.0;
-                headingDegrees += (HgRandom.FlipCoin() ? 1 : -1) * randomNumber;
+                var randomNumber = SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0) / 100.0;
+                headingDegrees += (SiRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 
             double initialSpeed = weapon.Speed;
             if (Weapon.SpeedVariancePercent > 0)
             {
-                var randomNumber = HgRandom.Between(0, weapon.SpeedVariancePercent * 100.0) / 100.0;
+                var randomNumber = SiRandom.Between(0, weapon.SpeedVariancePercent * 100.0) / 100.0;
                 var variance = randomNumber * weapon.Speed;
-                initialSpeed += (HgRandom.FlipCoin() ? 1 : -1) * variance;
+                initialSpeed += (SiRandom.FlipCoin() ? 1 : -1) * variance;
             }
 
-            var initialVelocity = new HgVelocity()
+            var initialVelocity = new SiVelocity()
             {
                 Angle = new SiAngle(headingDegrees),
                 MaxSpeed = initialSpeed,
@@ -57,11 +57,11 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
 
             if (firedFrom is SpriteEnemyBase)
             {
-                FiredFromType = HgFiredFromType.Enemy;
+                FiredFromType = SiFiredFromType.Enemy;
             }
             else if (firedFrom is SpritePlayerBase)
             {
-                FiredFromType = HgFiredFromType.Player;
+                FiredFromType = SiFiredFromType.Player;
             }
 
             Velocity = initialVelocity;

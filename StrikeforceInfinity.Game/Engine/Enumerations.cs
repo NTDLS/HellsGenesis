@@ -1,7 +1,6 @@
 ﻿namespace StrikeforceInfinity.Game.Engine
 {
-
-    public enum HgControlledBy
+    public enum SiControlledBy
     {
         /// <summary>
         /// This sprite is controlled by local AI and the actions are sent to the
@@ -21,42 +20,42 @@
     }
 
 
-    public enum HgPlayMode
+    public enum SiPlayMode
     {
         SinglePlayer,
         MutiPlayerHost,
         MutiPlayerClient
     }
 
-    public enum HgLevelState
+    public enum SiLevelState
     {
         NotYetStarted,
         Started,
         Ended
     }
 
-    public enum HgSituationState
+    public enum SiSituationState
     {
         NotYetStarted,
         Started,
         Ended
     }
 
-    public enum HgDrawingCacheType
+    public enum SiDrawingCacheType
     {
         Scaling,
         Screen,
         Radar
     }
 
-    public enum HgRelativeDirection
+    public enum SiRelativeDirection
     {
         None,
         Left,
         Right
     }
 
-    public enum HgCardinalDirection
+    public enum SiCardinalDirection
     {
         None,
         North,
@@ -65,7 +64,7 @@
         West
     }
 
-    public enum HgPlayerClass
+    public enum SiPlayerClass
     {
         Debug,
         Frigate,
@@ -77,7 +76,7 @@
         Starfighter
     }
 
-    public enum HgEnemyClass
+    public enum SiEnemyClass
     {
         Debug,
         AITracer,
@@ -91,7 +90,7 @@
         Spectre
     }
 
-    public enum HgMenuItemType
+    public enum SiMenuItemType
     {
         Undefined,
         Title,
@@ -100,33 +99,33 @@
         SelectableTextInput
     }
 
-    public enum HgAnimationReplayMode
+    public enum SiAnimationReplayMode
     {
         SinglePlay,
         LoopedPlay
     };
 
-    public enum HgDamageType
+    public enum SiDamageType
     {
         Unspecified,
         Shield,
         Hull
     }
 
-    public enum HgFiredFromType
+    public enum SiFiredFromType
     {
         Unspecified,
         Player,
         Enemy
     }
 
-    public enum HgRotationMode
+    public enum SiRotationMode
     {
         None, //Almost free.
         Rotate
     }
 
-    public enum HgPlayerKey
+    public enum SiPlayerKey
     {
         SpeedBoost,
         Forward,

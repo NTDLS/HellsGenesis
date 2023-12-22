@@ -16,7 +16,7 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
         public MunitionScattershot(EngineCore gameCore, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
             : base(gameCore, weapon, firedFrom, null, xyOffset)
         {
-            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
+            selectedImageIndex = SiRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
             Initialize();

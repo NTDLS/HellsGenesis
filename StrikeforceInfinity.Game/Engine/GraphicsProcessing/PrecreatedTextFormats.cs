@@ -7,6 +7,7 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
         public TextFormat MenuGeneral { get; private set; }
         public TextFormat MenuTitle { get; private set; }
         public TextFormat MenuItem { get; private set; }
+        public TextFormat TextInputItem { get; private set; }
         public TextFormat LargeBlocker { get; private set; }
         public TextFormat RadarPositionIndicator { get; private set; }
         public TextFormat RealtimePlayerStats { get; private set; }
@@ -21,6 +22,7 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
             MenuItem = new TextFormat(factory, "Consolas", 20) { WordWrapping = WordWrapping.NoWrap };
             RadarPositionIndicator = new TextFormat(factory, "Digital-7 Mono", 16) { WordWrapping = WordWrapping.NoWrap };
             RealtimePlayerStats = new TextFormat(factory, "Consolas", 16) { WordWrapping = WordWrapping.NoWrap };
+            TextInputItem = new TextFormat(factory, "Consolas", 20) { WordWrapping = WordWrapping.NoWrap, };
         }
     }
 }

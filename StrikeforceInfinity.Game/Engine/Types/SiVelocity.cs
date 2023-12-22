@@ -3,9 +3,9 @@ using StrikeforceInfinity.Game.Utility.ExtensionMethods;
 
 namespace StrikeforceInfinity.Game.Engine.Types
 {
-    internal class HgVelocity
+    internal class SiVelocity
     {
-        public delegate void ValueChangeEvent(HgVelocity sender);
+        public delegate void ValueChangeEvent(SiVelocity sender);
 
         public event ValueChangeEvent OnThrottleChanged;
         public event ValueChangeEvent OnBoostChanged;

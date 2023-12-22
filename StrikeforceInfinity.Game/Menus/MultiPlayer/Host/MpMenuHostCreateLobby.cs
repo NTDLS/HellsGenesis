@@ -11,8 +11,8 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
     /// </summary>
     internal class MpMenuHostCreateLobby : MenuBase
     {
-        SpriteMenuSelectableTextInput textBoxName;
-        SpriteMenuSelectableTextInput textBoxMaxPlayers;
+        readonly SpriteMenuSelectableTextInput textBoxName;
+        readonly SpriteMenuSelectableTextInput textBoxMaxPlayers;
 
         public MpMenuHostCreateLobby(EngineCore gameCore)
             : base(gameCore)
@@ -27,22 +27,32 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
-            var helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "NameLabel");
-            helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += helpItem.Size.Height + 5;
+            //---------------------------------------------------------------------------------------------------------
 
-            textBoxName = CreateAndAddSelectableTextInput(new SiPoint(offsetX, offsetY), "Name", "My Game Name");
+            var labelName = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Name: ".PadLeft(25));
+            labelName.X -= (labelName.Size.Width) + 200;
+
+            double xPositionForlabel = labelName.X; //Save the X position for lables.
+            double xPositionForTextBox = labelName.X + labelName.Size.Width; //Save the X position for textboxes.
+
+            textBoxName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelName.Y), "NAME", "My Game Name");
             textBoxName.Selected = true;
-            textBoxName.X -= textBoxName.Size.Width / 2;
+            textBoxName.Y = labelName.Y;
+
+            //---------------------------------------------------------------------------------------------------------
+
             offsetY += textBoxName.Size.Height + 5;
 
-            textBoxMaxPlayers = CreateAndAddSelectableTextInput(new SiPoint(offsetX, offsetY), "MaxPlayers", "100");
-            textBoxMaxPlayers.X -= textBoxMaxPlayers.Size.Width / 2;
+            //---------------------------------------------------------------------------------------------------------
+            var labelMaxPlayers = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Max Players: ".PadLeft(25));
+            textBoxMaxPlayers = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelMaxPlayers.Y), "MAXPLAYERS", "100");
+            //---------------------------------------------------------------------------------------------------------
+
             offsetY += textBoxMaxPlayers.Size.Height + 5;
 
-            helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "Start", " Start ");
-            helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += helpItem.Size.Height + 5;
+            //---------------------------------------------------------------------------------------------------------
+
+            var startButton = CreateAndAddSelectableItem(new SiPoint(xPositionForTextBox, offsetY + 20), "NEXT", "Next >");
 
             OnExecuteSelection += MenuMultiplayerHostOrJoin_OnExecuteSelection;
             OnEscape += MpMenuHostCreateLobby_OnEscape;
@@ -58,7 +68,7 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Host
         {
             if (!int.TryParse(textBoxMaxPlayers.Text, out int maxPlayers))
             {
-                //return false;
+                return false;
             }
 
             //Create the game host on the server.

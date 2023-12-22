@@ -11,7 +11,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player
         public SpriteSerpentPlayer(EngineCore gameCore)
             : base(gameCore)
         {
-            ShipClass = HgPlayerClass.Serpent;
+            ShipClass = SiPlayerClass.Serpent;
 
             string imagePath = @$"Graphics\Player\Ships\{ShipClass}.png";
             Initialize(imagePath, new Size(32, 32));

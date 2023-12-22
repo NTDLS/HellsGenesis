@@ -22,7 +22,7 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (FiredFromType == HgFiredFromType.Enemy)
+            if (FiredFromType == SiFiredFromType.Enemy)
             {
                 if (DistanceTo(_gameCore.Player.Sprite) < MaxSeekingObservationDistance)
                 {
@@ -41,7 +41,7 @@ namespace StrikeforceInfinity.Game.Weapons.Munitions
                     }
                 }
             }
-            else if (FiredFromType == HgFiredFromType.Player)
+            else if (FiredFromType == SiFiredFromType.Player)
             {
                 double? smallestAngle = null;
 

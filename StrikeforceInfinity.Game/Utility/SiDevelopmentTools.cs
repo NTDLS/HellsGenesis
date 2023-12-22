@@ -50,7 +50,7 @@ namespace StrikeforceInfinity.Game.Utility
 
             for (int i = 0; i < particleCount; i++)
             {
-                var obj = gameCore.Sprites.Particles.CreateRandomShipPartParticleAt(X + HgRandom.Between(-20, 20), Y + HgRandom.Between(-20, 20));
+                var obj = gameCore.Sprites.Particles.CreateRandomShipPartParticleAt(X + SiRandom.Between(-20, 20), Y + SiRandom.Between(-20, 20));
                 obj.Visable = true;
             }
         }

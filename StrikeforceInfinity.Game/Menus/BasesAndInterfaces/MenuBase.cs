@@ -29,7 +29,7 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
 
         public List<SpriteMenuItem> VisibleSelectableItems() =>
             Items.Where(o => o.Visable == true
-            && (o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput)).ToList();
+            && (o.ItemType == SiMenuItemType.SelectableItem || o.ItemType == SiMenuItemType.SelectableTextInput)).ToList();
 
         #region Events.
 
@@ -92,7 +92,7 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
             var item = new SpriteMenuItem(_gameCore, this, _gameCore.Rendering.TextFormats.MenuTitle, _gameCore.Rendering.Materials.Brushes.OrangeRed, location)
             {
                 Text = text,
-                ItemType = HgMenuItemType.Title
+                ItemType = SiMenuItemType.Title
             };
             AddMenuItem(item);
             return item;
@@ -103,7 +103,7 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
             var item = new SpriteMenuItem(_gameCore, this, _gameCore.Rendering.TextFormats.MenuGeneral, _gameCore.Rendering.Materials.Brushes.LawnGreen, location)
             {
                 Text = text,
-                ItemType = HgMenuItemType.Textblock
+                ItemType = SiMenuItemType.Textblock
             };
             AddMenuItem(item);
             return item;
@@ -115,7 +115,7 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
             {
                 Key = key,
                 Text = text,
-                ItemType = HgMenuItemType.SelectableItem
+                ItemType = SiMenuItemType.SelectableItem
             };
             AddMenuItem(item);
             return item;
@@ -123,11 +123,11 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
 
         public SpriteMenuSelectableTextInput CreateAndAddSelectableTextInput(SiPoint location, string key, string text = "")
         {
-            var item = new SpriteMenuSelectableTextInput(_gameCore, this, _gameCore.Rendering.TextFormats.MenuItem, _gameCore.Rendering.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuSelectableTextInput(_gameCore, this, _gameCore.Rendering.TextFormats.TextInputItem, _gameCore.Rendering.Materials.Brushes.Orange, location)
             {
                 Key = key,
                 Text = text,
-                ItemType = HgMenuItemType.SelectableTextInput
+                ItemType = SiMenuItemType.SelectableTextInput
             };
             AddMenuItem(item);
             return item;
@@ -180,13 +180,13 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                 return; //We have to keep the menues from going crazy.
             }
 
-            if (_gameCore.Input.IsKeyPressed(HgPlayerKey.Enter))
+            if (_gameCore.Input.IsKeyPressed(SiPlayerKey.Enter))
             {
                 _gameCore.Audio.Click.Play();
 
                 _lastInputHandled = DateTime.UtcNow;
 
-                var selectedItem = (from o in Items where o.ItemType == HgMenuItemType.SelectableItem && o.Selected == true select o).FirstOrDefault();
+                var selectedItem = (from o in Items where o.ItemType == SiMenuItemType.SelectableItem && o.Selected == true select o).FirstOrDefault();
                 if (selectedItem != null)
                 {
                     //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
@@ -199,10 +199,13 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                         {
                             QueueForDelete();
                         }
+                        else
+                        {
+                        }
                     });
                 }
             }
-            else if (_gameCore.Input.IsKeyPressed(HgPlayerKey.Escape))
+            else if (_gameCore.Input.IsKeyPressed(SiPlayerKey.Escape))
             {
                 _gameCore.Audio.Click.Play();
 
@@ -218,13 +221,16 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                     {
                         QueueForDelete();
                     }
+                    else
+                    {
+                    }
                 });
             }
 
-            if (_gameCore.Input.IsKeyPressed(HgPlayerKey.Right)
-                || _gameCore.Input.IsKeyPressed(HgPlayerKey.Down)
-                //|| _gameCore.Input.IsKeyPressed(HgPlayerKey.Reverse)
-                //|| _gameCore.Input.IsKeyPressed(HgPlayerKey.RotateClockwise)
+            if (_gameCore.Input.IsKeyPressed(SiPlayerKey.Right)
+                || _gameCore.Input.IsKeyPressed(SiPlayerKey.Down)
+                //|| _gameCore.Input.IsKeyPressed(SiPlayerKey.Reverse)
+                //|| _gameCore.Input.IsKeyPressed(SiPlayerKey.RotateClockwise)
                 )
             {
                 _lastInputHandled = DateTime.UtcNow;
@@ -232,7 +238,7 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                 int selectIndex = 0;
 
                 var items = (from o in Items
-                             where o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput
+                             where o.ItemType == SiMenuItemType.SelectableItem || o.ItemType == SiMenuItemType.SelectableTextInput
                              select o).ToList();
                 if (items != null && items.Count > 0)
                 {
@@ -241,7 +247,7 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                     for (int i = 0; i < items.Count; i++)
                     {
                         var item = items[i];
-                        if (item.ItemType == HgMenuItemType.SelectableItem || item.ItemType == HgMenuItemType.SelectableTextInput)
+                        if (item.ItemType == SiMenuItemType.SelectableItem || item.ItemType == SiMenuItemType.SelectableTextInput)
                         {
                             if (item.Selected)
                             {
@@ -262,7 +268,7 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                     if (selectIndex != previouslySelectedIndex)
                     {
                         var selectedItem = (from o in Items
-                                            where (o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput) && o.Selected == true
+                                            where (o.ItemType == SiMenuItemType.SelectableItem || o.ItemType == SiMenuItemType.SelectableTextInput) && o.Selected == true
                                             select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
@@ -278,10 +284,10 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                 }
             }
 
-            if (_gameCore.Input.IsKeyPressed(HgPlayerKey.Left)
-                || _gameCore.Input.IsKeyPressed(HgPlayerKey.Up)
-                //|| _gameCore.Input.IsKeyPressed(HgPlayerKey.Forward)
-                //|| _gameCore.Input.IsKeyPressed(HgPlayerKey.RotateCounterClockwise)
+            if (_gameCore.Input.IsKeyPressed(SiPlayerKey.Left)
+                || _gameCore.Input.IsKeyPressed(SiPlayerKey.Up)
+                //|| _gameCore.Input.IsKeyPressed(SiPlayerKey.Forward)
+                //|| _gameCore.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise)
                 )
             {
                 _lastInputHandled = DateTime.UtcNow;
@@ -289,7 +295,7 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                 int selectIndex = 0;
 
                 var items = (from o in Items
-                             where o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput
+                             where o.ItemType == SiMenuItemType.SelectableItem || o.ItemType == SiMenuItemType.SelectableTextInput
                              select o).ToList();
                 if (items != null && items.Count > 0)
                 {
@@ -298,7 +304,7 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                     for (int i = 0; i < items.Count; i++)
                     {
                         var item = items[i];
-                        if (item.ItemType == HgMenuItemType.SelectableItem || item.ItemType == HgMenuItemType.SelectableTextInput)
+                        if (item.ItemType == SiMenuItemType.SelectableItem || item.ItemType == SiMenuItemType.SelectableTextInput)
                         {
                             if (item.Selected)
                             {
@@ -319,7 +325,7 @@ namespace StrikeforceInfinity.Game.Menus.BasesAndInterfaces
                     if (selectIndex != previouslySelectedIndex)
                     {
                         var selectedItem = (from o in Items
-                                            where (o.ItemType == HgMenuItemType.SelectableItem || o.ItemType == HgMenuItemType.SelectableTextInput) && o.Selected == true
+                                            where (o.ItemType == SiMenuItemType.SelectableItem || o.ItemType == SiMenuItemType.SelectableTextInput) && o.Selected == true
                                             select o).FirstOrDefault();
                         if (selectedItem != null)
                         {

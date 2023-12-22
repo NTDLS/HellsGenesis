@@ -17,7 +17,7 @@ namespace StrikeforceInfinity.Game.Managers
     {
         private readonly EngineCore _gameCore;
 
-        public Dictionary<Point, HgQuadrant> Quadrants { get; private set; } = new();
+        public Dictionary<Point, SiQuadrant> Quadrants { get; private set; } = new();
         public SiPoint BackgroundOffset { get; private set; } = new();
         public SiFrameCounter GameLoopCounter { get; private set; } = new();
         public Control DrawingSurface { get; private set; }
@@ -109,41 +109,41 @@ namespace StrikeforceInfinity.Game.Managers
             var currentScaledScreenBounds = GetCurrentScaledScreenBounds();
 
             return new SiPoint(
-                    HgRandom.Generator.Next((int)currentScaledScreenBounds.Left, (int)(currentScaledScreenBounds.Left + currentScaledScreenBounds.Width)),
-                    HgRandom.Generator.Next((int)currentScaledScreenBounds.Top, (int)(currentScaledScreenBounds.Top + currentScaledScreenBounds.Height))
+                    SiRandom.Generator.Next((int)currentScaledScreenBounds.Left, (int)(currentScaledScreenBounds.Left + currentScaledScreenBounds.Width)),
+                    SiRandom.Generator.Next((int)currentScaledScreenBounds.Top, (int)(currentScaledScreenBounds.Top + currentScaledScreenBounds.Height))
                 );
         }
 
         public SiPoint RandomOffScreenLocation(int minOffscreenDistance = 100, int maxOffscreenDistance = 500)
         {
-            if (HgRandom.FlipCoin())
+            if (SiRandom.FlipCoin())
             {
-                if (HgRandom.FlipCoin())
+                if (SiRandom.FlipCoin())
                 {
                     return new SiPoint(
-                        -HgRandom.Between(minOffscreenDistance, maxOffscreenDistance),
-                        HgRandom.Between(0, TotalCanvasSize.Height));
+                        -SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                        SiRandom.Between(0, TotalCanvasSize.Height));
                 }
                 else
                 {
                     return new SiPoint(
-                        -HgRandom.Between(minOffscreenDistance, maxOffscreenDistance),
-                        HgRandom.Between(0, TotalCanvasSize.Width));
+                        -SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                        SiRandom.Between(0, TotalCanvasSize.Width));
                 }
             }
             else
             {
-                if (HgRandom.FlipCoin())
+                if (SiRandom.FlipCoin())
                 {
                     return new SiPoint(
-                        TotalCanvasSize.Width + HgRandom.Between(minOffscreenDistance, maxOffscreenDistance),
-                        HgRandom.Between(0, TotalCanvasSize.Height));
+                        TotalCanvasSize.Width + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                        SiRandom.Between(0, TotalCanvasSize.Height));
                 }
                 else
                 {
                     return new SiPoint(
-                        TotalCanvasSize.Height + HgRandom.Between(minOffscreenDistance, maxOffscreenDistance),
-                    HgRandom.Between(0, TotalCanvasSize.Width));
+                        TotalCanvasSize.Height + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                    SiRandom.Between(0, TotalCanvasSize.Width));
                 }
             }
         }
@@ -165,7 +165,7 @@ namespace StrikeforceInfinity.Game.Managers
             OverdrawSize = new Size(totalSizeX - NatrualScreenSize.Width, totalSizeY - NatrualScreenSize.Height);
         }
 
-        public HgQuadrant GetQuadrant(double x, double y)
+        public SiQuadrant GetQuadrant(double x, double y)
         {
             var coord = new Point(
                     (int)(x / NatrualScreenSize.Width),
@@ -180,7 +180,7 @@ namespace StrikeforceInfinity.Game.Managers
                     NatrualScreenSize.Width,
                     NatrualScreenSize.Height);
 
-                var quad = new HgQuadrant(coord, absoluteBounds);
+                var quad = new SiQuadrant(coord, absoluteBounds);
 
                 Quadrants.Add(coord, quad);
             }

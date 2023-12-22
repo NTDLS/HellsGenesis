@@ -19,7 +19,7 @@ namespace StrikeforceInfinity.Game.Levels.BasesAndInterfaces
         public string Description { get; set; }
         public int CurrentWave { get; set; } = 0;
         public int TotalWaves { get; set; } = 1;
-        public HgLevelState State { get; protected set; } = HgLevelState.NotYetStarted;
+        public SiLevelState State { get; protected set; } = SiLevelState.NotYetStarted;
 
         public LevelBase(EngineCore gameCore, string name, string description)
         {
@@ -35,23 +35,23 @@ namespace StrikeforceInfinity.Game.Levels.BasesAndInterfaces
                 obj.QueuedForDeletion = true;
             }
 
-            State = HgLevelState.Ended;
+            State = SiLevelState.Ended;
         }
 
         public virtual void Begin()
         {
-            State = HgLevelState.Started;
+            State = SiLevelState.Started;
         }
 
-        protected SiEngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, HgOnExecute executeCallback)
+        protected SiEngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, SiOnExecute executeCallback)
         {
             //Keep track of recurring events to we can delete them when we are done.
-            var obj = _gameCore.Events.Create(timeout, executeCallback, null, HgCallbackEventMode.Recurring);
+            var obj = _gameCore.Events.Create(timeout, executeCallback, null, SiCallbackEventMode.Recurring);
             Events.Add(obj);
             return obj;
         }
 
-        protected SiEngineCallbackEvent AddSingleFireEvent(TimeSpan timeout, HgOnExecute executeCallback)
+        protected SiEngineCallbackEvent AddSingleFireEvent(TimeSpan timeout, SiOnExecute executeCallback)
         {
             return _gameCore.Events.Create(timeout, executeCallback);
         }

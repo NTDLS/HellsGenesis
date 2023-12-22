@@ -33,7 +33,7 @@ namespace StrikeforceInfinity.Game.Managers
         {
             const string _assetExplosionSoundPath = @"Sounds\Explode\";
             int explosionSoundCount = 4;
-            int selectedExplosionSoundIndex = HgRandom.Generator.Next(0, 1000) % explosionSoundCount;
+            int selectedExplosionSoundIndex = SiRandom.Generator.Next(0, 1000) % explosionSoundCount;
             var explodeSound = _gameCore.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{selectedExplosionSoundIndex}.wav"), 1.0f);
             explodeSound?.Play();
         }

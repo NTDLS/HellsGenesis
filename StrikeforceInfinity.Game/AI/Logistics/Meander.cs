@@ -46,7 +46,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
         public double DistanceToKeep { get; set; } = 500;
         public DateTime? LastDecisionTime { get; set; } = DateTime.Now.AddHours(-1);
         public int MillisecondsBetweenDecisions { get; set; } = 50;
-        public HgRelativeDirection FavorateDirection = HgRelativeDirection.None;
+        public SiRelativeDirection FavorateDirection = SiRelativeDirection.None;
 
         #endregion
 
@@ -65,7 +65,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
             _gameCore = gameCore;
             _owner = owner;
             _observedObject = observedObject;
-            FavorateDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
+            FavorateDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
 
             if (_singletonNetwork != null)
             {
@@ -176,7 +176,7 @@ namespace StrikeforceInfinity.Game.AI.Logistics
             {
                 if (elapsedTimeSinceLastDecision > 1000)
                 {
-                    FavorateDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
+                    FavorateDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
                 }
 
                 var decidingFactors = GatherInputs();
@@ -194,11 +194,11 @@ namespace StrikeforceInfinity.Game.AI.Logistics
                 }
                 else if (transitionToObservationObject)
                 {
-                    _owner.Rotate((45 * 0.05) * (FavorateDirection == HgRelativeDirection.Left ? 1 : -1));
+                    _owner.Rotate((45 * 0.05) * (FavorateDirection == SiRelativeDirection.Left ? 1 : -1));
                 }
                 else if (transitionFromObservationObject)
                 {
-                    _owner.Rotate((-45 * 0.05) * (FavorateDirection == HgRelativeDirection.Left ? 1 : -1));
+                    _owner.Rotate((-45 * 0.05) * (FavorateDirection == SiRelativeDirection.Left ? 1 : -1));
                 }
 
                 LastDecisionTime = now;

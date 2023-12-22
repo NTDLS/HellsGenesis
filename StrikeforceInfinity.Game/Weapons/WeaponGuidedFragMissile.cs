@@ -52,12 +52,12 @@ namespace StrikeforceInfinity.Game.Weapons
                 {
                     if (_toggle)
                     {
-                        var pointRight = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(10, 10));
+                        var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(10, 10));
                         _gameCore.Sprites.Munitions.Create(this, pointRight);
                     }
                     else
                     {
-                        var pointLeft = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(10, 10));
+                        var pointLeft = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(10, 10));
                         _gameCore.Sprites.Munitions.Create(this, pointLeft);
                     }
 
@@ -69,12 +69,12 @@ namespace StrikeforceInfinity.Game.Weapons
                     {
                         if (_toggle)
                         {
-                            var pointRight = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(10, 10));
+                            var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(10, 10));
                             _gameCore.Sprites.Munitions.CreateLocked(this, lockedOn, pointRight);
                         }
                         else
                         {
-                            var pointLeft = HgMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(10, 10));
+                            var pointLeft = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(10, 10));
                             _gameCore.Sprites.Munitions.CreateLocked(this, lockedOn, pointLeft);
                         }
                         _toggle = !_toggle;

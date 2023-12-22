@@ -18,7 +18,7 @@ namespace StrikeforceInfinity.Game.Sprites.PowerUp
         public SpritePowerUpBounty(EngineCore gameCore)
             : base(gameCore)
         {
-            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
+            selectedImageIndex = SiRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
             _powerUpAmount *= selectedImageIndex + 1;
         }

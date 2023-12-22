@@ -33,7 +33,7 @@ namespace StrikeforceInfinity.Game.Controller
                 }
 
                 double requiredAngle = GameCore.Player.Sprite.AngleTo(anchor);
-                var offset = HgMath.AngleFromPointAtDistance(new HgAngle(requiredAngle), new HgPoint(200, 200));
+                var offset = SiMath.AngleFromPointAtDistance(new SiAngle(requiredAngle), new SiPoint(200, 200));
                 pointer.Velocity.Angle.Degrees = requiredAngle;
                 pointer.Location = GameCore.Player.Sprite.Location + offset;
                 anchor.Velocity.Angle.Degrees = anchor.AngleTo(GameCore.Player.Sprite);

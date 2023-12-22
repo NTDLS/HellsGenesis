@@ -43,7 +43,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
 
             SetImage(_imagesPath + "Hull.png");
 
-            ShipClass = HgEnemyClass.Devastator;
+            ShipClass = SiEnemyClass.Devastator;
 
             //Load the loadout from file or create a new one if it does not exist.
             EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
@@ -100,7 +100,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
             {
                 if (_leftGun.IsDead == false)
                 {
-                    var pointLeft = HgMath.PointFromAngleAtDistance360(Velocity.Angle - 90, new SiPoint(25, 25));
+                    var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - 90, new SiPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _leftGun.X = X + pointLeft.X;
                     _leftGun.Y = Y + pointLeft.Y;
@@ -108,7 +108,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
 
                 if (_rightGun.IsDead == false)
                 {
-                    var pointRight = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 90, new SiPoint(25, 25));
+                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 90, new SiPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _rightGun.X = X + pointRight.X;
                     _rightGun.Y = Y + pointRight.Y;
@@ -116,7 +116,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
 
                 if (_leftThrust.IsDead == false)
                 {
-                    var pointLeft = HgMath.PointFromAngleAtDistance360(Velocity.Angle - 135, new SiPoint(35, 35));
+                    var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - 135, new SiPoint(35, 35));
                     _leftThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _leftThrust.X = X + pointLeft.X;
                     _leftThrust.Y = Y + pointLeft.Y;
@@ -124,7 +124,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
 
                 if (_rightThrust.IsDead == false)
                 {
-                    var pointRight = HgMath.PointFromAngleAtDistance360(Velocity.Angle + 135, new SiPoint(35, 35));
+                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 135, new SiPoint(35, 35));
                     _rightThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _rightThrust.X = X + pointRight.X;
                     _rightThrust.Y = Y + pointRight.Y;
@@ -132,7 +132,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
 
                 if (_turret.IsDead == false)
                 {
-                    var pointRight = HgMath.PointFromAngleAtDistance360(Velocity.Angle, new SiPoint(0, 0));
+                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle, new SiPoint(0, 0));
                     _turret.Velocity.Angle.Degrees = AngleTo360(_gameCore.Player.Sprite);
                     _turret.X = X + pointRight.X;
                     _turret.Y = Y + pointRight.Y;
@@ -152,7 +152,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
         }
 
         private const double baseDistanceToKeep = 200;
-        private double distanceToKeep = baseDistanceToKeep * (HgRandom.Generator.NextDouble() + 1);
+        private double distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
         private const double baseFallbackDistance = 800;
         private double fallbackDistance;
         private SiAngle fallToAngle;
@@ -164,7 +164,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
         {
             base.ApplyIntelligence(displacementVector);
 
-            double distanceToPlayer = HgMath.DistanceTo(this, _gameCore.Player.Sprite);
+            double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
 
             //We have no engines. :(
             if (_leftThrust.IsDead && _rightThrust.IsDead)
@@ -268,8 +268,8 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + HgRandom.Between(0, 10));
-                    fallbackDistance = baseFallbackDistance * (HgRandom.Generator.NextDouble() + 1);
+                    fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
+                    fallbackDistance = baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 
@@ -313,7 +313,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Bosses
                 else
                 {
                     mode = AIMode.Approaching;
-                    distanceToKeep = baseDistanceToKeep * (HgRandom.Generator.NextDouble() + 1);
+                    distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 

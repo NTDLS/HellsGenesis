@@ -11,7 +11,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player
         public SpriteCruiserPlayer(EngineCore gameCore)
             : base(gameCore)
         {
-            ShipClass = HgPlayerClass.Cruiser;
+            ShipClass = SiPlayerClass.Cruiser;
 
             string imagePath = @$"Graphics\Player\Ships\{ShipClass}.png";
             Initialize(imagePath, new Size(32, 32));

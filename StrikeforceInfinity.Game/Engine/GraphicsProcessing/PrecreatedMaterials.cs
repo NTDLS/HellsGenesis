@@ -16,6 +16,7 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
             public RawColor4 WhiteSmoke { get; private set; } = new(0.9608f, 0.9608f, 0.9608f, 1);
             public RawColor4 Cyan { get; private set; } = new(0, 1f, 1f, 1f);
             public RawColor4 OrangeRed { get; private set; } = new(1f, 0.2706f, 0.0000f, 1);
+            public RawColor4 Orange { get; private set; } = new(1.0f, 0.6471f, 0.0f, 1);
             public RawColor4 LawnGreen { get; private set; } = new(0.4863f, 0.9882f, 0f, 1);
         }
 
@@ -30,6 +31,7 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
             public SolidColorBrush WhiteSmoke { get; internal set; }
             public SolidColorBrush Cyan { get; internal set; }
             public SolidColorBrush OrangeRed { get; internal set; }
+            public SolidColorBrush Orange { get; internal set; }
             public SolidColorBrush LawnGreen { get; internal set; }
         }
 
@@ -47,6 +49,7 @@ namespace StrikeforceInfinity.Game.Engine.GraphicsProcessing
             Brushes.WhiteSmoke = new SolidColorBrush(renterTarget, Raw.WhiteSmoke);
             Brushes.Cyan = new SolidColorBrush(renterTarget, Raw.Cyan);
             Brushes.OrangeRed = new SolidColorBrush(renterTarget, Raw.OrangeRed);
+            Brushes.Orange = new SolidColorBrush(renterTarget, Raw.Orange);
             Brushes.LawnGreen = new SolidColorBrush(renterTarget, Raw.LawnGreen);
         }
     }

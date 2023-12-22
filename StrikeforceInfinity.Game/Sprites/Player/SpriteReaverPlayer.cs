@@ -11,7 +11,7 @@ namespace StrikeforceInfinity.Game.Sprites.Player
         public SpriteReaverPlayer(EngineCore gameCore)
             : base(gameCore)
         {
-            ShipClass = HgPlayerClass.Reaver;
+            ShipClass = SiPlayerClass.Reaver;
 
             string imagePath = @$"Graphics\Player\Ships\{ShipClass}.png";
             Initialize(imagePath, new Size(32, 32));

@@ -13,25 +13,25 @@ namespace StrikeforceInfinity.Game.Sprites
 
 
         private double _rotationSpeed;
-        private HgRelativeDirection _rotationDirection;
+        private SiRelativeDirection _rotationDirection;
         private SiAngle _travelAngle = new();
 
         public SpriteRandomShipPartParticle(EngineCore gameCore, double x, double y)
             : base(gameCore)
         {
-            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % _imageCount;
+            selectedImageIndex = SiRandom.Generator.Next(0, 1000) % _imageCount;
 
             Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
             X = x;
             Y = y;
 
-            _rotationSpeed = HgRandom.Between(1, 100) / 20.0;
-            _rotationDirection = HgRandom.FlipCoin() ? HgRelativeDirection.Left : HgRelativeDirection.Right;
-            _travelAngle.Degrees = HgRandom.Between(0, 360);
+            _rotationSpeed = SiRandom.Between(1, 100) / 20.0;
+            _rotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
+            _travelAngle.Degrees = SiRandom.Between(0, 360);
 
             Velocity.ThrottlePercentage = 100;
-            Velocity.MaxSpeed = HgRandom.Between(1.0, 4.0);
+            Velocity.MaxSpeed = SiRandom.Between(1.0, 4.0);
 
             _gameCore = gameCore;
         }
@@ -41,11 +41,11 @@ namespace StrikeforceInfinity.Game.Sprites
             X += _travelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
             Y += _travelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
 
-            if (_rotationDirection == HgRelativeDirection.Right)
+            if (_rotationDirection == SiRelativeDirection.Right)
             {
                 Velocity.Angle.Degrees += _rotationSpeed;
             }
-            else if (_rotationDirection == HgRelativeDirection.Left)
+            else if (_rotationDirection == SiRelativeDirection.Left)
             {
                 Velocity.Angle.Degrees -= _rotationSpeed;
             }

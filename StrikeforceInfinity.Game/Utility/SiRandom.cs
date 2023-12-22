@@ -2,7 +2,7 @@
 
 namespace StrikeforceInfinity.Game.Utility
 {
-    internal class HgRandom
+    internal class SiRandom
     {
         public static Random Generator = new();
 

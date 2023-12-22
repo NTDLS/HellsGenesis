@@ -38,15 +38,15 @@ namespace StrikeforceInfinity.Game.Sprites.MenuItems
 
         public string Key { get; set; }
 
-        public HgMenuItemType ItemType { get; set; }
+        public SiMenuItemType ItemType { get; set; }
 
         public SpriteMenuItem(EngineCore gameCore, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location)
             : base(gameCore, format, color, location, true)
         {
-            ItemType = HgMenuItemType.Undefined;
+            ItemType = SiMenuItemType.Undefined;
             Menu = menu;
             Visable = true;
-            Velocity = new HgVelocity();
+            Velocity = new SiVelocity();
 
 
         }

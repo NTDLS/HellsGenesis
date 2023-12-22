@@ -26,12 +26,12 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
         public SpriteEnemyDebug(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
-            selectedImageIndex = HgRandom.Generator.Next(0, 1000) % imageCount;
+            selectedImageIndex = SiRandom.Generator.Next(0, 1000) % imageCount;
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
 
-            ShipClass = HgEnemyClass.Debug;
+            ShipClass = SiEnemyClass.Debug;
 
-            if (ControlledBy == HgControlledBy.Server)
+            if (ControlledBy == SiControlledBy.Server)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
@@ -64,13 +64,13 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
             ResetLoadout(loadout);
 
             Velocity.MaxBoost = 1.5;
-            Velocity.MaxSpeed = HgRandom.Generator.Next(_gameCore.Settings.MaxEnemySpeed - 4, _gameCore.Settings.MaxEnemySpeed - 3);
+            Velocity.MaxSpeed = SiRandom.Generator.Next(_gameCore.Settings.MaxEnemySpeed - 4, _gameCore.Settings.MaxEnemySpeed - 3);
 
             AddAIController(new HostileEngagement(_gameCore, this, _gameCore.Player.Sprite));
             AddAIController(new Taunt(_gameCore, this, _gameCore.Player.Sprite));
             AddAIController(new Meander(_gameCore, this, _gameCore.Player.Sprite));
 
-            //if (HgRandom.FlipCoin())
+            //if (SiRandom.FlipCoin())
             //{
             SetCurrentAIController(AIControllers[typeof(Taunt)]);
             //}
@@ -79,7 +79,7 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
             //    SetDefaultAIController(AIControllers[typeof(Meander)]);
             //}
 
-            behaviorChangeThresholdMiliseconds = HgRandom.Between(2000, 10000);
+            behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
 
             SetCurrentAIController(AIControllers[typeof(Taunt)]);
         }
@@ -91,33 +91,33 @@ namespace StrikeforceInfinity.Game.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (ControlledBy == HgControlledBy.Server)
+            if (ControlledBy == SiControlledBy.Server)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
                 return;
             }
 
-            double distanceToPlayer = HgMath.DistanceTo(this, _gameCore.Player.Sprite);
+            double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
 
             base.ApplyIntelligence(displacementVector);
 
             if ((DateTime.Now - lastBehaviorChangeTime).TotalMilliseconds > behaviorChangeThresholdMiliseconds)
             {
-                behaviorChangeThresholdMiliseconds = HgRandom.Between(2000, 10000);
+                behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
 
                 /*
-                if (HgRandom.ChanceIn(2))
+                if (SiRandom.ChanceIn(2))
                 {
                     SetDefaultAIController(AIControllers[typeof(HostileEngagement)]);
                 }
-                if (HgRandom.ChanceIn(2))
+                if (SiRandom.ChanceIn(2))
                 {
                 */
                 SetCurrentAIController(AIControllers[typeof(Taunt)]);
                 /*
                 }
-                else if (HgRandom.ChanceIn(2))
+                else if (SiRandom.ChanceIn(2))
                 {
                     SetDefaultAIController(AIControllers[typeof(Meander)]);
                 }

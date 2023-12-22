@@ -4,7 +4,7 @@ using System;
 
 namespace StrikeforceInfinity.Game.Utility
 {
-    internal class HgMath
+    internal class SiMath
     {
         public const double AngleOffsetDegrees = 90.0;
         public const double AngleOffsetRadians = 1.5707963267948966; //(Math.PI / 180.0) * AngleOffsetDegrees;

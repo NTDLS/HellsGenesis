@@ -13,7 +13,7 @@ namespace StrikeforceInfinity.Game.Sprites
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
             X = 0;
             Y = 0;
-            Velocity = new HgVelocity();
+            Velocity = new SiVelocity();
         }
 
         public SpriteDebug(EngineCore gameCore, double x, double y)
@@ -22,7 +22,7 @@ namespace StrikeforceInfinity.Game.Sprites
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
             X = x;
             Y = y;
-            Velocity = new HgVelocity();
+            Velocity = new SiVelocity();
         }
 
         public SpriteDebug(EngineCore gameCore, double x, double y, string imagePath)
@@ -31,7 +31,7 @@ namespace StrikeforceInfinity.Game.Sprites
             Initialize(imagePath);
             X = x;
             Y = y;
-            Velocity = new HgVelocity();
+            Velocity = new SiVelocity();
         }
 
         public override void ApplyMotion(SiPoint displacementVector)

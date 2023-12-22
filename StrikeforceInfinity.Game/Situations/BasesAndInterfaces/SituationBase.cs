@@ -18,7 +18,7 @@ namespace StrikeforceInfinity.Game.Situations.BasesAndInterfaces
 
         public string Name { get; set; }
         public string Description { get; set; }
-        public HgSituationState State { get; protected set; } = HgSituationState.NotYetStarted;
+        public SiSituationState State { get; protected set; } = SiSituationState.NotYetStarted;
 
         public List<LevelBase> Levels { get; protected set; } = new();
 
@@ -27,7 +27,7 @@ namespace StrikeforceInfinity.Game.Situations.BasesAndInterfaces
             _gameCore = gameCore;
             Name = name;
             Description = description;
-            State = HgSituationState.NotYetStarted;
+            State = SiSituationState.NotYetStarted;
         }
 
         public void End()
@@ -40,7 +40,7 @@ namespace StrikeforceInfinity.Game.Situations.BasesAndInterfaces
                 }
             }
 
-            State = HgSituationState.Ended;
+            State = SiSituationState.Ended;
 
             CurrentLevel = null;
             _currentLevelIndex = 0;
@@ -61,13 +61,13 @@ namespace StrikeforceInfinity.Game.Situations.BasesAndInterfaces
                     CurrentLevel.Begin();
                     _currentLevelIndex++;
 
-                    State = HgSituationState.Started;
+                    State = SiSituationState.Started;
 
                     return true;
                 }
                 else
                 {
-                    State = HgSituationState.Ended;
+                    State = SiSituationState.Ended;
 
                     CurrentLevel = null;
                     return false;
