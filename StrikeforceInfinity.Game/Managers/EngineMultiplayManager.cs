@@ -278,14 +278,7 @@ namespace StrikeforceInfinity.Game.Managers
 
         private IFramePayloadQueryReply MessageClient_OnQueryReceived(MessageClient client, Guid connectionId, IFramePayloadQuery payload)
         {
-            if (false)
-            {
-
-            }
-            else
-            {
-                throw new NotImplementedException("The client query is not implemented.");
-            }
+            throw new NotImplementedException("The client query is not implemented.");
         }
 
 

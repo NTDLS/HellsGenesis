@@ -101,8 +101,7 @@ namespace StrikeforceInfinity.Server.Engine
                     var lobby = Lobbies.GetByLobbyUID(getLobbyInfo.LobyUID);
                     if (lobby == null)
                     {
-                        Log.Exception($"The lobby was not found '{getLobbyInfo.LobyUID}'.");
-                        return new SiGetLobbyInfoReply();
+                        throw new Exception($"The lobby was not found '{getLobbyInfo.LobyUID}'.");
                     }
 
                     return new SiGetLobbyInfoReply()
@@ -150,7 +149,6 @@ namespace StrikeforceInfinity.Server.Engine
                     }
 
                     session.SetRemoteEndpointPort(configure.ClientListenUdpPort);
-
                     if (session.Endpoint == null)
                     {
                         throw new Exception($"Session endpoint can not be null: '{connectionId}'.");
@@ -174,7 +172,6 @@ namespace StrikeforceInfinity.Server.Engine
             {
                 Log.Exception(ex.Message);
                 throw;
-
             }
         }
 
