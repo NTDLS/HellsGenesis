@@ -15,7 +15,6 @@ namespace StrikeforceInfinity.Server.Engine.Managers
             _serverCore = serverCore;
         }
 
-
         public Lobby Create(Guid connectionId, SiLobbyConfiguration configuration)
         {
             return _collection.Use(o =>
