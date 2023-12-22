@@ -40,7 +40,7 @@ namespace StrikeforceInfinity.Menus.SinglePlayer
 
             //Use reflection to get a list of possible player types.
             var playerTypes = SiReflection.GetSubClassesOf<SpritePlayerBase>()
-                .Where(o => o is not ISpriteDrone)
+                .Where(o => o.Name.EndsWith("Drone") == false)
                 .OrderBy(o => o.Name).ToList();
 
             //Move the debug player to the top of the list.

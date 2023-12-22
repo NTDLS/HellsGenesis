@@ -63,6 +63,7 @@ namespace StrikeforceInfinity.Game.Managers
         public MultiplayState State { get; private set; } = new();
         public SiPlayMode PlayMode { get; private set; }
         public Guid LobbyUID { get; private set; } = Guid.Empty;
+        public string PlayerName { get; set; }
 
         public EngineMultiplayManager(EngineCore gameCore)
         {
@@ -102,12 +103,13 @@ namespace StrikeforceInfinity.Game.Managers
             }
         }
 
-        public void RegisterLobbyUID(Guid lobbyUID)
+        public void RegisterLobbyUID(Guid lobbyUID, string playerName)
         {
             LobbyUID = lobbyUID;
+            PlayerName = playerName;
             if (PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiRegisterToLobby(LobbyUID));
+                Notify(new SiRegisterToLobby(LobbyUID, playerName));
             }
         }
 
@@ -115,7 +117,7 @@ namespace StrikeforceInfinity.Game.Managers
         {
             if (PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiRegisterToLobby(LobbyUID));
+                Notify(new SiDeregisterToLobby(LobbyUID));
             }
             LobbyUID = Guid.Empty;
         }

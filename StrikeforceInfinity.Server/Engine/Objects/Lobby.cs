@@ -1,5 +1,6 @@
 ﻿using NTDLS.Semaphore;
 using StrikeforceInfinity.Shared;
+using StrikeforceInfinity.Shared.Payload;
 using System.Timers;
 
 namespace StrikeforceInfinity.Server.Engine.Objects
@@ -35,13 +36,13 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// </summary>
         public int MaxPlayers { get; set; }
 
-        public Lobby(ServerCore serverCore, Guid ownerConnectionId, string name, int maxPlayers)
+        public Lobby(ServerCore serverCore, Guid ownerConnectionId, SiLobbyConfiguration configuration)
         {
             _serverCore = serverCore;
             UID = Guid.NewGuid();
             OwnerConnectionId = ownerConnectionId;
-            Name = name;
-            MaxPlayers = maxPlayers;
+            Name = configuration.Name;
+            MaxPlayers = configuration.MaxPlayers;
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
         }
@@ -52,6 +53,29 @@ namespace StrikeforceInfinity.Server.Engine.Objects
             SiUtility.TryAndIgnore(_timer.Dispose);
         }
 
+        public SiLobbyInfo GetLobbyInfo()
+        {
+            var lobbyInfo = new SiLobbyInfo()
+            {
+                Name = Name,
+                WaitingCount = 0,
+            };
+
+            foreach (var connection in GetConenctions())
+            {
+                lobbyInfo.Connections.Add(new SiLobbyConnection
+                {
+                    Name = "The <player name> is not implemented.",
+                    IsWaitingInLobby = connection.IsWaitingInLobby,
+                    LatencyMs = connection.LatencyMs,
+
+                });
+            }
+
+            return lobbyInfo;
+        }
+
+
         bool _isTimerExecuting = false;
         private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
         {
@@ -61,7 +85,7 @@ namespace StrikeforceInfinity.Server.Engine.Objects
                 {
                     _isTimerExecuting = true;
 
-                    var connectionIds = Connections();
+                    var connectionIds = GetConnectionIDs();
 
                     foreach (var connectionId in connectionIds)
                     {
@@ -99,12 +123,13 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         /// Registers a connection for this lobby.
         /// </summary>
         /// <param name="connectionId"></param>
-        public void Register(Guid connectionId)
+        public void Register(Guid connectionId, string playerName)
         {
             _connections.Use(o =>
             {
                 var state = new LobbyConnection()
                 {
+                    PlayerName = playerName,
                     ConnectionId = connectionId
                 };
 
@@ -135,10 +160,22 @@ namespace StrikeforceInfinity.Server.Engine.Objects
         }
 
         /// <summary>
+        /// Gets the list of all registered connections.
+        /// </summary>
+        /// <param name="connectionId"></param>
+        public List<LobbyConnection> GetConenctions()
+        {
+            return _connections.Use(o =>
+            {
+                return o.Select(o => o.Value).ToList();
+            });
+        }
+
+        /// <summary>
         /// Gets the list of all registered connection ids.
         /// </summary>
         /// <param name="connectionId"></param>
-        public List<Guid> Connections()
+        public List<Guid> GetConnectionIDs()
         {
             return _connections.Use(o =>
             {

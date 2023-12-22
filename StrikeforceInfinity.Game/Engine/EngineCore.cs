@@ -25,7 +25,6 @@ namespace StrikeforceInfinity.Game.Engine
         public EngineAssetManager Assets { get; private set; }
         public EngineDebugManager Debug { get; private set; }
         public MenusTickController Menus { get; private set; }
-
         public EngineRendering Rendering { get; private set; }
         public EngineSettings Settings { get; private set; }
 

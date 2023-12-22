@@ -5,12 +5,13 @@
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public Guid OwnerSessionId { get; set; }
         public Guid UID { get; set; }
+
         public string Name { get; set; } = string.Empty;
         public int MaxPlayers { get; set; }
 
-        public SiLobbyConfiguration(string name, int maxPlayers)
+        public SiLobbyConfiguration(string lobbyName, int maxPlayers)
         {
-            Name = name;
+            Name = lobbyName;
             MaxPlayers = maxPlayers;
         }
 

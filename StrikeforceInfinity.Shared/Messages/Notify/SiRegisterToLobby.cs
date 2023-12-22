@@ -9,10 +9,12 @@ namespace StrikeforceInfinity.Shared.Messages.Notify
     public class SiRegisterToLobby : IFramePayloadNotification
     {
         public Guid LobbyUID { get; set; }
+        public string PlayerName { get; set; }
 
-        public SiRegisterToLobby(Guid lobbyUID)
+        public SiRegisterToLobby(Guid lobbyUID, string playerName)
         {
             LobbyUID = lobbyUID;
+            PlayerName = playerName;
         }
     }
 }

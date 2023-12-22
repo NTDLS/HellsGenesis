@@ -19,7 +19,7 @@ namespace StrikeforceInfinity.Server.Engine.Managers
         {
             return _collection.Use(o =>
             {
-                var lobby = new Lobby(_serverCore, connectionId, configuration.Name, configuration.MaxPlayers);
+                var lobby = new Lobby(_serverCore, connectionId, configuration);
                 {
                     //...
                 };

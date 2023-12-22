@@ -71,7 +71,7 @@ namespace StrikeforceInfinity.Server.Engine
                 }
 
                 //Broadcast the sprite vectors all connections except for the one that sent it.
-                var registeredConnectionIds = lobby.Connections();
+                var registeredConnectionIds = lobby.GetConnectionIDs();
                 registeredConnectionIds.Remove(spriteVectors.ConnectionId); //No need to send to the connection that sent us the vector list.
                 foreach (var registeredConnectionId in registeredConnectionIds)
                 {
@@ -195,7 +195,7 @@ namespace StrikeforceInfinity.Server.Engine
                     return;
                 }
 
-                var registeredConnectionIds = lobby.Connections();
+                var registeredConnectionIds = lobby.GetConnectionIDs();
                 foreach (var registeredConnectionId in registeredConnectionIds)
                 {
                     _messageServer.Notify(registeredConnectionId,
@@ -203,6 +203,20 @@ namespace StrikeforceInfinity.Server.Engine
                 }
 
                 Lobbies.Delete(deleteLobby.LobbyUID);
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiDeregisterToLobby deregister)
+            {
+                Log.Verbose($"ConnectionId: '{connectionId}' deregistered for lobby: '{deregister.LobbyUID}'");
+
+                if (!Lobbies.TryGetByLobbyUID(deregister.LobbyUID, out var lobby))
+                {
+                    Log.Exception($"The lobby was not found '{deregister.LobbyUID}'.");
+                    return;
+                }
+
+                lobby.Deregister(connectionId);
+                session.ClearCurrentLobby();
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiRegisterToLobby register)
@@ -215,7 +229,7 @@ namespace StrikeforceInfinity.Server.Engine
                     return;
                 }
 
-                lobby.Register(connectionId);
+                lobby.Register(connectionId, register.PlayerName);
                 session.SetCurrentLobby(register.LobbyUID);
             }
             //------------------------------------------------------------------------------------------------------------------------------
@@ -256,7 +270,7 @@ namespace StrikeforceInfinity.Server.Engine
                 }
 
                 //The owner of the lobby send a new layout, send it to all of the connections.
-                var registeredConnectionIds = lobby.Connections();
+                var registeredConnectionIds = lobby.GetConnectionIDs();
                 foreach (var registeredConnectionId in registeredConnectionIds)
                 {
                     _messageServer.Notify(registeredConnectionId, layoutDirective);

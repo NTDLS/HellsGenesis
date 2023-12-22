@@ -5,6 +5,7 @@ using StrikeforceInfinity.Game.Sprites.MenuItems;
 using StrikeforceInfinity.Menus.SinglePlayer;
 using System;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace StrikeforceInfinity.Menus.MultiPlayer.Client
 {
@@ -13,6 +14,8 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Client
     /// </summary>
     internal class MpMenuClientJoinLobby : MenuBase
     {
+        readonly SpriteMenuSelectableTextInput textboxPlayerName;
+
         public MpMenuClientJoinLobby(EngineCore gameCore)
             : base(gameCore)
         {
@@ -26,15 +29,33 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Client
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
-            var helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Name");
-            helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += helpItem.Size.Height + 5;
+            //---------------------------------------------------------------------------------------------------------
+
+            var labelName = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Player Name: ".PadLeft(25));
+            labelName.X -= (labelName.Size.Width) + 200;
+
+            double xPositionForlabel = labelName.X; //Save the X position for lables.
+            double xPositionForTextBox = labelName.X + labelName.Size.Width; //Save the X position for textboxes.
+
+            textboxPlayerName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelName.Y), "PLAYERNAME", "Player 2");
+            textboxPlayerName.Selected = true;
+            textboxPlayerName.Y = labelName.Y;
+
+            //---------------------------------------------------------------------------------------------------------
+
+            offsetY += textboxPlayerName.Size.Height + 25;
+
+            //---------------------------------------------------------------------------------------------------------
+            var labelplayerName = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Active Lobbies: ".PadLeft(25));
+
+            //---------------------------------------------------------------------------------------------------------
+
+            offsetY += textboxPlayerName.Size.Height + 5;
 
             var gameHosts = _gameCore.Multiplay.GetHostList();
             foreach (var gameHost in gameHosts)
             {
-                helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), gameHost.UID.ToString(), gameHost.Name);
-                helpItem.X -= helpItem.Size.Width / 2;
+                var helpItem = CreateAndAddSelectableItem(new SiPoint(xPositionForlabel, offsetY), gameHost.UID.ToString(), gameHost.Name);
                 offsetY += helpItem.Size.Height + 5;
             }
 
@@ -58,7 +79,7 @@ namespace StrikeforceInfinity.Menus.MultiPlayer.Client
         {
             var lobbyUID = Guid.Parse(item.Key);
 
-            _gameCore.Multiplay.RegisterLobbyUID(lobbyUID);
+            _gameCore.Multiplay.RegisterLobbyUID(lobbyUID, textboxPlayerName.Text);
             _gameCore.Menus.Insert(new MpMenuClientSelectLoadout(_gameCore));
 
             return true;

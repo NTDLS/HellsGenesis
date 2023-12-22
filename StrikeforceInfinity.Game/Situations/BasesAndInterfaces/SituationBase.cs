@@ -32,18 +32,21 @@ namespace StrikeforceInfinity.Game.Situations.BasesAndInterfaces
 
         public void End()
         {
-            lock (CurrentLevel)
+            if (CurrentLevel != null)
             {
-                foreach (var obj in Levels)
+                lock (CurrentLevel)
                 {
-                    obj.End();
+                    foreach (var obj in Levels)
+                    {
+                        obj.End();
+                    }
                 }
+
+                State = SiSituationState.Ended;
+
+                CurrentLevel = null;
+                _currentLevelIndex = 0;
             }
-
-            State = SiSituationState.Ended;
-
-            CurrentLevel = null;
-            _currentLevelIndex = 0;
         }
 
         /// <summary>
