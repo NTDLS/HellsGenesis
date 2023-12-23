@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Si.Game.Engine;
 using Si.Game.Engine.Types;
-using Si.Game.Loudouts;
+using Si.Shared.GameEngine.Loudouts;
 using Si.Game.Managers;
 using Si.Game.Utility;
 using Si.Game.Weapons.BasesAndInterfaces;

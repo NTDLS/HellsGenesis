@@ -1,5 +1,5 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Loudouts;
+using Si.Shared.GameEngine.Loudouts;
 using Si.Game.Sprites.Player.BasesAndInterfaces;
 using Si.Game.Weapons;
 using System.Drawing;

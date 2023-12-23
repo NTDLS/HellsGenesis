@@ -1,7 +1,7 @@
 ﻿using Si.Shared;
 using Si.Game.AI.Logistics;
 using Si.Game.Engine;
-using Si.Game.Loudouts;
+using Si.Shared.GameEngine.Loudouts;
 using Si.Game.Sprites.Enemies.Peons.BasesAndInterfaces;
 using Si.Game.Utility;
 using Si.Game.Weapons;

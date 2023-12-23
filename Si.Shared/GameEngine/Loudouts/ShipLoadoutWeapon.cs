@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Si.Game.Loudouts
+namespace Si.Shared.GameEngine.Loudouts
 {
     public class ShipLoadoutWeapon
     {
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
         public int MunitionCount { get; set; }
 
         public ShipLoadoutWeapon() { }
