@@ -56,6 +56,7 @@ namespace Si.Multiplay
                     lock (this)
                     {
                         _internal_udpManager ??= new UdpMessageManager(_clientListenUdpPort, UdpMessageManager_ProcessNotificationCallback);
+                        _internal_udpManager.WriteMessage(SiConstants.MultiplayServerAddress, SiConstants.MultiplayServerTCPPort, new SiUDPHello());
                     }
                 }
                 return _internal_udpManager;

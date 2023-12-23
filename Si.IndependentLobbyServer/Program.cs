@@ -7,10 +7,9 @@ namespace Si.IndependentLobbyServer
         static void Main(string[] args)
         {
             var multiplay = new EngineMultiplayManager();
-            //Multiplay.OnReceivedSituationLayout += Sprites.ApplySituationLayout;
-            //Multiplay.OnNeedSituationLayout += Sprites.GetSituationLayout;
-            //Multiplay.OnSpriteVectorsUpdated += Sprites.UpdateSpriteVectors;
-
+            //multiplay.OnReceivedSituationLayout += Multiplay_OnReceivedSituationLayout;
+            //multiplay.OnNeedSituationLayout += Multiplay_OnNeedSituationLayout;
+            //multiplay.OnSpriteVectorsUpdated += Multiplay_OnSpriteVectorsUpdated;
 
             multiplay.ConfigureConnection();
 
@@ -19,8 +18,6 @@ namespace Si.IndependentLobbyServer
             multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration("Deep Space -11", 5, 10, 30));
 
             Console.ReadLine();
-
-
         }
     }
 }

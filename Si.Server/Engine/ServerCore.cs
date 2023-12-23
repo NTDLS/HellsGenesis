@@ -56,7 +56,12 @@ namespace Si.Server.Engine
         private void UdpMessageManager_ProcessNotificationCallback(IUDPPayloadNotification payload)
         {
             //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiSpriteVectors spriteVectors)
+            if (payload is SiUDPHello)
+            {
+                Log.Verbose($"A client sent a UDP hello.");
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiSpriteVectors spriteVectors)
             {
                 if (!Sessions.TryGetByConnectionId(spriteVectors.ConnectionId, out var session))
                 {
