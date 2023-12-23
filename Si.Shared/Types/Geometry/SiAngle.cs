@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Si.Shared.Types.Geometry
+﻿namespace Si.Shared.Types.Geometry
 {
     public class SiAngle
     {

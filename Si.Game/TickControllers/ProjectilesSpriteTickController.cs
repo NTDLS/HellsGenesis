@@ -6,8 +6,8 @@ using Si.Game.Sprites.Enemies.Peons.BasesAndInterfaces;
 using Si.Game.TickControllers.BasesAndInterfaces;
 using Si.Game.Weapons.BasesAndInterfaces;
 using Si.Game.Weapons.Munitions;
-using System.Collections.Generic;
 using Si.Shared.Types.Geometry;
+using System.Collections.Generic;
 
 namespace Si.Game.Controller
 {

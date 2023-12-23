@@ -1,7 +1,7 @@
 ﻿using Si.Game.Engine;
-using Si.Shared.Types.Geometry;
 using Si.Game.Menus.BasesAndInterfaces;
 using Si.Menus.SinglePlayer;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Menus.MultiPlayer.Client
 {

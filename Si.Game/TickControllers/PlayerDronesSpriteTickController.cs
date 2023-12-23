@@ -2,9 +2,9 @@
 using Si.Game.Managers;
 using Si.Game.Sprites.Player.BasesAndInterfaces;
 using Si.Game.TickControllers.BasesAndInterfaces;
+using Si.Shared.Types.Geometry;
 using Si.Sprites.BasesAndInterfaces;
 using System.Linq;
-using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Controller
 {

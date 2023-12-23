@@ -2,9 +2,9 @@
 using Si.Game.Managers;
 using Si.Game.Sprites;
 using Si.Game.TickControllers.BasesAndInterfaces;
+using Si.Shared.Types.Geometry;
 using System.Drawing;
 using static Si.Shared.SiConstants;
-using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Controller
 {

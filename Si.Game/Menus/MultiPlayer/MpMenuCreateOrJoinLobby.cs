@@ -1,10 +1,10 @@
 ﻿using Si.Game.Engine;
-using Si.Shared.Types.Geometry;
 using Si.Game.Menus;
 using Si.Game.Menus.BasesAndInterfaces;
 using Si.Game.Sprites.MenuItems;
 using Si.Menus.MultiPlayer.Client;
 using Si.Menus.MultiPlayer.Host;
+using Si.Shared.Types.Geometry;
 using static Si.Shared.SiConstants;
 
 namespace Si.Menus.MultiPlayer

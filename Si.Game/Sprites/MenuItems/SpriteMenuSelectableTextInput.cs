@@ -1,11 +1,10 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using Si.Game.Engine;
-using Si.Game.Engine.Types;
 using Si.Game.Menus.BasesAndInterfaces;
-using static Si.Shared.SiConstants;
-using Si.Shared.Types.Geometry;
 using Si.Shared.Types;
+using Si.Shared.Types.Geometry;
+using static Si.Shared.SiConstants;
 
 namespace Si.Game.Sprites.MenuItems
 {

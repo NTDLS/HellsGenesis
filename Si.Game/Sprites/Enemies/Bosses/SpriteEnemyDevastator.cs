@@ -1,12 +1,12 @@
-﻿using Si.Shared;
-using Si.Game.Engine;
+﻿using Si.Game.Engine;
 using Si.Game.Loudouts;
 using Si.Game.Sprites.Enemies.Bosses.BasesAndInterfaces;
 using Si.Game.Utility;
 using Si.Game.Weapons;
-using static Si.Shared.SiConstants;
+using Si.Shared;
 using Si.Shared.ExtensionMethods;
 using Si.Shared.Types.Geometry;
+using static Si.Shared.SiConstants;
 
 namespace Si.Game.Sprites.Enemies.Bosses
 {

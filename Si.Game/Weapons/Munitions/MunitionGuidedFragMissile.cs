@@ -1,11 +1,10 @@
 ﻿using Si.Game.Engine;
 using Si.Game.Sprites;
-using Si.Game.Utility;
 using Si.Game.Weapons.BasesAndInterfaces;
-using System.Drawing;
-using System.IO;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
+using System.Drawing;
+using System.IO;
 
 namespace Si.Game.Weapons.Munitions
 {

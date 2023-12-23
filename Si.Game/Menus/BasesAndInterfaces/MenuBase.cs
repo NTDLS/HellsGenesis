@@ -1,13 +1,13 @@
 ﻿using SharpDX.DirectInput;
 using Si.Game.Engine;
 using Si.Game.Sprites.MenuItems;
+using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static Si.Shared.SiConstants;
-using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Menus.BasesAndInterfaces
 {

@@ -1,5 +1,4 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 using System.Drawing;

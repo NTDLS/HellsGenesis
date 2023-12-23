@@ -1,11 +1,10 @@
-﻿using Si.Shared;
-using Si.Game.Engine;
+﻿using Si.Game.Engine;
 using Si.Game.Managers;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
 using Si.Game.TickControllers.BasesAndInterfaces;
-using Si.Game.Utility;
-using System;
+using Si.Shared;
 using Si.Shared.Types.Geometry;
+using System;
 
 namespace Si.Game.Controller
 {

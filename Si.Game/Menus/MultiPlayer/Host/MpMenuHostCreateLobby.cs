@@ -1,8 +1,8 @@
 ﻿using Si.Game.Engine;
-using Si.Shared.Types.Geometry;
 using Si.Game.Menus.BasesAndInterfaces;
 using Si.Game.Sprites.MenuItems;
 using Si.Shared.Payload;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Menus.MultiPlayer.Host
 {

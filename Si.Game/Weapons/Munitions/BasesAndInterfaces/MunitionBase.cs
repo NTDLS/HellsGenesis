@@ -1,15 +1,13 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types;
 using Si.Game.Sprites;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
 using Si.Game.Sprites.Player.BasesAndInterfaces;
-using Si.Game.Utility;
 using Si.Game.Weapons.BasesAndInterfaces;
+using Si.Shared;
+using Si.Shared.Types;
+using Si.Shared.Types.Geometry;
 using System;
 using static Si.Shared.SiConstants;
-using Si.Shared;
-using Si.Shared.Types.Geometry;
-using Si.Shared.Types;
 
 namespace Si.Game.Weapons.Munitions
 {

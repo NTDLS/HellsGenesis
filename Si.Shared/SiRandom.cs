@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Si.Shared
+﻿namespace Si.Shared
 {
     public class SiRandom
     {

@@ -2,7 +2,6 @@
 using Si.Game.Managers;
 using Si.Game.Sprites;
 using Si.Game.TickControllers.BasesAndInterfaces;
-using Si.Game.Utility;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 

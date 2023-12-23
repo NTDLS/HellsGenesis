@@ -1,9 +1,9 @@
 ﻿using Si.Game.Engine;
-using Si.Shared.Types.Geometry;
 using Si.Game.Menus.BasesAndInterfaces;
 using Si.Game.Sprites.MenuItems;
 using Si.Menus.MultiPlayer;
 using Si.Menus.SinglePlayer;
+using Si.Shared.Types.Geometry;
 using static Si.Shared.SiConstants;
 
 namespace Si.Game.Menus

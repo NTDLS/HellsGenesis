@@ -1,7 +1,6 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using Si.Game.Engine;
-using Si.Game.Engine.Types;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 

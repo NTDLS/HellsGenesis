@@ -1,8 +1,7 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Utility;
-using System.IO;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
+using System.IO;
 
 namespace Si.Game.Sprites
 {

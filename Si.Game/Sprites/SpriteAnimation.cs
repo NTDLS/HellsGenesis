@@ -2,7 +2,6 @@
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
 using Si.Game.Engine;
-using Si.Game.Engine.Types;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 using System;

@@ -4,8 +4,8 @@ using Si.Game.Levels.BasesAndInterfaces;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
 using Si.Game.Sprites.Enemies.Peons;
 using Si.Game.Utility;
-using System.Linq;
 using Si.Shared.Types.Geometry;
+using System.Linq;
 
 namespace Si.Game.Levels
 {

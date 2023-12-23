@@ -1,15 +1,15 @@
-﻿using Si.Shared;
-using Si.Game.AI.Logistics;
+﻿using Si.Game.AI.Logistics;
 using Si.Game.Engine;
 using Si.Game.Loudouts;
 using Si.Game.Sprites.Enemies.Peons.BasesAndInterfaces;
 using Si.Game.Utility;
 using Si.Game.Weapons;
+using Si.Shared;
+using Si.Shared.Types.Geometry;
 using System;
 using System.Drawing;
 using System.IO;
 using static Si.Shared.SiConstants;
-using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Sprites.Enemies.Peons
 {

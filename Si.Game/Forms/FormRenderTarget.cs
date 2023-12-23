@@ -1,7 +1,7 @@
 ﻿using Si.Game.Engine;
-using Si.Shared.Types.Geometry;
 using Si.Game.Sprites;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
+using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

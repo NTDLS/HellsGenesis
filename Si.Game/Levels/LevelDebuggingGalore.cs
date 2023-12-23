@@ -3,7 +3,6 @@ using Si.Game.Engine.Types;
 using Si.Game.Levels.BasesAndInterfaces;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
 using Si.Game.Sprites.Enemies.Peons;
-using Si.Game.Utility;
 using Si.Shared;
 
 namespace Si.Game.Levels

@@ -4,15 +4,15 @@ using Si.Game.Engine.Types;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
 using Si.Game.Utility;
 using Si.Game.Weapons.Munitions;
+using Si.Shared.ExtensionMethods;
 using Si.Shared.Messages.Notify;
+using Si.Shared.Types;
+using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using static Si.Shared.SiConstants;
-using Si.Shared.ExtensionMethods;
-using Si.Shared.Types;
-using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Sprites
 {

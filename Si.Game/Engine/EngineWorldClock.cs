@@ -1,8 +1,8 @@
 ﻿using Si.Game.Sprites;
+using Si.Shared.Types.Geometry;
 using System.Diagnostics;
 using System.Threading;
 using static Si.Shared.SiConstants;
-using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Engine
 {

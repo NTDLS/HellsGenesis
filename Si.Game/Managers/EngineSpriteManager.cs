@@ -1,4 +1,4 @@
-﻿using Si.Shared;
+﻿using SharpDX.Mathematics.Interop;
 using Si.Game.Controller;
 using Si.Game.Engine;
 using Si.Game.Menus;
@@ -7,19 +7,17 @@ using Si.Game.Sprites.Enemies.BasesAndInterfaces;
 using Si.Game.Sprites.Player;
 using Si.Game.Sprites.Player.BasesAndInterfaces;
 using Si.Game.Sprites.PowerUp.BasesAndInterfaces;
-using Si.Game.Utility;
 using Si.Game.Weapons.Munitions;
+using Si.Shared;
 using Si.Shared.Messages.Notify;
 using Si.Shared.Messages.Query;
 using Si.Shared.Payload;
+using Si.Shared.Types.Geometry;
 using Si.Sprites.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Si.Shared.SiConstants;
-using SharpDX.Mathematics.Interop;
-using System.Drawing;
-using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Managers
 {

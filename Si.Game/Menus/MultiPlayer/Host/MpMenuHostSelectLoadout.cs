@@ -1,11 +1,10 @@
-﻿using Si.Shared;
-using Si.Game.Engine;
-using Si.Shared.Types.Geometry;
+﻿using Si.Game.Engine;
 using Si.Game.Menus.BasesAndInterfaces;
 using Si.Game.Sprites.MenuItems;
 using Si.Game.Sprites.Player.BasesAndInterfaces;
-using Si.Game.Utility;
 using Si.Menus.MultiPlayer.Host;
+using Si.Shared;
+using Si.Shared.Types.Geometry;
 using System.Linq;
 using System.Threading;
 
