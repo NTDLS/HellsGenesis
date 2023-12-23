@@ -9,11 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		ToDo.txt = ToDo.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Game", "StrikeforceInfinity.Game\StrikeforceInfinity.Game.csproj", "{6A6E6F4E-D794-4211-B5C5-A6292432476E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Shared", "Si.Shared\Si.Shared.csproj", "{5E27B9A7-5E9F-44F9-9327-4046B7A10973}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Server", "StrikeforceInfinity.Server\StrikeforceInfinity.Server.csproj", "{2501CC2B-281E-4C07-927E-60002C103E1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Server", "Si.Server\Si.Server.csproj", "{6FD804F5-47FF-4F05-93E7-1096D3EBE32A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StrikeforceInfinity.Shared", "StrikeforceInfinity.Shared\StrikeforceInfinity.Shared.csproj", "{DD34E270-9942-4E5A-A88E-9A467F05FB6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Multiplay", "Si.Multiplay\Si.Multiplay.csproj", "{FF5BC88A-45E6-4394-BB1F-CB43A9429CC1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Game", "Si.Game\Si.Game.csproj", "{2DE0D5CC-1E88-4ED7-8583-B9BE69EB2E08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,18 +23,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6A6E6F4E-D794-4211-B5C5-A6292432476E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A6E6F4E-D794-4211-B5C5-A6292432476E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A6E6F4E-D794-4211-B5C5-A6292432476E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A6E6F4E-D794-4211-B5C5-A6292432476E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2501CC2B-281E-4C07-927E-60002C103E1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2501CC2B-281E-4C07-927E-60002C103E1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2501CC2B-281E-4C07-927E-60002C103E1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2501CC2B-281E-4C07-927E-60002C103E1C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DD34E270-9942-4E5A-A88E-9A467F05FB6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E27B9A7-5E9F-44F9-9327-4046B7A10973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E27B9A7-5E9F-44F9-9327-4046B7A10973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E27B9A7-5E9F-44F9-9327-4046B7A10973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E27B9A7-5E9F-44F9-9327-4046B7A10973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FD804F5-47FF-4F05-93E7-1096D3EBE32A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FD804F5-47FF-4F05-93E7-1096D3EBE32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FD804F5-47FF-4F05-93E7-1096D3EBE32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FD804F5-47FF-4F05-93E7-1096D3EBE32A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF5BC88A-45E6-4394-BB1F-CB43A9429CC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF5BC88A-45E6-4394-BB1F-CB43A9429CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF5BC88A-45E6-4394-BB1F-CB43A9429CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF5BC88A-45E6-4394-BB1F-CB43A9429CC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DE0D5CC-1E88-4ED7-8583-B9BE69EB2E08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DE0D5CC-1E88-4ED7-8583-B9BE69EB2E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DE0D5CC-1E88-4ED7-8583-B9BE69EB2E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DE0D5CC-1E88-4ED7-8583-B9BE69EB2E08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
