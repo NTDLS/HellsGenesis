@@ -5,8 +5,10 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{5E60224E-A4A6-47B6-A293-F24A5EFE403F}"
 	ProjectSection(SolutionItems) = preProject
-		Menus.txt = Menus.txt
-		ToDo.txt = ToDo.txt
+		Modules.md = Modules.md
+		Menus.md = Menus.md
+		Terms.md = Terms.md
+		ToDo.md = ToDo.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Shared", "Si.Shared\Si.Shared.csproj", "{5E27B9A7-5E9F-44F9-9327-4046B7A10973}"

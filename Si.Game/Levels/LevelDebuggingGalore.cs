@@ -4,7 +4,6 @@ using Si.Game.Levels.BasesAndInterfaces;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
 using Si.Game.Sprites.Enemies.Peons;
 using Si.Game.Utility;
-using static Si.Shared.SiConstants;
 
 namespace Si.Game.Levels
 {
@@ -63,10 +62,7 @@ namespace Si.Game.Levels
 
                 CurrentWave++;
 
-                if (_gameCore.Multiplay.State.PlayMode == SiPlayMode.MutiPlayerHost)
-                {
-                    _gameCore.Multiplay.BroadcastLevelLayout();
-                }
+                _gameCore.Multiplay.BroadcastSituationLayout();
             }
         }
 

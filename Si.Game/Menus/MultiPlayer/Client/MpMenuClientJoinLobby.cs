@@ -51,7 +51,7 @@ namespace Si.Menus.MultiPlayer.Client
 
             offsetY += textboxPlayerName.Size.Height + 5;
 
-            var gameHosts = _gameCore.Multiplay.GetHostList();
+            var gameHosts = _gameCore.Multiplay.ListLobbies();
             foreach (var gameHost in gameHosts)
             {
                 var helpItem = CreateAndAddSelectableItem(new SiPoint(xPositionForlabel, offsetY), gameHost.UID.ToString(), gameHost.Name);

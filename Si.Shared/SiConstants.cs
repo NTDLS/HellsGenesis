@@ -3,8 +3,8 @@
     public static class SiConstants
     {
         public static string FriendlyName = "Strikeforce Infinity";
-        public const string DataAddress = "127.0.0.1";
-        public const int DataPort = 6785;
+        public const string MultiplayServerAddress = "127.0.0.1";
+        public const int MultiplayServerTCPPort = 6785;
 
         public enum SiPlayMode
         {
