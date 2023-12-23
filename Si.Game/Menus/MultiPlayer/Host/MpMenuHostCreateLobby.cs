@@ -12,7 +12,9 @@ namespace Si.Menus.MultiPlayer.Host
     internal class MpMenuHostCreateLobby : MenuBase
     {
         readonly SpriteMenuSelectableTextInput textBoxName;
+        readonly SpriteMenuSelectableTextInput textBoxMinPlayers;
         readonly SpriteMenuSelectableTextInput textBoxMaxPlayers;
+        readonly SpriteMenuSelectableTextInput textBoxAutoStartSeconds;
         readonly SpriteMenuSelectableTextInput textboxPlayerName;
 
         public MpMenuHostCreateLobby(EngineCore gameCore)
@@ -52,8 +54,22 @@ namespace Si.Menus.MultiPlayer.Host
             offsetY += textboxPlayerName.Size.Height + 5;
 
             //---------------------------------------------------------------------------------------------------------
+            var labelMinPlayers = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Min. Players: ".PadLeft(25));
+            textBoxMinPlayers = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelMinPlayers.Y), "MINPLAYERS", "2");
+            //---------------------------------------------------------------------------------------------------------
+
+            offsetY += textboxPlayerName.Size.Height + 5;
+
+            //---------------------------------------------------------------------------------------------------------
             var labelMaxPlayers = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Max Players: ".PadLeft(25));
             textBoxMaxPlayers = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelMaxPlayers.Y), "MAXPLAYERS", "100");
+            //---------------------------------------------------------------------------------------------------------
+
+            offsetY += textboxPlayerName.Size.Height + 5;
+
+            //---------------------------------------------------------------------------------------------------------
+            var labelAutoStartSeconds = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Auto Start Seconds: ".PadLeft(25));
+            textBoxAutoStartSeconds = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelAutoStartSeconds.Y), "AUTOSTARTSECONDS", "60");
             //---------------------------------------------------------------------------------------------------------
 
             offsetY += textBoxMaxPlayers.Size.Height + 25;
@@ -74,7 +90,15 @@ namespace Si.Menus.MultiPlayer.Host
 
         private bool MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
         {
+            if (!int.TryParse(textBoxMinPlayers.Text, out int minxPlayers))
+            {
+                return false;
+            }
             if (!int.TryParse(textBoxMaxPlayers.Text, out int maxPlayers))
+            {
+                return false;
+            }
+            if (!int.TryParse(textBoxAutoStartSeconds.Text, out int autoStartSeconds))
             {
                 return false;
             }
@@ -82,7 +106,7 @@ namespace Si.Menus.MultiPlayer.Host
             //TODO: validate user input here.
 
             //Create the game host on the server.
-            var lobbyUID = _gameCore.Multiplay.CreateLobby(new SiLobbyConfiguration(textBoxName.Text, maxPlayers));
+            var lobbyUID = _gameCore.Multiplay.CreateLobby(new SiLobbyConfiguration(textBoxName.Text, minxPlayers, maxPlayers, autoStartSeconds));
 
             _gameCore.Multiplay.RegisterLobbyUID(lobbyUID, textboxPlayerName.Text);
 

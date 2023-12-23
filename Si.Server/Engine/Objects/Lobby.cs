@@ -32,9 +32,19 @@ namespace Si.Server.Engine.Objects
         public string Name { get; set; }
 
         /// <summary>
+        /// The minimum number of players needed to start the game.
+        /// </summary>
+        public int MinPlayers { get; set; }
+
+        /// <summary>
         /// The maximum number of players that can register for the lobby.
         /// </summary>
         public int MaxPlayers { get; set; }
+
+        /// <summary>
+        /// The maximum amount of time to wait after reaching the MinPlayers that the server will wait before auto-starting the game.
+        /// </summary>
+        public int AutoStartSeconds { get; set; }
 
         public Lobby(ServerCore serverCore, Guid ownerConnectionId, SiLobbyConfiguration configuration)
         {
@@ -42,7 +52,11 @@ namespace Si.Server.Engine.Objects
             UID = Guid.NewGuid();
             OwnerConnectionId = ownerConnectionId;
             Name = configuration.Name;
+            MinPlayers = configuration.MinPlayers;
             MaxPlayers = configuration.MaxPlayers;
+            AutoStartSeconds = configuration.AutoStartSeconds;
+
+
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
         }

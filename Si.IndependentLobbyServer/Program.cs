@@ -14,9 +14,9 @@ namespace Si.IndependentLobbyServer
 
             multiplay.ConfigureConnection();
 
-            multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration("Boaring Hoast", 10));
-            multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration("Werbenjägermanjensen", 10));
-            multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration("Deep Space -11", 10));
+            multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration("Boaring Hoast", 1, 10, 30));
+            multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration("Werbenjägermanjensen", 2, 10, 30));
+            multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration("Deep Space -11", 5, 10, 30));
 
             Console.ReadLine();
 
