@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace Si.Game.Engine.Types
+﻿namespace Si.Shared.Types
 {
     /// <summary>
     /// Used to keep track of the FPS that the world clock is executing at.
     /// </summary>
-    internal class SiFrameCounter
+    public class SiFrameCounter
     {
         public DateTime _lastFrame;
         public int _frameRateSamples;

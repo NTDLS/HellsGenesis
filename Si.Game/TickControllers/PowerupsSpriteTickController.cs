@@ -1,9 +1,9 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Managers;
 using Si.Game.Sprites.PowerUp.BasesAndInterfaces;
 using Si.Game.TickControllers.BasesAndInterfaces;
 using System;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Controller
 {

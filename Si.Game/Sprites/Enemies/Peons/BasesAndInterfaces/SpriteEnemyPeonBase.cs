@@ -1,10 +1,10 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
 using Si.Game.Utility;
 using System;
 using System.Drawing;
 using static Si.Shared.SiConstants;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Sprites.Enemies.Peons.BasesAndInterfaces
 {

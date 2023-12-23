@@ -1,12 +1,14 @@
-﻿using Si.Game.Engine;
+﻿using Si.Shared;
+using Si.Game.Engine;
 using Si.Game.Engine.Types;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Utility;
-using Si.Game.Utility.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using Si.Shared.ExtensionMethods;
+using Si.Shared.Types;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Managers
 {

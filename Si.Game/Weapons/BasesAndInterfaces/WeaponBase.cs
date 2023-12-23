@@ -1,11 +1,11 @@
 ﻿using Si.Game.Engine;
 using Si.Game.Engine.Types;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Sprites;
-using Si.Game.Utility.ExtensionMethods;
 using Si.Game.Weapons.Munitions;
 using System;
 using System.Collections.Generic;
+using Si.Shared.ExtensionMethods;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Weapons.BasesAndInterfaces
 {

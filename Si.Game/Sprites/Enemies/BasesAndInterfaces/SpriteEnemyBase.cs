@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using Si.Shared;
+using Newtonsoft.Json;
 using Si.Game.AI;
 using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Loudouts;
 using Si.Game.Managers;
 using Si.Game.Sprites.PowerUp;
 using Si.Game.Sprites.PowerUp.BasesAndInterfaces;
 using Si.Game.Utility;
-using Si.Game.Utility.ExtensionMethods;
 using Si.Game.Weapons.BasesAndInterfaces;
 using Si.Game.Weapons.Munitions;
 using Si.Shared.Messages.Notify;
@@ -15,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Si.Shared.SiConstants;
+using Si.Shared.ExtensionMethods;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Sprites.Enemies.BasesAndInterfaces
 {

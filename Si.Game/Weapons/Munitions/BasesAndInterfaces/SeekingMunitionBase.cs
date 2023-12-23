@@ -1,9 +1,9 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Sprites;
 using Si.Game.Weapons.BasesAndInterfaces;
 using System;
 using static Si.Shared.SiConstants;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Weapons.Munitions
 {

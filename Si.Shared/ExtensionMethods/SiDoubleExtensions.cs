@@ -1,6 +1,6 @@
-﻿namespace Si.Game.Utility.ExtensionMethods
+﻿namespace Si.Shared.ExtensionMethods
 {
-    internal static class SiDoubleExtensions
+    public static class SiDoubleExtensions
     {
         /// <summary>
         /// Degrees 0-360 -> 0 to 180 (right) and 0 to -180 (left).

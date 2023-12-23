@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Si.Shared;
+using Newtonsoft.Json;
 using Si.Game.Engine;
 using Si.Game.Engine.Types;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Loudouts;
 using Si.Game.Managers;
 using Si.Game.Utility;
@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using static Si.Shared.SiConstants;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Sprites.Player.BasesAndInterfaces
 {

@@ -1,5 +1,5 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.TickControllers.BasesAndInterfaces
 {

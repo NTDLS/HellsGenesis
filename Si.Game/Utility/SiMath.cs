@@ -1,5 +1,5 @@
-﻿using Si.Game.Engine.Types.Geometry;
-using Si.Game.Sprites;
+﻿using Si.Game.Sprites;
+using Si.Shared.Types.Geometry;
 using System;
 
 namespace Si.Game.Utility

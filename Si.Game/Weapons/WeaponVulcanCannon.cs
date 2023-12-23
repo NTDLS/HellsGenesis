@@ -1,8 +1,8 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Sprites;
 using Si.Game.Weapons.BasesAndInterfaces;
 using Si.Game.Weapons.Munitions;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Weapons
 {

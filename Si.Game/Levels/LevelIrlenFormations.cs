@@ -1,11 +1,11 @@
 ﻿using Si.Game.Engine;
 using Si.Game.Engine.Types;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Levels.BasesAndInterfaces;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
 using Si.Game.Sprites.Enemies.Peons;
 using Si.Game.Utility;
 using System.Linq;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Levels
 {

@@ -1,9 +1,9 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Sprites.Player.BasesAndInterfaces;
 using Si.Game.TickControllers.BasesAndInterfaces;
-using Si.Game.Utility.ExtensionMethods;
 using static Si.Shared.SiConstants;
+using Si.Shared.ExtensionMethods;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Controller
 {

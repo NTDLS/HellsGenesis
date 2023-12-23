@@ -1,7 +1,7 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
+using Si.Shared.Types.Geometry;
 using System.Drawing;
 
 namespace Si.Game.Sprites

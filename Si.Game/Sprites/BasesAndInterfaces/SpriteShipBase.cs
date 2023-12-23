@@ -1,8 +1,9 @@
 ﻿using Si.Game.Engine;
 using Si.Game.Engine.Types;
-using Si.Game.Engine.Types.Geometry;
-using Si.Game.Utility;
 using Si.Game.Weapons.Munitions;
+using Si.Shared;
+using Si.Shared.Types;
+using Si.Shared.Types.Geometry;
 using System.Drawing;
 using System.IO;
 

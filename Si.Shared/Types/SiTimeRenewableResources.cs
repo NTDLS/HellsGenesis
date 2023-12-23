@@ -1,20 +1,20 @@
-﻿using Si.Game.Utility.ExtensionMethods;
+﻿using Si.Shared.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 
-namespace Si.Game.Engine.Types
+namespace Si.Shared.Types
 {
     /// <summary>
     /// Keeps track of a collection of time-renewable-resources such as "boost amount" or health.
     /// </summary>
-    internal class SiTimeRenewableResources
+    public class SiTimeRenewableResources
     {
         #region class:TimeRenewableResource.
 
         /// <summary>
         /// Keeps track of time-renewable-resources such as "boost amount".
         /// </summary>
-        internal class TimeRenewableResource
+        public class TimeRenewableResource
         {
             public double RebuildRatePerSecond { get; set; }
             public double AvailableResource { get; private set; }

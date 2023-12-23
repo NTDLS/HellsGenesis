@@ -1,7 +1,7 @@
 ﻿using Si.Game.Engine;
 using Si.Game.Engine.Debug;
 using Si.Game.Forms;
-using Si.Game.Utility.ExtensionMethods;
+using Si.Shared.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Linq;

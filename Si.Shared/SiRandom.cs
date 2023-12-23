@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Si.Game.Utility
+namespace Si.Shared
 {
-    internal class SiRandom
+    public class SiRandom
     {
         public static Random Generator = new();
 

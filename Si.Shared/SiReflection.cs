@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace Si.Game.Utility
+namespace Si.Shared
 {
-    internal static class SiReflection
+    public static class SiReflection
     {
         public static IEnumerable<Type> GetSubClassesOf<T>()
         {
@@ -13,33 +10,33 @@ namespace Si.Game.Utility
             return allTypes.Where(type => type.IsSubclassOf(typeof(T)));
         }
 
-        public static string GetStaticPropertyValue(string typeName, string propertyName)
+        public static string? GetStaticPropertyValue(string typeName, string propertyName)
         {
             var type = Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);
             var propertyInfo = type.GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Static);
-            return propertyInfo.GetValue(null) as string;
+            return propertyInfo?.GetValue(null) as string;
         }
 
-        public static T CreateInstanceFromType<T>(Type type, object[] constructorArgs)
+        public static T? CreateInstanceFromType<T>(Type type, object[] constructorArgs)
         {
-            return (T)Activator.CreateInstance(type, constructorArgs);
+            return (T?)Activator.CreateInstance(type, constructorArgs);
         }
 
-        public static T CreateInstanceFromType<T>(Type type)
+        public static T? CreateInstanceFromType<T>(Type type)
         {
-            return (T)Activator.CreateInstance(type);
+            return (T?)Activator.CreateInstance(type);
         }
 
-        public static T CreateInstanceFromTypeName<T>(string typeName, object[] constructorArgs)
-        {
-            var type = Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);
-            return (T)Activator.CreateInstance(type, constructorArgs);
-        }
-
-        public static T CreateInstanceFromTypeName<T>(string typeName)
+        public static T? CreateInstanceFromTypeName<T>(string typeName, object[] constructorArgs)
         {
             var type = Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);
-            return (T)Activator.CreateInstance(type);
+            return (T?)Activator.CreateInstance(type, constructorArgs);
+        }
+
+        public static T? CreateInstanceFromTypeName<T>(string typeName)
+        {
+            var type = Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);
+            return (T?)Activator.CreateInstance(type);
         }
 
         public static Type GetTypeByName(string typeName)
@@ -48,9 +45,9 @@ namespace Si.Game.Utility
         }
 
 
-        public static T CreateInstanceOf<T>(object[] constructorArgs)
+        public static T? CreateInstanceOf<T>(object[] constructorArgs)
         {
-            return (T)Activator.CreateInstance(typeof(T), constructorArgs);
+            return (T?)Activator.CreateInstance(typeof(T), constructorArgs);
 
             /*
             ConstructorInfo constructor = type.GetConstructor(constructorArgs.Select(obj => obj.GetType()).ToArray());

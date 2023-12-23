@@ -1,5 +1,4 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Managers;
 using Si.Game.Sprites;
 using Si.Game.Sprites.Enemies.Bosses.BasesAndInterfaces;
@@ -8,6 +7,7 @@ using Si.Game.TickControllers.BasesAndInterfaces;
 using Si.Game.Weapons.BasesAndInterfaces;
 using Si.Game.Weapons.Munitions;
 using System.Collections.Generic;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Controller
 {

@@ -1,15 +1,15 @@
-﻿using Si.Game.Engine.Types.Geometry;
-using Si.Game.Utility.ExtensionMethods;
+﻿using Si.Shared.ExtensionMethods;
+using Si.Shared.Types.Geometry;
 
-namespace Si.Game.Engine.Types
+namespace Si.Shared.Types
 {
-    internal class SiVelocity
+    public class SiVelocity
     {
         public delegate void ValueChangeEvent(SiVelocity sender);
 
-        public event ValueChangeEvent OnThrottleChanged;
-        public event ValueChangeEvent OnBoostChanged;
-        public event ValueChangeEvent OnRecoilChanged;
+        public event ValueChangeEvent? OnThrottleChanged;
+        public event ValueChangeEvent? OnBoostChanged;
+        public event ValueChangeEvent? OnRecoilChanged;
 
         public SiAngle Angle { get; set; } = new();
         public double MaxSpeed { get; set; }

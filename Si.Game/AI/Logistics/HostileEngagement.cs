@@ -1,12 +1,13 @@
 ﻿using NTDLS.Determinet;
 using NTDLS.Determinet.Types;
 using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Sprites;
 using Si.Game.Utility;
-using Si.Game.Utility.ExtensionMethods;
 using System;
 using static Si.Shared.SiConstants;
+using Si.Shared;
+using Si.Shared.ExtensionMethods;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.AI.Logistics
 {

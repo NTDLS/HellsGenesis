@@ -1,9 +1,10 @@
-﻿using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
+﻿using Si.Shared;
+using Si.Game.Engine;
 using Si.Game.Utility;
 using System;
 using System.Drawing;
 using System.Linq;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Sprites.PowerUp.BasesAndInterfaces
 {

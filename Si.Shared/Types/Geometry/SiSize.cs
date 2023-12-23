@@ -1,6 +1,6 @@
-﻿namespace Si.Game.Engine.Types.Geometry
+﻿namespace Si.Shared.Types.Geometry
 {
-    internal class SiSize
+    public class SiSize
     {
         public double Width { get; set; }
         public double Height { get; set; }

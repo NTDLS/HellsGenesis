@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Si.Game.Engine.Types.Geometry
+namespace Si.Shared.Types.Geometry
 {
-    internal class SiPoint
+    public class SiPoint
     {
         public static SiPoint Zero = new();
 
@@ -141,9 +141,9 @@ namespace Si.Game.Engine.Types.Geometry
             return new SiPoint(original.X * modifier, original.Y * modifier);
         }
 
-        public override bool Equals(object o)
+        public override bool Equals(object? o)
         {
-            return Math.Round(((SiPoint)o).X, 4) == X && Math.Round(((SiPoint)o).Y, 4) == Y;
+            return Math.Round(((SiPoint?)o)?.X ?? double.NaN, 4) == X && Math.Round(((SiPoint?)o)?.Y ?? double.NaN, 4) == Y;
         }
 
         #endregion

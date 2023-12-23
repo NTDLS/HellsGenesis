@@ -1,16 +1,16 @@
 ﻿using System;
 
-namespace Si.Game.Engine.Types.Geometry
+namespace Si.Shared.Types.Geometry
 {
-    internal class SiAngle
+    public class SiNormalizedAngle
     {
         #region Static Utilities.
 
         /// <summary>
         /// Rotate the angle counter-clockwise by 90 degrees. All of our graphics math should assume this.
         /// </summary>
-        public const double AngleOffsetDegrees = 90.0;
-        public const double AngleOffsetRadians = 1.5707963267948966; //(Math.PI / 180.0) * AngleOffsetDegrees;
+        public static double DegreeOffset = 90.0;
+        public static double RadianOffset = Math.PI / 180 * DegreeOffset; //1.5707963267948966
 
         const double DEG_TO_RAD = Math.PI / 180.0;
         const double RAD_TO_DEG = 180.0 / Math.PI;
@@ -27,28 +27,28 @@ namespace Si.Game.Engine.Types.Geometry
 
         public static double XYToRadians(double x, double y)
         {
-            return Math.Atan2(y, x) + AngleOffsetRadians;
+            return Math.Atan2(y, x) + RadianOffset;
         }
 
         public static double XYToDegrees(double x, double y)
         {
-            return RadiansToDegrees(Math.Atan2(y, x)) + AngleOffsetDegrees;
+            return RadiansToDegrees(Math.Atan2(y, x)) + DegreeOffset;
         }
 
-        public static SiPoint ToXY(SiAngle angle)
+        public static SiPoint ToXY(SiNormalizedAngle angle)
         {
             return new SiPoint(angle.X, angle.Y);
         }
 
         public static SiPoint DegreesToXY(double degrees)
         {
-            double radians = DegreesToRadians(degrees) - AngleOffsetRadians;
+            double radians = DegreesToRadians(degrees) - RadianOffset;
             return new SiPoint(Math.Cos(radians), Math.Sin(radians));
         }
 
         public static SiPoint RadiansToXY(double radians)
         {
-            radians -= AngleOffsetRadians;
+            radians -= RadianOffset;
             return new SiPoint(Math.Cos(radians), Math.Sin(radians));
         }
 
@@ -56,62 +56,62 @@ namespace Si.Game.Engine.Types.Geometry
 
         #region ~/CTor.
 
-        public SiAngle()
+        public SiNormalizedAngle()
         {
         }
 
-        public SiAngle(SiAngle angle)
+        public SiNormalizedAngle(SiNormalizedAngle angle)
         {
             Degrees = angle.Degrees;
         }
 
-        public SiAngle(double degrees)
+        public SiNormalizedAngle(double degrees)
         {
             Degrees = degrees;
         }
 
-        public SiAngle(double x, double y)
+        public SiNormalizedAngle(double x, double y)
         {
-            Degrees = RadiansToDegrees(Math.Atan2(y, x)) + AngleOffsetDegrees;
+            Degrees = RadiansToDegrees(Math.Atan2(y, x)) + DegreeOffset;
         }
 
         #endregion
 
         #region  Unary Operator Overloading.
 
-        public static SiAngle operator -(SiAngle original, SiAngle modifier)
+        public static SiNormalizedAngle operator -(SiNormalizedAngle original, SiNormalizedAngle modifier)
         {
-            return new SiAngle(original.Degrees - modifier.Degrees);
+            return new SiNormalizedAngle(original.Degrees - modifier.Degrees);
         }
 
-        public static SiAngle operator -(SiAngle original, double degrees)
+        public static SiNormalizedAngle operator -(SiNormalizedAngle original, double degrees)
         {
-            return new SiAngle(original.Degrees - degrees);
+            return new SiNormalizedAngle(original.Degrees - degrees);
         }
 
-        public static SiAngle operator +(SiAngle original, SiAngle modifier)
+        public static SiNormalizedAngle operator +(SiNormalizedAngle original, SiNormalizedAngle modifier)
         {
-            return new SiAngle(original.Degrees + modifier.Degrees);
+            return new SiNormalizedAngle(original.Degrees + modifier.Degrees);
         }
 
-        public static SiAngle operator +(SiAngle original, double degrees)
+        public static SiNormalizedAngle operator +(SiNormalizedAngle original, double degrees)
         {
-            return new SiAngle(original.Degrees + degrees);
+            return new SiNormalizedAngle(original.Degrees + degrees);
         }
 
-        public static SiAngle operator *(SiAngle original, SiAngle modifier)
+        public static SiNormalizedAngle operator *(SiNormalizedAngle original, SiNormalizedAngle modifier)
         {
-            return new SiAngle(original.Degrees * modifier.Degrees);
+            return new SiNormalizedAngle(original.Degrees * modifier.Degrees);
         }
 
-        public static SiAngle operator *(SiAngle original, double degrees)
+        public static SiNormalizedAngle operator *(SiNormalizedAngle original, double degrees)
         {
-            return new SiAngle(original.Degrees * degrees);
+            return new SiNormalizedAngle(original.Degrees * degrees);
         }
 
-        public override bool Equals(object o)
+        public override bool Equals(object? o)
         {
-            return Math.Round(((SiAngle)o).X, 4) == X && Math.Round(((SiAngle)o).Y, 4) == Y;
+            return Math.Round(((SiNormalizedAngle?)o)?.X ?? double.NaN, 4) == X && Math.Round(((SiNormalizedAngle?)o)?.Y ?? double.NaN, 4) == Y;
         }
 
         #endregion
@@ -128,28 +128,11 @@ namespace Si.Game.Engine.Types.Geometry
 
         public bool IsBetween(double minValue, double maxValue)
         {
-            var normalized = DegreesNormalized;
             if (minValue > maxValue)
             {
-                return normalized >= maxValue && normalized <= minValue;
+                return _degrees >= maxValue && _degrees <= minValue;
             }
-            return normalized >= minValue && normalized <= maxValue;
-        }
-
-        public double DegreesNormalized
-        {
-            get
-            {
-                return (_degrees + 180) % 360 - 180;
-            }
-        }
-
-        public double DegreesNormalized360
-        {
-            get
-            {
-                return (_degrees + 360) % 360;
-            }
+            return _degrees >= minValue && _degrees <= maxValue;
         }
 
         public double _degrees;
@@ -161,14 +144,7 @@ namespace Si.Game.Engine.Types.Geometry
             }
             set
             {
-                if (value < 0)
-                {
-                    _degrees = 360 - Math.Abs(value) % 360.0;
-                }
-                else
-                {
-                    _degrees = value % 360;
-                }
+                _degrees = (value + 180) % 360 - 180;
             }
         }
 
@@ -176,7 +152,7 @@ namespace Si.Game.Engine.Types.Geometry
         {
             get
             {
-                return DegreesToRadians(_degrees) - AngleOffsetRadians;
+                return DegreesToRadians(_degrees) - RadianOffset;
             }
         }
 

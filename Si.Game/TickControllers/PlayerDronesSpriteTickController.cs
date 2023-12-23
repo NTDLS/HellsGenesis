@@ -1,10 +1,10 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Managers;
 using Si.Game.Sprites.Player.BasesAndInterfaces;
 using Si.Game.TickControllers.BasesAndInterfaces;
 using Si.Sprites.BasesAndInterfaces;
 using System.Linq;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Controller
 {

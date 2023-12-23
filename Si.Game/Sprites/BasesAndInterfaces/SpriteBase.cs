@@ -1,10 +1,8 @@
 ﻿using SharpDX.Mathematics.Interop;
 using Si.Game.Engine;
 using Si.Game.Engine.Types;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
 using Si.Game.Utility;
-using Si.Game.Utility.ExtensionMethods;
 using Si.Game.Weapons.Munitions;
 using Si.Shared.Messages.Notify;
 using System;
@@ -12,6 +10,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using static Si.Shared.SiConstants;
+using Si.Shared.ExtensionMethods;
+using Si.Shared.Types;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Sprites
 {
@@ -814,8 +815,8 @@ namespace Si.Game.Sprites
                 if (Highlight)
                 {
                     var rectangle = new RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
-
-                    _gameCore.Rendering.DrawRectangleAt(renderTarget, rectangle.ToRawRectangleF(), Velocity.Angle.Degrees, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
+                    var rawRectF = new RawRectangleF(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom);
+                    _gameCore.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Degrees, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
                 }
             }
         }

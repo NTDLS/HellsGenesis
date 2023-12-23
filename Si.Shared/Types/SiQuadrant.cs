@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace Si.Game.Engine.Types
+namespace Si.Shared.Types
 {
-    internal class SiQuadrant
+    public class SiQuadrant
     {
         public Point Key { get; private set; }
         public Rectangle Bounds { get; private set; }

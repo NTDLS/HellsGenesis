@@ -1,6 +1,6 @@
-﻿namespace Si.Game.Engine.Types.Geometry
+﻿namespace Si.Shared.Types.Geometry
 {
-    internal class NsRectangle
+    public class NsRectangle
     {
         public double X { get; set; }
         public double Y { get; set; }

@@ -1,11 +1,12 @@
 ﻿using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
+using Si.Shared.Types.Geometry;
 using Si.Game.Menus;
 using Si.Game.Menus.BasesAndInterfaces;
 using Si.Game.Situations.BasesAndInterfaces;
 using Si.Game.Sprites.MenuItems;
 using Si.Game.Utility;
 using System.Linq;
+using Si.Shared;
 
 namespace Si.Menus.SinglePlayer
 {

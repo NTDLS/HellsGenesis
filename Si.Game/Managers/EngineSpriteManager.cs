@@ -1,6 +1,6 @@
-﻿using Si.Game.Controller;
+﻿using Si.Shared;
+using Si.Game.Controller;
 using Si.Game.Engine;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Menus;
 using Si.Game.Sprites;
 using Si.Game.Sprites.Enemies.BasesAndInterfaces;
@@ -8,7 +8,6 @@ using Si.Game.Sprites.Player;
 using Si.Game.Sprites.Player.BasesAndInterfaces;
 using Si.Game.Sprites.PowerUp.BasesAndInterfaces;
 using Si.Game.Utility;
-using Si.Game.Utility.ExtensionMethods;
 using Si.Game.Weapons.Munitions;
 using Si.Shared.Messages.Notify;
 using Si.Shared.Messages.Query;
@@ -18,6 +17,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Si.Shared.SiConstants;
+using SharpDX.Mathematics.Interop;
+using System.Drawing;
+using Si.Shared.Types.Geometry;
 
 namespace Si.Game.Managers
 {
@@ -407,8 +409,11 @@ namespace Si.Game.Managers
 
             if (_gameCore.Settings.HighlightNatrualBounds)
             {
+                var natrualScreenBounds = _gameCore.Display.NatrualScreenBounds;
+                var rawRectF = new RawRectangleF(natrualScreenBounds.Left, natrualScreenBounds.Top, natrualScreenBounds.Right, natrualScreenBounds.Bottom);
+
                 //Highlight the 1:1 frame
-                _gameCore.Rendering.DrawRectangleAt(renderTarget, _gameCore.Display.NatrualScreenBounds.ToRawRectangleF(), 0, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
+                _gameCore.Rendering.DrawRectangleAt(renderTarget, rawRectF, 0, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
             }
         }
     }

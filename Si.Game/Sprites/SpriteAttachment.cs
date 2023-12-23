@@ -1,9 +1,10 @@
 ﻿using Si.Game.Engine;
 using Si.Game.Engine.Types;
-using Si.Game.Engine.Types.Geometry;
 using Si.Game.Weapons.Munitions;
 using System.Drawing;
 using static Si.Shared.SiConstants;
+using Si.Shared.Types.Geometry;
+using Si.Shared.Types;
 
 namespace Si.Game.Sprites
 {

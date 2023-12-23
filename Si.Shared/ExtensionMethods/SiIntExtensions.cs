@@ -1,6 +1,6 @@
-﻿namespace Si.Game.Utility.ExtensionMethods
+﻿namespace Si.Shared.ExtensionMethods
 {
-    internal static class SiIntExtensions
+    public static class SiIntExtensions
     {
         /// <summary>
         /// Clips a value to a min/max value.

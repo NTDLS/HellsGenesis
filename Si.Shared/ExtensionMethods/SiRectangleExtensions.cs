@@ -1,9 +1,8 @@
-﻿using SharpDX.Mathematics.Interop;
-using System.Drawing;
+﻿using System.Drawing;
 
-namespace Si.Game.Utility.ExtensionMethods
+namespace Si.Shared.ExtensionMethods
 {
-    internal static class SiRectangleExtensions
+    public static class SiRectangleExtensions
     {
         /// <summary>
         /// Clones a float rectangle.
@@ -11,14 +10,6 @@ namespace Si.Game.Utility.ExtensionMethods
         public static RectangleF Clone(this RectangleF rectangle)
         {
             return new RectangleF(rectangle.Location, rectangle.Size);
-        }
-
-        /// <summary>
-        /// Converts a float rectangle to a raw float rectangle.
-        /// </summary>
-        public static RawRectangleF ToRawRectangleF(this RectangleF value)
-        {
-            return new RawRectangleF(value.Left, value.Top, value.Right, value.Bottom);
         }
 
         /// <summary>
