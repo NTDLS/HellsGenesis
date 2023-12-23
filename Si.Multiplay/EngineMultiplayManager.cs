@@ -15,23 +15,23 @@ namespace Si.Multiplay
     {
         #region Events
 
-        public delegate void NeedSituationLayout(SiSituationLayout situationLayout);
+        public delegate void ReceivedSituationLayout(SiSituationLayout situationLayout);
         /// <summary>
-        /// Called when the multiplay manager needs a layout of all applicable sprites states to fully update a client.
+        /// Called when the multiplay manager receives a full layout of sprites and they need to be created on the map.
         /// </summary>
-        public event NeedSituationLayout? OnReceivedSituationLayout;
+        public event ReceivedSituationLayout? OnReceivedSituationLayout;
 
         public delegate void SpriteVectorsUpdated(SiSpriteVectors spriteVectors);
         /// <summary>
-        /// Called when the multiplay manager receives a updated list of sprite vectors for the client.
+        /// Called when the multiplay manager receives a updated list of sprite vectors for the connection.
         /// </summary>
         public event SpriteVectorsUpdated? OnSpriteVectorsUpdated;
 
-        public delegate List<SiSpriteLayout> NeedSpriteLayout();
+        public delegate List<SiSpriteLayout> NeedSituationLayout();
         /// <summary>
-        /// Called when the multiplay manager needs a layout of all applicable sprites states to fully update a client.
+        /// Called when the multiplay manager needs a layout of all applicable sprites create clone maps for each connection.
         /// </summary>
-        public event NeedSpriteLayout? OnNeedSituationLayout;
+        public event NeedSituationLayout? OnNeedSituationLayout;
 
         #endregion
 
@@ -244,18 +244,7 @@ namespace Si.Multiplay
                 throw new NotImplementedException("The client query is not implemented.");
             }
         }
-        public void NotifyddddSpriteVector(IFramePayloadNotification multiplayerEvent)
-        {
-            //TODO: We should really package these into a collection instead of sending one at a time.
 
-            if (State.LobbyUID != Guid.Empty)
-            {
-                if (State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
-                {
-                    MessageClient?.Notify(multiplayerEvent);
-                }
-            }
-        }
 
         public void RecordSpriteVector(SiSpriteVector multiplayerEvent)
         {

@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Multiplay", "Si.Multipla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Game", "Si.Game\Si.Game.csproj", "{2DE0D5CC-1E88-4ED7-8583-B9BE69EB2E08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Si.IndependentLobbyServer", "Si.IndependentLobbyServer\Si.IndependentLobbyServer.csproj", "{C970A57F-53A1-4BF6-A75A-17362CFD6B06}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2DE0D5CC-1E88-4ED7-8583-B9BE69EB2E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DE0D5CC-1E88-4ED7-8583-B9BE69EB2E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DE0D5CC-1E88-4ED7-8583-B9BE69EB2E08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C970A57F-53A1-4BF6-A75A-17362CFD6B06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C970A57F-53A1-4BF6-A75A-17362CFD6B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C970A57F-53A1-4BF6-A75A-17362CFD6B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C970A57F-53A1-4BF6-A75A-17362CFD6B06}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
