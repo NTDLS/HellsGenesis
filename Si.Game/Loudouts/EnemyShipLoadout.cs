@@ -3,12 +3,12 @@ using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 using static Si.Shared.SiConstants;
 
-namespace Si.Shared.GameEngine.Loudouts
+namespace Si.Game.Loudouts
 {
     /// <summary>
     /// Contains a single instance of a enemy loadout.
     /// </summary>
-    public class EnemyShipLoadout
+    internal class EnemyShipLoadout
     {
         [JsonConverter(typeof(StringEnumConverter))]
         public SiEnemyClass Class { get; set; }
@@ -16,7 +16,7 @@ namespace Si.Shared.GameEngine.Loudouts
         public int ImageIndex => (int)Class;
         [JsonIgnore]
         public string Name => Class.ToString();
-        public string Description { get; set; } = string.Empty;
+        public string Description { get; set; }
         public double MaxSpeed { get; set; }
         public double MaxBoost { get; set; }
         public int HullHealth { get; set; }

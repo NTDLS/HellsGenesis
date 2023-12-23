@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Si.Game.AI;
 using Si.Game.Engine;
-using Si.Shared.GameEngine.Loudouts;
+using Si.Game.Loudouts;
 using Si.Game.Managers;
 using Si.Game.Sprites.PowerUp;
 using Si.Game.Sprites.PowerUp.BasesAndInterfaces;
