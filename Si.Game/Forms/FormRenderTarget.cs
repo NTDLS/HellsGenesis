@@ -1,6 +1,6 @@
-﻿using Si.Game.Engine;
-using Si.Game.Sprites;
-using Si.Game.Sprites.Enemies.BasesAndInterfaces;
+﻿using Si.GameEngine.Engine;
+using Si.GameEngine.Sprites;
+using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
 using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;

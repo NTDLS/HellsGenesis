@@ -6,13 +6,19 @@ namespace Si.Shared
     {
         public static IEnumerable<Type> GetSubClassesOf<T>()
         {
-            var allTypes = Assembly.GetExecutingAssembly().GetTypes();
-            return allTypes.Where(type => type.IsSubclassOf(typeof(T)));
+            List<Type> allTypes = new();
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                allTypes.AddRange(assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(T))));
+            }
+
+            return allTypes;
         }
 
         public static string? GetStaticPropertyValue(string typeName, string propertyName)
         {
-            var type = Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);
+            var type = GetTypeByName(typeName);
             var propertyInfo = type.GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Static);
             return propertyInfo?.GetValue(null) as string;
         }
@@ -41,9 +47,16 @@ namespace Si.Shared
 
         public static Type GetTypeByName(string typeName)
         {
-            return Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                var type = assembly.GetTypes().SingleOrDefault(t => t.Name == typeName);
+                if (type != null)
+                {
+                    return type;
+                }
+            }
+            throw new Exception("Type not found.");
         }
-
 
         public static T? CreateInstanceOf<T>(object[] constructorArgs)
         {
