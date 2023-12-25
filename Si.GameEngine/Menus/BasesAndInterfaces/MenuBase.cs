@@ -136,10 +136,10 @@ namespace Si.GameEngine.Menus.BasesAndInterfaces
 
         public void AddMenuItem(SpriteMenuItem item)
         {
-            lock (_gameCore.Menus.Collection)
+            _gameCore.Menus.Use(o => // <-- Do we really need this lock?
             {
                 Items.Add(item);
-            }
+            });
         }
 
         public void HandleInput()

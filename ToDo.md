@@ -1,5 +1,6 @@
 # To-Do List
 
+- [] Make _gameCore.Menus.Collection private like EngineSpriteManager._collection.
 - [x] Add recoil to non-energy and non-rocket-powered weapons.
 - [] Finish AI for first peon enemy: Phoenix
 	- [] Perfect the Taunt enamy AI before moving on to next AI model.

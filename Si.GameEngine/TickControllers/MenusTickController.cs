@@ -1,6 +1,8 @@
-﻿using SharpDX.Direct2D1;
+﻿using NTDLS.Semaphore;
+using SharpDX.Direct2D1;
 using Si.GameEngine.Engine;
 using Si.GameEngine.Menus.BasesAndInterfaces;
+using Si.GameEngine.Sprites;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,9 @@ namespace Si.GameEngine.Controller
 {
     public class MenusTickController : UnvectoredTickControllerBase<MenuBase>
     {
-        public List<MenuBase> Collection { get; private set; } = new();
+        public delegate void CollectionAccessor(List<MenuBase> sprites);
+
+        private PessimisticSemaphore<List<MenuBase>> _collection = new();
 
         /// <summary>
         /// Determines if any active menu handles the escape key.
@@ -17,10 +21,8 @@ namespace Si.GameEngine.Controller
         /// <returns></returns>
         public bool VisibleMenuHandlesEscape()
         {
-            lock (Collection)
-            {
-                return Collection.Where(o => o.HandlesEscape() == true).Any();
-            }
+            return _collection.Use(o =>
+                o.Where(o => o.HandlesEscape() == true).Any());
         }
 
         public MenusTickController(EngineCore gameCore)
@@ -28,54 +30,58 @@ namespace Si.GameEngine.Controller
         {
         }
 
+        public void Use(CollectionAccessor collectionAccessor)
+            => _collection.Use(o => collectionAccessor(o));
+
         public override void ExecuteWorldClockTick()
         {
-            for (int i = 0; i < Collection.Count; i++)
+            _collection.Use(o =>
             {
-                var menu = Collection[i];
-                menu.HandleInput();
-            }
+                for (int i = 0; i < o.Count; i++)
+                {
+                    var menu = o[i];
+                    menu.HandleInput();
+                }
+            });
         }
 
         public void Render(RenderTarget renderTarget)
         {
-            lock (Collection)
-            {
-                foreach (var obj in Collection)
+            _collection.Use(o =>
                 {
-                    obj.Render(renderTarget);
-                }
-            }
+                    foreach (var obj in o)
+                    {
+                        obj.Render(renderTarget);
+                    }
+                });
         }
 
         #region Factories.
 
         public void CleanupDeletedObjects()
         {
-            for (int i = 0; i < Collection.Count; i++)
+            _collection.Use(o =>
             {
-                if (Collection[i].QueuedForDeletion)
+                for (int i = 0; i < o.Count; i++)
                 {
-                    Delete(Collection[i]);
+                    if (o[i].QueuedForDeletion)
+                    {
+                        Delete(o[i]);
+                    }
                 }
-            }
+            });
         }
 
         public void Insert(MenuBase menu)
-        {
-            lock (Collection)
-            {
-                Collection.Add(menu);
-            }
-        }
+            => _collection.Use(o => o.Add(menu));
 
         public void Delete(MenuBase menu)
         {
-            lock (Collection)
+            _collection.Use(o =>
             {
                 menu.InvokeCleanup();
-                Collection.Remove(menu);
-            }
+                o.Remove(menu);
+            });
         }
 
         #endregion

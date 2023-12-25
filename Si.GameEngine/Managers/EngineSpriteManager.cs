@@ -1,4 +1,5 @@
-﻿using SharpDX.Mathematics.Interop;
+﻿using NTDLS.Semaphore;
+using SharpDX.Mathematics.Interop;
 using Si.GameEngine.Controller;
 using Si.GameEngine.Engine;
 using Si.GameEngine.Menus;
@@ -26,6 +27,8 @@ namespace Si.GameEngine.Managers
     /// </summary>
     public class EngineSpriteManager
     {
+        public delegate void CollectionAccessor(List<SpriteBase> sprites);
+
         private readonly EngineCore _gameCore;
         private SiPoint _radarScale;
         private SiPoint _radarOffset;
@@ -36,8 +39,7 @@ namespace Si.GameEngine.Managers
 
         #region Sprites and their factories.
 
-        internal List<SpriteBase> Collection { get; private set; } = new();
-
+        private readonly PessimisticSemaphore<List<SpriteBase>> _collection = new();
         public AnimationSpriteTickController Animations { get; private set; }
         public AttachmentSpriteTickController Attachments { get; private set; }
         public MunitionSpriteTickController Munitions { get; private set; }
@@ -67,6 +69,29 @@ namespace Si.GameEngine.Managers
             Stars = new StarsSpriteTickController(_gameCore, this);
             TextBlocks = new TextBlocksSpriteTickController(_gameCore, this);
             PlayerDrones = new PlayerDronesSpriteTickController(_gameCore, this);
+        }
+
+        public void Insert(SpriteBase item)
+            => _collection.Use(o => o.Add(item));
+
+        public void Delete(SpriteBase item)
+        {
+            _collection.Use(o =>
+            {
+                item.Cleanup();
+                o.Remove(item);
+            });
+        }
+
+        public void Use(CollectionAccessor collectionAccessor)
+            => _collection.Use(o=> collectionAccessor(o));
+
+        public void DeleteAllOfType<T>() where T : SpriteBase
+        {
+            _collection.Use(o =>
+            {
+                OfType<T>().ForEach(c => c.QueueForDelete());
+            });
         }
 
         /// <summary>
@@ -109,23 +134,26 @@ namespace Si.GameEngine.Managers
         {
             var allMultiplayUIDs = spriteVectors.Collection.Select(o => o.MultiplayUID).ToHashSet();
 
-            //Get all the sprites ahead of time. I "think" this is faster than searching in a loop.
-            var sprites = Collection.Where(o => allMultiplayUIDs.Contains(o.MultiplayUID)).ToList();
-
-            foreach (var vector in spriteVectors.Collection)
+            _collection.Use(o =>
             {
-                var sprite = sprites.Where(o => o.MultiplayUID == vector.MultiplayUID).FirstOrDefault();
-                if (sprite != null)
+                //Get all the sprites ahead of time. I "think" this is faster than searching in a loop.
+                var sprites = o.Where(o => allMultiplayUIDs.Contains(o.MultiplayUID)).ToList();
+
+                foreach (var vector in spriteVectors.Collection)
                 {
-                    if (sprite is ISpriteDrone playerDrone)
+                    var sprite = sprites.Where(o => o.MultiplayUID == vector.MultiplayUID).FirstOrDefault();
+                    if (sprite != null)
                     {
-                        playerDrone.ApplyMultiplayVector(vector);
-                    }
-                    else
-                    {
+                        if (sprite is ISpriteDrone playerDrone)
+                        {
+                            playerDrone.ApplyMultiplayVector(vector);
+                        }
+                        else
+                        {
+                        }
                     }
                 }
-            }
+            });
         }
 
         public void ApplySituationLayout(SiSituationLayout situationLayout)
@@ -169,32 +197,29 @@ namespace Si.GameEngine.Managers
 
         public SpriteBase CreateByNameOfType(string typeFullName)
         {
-            lock (Collection)
-            {
-                var type = Type.GetType(typeFullName) ?? throw new ArgumentException($"Type with FullName '{typeFullName}' not found.");
-                object[] param = { _gameCore };
-                var obj = (SpriteBase)Activator.CreateInstance(type, param);
+            var type = Type.GetType(typeFullName) ?? throw new ArgumentException($"Type with FullName '{typeFullName}' not found.");
+            object[] param = { _gameCore };
+            var obj = (SpriteBase)Activator.CreateInstance(type, param);
 
-                obj.Location = _gameCore.Display.RandomOffScreenLocation();
-                obj.Velocity.MaxSpeed = SiRandom.Generator.Next(_gameCore.Settings.MinEnemySpeed, _gameCore.Settings.MaxEnemySpeed);
-                obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
+            obj.Location = _gameCore.Display.RandomOffScreenLocation();
+            obj.Velocity.MaxSpeed = SiRandom.Generator.Next(_gameCore.Settings.MinEnemySpeed, _gameCore.Settings.MaxEnemySpeed);
+            obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
 
-                var enemy = obj as SpriteEnemyBase;
+            var enemy = obj as SpriteEnemyBase;
 
-                enemy?.BeforeCreate();
-                Collection.Add(obj);
-                enemy?.AfterCreate();
+            enemy?.BeforeCreate();
+            Insert(obj);
+            enemy?.AfterCreate();
 
-                return obj;
-            }
+            return obj;
         }
 
         public void CleanupDeletedObjects()
         {
-            lock (Collection)
+            _collection.Use(o =>
             {
-                _gameCore.Sprites.Collection.Where(o => o.QueuedForDeletion).ToList().ForEach(p => p.Cleanup());
-                _gameCore.Sprites.Collection.RemoveAll(o => o.QueuedForDeletion);
+                o.Where(o => o.QueuedForDeletion).ToList().ForEach(p => p.Cleanup());
+                o.RemoveAll(o => o.QueuedForDeletion);
 
                 for (int i = 0; i < _gameCore.Events.Collection.Count; i++)
                 {
@@ -212,7 +237,7 @@ namespace Si.GameEngine.Managers
                     _gameCore.Player.Sprite.IsDead = false;
                     _gameCore.Menus.Insert(new MenuStartNewGame(_gameCore));
                 }
-            }
+            });
         }
 
         public void DeleteAll()
@@ -224,50 +249,36 @@ namespace Si.GameEngine.Managers
         }
 
         public T GetSpriteByTag<T>(string name) where T : SpriteBase
-        {
-            lock (Collection)
-            {
-                return Collection.Where(o => o.SpriteTag == name).SingleOrDefault() as T;
-            }
-        }
+            => _collection.Use(o => o.Where(o => o.SpriteTag == name).SingleOrDefault() as T);
 
         public List<T> OfType<T>() where T : class
-        {
-            lock (Collection)
-            {
-                return _gameCore.Sprites.Collection.Where(o => o is T).Select(o => o as T).ToList();
-            }
-        }
+            =>
+                _collection.Use(o => o.Where(o => o is T).Select(o => o as T).ToList());
 
         public List<T> VisibleOfType<T>() where T : class
-        {
-            lock (Collection)
-            {
-                return _gameCore.Sprites.Collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList();
-            }
-        }
+                => _collection.Use(o => o.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList());
 
         public void DeleteAllSpritesByTag(string name)
         {
-            lock (Collection)
+            _collection.Use(o =>
             {
-                foreach (var sprite in Collection)
+                foreach (var sprite in o)
                 {
                     if (sprite.SpriteTag == name)
                     {
                         sprite.QueueForDelete();
                     }
                 }
-            }
+            });
         }
 
         public List<SpriteBase> Intersections(SpriteBase with)
         {
-            lock (Collection)
+            return _collection.Use(o =>
             {
                 var objs = new List<SpriteBase>();
 
-                foreach (var obj in Collection.Where(o => o.Visable == true))
+                foreach (var obj in o.Where(o => o.Visable == true))
                 {
                     if (obj != with)
                     {
@@ -278,7 +289,7 @@ namespace Si.GameEngine.Managers
                     }
                 }
                 return objs;
-            }
+            });
         }
 
         public List<SpriteBase> Intersections(double x, double y, double width, double height)
@@ -286,11 +297,11 @@ namespace Si.GameEngine.Managers
 
         public List<SpriteBase> Intersections(SiPoint location, SiPoint size)
         {
-            lock (Collection)
+            return _collection.Use(o =>
             {
                 var objs = new List<SpriteBase>();
 
-                foreach (var obj in Collection.Where(o => o.Visable == true))
+                foreach (var obj in o.Where(o => o.Visable == true))
                 {
                     if (obj.Intersects(location, size))
                     {
@@ -298,16 +309,13 @@ namespace Si.GameEngine.Managers
                     }
                 }
                 return objs;
-            }
+            });
         }
 
         public SpritePlayerBase InsertPlayer(SpritePlayerBase sprite)
         {
-            lock (Collection)
-            {
-                Collection.Add(sprite);
-                return sprite;
-            }
+            Insert(sprite);
+            return sprite;
         }
 
         public void RenderPostScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
@@ -348,25 +356,28 @@ namespace Si.GameEngine.Managers
                             _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _gameCore.Player.Sprite.Y * _radarScale.Y)
                         );
 
-                    //Render radar:
-                    foreach (var sprite in Collection.Where(o => o.Visable == true))
+                    _collection.Use(o =>
                     {
-                        //SiPoint scale, SiPoint< double > offset
-                        int x = (int)(_radarOffset.X + sprite.X * _radarScale.X);
-                        int y = (int)(_radarOffset.Y + sprite.Y * _radarScale.Y);
-
-                        if (x > _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
-                            && x < _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
-                            && y > _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
-                            && y < _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
-                            )
+                        //Render radar:
+                        foreach (var sprite in o.Where(o => o.Visable == true))
                         {
-                            if ((sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerUpBase) && sprite.Visable == true)
+                            //SiPoint scale, SiPoint< double > offset
+                            int x = (int)(_radarOffset.X + sprite.X * _radarScale.X);
+                            int y = (int)(_radarOffset.Y + sprite.Y * _radarScale.Y);
+
+                            if (x > _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
+                                && x < _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
+                                && y > _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
+                                && y < _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
+                                )
                             {
-                                sprite.RenderRadar(renderTarget, x, y);
+                                if ((sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerUpBase) && sprite.Visable == true)
+                                {
+                                    sprite.RenderRadar(renderTarget, x, y);
+                                }
                             }
                         }
-                    }
+                    });
 
                     //Render player blip:
                     _gameCore.Rendering.FillEllipseAt(
@@ -385,22 +396,25 @@ namespace Si.GameEngine.Managers
         /// <returns></returns>
         public void RenderPreScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            //Render to display:
-            foreach (var sprite in Collection.Where(o => o.Visable == true))
+            _collection.Use(o =>
             {
-                if (sprite is SpriteTextBlock spriteTextBlock)
+                //Render to display:
+                foreach (var sprite in o.Where(o => o.Visable == true))
                 {
-                    if (spriteTextBlock.IsFixedPosition == true)
+                    if (sprite is SpriteTextBlock spriteTextBlock)
                     {
-                        continue; //We want to add these later so they are not scaled.
+                        if (spriteTextBlock.IsFixedPosition == true)
+                        {
+                            continue; //We want to add these later so they are not scaled.
+                        }
+                    }
+
+                    if (sprite.IsWithinCurrentScaledScreenBounds)
+                    {
+                        sprite.Render(renderTarget);
                     }
                 }
-
-                if (sprite.IsWithinCurrentScaledScreenBounds)
-                {
-                    sprite.Render(renderTarget);
-                }
-            }
+            });
 
             _gameCore.Player.Sprite?.Render(renderTarget);
             _gameCore.Menus.Render(renderTarget);

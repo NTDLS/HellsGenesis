@@ -25,26 +25,23 @@ namespace Si.GameEngine.Controller
 
         public void DeleteAllByOwner(uint owerId)
         {
-            lock (SpriteManager.Collection)
+            SpriteManager.Use(o =>
             {
                 SpriteManager.OfType<SpriteAttachment>()
                     .Where(o => o.OwnerUID == owerId)
                     .ToList()
                     .ForEach(c => c.QueueForDelete());
-            }
+            });
         }
 
         public SpriteAttachment Create(string imagePath = null, Size? size = null, uint ownerUID = 0)
         {
-            lock (SpriteManager.Collection)
+            var obj = new SpriteAttachment(GameCore, imagePath, size)
             {
-                var obj = new SpriteAttachment(GameCore, imagePath, size)
-                {
-                    OwnerUID = ownerUID
-                };
-                SpriteManager.Collection.Add(obj);
-                return obj;
-            }
+                OwnerUID = ownerUID
+            };
+            SpriteManager.Insert(obj);
+            return obj;
         }
     }
 }

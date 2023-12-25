@@ -31,23 +31,17 @@ namespace Si.GameEngine.Controller
         /// <param name="defaultPosition"></param>
         public void InsertAt(SpriteAnimation animation, SpriteBase defaultPosition)
         {
-            lock (SpriteManager.Collection)
-            {
-                animation.X = defaultPosition.X;
-                animation.Y = defaultPosition.Y;
-                animation.RotationMode = SiRotationMode.Rotate;
-                SpriteManager.Collection.Add(animation);
-            }
+            animation.X = defaultPosition.X;
+            animation.Y = defaultPosition.Y;
+            animation.RotationMode = SiRotationMode.Rotate;
+            SpriteManager.Insert(animation);
         }
 
         public SpriteAnimation Create(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, SpriteAnimation.PlayMode playMode = null)
         {
-            lock (SpriteManager.Collection)
-            {
-                SpriteAnimation obj = new SpriteAnimation(GameCore, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
-                SpriteManager.Collection.Add(obj);
-                return obj;
-            }
+            SpriteAnimation obj = new SpriteAnimation(GameCore, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
+            SpriteManager.Insert(obj);
+            return obj;
         }
     }
 }

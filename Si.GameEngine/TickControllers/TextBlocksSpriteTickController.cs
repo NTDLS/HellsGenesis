@@ -28,33 +28,24 @@ namespace Si.GameEngine.Controller
 
         public SpriteRadarPositionTextBlock CreateRadarPosition(TextFormat format, SolidColorBrush color, SiPoint location)
         {
-            lock (SpriteManager.Collection)
-            {
-                var obj = new SpriteRadarPositionTextBlock(GameCore, format, color, location);
-                SpriteManager.Collection.Add(obj);
-                return obj;
-            }
+            var obj = new SpriteRadarPositionTextBlock(GameCore, format, color, location);
+            SpriteManager.Insert(obj);
+            return obj;
         }
 
         public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic)
         {
-            lock (SpriteManager.Collection)
-            {
-                var obj = new SpriteTextBlock(GameCore, format, color, location, isPositionStatic);
-                SpriteManager.Collection.Add(obj);
-                return obj;
-            }
+            var obj = new SpriteTextBlock(GameCore, format, color, location, isPositionStatic);
+            SpriteManager.Insert(obj);
+            return obj;
         }
 
         public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name)
         {
-            lock (SpriteManager.Collection)
-            {
-                var obj = new SpriteTextBlock(GameCore, format, color, location, isPositionStatic);
-                obj.SpriteTag = name;
-                SpriteManager.Collection.Add(obj);
-                return obj;
-            }
+            var obj = new SpriteTextBlock(GameCore, format, color, location, isPositionStatic);
+            obj.SpriteTag = name;
+            SpriteManager.Insert(obj);
+            return obj;
         }
 
         #endregion

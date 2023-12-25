@@ -55,8 +55,6 @@ namespace Si.GameEngine.Controller
 
         public T Create<T>() where T : SpriteEnemyBase
         {
-            lock (SpriteManager.Collection)
-            {
                 object[] param = { GameCore };
                 SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
@@ -65,11 +63,10 @@ namespace Si.GameEngine.Controller
                 obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
 
                 obj.BeforeCreate();
-                SpriteManager.Collection.Add(obj);
+                SpriteManager.Insert(obj);
                 obj.AfterCreate();
 
                 return (T)obj;
-            }
         }
     }
 }

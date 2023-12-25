@@ -188,15 +188,9 @@ namespace Si.GameEngine.Sprites
 
         public void QueueForDelete()
         {
-            Visable = false;
-            if (_readyForDeletion == false)
-            {
-                VisibilityChanged();
-            }
-
-            OnQueuedForDelete?.Invoke(this);
-
             _readyForDeletion = true;
+            Visable = false;
+            OnQueuedForDelete?.Invoke(this);
         }
 
         /// <summary>
@@ -431,16 +425,19 @@ namespace Si.GameEngine.Sprites
         {
             var intersections = new List<SpriteBase>();
 
-            foreach (var intersection in _gameCore.Sprites.Collection)
+            _gameCore.Sprites.Use(o =>
             {
-                if (intersection != this && intersection.Visable && intersection is not SpriteTextBlock)
+                foreach (var intersection in o)
                 {
-                    if (Intersects(intersection))
+                    if (intersection != this && intersection.Visable && intersection is not SpriteTextBlock)
                     {
-                        intersections.Add(intersection);
+                        if (Intersects(intersection))
+                        {
+                            intersections.Add(intersection);
+                        }
                     }
                 }
-            }
+            });
 
             return intersections;
         }

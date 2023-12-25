@@ -86,9 +86,11 @@ namespace Si.GameEngine.Engine
 
                 _gameCore.Display.GameLoopCounter.Calculate();
 
-                lock (_gameCore.Menus.Collection)
-                    lock (_gameCore.Player.Sprite)
-                        lock (_gameCore.Sprites.Collection)
+                lock (_gameCore.Player.Sprite)
+                {
+                    _gameCore.Menus.Use(m =>
+                    {
+                        _gameCore.Sprites.Use(o =>
                         {
                             if (_pause == false)
                             {
@@ -101,7 +103,9 @@ namespace Si.GameEngine.Engine
 
                             _gameCore.Render();
                             timer.Stop();
-                        }
+                        });
+                    });
+                }
 
                 var clockTime = (((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000;
                 var deltaClockTime = targetFrameDuration - clockTime;

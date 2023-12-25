@@ -76,22 +76,16 @@ namespace Si.GameEngine.Controller
 
         public SpriteRadarPositionIndicator Create()
         {
-            lock (_manager.Collection)
-            {
-                var obj = new SpriteRadarPositionIndicator(GameCore);
-                _manager.Collection.Add(obj);
-                return obj;
-            }
+            var obj = new SpriteRadarPositionIndicator(GameCore);
+            _manager.Insert(obj);
+            return obj;
         }
 
         public void Delete(SpriteRadarPositionIndicator obj)
         {
-            lock (_manager.Collection)
-            {
-                obj.Cleanup();
-                obj.Visable = false;
-                _manager.Collection.Remove(obj);
-            }
+            obj.Cleanup();
+            obj.Visable = false;
+            _manager.Delete(obj);
         }
 
         #endregion
