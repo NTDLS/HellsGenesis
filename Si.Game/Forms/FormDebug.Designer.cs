@@ -122,6 +122,7 @@
             // 
             // textBoxCommand
             // 
+            textBoxCommand.AcceptsTab = true;
             textBoxCommand.Dock = System.Windows.Forms.DockStyle.Fill;
             textBoxCommand.Location = new System.Drawing.Point(0, 0);
             textBoxCommand.Name = "textBoxCommand";

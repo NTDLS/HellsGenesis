@@ -1,6 +1,6 @@
 ﻿using Si.GameEngine.Engine;
 using Si.GameEngine.Engine.Debug;
-using Si.GameEngine.Forms;
+using Si.GameEngine.Engine.Debug.BasesAndInterfaces;
 using Si.Shared.ExtensionMethods;
 using System;
 using System.Collections.Generic;
@@ -9,6 +9,8 @@ using System.Reflection;
 
 namespace Si.GameEngine.Managers
 {
+
+
     /// <summary>
     /// Handles keyboard debugging inquiries.
     /// </summary>
@@ -60,15 +62,15 @@ namespace Si.GameEngine.Managers
 
         private readonly EngineCore _gameCore;
         private readonly Stack<string> _commandStack = new();
-        private readonly FormDebug formDebug;
+        private IDebugForm _debugForm;
         public DebugCommandParser CommandParser { get; } = new(_commandPrototypes);
         private readonly List<MethodInfo> _hardDebugMethods;
         public bool IsVisible { get; private set; } = false;
 
-        public EngineDebugManager(EngineCore gameCore)
+        public EngineDebugManager(EngineCore gameCore, IDebugForm debugForm)
         {
             _gameCore = gameCore;
-            formDebug = new FormDebug(_gameCore);
+            _debugForm = debugForm;
             _hardDebugMethods = GetMethodsWithOnlyDebugCommandParameter();
         }
 
@@ -80,11 +82,11 @@ namespace Si.GameEngine.Managers
 
             if (IsVisible)
             {
-                formDebug.Show();
+                _debugForm.Show();
             }
             else
             {
-                formDebug.Hide();
+                _debugForm.Hide();
             }
         }
 
@@ -94,7 +96,7 @@ namespace Si.GameEngine.Managers
             {
                 try
                 {
-                    formDebug.WriteLine($"Executing ↓ \"{command}\":", System.Drawing.Color.Blue);
+                    _debugForm.WriteLine($"Executing ↓ \"{command}\":", System.Drawing.Color.Blue);
 
                     var parsedCommand = CommandParser.Parse(command);
 
@@ -106,9 +108,9 @@ namespace Si.GameEngine.Managers
                 }
                 catch (Exception ex)
                 {
-                    formDebug.WriteLine(ex.Message, System.Drawing.Color.DarkRed);
+                    _debugForm.WriteLine(ex.Message, System.Drawing.Color.DarkRed);
                 }
-                formDebug.WriteLine($"Complete  ↑", System.Drawing.Color.Blue);
+                _debugForm.WriteLine($"Complete  ↑", System.Drawing.Color.Blue);
             }
         }
 
@@ -134,7 +136,7 @@ namespace Si.GameEngine.Managers
 
         public void CommandHandler_Display_BackgroundOffset_Get(DebugCommand command)
         {
-            formDebug.WriteLine($"{_gameCore.Display.BackgroundOffset}", System.Drawing.Color.Black);
+            _debugForm.WriteLine($"{_gameCore.Display.BackgroundOffset}", System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Display_BackgroundOffset_Set(DebugCommand command)
@@ -190,7 +192,7 @@ namespace Si.GameEngine.Managers
         public void CommandHandler_Display_Adapters(DebugCommand command)
         {
             var text = _gameCore.Rendering.GetGraphicsAdaptersInfo();
-            formDebug.Write(text, System.Drawing.Color.Black);
+            _debugForm.Write(text, System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Enemies_DeleteAll(DebugCommand command)
@@ -216,7 +218,7 @@ namespace Si.GameEngine.Managers
 
         public void CommandHandler_Cls(DebugCommand command)
         {
-            formDebug.ClearText();
+            _debugForm.ClearText();
         }
 
         public void CommandHandler_Help(DebugCommand command)
@@ -261,7 +263,7 @@ namespace Si.GameEngine.Managers
                     text += "    }\r\n";
                 }
 
-                formDebug.Write(text, System.Drawing.Color.Black);
+                _debugForm.Write(text, System.Drawing.Color.Black);
             }
         }
 
@@ -276,7 +278,7 @@ namespace Si.GameEngine.Managers
                 + $"        Total Canvas Bounds: {_gameCore.Display.TotalCanvasBounds}\r\n"
                 + $"      Natrual Screen Bounds: {_gameCore.Display.NatrualScreenBounds}\r\n"
                 + $" Speed Frame Scaling Factor: {_gameCore.Display.SpeedOrientedFrameScalingFactor():n4}";
-            formDebug.WriteLine(infoText, System.Drawing.Color.Black);
+            _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Engine_HighlightAll(DebugCommand command)
@@ -298,7 +300,7 @@ namespace Si.GameEngine.Managers
 
         public void CommandHandler_Display_Zoom_Get(DebugCommand command)
         {
-            formDebug.WriteLine($"{_gameCore.Display.SpeedOrientedFrameScalingFactor():n4}", System.Drawing.Color.Black);
+            _debugForm.WriteLine($"{_gameCore.Display.SpeedOrientedFrameScalingFactor():n4}", System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Engine_Pause(DebugCommand command)
@@ -328,12 +330,12 @@ namespace Si.GameEngine.Managers
                 + $"  Avg: {_gameCore.Display.GameLoopCounter.AverageFrameRate:n4}\r\n"
                 + $"  Min: {_gameCore.Display.GameLoopCounter.FrameRateMin:n4}\r\n"
                 + $"  Max: {_gameCore.Display.GameLoopCounter.FrameRateMax:n4}";
-            formDebug.WriteLine(infoText, System.Drawing.Color.Black);
+            _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Player_Inspect(DebugCommand command)
         {
-            formDebug.WriteLine(_gameCore.Player.Sprite.GetInspectionText(), System.Drawing.Color.Black);
+            _debugForm.WriteLine(_gameCore.Player.Sprite.GetInspectionText(), System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Inspect(DebugCommand command)
@@ -344,7 +346,7 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    formDebug.WriteLine(sprite.GetInspectionText(), System.Drawing.Color.Black);
+                    _debugForm.WriteLine(sprite.GetInspectionText(), System.Drawing.Color.Black);
                 }
             });
         }
@@ -377,7 +379,7 @@ namespace Si.GameEngine.Managers
                 if (baseSprite != null && targetSprite != null)
                 {
                     var result = baseSprite.IsPointingAt(targetSprite, toleranceDegrees, maxDistance);
-                    formDebug.WriteLine($"IsPointingAt: {result}", System.Drawing.Color.Black);
+                    _debugForm.WriteLine($"IsPointingAt: {result}", System.Drawing.Color.Black);
                 }
             });
         }
@@ -397,7 +399,7 @@ namespace Si.GameEngine.Managers
                 if (baseSprite != null && targetSprite != null)
                 {
                     var result = baseSprite.IsPointingAway(targetSprite, toleranceDegrees, maxDistance);
-                    formDebug.WriteLine($"IsPointingAt: {result}", System.Drawing.Color.Black);
+                    _debugForm.WriteLine($"IsPointingAt: {result}", System.Drawing.Color.Black);
                 }
             });
         }
@@ -416,7 +418,7 @@ namespace Si.GameEngine.Managers
                 if (baseSprite != null && targetSprite != null)
                 {
                     var result = baseSprite.DistanceTo(targetSprite);
-                    formDebug.WriteLine($"DistanceTo: {result:n4}", System.Drawing.Color.Black);
+                    _debugForm.WriteLine($"DistanceTo: {result:n4}", System.Drawing.Color.Black);
                 }
             });
         }
@@ -434,7 +436,7 @@ namespace Si.GameEngine.Managers
                 if (baseSprite != null && targetSprite != null)
                 {
                     var result = baseSprite.AngleTo360(targetSprite);
-                    formDebug.WriteLine($"AngleTo: {result:n4}", System.Drawing.Color.Black);
+                    _debugForm.WriteLine($"AngleTo: {result:n4}", System.Drawing.Color.Black);
                 }
             });
         }
@@ -580,7 +582,7 @@ namespace Si.GameEngine.Managers
 
                 foreach (var sprite in sprites)
                 {
-                    formDebug.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}, Position: {sprite.Location}", System.Drawing.Color.Black);
+                    _debugForm.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}, Position: {sprite.Location}", System.Drawing.Color.Black);
                 }
             });
         }

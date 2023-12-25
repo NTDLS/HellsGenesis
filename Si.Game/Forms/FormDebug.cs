@@ -1,4 +1,5 @@
 ﻿using Si.GameEngine.Engine;
+using Si.GameEngine.Engine.Debug.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,13 +9,12 @@ using System.Windows.Forms;
 
 namespace Si.Game.Forms
 {
-    public partial class FormDebug : Form
+    public partial class FormDebug : Form, IDebugForm
     {
         private readonly EngineCore _gameCore;
         private readonly List<string> _commandHistory = new();
         private int _commandHistoryIndex = 0;
-
-        public FormDebug() => InitializeComponent();
+        private DateTime _lastTabKeyTimestamp = DateTime.UtcNow;
 
         private void FormDebug_Load(object sender, EventArgs e)
         {
@@ -61,7 +61,7 @@ namespace Si.Game.Forms
             var allowedTypes = new AutoCompleteStringCollection();
             allowedTypes.AddRange(suggestions);
             textBoxCommand.AutoCompleteCustomSource = allowedTypes;
-            textBoxCommand.AutoCompleteMode = AutoCompleteMode.Append;
+            textBoxCommand.AutoCompleteMode = AutoCompleteMode.Suggest;
             textBoxCommand.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
 
@@ -86,6 +86,26 @@ namespace Si.Game.Forms
                 gameCore.Debug.ToggleVisibility();
                 e.Cancel = true;
             };
+
+            textBoxCommand.LostFocus += TextBoxCommand_LostFocus;
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Tab)
+            {
+                _lastTabKeyTimestamp = DateTime.UtcNow;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void TextBoxCommand_LostFocus(object sender, EventArgs e)
+        {
+            if ((DateTime.UtcNow - _lastTabKeyTimestamp).TotalMilliseconds < 100)
+            {
+                textBoxCommand.Focus();
+            }
         }
 
         private void ListViewCommands_MouseDoubleClick(object sender, MouseEventArgs e)

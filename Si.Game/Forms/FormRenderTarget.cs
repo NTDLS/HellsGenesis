@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Engine;
+﻿using Si.Game.Forms;
+using Si.GameEngine.Engine;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
 using Si.Shared.Types.Geometry;
@@ -54,6 +55,8 @@ namespace Si.Game
             Controls.Add(drawingSurface);
 
             _gameCore = new EngineCore(drawingSurface);
+
+            _gameCore.EnableDebugging(new FormDebug(_gameCore));
 
             _gameCore.OnStopEngine += (EngineCore sender) =>
             {   //If the engine is stopped, close the main form.

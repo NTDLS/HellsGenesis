@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Si.GameEngine.Controller;
+using Si.GameEngine.Engine.Debug.BasesAndInterfaces;
 using Si.GameEngine.Engine.GraphicsProcessing;
 using Si.GameEngine.Engine.Types;
 using Si.GameEngine.Managers;
@@ -72,7 +73,6 @@ namespace Si.GameEngine.Engine
             Menus = new MenusTickController(this);
             Player = new PlayerSpriteTickController(this);
             Rendering = new EngineRendering(this);
-            Debug = new EngineDebugManager(this);
 
             Multiplay = new EngineMultiplayManager();
             Multiplay.OnReceivedSituationLayout += Sprites.ApplySituationLayout;
@@ -82,6 +82,11 @@ namespace Si.GameEngine.Engine
             _worldClock = new EngineWorldClock(this);
 
             Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
+        }
+
+        public void EnableDebugging(IDebugForm debugForm)
+        {
+            Debug = new EngineDebugManager(this, debugForm);
         }
 
         public static EngineSettings LoadSettings()
