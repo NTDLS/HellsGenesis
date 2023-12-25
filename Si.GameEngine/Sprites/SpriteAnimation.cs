@@ -23,7 +23,6 @@ namespace Si.GameEngine.Sprites
         private readonly int _frameDelayMilliseconds = 10;
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
         private readonly PlayMode _playMode;
-        private readonly string _spriteSheetFileName;
 
         public class PlayMode
         {
@@ -74,8 +73,6 @@ namespace Si.GameEngine.Sprites
 
             Location = new SiPoint(0, 0);
             Velocity = new SiVelocity();
-
-            _spriteSheetFileName = spriteSheetFileName;
 
             AdvanceImage();
         }

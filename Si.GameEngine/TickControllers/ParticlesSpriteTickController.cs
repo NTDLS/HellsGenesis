@@ -44,16 +44,16 @@ namespace Si.GameEngine.Controller
 
         public SpriteRandomShipPartParticle CreateRandomShipPartParticleAt(SpriteBase sprite)
         {
-                var obj = new SpriteRandomShipPartParticle(GameCore, sprite.X, sprite.Y);
-                SpriteManager.Insert(obj);
-                return obj;
+            var obj = new SpriteRandomShipPartParticle(GameCore, sprite.X, sprite.Y);
+            SpriteManager.Add(obj);
+            return obj;
         }
 
         public SpriteRandomShipPartParticle CreateRandomShipPartParticleAt(double x, double y)
         {
-                var obj = new SpriteRandomShipPartParticle(GameCore, x, y);
-                SpriteManager.Insert(obj);
-                return obj;
+            var obj = new SpriteRandomShipPartParticle(GameCore, x, y);
+            SpriteManager.Add(obj);
+            return obj;
         }
     }
 }

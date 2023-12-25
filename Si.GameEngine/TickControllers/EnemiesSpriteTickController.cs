@@ -55,18 +55,18 @@ namespace Si.GameEngine.Controller
 
         public T Create<T>() where T : SpriteEnemyBase
         {
-                object[] param = { GameCore };
-                SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
+            object[] param = { GameCore };
+            SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
-                obj.Location = GameCore.Display.RandomOffScreenLocation();
-                obj.Velocity.MaxSpeed = SiRandom.Generator.Next(GameCore.Settings.MinEnemySpeed, GameCore.Settings.MaxEnemySpeed);
-                obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
+            obj.Location = GameCore.Display.RandomOffScreenLocation();
+            obj.Velocity.MaxSpeed = SiRandom.Generator.Next(GameCore.Settings.MinEnemySpeed, GameCore.Settings.MaxEnemySpeed);
+            obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
 
-                obj.BeforeCreate();
-                SpriteManager.Insert(obj);
-                obj.AfterCreate();
+            obj.BeforeCreate();
+            SpriteManager.Add(obj);
+            obj.AfterCreate();
 
-                return (T)obj;
+            return (T)obj;
         }
     }
 }

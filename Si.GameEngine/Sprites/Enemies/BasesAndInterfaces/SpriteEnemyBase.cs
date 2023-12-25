@@ -35,7 +35,6 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         public bool IsHostile { get; set; } = true;
         public List<WeaponBase> Weapons { get; private set; } = new();
 
-
         public SpriteEnemyBase(EngineCore gameCore, int hullHealth, int bountyMultiplier)
                 : base(gameCore)
         {

@@ -34,13 +34,13 @@ namespace Si.GameEngine.Controller
             animation.X = defaultPosition.X;
             animation.Y = defaultPosition.Y;
             animation.RotationMode = SiRotationMode.Rotate;
-            SpriteManager.Insert(animation);
+            SpriteManager.Add(animation);
         }
 
         public SpriteAnimation Create(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, SpriteAnimation.PlayMode playMode = null)
         {
             SpriteAnimation obj = new SpriteAnimation(GameCore, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
-            SpriteManager.Insert(obj);
+            SpriteManager.Add(obj);
             return obj;
         }
     }

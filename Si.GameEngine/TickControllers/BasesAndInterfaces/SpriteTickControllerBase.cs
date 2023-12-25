@@ -34,7 +34,7 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
         public void DeleteAll()
             => SpriteManager.DeleteAllOfType<T>();
         public void Insert(T obj)
-            => SpriteManager.Insert(obj);
+            => SpriteManager.Add(obj);
 
         public T Create(double x, double y, string name = "")
         {
@@ -42,7 +42,7 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
             obj.X = x;
             obj.Y = y;
             obj.SpriteTag = name;
-            SpriteManager.Insert(obj);
+            SpriteManager.Add(obj);
             return obj;
         }
 
@@ -54,17 +54,16 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
 
             obj.SpriteTag = name;
 
-            SpriteManager.Insert(obj);
+            SpriteManager.Add(obj);
             return obj;
         }
 
         public T Create(double x, double y)
         {
-
             T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
             obj.X = x;
             obj.Y = y;
-            SpriteManager.Insert(obj);
+            SpriteManager.Add(obj);
             return obj;
 
         }
@@ -72,7 +71,7 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
         public T Create()
         {
             T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
-            SpriteManager.Insert(obj);
+            SpriteManager.Add(obj);
             return obj;
         }
 
@@ -80,7 +79,7 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
         {
             T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
             obj.SpriteTag = name;
-            SpriteManager.Insert(obj);
+            SpriteManager.Add(obj);
             return obj;
         }
 

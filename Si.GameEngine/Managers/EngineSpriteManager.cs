@@ -71,7 +71,7 @@ namespace Si.GameEngine.Managers
             PlayerDrones = new PlayerDronesSpriteTickController(_gameCore, this);
         }
 
-        public void Insert(SpriteBase item)
+        public void Add(SpriteBase item)
             => _collection.Use(o => o.Add(item));
 
         public void Delete(SpriteBase item)
@@ -84,7 +84,7 @@ namespace Si.GameEngine.Managers
         }
 
         public void Use(CollectionAccessor collectionAccessor)
-            => _collection.Use(o=> collectionAccessor(o));
+            => _collection.Use(o => collectionAccessor(o));
 
         public void DeleteAllOfType<T>() where T : SpriteBase
         {
@@ -208,7 +208,7 @@ namespace Si.GameEngine.Managers
             var enemy = obj as SpriteEnemyBase;
 
             enemy?.BeforeCreate();
-            Insert(obj);
+            Add(obj);
             enemy?.AfterCreate();
 
             return obj;
@@ -314,7 +314,7 @@ namespace Si.GameEngine.Managers
 
         public SpritePlayerBase InsertPlayer(SpritePlayerBase sprite)
         {
-            Insert(sprite);
+            Add(sprite);
             return sprite;
         }
 

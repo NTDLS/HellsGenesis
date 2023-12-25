@@ -40,7 +40,7 @@ namespace Si.GameEngine.Controller
             {
                 OwnerUID = ownerUID
             };
-            SpriteManager.Insert(obj);
+            SpriteManager.Add(obj);
             return obj;
         }
     }

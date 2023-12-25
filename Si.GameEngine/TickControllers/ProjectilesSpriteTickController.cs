@@ -71,16 +71,16 @@ namespace Si.GameEngine.Controller
 
         public MunitionBase Create(WeaponBase weapon, SiPoint xyOffset = null)
         {
-                var obj = weapon.CreateMunition(xyOffset, null);
-                SpriteManager.Insert(obj);
-                return obj;
+            var obj = weapon.CreateMunition(xyOffset, null);
+            SpriteManager.Add(obj);
+            return obj;
         }
 
         public MunitionBase CreateLocked(WeaponBase weapon, SpriteBase lockedTarget, SiPoint xyOffset = null)
         {
-                var obj = weapon.CreateMunition(xyOffset, lockedTarget);
-                SpriteManager.Insert(obj);
-                return obj;
+            var obj = weapon.CreateMunition(xyOffset, lockedTarget);
+            SpriteManager.Add(obj);
+            return obj;
         }
     }
 }

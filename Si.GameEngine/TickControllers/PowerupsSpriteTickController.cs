@@ -25,11 +25,11 @@ namespace Si.GameEngine.Controller
 
         public T Create<T>(double x, double y) where T : SpritePowerUpBase
         {
-                object[] param = { GameCore };
-                var obj = (SpritePowerUpBase)Activator.CreateInstance(typeof(T), param);
-                obj.Location = new SiPoint(x, y);
-                SpriteManager.Insert(obj);
-                return (T)obj;
+            object[] param = { GameCore };
+            var obj = (SpritePowerUpBase)Activator.CreateInstance(typeof(T), param);
+            obj.Location = new SiPoint(x, y);
+            SpriteManager.Add(obj);
+            return (T)obj;
         }
     }
 }
