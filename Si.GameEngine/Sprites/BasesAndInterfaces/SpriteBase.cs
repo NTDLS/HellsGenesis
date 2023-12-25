@@ -46,9 +46,6 @@ namespace Si.GameEngine.Sprites
         protected SpriteAnimation _hitExplosionAnimation;
         protected SpriteAnimation _hitAnimation;
 
-        private DateTime _lastHit = DateTime.Now.AddMinutes(-5);
-        //private readonly int _MillisecondsBetweenHits = 200;
-
         private bool _isLockedOn = false;
         private SiVelocity _velocity;
         private bool _readyForDeletion;
@@ -452,8 +449,6 @@ namespace Si.GameEngine.Sprites
         /// <returns></returns>
         public virtual void Hit(int damage)
         {
-            _lastHit = DateTime.Now;
-
             if (ShieldHealth > 0)
             {
                 _shieldHit.Play();

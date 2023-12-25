@@ -177,7 +177,7 @@ namespace Si.GameEngine.Managers
 
                 using (var stream = new FileStream(assetAbsolutePath, FileMode.Open, FileAccess.Read))
                 {
-                    var result = new SiAudioClip(stream, initialVolumne, loopForever);
+                    var result = new SiAudioClip(_gameCore, stream, initialVolumne, loopForever);
                     _collection.Add(key, result);
                     stream.Close();
                     return result;

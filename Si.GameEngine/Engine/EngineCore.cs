@@ -17,6 +17,11 @@ namespace Si.GameEngine.Engine
     /// </summary>
     public class EngineCore
     {
+        /// <summary>
+        /// If TRUE the game can run "headless" with no diplay or audio.
+        /// </summary>
+        public bool IsRunningHeadless { get; private set; }
+
         public SituationsTickController Situations { get; private set; }
         public EventsTickController Events { get; private set; }
         public PlayerSpriteTickController Player { get; private set; }
@@ -59,8 +64,15 @@ namespace Si.GameEngine.Engine
 
         #endregion
 
-        public EngineCore(Control drawingSurface)
+        /// <summary>
+        /// Initializes a new instace of the game engine.
+        /// </summary>
+        /// <param name="drawingSurface">The window that the game will be rendered to.</param>
+        /// <param name="runningHeadless">If TRUE the game can run "headless" with no diplay or audio.</param>
+        public EngineCore(Control drawingSurface, bool runningHeadless = false)
         {
+            IsRunningHeadless = runningHeadless;
+
             Settings = LoadSettings();
 
             Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
@@ -123,31 +135,34 @@ namespace Si.GameEngine.Engine
 
         public void Render()
         {
-            try
+            if (!IsRunningHeadless)
             {
-                Rendering.ScreenRenderTarget.BeginDraw();
-                Rendering.IntermediateRenderTarget.BeginDraw();
-
-                Rendering.ScreenRenderTarget.Clear(Rendering.Materials.Raw.Black);
-
-                Rendering.IntermediateRenderTarget.Clear(Rendering.Materials.Raw.Black);
-                Sprites.RenderPreScaling(Rendering.IntermediateRenderTarget);
-                Rendering.IntermediateRenderTarget.EndDraw();
-
-                if (Settings.AutoZoomWhenMoving)
+                try
                 {
-                    Rendering.ApplyScaling((float)Display.SpeedOrientedFrameScalingFactor());
-                }
-                else
-                {
-                    Rendering.ApplyScaling((float)Display.BaseDrawScale);
-                }
-                Sprites.RenderPostScaling(Rendering.ScreenRenderTarget);
+                    Rendering.ScreenRenderTarget.BeginDraw();
+                    Rendering.IntermediateRenderTarget.BeginDraw();
 
-                Rendering.ScreenRenderTarget.EndDraw();
-            }
-            catch
-            {
+                    Rendering.ScreenRenderTarget.Clear(Rendering.Materials.Raw.Black);
+
+                    Rendering.IntermediateRenderTarget.Clear(Rendering.Materials.Raw.Black);
+                    Sprites.RenderPreScaling(Rendering.IntermediateRenderTarget);
+                    Rendering.IntermediateRenderTarget.EndDraw();
+
+                    if (Settings.AutoZoomWhenMoving)
+                    {
+                        Rendering.ApplyScaling((float)Display.SpeedOrientedFrameScalingFactor());
+                    }
+                    else
+                    {
+                        Rendering.ApplyScaling((float)Display.BaseDrawScale);
+                    }
+                    Sprites.RenderPostScaling(Rendering.ScreenRenderTarget);
+
+                    Rendering.ScreenRenderTarget.EndDraw();
+                }
+                catch
+                {
+                }
             }
         }
 

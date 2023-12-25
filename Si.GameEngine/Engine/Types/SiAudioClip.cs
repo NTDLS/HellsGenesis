@@ -20,37 +20,48 @@ namespace Si.GameEngine.Engine.Types
         private bool _isPlaying = false; //Only applicable when _loopForever == false;
         private bool _isFading;
         public float InitialVolumne { get; private set; }
+        private readonly EngineCore _gameCore;
 
         public void SetVolume(float volumne)
         {
             _singleSourceVoice.SetVolume(volumne);
         }
 
-        public SiAudioClip(Stream stream, float initialVolumne = 1, bool loopForever = false)
+        public SiAudioClip(EngineCore gameCore, Stream stream, float initialVolumne = 1, bool loopForever = false)
         {
-            _loopForever = loopForever;
-            InitialVolumne = initialVolumne;
+            _gameCore = gameCore;
 
-            _ = new MasteringVoice(_xaudio); //Yes, this is required.
-
-            _soundstream = new SoundStream(stream);
-
-            _waveFormat = _soundstream.Format;
-            _buffer = new AudioBuffer
+            if (!gameCore.IsRunningHeadless)
             {
-                Stream = _soundstream.ToDataStream(),
-                AudioBytes = (int)_soundstream.Length,
-                Flags = BufferFlags.EndOfStream,
-            };
+                _loopForever = loopForever;
+                InitialVolumne = initialVolumne;
 
-            if (loopForever)
-            {
-                _buffer.LoopCount = 100;
+                _ = new MasteringVoice(_xaudio); //Yes, this is required.
+
+                _soundstream = new SoundStream(stream);
+
+                _waveFormat = _soundstream.Format;
+                _buffer = new AudioBuffer
+                {
+                    Stream = _soundstream.ToDataStream(),
+                    AudioBytes = (int)_soundstream.Length,
+                    Flags = BufferFlags.EndOfStream,
+                };
+
+                if (loopForever)
+                {
+                    _buffer.LoopCount = 100;
+                }
             }
         }
 
         public void Play()
         {
+            if (_gameCore.IsRunningHeadless)
+            {
+                return;
+            }
+
             lock (this)
             {
                 if (_loopForever == true)
@@ -84,6 +95,10 @@ namespace Si.GameEngine.Engine.Types
 
         public void Fade()
         {
+            if (_gameCore.IsRunningHeadless)
+            {
+                return;
+            }
             if (_isPlaying && _isFading == false)
             {
                 _isFading = true;
@@ -109,6 +124,10 @@ namespace Si.GameEngine.Engine.Types
 
         public void Stop()
         {
+            if (_gameCore.IsRunningHeadless)
+            {
+                return;
+            }
             if (_loopForever == true)
             {
                 if (_singleSourceVoice != null && _isPlaying)
