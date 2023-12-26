@@ -5,6 +5,7 @@ using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.Menus.MultiPlayer.Client;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
@@ -50,33 +51,31 @@ namespace Si.Menus.SinglePlayer
                 playerTypes.Insert(0, debugPlayer);
             }
 
+            List<SpritePlayerBase> playerSprites = new();
+
             foreach (var playerType in playerTypes)
             {
-                var playerTypeInstance = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerType, new object[] { gameCore });
-                playerTypeInstance.SpriteTag = "MENU_SHIP_SELECT";
-                playerTypeInstance.Velocity.Angle.Degrees = 45;
-                playerTypeInstance.ThrustAnimation.Visable = true;
-                playerTypeInstance.BoostAnimation.Visable = true;
+                var playerSprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerType, new object[] { gameCore });
+                playerSprite.SpriteTag = "MENU_SHIP_SELECT";
+                playerSprite.Velocity.Angle.Degrees = 45;
 
-                var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), playerTypeInstance.Loadout.Name, playerTypeInstance.Loadout.Name);
+                var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), playerSprite.Loadout.Name, playerSprite.Loadout.Name);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
-                menuItem.UserData = playerTypeInstance;
+                menuItem.UserData = playerSprite;
 
-                var shipIcon = _gameCore.Sprites.InsertPlayer(playerTypeInstance);
+                playerSprites.Add(playerSprite);
 
-                if (playerTypeInstance.Loadout.Name == "Debug")
-                {
-                    shipIcon.ThrustAnimation.Visable = true;
-                }
-                else
-                {
-                    shipIcon.BoostAnimation.Visable = true;
-                }
-                shipIcon.X = offsetX;
-                shipIcon.Y = offsetY;
+                playerSprite.X = offsetX;
+                playerSprite.Y = offsetY;
                 offsetY += 50;
             }
+
+            playerSprites.ForEach(sprite =>
+            {
+                _gameCore.Sprites.InsertPlayer(sprite);
+                sprite.ThrustAnimation.Visable = true;
+            });
 
             OnSelectionChanged += PlayerLoadoutMenu_OnSelectionChanged;
             OnExecuteSelection += PlayerLoadoutMenu_OnExecuteSelection;

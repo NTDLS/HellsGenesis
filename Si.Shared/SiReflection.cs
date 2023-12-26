@@ -10,9 +10,12 @@ namespace Si.Shared
 
         public static IEnumerable<Type> GetSubClassesOf<T>()
         {
-            if (_subClassesOfCache.TryGetValue(typeof(T), out var cached))
+            lock (_subClassesOfCache)
             {
-                return cached;
+                if (_subClassesOfCache.TryGetValue(typeof(T), out var cached))
+                {
+                    return cached;
+                }
             }
 
             List<Type> allTypes = new();
@@ -22,7 +25,10 @@ namespace Si.Shared
                 allTypes.AddRange(assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(T))));
             }
 
-            _subClassesOfCache.TryAdd(typeof(T), allTypes);
+            lock (_subClassesOfCache)
+            {
+                _subClassesOfCache.TryAdd(typeof(T), allTypes);
+            }
 
             return allTypes;
         }
@@ -31,16 +37,22 @@ namespace Si.Shared
         {
             string key = $"[{typeName}].[{propertyName}]";
 
-            if (_staticPropertyCache.TryGetValue(key, out var cachedPropertyInfo))
+            lock (_staticPropertyCache)
             {
-                return cachedPropertyInfo.GetValue(null) as string;
+                if (_staticPropertyCache.TryGetValue(key, out var cachedPropertyInfo))
+                {
+                    return cachedPropertyInfo.GetValue(null) as string;
+                }
             }
 
             var type = GetTypeByName(typeName);
             var propertyInfo = type.GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Static);
             if (propertyInfo != null)
             {
-                _staticPropertyCache.TryAdd(key, propertyInfo);
+                lock (_staticPropertyCache)
+                {
+                    _staticPropertyCache.TryAdd(key, propertyInfo);
+                }
 
                 return propertyInfo.GetValue(null) as string;
             }
@@ -72,9 +84,12 @@ namespace Si.Shared
 
         public static Type GetTypeByName(string typeName)
         {
-            if (_typeCache.TryGetValue(typeName, out var cachedType))
+            lock (_typeCache)
             {
-                return cachedType;
+                if (_typeCache.TryGetValue(typeName, out var cachedType))
+                {
+                    return cachedType;
+                }
             }
 
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -82,7 +97,10 @@ namespace Si.Shared
                 var type = assembly.GetTypes().SingleOrDefault(t => t.Name == typeName);
                 if (type != null)
                 {
-                    _typeCache.TryAdd(typeName, type);
+                    lock (_typeCache)
+                    {
+                        _typeCache.TryAdd(typeName, type);
+                    }
 
                     return type;
                 }

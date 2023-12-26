@@ -4,7 +4,6 @@ using Si.GameEngine.Engine.Types;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 
 namespace Si.GameEngine.Managers
 {
@@ -69,12 +68,12 @@ namespace Si.GameEngine.Managers
                 Directory.CreateDirectory(userDataPath);
             }
             string assetAbsolutePath = Path.Combine(userDataPath, assetRelativePath).Trim().Replace("\\", "/");
-            if (System.IO.File.Exists(assetAbsolutePath) == false)
+            if (File.Exists(assetAbsolutePath) == false)
             {
                 return defaultText;
             }
 
-            return System.IO.File.ReadAllText(assetAbsolutePath);
+            return File.ReadAllText(assetAbsolutePath);
         }
 
         /// <summary>
@@ -90,7 +89,7 @@ namespace Si.GameEngine.Managers
                 Directory.CreateDirectory(userDataPath);
             }
             string assetAbsolutePath = Path.Combine(userDataPath, assetRelativePath).Trim().Replace("\\", "/");
-            System.IO.File.WriteAllText(assetAbsolutePath, value);
+            File.WriteAllText(assetAbsolutePath, value);
         }
 
         /// <summary>
@@ -111,12 +110,12 @@ namespace Si.GameEngine.Managers
                     return value as string;
                 }
 
-                if (System.IO.File.Exists(assetAbsolutePath) == false)
+                if (File.Exists(assetAbsolutePath) == false)
                 {
                     return defaultText;
                 }
 
-                return System.IO.File.ReadAllText(assetAbsolutePath);
+                return File.ReadAllText(assetAbsolutePath);
             }
         }
 
@@ -132,7 +131,7 @@ namespace Si.GameEngine.Managers
 
             lock (_collection)
             {
-                System.IO.File.WriteAllText(assetAbsolutePath, value);
+                File.WriteAllText(assetAbsolutePath, value);
 
                 if (_collection.ContainsKey(key))
                 {
@@ -152,7 +151,7 @@ namespace Si.GameEngine.Managers
 
             lock (_collection)
             {
-                System.IO.File.Delete(assetAbsolutePath);
+                File.Delete(assetAbsolutePath);
                 _collection.Remove(key);
             }
         }

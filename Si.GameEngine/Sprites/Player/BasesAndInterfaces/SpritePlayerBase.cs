@@ -136,7 +136,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
 
             try
             {
-                if (string.IsNullOrWhiteSpace(loadoutText))
+                if (string.IsNullOrWhiteSpace(loadoutText) == false)
                 {
                     loadout = JsonConvert.DeserializeObject<PlayerShipLoadout>(loadoutText);
                 }
@@ -229,9 +229,10 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                     ThrustAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
                     {
                         IsFixedPosition = true,
-                        Visable = false
+                        Visable = false,
+                        OwnerUID = UID
                     };
-                    ThrustAnimation.Reset();
+                    //ThrustAnimation.Reset();
                     _gameCore.Sprites.Animations.InsertAt(ThrustAnimation, this);
                     ThrustAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
                 }
@@ -247,9 +248,10 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                     BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
                     {
                         IsFixedPosition = true,
-                        Visable = false
+                        Visable = false,
+                        OwnerUID = UID
                     };
-                    BoostAnimation.Reset();
+                    //BoostAnimation.Reset();
                     _gameCore.Sprites.Animations.InsertAt(BoostAnimation, this);
                     BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
                 }
