@@ -48,6 +48,11 @@ namespace Si.Server.Engine.Objects
         /// </summary>
         public int AutoStartSeconds { get; set; }
 
+        /// <summary>
+        /// Whether the server is hosted by a person or an independent lobby host.
+        /// </summary>
+        public bool IsHeadless { get; set; }
+
         public Lobby(ServerCore serverCore, Guid ownerConnectionId, SiLobbyConfiguration configuration)
         {
             _serverCore = serverCore;
@@ -57,6 +62,7 @@ namespace Si.Server.Engine.Objects
             MinPlayers = configuration.MinPlayers;
             MaxPlayers = configuration.MaxPlayers;
             AutoStartSeconds = configuration.AutoStartSeconds;
+            IsHeadless = configuration.IsHeadless;
 
             _pingTimer.Elapsed += PingTimer_Elapsed;
             _pingTimer.Start();
@@ -142,11 +148,8 @@ namespace Si.Server.Engine.Objects
                 _isLobbyStartTimerExecuting = true;
                 try
                 {
-                    if (_countdownStartTime != null)
+                    //if(RemainingSecondsUntilAutoStart <= 0)
                     {
-                        var elapsedSeconds = (DateTime.UtcNow - (DateTime)_countdownStartTime).TotalSeconds;
-                        var remainingTimeUntilAutoStart = (int)(AutoStartSeconds - elapsedSeconds);
-                        _serverCore.SendLobbyStartCountdown(UID, remainingTimeUntilAutoStart);
                     }
                 }
                 catch { }
@@ -154,6 +157,23 @@ namespace Si.Server.Engine.Objects
                 {
                     _isLobbyStartTimerExecuting = false;
                 }
+            }
+        }
+
+        public int? RemainingSecondsUntilAutoStart
+        {
+            get
+            {
+                try
+                {
+                    if (_countdownStartTime != null)
+                    {
+                        var elapsedSeconds = (DateTime.UtcNow - (DateTime)_countdownStartTime).TotalSeconds;
+                        return (int)(AutoStartSeconds - elapsedSeconds);
+                    }
+                }
+                catch { }
+                return null;
             }
         }
 
@@ -173,7 +193,7 @@ namespace Si.Server.Engine.Objects
 
                 o.Remove(connectionId);
                 o.Add(connectionId, state);
-                MaybeStartLobbyCountdown();
+                StartLobbyCountdownIfApplicable();
             });
         }
 
@@ -186,7 +206,7 @@ namespace Si.Server.Engine.Objects
             _connections.Use(o =>
             {
                 o.Remove(connectionId);
-                MaybeStartLobbyCountdown();
+                StartLobbyCountdownIfApplicable();
             });
         }
 
@@ -231,7 +251,7 @@ namespace Si.Server.Engine.Objects
         /// </summary>
         /// <param name="connectionId"></param>
         /// <returns>Returns true if all registered connections are ready to start.</returns>
-        public bool FlagConnectionAsReadyToPlay(Guid connectionId)
+        public bool SetConnectionAsReadyToPlay(Guid connectionId)
         {
             return _connections.Use(o =>
             {
@@ -240,7 +260,7 @@ namespace Si.Server.Engine.Objects
                     state.IsReadyToPlay = true;
                 }
 
-                MaybeStartLobbyCountdown();
+                StartLobbyCountdownIfApplicable();
 
                 return o.Values.All(o => o.IsReadyToPlay == true);
             });
@@ -250,7 +270,7 @@ namespace Si.Server.Engine.Objects
         /// Tells the server that the connections is waiting on the lobby.
         /// </summary>
         /// <param name="connectionId"></param>
-        public void FlagConnectionAsWaitingInLobby(Guid connectionId)
+        public void SetConnectionAsWaitingInLobby(Guid connectionId)
         {
             _connections.Use(o =>
             {
@@ -258,7 +278,7 @@ namespace Si.Server.Engine.Objects
                 {
                     state.IsWaitingInLobby = true;
                 }
-                MaybeStartLobbyCountdown();
+                StartLobbyCountdownIfApplicable();
             });
         }
 
@@ -266,7 +286,7 @@ namespace Si.Server.Engine.Objects
         /// Tells the server that the connections has left the lobby - but is still registered.
         /// </summary>
         /// <param name="connectionId"></param>
-        public void FlagConnectionAsLeftInLobby(Guid connectionId)
+        public void SetConnectionAsLeftInLobby(Guid connectionId)
         {
             _connections.Use(o =>
             {
@@ -274,16 +294,16 @@ namespace Si.Server.Engine.Objects
                 {
                     state.IsWaitingInLobby = false;
                 }
-                MaybeStartLobbyCountdown();
+                StartLobbyCountdownIfApplicable();
             });
         }
 
-        private void MaybeStartLobbyCountdown()
+        private void StartLobbyCountdownIfApplicable()
         {
             _connections.Use(o =>
             {
-                //Is the lobby owner ready?
-                if (o.Values.Where(o => o.ConnectionId == OwnerConnectionId && o.IsWaitingInLobby == true).Any())
+                //Is the lobby owner ready (or headless)?
+                if (IsHeadless || o.Values.Where(o => o.ConnectionId == OwnerConnectionId && o.IsWaitingInLobby == true).Any())
                 {
                     //How many other players are ready?
                     int readyToPlayCount = o.Values.Where(o => o.IsWaitingInLobby == true).Count();

@@ -10,6 +10,7 @@
         public int MinPlayers { get; set; }
         public int MaxPlayers { get; set; }
         public int AutoStartSeconds { get; set; }
+        public bool IsHeadless { get; set; }
 
         public SiLobbyConfiguration(string lobbyName, int minPlayers, int maxPlayers, int autoStartSeconds)
         {

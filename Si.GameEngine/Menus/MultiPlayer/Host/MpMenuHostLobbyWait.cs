@@ -3,6 +3,7 @@ using Si.GameEngine.Menus.BasesAndInterfaces;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Menus.SinglePlayer;
 using Si.Shared.Types.Geometry;
+using System.Drawing;
 using System.Timers;
 
 namespace Si.Menus.MultiPlayer.Host
@@ -12,28 +13,35 @@ namespace Si.Menus.MultiPlayer.Host
     /// </summary>
     internal class MpMenuHostLobbyWait : MenuBase
     {
-        private Timer _timer = new(1000);
-
-        SpriteMenuItem _countOfReadyPlayers;
+        private readonly Timer _timer = new(1000);
+        private readonly SpriteMenuItem _countdownToAutoStart;
+        private readonly SpriteMenuItem _countOfReadyPlayers;
+        private readonly RectangleF _currentScaledScreenBounds;
 
         public MpMenuHostLobbyWait(EngineCore gameCore)
             : base(gameCore)
         {
-            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
+            _currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
 
             double offsetX = _gameCore.Display.TotalCanvasSize.Width / 2;
-            double offsetY = currentScaledScreenBounds.Y + 100;
+            double offsetY = _currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Host Lobby");
+            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Waiting in your Lobby");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
             _countOfReadyPlayers = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "?");
-            _countOfReadyPlayers.X = offsetX + 300;
-            _countOfReadyPlayers.Y = offsetY - _countOfReadyPlayers.Size.Height;
+            _countOfReadyPlayers.X -= _countOfReadyPlayers.Size.Width / 2;
 
-            var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "START_NOW", " Start Now ");
+            offsetY += _countOfReadyPlayers.Size.Height + 10;
+
+            _countdownToAutoStart = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
+            _countdownToAutoStart.X -= _countdownToAutoStart.Size.Width / 2;
+
+            offsetY += _countdownToAutoStart.Size.Height + 10;
+
+            var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "START_NOW", " Start Now! ");
             helpItem.Selected = true;
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
@@ -48,10 +56,9 @@ namespace Si.Menus.MultiPlayer.Host
             }
             */
 
-            OnExecuteSelection += MenuMultiplayerHostOrJoin_OnExecuteSelection;
+            OnExecuteSelection += MpMenuHostLobbyWait_OnExecuteSelection;
             OnCleanup += MpMenuHostLobbyWait_OnCleanup;
             OnEscape += MpMenuHostLobbyWait_OnEscape;
-
 
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
@@ -80,7 +87,7 @@ namespace Si.Menus.MultiPlayer.Host
             _timer.Dispose();
         }
 
-        private bool MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
+        private bool MpMenuHostLobbyWait_OnExecuteSelection(SpriteMenuItem item)
         {
             _gameCore.StartGame();
             return true;

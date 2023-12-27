@@ -3,7 +3,6 @@ using NTDLS.StreamFraming.Payloads;
 using NTDLS.UDPPacketFraming;
 using NTDLS.UDPPacketFraming.Payloads;
 using Si.Server.Engine.Managers;
-using Si.Server.Engine.Objects;
 using Si.Shared;
 using Si.Shared.Messages.Notify;
 using Si.Shared.Messages.Query;
@@ -52,22 +51,6 @@ namespace Si.Server.Engine
         {
             var result = await _messageServer.Query<SiPingReply>(connectionId, new SiPing(), 250);
             return result?.Ping;
-        }
-
-        public void SendLobbyStartCountdown(Guid lobbyUID, int secondsRemaining)
-        {
-            if (!Lobbies.TryGetByLobbyUID(lobbyUID, out var lobby))
-            {
-                Log.Exception($"The lobby was not found '{lobby}'.");
-                return;
-            }
-
-            //The owner of the lobby send a new layout, send it to all of the connections.
-            var registeredConnectionIds = lobby.GetConnectionIDs();
-            foreach (var registeredConnectionId in registeredConnectionIds)
-            {
-                _messageServer.Notify(registeredConnectionId, new SiLobbyStartCountdown(lobbyUID, secondsRemaining));
-            }
         }
 
         private void UdpMessageManager_ProcessNotificationCallback(IUDPPayloadNotification payload)
@@ -132,6 +115,8 @@ namespace Si.Server.Engine
                         Info = new SiLobbyInfo
                         {
                             Name = lobby.Name,
+                            IsHeadless = lobby.IsHeadless,
+                            RemainingSecondsUntilAutoStart = lobby.RemainingSecondsUntilAutoStart,
                             WaitingCount = lobby.ConnectionsWaitingInLobbyCount()
                         }
                     };
@@ -265,7 +250,7 @@ namespace Si.Server.Engine
                     return;
                 }
 
-                lobby.FlagConnectionAsWaitingInLobby(connectionId);
+                lobby.SetConnectionAsWaitingInLobby(connectionId);
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiLeftLobby)
@@ -278,7 +263,7 @@ namespace Si.Server.Engine
                     return;
                 }
 
-                lobby.FlagConnectionAsLeftInLobby(connectionId);
+                lobby.SetConnectionAsLeftInLobby(connectionId);
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiSituationLayout layoutDirective)
@@ -309,7 +294,7 @@ namespace Si.Server.Engine
                     return;
                 }
 
-                lobby.FlagConnectionAsReadyToPlay(connectionId);
+                lobby.SetConnectionAsReadyToPlay(connectionId);
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else
