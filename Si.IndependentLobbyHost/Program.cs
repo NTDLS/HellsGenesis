@@ -1,6 +1,6 @@
 ﻿using Si.Multiplay;
 
-namespace Si.IndependentLobbyServer
+namespace Si.IndependentLobbyHost
 {
     /// <summary>
     /// Uses the Si.Multiplay module to allow for hosting lobbies for human players independent from the Si.Game.

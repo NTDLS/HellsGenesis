@@ -11,6 +11,9 @@ using static Si.Shared.SiConstants;
 
 namespace Si.Multiplay
 {
+    /// <summary>
+    /// The Multiplay manager is what we use to communicate with the Server. It is used by the game and the independent lobby hosts.
+    /// </summary>
     public class EngineMultiplayManager
     {
         #region Events

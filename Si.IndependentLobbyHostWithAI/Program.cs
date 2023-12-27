@@ -1,7 +1,7 @@
 ﻿using Si.GameEngine.Engine;
 using Si.Multiplay;
 
-namespace Si.Si.IndependentSituationLobbyServer
+namespace Si.IndependentLobbyHostWithAI
 {
     /// <summary>
     /// Uses the Si.Multiplay and Si.GameEngine modules to allow for hosting lobbies a situation server which includes human and AI players.
