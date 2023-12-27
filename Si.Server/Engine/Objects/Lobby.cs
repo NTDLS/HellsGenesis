@@ -9,7 +9,9 @@ namespace Si.Server.Engine.Objects
     {
         private readonly ServerCore _serverCore;
         private readonly PessimisticSemaphore<Dictionary<Guid, LobbyConnection>> _connections = new();
-        private readonly System.Timers.Timer _timer = new(1000);
+        private readonly System.Timers.Timer _pingTimer = new(1000);
+        private readonly System.Timers.Timer _lobbyStartTimer = new(1000);
+        private DateTime? _countdownStartTime;
 
         /// <summary>
         /// The date and time that the lobby was created.
@@ -56,15 +58,17 @@ namespace Si.Server.Engine.Objects
             MaxPlayers = configuration.MaxPlayers;
             AutoStartSeconds = configuration.AutoStartSeconds;
 
+            _pingTimer.Elapsed += PingTimer_Elapsed;
+            _pingTimer.Start();
 
-            _timer.Elapsed += Timer_Elapsed;
-            _timer.Start();
+            _lobbyStartTimer.Elapsed += LobbyStartTimer_Elapsed;
+            _lobbyStartTimer.Start();
         }
 
         ~Lobby()
         {
-            SiUtility.TryAndIgnore(_timer.Stop);
-            SiUtility.TryAndIgnore(_timer.Dispose);
+            SiUtility.TryAndIgnore(_pingTimer.Stop);
+            SiUtility.TryAndIgnore(_pingTimer.Dispose);
         }
 
         public SiLobbyInfo GetLobbyInfo()
@@ -82,23 +86,20 @@ namespace Si.Server.Engine.Objects
                     Name = "The <player name> is not implemented.",
                     IsWaitingInLobby = connection.IsWaitingInLobby,
                     LatencyMs = connection.LatencyMs,
-
                 });
             }
 
             return lobbyInfo;
         }
 
-
-        bool _isTimerExecuting = false;
-        private void Timer_Elapsed(object? sender, ElapsedEventArgs e)
+        bool _isPingTimerExecuting = false;
+        private void PingTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            if (_isTimerExecuting == false)
+            if (_isPingTimerExecuting == false)
             {
+                _isPingTimerExecuting = true;
                 try
                 {
-                    _isTimerExecuting = true;
-
                     var connectionIds = GetConnectionIDs();
 
                     foreach (var connectionId in connectionIds)
@@ -128,7 +129,30 @@ namespace Si.Server.Engine.Objects
                 catch { }
                 finally
                 {
-                    _isTimerExecuting = false;
+                    _isPingTimerExecuting = false;
+                }
+            }
+        }
+
+        bool _isLobbyStartTimerExecuting = false;
+        private void LobbyStartTimer_Elapsed(object? sender, ElapsedEventArgs e)
+        {
+            if (_isLobbyStartTimerExecuting == false)
+            {
+                _isLobbyStartTimerExecuting = true;
+                try
+                {
+                    if (_countdownStartTime != null)
+                    {
+                        var elapsedSeconds = (DateTime.UtcNow - (DateTime)_countdownStartTime).TotalSeconds;
+                        var remainingTimeUntilAutoStart = (int)(AutoStartSeconds - elapsedSeconds);
+                        _serverCore.SendLobbyStartCountdown(UID, remainingTimeUntilAutoStart);
+                    }
+                }
+                catch { }
+                finally
+                {
+                    _isLobbyStartTimerExecuting = false;
                 }
             }
         }
@@ -149,6 +173,7 @@ namespace Si.Server.Engine.Objects
 
                 o.Remove(connectionId);
                 o.Add(connectionId, state);
+                MaybeStartLobbyCountdown();
             });
         }
 
@@ -161,6 +186,7 @@ namespace Si.Server.Engine.Objects
             _connections.Use(o =>
             {
                 o.Remove(connectionId);
+                MaybeStartLobbyCountdown();
             });
         }
 
@@ -169,8 +195,11 @@ namespace Si.Server.Engine.Objects
         /// </summary>
         public void Cleanup()
         {
-            SiUtility.TryAndIgnore(_timer.Stop);
-            SiUtility.TryAndIgnore(_timer.Dispose);
+            SiUtility.TryAndIgnore(_pingTimer.Stop);
+            SiUtility.TryAndIgnore(_pingTimer.Dispose);
+
+            SiUtility.TryAndIgnore(_lobbyStartTimer.Stop);
+            SiUtility.TryAndIgnore(_lobbyStartTimer.Dispose);
         }
 
         /// <summary>
@@ -211,6 +240,8 @@ namespace Si.Server.Engine.Objects
                     state.IsReadyToPlay = true;
                 }
 
+                MaybeStartLobbyCountdown();
+
                 return o.Values.All(o => o.IsReadyToPlay == true);
             });
         }
@@ -227,6 +258,7 @@ namespace Si.Server.Engine.Objects
                 {
                     state.IsWaitingInLobby = true;
                 }
+                MaybeStartLobbyCountdown();
             });
         }
 
@@ -242,6 +274,29 @@ namespace Si.Server.Engine.Objects
                 {
                     state.IsWaitingInLobby = false;
                 }
+                MaybeStartLobbyCountdown();
+            });
+        }
+
+        private void MaybeStartLobbyCountdown()
+        {
+            _connections.Use(o =>
+            {
+                //Is the lobby owner ready?
+                if (o.Values.Where(o => o.ConnectionId == OwnerConnectionId && o.IsWaitingInLobby == true).Any())
+                {
+                    //How many other players are ready?
+                    int readyToPlayCount = o.Values.Where(o => o.IsWaitingInLobby == true).Count();
+
+                    if (readyToPlayCount >= MinPlayers)
+                    {
+                        //We have enough players to start the game, so start the countdown.
+                        _countdownStartTime = DateTime.UtcNow;
+                        return;
+                    }
+                }
+
+                _countdownStartTime = null;
             });
         }
 

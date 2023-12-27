@@ -5,8 +5,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <OutputType>Exe</OutputType>
-    <StartupObject>Si.Si.IndependentSituationLobbyServer.Program</StartupObject>
+    <StartupObject>Si.IndependentLobbyHostWithAI.Program</StartupObject>
+    <ApplicationIcon>StrikeforceInfinity.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="StrikeforceInfinity.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Si.GameEngine\Si.GameEngine.csproj" />

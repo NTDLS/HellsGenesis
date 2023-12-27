@@ -3,6 +3,7 @@ using NTDLS.StreamFraming.Payloads;
 using NTDLS.UDPPacketFraming;
 using NTDLS.UDPPacketFraming.Payloads;
 using Si.Server.Engine.Managers;
+using Si.Server.Engine.Objects;
 using Si.Shared;
 using Si.Shared.Messages.Notify;
 using Si.Shared.Messages.Query;
@@ -49,8 +50,24 @@ namespace Si.Server.Engine
 
         public async Task<SiPing?> PingConnection(Guid connectionId)
         {
-            var result = await _messageServer.Query<SiPingReply>(connectionId, new SiPing());
+            var result = await _messageServer.Query<SiPingReply>(connectionId, new SiPing(), 250);
             return result?.Ping;
+        }
+
+        public void SendLobbyStartCountdown(Guid lobbyUID, int secondsRemaining)
+        {
+            if (!Lobbies.TryGetByLobbyUID(lobbyUID, out var lobby))
+            {
+                Log.Exception($"The lobby was not found '{lobby}'.");
+                return;
+            }
+
+            //The owner of the lobby send a new layout, send it to all of the connections.
+            var registeredConnectionIds = lobby.GetConnectionIDs();
+            foreach (var registeredConnectionId in registeredConnectionIds)
+            {
+                _messageServer.Notify(registeredConnectionId, new SiLobbyStartCountdown(lobbyUID, secondsRemaining));
+            }
         }
 
         private void UdpMessageManager_ProcessNotificationCallback(IUDPPayloadNotification payload)
