@@ -65,14 +65,48 @@ namespace Si.GameEngine.Engine
         #endregion
 
         /// <summary>
+        /// Initializes a new instace of the game engine in headless mode with no display or audio.
+        /// </summary>
+        public EngineCore(EngineMultiplayManager multiplayManager)
+        {
+            IsRunningHeadless = true;
+
+            Settings = LoadSettings();
+
+            var drawingSurface = new Control()
+            {
+                Height = 1080,
+                Width = 1920
+            };
+
+            Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
+            Assets = new EngineAssetManager(this);
+            Sprites = new EngineSpriteManager(this);
+            Input = new EngineInputManager(this);
+            Situations = new SituationsTickController(this);
+            Events = new EventsTickController(this);
+            Audio = new EngineAudioManager(this);
+            Menus = new MenusTickController(this);
+            Player = new PlayerSpriteTickController(this);
+            Rendering = new EngineRendering(this);
+
+            Multiplay = multiplayManager;
+            Multiplay.OnReceivedSituationLayout += Sprites.ApplySituationLayout;
+            Multiplay.OnNeedSituationLayout += Sprites.GetSituationLayout;
+            Multiplay.OnSpriteVectorsUpdated += Sprites.UpdateSpriteVectors;
+
+            _worldClock = new EngineWorldClock(this);
+
+            Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
+        }
+
+
+        /// <summary>
         /// Initializes a new instace of the game engine.
         /// </summary>
         /// <param name="drawingSurface">The window that the game will be rendered to.</param>
-        /// <param name="runningHeadless">If TRUE the game can run "headless" with no diplay or audio.</param>
-        public EngineCore(Control drawingSurface, bool runningHeadless = false)
+        public EngineCore(Control drawingSurface)
         {
-            IsRunningHeadless = runningHeadless;
-
             Settings = LoadSettings();
 
             Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <StartupObject>Si.Si.IndependentSituationLobbyServer.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Si.GameEngine\Si.GameEngine.csproj" />
+    <ProjectReference Include="..\Si.Multiplay\Si.Multiplay.csproj" />
+  </ItemGroup>
+
+</Project>

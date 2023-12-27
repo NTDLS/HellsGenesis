@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Server", "Si.Server\Si.S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.GameEngine", "Si.GameEngine\Si.GameEngine.csproj", "{C4EF90F1-BB9E-46B0-9ED7-4F87D7781BB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Si.IndependentSituationLobbyServer", "Si.IndependentSituationLobbyServer\Si.IndependentSituationLobbyServer.csproj", "{BDBEBA35-A7DF-4CB7-87E7-1A9B8C0CB072}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{C4EF90F1-BB9E-46B0-9ED7-4F87D7781BB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4EF90F1-BB9E-46B0-9ED7-4F87D7781BB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4EF90F1-BB9E-46B0-9ED7-4F87D7781BB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDBEBA35-A7DF-4CB7-87E7-1A9B8C0CB072}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDBEBA35-A7DF-4CB7-87E7-1A9B8C0CB072}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDBEBA35-A7DF-4CB7-87E7-1A9B8C0CB072}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDBEBA35-A7DF-4CB7-87E7-1A9B8C0CB072}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{C970A57F-53A1-4BF6-A75A-17362CFD6B06} = {C00A988A-2DBB-4EB7-8B9F-265DE8303609}
 		{1280F29F-D61D-4580-A128-4BC061AE17BB} = {C00A988A-2DBB-4EB7-8B9F-265DE8303609}
 		{C4EF90F1-BB9E-46B0-9ED7-4F87D7781BB5} = {A6424186-E893-44C9-8FC6-805944EB1D84}
+		{BDBEBA35-A7DF-4CB7-87E7-1A9B8C0CB072} = {C00A988A-2DBB-4EB7-8B9F-265DE8303609}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99D468A4-85E5-41AA-912F-A2435A154952}

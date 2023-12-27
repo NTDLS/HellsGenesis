@@ -16,7 +16,7 @@ namespace Si.GameEngine.Managers
         private readonly Dictionary<string, object> _collection = new();
 
 #if DEBUG
-        private readonly string assetRawPath = @"..\..\..\Assets";
+        private readonly string assetRawPath = @"C:\NTDLS\StrikeforceInfinity\Si.Game\Assets";
 #else
         private readonly string assetRawPath = @".\Assets";
 #endif
