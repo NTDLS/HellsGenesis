@@ -42,6 +42,18 @@ namespace Si.Server.Engine.Managers
             });
         }
 
+
+        public bool TryGetByLobbyOwnerConnectionId(Guid connectionId, [NotNullWhen(true)] out Lobby? outLobby)
+        {
+            var result = _collection.Use(o =>
+            {
+                return o.Values.Where(x => x.OwnerConnectionId == connectionId).SingleOrDefault();
+            });
+
+            outLobby = result;
+            return outLobby != null;
+        }
+
         public bool TryGetByLobbyUID(Guid lobbyUID, [NotNullWhen(true)] out Lobby? outLobby)
         {
             var result = _collection.Use(o =>

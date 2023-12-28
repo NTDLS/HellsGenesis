@@ -47,7 +47,15 @@ namespace Si.Menus.MultiPlayer.Client
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
 
+            _gameCore.Multiplay.OnHostIsStartingGame += Multiplay_OnHostIsStartingGame;
+
             _gameCore.Multiplay.SetWaitingInLobby();
+        }
+
+        private void Multiplay_OnHostIsStartingGame()
+        {
+            Close();
+            _gameCore.StartGame();
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -71,6 +79,7 @@ namespace Si.Menus.MultiPlayer.Client
 
         private void MpMenuClientLobbyWait_OnCleanup()
         {
+            _gameCore.Multiplay.OnHostIsStartingGame -= Multiplay_OnHostIsStartingGame;
             _timer.Stop();
             _timer.Dispose();
         }

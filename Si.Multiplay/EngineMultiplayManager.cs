@@ -36,6 +36,12 @@ namespace Si.Multiplay
         /// </summary>
         public event NeedSituationLayout? OnNeedSituationLayout;
 
+        public delegate void HostIsStartingGame();
+        /// <summary>
+        /// Called when the game is starting. Lets the clients know to close their lobby waiting menus.
+        /// </summary>
+        public event HostIsStartingGame? OnHostIsStartingGame;
+
         #endregion
 
         public MultiplayState State { get; private set; } = new();
@@ -96,6 +102,14 @@ namespace Si.Multiplay
             }
         }
 
+        public void NotifyHostIsStartingGame()
+        {
+            if (State.PlayMode == SiPlayMode.MutiPlayerHost)
+            {
+                MessageClient.Notify(new SiHostIsStartingGame(State.LobbyUID));
+            }
+        }
+
         /// <summary>
         /// Tells the server about the client and exchanges any applicable settings with/from the server.
         /// </summary>
@@ -132,7 +146,6 @@ namespace Si.Multiplay
             }
 
             var layouts = OnNeedSituationLayout?.Invoke();
-
             if (layouts == null)
             {
                 layouts = new List<SiSpriteLayout>();
@@ -293,7 +306,12 @@ namespace Si.Multiplay
         private void MessageClient_OnNotificationReceived(MessageClient client, Guid connectionId, IFramePayloadNotification payload)
         {
             //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiLobbyDeleted lobbyDeleted)
+            if (payload is SiHostIsStartingGame hostIsStartingGame)
+            {
+                OnHostIsStartingGame?.Invoke();
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiLobbyDeleted lobbyDeleted)
             {
                 //TODO: The client is waiting in a lobby that no longer exists. We should do something.
             }

@@ -159,7 +159,20 @@ namespace Si.GameEngine.Engine
         {
             Sprites.PlayerStatsText.Visable = true;
             Sprites.DeleteAll();
-            Situations.AdvanceLevel();
+
+            switch (Multiplay.State.PlayMode)
+            {
+                case Shared.SiConstants.SiPlayMode.SinglePlayer:
+                    Situations.AdvanceLevel();
+                    break;
+                case Shared.SiConstants.SiPlayMode.MutiPlayerClient:
+                    Player.ResetAndShow();
+                    break;
+                case Shared.SiConstants.SiPlayMode.MutiPlayerHost:
+                    Multiplay.NotifyHostIsStartingGame();
+                    Situations.AdvanceLevel();
+                    break;
+            }
         }
 
         public static void SaveSettings(EngineSettings settings)

@@ -192,6 +192,23 @@ namespace Si.Server.Engine
             }
 
             //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiHostIsStartingGame hostIsStartingGame)
+            {
+                Log.Verbose($"ConnectionId: '{connectionId}' is starting game for lobby: '{hostIsStartingGame.LobbyUID}'.");
+
+                if (!Lobbies.TryGetByLobbyUID(hostIsStartingGame.LobbyUID, out var lobby))
+                {
+                    Log.Exception($"The lobby was not found '{hostIsStartingGame.LobbyUID}'.");
+                    return;
+                }
+
+                //Let all the non-lobby-owner connections know that the host is starting the game.
+                foreach (var registeredConnectionId in lobby.GetConnectionIDs().Where(o => o != connectionId))
+                {
+                    _messageServer.Notify(registeredConnectionId, hostIsStartingGame);
+                }
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiDeleteLobby deleteLobby)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' is deleting the lobby: '{deleteLobby.LobbyUID}'");

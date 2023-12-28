@@ -87,6 +87,7 @@ namespace Si.GameEngine.Menus.BasesAndInterfaces
         //public void Hide() => Items.ForEach(o => o.Visable = false);
         public bool HandlesEscape() => (OnEscape != null);
         public void QueueForDelete() => QueuedForDeletion = true;
+        public void Close() =>  QueueForDelete();
 
         public SpriteMenuItem CreateAndAddTitleItem(SiPoint location, string text)
         {
@@ -198,7 +199,7 @@ namespace Si.GameEngine.Menus.BasesAndInterfaces
                     {
                         if (o.Result == true)
                         {
-                            QueueForDelete();
+                            Close();
                         }
                         else
                         {
@@ -220,7 +221,7 @@ namespace Si.GameEngine.Menus.BasesAndInterfaces
                 {
                     if (o.Result == true)
                     {
-                        QueueForDelete();
+                        Close();
                     }
                     else
                     {
