@@ -32,10 +32,14 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
             };
 
             ThrustAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode);
+            ThrustAnimation.IsFixedPosition = true;
+            ThrustAnimation.OwnerUID = UID;
             ThrustAnimation.Reset();
             _gameCore.Sprites.Animations.InsertAt(ThrustAnimation, this);
 
             BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode);
+            ThrustAnimation.IsFixedPosition = true;
+            ThrustAnimation.OwnerUID = UID;
             BoostAnimation.Reset();
             _gameCore.Sprites.Animations.InsertAt(BoostAnimation, this);
 
