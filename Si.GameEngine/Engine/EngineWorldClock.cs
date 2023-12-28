@@ -163,7 +163,8 @@ namespace Si.GameEngine.Engine
                 _gameCore.Player.Sprite.ShipEngineRoarSound.Stop();
             }
 
-            if (_gameCore.Situations?.CurrentSituation?.State == SiSituationState.Started)
+            if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.MutiPlayerClient
+                && _gameCore.Situations?.CurrentSituation?.State == SiSituationState.Started)
             {
                 //situation = $"{_gameCore.Situations.CurrentSituation.Name} (Wave {_gameCore.Situations.CurrentSituation.CurrentWave} of {_gameCore.Situations.CurrentSituation.TotalWaves})";
                 string situation = $"{_gameCore.Situations.CurrentSituation.Name}";
@@ -189,7 +190,6 @@ namespace Si.GameEngine.Engine
                     + $"Pri-Weapon: {_gameCore.Player.Sprite.PrimaryWeapon?.Name} x{_gameCore.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
                     + $"Sec-Weapon: {_gameCore.Player.Sprite.SelectedSecondaryWeapon?.Name} x{_gameCore.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
             }
-
 
             //_gameCore.Sprites.DebugText.Text = "Anything we need to know about?";
         }
