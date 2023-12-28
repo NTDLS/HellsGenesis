@@ -371,7 +371,7 @@ namespace Si.GameEngine.Managers
                                 && y < _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
                                 )
                             {
-                                if ((sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerUpBase) && sprite.Visable == true)
+                                if ((sprite is SpritePlayerBase || sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerUpBase) && sprite.Visable == true)
                                 {
                                     sprite.RenderRadar(renderTarget, x, y);
                                 }

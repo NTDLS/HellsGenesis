@@ -6,6 +6,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 {
     internal class SpriteEnemyPhoenixDrone : SpriteEnemyPhoenix, ISpriteDrone
     {
+
         public SpriteEnemyPhoenixDrone(EngineCore gameCore)
             : base(gameCore)
         {
@@ -13,8 +14,9 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
         public void ApplyMultiplayVector(SiSpriteVector vector)
         {
-            X = vector.X;
-            Y = vector.Y;
+            var bgOffset = _gameCore.Display.BackgroundOffset;
+            X = vector.X;// - bgOffset.X;
+            Y = vector.Y;// - bgOffset.Y;
             Velocity.Angle.Degrees = vector.AngleDegrees;
             ThrustAnimation.Visable = vector.ThrottlePercentage > 0;
             BoostAnimation.Visable = vector.BoostPercentage > 0;

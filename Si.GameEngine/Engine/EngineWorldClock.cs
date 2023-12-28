@@ -141,6 +141,7 @@ namespace Si.GameEngine.Engine
             _gameCore.Sprites.TextBlocks.ExecuteWorldClockTick(displacementVector);
             _gameCore.Sprites.Powerups.ExecuteWorldClockTick(displacementVector);
             _gameCore.Sprites.Debugs.ExecuteWorldClockTick(displacementVector);
+            _gameCore.Sprites.PlayerDrones.ExecuteWorldClockTick(displacementVector);
 
             _gameCore.Sprites.RadarPositions.ExecuteWorldClockTick();
 

@@ -74,6 +74,9 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             //}
 
             behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
+
+            Velocity.ThrottlePercentage = 0;
+            Velocity.BoostPercentage = 0;
         }
 
         #region Artificial Intelligence.
@@ -83,6 +86,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
+            return;
             if (ControlledBy == SiControlledBy.Server)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase

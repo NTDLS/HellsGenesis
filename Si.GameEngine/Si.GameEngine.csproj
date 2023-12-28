@@ -20,8 +20,11 @@
 
   <ItemGroup>
     <Compile Remove="Assets\Loadouts\**" />
+    <Compile Remove="Sprites\Player\Interfaces\**" />
     <EmbeddedResource Remove="Assets\Loadouts\**" />
+    <EmbeddedResource Remove="Sprites\Player\Interfaces\**" />
     <None Remove="Assets\Loadouts\**" />
+    <None Remove="Sprites\Player\Interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -62,7 +65,6 @@
 
   <ItemGroup>
     <Folder Include="Forms\" />
-    <Folder Include="Sprites\Player\Interfaces\" />
   </ItemGroup>
 
 </Project>

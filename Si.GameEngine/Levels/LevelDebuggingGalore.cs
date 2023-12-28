@@ -74,9 +74,9 @@ namespace Si.GameEngine.Levels
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
 
             _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
 
             //_gameCore.Sprites.Debugs.CreateAtCenterScreen();
             //_gameCore.Sprites.Enemies.Create<SpriteEnemyDebug>();

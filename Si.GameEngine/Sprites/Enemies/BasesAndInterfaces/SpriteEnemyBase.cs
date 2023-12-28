@@ -26,6 +26,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
     {
         private readonly SiSpriteVector _multiplaySpriteVector = new();
 
+        public bool IsDrone { get; private set; }
         public SiEnemyClass ShipClass { get; set; }
         public EnemyShipLoadout Loadout { get; set; }
         public IAIController CurrentAIController { get; set; }
@@ -38,6 +39,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         public SpriteEnemyBase(EngineCore gameCore, int hullHealth, int bountyMultiplier)
                 : base(gameCore)
         {
+            IsDrone = GetType().Name.EndsWith("Drone");
+
             Velocity.ThrottlePercentage = 1;
             Initialize();
 
@@ -103,10 +106,12 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 {
                     //System.Diagnostics.Debug.WriteLine($"MultiplayUID: {enemy.MultiplayUID}");
 
+                    var bgOffset = _gameCore.Display.BackgroundOffset;
+
                     _multiplaySpriteVector.MultiplayUID = MultiplayUID;
                     _multiplaySpriteVector.Timestamp = DateTime.UtcNow;
-                    _multiplaySpriteVector.X = X;
-                    _multiplaySpriteVector.Y = Y;
+                    _multiplaySpriteVector.X = X;// + bgOffset.X;
+                    _multiplaySpriteVector.Y = Y;// + bgOffset.Y;
                     _multiplaySpriteVector.AngleDegrees = Velocity.Angle.Degrees;
                     _multiplaySpriteVector.BoostPercentage = Velocity.BoostPercentage;
                     _multiplaySpriteVector.ThrottlePercentage = Velocity.ThrottlePercentage;

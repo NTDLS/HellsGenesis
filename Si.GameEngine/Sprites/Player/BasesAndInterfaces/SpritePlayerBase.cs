@@ -23,6 +23,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
     public class SpritePlayerBase : _SpriteShipBase
     {
         private readonly SiSpriteVector _multiplaySpriteVector = new();
+
+        public bool IsDrone { get; private set; }
         public SiPlayerClass ShipClass { get; set; }
         public PlayerShipLoadout Loadout { get; private set; }
         public SiAudioClip AmmoLowSound { get; private set; }
@@ -51,6 +53,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
         public SpritePlayerBase(EngineCore gameCore)
             : base(gameCore)
         {
+            IsDrone = GetType().Name.EndsWith("Drone");
+
             OnHit += SpritePlayer_OnHit;
 
             AmmoLowSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);

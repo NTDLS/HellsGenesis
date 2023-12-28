@@ -2,6 +2,7 @@
 using Si.GameEngine.Engine;
 using Si.GameEngine.Engine.Types;
 using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
+using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.Utility;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared.ExtensionMethods;
@@ -821,15 +822,18 @@ namespace Si.GameEngine.Sprites
         {
             if (_isVisible && _image != null)
             {
-                if (this is SpriteEnemyBase)
+                if (this is SpritePlayerBase player && player.IsDrone)
+                {
+                    _gameCore.Rendering.FillTriangleAt(renderTarget, x, y, 10, _gameCore.Rendering.Materials.Brushes.Cyan);
+                }
+                else if (this is SpriteEnemyBase)
                 {
                     _gameCore.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameCore.Rendering.Materials.Brushes.WhiteSmoke);
                 }
                 else if (this is MunitionBase)
                 {
                     float size;
-
-                    RawColor4 color = _gameCore.Rendering.Materials.Raw.Blue;
+                    RawColor4 color;
 
                     var munition = this as MunitionBase;
                     if (munition.FiredFromType == SiFiredFromType.Enemy)
@@ -851,7 +855,6 @@ namespace Si.GameEngine.Sprites
                     }
 
                     _gameCore.Rendering.FillEllipseAt(renderTarget, x, y, size, size, color);
-
                 }
 
             }
