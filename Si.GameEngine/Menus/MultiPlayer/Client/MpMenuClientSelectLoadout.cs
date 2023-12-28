@@ -110,7 +110,7 @@ namespace Si.Menus.SinglePlayer
 
             if (item.UserData is SpritePlayerBase selectedSprite)
             {
-                _gameCore.Player.SelectClass(selectedSprite.GetType());
+                _gameCore.Player.InstantiatePlayerClass(selectedSprite.GetType());
             }
 
             _gameCore.Menus.Insert(new MpMenuClientLobbyWait(_gameCore));

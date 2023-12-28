@@ -23,6 +23,11 @@
         public bool IsWaitingInLobby { get; set; }
 
         /// <summary>
+        /// The player class that the player selected at the loadout screen.
+        /// </summary>
+        public Type? SelectedPlayerClass { get; set; }
+
+        /// <summary>
         /// The latest measured latency from the server to the client in milliseconds.
         /// </summary>
         public double LatencyMs { get; set; }

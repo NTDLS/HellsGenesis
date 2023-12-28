@@ -49,7 +49,7 @@ namespace Si.Menus.MultiPlayer.Client
 
             _gameCore.Multiplay.OnHostIsStartingGame += Multiplay_OnHostIsStartingGame;
 
-            _gameCore.Multiplay.SetWaitingInLobby();
+            _gameCore.Multiplay.SetWaitingInLobby(_gameCore.Player.Sprite.GetType(), _gameCore.Player.Sprite.MultiplayUID);
         }
 
         private void Multiplay_OnHostIsStartingGame()

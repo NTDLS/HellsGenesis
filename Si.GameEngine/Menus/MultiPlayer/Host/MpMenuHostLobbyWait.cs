@@ -53,7 +53,7 @@ namespace Si.Menus.MultiPlayer.Host
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
 
-            _gameCore.Multiplay.SetWaitingInLobby();
+            _gameCore.Multiplay.SetWaitingInLobby(_gameCore.Player.Sprite.GetType(), _gameCore.Player.Sprite.MultiplayUID);
         }
 
         private bool MpMenuHostLobbyWait_OnEscape()

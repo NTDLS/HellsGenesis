@@ -2,7 +2,7 @@
 {
     public class SiSpriteVector
     {
-        public uint MultiplayUID { get; set; }
+        public Guid MultiplayUID { get; set; }
         public DateTime Timestamp { get; set; }
         public double X { get; set; }
         public double Y { get; set; }

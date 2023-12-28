@@ -25,7 +25,7 @@ namespace Si.GameEngine.Controller
             _gameCore = gameCore;
         }
 
-        public void SelectClass(Type playerClassType)
+        public void InstantiatePlayerClass(Type playerClassType)
         {
             Sprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerClassType, new object[] { _gameCore });
             Sprite.Visable = false;

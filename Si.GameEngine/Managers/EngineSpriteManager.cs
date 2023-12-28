@@ -108,10 +108,9 @@ namespace Si.GameEngine.Managers
             var enemies = _gameCore.Sprites.Enemies.All();
             foreach (var enemy in enemies)
             {
-                //Make sure the MultiplayUID matches the MultiplayUID at all other connections.
-                enemy.MultiplayUID = enemy.UID;
+                enemy.MultiplayUID = Guid.NewGuid();
 
-                spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName + "Drone", enemy.UID)
+                spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName + "Drone", enemy.MultiplayUID)
                 {
                     Vector = new SiSpriteVector() { X = enemy.X, Y = enemy.Y }
                 });
@@ -120,9 +119,8 @@ namespace Si.GameEngine.Managers
             //--------------------------------------------------------------------------------------
             //-- Send the human player sprite (drone):
             //--------------------------------------------------------------------------------------
-            //Make sure the MultiplayUID matches the MultiplayUID at all other connections.
-            _gameCore.Player.Sprite.MultiplayUID = _gameCore.Player.Sprite.UID;
-            spriteLayouts.Add(new SiSpriteLayout(_gameCore.Player.Sprite.GetType().FullName + "Drone", _gameCore.Player.Sprite.UID)
+            _gameCore.Player.Sprite.MultiplayUID = Guid.NewGuid();
+            spriteLayouts.Add(new SiSpriteLayout(_gameCore.Player.Sprite.GetType().FullName + "Drone", _gameCore.Player.Sprite.MultiplayUID)
             {
                 Vector = new SiSpriteVector() { X = _gameCore.Display.BackgroundOffset.X, Y = _gameCore.Display.BackgroundOffset.Y }
             });

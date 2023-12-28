@@ -53,6 +53,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
         public SpritePlayerBase(EngineCore gameCore)
             : base(gameCore)
         {
+            MultiplayUID = Guid.NewGuid();
             IsDrone = GetType().Name.EndsWith("Drone");
 
             OnHit += SpritePlayer_OnHit;

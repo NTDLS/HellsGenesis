@@ -270,13 +270,14 @@ namespace Si.Server.Engine.Objects
         /// Tells the server that the connections is waiting on the lobby.
         /// </summary>
         /// <param name="connectionId"></param>
-        public void SetConnectionAsWaitingInLobby(Guid connectionId)
+        public void SetConnectionAsWaitingInLobby(Guid connectionId, Type selectedPlayerClass)
         {
             _connections.Use(o =>
             {
                 if (o.TryGetValue(connectionId, out var state))
                 {
                     state.IsWaitingInLobby = true;
+                    state.SelectedPlayerClass = selectedPlayerClass;
                 }
                 StartLobbyCountdownIfApplicable();
             });

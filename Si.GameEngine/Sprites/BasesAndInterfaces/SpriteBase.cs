@@ -29,9 +29,9 @@ namespace Si.GameEngine.Sprites
         public SiControlledBy ControlledBy { get; set; }
 
         /// <summary>
-        /// The UID of this sprite. Each connected client has a sprite with the same mathcing UID.
+        /// Each connected client has a sprite with the same matching UID.
         /// </summary>
-        public uint MultiplayUID { get; set; }
+        public Guid MultiplayUID { get; set; }
 
         #endregion
 

@@ -228,11 +228,11 @@ namespace Si.Multiplay
         /// <summary>
         /// /// Lets the server know that this client has finished selecting a loadout, or setting up the situation and is ready to start whenever.
         /// </summary>
-        public void SetWaitingInLobby()
+        public void SetWaitingInLobby(Type selectedPlayerClass, Guid playerMultiplayUID)
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiWaitingInLobby());
+                Notify(new SiWaitingInLobby(selectedPlayerClass, playerMultiplayUID));
             }
         }
 

@@ -75,10 +75,8 @@ namespace Si.Server.Engine
                     return;
                 }
 
-                //Broadcast the sprite vectors all connections except for the one that sent it.
-                var registeredConnectionIds = lobby.GetConnectionIDs();
-                registeredConnectionIds.Remove(spriteVectors.ConnectionId); //No need to send to the connection that sent us the vector list.
-                foreach (var registeredConnectionId in registeredConnectionIds)
+                //Broadcast the sprite vectors all connections except for the one that sent it to us.
+                foreach (var registeredConnectionId in lobby.GetConnectionIDs().Where(o => o != spriteVectors.ConnectionId))
                 {
                     if (_activeEndpoints.TryGetValue(registeredConnectionId, out var ipEndpoint))
                     {
@@ -257,7 +255,7 @@ namespace Si.Server.Engine
                 session.SetCurrentLobby(register.LobbyUID);
             }
             //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiWaitingInLobby)
+            else if (payload is SiWaitingInLobby waitingInLobby)
             {
                 Log.Verbose($"ConnectionId: '{connectionId}' is waiting in the lobby.");
 
@@ -267,7 +265,7 @@ namespace Si.Server.Engine
                     return;
                 }
 
-                lobby.SetConnectionAsWaitingInLobby(connectionId);
+                lobby.SetConnectionAsWaitingInLobby(connectionId, waitingInLobby.SelectedClass);
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiLeftLobby)
