@@ -10,6 +10,8 @@ namespace Si.IndependentLobbyHost
         static void Main(string[] args)
         {
             CreateEmptyLobbyies();
+
+            Console.WriteLine("Press [enter] to exit.");
             Console.ReadLine();
         }
 

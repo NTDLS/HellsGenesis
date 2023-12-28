@@ -306,7 +306,7 @@ namespace Si.Multiplay
             //------------------------------------------------------------------------------------------------------------------------------
             else
             {
-                throw new NotImplementedException("The client notification is not implemented.");
+                throw new NotImplementedException("The client TCP notification is not implemented.");
             }
         }
 
@@ -328,7 +328,7 @@ namespace Si.Multiplay
             //------------------------------------------------------------------------------------------------------------------------------
             else
             {
-                throw new NotImplementedException("The client query is not implemented.");
+                throw new NotImplementedException("The client TCP query is not implemented.");
             }
         }
 

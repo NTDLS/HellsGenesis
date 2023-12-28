@@ -11,6 +11,11 @@ namespace Si.IndependentLobbyHostWithAI
         static void Main(string[] args)
         {
             var engine = CreateGameAndLobby("Boaring AI Hoast", 1, 10, 30);
+
+            //TODO: Add situation load logic.
+
+
+            Console.WriteLine("Press [enter] to exit.");
             Console.ReadLine();
         }
 

@@ -80,12 +80,9 @@ namespace Si.Server
         {
             HostFactory.Run(x =>
             {
-                x.StartAutomatically(); // Start the service automatically
+                x.StartAutomatically();
 
-                x.EnableServiceRecovery(rc =>
-                {
-                    rc.RestartService(1); // restart the service after 1 minute
-                });
+                x.EnableServiceRecovery(rc => rc.RestartService(1));
 
                 x.Service<NsService>(s =>
                 {
@@ -93,6 +90,7 @@ namespace Si.Server
                     s.WhenStarted(tc => tc.Start());
                     s.WhenStopped(tc => tc.Stop());
                 });
+
                 x.RunAsLocalSystem();
 
                 x.SetDescription("StrikeforceInfinity game server service.");
