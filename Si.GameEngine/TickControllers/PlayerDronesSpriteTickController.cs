@@ -3,8 +3,6 @@ using Si.GameEngine.Managers;
 using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.Shared.Types.Geometry;
-using Si.Sprites.BasesAndInterfaces;
-using System.Linq;
 
 namespace Si.GameEngine.Controller
 {

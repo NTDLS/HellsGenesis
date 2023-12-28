@@ -1,5 +1,4 @@
-﻿using Si.Shared.Messages.Notify;
-using static Si.Shared.SiConstants;
+﻿using static Si.Shared.SiConstants;
 
 namespace Si.Multiplay
 {
