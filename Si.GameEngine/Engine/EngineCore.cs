@@ -91,15 +91,15 @@ namespace Si.GameEngine.Engine
             Rendering = new EngineRendering(this);
 
             Multiplay = multiplayManager;
-            Multiplay.OnReceivedSituationLayout += Sprites.ApplySituationLayout;
-            Multiplay.OnNeedSituationLayout += Sprites.GetSituationLayout;
-            Multiplay.OnSpriteVectorsUpdated += Sprites.UpdateSpriteVectors;
+            Multiplay.OnReceivedSituationLayout += Sprites.MultiplayApplySituationLayout;
+            Multiplay.OnNeedSituationLayout += Sprites.MultiplayGetSituationLayout;
+            Multiplay.OnSpriteVectorsUpdated += Sprites.MultiplayUpdateSpriteVectors;
+            Multiplay.OnPlayerSpriteCreated += Sprites.MultiplayPlayerSpriteCreated;
 
             _worldClock = new EngineWorldClock(this);
 
             Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
-
 
         /// <summary>
         /// Initializes a new instace of the game engine.
@@ -121,9 +121,11 @@ namespace Si.GameEngine.Engine
             Rendering = new EngineRendering(this);
 
             Multiplay = new EngineMultiplayManager();
-            Multiplay.OnReceivedSituationLayout += Sprites.ApplySituationLayout;
-            Multiplay.OnNeedSituationLayout += Sprites.GetSituationLayout;
-            Multiplay.OnSpriteVectorsUpdated += Sprites.UpdateSpriteVectors;
+            Multiplay.OnReceivedSituationLayout += Sprites.MultiplayApplySituationLayout;
+            Multiplay.OnNeedSituationLayout += Sprites.MultiplayGetSituationLayout;
+            Multiplay.OnSpriteVectorsUpdated += Sprites.MultiplayUpdateSpriteVectors;
+            Multiplay.OnPlayerSpriteCreated += Sprites.MultiplayPlayerSpriteCreated;
+            Multiplay.OnLevelStarted += Sprites.MultiplayLevelStarted;
 
             _worldClock = new EngineWorldClock(this);
 
@@ -166,10 +168,12 @@ namespace Si.GameEngine.Engine
                     break;
                 case Shared.SiConstants.SiPlayMode.MutiPlayerClient:
                     Player.Show();
+                    Multiplay.NotifyPlayerSpriteCreated(Player.Sprite.GetType(), Player.Sprite.MultiplayUID);
                     break;
                 case Shared.SiConstants.SiPlayMode.MutiPlayerHost:
                     Multiplay.NotifyHostIsStartingGame();
                     Situations.AdvanceLevel();
+                    Multiplay.NotifyPlayerSpriteCreated(Player.Sprite.GetType(), Player.Sprite.MultiplayUID);
                     break;
             }
         }

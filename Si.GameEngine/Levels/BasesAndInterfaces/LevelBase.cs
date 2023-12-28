@@ -42,6 +42,7 @@ namespace Si.GameEngine.Levels.BasesAndInterfaces
         public virtual void Begin()
         {
             State = SiLevelState.Started;
+            _gameCore.Multiplay.NotifyLevelStarted();
         }
 
         protected SiEngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, SiOnExecute executeCallback)

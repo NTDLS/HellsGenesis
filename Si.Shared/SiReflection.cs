@@ -72,13 +72,13 @@ namespace Si.Shared
 
         public static T? CreateInstanceFromTypeName<T>(string typeName, object[] constructorArgs)
         {
-            var type = Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);
+            var type = GetTypeByName(typeName);
             return (T?)Activator.CreateInstance(type, constructorArgs);
         }
 
         public static T? CreateInstanceFromTypeName<T>(string typeName)
         {
-            var type = Assembly.GetExecutingAssembly().GetTypes().First(t => t.Name == typeName);
+            var type = GetTypeByName(typeName);
             return (T?)Activator.CreateInstance(type);
         }
 

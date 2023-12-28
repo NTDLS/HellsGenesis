@@ -7,21 +7,8 @@ namespace Si.Shared.Messages.Notify
     /// </summary>
     public class SiWaitingInLobby : IFramePayloadNotification
     {
-        /// <summary>
-        /// The player class that the player selected.
-        /// </summary>
-        public Type SelectedClass { get; set; }
-
-        /// <summary>
-        /// The MultiplayUID for the player sprite at the connection that created the sprite. This will be broadcast to all connections
-        /// and they are exprected to create the same sprite with the same MultiplayUID.
-        /// </summary>
-        public Guid PlayerMultiplayUID { get; set; }
-
-        public SiWaitingInLobby(Type selectedClass, Guid playerMultiplayUID)
+        public SiWaitingInLobby()
         {
-            PlayerMultiplayUID = playerMultiplayUID;
-            SelectedClass = selectedClass;
         }
     }
 }

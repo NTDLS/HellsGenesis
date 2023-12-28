@@ -98,7 +98,7 @@ namespace Si.GameEngine.Managers
         /// Gets the current sprites that are needed to populated a remote multiplay map.
         /// </summary>
         /// <returns></returns>
-        public List<SiSpriteLayout> GetSituationLayout()
+        public List<SiSpriteLayout> MultiplayGetSituationLayout()
         {
             var spriteLayouts = new List<SiSpriteLayout>();
 
@@ -128,7 +128,30 @@ namespace Si.GameEngine.Managers
             return spriteLayouts;
         }
 
-        public void UpdateSpriteVectors(SiSpriteVectors spriteVectors)
+        public void MultiplayLevelStarted()
+        {
+            _collection.Use(o =>
+            {
+                //var playerDrones = o.OfType<SpritePlayerBase>().Where(x => x.IsDrone).ToList();
+                //playerDrones.ForEach(x => x.Visable = true)
+            });
+        }
+
+        public void MultiplayPlayerSpriteCreated(string selectedPlayerClass, Guid playerMultiplayUID)
+        {
+            var playerDrone = SiReflection.CreateInstanceFromTypeName<SpritePlayerBase>($"{selectedPlayerClass}Drone", new[] { _gameCore });
+            playerDrone.MultiplayUID = playerMultiplayUID;
+            //playerDrone.Visable = false;
+
+            //TODO: How do we coordinate these?
+            playerDrone.X = 1000;
+            playerDrone.Y = 1000;
+            playerDrone.Highlight = true;
+
+            PlayerDrones.Insert(playerDrone);
+        }
+
+        public void MultiplayUpdateSpriteVectors(SiSpriteVectors spriteVectors)
         {
             var allMultiplayUIDs = spriteVectors.Collection.Select(o => o.MultiplayUID).ToHashSet();
 
@@ -154,7 +177,7 @@ namespace Si.GameEngine.Managers
             });
         }
 
-        public void ApplySituationLayout(SiSituationLayout situationLayout)
+        public void MultiplayApplySituationLayout(SiSituationLayout situationLayout)
         {
             Enemies.DeleteAll();
 

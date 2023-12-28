@@ -42,6 +42,18 @@ namespace Si.Multiplay
         /// </summary>
         public event HostIsStartingGame? OnHostIsStartingGame;
 
+        public delegate void PlayerSpriteCreated(string selectedPlayerClass, Guid playerMultiplayUID);
+        /// <summary>
+        /// Called when the game is starting. Lets the clients know to close their lobby waiting menus.
+        /// </summary>
+        public event PlayerSpriteCreated? OnPlayerSpriteCreated;
+
+        public delegate void LevelStarted();
+        /// <summary>
+        /// Called when the host owner starts the level and all connections should now show the player drones.
+        /// </summary>
+        public event LevelStarted? OnLevelStarted;
+
         #endregion
 
         public MultiplayState State { get; private set; } = new();
@@ -107,6 +119,14 @@ namespace Si.Multiplay
             if (State.PlayMode == SiPlayMode.MutiPlayerHost)
             {
                 MessageClient.Notify(new SiHostIsStartingGame(State.LobbyUID));
+            }
+        }
+
+        public void NotifyLevelStarted()
+        {
+            if (State.PlayMode == SiPlayMode.MutiPlayerHost)
+            {
+                MessageClient.Notify(new SiHostStartedLevel());
             }
         }
 
@@ -208,12 +228,13 @@ namespace Si.Multiplay
 
         /// <summary>
         /// Lets the server know that the menues are closed, the player is on the screen and we are ready to receive the situation layout.
+        /// This is also used to tell all other connections what out player class and its multiplay UID is.
         /// </summary>
-        public void SetReadyToPlay()
+        public void NotifyPlayerSpriteCreated(Type selectedPlayerClass, Guid playerMultiplayUID)
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiReadyToPlay());
+                Notify(new SiPlayerSpriteCreated(selectedPlayerClass.Name, playerMultiplayUID));
             }
         }
 
@@ -228,11 +249,11 @@ namespace Si.Multiplay
         /// <summary>
         /// /// Lets the server know that this client has finished selecting a loadout, or setting up the situation and is ready to start whenever.
         /// </summary>
-        public void SetWaitingInLobby(Type selectedPlayerClass, Guid playerMultiplayUID)
+        public void SetWaitingInLobby()
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiWaitingInLobby(selectedPlayerClass, playerMultiplayUID));
+                Notify(new SiWaitingInLobby());
             }
         }
 
@@ -287,7 +308,6 @@ namespace Si.Multiplay
             //------------------------------------------------------------------------------------------------------------------------------
             if (payload is SiSpriteVectors spriteVectors)
             {
-
                 OnSpriteVectorsUpdated?.Invoke(spriteVectors);
             }
             //------------------------------------------------------------------------------------------------------------------------------
@@ -321,6 +341,16 @@ namespace Si.Multiplay
             {
                 //The server is telling us to initialize the layout using the supplied sprites and their states.
                 OnReceivedSituationLayout?.Invoke(situationLayout);
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiPlayerSpriteCreated playerSpriteCreated)
+            {
+                OnPlayerSpriteCreated?.Invoke(playerSpriteCreated.SelectedPlayerClass, playerSpriteCreated.PlayerMultiplayUID);
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiHostStartedLevel)
+            {
+                OnLevelStarted?.Invoke();
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else
