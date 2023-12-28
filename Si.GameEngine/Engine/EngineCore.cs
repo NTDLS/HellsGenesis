@@ -157,7 +157,6 @@ namespace Si.GameEngine.Engine
 
         public void StartGame()
         {
-            Sprites.PlayerStatsText.Visable = true;
             Sprites.DeleteAll();
 
             switch (Multiplay.State.PlayMode)

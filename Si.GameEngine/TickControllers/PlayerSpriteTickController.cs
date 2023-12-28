@@ -274,6 +274,7 @@ namespace Si.GameEngine.Controller
         {
             Sprite.Reset();
 
+            GameCore.Sprites.PlayerStatsText.Visable = true;
             GameCore.Sprites.RenderRadar = true;
             Sprite.Visable = true;
             Sprite.ShipEngineIdleSound.Play();
@@ -282,8 +283,9 @@ namespace Si.GameEngine.Controller
 
         public void Hide()
         {
-            Sprite.Visable = false;
+            GameCore.Sprites.PlayerStatsText.Visable = false;
             GameCore.Sprites.RenderRadar = false;
+            Sprite.Visable = false;
             Sprite.ShipEngineIdleSound.Stop();
             Sprite.ShipEngineRoarSound.Stop();
         }

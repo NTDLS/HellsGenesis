@@ -178,6 +178,18 @@ namespace Si.GameEngine.Engine
                     + $"Pri-Weapon: {_gameCore.Player.Sprite.PrimaryWeapon?.Name} x{_gameCore.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
                     + $"Sec-Weapon: {_gameCore.Player.Sprite.SelectedSecondaryWeapon?.Name} x{_gameCore.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
             }
+            else if (_gameCore.Multiplay.State.PlayMode == SiPlayMode.MutiPlayerClient)
+            {
+                double boostRebuildPercent = (_gameCore.Player.Sprite.Velocity.AvailableBoost / _gameCore.Settings.PlayerBoostRebuildFloor) * 100.0;
+
+                _gameCore.Sprites.PlayerStatsText.Text =
+                     $"      Hull: {_gameCore.Player.Sprite.HullHealth:n0} (Shields: {_gameCore.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_gameCore.Player.Sprite.Bounty}\r\n"
+                    + $"      Warp: {((_gameCore.Player.Sprite.Velocity.AvailableBoost / _gameCore.Settings.MaxPlayerBoostAmount) * 100.0):n1}%"
+                        + (_gameCore.Player.Sprite.Velocity.BoostRebuilding ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
+                    + $"Pri-Weapon: {_gameCore.Player.Sprite.PrimaryWeapon?.Name} x{_gameCore.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
+                    + $"Sec-Weapon: {_gameCore.Player.Sprite.SelectedSecondaryWeapon?.Name} x{_gameCore.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
+            }
+
 
             //_gameCore.Sprites.DebugText.Text = "Anything we need to know about?";
         }
