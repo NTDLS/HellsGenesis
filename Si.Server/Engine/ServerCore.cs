@@ -293,9 +293,8 @@ namespace Si.Server.Engine
                     return;
                 }
 
-                //The owner of the lobby send a new layout, send it to all of the connections.
-                var registeredConnectionIds = lobby.GetConnectionIDs();
-                foreach (var registeredConnectionId in registeredConnectionIds)
+                //The owner of the lobby sent a new layout, send it to all of the connections except for the one that sent it to us.
+                foreach (var registeredConnectionId in lobby.GetConnectionIDs().Where(o => o != connectionId))
                 {
                     _messageServer.Notify(registeredConnectionId, layoutDirective);
                 }

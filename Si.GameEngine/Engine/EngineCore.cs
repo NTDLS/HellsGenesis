@@ -165,7 +165,7 @@ namespace Si.GameEngine.Engine
                     Situations.AdvanceLevel();
                     break;
                 case Shared.SiConstants.SiPlayMode.MutiPlayerClient:
-                    Player.ResetAndShow();
+                    Player.Show();
                     break;
                 case Shared.SiConstants.SiPlayMode.MutiPlayerHost:
                     Multiplay.NotifyHostIsStartingGame();

@@ -110,8 +110,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
                     _multiplaySpriteVector.MultiplayUID = MultiplayUID;
                     _multiplaySpriteVector.Timestamp = DateTime.UtcNow;
-                    _multiplaySpriteVector.X = X;// + bgOffset.X;
-                    _multiplaySpriteVector.Y = Y;// + bgOffset.Y;
+                    _multiplaySpriteVector.X = X + bgOffset.X;
+                    _multiplaySpriteVector.Y = Y + bgOffset.Y;
                     _multiplaySpriteVector.AngleDegrees = Velocity.Angle.Degrees;
                     _multiplaySpriteVector.BoostPercentage = Velocity.BoostPercentage;
                     _multiplaySpriteVector.ThrottlePercentage = Velocity.ThrottlePercentage;

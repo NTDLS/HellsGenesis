@@ -68,12 +68,15 @@ namespace Si.GameEngine.Levels
 
         private void AddEnemies()
         {
+            var sprite = _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            sprite.X = 1600;
+            sprite.Y = 600;
+
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameCore.Sprites.Enemies.Create<EnemyRepulsor>();
 
-            _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             //_gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();

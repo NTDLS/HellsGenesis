@@ -1,8 +1,10 @@
 ﻿using Si.GameEngine.Engine;
 using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
+using Si.Shared;
 using Si.Shared.ExtensionMethods;
 using Si.Shared.Types.Geometry;
+using System;
 using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Controller
@@ -21,6 +23,12 @@ namespace Si.GameEngine.Controller
             : base(gameCore)
         {
             _gameCore = gameCore;
+        }
+
+        public void SelectClass(Type playerClassType)
+        {
+            Sprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerClassType, new object[] { _gameCore });
+            Sprite.Visable = false;
         }
 
         /// <summary>
@@ -274,6 +282,15 @@ namespace Si.GameEngine.Controller
         {
             Sprite.Reset();
 
+            GameCore.Sprites.PlayerStatsText.Visable = true;
+            GameCore.Sprites.RenderRadar = true;
+            Sprite.Visable = true;
+            Sprite.ShipEngineIdleSound.Play();
+            Sprite.AllSystemsGoSound.Play();
+        }
+
+        public void Show()
+        {
             GameCore.Sprites.PlayerStatsText.Visable = true;
             GameCore.Sprites.RenderRadar = true;
             Sprite.Visable = true;
