@@ -46,16 +46,6 @@ namespace Si.Menus.MultiPlayer.Host
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            /*
-            var gameHosts = _gameCore.Multiplay.GetHostList();
-            foreach (var gameHost in gameHosts)
-            {
-                helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), gameHost.UID.ToString(), gameHost.Name);
-                helpItem.X -= helpItem.Size.Width / 2;
-                offsetY += helpItem.Size.Height + 5;
-            }
-            */
-
             OnExecuteSelection += MpMenuHostLobbyWait_OnExecuteSelection;
             OnCleanup += MpMenuHostLobbyWait_OnCleanup;
             OnEscape += MpMenuHostLobbyWait_OnEscape;
@@ -77,7 +67,18 @@ namespace Si.Menus.MultiPlayer.Host
         {
             _gameCore.Multiplay.GetLobbyInfo(_gameCore.Multiplay.State.LobbyUID).ContinueWith(o =>
             {
-                _countOfReadyPlayers.Text = $"{o.Result.WaitingCount:n0}";
+                _countOfReadyPlayers.Text = $"Players: {o.Result.WaitingCount:n0}";
+                _countOfReadyPlayers.X = (_gameCore.Display.TotalCanvasSize.Width / 2) - (_countOfReadyPlayers.Size.Width / 2);
+
+                if (o.Result.RemainingSecondsUntilAutoStart != null)
+                {
+                    _countdownToAutoStart.Text = $"Auto-starting in {o.Result.RemainingSecondsUntilAutoStart:n0}s.";
+                    _countdownToAutoStart.X = (_gameCore.Display.TotalCanvasSize.Width / 2) - (_countdownToAutoStart.Size.Width / 2);
+                }
+                else
+                {
+                    _countdownToAutoStart.Text = "";
+                }
             });
         }
 

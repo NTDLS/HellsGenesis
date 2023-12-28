@@ -41,17 +41,6 @@ namespace Si.Menus.MultiPlayer.Client
 
             offsetY += _countdownToAutoStart.Size.Height + 10;
 
-            /*
-            var gameHosts = _gameCore.Multiplay.GetHostList();
-            foreach (var gameHost in gameHosts)
-            {
-                helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), gameHost.UID.ToString(), gameHost.Name);
-                helpItem.X -= helpItem.Size.Width / 2;
-                offsetY += helpItem.Size.Height + 5;
-            }
-            */
-
-            //OnExecuteSelection += MpMenuHostLobbyWait_OnExecuteSelection;
             OnCleanup += MpMenuClientLobbyWait_OnCleanup;
             OnEscape += MpMenuClientLobbyWait_OnEscape;
 
@@ -86,19 +75,11 @@ namespace Si.Menus.MultiPlayer.Client
             _timer.Dispose();
         }
 
-
         private bool MpMenuClientLobbyWait_OnEscape()
         {
             _gameCore.Multiplay.SetLeftLobby();
             _gameCore.Menus.Insert(new MpMenuClientSelectLoadout(_gameCore));
             return true;
         }
-
-        /*
-        private bool MenuMultiplayerHostOrJoin_OnExecuteSelection(SpriteMenuItem item)
-        {
-            return true;
-        }
-        */
     }
 }
