@@ -109,7 +109,7 @@ namespace Si.GameEngine.Sprites
                 + $"       Ready for Delete?: {QueuedForDeletion}\r\n"
                 + $"                Is Dead?: {IsDead}\r\n"
                 + $"                Location: {Location}\r\n"
-                + $"                Location: {MultiplayX}\r\n"
+                + $"     Multiplay Location : {MultiplayLocation}\r\n"
                 + $"                   Angle: {Velocity.Angle}y\r\n"
                 + $"                          {Velocity.Angle.Degrees:n2}deg\r\n"
                 + $"                          {Velocity.Angle.Radians:n2}rad\r\n"

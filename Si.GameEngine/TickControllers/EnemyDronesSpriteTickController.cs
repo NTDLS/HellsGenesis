@@ -8,11 +8,11 @@ using System;
 
 namespace Si.GameEngine.Controller
 {
-    internal class EnemieDronesSpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
+    public class EnemyDronesSpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
     {
         private readonly EngineCore _gameCore;
 
-        public EnemieDronesSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
+        public EnemyDronesSpriteTickController(EngineCore gameCore, EngineSpriteManager manager)
             : base(gameCore, manager)
         {
             _gameCore = gameCore;

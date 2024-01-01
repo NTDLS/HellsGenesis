@@ -52,6 +52,7 @@ namespace Si.GameEngine.Managers
         public StarsSpriteTickController Stars { get; private set; }
         public TextBlocksSpriteTickController TextBlocks { get; private set; }
         public PlayerDronesSpriteTickController PlayerDrones { get; private set; }
+        public EnemyDronesSpriteTickController EnemyDrones { get; private set; }
 
         #endregion
 
@@ -70,6 +71,7 @@ namespace Si.GameEngine.Managers
             Stars = new StarsSpriteTickController(_gameCore, this);
             TextBlocks = new TextBlocksSpriteTickController(_gameCore, this);
             PlayerDrones = new PlayerDronesSpriteTickController(_gameCore, this);
+            EnemyDrones = new EnemyDronesSpriteTickController(_gameCore, this);
         }
 
         public void Add(SpriteBase item)
@@ -149,8 +151,6 @@ namespace Si.GameEngine.Managers
         {
             var allMultiplayUIDs = spriteVectors.Collection.Select(o => o.MultiplayUID).ToHashSet();
 
-            ///uktiplay vector works, need to add client side vecrtor updates of X,Y.
-
             _collection.Use(o =>
             {
                 //Get all the sprites ahead of time. I "think" this is faster than searching in a loop.
@@ -183,8 +183,8 @@ namespace Si.GameEngine.Managers
 
                 var sprite = CreateByNameOfType(spriteInfo.FullTypeName);
                 sprite.MultiplayUID = spriteInfo.MultiplayUID;
-                sprite.X = spriteInfo.Vector.X;
-                sprite.Y = spriteInfo.Vector.Y;
+                sprite.MultiplayX = spriteInfo.Vector.X;
+                sprite.MultiplayY = spriteInfo.Vector.Y;
                 sprite.Velocity.Angle.Degrees = spriteInfo.Vector.AngleDegrees;
                 sprite.Velocity.ThrottlePercentage = spriteInfo.Vector.ThrottlePercentage;
                 sprite.Velocity.BoostPercentage = spriteInfo.Vector.BoostPercentage;
