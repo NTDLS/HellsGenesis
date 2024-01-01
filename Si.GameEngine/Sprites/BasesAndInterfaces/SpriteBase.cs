@@ -51,6 +51,7 @@ namespace Si.GameEngine.Sprites
         private SiVelocity _velocity;
         private bool _readyForDeletion;
         private SiPoint _location = new();
+        private SiPoint _multiPlayLocation = new();
         private Size _size;
 
         #region Properties.
@@ -70,10 +71,10 @@ namespace Si.GameEngine.Sprites
         public bool QueuedForDeletion => _readyForDeletion;
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public SiPoint LocationCenter => new(_location.X - Size.Width / 2.0, _location.Y - Size.Height / 2.0);
-        public RectangleF VisibleBounds => new Rectangle((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
-        public RectangleF Bounds => new((float)_location.X, (float)_location.Y, Size.Width, Size.Height);
-        public Rectangle BoundsI => new((int)_location.X, (int)_location.Y, Size.Width, Size.Height);
+        public SiPoint LocationCenter => new((_location.X + _multiPlayLocation.X) - Size.Width / 2.0, (_location.Y + _multiPlayLocation.Y) - Size.Height / 2.0);
+        public RectangleF VisibleBounds => new Rectangle((int)((_location.X + _multiPlayLocation.X) - Size.Width / 2.0), (int)((_location.Y + _multiPlayLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+        public RectangleF Bounds => new((float)(_location.X + _multiPlayLocation.X), (float)(_location.Y + _multiPlayLocation.Y), Size.Width, Size.Height);
+        public Rectangle BoundsI => new((int)(_location.X + _multiPlayLocation.X), (int)(_location.Y + _multiPlayLocation.Y), Size.Width, Size.Height);
         public SiQuadrant Quadrant => _gameCore.Display.GetQuadrant(X + _gameCore.Display.BackgroundOffset.X, Y + _gameCore.Display.BackgroundOffset.Y);
 
         public SiVelocity Velocity
@@ -108,6 +109,7 @@ namespace Si.GameEngine.Sprites
                 + $"       Ready for Delete?: {QueuedForDeletion}\r\n"
                 + $"                Is Dead?: {IsDead}\r\n"
                 + $"                Location: {Location}\r\n"
+                + $"                Location: {MultiplayX}\r\n"
                 + $"                   Angle: {Velocity.Angle}y\r\n"
                 + $"                          {Velocity.Angle.Degrees:n2}deg\r\n"
                 + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
@@ -194,6 +196,21 @@ namespace Si.GameEngine.Sprites
         /// <summary>
         /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
+        public SiPoint MultiplayLocation
+        {
+            get
+            {
+                return new SiPoint(_multiPlayLocation, true);
+            }
+            set
+            {
+                _multiPlayLocation = value.ToWriteableCopy();
+            }
+        }
+
+        /// <summary>
+        /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
+        /// </summary>
         public SiPoint Location
         {
             get
@@ -210,6 +227,26 @@ namespace Si.GameEngine.Sprites
         {
             _location = location;
             PositionChanged();
+        }
+
+        public double MultiplayX
+        {
+            get => _multiPlayLocation.X;
+            set
+            {
+                _multiPlayLocation.X = value;
+                PositionChanged();
+            }
+        }
+
+        public double MultiplayY
+        {
+            get => _multiPlayLocation.Y;
+            set
+            {
+                _multiPlayLocation.Y = value;
+                PositionChanged();
+            }
         }
 
         public double X
@@ -792,6 +829,14 @@ namespace Si.GameEngine.Sprites
 
         public virtual void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
+            if (this.SpriteTag == "AAAAAA")
+            {
+            }
+
+            if (this is SpritePlayerBase sp && sp.IsDrone)
+            {
+            }
+
             if (_isVisible && _image != null)
             {
                 DrawImage(renderTarget, _image);
@@ -807,7 +852,7 @@ namespace Si.GameEngine.Sprites
 
                 if (Highlight)
                 {
-                    var rectangle = new RectangleF((int)(_location.X - Size.Width / 2.0), (int)(_location.Y - Size.Height / 2.0), Size.Width, Size.Height);
+                    var rectangle = new RectangleF((int)((_location.X + _multiPlayLocation.X) - Size.Width / 2.0), (int)((_location.Y + _multiPlayLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
                     var rawRectF = new RawRectangleF(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom);
                     _gameCore.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Degrees, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
                 }
@@ -867,12 +912,14 @@ namespace Si.GameEngine.Sprites
             if (RotationMode != SiRotationMode.None)
             {
                 _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap,
-                    _location.X - bitmap.Size.Width / 2.0,
-                    _location.Y - bitmap.Size.Height / 2.0, angle);
+                    (_location.X + _multiPlayLocation.X) - bitmap.Size.Width / 2.0,
+                    (_location.Y + _multiPlayLocation.Y) - bitmap.Size.Height / 2.0, angle);
             }
             else //Almost free.
             {
-                _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap, _location.X - bitmap.Size.Width / 2.0, _location.Y - bitmap.Size.Height / 2.0);
+                _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap,
+                    (_location.X + _multiPlayLocation.X) - bitmap.Size.Width / 2.0,
+                    (_location.Y + +_multiPlayLocation.Y) - bitmap.Size.Height / 2.0);
             }
         }
 

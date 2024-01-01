@@ -12,7 +12,6 @@ namespace Si.Shared.Messages.Notify
         public SiSpriteVectors(List<SiSpriteVector> collection)
         {
             Collection = collection;
-
         }
     }
 }

@@ -65,7 +65,9 @@ namespace Si.Server.Engine.Objects
             IsHeadless = configuration.IsHeadless;
 
             _pingTimer.Elapsed += PingTimer_Elapsed;
+#if !DEBUG
             _pingTimer.Start();
+#endif
 
             _lobbyStartTimer.Elapsed += LobbyStartTimer_Elapsed;
             _lobbyStartTimer.Start();

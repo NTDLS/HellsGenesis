@@ -3,6 +3,8 @@ using Si.GameEngine.Managers;
 using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.Shared.Types.Geometry;
+using Si.Sprites.BasesAndInterfaces;
+using System.Linq;
 
 namespace Si.GameEngine.Controller
 {
@@ -22,13 +24,11 @@ namespace Si.GameEngine.Controller
 
         public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
-            /*
             foreach (var drone in Visible().OfType<ISpriteDrone>())
             {
                 //drone.ApplyIntelligence(displacementVector);
-                //drone.ApplyMotion(displacementVector);
+                drone.ApplyMotion(displacementVector);
             }
-            */
         }
     }
 }

@@ -17,6 +17,7 @@ using Si.Shared.Types.Geometry;
 using Si.Sprites.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using static Si.Shared.SiConstants;
 
@@ -116,15 +117,6 @@ namespace Si.GameEngine.Managers
                 });
             }
 
-            //--------------------------------------------------------------------------------------
-            //-- Send the human player sprite (drone):
-            //--------------------------------------------------------------------------------------
-            _gameCore.Player.Sprite.MultiplayUID = Guid.NewGuid();
-            spriteLayouts.Add(new SiSpriteLayout(_gameCore.Player.Sprite.GetType().FullName + "Drone", _gameCore.Player.Sprite.MultiplayUID)
-            {
-                Vector = new SiSpriteVector() { X = _gameCore.Display.BackgroundOffset.X, Y = _gameCore.Display.BackgroundOffset.Y }
-            });
-
             return spriteLayouts;
         }
 
@@ -132,8 +124,8 @@ namespace Si.GameEngine.Managers
         {
             _collection.Use(o =>
             {
-                //var playerDrones = o.OfType<SpritePlayerBase>().Where(x => x.IsDrone).ToList();
-                //playerDrones.ForEach(x => x.Visable = true)
+                var playerDrones = o.OfType<SpritePlayerBase>().Where(x => x.IsDrone).ToList();
+                playerDrones.ForEach(x => x.Visable = true);
             });
         }
 
@@ -141,19 +133,23 @@ namespace Si.GameEngine.Managers
         {
             var playerDrone = SiReflection.CreateInstanceFromTypeName<SpritePlayerBase>($"{selectedPlayerClass}Drone", new[] { _gameCore });
             playerDrone.MultiplayUID = playerMultiplayUID;
-            //playerDrone.Visable = false;
-
-            //TODO: How do we coordinate these?
-            playerDrone.X = 1000;
-            playerDrone.Y = 1000;
+            playerDrone.Visable = true;
+            playerDrone.X = 0;
+            playerDrone.Y = 0;
+            //playerDrone.MultiplayX = 1000;
+            //playerDrone.MultiplayY = 1000;
             playerDrone.Highlight = true;
 
             PlayerDrones.Insert(playerDrone);
+
+            Debug.WriteLine($"Inserted Multiplay Sprite: '{selectedPlayerClass}'->'{playerMultiplayUID}'->{playerDrone.UID}");
         }
 
         public void MultiplayUpdateSpriteVectors(SiSpriteVectors spriteVectors)
         {
             var allMultiplayUIDs = spriteVectors.Collection.Select(o => o.MultiplayUID).ToHashSet();
+
+            ///uktiplay vector works, need to add client side vecrtor updates of X,Y.
 
             _collection.Use(o =>
             {
@@ -432,7 +428,16 @@ namespace Si.GameEngine.Managers
 
                     if (sprite.IsWithinCurrentScaledScreenBounds)
                     {
+                        if (sprite is SpritePlayerBase sp && sp.IsDrone)
+                        {
+                        }
                         sprite.Render(renderTarget);
+                    }
+                    else
+                    {
+                        if (sprite is SpritePlayerBase sp && sp.IsDrone)
+                        {
+                        }
                     }
                 }
             });
