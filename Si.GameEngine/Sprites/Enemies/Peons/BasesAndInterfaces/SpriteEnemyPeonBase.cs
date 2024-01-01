@@ -58,15 +58,15 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
             {
                 var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                 ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                ThrustAnimation.X = X + pointRight.X;
-                ThrustAnimation.Y = Y + pointRight.Y;
+                ThrustAnimation.LocalX = LocalX + pointRight.X;
+                ThrustAnimation.LocalY = LocalY + pointRight.Y;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
                 var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                 BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                BoostAnimation.X = X + pointRight.X;
-                BoostAnimation.Y = Y + pointRight.Y;
+                BoostAnimation.LocalX = LocalX + pointRight.X;
+                BoostAnimation.LocalY = LocalY + pointRight.Y;
             }
         }
 
@@ -84,11 +84,6 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            if (_gameCore.Multiplay.State.PlayMode == SiPlayMode.MutiPlayerClient)
-            {
-                return;
-            }
-
             base.ApplyMotion(displacementVector);
 
             if (ThrustAnimation != null)

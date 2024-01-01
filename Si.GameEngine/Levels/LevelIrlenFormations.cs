@@ -88,8 +88,8 @@ namespace Si.GameEngine.Levels
         private SpriteEnemyIrlen AddOneEnemyAt(double x, double y, double angle)
         {
             var enemy = _gameCore.Sprites.Enemies.Create<SpriteEnemyIrlen>();
-            enemy.X = x;
-            enemy.Y = y;
+            enemy.LocalX = x;
+            enemy.LocalY = y;
             enemy.Velocity.ThrottlePercentage = 0.8;
             enemy.Velocity.MaxSpeed = 6;
             enemy.Velocity.Angle.Degrees = angle;

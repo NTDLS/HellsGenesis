@@ -17,8 +17,8 @@ namespace Si.GameEngine.Sprites
             selectedImageIndex = SiRandom.Generator.Next(0, 1000) % _imageCount;
             Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
-            X = SiRandom.Generator.Next(0, gameCore.Display.TotalCanvasSize.Width);
-            Y = SiRandom.Generator.Next(0, gameCore.Display.TotalCanvasSize.Height);
+            LocalX = SiRandom.Generator.Next(0, gameCore.Display.TotalCanvasSize.Width);
+            LocalY = SiRandom.Generator.Next(0, gameCore.Display.TotalCanvasSize.Height);
 
             Velocity.MaxSpeed = 3;
 
@@ -34,8 +34,8 @@ namespace Si.GameEngine.Sprites
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            X -= displacementVector.X * Velocity.MaxSpeed * Velocity.ThrottlePercentage;
-            Y -= displacementVector.Y * Velocity.MaxSpeed * Velocity.ThrottlePercentage;
+            LocalX -= displacementVector.X * Velocity.MaxSpeed * Velocity.ThrottlePercentage;
+            LocalY -= displacementVector.Y * Velocity.MaxSpeed * Velocity.ThrottlePercentage;
 
             if (_gameCore.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
             {

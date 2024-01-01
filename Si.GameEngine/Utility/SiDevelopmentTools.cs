@@ -46,8 +46,8 @@ namespace Si.GameEngine.Utility
         /// <param name="core"></param>
         public static void ParticleBlast(EngineCore gameCore, int particleCount, SpriteBase at)
         {
-            double X = at.X;
-            double Y = at.Y;
+            double X = at.LocalX;
+            double Y = at.LocalY;
 
             for (int i = 0; i < particleCount; i++)
             {

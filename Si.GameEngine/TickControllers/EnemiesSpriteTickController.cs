@@ -58,7 +58,7 @@ namespace Si.GameEngine.Controller
             object[] param = { GameCore };
             SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
-            obj.Location = GameCore.Display.RandomOffScreenLocation();
+            obj.LocalLocation = GameCore.Display.RandomOffScreenLocation();
             obj.Velocity.MaxSpeed = SiRandom.Generator.Next(GameCore.Settings.MinEnemySpeed, GameCore.Settings.MaxEnemySpeed);
             obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
 

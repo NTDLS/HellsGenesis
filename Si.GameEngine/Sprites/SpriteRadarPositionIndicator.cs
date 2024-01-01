@@ -13,8 +13,8 @@ namespace Si.GameEngine.Sprites
         {
             Initialize(Path.Combine(_assetPath, _assetFile));
 
-            X = 0;
-            Y = 0;
+            LocalX = 0;
+            LocalY = 0;
         }
     }
 }

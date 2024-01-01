@@ -27,7 +27,7 @@ namespace Si.GameEngine.Controller
         {
             object[] param = { GameCore };
             var obj = (SpritePowerUpBase)Activator.CreateInstance(typeof(T), param);
-            obj.Location = new SiPoint(x, y);
+            obj.LocalLocation = new SiPoint(x, y);
             SpriteManager.Add(obj);
             return (T)obj;
         }

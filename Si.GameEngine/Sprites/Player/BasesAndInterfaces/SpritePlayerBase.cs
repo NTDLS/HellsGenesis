@@ -181,8 +181,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
 
             IsDead = false;
 
-            X = _gameCore.Display.TotalCanvasSize.Width / 2;
-            Y = _gameCore.Display.TotalCanvasSize.Height / 2;
+            LocalX = _gameCore.Display.TotalCanvasSize.Width / 2;
+            LocalY = _gameCore.Display.TotalCanvasSize.Height / 2;
 
             Velocity.Angle = new SiAngle(45);
 
@@ -268,8 +268,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 {
                     var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                     ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                    ThrustAnimation.X = X + pointBehind.X;
-                    ThrustAnimation.Y = Y + pointBehind.Y;
+                    ThrustAnimation.LocalX = LocalX + pointBehind.X;
+                    ThrustAnimation.LocalY = LocalY + pointBehind.Y;
                 }
             }
 
@@ -279,8 +279,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 {
                     var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                     BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                    BoostAnimation.X = X + pointBehind.X;
-                    BoostAnimation.Y = Y + pointBehind.Y;
+                    BoostAnimation.LocalX = LocalX + pointBehind.X;
+                    BoostAnimation.LocalY = LocalY + pointBehind.Y;
                 }
             }
         }

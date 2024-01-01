@@ -27,23 +27,23 @@ namespace Si.Menus.MultiPlayer.Host
             double offsetY = _currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Waiting in your Lobby");
-            itemTitle.X -= itemTitle.Size.Width / 2;
+            itemTitle.LocalX -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
             _countOfReadyPlayers = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "?");
-            _countOfReadyPlayers.X -= _countOfReadyPlayers.Size.Width / 2;
+            _countOfReadyPlayers.LocalX -= _countOfReadyPlayers.Size.Width / 2;
 
             offsetY += _countOfReadyPlayers.Size.Height + 10;
 
             _countdownToAutoStart = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
-            _countdownToAutoStart.X -= _countdownToAutoStart.Size.Width / 2;
+            _countdownToAutoStart.LocalX -= _countdownToAutoStart.Size.Width / 2;
 
             offsetY += _countdownToAutoStart.Size.Height + 10;
 
             var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "START_NOW", " Start Now! ");
             helpItem.Selected = true;
-            helpItem.X -= helpItem.Size.Width / 2;
+            helpItem.LocalX -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
             OnExecuteSelection += MpMenuHostLobbyWait_OnExecuteSelection;
@@ -68,12 +68,12 @@ namespace Si.Menus.MultiPlayer.Host
             _gameCore.Multiplay.GetLobbyInfo(_gameCore.Multiplay.State.LobbyUID).ContinueWith(o =>
             {
                 _countOfReadyPlayers.Text = $"Players: {o.Result.WaitingCount:n0}";
-                _countOfReadyPlayers.X = (_gameCore.Display.TotalCanvasSize.Width / 2) - (_countOfReadyPlayers.Size.Width / 2);
+                _countOfReadyPlayers.LocalX = (_gameCore.Display.TotalCanvasSize.Width / 2) - (_countOfReadyPlayers.Size.Width / 2);
 
                 if (o.Result.RemainingSecondsUntilAutoStart != null)
                 {
                     _countdownToAutoStart.Text = $"Auto-starting in {o.Result.RemainingSecondsUntilAutoStart:n0}s.";
-                    _countdownToAutoStart.X = (_gameCore.Display.TotalCanvasSize.Width / 2) - (_countdownToAutoStart.Size.Width / 2);
+                    _countdownToAutoStart.LocalX = (_gameCore.Display.TotalCanvasSize.Width / 2) - (_countdownToAutoStart.Size.Width / 2);
                 }
                 else
                 {

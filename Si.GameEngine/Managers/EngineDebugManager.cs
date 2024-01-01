@@ -153,8 +153,8 @@ namespace Si.GameEngine.Managers
                 {
                     if (sprite.IsFixedPosition == false)
                     {
-                        sprite.X += deltaX;
-                        sprite.Y += deltaY;
+                        sprite.LocalX += deltaX;
+                        sprite.LocalY += deltaY;
                     }
                 }
             });
@@ -171,20 +171,20 @@ namespace Si.GameEngine.Managers
                 var baseSprite = o.Where(o => o.UID == spriteUID).FirstOrDefault();
                 if (baseSprite != null)
                 {
-                    var deltaX = (_gameCore.Display.TotalCanvasSize.Width / 2) - baseSprite.X;
-                    var deltaY = (_gameCore.Display.TotalCanvasSize.Height / 2) - baseSprite.Y;
+                    var deltaX = (_gameCore.Display.TotalCanvasSize.Width / 2) - baseSprite.LocalX;
+                    var deltaY = (_gameCore.Display.TotalCanvasSize.Height / 2) - baseSprite.LocalY;
 
                     foreach (var sprite in o)
                     {
                         if (sprite.IsFixedPosition == false)
                         {
-                            sprite.X += deltaX;
-                            sprite.Y += deltaY;
+                            sprite.LocalX += deltaX;
+                            sprite.LocalY += deltaY;
                         }
                     }
 
-                    _gameCore.Display.BackgroundOffset.X = baseSprite.X;
-                    _gameCore.Display.BackgroundOffset.Y = baseSprite.Y;
+                    _gameCore.Display.BackgroundOffset.X = baseSprite.LocalX;
+                    _gameCore.Display.BackgroundOffset.Y = baseSprite.LocalY;
                 }
             });
         }
@@ -547,8 +547,8 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.X = command.ParameterValue<double>("x");
-                    sprite.Y = command.ParameterValue<double>("y");
+                    sprite.LocalX = command.ParameterValue<double>("x");
+                    sprite.LocalY = command.ParameterValue<double>("y");
                 }
             });
         }
@@ -562,8 +562,8 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.X = _gameCore.Display.TotalCanvasSize.Width / 2;
-                    sprite.Y = _gameCore.Display.TotalCanvasSize.Height / 2;
+                    sprite.LocalX = _gameCore.Display.TotalCanvasSize.Width / 2;
+                    sprite.LocalY = _gameCore.Display.TotalCanvasSize.Height / 2;
                 }
             });
         }

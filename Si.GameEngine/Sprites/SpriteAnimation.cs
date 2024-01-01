@@ -71,7 +71,7 @@ namespace Si.GameEngine.Sprites
             _columns = (int)(_sheetImage.Size.Width / ((Size)frameSize).Width);
             _frameCount = _rows * _columns;
 
-            Location = new SiPoint(0, 0);
+            LocalLocation = new SiPoint(0, 0);
             Velocity = new SiVelocity();
 
             AdvanceImage();
@@ -97,8 +97,8 @@ namespace Si.GameEngine.Sprites
             _gameCore.Rendering.DrawBitmapAt(
                 renderTarget,
                 _sheetImage,
-                X - _frameSize.Width / 2.0,
-                Y - _frameSize.Height / 2.0,
+                (LocalX + MultiplayX) - _frameSize.Width / 2.0,
+                (LocalY + MultiplayY) - _frameSize.Height / 2.0,
                 Velocity.Angle.Degrees,
                 sourceRect,
                 new Size2F(_frameSize.Width, _frameSize.Height)

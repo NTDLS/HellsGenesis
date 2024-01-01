@@ -29,14 +29,14 @@ namespace Si.Menus.SinglePlayer
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Select a Ship Class");
-            itemTitle.X = offsetX + 200;
-            itemTitle.Y = offsetY - itemTitle.Size.Height;
+            itemTitle.LocalX = offsetX + 200;
+            itemTitle.LocalY = offsetY - itemTitle.Size.Height;
 
             offsetY += itemTitle.Height;
 
             _shipBlurb = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
-            _shipBlurb.X = offsetX + 200;
-            _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
+            _shipBlurb.LocalX = offsetX + 200;
+            _shipBlurb.LocalY = offsetY - _shipBlurb.Size.Height;
 
             //Use reflection to get a list of possible player types.
             var playerTypes = SiReflection.GetSubClassesOf<SpritePlayerBase>()
@@ -60,14 +60,14 @@ namespace Si.Menus.SinglePlayer
                 playerSprite.Velocity.Angle.Degrees = 45;
 
                 var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), playerSprite.Loadout.Name, playerSprite.Loadout.Name);
-                menuItem.Y -= menuItem.Size.Height / 2;
+                menuItem.LocalY -= menuItem.Size.Height / 2;
 
                 menuItem.UserData = playerSprite;
 
                 playerSprites.Add(playerSprite);
 
-                playerSprite.X = offsetX;
-                playerSprite.Y = offsetY;
+                playerSprite.LocalX = offsetX;
+                playerSprite.LocalY = offsetY;
                 offsetY += 50;
             }
 

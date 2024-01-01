@@ -47,8 +47,8 @@ namespace Si.GameEngine.Engine
             {
                 textBlock = _gameCore.Sprites.TextBlocks.Create(_gameCore.Rendering.TextFormats.LargeBlocker, _gameCore.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText");
                 textBlock.Text = "Paused";
-                textBlock.X = _gameCore.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
-                textBlock.Y = _gameCore.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
+                textBlock.LocalX = _gameCore.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
+                textBlock.LocalY = _gameCore.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
             }
 
             textBlock.Visable = _pause;

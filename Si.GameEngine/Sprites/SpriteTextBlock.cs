@@ -35,7 +35,7 @@ namespace Si.GameEngine.Sprites
             : base(gameCore)
         {
             IsFixedPosition = isFixedPosition;
-            Location = new SiPoint(location);
+            LocalLocation = new SiPoint(location);
             Color = color;
 
             Format = format;
@@ -45,7 +45,7 @@ namespace Si.GameEngine.Sprites
         {
             if (Visable)
             {
-                _gameCore.Rendering.DrawTextAt(renderTarget, (float)X, (float)Y, 0, _text ?? string.Empty, Format, Color);
+                _gameCore.Rendering.DrawTextAt(renderTarget, (float)LocalX, (float)LocalY, 0, _text ?? string.Empty, Format, Color);
             }
         }
     }

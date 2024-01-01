@@ -151,7 +151,7 @@ namespace Si.Game
 
                     text.AppendLine($"Type: {sprite.GetType().Name}");
                     text.AppendLine($"UID: {sprite.UID}");
-                    text.AppendLine($"X,Y: {sprite.X:n2},{sprite.Y:n2}");
+                    text.AppendLine($"Location: {sprite.Location}");
 
                     if (sprite is SpriteEnemyBase)
                     {

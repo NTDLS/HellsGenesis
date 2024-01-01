@@ -16,8 +16,8 @@ namespace Si.GameEngine.Sprites
         {
             Initialize(imagePath, size);
 
-            X = 0;
-            Y = 0;
+            LocalX = 0;
+            LocalY = 0;
             Velocity = new SiVelocity();
         }
 

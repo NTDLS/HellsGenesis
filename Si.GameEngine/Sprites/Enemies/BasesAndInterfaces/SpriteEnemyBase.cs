@@ -91,7 +91,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
                 if (powerUp != null)
                 {
-                    powerUp.Location = Location;
+                    powerUp.LocalLocation = Location;
                     _gameCore.Sprites.Powerups.Insert(powerUp);
                 }
             }
@@ -110,8 +110,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
                     _multiplaySpriteVector.MultiplayUID = MultiplayUID;
                     _multiplaySpriteVector.Timestamp = DateTime.UtcNow;
-                    _multiplaySpriteVector.X = X + bgOffset.X;
-                    _multiplaySpriteVector.Y = Y + bgOffset.Y;
+                    _multiplaySpriteVector.X = LocalX + bgOffset.X;
+                    _multiplaySpriteVector.Y = LocalY + bgOffset.Y;
                     _multiplaySpriteVector.AngleDegrees = Velocity.Angle.Degrees;
                     _multiplaySpriteVector.BoostPercentage = Velocity.BoostPercentage;
                     _multiplaySpriteVector.ThrottlePercentage = Velocity.ThrottlePercentage;
@@ -210,10 +210,10 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            if (X < -_gameCore.Settings.EnemySceneDistanceLimit
-                || X >= _gameCore.Display.NatrualScreenSize.Width + _gameCore.Settings.EnemySceneDistanceLimit
-                || Y < -_gameCore.Settings.EnemySceneDistanceLimit
-                || Y >= _gameCore.Display.NatrualScreenSize.Height + _gameCore.Settings.EnemySceneDistanceLimit)
+            if (LocalX < -_gameCore.Settings.EnemySceneDistanceLimit
+                || LocalX >= _gameCore.Display.NatrualScreenSize.Width + _gameCore.Settings.EnemySceneDistanceLimit
+                || LocalY < -_gameCore.Settings.EnemySceneDistanceLimit
+                || LocalY >= _gameCore.Display.NatrualScreenSize.Height + _gameCore.Settings.EnemySceneDistanceLimit)
             {
                 QueueForDelete();
                 return;
@@ -249,8 +249,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 thrustVector += Velocity.MaxBoost * Velocity.BoostPercentage;
             }
 
-            X += Velocity.Angle.X * thrustVector - displacementVector.X;
-            Y += Velocity.Angle.Y * thrustVector - displacementVector.Y;
+            LocalX += Velocity.Angle.X * thrustVector - displacementVector.X;
+            LocalY += Velocity.Angle.Y * thrustVector - displacementVector.Y;
 
             //base.ApplyMotion(displacementVector);
 
@@ -267,10 +267,10 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
                     var offset = SiMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle), new SiPoint(200, 200));
 
-                    RadarPositionText.Location = _gameCore.Player.Sprite.Location + offset + new SiPoint(25, 25);
+                    RadarPositionText.LocalLocation = _gameCore.Player.Sprite.Location + offset + new SiPoint(25, 25);
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
 
-                    RadarPositionIndicator.Location = _gameCore.Player.Sprite.Location + offset;
+                    RadarPositionIndicator.LocalLocation = _gameCore.Player.Sprite.Location + offset;
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
                 }
                 else

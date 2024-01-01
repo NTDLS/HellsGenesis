@@ -104,40 +104,40 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 {
                     var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - 90, new SiPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
-                    _leftGun.X = X + pointLeft.X;
-                    _leftGun.Y = Y + pointLeft.Y;
+                    _leftGun.LocalX = LocalX + pointLeft.X;
+                    _leftGun.LocalY = LocalY + pointLeft.Y;
                 }
 
                 if (_rightGun.IsDead == false)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 90, new SiPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
-                    _rightGun.X = X + pointRight.X;
-                    _rightGun.Y = Y + pointRight.Y;
+                    _rightGun.LocalX = LocalX + pointRight.X;
+                    _rightGun.LocalY = LocalY + pointRight.Y;
                 }
 
                 if (_leftThrust.IsDead == false)
                 {
                     var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - 135, new SiPoint(35, 35));
                     _leftThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
-                    _leftThrust.X = X + pointLeft.X;
-                    _leftThrust.Y = Y + pointLeft.Y;
+                    _leftThrust.LocalX = LocalX + pointLeft.X;
+                    _leftThrust.LocalY = LocalY + pointLeft.Y;
                 }
 
                 if (_rightThrust.IsDead == false)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 135, new SiPoint(35, 35));
                     _rightThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
-                    _rightThrust.X = X + pointRight.X;
-                    _rightThrust.Y = Y + pointRight.Y;
+                    _rightThrust.LocalX = LocalX + pointRight.X;
+                    _rightThrust.LocalY = LocalY + pointRight.Y;
                 }
 
                 if (_turret.IsDead == false)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle, new SiPoint(0, 0));
                     _turret.Velocity.Angle.Degrees = AngleTo360(_gameCore.Player.Sprite);
-                    _turret.X = X + pointRight.X;
-                    _turret.Y = Y + pointRight.Y;
+                    _turret.LocalX = LocalX + pointRight.X;
+                    _turret.LocalY = LocalY + pointRight.Y;
                 }
             }
         }

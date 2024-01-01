@@ -115,7 +115,7 @@ namespace Si.GameEngine.Managers
 
                 spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName + "Drone", enemy.MultiplayUID)
                 {
-                    Vector = new SiSpriteVector() { X = enemy.X, Y = enemy.Y }
+                    Vector = new SiSpriteVector() { X = enemy.LocalX, Y = enemy.LocalY }
                 });
             }
 
@@ -136,8 +136,8 @@ namespace Si.GameEngine.Managers
             var playerDrone = SiReflection.CreateInstanceFromTypeName<SpritePlayerBase>($"{selectedPlayerClass}Drone", new[] { _gameCore });
             playerDrone.MultiplayUID = playerMultiplayUID;
             playerDrone.Visable = true;
-            playerDrone.X = 0;
-            playerDrone.Y = 0;
+            playerDrone.LocalX = 0;
+            playerDrone.LocalY = 0;
             //playerDrone.MultiplayX = 1000;
             //playerDrone.MultiplayY = 1000;
             playerDrone.Highlight = true;
@@ -185,6 +185,8 @@ namespace Si.GameEngine.Managers
                 sprite.MultiplayUID = spriteInfo.MultiplayUID;
                 sprite.MultiplayX = spriteInfo.Vector.X;
                 sprite.MultiplayY = spriteInfo.Vector.Y;
+                sprite.LocalX = 0;
+                sprite.LocalY = 0;
                 sprite.Velocity.Angle.Degrees = spriteInfo.Vector.AngleDegrees;
                 sprite.Velocity.ThrottlePercentage = spriteInfo.Vector.ThrottlePercentage;
                 sprite.Velocity.BoostPercentage = spriteInfo.Vector.BoostPercentage;
@@ -203,7 +205,7 @@ namespace Si.GameEngine.Managers
 
             PlayerStatsText = TextBlocks.Create(_gameCore.Rendering.TextFormats.RealtimePlayerStats, _gameCore.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_gameCore.Rendering.TextFormats.RealtimePlayerStats, _gameCore.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
+            DebugText = TextBlocks.Create(_gameCore.Rendering.TextFormats.RealtimePlayerStats, _gameCore.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.LocalY + 100), true);
 
             _gameCore.Audio.BackgroundMusicSound.Play();
         }
@@ -218,7 +220,7 @@ namespace Si.GameEngine.Managers
             object[] param = { _gameCore };
             var obj = (SpriteBase)Activator.CreateInstance(type, param);
 
-            obj.Location = _gameCore.Display.RandomOffScreenLocation();
+            obj.LocalLocation = _gameCore.Display.RandomOffScreenLocation();
             obj.Velocity.MaxSpeed = SiRandom.Generator.Next(_gameCore.Settings.MinEnemySpeed, _gameCore.Settings.MaxEnemySpeed);
             obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
 
@@ -369,8 +371,8 @@ namespace Si.GameEngine.Managers
                     double centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0) - 2.0; //Subtract half the dot size.
 
                     _radarOffset = new SiPoint(
-                            _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _gameCore.Player.Sprite.X * _radarScale.X),
-                            _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _gameCore.Player.Sprite.Y * _radarScale.Y)
+                            _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _gameCore.Player.Sprite.LocalX * _radarScale.X),
+                            _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _gameCore.Player.Sprite.LocalY * _radarScale.Y)
                         );
 
                     _collection.Use(o =>
@@ -379,8 +381,8 @@ namespace Si.GameEngine.Managers
                         foreach (var sprite in o.Where(o => o.Visable == true))
                         {
                             //SiPoint scale, SiPoint< double > offset
-                            int x = (int)(_radarOffset.X + sprite.X * _radarScale.X);
-                            int y = (int)(_radarOffset.Y + sprite.Y * _radarScale.Y);
+                            int x = (int)(_radarOffset.X + sprite.LocalX * _radarScale.X);
+                            int y = (int)(_radarOffset.Y + sprite.LocalY * _radarScale.Y);
 
                             if (x > _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
                                 && x < _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
