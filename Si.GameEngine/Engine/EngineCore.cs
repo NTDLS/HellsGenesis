@@ -92,9 +92,9 @@ namespace Si.GameEngine.Engine
 
             Multiplay = multiplayManager;
             Multiplay.OnReceivedSituationLayout += Sprites.MultiplayApplySituationLayout;
-            Multiplay.OnNeedSituationLayout += Sprites.MultiplayGetSituationLayout;
-            Multiplay.OnApplySpriteActions += Sprites.MultiplayApplySpriteActions;
-            Multiplay.OnPlayerSpriteCreated += Sprites.MultiplayPlayerSpriteCreated;
+            Multiplay.OnNeedSituationLayout += Sprites.OnEventMultiplayGetSituationLayout;
+            Multiplay.OnApplySpriteActions += Sprites.OnEventMultiplayApplySpriteActions;
+            Multiplay.OnPlayerSpriteCreated += Sprites.OnEventMultiplayPlayerSpriteCreated;
 
             _worldClock = new EngineWorldClock(this);
 
@@ -122,10 +122,10 @@ namespace Si.GameEngine.Engine
 
             Multiplay = new EngineMultiplayManager();
             Multiplay.OnReceivedSituationLayout += Sprites.MultiplayApplySituationLayout;
-            Multiplay.OnNeedSituationLayout += Sprites.MultiplayGetSituationLayout;
-            Multiplay.OnApplySpriteActions += Sprites.MultiplayApplySpriteActions;
-            Multiplay.OnPlayerSpriteCreated += Sprites.MultiplayPlayerSpriteCreated;
-            Multiplay.OnLevelStarted += Sprites.MultiplayLevelStarted;
+            Multiplay.OnNeedSituationLayout += Sprites.OnEventMultiplayGetSituationLayout;
+            Multiplay.OnApplySpriteActions += Sprites.OnEventMultiplayApplySpriteActions;
+            Multiplay.OnPlayerSpriteCreated += Sprites.OnEventMultiplayPlayerSpriteCreated;
+            Multiplay.OnLevelStarted += Sprites.OnEventMultiplayLevelStarted;
 
             _worldClock = new EngineWorldClock(this);
 

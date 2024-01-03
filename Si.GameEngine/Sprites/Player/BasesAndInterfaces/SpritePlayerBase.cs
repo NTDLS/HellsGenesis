@@ -72,6 +72,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             ShipEngineBoostSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
         }
 
+
         public override void VisibilityChanged()
         {
             UpdateThrustAnimationPositions();

@@ -112,7 +112,7 @@ namespace Si.GameEngine.Managers
         /// Gets the current sprites that are needed to populated a remote multiplay map.
         /// </summary>
         /// <returns></returns>
-        public List<SiSpriteLayout> MultiplayGetSituationLayout()
+        public List<SiSpriteLayout> OnEventMultiplayGetSituationLayout()
         {
             var spriteLayouts = new List<SiSpriteLayout>();
 
@@ -133,7 +133,7 @@ namespace Si.GameEngine.Managers
             return spriteLayouts;
         }
 
-        public void MultiplayLevelStarted()
+        public void OnEventMultiplayLevelStarted()
         {
             _collection.Use(o =>
             {
@@ -142,15 +142,13 @@ namespace Si.GameEngine.Managers
             });
         }
 
-        public void MultiplayPlayerSpriteCreated(string selectedPlayerClass, Guid playerMultiplayUID)
+        public void OnEventMultiplayPlayerSpriteCreated(string selectedPlayerClass, Guid playerMultiplayUID)
         {
             var playerDrone = SiReflection.CreateInstanceFromTypeName<SpritePlayerBase>($"{selectedPlayerClass}Drone", new[] { _gameCore });
             playerDrone.MultiplayUID = playerMultiplayUID;
             playerDrone.Visable = true;
             playerDrone.LocalX = 0;
             playerDrone.LocalY = 0;
-            //playerDrone.MultiplayX = 1000;
-            //playerDrone.MultiplayY = 1000;
             playerDrone.Highlight = true;
 
             PlayerDrones.Insert(playerDrone);
@@ -158,9 +156,13 @@ namespace Si.GameEngine.Managers
             Debug.WriteLine($"Inserted Multiplay Sprite: '{selectedPlayerClass}'->'{playerMultiplayUID}'->{playerDrone.UID}");
         }
 
-        public void MultiplayApplySpriteActions(SiSpriteActions actions)
+        public void OnEventMultiplayApplySpriteActions(SiSpriteActions actions)
         {
             var allMultiplayUIDs = actions.Collection.Select(o => o.MultiplayUID).ToHashSet();
+            if (!allMultiplayUIDs.Any())
+            {
+                return;
+            }
 
             _collection.Use(o =>
             {
@@ -169,19 +171,24 @@ namespace Si.GameEngine.Managers
 
                 foreach (var action in actions.Collection)
                 {
-                    var sprite = sprites.Where(o => o.MultiplayUID == action.MultiplayUID).FirstOrDefault();
-                    if (sprite is ISpriteDrone drone)
+                    var drone = sprites.Where(o => o.MultiplayUID == action.MultiplayUID).FirstOrDefault() as ISpriteDrone;
+                    if (drone != null)
                     {
                         if (action is SiSpriteVector vector)
                         {
                             drone.ApplyMultiplayVector(vector);
                         }
+                        else if (action is SiSpriteHit hit)
+                        {
+                            drone.Hit(hit.Damage);
+                        }
+                        else if (action is SiSpriteExplode)
+                        {
+                            drone.Explode();
+                        }
                         else if (action is SiSpriteWeaponFire weaponFire)
                         {
-                            if (sprite is SpriteEnemyBase enemy)
-                            {
-                                enemy.FireDroneWeapon(weaponFire.WeaponName);
-                            }
+                            drone.FireDroneWeapon(weaponFire.WeaponTypeName);
                         }
                     }
                 }

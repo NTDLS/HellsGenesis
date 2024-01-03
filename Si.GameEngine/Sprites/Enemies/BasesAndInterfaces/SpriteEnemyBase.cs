@@ -382,24 +382,13 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
             if (weapon != null && _gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && this.IsDrone == false)
             {
-                _gameCore.Multiplay.RecordSpriteWeaponFire(new SiSpriteWeaponFire()
+                _gameCore.Multiplay.RecordSpriteWeaponFire(new SiSpriteWeaponFire(MultiplayUID)
                 {
-                    MultiplayUID = this.MultiplayUID,
-                    WeaponName = weapon.Name
+                    WeaponTypeName = weapon.GetType().Name,
                 });
             }
 
             return weapon?.Fire() == true;
-        }
-
-        public bool FireDroneWeapon(string weaponName)
-        {
-            return GetWeaponByName(weaponName)?.Fire() == true;
-        }
-
-        public WeaponBase GetWeaponByName(string weaponName)
-        {
-            return (from o in Weapons where o.Name == weaponName select o).FirstOrDefault();
         }
 
         public WeaponBase GetWeaponOfType<T>() where T : WeaponBase

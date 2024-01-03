@@ -59,6 +59,9 @@ namespace Si.Multiplay
 
         public MultiplayState State { get; private set; } = new();
 
+        public bool ShouldRecordEvents
+            => State.LobbyUID != Guid.Empty && State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true;
+
         /// <summary>
         /// This is the UDP port that the client will listen on. This is communicated to the server via ConfigureConnection().
         /// </summary>
@@ -195,7 +198,7 @@ namespace Si.Multiplay
             State.LobbyUID = lobbyUID;
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiDeleteLobby(State.LobbyUID));
+                NotifyImmediately(new SiDeleteLobby(State.LobbyUID));
             }
         }
 
@@ -211,7 +214,7 @@ namespace Si.Multiplay
             State.PlayerName = playerName;
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiRegisterToLobby(State.LobbyUID, playerName));
+                NotifyImmediately(new SiRegisterToLobby(State.LobbyUID, playerName));
             }
         }
 
@@ -222,7 +225,7 @@ namespace Si.Multiplay
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiDeregisterToLobby(State.LobbyUID));
+                NotifyImmediately(new SiDeregisterToLobby(State.LobbyUID));
             }
             State.LobbyUID = Guid.Empty;
         }
@@ -235,7 +238,7 @@ namespace Si.Multiplay
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiPlayerSpriteCreated(selectedPlayerClass.Name, playerMultiplayUID));
+                NotifyImmediately(new SiPlayerSpriteCreated(selectedPlayerClass.Name, playerMultiplayUID));
             }
         }
 
@@ -243,7 +246,7 @@ namespace Si.Multiplay
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiLeftLobby());
+                NotifyImmediately(new SiLeftLobby());
             }
         }
 
@@ -254,7 +257,7 @@ namespace Si.Multiplay
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                Notify(new SiWaitingInLobby());
+                NotifyImmediately(new SiWaitingInLobby());
             }
         }
 
@@ -388,12 +391,9 @@ namespace Si.Multiplay
         /// <param name="multiplayEvent"></param>
         public void RecordSpriteVector(SiSpriteVector multiplayEvent)
         {
-            if (State.LobbyUID != Guid.Empty)
+            if (ShouldRecordEvents)
             {
-                if (State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
-                {
-                    _spriteActionBuffer.Add(multiplayEvent);
-                }
+                _spriteActionBuffer.Add(multiplayEvent);
             }
         }
 
@@ -403,12 +403,29 @@ namespace Si.Multiplay
         /// <param name="multiplayerEvent"></param>
         public void RecordSpriteWeaponFire(SiSpriteWeaponFire multiplayEvent)
         {
-            if (State.LobbyUID != Guid.Empty)
+            if (ShouldRecordEvents)
             {
-                if (State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
-                {
-                    _spriteActionBuffer.Add(multiplayEvent);
-                }
+                _spriteActionBuffer.Add(multiplayEvent);
+            }
+        }
+
+        /// <summary>
+        /// Buffers sprite vector information so that all of the updates can be sent at one time at the end of the game loop.
+        /// </summary>
+        /// <param name="multiplayerEvent"></param>
+        public void RecordSpriteExplode(Guid playerMultiplayUID)
+        {
+            if (ShouldRecordEvents)
+            {
+                _spriteActionBuffer.Add(new SiSpriteExplode(playerMultiplayUID));
+            }
+        }
+
+        public void RecordSpriteHit(Guid playerMultiplayUID)
+        {
+            if (ShouldRecordEvents)
+            {
+                _spriteActionBuffer.Add(new SiSpriteHit(playerMultiplayUID));
             }
         }
 
@@ -436,7 +453,7 @@ namespace Si.Multiplay
         /// Just a simple function used to send a notification with some checks.
         /// </summary>
         /// <param name="multiplayerEvent"></param>
-        public void Notify(IFramePayloadNotification multiplayerEvent)
+        public void NotifyImmediately(IFramePayloadNotification multiplayerEvent)
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
             {

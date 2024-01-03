@@ -7,5 +7,14 @@
         public double AngleDegrees { get; set; }
         public double ThrottlePercentage { get; set; }
         public double BoostPercentage { get; set; }
+
+        public SiSpriteVector(Guid multiplayUID)
+            : base(multiplayUID)
+        {
+        }
+
+        public SiSpriteVector()
+        {
+        }
     }
 }

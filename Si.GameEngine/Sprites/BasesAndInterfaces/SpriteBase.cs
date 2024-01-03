@@ -472,6 +472,8 @@ namespace Si.GameEngine.Sprites
         /// <returns></returns>
         public virtual void Hit(int damage)
         {
+            _gameCore.Multiplay.RecordSpriteHit(MultiplayUID);
+
             if (ShieldHealth > 0)
             {
                 _shieldHit.Play();
@@ -717,6 +719,8 @@ namespace Si.GameEngine.Sprites
             {
                 QueueForDelete();
             }
+
+            _gameCore.Multiplay.RecordSpriteExplode(this.MultiplayUID);
 
             OnExplode?.Invoke(this);
         }

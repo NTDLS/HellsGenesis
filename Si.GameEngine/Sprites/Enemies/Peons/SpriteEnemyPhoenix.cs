@@ -132,11 +132,11 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
                     if (closestDistance < 1000)
                     {
-                        if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponVulcanCannon>())
+                        if (closestDistance > 500 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                         {
                             FireWeapon<WeaponVulcanCannon>();
                         }
-                        else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
+                        else if (closestDistance > 0 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                         {
                             FireWeapon<WeaponDualVulcanCannon>();
                         }

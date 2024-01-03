@@ -1,8 +1,10 @@
 ﻿using Si.GameEngine.Engine;
+using Si.GameEngine.Weapons.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -62,6 +64,29 @@ namespace Si.GameEngine.Sprites
             _lockedOnSoftImage = _gameCore.Assets.GetBitmap(_assetPathlockedOnSoftImage);
 
             base.Initialize(imagePath, size);
+        }
+
+        public bool FireDroneWeapon(string weaponTypeName)
+        {
+            return GetWeaponByName(weaponTypeName)?.Fire() == true;
+        }
+
+        private readonly Dictionary<string, WeaponBase> _droneWeaponsCache = new();
+
+        public WeaponBase GetWeaponByName(string weaponTypeName)
+        {
+            if (_droneWeaponsCache.TryGetValue(weaponTypeName, out var weapon))
+            {
+                return weapon;
+            }
+
+            var weaponType = SiReflection.GetTypeByName(weaponTypeName); //TODO: Probably need to speed this up.
+            weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameCore, this });
+            weapon.IsOwnerDrone = true;
+
+            _droneWeaponsCache.Add(weaponTypeName, weapon);
+
+            return weapon;
         }
 
         public override void Explode()

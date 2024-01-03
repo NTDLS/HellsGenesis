@@ -2,6 +2,11 @@
 {
     public class SiSpriteWeaponFire : SiSpriteAction
     {
-        public string WeaponName { get; set; } = string.Empty;
+        public string WeaponTypeName { get; set; } = string.Empty;
+
+        public SiSpriteWeaponFire(Guid multiplayUID)
+            : base(multiplayUID)
+        {
+        }
     }
 }

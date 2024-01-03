@@ -7,6 +7,8 @@ namespace Si.Sprites.BasesAndInterfaces
     {
         public void ApplyMultiplayVector(SiSpriteVector vector);
         public void ApplyMotion(SiPoint displacementVector);
-        //public void ApplyIntelligence(SiPoint displacementVector);
+        public void Hit(int damage);
+        public void Explode();
+        public bool FireDroneWeapon(string weaponTypeName);
     }
 }

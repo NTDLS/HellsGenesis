@@ -20,6 +20,8 @@ namespace Si.GameEngine.Weapons.BasesAndInterfaces
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected SiAudioClip _fireSound;
 
+        public bool IsOwnerDrone { get; set; }
+
         /// <summary>
         /// RecoilAmount is expressed in decimal percentage of thrust.
         /// </summary>
@@ -146,7 +148,7 @@ namespace Si.GameEngine.Weapons.BasesAndInterfaces
             get
             {
                 bool result = false;
-                if (RoundQuantity > 0 || _owner.IsDrone)
+                if (RoundQuantity > 0 || IsOwnerDrone)
                 {
                     result = (DateTime.Now - _lastFired).TotalMilliseconds > FireDelayMilliseconds;
                     if (result)
