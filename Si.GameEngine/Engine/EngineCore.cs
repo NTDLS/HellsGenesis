@@ -5,6 +5,7 @@ using Si.GameEngine.Engine.GraphicsProcessing;
 using Si.GameEngine.Engine.Types;
 using Si.GameEngine.Managers;
 using Si.GameEngine.Menus;
+using Si.GameEngine.Weapons.BasesAndInterfaces;
 using Si.Multiplay;
 using System;
 using System.Drawing;

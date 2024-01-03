@@ -15,8 +15,9 @@ namespace Si.GameEngine.Sprites
     /// </summary>
     public class SpriteShipBase : SpriteBase
     {
-        public bool IsDrone { get; private set; }
+        private readonly Dictionary<string, WeaponBase> _droneWeaponsCache = new();
 
+        public bool IsDrone { get; private set; }
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
         public SiTimeRenewableResources RenewableResources { get; set; } = new();
@@ -43,6 +44,11 @@ namespace Si.GameEngine.Sprites
         {
             IsDrone = GetType().Name.EndsWith("Drone");
 
+            if (IsDrone)
+            {
+                BuildDroneWeaponsCache();
+            }
+
             _gameCore = gameCore;
         }
 
@@ -66,21 +72,42 @@ namespace Si.GameEngine.Sprites
             base.Initialize(imagePath, size);
         }
 
+        /// <summary>
+        /// Fires a drone weapon (a weapon without ammo limits).
+        /// </summary>
+        /// <param name="weaponTypeName"></param>
+        /// <returns></returns>
         public bool FireDroneWeapon(string weaponTypeName)
         {
-            return GetWeaponByName(weaponTypeName)?.Fire() == true;
+            return GetDroneWeaponByTypeName(weaponTypeName)?.Fire() == true;
         }
 
-        private readonly Dictionary<string, WeaponBase> _droneWeaponsCache = new();
+        /// <summary>
+        /// Builds the cache of all weapons so the drone can fire quickly.
+        /// </summary>
+        private void BuildDroneWeaponsCache()
+        {
+            var allWeapons = SiReflection.GetSubClassesOf<WeaponBase>();
 
-        public WeaponBase GetWeaponByName(string weaponTypeName)
+            foreach (var weapon in allWeapons)
+            {
+                _ = GetDroneWeaponByTypeName(weapon.Name);
+            }
+        }
+
+        /// <summary>
+        /// Gets a cached drone weapon (a weapon without ammo limits).
+        /// </summary>
+        /// <param name="weaponTypeName"></param>
+        /// <returns></returns>
+        private WeaponBase GetDroneWeaponByTypeName(string weaponTypeName)
         {
             if (_droneWeaponsCache.TryGetValue(weaponTypeName, out var weapon))
             {
                 return weapon;
             }
 
-            var weaponType = SiReflection.GetTypeByName(weaponTypeName); //TODO: Probably need to speed this up.
+            var weaponType = SiReflection.GetTypeByName(weaponTypeName);
             weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameCore, this });
             weapon.IsOwnerDrone = true;
 
