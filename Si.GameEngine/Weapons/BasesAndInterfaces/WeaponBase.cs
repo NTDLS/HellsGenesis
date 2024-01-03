@@ -2,7 +2,6 @@
 using Si.GameEngine.Engine.Types;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Weapons.Munitions;
-using Si.Shared.ExtensionMethods;
 using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,7 @@ namespace Si.GameEngine.Weapons.BasesAndInterfaces
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected EngineCore _gameCore;
-        protected SpriteBase _owner;
+        protected SpriteShipBase _owner;
 
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected SiAudioClip _fireSound;
@@ -109,14 +108,14 @@ namespace Si.GameEngine.Weapons.BasesAndInterfaces
             return lockOn || softLockOn;
         }
 
-        public virtual bool Fire(bool ignoreAmmo = false)
+        public virtual bool Fire()
         {
             if (_owner == null)
             {
                 throw new ArgumentNullException("Weapon is not owned.");
             }
 
-            if (CanFire || ignoreAmmo)
+            if (CanFire)
             {
                 RoundsFired++;
                 RoundQuantity--;
@@ -147,7 +146,7 @@ namespace Si.GameEngine.Weapons.BasesAndInterfaces
             get
             {
                 bool result = false;
-                if (RoundQuantity > 0)
+                if (RoundQuantity > 0 || _owner.IsDrone)
                 {
                     result = (DateTime.Now - _lastFired).TotalMilliseconds > FireDelayMilliseconds;
                     if (result)

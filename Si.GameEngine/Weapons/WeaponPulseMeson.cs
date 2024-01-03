@@ -39,9 +39,9 @@ namespace Si.GameEngine.Weapons
             return new MunitionPulseMeson(_gameCore, this, _owner, xyOffset);
         }
 
-        public override bool Fire(bool ignoreAmmo = false)
+        public override bool Fire()
         {
-            if (CanFire || ignoreAmmo)
+            if (CanFire)
             {
                 _fireSound.Play();
                 RoundQuantity--;

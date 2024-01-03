@@ -29,9 +29,9 @@ namespace Si.GameEngine.Weapons
             RecoilAmount = 0.10;
         }
 
-        public override bool Fire(bool ignoreAmmo = false)
+        public override bool Fire()
         {
-            if (CanFire || ignoreAmmo)
+            if (CanFire)
             {
                 _fireSound.Play();
 

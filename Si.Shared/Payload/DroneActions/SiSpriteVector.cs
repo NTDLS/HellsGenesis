@@ -1,6 +1,6 @@
 ﻿namespace Si.Shared.Payload.DroneActions
 {
-    public class SiSpriteVector: SiSpriteAction
+    public class SiSpriteVector : SiSpriteAction
     {
         public double X { get; set; }
         public double Y { get; set; }

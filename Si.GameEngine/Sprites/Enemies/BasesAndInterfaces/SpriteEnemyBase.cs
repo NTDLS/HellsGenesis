@@ -26,7 +26,6 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
     {
         private readonly SiSpriteVector _multiplaySpriteVector = new();
 
-        public bool IsDrone { get; private set; }
         public SiEnemyClass ShipClass { get; set; }
         public EnemyShipLoadout Loadout { get; set; }
         public IAIController CurrentAIController { get; set; }
@@ -39,8 +38,6 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         public SpriteEnemyBase(EngineCore gameCore, int hullHealth, int bountyMultiplier)
                 : base(gameCore)
         {
-            IsDrone = GetType().Name.EndsWith("Drone");
-
             Velocity.ThrottlePercentage = 1;
             Initialize();
 
@@ -397,8 +394,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
         public bool FireDroneWeapon(string weaponName)
         {
-            var weapon = GetWeaponByName(weaponName);
-            return weapon?.Fire(true) == true;
+            return GetWeaponByName(weaponName)?.Fire() == true;
         }
 
         public WeaponBase GetWeaponByName(string weaponName)

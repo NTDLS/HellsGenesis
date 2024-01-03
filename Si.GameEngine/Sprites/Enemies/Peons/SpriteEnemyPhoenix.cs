@@ -2,7 +2,6 @@
 using Si.GameEngine.Engine;
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces;
-using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.Utility;
 using Si.GameEngine.Weapons;
 using Si.Shared;
@@ -54,6 +53,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 };
 
                 loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000));
+                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponDualVulcanCannon), 2500));
                 loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
                 loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
 
@@ -132,38 +132,16 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
                     if (closestDistance < 1000)
                     {
-                        if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
-                        {
-                            FireWeapon<WeaponDualVulcanCannon>();
-                        }
-                        else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
+                        if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                         {
                             FireWeapon<WeaponVulcanCannon>();
                         }
-                    }
-                }
-
-                /*
-                if (distanceToPlayer < 1000)
-                {
-                    if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
-                    {
-                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
-                        if (isPointingAtPlayer)
+                        else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                         {
                             FireWeapon<WeaponDualVulcanCannon>();
                         }
                     }
-                    else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
-                    {
-                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
-                        if (isPointingAtPlayer)
-                        {
-                            FireWeapon<WeaponVulcanCannon>();
-                        }
-                    }
                 }
-                */
             }
 
             //CurrentAIController?.ApplyIntelligence(displacementVector);

@@ -24,7 +24,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
     {
         private readonly SiSpriteVector _multiplaySpriteVector = new();
 
-        public bool IsDrone { get; private set; }
         public SiPlayerClass ShipClass { get; set; }
         public PlayerShipLoadout Loadout { get; private set; }
         public SiAudioClip AmmoLowSound { get; private set; }
@@ -54,7 +53,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             : base(gameCore)
         {
             MultiplayUID = Guid.NewGuid();
-            IsDrone = GetType().Name.EndsWith("Drone");
 
             OnHit += SpritePlayer_OnHit;
 

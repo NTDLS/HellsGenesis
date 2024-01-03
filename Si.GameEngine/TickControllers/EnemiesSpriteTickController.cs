@@ -26,7 +26,7 @@ namespace Si.GameEngine.Controller
                 GameCore.Player.Sprite.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
             }
 
-            foreach (var enemy in Visible().Where(o=>o.IsDrone == false))
+            foreach (var enemy in Visible().Where(o => o.IsDrone == false))
             {
                 foreach (var weapon in enemy.Weapons)
                 {

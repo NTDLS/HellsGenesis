@@ -41,9 +41,9 @@ namespace Si.GameEngine.Weapons
             return new MunitionGuidedFragMissile(_gameCore, this, _owner, targetOfLock, xyOffset);
         }
 
-        public override bool Fire(bool ignoreAmmo = false)
+        public override bool Fire()
         {
-            if (CanFire || ignoreAmmo)
+            if (CanFire)
             {
                 _fireSound.Play();
                 RoundQuantity--;

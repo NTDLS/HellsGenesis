@@ -735,12 +735,6 @@ namespace Si.GameEngine.Sprites
         #region Sprite geometry.
 
         /// <summary>
-        /// Calculates the difference in heading angle from one object to get to another between 0-259.
-        /// </summary>
-        /// <returns></returns>
-        public double DeltaAngle360(SpriteBase toObj) => SiMath.DeltaAngle360(this, toObj);
-
-        /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
@@ -764,8 +758,12 @@ namespace Si.GameEngine.Sprites
         /// <returns></returns>
         public double AngleTo(SpriteBase atObj) => SiMath.AngleTo(this, atObj);
 
-
+        /// <summary>
         /// Calculates the angle in degrees to a location.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <returns></returns>
+        [Obsolete("This method is deprecated. Use AngleTo() instead.")]
         public double AngleTo360(SiPoint location) => SiMath.AngleTo360(this, location);
 
         public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)

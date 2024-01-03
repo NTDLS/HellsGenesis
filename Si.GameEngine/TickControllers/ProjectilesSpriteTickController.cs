@@ -8,7 +8,6 @@ using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.GameEngine.Weapons.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared.Types.Geometry;
-using Si.Sprites.BasesAndInterfaces;
 using System.Collections.Generic;
 using System.Linq;
 

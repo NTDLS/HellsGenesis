@@ -1,9 +1,4 @@
-using Newtonsoft.Json;
-using Si.GameEngine.Weapons.BasesAndInterfaces;
-using Si.Shared.Messages.Notify;
-using Si.Shared.Payload.DroneActions;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Si.Game
