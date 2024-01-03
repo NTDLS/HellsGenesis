@@ -13,7 +13,7 @@ namespace Si.GameEngine.Weapons
         private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponBlunderbuss(EngineCore gameCore, _SpriteShipBase owner)
+        public WeaponBlunderbuss(EngineCore gameCore, SpriteShipBase owner)
             : base(gameCore, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponBlunderbuss(EngineCore gameCore)
@@ -29,9 +29,9 @@ namespace Si.GameEngine.Weapons
             RecoilAmount = 0.045;
         }
 
-        public override bool Fire()
+        public override bool Fire(bool ignoreAmmo = false)
         {
-            if (CanFire)
+            if (CanFire || ignoreAmmo)
             {
                 _fireSound.Play();
 

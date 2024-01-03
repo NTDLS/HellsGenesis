@@ -6,7 +6,7 @@ using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.Utility;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared.ExtensionMethods;
-using Si.Shared.Messages.Notify;
+using Si.Shared.Payload.DroneActions;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 using System;
@@ -775,6 +775,46 @@ namespace Si.GameEngine.Sprites
 
         public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees) => SiMath.IsPointingAt(this, atObj, toleranceDegrees);
 
+        /// <summary>
+        /// Returns true if any of the given sprites are pointing at this one.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="atObjs"></param>
+        /// <param name="toleranceDegrees"></param>
+        /// <returns></returns>
+        public bool IsPointingAtAny<T>(List<T> atObjs, double toleranceDegrees) where T : SpriteBase
+        {
+            foreach (var atObj in atObjs)
+            {
+                if (SiMath.IsPointingAt(this, atObj, toleranceDegrees))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// From the list of given sprites, returns the list of sprites that are pointing at us.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="atObjs"></param>
+        /// <param name="toleranceDegrees"></param>
+        /// <returns></returns>
+        public List<T> GetPointingAtOf<T>(List<T> atObjs, double toleranceDegrees) where T : SpriteBase
+        {
+            var results = new List<T>();
+
+            foreach (var atObj in atObjs)
+            {
+                if (SiMath.IsPointingAt(this, atObj, toleranceDegrees))
+                {
+                    results.Add(atObj);
+                }
+            }
+            return results;
+        }
+
         public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees) => SiMath.IsPointingAway(this, atObj, toleranceDegrees);
 
         public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
@@ -782,6 +822,52 @@ namespace Si.GameEngine.Sprites
         public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(Location, to.Location);
 
         public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(Location, to);
+
+        /// <summary>
+        /// Of the given sprites, returns the sprite that is the closest.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tos"></param>
+        /// <returns></returns>
+        public T ClosestOf<T>(List<T> tos) where T : SpriteBase
+        {
+            double closestDistance = double.MaxValue;
+            T closestSprite = tos.First();
+
+            foreach (var to in tos)
+            {
+                var distance = SiPoint.DistanceTo(Location, to.Location);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestSprite = to;
+                };
+            }
+
+            return closestSprite;
+        }
+
+        /// <summary>
+        /// Of the given sprites, returns the distance of the closest one.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tos"></param>
+        /// <returns></returns>
+        public double ClosestDistanceOf<T>(List<T> tos) where T : SpriteBase
+        {
+            double closestDistance = double.MaxValue;
+
+            foreach (var to in tos)
+            {
+                var distance = SiPoint.DistanceTo(Location, to.Location);
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                };
+            }
+
+            return closestDistance;
+        }
 
         #endregion
 

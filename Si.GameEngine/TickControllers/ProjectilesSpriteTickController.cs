@@ -3,11 +3,14 @@ using Si.GameEngine.Managers;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites.Enemies.Bosses.BasesAndInterfaces;
 using Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces;
+using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.GameEngine.Weapons.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared.Types.Geometry;
+using Si.Sprites.BasesAndInterfaces;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Si.GameEngine.Controller
 {
@@ -20,25 +23,30 @@ namespace Si.GameEngine.Controller
 
         public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
-            var objectsThatCanBeHit = new List<_SpriteShipBase>
+            var munitions = VisibleOfType<MunitionBase>();
+            if (munitions.Any())
             {
-                GameCore.Player.Sprite
-            };
-
-            objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyBossBase>());
-            objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyPeonBase>());
-            objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
-
-            foreach (var munition in VisibleOfType<MunitionBase>())
-            {
-                munition.ApplyMotion(displacementVector); //Move the munition.
-
-                if (TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit, displacementVector))
+                var objectsThatCanBeHit = new List<SpriteShipBase>
                 {
-                    munition.Explode();
-                }
+                    GameCore.Player.Sprite
+                };
 
-                munition.ApplyIntelligence(displacementVector);
+                objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyBossBase>());
+                objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyPeonBase>());
+                objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpritePlayerBase>());
+                objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
+
+                foreach (var munition in munitions)
+                {
+                    munition.ApplyMotion(displacementVector); //Move the munition.
+
+                    if (TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit, displacementVector))
+                    {
+                        munition.Explode();
+                    }
+
+                    munition.ApplyIntelligence(displacementVector);
+                }
             }
         }
 
@@ -47,7 +55,7 @@ namespace Si.GameEngine.Controller
         ///     betwwen where it ended up and where it should have come from given its velocity.
         /// </summary>
         /// <returns></returns>
-        public bool TestObjectCollisionsAlongMunitionPath(MunitionBase munition, List<_SpriteShipBase> objectsThatCanBeHit, SiPoint displacementVector)
+        public bool TestObjectCollisionsAlongMunitionPath(MunitionBase munition, List<SpriteShipBase> objectsThatCanBeHit, SiPoint displacementVector)
         {
             var hitTestPosition = munition.Location.ToWriteableCopy(); //Grab the new location of the munition.
 

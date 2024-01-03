@@ -7,7 +7,7 @@ using Si.GameEngine.Utility;
 using Si.GameEngine.Weapons.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared;
-using Si.Shared.Messages.Notify;
+using Si.Shared.Payload.DroneActions;
 using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
     /// <summary>
     /// The player base is a sub-class of the ship base. It is only used by the Player and as a model for menu selections.
     /// </summary>
-    public class SpritePlayerBase : _SpriteShipBase
+    public class SpritePlayerBase : SpriteShipBase
     {
         private readonly SiSpriteVector _multiplaySpriteVector = new();
 

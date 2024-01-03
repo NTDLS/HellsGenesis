@@ -15,7 +15,7 @@ namespace Si.GameEngine.Weapons
 
         private bool _toggle = false;
 
-        public WeaponPulseMeson(EngineCore gameCore, _SpriteShipBase owner)
+        public WeaponPulseMeson(EngineCore gameCore, SpriteShipBase owner)
             : base(gameCore, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponPulseMeson(EngineCore gameCore)
@@ -39,9 +39,9 @@ namespace Si.GameEngine.Weapons
             return new MunitionPulseMeson(_gameCore, this, _owner, xyOffset);
         }
 
-        public override bool Fire()
+        public override bool Fire(bool ignoreAmmo = false)
         {
-            if (CanFire)
+            if (CanFire || ignoreAmmo)
             {
                 _fireSound.Play();
                 RoundQuantity--;

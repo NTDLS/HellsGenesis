@@ -12,7 +12,7 @@ namespace Si.GameEngine.Weapons
         private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
         private const float soundVolumne = 0.2f;
 
-        public WeaponScattershot(EngineCore gameCore, _SpriteShipBase owner)
+        public WeaponScattershot(EngineCore gameCore, SpriteShipBase owner)
             : base(gameCore, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponScattershot(EngineCore gameCore)

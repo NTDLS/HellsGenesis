@@ -11,7 +11,7 @@ namespace Si.GameEngine.Sprites
     /// <summary>
     /// The ship base is a ship object that moves, can be hit, explodes and can be the subject of locking weapons.
     /// </summary>
-    public class _SpriteShipBase : SpriteBase
+    public class SpriteShipBase : SpriteBase
     {
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
@@ -34,7 +34,7 @@ namespace Si.GameEngine.Sprites
         private readonly int _explosionSoundCount = 4;
         private int _selectedExplosionSoundIndex = 0;
 
-        public _SpriteShipBase(EngineCore gameCore, string name = "")
+        public SpriteShipBase(EngineCore gameCore, string name = "")
             : base(gameCore, name)
         {
             _gameCore = gameCore;

@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace Si.GameEngine.Sprites
 {
-    public class SpriteDebug : _SpriteShipBase
+    public class SpriteDebug : SpriteShipBase
     {
         public SpriteDebug(EngineCore gameCore)
             : base(gameCore)

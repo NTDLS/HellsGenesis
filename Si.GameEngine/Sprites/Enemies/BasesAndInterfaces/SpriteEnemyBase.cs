@@ -10,7 +10,7 @@ using Si.GameEngine.Weapons.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared;
 using Si.Shared.ExtensionMethods;
-using Si.Shared.Messages.Notify;
+using Si.Shared.Payload.DroneActions;
 using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
@@ -22,7 +22,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
     /// <summary>
     /// The enemy base is a sub-class of the ship base. It is used by Peon and Boss enemies.
     /// </summary>
-    public class SpriteEnemyBase : _SpriteShipBase
+    public class SpriteEnemyBase : SpriteShipBase
     {
         private readonly SiSpriteVector _multiplaySpriteVector = new();
 
@@ -382,7 +382,28 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         public bool FireWeapon<T>() where T : WeaponBase
         {
             var weapon = GetWeaponOfType<T>();
+
+            if (weapon != null && _gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && this.IsDrone == false)
+            {
+                _gameCore.Multiplay.RecordSpriteWeaponFire(new SiSpriteWeaponFire()
+                {
+                    MultiplayUID = this.MultiplayUID,
+                    WeaponName = weapon.Name
+                });
+            }
+
             return weapon?.Fire() == true;
+        }
+
+        public bool FireDroneWeapon(string weaponName)
+        {
+            var weapon = GetWeaponByName(weaponName);
+            return weapon?.Fire(true) == true;
+        }
+
+        public WeaponBase GetWeaponByName(string weaponName)
+        {
+            return (from o in Weapons where o.Name == weaponName select o).FirstOrDefault();
         }
 
         public WeaponBase GetWeaponOfType<T>() where T : WeaponBase

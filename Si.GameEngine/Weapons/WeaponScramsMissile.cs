@@ -15,7 +15,7 @@ namespace Si.GameEngine.Weapons
 
         private bool _toggle = false;
 
-        public WeaponScramsMissile(EngineCore gameCore, _SpriteShipBase owner)
+        public WeaponScramsMissile(EngineCore gameCore, SpriteShipBase owner)
             : base(gameCore, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponScramsMissile(EngineCore gameCore)
@@ -41,9 +41,9 @@ namespace Si.GameEngine.Weapons
             return new MunitionGuidedFragMissile(_gameCore, this, _owner, targetOfLock, xyOffset);
         }
 
-        public override bool Fire()
+        public override bool Fire(bool ignoreAmmo = false)
         {
-            if (CanFire)
+            if (CanFire || ignoreAmmo)
             {
                 _fireSound.Play();
                 RoundQuantity--;

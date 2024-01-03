@@ -7,7 +7,7 @@ using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Sprites
 {
-    public class SpriteAttachment : _SpriteShipBase
+    public class SpriteAttachment : SpriteShipBase
     {
         public bool TakesDamage { get; set; }
 

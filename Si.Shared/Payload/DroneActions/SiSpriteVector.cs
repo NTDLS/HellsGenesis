@@ -1,9 +1,7 @@
-﻿namespace Si.Shared.Messages.Notify
+﻿namespace Si.Shared.Payload.DroneActions
 {
-    public class SiSpriteVector
+    public class SiSpriteVector: SiSpriteAction
     {
-        public Guid MultiplayUID { get; set; }
-        public DateTime Timestamp { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
         public double AngleDegrees { get; set; }

@@ -12,7 +12,7 @@ namespace Si.GameEngine.Weapons
         private const string soundPath = @"Sounds\Weapons\PhotonTorpedo.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponPhotonTorpedo(EngineCore gameCore, _SpriteShipBase owner)
+        public WeaponPhotonTorpedo(EngineCore gameCore, SpriteShipBase owner)
             : base(gameCore, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponPhotonTorpedo(EngineCore gameCore)

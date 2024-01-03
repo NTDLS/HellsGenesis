@@ -13,6 +13,7 @@ using Si.Shared;
 using Si.Shared.Messages.Notify;
 using Si.Shared.Messages.Query;
 using Si.Shared.Payload;
+using Si.Shared.Payload.DroneActions;
 using Si.Shared.Types.Geometry;
 using Si.Sprites.BasesAndInterfaces;
 using System;
@@ -72,6 +73,16 @@ namespace Si.GameEngine.Managers
             TextBlocks = new TextBlocksSpriteTickController(_gameCore, this);
             PlayerDrones = new PlayerDronesSpriteTickController(_gameCore, this);
             EnemyDrones = new EnemyDronesSpriteTickController(_gameCore, this);
+        }
+
+        public List<SpritePlayerBase> AllVisiblePlayers
+        {
+            get
+            {
+                var players = VisibleOfType<SpritePlayerBase>();
+                players.Add(_gameCore.Player.Sprite);
+                return players;
+            }
         }
 
         public void Add(SpriteBase item)
@@ -147,26 +158,30 @@ namespace Si.GameEngine.Managers
             Debug.WriteLine($"Inserted Multiplay Sprite: '{selectedPlayerClass}'->'{playerMultiplayUID}'->{playerDrone.UID}");
         }
 
-        public void MultiplayUpdateSpriteVectors(SiSpriteVectors spriteVectors)
+        public void MultiplayApplySpriteActions(SiSpriteActions actions)
         {
-            var allMultiplayUIDs = spriteVectors.Collection.Select(o => o.MultiplayUID).ToHashSet();
+            var allMultiplayUIDs = actions.Collection.Select(o => o.MultiplayUID).ToHashSet();
 
             _collection.Use(o =>
             {
                 //Get all the sprites ahead of time. I "think" this is faster than searching in a loop.
                 var sprites = o.Where(o => allMultiplayUIDs.Contains(o.MultiplayUID)).ToList();
 
-                foreach (var vector in spriteVectors.Collection)
+                foreach (var action in actions.Collection)
                 {
-                    var sprite = sprites.Where(o => o.MultiplayUID == vector.MultiplayUID).FirstOrDefault();
-                    if (sprite != null)
+                    var sprite = sprites.Where(o => o.MultiplayUID == action.MultiplayUID).FirstOrDefault();
+                    if (sprite is ISpriteDrone drone)
                     {
-                        if (sprite is ISpriteDrone drone)
+                        if (action is SiSpriteVector vector)
                         {
                             drone.ApplyMultiplayVector(vector);
                         }
-                        else
+                        else if (action is SiSpriteWeaponFire weaponFire)
                         {
+                            if (sprite is SpriteEnemyBase enemy)
+                            {
+                                enemy.FireDroneWeapon(weaponFire.WeaponName);
+                            }
                         }
                     }
                 }
@@ -271,8 +286,7 @@ namespace Si.GameEngine.Managers
             => _collection.Use(o => o.Where(o => o.SpriteTag == name).SingleOrDefault() as T);
 
         public List<T> OfType<T>() where T : class
-            =>
-                _collection.Use(o => o.Where(o => o is T).Select(o => o as T).ToList());
+            => _collection.Use(o => o.Where(o => o is T).Select(o => o as T).ToList());
 
         public List<T> VisibleOfType<T>() where T : class
                 => _collection.Use(o => o.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList());

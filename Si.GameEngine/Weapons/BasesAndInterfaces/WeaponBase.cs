@@ -54,7 +54,7 @@ namespace Si.GameEngine.Weapons.BasesAndInterfaces
             Name = name;
         }
 
-        public WeaponBase(EngineCore gameCore, _SpriteShipBase owner, string name, string soundPath, float soundVolume)
+        public WeaponBase(EngineCore gameCore, SpriteShipBase owner, string name, string soundPath, float soundVolume)
         {
             _owner = owner;
             _gameCore = gameCore;
@@ -109,14 +109,14 @@ namespace Si.GameEngine.Weapons.BasesAndInterfaces
             return lockOn || softLockOn;
         }
 
-        public virtual bool Fire()
+        public virtual bool Fire(bool ignoreAmmo = false)
         {
             if (_owner == null)
             {
                 throw new ArgumentNullException("Weapon is not owned.");
             }
 
-            if (CanFire)
+            if (CanFire || ignoreAmmo)
             {
                 RoundsFired++;
                 RoundQuantity--;
@@ -133,8 +133,9 @@ namespace Si.GameEngine.Weapons.BasesAndInterfaces
 
         public void ApplyRecoil()
         {
-            _owner.Velocity.RecoilPercentage += RecoilAmount;
-            _owner.Velocity.RecoilPercentage.Box(0, _gameCore.Settings.MaxRecoilPercentage);
+            //TODO: uncomment this later, testing multiplayer.
+            //_owner.Velocity.RecoilPercentage += RecoilAmount;
+            //_owner.Velocity.RecoilPercentage.Box(0, _gameCore.Settings.MaxRecoilPercentage);
         }
 
         public virtual void Hit()

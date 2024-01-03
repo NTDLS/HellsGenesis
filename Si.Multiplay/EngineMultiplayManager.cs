@@ -6,6 +6,7 @@ using Si.Shared;
 using Si.Shared.Messages.Notify;
 using Si.Shared.Messages.Query;
 using Si.Shared.Payload;
+using Si.Shared.Payload.DroneActions;
 using System.Reflection;
 using static Si.Shared.SiConstants;
 
@@ -24,11 +25,11 @@ namespace Si.Multiplay
         /// </summary>
         public event ReceivedSituationLayout? OnReceivedSituationLayout;
 
-        public delegate void SpriteVectorsUpdated(SiSpriteVectors spriteVectors);
+        public delegate void ApplySpriteActions(SiSpriteActions spriteActions);
         /// <summary>
         /// Called when the multiplay manager receives a updated list of sprite vectors for the connection.
         /// </summary>
-        public event SpriteVectorsUpdated? OnSpriteVectorsUpdated;
+        public event ApplySpriteActions? OnApplySpriteActions;
 
         public delegate List<SiSpriteLayout> NeedSituationLayout();
         /// <summary>
@@ -63,7 +64,7 @@ namespace Si.Multiplay
         /// </summary>
         private readonly int _clientListenUdpPort = UdpMessageManager.GetRandomUnusedUDPPort(5000, 8000);
 
-        private readonly List<SiSpriteVector> _spriteVectorBuffer = new();
+        private readonly List<SiSpriteAction> _spriteActionBuffer = new();
         private UdpMessageManager? _internal_udpManager;
         private MessageClient? _internal_messageClient;
 
@@ -306,9 +307,9 @@ namespace Si.Multiplay
         private void UdpMessageManager_ProcessNotificationCallback(IUDPPayloadNotification payload)
         {
             //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiSpriteVectors spriteVectors)
+            if (payload is SiSpriteActions spriteActions)
             {
-                OnSpriteVectorsUpdated?.Invoke(spriteVectors);
+                OnApplySpriteActions?.Invoke(spriteActions);
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else
@@ -384,14 +385,29 @@ namespace Si.Multiplay
         /// <summary>
         /// Buffers sprite vector information so that all of the updates can be sent at one time at the end of the game loop.
         /// </summary>
-        /// <param name="multiplayerEvent"></param>
-        public void RecordSpriteVector(SiSpriteVector multiplayerEvent)
+        /// <param name="multiplayEvent"></param>
+        public void RecordSpriteVector(SiSpriteVector multiplayEvent)
         {
             if (State.LobbyUID != Guid.Empty)
             {
                 if (State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
                 {
-                    _spriteVectorBuffer.Add(multiplayerEvent);
+                    _spriteActionBuffer.Add(multiplayEvent);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Buffers sprite vector information so that all of the updates can be sent at one time at the end of the game loop.
+        /// </summary>
+        /// <param name="multiplayerEvent"></param>
+        public void RecordSpriteWeaponFire(SiSpriteWeaponFire multiplayEvent)
+        {
+            if (State.LobbyUID != Guid.Empty)
+            {
+                if (State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
+                {
+                    _spriteActionBuffer.Add(multiplayEvent);
                 }
             }
         }
@@ -401,17 +417,17 @@ namespace Si.Multiplay
         /// </summary>
         public void FlushSpriteVectorsToServer()
         {
-            if (State.LobbyUID != Guid.Empty && _spriteVectorBuffer.Any())
+            if (State.LobbyUID != Guid.Empty && _spriteActionBuffer.Any())
             {
                 if (State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
                 {
-                    var spriteVectors = new SiSpriteVectors(_spriteVectorBuffer);
+                    var spriteActions = new SiSpriteActions(_spriteActionBuffer);
 
-                    spriteVectors.ConnectionId = State.ConnectionId;
+                    spriteActions.ConnectionId = State.ConnectionId;
 
                     //System.Diagnostics.Debug.WriteLine($"MultiplayUID: {_spriteVectors.Select(o=>o.MultiplayUID).Distinct().Count()}");
-                    UdpManager.WriteMessage(SiConstants.MultiplayServerAddress, SiConstants.MultiplayServerTCPPort, spriteVectors);
-                    _spriteVectorBuffer.Clear();
+                    UdpManager.WriteMessage(SiConstants.MultiplayServerAddress, SiConstants.MultiplayServerTCPPort, spriteActions);
+                    _spriteActionBuffer.Clear();
                 }
             }
         }

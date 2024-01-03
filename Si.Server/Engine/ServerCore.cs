@@ -68,7 +68,7 @@ namespace Si.Server.Engine
                 Log.Verbose($"A client sent a UDP hello.");
             }
             //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiSpriteVectors spriteVectors)
+            else if (payload is SiSpriteActions spriteVectors)
             {
                 if (!Sessions.TryGetByConnectionId(spriteVectors.ConnectionId, out var session))
                 {
