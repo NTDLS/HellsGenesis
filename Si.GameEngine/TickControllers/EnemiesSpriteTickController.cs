@@ -5,6 +5,7 @@ using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System;
+using System.Linq;
 
 namespace Si.GameEngine.Controller
 {
@@ -25,7 +26,7 @@ namespace Si.GameEngine.Controller
                 GameCore.Player.Sprite.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
             }
 
-            foreach (var enemy in Visible())
+            foreach (var enemy in Visible().Where(o=>o.IsDrone == false))
             {
                 foreach (var weapon in enemy.Weapons)
                 {

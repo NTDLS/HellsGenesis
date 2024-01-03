@@ -1,6 +1,7 @@
 ﻿using Si.GameEngine.Engine;
 using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
 using Si.GameEngine.Utility;
+using Si.Shared.Messages.Notify;
 using Si.Shared.Types.Geometry;
 using System;
 using System.Drawing;
@@ -82,6 +83,10 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
             }
         }
 
+        /// <summary>
+        /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
+        /// </summary>
+        /// <param name="displacementVector"></param>
         public override void ApplyMotion(SiPoint displacementVector)
         {
             base.ApplyMotion(displacementVector);
@@ -94,6 +99,17 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
             {
                 BoostAnimation.Visable = Velocity.BoostPercentage > 0;
             }
+        }
+
+        /// <summary>
+        /// Applies the multiplay position of the sprite as dictated by a remote game client.
+        /// </summary>
+        /// <param name="vector"></param>
+        public override void ApplyMultiplayVector(SiSpriteVector vector)
+        {
+            ThrustAnimation.Visable = vector.ThrottlePercentage > 0;
+            BoostAnimation.Visable = vector.BoostPercentage > 0;
+            base.ApplyMultiplayVector(vector);
         }
 
         public override void Cleanup()

@@ -161,9 +161,9 @@ namespace Si.GameEngine.Managers
                     var sprite = sprites.Where(o => o.MultiplayUID == vector.MultiplayUID).FirstOrDefault();
                     if (sprite != null)
                     {
-                        if (sprite is ISpriteDrone playerDrone)
+                        if (sprite is ISpriteDrone drone)
                         {
-                            playerDrone.ApplyMultiplayVector(vector);
+                            drone.ApplyMultiplayVector(vector);
                         }
                         else
                         {

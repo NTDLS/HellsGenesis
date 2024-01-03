@@ -208,6 +208,10 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
             return false;
         }
 
+        /// <summary>
+        /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
+        /// </summary>
+        /// <param name="displacementVector"></param>
         public override void ApplyMotion(SiPoint displacementVector)
         {
             if (LocalX < -_gameCore.Settings.EnemySceneDistanceLimit
@@ -288,6 +292,17 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                     Velocity.RecoilPercentage = 0;
                 }
             }
+        }
+
+        /// <summary>
+        /// Applies the multiplay position of the sprite as dictated by a remote game client.
+        /// </summary>
+        /// <param name="vector"></param>
+        public virtual void ApplyMultiplayVector(SiSpriteVector vector)
+        {
+            MultiplayX = vector.X;
+            MultiplayY = vector.Y;
+            Velocity.Angle.Degrees = vector.AngleDegrees;
         }
 
         public virtual void ApplyIntelligence(SiPoint displacementVector)

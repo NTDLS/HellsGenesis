@@ -10,13 +10,5 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             : base(gameCore)
         {
         }
-        public void ApplyMultiplayVector(SiSpriteVector vector)
-        {
-            MultiplayX = _gameCore.Player.Sprite.LocalX + vector.X;
-            MultiplayY = _gameCore.Player.Sprite.LocalY + vector.Y;
-            Velocity.Angle.Degrees = vector.AngleDegrees;
-            ThrustAnimation.Visable = vector.ThrottlePercentage > 0;
-            BoostAnimation.Visable = vector.BoostPercentage > 0;
-        }
     }
 }
