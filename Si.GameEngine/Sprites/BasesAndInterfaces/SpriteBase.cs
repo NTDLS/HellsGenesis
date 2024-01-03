@@ -341,10 +341,7 @@ namespace Si.GameEngine.Sprites
             _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
-        public SharpDX.Direct2D1.Bitmap GetImage()
-        {
-            return _image;
-        }
+        public SharpDX.Direct2D1.Bitmap GetImage() => _image;
 
         #region Intersections.
 
@@ -882,7 +879,7 @@ namespace Si.GameEngine.Sprites
             }
         }
 
-        public virtual SiSpriteVector GetMultiplayVector() { return null; }
+        public virtual SiDroneActionVector GetMultiplayVector() { return null; }
         public virtual void VelocityChanged() { }
         public virtual void VisibilityChanged() { }
         public virtual void PositionChanged() { }

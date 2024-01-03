@@ -67,7 +67,7 @@ namespace Si.Multiplay
         /// </summary>
         private readonly int _clientListenUdpPort = UdpMessageManager.GetRandomUnusedUDPPort(5000, 8000);
 
-        private readonly List<SiSpriteAction> _spriteActionBuffer = new();
+        private readonly List<SiDroneAction> _spriteActionBuffer = new();
         private UdpMessageManager? _internal_udpManager;
         private MessageClient? _internal_messageClient;
 
@@ -389,7 +389,7 @@ namespace Si.Multiplay
         /// Buffers sprite vector information so that all of the updates can be sent at one time at the end of the game loop.
         /// </summary>
         /// <param name="multiplayEvent"></param>
-        public void RecordSpriteVector(SiSpriteVector multiplayEvent)
+        public void RecordSpriteVector(SiDroneActionVector multiplayEvent)
         {
             if (ShouldRecordEvents)
             {
@@ -401,7 +401,7 @@ namespace Si.Multiplay
         /// Buffers sprite vector information so that all of the updates can be sent at one time at the end of the game loop.
         /// </summary>
         /// <param name="multiplayerEvent"></param>
-        public void RecordSpriteWeaponFire(SiSpriteWeaponFire multiplayEvent)
+        public void RecordSpriteWeaponFire(SiDroneActionFireWeapon multiplayEvent)
         {
             if (ShouldRecordEvents)
             {
@@ -417,7 +417,7 @@ namespace Si.Multiplay
         {
             if (ShouldRecordEvents)
             {
-                _spriteActionBuffer.Add(new SiSpriteExplode(playerMultiplayUID));
+                _spriteActionBuffer.Add(new SiDroneActionExplode(playerMultiplayUID));
             }
         }
 
@@ -425,7 +425,7 @@ namespace Si.Multiplay
         {
             if (ShouldRecordEvents)
             {
-                _spriteActionBuffer.Add(new SiSpriteHit(playerMultiplayUID));
+                _spriteActionBuffer.Add(new SiDroneActionHit(playerMultiplayUID));
             }
         }
 

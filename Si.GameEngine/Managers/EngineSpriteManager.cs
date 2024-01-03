@@ -174,19 +174,19 @@ namespace Si.GameEngine.Managers
                     var drone = sprites.Where(o => o.MultiplayUID == action.MultiplayUID).FirstOrDefault() as ISpriteDrone;
                     if (drone != null)
                     {
-                        if (action is SiSpriteVector vector)
+                        if (action is SiDroneActionVector vector)
                         {
                             drone.ApplyMultiplayVector(vector);
                         }
-                        else if (action is SiSpriteHit hit)
+                        else if (action is SiDroneActionHit hit)
                         {
                             drone.Hit(hit.Damage);
                         }
-                        else if (action is SiSpriteExplode)
+                        else if (action is SiDroneActionExplode)
                         {
                             drone.Explode();
                         }
-                        else if (action is SiSpriteWeaponFire weaponFire)
+                        else if (action is SiDroneActionFireWeapon weaponFire)
                         {
                             drone.FireDroneWeapon(weaponFire.WeaponTypeName);
                         }

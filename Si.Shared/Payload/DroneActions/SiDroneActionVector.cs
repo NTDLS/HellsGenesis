@@ -1,6 +1,6 @@
 ﻿namespace Si.Shared.Payload.DroneActions
 {
-    public class SiSpriteVector : SiSpriteAction
+    public class SiDroneActionVector : SiDroneAction
     {
         public double X { get; set; }
         public double Y { get; set; }
@@ -8,12 +8,8 @@
         public double ThrottlePercentage { get; set; }
         public double BoostPercentage { get; set; }
 
-        public SiSpriteVector(Guid multiplayUID)
+        public SiDroneActionVector(Guid multiplayUID)
             : base(multiplayUID)
-        {
-        }
-
-        public SiSpriteVector()
         {
         }
     }

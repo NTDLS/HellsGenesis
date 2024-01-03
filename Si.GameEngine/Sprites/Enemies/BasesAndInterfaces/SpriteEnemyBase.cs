@@ -24,7 +24,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
     /// </summary>
     public class SpriteEnemyBase : SpriteShipBase
     {
-        private readonly SiSpriteVector _multiplaySpriteVector = new();
+        private DateTime _lastMultiplaySpriteVectorUpdate = DateTime.MinValue;
 
         public SiEnemyClass ShipClass { get; set; }
         public EnemyShipLoadout Loadout { get; set; }
@@ -95,25 +95,25 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
             base.Explode();
         }
 
-        public override SiSpriteVector GetMultiplayVector()
+        public override SiDroneActionVector GetMultiplayVector()
         {
             if (_gameCore.Multiplay.State.PlayMode == SiPlayMode.MutiPlayerHost)
             {
-                if ((DateTime.UtcNow - _multiplaySpriteVector.Timestamp).TotalMilliseconds >= _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs)
+                if ((DateTime.UtcNow - _lastMultiplaySpriteVectorUpdate).TotalMilliseconds >= _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs)
                 {
-                    //System.Diagnostics.Debug.WriteLine($"MultiplayUID: {enemy.MultiplayUID}");
+                    _lastMultiplaySpriteVectorUpdate = DateTime.UtcNow;
 
                     var bgOffset = _gameCore.Display.BackgroundOffset;
 
-                    _multiplaySpriteVector.MultiplayUID = MultiplayUID;
-                    _multiplaySpriteVector.Timestamp = DateTime.UtcNow;
-                    _multiplaySpriteVector.X = LocalX + bgOffset.X;
-                    _multiplaySpriteVector.Y = LocalY + bgOffset.Y;
-                    _multiplaySpriteVector.AngleDegrees = Velocity.Angle.Degrees;
-                    _multiplaySpriteVector.BoostPercentage = Velocity.BoostPercentage;
-                    _multiplaySpriteVector.ThrottlePercentage = Velocity.ThrottlePercentage;
-
-                    return _multiplaySpriteVector;
+                    return new SiDroneActionVector(MultiplayUID)
+                    {
+                        MultiplayUID = MultiplayUID,
+                        X = LocalX + bgOffset.X,
+                        Y = LocalY + bgOffset.Y,
+                        AngleDegrees = Velocity.Angle.Degrees,
+                        BoostPercentage = Velocity.BoostPercentage,
+                        ThrottlePercentage = Velocity.ThrottlePercentage
+                    };
                 }
             }
 
@@ -295,7 +295,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         /// Applies the multiplay position of the sprite as dictated by a remote game client.
         /// </summary>
         /// <param name="vector"></param>
-        public virtual void ApplyMultiplayVector(SiSpriteVector vector)
+        public virtual void ApplyMultiplayVector(SiDroneActionVector vector)
         {
             MultiplayX = vector.X;
             MultiplayY = vector.Y;
@@ -382,7 +382,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
             if (weapon != null && _gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && this.IsDrone == false)
             {
-                _gameCore.Multiplay.RecordSpriteWeaponFire(new SiSpriteWeaponFire(MultiplayUID)
+                _gameCore.Multiplay.RecordSpriteWeaponFire(new SiDroneActionFireWeapon(MultiplayUID)
                 {
                     WeaponTypeName = weapon.GetType().Name,
                 });

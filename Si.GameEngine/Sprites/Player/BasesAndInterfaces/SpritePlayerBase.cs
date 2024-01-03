@@ -22,7 +22,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
     /// </summary>
     public class SpritePlayerBase : SpriteShipBase
     {
-        private readonly SiSpriteVector _multiplaySpriteVector = new();
+        private DateTime _lastMultiplaySpriteVectorUpdate = DateTime.MinValue;
 
         public SiPlayerClass ShipClass { get; set; }
         public PlayerShipLoadout Loadout { get; private set; }
@@ -83,21 +83,22 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             }
         }
 
-        public override SiSpriteVector GetMultiplayVector()
+        public override SiDroneActionVector GetMultiplayVector()
         {
             if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                if ((DateTime.UtcNow - _multiplaySpriteVector.Timestamp).TotalMilliseconds >= _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs)
+                if ((DateTime.UtcNow - _lastMultiplaySpriteVectorUpdate).TotalMilliseconds >= _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs)
                 {
-                    _multiplaySpriteVector.MultiplayUID = MultiplayUID;
-                    _multiplaySpriteVector.Timestamp = DateTime.UtcNow;
-                    _multiplaySpriteVector.X = _gameCore.Display.BackgroundOffset.X;
-                    _multiplaySpriteVector.Y = _gameCore.Display.BackgroundOffset.Y;
-                    _multiplaySpriteVector.AngleDegrees = Velocity.Angle.Degrees;
-                    _multiplaySpriteVector.BoostPercentage = Velocity.BoostPercentage;
-                    _multiplaySpriteVector.ThrottlePercentage = Velocity.ThrottlePercentage;
+                    _lastMultiplaySpriteVectorUpdate = DateTime.UtcNow;
 
-                    return _multiplaySpriteVector;
+                    return new SiDroneActionVector(MultiplayUID)
+                    {
+                        X = _gameCore.Display.BackgroundOffset.X,
+                        Y = _gameCore.Display.BackgroundOffset.Y,
+                        AngleDegrees = Velocity.Angle.Degrees,
+                        BoostPercentage = Velocity.BoostPercentage,
+                        ThrottlePercentage = Velocity.ThrottlePercentage
+                    };
                 }
             }
             return null;

@@ -17,7 +17,6 @@ namespace Si.Shared.Payload
         {
             FullTypeName = fullTypeName;
             MultiplayUID = multiplayUID;
-            Vector.MultiplayUID = multiplayUID;
         }
 
         public SiSpriteLayout()

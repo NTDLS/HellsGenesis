@@ -1,13 +1,12 @@
 ﻿namespace Si.Shared.Payload.DroneActions
 {
-    public class SiSpriteHit : SiSpriteAction
+    public class SiDroneActionHit : SiDroneAction
     {
         public int Damage { get; set; }
 
-        public SiSpriteHit(Guid multiplayUID)
+        public SiDroneActionHit(Guid multiplayUID)
             : base(multiplayUID)
         {
         }
-
     }
 }

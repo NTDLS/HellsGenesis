@@ -11,7 +11,7 @@ namespace Si.GameEngine.Sprites.Player
         {
         }
 
-        public void ApplyMultiplayVector(SiSpriteVector vector)
+        public void ApplyMultiplayVector(SiDroneActionVector vector)
         {
             MultiplayX = _gameCore.Player.Sprite.LocalX + vector.X;
             MultiplayY = _gameCore.Player.Sprite.LocalY + vector.Y;

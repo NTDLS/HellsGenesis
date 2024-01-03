@@ -105,7 +105,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
         /// Applies the multiplay position of the sprite as dictated by a remote game client.
         /// </summary>
         /// <param name="vector"></param>
-        public override void ApplyMultiplayVector(SiSpriteVector vector)
+        public override void ApplyMultiplayVector(SiDroneActionVector vector)
         {
             ThrustAnimation.Visable = vector.ThrottlePercentage > 0;
             BoostAnimation.Visable = vector.BoostPercentage > 0;

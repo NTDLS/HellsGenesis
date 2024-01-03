@@ -9,9 +9,9 @@ namespace Si.Shared.Messages.Notify
     public class SiSpriteActions : IUDPPayloadNotification
     {
         public Guid ConnectionId { get; set; }
-        public List<SiSpriteAction> Collection { get; set; }
+        public List<SiDroneAction> Collection { get; set; }
 
-        public SiSpriteActions(List<SiSpriteAction> collection)
+        public SiSpriteActions(List<SiDroneAction> collection)
         {
             Collection = collection;
         }
