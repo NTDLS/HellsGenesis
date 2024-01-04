@@ -35,14 +35,14 @@ namespace Si.GameEngine.Weapons
             {
                 _fireSound.Play();
 
-                if (RoundQuantity > 0 || IsOwnerDrone)
+                if (RoundQuantity > 0 || _owner.IsDrone)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(5, 5));
                     _gameCore.Sprites.Munitions.Create(this, pointRight);
                     RoundQuantity--;
                 }
 
-                if (RoundQuantity > 0 || IsOwnerDrone)
+                if (RoundQuantity > 0 || _owner.IsDrone)
                 {
                     var pointLeft = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(5, 5));
                     _gameCore.Sprites.Munitions.Create(this, pointLeft);

@@ -3,6 +3,7 @@ using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.Shared;
 using Si.Shared.ExtensionMethods;
+using Si.Shared.Payload.DroneActions;
 using Si.Shared.Types.Geometry;
 using System;
 using static Si.Shared.SiConstants;
@@ -45,6 +46,14 @@ namespace Si.GameEngine.Controller
                 {
                     if (Sprite.PrimaryWeapon != null && Sprite.PrimaryWeapon.Fire())
                     {
+                        if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && Sprite.IsDrone == false)
+                        {
+                            _gameCore.Multiplay.RecordSpriteWeaponFire(new SiDroneActionFireWeapon(Sprite.MultiplayUID)
+                            {
+                                WeaponTypeName = Sprite.PrimaryWeapon.GetType().Name,
+                            });
+                        }
+
                         if (Sprite.PrimaryWeapon?.RoundQuantity == 25)
                         {
                             Sprite.AmmoLowSound.Play();
@@ -60,6 +69,14 @@ namespace Si.GameEngine.Controller
                 {
                     if (Sprite.SelectedSecondaryWeapon != null && Sprite.SelectedSecondaryWeapon.Fire())
                     {
+                        if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && Sprite.IsDrone == false)
+                        {
+                            _gameCore.Multiplay.RecordSpriteWeaponFire(new SiDroneActionFireWeapon(Sprite.MultiplayUID)
+                            {
+                                WeaponTypeName = Sprite.SelectedSecondaryWeapon.GetType().Name,
+                            });
+                        }
+
                         if (Sprite.SelectedSecondaryWeapon?.RoundQuantity == 25)
                         {
                             Sprite.AmmoLowSound.Play();

@@ -37,7 +37,7 @@ namespace Si.GameEngine.Weapons
 
                 for (int i = -15; i < 15; i++)
                 {
-                    if (RoundQuantity > 0)
+                    if (RoundQuantity > 0 || _owner.IsDrone)
                     {
                         var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(i, i));
                         _gameCore.Sprites.Munitions.Create(this, pointRight);

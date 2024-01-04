@@ -109,7 +109,6 @@ namespace Si.GameEngine.Sprites
 
             var weaponType = SiReflection.GetTypeByName(weaponTypeName);
             weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameCore, this });
-            weapon.IsOwnerDrone = true;
 
             _droneWeaponsCache.Add(weaponTypeName, weapon);
 
