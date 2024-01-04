@@ -1,11 +1,9 @@
 ﻿using static Si.Shared.SiConstants;
 
-namespace Si.Multiplay
+namespace Si.MultiplayClient
 {
     public class MultiplayState
     {
-        //public Dictionary<uint, SiSpriteVectors> LatestSpriteVectors { get; private set; } = new();
-
         /// <summary>
         /// The connection id of the tcp/ip connection according to the server.
         /// </summary>

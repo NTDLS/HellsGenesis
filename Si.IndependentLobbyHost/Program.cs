@@ -1,4 +1,5 @@
-﻿using Si.Multiplay;
+﻿
+using Si.MultiplayClient;
 
 namespace Si.IndependentLobbyHost
 {

@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Si.GameEngine\Si.GameEngine.csproj" />
-    <ProjectReference Include="..\Si.Multiplay\Si.Multiplay.csproj" />
+    <ProjectReference Include="..\Si.MultiplayClient\Si.MultiplayClient.csproj" />
   </ItemGroup>
 
 </Project>

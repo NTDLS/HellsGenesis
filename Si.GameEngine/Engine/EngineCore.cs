@@ -5,8 +5,7 @@ using Si.GameEngine.Engine.GraphicsProcessing;
 using Si.GameEngine.Engine.Types;
 using Si.GameEngine.Managers;
 using Si.GameEngine.Menus;
-using Si.GameEngine.Weapons.BasesAndInterfaces;
-using Si.Multiplay;
+using Si.MultiplayClient;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -40,9 +39,10 @@ namespace Si.GameEngine.Engine
         public bool IsRunning { get; private set; } = false;
 
         private readonly EngineWorldClock _worldClock;
+        private readonly MultiplayClientEventHandlers _multiplayClientEventHandlers;
 
-        static uint _nextSequentialId = 1;
-        static readonly object _nextSequentialLock = new();
+        private static uint _nextSequentialId = 1;
+        private static readonly object _nextSequentialLock = new();
         /// <summary>
         /// Used to give all loaded sprites a unique ID. Very handy for debugging.
         /// </summary>
@@ -92,10 +92,13 @@ namespace Si.GameEngine.Engine
             Rendering = new EngineRendering(this);
 
             Multiplay = multiplayManager;
-            Multiplay.OnReceivedSituationLayout += Sprites.MultiplayApplySituationLayout;
-            Multiplay.OnNeedSituationLayout += Sprites.OnEventMultiplayGetSituationLayout;
-            Multiplay.OnApplySpriteActions += Sprites.OnEventMultiplayApplySpriteActions;
-            Multiplay.OnPlayerSpriteCreated += Sprites.OnEventMultiplayPlayerSpriteCreated;
+
+            _multiplayClientEventHandlers = new MultiplayClientEventHandlers(this);
+            Multiplay.OnReceivedLevelLayout += _multiplayClientEventHandlers.OnReceivedLevelLayout;
+            Multiplay.OnNeedLevelLayout += _multiplayClientEventHandlers.OnNeedLevelLayout;
+            Multiplay.OnApplySpriteActions += _multiplayClientEventHandlers.OnApplySpriteActions;
+            Multiplay.OnPlayerSpriteCreated += _multiplayClientEventHandlers.OnPlayerSpriteCreated;
+            Multiplay.OnHostLevelStarted += _multiplayClientEventHandlers.OnHostLevelStarted;
 
             _worldClock = new EngineWorldClock(this);
 
@@ -122,11 +125,13 @@ namespace Si.GameEngine.Engine
             Rendering = new EngineRendering(this);
 
             Multiplay = new EngineMultiplayManager();
-            Multiplay.OnReceivedSituationLayout += Sprites.MultiplayApplySituationLayout;
-            Multiplay.OnNeedSituationLayout += Sprites.OnEventMultiplayGetSituationLayout;
-            Multiplay.OnApplySpriteActions += Sprites.OnEventMultiplayApplySpriteActions;
-            Multiplay.OnPlayerSpriteCreated += Sprites.OnEventMultiplayPlayerSpriteCreated;
-            Multiplay.OnLevelStarted += Sprites.OnEventMultiplayLevelStarted;
+
+            _multiplayClientEventHandlers = new MultiplayClientEventHandlers(this);
+            Multiplay.OnReceivedLevelLayout += _multiplayClientEventHandlers.OnReceivedLevelLayout;
+            Multiplay.OnNeedLevelLayout += _multiplayClientEventHandlers.OnNeedLevelLayout;
+            Multiplay.OnApplySpriteActions += _multiplayClientEventHandlers.OnApplySpriteActions;
+            Multiplay.OnPlayerSpriteCreated += _multiplayClientEventHandlers.OnPlayerSpriteCreated;
+            Multiplay.OnHostLevelStarted += _multiplayClientEventHandlers.OnHostLevelStarted;
 
             _worldClock = new EngineWorldClock(this);
 

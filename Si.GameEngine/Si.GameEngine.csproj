@@ -59,7 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Si.Multiplay\Si.Multiplay.csproj" />
+    <ProjectReference Include="..\Si.MultiplayClient\Si.MultiplayClient.csproj" />
     <ProjectReference Include="..\Si.Shared\Si.Shared.csproj" />
   </ItemGroup>
 

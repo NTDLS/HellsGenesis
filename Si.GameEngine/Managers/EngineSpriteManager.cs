@@ -10,17 +10,10 @@ using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.Sprites.PowerUp.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared;
-using Si.Shared.Messages.Notify;
-using Si.Shared.Messages.Query;
-using Si.Shared.Payload;
-using Si.Shared.Payload.DroneActions;
 using Si.Shared.Types.Geometry;
-using Si.Sprites.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Managers
 {
@@ -108,118 +101,7 @@ namespace Si.GameEngine.Managers
             });
         }
 
-        /// <summary>
-        /// Gets the current sprites that are needed to populated a remote multiplay map.
-        /// </summary>
-        /// <returns></returns>
-        public List<SiSpriteLayout> OnEventMultiplayGetSituationLayout()
-        {
-            var spriteLayouts = new List<SiSpriteLayout>();
 
-            //--------------------------------------------------------------------------------------
-            //-- Send the enemy sprites:
-            //--------------------------------------------------------------------------------------
-            var enemies = _gameCore.Sprites.Enemies.All();
-            foreach (var enemy in enemies)
-            {
-                enemy.MultiplayUID = Guid.NewGuid();
-
-                spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName + "Drone", enemy.MultiplayUID)
-                {
-                    Vector = new SiSpriteVector() { X = enemy.LocalX, Y = enemy.LocalY }
-                });
-            }
-
-            return spriteLayouts;
-        }
-
-        public void OnEventMultiplayLevelStarted()
-        {
-            _collection.Use(o =>
-            {
-                var playerDrones = o.OfType<SpritePlayerBase>().Where(x => x.IsDrone).ToList();
-                playerDrones.ForEach(x => x.Visable = true);
-            });
-        }
-
-        public void OnEventMultiplayPlayerSpriteCreated(string selectedPlayerClass, Guid playerMultiplayUID)
-        {
-            var playerDrone = SiReflection.CreateInstanceFromTypeName<SpritePlayerBase>($"{selectedPlayerClass}Drone", new[] { _gameCore });
-            playerDrone.MultiplayUID = playerMultiplayUID;
-            playerDrone.Visable = true;
-            playerDrone.LocalX = 0;
-            playerDrone.LocalY = 0;
-            playerDrone.Highlight = true;
-
-            PlayerDrones.Insert(playerDrone);
-
-            Debug.WriteLine($"Inserted Multiplay Sprite: '{selectedPlayerClass}'->'{playerMultiplayUID}'->{playerDrone.UID}");
-        }
-
-        public void OnEventMultiplayApplySpriteActions(SiSpriteActions actions)
-        {
-            var allMultiplayUIDs = actions.Collection.Select(o => o.MultiplayUID).ToHashSet();
-            if (!allMultiplayUIDs.Any())
-            {
-                return;
-            }
-
-            _collection.Use(o =>
-            {
-                //Get all the sprites ahead of time. I "think" this is faster than searching in a loop.
-                var sprites = o.Where(o => allMultiplayUIDs.Contains(o.MultiplayUID)).ToList();
-
-                foreach (var action in actions.Collection)
-                {
-                    var drone = sprites.Where(o => o.MultiplayUID == action.MultiplayUID).FirstOrDefault() as ISpriteDrone;
-                    if (drone != null)
-                    {
-                        if (action is SiDroneActionVector vector)
-                        {
-                            drone.ApplyMultiplayVector(vector);
-                        }
-                        else if (action is SiDroneActionHit hit)
-                        {
-                            drone.Hit(hit.Damage);
-                        }
-                        else if (action is SiDroneActionExplode)
-                        {
-                            drone.Explode();
-                        }
-                        else if (action is SiDroneActionFireWeapon weaponFire)
-                        {
-                            drone.FireDroneWeapon(weaponFire.WeaponTypeName);
-                        }
-                    }
-                }
-            });
-        }
-
-        public void MultiplayApplySituationLayout(SiSituationLayout situationLayout)
-        {
-            Enemies.DeleteAll();
-
-            foreach (var spriteInfo in situationLayout.Sprites)
-            {
-                //Debug.WriteLine($"Adding Sprite: {spriteInfo.MultiplayUID}->'{spriteInfo.FullTypeName}'");
-
-                var sprite = CreateByNameOfType(spriteInfo.FullTypeName);
-                sprite.MultiplayUID = spriteInfo.MultiplayUID;
-                sprite.MultiplayX = spriteInfo.Vector.X;
-                sprite.MultiplayY = spriteInfo.Vector.Y;
-                sprite.LocalX = 0;
-                sprite.LocalY = 0;
-                sprite.Velocity.Angle.Degrees = spriteInfo.Vector.AngleDegrees;
-                sprite.Velocity.ThrottlePercentage = spriteInfo.Vector.ThrottlePercentage;
-                sprite.Velocity.BoostPercentage = spriteInfo.Vector.BoostPercentage;
-                sprite.ControlledBy = _gameCore.Multiplay.State.PlayMode switch
-                {
-                    SiPlayMode.MutiPlayerHost => SiControlledBy.LocalAI,
-                    SiPlayMode.MutiPlayerClient => SiControlledBy.Server,
-                    _ => throw new InvalidOperationException("Unhandled PlayMode")
-                };
-            }
-        }
 
         public void Start()
         {

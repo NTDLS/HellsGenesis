@@ -10,7 +10,7 @@ using Si.Shared.Payload.DroneActions;
 using System.Reflection;
 using static Si.Shared.SiConstants;
 
-namespace Si.Multiplay
+namespace Si.MultiplayClient
 {
     /// <summary>
     /// The Multiplay manager is what we use to communicate with the Server. It is used by the game and the independent lobby hosts.
@@ -23,7 +23,7 @@ namespace Si.Multiplay
         /// <summary>
         /// Called when the multiplay manager receives a full layout of sprites and they need to be created on the map.
         /// </summary>
-        public event ReceivedSituationLayout? OnReceivedSituationLayout;
+        public event ReceivedSituationLayout? OnReceivedLevelLayout;
 
         public delegate void ApplySpriteActions(SiSpriteActions spriteActions);
         /// <summary>
@@ -35,7 +35,7 @@ namespace Si.Multiplay
         /// <summary>
         /// Called when the multiplay manager needs a layout of all applicable sprites create clone maps for each connection.
         /// </summary>
-        public event NeedSituationLayout? OnNeedSituationLayout;
+        public event NeedSituationLayout? OnNeedLevelLayout;
 
         public delegate void HostIsStartingGame();
         /// <summary>
@@ -49,11 +49,11 @@ namespace Si.Multiplay
         /// </summary>
         public event PlayerSpriteCreated? OnPlayerSpriteCreated;
 
-        public delegate void LevelStarted();
+        public delegate void HostLevelStarted();
         /// <summary>
         /// Called when the host owner starts the level and all connections should now show the player drones.
         /// </summary>
-        public event LevelStarted? OnLevelStarted;
+        public event HostLevelStarted? OnHostLevelStarted;
 
         #endregion
 
@@ -169,7 +169,7 @@ namespace Si.Multiplay
                 return;
             }
 
-            var layouts = OnNeedSituationLayout?.Invoke();
+            var layouts = OnNeedLevelLayout?.Invoke();
             if (layouts == null)
             {
                 layouts = new List<SiSpriteLayout>();
@@ -344,7 +344,7 @@ namespace Si.Multiplay
             else if (payload is SiSituationLayout situationLayout)
             {
                 //The server is telling us to initialize the layout using the supplied sprites and their states.
-                OnReceivedSituationLayout?.Invoke(situationLayout);
+                OnReceivedLevelLayout?.Invoke(situationLayout);
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiPlayerSpriteCreated playerSpriteCreated)
@@ -354,7 +354,7 @@ namespace Si.Multiplay
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiHostStartedLevel)
             {
-                OnLevelStarted?.Invoke();
+                OnHostLevelStarted?.Invoke();
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else

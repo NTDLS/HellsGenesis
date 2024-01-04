@@ -1,6 +1,4 @@
-﻿using Si.Shared.Payload.DroneActions;
-
-namespace Si.Shared.Payload
+﻿namespace Si.Shared.Payload
 {
     /// <summary>
     /// Contains all of the information need to spawn a sprite.

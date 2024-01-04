@@ -11,7 +11,7 @@ The server is the application that the game clients (Si.Game) connect to for mul
 It is responsible for receiving configuration, receiving and distributing all sprite updates to
 clients. It also houses the information on which lobbies are available.
 
-## Si.Multiplay
+## Si.MultiplayClient
 Contains the multiplayer client. This is what the game uses to communicate with the Si.Server.
 It is split out from the game so that Si.IndependentLobbyServer can use it to host lobbies without
 the overhead of a DirectX game.
