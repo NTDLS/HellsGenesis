@@ -20,7 +20,8 @@ namespace Si.GameEngine.Engine
         /// <summary>
         /// If TRUE the game can run "headless" with no diplay or audio.
         /// </summary>
-        public bool IsRunningHeadless { get; private set; }
+        public readonly bool _isRunningHeadless;
+        public bool IsRunningHeadless => _isRunningHeadless;
 
         public SituationsTickController Situations { get; private set; }
         public EventsTickController Events { get; private set; }
@@ -70,7 +71,7 @@ namespace Si.GameEngine.Engine
         /// </summary>
         public EngineCore(EngineMultiplayManager multiplayManager)
         {
-            IsRunningHeadless = true;
+            _isRunningHeadless = true;
 
             Settings = LoadSettings();
 
@@ -191,7 +192,7 @@ namespace Si.GameEngine.Engine
 
         public void Render()
         {
-            if (!IsRunningHeadless)
+            if (!_isRunningHeadless)
             {
                 try
                 {

@@ -31,7 +31,7 @@ namespace Si.GameEngine.Engine.Types
         {
             _gameCore = gameCore;
 
-            if (!gameCore.IsRunningHeadless)
+            if (!gameCore._isRunningHeadless)
             {
                 _loopForever = loopForever;
                 InitialVolumne = initialVolumne;
@@ -57,7 +57,7 @@ namespace Si.GameEngine.Engine.Types
 
         public void Play()
         {
-            if (_gameCore.IsRunningHeadless)
+            if (_gameCore._isRunningHeadless)
             {
                 return;
             }
@@ -95,7 +95,7 @@ namespace Si.GameEngine.Engine.Types
 
         public void Fade()
         {
-            if (_gameCore.IsRunningHeadless)
+            if (_gameCore._isRunningHeadless)
             {
                 return;
             }
@@ -124,7 +124,7 @@ namespace Si.GameEngine.Engine.Types
 
         public void Stop()
         {
-            if (_gameCore.IsRunningHeadless)
+            if (_gameCore._isRunningHeadless)
             {
                 return;
             }
