@@ -83,7 +83,14 @@ namespace Si.GameEngine.Controller
             return obj;
         }
 
-        public MunitionBase CreateLocked(WeaponBase weapon, SpriteBase lockedTarget, SiPoint xyOffset = null)
+        /// <summary>
+        /// Creates a munition that is locked on to another sprite.
+        /// </summary>
+        /// <param name="weapon"></param>
+        /// <param name="lockedTarget"></param>
+        /// <param name="xyOffset"></param>
+        /// <returns></returns>
+        public MunitionBase CreateLockedOnTo(WeaponBase weapon, SpriteBase lockedTarget, SiPoint xyOffset = null)
         {
             var obj = weapon.CreateMunition(xyOffset, lockedTarget);
             SpriteManager.Add(obj);

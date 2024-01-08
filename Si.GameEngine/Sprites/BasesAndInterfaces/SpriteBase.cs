@@ -899,14 +899,6 @@ namespace Si.GameEngine.Sprites
 
         public virtual void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            if (this.SpriteTag == "AAAAAA")
-            {
-            }
-
-            if (this is SpritePlayerBase sp && sp.IsDrone)
-            {
-            }
-
             if (_isVisible && _image != null)
             {
                 DrawImage(renderTarget, _image);

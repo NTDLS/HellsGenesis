@@ -70,12 +70,12 @@ namespace Si.GameEngine.Weapons
                         if (_toggle)
                         {
                             var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(10, 10));
-                            _gameCore.Sprites.Munitions.CreateLocked(this, lockedOn, pointRight);
+                            _gameCore.Sprites.Munitions.CreateLockedOnTo(this, lockedOn, pointRight);
                         }
                         else
                         {
                             var pointLeft = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(10, 10));
-                            _gameCore.Sprites.Munitions.CreateLocked(this, lockedOn, pointLeft);
+                            _gameCore.Sprites.Munitions.CreateLockedOnTo(this, lockedOn, pointLeft);
                         }
                         _toggle = !_toggle;
                     }

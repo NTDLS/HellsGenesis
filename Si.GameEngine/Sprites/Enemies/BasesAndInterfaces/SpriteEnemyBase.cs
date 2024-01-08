@@ -112,7 +112,9 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                         Y = LocalY + bgOffset.Y,
                         AngleDegrees = Velocity.Angle.Degrees,
                         BoostPercentage = Velocity.BoostPercentage,
-                        ThrottlePercentage = Velocity.ThrottlePercentage
+                        ThrottlePercentage = Velocity.ThrottlePercentage,
+                        MaxBoost = Velocity.MaxBoost,
+                        MaxSpeed = Velocity.MaxSpeed
                     };
                 }
             }
@@ -211,6 +213,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         /// <param name="displacementVector"></param>
         public override void ApplyMotion(SiPoint displacementVector)
         {
+            //TODO: Add IsDrone logic like SpritePlayerBase.ApplyMotion.....
+
             if (LocalX < -_gameCore.Settings.EnemySceneDistanceLimit
                 || LocalX >= _gameCore.Display.NatrualScreenSize.Width + _gameCore.Settings.EnemySceneDistanceLimit
                 || LocalY < -_gameCore.Settings.EnemySceneDistanceLimit
@@ -297,6 +301,11 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         /// <param name="vector"></param>
         public virtual void ApplyMultiplayVector(SiDroneActionVector vector)
         {
+            Velocity.ThrottlePercentage = vector.ThrottlePercentage;
+            Velocity.BoostPercentage = vector.BoostPercentage;
+            Velocity.MaxSpeed = vector.MaxSpeed;
+            Velocity.MaxBoost = vector.MaxBoost;
+            Velocity.AvailableBoost = 10000;
             MultiplayX = vector.X;
             MultiplayY = vector.Y;
             Velocity.Angle.Degrees = vector.AngleDegrees;

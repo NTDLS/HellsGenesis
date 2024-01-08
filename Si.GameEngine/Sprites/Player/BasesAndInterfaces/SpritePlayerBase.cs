@@ -97,7 +97,9 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                         Y = _gameCore.Display.BackgroundOffset.Y,
                         AngleDegrees = Velocity.Angle.Degrees,
                         BoostPercentage = Velocity.BoostPercentage,
-                        ThrottlePercentage = Velocity.ThrottlePercentage
+                        ThrottlePercentage = Velocity.ThrottlePercentage,
+                        MaxSpeed = Velocity.MaxSpeed,
+                        MaxBoost = Velocity.MaxBoost
                     };
                 }
             }
@@ -540,5 +542,39 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
         }
 
         #endregion
+
+        public void ApplyMultiplayVector(SiDroneActionVector vector)
+        {
+            MultiplayX = _gameCore.Player.Sprite.LocalX + vector.X;
+            MultiplayY = _gameCore.Player.Sprite.LocalY + vector.Y;
+
+            Velocity.Angle.Degrees = vector.AngleDegrees;
+            Velocity.ThrottlePercentage = vector.ThrottlePercentage;
+            Velocity.BoostPercentage = vector.BoostPercentage;
+            Velocity.MaxSpeed = vector.MaxSpeed;
+            Velocity.MaxBoost = vector.MaxBoost;
+            Velocity.AvailableBoost = 10000; //Don't let the drone run out of boost.
+
+            ThrustAnimation.Visable = vector.ThrottlePercentage > 0;
+            BoostAnimation.Visable = vector.BoostPercentage > 0;
+        }
+
+        public override void ApplyMotion(SiPoint displacementVector)
+        {
+            if (IsDrone)
+            {
+                //Move sprite based on Multiplay vector. Linear interpolation?
+                MultiplayX += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+                MultiplayY += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+
+                //Move sprite based on local offset.
+                LocalX -= displacementVector.X;
+                LocalY -= displacementVector.Y;
+            }
+            else
+            {
+                base.ApplyMotion(displacementVector);
+            }
+        }
     }
 }
