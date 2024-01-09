@@ -21,17 +21,11 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
 
-        private const string _assetPath = @"Graphics\Enemy\Debug\";
-        private readonly int imageCount = 1;
-        private readonly int selectedImageIndex = 0;
-
         public SpriteEnemyDebug(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
-            selectedImageIndex = SiRandom.Generator.Next(0, 1000) % imageCount;
-            SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
-
             ShipClass = SiEnemyClass.Debug;
+            SetImage(@$"Graphics\Enemy\{ShipClass}\Hull.png", new Size(32, 32));
 
             if (ControlledBy == SiControlledBy.Server)
             {
