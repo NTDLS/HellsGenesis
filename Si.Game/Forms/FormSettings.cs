@@ -23,7 +23,7 @@ namespace Si.Game
             checkBoxHighlightAllSprites.Checked = settings.HighlightAllSprites;
             checkBoxHighlightNatrualBounds.Checked = settings.HighlightNatrualBounds;
             checkBoxEnableSpriteInterrogation.Checked = settings.EnableSpriteInterrogation;
-            textBoxFrameLimiter.Text = $"{settings.FrameLimiter:n0}";
+            textBoxFramePerSecondLimit.Text = $"{settings.FramePerSecondLimit:n0}";
             textBoxOverdrawScale.Text = $"{settings.OverdrawScale:n0}";
             textBoxInitialFrameStarCount.Text = $"{settings.InitialFrameStarCount:n0}";
             textBoxDeltaFrameTargetStarCount.Text = $"{settings.DeltaFrameTargetStarCount:n0}";
@@ -107,7 +107,7 @@ namespace Si.Game
                 settings.HighlightNatrualBounds = checkBoxHighlightNatrualBounds.Checked;
                 settings.EnableSpriteInterrogation = checkBoxEnableSpriteInterrogation.Checked;
 
-                settings.FrameLimiter = GetAndValidate(textBoxFrameLimiter, 30, 1000, "Frame Limiter");
+                settings.FramePerSecondLimit = GetAndValidate(textBoxFramePerSecondLimit, 30, 1000, "Frame Limiter");
                 settings.OverdrawScale = GetAndValidate(textBoxOverdrawScale, 1.0, 10.0, "Overdraw scale");
                 settings.InitialFrameStarCount = GetAndValidate(textBoxInitialFrameStarCount, 0, 1000, "Initial frame star count");
                 settings.DeltaFrameTargetStarCount = GetAndValidate(textBoxDeltaFrameTargetStarCount, 0, 1000, "Delta-frame target star count");

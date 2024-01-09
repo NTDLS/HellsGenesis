@@ -13,7 +13,7 @@ namespace Si.GameEngine.Engine
     {
         private readonly EngineCore _gameCore;
         private bool _shutdown = false;
-        private bool _pause = false;
+        private bool _isPaused = false;
         private readonly Thread _graphicsThread;
 
         public EngineWorldClock(EngineCore gameCore)
@@ -36,11 +36,16 @@ namespace Si.GameEngine.Engine
             _graphicsThread.Join();
         }
 
-        public bool IsPaused() => _pause;
+        public bool IsPaused() => _isPaused;
 
         public void TogglePause()
         {
-            _pause = !_pause;
+            if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer)
+            {
+                return; //Cant pause multiplayer games.
+            }
+
+            _isPaused = !_isPaused;
 
             var textBlock = _gameCore.Sprites.GetSpriteByTag<SpriteTextBlock>("PausedText");
             if (textBlock == null)
@@ -51,17 +56,26 @@ namespace Si.GameEngine.Engine
                 textBlock.LocalY = _gameCore.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
             }
 
-            textBlock.Visable = _pause;
+            textBlock.Visable = _isPaused;
         }
 
         public void Pause()
         {
-            _pause = true;
+            if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer)
+            {
+                return; //Cant pause multiplayer games.
+            }
+
+            _isPaused = true;
         }
 
         public void Resume()
         {
-            _pause = false;
+            if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer)
+            {
+                return; //Cant pause multiplayer games.
+            }
+            _isPaused = false;
         }
 
         #endregion
@@ -81,7 +95,7 @@ namespace Si.GameEngine.Engine
 
             while (_shutdown == false)
             {
-                var targetFrameDuration = 1000000 / _gameCore.Settings.FrameLimiter; //1000000 / n-frames/second.
+                var targetFrameDuration = 1000000 / _gameCore.Settings.FramePerSecondLimit; //1000000 / n-frames/second.
                 timer.Restart();
 
                 _gameCore.Display.GameLoopCounter.Calculate();
@@ -90,7 +104,7 @@ namespace Si.GameEngine.Engine
                 {
                     _gameCore.Sprites.Use(o =>
                     {
-                        if (_pause == false)
+                        if (_isPaused == false)
                         {
                             BeforeExecuteWorldClockTick();
                             var displacementVector = ExecuteWorldClockTick();
@@ -113,7 +127,7 @@ namespace Si.GameEngine.Engine
                     Thread.Yield();
                 }
 
-                if (_pause)
+                if (_isPaused)
                 {
                     Thread.Yield();
                 }

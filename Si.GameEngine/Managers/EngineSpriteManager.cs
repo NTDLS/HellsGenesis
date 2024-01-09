@@ -126,8 +126,6 @@ namespace Si.GameEngine.Managers
             });
         }
 
-
-
         public void Start()
         {
             _gameCore.Player.Sprite = new SpriteDebugPlayer(_gameCore) { Visable = false };

@@ -28,7 +28,6 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         public EnemyShipLoadout Loadout { get; set; }
         public IAIController CurrentAIController { get; set; }
         public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
-        public int CollisionDamage { get; set; } = 25;
         public int BountyWorth { get; private set; } = 25;
         public bool IsHostile { get; set; } = true;
         public List<WeaponBase> Weapons { get; private set; } = new();

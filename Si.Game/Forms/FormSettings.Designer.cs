@@ -43,7 +43,7 @@
             label2 = new System.Windows.Forms.Label();
             labelOverdrawScale = new System.Windows.Forms.Label();
             textBoxOverdrawScale = new System.Windows.Forms.TextBox();
-            textBoxFrameLimiter = new System.Windows.Forms.TextBox();
+            textBoxFramePerSecondLimit = new System.Windows.Forms.TextBox();
             tabPageDebug = new System.Windows.Forms.TabPage();
             checkBoxEnableSpriteInterrogation = new System.Windows.Forms.CheckBox();
             checkBoxHighlightAllSprites = new System.Windows.Forms.CheckBox();
@@ -127,7 +127,7 @@
             tabPageDisplayAdvanced.Controls.Add(label2);
             tabPageDisplayAdvanced.Controls.Add(labelOverdrawScale);
             tabPageDisplayAdvanced.Controls.Add(textBoxOverdrawScale);
-            tabPageDisplayAdvanced.Controls.Add(textBoxFrameLimiter);
+            tabPageDisplayAdvanced.Controls.Add(textBoxFramePerSecondLimit);
             tabPageDisplayAdvanced.Location = new System.Drawing.Point(4, 24);
             tabPageDisplayAdvanced.Name = "tabPageDisplayAdvanced";
             tabPageDisplayAdvanced.Padding = new System.Windows.Forms.Padding(3);
@@ -193,12 +193,12 @@
             textBoxOverdrawScale.Size = new System.Drawing.Size(133, 23);
             textBoxOverdrawScale.TabIndex = 25;
             // 
-            // textBoxFrameLimiter
+            // textBoxFramePerSecondLimit
             // 
-            textBoxFrameLimiter.Location = new System.Drawing.Point(16, 31);
-            textBoxFrameLimiter.Name = "textBoxFrameLimiter";
-            textBoxFrameLimiter.Size = new System.Drawing.Size(133, 23);
-            textBoxFrameLimiter.TabIndex = 24;
+            textBoxFramePerSecondLimit.Location = new System.Drawing.Point(16, 31);
+            textBoxFramePerSecondLimit.Name = "textBoxFramePerSecondLimit";
+            textBoxFramePerSecondLimit.Size = new System.Drawing.Size(133, 23);
+            textBoxFramePerSecondLimit.TabIndex = 24;
             // 
             // tabPageDebug
             // 
@@ -300,7 +300,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelOverdrawScale;
         private System.Windows.Forms.TextBox textBoxOverdrawScale;
-        private System.Windows.Forms.TextBox textBoxFrameLimiter;
+        private System.Windows.Forms.TextBox textBoxFramePerSecondLimit;
         private System.Windows.Forms.Label labelInitialStarCount;
         private System.Windows.Forms.Label labelFrameTargetStarCount;
         private System.Windows.Forms.TextBox textBoxDeltaFrameTargetStarCount;

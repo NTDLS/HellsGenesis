@@ -48,6 +48,15 @@ namespace Si.GameEngine.Controller
             return obj;
         }
 
+        public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name, string text)
+        {
+            var obj = new SpriteTextBlock(GameCore, format, color, location, isPositionStatic);
+            obj.SpriteTag = name;
+            obj.Text = text;
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
         #endregion
     }
 }

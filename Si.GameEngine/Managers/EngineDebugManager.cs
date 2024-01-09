@@ -320,13 +320,13 @@ namespace Si.GameEngine.Managers
         public void CommandHandler_Display_Framerate_Set(DebugCommand command)
         {
             var rate = command.ParameterValue<double>("rate");
-            _gameCore.Settings.FrameLimiter = rate;
+            _gameCore.Settings.FramePerSecondLimit = rate;
         }
 
         public void CommandHandler_Display_Framerate_Get(DebugCommand command)
         {
             var infoText =
-                  $"Limit: {_gameCore.Settings.FrameLimiter:n4}\r\n"
+                  $"Limit: {_gameCore.Settings.FramePerSecondLimit:n4}\r\n"
                 + $"  Avg: {_gameCore.Display.GameLoopCounter.AverageFrameRate:n4}\r\n"
                 + $"  Min: {_gameCore.Display.GameLoopCounter.FrameRateMin:n4}\r\n"
                 + $"  Max: {_gameCore.Display.GameLoopCounter.FrameRateMax:n4}";
