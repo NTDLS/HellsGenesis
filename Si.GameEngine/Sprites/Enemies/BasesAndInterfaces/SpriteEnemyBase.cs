@@ -3,8 +3,8 @@ using Si.GameEngine.AI;
 using Si.GameEngine.Engine;
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Managers;
-using Si.GameEngine.Sprites.PowerUp;
-using Si.GameEngine.Sprites.PowerUp.BasesAndInterfaces;
+using Si.GameEngine.Sprites.Powerup;
+using Si.GameEngine.Sprites.Powerup.BasesAndInterfaces;
 using Si.GameEngine.Weapons.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared;
@@ -63,31 +63,31 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
             {
                 int random = SiRandom.Between(0, 4);
 
-                SpritePowerUpBase powerUp = null;
+                SpritePowerupBase powerup = null;
 
                 switch (random)
                 {
                     case 0:
-                        powerUp = new SpritePowerUpAmmo(_gameCore);
+                        powerup = new SpritePowerupAmmo(_gameCore);
                         break;
                     case 1:
-                        powerUp = new SpritePowerUpBoost(_gameCore);
+                        powerup = new SpritePowerupBoost(_gameCore);
                         break;
                     case 2:
-                        powerUp = new SpritePowerUpBounty(_gameCore);
+                        powerup = new SpritePowerupBounty(_gameCore);
                         break;
                     case 3:
-                        powerUp = new SpritePowerUpRepair(_gameCore);
+                        powerup = new SpritePowerupRepair(_gameCore);
                         break;
                     case 4:
-                        powerUp = new SpritePowerUpSheild(_gameCore);
+                        powerup = new SpritePowerupSheild(_gameCore);
                         break;
                 }
 
-                if (powerUp != null)
+                if (powerup != null)
                 {
-                    powerUp.LocalLocation = Location;
-                    _gameCore.Sprites.Powerups.Insert(powerUp);
+                    powerup.LocalLocation = Location;
+                    _gameCore.Sprites.Powerups.Insert(powerup);
                 }
             }
             base.Explode();

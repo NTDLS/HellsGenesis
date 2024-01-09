@@ -7,7 +7,7 @@ using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
 using Si.GameEngine.Sprites.Player;
 using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
-using Si.GameEngine.Sprites.PowerUp.BasesAndInterfaces;
+using Si.GameEngine.Sprites.Powerup.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
@@ -287,7 +287,7 @@ namespace Si.GameEngine.Managers
                                 && y < _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
                                 )
                             {
-                                if ((sprite is SpritePlayerBase || sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerUpBase) && sprite.Visable == true)
+                                if ((sprite is SpritePlayerBase || sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerupBase) && sprite.Visable == true)
                                 {
                                     sprite.RenderRadar(renderTarget, x, y);
                                 }

@@ -1,36 +1,33 @@
 ﻿using Si.GameEngine.Engine;
-using Si.GameEngine.Sprites.PowerUp.BasesAndInterfaces;
+using Si.GameEngine.Sprites.Powerup.BasesAndInterfaces;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
-using System.IO;
 
-namespace Si.GameEngine.Sprites.PowerUp
+namespace Si.GameEngine.Sprites.Powerup
 {
-    internal class SpritePowerUpAmmo : SpritePowerUpBase
+    internal class SpritePowerupAmmo : SpritePowerupBase
     {
-        private const string _assetPath = @"Graphics\PowerUp\Ammo\";
         private readonly int imageCount = 3;
-        private readonly int selectedImageIndex = 0;
 
-        private readonly int _powerUpAmount = 100;
-
-        public SpritePowerUpAmmo(EngineCore gameCore)
+        public SpritePowerupAmmo(EngineCore gameCore)
             : base(gameCore)
         {
-            selectedImageIndex = SiRandom.Generator.Next(0, 1000) % imageCount;
-            SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"), new Size(32, 32));
-            _powerUpAmount *= selectedImageIndex + 1;
+            PowerupAmount = 100;
+
+            int multiplier = SiRandom.Generator.Next(0, 1000) % imageCount;
+            SetImage(@$"Graphics\Powerup\Ammo\{multiplier}.png", new Size(32, 32));
+            PowerupAmount *= multiplier + 1;
         }
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
             if (Intersects(_gameCore.Player.Sprite))
             {
-                _gameCore.Player.Sprite.PrimaryWeapon.RoundQuantity += _powerUpAmount;
+                _gameCore.Player.Sprite.PrimaryWeapon.RoundQuantity += PowerupAmount;
                 if (_gameCore.Player.Sprite.SelectedSecondaryWeapon != null)
                 {
-                    _gameCore.Player.Sprite.SelectedSecondaryWeapon.RoundQuantity += _powerUpAmount;
+                    _gameCore.Player.Sprite.SelectedSecondaryWeapon.RoundQuantity += PowerupAmount;
                 }
                 Explode();
             }

@@ -5,26 +5,32 @@ using System;
 using System.Drawing;
 using System.Linq;
 
-namespace Si.GameEngine.Sprites.PowerUp.BasesAndInterfaces
+namespace Si.GameEngine.Sprites.Powerup.BasesAndInterfaces
 {
     /// <summary>
     /// Represents a "power-up" that the player can pick up to gain some ability / stat-improvement.
     /// </summary>
-    public class SpritePowerUpBase : SpriteBase
+    public class SpritePowerupBase : SpriteBase
     {
-        private const string _assetHitAnimationPath = @"Graphics\Animation\PowerUp\";
+        private const string _assetHitAnimationPath = @"Graphics\Animation\Powerup\";
         private readonly string[] _assetHitAnimationFiles = {
             #region Image Paths.
             "PowerUpShort128x128.png",
             #endregion
         };
 
-        private const string _assetExplosionSoundPath = @"Sounds\PowerUp\";
+        private const string _assetExplosionSoundPath = @"Sounds\Powerup\";
         private readonly string[] _assetExplosionSoundFiles = {
             #region Sound Paths.
             "PowerUp1.wav",
             #endregion
         };
+
+
+        /// <summary>
+        /// The power up amount (number of boost points, shield points, repair, etc.).
+        /// </summary>
+        public int PowerupAmount { get; set; } = 1;
 
         /// <summary>
         /// Time until the powerup exploded on its own.
@@ -39,7 +45,7 @@ namespace Si.GameEngine.Sprites.PowerUp.BasesAndInterfaces
             }
         }
 
-        public SpritePowerUpBase(EngineCore gameCore)
+        public SpritePowerupBase(EngineCore gameCore)
             : base(gameCore)
         {
             Initialize();
