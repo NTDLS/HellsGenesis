@@ -59,35 +59,23 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         {
             _gameCore.Player.Sprite.Bounty += BountyWorth;
 
-            if (SiRandom.PercentChance(5))
+            if (SiRandom.PercentChance(10))
             {
-                int random = SiRandom.Between(0, 4);
-
-                SpritePowerupBase powerup = null;
-
-                switch (random)
+                var powerup = SiRandom.Between(0, 4) switch
                 {
-                    case 0:
-                        powerup = new SpritePowerupAmmo(_gameCore);
-                        break;
-                    case 1:
-                        powerup = new SpritePowerupBoost(_gameCore);
-                        break;
-                    case 2:
-                        powerup = new SpritePowerupBounty(_gameCore);
-                        break;
-                    case 3:
-                        powerup = new SpritePowerupRepair(_gameCore);
-                        break;
-                    case 4:
-                        powerup = new SpritePowerupSheild(_gameCore);
-                        break;
-                }
+                    0 => new SpritePowerupAmmo(_gameCore),
+                    1 => new SpritePowerupBoost(_gameCore),
+                    2 => new SpritePowerupBounty(_gameCore),
+                    3 => new SpritePowerupRepair(_gameCore),
+                    4 => new SpritePowerupSheild(_gameCore),
+                    _ => null as SpritePowerupBase
+                };
 
                 if (powerup != null)
                 {
                     powerup.LocalLocation = Location;
                     _gameCore.Sprites.Powerups.Insert(powerup);
+                    _gameCore.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
                 }
             }
             base.Explode();
