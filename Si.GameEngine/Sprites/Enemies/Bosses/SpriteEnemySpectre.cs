@@ -25,17 +25,17 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
         private readonly double _initialMaxpeed;
 
-        readonly string _imagesPath = @"Graphics\Enemy\Spectre\";
+        readonly string _assetPath = @"Graphics\Enemy\Bosses\Spectre\";
 
         public SpriteEnemySpectre(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
-            _leftGun = Attach(_imagesPath + "Gun.Left.png", true, 3);
-            _rightGun = Attach(_imagesPath + "Gun.Right.png", true, 3);
-            _leftThrust = Attach(_imagesPath + "Jet.png", true, 3);
-            _rightThrust = Attach(_imagesPath + "Jet.png", true, 3);
+            _leftGun = Attach(_assetPath + "Gun.Left.png", true, 3);
+            _rightGun = Attach(_assetPath + "Gun.Right.png", true, 3);
+            _leftThrust = Attach(_assetPath + "Jet.png", true, 3);
+            _rightThrust = Attach(_assetPath + "Jet.png", true, 3);
 
-            SetImage(_imagesPath + "Hull.png");
+            SetImage(_assetPath + "Hull.png");
 
             ShipClass = SiEnemyClass.Spectre;
 

@@ -24,16 +24,16 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
         private readonly double _initialMaxpeed;
 
-        readonly string _imagesPath = @"Graphics\Enemy\Repulsor\";
+        readonly string _assetPath = @"Graphics\Enemy\Bosses\Repulsor\";
 
         public SpriteEnemyRepulsor(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
-            _leftGun = Attach(_imagesPath + "Gun.Left.png", true, 3);
-            _rightGun = Attach(_imagesPath + "Gun.Right.png", true, 3);
-            _thrust = Attach(_imagesPath + "Jet.png", true, 3);
+            _leftGun = Attach(_assetPath + "Gun.Left.png", true, 3);
+            _rightGun = Attach(_assetPath + "Gun.Right.png", true, 3);
+            _thrust = Attach(_assetPath + "Jet.png", true, 3);
 
-            SetImage(_imagesPath + "Hull.png");
+            SetImage(_assetPath + "Hull.png");
 
             ShipClass = SiEnemyClass.Repulsor;
 

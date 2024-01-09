@@ -7,7 +7,6 @@ using Si.Shared;
 using Si.Shared.ExtensionMethods;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
-using System.IO;
 using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies.Peons
@@ -24,7 +23,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             : base(gameCore, hullHealth, bountyMultiplier)
         {
             ShipClass = SiEnemyClass.Scinzad;
-            SetImage(@$"Graphics\Enemy\{ShipClass}\Hull.png", new Size(32, 32));
+            SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png", new Size(32, 32));
 
             if (ControlledBy == SiControlledBy.Server)
             {

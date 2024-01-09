@@ -31,19 +31,19 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
         private readonly double _initialMaxpeed;
 
-        readonly string _imagesPath = @"Graphics\Enemy\Devastator\";
+        readonly string _assetPath = @"Graphics\Enemy\Bosses\Devastator\";
 
         public SpriteEnemyDevastator(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
-            _leftCannon = Attach(_imagesPath + "Gun.Cannon.Left.png", true, 3);
-            _rightCannon = Attach(_imagesPath + "Gun.Cannon.Right.png", true, 3);
-            _leftGun = Attach(_imagesPath + "Gun.Left.png", true, 3);
-            _rightGun = Attach(_imagesPath + "Gun.Right.png", true, 3);
-            _leftThrust = Attach(_imagesPath + "Jet.Left.png", true, 3);
-            _rightThrust = Attach(_imagesPath + "Jet.Right.png", true, 3);
+            _leftCannon = Attach(_assetPath + "Gun.Cannon.Left.png", true, 3);
+            _rightCannon = Attach(_assetPath + "Gun.Cannon.Right.png", true, 3);
+            _leftGun = Attach(_assetPath + "Gun.Left.png", true, 3);
+            _rightGun = Attach(_assetPath + "Gun.Right.png", true, 3);
+            _leftThrust = Attach(_assetPath + "Jet.Left.png", true, 3);
+            _rightThrust = Attach(_assetPath + "Jet.Right.png", true, 3);
 
-            SetImage(_imagesPath + "Hull.png");
+            SetImage(_assetPath + "Hull.png");
 
             ShipClass = SiEnemyClass.Devastator;
 
@@ -75,7 +75,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
         public override void AfterCreate()
         {
-            _turret = Attach(_imagesPath + "Gun.Turret.png", true, 3);
+            _turret = Attach(_assetPath + "Gun.Turret.png", true, 3);
             base.AfterCreate();
         }
 
