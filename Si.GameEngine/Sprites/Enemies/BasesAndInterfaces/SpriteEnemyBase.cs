@@ -208,12 +208,42 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         }
 
         /// <summary>
+        /// Moves the sprite to the exact location as dictated by the remote connection.
+        /// Also sets the current vector of the remote sprite so that we can move the sprite along that vector between updates.
+        /// </summary>
+        /// <param name="vector"></param>
+        public override void ApplyAbsoluteMultiplayVector(SiDroneActionVector vector)
+        {
+            Velocity.ThrottlePercentage = vector.ThrottlePercentage;
+            Velocity.BoostPercentage = vector.BoostPercentage;
+            Velocity.MaxSpeed = vector.MaxSpeed;
+            Velocity.MaxBoost = vector.MaxBoost;
+            Velocity.Angle.Degrees = vector.AngleDegrees;
+            Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
+
+            MultiplayX = vector.X;
+            MultiplayY = vector.Y;
+        }
+
+        /// <summary>
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            //TODO: Add IsDrone logic like SpritePlayerBase.ApplyMotion.....
+            if (IsDrone)
+            {
+                var thrust = (Velocity.MaxSpeed * Velocity.ThrottlePercentage) + (Velocity.MaxBoost * Velocity.BoostPercentage);
+
+                //Move sprite based on Multiplay vector. Linear interpolation?
+                MultiplayX += Velocity.Angle.X * thrust;
+                MultiplayY += Velocity.Angle.Y * thrust;
+
+                //Move sprite based on local offset.
+                LocalX -= displacementVector.X;
+                LocalY -= displacementVector.Y;
+                return;
+            }
 
             if (LocalX < -_gameCore.Settings.EnemySceneDistanceLimit
                 || LocalX >= _gameCore.Display.NatrualScreenSize.Width + _gameCore.Settings.EnemySceneDistanceLimit
@@ -293,22 +323,6 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                     Velocity.RecoilPercentage = 0;
                 }
             }
-        }
-
-        /// <summary>
-        /// Applies the multiplay position of the sprite as dictated by a remote game client.
-        /// </summary>
-        /// <param name="vector"></param>
-        public virtual void ApplyMultiplayVector(SiDroneActionVector vector)
-        {
-            Velocity.ThrottlePercentage = vector.ThrottlePercentage;
-            Velocity.BoostPercentage = vector.BoostPercentage;
-            Velocity.MaxSpeed = vector.MaxSpeed;
-            Velocity.MaxBoost = vector.MaxBoost;
-            Velocity.AvailableBoost = 10000;
-            MultiplayX = vector.X;
-            MultiplayY = vector.Y;
-            Velocity.Angle.Degrees = vector.AngleDegrees;
         }
 
         public virtual void ApplyIntelligence(SiPoint displacementVector)

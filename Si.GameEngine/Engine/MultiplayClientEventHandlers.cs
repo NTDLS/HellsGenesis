@@ -104,7 +104,7 @@ namespace Si.GameEngine.Engine
                     {
                         if (action is SiDroneActionVector vector)
                         {
-                            drone.ApplyMultiplayVector(vector);
+                            drone.ApplyAbsoluteMultiplayVector(vector);
                         }
                         else if (action is SiDroneActionHit hit)
                         {

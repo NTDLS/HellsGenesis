@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Metadata;
 using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Sprites
@@ -870,6 +871,10 @@ namespace Si.GameEngine.Sprites
 
         #endregion
 
+        /// <summary>
+        /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
+        /// </summary>
+        /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(SiPoint displacementVector)
         {
             if (IsFixedPosition == false)
@@ -877,6 +882,26 @@ namespace Si.GameEngine.Sprites
                 LocalX += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
                 LocalY += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
             }
+        }
+
+        /// <summary>
+        /// Moves the sprite to the exact location as dictated by the remote connection.
+        /// Also sets the current vector of the remote sprite so that we can move the sprite along that vector between updates.
+        /// </summary>
+        /// <param name="vector"></param>
+        public virtual void ApplyAbsoluteMultiplayVector(SiDroneActionVector vector)
+        {
+            /* This is handled in SpriteEnemyBase and SpritePlayerBase.
+            Velocity.ThrottlePercentage = vector.ThrottlePercentage;
+            Velocity.BoostPercentage = vector.BoostPercentage;
+            Velocity.MaxSpeed = vector.MaxSpeed;
+            Velocity.MaxBoost = vector.MaxBoost;
+            Velocity.Angle.Degrees = vector.AngleDegrees;
+            Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
+
+            MultiplayX = vector.X;
+            MultiplayY = vector.Y;
+            */
         }
 
         public virtual SiDroneActionVector GetMultiplayVector() { return null; }

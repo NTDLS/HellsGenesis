@@ -5,7 +5,7 @@ namespace Si.Sprites.BasesAndInterfaces
 {
     internal interface ISpriteDrone
     {
-        public void ApplyMultiplayVector(SiDroneActionVector vector);
+        public void ApplyAbsoluteMultiplayVector(SiDroneActionVector vector);
         public void ApplyMotion(SiPoint displacementVector);
         public void Hit(int damage);
         public void Explode();

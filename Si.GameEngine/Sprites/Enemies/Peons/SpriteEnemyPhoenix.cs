@@ -2,7 +2,6 @@
 using Si.GameEngine.Engine;
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces;
-using Si.GameEngine.Utility;
 using Si.GameEngine.Weapons;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
@@ -96,32 +95,31 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             }
 
 
-            double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
+            //double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
 
+            base.ApplyIntelligence(displacementVector);
 
-            //base.ApplyIntelligence(displacementVector);
+            if ((DateTime.Now - lastBehaviorChangeTime).TotalMilliseconds > behaviorChangeThresholdMiliseconds)
+            {
+                behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
 
-            //if ((DateTime.Now - lastBehaviorChangeTime).TotalMilliseconds > behaviorChangeThresholdMiliseconds)
-            //{
-            //    behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
-
-            //    /*
-            //    if (SiRandom.ChanceIn(2))
-            //    {
-            //        SetDefaultAIController(AIControllers[typeof(HostileEngagement)]);
-            //    }
-            //    if (SiRandom.ChanceIn(2))
-            //    {
-            //    */
-            //    SetCurrentAIController(AIControllers[typeof(Taunt)]);
-            //    /*
-            //    }
-            //    else if (SiRandom.ChanceIn(2))
-            //    {
-            //        SetDefaultAIController(AIControllers[typeof(Meander)]);
-            //    }
-            //    */
-            //}
+                /*
+                if (SiRandom.ChanceIn(2))
+                {
+                    SetDefaultAIController(AIControllers[typeof(HostileEngagement)]);
+                }
+                if (SiRandom.ChanceIn(2))
+                {
+                */
+                SetCurrentAIController(AIControllers[typeof(Taunt)]);
+                /*
+                }
+                else if (SiRandom.ChanceIn(2))
+                {
+                    SetDefaultAIController(AIControllers[typeof(Meander)]);
+                }
+                */
+            }
 
             if (IsHostile)
             {
@@ -144,7 +142,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 }
             }
 
-            //CurrentAIController?.ApplyIntelligence(displacementVector);
+            CurrentAIController?.ApplyIntelligence(displacementVector);
         }
 
         #endregion
