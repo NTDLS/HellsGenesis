@@ -8,15 +8,15 @@ using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies.Peons
 {
-    internal class SpriteEnemyUves : SpriteEnemyPeonBase
+    internal class SpriteEnemyScav : SpriteEnemyPeonBase
     {
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
 
-        public SpriteEnemyUves(EngineCore gameCore)
+        public SpriteEnemyScav(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
-            ShipClass = SiEnemyClass.Uves;
+            ShipClass = SiEnemyClass.Scav;
             SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png", new Size(32, 32));
 
             if (ControlledBy == SiControlledBy.Server)
@@ -32,7 +32,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             {
                 loadout = new EnemyShipLoadout(ShipClass)
                 {
-                    Description = "→ Uves ←\n"
+                    Description = "→ Scav ←\n"
                        + "TODO: Add a description\n",
                     MaxSpeed = 3.5,
                     MaxBoost = 1.5,

@@ -10,12 +10,12 @@ namespace Si.GameEngine.Levels
     /// <summary>
     /// Levels are contained inside Situations. Each level contains a set of waves that are progressed. 
     /// </summary>
-    internal class LevelScinzadSkirmish : LevelBase
+    internal class LevelMinnowSkirmish : LevelBase
     {
-        public LevelScinzadSkirmish(EngineCore gameCore)
+        public LevelMinnowSkirmish(EngineCore gameCore)
             : base(gameCore,
-                  "Scinzad Skirmish",
-                  "Its not a skirmish, its a space aged dog fight."
+                  "Minnow Skirmish",
+                  "Its not just a skirmish, its a space aged dog fight."
                   )
         {
             TotalWaves = 5;
@@ -62,7 +62,7 @@ namespace Si.GameEngine.Levels
 
         private void AddEnemyCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            _gameCore.Sprites.Enemies.Create<SpriteEnemyScinzad>();
+            _gameCore.Sprites.Enemies.Create<SpriteEnemyMinnow>();
         }
     }
 }

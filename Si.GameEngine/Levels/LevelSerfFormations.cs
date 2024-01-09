@@ -12,11 +12,11 @@ namespace Si.GameEngine.Levels
     /// <summary>
     /// Levels are contained inside Situations. Each level contains a set of waves that are progressed. 
     /// </summary>
-    internal class LevelIrlenFormations : LevelBase
+    internal class LevelSerfFormations : LevelBase
     {
-        public LevelIrlenFormations(EngineCore gameCore)
+        public LevelSerfFormations(EngineCore gameCore)
             : base(gameCore,
-                  "Irlen Formations",
+                  "Serf Formations",
                   "They fly in formation, which look like easy targets...."
                   )
         {
@@ -37,16 +37,16 @@ namespace Si.GameEngine.Levels
 
         private void RedirectFormationCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            var formationIrlens = _gameCore.Sprites.Enemies.VisibleOfType<SpriteEnemyIrlen>()
-                .Where(o => o.Mode == SpriteEnemyIrlen.AIMode.InFormation).ToList();
+            var formationSerfs = _gameCore.Sprites.Enemies.VisibleOfType<SpriteEnemySerf>()
+                .Where(o => o.Mode == SpriteEnemySerf.AIMode.InFormation).ToList();
 
-            if (formationIrlens.Count > 0)
+            if (formationSerfs.Count > 0)
             {
-                if (formationIrlens.Exists(o => o.IsWithinCurrentScaledScreenBounds == true) == false)
+                if (formationSerfs.Exists(o => o.IsWithinCurrentScaledScreenBounds == true) == false)
                 {
-                    double angleToPlayer = formationIrlens.First().AngleTo360(_gameCore.Player.Sprite);
+                    double angleToPlayer = formationSerfs.First().AngleTo360(_gameCore.Player.Sprite);
 
-                    foreach (SpriteEnemyIrlen enemy in formationIrlens)
+                    foreach (SpriteEnemySerf enemy in formationSerfs)
                     {
                         enemy.Velocity.Angle.Degrees = angleToPlayer;
                     }
@@ -85,9 +85,9 @@ namespace Si.GameEngine.Levels
             waitingOnPopulation = false;
         }
 
-        private SpriteEnemyIrlen AddOneEnemyAt(double x, double y, double angle)
+        private SpriteEnemySerf AddOneEnemyAt(double x, double y, double angle)
         {
-            var enemy = _gameCore.Sprites.Enemies.Create<SpriteEnemyIrlen>();
+            var enemy = _gameCore.Sprites.Enemies.Create<SpriteEnemySerf>();
             enemy.LocalX = x;
             enemy.LocalY = y;
             enemy.Velocity.ThrottlePercentage = 0.8;

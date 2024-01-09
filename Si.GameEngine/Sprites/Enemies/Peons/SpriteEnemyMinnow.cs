@@ -14,15 +14,15 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
     /// <summary>
     /// 100% traditional weapons, they enforce their distance and are are moddled to provoke dog fighting. These are fast units.
     /// </summary>
-    internal class SpriteEnemyScinzad : SpriteEnemyPeonBase
+    internal class SpriteEnemyMinnow : SpriteEnemyPeonBase
     {
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
 
-        public SpriteEnemyScinzad(EngineCore gameCore)
+        public SpriteEnemyMinnow(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
-            ShipClass = SiEnemyClass.Scinzad;
+            ShipClass = SiEnemyClass.Minnow;
             SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png", new Size(32, 32));
 
             if (ControlledBy == SiControlledBy.Server)
@@ -38,7 +38,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             {
                 loadout = new EnemyShipLoadout(ShipClass)
                 {
-                    Description = "→ Scinzad ←\n"
+                    Description = "→ Minnow ←\n"
                        + "TODO: Add a description\n",
                     MaxSpeed = 3.5,
                     MaxBoost = 1.5,

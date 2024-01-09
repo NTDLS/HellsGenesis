@@ -93,11 +93,11 @@
         {
             Debug,
             AITracer,
-            Irlen,
+            Serf,
             Phoenix,
-            Scinzad,
-            Theda,
-            Uves,
+            Minnow,
+            Merc,
+            Scav,
             Devastator,
             Repulsor,
             Spectre

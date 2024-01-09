@@ -17,8 +17,8 @@ namespace Si.GameEngine.Situations
                   )
         {
             Levels.Add(new LevelPhoenixAmbush(gameCore));
-            Levels.Add(new LevelScinzadSkirmish(gameCore));
-            Levels.Add(new LevelIrlenFormations(gameCore));
+            Levels.Add(new LevelMinnowSkirmish(gameCore));
+            Levels.Add(new LevelSerfFormations(gameCore));
             Levels.Add(new LevelFreeFlight(gameCore));
         }
     }

@@ -3,9 +3,9 @@ using Si.Sprites.BasesAndInterfaces;
 
 namespace Si.GameEngine.Sprites.Enemies.Peons
 {
-    internal class SpriteEnemyIrlenDrone : SpriteEnemyIrlen, ISpriteDrone
+    internal class SpriteEnemySerfDrone : SpriteEnemySerf, ISpriteDrone
     {
-        public SpriteEnemyIrlenDrone(EngineCore gameCore)
+        public SpriteEnemySerfDrone(EngineCore gameCore)
             : base(gameCore)
         {
         }

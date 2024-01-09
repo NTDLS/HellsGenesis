@@ -11,15 +11,15 @@ using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies.Peons
 {
-    internal class SpriteEnemyIrlen : SpriteEnemyPeonBase
+    internal class SpriteEnemySerf : SpriteEnemyPeonBase
     {
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
 
-        public SpriteEnemyIrlen(EngineCore gameCore)
+        public SpriteEnemySerf(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
-            ShipClass = SiEnemyClass.Irlen;
+            ShipClass = SiEnemyClass.Serf;
             SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png", new Size(32, 32));
 
             if (ControlledBy == SiControlledBy.Server)
@@ -35,7 +35,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             {
                 loadout = new EnemyShipLoadout(ShipClass)
                 {
-                    Description = "→ Irlen ←\n"
+                    Description = "→ Serf ←\n"
                        + "TODO: Add a description\n",
                     MaxSpeed = 3.5,
                     MaxBoost = 1.5,
@@ -92,7 +92,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             if (Mode == AIMode.InFormation)
             {
                 //Since we need to handle the entire "platoon" of formation ships all at once, a good
-                //  deal of this AI is handled by the Scenerio engine(s). (see: ScenarioIrlenFormations).
+                //  deal of this AI is handled by the Scenerio engine(s). (see: ScenarioSerfFormations).
                 if (distanceToPlayer < 500 && SiRandom.PercentChance(10000) || HullHealth != initialHullHealth)
                 {
                     Mode = AIMode.MovingToFallback;
