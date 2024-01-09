@@ -26,7 +26,6 @@ namespace Si.GameEngine.Controller
         {
             foreach (var drone in Visible().OfType<ISpriteDrone>())
             {
-                //drone.ApplyIntelligence(displacementVector);
                 drone.ApplyMotion(displacementVector);
             }
         }

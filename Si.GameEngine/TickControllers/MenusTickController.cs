@@ -47,12 +47,7 @@ namespace Si.GameEngine.Controller
         public void Render(RenderTarget renderTarget)
         {
             _collection.Use(o =>
-                {
-                    foreach (var obj in o)
-                    {
-                        obj.Render(renderTarget);
-                    }
-                });
+                o.ForEach(obj => obj.Render(renderTarget)));
         }
 
         #region Factories.
