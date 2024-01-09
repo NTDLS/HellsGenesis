@@ -1,9 +1,12 @@
 ﻿using Si.GameEngine.Engine;
+using Si.GameEngine.Utility;
 using Si.GameEngine.Weapons.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared;
+using Si.Shared.ExtensionMethods;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -148,6 +151,35 @@ namespace Si.GameEngine.Sprites
                 return true;
             }
             return false;
+        }
+
+        public void FixRadarPositionIndicator()
+        {
+            if (RadarPositionIndicator != null)
+            {
+                if (_gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds, -50) == false)
+                {
+                    RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_gameCore.Player.Sprite));
+
+                    RadarPositionText.Visable = true;
+                    RadarPositionIndicator.Visable = true;
+
+                    double requiredAngle = _gameCore.Player.Sprite.AngleTo360(this);
+
+                    var offset = SiMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle), new SiPoint(200, 200));
+
+                    RadarPositionText.LocalLocation = _gameCore.Player.Sprite.Location + offset + new SiPoint(25, 25);
+                    RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
+
+                    RadarPositionIndicator.LocalLocation = _gameCore.Player.Sprite.Location + offset;
+                    RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
+                }
+                else
+                {
+                    RadarPositionText.Visable = false;
+                    RadarPositionIndicator.Visable = false;
+                }
+            }
         }
 
         public override void Cleanup()

@@ -242,6 +242,9 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 //Move sprite based on local offset.
                 LocalX -= displacementVector.X;
                 LocalY -= displacementVector.Y;
+
+                FixRadarPositionIndicator();
+
                 return;
             }
 
@@ -289,31 +292,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
             //base.ApplyMotion(displacementVector);
 
-            if (RadarPositionIndicator != null)
-            {
-                if (_gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds, -50) == false)
-                {
-                    RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_gameCore.Player.Sprite));
-
-                    RadarPositionText.Visable = true;
-                    RadarPositionIndicator.Visable = true;
-
-                    double requiredAngle = _gameCore.Player.Sprite.AngleTo360(this);
-
-                    var offset = SiMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle), new SiPoint(200, 200));
-
-                    RadarPositionText.LocalLocation = _gameCore.Player.Sprite.Location + offset + new SiPoint(25, 25);
-                    RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
-
-                    RadarPositionIndicator.LocalLocation = _gameCore.Player.Sprite.Location + offset;
-                    RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
-                }
-                else
-                {
-                    RadarPositionText.Visable = false;
-                    RadarPositionIndicator.Visable = false;
-                }
-            }
+            FixRadarPositionIndicator();
 
             if (Velocity.RecoilPercentage > 0)
             {

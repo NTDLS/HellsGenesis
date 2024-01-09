@@ -56,6 +56,17 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
 
             OnHit += SpritePlayer_OnHit;
 
+
+            if (IsDrone)
+            {
+                RadarPositionIndicator = _gameCore.Sprites.RadarPositions.Create();
+                RadarPositionIndicator.Visable = false;
+
+                RadarPositionText = _gameCore.Sprites.TextBlocks.CreateRadarPosition(
+                    gameCore.Rendering.TextFormats.RadarPositionIndicator,
+                    gameCore.Rendering.Materials.Brushes.Red, new SiPoint());
+            }
+
             AmmoLowSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);
             SystemsFailingSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Systems Failing.wav", 0.75f);
             HullBreachedSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Hull Breached.wav", 0.75f);
@@ -580,6 +591,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
 
                 ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
                 BoostAnimation.Visable = Velocity.BoostPercentage > 0;
+
+                FixRadarPositionIndicator();
             }
             else
             {
