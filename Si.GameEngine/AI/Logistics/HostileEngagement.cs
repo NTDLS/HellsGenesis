@@ -128,7 +128,7 @@ namespace Si.GameEngine.AI.Logistics
         {
             var distanceTo = _owner.DistanceTo(_observedObject);
 
-            //We are evading, dont make any other decisions until evasion is complete.
+            //We are evading, don't make any other decisions until evasion is complete.
             if (_currentAction == ActionState.EvasiveLoop)
             {
                 if (_owner.Velocity.Angle.IsBetween(_evasiveLoopTargetAngle.Degrees, _evasiveLoopTargetAngle.Degrees + 30))

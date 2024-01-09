@@ -89,9 +89,11 @@ namespace Si.GameEngine.Controller
                     }
                 }
 
+                #region LockPlayerAngleToNearbyEnemy.
+                //This needs some work. It works, but its odd - the movement is rigid.
+
                 if (GameCore.Settings.LockPlayerAngleToNearbyEnemy)
                 {
-                    #region //This needs some work. It works, but its odd - the movement is rigid.
                     if (GameCore.Input.IsKeyPressed(SiPlayerKey.RotateClockwise) == false && GameCore.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) == false)
                     {
                         if (_allowLockPlayerAngleToNearbyEnemy)
@@ -119,8 +121,8 @@ namespace Si.GameEngine.Controller
                     {
                         _allowLockPlayerAngleToNearbyEnemy = true;
                     }
-                    #endregion
                 }
+                #endregion
 
                 //Make player boost "build up" and fade-in.
                 if (GameCore.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && GameCore.Input.IsKeyPressed(SiPlayerKey.Forward)
@@ -192,7 +194,7 @@ namespace Si.GameEngine.Controller
 
                         if (Sprite.Velocity.ThrottlePercentage < 0.01)
                         {
-                            //Dont overshoot the stop.
+                            //Don't overshoot the stop.
                             Sprite.Velocity.ThrottlePercentage = 0;
                         }
                     }
@@ -205,7 +207,7 @@ namespace Si.GameEngine.Controller
                         Sprite.Velocity.ThrottlePercentage += thrustToRemove;
                         if (Sprite.Velocity.ThrottlePercentage > 0)
                         {
-                            //Dont overshoot the stop.
+                            //Don't overshoot the stop.
                             Sprite.Velocity.ThrottlePercentage = 0;
                         }
                     }
