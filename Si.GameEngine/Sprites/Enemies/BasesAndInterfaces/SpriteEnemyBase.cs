@@ -308,7 +308,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
             {
                 foreach (var weapon in Weapons)
                 {
-                    if (weapon.ApplyWeaponsLock(displacementVector, _gameCore.Player.Sprite)) //Enemy lock-on to Player. :O
+                    if (weapon.ApplyWeaponsLock(_gameCore.Player.Sprite)) //Enemy lock-on to Player. :O
                     {
                         break;
                     }

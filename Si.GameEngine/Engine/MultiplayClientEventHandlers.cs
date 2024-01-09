@@ -42,7 +42,8 @@ namespace Si.GameEngine.Engine
 
                 spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName + "Drone", enemy.MultiplayUID)
                 {
-                    Vector = new SiSpriteVector() { X = enemy.LocalX, Y = enemy.LocalY }
+                    Vector = new SiSpriteVector() { X = enemy.LocalX, Y = enemy.LocalY },
+                     enemy.GetImage
                 });
             }
 

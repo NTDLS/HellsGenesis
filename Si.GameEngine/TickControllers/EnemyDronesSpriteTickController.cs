@@ -21,26 +21,12 @@ namespace Si.GameEngine.Controller
 
         public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
-            if (GameCore.Player.Sprite != null)
-            {
-                GameCore.Player.Sprite.SelectedSecondaryWeapon?.LockedOnObjects.Clear();
-            }
-
             foreach (var enemy in Visible().Where(o => o.IsDrone == true))
             {
-                foreach (var weapon in enemy.Weapons)
-                {
-                    weapon.LockedOnObjects.Clear();
-                }
-
                 if (GameCore.Player.Sprite.Visable)
                 {
                     enemy.ApplyIntelligence(displacementVector);
-
-                    if (GameCore.Player.Sprite.SelectedSecondaryWeapon != null)
-                    {
-                        GameCore.Player.Sprite.SelectedSecondaryWeapon.ApplyWeaponsLock(displacementVector, enemy); //Player lock-on to enemy. :D
-                    }
+                    GameCore.Player.Sprite.SelectedSecondaryWeapon?.ApplyWeaponsLock(enemy); //Player lock-on to enemy. :D
                 }
 
                 var multiplayVector = enemy.GetMultiplayVector();

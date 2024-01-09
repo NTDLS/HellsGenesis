@@ -71,7 +71,7 @@ namespace Si.GameEngine.Weapons.BasesAndInterfaces
 
         }
 
-        public virtual bool ApplyWeaponsLock(SiPoint displacementVector, SpriteBase wouldFireAt)
+        public virtual bool ApplyWeaponsLock(SpriteBase wouldFireAt)
         {
             if (_owner == null)
             {
@@ -83,6 +83,14 @@ namespace Si.GameEngine.Weapons.BasesAndInterfaces
 
             if (CanLockOn)
             {
+                LockedOnObjects.ForEach(o =>
+                {
+                    o.IsLockedOn = false;
+                    o.IsLockedOnSoft = false;
+                });
+
+                LockedOnObjects.Clear();
+
                 if (_owner.IsPointingAt(wouldFireAt, MaxLockOnAngle))
                 {
                     var distance = _owner.DistanceTo(wouldFireAt);

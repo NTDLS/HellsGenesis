@@ -382,7 +382,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 weapon.RoundQuantity += munitionCount;
             }
 
-            if (SelectedSecondaryWeapon == null)//If there is no secondary weapon selected, then default to the newly added one.
+            if (SelectedSecondaryWeapon == null) //If there is no secondary weapon selected, then default to the newly added one.
             {
                 SelectedSecondaryWeapon = weapon;
             }
