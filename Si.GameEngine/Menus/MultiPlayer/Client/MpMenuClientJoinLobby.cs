@@ -70,7 +70,7 @@ namespace Si.Menus.MultiPlayer.Client
 
         private bool MpMenuClientJoinLobby_OnEscape()
         {
-            _gameCore.Menus.Insert(new MpMenuCreateOrJoinLobby(_gameCore));
+            _gameCore.Menus.Add(new MpMenuCreateOrJoinLobby(_gameCore));
             return true;
         }
 
@@ -79,7 +79,7 @@ namespace Si.Menus.MultiPlayer.Client
             var lobbyUID = Guid.Parse(item.Key);
 
             _gameCore.Multiplay.RegisterLobbyUID(lobbyUID, textboxPlayerName.Text);
-            _gameCore.Menus.Insert(new MpMenuClientSelectLoadout(_gameCore));
+            _gameCore.Menus.Add(new MpMenuClientSelectLoadout(_gameCore));
 
             return true;
         }

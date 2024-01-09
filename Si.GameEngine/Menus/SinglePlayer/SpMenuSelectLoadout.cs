@@ -72,7 +72,7 @@ namespace Si.Menus.SinglePlayer
 
             playerSprites.ForEach(sprite =>
             {
-                _gameCore.Sprites.InsertPlayer(sprite);
+                _gameCore.Sprites.AddPlayer(sprite);
                 sprite.ThrustAnimation.Visable = true;
             });
 
@@ -88,7 +88,7 @@ namespace Si.Menus.SinglePlayer
 
         private bool SpMenuSelectLoadout_OnEscape()
         {
-            _gameCore.Menus.Insert(new SpMenuSituationSelect(_gameCore));
+            _gameCore.Menus.Add(new SpMenuSituationSelect(_gameCore));
             return true;
         }
 

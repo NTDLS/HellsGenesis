@@ -175,7 +175,7 @@ namespace Si.GameEngine.Managers
                 {
                     _gameCore.Player.Sprite.Visable = false;
                     _gameCore.Player.Sprite.IsDead = false;
-                    _gameCore.Menus.Insert(new MenuStartNewGame(_gameCore));
+                    _gameCore.Menus.Add(new MenuStartNewGame(_gameCore));
                 }
             });
         }
@@ -251,7 +251,7 @@ namespace Si.GameEngine.Managers
             });
         }
 
-        public SpritePlayerBase InsertPlayer(SpritePlayerBase sprite)
+        public SpritePlayerBase AddPlayer(SpritePlayerBase sprite)
         {
             Add(sprite);
             return sprite;

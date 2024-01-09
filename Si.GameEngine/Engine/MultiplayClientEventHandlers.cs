@@ -82,16 +82,24 @@ namespace Si.GameEngine.Engine
             playerDrone.Visable = true;
             playerDrone.LocalX = 0;
             playerDrone.LocalY = 0;
-            playerDrone.Highlight = true;
 
-            _gameCore.Sprites.PlayerDrones.Insert(playerDrone);
-
+            _gameCore.Sprites.PlayerDrones.Add(playerDrone);
             //Debug.WriteLine($"Inserted Multiplay Sprite: '{selectedPlayerClass}'->'{playerMultiplayUID}'->{playerDrone.UID}");
         }
 
         public void OnSpriteCreated(SiSpriteLayout layout)
         {
-            throw new NotImplementedException();
+            var sprite = SiReflection.CreateInstanceFromTypeName<SpritePlayerBase>(layout.FullTypeName, new[] { _gameCore });
+            sprite.MultiplayUID = layout.MultiplayUID;
+            sprite.Visable = true;
+            sprite.MultiplayX = layout.Vector.X;
+            sprite.MultiplayY = layout.Vector.Y;
+            sprite.Velocity.MaxBoost = layout.Vector.MaxBoost;
+            sprite.Velocity.MaxSpeed = layout.Vector.MaxSpeed;
+            sprite.Velocity.BoostPercentage = layout.Vector.BoostPercentage;
+            sprite.Velocity.ThrottlePercentage = layout.Vector.ThrottlePercentage;
+
+            _gameCore.Sprites.Add(sprite);
         }
 
         /// <summary>

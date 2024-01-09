@@ -42,7 +42,7 @@ namespace Si.Menus.MultiPlayer
 
         private bool MenuMultiplayerHostOrJoin_OnEscape()
         {
-            _gameCore.Menus.Insert(new MenuStartNewGame(_gameCore));
+            _gameCore.Menus.Add(new MenuStartNewGame(_gameCore));
             return true;
         }
 
@@ -51,12 +51,12 @@ namespace Si.Menus.MultiPlayer
             if (item.Key == "JOIN")
             {
                 _gameCore.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);
-                _gameCore.Menus.Insert(new MpMenuClientJoinLobby(_gameCore));
+                _gameCore.Menus.Add(new MpMenuClientJoinLobby(_gameCore));
             }
             else if (item.Key == "HOST")
             {
                 _gameCore.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerHost);
-                _gameCore.Menus.Insert(new MpMenuHostCreateLobby(_gameCore));
+                _gameCore.Menus.Add(new MpMenuHostCreateLobby(_gameCore));
             }
 
             return true;

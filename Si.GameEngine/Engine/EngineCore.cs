@@ -227,7 +227,7 @@ namespace Si.GameEngine.Engine
 
         private void NewGameMenuCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            Menus.Insert(new MenuStartNewGame(this));
+            Menus.Add(new MenuStartNewGame(this));
         }
 
         public void StartEngine()

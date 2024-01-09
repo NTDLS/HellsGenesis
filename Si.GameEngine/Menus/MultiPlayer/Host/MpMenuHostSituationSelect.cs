@@ -71,7 +71,7 @@ namespace Si.Menus.MultiPlayer.Host
             _gameCore.Multiplay.DeregisterLobbyUID();
             _gameCore.Multiplay.DeleteLobby(lobbyUID);
 
-            _gameCore.Menus.Insert(new MpMenuHostCreateLobby(_gameCore));
+            _gameCore.Menus.Add(new MpMenuHostCreateLobby(_gameCore));
             return true;
         }
 
@@ -81,7 +81,7 @@ namespace Si.Menus.MultiPlayer.Host
             {
                 _gameCore.ResetGame();
                 _gameCore.Situations.Select(situation.GetType().Name);
-                _gameCore.Menus.Insert(new MpMenuHostSelectLoadout(_gameCore));
+                _gameCore.Menus.Add(new MpMenuHostSelectLoadout(_gameCore));
             }
             return true;
         }

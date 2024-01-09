@@ -87,7 +87,7 @@ namespace Si.Menus.MultiPlayer.Client
         private bool MpMenuClientLobbyWait_OnEscape()
         {
             _gameCore.Multiplay.SetLeftLobby();
-            _gameCore.Menus.Insert(new MpMenuClientSelectLoadout(_gameCore));
+            _gameCore.Menus.Add(new MpMenuClientSelectLoadout(_gameCore));
             return true;
         }
     }

@@ -727,7 +727,7 @@ namespace Si.GameEngine.Sprites
             if (_hitExplosionAnimation != null)
             {
                 _hitExplosionAnimation.Reset();
-                _gameCore.Sprites.Animations.InsertAt(_hitExplosionAnimation, this);
+                _gameCore.Sprites.Animations.AddAt(_hitExplosionAnimation, this);
             }
         }
 

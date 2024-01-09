@@ -66,7 +66,7 @@ namespace Si.Menus.SinglePlayer
 
         private bool SpMenuSituationSelect_OnEscape()
         {
-            _gameCore.Menus.Insert(new MenuStartNewGame(_gameCore));
+            _gameCore.Menus.Add(new MenuStartNewGame(_gameCore));
             return true;
         }
 
@@ -76,7 +76,7 @@ namespace Si.Menus.SinglePlayer
             {
                 _gameCore.ResetGame();
                 _gameCore.Situations.Select(situation.GetType().Name);
-                _gameCore.Menus.Insert(new SpMenuSelectLoadout(_gameCore));
+                _gameCore.Menus.Add(new SpMenuSelectLoadout(_gameCore));
             }
             return true;
         }

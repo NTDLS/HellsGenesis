@@ -73,7 +73,7 @@ namespace Si.Menus.SinglePlayer
 
             playerSprites.ForEach(sprite =>
             {
-                _gameCore.Sprites.InsertPlayer(sprite);
+                _gameCore.Sprites.AddPlayer(sprite);
                 sprite.ThrustAnimation.Visable = true;
             });
 
@@ -89,7 +89,7 @@ namespace Si.Menus.SinglePlayer
 
         private bool MpMenuHostSelectLoadout_OnEscape()
         {
-            _gameCore.Menus.Insert(new MpMenuHostSituationSelect(_gameCore));
+            _gameCore.Menus.Add(new MpMenuHostSituationSelect(_gameCore));
             return true;
         }
 
@@ -113,7 +113,7 @@ namespace Si.Menus.SinglePlayer
                 _gameCore.Player.InstantiatePlayerClass(selectedSprite.GetType());
             }
 
-            _gameCore.Menus.Insert(new MpMenuHostLobbyWait(_gameCore));
+            _gameCore.Menus.Add(new MpMenuHostLobbyWait(_gameCore));
             return true;
         }
 

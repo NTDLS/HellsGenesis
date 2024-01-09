@@ -38,7 +38,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
                 OwnerUID = UID
             };
             ThrustAnimation.Reset();
-            _gameCore.Sprites.Animations.InsertAt(ThrustAnimation, this);
+            _gameCore.Sprites.Animations.AddAt(ThrustAnimation, this);
 
             BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
             {
@@ -46,7 +46,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
                 OwnerUID = UID
             };
             BoostAnimation.Reset();
-            _gameCore.Sprites.Animations.InsertAt(BoostAnimation, this);
+            _gameCore.Sprites.Animations.AddAt(BoostAnimation, this);
 
             UpdateThrustAnimationPositions();
         }

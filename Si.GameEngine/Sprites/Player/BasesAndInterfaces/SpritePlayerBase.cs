@@ -249,7 +249,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                         OwnerUID = UID
                     };
                     //ThrustAnimation.Reset();
-                    _gameCore.Sprites.Animations.InsertAt(ThrustAnimation, this);
+                    _gameCore.Sprites.Animations.AddAt(ThrustAnimation, this);
                     ThrustAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
                 }
 
@@ -268,7 +268,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                         OwnerUID = UID
                     };
                     //BoostAnimation.Reset();
-                    _gameCore.Sprites.Animations.InsertAt(BoostAnimation, this);
+                    _gameCore.Sprites.Animations.AddAt(BoostAnimation, this);
                     BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
                 }
             }

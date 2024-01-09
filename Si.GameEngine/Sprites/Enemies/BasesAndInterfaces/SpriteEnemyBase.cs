@@ -58,7 +58,9 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         {
             _gameCore.Player.Sprite.Bounty += BountyWorth;
 
-            if (SiRandom.PercentChance(10))
+            //TODO: Recomment this line after testing.
+            //https://github.com/NTDLS/StrikeforceInfinity/issues/7
+            //if (SiRandom.PercentChance(10))
             {
                 var powerup = SiRandom.Between(0, 4) switch
                 {
@@ -73,7 +75,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 if (powerup != null)
                 {
                     powerup.LocalLocation = Location;
-                    _gameCore.Sprites.Powerups.Insert(powerup);
+                    _gameCore.Sprites.Powerups.Add(powerup);
                     _gameCore.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
                 }
             }

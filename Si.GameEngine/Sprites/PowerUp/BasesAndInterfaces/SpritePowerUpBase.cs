@@ -68,7 +68,7 @@ namespace Si.GameEngine.Sprites.Powerup.BasesAndInterfaces
         {
             _explodeSound.Play();
             _hitAnimation.Reset();
-            _gameCore.Sprites.Animations.InsertAt(_hitAnimation, this);
+            _gameCore.Sprites.Animations.AddAt(_hitAnimation, this);
             QueueForDelete();
         }
 

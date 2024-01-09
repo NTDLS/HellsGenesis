@@ -50,8 +50,9 @@ namespace Si.GameEngine.Engine
             var textBlock = _gameCore.Sprites.GetSpriteByTag<SpriteTextBlock>("PausedText");
             if (textBlock == null)
             {
-                textBlock = _gameCore.Sprites.TextBlocks.Create(_gameCore.Rendering.TextFormats.LargeBlocker, _gameCore.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText");
-                textBlock.Text = "Paused";
+                textBlock = _gameCore.Sprites.TextBlocks.Create(_gameCore.Rendering.TextFormats.LargeBlocker,
+                    _gameCore.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText", "Paused");
+
                 textBlock.LocalX = _gameCore.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
                 textBlock.LocalY = _gameCore.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
             }

@@ -71,7 +71,7 @@ namespace Si.GameEngine.Controller
             });
         }
 
-        public void Insert(MenuBase menu)
+        public void Add(MenuBase menu)
             => _collection.Use(o => o.Add(menu));
 
         public void Delete(MenuBase menu)

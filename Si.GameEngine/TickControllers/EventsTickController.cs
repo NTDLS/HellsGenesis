@@ -41,7 +41,7 @@ namespace Si.GameEngine.Controller
             Create(new TimeSpan(0, 0, 0, 5), (core, sender, refObj) =>
             {
                 GameCore.Audio.DoorIsAjarSound.Play();
-                GameCore.Menus.Insert(new MenuStartNewGame(core));
+                GameCore.Menus.Add(new MenuStartNewGame(core));
             });
         }
 
@@ -79,7 +79,7 @@ namespace Si.GameEngine.Controller
             });
         }
 
-        public SiEngineCallbackEvent Insert(SiEngineCallbackEvent obj)
+        public SiEngineCallbackEvent Add(SiEngineCallbackEvent obj)
         {
             return _collection.Use(o =>
             {

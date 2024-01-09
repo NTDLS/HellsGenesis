@@ -59,7 +59,7 @@ namespace Si.Menus.MultiPlayer.Host
         private bool MpMenuHostLobbyWait_OnEscape()
         {
             _gameCore.Multiplay.SetLeftLobby();
-            _gameCore.Menus.Insert(new MpMenuHostSelectLoadout(_gameCore));
+            _gameCore.Menus.Add(new MpMenuHostSelectLoadout(_gameCore));
             return true;
         }
 

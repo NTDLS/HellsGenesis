@@ -84,7 +84,7 @@ namespace Si.Menus.MultiPlayer.Host
 
         private bool MpMenuHostCreateLobby_OnEscape()
         {
-            _gameCore.Menus.Insert(new MpMenuCreateOrJoinLobby(_gameCore));
+            _gameCore.Menus.Add(new MpMenuCreateOrJoinLobby(_gameCore));
             return true;
         }
 
@@ -110,7 +110,7 @@ namespace Si.Menus.MultiPlayer.Host
 
             _gameCore.Multiplay.RegisterLobbyUID(lobbyUID, textboxPlayerName.Text);
 
-            _gameCore.Menus.Insert(new MpMenuHostSituationSelect(_gameCore));
+            _gameCore.Menus.Add(new MpMenuHostSituationSelect(_gameCore));
 
             return true;
         }

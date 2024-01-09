@@ -19,7 +19,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses.BasesAndInterfaces
         {
             _explodeSound?.Play();
             _explosionAnimation?.Reset();
-            _gameCore.Sprites.Animations.InsertAt(_explosionAnimation, this);
+            _gameCore.Sprites.Animations.AddAt(_explosionAnimation, this);
 
             CreateParticlesExplosion();
 

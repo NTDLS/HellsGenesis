@@ -29,7 +29,7 @@ namespace Si.GameEngine.Controller
         /// </summary>
         /// <param name="animation"></param>
         /// <param name="defaultPosition"></param>
-        public void InsertAt(SpriteAnimation animation, SpriteBase defaultPosition)
+        public void AddAt(SpriteAnimation animation, SpriteBase defaultPosition)
         {
             animation.LocalX = defaultPosition.LocalX;
             animation.LocalY = defaultPosition.LocalY;
