@@ -284,8 +284,8 @@ namespace Si.GameEngine.Managers
                         foreach (var sprite in o.Where(o => o.Visable == true))
                         {
                             //SiPoint scale, SiPoint< double > offset
-                            int x = (int)(_radarOffset.X + sprite.LocalX * _radarScale.X);
-                            int y = (int)(_radarOffset.Y + sprite.LocalY * _radarScale.Y);
+                            int x = (int)(_radarOffset.X + sprite.Location.X * _radarScale.X);
+                            int y = (int)(_radarOffset.Y + sprite.Location.Y * _radarScale.Y);
 
                             if (x > _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
                                 && x < _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width

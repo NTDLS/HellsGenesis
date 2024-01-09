@@ -956,11 +956,11 @@ namespace Si.GameEngine.Sprites
             {
                 if (this is SpritePlayerBase player && player.IsDrone)
                 {
-                    _gameCore.Rendering.FillTriangleAt(renderTarget, x, y, 10, _gameCore.Rendering.Materials.Brushes.Cyan);
+                    _gameCore.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameCore.Rendering.Materials.Brushes.Orange);
                 }
                 else if (this is SpriteEnemyBase)
                 {
-                    _gameCore.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameCore.Rendering.Materials.Brushes.WhiteSmoke);
+                    _gameCore.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameCore.Rendering.Materials.Brushes.OrangeRed);
                 }
                 else if (this is MunitionBase)
                 {
@@ -988,7 +988,6 @@ namespace Si.GameEngine.Sprites
 
                     _gameCore.Rendering.FillEllipseAt(renderTarget, x, y, size, size, color);
                 }
-
             }
         }
 
