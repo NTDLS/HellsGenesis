@@ -86,26 +86,23 @@ namespace Si.GameEngine.Engine
 
                 _gameCore.Display.GameLoopCounter.Calculate();
 
-                lock (_gameCore.Player.Sprite)
+                _gameCore.Menus.Use(m =>
                 {
-                    _gameCore.Menus.Use(m =>
+                    _gameCore.Sprites.Use(o =>
                     {
-                        _gameCore.Sprites.Use(o =>
+                        if (_pause == false)
                         {
-                            if (_pause == false)
-                            {
-                                BeforeExecuteWorldClockTick();
-                                var displacementVector = ExecuteWorldClockTick();
-                                AfterExecuteWorldClockTick(displacementVector);
-                            }
+                            BeforeExecuteWorldClockTick();
+                            var displacementVector = ExecuteWorldClockTick();
+                            AfterExecuteWorldClockTick(displacementVector);
+                        }
 
-                            _gameCore.Debug.ProcessCommand();
+                        _gameCore.Debug.ProcessCommand();
 
-                            _gameCore.Render();
-                            timer.Stop();
-                        });
+                        _gameCore.Render();
+                        timer.Stop();
                     });
-                }
+                });
 
                 var clockTime = (((double)timer.ElapsedTicks) / Stopwatch.Frequency) * 1000000;
                 var deltaClockTime = targetFrameDuration - clockTime;

@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Engine;
+﻿using NTDLS.Semaphore;
+using Si.GameEngine.Engine;
 using Si.GameEngine.Engine.Types;
 using Si.GameEngine.Menus;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
@@ -10,7 +11,7 @@ namespace Si.GameEngine.Controller
 {
     public class EventsTickController : UnvectoredTickControllerBase<SiEngineCallbackEvent>
     {
-        public List<SiEngineCallbackEvent> Collection { get; private set; } = new();
+        private readonly PessimisticSemaphore<List<SiEngineCallbackEvent>> _collection = new();
 
         public EventsTickController(EngineCore gameCore)
             : base(gameCore)
@@ -19,14 +20,17 @@ namespace Si.GameEngine.Controller
 
         public override void ExecuteWorldClockTick()
         {
-            for (int i = 0; i < Collection.Count; i++)
+            _collection.Use(o =>
             {
-                var engineEvent = Collection[i];
-                if (engineEvent.QueuedForDeletion == false)
+                for (int i = 0; i < o.Count; i++)
                 {
-                    engineEvent.CheckForTrigger();
+                    var engineEvent = o[i];
+                    if (engineEvent.QueuedForDeletion == false)
+                    {
+                        engineEvent.CheckForTrigger();
+                    }
                 }
-            }
+            });
         }
 
         /// <summary>
@@ -47,49 +51,63 @@ namespace Si.GameEngine.Controller
             SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
             SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
         {
-            lock (Collection)
+            return _collection.Use(o =>
             {
                 var obj = new SiEngineCallbackEvent(GameCore, countdown, executeCallback, refObj, callbackEventMode, callbackEventAsync);
-                Collection.Add(obj);
+                o.Add(obj);
                 return obj;
-            }
+            });
         }
 
         public SiEngineCallbackEvent Create(TimeSpan countdown, SiOnExecute executeCallback, object refObj)
         {
-            lock (Collection)
+            return _collection.Use(o =>
             {
                 var obj = new SiEngineCallbackEvent(GameCore, countdown, executeCallback, refObj);
-                Collection.Add(obj);
+                o.Add(obj);
                 return obj;
-            }
+            });
         }
 
         public SiEngineCallbackEvent Create(TimeSpan countdown, SiOnExecute executeCallback)
         {
-            lock (Collection)
+            return _collection.Use(o =>
             {
                 var obj = new SiEngineCallbackEvent(GameCore, countdown, executeCallback);
-                Collection.Add(obj);
+                o.Add(obj);
                 return obj;
-            }
+            });
         }
 
         public SiEngineCallbackEvent Insert(SiEngineCallbackEvent obj)
         {
-            lock (Collection)
+            return _collection.Use(o =>
             {
-                Collection.Add(obj);
+                o.Add(obj);
                 return obj;
-            }
+            });
         }
 
         public void Delete(SiEngineCallbackEvent obj)
         {
-            lock (Collection)
+            _collection.Use(o =>
             {
-                Collection.Remove(obj);
-            }
+                o.Remove(obj);
+            });
+        }
+
+        public void CleanupQueuedForDeletion()
+        {
+            _collection.Use(o =>
+            {
+                for (int i = 0; i < o.Count; i++)
+                {
+                    if (o[i].QueuedForDeletion)
+                    {
+                        o.Remove(o[i]);
+                    }
+                }
+            });
         }
 
         #endregion

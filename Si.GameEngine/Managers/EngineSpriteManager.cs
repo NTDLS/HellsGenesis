@@ -144,13 +144,7 @@ namespace Si.GameEngine.Managers
                 o.Where(o => o.QueuedForDeletion).ToList().ForEach(p => p.Cleanup());
                 o.RemoveAll(o => o.QueuedForDeletion);
 
-                for (int i = 0; i < _gameCore.Events.Collection.Count; i++)
-                {
-                    if (_gameCore.Events.Collection[i].QueuedForDeletion)
-                    {
-                        _gameCore.Events.Delete(_gameCore.Events.Collection[i]);
-                    }
-                }
+                _gameCore.Events.CleanupQueuedForDeletion();
 
                 _gameCore.Menus.CleanupDeletedObjects();
 

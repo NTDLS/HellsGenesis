@@ -1,4 +1,5 @@
 ﻿using NTDLS.Determinet;
+using NTDLS.Semaphore;
 using Si.GameEngine.Engine;
 using Si.GameEngine.Engine.Types;
 using System;
@@ -13,7 +14,7 @@ namespace Si.GameEngine.Managers
     public class EngineAssetManager
     {
         private readonly EngineCore _gameCore;
-        private readonly Dictionary<string, object> _collection = new();
+        private readonly PessimisticSemaphore<Dictionary<string, object>> _collection = new();
 
 #if DEBUG
         private readonly string assetRawPath = @"C:\NTDLS\StrikeforceInfinity\Si.Game\Assets";
@@ -35,9 +36,9 @@ namespace Si.GameEngine.Managers
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
             string key = $"DniNeuralNetwork({assetAbsolutePath})";
 
-            lock (_collection)
+            return _collection.Use(o =>
             {
-                if (_collection.TryGetValue(key, out var value))
+                if (o.TryGetValue(key, out var value))
                 {
                     return (value as DniNeuralNetwork).Clone();
                 }
@@ -46,12 +47,11 @@ namespace Si.GameEngine.Managers
                 if (string.IsNullOrEmpty(json) == false)
                 {
                     var network = DniNeuralNetwork.LoadFromText(json);
-                    _collection.Add(key, network);
+                    o.Add(key, network);
                     return network.Clone();
                 }
-            }
-
-            return null;
+                return null;
+            });
         }
 
         /// <summary>
@@ -103,9 +103,9 @@ namespace Si.GameEngine.Managers
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
             string key = $"Text({assetRelativePath})";
 
-            lock (_collection)
+            return _collection.Use(o =>
             {
-                if (_collection.TryGetValue(key, out var value))
+                if (o.TryGetValue(key, out var value))
                 {
                     return value as string;
                 }
@@ -116,7 +116,7 @@ namespace Si.GameEngine.Managers
                 }
 
                 return File.ReadAllText(assetAbsolutePath);
-            }
+            });
         }
 
         /// <summary>
@@ -129,19 +129,19 @@ namespace Si.GameEngine.Managers
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
             string key = $"Text({assetRelativePath})";
 
-            lock (_collection)
+            _collection.Use(o =>
             {
                 File.WriteAllText(assetAbsolutePath, value);
 
-                if (_collection.ContainsKey(key))
+                if (o.ContainsKey(key))
                 {
-                    _collection[key] = value;
+                    o[key] = value;
                 }
                 else
                 {
-                    _collection.Add(key, value);
+                    o.Add(key, value);
                 }
-            }
+            });
         }
 
         public void DeleteFile(string assetRelativePath)
@@ -149,11 +149,11 @@ namespace Si.GameEngine.Managers
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
             string key = $"Text({assetRelativePath})";
 
-            lock (_collection)
+            _collection.Use(o =>
             {
                 File.Delete(assetAbsolutePath);
-                _collection.Remove(key);
-            }
+                o.Remove(key);
+            });
         }
 
         /// <summary>
@@ -168,9 +168,9 @@ namespace Si.GameEngine.Managers
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
             string key = $"Audio({assetRelativePath})";
 
-            lock (_collection)
+            return _collection.Use(o =>
             {
-                if (_collection.TryGetValue(key, out var value))
+                if (o.TryGetValue(key, out var value))
                 {
                     return value as SiAudioClip;
                 }
@@ -178,11 +178,11 @@ namespace Si.GameEngine.Managers
                 using (var stream = new FileStream(assetAbsolutePath, FileMode.Open, FileAccess.Read))
                 {
                     var result = new SiAudioClip(_gameCore, stream, initialVolumne, loopForever);
-                    _collection.Add(key, result);
+                    o.Add(key, result);
                     stream.Close();
                     return result;
                 }
-            }
+            });
         }
 
         /// <summary>
@@ -195,17 +195,17 @@ namespace Si.GameEngine.Managers
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
             string key = $"Bitmap({assetRelativePath})";
 
-            lock (_collection)
+            return _collection.Use(o =>
             {
-                if (_collection.TryGetValue(key, out var value))
+                if (o.TryGetValue(key, out var value))
                 {
                     return value as SharpDX.Direct2D1.Bitmap;
                 }
 
                 var result = _gameCore.Rendering.GetBitmap(assetAbsolutePath);
-                _collection.Add(key, result);
+                o.Add(key, result);
                 return result;
-            }
+            });
         }
 
         /// <summary>
@@ -221,17 +221,17 @@ namespace Si.GameEngine.Managers
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
             string key = $"Bitmap({assetRelativePath})";
 
-            lock (_collection)
+            return _collection.Use(o =>
             {
-                if (_collection.TryGetValue(key, out var value))
+                if (o.TryGetValue(key, out var value))
                 {
                     return value as SharpDX.Direct2D1.Bitmap;
                 }
 
                 var result = _gameCore.Rendering.GetBitmap(assetAbsolutePath, newWidth, newHeight);
-                _collection.Add(key, result);
+                o.Add(key, result);
                 return result;
-            }
+            });
         }
     }
 }

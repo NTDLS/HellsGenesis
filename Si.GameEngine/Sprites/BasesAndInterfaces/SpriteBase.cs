@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection.Metadata;
 using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Sprites

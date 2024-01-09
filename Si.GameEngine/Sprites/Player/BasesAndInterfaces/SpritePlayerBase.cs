@@ -56,7 +56,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
 
             OnHit += SpritePlayer_OnHit;
 
-
             if (IsDrone)
             {
                 RadarPositionIndicator = _gameCore.Sprites.RadarPositions.Create();
@@ -82,7 +81,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             ShipEngineIdleSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
             ShipEngineBoostSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
         }
-
 
         public override void VisibilityChanged()
         {

@@ -1,21 +1,25 @@
-﻿using System.Reflection;
+﻿using NTDLS.Semaphore;
+using System.Reflection;
 
 namespace Si.Shared
 {
     public static class SiReflection
     {
-        static readonly Dictionary<string, Type> _typeCache = new();
-        static readonly Dictionary<string, PropertyInfo> _staticPropertyCache = new();
-        static readonly Dictionary<Type, List<Type>> _subClassesOfCache = new();
+        static readonly PessimisticSemaphore<Dictionary<string, Type>> _typeCache = new();
+        static readonly PessimisticSemaphore<Dictionary<string, PropertyInfo>> _staticPropertyCache = new();
+        static readonly PessimisticSemaphore<Dictionary<Type, List<Type>>> _subClassesOfCache = new();
 
         public static IEnumerable<Type> GetSubClassesOf<T>()
         {
-            lock (_subClassesOfCache)
+            var cached = _subClassesOfCache.Use(o =>
             {
-                if (_subClassesOfCache.TryGetValue(typeof(T), out var cached))
-                {
-                    return cached;
-                }
+                o.TryGetValue(typeof(T), out var cached);
+                return cached;
+            });
+
+            if (cached != null)
+            {
+                return cached;
             }
 
             List<Type> allTypes = new();
@@ -25,10 +29,7 @@ namespace Si.Shared
                 allTypes.AddRange(assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(T))));
             }
 
-            lock (_subClassesOfCache)
-            {
-                _subClassesOfCache.TryAdd(typeof(T), allTypes);
-            }
+            _subClassesOfCache.Use(o => o.TryAdd(typeof(T), allTypes));
 
             return allTypes;
         }
@@ -37,23 +38,25 @@ namespace Si.Shared
         {
             string key = $"[{typeName}].[{propertyName}]";
 
-            lock (_staticPropertyCache)
+            var cached = _staticPropertyCache.Use(o =>
             {
-                if (_staticPropertyCache.TryGetValue(key, out var cachedPropertyInfo))
+                if (o.TryGetValue(key, out var cachedPropertyInfo))
                 {
                     return cachedPropertyInfo.GetValue(null) as string;
                 }
+                return null;
+            });
+
+            if (cached != null)
+            {
+                return cached;
             }
 
             var type = GetTypeByName(typeName);
             var propertyInfo = type.GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Static);
             if (propertyInfo != null)
             {
-                lock (_staticPropertyCache)
-                {
-                    _staticPropertyCache.TryAdd(key, propertyInfo);
-                }
-
+                _staticPropertyCache.Use(o => o.TryAdd(key, propertyInfo));
                 return propertyInfo.GetValue(null) as string;
             }
 
@@ -84,12 +87,15 @@ namespace Si.Shared
 
         public static Type GetTypeByName(string typeName)
         {
-            lock (_typeCache)
+            var cached = _typeCache.Use(o =>
             {
-                if (_typeCache.TryGetValue(typeName, out var cachedType))
-                {
-                    return cachedType;
-                }
+                o.TryGetValue(typeName, out var cachedType);
+                return cachedType;
+            });
+
+            if (cached != null)
+            {
+                return cached;
             }
 
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
@@ -97,11 +103,7 @@ namespace Si.Shared
                 var type = assembly.GetTypes().SingleOrDefault(t => t.Name == typeName);
                 if (type != null)
                 {
-                    lock (_typeCache)
-                    {
-                        _typeCache.TryAdd(typeName, type);
-                    }
-
+                    _typeCache.Use(o => o.TryAdd(typeName, type));
                     return type;
                 }
             }
