@@ -42,7 +42,16 @@ namespace Si.GameEngine.Engine
 
                 spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName + "Drone", enemy.MultiplayUID)
                 {
-                    Vector = new SiSpriteVector() { X = enemy.LocalX, Y = enemy.LocalY }
+                    Vector = new SiSpriteVector()
+                    {
+                        X = enemy.LocalX,
+                        Y = enemy.LocalY,
+                        AngleDegrees = enemy.Velocity.Angle.Degrees,
+                        MaxSpeed = enemy.Velocity.MaxSpeed,
+                        MaxBoost = enemy.Velocity.MaxBoost,
+                        ThrottlePercentage = enemy.Velocity.ThrottlePercentage,
+                        BoostPercentage = enemy.Velocity.BoostPercentage,
+                    }
                 });
             }
 
@@ -78,6 +87,11 @@ namespace Si.GameEngine.Engine
             _gameCore.Sprites.PlayerDrones.Insert(playerDrone);
 
             //Debug.WriteLine($"Inserted Multiplay Sprite: '{selectedPlayerClass}'->'{playerMultiplayUID}'->{playerDrone.UID}");
+        }
+
+        public void OnSpriteCreated(SiSpriteLayout layout)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -142,6 +156,8 @@ namespace Si.GameEngine.Engine
                 sprite.MultiplayY = spriteInfo.Vector.Y;
                 sprite.LocalX = 0;
                 sprite.LocalY = 0;
+                sprite.Velocity.MaxSpeed = spriteInfo.Vector.MaxSpeed;
+                sprite.Velocity.MaxBoost = spriteInfo.Vector.MaxBoost;
                 sprite.Velocity.Angle.Degrees = spriteInfo.Vector.AngleDegrees;
                 sprite.Velocity.ThrottlePercentage = spriteInfo.Vector.ThrottlePercentage;
                 sprite.Velocity.BoostPercentage = spriteInfo.Vector.BoostPercentage;

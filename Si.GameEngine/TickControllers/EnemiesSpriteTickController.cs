@@ -53,6 +53,11 @@ namespace Si.GameEngine.Controller
             SpriteManager.Add(obj);
             obj.AfterCreate();
 
+            if (obj.IsDrone == false)
+            {
+                SpriteManager.MultiplayNotifyOfSpriteCreation(obj);
+            }
+
             return (T)obj;
         }
     }

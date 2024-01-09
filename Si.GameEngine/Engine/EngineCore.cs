@@ -100,6 +100,7 @@ namespace Si.GameEngine.Engine
             Multiplay.OnApplySpriteActions += _multiplayClientEventHandlers.OnApplySpriteActions;
             Multiplay.OnPlayerSpriteCreated += _multiplayClientEventHandlers.OnPlayerSpriteCreated;
             Multiplay.OnHostLevelStarted += _multiplayClientEventHandlers.OnHostLevelStarted;
+            Multiplay.OnSpriteCreated += _multiplayClientEventHandlers.OnSpriteCreated;
 
             _worldClock = new EngineWorldClock(this);
 
@@ -133,6 +134,7 @@ namespace Si.GameEngine.Engine
             Multiplay.OnApplySpriteActions += _multiplayClientEventHandlers.OnApplySpriteActions;
             Multiplay.OnPlayerSpriteCreated += _multiplayClientEventHandlers.OnPlayerSpriteCreated;
             Multiplay.OnHostLevelStarted += _multiplayClientEventHandlers.OnHostLevelStarted;
+            Multiplay.OnSpriteCreated += _multiplayClientEventHandlers.OnSpriteCreated;
 
             _worldClock = new EngineWorldClock(this);
 

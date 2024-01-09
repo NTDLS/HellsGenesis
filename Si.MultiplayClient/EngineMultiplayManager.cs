@@ -55,6 +55,12 @@ namespace Si.MultiplayClient
         /// </summary>
         public event HostLevelStarted? OnHostLevelStarted;
 
+        public delegate void SpriteCreated(SiSpriteLayout layout);
+        /// <summary>
+        /// Called when any applicable sprite is created by a client and needs to be communictaed to other lobby clients.
+        /// </summary>
+        public event SpriteCreated? OnSpriteCreated;
+
         #endregion
 
         public MultiplayState State { get; private set; } = new();
@@ -115,6 +121,14 @@ namespace Si.MultiplayClient
                 }
                 #endregion
                 return _internal_messageClient;
+            }
+        }
+
+        public void NotifySpriteCreated(SiSpriteLayout spriteLayout)
+        {
+            if (State.PlayMode != SiPlayMode.SinglePlayer)
+            {
+                MessageClient.Notify(new SiSpriteCreated(spriteLayout));
             }
         }
 
@@ -350,6 +364,14 @@ namespace Si.MultiplayClient
             else if (payload is SiPlayerSpriteCreated playerSpriteCreated)
             {
                 OnPlayerSpriteCreated?.Invoke(playerSpriteCreated.SelectedPlayerClass, playerSpriteCreated.PlayerMultiplayUID);
+            }
+            //------------------------------------------------------------------------------------------------------------------------------
+            else if (payload is SiSpriteCreated spriteCreated)
+            {
+                if (spriteCreated.Layout != null)
+                {
+                    OnSpriteCreated?.Invoke(spriteCreated.Layout);
+                }
             }
             //------------------------------------------------------------------------------------------------------------------------------
             else if (payload is SiHostStartedLevel)

@@ -29,6 +29,14 @@ namespace Si.GameEngine.Controller
             var obj = (SpritePowerupBase)Activator.CreateInstance(typeof(T), param);
             obj.LocalLocation = new SiPoint(x, y);
             SpriteManager.Add(obj);
+
+            /*
+            if (obj.IsDrone == false)
+            {
+                SpriteManager.MultiplayNotifyOfSpriteCreation(obj);
+            }
+            */
+
             return (T)obj;
         }
     }

@@ -31,10 +31,9 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
             SpriteManager = manager;
         }
 
-        public void DeleteAll()
-            => SpriteManager.DeleteAllOfType<T>();
-        public void Insert(T obj)
-            => SpriteManager.Add(obj);
+        public void DeleteAll() => SpriteManager.DeleteAllOfType<T>();
+
+        public void Insert(T obj) => SpriteManager.Add(obj);
 
         public T Create(double x, double y, string name = "")
         {

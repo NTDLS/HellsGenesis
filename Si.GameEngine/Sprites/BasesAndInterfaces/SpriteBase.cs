@@ -717,7 +717,7 @@ namespace Si.GameEngine.Sprites
                 QueueForDelete();
             }
 
-            _gameCore.Multiplay.RecordSpriteExplode(this.MultiplayUID);
+            _gameCore.Multiplay.RecordSpriteExplode(MultiplayUID);
 
             OnExplode?.Invoke(this);
         }

@@ -10,6 +10,7 @@ using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.Sprites.Powerup.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared;
+using Si.Shared.Payload;
 using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
@@ -80,6 +81,30 @@ namespace Si.GameEngine.Managers
 
         public void Add(SpriteBase item)
             => _collection.Use(o => o.Add(item));
+
+        public void MultiplayNotifyOfSpriteCreation(SpriteBase item)
+        {
+            //If this is not a drone, then tell the
+            var fullTypeName = item.GetType().FullName;
+            if (fullTypeName.EndsWith("Drone") == false)
+            {
+                _gameCore.Multiplay.NotifySpriteCreated(new SiSpriteLayout()
+                {
+                    FullTypeName = fullTypeName,
+                    MultiplayUID = item.MultiplayUID,
+                    Vector = new SiSpriteVector
+                    {
+                        X = item.LocalX,
+                        Y = item.LocalY,
+                        AngleDegrees = item.Velocity.Angle.Degrees,
+                        BoostPercentage = item.Velocity.BoostPercentage,
+                        ThrottlePercentage = item.Velocity.ThrottlePercentage,
+                        MaxBoost = item.Velocity.MaxBoost,
+                        MaxSpeed = item.Velocity.MaxSpeed,
+                    }
+                });
+            }
+        }
 
         public void Delete(SpriteBase item)
         {
