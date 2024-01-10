@@ -10,6 +10,7 @@ using Si.Shared.Payload.DroneActions;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -28,10 +29,40 @@ namespace Si.GameEngine.Sprites
 
         public SiControlledBy ControlledBy { get; set; }
 
+        public bool IsDrone { get; set; }
+
         /// <summary>
         /// Each connected client has a sprite with the same matching UID.
         /// </summary>
-        public Guid MultiplayUID { get; set; }
+        private Guid? _multiplayUID = null;
+
+        public Guid MultiplayUID
+        {
+            get
+            {
+                if (_multiplayUID == null)
+                {
+                    if (IsDrone)
+                    {
+                        throw new Exception("Drones can not be the originators of MultiplayUIDs.");
+                    }
+                    _multiplayUID = Guid.NewGuid();
+                }
+                return (Guid)_multiplayUID;
+            }
+            set
+            {
+                if (IsDrone == false)
+                {
+                    throw new Exception("Only drones can have their MultiplayUIDs set.");
+                }
+                else if (_multiplayUID == null || _multiplayUID == Guid.Empty)
+                {
+                    throw new Exception("Drone MultiplayUIDs can not be NULL or empty.");
+                }
+                _multiplayUID = value;
+            }
+        }
 
         #endregion
 
@@ -300,6 +331,9 @@ namespace Si.GameEngine.Sprites
         public SpriteBase(EngineCore gameCore, string name = "")
         {
             _gameCore = gameCore;
+
+            IsDrone = GetType().Name.EndsWith("Drone");
+
             SpriteTag = name;
             RotationMode = SiRotationMode.Rotate;
             Velocity = new SiVelocity();

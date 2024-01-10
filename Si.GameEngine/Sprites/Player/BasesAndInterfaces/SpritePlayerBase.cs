@@ -52,8 +52,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
         public SpritePlayerBase(EngineCore gameCore)
             : base(gameCore)
         {
-            MultiplayUID = Guid.NewGuid();
-
             OnHit += SpritePlayer_OnHit;
 
             if (IsDrone)

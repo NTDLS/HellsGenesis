@@ -20,7 +20,6 @@ namespace Si.GameEngine.Sprites
     {
         private readonly Dictionary<string, WeaponBase> _droneWeaponsCache = new();
 
-        public bool IsDrone { get; private set; }
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
         public SiTimeRenewableResources RenewableResources { get; set; } = new();
@@ -45,8 +44,6 @@ namespace Si.GameEngine.Sprites
         public SpriteShipBase(EngineCore gameCore, string name = "")
             : base(gameCore, name)
         {
-            IsDrone = GetType().Name.EndsWith("Drone");
-
             if (IsDrone)
             {
                 BuildDroneWeaponsCache();

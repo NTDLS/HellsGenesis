@@ -39,8 +39,6 @@ namespace Si.GameEngine.Engine
             var enemies = _gameCore.Sprites.Enemies.All();
             foreach (var enemy in enemies)
             {
-                enemy.MultiplayUID = Guid.NewGuid();
-
                 spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName + "Drone", enemy.MultiplayUID)
                 {
                     Vector = new SiSpriteVector()
@@ -91,6 +89,7 @@ namespace Si.GameEngine.Engine
         public void OnSpriteCreated(SiSpriteLayout layout)
         {
             var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName, new[] { _gameCore });
+            sprite.IsDrone = true;
             sprite.MultiplayUID = layout.MultiplayUID;
             sprite.Visable = true;
             sprite.MultiplayX = layout.Vector.X;
