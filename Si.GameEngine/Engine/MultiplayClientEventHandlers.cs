@@ -8,6 +8,7 @@ using Si.Shared.Payload.DroneActions;
 using Si.Sprites.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using static Si.Shared.SiConstants;
 
@@ -43,7 +44,7 @@ namespace Si.GameEngine.Engine
             var enemies = _gameCore.Sprites.Enemies.All();
             foreach (var enemy in enemies)
             {
-                spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName + "Drone", enemy.MultiplayUID)
+                spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName, enemy.MultiplayUID)
                 {
                     Vector = new SiSpriteVector()
                     {
@@ -98,7 +99,17 @@ namespace Si.GameEngine.Engine
                 return; //We already have a sprite with this UID.
             }
 
-            var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName, new[] { _gameCore });
+            SpriteBase sprite;
+
+            if (SiReflection.DoesTypeExist(layout.FullTypeName + "Drone"))
+            {
+                sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName + "Drone", new[] { _gameCore });
+            }
+            else
+            {
+                sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName, new[] { _gameCore });
+            }
+
             sprite.IsDrone = true;
             sprite.MultiplayUID = layout.MultiplayUID;
             sprite.Visable = true;
@@ -162,6 +173,10 @@ namespace Si.GameEngine.Engine
         /// <exception cref="InvalidOperationException"></exception>
         public void OnReceivedLevelLayout(SiSituationLayout situationLayout)
         {
+            //Maybe we only do this for newcomers to a game already in session and just rely on
+            //  OnSpriteCreated() to add sprites to the clients that start the game with the host.
+
+            /*
             _gameCore.Sprites.Enemies.DeleteAll();
 
             foreach (var spriteInfo in situationLayout.Sprites)
@@ -186,6 +201,7 @@ namespace Si.GameEngine.Engine
                     _ => throw new InvalidOperationException("Unhandled PlayMode")
                 };
             }
+            */
         }
     }
 }

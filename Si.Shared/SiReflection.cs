@@ -52,7 +52,8 @@ namespace Si.Shared
                 return cached;
             }
 
-            var type = GetTypeByName(typeName);
+            var type = GetTypeByName(typeName) ?? throw new Exception("Type not found.");
+
             var propertyInfo = type.GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Static);
             if (propertyInfo != null)
             {
@@ -75,17 +76,22 @@ namespace Si.Shared
 
         public static T? CreateInstanceFromTypeName<T>(string typeName, object[] constructorArgs)
         {
-            var type = GetTypeByName(typeName);
+            var type = GetTypeByName(typeName) ?? throw new Exception("Type not found.");
             return (T?)Activator.CreateInstance(type, constructorArgs);
         }
 
         public static T? CreateInstanceFromTypeName<T>(string typeName)
         {
-            var type = GetTypeByName(typeName);
+            var type = GetTypeByName(typeName) ?? throw new Exception("Type not found.");
             return (T?)Activator.CreateInstance(type);
         }
 
-        public static Type GetTypeByName(string typeName)
+        public static bool DoesTypeExist(string typeName)
+        {
+            return GetTypeByName(typeName) != null;
+        }
+
+        public static Type? GetTypeByName(string typeName)
         {
             var cached = _typeCache.Use(o =>
             {
@@ -107,7 +113,25 @@ namespace Si.Shared
                     return type;
                 }
             }
-            throw new Exception("Type not found.");
+
+            return null;
+        }
+
+        /// <summary>
+        // Caches all types that inherit from T;
+        /// </summary>
+        public static void BuildReflectionCacheOfType<T>()
+        {
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                foreach (var type in assembly.GetTypes())
+                {
+                    if (typeof(T).IsAssignableFrom(type) && type != typeof(T))
+                    {
+                        _ = SiReflection.GetTypeByName(type.Name);
+                    }
+                }
+            }
         }
 
         public static T? CreateInstanceOf<T>(object[] constructorArgs)

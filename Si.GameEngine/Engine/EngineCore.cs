@@ -5,7 +5,9 @@ using Si.GameEngine.Engine.GraphicsProcessing;
 using Si.GameEngine.Engine.Types;
 using Si.GameEngine.Managers;
 using Si.GameEngine.Menus;
+using Si.GameEngine.Sprites;
 using Si.MultiplayClient;
+using Si.Shared;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -102,6 +104,8 @@ namespace Si.GameEngine.Engine
             Multiplay.OnHostLevelStarted += _multiplayClientEventHandlers.OnHostLevelStarted;
             Multiplay.OnSpriteCreated += _multiplayClientEventHandlers.OnSpriteCreated;
 
+            SiReflection.BuildReflectionCacheOfType<SpriteBase>();
+
             _worldClock = new EngineWorldClock(this);
 
             Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
@@ -136,10 +140,14 @@ namespace Si.GameEngine.Engine
             Multiplay.OnHostLevelStarted += _multiplayClientEventHandlers.OnHostLevelStarted;
             Multiplay.OnSpriteCreated += _multiplayClientEventHandlers.OnSpriteCreated;
 
+            SiReflection.BuildReflectionCacheOfType<SpriteBase>();
+
             _worldClock = new EngineWorldClock(this);
 
             Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
+
+
 
         public void EnableDebugging(IDebugForm debugForm)
         {
