@@ -88,6 +88,11 @@ namespace Si.GameEngine.Engine
 
         public void OnSpriteCreated(SiSpriteLayout layout)
         {
+            if (_gameCore.Sprites.Use(o => o.Any(s => s.MultiplayUID == layout.MultiplayUID)))
+            {
+                return; //We already have a sprite with this UID.
+            }
+
             var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName, new[] { _gameCore });
             sprite.IsDrone = true;
             sprite.MultiplayUID = layout.MultiplayUID;

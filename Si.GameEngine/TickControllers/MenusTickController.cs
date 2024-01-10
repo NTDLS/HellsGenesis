@@ -2,6 +2,7 @@
 using SharpDX.Direct2D1;
 using Si.GameEngine.Engine;
 using Si.GameEngine.Menus.BasesAndInterfaces;
+using Si.GameEngine.Sprites;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,9 @@ namespace Si.GameEngine.Controller
     public class MenusTickController : UnvectoredTickControllerBase<MenuBase>
     {
         public delegate void CollectionAccessor(List<MenuBase> sprites);
+        public delegate T CollectionAccessorT<T>(List<MenuBase> sprites);
 
-        private PessimisticSemaphore<List<MenuBase>> _collection = new();
+        private readonly PessimisticSemaphore<List<MenuBase>> _collection = new();
 
         /// <summary>
         /// Determines if any active menu handles the escape key.
@@ -31,6 +33,9 @@ namespace Si.GameEngine.Controller
 
         public void Use(CollectionAccessor collectionAccessor)
             => _collection.Use(o => collectionAccessor(o));
+
+        public T Use<T>(CollectionAccessorT<T> collectionAccessor)
+            => _collection.Use<T>(o => collectionAccessor(o));
 
         public override void ExecuteWorldClockTick()
         {

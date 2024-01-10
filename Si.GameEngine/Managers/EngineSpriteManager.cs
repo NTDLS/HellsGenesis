@@ -24,6 +24,7 @@ namespace Si.GameEngine.Managers
     public class EngineSpriteManager
     {
         public delegate void CollectionAccessor(List<SpriteBase> sprites);
+        public delegate T CollectionAccessorT<T>(List<SpriteBase> sprites);
 
         private readonly EngineCore _gameCore;
         private SiPoint _radarScale;
@@ -117,6 +118,9 @@ namespace Si.GameEngine.Managers
 
         public void Use(CollectionAccessor collectionAccessor)
             => _collection.Use(o => collectionAccessor(o));
+
+        public T Use<T>(CollectionAccessorT<T> collectionAccessor)
+            => _collection.Use<T>(o => collectionAccessor(o));
 
         public void DeleteAllOfType<T>() where T : SpriteBase
         {
