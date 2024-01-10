@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
+﻿using Si.GameEngine.Sprites;
+using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.Shared;
 using Si.Shared.Messages.Notify;
 using Si.Shared.Messages.Query;
@@ -89,7 +90,7 @@ namespace Si.GameEngine.Engine
 
         public void OnSpriteCreated(SiSpriteLayout layout)
         {
-            var sprite = SiReflection.CreateInstanceFromTypeName<SpritePlayerBase>(layout.FullTypeName, new[] { _gameCore });
+            var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName, new[] { _gameCore });
             sprite.MultiplayUID = layout.MultiplayUID;
             sprite.Visable = true;
             sprite.MultiplayX = layout.Vector.X;

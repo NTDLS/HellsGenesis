@@ -85,7 +85,7 @@ namespace Si.GameEngine.Managers
         public void MultiplayNotifyOfSpriteCreation(SpriteBase item)
         {
             //If this is not a drone, then tell the
-            var fullTypeName = item.GetType().FullName;
+            var fullTypeName = item.GetType().Name;
             if (fullTypeName.EndsWith("Drone") == false)
             {
                 _gameCore.Multiplay.NotifySpriteCreated(new SiSpriteLayout()

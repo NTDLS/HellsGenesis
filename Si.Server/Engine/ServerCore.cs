@@ -321,6 +321,19 @@ namespace Si.Server.Engine
                     BroadcastNotificationToAllBut(lobby, connectionId, hostStartedLevel);
                 }
                 //------------------------------------------------------------------------------------------------------------------------------
+                else if (payload is SiSpriteCreated spriteCreated)
+                {
+                    Log.Verbose($"ConnectionId: '{connectionId}' created a sprite.");
+
+                    if (!Lobbies.TryGetByLobbyUID(session.LobbyUID, out var lobby))
+                    {
+                        Log.Exception($"The lobby was not found '{session.LobbyUID}'.");
+                        return;
+                    }
+
+                    BroadcastNotificationToAllBut(lobby, connectionId, spriteCreated);
+                }
+                //------------------------------------------------------------------------------------------------------------------------------
                 else
                 {
                     throw new NotImplementedException("The server notification is not implemented.");
