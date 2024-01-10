@@ -26,13 +26,17 @@ namespace Si.GameEngine.Engine
         }
 
         /// <summary>
-        /// The server is requesting that we as the lobby owner supply a list of sprites to populate the other connections maps.
+        /// The server is requesting that we as the lobby owner supply a list of sprites to populate other connections maps.
         /// </summary>
         /// <returns></returns>
         public List<SiSpriteLayout> OnNeedLevelLayout()
         {
             var spriteLayouts = new List<SiSpriteLayout>();
 
+            //Maybe we only do this for newcomers to a game already in session and just rely on
+            //  OnSpriteCreated() to add sprites to the clients that start the game with the host.
+
+            /*
             //--------------------------------------------------------------------------------------
             //-- Send the enemy sprites:
             //--------------------------------------------------------------------------------------
@@ -53,6 +57,7 @@ namespace Si.GameEngine.Engine
                     }
                 });
             }
+            */
 
             return spriteLayouts;
         }

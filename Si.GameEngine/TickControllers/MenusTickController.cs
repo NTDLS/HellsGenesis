@@ -15,16 +15,6 @@ namespace Si.GameEngine.Controller
 
         private readonly PessimisticSemaphore<List<MenuBase>> _collection = new();
 
-        /// <summary>
-        /// Determines if any active menu handles the escape key.
-        /// </summary>
-        /// <returns></returns>
-        public bool VisibleMenuHandlesEscape()
-        {
-            return _collection.Use(o =>
-                o.Where(o => o.HandlesEscape() == true).Any());
-        }
-
         public MenusTickController(EngineCore gameCore)
             : base(gameCore)
         {
@@ -35,6 +25,16 @@ namespace Si.GameEngine.Controller
 
         public T Use<T>(CollectionAccessorT<T> collectionAccessor)
             => _collection.Use<T>(o => collectionAccessor(o));
+
+        /// <summary>
+        /// Determines if any active menu handles the escape key.
+        /// </summary>
+        /// <returns></returns>
+        public bool DoesVisibleMenuHandleEscapeKey()
+        {
+            return _collection.Use(o =>
+                o.Where(o => o.HandlesEscape() == true).Any());
+        }
 
         public override void ExecuteWorldClockTick()
         {

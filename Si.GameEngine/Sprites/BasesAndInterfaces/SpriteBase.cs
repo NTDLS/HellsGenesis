@@ -55,11 +55,15 @@ namespace Si.GameEngine.Sprites
                 {
                     throw new Exception("Only drones can have their MultiplayUIDs set.");
                 }
-                else if (_multiplayUID == null || _multiplayUID == Guid.Empty)
+                if (_multiplayUID != null & _multiplayUID != Guid.Empty)
+                {
+                    throw new Exception("MultiplayUIDs can not be set twice.");
+                }
+                _multiplayUID = value;
+                if (_multiplayUID == null || _multiplayUID == Guid.Empty)
                 {
                     throw new Exception("Drone MultiplayUIDs can not be NULL or empty.");
                 }
-                _multiplayUID = value;
             }
         }
 

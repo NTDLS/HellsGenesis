@@ -266,7 +266,7 @@ namespace Si.Game
             if (e.KeyCode == Keys.Escape)
             {
                 //We do not want the escape key to inturrupt menus.
-                if (_gameCore.Menus.VisibleMenuHandlesEscape() == false)
+                if (_gameCore.Menus.DoesVisibleMenuHandleEscapeKey() == false)
                 {
                     _gameCore.Pause();
 

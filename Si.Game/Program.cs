@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Si.Game
@@ -9,17 +10,20 @@ namespace Si.Game
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            using (var form = new FormStartup())
+            if (args.Length == 0 || args.Where(o => o.ToLower() == "/nosplash").Any() == false)
             {
-                if (form.ShowDialog() == DialogResult.Cancel)
+                using (var form = new FormStartup())
                 {
-                    return;
+                    if (form.ShowDialog() == DialogResult.Cancel)
+                    {
+                        return;
+                    }
                 }
             }
 

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Si.Game": {
+      "commandName": "Project",
+      "commandLineArgs": "/nosplash"
+    }
+  }
+}
