@@ -39,7 +39,7 @@ namespace Si.Game
                 if ((baseX % 2) != 0) baseX++;
                 if ((baseY % 2) != 0) baseY++;
 
-                if (trackBarResolution.Minimum == 1 && baseX >= 320 && baseY >= 320)
+                if (trackBarResolution.Minimum == 1 && baseX >= 540 && baseY >= 540)
                 {
                     trackBarResolution.Minimum = i;
                 }
