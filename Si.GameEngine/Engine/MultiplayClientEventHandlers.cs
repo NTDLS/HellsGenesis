@@ -8,9 +8,7 @@ using Si.Shared.Payload.DroneActions;
 using Si.Sprites.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Engine
 {
@@ -115,6 +113,10 @@ namespace Si.GameEngine.Engine
             sprite.Visable = true;
             sprite.MultiplayX = layout.Vector.X;
             sprite.MultiplayY = layout.Vector.Y;
+            //sprite.LocalX = _gameCore.Display.BackgroundOffset.X;
+            //sprite.LocalY = _gameCore.Display.BackgroundOffset.Y;
+            sprite.LocalX = 0;
+            sprite.LocalY = 0;
             sprite.Velocity.MaxBoost = layout.Vector.MaxBoost;
             sprite.Velocity.MaxSpeed = layout.Vector.MaxSpeed;
             sprite.Velocity.BoostPercentage = layout.Vector.BoostPercentage;
