@@ -58,25 +58,28 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         {
             _gameCore.Player.Sprite.Bounty += BountyWorth;
 
-            //TODO: Recomment this line after testing.
-            //https://github.com/NTDLS/StrikeforceInfinity/issues/7
-            //if (SiRandom.PercentChance(10))
+            if (IsDrone == false)
             {
-                var powerup = SiRandom.Between(0, 4) switch
+                //TODO: Recomment this line after testing.
+                //https://github.com/NTDLS/StrikeforceInfinity/issues/7
+                //if (SiRandom.PercentChance(10))
                 {
-                    0 => new SpritePowerupAmmo(_gameCore),
-                    1 => new SpritePowerupBoost(_gameCore),
-                    2 => new SpritePowerupBounty(_gameCore),
-                    3 => new SpritePowerupRepair(_gameCore),
-                    4 => new SpritePowerupSheild(_gameCore),
-                    _ => null as SpritePowerupBase
-                };
+                    var powerup = SiRandom.Between(0, 4) switch
+                    {
+                        0 => new SpritePowerupAmmo(_gameCore),
+                        1 => new SpritePowerupBoost(_gameCore),
+                        2 => new SpritePowerupBounty(_gameCore),
+                        3 => new SpritePowerupRepair(_gameCore),
+                        4 => new SpritePowerupSheild(_gameCore),
+                        _ => null as SpritePowerupBase
+                    };
 
-                if (powerup != null)
-                {
-                    powerup.LocalLocation = Location;
-                    _gameCore.Sprites.Powerups.Add(powerup);
-                    _gameCore.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
+                    if (powerup != null)
+                    {
+                        powerup.LocalLocation = Location;
+                        _gameCore.Sprites.Powerups.Add(powerup);
+                        _gameCore.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
+                    }
                 }
             }
             base.Explode();

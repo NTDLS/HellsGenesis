@@ -323,7 +323,7 @@ namespace Si.Server.Engine
                 //------------------------------------------------------------------------------------------------------------------------------
                 else if (payload is SiSpriteCreated spriteCreated)
                 {
-                    Log.Verbose($"ConnectionId: '{connectionId}' created a sprite.");
+                    Log.Verbose($"ConnectionId: '{connectionId}' created a sprite of type {spriteCreated.Layout?.FullTypeName ?? string.Empty}.");
 
                     if (!Lobbies.TryGetByLobbyUID(session.LobbyUID, out var lobby))
                     {
