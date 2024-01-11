@@ -153,10 +153,8 @@ namespace Si.Game
                     text.AppendLine($"UID: {sprite.UID}");
                     text.AppendLine($"Location: {sprite.Location}");
 
-                    if (sprite is SpriteEnemyBase)
+                    if (sprite is SpriteEnemyBase enemy)
                     {
-                        var enemy = (SpriteEnemyBase)sprite;
-
                         text.AppendLine($"Hit Points: {enemy.HullHealth:n0}");
                         text.AppendLine($"Is Locked-on: {enemy.IsLockedOn}");
                         text.AppendLine($"Is Locked-on (Soft): {enemy.IsLockedOnSoft:n0}");
@@ -196,10 +194,8 @@ namespace Si.Game
             }
             else if (e.ClickedItem?.Text == "Save Brain")
             {
-                if (sprite is SpriteEnemyBase)
+                if (sprite is SpriteEnemyBase enemy)
                 {
-                    var enemy = (SpriteEnemyBase)sprite;
-
                     bool wasPaused = _gameCore.IsPaused();
                     if (wasPaused == false)
                     {
@@ -226,10 +222,8 @@ namespace Si.Game
             }
             else if (e.ClickedItem?.Text == "View Brain")
             {
-                if (sprite is SpriteEnemyBase)
+                if (sprite is SpriteEnemyBase enemy)
                 {
-                    var enemy = (SpriteEnemyBase)sprite;
-
                     bool wasPaused = _gameCore.IsPaused();
                     if (wasPaused == false)
                     {

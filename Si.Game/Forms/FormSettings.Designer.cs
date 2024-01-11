@@ -250,7 +250,7 @@
             buttonCancel.TabIndex = 18;
             buttonCancel.Text = "Cancel";
             buttonCancel.UseVisualStyleBackColor = true;
-            buttonCancel.Click += buttonCancel_Click;
+            buttonCancel.Click += ButtonCancel_Click;
             // 
             // buttonSave
             // 
@@ -260,7 +260,7 @@
             buttonSave.TabIndex = 19;
             buttonSave.Text = "Save";
             buttonSave.UseVisualStyleBackColor = true;
-            buttonSave.Click += buttonSave_Click;
+            buttonSave.Click += ButtonSave_Click;
             // 
             // FormSettings
             // 

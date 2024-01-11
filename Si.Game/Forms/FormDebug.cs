@@ -78,7 +78,7 @@ namespace Si.Game.Forms
 
             Shown += (object sender, EventArgs e) => textBoxCommand.Focus();
 
-            textBoxCommand.KeyUp += textBoxCommand_KeyUp;
+            textBoxCommand.KeyUp += TextBoxCommand_KeyUp;
             listViewCommands.MouseDoubleClick += ListViewCommands_MouseDoubleClick;
 
             FormClosing += (object sender, FormClosingEventArgs e) =>
@@ -117,7 +117,7 @@ namespace Si.Game.Forms
             }
         }
 
-        private void textBoxCommand_KeyUp(object sender, KeyEventArgs e)
+        private void TextBoxCommand_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up)
             {

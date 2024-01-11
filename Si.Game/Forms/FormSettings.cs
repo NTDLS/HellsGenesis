@@ -15,7 +15,7 @@ namespace Si.Game
 
         private void FormSettings_Load(object sender, EventArgs e)
         {
-            trackBarResolution.Scroll += trackBarResolution_Scroll;
+            trackBarResolution.Scroll += TrackBarResolution_Scroll;
 
             var settings = EngineCore.LoadSettings();
 
@@ -47,13 +47,13 @@ namespace Si.Game
                 if (baseX >= settings.Resolution.Width && baseY >= settings.Resolution.Height)
                 {
                     trackBarResolution.Value = i;
-                    trackBarResolution_Scroll(this, new EventArgs());
+                    TrackBarResolution_Scroll(this, new EventArgs());
                     break;
                 }
             }
         }
 
-        private void trackBarResolution_Scroll(object sender, EventArgs e)
+        private void TrackBarResolution_Scroll(object sender, EventArgs e)
         {
             int baseX = Screen.PrimaryScreen.Bounds.Width;
             int baseY = Screen.PrimaryScreen.Bounds.Height;
@@ -74,7 +74,7 @@ namespace Si.Game
             }
         }
 
-        private void buttonCancel_Click(object sender, EventArgs e)
+        private void ButtonCancel_Click(object sender, EventArgs e)
         {
             Close();
         }
@@ -96,7 +96,7 @@ namespace Si.Game
             }
             return value;
         }
-        private void buttonSave_Click(object sender, EventArgs e)
+        private void ButtonSave_Click(object sender, EventArgs e)
         {
             try
             {
