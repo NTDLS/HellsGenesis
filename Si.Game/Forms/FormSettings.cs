@@ -6,7 +6,7 @@ namespace Si.Game
 {
     public partial class FormSettings : Form
     {
-        const int MAX_RESOLUTIONS = 16;
+        const int MAX_RESOLUTIONS = 32;
 
         public FormSettings()
         {
@@ -39,7 +39,7 @@ namespace Si.Game
                 if ((baseX % 2) != 0) baseX++;
                 if ((baseY % 2) != 0) baseY++;
 
-                if (trackBarResolution.Minimum == 1 && baseX > 640 && baseY > 640)
+                if (trackBarResolution.Minimum == 1 && baseX >= 320 && baseY >= 320)
                 {
                     trackBarResolution.Minimum = i;
                 }
