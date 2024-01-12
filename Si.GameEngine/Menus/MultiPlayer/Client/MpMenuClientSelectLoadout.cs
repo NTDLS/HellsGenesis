@@ -8,6 +8,7 @@ using Si.Shared.Types.Geometry;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using static Si.Shared.SiConstants;
 
 namespace Si.Menus.SinglePlayer
 {
@@ -23,6 +24,8 @@ namespace Si.Menus.SinglePlayer
         public MpMenuClientSelectLoadout(EngineCore gameCore)
             : base(gameCore)
         {
+            _gameCore.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);
+
             var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
 
             double offsetX = currentScaledScreenBounds.X + 40;

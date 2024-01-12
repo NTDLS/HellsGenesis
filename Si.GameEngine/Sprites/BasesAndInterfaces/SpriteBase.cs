@@ -6,7 +6,7 @@ using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.Utility;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared.ExtensionMethods;
-using Si.Shared.Payload.DroneActions;
+using Si.Shared.Payload.SpriteActions;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 using System;
@@ -949,7 +949,7 @@ namespace Si.GameEngine.Sprites
         /// Also sets the current vector of the remote sprite so that we can move the sprite along that vector between updates.
         /// </summary>
         /// <param name="vector"></param>
-        public virtual void ApplyAbsoluteMultiplayVector(SiDroneActionVector vector)
+        public virtual void ApplyAbsoluteMultiplayVector(SiSpriteActionVector vector)
         {
             /* This is handled in SpriteEnemyBase and SpritePlayerBase.
             Velocity.ThrottlePercentage = vector.ThrottlePercentage;
@@ -964,7 +964,7 @@ namespace Si.GameEngine.Sprites
             */
         }
 
-        public virtual SiDroneActionVector GetMultiplayVector() { return null; }
+        public virtual SiSpriteActionVector GetMultiplayVector() { return null; }
         public virtual void VelocityChanged() { }
         public virtual void VisibilityChanged() { }
         public virtual void PositionChanged() { }

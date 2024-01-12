@@ -7,7 +7,7 @@ using Si.GameEngine.Utility;
 using Si.GameEngine.Weapons.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared;
-using Si.Shared.Payload.DroneActions;
+using Si.Shared.Payload.SpriteActions;
 using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
@@ -90,7 +90,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             }
         }
 
-        public override SiDroneActionVector GetMultiplayVector()
+        public override SiSpriteActionVector GetMultiplayVector()
         {
             if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer)
             {
@@ -98,7 +98,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 {
                     _lastMultiplaySpriteVectorUpdate = DateTime.UtcNow;
 
-                    return new SiDroneActionVector(MultiplayUID)
+                    return new SiSpriteActionVector(MultiplayUID)
                     {
                         X = _gameCore.Display.BackgroundOffset.X,
                         Y = _gameCore.Display.BackgroundOffset.Y,
@@ -555,7 +555,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
         /// Also sets the current vector of the remote sprite so that we can move the sprite along that vector between updates.
         /// </summary>
         /// <param name="vector"></param>
-        public override void ApplyAbsoluteMultiplayVector(SiDroneActionVector vector)
+        public override void ApplyAbsoluteMultiplayVector(SiSpriteActionVector vector)
         {
             Velocity.Angle.Degrees = vector.AngleDegrees;
             Velocity.ThrottlePercentage = vector.ThrottlePercentage;

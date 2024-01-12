@@ -3,7 +3,7 @@ using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.Shared;
 using Si.Shared.ExtensionMethods;
-using Si.Shared.Payload.DroneActions;
+using Si.Shared.Payload.SpriteActions;
 using Si.Shared.Types.Geometry;
 using System;
 using static Si.Shared.SiConstants;
@@ -48,7 +48,7 @@ namespace Si.GameEngine.Controller
                     {
                         if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && Sprite.IsDrone == false)
                         {
-                            _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiDroneActionFireWeapon(Sprite.MultiplayUID)
+                            _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiSpriteActionFireWeapon(Sprite.MultiplayUID)
                             {
                                 WeaponTypeName = Sprite.PrimaryWeapon.GetType().Name,
                             });
@@ -71,7 +71,7 @@ namespace Si.GameEngine.Controller
                     {
                         if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && Sprite.IsDrone == false)
                         {
-                            _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiDroneActionFireWeapon(Sprite.MultiplayUID)
+                            _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiSpriteActionFireWeapon(Sprite.MultiplayUID)
                             {
                                 WeaponTypeName = Sprite.SelectedSecondaryWeapon.GetType().Name,
                             });
@@ -289,7 +289,7 @@ namespace Si.GameEngine.Controller
             Sprite.RenewableResources.RenewAllResources();
 
             var multiplayVector = Sprite.GetMultiplayVector();
-            if (multiplayVector != null)
+            if (multiplayVector != null && Sprite.Visable)
             {
                 _gameCore.Multiplay.RecordDroneActionVector(multiplayVector);
             }

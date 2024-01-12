@@ -1,7 +1,7 @@
 ﻿using Si.GameEngine.Engine;
 using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
 using Si.GameEngine.Utility;
-using Si.Shared.Payload.DroneActions;
+using Si.Shared.Payload.SpriteActions;
 using Si.Shared.Types.Geometry;
 using System;
 using System.Drawing;
@@ -105,7 +105,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
         /// Applies the multiplay position of the sprite as dictated by a remote game client.
         /// </summary>
         /// <param name="vector"></param>
-        public override void ApplyAbsoluteMultiplayVector(SiDroneActionVector vector)
+        public override void ApplyAbsoluteMultiplayVector(SiSpriteActionVector vector)
         {
             ThrustAnimation.Visable = vector.ThrottlePercentage > 0;
             BoostAnimation.Visable = vector.BoostPercentage > 0;

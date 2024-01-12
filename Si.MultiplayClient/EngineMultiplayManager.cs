@@ -6,7 +6,7 @@ using Si.Shared;
 using Si.Shared.Messages.Notify;
 using Si.Shared.Messages.Query;
 using Si.Shared.Payload;
-using Si.Shared.Payload.DroneActions;
+using Si.Shared.Payload.SpriteActions;
 using System.Reflection;
 using static Si.Shared.SiConstants;
 
@@ -73,7 +73,7 @@ namespace Si.MultiplayClient
         /// </summary>
         private readonly int _clientListenUdpPort = UdpMessageManager.GetRandomUnusedUDPPort(5000, 8000);
 
-        private readonly List<SiDroneAction> _spriteActionBuffer = new();
+        private readonly List<SiSpriteAction> _spriteActionBuffer = new();
         private UdpMessageManager? _internal_udpManager;
         private MessageClient? _internal_messageClient;
 
@@ -411,7 +411,7 @@ namespace Si.MultiplayClient
         /// Buffers sprite vector information so that all of the updates can be sent at one time at the end of the game loop.
         /// </summary>
         /// <param name="multiplayEvent"></param>
-        public void RecordDroneActionVector(SiDroneActionVector multiplayEvent)
+        public void RecordDroneActionVector(SiSpriteActionVector multiplayEvent)
         {
             if (ShouldRecordEvents)
             {
@@ -423,7 +423,7 @@ namespace Si.MultiplayClient
         /// Buffers sprite vector information so that all of the updates can be sent at one time at the end of the game loop.
         /// </summary>
         /// <param name="multiplayerEvent"></param>
-        public void RecordDroneActionFireWeapon(SiDroneActionFireWeapon multiplayEvent)
+        public void RecordDroneActionFireWeapon(SiSpriteActionFireWeapon multiplayEvent)
         {
             if (ShouldRecordEvents)
             {
@@ -439,7 +439,7 @@ namespace Si.MultiplayClient
         {
             if (ShouldRecordEvents && multiplayUID != null)
             {
-                _spriteActionBuffer.Add(new SiDroneActionExplode((Guid)multiplayUID));
+                _spriteActionBuffer.Add(new SiSpriteActionExplode((Guid)multiplayUID));
             }
         }
 
@@ -447,7 +447,7 @@ namespace Si.MultiplayClient
         {
             if (ShouldRecordEvents && multiplayUID != null)
             {
-                _spriteActionBuffer.Add(new SiDroneActionDelete((Guid)multiplayUID));
+                _spriteActionBuffer.Add(new SiSpriteActionDelete((Guid)multiplayUID));
             }
         }
 
@@ -455,7 +455,7 @@ namespace Si.MultiplayClient
         {
             if (ShouldRecordEvents && multiplayUID != null)
             {
-                _spriteActionBuffer.Add(new SiDroneActionHit((Guid)multiplayUID));
+                _spriteActionBuffer.Add(new SiSpriteActionHit((Guid)multiplayUID));
             }
         }
 

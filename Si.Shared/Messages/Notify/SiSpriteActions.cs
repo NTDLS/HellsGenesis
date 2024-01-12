@@ -1,5 +1,5 @@
 ﻿using NTDLS.UDPPacketFraming.Payloads;
-using Si.Shared.Payload.DroneActions;
+using Si.Shared.Payload.SpriteActions;
 
 namespace Si.Shared.Messages.Notify
 {
@@ -9,9 +9,9 @@ namespace Si.Shared.Messages.Notify
     public class SiSpriteActions : IUDPPayloadNotification
     {
         public Guid ConnectionId { get; set; }
-        public List<SiDroneAction> Collection { get; set; }
+        public List<SiSpriteAction> Collection { get; set; }
 
-        public SiSpriteActions(List<SiDroneAction> collection)
+        public SiSpriteActions(List<SiSpriteAction> collection)
         {
             Collection = collection;
         }

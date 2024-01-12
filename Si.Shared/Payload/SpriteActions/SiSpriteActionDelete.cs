@@ -1,11 +1,11 @@
-﻿namespace Si.Shared.Payload.DroneActions
+﻿namespace Si.Shared.Payload.SpriteActions
 {
     /// <summary>
     /// Drone needs to be deleted, not exploded.
     /// </summary>
-    public class SiDroneActionDelete : SiDroneAction
+    public class SiSpriteActionDelete : SiSpriteAction
     {
-        public SiDroneActionDelete(Guid playerMultiplayUID)
+        public SiSpriteActionDelete(Guid playerMultiplayUID)
             : base(playerMultiplayUID)
         {
         }

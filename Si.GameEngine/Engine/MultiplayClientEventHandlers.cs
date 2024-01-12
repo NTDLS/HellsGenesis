@@ -4,7 +4,7 @@ using Si.Shared;
 using Si.Shared.Messages.Notify;
 using Si.Shared.Messages.Query;
 using Si.Shared.Payload;
-using Si.Shared.Payload.DroneActions;
+using Si.Shared.Payload.SpriteActions;
 using Si.Sprites.BasesAndInterfaces;
 using System;
 using System.Collections.Generic;
@@ -99,6 +99,7 @@ namespace Si.GameEngine.Engine
 
             SpriteBase sprite;
 
+            //If the sprite has a dedicated "...Drone" type then create it instead.
             if (SiReflection.DoesTypeExist(layout.FullTypeName + "Drone"))
             {
                 sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName + "Drone", new[] { _gameCore });
@@ -113,10 +114,8 @@ namespace Si.GameEngine.Engine
             sprite.Visable = true;
             sprite.MultiplayX = layout.Vector.X;
             sprite.MultiplayY = layout.Vector.Y;
-            //sprite.LocalX = _gameCore.Display.BackgroundOffset.X;
-            //sprite.LocalY = _gameCore.Display.BackgroundOffset.Y;
-            sprite.LocalX = 0;
-            sprite.LocalY = 0;
+            sprite.LocalX = -_gameCore.Display.BackgroundOffset.X;
+            sprite.LocalY = -_gameCore.Display.BackgroundOffset.Y;
             sprite.Velocity.MaxBoost = layout.Vector.MaxBoost;
             sprite.Velocity.MaxSpeed = layout.Vector.MaxSpeed;
             sprite.Velocity.BoostPercentage = layout.Vector.BoostPercentage;
@@ -144,28 +143,32 @@ namespace Si.GameEngine.Engine
 
                 foreach (var action in actions.Collection)
                 {
-                    var drone = sprites.Where(o => o.MultiplayUID == action.MultiplayUID).FirstOrDefault() as ISpriteDrone;
-                    if (drone != null)
+                    var sprite = sprites.SingleOrDefault(o => o.MultiplayUID == action.MultiplayUID);
+                    if (sprite != null)
                     {
-                        if (action is SiDroneActionVector vector)
+                        if (action is SiSpriteActionVector vector)
                         {
-                            drone.ApplyAbsoluteMultiplayVector(vector);
+                            sprite.ApplyAbsoluteMultiplayVector(vector);
                         }
-                        else if (action is SiDroneActionHit hit)
+                        else if (action is SiSpriteActionHit hit)
                         {
-                            drone.Hit(hit.Damage);
+                            sprite.Hit(hit.Damage);
                         }
-                        else if (action is SiDroneActionDelete)
+                        else if (action is SiSpriteActionDelete)
                         {
-                            drone.QueueForDelete();
+                            sprite.QueueForDelete();
                         }
-                        else if (action is SiDroneActionExplode)
+                        else if (action is SiSpriteActionExplode)
                         {
-                            drone.Explode();
+                            sprite.Explode();
                         }
-                        else if (action is SiDroneActionFireWeapon weaponFire)
+
+                        if (sprite is ISpriteDrone drone)
                         {
-                            drone.FireDroneWeapon(weaponFire.WeaponTypeName);
+                            if (action is SiSpriteActionFireWeapon weaponFire)
+                            {
+                                drone.FireDroneWeapon(weaponFire.WeaponTypeName);
+                            }
                         }
                     }
                 }

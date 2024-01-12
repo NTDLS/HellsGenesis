@@ -5,6 +5,7 @@ using Si.Menus.SinglePlayer;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
 using System.Timers;
+using static Si.Shared.SiConstants;
 
 namespace Si.Menus.MultiPlayer.Client
 {
@@ -21,6 +22,8 @@ namespace Si.Menus.MultiPlayer.Client
         public MpMenuClientLobbyWait(EngineCore gameCore)
             : base(gameCore)
         {
+            _gameCore.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);
+
             _currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
 
             double offsetX = _gameCore.Display.TotalCanvasSize.Width / 2;

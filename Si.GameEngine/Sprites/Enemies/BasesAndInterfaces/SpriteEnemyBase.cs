@@ -8,7 +8,7 @@ using Si.GameEngine.Sprites.Powerup.BasesAndInterfaces;
 using Si.GameEngine.Weapons.BasesAndInterfaces;
 using Si.GameEngine.Weapons.Munitions;
 using Si.Shared;
-using Si.Shared.Payload.DroneActions;
+using Si.Shared.Payload.SpriteActions;
 using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
@@ -85,7 +85,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
             base.Explode();
         }
 
-        public override SiDroneActionVector GetMultiplayVector()
+        public override SiSpriteActionVector GetMultiplayVector()
         {
             if (_gameCore.Multiplay.State.PlayMode == SiPlayMode.MutiPlayerHost)
             {
@@ -95,7 +95,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
                     var bgOffset = _gameCore.Display.BackgroundOffset;
 
-                    return new SiDroneActionVector(MultiplayUID)
+                    return new SiSpriteActionVector(MultiplayUID)
                     {
                         MultiplayUID = MultiplayUID,
                         X = LocalX + bgOffset.X,
@@ -202,7 +202,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         /// Also sets the current vector of the remote sprite so that we can move the sprite along that vector between updates.
         /// </summary>
         /// <param name="vector"></param>
-        public override void ApplyAbsoluteMultiplayVector(SiDroneActionVector vector)
+        public override void ApplyAbsoluteMultiplayVector(SiSpriteActionVector vector)
         {
             Velocity.ThrottlePercentage = vector.ThrottlePercentage;
             Velocity.BoostPercentage = vector.BoostPercentage;
@@ -374,7 +374,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
             if (weapon != null && _gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && this.IsDrone == false)
             {
-                _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiDroneActionFireWeapon(MultiplayUID)
+                _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiSpriteActionFireWeapon(MultiplayUID)
                 {
                     WeaponTypeName = weapon.GetType().Name,
                 });

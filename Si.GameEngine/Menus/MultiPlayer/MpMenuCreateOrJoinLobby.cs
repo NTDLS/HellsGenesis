@@ -17,6 +17,9 @@ namespace Si.Menus.MultiPlayer
         public MpMenuCreateOrJoinLobby(EngineCore gameCore)
             : base(gameCore)
         {
+            //Set this here incase we are comming back to this menue from the join/host menu.
+            _gameCore.Multiplay.SetPlayMode(SiPlayMode.SinglePlayer);
+
             var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
 
             double offsetX = _gameCore.Display.TotalCanvasSize.Width / 2;

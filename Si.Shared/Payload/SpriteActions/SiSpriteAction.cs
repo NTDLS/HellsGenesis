@@ -1,10 +1,10 @@
-﻿namespace Si.Shared.Payload.DroneActions
+﻿namespace Si.Shared.Payload.SpriteActions
 {
-    public class SiDroneAction
+    public class SiSpriteAction
     {
         public Guid MultiplayUID { get; set; }
 
-        public SiDroneAction(Guid multiplayUID)
+        public SiSpriteAction(Guid multiplayUID)
         {
             MultiplayUID = multiplayUID;
         }
