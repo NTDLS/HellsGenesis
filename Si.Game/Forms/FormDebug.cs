@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Windows.Forms;
 
@@ -15,6 +18,7 @@ namespace Si.Game.Forms
         private readonly List<string> _commandHistory = new();
         private int _commandHistoryIndex = 0;
         private DateTime _lastTabKeyTimestamp = DateTime.UtcNow;
+        private bool _allowHistoryBrowse = false;
 
         private void FormDebug_Load(object sender, EventArgs e)
         {
@@ -119,6 +123,16 @@ namespace Si.Game.Forms
 
         private void TextBoxCommand_KeyUp(object sender, KeyEventArgs e)
         {
+            if (textBoxCommand.Text.Length == 0)
+            {
+                _allowHistoryBrowse = true;
+            }
+
+            if (_allowHistoryBrowse == false)
+            {
+                return;
+            }
+
             if (e.KeyCode == Keys.Up)
             {
                 if (_commandHistoryIndex > 0)
@@ -138,6 +152,10 @@ namespace Si.Game.Forms
                     textBoxCommand.SelectionStart = textBoxCommand.Text.Length;
                     textBoxCommand.SelectionLength = 0;
                 }
+            }
+            else
+            {
+                _allowHistoryBrowse = false;
             }
         }
 

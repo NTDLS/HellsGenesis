@@ -1,4 +1,5 @@
 ﻿using NTDLS.Semaphore;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Si.Shared
@@ -22,7 +23,7 @@ namespace Si.Shared
                 return cached;
             }
 
-            List<Type> allTypes = new();
+            List<Type> allTypes = [];
 
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
@@ -122,15 +123,9 @@ namespace Si.Shared
         /// </summary>
         public static void BuildReflectionCacheOfType<T>()
         {
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (var item in GetSubClassesOf<T>())
             {
-                foreach (var type in assembly.GetTypes())
-                {
-                    if (typeof(T).IsAssignableFrom(type) && type != typeof(T))
-                    {
-                        _ = SiReflection.GetTypeByName(type.Name);
-                    }
-                }
+                _ = SiReflection.GetTypeByName(item.Name);
             }
         }
 

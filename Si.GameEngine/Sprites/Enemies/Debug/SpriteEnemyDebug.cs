@@ -10,7 +10,7 @@ using System;
 using System.Drawing;
 using static Si.Shared.SiConstants;
 
-namespace Si.GameEngine.Sprites.Enemies.Peons
+namespace Si.GameEngine.Sprites.Enemies.Debug
 {
     /// <summary>
     /// Debugging enemy unit - a scary sight to see.
@@ -24,7 +24,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             : base(gameCore, hullHealth, bountyMultiplier)
         {
             ShipClass = SiEnemyClass.Debug;
-            SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png", new Size(32, 32));
+            SetImage(@$"Graphics\Enemy\Debug\{ShipClass}\Hull.png", new Size(32, 32));
 
             if (ControlledBy == SiControlledBy.Server)
             {
@@ -57,9 +57,6 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             }
 
             ResetLoadout(loadout);
-
-            Velocity.MaxBoost = 1.5;
-            Velocity.MaxSpeed = SiRandom.Generator.Next(_gameCore.Settings.MaxEnemySpeed - 4, _gameCore.Settings.MaxEnemySpeed - 3);
 
             AddAIController(new HostileEngagement(_gameCore, this, _gameCore.Player.Sprite));
             AddAIController(new Taunt(_gameCore, this, _gameCore.Player.Sprite));

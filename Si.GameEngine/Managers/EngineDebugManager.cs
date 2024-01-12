@@ -1,11 +1,15 @@
 ﻿using Si.GameEngine.Engine;
 using Si.GameEngine.Engine.Debug;
 using Si.GameEngine.Engine.Debug.BasesAndInterfaces;
+using Si.GameEngine.Sprites;
+using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
+using Si.Shared;
 using Si.Shared.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Si.GameEngine.Managers
 {
@@ -35,6 +39,9 @@ namespace Si.GameEngine.Managers
             "Engine-HighlightAll|state:Required:Boolean|Highlights all visible sprites.",
             "Engine-Pause|state:Required:Boolean|Pauses and unpauses the engine.",
 
+            "Sprite-Create|typeName:Required:String,x:Required:Numeric,y:Required:Numeric|Creates a sprite at the given position.",
+            "Sprite-ListTypes||Lists all sprite types.",
+
             "Sprite-Enemies-DeleteAll||Deletes all enemy sprites.",
             "Sprite-Enemies-ExplodeAll||Explodes all enemy sprites.",
 
@@ -54,7 +61,8 @@ namespace Si.GameEngine.Managers
             "Sprite-List|typeFilter:Optional:Criterion|Lists all sprites given an optional filter. Filter is a LIKE using !% and _.",
             "Sprite-MaxBoost|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured max boost speed.",
             "Sprite-MaxSpeed|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured native boost speed.",
-            "Sprite-Move|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric|Sets a new position for a given sprite.",
+            "Sprite-MoveLocal|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric|Sets a new local position for a given sprite.",
+            "Sprite-MoveMultiplay|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric|Sets a new multiplay position for a given sprite.",
             "Sprite-Move-Center|uid:Required:Numeric|Moves a given sprite to the center of the screen.",
             "Sprite-Throttle|uid:Required:Numeric,value:Required:Numeric|Gets the current throttle percentage for a sprite.",
             "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean|Displays whether a given sprite is visible or not.",
@@ -333,6 +341,36 @@ namespace Si.GameEngine.Managers
             _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
+        public void CommandHandler_Sprite_ListTypes(DebugCommand command)
+        {
+            var spriteTypes = SiReflection.GetSubClassesOf<SpriteBase>();
+
+            StringBuilder text = new();
+
+            foreach (var item in spriteTypes)
+            {
+                text.AppendLine(item.Name.ToString());
+            }
+
+            _debugForm.WriteLine(text.ToString(), System.Drawing.Color.Black);
+        }
+
+        public void CommandHandler_Sprite_Create(DebugCommand command)
+        {
+            var typeName = command.ParameterValue<string>("typeName");
+            var x = command.ParameterValue<uint>("x");
+            var y = command.ParameterValue<uint>("y");
+
+            var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(typeName, new[] { _gameCore });
+            sprite.LocalX = x;
+            sprite.LocalY = y;
+            sprite.Visable = true;
+
+            _gameCore.Sprites.Add(sprite);
+
+            _debugForm.WriteLine($"CreatedUID: {sprite.UID}, MultiplayUID: {sprite.MultiplayUID}", System.Drawing.Color.Black);
+        }
+
         public void CommandHandler_Sprite_Player_Inspect(DebugCommand command)
         {
             _debugForm.WriteLine(_gameCore.Player.Sprite.GetInspectionText(), System.Drawing.Color.Black);
@@ -538,7 +576,7 @@ namespace Si.GameEngine.Managers
             });
         }
 
-        public void CommandHandler_Sprite_Move(DebugCommand command)
+        public void CommandHandler_Sprite_MoveLocal(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -549,6 +587,21 @@ namespace Si.GameEngine.Managers
                 {
                     sprite.LocalX = command.ParameterValue<double>("x");
                     sprite.LocalY = command.ParameterValue<double>("y");
+                }
+            });
+        }
+
+        public void CommandHandler_Sprite_MoveMultiplay(DebugCommand command)
+        {
+            var uid = command.ParameterValue<uint>("uid");
+
+            _gameCore.Sprites.Use(o =>
+            {
+                var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
+                if (sprite != null)
+                {
+                    sprite.MultiplayX = command.ParameterValue<double>("x");
+                    sprite.MultiplayY = command.ParameterValue<double>("y");
                 }
             });
         }
