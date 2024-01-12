@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Engine;
+﻿using SharpDX;
+using Si.GameEngine.Engine;
 using Si.GameEngine.Engine.Debug;
 using Si.GameEngine.Engine.Debug.BasesAndInterfaces;
 using Si.GameEngine.Sprites;
@@ -12,8 +13,6 @@ using System.Text;
 
 namespace Si.GameEngine.Managers
 {
-
-
     /// <summary>
     /// Handles keyboard debugging inquiries.
     /// </summary>
@@ -40,6 +39,8 @@ namespace Si.GameEngine.Managers
 
             "Sprite-Create|typeName:Required:String,x:Required:Numeric,y:Required:Numeric|Creates a sprite at the given position.",
             "Sprite-ListTypes||Lists all sprite types.",
+
+            "Sprite-Watch|uid:Required:Numeric|Starts a watch form to monitor various sprite metrics.",
 
             "Sprite-Enemies-DeleteAll||Deletes all enemy sprites.",
             "Sprite-Enemies-ExplodeAll||Explodes all enemy sprites.",
@@ -474,6 +475,23 @@ namespace Si.GameEngine.Managers
                 {
                     var result = baseSprite.AngleTo360(targetSprite);
                     _debugForm.WriteLine($"AngleTo: {result:n4}", System.Drawing.Color.Black);
+                }
+            });
+        }
+
+        public void CommandHandler_Sprite_Watch(DebugCommand command)
+        {
+            var uid = command.ParameterValue<uint>("uid");
+            _gameCore.Sprites.Use(o =>
+            {
+                var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
+                if (sprite != null)
+                {
+                    _debugForm.StartWatch(_gameCore, sprite);
+                }
+                else
+                {
+                    _debugForm.WriteLine($"Sprite not found: {uid}.", System.Drawing.Color.Red);
                 }
             });
         }

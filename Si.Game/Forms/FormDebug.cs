@@ -1,10 +1,12 @@
 ﻿using Si.GameEngine.Engine;
 using Si.GameEngine.Engine.Debug.BasesAndInterfaces;
+using Si.GameEngine.Sprites;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Si.Game.Forms
@@ -113,7 +115,7 @@ namespace Si.Game.Forms
         {
             if (listViewCommands.SelectedItems.Count > 0)
             {
-                ListViewItem selectedItem = listViewCommands.SelectedItems[0];
+                var selectedItem = listViewCommands.SelectedItems[0];
                 textBoxCommand.Text = selectedItem.Text;
             }
         }
@@ -224,6 +226,17 @@ namespace Si.Game.Forms
             richTextBoxOutput.SelectionStart = richTextBoxOutput.Text.Length;
             richTextBoxOutput.ScrollToCaret();
             richTextBoxOutput.ResumeLayout();
+        }
+
+        public void StartWatch(EngineCore gameCore, SpriteBase sprite)
+        {
+            new Thread(o =>
+            {
+                using (var form = new FormDebugSpriteWatch(_gameCore, sprite))
+                {
+                    form.ShowDialog();
+                }
+            }).Start();
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Si.Game
@@ -141,6 +142,7 @@ namespace Si.Game
                         menu.Items.Add("View Brain").Tag = sprite;
                     }
                     menu.Items.Add("Delete").Tag = sprite;
+                    menu.Items.Add("Watch").Tag = sprite;
 
                     var location = new Point((int)e.X + 10, (int)e.Y);
                     menu.Show(_gameCore.Display.DrawingSurface, location);
@@ -191,6 +193,14 @@ namespace Si.Game
             if (e.ClickedItem?.Text == "Delete")
             {
                 sprite.QueueForDelete();
+            }
+            else if (e.ClickedItem?.Text == "Watch")
+            {
+                new Thread(o =>
+                {
+                    using var form = new FormDebugSpriteWatch(_gameCore, sprite);
+                    form.ShowDialog();
+                }).Start();
             }
             else if (e.ClickedItem?.Text == "Save Brain")
             {
