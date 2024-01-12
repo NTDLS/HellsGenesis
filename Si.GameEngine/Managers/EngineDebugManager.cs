@@ -1,5 +1,4 @@
-﻿using SharpDX;
-using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Engine;
 using Si.GameEngine.Engine.Debug;
 using Si.GameEngine.Engine.Debug.BasesAndInterfaces;
 using Si.GameEngine.Sprites;
