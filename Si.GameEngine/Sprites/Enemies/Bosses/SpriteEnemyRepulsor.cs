@@ -68,7 +68,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             {
                 bool visibleThrust = Velocity.ThrottlePercentage > 0;
 
-                if (_thrust.IsDead == false)
+                if (_thrust.IsDeadOrExploded == false)
                 {
                     _thrust.Visable = visibleThrust;
                 }
@@ -79,7 +79,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         {
             if (_leftGun != null && _rightGun != null)
             {
-                if (_leftGun?.IsDead == false)
+                if (_leftGun?.IsDeadOrExploded == false)
                 {
                     var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - 90, new SiPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
@@ -87,7 +87,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                     _leftGun.LocalY = LocalY + pointLeft.Y;
                 }
 
-                if (_rightGun?.IsDead == false)
+                if (_rightGun?.IsDeadOrExploded == false)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 90, new SiPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
@@ -95,7 +95,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                     _rightGun.LocalY = LocalY + pointRight.Y;
                 }
 
-                if (_thrust?.IsDead == false)
+                if (_thrust?.IsDeadOrExploded == false)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(35, 35));
                     _thrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
@@ -132,13 +132,13 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
 
             //We have no engines. :(
-            if (_thrust?.IsDead == true)
+            if (_thrust?.IsDeadOrExploded == true)
             {
                 mode = AIMode.LameDuck;
             }
 
             //If we get down to one engine, slowly cut the max thrust to half of what it originally was. If we lose both, reduce it to 1.
-            if (_thrust?.IsDead == true)
+            if (_thrust?.IsDeadOrExploded == true)
             {
                 Velocity.MaxSpeed -= 0.5;
                 if (Velocity.MaxSpeed < 1)
@@ -279,7 +279,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
             if (IsHostile)
             {
-                if (distanceToPlayer < 1000 && (_rightGun?.IsDead == false || _leftGun?.IsDead == false))
+                if (distanceToPlayer < 1000 && (_rightGun?.IsDeadOrExploded == false || _leftGun?.IsDeadOrExploded == false))
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {

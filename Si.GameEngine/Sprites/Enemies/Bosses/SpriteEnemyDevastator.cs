@@ -84,11 +84,11 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             {
                 bool visibleThrust = Velocity.ThrottlePercentage > 0;
 
-                if (_leftThrust.IsDead == false)
+                if (_leftThrust.IsDeadOrExploded == false)
                 {
                     _leftThrust.Visable = visibleThrust;
                 }
-                if (_rightThrust.IsDead == false)
+                if (_rightThrust.IsDeadOrExploded == false)
                 {
                     _rightThrust.Visable = visibleThrust;
                 }
@@ -99,7 +99,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         {
             if (_leftGun != null && _rightGun != null)
             {
-                if (_leftGun.IsDead == false)
+                if (_leftGun.IsDeadOrExploded == false)
                 {
                     var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - 90, new SiPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
@@ -107,7 +107,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                     _leftGun.LocalY = LocalY + pointLeft.Y;
                 }
 
-                if (_rightGun.IsDead == false)
+                if (_rightGun.IsDeadOrExploded == false)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 90, new SiPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
@@ -115,7 +115,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                     _rightGun.LocalY = LocalY + pointRight.Y;
                 }
 
-                if (_leftThrust.IsDead == false)
+                if (_leftThrust.IsDeadOrExploded == false)
                 {
                     var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - 135, new SiPoint(35, 35));
                     _leftThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
@@ -123,7 +123,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                     _leftThrust.LocalY = LocalY + pointLeft.Y;
                 }
 
-                if (_rightThrust.IsDead == false)
+                if (_rightThrust.IsDeadOrExploded == false)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 135, new SiPoint(35, 35));
                     _rightThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
@@ -131,7 +131,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                     _rightThrust.LocalY = LocalY + pointRight.Y;
                 }
 
-                if (_turret.IsDead == false)
+                if (_turret.IsDeadOrExploded == false)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle, new SiPoint(0, 0));
                     _turret.Velocity.Angle.Degrees = AngleTo360(_gameCore.Player.Sprite);
@@ -168,13 +168,13 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
 
             //We have no engines. :(
-            if (_leftThrust.IsDead && _rightThrust.IsDead)
+            if (_leftThrust.IsDeadOrExploded && _rightThrust.IsDeadOrExploded)
             {
                 mode = AIMode.LameDuck;
             }
 
             //If we get down to one engine, slowly cut the max thrust to half of what it originally was. If we lose both, reduce it to 1.
-            int thrustHandicap = (_leftThrust.IsDead ? 0 : 1) + (_rightThrust.IsDead ? 0 : 1);
+            int thrustHandicap = (_leftThrust.IsDeadOrExploded ? 0 : 1) + (_rightThrust.IsDeadOrExploded ? 0 : 1);
             if (thrustHandicap == 1 && Velocity.MaxSpeed > _initialMaxpeed / 2)
             {
                 Velocity.MaxSpeed -= 0.5;
@@ -320,7 +320,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
             if (IsHostile)
             {
-                if (distanceToPlayer < 1000 && (_rightGun?.IsDead == false || _leftGun?.IsDead == false))
+                if (distanceToPlayer < 1000 && (_rightGun?.IsDeadOrExploded == false || _leftGun?.IsDeadOrExploded == false))
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {

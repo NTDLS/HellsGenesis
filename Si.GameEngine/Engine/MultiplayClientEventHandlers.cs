@@ -155,6 +155,10 @@ namespace Si.GameEngine.Engine
                         {
                             drone.Hit(hit.Damage);
                         }
+                        else if (action is SiDroneActionDelete)
+                        {
+                            drone.QueueForDelete();
+                        }
                         else if (action is SiDroneActionExplode)
                         {
                             drone.Explode();

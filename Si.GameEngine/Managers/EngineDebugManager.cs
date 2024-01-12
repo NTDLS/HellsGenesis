@@ -652,7 +652,7 @@ namespace Si.GameEngine.Managers
 
                 foreach (var sprite in sprites)
                 {
-                    _debugForm.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}, Position: {sprite.Location}", System.Drawing.Color.Black);
+                    _debugForm.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}, Position: {sprite.RealLocation}", System.Drawing.Color.Black);
                 }
             });
         }

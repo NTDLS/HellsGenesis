@@ -54,7 +54,7 @@ namespace Si.GameEngine.Weapons.Munitions
                 ThrottlePercentage = 1.0
             };
 
-            LocalLocation = firedFrom.Location + (xyOffset ?? SiPoint.Zero);
+            LocalLocation = firedFrom.RealLocation + (xyOffset ?? SiPoint.Zero);
 
             if (firedFrom is SpriteEnemyBase)
             {

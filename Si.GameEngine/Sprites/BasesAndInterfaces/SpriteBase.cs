@@ -101,7 +101,11 @@ namespace Si.GameEngine.Sprites
         public SiRotationMode RotationMode { get; set; }
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
         public int ShieldHealth { get; private set; } = 0; //Sheild hit-points, these take 1/2 damage.
-        public bool IsDead { get; set; } = false;
+
+        /// <summary>
+        /// The sprite still exists, but is not functional (e.g. its been shot and exploded).
+        /// </summary>
+        public bool IsDeadOrExploded { get; private set; } = false;
         public bool QueuedForDeletion => _readyForDeletion;
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
@@ -133,24 +137,25 @@ namespace Si.GameEngine.Sprites
             }
 
             return
-                  $">                    UID: {UID}y\r\n"
-                + $"                   Owner: {OwnerUID:n0}\r\n"
+                  $">                    UID: {UID}\r\n"
+                + $"           Multiplay UID: {MultiplayUID}\r\n"
+                + $"               Owner UID: {OwnerUID:n0}\r\n"
                 + $"                    Name: {GetType().Name}\r\n"
                 + $"                     Tag: {SpriteTag:n0}\r\n"
                 + $"             Is Visable?: {Visable:n0}\r\n"
                 + $"                    Size: {Size:n0}\r\n"
                 + $"                  Bounds: {Bounds:n0}\r\n"
                 + $"       Ready for Delete?: {QueuedForDeletion}\r\n"
-                + $"                Is Dead?: {IsDead}\r\n"
-                + $"                Location: {Location}\r\n"
+                + $"                Is Dead?: {IsDeadOrExploded}\r\n"
+                + $"           Real Location: {RealLocation}\r\n"
                 + $"          Local-Location: {LocalLocation}\r\n"
                 + $"      Multiplay-Location: {MultiplayLocation}\r\n"
-                + $"                   Angle: {Velocity.Angle}y\r\n"
+                + $"        Virtual Location: {VirtualLocation}\r\n"
+                + $"                   Angle: {Velocity.Angle}\r\n"
                 + $"                          {Velocity.Angle.Degrees:n2}deg\r\n"
                 + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
                 + $"                          {Velocity.Angle.RadiansUnadjusted:n2}rad unadjusted\r\n"
                 + extraInfo
-                + $"              Virtual XY: X:{LocalX + _gameCore.Display.BackgroundOffset.X:n0}, Y:{LocalY + _gameCore.Display.BackgroundOffset.Y:n0}\r\n"
                 + $"       Background Offset: {_gameCore.Display.BackgroundOffset}\r\n"
                 + $"                  Thrust: {(Velocity.ThrottlePercentage * 100):n2}\r\n"
                 + $"                   Boost: {(Velocity.BoostPercentage * 100):n2}\r\n"
@@ -220,6 +225,12 @@ namespace Si.GameEngine.Sprites
 
         public void QueueForDelete()
         {
+            if (IsDeadOrExploded == false)
+            {
+                //This sprite is being deleted but has not been killed. It is likely that this sprite still exists on remote clients.
+                _gameCore.Multiplay.RecordDroneActionDelete(_multiplayUID);
+            }
+
             _readyForDeletion = true;
             Visable = false;
             OnQueuedForDelete?.Invoke(this);
@@ -231,20 +242,17 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public SiPoint MultiplayLocation
         {
-            get =>
-                 new SiPoint(_multiPlayLocation, true);
-            set =>
-                _multiPlayLocation = value.ToWriteableCopy();
+            get => new SiPoint(_multiPlayLocation, true);
+            set => _multiPlayLocation = value.ToWriteableCopy();
         }
 
         /// <summary>
         /// The combined local and multiplay location of the sptire.
         /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
-        public SiPoint Location
+        public SiPoint RealLocation
         {
             get => new SiPoint(_localLocation.X + _multiPlayLocation.X, _localLocation.Y + _multiPlayLocation.Y, true);
-
         }
 
         /// <summary>
@@ -257,6 +265,14 @@ namespace Si.GameEngine.Sprites
             set => _localLocation = value.ToWriteableCopy();
         }
 
+        public SiPoint VirtualLocation
+        {
+            get => new SiPoint(RealLocation.X + _gameCore.Display.BackgroundOffset.X, RealLocation.Y + _gameCore.Display.BackgroundOffset.Y);
+        }
+
+        /// <summary>
+        /// Typically speaking, this would match the LocalX at the client that owns the sprite.
+        /// </summary>
         public double MultiplayX
         {
             get => _multiPlayLocation.X;
@@ -267,6 +283,9 @@ namespace Si.GameEngine.Sprites
             }
         }
 
+        /// <summary>
+        /// Typically speaking, this would match the LocalY at the client that owns the sprite.
+        /// </summary>
         public double MultiplayY
         {
             get => _multiPlayLocation.Y;
@@ -360,6 +379,11 @@ namespace Si.GameEngine.Sprites
             VisibilityChanged();
         }
 
+        public void ReviveDeadOrExploded()
+        {
+            IsDeadOrExploded = false;
+        }
+
         public void SetImage(SharpDX.Direct2D1.Bitmap bitmap)
         {
             _image = bitmap;
@@ -395,7 +419,7 @@ namespace Si.GameEngine.Sprites
         {
             if (Visable && otherObject.Visable)
             {
-                var previousPosition = otherObject.Location.ToWriteableCopy();
+                var previousPosition = otherObject.RealLocation.ToWriteableCopy();
 
                 for (int i = 0; i < otherObject.Velocity.MaxSpeed; i++)
                 {
@@ -506,7 +530,7 @@ namespace Si.GameEngine.Sprites
         /// <returns></returns>
         public virtual void Hit(int damage)
         {
-            _gameCore.Multiplay.RecordSpriteHit(MultiplayUID);
+            _gameCore.Multiplay.RecordDroneActionHit(_multiplayUID);
 
             if (ShieldHealth > 0)
             {
@@ -551,7 +575,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public void PointAtAndGoto(SiPoint location, double? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(Location, location);
+            Velocity.Angle.Degrees = SiPoint.AngleTo360(RealLocation, location);
             if (velocity != null)
             {
                 Velocity.MaxSpeed = (double)velocity;
@@ -563,7 +587,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, double? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(Location, obj.Location);
+            Velocity.Angle.Degrees = SiPoint.AngleTo360(RealLocation, obj.RealLocation);
 
             if (velocity != null)
             {
@@ -746,7 +770,7 @@ namespace Si.GameEngine.Sprites
                 attachments.Explode();
             }
 
-            IsDead = true;
+            IsDeadOrExploded = true;
             _isVisible = false;
 
             if (this is not SpriteAttachment) //Attachments are deleted when the owning object is deleted.
@@ -754,7 +778,7 @@ namespace Si.GameEngine.Sprites
                 QueueForDelete();
             }
 
-            _gameCore.Multiplay.RecordSpriteExplode(MultiplayUID);
+            _gameCore.Multiplay.RecordDroneActionExplode(_multiplayUID);
 
             OnExplode?.Invoke(this);
         }
@@ -855,9 +879,9 @@ namespace Si.GameEngine.Sprites
 
         public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(Location, to.Location);
+        public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(RealLocation, to.RealLocation);
 
-        public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(Location, to);
+        public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(RealLocation, to);
 
         /// <summary>
         /// Of the given sprites, returns the sprite that is the closest.
@@ -872,7 +896,7 @@ namespace Si.GameEngine.Sprites
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(Location, to.Location);
+                var distance = SiPoint.DistanceTo(RealLocation, to.RealLocation);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -895,7 +919,7 @@ namespace Si.GameEngine.Sprites
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(Location, to.Location);
+                var distance = SiPoint.DistanceTo(RealLocation, to.RealLocation);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;

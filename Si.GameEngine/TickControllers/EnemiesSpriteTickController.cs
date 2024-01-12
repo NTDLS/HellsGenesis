@@ -32,7 +32,7 @@ namespace Si.GameEngine.Controller
                 var multiplayVector = enemy.GetMultiplayVector();
                 if (multiplayVector != null)
                 {
-                    _gameCore.Multiplay.RecordSpriteVector(multiplayVector);
+                    _gameCore.Multiplay.RecordDroneActionVector(multiplayVector);
                 }
 
                 enemy.ApplyMotion(displacementVector);

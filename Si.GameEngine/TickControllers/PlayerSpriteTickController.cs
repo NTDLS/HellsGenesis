@@ -48,7 +48,7 @@ namespace Si.GameEngine.Controller
                     {
                         if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && Sprite.IsDrone == false)
                         {
-                            _gameCore.Multiplay.RecordSpriteWeaponFire(new SiDroneActionFireWeapon(Sprite.MultiplayUID)
+                            _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiDroneActionFireWeapon(Sprite.MultiplayUID)
                             {
                                 WeaponTypeName = Sprite.PrimaryWeapon.GetType().Name,
                             });
@@ -71,7 +71,7 @@ namespace Si.GameEngine.Controller
                     {
                         if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && Sprite.IsDrone == false)
                         {
-                            _gameCore.Multiplay.RecordSpriteWeaponFire(new SiDroneActionFireWeapon(Sprite.MultiplayUID)
+                            _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiDroneActionFireWeapon(Sprite.MultiplayUID)
                             {
                                 WeaponTypeName = Sprite.SelectedSecondaryWeapon.GetType().Name,
                             });
@@ -291,7 +291,7 @@ namespace Si.GameEngine.Controller
             var multiplayVector = Sprite.GetMultiplayVector();
             if (multiplayVector != null)
             {
-                _gameCore.Multiplay.RecordSpriteVector(multiplayVector);
+                _gameCore.Multiplay.RecordDroneActionVector(multiplayVector);
             }
 
             return displacementVector;

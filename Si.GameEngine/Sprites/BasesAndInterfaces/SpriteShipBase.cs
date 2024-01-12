@@ -165,10 +165,10 @@ namespace Si.GameEngine.Sprites
 
                     var offset = SiMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle), new SiPoint(200, 200));
 
-                    RadarPositionText.LocalLocation = _gameCore.Player.Sprite.Location + offset + new SiPoint(25, 25);
+                    RadarPositionText.LocalLocation = _gameCore.Player.Sprite.RealLocation + offset + new SiPoint(25, 25);
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
 
-                    RadarPositionIndicator.LocalLocation = _gameCore.Player.Sprite.Location + offset;
+                    RadarPositionIndicator.LocalLocation = _gameCore.Player.Sprite.RealLocation + offset;
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
                 }
                 else

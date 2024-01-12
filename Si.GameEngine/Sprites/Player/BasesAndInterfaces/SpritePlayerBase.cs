@@ -188,7 +188,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             ClearPrimaryWeapon();
             ClearSecondaryWeapons();
 
-            IsDead = false;
+            ReviveDeadOrExploded();
 
             LocalX = _gameCore.Display.TotalCanvasSize.Width / 2;
             LocalY = _gameCore.Display.TotalCanvasSize.Height / 2;

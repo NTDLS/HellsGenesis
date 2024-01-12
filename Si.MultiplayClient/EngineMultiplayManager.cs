@@ -248,11 +248,11 @@ namespace Si.MultiplayClient
         /// Lets the server know that the menues are closed, the player is on the screen and we are ready to receive the situation layout.
         /// This is also used to tell all other connections what out player class and its multiplay UID is.
         /// </summary>
-        public void NotifyPlayerSpriteCreated(Type selectedPlayerClass, Guid playerMultiplayUID)
+        public void NotifyPlayerSpriteCreated(Type selectedPlayerClass, Guid multiplayUID)
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                NotifyImmediately(new SiPlayerSpriteCreated(selectedPlayerClass.Name, playerMultiplayUID));
+                NotifyImmediately(new SiPlayerSpriteCreated(selectedPlayerClass.Name, multiplayUID));
             }
         }
 
@@ -411,7 +411,7 @@ namespace Si.MultiplayClient
         /// Buffers sprite vector information so that all of the updates can be sent at one time at the end of the game loop.
         /// </summary>
         /// <param name="multiplayEvent"></param>
-        public void RecordSpriteVector(SiDroneActionVector multiplayEvent)
+        public void RecordDroneActionVector(SiDroneActionVector multiplayEvent)
         {
             if (ShouldRecordEvents)
             {
@@ -423,7 +423,7 @@ namespace Si.MultiplayClient
         /// Buffers sprite vector information so that all of the updates can be sent at one time at the end of the game loop.
         /// </summary>
         /// <param name="multiplayerEvent"></param>
-        public void RecordSpriteWeaponFire(SiDroneActionFireWeapon multiplayEvent)
+        public void RecordDroneActionFireWeapon(SiDroneActionFireWeapon multiplayEvent)
         {
             if (ShouldRecordEvents)
             {
@@ -435,19 +435,27 @@ namespace Si.MultiplayClient
         /// Buffers sprite vector information so that all of the updates can be sent at one time at the end of the game loop.
         /// </summary>
         /// <param name="multiplayerEvent"></param>
-        public void RecordSpriteExplode(Guid playerMultiplayUID)
+        public void RecordDroneActionExplode(Guid? multiplayUID)
         {
-            if (ShouldRecordEvents)
+            if (ShouldRecordEvents && multiplayUID != null)
             {
-                _spriteActionBuffer.Add(new SiDroneActionExplode(playerMultiplayUID));
+                _spriteActionBuffer.Add(new SiDroneActionExplode((Guid)multiplayUID));
             }
         }
 
-        public void RecordSpriteHit(Guid playerMultiplayUID)
+        public void RecordDroneActionDelete(Guid? multiplayUID)
         {
-            if (ShouldRecordEvents)
+            if (ShouldRecordEvents && multiplayUID != null)
             {
-                _spriteActionBuffer.Add(new SiDroneActionHit(playerMultiplayUID));
+                _spriteActionBuffer.Add(new SiDroneActionDelete((Guid)multiplayUID));
+            }
+        }
+
+        public void RecordDroneActionHit(Guid? multiplayUID)
+        {
+            if (ShouldRecordEvents && multiplayUID != null)
+            {
+                _spriteActionBuffer.Add(new SiDroneActionHit((Guid)multiplayUID));
             }
         }
 

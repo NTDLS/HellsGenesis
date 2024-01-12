@@ -76,7 +76,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
                     if (powerup != null)
                     {
-                        powerup.LocalLocation = Location;
+                        powerup.LocalLocation = RealLocation;
                         _gameCore.Sprites.Powerups.Add(powerup);
                         _gameCore.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
                     }
@@ -374,7 +374,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
             if (weapon != null && _gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && this.IsDrone == false)
             {
-                _gameCore.Multiplay.RecordSpriteWeaponFire(new SiDroneActionFireWeapon(MultiplayUID)
+                _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiDroneActionFireWeapon(MultiplayUID)
                 {
                     WeaponTypeName = weapon.GetType().Name,
                 });
