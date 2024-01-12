@@ -44,7 +44,7 @@ namespace Si.GameEngine.AI.Logistics
 
         #region Instance parameters.
 
-        double? lastFollowDistance = null;
+        private double? _lastFollowDistance = null;
         private ActionState _currentAction = ActionState.None;
         private readonly double _distanceToKeep = 2000;
         private DateTime? _lastDecisionTime = DateTime.Now.AddHours(-1);
@@ -201,7 +201,7 @@ namespace Si.GameEngine.AI.Logistics
                     _owner.Velocity.Angle += 0.4;
                 }
 
-                double? deltaFollowDistance = lastFollowDistance - distanceTo;
+                double? deltaFollowDistance = _lastFollowDistance - distanceTo;
                 if (deltaFollowDistance != null)
                 {
                     double throttleAdjust = 0;
@@ -227,7 +227,7 @@ namespace Si.GameEngine.AI.Logistics
                     _owner.Velocity.ThrottlePercentage += throttleAdjust;
                 }
 
-                lastFollowDistance = distanceTo;
+                _lastFollowDistance = distanceTo;
             }
             else if (_currentAction == ActionState.TransitionToAttacking)
             {

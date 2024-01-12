@@ -8,7 +8,7 @@ namespace Si.Server.Engine.Managers
     internal class LobbyManager
     {
         private readonly ServerCore _serverCore;
-        readonly PessimisticSemaphore<Dictionary<Guid, Lobby>> _collection = new();
+        private readonly PessimisticSemaphore<Dictionary<Guid, Lobby>> _collection = new();
 
         public LobbyManager(ServerCore serverCore)
         {

@@ -19,8 +19,6 @@ namespace Si.GameEngine.Levels
             TotalWaves = 5;
         }
 
-        readonly List<SiEngineCallbackEvent> events = new List<SiEngineCallbackEvent>();
-
         public override void Begin()
         {
             base.Begin();

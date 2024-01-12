@@ -1,12 +1,7 @@
-﻿using Si.GameEngine.AI.Logistics;
-using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Engine;
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces;
-using Si.GameEngine.Utility;
 using Si.GameEngine.Weapons;
-using Si.Shared;
-using Si.Shared.Types.Geometry;
-using System;
 using System.Drawing;
 using static Si.Shared.SiConstants;
 

@@ -23,8 +23,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         private readonly SpriteAttachment _thrust;
 
         private readonly double _initialMaxpeed;
-
-        readonly string _assetPath = @"Graphics\Enemy\Bosses\Repulsor\";
+        private readonly string _assetPath = @"Graphics\Enemy\Bosses\Repulsor\";
 
         public SpriteEnemyRepulsor(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)

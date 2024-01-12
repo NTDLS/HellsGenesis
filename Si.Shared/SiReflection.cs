@@ -1,14 +1,13 @@
 ﻿using NTDLS.Semaphore;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Si.Shared
 {
     public static class SiReflection
     {
-        static readonly PessimisticSemaphore<Dictionary<string, Type>> _typeCache = new();
-        static readonly PessimisticSemaphore<Dictionary<string, PropertyInfo>> _staticPropertyCache = new();
-        static readonly PessimisticSemaphore<Dictionary<Type, List<Type>>> _subClassesOfCache = new();
+        private static readonly PessimisticSemaphore<Dictionary<string, Type>> _typeCache = new();
+        private static readonly PessimisticSemaphore<Dictionary<string, PropertyInfo>> _staticPropertyCache = new();
+        private static readonly PessimisticSemaphore<Dictionary<Type, List<Type>>> _subClassesOfCache = new();
 
         public static IEnumerable<Type> GetSubClassesOf<T>()
         {

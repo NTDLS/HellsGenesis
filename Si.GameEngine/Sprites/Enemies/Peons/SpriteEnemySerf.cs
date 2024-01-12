@@ -54,7 +54,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             Velocity.Angle.Degrees = AngleTo360(_gameCore.Player.Sprite);
 
-            initialHullHealth = HullHealth;
+            _initialHullHealth = HullHealth;
         }
 
         #region Artificial Intelligence.
@@ -68,12 +68,13 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             MovingToApproach,
         }
 
-        readonly int initialHullHealth = 0;
-        const double baseDistanceToKeep = 100;
-        double distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
-        const double baseFallbackDistance = 400;
-        double fallbackDistance;
-        SiAngle fallToAngle;
+        private readonly int _initialHullHealth = 0;
+        private const double _baseDistanceToKeep = 100;
+        private double _distanceToKeep = _baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
+        private const double _baseFallbackDistance = 400;
+        private double _fallbackDistance;
+        private SiAngle _fallToAngle;
+
         public AIMode Mode = AIMode.InFormation;
 
         public override void ApplyIntelligence(SiPoint displacementVector)
@@ -93,31 +94,31 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             {
                 //Since we need to handle the entire "platoon" of formation ships all at once, a good
                 //  deal of this AI is handled by the Scenerio engine(s). (see: ScenarioSerfFormations).
-                if (distanceToPlayer < 500 && SiRandom.PercentChance(10000) || HullHealth != initialHullHealth)
+                if (distanceToPlayer < 500 && SiRandom.PercentChance(10000) || HullHealth != _initialHullHealth)
                 {
                     Mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
-                    fallbackDistance = baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
+                    _fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
+                    _fallbackDistance = _baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 
             if (Mode == AIMode.Approaching)
             {
-                if (distanceToPlayer > distanceToKeep)
+                if (distanceToPlayer > _distanceToKeep)
                 {
                     PointAtAndGoto(_gameCore.Player.Sprite);
                 }
                 else
                 {
                     Mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
-                    fallbackDistance = baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
+                    _fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
+                    _fallbackDistance = _baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 
             if (Mode == AIMode.MovingToFallback)
             {
-                var deltaAngle = Velocity.Angle - fallToAngle;
+                var deltaAngle = Velocity.Angle - _fallToAngle;
 
                 if (deltaAngle.Degrees > 10)
                 {
@@ -131,7 +132,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                     }
                 }
 
-                if (distanceToPlayer > fallbackDistance)
+                if (distanceToPlayer > _fallbackDistance)
                 {
                     Mode = AIMode.MovingToApproach;
                 }
@@ -155,7 +156,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 else
                 {
                     Mode = AIMode.Approaching;
-                    distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
+                    _distanceToKeep = _baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 

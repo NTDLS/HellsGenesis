@@ -14,6 +14,8 @@ namespace Si.GameEngine.Levels
     /// </summary>
     internal class LevelSerfFormations : LevelBase
     {
+        private bool _waitingOnPopulation = false;
+
         public LevelSerfFormations(EngineCore gameCore)
             : base(gameCore,
                   "Serf Formations",
@@ -59,19 +61,17 @@ namespace Si.GameEngine.Levels
             _gameCore.Player.ResetAndShow();
         }
 
-        bool waitingOnPopulation = false;
-
         private void AdvanceWaveCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
         {
-            if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !waitingOnPopulation)
+            if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !_waitingOnPopulation)
             {
-                if (CurrentWave == TotalWaves && waitingOnPopulation != true)
+                if (CurrentWave == TotalWaves && _waitingOnPopulation != true)
                 {
                     End();
                     return;
                 }
 
-                waitingOnPopulation = true;
+                _waitingOnPopulation = true;
                 _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
                 CurrentWave++;
             }
@@ -82,7 +82,7 @@ namespace Si.GameEngine.Levels
             SiPoint baseLocation = _gameCore.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave * 5);
             _gameCore.Audio.RadarBlipsSound.Play();
-            waitingOnPopulation = false;
+            _waitingOnPopulation = false;
         }
 
         private SpriteEnemySerf AddOneEnemyAt(double x, double y, double angle)

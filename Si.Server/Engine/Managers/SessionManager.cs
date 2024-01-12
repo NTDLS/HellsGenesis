@@ -8,8 +8,7 @@ namespace Si.Server.Engine.Managers
     internal class SessionManager
     {
         private readonly ServerCore _serverCore;
-
-        readonly PessimisticSemaphore<Dictionary<Guid, Session>> _sessions = new();
+        private readonly PessimisticSemaphore<Dictionary<Guid, Session>> _sessions = new();
 
         public SessionManager(ServerCore serverCore)
         {

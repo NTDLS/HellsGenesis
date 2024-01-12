@@ -13,7 +13,7 @@ namespace Si.Menus.MultiPlayer.Client
     /// </summary>
     internal class MpMenuClientJoinLobby : MenuBase
     {
-        readonly SpriteMenuSelectableTextInput textboxPlayerName;
+        private readonly SpriteMenuSelectableTextInput _textboxPlayerName;
 
         public MpMenuClientJoinLobby(EngineCore gameCore)
             : base(gameCore)
@@ -36,20 +36,20 @@ namespace Si.Menus.MultiPlayer.Client
             double xPositionForlabel = labelName.LocalX; //Save the X position for lables.
             double xPositionForTextBox = labelName.LocalX + labelName.Size.Width; //Save the X position for textboxes.
 
-            textboxPlayerName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelName.LocalY), "PLAYERNAME", "Player 2");
-            textboxPlayerName.Selected = true;
-            textboxPlayerName.LocalY = labelName.LocalY;
+            _textboxPlayerName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelName.LocalY), "PLAYERNAME", "Player 2");
+            _textboxPlayerName.Selected = true;
+            _textboxPlayerName.LocalY = labelName.LocalY;
 
             //---------------------------------------------------------------------------------------------------------
 
-            offsetY += textboxPlayerName.Size.Height + 25;
+            offsetY += _textboxPlayerName.Size.Height + 25;
 
             //---------------------------------------------------------------------------------------------------------
             var labelplayerName = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Active Lobbies: ".PadLeft(25));
 
             //---------------------------------------------------------------------------------------------------------
 
-            offsetY += textboxPlayerName.Size.Height + 5;
+            offsetY += _textboxPlayerName.Size.Height + 5;
 
             var gameHosts = _gameCore.Multiplay.ListLobbies();
             foreach (var gameHost in gameHosts)
@@ -78,7 +78,7 @@ namespace Si.Menus.MultiPlayer.Client
         {
             var lobbyUID = Guid.Parse(item.Key);
 
-            _gameCore.Multiplay.RegisterLobbyUID(lobbyUID, textboxPlayerName.Text);
+            _gameCore.Multiplay.RegisterLobbyUID(lobbyUID, _textboxPlayerName.Text);
             _gameCore.Menus.Add(new MpMenuClientSelectLoadout(_gameCore));
 
             return true;

@@ -24,8 +24,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         private readonly SpriteAttachment _leftThrust;
 
         private readonly double _initialMaxpeed;
-
-        readonly string _assetPath = @"Graphics\Enemy\Bosses\Spectre\";
+        private readonly string _assetPath = @"Graphics\Enemy\Bosses\Spectre\";
 
         public SpriteEnemySpectre(EngineCore gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)

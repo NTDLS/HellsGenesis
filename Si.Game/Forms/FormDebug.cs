@@ -4,9 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using System.Text;
 using System.Windows.Forms;
 
@@ -18,7 +15,7 @@ namespace Si.Game.Forms
         private readonly List<string> _commandHistory = new();
         private int _commandHistoryIndex = 0;
         private DateTime _lastTabKeyTimestamp = DateTime.UtcNow;
-        private bool _allowHistoryBrowse = false;
+        private bool _IsInHistoryBrowseMode = false;
 
         private void FormDebug_Load(object sender, EventArgs e)
         {
@@ -123,12 +120,13 @@ namespace Si.Game.Forms
 
         private void TextBoxCommand_KeyUp(object sender, KeyEventArgs e)
         {
-            if (textBoxCommand.Text.Length == 0)
+            if (textBoxCommand.Text.Length == 0 && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down))
             {
-                _allowHistoryBrowse = true;
+                //If there is no text in the box, then hitting UP or DOWN enters history browse mode.
+                _IsInHistoryBrowseMode = true;
             }
 
-            if (_allowHistoryBrowse == false)
+            if (_IsInHistoryBrowseMode == false)
             {
                 return;
             }
@@ -155,7 +153,8 @@ namespace Si.Game.Forms
             }
             else
             {
-                _allowHistoryBrowse = false;
+                //Any other key press leaves history browse mode.
+                _IsInHistoryBrowseMode = false;
             }
         }
 

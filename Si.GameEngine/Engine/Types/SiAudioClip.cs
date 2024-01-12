@@ -106,7 +106,7 @@ namespace Si.GameEngine.Engine.Types
             }
         }
 
-        void FadeThread()
+        private void FadeThread()
         {
             float volumne;
 

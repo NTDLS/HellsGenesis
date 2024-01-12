@@ -6,7 +6,7 @@ namespace Si.Game
 {
     public partial class FormSettings : Form
     {
-        const int MAX_RESOLUTIONS = 32;
+        private const int MAX_RESOLUTIONS = 32;
 
         public FormSettings()
         {

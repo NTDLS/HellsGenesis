@@ -100,7 +100,7 @@ namespace Si.Server.Engine.Objects
             return lobbyInfo;
         }
 
-        bool _isPingTimerExecuting = false;
+        private bool _isPingTimerExecuting = false;
         private void PingTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             if (_isPingTimerExecuting == false)
@@ -142,7 +142,7 @@ namespace Si.Server.Engine.Objects
             }
         }
 
-        bool _isLobbyStartTimerExecuting = false;
+        private bool _isLobbyStartTimerExecuting = false;
         private void LobbyStartTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
             if (_isLobbyStartTimerExecuting == false)

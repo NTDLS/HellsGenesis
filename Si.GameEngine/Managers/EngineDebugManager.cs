@@ -2,7 +2,6 @@
 using Si.GameEngine.Engine.Debug;
 using Si.GameEngine.Engine.Debug.BasesAndInterfaces;
 using Si.GameEngine.Sprites;
-using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.Shared;
 using Si.Shared.ExtensionMethods;
 using System;
