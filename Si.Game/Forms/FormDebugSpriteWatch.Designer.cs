@@ -31,33 +31,33 @@ namespace Si.Game.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDebugSpriteWatch));
-            splitContainer1 = new System.Windows.Forms.SplitContainer();
+            splitContainerBody = new System.Windows.Forms.SplitContainer();
             listViewVariables = new BufferedListView();
             columnHeaderName = new System.Windows.Forms.ColumnHeader();
             columnHeaderValue = new System.Windows.Forms.ColumnHeader();
             richTexLog = new System.Windows.Forms.RichTextBox();
-            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
-            splitContainer1.Panel1.SuspendLayout();
-            splitContainer1.Panel2.SuspendLayout();
-            splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)splitContainerBody).BeginInit();
+            splitContainerBody.Panel1.SuspendLayout();
+            splitContainerBody.Panel2.SuspendLayout();
+            splitContainerBody.SuspendLayout();
             SuspendLayout();
             // 
-            // splitContainer1
+            // splitContainerBody
             // 
-            splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            splitContainer1.Location = new System.Drawing.Point(0, 0);
-            splitContainer1.Name = "splitContainer1";
+            splitContainerBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            splitContainerBody.Location = new System.Drawing.Point(0, 0);
+            splitContainerBody.Name = "splitContainerBody";
             // 
-            // splitContainer1.Panel1
+            // splitContainerBody.Panel1
             // 
-            splitContainer1.Panel1.Controls.Add(listViewVariables);
+            splitContainerBody.Panel1.Controls.Add(listViewVariables);
             // 
-            // splitContainer1.Panel2
+            // splitContainerBody.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(richTexLog);
-            splitContainer1.Size = new System.Drawing.Size(1039, 563);
-            splitContainer1.SplitterDistance = 632;
-            splitContainer1.TabIndex = 1;
+            splitContainerBody.Panel2.Controls.Add(richTexLog);
+            splitContainerBody.Size = new System.Drawing.Size(659, 563);
+            splitContainerBody.SplitterDistance = 400;
+            splitContainerBody.TabIndex = 1;
             // 
             // listViewVariables
             // 
@@ -66,7 +66,7 @@ namespace Si.Game.Forms
             listViewVariables.GridLines = true;
             listViewVariables.Location = new System.Drawing.Point(0, 0);
             listViewVariables.Name = "listViewVariables";
-            listViewVariables.Size = new System.Drawing.Size(632, 563);
+            listViewVariables.Size = new System.Drawing.Size(400, 563);
             listViewVariables.TabIndex = 0;
             listViewVariables.UseCompatibleStateImageBehavior = false;
             listViewVariables.View = System.Windows.Forms.View.Details;
@@ -86,7 +86,7 @@ namespace Si.Game.Forms
             richTexLog.Dock = System.Windows.Forms.DockStyle.Fill;
             richTexLog.Location = new System.Drawing.Point(0, 0);
             richTexLog.Name = "richTexLog";
-            richTexLog.Size = new System.Drawing.Size(403, 563);
+            richTexLog.Size = new System.Drawing.Size(255, 563);
             richTexLog.TabIndex = 0;
             richTexLog.Text = "";
             // 
@@ -94,21 +94,21 @@ namespace Si.Game.Forms
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(1039, 563);
-            Controls.Add(splitContainer1);
+            ClientSize = new System.Drawing.Size(659, 563);
+            Controls.Add(splitContainerBody);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "FormDebugSpriteWatch";
             Text = "Strikeforce Infinity : Sprite Watch";
-            splitContainer1.Panel1.ResumeLayout(false);
-            splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
-            splitContainer1.ResumeLayout(false);
+            splitContainerBody.Panel1.ResumeLayout(false);
+            splitContainerBody.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)splitContainerBody).EndInit();
+            splitContainerBody.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
         private System.Windows.Forms.RichTextBox richTexLog;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainerBody;
         private BufferedListView listViewVariables;
         private System.Windows.Forms.ColumnHeader columnHeaderName;
         private System.Windows.Forms.ColumnHeader columnHeaderValue;

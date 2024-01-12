@@ -23,6 +23,8 @@ namespace Si.Game.Forms
             _timer.Interval = 250;
             _timer.Tick += Timer_Tick;
             _timer.Start();
+
+            splitContainerBody.Panel2Collapsed = true;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
