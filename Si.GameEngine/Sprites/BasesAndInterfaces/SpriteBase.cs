@@ -243,8 +243,8 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public SiPoint RemoteLocation
         {
-            get => new SiPoint(_remoteLocation, true);
-            set => _remoteLocation = value.ToWriteableCopy();
+            get => new SiReadonlyPoint(_remoteLocation);
+            set => _remoteLocation = value;
         }
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace Si.GameEngine.Sprites
         public SiPoint LocalLocation
         {
             get => new SiReadonlyPoint(_localLocation);
-            set => _localLocation = value.ToWriteableCopy();
+            set => _localLocation = value;
         }
 
         /// <summary>

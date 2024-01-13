@@ -6,30 +6,20 @@ namespace Si.Shared.Types.Geometry
     {
         public static SiPoint Zero = new();
 
-        private double _x;
-        private double _y;
+        protected double _x;
+        protected double _y;
 
-        public double X
+        public virtual double X
         {
             get => _x;
-            set
-            {
-                if (IsReadonly) throw new Exception("The point is readonly");
-                _x = value;
-            }
+            set => _x = value;
         }
 
-        public double Y
+        public virtual double Y
         {
             get => _y;
-            set
-            {
-                if (IsReadonly) throw new Exception("The point is readonly");
-                _y = value;
-            }
+            set => _y = value;
         }
-
-        public bool IsReadonly { get; private set; }
 
         public SiPoint()
         {
@@ -46,27 +36,6 @@ namespace Si.Shared.Types.Geometry
             X = p.X;
             Y = p.Y;
         }
-
-        public SiPoint(bool isReadonly)
-        {
-            IsReadonly = isReadonly;
-        }
-
-        public SiPoint(double x, double y, bool isReadonly)
-        {
-            IsReadonly = isReadonly;
-            _x = x;
-            _y = y;
-        }
-
-        public SiPoint(SiPoint p, bool isReadonly)
-        {
-            IsReadonly = isReadonly;
-            _x = p.X;
-            _y = p.Y;
-        }
-
-        public SiPoint ToWriteableCopy() => new SiPoint(this);
 
         public RectangleF ToRectangleF(float width, float height)
         {
@@ -156,5 +125,7 @@ namespace Si.Shared.Types.Geometry
         {
             return $"{{{Math.Round(X, 4).ToString("#.####")},{Math.Round(Y, 4).ToString("#.####")}}}";
         }
+
+        public SiReadonlyPoint ToReadonlyCopy() => new SiReadonlyPoint(this);
     }
 }

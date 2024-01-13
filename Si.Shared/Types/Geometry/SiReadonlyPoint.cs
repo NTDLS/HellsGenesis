@@ -7,18 +7,41 @@
         }
 
         public SiReadonlyPoint(double x, double y)
-            : base(x, y, true)
         {
+            _x = x;
+            _y = y;
         }
 
         public SiReadonlyPoint(SiReadonlyPoint p)
-            : base(p)
         {
+            _x = p._x;
+            _y = p._y;
         }
 
         public SiReadonlyPoint(SiPoint p)
-            : base(p)
         {
+            _x = p.X;
+            _y = p.Y;
         }
+
+        public override double X
+        {
+            get => _x;
+            set
+            {
+                throw new Exception("The point is readonly");
+            }
+        }
+
+        public override double Y
+        {
+            get => _y;
+            set
+            {
+                throw new Exception("The point is readonly");
+            }
+        }
+
+        public SiPoint ToWriteableCopy() => new SiPoint(this);
     }
 }
