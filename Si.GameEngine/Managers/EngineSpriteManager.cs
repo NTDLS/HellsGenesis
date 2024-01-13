@@ -225,7 +225,7 @@ namespace Si.GameEngine.Managers
                 {
                     if (obj != with)
                     {
-                        if (obj.Intersects(with.RealLocation, new SiPoint(with.Size.Width, with.Size.Height)))
+                        if (obj.Intersects(with.CombinedLocation, new SiPoint(with.Size.Width, with.Size.Height)))
                         {
                             objs.Add(obj);
                         }
@@ -305,8 +305,8 @@ namespace Si.GameEngine.Managers
                         foreach (var sprite in o.Where(o => o.Visable == true))
                         {
                             //SiPoint scale, SiPoint< double > offset
-                            int x = (int)(_radarOffset.X + sprite.RealLocation.X * _radarScale.X);
-                            int y = (int)(_radarOffset.Y + sprite.RealLocation.Y * _radarScale.Y);
+                            int x = (int)(_radarOffset.X + sprite.CombinedLocation.X * _radarScale.X);
+                            int y = (int)(_radarOffset.Y + sprite.CombinedLocation.Y * _radarScale.Y);
 
                             if (x > _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
                                 && x < _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width

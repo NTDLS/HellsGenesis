@@ -85,7 +85,7 @@ namespace Si.GameEngine.Sprites
         private SiVelocity _velocity;
         private bool _readyForDeletion;
         private SiPoint _localLocation = new();
-        private SiPoint _multiPlayLocation = new();
+        private SiPoint _remoteLocation = new();
         private Size _size;
 
         #region Properties.
@@ -109,10 +109,10 @@ namespace Si.GameEngine.Sprites
         public bool QueuedForDeletion => _readyForDeletion;
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public SiPoint LocationCenter => new((_localLocation.X + _multiPlayLocation.X) - Size.Width / 2.0, (_localLocation.Y + _multiPlayLocation.Y) - Size.Height / 2.0);
-        public RectangleF VisibleBounds => new Rectangle((int)((_localLocation.X + _multiPlayLocation.X) - Size.Width / 2.0), (int)((_localLocation.Y + _multiPlayLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
-        public RectangleF Bounds => new((float)(_localLocation.X + _multiPlayLocation.X), (float)(_localLocation.Y + _multiPlayLocation.Y), Size.Width, Size.Height);
-        public Rectangle BoundsI => new((int)(_localLocation.X + _multiPlayLocation.X), (int)(_localLocation.Y + _multiPlayLocation.Y), Size.Width, Size.Height);
+        public SiPoint LocationCenter => new((_localLocation.X + _remoteLocation.X) - Size.Width / 2.0, (_localLocation.Y + _remoteLocation.Y) - Size.Height / 2.0);
+        public RectangleF VisibleBounds => new Rectangle((int)((_localLocation.X + _remoteLocation.X) - Size.Width / 2.0), (int)((_localLocation.Y + _remoteLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+        public RectangleF Bounds => new((float)(_localLocation.X + _remoteLocation.X), (float)(_localLocation.Y + _remoteLocation.Y), Size.Width, Size.Height);
+        public Rectangle BoundsI => new((int)(_localLocation.X + _remoteLocation.X), (int)(_localLocation.Y + _remoteLocation.Y), Size.Width, Size.Height);
         public SiQuadrant Quadrant => _gameCore.Display.GetQuadrant(LocalX + _gameCore.Display.BackgroundOffset.X, LocalY + _gameCore.Display.BackgroundOffset.Y);
 
         public SiVelocity Velocity
@@ -147,10 +147,10 @@ namespace Si.GameEngine.Sprites
                 + $"                  Bounds: {Bounds:n0}\r\n"
                 + $"       Ready for Delete?: {QueuedForDeletion}\r\n"
                 + $"                Is Dead?: {IsDeadOrExploded}\r\n"
-                + $"           Real Location: {RealLocation}\r\n"
+                + $"       Combined-Location: {CombinedLocation}\r\n"
                 + $"          Local-Location: {LocalLocation}\r\n"
-                + $"      Multiplay-Location: {MultiplayLocation}\r\n"
-                + $"        Virtual Location: {VirtualLocation}\r\n"
+                + $"         Remote-Location: {RemoteLocation}\r\n"
+                + $"       Universe-Location: {UniverseLocation}\r\n"
                 + $"                   Angle: {Velocity.Angle}\r\n"
                 + $"                          {Velocity.Angle.Degrees:n2}deg\r\n"
                 + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
@@ -237,48 +237,53 @@ namespace Si.GameEngine.Sprites
         }
 
         /// <summary>
-        /// The location as dictated by a remote connection (when this sptire is a multiplay drone).
+        /// The location of the sprite at the owning client. This is typically changed at the
+        /// remote client as the background scrolls and is communicated to each connection.
         /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
-        public SiPoint MultiplayLocation
+        public SiPoint RemoteLocation
         {
-            get => new SiPoint(_multiPlayLocation, true);
-            set => _multiPlayLocation = value.ToWriteableCopy();
+            get => new SiPoint(_remoteLocation, true);
+            set => _remoteLocation = value.ToWriteableCopy();
         }
 
         /// <summary>
-        /// The combined local and multiplay location of the sptire.
-        /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
-        /// </summary>
-        public SiPoint RealLocation
-        {
-            get => new SiPoint(_localLocation.X + _multiPlayLocation.X, _localLocation.Y + _multiPlayLocation.Y, true);
-        }
-
-        /// <summary>
-        /// The local client client location.
+        /// The location of the sprite on the local client. This is typically changed as the background scrolls.
         /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
         public SiPoint LocalLocation
         {
-            get => new SiPoint(_localLocation, true);
+            get => new SiReadonlyPoint(_localLocation);
             set => _localLocation = value.ToWriteableCopy();
         }
 
-        public SiPoint VirtualLocation
+        /// <summary>
+        /// The combined "local" and "remote" location. This is the "real" location where rendering should take place.
+        /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
+        /// </summary>
+        public SiReadonlyPoint CombinedLocation
         {
-            get => new SiPoint(RealLocation.X + _gameCore.Display.BackgroundOffset.X, RealLocation.Y + _gameCore.Display.BackgroundOffset.Y);
+            get => new SiReadonlyPoint(_localLocation.X + _remoteLocation.X, _localLocation.Y + _remoteLocation.Y);
+        }
+
+        /// <summary>
+        /// This is the combined location + the background offset. This will give the sprites location in the whole universe.
+        /// This location is matched by remote multiplayer sprites.
+        /// </summary>
+        public SiReadonlyPoint UniverseLocation
+        {
+            get => new SiReadonlyPoint(CombinedLocation.X + _gameCore.Display.BackgroundOffset.X, CombinedLocation.Y + _gameCore.Display.BackgroundOffset.Y);
         }
 
         /// <summary>
         /// Typically speaking, this would match the LocalX at the client that owns the sprite.
         /// </summary>
-        public double MultiplayX
+        public double RemoteX
         {
-            get => _multiPlayLocation.X;
+            get => _remoteLocation.X;
             set
             {
-                _multiPlayLocation.X = value;
+                _remoteLocation.X = value;
                 PositionChanged();
             }
         }
@@ -286,12 +291,12 @@ namespace Si.GameEngine.Sprites
         /// <summary>
         /// Typically speaking, this would match the LocalY at the client that owns the sprite.
         /// </summary>
-        public double MultiplayY
+        public double RemoteY
         {
-            get => _multiPlayLocation.Y;
+            get => _remoteLocation.Y;
             set
             {
-                _multiPlayLocation.Y = value;
+                _remoteLocation.Y = value;
                 PositionChanged();
             }
         }
@@ -419,7 +424,7 @@ namespace Si.GameEngine.Sprites
         {
             if (Visable && otherObject.Visable)
             {
-                var previousPosition = otherObject.RealLocation.ToWriteableCopy();
+                var previousPosition = otherObject.CombinedLocation.ToWriteableCopy();
 
                 for (int i = 0; i < otherObject.Velocity.MaxSpeed; i++)
                 {
@@ -575,7 +580,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public void PointAtAndGoto(SiPoint location, double? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(RealLocation, location);
+            Velocity.Angle.Degrees = SiPoint.AngleTo360(CombinedLocation, location);
             if (velocity != null)
             {
                 Velocity.MaxSpeed = (double)velocity;
@@ -587,7 +592,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, double? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(RealLocation, obj.RealLocation);
+            Velocity.Angle.Degrees = SiPoint.AngleTo360(CombinedLocation, obj.CombinedLocation);
 
             if (velocity != null)
             {
@@ -879,9 +884,9 @@ namespace Si.GameEngine.Sprites
 
         public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(RealLocation, to.RealLocation);
+        public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(CombinedLocation, to.CombinedLocation);
 
-        public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(RealLocation, to);
+        public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(CombinedLocation, to);
 
         /// <summary>
         /// Of the given sprites, returns the sprite that is the closest.
@@ -896,7 +901,7 @@ namespace Si.GameEngine.Sprites
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(RealLocation, to.RealLocation);
+                var distance = SiPoint.DistanceTo(CombinedLocation, to.CombinedLocation);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -919,7 +924,7 @@ namespace Si.GameEngine.Sprites
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(RealLocation, to.RealLocation);
+                var distance = SiPoint.DistanceTo(CombinedLocation, to.CombinedLocation);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -959,8 +964,8 @@ namespace Si.GameEngine.Sprites
             Velocity.Angle.Degrees = vector.AngleDegrees;
             Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
 
-            MultiplayX = vector.X;
-            MultiplayY = vector.Y;
+            RemoteX = vector.X;
+            RemoteY = vector.Y;
             */
         }
 
@@ -999,7 +1004,7 @@ namespace Si.GameEngine.Sprites
 
                 if (Highlight)
                 {
-                    var rectangle = new RectangleF((int)((_localLocation.X + _multiPlayLocation.X) - Size.Width / 2.0), (int)((_localLocation.Y + _multiPlayLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+                    var rectangle = new RectangleF((int)((_localLocation.X + _remoteLocation.X) - Size.Width / 2.0), (int)((_localLocation.Y + _remoteLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
                     var rawRectF = new RawRectangleF(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom);
                     _gameCore.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Degrees, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
                 }
@@ -1058,14 +1063,14 @@ namespace Si.GameEngine.Sprites
             if (RotationMode != SiRotationMode.None)
             {
                 _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap,
-                    (_localLocation.X + _multiPlayLocation.X) - bitmap.Size.Width / 2.0,
-                    (_localLocation.Y + _multiPlayLocation.Y) - bitmap.Size.Height / 2.0, angle);
+                    (_localLocation.X + _remoteLocation.X) - bitmap.Size.Width / 2.0,
+                    (_localLocation.Y + _remoteLocation.Y) - bitmap.Size.Height / 2.0, angle);
             }
             else //Almost free.
             {
                 _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap,
-                    (_localLocation.X + _multiPlayLocation.X) - bitmap.Size.Width / 2.0,
-                    (_localLocation.Y + +_multiPlayLocation.Y) - bitmap.Size.Height / 2.0);
+                    (_localLocation.X + _remoteLocation.X) - bitmap.Size.Width / 2.0,
+                    (_localLocation.Y + +_remoteLocation.Y) - bitmap.Size.Height / 2.0);
             }
         }
 

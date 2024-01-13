@@ -564,8 +564,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             Velocity.MaxBoost = vector.MaxBoost;
             Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
 
-            MultiplayX = _gameCore.Player.Sprite.LocalX + vector.X;
-            MultiplayY = _gameCore.Player.Sprite.LocalY + vector.Y;
+            RemoteX = _gameCore.Player.Sprite.LocalX + vector.X;
+            RemoteY = _gameCore.Player.Sprite.LocalY + vector.Y;
 
             ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
             BoostAnimation.Visable = Velocity.BoostPercentage > 0;
@@ -578,8 +578,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 var thrust = (Velocity.MaxSpeed * Velocity.ThrottlePercentage) + (Velocity.MaxBoost * Velocity.BoostPercentage);
 
                 //Move sprite based on Multiplay vector. Linear interpolation?
-                MultiplayX += Velocity.Angle.X * thrust;
-                MultiplayY += Velocity.Angle.Y * thrust;
+                RemoteX += Velocity.Angle.X * thrust;
+                RemoteY += Velocity.Angle.Y * thrust;
 
                 //Move sprite based on local offset.
                 LocalX -= displacementVector.X;

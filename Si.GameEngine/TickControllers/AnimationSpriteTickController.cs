@@ -31,8 +31,8 @@ namespace Si.GameEngine.Controller
         /// <param name="defaultPosition"></param>
         public void AddAt(SpriteAnimation animation, SpriteBase defaultPosition)
         {
-            animation.LocalX = defaultPosition.RealLocation.X;
-            animation.LocalY = defaultPosition.RealLocation.Y;
+            animation.LocalX = defaultPosition.CombinedLocation.X;
+            animation.LocalY = defaultPosition.CombinedLocation.Y;
             animation.RotationMode = SiRotationMode.Rotate;
             SpriteManager.Add(animation);
         }

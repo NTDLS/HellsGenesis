@@ -73,7 +73,7 @@ namespace Si.GameEngine.Utility
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static double AngleTo360(SpriteBase from, SpriteBase to)
         {
-            return SiPoint.AngleTo360(from.RealLocation, to.RealLocation);
+            return SiPoint.AngleTo360(from.CombinedLocation, to.CombinedLocation);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Si.GameEngine.Utility
         /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
         public static double AngleTo(SpriteBase from, SpriteBase to)
         {
-            var angle360 = SiPoint.AngleTo360(from.RealLocation, to.RealLocation);
+            var angle360 = SiPoint.AngleTo360(from.CombinedLocation, to.CombinedLocation);
             if (angle360 > 180)
             {
                 angle360 -= 180;
@@ -103,7 +103,7 @@ namespace Si.GameEngine.Utility
         /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
         public static double AngleTo(SpriteBase from, SiPoint to)
         {
-            var angle360 = SiPoint.AngleTo360(from.RealLocation, to);
+            var angle360 = SiPoint.AngleTo360(from.CombinedLocation, to);
             if (angle360 > 180)
             {
                 angle360 -= 180;
@@ -122,7 +122,7 @@ namespace Si.GameEngine.Utility
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static double AngleTo360(SiPoint from, SpriteBase to)
         {
-            return SiPoint.AngleTo360(from, to.RealLocation);
+            return SiPoint.AngleTo360(from, to.CombinedLocation);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Si.GameEngine.Utility
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static double AngleTo360(SpriteBase from, SiPoint to)
         {
-            return SiPoint.AngleTo360(from.RealLocation, to);
+            return SiPoint.AngleTo360(from.CombinedLocation, to);
         }
 
         /// <summary>
@@ -302,7 +302,7 @@ namespace Si.GameEngine.Utility
         /// <returns>The calcuated distance from one object to the other.</returns>
         public static double DistanceTo(SpriteBase from, SpriteBase to)
         {
-            return SiPoint.DistanceTo(from.RealLocation, to.RealLocation);
+            return SiPoint.DistanceTo(from.CombinedLocation, to.CombinedLocation);
         }
     }
 }
