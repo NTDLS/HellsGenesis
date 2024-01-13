@@ -616,8 +616,8 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.MultiplayX = command.ParameterValue<double>("x");
-                    sprite.MultiplayY = command.ParameterValue<double>("y");
+                    sprite.RemoteX = command.ParameterValue<double>("x");
+                    sprite.RemoteY = command.ParameterValue<double>("y");
                 }
             });
         }
@@ -651,7 +651,7 @@ namespace Si.GameEngine.Managers
 
                 foreach (var sprite in sprites)
                 {
-                    _debugForm.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}, Position: {sprite.RealLocation}", System.Drawing.Color.Black);
+                    _debugForm.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}, Position: {sprite.CombinedLocation}", System.Drawing.Color.Black);
                 }
             });
         }

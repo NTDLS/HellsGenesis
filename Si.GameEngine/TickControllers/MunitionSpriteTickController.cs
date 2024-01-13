@@ -56,7 +56,7 @@ namespace Si.GameEngine.Controller
         /// <returns></returns>
         public bool TestObjectCollisionsAlongMunitionPath(MunitionBase munition, List<SpriteShipBase> objectsThatCanBeHit, SiPoint displacementVector)
         {
-            var hitTestPosition = munition.RealLocation.ToWriteableCopy(); //Grab the new location of the munition.
+            var hitTestPosition = munition.CombinedLocation.ToWriteableCopy(); //Grab the new location of the munition.
 
             //Loop backwards and hit-test each position along the munitions path.
             for (int i = 0; i < munition.Velocity.MaxSpeed; i++)

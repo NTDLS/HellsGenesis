@@ -54,11 +54,11 @@ namespace Si.Game.Forms
             UpsertVariable("Bounds", $"{_sprite.Bounds:n0}");
             UpsertVariable("Ready for Delete?", $"{_sprite.QueuedForDeletion}");
             UpsertVariable("Is Dead?", $"{_sprite.IsDeadOrExploded}");
-            UpsertVariable("Location (Real)", $"{_sprite.RealLocation}");
             UpsertVariable("Location (Local)", $"{_sprite.LocalLocation}");
-            UpsertVariable("Location (Multiplay)", $"{_sprite.MultiplayLocation}");
+            UpsertVariable("Location (Remote)", $"{_sprite.RemoteLocation}");
+            UpsertVariable("Location (Combined)", $"{_sprite.CombinedLocation}");
+            UpsertVariable("Location (Universe)", $"{_sprite.UniverseLocation},");
             UpsertVariable("Background Offset", $"{_gameCore.Display.BackgroundOffset}");
-            UpsertVariable("Location (Virtual)", $"{_sprite.VirtualLocation},");
             UpsertVariable("Angle Degrees", $"{_sprite.Velocity.Angle}");
             UpsertVariable("Angle Radians", $"{_sprite.Velocity.Angle.Radians:n2}");
             UpsertVariable("Angle Radians Unadjusted", $"{_sprite.Velocity.Angle.RadiansUnadjusted:n2}");

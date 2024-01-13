@@ -112,8 +112,8 @@ namespace Si.GameEngine.Engine
             sprite.IsDrone = true;
             sprite.MultiplayUID = layout.MultiplayUID;
             sprite.Visable = true;
-            sprite.MultiplayX = layout.Vector.X;
-            sprite.MultiplayY = layout.Vector.Y;
+            sprite.RemoteX = layout.Vector.X;
+            sprite.RemoteY = layout.Vector.Y;
             sprite.LocalX = -_gameCore.Display.BackgroundOffset.X;
             sprite.LocalY = -_gameCore.Display.BackgroundOffset.Y;
             sprite.Velocity.MaxBoost = layout.Vector.MaxBoost;

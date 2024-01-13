@@ -76,7 +76,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
                     if (powerup != null)
                     {
-                        powerup.LocalLocation = RealLocation;
+                        powerup.LocalLocation = CombinedLocation;
                         _gameCore.Sprites.Powerups.Add(powerup);
                         _gameCore.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
                     }
@@ -211,8 +211,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
             Velocity.Angle.Degrees = vector.AngleDegrees;
             Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
 
-            MultiplayX = vector.X;
-            MultiplayY = vector.Y;
+            RemoteX = vector.X;
+            RemoteY = vector.Y;
         }
 
         /// <summary>
@@ -226,8 +226,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 var thrust = (Velocity.MaxSpeed * Velocity.ThrottlePercentage) + (Velocity.MaxBoost * Velocity.BoostPercentage);
 
                 //Move sprite based on Multiplay vector. Linear interpolation?
-                MultiplayX += Velocity.Angle.X * thrust;
-                MultiplayY += Velocity.Angle.Y * thrust;
+                RemoteX += Velocity.Angle.X * thrust;
+                RemoteY += Velocity.Angle.Y * thrust;
 
                 //Move sprite based on local offset.
                 LocalX -= displacementVector.X;
