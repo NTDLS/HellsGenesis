@@ -242,7 +242,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public SiPoint RemoteLocation
         {
-            get => new SiPoint(_remoteLocation);
+            get => _remoteLocation;
             set => _remoteLocation = value;
         }
 
@@ -252,7 +252,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public SiPoint LocalLocation
         {
-            get => new SiPoint(_localLocation);
+            get => _localLocation;
             set => _localLocation = value;
         }
 
@@ -260,11 +260,7 @@ namespace Si.GameEngine.Sprites
         /// The combined "local" and "remote" location. This is the "real" location where rendering should take place.
         /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
-        public SiPoint UniverseLocation
-        {
-            get => new SiPoint(_localLocation.X + _remoteLocation.X, _localLocation.Y + _remoteLocation.Y);
-        }
-
+        public SiPoint UniverseLocation => _localLocation + _remoteLocation;
 
         /// <summary>
         /// This is the combined location + the background offset. This will give the sprites location in the whole universe.
