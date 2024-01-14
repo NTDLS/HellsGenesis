@@ -98,8 +98,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                     return new SiSpriteActionVector(MultiplayUID)
                     {
                         MultiplayUID = MultiplayUID,
-                        X = X + bgOffset.X,
-                        Y = Y + bgOffset.Y,
+                        X = X,
+                        Y = Y,
                         AngleDegrees = Velocity.Angle.Degrees,
                         BoostPercentage = Velocity.BoostPercentage,
                         ThrottlePercentage = Velocity.ThrottlePercentage,

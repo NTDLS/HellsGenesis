@@ -98,10 +98,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 {
                     _lastMultiplaySpriteVectorUpdate = DateTime.UtcNow;
 
-                    if (this is SpriteDebugPlayer)
-                    {
-                    }
-
                     return new SiSpriteActionVector(MultiplayUID)
                     {
                         X = X,
