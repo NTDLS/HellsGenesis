@@ -71,7 +71,7 @@ namespace Si.GameEngine.Sprites
             _columns = (int)(_sheetImage.Size.Width / ((Size)frameSize).Width);
             _frameCount = _rows * _columns;
 
-            LocalLocation = new SiPoint(0, 0);
+            Location = new SiPoint(0, 0);
             Velocity = new SiVelocity();
 
             AdvanceImage();

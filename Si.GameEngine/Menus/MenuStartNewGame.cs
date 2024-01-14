@@ -22,43 +22,43 @@ namespace Si.GameEngine.Menus
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Strikeforce Infinity");
-            itemTitle.LocalX -= itemTitle.Size.Width / 2;
+            itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
             var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "SINGLE_PLAYER", " Single Player ");
             helpItem.Selected = true;
-            helpItem.LocalX -= helpItem.Size.Width / 2;
+            helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
             helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "MULTI_PLAYER", " Multiplayer ");
-            helpItem.LocalX -= helpItem.Size.Width / 2;
+            helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
             offsetY += 50;
 
             helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Move with <W>, <A>, <S>.");
-            helpItem.LocalX -= helpItem.Size.Width / 2;
+            helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
             helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Warp Drive with <SHIFT>.");
-            helpItem.LocalX -= helpItem.Size.Width / 2;
+            helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
             helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Fire primary with <SPACE>.");
-            helpItem.LocalX -= helpItem.Size.Width / 2;
+            helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
             helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Fire secondary with <CTRL>.");
-            helpItem.LocalX -= helpItem.Size.Width / 2;
+            helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
             helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Change weapons with <left> and <right> arrows.");
-            helpItem.LocalX -= helpItem.Size.Width / 2;
+            helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
             helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Change speed with <up> and <down> arrows.");
-            helpItem.LocalX -= helpItem.Size.Width / 2;
+            helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
             //itemYes.Selected = true;

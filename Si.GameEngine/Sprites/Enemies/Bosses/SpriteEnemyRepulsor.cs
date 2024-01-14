@@ -83,24 +83,24 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 {
                     var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - 90, new SiPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
-                    _leftGun.LocalX = LocalX + pointLeft.X;
-                    _leftGun.LocalY = LocalY + pointLeft.Y;
+                    _leftGun.X = X + pointLeft.X;
+                    _leftGun.Y = Y + pointLeft.Y;
                 }
 
                 if (_rightGun?.IsDeadOrExploded == false)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 90, new SiPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
-                    _rightGun.LocalX = LocalX + pointRight.X;
-                    _rightGun.LocalY = LocalY + pointRight.Y;
+                    _rightGun.X = X + pointRight.X;
+                    _rightGun.Y = Y + pointRight.Y;
                 }
 
                 if (_thrust?.IsDeadOrExploded == false)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(35, 35));
                     _thrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
-                    _thrust.LocalX = LocalX + pointRight.X;
-                    _thrust.LocalY = LocalY + pointRight.Y;
+                    _thrust.X = X + pointRight.X;
+                    _thrust.Y = Y + pointRight.Y;
                 }
             }
         }

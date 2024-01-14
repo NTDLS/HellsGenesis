@@ -27,21 +27,21 @@ namespace Si.Menus.MultiPlayer.Client
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Join Game");
-            itemTitle.LocalX -= itemTitle.Size.Width / 2;
+            itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
             //---------------------------------------------------------------------------------------------------------
 
             var labelName = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Player Name: ".PadLeft(25));
-            labelName.LocalX -= (labelName.Size.Width) + 200;
+            labelName.X -= (labelName.Size.Width) + 200;
 
-            double xPositionForlabel = labelName.LocalX; //Save the X position for lables.
-            double xPositionForTextBox = labelName.LocalX + labelName.Size.Width; //Save the X position for textboxes.
+            double xPositionForlabel = labelName.X; //Save the X position for lables.
+            double xPositionForTextBox = labelName.X + labelName.Size.Width; //Save the X position for textboxes.
 
-            _textboxPlayerName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelName.LocalY), "PLAYERNAME", "Player 2");
+            _textboxPlayerName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelName.Y), "PLAYERNAME", "Player 2");
             _textboxPlayerName.Selected = true;
-            _textboxPlayerName.LocalY = labelName.LocalY;
+            _textboxPlayerName.Y = labelName.Y;
 
             //---------------------------------------------------------------------------------------------------------
 

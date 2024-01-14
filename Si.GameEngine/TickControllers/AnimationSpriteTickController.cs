@@ -30,8 +30,8 @@ namespace Si.GameEngine.Controller
         /// <param name="defaultPosition"></param>
         public void AddAt(SpriteAnimation animation, SpriteBase defaultPosition)
         {
-            animation.LocalX = defaultPosition.UniverseLocation.X;
-            animation.LocalY = defaultPosition.UniverseLocation.Y;
+            animation.X = defaultPosition.Location.X;
+            animation.Y = defaultPosition.Location.Y;
             SpriteManager.Add(animation);
         }
 

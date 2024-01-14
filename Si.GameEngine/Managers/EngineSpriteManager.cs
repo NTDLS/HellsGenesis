@@ -95,8 +95,8 @@ namespace Si.GameEngine.Managers
                     MultiplayUID = item.MultiplayUID,
                     Vector = new SiSpriteVector
                     {
-                        X = item.LocalX,
-                        Y = item.LocalY,
+                        X = item.X,
+                        Y = item.Y,
                         AngleDegrees = item.Velocity.Angle.Degrees,
                         BoostPercentage = item.Velocity.BoostPercentage,
                         ThrottlePercentage = item.Velocity.ThrottlePercentage,
@@ -136,7 +136,7 @@ namespace Si.GameEngine.Managers
 
             PlayerStatsText = TextBlocks.Create(_gameCore.Rendering.TextFormats.RealtimePlayerStats, _gameCore.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_gameCore.Rendering.TextFormats.RealtimePlayerStats, _gameCore.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.LocalY + 100), true);
+            DebugText = TextBlocks.Create(_gameCore.Rendering.TextFormats.RealtimePlayerStats, _gameCore.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
 
             _gameCore.Audio.BackgroundMusicSound.Play();
         }
@@ -151,7 +151,7 @@ namespace Si.GameEngine.Managers
             object[] param = { _gameCore };
             var obj = (SpriteBase)Activator.CreateInstance(type, param);
 
-            obj.LocalLocation = _gameCore.Display.RandomOffScreenLocation();
+            obj.Location = _gameCore.Display.RandomOffScreenLocation();
             obj.Velocity.MaxSpeed = SiRandom.Generator.Next(_gameCore.Settings.MinEnemySpeed, _gameCore.Settings.MaxEnemySpeed);
             obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
 
@@ -225,7 +225,7 @@ namespace Si.GameEngine.Managers
                 {
                     if (obj != with)
                     {
-                        if (obj.Intersects(with.UniverseLocation, new SiPoint(with.Size.Width, with.Size.Height)))
+                        if (obj.Intersects(with.Location, new SiPoint(with.Size.Width, with.Size.Height)))
                         {
                             objs.Add(obj);
                         }
@@ -295,8 +295,8 @@ namespace Si.GameEngine.Managers
                     double centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0) - 2.0; //Subtract half the dot size.
 
                     _radarOffset = new SiPoint(
-                            _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _gameCore.Player.Sprite.LocalX * _radarScale.X),
-                            _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _gameCore.Player.Sprite.LocalY * _radarScale.Y)
+                            _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _gameCore.Player.Sprite.X * _radarScale.X),
+                            _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _gameCore.Player.Sprite.Y * _radarScale.Y)
                         );
 
                     _collection.Use(o =>
@@ -305,8 +305,8 @@ namespace Si.GameEngine.Managers
                         foreach (var sprite in o.Where(o => o.Visable == true))
                         {
                             //SiPoint scale, SiPoint< double > offset
-                            int x = (int)(_radarOffset.X + sprite.UniverseLocation.X * _radarScale.X);
-                            int y = (int)(_radarOffset.Y + sprite.UniverseLocation.Y * _radarScale.Y);
+                            int x = (int)(_radarOffset.X + sprite.Location.X * _radarScale.X);
+                            int y = (int)(_radarOffset.Y + sprite.Location.Y * _radarScale.Y);
 
                             if (x > _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
                                 && x < _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width

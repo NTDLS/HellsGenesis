@@ -24,8 +24,8 @@ namespace Si.GameEngine.Sprites
 
             Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
-            LocalX = x;
-            LocalY = y;
+            X = x;
+            Y = y;
 
             _rotationSpeed = SiRandom.Between(1, 100) / 20.0;
             _rotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
@@ -39,8 +39,8 @@ namespace Si.GameEngine.Sprites
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            LocalX += _travelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
-            LocalY += _travelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            X += _travelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            Y += _travelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
 
             if (_rotationDirection == SiRelativeDirection.Right)
             {

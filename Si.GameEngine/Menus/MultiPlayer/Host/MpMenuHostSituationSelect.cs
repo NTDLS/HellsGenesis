@@ -25,14 +25,14 @@ namespace Si.Menus.MultiPlayer.Host
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Whats the Situation?");
-            itemTitle.LocalX = offsetX + 200;
-            itemTitle.LocalY = offsetY - itemTitle.Size.Height;
+            itemTitle.X = offsetX + 200;
+            itemTitle.Y = offsetY - itemTitle.Size.Height;
 
             offsetY += itemTitle.Height;
 
             _situationBlurb = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
-            _situationBlurb.LocalX = offsetX + 300;
-            _situationBlurb.LocalY = offsetY - _situationBlurb.Size.Height;
+            _situationBlurb.X = offsetX + 300;
+            _situationBlurb.Y = offsetY - _situationBlurb.Size.Height;
 
             //Use reflection to get a list of possible player types.
             var situationTypes = SiReflection.GetSubClassesOf<SituationBase>().OrderBy(o => o.Name).ToList();
@@ -53,7 +53,7 @@ namespace Si.Menus.MultiPlayer.Host
 
                 menuItem.UserData = situationInstance;
 
-                menuItem.LocalY -= menuItem.Size.Height / 2;
+                menuItem.Y -= menuItem.Size.Height / 2;
                 offsetY += 50;
             }
 
