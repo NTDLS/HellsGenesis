@@ -18,6 +18,10 @@ namespace Si.GameEngine.Managers
         private readonly EngineCore _gameCore;
 
         public Dictionary<Point, SiQuadrant> Quadrants { get; private set; } = new();
+
+        /// <summary>
+        /// The background offset is really nothing more than the X/Y travel distance of the local player.
+        /// </summary>
         public SiPoint BackgroundOffset { get; private set; } = new();
         public SiFrameCounter GameLoopCounter { get; private set; } = new();
         public Control DrawingSurface { get; private set; }

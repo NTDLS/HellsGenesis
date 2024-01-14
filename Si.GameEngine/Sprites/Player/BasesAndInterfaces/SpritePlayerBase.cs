@@ -242,7 +242,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                     };
                     ThrustAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
                     {
-                        IsFixedPosition = true,
                         Visable = false,
                         OwnerUID = UID
                     };
@@ -261,7 +260,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                     };
                     BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
                     {
-                        IsFixedPosition = true,
                         Visable = false,
                         OwnerUID = UID
                     };
@@ -580,10 +578,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 //Move sprite based on Multiplay vector. Linear interpolation?
                 RemoteX += Velocity.Angle.X * thrust;
                 RemoteY += Velocity.Angle.Y * thrust;
-
-                //Move sprite based on local offset.
-                LocalX -= displacementVector.X;
-                LocalY -= displacementVector.Y;
 
                 ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
                 BoostAnimation.Visable = Velocity.BoostPercentage > 0;

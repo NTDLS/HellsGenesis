@@ -76,7 +76,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
                     if (powerup != null)
                     {
-                        powerup.LocalLocation = CombinedLocation;
+                        powerup.LocalLocation = UniverseLocation;
                         _gameCore.Sprites.Powerups.Add(powerup);
                         _gameCore.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
                     }
@@ -230,8 +230,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 RemoteY += Velocity.Angle.Y * thrust;
 
                 //Move sprite based on local offset.
-                LocalX -= displacementVector.X;
-                LocalY -= displacementVector.Y;
+                //LocalX -= displacementVector.X;
+                //LocalY -= displacementVector.Y;
 
                 FixRadarPositionIndicator();
 
@@ -277,8 +277,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 thrustVector += Velocity.MaxBoost * Velocity.BoostPercentage;
             }
 
-            LocalX += Velocity.Angle.X * thrustVector - displacementVector.X;
-            LocalY += Velocity.Angle.Y * thrustVector - displacementVector.Y;
+            LocalX += Velocity.Angle.X * thrustVector;
+            LocalY += Velocity.Angle.Y * thrustVector;
 
             //base.ApplyMotion(displacementVector);
 

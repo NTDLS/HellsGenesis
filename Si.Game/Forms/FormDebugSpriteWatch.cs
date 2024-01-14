@@ -56,8 +56,9 @@ namespace Si.Game.Forms
             UpsertVariable("Is Dead?", $"{_sprite.IsDeadOrExploded}");
             UpsertVariable("Location (Local)", $"{_sprite.LocalLocation}");
             UpsertVariable("Location (Remote)", $"{_sprite.RemoteLocation}");
-            UpsertVariable("Location (Combined)", $"{_sprite.CombinedLocation}");
-            UpsertVariable("Location (Universe)", $"{_sprite.UniverseLocation},");
+            UpsertVariable("Location (Universe)", $"{_sprite.UniverseLocation}");
+            UpsertVariable("Location (Render)", $"{_sprite.RenderLocation},");
+
             UpsertVariable("Background Offset", $"{_gameCore.Display.BackgroundOffset}");
             UpsertVariable("Angle Degrees", $"{_sprite.Velocity.Angle}");
             UpsertVariable("Angle Radians", $"{_sprite.Velocity.Angle.Radians:n2}");
@@ -67,14 +68,12 @@ namespace Si.Game.Forms
             UpsertVariable("Recoil", $"{(_sprite.Velocity.RecoilPercentage * 100):n2}");
             UpsertVariable("Hull", $"{_sprite.HullHealth:n0}");
             UpsertVariable("Shield", $"{_sprite.ShieldHealth:n0}");
-            UpsertVariable("Rotation Mode", $"{_sprite.RotationMode}");
             UpsertVariable("Attachments", $"{(_sprite.Attachments?.Count() ?? 0):n0}");
             UpsertVariable("Highlight", $"{_sprite.Highlight}");
             UpsertVariable("Is Fixed Position", $"{_sprite.IsFixedPosition}");
             UpsertVariable("Is Locked On", $"{_sprite.IsLockedOn}");
             UpsertVariable("Is Locked On (Soft)", $"{_sprite.IsLockedOnSoft:n0}");
             UpsertVariable("In Current Scaled Bounds", $"{_sprite.IsWithinCurrentScaledScreenBounds}");
-            UpsertVariable("Quandrant", $"{_sprite.Quadrant}");
             UpsertVariable("Visible Bounds", $"{_sprite.VisibleBounds}");
 
             listViewVariables.ResumeLayout();

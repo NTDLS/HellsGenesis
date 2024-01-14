@@ -4,7 +4,6 @@ using Si.GameEngine.Sprites;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
-using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Controller
 {
@@ -31,9 +30,8 @@ namespace Si.GameEngine.Controller
         /// <param name="defaultPosition"></param>
         public void AddAt(SpriteAnimation animation, SpriteBase defaultPosition)
         {
-            animation.LocalX = defaultPosition.CombinedLocation.X;
-            animation.LocalY = defaultPosition.CombinedLocation.Y;
-            animation.RotationMode = SiRotationMode.Rotate;
+            animation.LocalX = defaultPosition.UniverseLocation.X;
+            animation.LocalY = defaultPosition.UniverseLocation.Y;
             SpriteManager.Add(animation);
         }
 

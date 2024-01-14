@@ -271,11 +271,18 @@ namespace Si.GameEngine.Controller
                 {
                     Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
                 }
+
+                //insted of a fixed location, lets set the player to the center of the background offset.
+                //this is so bullets work right
             }
 
             //Scroll the background.
             GameCore.Display.BackgroundOffset.X += displacementVector.X;
             GameCore.Display.BackgroundOffset.Y += displacementVector.Y;
+
+            //Move the player in the direction of the background. This keeps the player visually in place, which is in the center screen.
+            Sprite.LocalX += displacementVector.X;
+            Sprite.LocalY += displacementVector.Y;
 
             if (Sprite.Velocity.RecoilPercentage > 0)
             {
@@ -294,7 +301,7 @@ namespace Si.GameEngine.Controller
                 _gameCore.Multiplay.RecordDroneActionVector(multiplayVector);
             }
 
-            return displacementVector;
+            return displacementVector.ToReadonlyCopy();
         }
 
         public void ResetAndShow()

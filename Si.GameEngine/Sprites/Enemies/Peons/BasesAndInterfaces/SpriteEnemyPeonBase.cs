@@ -34,7 +34,6 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
 
             ThrustAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
             {
-                IsFixedPosition = true,
                 OwnerUID = UID
             };
             ThrustAnimation.Reset();
@@ -42,7 +41,6 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
 
             BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
             {
-                IsFixedPosition = true,
                 OwnerUID = UID
             };
             BoostAnimation.Reset();

@@ -96,9 +96,8 @@ namespace Si.GameEngine.Sprites
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
-        public bool IsWithinCurrentScaledScreenBounds => _gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds);
+        public bool IsWithinCurrentScaledScreenBounds => _gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds);
         public bool Highlight { get; set; } = false;
-        public SiRotationMode RotationMode { get; set; }
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
         public int ShieldHealth { get; private set; } = 0; //Sheild hit-points, these take 1/2 damage.
 
@@ -107,13 +106,16 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public bool IsDeadOrExploded { get; private set; } = false;
         public bool QueuedForDeletion => _readyForDeletion;
+
+        /// <summary>
+        /// If true, the sprite does not respond to changes in background offset.
+        /// </summary>
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public SiPoint LocationCenter => new((_localLocation.X + _remoteLocation.X) - Size.Width / 2.0, (_localLocation.Y + _remoteLocation.Y) - Size.Height / 2.0);
-        public RectangleF VisibleBounds => new Rectangle((int)((_localLocation.X + _remoteLocation.X) - Size.Width / 2.0), (int)((_localLocation.Y + _remoteLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
-        public RectangleF Bounds => new((float)(_localLocation.X + _remoteLocation.X), (float)(_localLocation.Y + _remoteLocation.Y), Size.Width, Size.Height);
-        public Rectangle BoundsI => new((int)(_localLocation.X + _remoteLocation.X), (int)(_localLocation.Y + _remoteLocation.Y), Size.Width, Size.Height);
-        public SiQuadrant Quadrant => _gameCore.Display.GetQuadrant(LocalX + _gameCore.Display.BackgroundOffset.X, LocalY + _gameCore.Display.BackgroundOffset.Y);
+        public RectangleF VisibleBounds => new Rectangle((int)((UniverseLocation.X) - Size.Width / 2.0), (int)((UniverseLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+        public RectangleF Bounds => new((float)(UniverseLocation.X), (float)(UniverseLocation.Y), Size.Width, Size.Height);
+        public Rectangle BoundsI => new((int)(UniverseLocation.X), (int)(UniverseLocation.Y), Size.Width, Size.Height);
+        public RectangleF RenderBounds => new((float)(RenderLocation.X), (float)(RenderLocation.Y), Size.Width, Size.Height);
 
         public SiVelocity Velocity
         {
@@ -147,10 +149,9 @@ namespace Si.GameEngine.Sprites
                 + $"                  Bounds: {Bounds:n0}\r\n"
                 + $"       Ready for Delete?: {QueuedForDeletion}\r\n"
                 + $"                Is Dead?: {IsDeadOrExploded}\r\n"
-                + $"       Combined-Location: {CombinedLocation}\r\n"
+                + $"       Universe-Location: {UniverseLocation}\r\n"
                 + $"          Local-Location: {LocalLocation}\r\n"
                 + $"         Remote-Location: {RemoteLocation}\r\n"
-                + $"       Universe-Location: {UniverseLocation}\r\n"
                 + $"                   Angle: {Velocity.Angle}\r\n"
                 + $"                          {Velocity.Angle.Degrees:n2}deg\r\n"
                 + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
@@ -162,14 +163,12 @@ namespace Si.GameEngine.Sprites
                 + $"                  Recoil: {(Velocity.RecoilPercentage * 100):n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
-                + $"                Rotation: {RotationMode}\r\n"
                 + $"             Attachments: {(Attachments?.Count() ?? 0):n0}\r\n"
                 + $"               Highlight: {Highlight}\r\n"
                 + $"       Is Fixed Position: {IsFixedPosition}\r\n"
                 + $"            Is Locked On: {IsLockedOn}\r\n"
                 + $"     Is Locked On (Soft): {IsLockedOnSoft:n0}\r\n"
                 + $"In Current Scaled Bounds: {IsWithinCurrentScaledScreenBounds}\r\n"
-                + $"               Quandrant: {Quadrant}\r\n"
                 + $"          Visible Bounds: {VisibleBounds}\r\n";
         }
 
@@ -243,7 +242,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public SiPoint RemoteLocation
         {
-            get => new SiReadonlyPoint(_remoteLocation);
+            get => _remoteLocation;
             set => _remoteLocation = value;
         }
 
@@ -253,7 +252,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public SiPoint LocalLocation
         {
-            get => new SiReadonlyPoint(_localLocation);
+            get => _localLocation;
             set => _localLocation = value;
         }
 
@@ -261,18 +260,25 @@ namespace Si.GameEngine.Sprites
         /// The combined "local" and "remote" location. This is the "real" location where rendering should take place.
         /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
-        public SiReadonlyPoint CombinedLocation
-        {
-            get => new SiReadonlyPoint(_localLocation.X + _remoteLocation.X, _localLocation.Y + _remoteLocation.Y);
-        }
+        public SiPoint UniverseLocation => _localLocation + _remoteLocation;
 
         /// <summary>
         /// This is the combined location + the background offset. This will give the sprites location in the whole universe.
         /// This location is matched by remote multiplayer sprites.
         /// </summary>
-        public SiReadonlyPoint UniverseLocation
+        public SiPoint RenderLocation
         {
-            get => new SiReadonlyPoint(CombinedLocation.X + _gameCore.Display.BackgroundOffset.X, CombinedLocation.Y + _gameCore.Display.BackgroundOffset.Y);
+            get
+            {
+                if (IsFixedPosition)
+                {
+                    return UniverseLocation;
+                }
+                else
+                {
+                    return UniverseLocation - _gameCore.Display.BackgroundOffset;
+                }
+            }
         }
 
         /// <summary>
@@ -362,7 +368,6 @@ namespace Si.GameEngine.Sprites
             IsDrone = GetType().Name.EndsWith("Drone");
 
             SpriteTag = name;
-            RotationMode = SiRotationMode.Rotate;
             Velocity = new SiVelocity();
             Highlight = _gameCore.Settings.HighlightAllSprites;
         }
@@ -424,7 +429,7 @@ namespace Si.GameEngine.Sprites
         {
             if (Visable && otherObject.Visable)
             {
-                var previousPosition = otherObject.CombinedLocation.ToWriteableCopy();
+                var previousPosition = otherObject.UniverseLocation;
 
                 for (int i = 0; i < otherObject.Velocity.MaxSpeed; i++)
                 {
@@ -580,7 +585,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public void PointAtAndGoto(SiPoint location, double? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(CombinedLocation, location);
+            Velocity.Angle.Degrees = SiPoint.AngleTo360(UniverseLocation, location);
             if (velocity != null)
             {
                 Velocity.MaxSpeed = (double)velocity;
@@ -592,7 +597,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, double? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(CombinedLocation, obj.CombinedLocation);
+            Velocity.Angle.Degrees = SiPoint.AngleTo360(UniverseLocation, obj.UniverseLocation);
 
             if (velocity != null)
             {
@@ -884,9 +889,9 @@ namespace Si.GameEngine.Sprites
 
         public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(CombinedLocation, to.CombinedLocation);
+        public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(UniverseLocation, to.UniverseLocation);
 
-        public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(CombinedLocation, to);
+        public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(UniverseLocation, to);
 
         /// <summary>
         /// Of the given sprites, returns the sprite that is the closest.
@@ -901,7 +906,7 @@ namespace Si.GameEngine.Sprites
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(CombinedLocation, to.CombinedLocation);
+                var distance = SiPoint.DistanceTo(UniverseLocation, to.UniverseLocation);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -924,7 +929,7 @@ namespace Si.GameEngine.Sprites
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(CombinedLocation, to.CombinedLocation);
+                var distance = SiPoint.DistanceTo(UniverseLocation, to.UniverseLocation);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -942,11 +947,8 @@ namespace Si.GameEngine.Sprites
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(SiPoint displacementVector)
         {
-            if (IsFixedPosition == false)
-            {
-                LocalX += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
-                LocalY += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
-            }
+            LocalX += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            LocalY += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
         }
 
         /// <summary>
@@ -1004,7 +1006,7 @@ namespace Si.GameEngine.Sprites
 
                 if (Highlight)
                 {
-                    var rectangle = new RectangleF((int)((_localLocation.X + _remoteLocation.X) - Size.Width / 2.0), (int)((_localLocation.Y + _remoteLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+                    var rectangle = new RectangleF((int)((RenderLocation.X) - Size.Width / 2.0), (int)((RenderLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
                     var rawRectF = new RawRectangleF(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom);
                     _gameCore.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Degrees, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
                 }
@@ -1060,18 +1062,9 @@ namespace Si.GameEngine.Sprites
         {
             float angle = (float)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
 
-            if (RotationMode != SiRotationMode.None)
-            {
-                _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap,
-                    (_localLocation.X + _remoteLocation.X) - bitmap.Size.Width / 2.0,
-                    (_localLocation.Y + _remoteLocation.Y) - bitmap.Size.Height / 2.0, angle);
-            }
-            else //Almost free.
-            {
-                _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap,
-                    (_localLocation.X + _remoteLocation.X) - bitmap.Size.Width / 2.0,
-                    (_localLocation.Y + +_remoteLocation.Y) - bitmap.Size.Height / 2.0);
-            }
+            _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap,
+                (RenderLocation.X) - bitmap.Size.Width / 2.0,
+                (RenderLocation.Y) - bitmap.Size.Height / 2.0, angle);
         }
 
         #endregion
