@@ -271,6 +271,10 @@ namespace Si.GameEngine.Controller
                 {
                     Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
                 }
+
+                insted of a fixed location, lets set the player to the center of the background offset.
+                this is so bullets work right
+
             }
 
             //Scroll the background.

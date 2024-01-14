@@ -352,10 +352,10 @@ namespace Si.GameEngine.Managers
                         }
                     }
 
-                    //if (sprite.IsWithinCurrentScaledScreenBounds)
-                    //{
-                    sprite.Render(renderTarget);
-                    //}
+                    if (sprite.IsWithinCurrentScaledScreenBounds)
+                    {
+                        sprite.Render(renderTarget);
+                    }
                 }
             });
 

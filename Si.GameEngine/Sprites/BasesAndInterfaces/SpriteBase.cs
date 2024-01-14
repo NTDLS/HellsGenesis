@@ -112,11 +112,9 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public SiPoint LocationCenter => new((_localLocation.X + _remoteLocation.X) - Size.Width / 2.0, (_localLocation.Y + _remoteLocation.Y) - Size.Height / 2.0);
-        public RectangleF VisibleBounds => new Rectangle((int)((_localLocation.X + _remoteLocation.X) - Size.Width / 2.0), (int)((_localLocation.Y + _remoteLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
-        public RectangleF Bounds => new((float)(_localLocation.X + _remoteLocation.X), (float)(_localLocation.Y + _remoteLocation.Y), Size.Width, Size.Height);
-        public Rectangle BoundsI => new((int)(_localLocation.X + _remoteLocation.X), (int)(_localLocation.Y + _remoteLocation.Y), Size.Width, Size.Height);
-        public SiQuadrant Quadrant => _gameCore.Display.GetQuadrant(LocalX + _gameCore.Display.BackgroundOffset.X, LocalY + _gameCore.Display.BackgroundOffset.Y);
+        public RectangleF VisibleBounds => new Rectangle((int)((UniverseLocation.X) - Size.Width / 2.0), (int)((UniverseLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+        public RectangleF Bounds => new((float)(UniverseLocation.X), (float)(UniverseLocation.Y), Size.Width, Size.Height);
+        public Rectangle BoundsI => new((int)(UniverseLocation.X), (int)(UniverseLocation.Y), Size.Width, Size.Height);
 
         public SiVelocity Velocity
         {
@@ -171,7 +169,6 @@ namespace Si.GameEngine.Sprites
                 + $"            Is Locked On: {IsLockedOn}\r\n"
                 + $"     Is Locked On (Soft): {IsLockedOnSoft:n0}\r\n"
                 + $"In Current Scaled Bounds: {IsWithinCurrentScaledScreenBounds}\r\n"
-                + $"               Quandrant: {Quadrant}\r\n"
                 + $"          Visible Bounds: {VisibleBounds}\r\n";
         }
 
@@ -287,13 +284,11 @@ namespace Si.GameEngine.Sprites
             {
                 if (IsFixedPosition)
                 {
-                    return new SiReadonlyPoint(CombinedLocation.X, CombinedLocation.Y);
+                    return CombinedLocation;
                 }
                 else
                 {
-                    return new SiReadonlyPoint(
-                        CombinedLocation.X - _gameCore.Display.BackgroundOffset.X,
-                        CombinedLocation.Y - _gameCore.Display.BackgroundOffset.Y);
+                    return UniverseLocation;
                 }
             }
         }

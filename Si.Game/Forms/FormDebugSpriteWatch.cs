@@ -73,7 +73,6 @@ namespace Si.Game.Forms
             UpsertVariable("Is Locked On", $"{_sprite.IsLockedOn}");
             UpsertVariable("Is Locked On (Soft)", $"{_sprite.IsLockedOnSoft:n0}");
             UpsertVariable("In Current Scaled Bounds", $"{_sprite.IsWithinCurrentScaledScreenBounds}");
-            UpsertVariable("Quandrant", $"{_sprite.Quadrant}");
             UpsertVariable("Visible Bounds", $"{_sprite.VisibleBounds}");
 
             listViewVariables.ResumeLayout();
