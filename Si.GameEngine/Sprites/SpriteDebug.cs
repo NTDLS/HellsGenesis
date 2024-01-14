@@ -34,7 +34,7 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(SiReadonlyPoint displacementVector)
         {
             Velocity.Angle.Degrees = AngleTo360(_gameCore.Player.Sprite);
             base.ApplyMotion(displacementVector);

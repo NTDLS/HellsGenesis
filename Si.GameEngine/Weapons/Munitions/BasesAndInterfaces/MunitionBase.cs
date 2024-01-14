@@ -54,7 +54,14 @@ namespace Si.GameEngine.Weapons.Munitions
                 ThrottlePercentage = 1.0
             };
 
-            LocalLocation = firedFrom.CombinedLocation + (xyOffset ?? SiPoint.Zero);
+            if (firedFrom.IsFixedPosition)
+            {
+                LocalLocation = (firedFrom.RenderLocation + _gameCore.Display.BackgroundOffset) + (xyOffset ?? SiPoint.Zero);
+            }
+            else
+            {
+                LocalLocation = firedFrom.RenderLocation + (xyOffset ?? SiPoint.Zero);
+            }
 
             if (firedFrom is SpriteEnemyBase)
             {
@@ -68,7 +75,7 @@ namespace Si.GameEngine.Weapons.Munitions
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(SiPoint displacementVector)
+        public virtual void ApplyIntelligence(SiReadonlyPoint displacementVector)
         {
             if (AgeInMilliseconds > MilisecondsToLive)
             {
@@ -77,7 +84,7 @@ namespace Si.GameEngine.Weapons.Munitions
             }
         }
 
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(SiReadonlyPoint displacementVector)
         {
             if (LocalX < -_gameCore.Settings.MunitionSceneDistanceLimit
                 || LocalX >= _gameCore.Display.TotalCanvasSize.Width + _gameCore.Settings.MunitionSceneDistanceLimit
@@ -88,8 +95,8 @@ namespace Si.GameEngine.Weapons.Munitions
                 return;
             }
 
-            LocalX += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
-            LocalY += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
+            LocalX += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            LocalY += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
         }
 
         public override void Explode()

@@ -21,7 +21,7 @@ namespace Si.GameEngine.Weapons.Munitions
         {
         }
 
-        public override void ApplyIntelligence(SiPoint displacementVector)
+        public override void ApplyIntelligence(SiReadonlyPoint displacementVector)
         {
             if (FiredFromType == SiFiredFromType.Enemy)
             {

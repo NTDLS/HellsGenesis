@@ -16,7 +16,7 @@ namespace Si.GameEngine.Controller
         {
         }
 
-        public override void ExecuteWorldClockTick(SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(SiReadonlyPoint displacementVector)
         {
             foreach (var textBlock in Visible().Where(o => o.IsFixedPosition == false))
             {

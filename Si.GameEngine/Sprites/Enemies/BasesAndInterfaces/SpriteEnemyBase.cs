@@ -219,7 +219,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(SiReadonlyPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -230,8 +230,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 RemoteY += Velocity.Angle.Y * thrust;
 
                 //Move sprite based on local offset.
-                LocalX -= displacementVector.X;
-                LocalY -= displacementVector.Y;
+                //LocalX -= displacementVector.X;
+                //LocalY -= displacementVector.Y;
 
                 FixRadarPositionIndicator();
 
@@ -277,8 +277,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 thrustVector += Velocity.MaxBoost * Velocity.BoostPercentage;
             }
 
-            LocalX += Velocity.Angle.X * thrustVector - displacementVector.X;
-            LocalY += Velocity.Angle.Y * thrustVector - displacementVector.Y;
+            LocalX += Velocity.Angle.X * thrustVector;
+            LocalY += Velocity.Angle.Y * thrustVector;
 
             //base.ApplyMotion(displacementVector);
 

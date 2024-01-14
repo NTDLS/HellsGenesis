@@ -14,7 +14,7 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
         /// Moves the player and returns the direction and amount of movment which was applied.
         /// </summary>
         /// <returns>Returns the direction and amount of movement that the player has moved in the current tick.</returns>
-        public virtual SiPoint ExecuteWorldClockTick() => new SiPoint();
+        public virtual SiReadonlyPoint ExecuteWorldClockTick() => new();
 
         public PlayerTickControllerBase(EngineCore gameCore)
         {

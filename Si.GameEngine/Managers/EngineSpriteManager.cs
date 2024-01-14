@@ -352,19 +352,10 @@ namespace Si.GameEngine.Managers
                         }
                     }
 
-                    if (sprite.IsWithinCurrentScaledScreenBounds)
-                    {
-                        if (sprite is SpritePlayerBase sp && sp.IsDrone)
-                        {
-                        }
-                        sprite.Render(renderTarget);
-                    }
-                    else
-                    {
-                        if (sprite is SpritePlayerBase sp && sp.IsDrone)
-                        {
-                        }
-                    }
+                    //if (sprite.IsWithinCurrentScaledScreenBounds)
+                    //{
+                    sprite.Render(renderTarget);
+                    //}
                 }
             });
 

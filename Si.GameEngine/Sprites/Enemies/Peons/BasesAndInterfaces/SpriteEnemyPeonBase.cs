@@ -34,7 +34,6 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
 
             ThrustAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
             {
-                IsFixedPosition = true,
                 OwnerUID = UID
             };
             ThrustAnimation.Reset();
@@ -42,7 +41,6 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
 
             BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
             {
-                IsFixedPosition = true,
                 OwnerUID = UID
             };
             BoostAnimation.Reset();
@@ -87,7 +85,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(SiReadonlyPoint displacementVector)
         {
             base.ApplyMotion(displacementVector);
 

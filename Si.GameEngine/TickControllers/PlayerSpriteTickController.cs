@@ -36,7 +36,7 @@ namespace Si.GameEngine.Controller
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
         /// <returns></returns>
-        public override SiPoint ExecuteWorldClockTick()
+        public override SiReadonlyPoint ExecuteWorldClockTick()
         {
             var displacementVector = new SiPoint();
 
@@ -294,7 +294,7 @@ namespace Si.GameEngine.Controller
                 _gameCore.Multiplay.RecordDroneActionVector(multiplayVector);
             }
 
-            return displacementVector;
+            return displacementVector.ToReadonlyCopy();
         }
 
         public void ResetAndShow()

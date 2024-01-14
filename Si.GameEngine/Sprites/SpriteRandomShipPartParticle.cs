@@ -37,10 +37,10 @@ namespace Si.GameEngine.Sprites
             _gameCore = gameCore;
         }
 
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(SiReadonlyPoint displacementVector)
         {
-            LocalX += _travelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.X;
-            LocalY += _travelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) - displacementVector.Y;
+            LocalX += _travelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            LocalY += _travelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
 
             if (_rotationDirection == SiRelativeDirection.Right)
             {

@@ -32,10 +32,10 @@ namespace Si.GameEngine.Sprites
             }
         }
 
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(SiReadonlyPoint displacementVector)
         {
-            LocalX -= displacementVector.X * Velocity.MaxSpeed * Velocity.ThrottlePercentage;
-            LocalY -= displacementVector.Y * Velocity.MaxSpeed * Velocity.ThrottlePercentage;
+            //LocalX -= Velocity.MaxSpeed * Velocity.ThrottlePercentage;
+            //LocalY -= Velocity.MaxSpeed * Velocity.ThrottlePercentage;
 
             if (_gameCore.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
             {

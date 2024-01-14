@@ -67,7 +67,6 @@ namespace Si.Game.Forms
             UpsertVariable("Recoil", $"{(_sprite.Velocity.RecoilPercentage * 100):n2}");
             UpsertVariable("Hull", $"{_sprite.HullHealth:n0}");
             UpsertVariable("Shield", $"{_sprite.ShieldHealth:n0}");
-            UpsertVariable("Rotation Mode", $"{_sprite.RotationMode}");
             UpsertVariable("Attachments", $"{(_sprite.Attachments?.Count() ?? 0):n0}");
             UpsertVariable("Highlight", $"{_sprite.Highlight}");
             UpsertVariable("Is Fixed Position", $"{_sprite.IsFixedPosition}");

@@ -54,6 +54,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
         {
             OnHit += SpritePlayer_OnHit;
 
+            IsFixedPosition = true;
+
             if (IsDrone)
             {
                 RadarPositionIndicator = _gameCore.Sprites.RadarPositions.Create();
@@ -571,7 +573,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             BoostAnimation.Visable = Velocity.BoostPercentage > 0;
         }
 
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(SiReadonlyPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -580,10 +582,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 //Move sprite based on Multiplay vector. Linear interpolation?
                 RemoteX += Velocity.Angle.X * thrust;
                 RemoteY += Velocity.Angle.Y * thrust;
-
-                //Move sprite based on local offset.
-                LocalX -= displacementVector.X;
-                LocalY -= displacementVector.Y;
 
                 ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
                 BoostAnimation.Visable = Velocity.BoostPercentage > 0;

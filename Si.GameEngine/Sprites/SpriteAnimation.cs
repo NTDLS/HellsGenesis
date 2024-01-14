@@ -97,8 +97,8 @@ namespace Si.GameEngine.Sprites
             _gameCore.Rendering.DrawBitmapAt(
                 renderTarget,
                 _sheetImage,
-                (LocalX + RemoteX) - _frameSize.Width / 2.0,
-                (LocalY + RemoteY) - _frameSize.Height / 2.0,
+                (RenderLocation.X) - _frameSize.Width / 2.0,
+                (RenderLocation.Y) - _frameSize.Height / 2.0,
                 Velocity.Angle.Degrees,
                 sourceRect,
                 new Size2F(_frameSize.Width, _frameSize.Height)

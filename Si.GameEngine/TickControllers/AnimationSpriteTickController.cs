@@ -4,7 +4,6 @@ using Si.GameEngine.Sprites;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
-using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Controller
 {
@@ -15,7 +14,7 @@ namespace Si.GameEngine.Controller
         {
         }
 
-        public override void ExecuteWorldClockTick(SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(SiReadonlyPoint displacementVector)
         {
             foreach (var animation in Visible())
             {
@@ -33,7 +32,6 @@ namespace Si.GameEngine.Controller
         {
             animation.LocalX = defaultPosition.CombinedLocation.X;
             animation.LocalY = defaultPosition.CombinedLocation.Y;
-            animation.RotationMode = SiRotationMode.Rotate;
             SpriteManager.Add(animation);
         }
 
