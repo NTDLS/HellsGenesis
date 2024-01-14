@@ -98,10 +98,14 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 {
                     _lastMultiplaySpriteVectorUpdate = DateTime.UtcNow;
 
+                    if (this is SpriteDebugPlayer)
+                    {
+                    }
+
                     return new SiSpriteActionVector(MultiplayUID)
                     {
-                        X = _gameCore.Display.BackgroundOffset.X,
-                        Y = _gameCore.Display.BackgroundOffset.Y,
+                        X = X,
+                        Y = Y,
                         AngleDegrees = Velocity.Angle.Degrees,
                         BoostPercentage = Velocity.BoostPercentage,
                         ThrottlePercentage = Velocity.ThrottlePercentage,
@@ -562,8 +566,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             Velocity.MaxBoost = vector.MaxBoost;
             Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
 
-            X = _gameCore.Player.Sprite.X + vector.X;
-            Y = _gameCore.Player.Sprite.Y + vector.Y;
+            X = vector.X;
+            Y = vector.Y;
 
             ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
             BoostAnimation.Visable = Velocity.BoostPercentage > 0;
