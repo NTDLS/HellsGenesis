@@ -22,6 +22,8 @@ namespace Si.GameEngine.Weapons.Munitions
         public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
 
+        SiPoint _createdAtLocation;
+
         public MunitionBase(EngineCore gameCore, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
             : base(gameCore)
         {
@@ -54,14 +56,8 @@ namespace Si.GameEngine.Weapons.Munitions
                 ThrottlePercentage = 1.0
             };
 
-            if (firedFrom.IsFixedPosition)
-            {
-                LocalLocation = (firedFrom.RenderLocation + _gameCore.Display.BackgroundOffset) + (xyOffset ?? SiPoint.Zero);
-            }
-            else
-            {
-                LocalLocation = firedFrom.RenderLocation + (xyOffset ?? SiPoint.Zero);
-            }
+            LocalLocation = (firedFrom.CombinedLocation) + (xyOffset ?? SiPoint.Zero);
+            _createdAtLocation = LocalLocation;
 
             if (firedFrom is SpriteEnemyBase)
             {
@@ -86,10 +82,8 @@ namespace Si.GameEngine.Weapons.Munitions
 
         public override void ApplyMotion(SiReadonlyPoint displacementVector)
         {
-            if (LocalX < -_gameCore.Settings.MunitionSceneDistanceLimit
-                || LocalX >= _gameCore.Display.TotalCanvasSize.Width + _gameCore.Settings.MunitionSceneDistanceLimit
-                || LocalY < -_gameCore.Settings.MunitionSceneDistanceLimit
-                || LocalY >= _gameCore.Display.TotalCanvasSize.Height + _gameCore.Settings.MunitionSceneDistanceLimit)
+            if (Math.Abs(_createdAtLocation.X - LocalX) > _gameCore.Settings.MunitionSceneDistanceLimit
+               || Math.Abs(_createdAtLocation.Y - LocalY) > _gameCore.Settings.MunitionSceneDistanceLimit)
             {
                 QueueForDelete();
                 return;

@@ -54,8 +54,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
         {
             OnHit += SpritePlayer_OnHit;
 
-            IsFixedPosition = true;
-
             if (IsDrone)
             {
                 RadarPositionIndicator = _gameCore.Sprites.RadarPositions.Create();
@@ -244,7 +242,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                     };
                     ThrustAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
                     {
-                        IsFixedPosition = true,
                         Visable = false,
                         OwnerUID = UID
                     };
@@ -263,7 +260,6 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                     };
                     BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
                     {
-                        IsFixedPosition = true,
                         Visable = false,
                         OwnerUID = UID
                     };

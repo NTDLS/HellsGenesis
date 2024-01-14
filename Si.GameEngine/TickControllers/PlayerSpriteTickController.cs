@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Engine;
+﻿using SharpDX.DirectWrite;
+using Si.GameEngine.Engine;
 using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.Shared;
@@ -272,14 +273,16 @@ namespace Si.GameEngine.Controller
                     Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
                 }
 
-                insted of a fixed location, lets set the player to the center of the background offset.
-                this is so bullets work right
-
+                //insted of a fixed location, lets set the player to the center of the background offset.
+                //this is so bullets work right
             }
 
             //Scroll the background.
             GameCore.Display.BackgroundOffset.X += displacementVector.X;
             GameCore.Display.BackgroundOffset.Y += displacementVector.Y;
+
+            Sprite.LocalX += displacementVector.X;
+            Sprite.LocalY += displacementVector.Y;
 
             if (Sprite.Velocity.RecoilPercentage > 0)
             {

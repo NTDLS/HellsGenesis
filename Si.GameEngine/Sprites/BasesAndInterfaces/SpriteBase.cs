@@ -96,7 +96,7 @@ namespace Si.GameEngine.Sprites
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
-        public bool IsWithinCurrentScaledScreenBounds => _gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds);
+        public bool IsWithinCurrentScaledScreenBounds => _gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds);
         public bool Highlight { get; set; } = false;
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
         public int ShieldHealth { get; private set; } = 0; //Sheild hit-points, these take 1/2 damage.
@@ -112,9 +112,10 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public RectangleF VisibleBounds => new Rectangle((int)((UniverseLocation.X) - Size.Width / 2.0), (int)((UniverseLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
-        public RectangleF Bounds => new((float)(UniverseLocation.X), (float)(UniverseLocation.Y), Size.Width, Size.Height);
-        public Rectangle BoundsI => new((int)(UniverseLocation.X), (int)(UniverseLocation.Y), Size.Width, Size.Height);
+        public RectangleF VisibleBounds => new Rectangle((int)((CombinedLocation.X) - Size.Width / 2.0), (int)((CombinedLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+        public RectangleF Bounds => new((float)(CombinedLocation.X), (float)(CombinedLocation.Y), Size.Width, Size.Height);
+        public Rectangle BoundsI => new((int)(CombinedLocation.X), (int)(CombinedLocation.Y), Size.Width, Size.Height);
+        public RectangleF RenderBounds => new((float)(RenderLocation.X), (float)(RenderLocation.Y), Size.Width, Size.Height);
 
         public SiVelocity Velocity
         {
@@ -1018,7 +1019,7 @@ namespace Si.GameEngine.Sprites
 
                 if (Highlight)
                 {
-                    var rectangle = new RectangleF((int)((_localLocation.X + _remoteLocation.X) - Size.Width / 2.0), (int)((_localLocation.Y + _remoteLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+                    var rectangle = new RectangleF((int)((RenderLocation.X) - Size.Width / 2.0), (int)((RenderLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
                     var rawRectF = new RawRectangleF(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom);
                     _gameCore.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Degrees, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
                 }

@@ -352,6 +352,7 @@ namespace Si.GameEngine.Managers
                         }
                     }
 
+                    //TODO: Fix IsWithinCurrentScaledScreenBounds
                     if (sprite.IsWithinCurrentScaledScreenBounds)
                     {
                         sprite.Render(renderTarget);

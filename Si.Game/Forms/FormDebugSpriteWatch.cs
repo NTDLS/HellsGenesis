@@ -58,6 +58,8 @@ namespace Si.Game.Forms
             UpsertVariable("Location (Remote)", $"{_sprite.RemoteLocation}");
             UpsertVariable("Location (Combined)", $"{_sprite.CombinedLocation}");
             UpsertVariable("Location (Universe)", $"{_sprite.UniverseLocation},");
+            UpsertVariable("Location (Render)", $"{_sprite.RenderLocation},");
+
             UpsertVariable("Background Offset", $"{_gameCore.Display.BackgroundOffset}");
             UpsertVariable("Angle Degrees", $"{_sprite.Velocity.Angle}");
             UpsertVariable("Angle Radians", $"{_sprite.Velocity.Angle.Radians:n2}");
