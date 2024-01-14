@@ -26,17 +26,17 @@ namespace Si.Menus.MultiPlayer
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Multiplayer");
-            itemTitle.LocalX -= itemTitle.Size.Width / 2;
+            itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
             var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "JOIN", " Join a Game ");
             helpItem.Selected = true;
-            helpItem.LocalX -= helpItem.Size.Width / 2;
+            helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
             helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "HOST", " Host a Game ");
-            helpItem.LocalX -= helpItem.Size.Width / 2;
+            helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
             OnExecuteSelection += MenuMultiplayerHostOrJoin_OnExecuteSelection;

@@ -54,9 +54,7 @@ namespace Si.Game.Forms
             UpsertVariable("Bounds", $"{_sprite.Bounds:n0}");
             UpsertVariable("Ready for Delete?", $"{_sprite.QueuedForDeletion}");
             UpsertVariable("Is Dead?", $"{_sprite.IsDeadOrExploded}");
-            UpsertVariable("Location (Local)", $"{_sprite.LocalLocation}");
-            UpsertVariable("Location (Remote)", $"{_sprite.RemoteLocation}");
-            UpsertVariable("Location (Universe)", $"{_sprite.UniverseLocation}");
+            UpsertVariable("Location", $"{_sprite.Location}");
             UpsertVariable("Location (Render)", $"{_sprite.RenderLocation},");
 
             UpsertVariable("Background Offset", $"{_gameCore.Display.BackgroundOffset}");

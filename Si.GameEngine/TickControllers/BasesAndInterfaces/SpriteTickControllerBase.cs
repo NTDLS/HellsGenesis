@@ -38,8 +38,8 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
         public T Create(double x, double y, string name = "")
         {
             T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
-            obj.LocalX = x;
-            obj.LocalY = y;
+            obj.X = x;
+            obj.Y = y;
             obj.SpriteTag = name;
             SpriteManager.Add(obj);
             return obj;
@@ -48,8 +48,8 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
         public T CreateAtCenterScreen(string name = "")
         {
             T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
-            obj.LocalX = GameCore.Display.TotalCanvasSize.Width / 2;
-            obj.LocalY = GameCore.Display.TotalCanvasSize.Height / 2;
+            obj.X = GameCore.Display.TotalCanvasSize.Width / 2;
+            obj.Y = GameCore.Display.TotalCanvasSize.Height / 2;
 
             obj.SpriteTag = name;
 
@@ -60,8 +60,8 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
         public T Create(double x, double y)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
-            obj.LocalX = x;
-            obj.LocalY = y;
+            obj.X = x;
+            obj.Y = y;
             SpriteManager.Add(obj);
             return obj;
 

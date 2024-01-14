@@ -83,8 +83,8 @@ namespace Si.GameEngine.Engine
             var playerDrone = SiReflection.CreateInstanceFromTypeName<SpritePlayerBase>($"{selectedPlayerClass}Drone", new[] { _gameCore });
             playerDrone.MultiplayUID = playerMultiplayUID;
             playerDrone.Visable = true;
-            playerDrone.LocalX = 0;
-            playerDrone.LocalY = 0;
+            playerDrone.X = 0;
+            playerDrone.Y = 0;
 
             _gameCore.Sprites.PlayerDrones.Add(playerDrone);
             //Debug.WriteLine($"Inserted Multiplay Sprite: '{selectedPlayerClass}'->'{playerMultiplayUID}'->{playerDrone.UID}");
@@ -112,10 +112,8 @@ namespace Si.GameEngine.Engine
             sprite.IsDrone = true;
             sprite.MultiplayUID = layout.MultiplayUID;
             sprite.Visable = true;
-            sprite.RemoteX = layout.Vector.X;
-            sprite.RemoteY = layout.Vector.Y;
-            sprite.LocalX = -_gameCore.Display.BackgroundOffset.X;
-            sprite.LocalY = -_gameCore.Display.BackgroundOffset.Y;
+            sprite.X = layout.Vector.X;
+            sprite.Y = layout.Vector.Y;
             sprite.Velocity.MaxBoost = layout.Vector.MaxBoost;
             sprite.Velocity.MaxSpeed = layout.Vector.MaxSpeed;
             sprite.Velocity.BoostPercentage = layout.Vector.BoostPercentage;

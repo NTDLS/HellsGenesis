@@ -57,15 +57,15 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
             {
                 var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                 ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                ThrustAnimation.LocalX = LocalX + pointRight.X;
-                ThrustAnimation.LocalY = LocalY + pointRight.Y;
+                ThrustAnimation.X = X + pointRight.X;
+                ThrustAnimation.Y = Y + pointRight.Y;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
                 var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                 BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                BoostAnimation.LocalX = LocalX + pointRight.X;
-                BoostAnimation.LocalY = LocalY + pointRight.Y;
+                BoostAnimation.X = X + pointRight.X;
+                BoostAnimation.Y = Y + pointRight.Y;
             }
         }
 

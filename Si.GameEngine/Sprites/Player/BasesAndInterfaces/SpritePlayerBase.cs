@@ -190,8 +190,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
 
             ReviveDeadOrExploded();
 
-            LocalX = _gameCore.Display.TotalCanvasSize.Width / 2;
-            LocalY = _gameCore.Display.TotalCanvasSize.Height / 2;
+            X = _gameCore.Display.TotalCanvasSize.Width / 2;
+            Y = _gameCore.Display.TotalCanvasSize.Height / 2;
 
             Velocity.Angle = new SiAngle(45);
 
@@ -275,8 +275,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 {
                     var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                     ThrustAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                    ThrustAnimation.LocalX = LocalX + pointBehind.X;
-                    ThrustAnimation.LocalY = LocalY + pointBehind.Y;
+                    ThrustAnimation.X = X + pointBehind.X;
+                    ThrustAnimation.Y = Y + pointBehind.Y;
                 }
             }
 
@@ -286,8 +286,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 {
                     var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(20, 20));
                     BoostAnimation.Velocity.Angle.Degrees = Velocity.Angle.Degrees - 180;
-                    BoostAnimation.LocalX = LocalX + pointBehind.X;
-                    BoostAnimation.LocalY = LocalY + pointBehind.Y;
+                    BoostAnimation.X = X + pointBehind.X;
+                    BoostAnimation.Y = Y + pointBehind.Y;
                 }
             }
         }
@@ -562,8 +562,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             Velocity.MaxBoost = vector.MaxBoost;
             Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
 
-            RemoteX = _gameCore.Player.Sprite.LocalX + vector.X;
-            RemoteY = _gameCore.Player.Sprite.LocalY + vector.Y;
+            X = _gameCore.Player.Sprite.X + vector.X;
+            Y = _gameCore.Player.Sprite.Y + vector.Y;
 
             ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
             BoostAnimation.Visable = Velocity.BoostPercentage > 0;
@@ -576,8 +576,8 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
                 var thrust = (Velocity.MaxSpeed * Velocity.ThrottlePercentage) + (Velocity.MaxBoost * Velocity.BoostPercentage);
 
                 //Move sprite based on Multiplay vector. Linear interpolation?
-                RemoteX += Velocity.Angle.X * thrust;
-                RemoteY += Velocity.Angle.Y * thrust;
+                X += Velocity.Angle.X * thrust;
+                Y += Velocity.Angle.Y * thrust;
 
                 ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
                 BoostAnimation.Visable = Velocity.BoostPercentage > 0;

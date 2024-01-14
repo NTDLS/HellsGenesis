@@ -11,8 +11,8 @@ namespace Si.GameEngine.Sprites
             : base(gameCore)
         {
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
-            LocalX = 0;
-            LocalY = 0;
+            X = 0;
+            Y = 0;
             Velocity = new SiVelocity();
         }
 
@@ -20,8 +20,8 @@ namespace Si.GameEngine.Sprites
             : base(gameCore)
         {
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
-            LocalX = x;
-            LocalY = y;
+            X = x;
+            Y = y;
             Velocity = new SiVelocity();
         }
 
@@ -29,8 +29,8 @@ namespace Si.GameEngine.Sprites
             : base(gameCore)
         {
             Initialize(imagePath);
-            LocalX = x;
-            LocalY = y;
+            X = x;
+            Y = y;
             Velocity = new SiVelocity();
         }
 

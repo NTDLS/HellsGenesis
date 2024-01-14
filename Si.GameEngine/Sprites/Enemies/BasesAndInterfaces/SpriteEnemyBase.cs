@@ -76,7 +76,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
                     if (powerup != null)
                     {
-                        powerup.LocalLocation = UniverseLocation;
+                        powerup.Location = Location;
                         _gameCore.Sprites.Powerups.Add(powerup);
                         _gameCore.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
                     }
@@ -98,8 +98,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                     return new SiSpriteActionVector(MultiplayUID)
                     {
                         MultiplayUID = MultiplayUID,
-                        X = LocalX + bgOffset.X,
-                        Y = LocalY + bgOffset.Y,
+                        X = X + bgOffset.X,
+                        Y = Y + bgOffset.Y,
                         AngleDegrees = Velocity.Angle.Degrees,
                         BoostPercentage = Velocity.BoostPercentage,
                         ThrottlePercentage = Velocity.ThrottlePercentage,
@@ -211,8 +211,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
             Velocity.Angle.Degrees = vector.AngleDegrees;
             Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
 
-            RemoteX = vector.X;
-            RemoteY = vector.Y;
+            X = vector.X;
+            Y = vector.Y;
         }
 
         /// <summary>
@@ -226,8 +226,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 var thrust = (Velocity.MaxSpeed * Velocity.ThrottlePercentage) + (Velocity.MaxBoost * Velocity.BoostPercentage);
 
                 //Move sprite based on Multiplay vector. Linear interpolation?
-                RemoteX += Velocity.Angle.X * thrust;
-                RemoteY += Velocity.Angle.Y * thrust;
+                X += Velocity.Angle.X * thrust;
+                Y += Velocity.Angle.Y * thrust;
 
                 //Move sprite based on local offset.
                 //LocalX -= displacementVector.X;
@@ -238,10 +238,10 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 return;
             }
 
-            if (LocalX < -_gameCore.Settings.EnemySceneDistanceLimit
-                || LocalX >= _gameCore.Display.NatrualScreenSize.Width + _gameCore.Settings.EnemySceneDistanceLimit
-                || LocalY < -_gameCore.Settings.EnemySceneDistanceLimit
-                || LocalY >= _gameCore.Display.NatrualScreenSize.Height + _gameCore.Settings.EnemySceneDistanceLimit)
+            if (X < -_gameCore.Settings.EnemySceneDistanceLimit
+                || X >= _gameCore.Display.NatrualScreenSize.Width + _gameCore.Settings.EnemySceneDistanceLimit
+                || Y < -_gameCore.Settings.EnemySceneDistanceLimit
+                || Y >= _gameCore.Display.NatrualScreenSize.Height + _gameCore.Settings.EnemySceneDistanceLimit)
             {
                 QueueForDelete();
                 return;
@@ -277,8 +277,8 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
                 thrustVector += Velocity.MaxBoost * Velocity.BoostPercentage;
             }
 
-            LocalX += Velocity.Angle.X * thrustVector;
-            LocalY += Velocity.Angle.Y * thrustVector;
+            X += Velocity.Angle.X * thrustVector;
+            Y += Velocity.Angle.Y * thrustVector;
 
             //base.ApplyMotion(displacementVector);
 

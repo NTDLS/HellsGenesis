@@ -281,8 +281,8 @@ namespace Si.GameEngine.Controller
             GameCore.Display.BackgroundOffset.Y += displacementVector.Y;
 
             //Move the player in the direction of the background. This keeps the player visually in place, which is in the center screen.
-            Sprite.LocalX += displacementVector.X;
-            Sprite.LocalY += displacementVector.Y;
+            Sprite.X += displacementVector.X;
+            Sprite.Y += displacementVector.Y;
 
             if (Sprite.Velocity.RecoilPercentage > 0)
             {

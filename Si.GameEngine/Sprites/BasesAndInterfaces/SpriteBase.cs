@@ -85,7 +85,6 @@ namespace Si.GameEngine.Sprites
         private SiVelocity _velocity;
         private bool _readyForDeletion;
         private SiPoint _localLocation = new();
-        private SiPoint _remoteLocation = new();
         private Size _size;
 
         #region Properties.
@@ -112,9 +111,9 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public RectangleF VisibleBounds => new Rectangle((int)((UniverseLocation.X) - Size.Width / 2.0), (int)((UniverseLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
-        public RectangleF Bounds => new((float)(UniverseLocation.X), (float)(UniverseLocation.Y), Size.Width, Size.Height);
-        public Rectangle BoundsI => new((int)(UniverseLocation.X), (int)(UniverseLocation.Y), Size.Width, Size.Height);
+        public RectangleF VisibleBounds => new Rectangle((int)((Location.X) - Size.Width / 2.0), (int)((Location.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+        public RectangleF Bounds => new((float)(Location.X), (float)(Location.Y), Size.Width, Size.Height);
+        public Rectangle BoundsI => new((int)(Location.X), (int)(Location.Y), Size.Width, Size.Height);
         public RectangleF RenderBounds => new((float)(RenderLocation.X), (float)(RenderLocation.Y), Size.Width, Size.Height);
 
         public SiVelocity Velocity
@@ -149,9 +148,8 @@ namespace Si.GameEngine.Sprites
                 + $"                  Bounds: {Bounds:n0}\r\n"
                 + $"       Ready for Delete?: {QueuedForDeletion}\r\n"
                 + $"                Is Dead?: {IsDeadOrExploded}\r\n"
-                + $"       Universe-Location: {UniverseLocation}\r\n"
-                + $"          Local-Location: {LocalLocation}\r\n"
-                + $"         Remote-Location: {RemoteLocation}\r\n"
+                + $"         Render-Location: {RenderLocation}\r\n"
+                + $"                Location: {Location}\r\n"
                 + $"                   Angle: {Velocity.Angle}\r\n"
                 + $"                          {Velocity.Angle.Degrees:n2}deg\r\n"
                 + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
@@ -236,31 +234,14 @@ namespace Si.GameEngine.Sprites
         }
 
         /// <summary>
-        /// The location of the sprite at the owning client. This is typically changed at the
-        /// remote client as the background scrolls and is communicated to each connection.
-        /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
-        /// </summary>
-        public SiPoint RemoteLocation
-        {
-            get => _remoteLocation;
-            set => _remoteLocation = value;
-        }
-
-        /// <summary>
         /// The location of the sprite on the local client. This is typically changed as the background scrolls.
         /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
-        public SiPoint LocalLocation
+        public SiPoint Location
         {
-            get => _localLocation;
+            get => new SiPoint(_localLocation);
             set => _localLocation = value;
         }
-
-        /// <summary>
-        /// The combined "local" and "remote" location. This is the "real" location where rendering should take place.
-        /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
-        /// </summary>
-        public SiPoint UniverseLocation => _localLocation + _remoteLocation;
 
         /// <summary>
         /// This is the combined location + the background offset. This will give the sprites location in the whole universe.
@@ -272,42 +253,16 @@ namespace Si.GameEngine.Sprites
             {
                 if (IsFixedPosition)
                 {
-                    return UniverseLocation;
+                    return Location;
                 }
                 else
                 {
-                    return UniverseLocation - _gameCore.Display.BackgroundOffset;
+                    return Location - _gameCore.Display.BackgroundOffset;
                 }
             }
         }
 
-        /// <summary>
-        /// Typically speaking, this would match the LocalX at the client that owns the sprite.
-        /// </summary>
-        public double RemoteX
-        {
-            get => _remoteLocation.X;
-            set
-            {
-                _remoteLocation.X = value;
-                PositionChanged();
-            }
-        }
-
-        /// <summary>
-        /// Typically speaking, this would match the LocalY at the client that owns the sprite.
-        /// </summary>
-        public double RemoteY
-        {
-            get => _remoteLocation.Y;
-            set
-            {
-                _remoteLocation.Y = value;
-                PositionChanged();
-            }
-        }
-
-        public double LocalX
+        public double X
         {
             get => _localLocation.X;
             set
@@ -317,7 +272,7 @@ namespace Si.GameEngine.Sprites
             }
         }
 
-        public double LocalY
+        public double Y
         {
             get => _localLocation.Y;
             set
@@ -429,7 +384,7 @@ namespace Si.GameEngine.Sprites
         {
             if (Visable && otherObject.Visable)
             {
-                var previousPosition = otherObject.UniverseLocation;
+                var previousPosition = otherObject.Location;
 
                 for (int i = 0; i < otherObject.Velocity.MaxSpeed; i++)
                 {
@@ -585,7 +540,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public void PointAtAndGoto(SiPoint location, double? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(UniverseLocation, location);
+            Velocity.Angle.Degrees = SiPoint.AngleTo360(Location, location);
             if (velocity != null)
             {
                 Velocity.MaxSpeed = (double)velocity;
@@ -597,7 +552,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, double? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(UniverseLocation, obj.UniverseLocation);
+            Velocity.Angle.Degrees = SiPoint.AngleTo360(Location, obj.Location);
 
             if (velocity != null)
             {
@@ -889,9 +844,9 @@ namespace Si.GameEngine.Sprites
 
         public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(UniverseLocation, to.UniverseLocation);
+        public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(Location, to.Location);
 
-        public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(UniverseLocation, to);
+        public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(Location, to);
 
         /// <summary>
         /// Of the given sprites, returns the sprite that is the closest.
@@ -906,7 +861,7 @@ namespace Si.GameEngine.Sprites
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(UniverseLocation, to.UniverseLocation);
+                var distance = SiPoint.DistanceTo(Location, to.Location);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -929,7 +884,7 @@ namespace Si.GameEngine.Sprites
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(UniverseLocation, to.UniverseLocation);
+                var distance = SiPoint.DistanceTo(Location, to.Location);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -947,8 +902,8 @@ namespace Si.GameEngine.Sprites
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(SiPoint displacementVector)
         {
-            LocalX += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
-            LocalY += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
         }
 
         /// <summary>

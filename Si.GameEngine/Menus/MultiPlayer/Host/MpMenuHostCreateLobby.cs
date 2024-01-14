@@ -26,21 +26,21 @@ namespace Si.Menus.MultiPlayer.Host
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Host a Game");
-            itemTitle.LocalX -= itemTitle.Size.Width / 2;
+            itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.Highlight = true;
 
             //---------------------------------------------------------------------------------------------------------
 
             var labelName = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Lobby Name: ".PadLeft(25));
-            labelName.LocalX -= (labelName.Size.Width) + 200;
+            labelName.X -= (labelName.Size.Width) + 200;
 
-            double xPositionForlabel = labelName.LocalX; //Save the X position for lables.
-            double xPositionForTextBox = labelName.LocalX + labelName.Size.Width; //Save the X position for textboxes.
+            double xPositionForlabel = labelName.X; //Save the X position for lables.
+            double xPositionForTextBox = labelName.X + labelName.Size.Width; //Save the X position for textboxes.
 
-            _textBoxName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelName.LocalY), "NAME", "My Game Name");
+            _textBoxName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelName.Y), "NAME", "My Game Name");
             _textBoxName.Selected = true;
-            _textBoxName.LocalY = labelName.LocalY;
+            _textBoxName.Y = labelName.Y;
 
             //---------------------------------------------------------------------------------------------------------
 
@@ -48,28 +48,28 @@ namespace Si.Menus.MultiPlayer.Host
 
             //---------------------------------------------------------------------------------------------------------
             var labelplayerName = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Player Name: ".PadLeft(25));
-            _textboxPlayerName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelplayerName.LocalY), "PLAYERNAME", "Player 1");
+            _textboxPlayerName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelplayerName.Y), "PLAYERNAME", "Player 1");
             //---------------------------------------------------------------------------------------------------------
 
             offsetY += _textboxPlayerName.Size.Height + 5;
 
             //---------------------------------------------------------------------------------------------------------
             var labelMinPlayers = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Min. Players: ".PadLeft(25));
-            _textBoxMinPlayers = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelMinPlayers.LocalY), "MINPLAYERS", "2");
+            _textBoxMinPlayers = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelMinPlayers.Y), "MINPLAYERS", "2");
             //---------------------------------------------------------------------------------------------------------
 
             offsetY += _textboxPlayerName.Size.Height + 5;
 
             //---------------------------------------------------------------------------------------------------------
             var labelMaxPlayers = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Max Players: ".PadLeft(25));
-            _textBoxMaxPlayers = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelMaxPlayers.LocalY), "MAXPLAYERS", "100");
+            _textBoxMaxPlayers = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelMaxPlayers.Y), "MAXPLAYERS", "100");
             //---------------------------------------------------------------------------------------------------------
 
             offsetY += _textboxPlayerName.Size.Height + 5;
 
             //---------------------------------------------------------------------------------------------------------
             var labelAutoStartSeconds = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Auto Start Seconds: ".PadLeft(25));
-            _textBoxAutoStartSeconds = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelAutoStartSeconds.LocalY), "AUTOSTARTSECONDS", "60");
+            _textBoxAutoStartSeconds = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelAutoStartSeconds.Y), "AUTOSTARTSECONDS", "60");
             //---------------------------------------------------------------------------------------------------------
 
             offsetY += _textBoxMaxPlayers.Size.Height + 25;

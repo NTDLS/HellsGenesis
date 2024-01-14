@@ -37,14 +37,14 @@ namespace Si.GameEngine.Controller
             for (int i = 0; i < count; i++)
             {
                 var obj = GameCore.Sprites.Particles.CreateRandomShipPartParticleAt(
-                    sprite.LocalX + SiRandom.Between(-20, 20), sprite.LocalY + SiRandom.Between(-20, 20));
+                    sprite.X + SiRandom.Between(-20, 20), sprite.Y + SiRandom.Between(-20, 20));
                 obj.Visable = true;
             }
         }
 
         public SpriteRandomShipPartParticle CreateRandomShipPartParticleAt(SpriteBase sprite)
         {
-            var obj = new SpriteRandomShipPartParticle(GameCore, sprite.LocalX, sprite.LocalY);
+            var obj = new SpriteRandomShipPartParticle(GameCore, sprite.X, sprite.Y);
             SpriteManager.Add(obj);
             return obj;
         }

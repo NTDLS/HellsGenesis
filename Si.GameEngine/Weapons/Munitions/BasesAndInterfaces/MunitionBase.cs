@@ -56,8 +56,8 @@ namespace Si.GameEngine.Weapons.Munitions
                 ThrottlePercentage = 1.0
             };
 
-            LocalLocation = (firedFrom.UniverseLocation) + (xyOffset ?? SiPoint.Zero);
-            _createdAtLocation = LocalLocation;
+            Location = (firedFrom.Location) + (xyOffset ?? SiPoint.Zero);
+            _createdAtLocation = Location;
 
             if (firedFrom is SpriteEnemyBase)
             {
@@ -82,15 +82,15 @@ namespace Si.GameEngine.Weapons.Munitions
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            if (Math.Abs(_createdAtLocation.X - LocalX) > _gameCore.Settings.MunitionSceneDistanceLimit
-               || Math.Abs(_createdAtLocation.Y - LocalY) > _gameCore.Settings.MunitionSceneDistanceLimit)
+            if (Math.Abs(_createdAtLocation.X - X) > _gameCore.Settings.MunitionSceneDistanceLimit
+               || Math.Abs(_createdAtLocation.Y - Y) > _gameCore.Settings.MunitionSceneDistanceLimit)
             {
                 QueueForDelete();
                 return;
             }
 
-            LocalX += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
-            LocalY += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
         }
 
         public override void Explode()

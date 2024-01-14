@@ -160,8 +160,8 @@ namespace Si.GameEngine.Managers
                 {
                     if (sprite.IsFixedPosition == false)
                     {
-                        sprite.LocalX += deltaX;
-                        sprite.LocalY += deltaY;
+                        sprite.X += deltaX;
+                        sprite.Y += deltaY;
                     }
                 }
             });
@@ -178,20 +178,20 @@ namespace Si.GameEngine.Managers
                 var baseSprite = o.Where(o => o.UID == spriteUID).FirstOrDefault();
                 if (baseSprite != null)
                 {
-                    var deltaX = (_gameCore.Display.TotalCanvasSize.Width / 2) - baseSprite.LocalX;
-                    var deltaY = (_gameCore.Display.TotalCanvasSize.Height / 2) - baseSprite.LocalY;
+                    var deltaX = (_gameCore.Display.TotalCanvasSize.Width / 2) - baseSprite.X;
+                    var deltaY = (_gameCore.Display.TotalCanvasSize.Height / 2) - baseSprite.Y;
 
                     foreach (var sprite in o)
                     {
                         if (sprite.IsFixedPosition == false)
                         {
-                            sprite.LocalX += deltaX;
-                            sprite.LocalY += deltaY;
+                            sprite.X += deltaX;
+                            sprite.Y += deltaY;
                         }
                     }
 
-                    _gameCore.Display.BackgroundOffset.X = baseSprite.LocalX;
-                    _gameCore.Display.BackgroundOffset.Y = baseSprite.LocalY;
+                    _gameCore.Display.BackgroundOffset.X = baseSprite.X;
+                    _gameCore.Display.BackgroundOffset.Y = baseSprite.Y;
                 }
             });
         }
@@ -361,8 +361,8 @@ namespace Si.GameEngine.Managers
             var y = command.ParameterValue<uint>("y");
 
             var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(typeName, new[] { _gameCore });
-            sprite.LocalX = x;
-            sprite.LocalY = y;
+            sprite.X = x;
+            sprite.Y = y;
             sprite.Visable = true;
 
             _gameCore.Sprites.Add(sprite);
@@ -601,8 +601,8 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.LocalX = command.ParameterValue<double>("x");
-                    sprite.LocalY = command.ParameterValue<double>("y");
+                    sprite.X = command.ParameterValue<double>("x");
+                    sprite.Y = command.ParameterValue<double>("y");
                 }
             });
         }
@@ -616,8 +616,8 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.RemoteX = command.ParameterValue<double>("x");
-                    sprite.RemoteY = command.ParameterValue<double>("y");
+                    sprite.X = command.ParameterValue<double>("x");
+                    sprite.Y = command.ParameterValue<double>("y");
                 }
             });
         }
@@ -631,8 +631,8 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.LocalX = _gameCore.Display.TotalCanvasSize.Width / 2;
-                    sprite.LocalY = _gameCore.Display.TotalCanvasSize.Height / 2;
+                    sprite.X = _gameCore.Display.TotalCanvasSize.Width / 2;
+                    sprite.Y = _gameCore.Display.TotalCanvasSize.Height / 2;
                 }
             });
         }
@@ -651,7 +651,7 @@ namespace Si.GameEngine.Managers
 
                 foreach (var sprite in sprites)
                 {
-                    _debugForm.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}, Position: {sprite.UniverseLocation}", System.Drawing.Color.Black);
+                    _debugForm.WriteLine($"Type: {sprite.GetType().Name}, UID: {sprite.UID}, Position: {sprite.Location}", System.Drawing.Color.Black);
                 }
             });
         }
