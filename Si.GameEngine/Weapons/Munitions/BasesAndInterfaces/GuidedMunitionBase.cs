@@ -22,7 +22,7 @@ namespace Si.GameEngine.Weapons.Munitions
             LockedTarget = lockedTarget;
         }
 
-        public override void ApplyIntelligence(SiReadonlyPoint displacementVector)
+        public override void ApplyIntelligence(SiPoint displacementVector)
         {
             if (LockedTarget != null)
             {

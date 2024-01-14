@@ -85,7 +85,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(SiReadonlyPoint displacementVector)
+        public override void ApplyMotion(SiPoint displacementVector)
         {
             base.ApplyMotion(displacementVector);
 

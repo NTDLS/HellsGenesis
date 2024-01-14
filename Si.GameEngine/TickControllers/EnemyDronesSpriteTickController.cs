@@ -19,7 +19,7 @@ namespace Si.GameEngine.Controller
             _gameCore = gameCore;
         }
 
-        public override void ExecuteWorldClockTick(SiReadonlyPoint displacementVector)
+        public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
             foreach (var enemy in Visible().Where(o => o.IsDrone == true))
             {

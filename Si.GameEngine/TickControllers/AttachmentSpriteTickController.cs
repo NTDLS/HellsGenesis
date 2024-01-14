@@ -15,7 +15,7 @@ namespace Si.GameEngine.Controller
         {
         }
 
-        public override void ExecuteWorldClockTick(SiReadonlyPoint displacementVector)
+        public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
             foreach (var attachment in Visible())
             {

@@ -56,7 +56,7 @@ namespace Si.GameEngine.Weapons.Munitions
                 ThrottlePercentage = 1.0
             };
 
-            LocalLocation = (firedFrom.CombinedLocation) + (xyOffset ?? SiPoint.Zero);
+            LocalLocation = (firedFrom.UniverseLocation) + (xyOffset ?? SiPoint.Zero);
             _createdAtLocation = LocalLocation;
 
             if (firedFrom is SpriteEnemyBase)
@@ -71,7 +71,7 @@ namespace Si.GameEngine.Weapons.Munitions
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(SiReadonlyPoint displacementVector)
+        public virtual void ApplyIntelligence(SiPoint displacementVector)
         {
             if (AgeInMilliseconds > MilisecondsToLive)
             {
@@ -80,7 +80,7 @@ namespace Si.GameEngine.Weapons.Munitions
             }
         }
 
-        public override void ApplyMotion(SiReadonlyPoint displacementVector)
+        public override void ApplyMotion(SiPoint displacementVector)
         {
             if (Math.Abs(_createdAtLocation.X - LocalX) > _gameCore.Settings.MunitionSceneDistanceLimit
                || Math.Abs(_createdAtLocation.Y - LocalY) > _gameCore.Settings.MunitionSceneDistanceLimit)

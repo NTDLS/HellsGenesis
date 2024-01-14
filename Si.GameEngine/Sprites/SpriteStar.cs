@@ -32,7 +32,7 @@ namespace Si.GameEngine.Sprites
             }
         }
 
-        public override void ApplyMotion(SiReadonlyPoint displacementVector)
+        public override void ApplyMotion(SiPoint displacementVector)
         {
             //LocalX -= Velocity.MaxSpeed * Velocity.ThrottlePercentage;
             //LocalY -= Velocity.MaxSpeed * Velocity.ThrottlePercentage;

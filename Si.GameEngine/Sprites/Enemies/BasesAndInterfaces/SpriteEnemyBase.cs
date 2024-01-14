@@ -76,7 +76,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
                     if (powerup != null)
                     {
-                        powerup.LocalLocation = CombinedLocation;
+                        powerup.LocalLocation = UniverseLocation;
                         _gameCore.Sprites.Powerups.Add(powerup);
                         _gameCore.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
                     }
@@ -219,7 +219,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(SiReadonlyPoint displacementVector)
+        public override void ApplyMotion(SiPoint displacementVector)
         {
             if (IsDrone)
             {

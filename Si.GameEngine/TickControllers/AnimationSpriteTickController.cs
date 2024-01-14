@@ -14,7 +14,7 @@ namespace Si.GameEngine.Controller
         {
         }
 
-        public override void ExecuteWorldClockTick(SiReadonlyPoint displacementVector)
+        public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
             foreach (var animation in Visible())
             {
@@ -30,8 +30,8 @@ namespace Si.GameEngine.Controller
         /// <param name="defaultPosition"></param>
         public void AddAt(SpriteAnimation animation, SpriteBase defaultPosition)
         {
-            animation.LocalX = defaultPosition.CombinedLocation.X;
-            animation.LocalY = defaultPosition.CombinedLocation.Y;
+            animation.LocalX = defaultPosition.UniverseLocation.X;
+            animation.LocalY = defaultPosition.UniverseLocation.Y;
             SpriteManager.Add(animation);
         }
 

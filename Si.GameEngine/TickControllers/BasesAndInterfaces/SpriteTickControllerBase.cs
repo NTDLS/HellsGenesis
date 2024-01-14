@@ -23,7 +23,7 @@ namespace Si.GameEngine.TickControllers.BasesAndInterfaces
         public List<subType> OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
         public T ByTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
 
-        public virtual void ExecuteWorldClockTick(SiReadonlyPoint displacementVector) { }
+        public virtual void ExecuteWorldClockTick(SiPoint displacementVector) { }
 
         public SpriteTickControllerBase(EngineCore gameCore, EngineSpriteManager manager)
         {

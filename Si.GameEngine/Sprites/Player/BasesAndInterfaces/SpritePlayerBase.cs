@@ -569,7 +569,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
             BoostAnimation.Visable = Velocity.BoostPercentage > 0;
         }
 
-        public override void ApplyMotion(SiReadonlyPoint displacementVector)
+        public override void ApplyMotion(SiPoint displacementVector)
         {
             if (IsDrone)
             {

@@ -135,7 +135,7 @@ namespace Si.GameEngine.Engine
             }
         }
 
-        private SiReadonlyPoint ExecuteWorldClockTick()
+        private SiPoint ExecuteWorldClockTick()
         {
             _gameCore.Menus.ExecuteWorldClockTick();
             _gameCore.Situations.ExecuteWorldClockTick();
@@ -169,7 +169,7 @@ namespace Si.GameEngine.Engine
         {
         }
 
-        private void AfterExecuteWorldClockTick(SiReadonlyPoint displacementVector)
+        private void AfterExecuteWorldClockTick(SiPoint displacementVector)
         {
             if (_gameCore.Player.Sprite.Visable == false)
             {

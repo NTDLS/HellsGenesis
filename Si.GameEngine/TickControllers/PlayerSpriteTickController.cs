@@ -1,5 +1,4 @@
-﻿using SharpDX.DirectWrite;
-using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Engine;
 using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.TickControllers.BasesAndInterfaces;
 using Si.Shared;
@@ -37,7 +36,7 @@ namespace Si.GameEngine.Controller
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
         /// <returns></returns>
-        public override SiReadonlyPoint ExecuteWorldClockTick()
+        public override SiPoint ExecuteWorldClockTick()
         {
             var displacementVector = new SiPoint();
 
@@ -281,6 +280,7 @@ namespace Si.GameEngine.Controller
             GameCore.Display.BackgroundOffset.X += displacementVector.X;
             GameCore.Display.BackgroundOffset.Y += displacementVector.Y;
 
+            //Move the player in the direction of the background. This keeps the player visually in place, which is in the center screen.
             Sprite.LocalX += displacementVector.X;
             Sprite.LocalY += displacementVector.Y;
 

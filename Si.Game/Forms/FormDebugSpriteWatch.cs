@@ -56,8 +56,7 @@ namespace Si.Game.Forms
             UpsertVariable("Is Dead?", $"{_sprite.IsDeadOrExploded}");
             UpsertVariable("Location (Local)", $"{_sprite.LocalLocation}");
             UpsertVariable("Location (Remote)", $"{_sprite.RemoteLocation}");
-            UpsertVariable("Location (Combined)", $"{_sprite.CombinedLocation}");
-            UpsertVariable("Location (Universe)", $"{_sprite.UniverseLocation},");
+            UpsertVariable("Location (Universe)", $"{_sprite.UniverseLocation}");
             UpsertVariable("Location (Render)", $"{_sprite.RenderLocation},");
 
             UpsertVariable("Background Offset", $"{_gameCore.Display.BackgroundOffset}");
