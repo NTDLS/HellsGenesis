@@ -1,6 +1,6 @@
-﻿using Si.GameEngine.Engine;
-using Si.GameEngine.Engine.Types;
-using Si.GameEngine.Levels.BasesAndInterfaces;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Core.Types;
+using Si.GameEngine.Levels._Superclass;
 
 namespace Si.GameEngine.Levels
 {
@@ -10,7 +10,7 @@ namespace Si.GameEngine.Levels
     /// </summary>
     internal class LevelFreeFlight : LevelBase
     {
-        public LevelFreeFlight(EngineCore gameCore)
+        public LevelFreeFlight(Engine gameCore)
             : base(gameCore,
                   "Free Flight",
                   "Theres nothing in this quadrant or the next that will threaten us.")
@@ -25,7 +25,7 @@ namespace Si.GameEngine.Levels
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
         }
 
-        private void FirstShowPlayerCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             _gameCore.Player.ResetAndShow();
         }

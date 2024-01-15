@@ -1,6 +1,6 @@
-﻿using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Core;
 using Si.GameEngine.Levels;
-using Si.GameEngine.Situations.BasesAndInterfaces;
+using Si.GameEngine.Situations._Superclass;
 
 namespace Si.GameEngine.Situations
 {
@@ -10,7 +10,7 @@ namespace Si.GameEngine.Situations
     /// </summary>
     internal class SituationFreeFlight : SituationBase
     {
-        public SituationFreeFlight(EngineCore gameCore)
+        public SituationFreeFlight(Engine gameCore)
             : base(gameCore,
                   "Free Flight",
                   "Theres nothing in this quadrant or the next that will threaten us.")

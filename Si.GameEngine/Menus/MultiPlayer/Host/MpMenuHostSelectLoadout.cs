@@ -1,7 +1,7 @@
-﻿using Si.GameEngine.Engine;
-using Si.GameEngine.Menus.BasesAndInterfaces;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
-using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
+using Si.GameEngine.Sprites.Player._Superclass;
 using Si.Menus.MultiPlayer.Host;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
@@ -20,7 +20,7 @@ namespace Si.Menus.SinglePlayer
         private Timer _animationTimer;
         private SpritePlayerBase _selectedSprite;
 
-        public MpMenuHostSelectLoadout(EngineCore gameCore)
+        public MpMenuHostSelectLoadout(Engine gameCore)
             : base(gameCore)
         {
             var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();

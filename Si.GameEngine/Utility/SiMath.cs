@@ -1,4 +1,4 @@
-﻿using Si.GameEngine.Sprites;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.Shared.Types.Geometry;
 using System;
 

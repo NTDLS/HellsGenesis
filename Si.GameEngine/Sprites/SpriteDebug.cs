@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
@@ -7,7 +8,7 @@ namespace Si.GameEngine.Sprites
 {
     public class SpriteDebug : SpriteShipBase
     {
-        public SpriteDebug(EngineCore gameCore)
+        public SpriteDebug(Engine gameCore)
             : base(gameCore)
         {
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
@@ -16,7 +17,7 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public SpriteDebug(EngineCore gameCore, double x, double y)
+        public SpriteDebug(Engine gameCore, double x, double y)
             : base(gameCore)
         {
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
@@ -25,7 +26,7 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public SpriteDebug(EngineCore gameCore, double x, double y, string imagePath)
+        public SpriteDebug(Engine gameCore, double x, double y, string imagePath)
             : base(gameCore)
         {
             Initialize(imagePath);

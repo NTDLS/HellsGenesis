@@ -1,6 +1,6 @@
-﻿using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Core;
 using Si.GameEngine.Levels;
-using Si.GameEngine.Situations.BasesAndInterfaces;
+using Si.GameEngine.Situations._Superclass;
 
 namespace Si.GameEngine.Situations
 {
@@ -10,7 +10,7 @@ namespace Si.GameEngine.Situations
     /// </summary>
     internal class SituationDebuggingGalore : SituationBase
     {
-        public SituationDebuggingGalore(EngineCore gameCore)
+        public SituationDebuggingGalore(Engine gameCore)
             : base(gameCore,
                   "Debugging Galore",
                   "The situation is dire and the explosions here typically\r\n"

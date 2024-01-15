@@ -1,7 +1,7 @@
-﻿using Si.GameEngine.Engine;
-using Si.GameEngine.Engine.Types;
-using Si.GameEngine.Levels.BasesAndInterfaces;
-using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Core.Types;
+using Si.GameEngine.Levels._Superclass;
+using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Enemies.Peons;
 using Si.Shared;
 
@@ -13,7 +13,7 @@ namespace Si.GameEngine.Levels
     /// </summary>
     internal class LevelDebuggingGalore : LevelBase
     {
-        public LevelDebuggingGalore(EngineCore gameCore)
+        public LevelDebuggingGalore(Engine gameCore)
             : base(gameCore,
                   "Debugging Galore",
                   "The level is dire, the explosions here typically\r\n"
@@ -34,13 +34,13 @@ namespace Si.GameEngine.Levels
             _gameCore.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void FirstShowPlayerCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             _gameCore.Player.ResetAndShow();
             _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, SiRandom.Between(0, 800)), AddFreshEnemiesCallback);
         }
 
-        private void AddFreshEnemiesCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count == 0)
             {

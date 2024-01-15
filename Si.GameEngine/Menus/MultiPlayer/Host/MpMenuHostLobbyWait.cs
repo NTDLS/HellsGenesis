@@ -1,5 +1,5 @@
-﻿using Si.GameEngine.Engine;
-using Si.GameEngine.Menus.BasesAndInterfaces;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Menus.SinglePlayer;
 using Si.Shared.Types.Geometry;
@@ -18,7 +18,7 @@ namespace Si.Menus.MultiPlayer.Host
         private readonly SpriteMenuItem _countOfReadyPlayers;
         private readonly RectangleF _currentScaledScreenBounds;
 
-        public MpMenuHostLobbyWait(EngineCore gameCore)
+        public MpMenuHostLobbyWait(Engine gameCore)
             : base(gameCore)
         {
             _currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();

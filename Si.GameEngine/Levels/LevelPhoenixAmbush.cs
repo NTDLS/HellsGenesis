@@ -1,7 +1,7 @@
-﻿using Si.GameEngine.Engine;
-using Si.GameEngine.Engine.Types;
-using Si.GameEngine.Levels.BasesAndInterfaces;
-using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Core.Types;
+using Si.GameEngine.Levels._Superclass;
+using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Enemies.Peons;
 using Si.Shared;
 
@@ -12,7 +12,7 @@ namespace Si.GameEngine.Levels
     /// </summary>
     internal class LevelPhoenixAmbush : LevelBase
     {
-        public LevelPhoenixAmbush(EngineCore gameCore)
+        public LevelPhoenixAmbush(Engine gameCore)
             : base(gameCore,
                   "Phoenix Ambush",
                   "We're safe now - or are we? Its an AMBUSH!"
@@ -32,12 +32,12 @@ namespace Si.GameEngine.Levels
             _gameCore.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void FirstShowPlayerCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             _gameCore.Player.ResetAndShow();
         }
 
-        private void AddFreshEnemiesCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count == 0)
             {
@@ -60,7 +60,7 @@ namespace Si.GameEngine.Levels
             }
         }
 
-        private void AddEnemyCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void AddEnemyCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             _gameCore.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
         }

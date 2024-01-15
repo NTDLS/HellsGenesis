@@ -63,8 +63,4 @@
     <ProjectReference Include="..\Si.Shared\Si.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Forms\" />
-  </ItemGroup>
-
 </Project>

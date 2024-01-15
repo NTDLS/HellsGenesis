@@ -1,8 +1,8 @@
-﻿using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Core;
 using Si.GameEngine.Loudouts;
-using Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces;
+using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
+using Si.GameEngine.Sprites.Weapons;
 using Si.GameEngine.Utility;
-using Si.GameEngine.Weapons;
 using Si.Shared;
 using Si.Shared.ExtensionMethods;
 using Si.Shared.Types.Geometry;
@@ -16,7 +16,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
 
-        public SpriteEnemySerf(EngineCore gameCore)
+        public SpriteEnemySerf(Engine gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
             ShipClass = SiEnemyClass.Serf;

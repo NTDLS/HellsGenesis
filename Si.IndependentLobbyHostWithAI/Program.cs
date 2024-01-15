@@ -1,4 +1,4 @@
-﻿using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Core;
 using Si.MultiplayClient;
 
 
@@ -20,14 +20,14 @@ namespace Si.IndependentLobbyHostWithAI
             Console.ReadLine();
         }
 
-        private static EngineCore CreateGameAndLobby(string lobbyName, int minPlayers, int maxPlayers, int autoStartSeconds)
+        private static Engine CreateGameAndLobby(string lobbyName, int minPlayers, int maxPlayers, int autoStartSeconds)
         {
             Console.WriteLine("Starting multiplay...");
             var multiplay = new EngineMultiplayManager();
             Console.WriteLine("Success!");
 
             Console.WriteLine("Starting game engine...");
-            var engine = new EngineCore(multiplay);
+            var engine = new Engine(multiplay);
             Console.WriteLine("Success!");
 
             //multiplay.OnReceivedSituationLayout += Multiplay_OnReceivedSituationLayout;

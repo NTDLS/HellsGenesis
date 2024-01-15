@@ -1,6 +1,7 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using Si.GameEngine.Engine;
+using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
 
@@ -36,7 +37,7 @@ namespace Si.GameEngine.Sprites
 
         #endregion
 
-        public SpriteTextBlock(EngineCore gameCore, TextFormat format, SolidColorBrush color, SiPoint location, bool isFixedPosition)
+        public SpriteTextBlock(Engine gameCore, TextFormat format, SolidColorBrush color, SiPoint location, bool isFixedPosition)
             : base(gameCore)
         {
             RenderScaleOrder = Shared.SiConstants.SiRenderScaleOrder.PostScale;

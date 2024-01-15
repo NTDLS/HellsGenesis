@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System.IO;
@@ -17,7 +18,7 @@ namespace Si.GameEngine.Sprites
         private SiRelativeDirection _rotationDirection;
         private SiAngle _travelAngle = new();
 
-        public SpriteRandomShipPartParticle(EngineCore gameCore, double x, double y)
+        public SpriteRandomShipPartParticle(Engine gameCore, double x, double y)
             : base(gameCore)
         {
             selectedImageIndex = SiRandom.Generator.Next(0, 1000) % _imageCount;

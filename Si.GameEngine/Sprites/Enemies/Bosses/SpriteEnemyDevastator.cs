@@ -1,8 +1,8 @@
-﻿using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Core;
 using Si.GameEngine.Loudouts;
-using Si.GameEngine.Sprites.Enemies.Bosses.BasesAndInterfaces;
+using Si.GameEngine.Sprites.Enemies.Bosses._Superclass;
+using Si.GameEngine.Sprites.Weapons;
 using Si.GameEngine.Utility;
-using Si.GameEngine.Weapons;
 using Si.Shared;
 using Si.Shared.ExtensionMethods;
 using Si.Shared.Types.Geometry;
@@ -32,7 +32,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         private readonly double _initialMaxpeed;
         private readonly string _assetPath = @"Graphics\Enemy\Bosses\Devastator\";
 
-        public SpriteEnemyDevastator(EngineCore gameCore)
+        public SpriteEnemyDevastator(Engine gameCore)
             : base(gameCore, hullHealth, bountyMultiplier)
         {
             _leftCannon = Attach(_assetPath + "Gun.Cannon.Left.png", true, 3);

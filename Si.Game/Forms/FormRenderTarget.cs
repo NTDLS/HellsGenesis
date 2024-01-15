@@ -1,7 +1,7 @@
 ﻿using Si.Game.Forms;
-using Si.GameEngine.Engine;
-using Si.GameEngine.Sprites;
-using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
+using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
+using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace Si.Game
     {
         private readonly List<SpriteBase> highlightedSprites = new();
         private readonly ToolTip _interrogationTip = new();
-        private readonly EngineCore _gameCore;
+        private readonly Engine _gameCore;
         private readonly bool _fullScreen = false;
 
         public FormRenderTarget()
@@ -27,7 +27,7 @@ namespace Si.Game
 
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
 
-            var settings = EngineCore.LoadSettings();
+            var settings = Engine.LoadSettings();
 
             if (settings.AlwaysOnTop)
             {
@@ -55,11 +55,11 @@ namespace Si.Game
             };
             Controls.Add(drawingSurface);
 
-            _gameCore = new EngineCore(drawingSurface);
+            _gameCore = new Engine(drawingSurface);
 
             _gameCore.EnableDebugging(new FormDebug(_gameCore));
 
-            _gameCore.OnStopEngine += (EngineCore sender) =>
+            _gameCore.OnStopEngine += (Engine sender) =>
             {   //If the engine is stopped, close the main form.
                 Invoke((MethodInvoker)delegate
                 {

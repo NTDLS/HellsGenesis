@@ -1,5 +1,6 @@
-﻿using Si.GameEngine.Engine;
-using Si.GameEngine.Weapons.Munitions;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
+using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
@@ -11,7 +12,7 @@ namespace Si.GameEngine.Sprites
     {
         public bool TakesDamage { get; set; }
 
-        public SpriteAttachment(EngineCore gameCore, string imagePath, Size? size = null)
+        public SpriteAttachment(Engine gameCore, string imagePath, Size? size = null)
             : base(gameCore)
         {
             Initialize(imagePath, size);

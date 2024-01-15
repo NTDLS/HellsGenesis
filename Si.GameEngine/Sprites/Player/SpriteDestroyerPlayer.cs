@@ -1,7 +1,7 @@
-﻿using Si.GameEngine.Engine;
+﻿using Si.GameEngine.Core;
 using Si.GameEngine.Loudouts;
-using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
-using Si.GameEngine.Weapons;
+using Si.GameEngine.Sprites.Player._Superclass;
+using Si.GameEngine.Sprites.Weapons;
 using System.Drawing;
 using static Si.Shared.SiConstants;
 
@@ -9,7 +9,7 @@ namespace Si.GameEngine.Sprites.Player
 {
     internal class SpriteDestroyerPlayer : SpritePlayerBase
     {
-        public SpriteDestroyerPlayer(EngineCore gameCore)
+        public SpriteDestroyerPlayer(Engine gameCore)
             : base(gameCore)
         {
             ShipClass = SiPlayerClass.Destroyer;

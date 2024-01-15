@@ -1,7 +1,7 @@
 ﻿using NTDLS.Determinet;
 using NTDLS.Determinet.Types;
-using Si.GameEngine.Engine;
-using Si.GameEngine.Sprites;
+using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.Shared;
 using Si.Shared.ExtensionMethods;
 using Si.Shared.Types.Geometry;
@@ -17,7 +17,7 @@ namespace Si.GameEngine.AI.Logistics
     {
         private const string _assetPath = @"Data\AI\Logistics\FlyBy.txt";
 
-        private readonly EngineCore _gameCore;
+        private readonly Engine _gameCore;
         private readonly SpriteShipBase _owner;
         private readonly SpriteBase _observedObject;
 
@@ -61,7 +61,7 @@ namespace Si.GameEngine.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public Meander(EngineCore gameCore, SpriteShipBase owner, SpriteBase observedObject)
+        public Meander(Engine gameCore, SpriteShipBase owner, SpriteBase observedObject)
         {
             _gameCore = gameCore;
             _owner = owner;

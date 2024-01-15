@@ -1,11 +1,11 @@
-﻿using Si.GameEngine.Engine;
-using Si.Sprites.BasesAndInterfaces;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 
 namespace Si.GameEngine.Sprites.Enemies.Peons
 {
     internal class SpriteEnemyMinnowDrone : SpriteEnemyMinnow, ISpriteDrone
     {
-        public SpriteEnemyMinnowDrone(EngineCore gameCore)
+        public SpriteEnemyMinnowDrone(Engine gameCore)
              : base(gameCore)
         {
         }

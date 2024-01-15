@@ -1,5 +1,5 @@
-﻿using Si.GameEngine.Engine;
-using Si.GameEngine.Menus.BasesAndInterfaces;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Menus.SinglePlayer;
 using Si.Shared.Types.Geometry;
@@ -16,7 +16,7 @@ namespace Si.Menus.MultiPlayer.Client
     {
         private readonly SpriteMenuSelectableTextInput _textboxPlayerName;
 
-        public MpMenuClientJoinLobby(EngineCore gameCore)
+        public MpMenuClientJoinLobby(Engine gameCore)
             : base(gameCore)
         {
             _gameCore.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);

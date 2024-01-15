@@ -1,11 +1,11 @@
-﻿using Si.GameEngine.Engine;
-using Si.Sprites.BasesAndInterfaces;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 
 namespace Si.GameEngine.Sprites.Player
 {
     internal class SpriteDreadnaughtPlayerDrone : SpriteDreadnaughtPlayer, ISpriteDrone
     {
-        public SpriteDreadnaughtPlayerDrone(EngineCore gameCore)
+        public SpriteDreadnaughtPlayerDrone(Engine gameCore)
             : base(gameCore)
         {
         }

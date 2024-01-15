@@ -1,7 +1,7 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using Si.GameEngine.Engine;
-using Si.GameEngine.Menus.BasesAndInterfaces;
+using Si.GameEngine.Core;
+using Si.GameEngine.Menus._Superclass;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 using static Si.Shared.SiConstants;
@@ -41,7 +41,7 @@ namespace Si.GameEngine.Sprites.MenuItems
 
         public SiMenuItemType ItemType { get; set; }
 
-        public SpriteMenuItem(EngineCore gameCore, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location)
+        public SpriteMenuItem(Engine gameCore, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location)
             : base(gameCore, format, color, location, true)
         {
             ItemType = SiMenuItemType.Undefined;

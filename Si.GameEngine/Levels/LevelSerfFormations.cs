@@ -1,7 +1,7 @@
-﻿using Si.GameEngine.Engine;
-using Si.GameEngine.Engine.Types;
-using Si.GameEngine.Levels.BasesAndInterfaces;
-using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Core.Types;
+using Si.GameEngine.Levels._Superclass;
+using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Enemies.Peons;
 using Si.GameEngine.Utility;
 using Si.Shared.Types.Geometry;
@@ -16,7 +16,7 @@ namespace Si.GameEngine.Levels
     {
         private bool _waitingOnPopulation = false;
 
-        public LevelSerfFormations(EngineCore gameCore)
+        public LevelSerfFormations(Engine gameCore)
             : base(gameCore,
                   "Serf Formations",
                   "They fly in formation, which look like easy targets...."
@@ -37,7 +37,7 @@ namespace Si.GameEngine.Levels
             _gameCore.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void RedirectFormationCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void RedirectFormationCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             var formationSerfs = _gameCore.Sprites.Enemies.VisibleOfType<SpriteEnemySerf>()
                 .Where(o => o.Mode == SpriteEnemySerf.AIMode.InFormation).ToList();
@@ -56,12 +56,12 @@ namespace Si.GameEngine.Levels
             }
         }
 
-        private void FirstShowPlayerCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             _gameCore.Player.ResetAndShow();
         }
 
-        private void AdvanceWaveCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void AdvanceWaveCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !_waitingOnPopulation)
             {
@@ -77,7 +77,7 @@ namespace Si.GameEngine.Levels
             }
         }
 
-        private void AddFreshEnemiesCallback(EngineCore gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
         {
             SiPoint baseLocation = _gameCore.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave * 5);
