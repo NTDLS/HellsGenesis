@@ -13,6 +13,21 @@ namespace Si.Shared.ExtensionMethods
         }
 
         /// <summary>
+        /// Similar to Inflate but grows the rectangle by all dimensions including the position. Returns a resized clone.
+        /// </summary>
+        /// <param name="rectangle"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static RectangleF Grow(this RectangleF rectangle, float size)
+        {
+            return new RectangleF(
+                rectangle.Location.X - size / 2,
+                rectangle.Location.Y - size / 2,
+                rectangle.Size.Width + size / 2,
+                rectangle.Size.Height + size / 2);
+        }
+
+        /// <summary>
         /// Determines if the rectangle is inside of another rectangle.
         /// </summary>
         public static bool IntersectsWith(this RectangleF reference, RectangleF with, float tolerance)

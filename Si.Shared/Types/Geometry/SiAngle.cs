@@ -126,7 +126,7 @@
 
         public bool IsBetween(double minValue, double maxValue)
         {
-            var normalized = DegreesNormalized;
+            var normalized = DegreesNormalized180;
             if (minValue > maxValue)
             {
                 return normalized >= maxValue && normalized <= minValue;
@@ -134,7 +134,10 @@
             return normalized >= minValue && normalized <= maxValue;
         }
 
-        public double DegreesNormalized
+        /// <summary>
+        /// Angle in degrees between 0-180 and -1--180
+        /// </summary>
+        public double DegreesNormalized180
         {
             get
             {
@@ -142,6 +145,9 @@
             }
         }
 
+        /// <summary>
+        /// Angle in degrees between 0-359.
+        /// </summary>
         public double DegreesNormalized360
         {
             get

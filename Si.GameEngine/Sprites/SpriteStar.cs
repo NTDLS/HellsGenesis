@@ -20,7 +20,7 @@ namespace Si.GameEngine.Sprites
             X = SiRandom.Generator.Next(0, gameEngine.Display.TotalCanvasSize.Width);
             Y = SiRandom.Generator.Next(0, gameEngine.Display.TotalCanvasSize.Height);
 
-            Velocity.MaxSpeed = 3;
+            Velocity.MaxSpeed = 0.5;
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
@@ -34,13 +34,8 @@ namespace Si.GameEngine.Sprites
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            //LocalX -= Velocity.MaxSpeed * Velocity.ThrottlePercentage;
-            //LocalY -= Velocity.MaxSpeed * Velocity.ThrottlePercentage;
-
-            if (_gameEngine.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
-            {
-                QueueForDelete();
-            }
+            X -= Velocity.MaxSpeed * displacementVector.X * Velocity.ThrottlePercentage;
+            Y -= Velocity.MaxSpeed * displacementVector.Y * Velocity.ThrottlePercentage;
         }
     }
 }
