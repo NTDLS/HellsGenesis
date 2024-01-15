@@ -1,5 +1,5 @@
 # Strikeforce Infinity
-As a Hell Fighter tribute, Strikeforce Infinity is a 2D space fighter game engine written in C# (currently .net7) and DirectX.
+As a Hell Fighter tribute, Strikeforce Infinity is a 2D space fighter game engine written in C# (currently .net8) and DirectX.
 
 Infinite space, neural network AI, multiple scenario, event driven, locking/seeking weapons, etc.
 
