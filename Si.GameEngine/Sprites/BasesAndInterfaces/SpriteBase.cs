@@ -111,7 +111,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public Rectangle BoundsI => new((int)(VisibleBounds.X), (int)(VisibleBounds.Y), Size.Width, Size.Height);
+        public Rectangle BoundsI => new((int)(Location.X), (int)(Location.Y), Size.Width, Size.Height);
 
         public RectangleF Bounds => new((float)(Location.X), (float)(Location.Y), Size.Width, Size.Height);
         public RectangleF RenderBounds => new((float)(RenderLocation.X), (float)(RenderLocation.Y), Size.Width, Size.Height);
