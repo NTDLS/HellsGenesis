@@ -4,7 +4,7 @@ namespace Si.GameEngine.Core.Debug._Superclass
 {
     public interface IDebugForm
     {
-        public void StartWatch(Engine gameEngine, SpriteBase sprite);
+        public void StartWatch(GameEngineCore gameEngine, SpriteBase sprite);
         public void WriteLine(string text, System.Drawing.Color color);
         public void Write(string text, System.Drawing.Color color);
         public void ClearText();

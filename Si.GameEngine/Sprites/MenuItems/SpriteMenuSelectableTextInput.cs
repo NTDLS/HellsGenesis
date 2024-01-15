@@ -1,5 +1,6 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
+using Si.GameEngine.Core;
 using Si.GameEngine.Menus._Superclass;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
@@ -14,7 +15,7 @@ namespace Si.GameEngine.Sprites.MenuItems
     {
         public int CharacterLimit { get; set; }
 
-        public SpriteMenuSelectableTextInput(Core.Engine gameEngine, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location, int characterLimit = 100)
+        public SpriteMenuSelectableTextInput(GameEngineCore gameEngine, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location, int characterLimit = 100)
             : base(gameEngine, menu, format, color, location)
         {
             ItemType = SiMenuItemType.SelectableTextInput;

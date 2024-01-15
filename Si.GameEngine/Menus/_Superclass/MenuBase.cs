@@ -1,4 +1,5 @@
 ﻿using SharpDX.DirectInput;
+using Si.GameEngine.Core;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Shared.Types.Geometry;
 using System;
@@ -15,7 +16,7 @@ namespace Si.GameEngine.Menus._Superclass
     /// </summary>
     public class MenuBase
     {
-        protected Core.Engine _gameEngine;
+        protected GameEngineCore _gameEngine;
         private DateTime _lastInputHandled = DateTime.UtcNow;
 
         public List<SpriteMenuItem> Items { get; private set; } = new();
@@ -77,7 +78,7 @@ namespace Si.GameEngine.Menus._Superclass
 
         #endregion
 
-        public MenuBase(Core.Engine gameEngine)
+        public MenuBase(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
         }

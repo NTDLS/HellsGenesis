@@ -12,7 +12,7 @@ namespace Si.GameEngine.Core.TickControllers
     {
         private readonly EngineSpriteManager _manager;
 
-        public RadarPositionsSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+        public RadarPositionsSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine)
         {
             _manager = manager;

@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System;
@@ -45,7 +46,7 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
             }
         }
 
-        public SpritePowerupBase(Core.Engine gameEngine)
+        public SpritePowerupBase(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             Initialize();

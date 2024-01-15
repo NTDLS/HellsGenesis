@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using System;
 using System.Drawing;
@@ -9,11 +10,11 @@ namespace Si.Game.Forms
 {
     public partial class FormDebugSpriteWatch : Form
     {
-        private readonly GameEngine.Core.Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
         private readonly SpriteBase _sprite;
         private readonly Timer _timer = new();
 
-        internal FormDebugSpriteWatch(GameEngine.Core.Engine gameEngine, SpriteBase sprite)
+        internal FormDebugSpriteWatch(GameEngineCore gameEngine, SpriteBase sprite)
         {
             InitializeComponent();
             _gameEngine = gameEngine;

@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites.Weapons._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.GameEngine.Utility;
 using Si.Shared;
@@ -40,7 +41,7 @@ namespace Si.GameEngine.Sprites._Superclass
         private readonly int _explosionSoundCount = 4;
         private int _selectedExplosionSoundIndex = 0;
 
-        public SpriteShipBase(Core.Engine gameEngine, string name = "")
+        public SpriteShipBase(GameEngineCore gameEngine, string name = "")
             : base(gameEngine, name)
         {
             if (IsDrone)

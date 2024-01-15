@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System.IO;
@@ -11,7 +12,7 @@ namespace Si.GameEngine.Sprites
         private readonly int _imageCount = 5;
         private readonly int selectedImageIndex = 0;
 
-        public SpriteStar(Core.Engine gameEngine)
+        public SpriteStar(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             selectedImageIndex = SiRandom.Generator.Next(0, 1000) % _imageCount;

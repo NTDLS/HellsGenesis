@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Si.GameEngine.AI;
+using Si.GameEngine.Core;
 using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites._Superclass;
@@ -32,7 +33,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         public bool IsHostile { get; set; } = true;
         public List<WeaponBase> Weapons { get; private set; } = new();
 
-        public SpriteEnemyBase(Core.Engine gameEngine, int hullHealth, int bountyMultiplier)
+        public SpriteEnemyBase(GameEngineCore gameEngine, int hullHealth, int bountyMultiplier)
                 : base(gameEngine)
         {
             Velocity.ThrottlePercentage = 1;

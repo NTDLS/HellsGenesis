@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Loudouts;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Bosses._Superclass;
 using Si.GameEngine.Sprites.Weapons;
 using Si.GameEngine.Utility;
@@ -25,7 +26,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         private readonly double _initialMaxpeed;
         private readonly string _assetPath = @"Graphics\Enemy\Bosses\Spectre\";
 
-        public SpriteEnemySpectre(Core.Engine gameEngine)
+        public SpriteEnemySpectre(GameEngineCore gameEngine)
             : base(gameEngine, hullHealth, bountyMultiplier)
         {
             _leftGun = Attach(_assetPath + "Gun.Left.png", true, 3);

@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Shared;
@@ -16,7 +17,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public MunitionFragMissile(Core.Engine gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
+        public MunitionFragMissile(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
             MaxSeekingObservationDistance = 1000;

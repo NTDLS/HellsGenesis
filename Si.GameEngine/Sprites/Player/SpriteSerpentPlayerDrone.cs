@@ -1,10 +1,11 @@
-﻿using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 
 namespace Si.GameEngine.Sprites.Player
 {
     internal class SpriteSerpentPlayerDrone : SpriteSerpentPlayer, ISpriteDrone
     {
-        public SpriteSerpentPlayerDrone(Core.Engine gameEngine)
+        public SpriteSerpentPlayerDrone(GameEngineCore gameEngine)
             : base(gameEngine)
         {
         }

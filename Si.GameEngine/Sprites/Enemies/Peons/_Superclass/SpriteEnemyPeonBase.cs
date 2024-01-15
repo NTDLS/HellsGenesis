@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Utility;
 using Si.Shared.Types.Geometry;
@@ -16,7 +17,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons._Superclass
         public SpriteAnimation ThrustAnimation { get; internal set; }
         public SpriteAnimation BoostAnimation { get; internal set; }
 
-        public SpriteEnemyPeonBase(Core.Engine gameEngine, int hullHealth, int bountyMultiplier)
+        public SpriteEnemyPeonBase(GameEngineCore gameEngine, int hullHealth, int bountyMultiplier)
             : base(gameEngine, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;

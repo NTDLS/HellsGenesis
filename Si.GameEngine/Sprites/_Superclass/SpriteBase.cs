@@ -1,4 +1,5 @@
 ﻿using SharpDX.Mathematics.Interop;
+using Si.GameEngine.Core;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
@@ -68,7 +69,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
         #region Backend variables.
 
-        protected Core.Engine _gameEngine;
+        protected GameEngineCore _gameEngine;
 
         private SharpDX.Direct2D1.Bitmap _image;
 
@@ -93,7 +94,7 @@ namespace Si.GameEngine.Sprites._Superclass
         #region Properties.
 
         public string SpriteTag { get; set; }
-        public uint UID { get; private set; } = Core.Engine.GetNextSequentialId();
+        public uint UID { get; private set; } = GameEngineCore.GetNextSequentialId();
         public uint OwnerUID { get; set; }
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);
@@ -247,7 +248,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
         #endregion
 
-        public SpriteBase(Core.Engine gameEngine, string name = "")
+        public SpriteBase(GameEngineCore gameEngine, string name = "")
         {
             _gameEngine = gameEngine;
 

@@ -7,7 +7,7 @@ namespace Si.ServerEngine.Core.Objects
 {
     internal class Lobby
     {
-        private readonly Engine _serverCore;
+        private readonly ServerEngineCore _serverCore;
         private readonly PessimisticSemaphore<Dictionary<Guid, LobbyConnection>> _connections = new();
         private readonly System.Timers.Timer _pingTimer = new(1000);
         private readonly System.Timers.Timer _lobbyStartTimer = new(1000);
@@ -53,7 +53,7 @@ namespace Si.ServerEngine.Core.Objects
         /// </summary>
         public bool IsHeadless { get; set; }
 
-        public Lobby(Engine serverCore, Guid ownerConnectionId, SiLobbyConfiguration configuration)
+        public Lobby(ServerEngineCore serverCore, Guid ownerConnectionId, SiLobbyConfiguration configuration)
         {
             _serverCore = serverCore;
             UID = Guid.NewGuid();

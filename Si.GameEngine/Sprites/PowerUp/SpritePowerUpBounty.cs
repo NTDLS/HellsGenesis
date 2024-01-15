@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites.Powerup._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites.Powerup._Superclass;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
@@ -9,7 +10,7 @@ namespace Si.GameEngine.Sprites.Powerup
     {
         private readonly int imageCount = 3;
 
-        public SpritePowerupBounty(Core.Engine gameEngine)
+        public SpritePowerupBounty(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             PowerupAmount = 100;

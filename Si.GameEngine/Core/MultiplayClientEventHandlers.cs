@@ -16,9 +16,9 @@ namespace Si.GameEngine.Core
     /// </summary>
     internal class MultiplayClientEventHandlers
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
 
-        public MultiplayClientEventHandlers(Engine gameEngine)
+        public MultiplayClientEventHandlers(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
         }

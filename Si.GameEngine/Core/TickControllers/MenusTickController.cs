@@ -14,7 +14,7 @@ namespace Si.GameEngine.Core.TickControllers
 
         private readonly PessimisticSemaphore<List<MenuBase>> _collection = new();
 
-        public MenusTickController(Engine gameEngine)
+        public MenusTickController(GameEngineCore gameEngine)
             : base(gameEngine)
         {
         }

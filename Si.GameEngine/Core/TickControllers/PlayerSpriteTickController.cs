@@ -14,12 +14,12 @@ namespace Si.GameEngine.Core.TickControllers
     /// </summary>
     public class PlayerSpriteTickController : PlayerTickControllerBase<SpritePlayerBase>
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
 
         public SpritePlayerBase Sprite { get; set; }
 
-        public PlayerSpriteTickController(Engine gameEngine)
+        public PlayerSpriteTickController(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             _gameEngine = gameEngine;

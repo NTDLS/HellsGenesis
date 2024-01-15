@@ -13,12 +13,12 @@ namespace Si.GameEngine.Core
     /// </summary>
     internal class EngineWorldClock
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
         private bool _shutdown = false;
         private bool _isPaused = false;
         private readonly Thread _graphicsThread;
 
-        public EngineWorldClock(Engine gameEngine)
+        public EngineWorldClock(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
             _graphicsThread = new Thread(GraphicsThreadProc);
@@ -167,7 +167,7 @@ namespace Si.GameEngine.Core
             return displacementVector;
         }
 
-        private void UpdateStatusText(Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void UpdateStatusText(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
             if (_gameEngine.Multiplay.State.PlayMode != SiPlayMode.MutiPlayerClient
                 && _gameEngine.Situations?.CurrentSituation?.State == SiSituationState.Started)

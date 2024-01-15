@@ -20,14 +20,14 @@ namespace Si.GameEngine.Core.Types
         private bool _isPlaying = false; //Only applicable when _loopForever == false;
         private bool _isFading;
         public float InitialVolumne { get; private set; }
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
 
         public void SetVolume(float volumne)
         {
             _singleSourceVoice.SetVolume(volumne);
         }
 
-        public SiAudioClip(Engine gameEngine, Stream stream, float initialVolumne = 1, bool loopForever = false)
+        public SiAudioClip(GameEngineCore gameEngine, Stream stream, float initialVolumne = 1, bool loopForever = false)
         {
             _gameEngine = gameEngine;
 

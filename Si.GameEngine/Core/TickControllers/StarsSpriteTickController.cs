@@ -10,7 +10,7 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class StarsSpriteTickController : SpriteTickControllerBase<SpriteStar>
     {
-        public StarsSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+        public StarsSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine, manager)
         {
         }

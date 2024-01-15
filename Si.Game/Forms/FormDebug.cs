@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Core.Debug._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Core.Debug._Superclass;
 using Si.GameEngine.Sprites._Superclass;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Si.Game.Forms
 {
     public partial class FormDebug : Form, IDebugForm
     {
-        private readonly GameEngine.Core.Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
         private readonly List<string> _commandHistory = new();
         private int _commandHistoryIndex = 0;
         private DateTime _lastTabKeyTimestamp = DateTime.UtcNow;
@@ -67,7 +68,7 @@ namespace Si.Game.Forms
             textBoxCommand.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
 
-        internal FormDebug(GameEngine.Core.Engine gameEngine)
+        internal FormDebug(GameEngineCore gameEngine)
         {
             InitializeComponent();
 
@@ -227,7 +228,7 @@ namespace Si.Game.Forms
             richTextBoxOutput.ResumeLayout();
         }
 
-        public void StartWatch(GameEngine.Core.Engine gameEngine, SpriteBase sprite)
+        public void StartWatch(GameEngineCore gameEngine, SpriteBase sprite)
         {
             new Thread(o =>
             {

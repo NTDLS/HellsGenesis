@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.Shared.Types.Geometry;
 using System;
@@ -15,7 +16,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
         public int MaxSeekingObservationAngleDegrees { get; set; } = 20;
         public int SeekingRotationRateInDegrees { get; set; } = 4;
 
-        public SeekingMunitionBase(Core.Engine gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
+        public SeekingMunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
         }

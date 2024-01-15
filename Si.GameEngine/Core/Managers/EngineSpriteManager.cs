@@ -27,7 +27,7 @@ namespace Si.GameEngine.Core.Managers
         public delegate void CollectionAccessor(List<SpriteBase> sprites);
         public delegate T CollectionAccessorT<T>(List<SpriteBase> sprites);
 
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
         private SiPoint _radarScale;
         private SiPoint _radarOffset;
 
@@ -53,7 +53,7 @@ namespace Si.GameEngine.Core.Managers
 
         #endregion
 
-        public EngineSpriteManager(Engine gameEngine)
+        public EngineSpriteManager(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
 

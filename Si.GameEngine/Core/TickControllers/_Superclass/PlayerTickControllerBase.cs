@@ -7,7 +7,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
     /// </summary>
     public class PlayerTickControllerBase<T> : TickControllerBase<T> where T : class
     {
-        public Engine GameEngine { get; private set; }
+        public GameEngineCore GameEngine { get; private set; }
 
         /// <summary>
         /// Moves the player and returns the direction and amount of movment which was applied.
@@ -15,7 +15,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
         /// <returns>Returns the direction and amount of movement that the player has moved in the current tick.</returns>
         public virtual SiPoint ExecuteWorldClockTick() => new();
 
-        public PlayerTickControllerBase(Engine gameEngine)
+        public PlayerTickControllerBase(GameEngineCore gameEngine)
         {
             GameEngine = gameEngine;
         }

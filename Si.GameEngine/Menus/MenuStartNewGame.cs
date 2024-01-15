@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Menus.MultiPlayer;
 using Si.Menus.SinglePlayer;
@@ -12,7 +13,7 @@ namespace Si.GameEngine.Menus
     /// </summary>
     internal class MenuStartNewGame : MenuBase
     {
-        public MenuStartNewGame(Core.Engine gameEngine)
+        public MenuStartNewGame(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();

@@ -1,4 +1,6 @@
-﻿namespace Si.GameEngine.Sprites._Superclass
+﻿using Si.GameEngine.Core;
+
+namespace Si.GameEngine.Sprites._Superclass
 {
     public class SpriteParticleBase : SpriteBase
     {
@@ -7,7 +9,7 @@
         /// </summary>
         /// <param name="core"></param>
         /// <param name="name"></param>
-        public SpriteParticleBase(Core.Engine gameEngine, string name = "")
+        public SpriteParticleBase(GameEngineCore gameEngine, string name = "")
             : base(gameEngine, name)
         {
             _gameEngine = gameEngine;

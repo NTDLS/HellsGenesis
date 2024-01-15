@@ -66,14 +66,14 @@ namespace Si.GameEngine.Core.Managers
             "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean|Displays whether a given sprite is visible or not.",
         };
 
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
         private readonly Stack<string> _commandStack = new();
         private IDebugForm _debugForm;
         public DebugCommandParser CommandParser { get; } = new(_commandPrototypes);
         private readonly List<MethodInfo> _hardDebugMethods;
         public bool IsVisible { get; private set; } = false;
 
-        public EngineDebugManager(Engine gameEngine, IDebugForm debugForm)
+        public EngineDebugManager(GameEngineCore gameEngine, IDebugForm debugForm)
         {
             _gameEngine = gameEngine;
             _debugForm = debugForm;

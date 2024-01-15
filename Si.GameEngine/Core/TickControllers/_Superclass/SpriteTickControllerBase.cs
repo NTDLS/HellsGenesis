@@ -13,7 +13,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
     /// </summary>
     public class SpriteTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
     {
-        public Engine GameEngine { get; private set; }
+        public GameEngineCore GameEngine { get; private set; }
         public EngineSpriteManager SpriteManager { get; private set; }
 
         public List<subType> VisibleOfType<subType>() where subType : T => SpriteManager.VisibleOfType<subType>();
@@ -24,7 +24,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
 
         public virtual void ExecuteWorldClockTick(SiPoint displacementVector) { }
 
-        public SpriteTickControllerBase(Engine gameEngine, EngineSpriteManager manager)
+        public SpriteTickControllerBase(GameEngineCore gameEngine, EngineSpriteManager manager)
         {
             GameEngine = gameEngine;
             SpriteManager = manager;

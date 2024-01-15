@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites.Enemies._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites.Enemies._Superclass;
 
 namespace Si.GameEngine.Sprites.Enemies.Bosses._Superclass
 {
@@ -7,7 +8,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses._Superclass
     /// </summary>
     internal class SpriteEnemyBossBase : SpriteEnemyBase
     {
-        public SpriteEnemyBossBase(Core.Engine gameEngine, int hullHealth, int bountyMultiplier)
+        public SpriteEnemyBossBase(GameEngineCore gameEngine, int hullHealth, int bountyMultiplier)
             : base(gameEngine, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;

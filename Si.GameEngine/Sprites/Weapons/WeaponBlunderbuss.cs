@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
@@ -13,10 +14,10 @@ namespace Si.GameEngine.Sprites.Weapons
         private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponBlunderbuss(Core.Engine gameEngine, SpriteShipBase owner)
+        public WeaponBlunderbuss(GameEngineCore gameEngine, SpriteShipBase owner)
             : base(gameEngine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponBlunderbuss(Core.Engine gameEngine)
+        public WeaponBlunderbuss(GameEngineCore gameEngine)
             : base(gameEngine, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()

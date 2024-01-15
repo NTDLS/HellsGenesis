@@ -7,10 +7,10 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class SituationsTickController : UnvectoredTickControllerBase<SituationBase>
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
         public SituationBase CurrentSituation { get; private set; }
 
-        public SituationsTickController(Engine gameEngine)
+        public SituationsTickController(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             _gameEngine = gameEngine;

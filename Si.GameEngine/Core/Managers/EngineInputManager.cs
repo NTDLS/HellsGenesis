@@ -13,7 +13,7 @@ namespace Si.GameEngine.Core.Managers
     /// </summary>
     public class EngineInputManager
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
         private readonly Dictionary<SiPlayerKey, bool> _playerKeyStates = new();
         private bool _collectDetailedKeyInformation = false;
         private readonly Dictionary<Key, bool> _allKeyStates = new();
@@ -38,7 +38,7 @@ namespace Si.GameEngine.Core.Managers
         /// </summary>
         public List<Key> DepressedKeys { get; private set; } = new();
 
-        public EngineInputManager(Engine gameEngine)
+        public EngineInputManager(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
 

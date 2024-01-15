@@ -9,7 +9,7 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class ParticlesSpriteTickController : SpriteTickControllerBase<SpriteParticleBase>
     {
-        public ParticlesSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+        public ParticlesSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine, manager)
         {
         }

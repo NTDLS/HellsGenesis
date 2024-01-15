@@ -1,6 +1,7 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
+using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
@@ -48,7 +49,7 @@ namespace Si.GameEngine.Sprites
             public bool DeleteSpriteAfterPlay;
         }
 
-        public SpriteAnimation(Core.Engine gameEngine, string spriteSheetFileName, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
+        public SpriteAnimation(GameEngineCore gameEngine, string spriteSheetFileName, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
             : base(gameEngine)
         {
             _playMode = playMode;

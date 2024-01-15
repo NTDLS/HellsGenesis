@@ -10,9 +10,9 @@ namespace Si.ServerEngine.Core.Managers
     /// </summary>
     internal class LogManager
     {
-        private readonly Engine _serverCore;
+        private readonly ServerEngineCore _serverCore;
 
-        public LogManager(Engine serverCore)
+        public LogManager(ServerEngineCore serverCore)
         {
             _serverCore = serverCore;
         }

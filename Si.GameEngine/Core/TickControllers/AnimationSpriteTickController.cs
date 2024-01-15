@@ -9,7 +9,7 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class AnimationSpriteTickController : SpriteTickControllerBase<SpriteAnimation>
     {
-        public AnimationSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+        public AnimationSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine, manager)
         {
         }

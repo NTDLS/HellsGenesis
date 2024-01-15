@@ -12,7 +12,7 @@ namespace Si.GameEngine.Core.Managers
     /// </summary>
     public class EngineAssetManager
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
         private readonly PessimisticSemaphore<Dictionary<string, object>> _collection = new();
 
 #if DEBUG
@@ -20,7 +20,7 @@ namespace Si.GameEngine.Core.Managers
 #else
         private readonly string assetRawPath = @".\Assets";
 #endif
-        public EngineAssetManager(Engine gameEngine)
+        public EngineAssetManager(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
         }

@@ -8,7 +8,7 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class PowerupsSpriteTickController : SpriteTickControllerBase<SpritePowerupBase>
     {
-        public PowerupsSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+        public PowerupsSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine, manager)
         {
         }

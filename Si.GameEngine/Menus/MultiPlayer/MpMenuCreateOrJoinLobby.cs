@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Menus;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Menus;
 using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Menus.MultiPlayer.Client;
@@ -13,7 +14,7 @@ namespace Si.Menus.MultiPlayer
     /// </summary>
     internal class MpMenuCreateOrJoinLobby : MenuBase
     {
-        public MpMenuCreateOrJoinLobby(GameEngine.Core.Engine gameEngine)
+        public MpMenuCreateOrJoinLobby(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             //Set this here incase we are comming back to this menue from the join/host menu.

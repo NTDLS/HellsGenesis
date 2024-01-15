@@ -10,7 +10,7 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class TextBlocksSpriteTickController : SpriteTickControllerBase<SpriteTextBlock>
     {
-        public TextBlocksSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+        public TextBlocksSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine, manager)
         {
         }

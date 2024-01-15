@@ -10,9 +10,9 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class EnemiesSpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
 
-        public EnemiesSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+        public EnemiesSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine, manager)
         {
             _gameEngine = gameEngine;

@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Loudouts;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons;
 using System.Drawing;
@@ -8,7 +9,7 @@ namespace Si.GameEngine.Sprites.Player
 {
     internal class SpriteFrigatePlayer : SpritePlayerBase
     {
-        public SpriteFrigatePlayer(Core.Engine gameEngine)
+        public SpriteFrigatePlayer(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             ShipClass = SiPlayerClass.Frigate;

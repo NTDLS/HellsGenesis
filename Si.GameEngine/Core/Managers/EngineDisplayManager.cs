@@ -14,7 +14,7 @@ namespace Si.GameEngine.Core.Managers
     /// </summary>
     public class EngineDisplayManager
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
 
         public SiFrameCounter FrameCounter { get; private set; } = new();
 
@@ -156,7 +156,7 @@ namespace Si.GameEngine.Core.Managers
             }
         }
 
-        public EngineDisplayManager(Engine gameEngine, Control drawingSurface, Size visibleSize)
+        public EngineDisplayManager(GameEngineCore gameEngine, Control drawingSurface, Size visibleSize)
         {
             _gameEngine = gameEngine;
             DrawingSurface = drawingSurface;

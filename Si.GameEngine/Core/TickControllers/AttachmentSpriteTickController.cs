@@ -9,7 +9,7 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class AttachmentSpriteTickController : SpriteTickControllerBase<SpriteAttachment>
     {
-        public AttachmentSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+        public AttachmentSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine, manager)
         {
         }

@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
@@ -15,10 +16,10 @@ namespace Si.GameEngine.Sprites.Weapons
 
         private bool _toggle = false;
 
-        public WeaponGuidedFragMissile(Core.Engine gameEngine, SpriteShipBase owner)
+        public WeaponGuidedFragMissile(GameEngineCore gameEngine, SpriteShipBase owner)
             : base(gameEngine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponGuidedFragMissile(Core.Engine gameEngine)
+        public WeaponGuidedFragMissile(GameEngineCore gameEngine)
             : base(gameEngine, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()

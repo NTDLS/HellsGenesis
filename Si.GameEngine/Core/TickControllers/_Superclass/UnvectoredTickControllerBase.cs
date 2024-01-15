@@ -6,11 +6,11 @@
     /// </summary>
     public class UnvectoredTickControllerBase<T> : TickControllerBase<T> where T : class
     {
-        public Engine GameEngine { get; private set; }
+        public GameEngineCore GameEngine { get; private set; }
 
         public virtual void ExecuteWorldClockTick() { }
 
-        public UnvectoredTickControllerBase(Engine gameEngine)
+        public UnvectoredTickControllerBase(GameEngineCore gameEngine)
         {
             GameEngine = gameEngine;
         }

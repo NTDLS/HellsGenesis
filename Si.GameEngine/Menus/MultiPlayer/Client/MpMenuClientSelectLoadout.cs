@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.Menus.MultiPlayer.Client;
@@ -20,7 +21,7 @@ namespace Si.Menus.SinglePlayer
         private Timer _animationTimer;
         private SpritePlayerBase _selectedSprite;
 
-        public MpMenuClientSelectLoadout(GameEngine.Core.Engine gameEngine)
+        public MpMenuClientSelectLoadout(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             _gameEngine.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);

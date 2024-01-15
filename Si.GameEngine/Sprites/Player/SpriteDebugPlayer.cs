@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Loudouts;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons;
 using System.Drawing;
@@ -8,7 +9,7 @@ namespace Si.GameEngine.Sprites.Player
 {
     internal class SpriteDebugPlayer : SpritePlayerBase
     {
-        public SpriteDebugPlayer(Core.Engine gameEngine)
+        public SpriteDebugPlayer(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             ShipClass = SiPlayerClass.Debug;

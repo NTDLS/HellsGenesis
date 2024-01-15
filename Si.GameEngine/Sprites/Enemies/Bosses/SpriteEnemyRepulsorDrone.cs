@@ -1,8 +1,10 @@
-﻿namespace Si.GameEngine.Sprites.Enemies.Bosses
+﻿using Si.GameEngine.Core;
+
+namespace Si.GameEngine.Sprites.Enemies.Bosses
 {
     internal class SpriteEnemyRepulsorDrone : SpriteEnemyRepulsor
     {
-        public SpriteEnemyRepulsorDrone(Core.Engine gameEngine)
+        public SpriteEnemyRepulsorDrone(GameEngineCore gameEngine)
             : base(gameEngine)
         {
         }

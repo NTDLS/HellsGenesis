@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Core.Types;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Core.Types;
 using Si.GameEngine.Levels._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Enemies.Peons;
@@ -15,7 +16,7 @@ namespace Si.GameEngine.Levels
     {
         private bool _waitingOnPopulation = false;
 
-        public LevelSerfFormations(Core.Engine gameEngine)
+        public LevelSerfFormations(GameEngineCore gameEngine)
             : base(gameEngine,
                   "Serf Formations",
                   "They fly in formation, which look like easy targets...."
@@ -36,7 +37,7 @@ namespace Si.GameEngine.Levels
             _gameEngine.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void RedirectFormationCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void RedirectFormationCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
             var formationSerfs = _gameEngine.Sprites.Enemies.VisibleOfType<SpriteEnemySerf>()
                 .Where(o => o.Mode == SpriteEnemySerf.AIMode.InFormation).ToList();
@@ -55,12 +56,12 @@ namespace Si.GameEngine.Levels
             }
         }
 
-        private void FirstShowPlayerCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
             _gameEngine.Player.ResetAndShow();
         }
 
-        private void AdvanceWaveCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void AdvanceWaveCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
             if (_gameEngine.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !_waitingOnPopulation)
             {
@@ -76,7 +77,7 @@ namespace Si.GameEngine.Levels
             }
         }
 
-        private void AddFreshEnemiesCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
             SiPoint baseLocation = _gameEngine.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave * 5);

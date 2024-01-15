@@ -15,7 +15,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 {
     public class EngineRendering
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
 
         public SharpDX.Direct2D1.BitmapRenderTarget IntermediateRenderTarget { get; private set; }
         public WindowRenderTarget ScreenRenderTarget { get; private set; }
@@ -25,7 +25,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(SharpDX.Direct2D1.FactoryType.SingleThreaded);
         private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
 
-        public EngineRendering(Engine gameEngine)
+        public EngineRendering(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
 

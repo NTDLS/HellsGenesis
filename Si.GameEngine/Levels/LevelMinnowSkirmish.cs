@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Core.Types;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Core.Types;
 using Si.GameEngine.Levels._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Enemies.Peons;
@@ -11,7 +12,7 @@ namespace Si.GameEngine.Levels
     /// </summary>
     internal class LevelMinnowSkirmish : LevelBase
     {
-        public LevelMinnowSkirmish(Core.Engine gameEngine)
+        public LevelMinnowSkirmish(GameEngineCore gameEngine)
             : base(gameEngine,
                   "Minnow Skirmish",
                   "Its not just a skirmish, its a space aged dog fight."
@@ -31,12 +32,12 @@ namespace Si.GameEngine.Levels
             _gameEngine.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void FirstShowPlayerCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
             _gameEngine.Player.ResetAndShow();
         }
 
-        private void AddFreshEnemiesCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
             if (_gameEngine.Sprites.OfType<SpriteEnemyBase>().Count == 0)
             {
@@ -59,7 +60,7 @@ namespace Si.GameEngine.Levels
             }
         }
 
-        private void AddEnemyCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void AddEnemyCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
             _gameEngine.Sprites.Enemies.Create<SpriteEnemyMinnow>();
         }

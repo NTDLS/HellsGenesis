@@ -9,7 +9,7 @@ namespace Si.GameEngine.Core.Managers
     /// </summary>
     public class EngineAudioManager
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
 
         public SiAudioClip BackgroundMusicSound { get; private set; }
         public SiAudioClip RadarBlipsSound { get; private set; }
@@ -17,7 +17,7 @@ namespace Si.GameEngine.Core.Managers
         public SiAudioClip LockedOnBlip { get; private set; }
         public SiAudioClip Click { get; private set; }
 
-        public EngineAudioManager(Engine gameEngine)
+        public EngineAudioManager(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
 

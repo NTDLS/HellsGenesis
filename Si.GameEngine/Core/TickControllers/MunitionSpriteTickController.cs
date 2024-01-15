@@ -15,7 +15,7 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class MunitionSpriteTickController : SpriteTickControllerBase<MunitionBase>
     {
-        public MunitionSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+        public MunitionSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine, manager)
         {
         }

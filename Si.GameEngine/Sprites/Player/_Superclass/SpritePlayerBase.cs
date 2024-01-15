@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Si.GameEngine.Core;
 using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Loudouts;
@@ -49,7 +50,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
         private readonly List<WeaponBase> _secondaryWeapons = new();
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
 
-        public SpritePlayerBase(Core.Engine gameEngine)
+        public SpritePlayerBase(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             OnHit += SpritePlayer_OnHit;

@@ -7,7 +7,7 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class DebugsSpriteTickController : SpriteTickControllerBase<SpriteDebug>
     {
-        public DebugsSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+        public DebugsSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine, manager)
         {
         }

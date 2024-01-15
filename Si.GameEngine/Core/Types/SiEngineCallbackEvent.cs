@@ -9,7 +9,7 @@ namespace Si.GameEngine.Core.Types
     /// </summary>
     public class SiEngineCallbackEvent
     {
-        private readonly Engine _gameEngine;
+        private readonly GameEngineCore _gameEngine;
         private readonly object _referenceObject = null;
         private readonly TimeSpan _countdown;
         private readonly SiOnExecute _onExecute;
@@ -27,7 +27,7 @@ namespace Si.GameEngine.Core.Types
         /// <param name="core">Engine core</param>
         /// <param name="sender">The event that is being triggered</param>
         /// <param name="refObj">An optional object passed by the user code</param>
-        public delegate void SiOnExecute(Engine gameEngine, SiEngineCallbackEvent sender, object refObj);
+        public delegate void SiOnExecute(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj);
 
         public enum SiCallbackEventMode
         {
@@ -41,7 +41,7 @@ namespace Si.GameEngine.Core.Types
             Asynchronous
         }
 
-        public SiEngineCallbackEvent(Engine gameEngine, TimeSpan countdown, SiOnExecute executeCallback, object refObj,
+        public SiEngineCallbackEvent(GameEngineCore gameEngine, TimeSpan countdown, SiOnExecute executeCallback, object refObj,
             SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
             SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
         {
@@ -55,7 +55,7 @@ namespace Si.GameEngine.Core.Types
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(Engine gameEngine, TimeSpan countdown, SiOnExecute executeCallback, object refObj)
+        public SiEngineCallbackEvent(GameEngineCore gameEngine, TimeSpan countdown, SiOnExecute executeCallback, object refObj)
         {
             _referenceObject = refObj;
             _gameEngine = gameEngine;
@@ -65,7 +65,7 @@ namespace Si.GameEngine.Core.Types
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(Engine gameEngine, TimeSpan countdown, SiOnExecute executeCallback)
+        public SiEngineCallbackEvent(GameEngineCore gameEngine, TimeSpan countdown, SiOnExecute executeCallback)
         {
             _gameEngine = gameEngine;
             _countdown = countdown;

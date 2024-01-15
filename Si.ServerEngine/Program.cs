@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using Si.ServerEngine.Core;
 using Si.Shared;
 using Topshelf;
 
@@ -6,12 +7,12 @@ namespace Si.ServerEngine
 {
     public class Program
     {
-        private static Core.Engine? _serverCore = null;
-        private static Core.Engine ServerCore
+        private static ServerEngineCore? _serverCore = null;
+        private static ServerEngineCore ServerCore
         {
             get
             {
-                _serverCore ??= new Core.Engine(Configuration);
+                _serverCore ??= new ServerEngineCore(Configuration);
                 return _serverCore;
             }
         }

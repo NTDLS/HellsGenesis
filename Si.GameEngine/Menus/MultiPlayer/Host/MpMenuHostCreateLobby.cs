@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Shared.Payload;
 using Si.Shared.Types.Geometry;
@@ -16,7 +17,7 @@ namespace Si.Menus.MultiPlayer.Host
         private readonly SpriteMenuSelectableTextInput _textBoxAutoStartSeconds;
         private readonly SpriteMenuSelectableTextInput _textboxPlayerName;
 
-        public MpMenuHostCreateLobby(GameEngine.Core.Engine gameEngine)
+        public MpMenuHostCreateLobby(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();

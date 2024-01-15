@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Loudouts;
+﻿using Si.GameEngine.Core;
+using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
 using Si.GameEngine.Sprites.Weapons;
 using System.Drawing;
@@ -14,7 +15,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
 
-        public SpriteEnemyDebugStatic(Core.Engine gameEngine)
+        public SpriteEnemyDebugStatic(GameEngineCore gameEngine)
             : base(gameEngine, hullHealth, bountyMultiplier)
         {
             ShipClass = SiEnemyClass.Debug;
