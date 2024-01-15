@@ -17,7 +17,7 @@ namespace Si.GameEngine.Core
     /// <summary>
     /// The core game engine. Containd the controllers and managers.
     /// </summary>
-    public class GameEngine
+    public class Engine
     {
         /// <summary>
         /// If TRUE the game can run "headless" with no diplay or audio.
@@ -60,10 +60,10 @@ namespace Si.GameEngine.Core
 
         #region Events.
 
-        public delegate void StartEngineEvent(GameEngine sender);
+        public delegate void StartEngineEvent(Engine sender);
         public event StartEngineEvent OnStartEngine;
 
-        public delegate void StopEngineEvent(GameEngine sender);
+        public delegate void StopEngineEvent(Engine sender);
         public event StopEngineEvent OnStopEngine;
 
         #endregion
@@ -71,7 +71,7 @@ namespace Si.GameEngine.Core
         /// <summary>
         /// Initializes a new instace of the game engine in headless mode with no display or audio.
         /// </summary>
-        public GameEngine(EngineMultiplayManager multiplayManager)
+        public Engine(EngineMultiplayManager multiplayManager)
         {
             _isRunningHeadless = true;
 
@@ -115,7 +115,7 @@ namespace Si.GameEngine.Core
         /// Initializes a new instace of the game engine.
         /// </summary>
         /// <param name="drawingSurface">The window that the game will be rendered to.</param>
-        public GameEngine(Control drawingSurface)
+        public Engine(Control drawingSurface)
         {
             Settings = LoadSettings();
 
@@ -233,7 +233,7 @@ namespace Si.GameEngine.Core
             }
         }
 
-        private void NewGameMenuCallback(GameEngine gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void NewGameMenuCallback(Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
             Menus.Add(new MenuStartNewGame(this));
         }

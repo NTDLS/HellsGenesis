@@ -13,7 +13,7 @@ using System.Net.Sockets;
 
 namespace Si.ServerEngine.Core
 {
-    internal class ServerEngine
+    internal class Engine
     {
         /// <summary>
         /// A list of IPaddress endpoints for all connections, these are used for UDP sending.
@@ -27,7 +27,7 @@ namespace Si.ServerEngine.Core
         public LobbyManager Lobbies { get; private set; }
         public SiSettings Settings { get; private set; }
 
-        public ServerEngine(SiSettings settings)
+        public Engine(SiSettings settings)
         {
             Settings = settings;
 
