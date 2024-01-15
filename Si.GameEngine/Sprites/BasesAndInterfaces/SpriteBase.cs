@@ -111,10 +111,24 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public RectangleF VisibleBounds => new Rectangle((int)((Location.X) - Size.Width / 2.0), (int)((Location.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+        public Rectangle BoundsI => new((int)(VisibleBounds.X), (int)(VisibleBounds.Y), Size.Width, Size.Height);
+
         public RectangleF Bounds => new((float)(Location.X), (float)(Location.Y), Size.Width, Size.Height);
-        public Rectangle BoundsI => new((int)(Location.X), (int)(Location.Y), Size.Width, Size.Height);
         public RectangleF RenderBounds => new((float)(RenderLocation.X), (float)(RenderLocation.Y), Size.Width, Size.Height);
+
+        /// <summary>
+        /// The location is the center of the sprite, so the VisibleBounds is the actual sprite rectangle.
+        /// /// TODO: Given that this is the case, WTF is [Bounds]? It seems to be a rectangle that starts
+        ///     in the center of the sprite and extends past he lower right corner by the size of the sprite.
+        /// </summary>
+        public RectangleF VisibleBounds => new((float)((Location.X) - Size.Width / 2.0), (float)((Location.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+
+        /// <summary>
+        /// The location is the center of the sprite, so the VisibleRenderBounds is the actual sprite rectangle.
+        /// TODO: Given that this is the case, WTF is [RenderBounds]?  It seems to be a rectangle that starts in
+        ///     the center of the sprite and extends past he lower right corner by the size of the sprite.
+        /// </summary>
+        public RectangleF VisibleRenderBounds => new((float)((RenderLocation.X) - Size.Width / 2.0), (float)((RenderLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
 
         public SiVelocity Velocity
         {
@@ -239,7 +253,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public SiPoint Location
         {
-            get => _localLocation.ToReadonlyCopy();
+            get => _localLocation.Clone(); //Changes made to the location object do not affect the sprite.
             set => _localLocation = value;
         }
 
@@ -268,7 +282,7 @@ namespace Si.GameEngine.Sprites
             set
             {
                 _localLocation.X = value;
-                PositionChanged();
+                LocationChanged();
             }
         }
 
@@ -278,7 +292,7 @@ namespace Si.GameEngine.Sprites
             set
             {
                 _localLocation.Y = value;
-                PositionChanged();
+                LocationChanged();
             }
         }
 
@@ -448,6 +462,22 @@ namespace Si.GameEngine.Sprites
                 );
 
             return VisibleBounds.IntersectsWith(alteredHitBox);
+        }
+
+        /// <summary>
+        /// Intersect detection with a position using adjusted "hit box" size.
+        /// </summary>
+        /// <returns></returns>
+        public bool RenderLocationIntersects(SiPoint location, SiPoint size)
+        {
+            var alteredHitBox = new RectangleF(
+                (float)location.X,
+                (float)location.Y,
+                (float)size.X,
+                (float)size.Y
+                );
+
+            return VisibleRenderBounds.IntersectsWith(alteredHitBox);
         }
 
         /// <summary>
@@ -926,7 +956,7 @@ namespace Si.GameEngine.Sprites
         public virtual SiSpriteActionVector GetMultiplayVector() { return null; }
         public virtual void VelocityChanged() { }
         public virtual void VisibilityChanged() { }
-        public virtual void PositionChanged() { }
+        public virtual void LocationChanged() { }
         public virtual void RotationChanged() { }
 
         public virtual void Cleanup()

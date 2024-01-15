@@ -126,6 +126,8 @@ namespace Si.Shared.Types.Geometry
             return $"{{{Math.Round(X, 4).ToString("#.####")},{Math.Round(Y, 4).ToString("#.####")}}}";
         }
 
-        public SiPoint ToReadonlyCopy() => new SiPoint(this);
+        public SiReadonlyPoint ToReadonlyCopy() => new SiReadonlyPoint(this);
+
+        public SiPoint Clone() => new SiPoint(this);
     }
 }

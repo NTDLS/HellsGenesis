@@ -52,7 +52,7 @@ namespace Si.GameEngine.Sprites.Enemies.BasesAndInterfaces
 
         public virtual void AfterCreate() { }
 
-        public override void RotationChanged() => PositionChanged();
+        public override void RotationChanged() => LocationChanged();
 
         public override void Explode()
         {

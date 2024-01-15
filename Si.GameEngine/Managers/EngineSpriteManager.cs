@@ -255,6 +255,23 @@ namespace Si.GameEngine.Managers
             });
         }
 
+        public List<SpriteBase> RenderLocationIntersections(SiPoint location, SiPoint size)
+        {
+            return _collection.Use(o =>
+            {
+                var objs = new List<SpriteBase>();
+
+                foreach (var obj in o.Where(o => o.Visable == true))
+                {
+                    if (obj.RenderLocationIntersects(location, size))
+                    {
+                        objs.Add(obj);
+                    }
+                }
+                return objs;
+            });
+        }
+
         public SpritePlayerBase AddPlayer(SpritePlayerBase sprite)
         {
             Add(sprite);

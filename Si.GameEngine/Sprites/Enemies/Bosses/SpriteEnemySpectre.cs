@@ -81,7 +81,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             }
         }
 
-        public override void PositionChanged()
+        public override void LocationChanged()
         {
             if (_leftGun != null && _rightGun != null)
             {

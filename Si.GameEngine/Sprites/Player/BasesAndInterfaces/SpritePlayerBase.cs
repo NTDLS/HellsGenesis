@@ -116,7 +116,7 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
         public override void RotationChanged() => UpdateThrustAnimationPositions();
 
         //The player position does not change, only the background offset changes... hmmmm. :/
-        public override void PositionChanged() => UpdateThrustAnimationPositions();
+        public override void LocationChanged() => UpdateThrustAnimationPositions();
 
         public string GetLoadoutHelpText()
         {

@@ -103,8 +103,8 @@ namespace Si.Game
 
             highlightedSprites.Clear();
 
-            var sprites = _gameCore.Sprites.Intersections(new SiPoint(x, y), new SiPoint(1, 1));
-            if (_gameCore.Player.Sprite.Intersects(new SiPoint(x, y), new SiPoint(1, 1)))
+            var sprites = _gameCore.Sprites.RenderLocationIntersections(new SiPoint(x, y), new SiPoint(1, 1));
+            if (_gameCore.Player.Sprite.RenderLocationIntersects(new SiPoint(x, y), new SiPoint(1, 1)))
             {
                 sprites.Add(_gameCore.Player.Sprite);
             }

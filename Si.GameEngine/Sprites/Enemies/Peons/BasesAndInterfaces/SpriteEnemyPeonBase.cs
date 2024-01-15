@@ -48,7 +48,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons.BasesAndInterfaces
             UpdateThrustAnimationPositions();
         }
 
-        public override void PositionChanged() => UpdateThrustAnimationPositions();
+        public override void LocationChanged() => UpdateThrustAnimationPositions();
 
         private void UpdateThrustAnimationPositions()
         {
