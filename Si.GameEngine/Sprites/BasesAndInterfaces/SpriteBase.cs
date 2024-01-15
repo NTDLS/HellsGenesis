@@ -113,12 +113,12 @@ namespace Si.GameEngine.Sprites
         public virtual Size Size => _size;
 
         /// <summary>
-        /// The location is the center of the sprite, so the VisibleBounds is the actual sprite rectangle.
+        /// The Location is the center of the sprite, so the Bounds is the actual sprite rectangle.
         /// </summary>
         public virtual RectangleF Bounds => new((float)((Location.X) - Size.Width / 2.0), (float)((Location.Y) - Size.Height / 2.0), Size.Width, Size.Height);
 
         /// <summary>
-        /// The location is the center of the sprite, so the VisibleRenderBounds is the actual sprite rectangle.
+        /// The RenderLocation is the center of the sprite, so the RenderBounds is the actual sprite rectangle.
         /// </summary>
         public virtual RectangleF RenderBounds => new((float)((RenderLocation.X) - Size.Width / 2.0), (float)((RenderLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
 
