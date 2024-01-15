@@ -111,24 +111,16 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public bool IsFixedPosition { get; set; }
         public virtual Size Size => _size;
-        public Rectangle BoundsI => new((int)(Location.X), (int)(Location.Y), Size.Width, Size.Height);
-
-        public RectangleF Bounds => new((float)(Location.X), (float)(Location.Y), Size.Width, Size.Height);
-        public RectangleF RenderBounds => new((float)(RenderLocation.X), (float)(RenderLocation.Y), Size.Width, Size.Height);
 
         /// <summary>
         /// The location is the center of the sprite, so the VisibleBounds is the actual sprite rectangle.
-        /// TODO: Given that this is the case, WTF is [Bounds]? It seems to be a rectangle that starts
-        ///     in the center of the sprite and extends past he lower right corner by the size of the sprite.
         /// </summary>
-        public RectangleF VisibleBounds => new((float)((Location.X) - Size.Width / 2.0), (float)((Location.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+        public virtual RectangleF Bounds => new((float)((Location.X) - Size.Width / 2.0), (float)((Location.Y) - Size.Height / 2.0), Size.Width, Size.Height);
 
         /// <summary>
         /// The location is the center of the sprite, so the VisibleRenderBounds is the actual sprite rectangle.
-        /// TODO: Given that this is the case, WTF is [RenderBounds]?  It seems to be a rectangle that starts in
-        ///     the center of the sprite and extends past he lower right corner by the size of the sprite.
         /// </summary>
-        public RectangleF VisibleRenderBounds => new((float)((RenderLocation.X) - Size.Width / 2.0), (float)((RenderLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
+        public virtual RectangleF RenderBounds => new((float)((RenderLocation.X) - Size.Width / 2.0), (float)((RenderLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
 
         public SiVelocity Velocity
         {
@@ -181,7 +173,7 @@ namespace Si.GameEngine.Sprites
                 + $"            Is Locked On: {IsLockedOn}\r\n"
                 + $"     Is Locked On (Soft): {IsLockedOnSoft:n0}\r\n"
                 + $"In Current Scaled Bounds: {IsWithinCurrentScaledScreenBounds}\r\n"
-                + $"          Visible Bounds: {VisibleBounds}\r\n";
+                + $"          Visible Bounds: {Bounds}\r\n";
         }
 
         public void SetHullHealth(int points)
@@ -461,7 +453,7 @@ namespace Si.GameEngine.Sprites
                 (float)size.Y
                 );
 
-            return VisibleBounds.IntersectsWith(alteredHitBox);
+            return Bounds.IntersectsWith(alteredHitBox);
         }
 
         /// <summary>
@@ -477,7 +469,7 @@ namespace Si.GameEngine.Sprites
                 (float)size.Y
                 );
 
-            return VisibleRenderBounds.IntersectsWith(alteredHitBox);
+            return RenderBounds.IntersectsWith(alteredHitBox);
         }
 
         /// <summary>
@@ -487,7 +479,7 @@ namespace Si.GameEngine.Sprites
         public bool Intersects(SiPoint location)
         {
             var alteredHitBox = new RectangleF((float)location.X, (float)location.Y, 1f, 1f);
-            return VisibleBounds.IntersectsWith(alteredHitBox);
+            return Bounds.IntersectsWith(alteredHitBox);
         }
 
         /// <summary>

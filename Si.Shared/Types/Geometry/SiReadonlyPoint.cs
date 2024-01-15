@@ -43,7 +43,7 @@
         }
 
         public SiPoint ToWriteableCopy() => new SiPoint(this);
-        
+
         public new SiReadonlyPoint Clone() => new SiReadonlyPoint(this);
     }
 }
