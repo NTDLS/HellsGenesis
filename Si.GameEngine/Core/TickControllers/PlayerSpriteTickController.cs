@@ -276,8 +276,8 @@ namespace Si.GameEngine.Core.TickControllers
             }
 
             //Scroll the background.
-            GameEngine.Display.BackgroundOffset.X += displacementVector.X;
-            GameEngine.Display.BackgroundOffset.Y += displacementVector.Y;
+            GameEngine.Display.RenderWindowPosition.X += displacementVector.X;
+            GameEngine.Display.RenderWindowPosition.Y += displacementVector.Y;
 
             //Move the player in the direction of the background. This keeps the player visually in place, which is in the center screen.
             Sprite.X += displacementVector.X;

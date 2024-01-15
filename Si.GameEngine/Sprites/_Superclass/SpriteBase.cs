@@ -182,7 +182,7 @@ namespace Si.GameEngine.Sprites._Superclass
                 }
                 else
                 {
-                    return _location - _gameEngine.Display.BackgroundOffset;
+                    return _location - _gameEngine.Display.RenderWindowPosition;
                 }
             }
         }
@@ -317,7 +317,7 @@ namespace Si.GameEngine.Sprites._Superclass
                 + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
                 + $"                          {Velocity.Angle.RadiansUnadjusted:n2}rad unadjusted\r\n"
                 + extraInfo
-                + $"       Background Offset: {_gameEngine.Display.BackgroundOffset}\r\n"
+                + $"       Background Offset: {_gameEngine.Display.RenderWindowPosition}\r\n"
                 + $"                  Thrust: {Velocity.ThrottlePercentage * 100:n2}\r\n"
                 + $"                   Boost: {Velocity.BoostPercentage * 100:n2}\r\n"
                 + $"                  Recoil: {Velocity.RecoilPercentage * 100:n2}\r\n"

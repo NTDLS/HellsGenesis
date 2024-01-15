@@ -142,7 +142,7 @@ namespace Si.GameEngine.Core.Managers
 
         public void CommandHandler_Display_BackgroundOffset_Get(DebugCommand command)
         {
-            _debugForm.WriteLine($"{_gameEngine.Display.BackgroundOffset}", System.Drawing.Color.Black);
+            _debugForm.WriteLine($"{_gameEngine.Display.RenderWindowPosition}", System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Display_BackgroundOffset_Set(DebugCommand command)
@@ -150,8 +150,8 @@ namespace Si.GameEngine.Core.Managers
             var x = command.ParameterValue<double>("x");
             var y = command.ParameterValue<double>("y");
 
-            var deltaX = _gameEngine.Display.BackgroundOffset.X - x;
-            var deltaY = _gameEngine.Display.BackgroundOffset.Y - y;
+            var deltaX = _gameEngine.Display.RenderWindowPosition.X - x;
+            var deltaY = _gameEngine.Display.RenderWindowPosition.Y - y;
 
             _gameEngine.Sprites.Use(o =>
             {
@@ -165,8 +165,8 @@ namespace Si.GameEngine.Core.Managers
                 }
             });
 
-            _gameEngine.Display.BackgroundOffset.X = x;
-            _gameEngine.Display.BackgroundOffset.Y = y;
+            _gameEngine.Display.RenderWindowPosition.X = x;
+            _gameEngine.Display.RenderWindowPosition.Y = y;
         }
 
         public void CommandHandler_Display_BackgroundOffset_CenterOn(DebugCommand command)
@@ -189,8 +189,8 @@ namespace Si.GameEngine.Core.Managers
                         }
                     }
 
-                    _gameEngine.Display.BackgroundOffset.X = baseSprite.X;
-                    _gameEngine.Display.BackgroundOffset.Y = baseSprite.Y;
+                    _gameEngine.Display.RenderWindowPosition.X = baseSprite.X;
+                    _gameEngine.Display.RenderWindowPosition.Y = baseSprite.Y;
                 }
             });
         }
@@ -276,7 +276,7 @@ namespace Si.GameEngine.Core.Managers
         public void CommandHandler_Display_Metrics(DebugCommand command)
         {
             var infoText =
-                  $"          Background Offset: {_gameEngine.Display.BackgroundOffset}\r\n"
+                  $"          Background Offset: {_gameEngine.Display.RenderWindowPosition}\r\n"
                 + $"            Base Draw Scale: {_gameEngine.Display.BaseDrawScale:n4}\r\n"
                 + $"              Overdraw Size: {_gameEngine.Display.OverdrawSize}\r\n"
                 + $"        Natrual Screen Size: {_gameEngine.Display.NatrualScreenSize}\r\n"
@@ -333,9 +333,9 @@ namespace Si.GameEngine.Core.Managers
         {
             var infoText =
                   $"Limit: {_gameEngine.Settings.FramePerSecondLimit:n4}\r\n"
-                + $"  Avg: {_gameEngine.Display.GameLoopCounter.AverageFrameRate:n4}\r\n"
-                + $"  Min: {_gameEngine.Display.GameLoopCounter.FrameRateMin:n4}\r\n"
-                + $"  Max: {_gameEngine.Display.GameLoopCounter.FrameRateMax:n4}";
+                + $"  Avg: {_gameEngine.Display.FrameCounter.AverageFrameRate:n4}\r\n"
+                + $"  Min: {_gameEngine.Display.FrameCounter.FrameRateMin:n4}\r\n"
+                + $"  Max: {_gameEngine.Display.FrameCounter.FrameRateMax:n4}";
             _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }
 

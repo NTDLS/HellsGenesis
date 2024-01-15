@@ -99,7 +99,7 @@ namespace Si.GameEngine.Core
                 var targetFrameDuration = 1000000 / _gameEngine.Settings.FramePerSecondLimit; //1000000 / n-frames/second.
                 timer.Restart();
 
-                _gameEngine.Display.GameLoopCounter.Calculate();
+                _gameEngine.Display.FrameCounter.Calculate();
 
                 _gameEngine.Menus.Use(m =>
                 {

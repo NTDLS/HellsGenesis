@@ -16,13 +16,16 @@ namespace Si.GameEngine.Core.Managers
     {
         private readonly Engine _gameEngine;
 
+        public SiFrameCounter FrameCounter { get; private set; } = new();
+
         public Dictionary<Point, SiQuadrant> Quadrants { get; private set; } = new();
 
         /// <summary>
-        /// The background offset is really nothing more than the X/Y travel distance of the local player.
+        /// The X,Y of the top left of the render window. This is the corner of the total
+        /// canvas which includes offscreen locations when not zoomed out. The local player
+        /// will be centered in this window and the window will moved with the players movements.
         /// </summary>
-        public SiPoint BackgroundOffset { get; private set; } = new();
-        public SiFrameCounter GameLoopCounter { get; private set; } = new();
+        public SiPoint RenderWindowPosition { get; private set; } = new();
         public Control DrawingSurface { get; private set; }
 
         private bool _isFocused = false;

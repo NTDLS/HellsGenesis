@@ -32,7 +32,7 @@ namespace Si.GameEngine.Core.TickControllers
                                 (GameEngine.Display.TotalCanvasSize.Width));
                             int y = SiRandom.Generator.Next(0, GameEngine.Display.TotalCanvasSize.Height);
 
-                            SpriteManager.Stars.Create(GameEngine.Display.BackgroundOffset.X + x, GameEngine.Display.BackgroundOffset.Y + y);
+                            SpriteManager.Stars.Create(GameEngine.Display.RenderWindowPosition.X + x, GameEngine.Display.RenderWindowPosition.Y + y);
                         }
 
                     }
@@ -42,7 +42,7 @@ namespace Si.GameEngine.Core.TickControllers
                         {
                             int x = SiRandom.Generator.Next(0, (int)-displacementVector.X);
                             int y = SiRandom.Generator.Next(0, GameEngine.Display.TotalCanvasSize.Height);
-                            SpriteManager.Stars.Create(GameEngine.Display.BackgroundOffset.X + x, GameEngine.Display.BackgroundOffset.Y + y);
+                            SpriteManager.Stars.Create(GameEngine.Display.RenderWindowPosition.X + x, GameEngine.Display.RenderWindowPosition.Y + y);
                         }
 
                     }
@@ -52,7 +52,7 @@ namespace Si.GameEngine.Core.TickControllers
                         {
                             int x = SiRandom.Generator.Next(0, GameEngine.Display.TotalCanvasSize.Width);
                             int y = SiRandom.Generator.Next(GameEngine.Display.TotalCanvasSize.Height - (int)displacementVector.Y, GameEngine.Display.TotalCanvasSize.Height);
-                            SpriteManager.Stars.Create(GameEngine.Display.BackgroundOffset.X + x, GameEngine.Display.BackgroundOffset.Y + y);
+                            SpriteManager.Stars.Create(GameEngine.Display.RenderWindowPosition.X + x, GameEngine.Display.RenderWindowPosition.Y + y);
                         }
                     }
                     else if (displacementVector.Y < 0)
@@ -61,7 +61,7 @@ namespace Si.GameEngine.Core.TickControllers
                         {
                             int x = SiRandom.Generator.Next(0, GameEngine.Display.TotalCanvasSize.Width);
                             int y = SiRandom.Generator.Next(0, (int)-displacementVector.Y);
-                            SpriteManager.Stars.Create(GameEngine.Display.BackgroundOffset.X + x, GameEngine.Display.BackgroundOffset.Y + y);
+                            SpriteManager.Stars.Create(GameEngine.Display.RenderWindowPosition.X + x, GameEngine.Display.RenderWindowPosition.Y + y);
                         }
                     }
                 }

@@ -93,7 +93,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                 {
                     _lastMultiplaySpriteVectorUpdate = DateTime.UtcNow;
 
-                    var bgOffset = _gameEngine.Display.BackgroundOffset;
+                    var bgOffset = _gameEngine.Display.RenderWindowPosition;
 
                     return new SiSpriteActionVector(MultiplayUID)
                     {
