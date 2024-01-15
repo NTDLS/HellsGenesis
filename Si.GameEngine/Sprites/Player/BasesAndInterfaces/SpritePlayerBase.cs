@@ -553,40 +553,17 @@ namespace Si.GameEngine.Sprites.Player.BasesAndInterfaces
         /// Also sets the current vector of the remote sprite so that we can move the sprite along that vector between updates.
         /// </summary>
         /// <param name="vector"></param>
-        public override void ApplyAbsoluteMultiplayVector(SiSpriteActionVector vector)
-        {
-            Velocity.Angle.Degrees = vector.AngleDegrees;
-            Velocity.ThrottlePercentage = vector.ThrottlePercentage;
-            Velocity.BoostPercentage = vector.BoostPercentage;
-            Velocity.MaxSpeed = vector.MaxSpeed;
-            Velocity.MaxBoost = vector.MaxBoost;
-            Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
-
-            X = vector.X;
-            Y = vector.Y;
-
-            ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
-            BoostAnimation.Visable = Velocity.BoostPercentage > 0;
-        }
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
+            base.ApplyMotion(displacementVector);
+
             if (IsDrone)
             {
-                var thrust = (Velocity.MaxSpeed * Velocity.ThrottlePercentage) + (Velocity.MaxBoost * Velocity.BoostPercentage);
-
-                //Move sprite based on Multiplay vector. Linear interpolation?
-                X += Velocity.Angle.X * thrust;
-                Y += Velocity.Angle.Y * thrust;
-
                 ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
                 BoostAnimation.Visable = Velocity.BoostPercentage > 0;
 
                 FixRadarPositionIndicator();
-            }
-            else
-            {
-                base.ApplyMotion(displacementVector);
             }
         }
     }

@@ -2,7 +2,6 @@
 using Si.GameEngine.Engine;
 using Si.GameEngine.Engine.Types;
 using Si.GameEngine.Sprites.Enemies.BasesAndInterfaces;
-using Si.GameEngine.Sprites.Player;
 using Si.GameEngine.Sprites.Player.BasesAndInterfaces;
 using Si.GameEngine.Utility;
 using Si.GameEngine.Weapons.Munitions;
@@ -240,7 +239,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public SiPoint Location
         {
-            get => new SiPoint(_localLocation);
+            get => _localLocation.ToReadonlyCopy();
             set => _localLocation = value;
         }
 
@@ -914,17 +913,14 @@ namespace Si.GameEngine.Sprites
         /// <param name="vector"></param>
         public virtual void ApplyAbsoluteMultiplayVector(SiSpriteActionVector vector)
         {
-            /* This is handled in SpriteEnemyBase and SpritePlayerBase.
             Velocity.ThrottlePercentage = vector.ThrottlePercentage;
             Velocity.BoostPercentage = vector.BoostPercentage;
             Velocity.MaxSpeed = vector.MaxSpeed;
             Velocity.MaxBoost = vector.MaxBoost;
             Velocity.Angle.Degrees = vector.AngleDegrees;
             Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
-
-            RemoteX = vector.X;
-            RemoteY = vector.Y;
-            */
+            X = vector.X;
+            Y = vector.Y;
         }
 
         public virtual SiSpriteActionVector GetMultiplayVector() { return null; }
