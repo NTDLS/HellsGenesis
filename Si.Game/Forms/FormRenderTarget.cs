@@ -97,7 +97,7 @@ namespace Si.Game
 
             foreach (var sprite in highlightedSprites)
             {
-                sprite.Highlight = false;
+                sprite.IsHighlighted = false;
             }
 
             highlightedSprites.Clear();
@@ -111,7 +111,7 @@ namespace Si.Game
             foreach (var sprite in sprites)
             {
                 highlightedSprites.Add(sprite);
-                sprite.Highlight = true;
+                sprite.IsHighlighted = true;
             }
         }
 

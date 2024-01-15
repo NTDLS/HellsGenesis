@@ -28,7 +28,7 @@ namespace Si.Menus.MultiPlayer.Client
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Join Game");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
-            itemTitle.Highlight = true;
+            itemTitle.IsHighlighted = true;
 
             //---------------------------------------------------------------------------------------------------------
 

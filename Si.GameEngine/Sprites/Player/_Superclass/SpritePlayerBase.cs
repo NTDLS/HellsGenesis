@@ -87,6 +87,8 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             {
                 if (ThrustAnimation != null) ThrustAnimation.Visable = false;
                 if (BoostAnimation != null) BoostAnimation.Visable = false;
+                ShipEngineIdleSound?.Stop();
+                ShipEngineRoarSound?.Stop();
             }
         }
 
@@ -230,9 +232,9 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
         private void UpdateThrustAnimationPositions()
         {
-            if (QueuedForDeletion == false)
+            if (IsQueuedForDeletion == false)
             {
-                if (ThrustAnimation == null || ThrustAnimation.QueuedForDeletion == true)
+                if (ThrustAnimation == null || ThrustAnimation.IsQueuedForDeletion == true)
                 {
                     var playMode = new SpriteAnimation.PlayMode()
                     {
@@ -250,7 +252,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
                     ThrustAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
                 }
 
-                if (BoostAnimation == null || BoostAnimation.QueuedForDeletion == true)
+                if (BoostAnimation == null || BoostAnimation.IsQueuedForDeletion == true)
                 {
                     var playMode = new SpriteAnimation.PlayMode()
                     {

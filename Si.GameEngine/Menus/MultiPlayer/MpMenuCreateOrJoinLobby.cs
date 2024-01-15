@@ -27,7 +27,7 @@ namespace Si.Menus.MultiPlayer
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Multiplayer");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
-            itemTitle.Highlight = true;
+            itemTitle.IsHighlighted = true;
 
             var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "JOIN", " Join a Game ");
             helpItem.Selected = true;

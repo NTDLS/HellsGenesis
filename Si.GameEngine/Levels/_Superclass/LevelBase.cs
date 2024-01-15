@@ -30,11 +30,7 @@ namespace Si.GameEngine.Levels._Superclass
 
         public virtual void End()
         {
-            foreach (var obj in Events)
-            {
-                obj.QueuedForDeletion = true;
-            }
-
+            Events.ForEach(e => e.QueueForDeletion());
             State = SiLevelState.Ended;
         }
 

@@ -23,7 +23,7 @@ namespace Si.GameEngine.Menus
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Strikeforce Infinity");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
-            itemTitle.Highlight = true;
+            itemTitle.IsHighlighted = true;
 
             var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "SINGLE_PLAYER", " Single Player ");
             helpItem.Selected = true;

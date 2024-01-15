@@ -19,7 +19,7 @@ namespace Si.GameEngine.Core.Types
 
         public Guid UID { get; private set; }
 
-        public bool QueuedForDeletion { get; set; } = false;
+        public bool IsQueuedForDeletion { get; private set; } = false;
 
         /// <summary>
         /// 
@@ -57,6 +57,7 @@ namespace Si.GameEngine.Core.Types
 
         public SiEngineCallbackEvent(Engine gameEngine, TimeSpan countdown, SiOnExecute executeCallback, object refObj)
         {
+            _referenceObject = refObj;
             _gameEngine = gameEngine;
             _countdown = countdown;
             _onExecute = executeCallback;
@@ -73,13 +74,18 @@ namespace Si.GameEngine.Core.Types
             UID = Guid.NewGuid();
         }
 
+        public void QueueForDeletion()
+        {
+            IsQueuedForDeletion = true;
+        }
+
         public bool CheckForTrigger()
         {
             lock (this)
             {
                 bool result = false;
 
-                if (QueuedForDeletion)
+                if (IsQueuedForDeletion)
                 {
                     return false;
                 }
@@ -90,7 +96,7 @@ namespace Si.GameEngine.Core.Types
 
                     if (_callbackEventMode == SiCallbackEventMode.OneTime)
                     {
-                        QueuedForDeletion = true;
+                        IsQueuedForDeletion = true;
                     }
 
                     if (_callbackEventAsync == SiCallbackEventAsync.Asynchronous)

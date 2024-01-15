@@ -27,7 +27,7 @@ namespace Si.Menus.MultiPlayer.Host
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Host a Game");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
-            itemTitle.Highlight = true;
+            itemTitle.IsHighlighted = true;
 
             //---------------------------------------------------------------------------------------------------------
 

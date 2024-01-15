@@ -169,8 +169,8 @@ namespace Si.GameEngine.Core.Managers
         {
             _collection.Use(o =>
             {
-                o.Where(o => o.QueuedForDeletion).ToList().ForEach(p => p.Cleanup());
-                o.RemoveAll(o => o.QueuedForDeletion);
+                o.Where(o => o.IsQueuedForDeletion).ToList().ForEach(p => p.Cleanup());
+                o.RemoveAll(o => o.IsQueuedForDeletion);
 
                 _gameEngine.Events.CleanupQueuedForDeletion();
 

@@ -99,7 +99,7 @@ namespace Si.GameEngine.Sprites._Superclass
         public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
         public bool IsWithinCurrentScaledScreenBounds => _gameEngine.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds);
-        public bool Highlight { get; set; } = false;
+        public bool IsHighlighted { get; set; } = false;
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
         public int ShieldHealth { get; private set; } = 0; //Sheild hit-points, these take 1/2 damage.
 
@@ -107,7 +107,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// The sprite still exists, but is not functional (e.g. its been shot and exploded).
         /// </summary>
         public bool IsDeadOrExploded { get; private set; } = false;
-        public bool QueuedForDeletion => _readyForDeletion;
+        public bool IsQueuedForDeletion => _readyForDeletion;
 
         /// <summary>
         /// If true, the sprite does not respond to changes in background offset.
@@ -255,7 +255,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
             SpriteTag = name;
             Velocity = new SiVelocity();
-            Highlight = _gameEngine.Settings.HighlightAllSprites;
+            IsHighlighted = _gameEngine.Settings.HighlightAllSprites;
         }
 
         public virtual void Initialize(string imagePath = null, Size? size = null)
@@ -308,7 +308,7 @@ namespace Si.GameEngine.Sprites._Superclass
                 + $"             Is Visable?: {Visable:n0}\r\n"
                 + $"                    Size: {Size:n0}\r\n"
                 + $"                  Bounds: {Bounds:n0}\r\n"
-                + $"       Ready for Delete?: {QueuedForDeletion}\r\n"
+                + $"       Ready for Delete?: {IsQueuedForDeletion}\r\n"
                 + $"                Is Dead?: {IsDeadOrExploded}\r\n"
                 + $"         Render-Location: {RenderLocation}\r\n"
                 + $"                Location: {Location}\r\n"
@@ -324,7 +324,7 @@ namespace Si.GameEngine.Sprites._Superclass
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
                 + $"             Attachments: {Attachments?.Count() ?? 0:n0}\r\n"
-                + $"               Highlight: {Highlight}\r\n"
+                + $"               Highlight: {IsHighlighted}\r\n"
                 + $"       Is Fixed Position: {IsFixedPosition}\r\n"
                 + $"            Is Locked On: {IsLockedOn}\r\n"
                 + $"     Is Locked On (Soft): {IsLockedOnSoft:n0}\r\n"
@@ -398,7 +398,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
         public bool Intersects(SpriteBase otherObject)
         {
-            if (Visable && otherObject.Visable && !QueuedForDeletion && !otherObject.QueuedForDeletion)
+            if (Visable && otherObject.Visable && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
             {
                 return Bounds.IntersectsWith(otherObject.Bounds);
             }
@@ -432,7 +432,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <returns></returns>
         public bool Intersects(SpriteBase otherObject, SiPoint sizeAdjust)
         {
-            if (Visable && otherObject.Visable && !QueuedForDeletion && !otherObject.QueuedForDeletion)
+            if (Visable && otherObject.Visable && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
             {
                 var alteredHitBox = new RectangleF(
                     otherObject.Bounds.X - (float)(sizeAdjust.X / 2),
@@ -997,7 +997,7 @@ namespace Si.GameEngine.Sprites._Superclass
                     DrawImage(renderTarget, _lockedOnSoftImage, 0);
                 }
 
-                if (Highlight)
+                if (IsHighlighted)
                 {
                     var rectangle = new RectangleF((int)(RenderLocation.X - Size.Width / 2.0), (int)(RenderLocation.Y - Size.Height / 2.0), Size.Width, Size.Height);
                     var rawRectF = new RawRectangleF(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom);

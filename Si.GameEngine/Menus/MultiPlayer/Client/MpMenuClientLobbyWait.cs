@@ -31,7 +31,7 @@ namespace Si.Menus.MultiPlayer.Client
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Waiting in Lobby");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
-            itemTitle.Highlight = true;
+            itemTitle.IsHighlighted = true;
 
             _countOfReadyPlayers = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "?");
             _countOfReadyPlayers.X -= _countOfReadyPlayers.Size.Width / 2;

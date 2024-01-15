@@ -24,7 +24,7 @@ namespace Si.GameEngine.Core.TickControllers
                 for (int i = 0; i < o.Count; i++)
                 {
                     var engineEvent = o[i];
-                    if (engineEvent.QueuedForDeletion == false)
+                    if (engineEvent.IsQueuedForDeletion == false)
                     {
                         engineEvent.CheckForTrigger();
                     }
@@ -53,6 +53,29 @@ namespace Si.GameEngine.Core.TickControllers
             return _collection.Use(o =>
             {
                 var obj = new SiEngineCallbackEvent(GameEngine, countdown, executeCallback, refObj, callbackEventMode, callbackEventAsync);
+                o.Add(obj);
+                return obj;
+            });
+        }
+
+        public SiEngineCallbackEvent Create(TimeSpan countdown, SiOnExecute executeCallback,
+            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
+            SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
+        {
+            return _collection.Use(o =>
+            {
+                var obj = new SiEngineCallbackEvent(GameEngine, countdown, executeCallback, null, callbackEventMode, callbackEventAsync);
+                o.Add(obj);
+                return obj;
+            });
+        }
+
+        public SiEngineCallbackEvent Create(TimeSpan countdown, SiOnExecute executeCallback,
+            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime)
+        {
+            return _collection.Use(o =>
+            {
+                var obj = new SiEngineCallbackEvent(GameEngine, countdown, executeCallback, null, callbackEventMode);
                 o.Add(obj);
                 return obj;
             });
@@ -101,7 +124,7 @@ namespace Si.GameEngine.Core.TickControllers
             {
                 for (int i = 0; i < o.Count; i++)
                 {
-                    if (o[i].QueuedForDeletion)
+                    if (o[i].IsQueuedForDeletion)
                     {
                         o.Remove(o[i]);
                     }

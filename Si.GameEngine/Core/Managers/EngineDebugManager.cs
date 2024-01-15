@@ -572,7 +572,7 @@ namespace Si.GameEngine.Core.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Highlight = command.ParameterValue<bool>("state");
+                    sprite.IsHighlighted = command.ParameterValue<bool>("state");
                 }
             });
         }

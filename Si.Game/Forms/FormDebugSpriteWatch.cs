@@ -51,7 +51,7 @@ namespace Si.Game.Forms
             UpsertVariable("Is Visable?", $"{_sprite.Visable:n0}");
             UpsertVariable("Size", $"{_sprite.Size:n0}");
             UpsertVariable("Bounds", $"{_sprite.Bounds:n0}");
-            UpsertVariable("Ready for Delete?", $"{_sprite.QueuedForDeletion}");
+            UpsertVariable("Ready for Delete?", $"{_sprite.IsQueuedForDeletion}");
             UpsertVariable("Is Dead?", $"{_sprite.IsDeadOrExploded}");
             UpsertVariable("Location", $"{_sprite.Location}");
             UpsertVariable("Location (Render)", $"{_sprite.RenderLocation},");
@@ -66,7 +66,7 @@ namespace Si.Game.Forms
             UpsertVariable("Hull", $"{_sprite.HullHealth:n0}");
             UpsertVariable("Shield", $"{_sprite.ShieldHealth:n0}");
             UpsertVariable("Attachments", $"{(_sprite.Attachments?.Count() ?? 0):n0}");
-            UpsertVariable("Highlight", $"{_sprite.Highlight}");
+            UpsertVariable("Highlight", $"{_sprite.IsHighlighted}");
             UpsertVariable("Is Fixed Position", $"{_sprite.IsFixedPosition}");
             UpsertVariable("Is Locked On", $"{_sprite.IsLockedOn}");
             UpsertVariable("Is Locked On (Soft)", $"{_sprite.IsLockedOnSoft:n0}");

@@ -1,5 +1,7 @@
-﻿using Si.GameEngine.Sprites;
+﻿using Si.GameEngine.Core.Types;
+using Si.GameEngine.Sprites;
 using Si.Shared.Types.Geometry;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using static Si.Shared.SiConstants;
@@ -28,6 +30,8 @@ namespace Si.GameEngine.Core
         {
             _shutdown = false;
             _graphicsThread.Start();
+
+            var evt = _gameEngine.Events.Create(new TimeSpan(0, 0, 0, 0, 10), UpdateStatusText, SiEngineCallbackEvent.SiCallbackEventMode.Recurring);
         }
 
         public void Shutdown()
@@ -105,11 +109,9 @@ namespace Si.GameEngine.Core
                 {
                     _gameEngine.Sprites.Use(o =>
                     {
-                        if (_isPaused == false)
+                        if (!_isPaused)
                         {
-                            BeforeExecuteWorldClockTick();
-                            var displacementVector = ExecuteWorldClockTick();
-                            AfterExecuteWorldClockTick(displacementVector);
+                            ExecuteWorldClockTick();
                         }
 
                         _gameEngine.Debug.ProcessCommand();
@@ -165,18 +167,8 @@ namespace Si.GameEngine.Core
             return displacementVector;
         }
 
-        private void BeforeExecuteWorldClockTick()
+        private void UpdateStatusText(Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
-        }
-
-        private void AfterExecuteWorldClockTick(SiPoint displacementVector)
-        {
-            if (_gameEngine.Player.Sprite.Visable == false)
-            {
-                _gameEngine.Player.Sprite.ShipEngineIdleSound.Stop();
-                _gameEngine.Player.Sprite.ShipEngineRoarSound.Stop();
-            }
-
             if (_gameEngine.Multiplay.State.PlayMode != SiPlayMode.MutiPlayerClient
                 && _gameEngine.Situations?.CurrentSituation?.State == SiSituationState.Started)
             {
