@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System.IO;
@@ -18,8 +17,8 @@ namespace Si.GameEngine.Sprites
         private SiRelativeDirection _rotationDirection;
         private SiAngle _travelAngle = new();
 
-        public SpriteRandomShipPartParticle(Engine gameCore, double x, double y)
-            : base(gameCore)
+        public SpriteRandomShipPartParticle(Core.Engine gameEngine, double x, double y)
+            : base(gameEngine)
         {
             selectedImageIndex = SiRandom.Generator.Next(0, 1000) % _imageCount;
 
@@ -35,7 +34,7 @@ namespace Si.GameEngine.Sprites
             Velocity.ThrottlePercentage = 100;
             Velocity.MaxSpeed = SiRandom.Between(1.0, 4.0);
 
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
         }
 
         public override void ApplyMotion(SiPoint displacementVector)
@@ -52,7 +51,7 @@ namespace Si.GameEngine.Sprites
                 Velocity.Angle.Degrees -= _rotationSpeed;
             }
 
-            if (_gameCore.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
+            if (_gameEngine.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
             {
                 QueueForDelete();
             }

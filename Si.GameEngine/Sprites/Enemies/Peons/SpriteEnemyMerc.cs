@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Loudouts;
+﻿using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
 using Si.GameEngine.Sprites.Weapons;
 using Si.Shared.Types.Geometry;
@@ -13,8 +12,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
 
-        public SpriteEnemyMerc(Engine gameCore)
-            : base(gameCore, hullHealth, bountyMultiplier)
+        public SpriteEnemyMerc(Core.Engine gameEngine)
+            : base(gameEngine, hullHealth, bountyMultiplier)
         {
             ShipClass = SiEnemyClass.Merc;
             SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png", new Size(32, 32));

@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites.Powerup._Superclass;
+﻿using Si.GameEngine.Sprites.Powerup._Superclass;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
@@ -10,8 +9,8 @@ namespace Si.GameEngine.Sprites.Powerup
     {
         private readonly int imageCount = 3;
 
-        public SpritePowerupSheild(Engine gameCore)
-            : base(gameCore)
+        public SpritePowerupSheild(Core.Engine gameEngine)
+            : base(gameEngine)
         {
             PowerupAmount = 100;
 
@@ -22,9 +21,9 @@ namespace Si.GameEngine.Sprites.Powerup
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (Intersects(_gameCore.Player.Sprite))
+            if (Intersects(_gameEngine.Player.Sprite))
             {
-                _gameCore.Player.Sprite.AddShieldHealth(PowerupAmount);
+                _gameEngine.Player.Sprite.AddShieldHealth(PowerupAmount);
                 Explode();
             }
             else if (AgeInMiliseconds > TimeToLive)

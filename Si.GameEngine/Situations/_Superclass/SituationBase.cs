@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Types;
+﻿using Si.GameEngine.Core.Types;
 using Si.GameEngine.Levels._Superclass;
 using System.Collections.Generic;
 using static Si.Shared.SiConstants;
@@ -11,7 +10,7 @@ namespace Si.GameEngine.Situations._Superclass
     /// </summary>
     public class SituationBase
     {
-        protected Engine _gameCore;
+        protected Core.Engine _gameEngine;
         protected List<SiEngineCallbackEvent> Events = new();
 
         public LevelBase CurrentLevel { get; protected set; }
@@ -23,9 +22,9 @@ namespace Si.GameEngine.Situations._Superclass
 
         public List<LevelBase> Levels { get; protected set; } = new();
 
-        public SituationBase(Engine gameCore, string name, string description)
+        public SituationBase(Core.Engine gameEngine, string name, string description)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
             Name = name;
             Description = description;
             State = SiSituationState.NotYetStarted;
@@ -60,7 +59,7 @@ namespace Si.GameEngine.Situations._Superclass
             {
                 if (_currentLevelIndex < Levels.Count)
                 {
-                    _gameCore.Player.Hide();
+                    _gameEngine.Player.Hide();
                     CurrentLevel = Levels[_currentLevelIndex];
                     CurrentLevel.Begin();
                     _currentLevelIndex++;

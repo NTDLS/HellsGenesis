@@ -1,5 +1,4 @@
 ﻿using SharpDX.DirectInput;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Utility;
 using System;
@@ -14,7 +13,7 @@ namespace Si.GameEngine.Core.Managers
     /// </summary>
     public class EngineInputManager
     {
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
         private readonly Dictionary<SiPlayerKey, bool> _playerKeyStates = new();
         private bool _collectDetailedKeyInformation = false;
         private readonly Dictionary<Key, bool> _allKeyStates = new();
@@ -39,9 +38,9 @@ namespace Si.GameEngine.Core.Managers
         /// </summary>
         public List<Key> DepressedKeys { get; private set; } = new();
 
-        public EngineInputManager(Engine gameCore)
+        public EngineInputManager(Engine gameEngine)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
 
             DirectInput = new();
             Keyboard = new Keyboard(DirectInput);
@@ -75,7 +74,7 @@ namespace Si.GameEngine.Core.Managers
 
         public void Snapshot()
         {
-            if (_gameCore.Display.IsDrawingSurfaceFocused == false)
+            if (_gameEngine.Display.IsDrawingSurfaceFocused == false)
             {
                 //We do this so that I can have more than one instance open on the same computer 
                 //  at a time without the keyboard commands to one affecting the other.
@@ -85,19 +84,19 @@ namespace Si.GameEngine.Core.Managers
 
             var keyboardState = Keyboard.GetCurrentState();
 
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.Reverse, keyboardState.IsPressed(Key.S));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.Left, keyboardState.IsPressed(Key.Left));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.Right, keyboardState.IsPressed(Key.Right));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.Up, keyboardState.IsPressed(Key.Up));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.Down, keyboardState.IsPressed(Key.Down));
-            _gameCore.Input.KeyStateChanged(SiPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.Reverse, keyboardState.IsPressed(Key.S));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.Left, keyboardState.IsPressed(Key.Left));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.Right, keyboardState.IsPressed(Key.Right));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.Up, keyboardState.IsPressed(Key.Up));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.Down, keyboardState.IsPressed(Key.Down));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
 
             //I beleive that this information may be taxing to gather.
             //Regardless we don't typically need is to require any code that uses it to enable it.
@@ -126,7 +125,7 @@ namespace Si.GameEngine.Core.Managers
                 }
 
                 bool shouldBeCaps = Control.IsKeyLocked(Keys.CapsLock);
-                bool shiftKeyDown = _gameCore.Input.DepressedKeys.Contains(Key.LeftShift) || _gameCore.Input.DepressedKeys.Contains(Key.RightShift);
+                bool shiftKeyDown = _gameEngine.Input.DepressedKeys.Contains(Key.LeftShift) || _gameEngine.Input.DepressedKeys.Contains(Key.RightShift);
                 if (shiftKeyDown)
                 {
                     shouldBeCaps = !shouldBeCaps;
@@ -134,13 +133,13 @@ namespace Si.GameEngine.Core.Managers
 
                 TypedString = string.Empty;
 
-                foreach (var key in _gameCore.Input.CycledKeys)
+                foreach (var key in _gameEngine.Input.CycledKeys)
                 {
                     if (key == Key.Space)
                     {
                         TypedString = " ";
                     }
-                    else if (!_gameCore.Input.IsModifierKey(key))
+                    else if (!_gameEngine.Input.IsModifierKey(key))
                     {
                         char? singleChar = null;
 
@@ -247,39 +246,39 @@ namespace Si.GameEngine.Core.Managers
         {
             if (key == Keys.Oem3)
             {
-                _gameCore.Debug.ToggleVisibility();
+                _gameEngine.Debug.ToggleVisibility();
             }
 
             else if (key == Keys.P)
             {
-                _gameCore.TogglePause();
+                _gameEngine.TogglePause();
             }
             else if (key == Keys.F1)
             {
-                if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count > 0)
+                if (_gameEngine.Sprites.OfType<SpriteEnemyBase>().Count > 0)
                 {
-                    _gameCore.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
+                    _gameEngine.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
                 }
             }
             else if (key == Keys.F2)
             {
-                SiDevelopmentTools.ParticleBlast(_gameCore, 50, _gameCore.Player.Sprite);
+                SiDevelopmentTools.ParticleBlast(_gameEngine, 50, _gameEngine.Player.Sprite);
                 //SiDevelopmentTools.CreateImageSizeVariants(@"..\..\..\Assets\Graphics\Fragments");
-                //_gameCore.Sprites.NewGame();
-                //_gameCore.Sprites.ResetAndShowPlayer();
+                //_gameEngine.Sprites.NewGame();
+                //_gameEngine.Sprites.ResetAndShowPlayer();
             }
             else if (key == Keys.Left)
             {
-                if (_gameCore.Player?.Sprite?.Visable == true)
+                if (_gameEngine.Player?.Sprite?.Visable == true)
                 {
-                    _gameCore.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
+                    _gameEngine.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
                 }
             }
             else if (key == Keys.Right)
             {
-                if (_gameCore.Player?.Sprite?.Visable == true)
+                if (_gameEngine.Player?.Sprite?.Visable == true)
                 {
-                    _gameCore.Player?.Sprite?.SelectNextAvailableUsableSecondaryWeapon();
+                    _gameEngine.Player?.Sprite?.SelectNextAvailableUsableSecondaryWeapon();
                 }
             }
         }

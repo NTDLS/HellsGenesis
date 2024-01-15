@@ -1,6 +1,5 @@
 ﻿using NTDLS.Determinet;
 using NTDLS.Semaphore;
-using Si.GameEngine.Core;
 using Si.GameEngine.Core.Types;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ namespace Si.GameEngine.Core.Managers
     /// </summary>
     public class EngineAssetManager
     {
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
         private readonly PessimisticSemaphore<Dictionary<string, object>> _collection = new();
 
 #if DEBUG
@@ -21,9 +20,9 @@ namespace Si.GameEngine.Core.Managers
 #else
         private readonly string assetRawPath = @".\Assets";
 #endif
-        public EngineAssetManager(Engine gameCore)
+        public EngineAssetManager(Engine gameEngine)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
         }
 
         /// <summary>
@@ -43,7 +42,7 @@ namespace Si.GameEngine.Core.Managers
                     return (value as DniNeuralNetwork).Clone();
                 }
 
-                var json = _gameCore.Assets.GetText(assetRelativePath);
+                var json = _gameEngine.Assets.GetText(assetRelativePath);
                 if (string.IsNullOrEmpty(json) == false)
                 {
                     var network = DniNeuralNetwork.LoadFromText(json);
@@ -177,7 +176,7 @@ namespace Si.GameEngine.Core.Managers
 
                 using (var stream = new FileStream(assetAbsolutePath, FileMode.Open, FileAccess.Read))
                 {
-                    var result = new SiAudioClip(_gameCore, stream, initialVolumne, loopForever);
+                    var result = new SiAudioClip(_gameEngine, stream, initialVolumne, loopForever);
                     o.Add(key, result);
                     stream.Close();
                     return result;
@@ -202,7 +201,7 @@ namespace Si.GameEngine.Core.Managers
                     return value as SharpDX.Direct2D1.Bitmap;
                 }
 
-                var result = _gameCore.Rendering.GetBitmap(assetAbsolutePath);
+                var result = _gameEngine.Rendering.GetBitmap(assetAbsolutePath);
                 o.Add(key, result);
                 return result;
             });
@@ -228,7 +227,7 @@ namespace Si.GameEngine.Core.Managers
                     return value as SharpDX.Direct2D1.Bitmap;
                 }
 
-                var result = _gameCore.Rendering.GetBitmap(assetAbsolutePath, newWidth, newHeight);
+                var result = _gameEngine.Rendering.GetBitmap(assetAbsolutePath, newWidth, newHeight);
                 o.Add(key, result);
                 return result;
             });

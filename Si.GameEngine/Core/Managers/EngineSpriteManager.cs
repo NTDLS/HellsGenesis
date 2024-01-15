@@ -1,6 +1,5 @@
 ﻿using NTDLS.Semaphore;
 using SharpDX.Mathematics.Interop;
-using Si.GameEngine.Core;
 using Si.GameEngine.Core.TickControllers;
 using Si.GameEngine.Menus;
 using Si.GameEngine.Sprites;
@@ -28,7 +27,7 @@ namespace Si.GameEngine.Core.Managers
         public delegate void CollectionAccessor(List<SpriteBase> sprites);
         public delegate T CollectionAccessorT<T>(List<SpriteBase> sprites);
 
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
         private SiPoint _radarScale;
         private SiPoint _radarOffset;
 
@@ -54,22 +53,22 @@ namespace Si.GameEngine.Core.Managers
 
         #endregion
 
-        public EngineSpriteManager(Engine gameCore)
+        public EngineSpriteManager(Engine gameEngine)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
 
-            Animations = new AnimationSpriteTickController(_gameCore, this);
-            Attachments = new AttachmentSpriteTickController(_gameCore, this);
-            Munitions = new MunitionSpriteTickController(_gameCore, this);
-            Debugs = new DebugsSpriteTickController(_gameCore, this);
-            Enemies = new EnemiesSpriteTickController(_gameCore, this);
-            Particles = new ParticlesSpriteTickController(_gameCore, this);
-            Powerups = new PowerupsSpriteTickController(_gameCore, this);
-            RadarPositions = new RadarPositionsSpriteTickController(_gameCore, this);
-            Stars = new StarsSpriteTickController(_gameCore, this);
-            TextBlocks = new TextBlocksSpriteTickController(_gameCore, this);
-            PlayerDrones = new PlayerDronesSpriteTickController(_gameCore, this);
-            EnemyDrones = new EnemyDronesSpriteTickController(_gameCore, this);
+            Animations = new AnimationSpriteTickController(_gameEngine, this);
+            Attachments = new AttachmentSpriteTickController(_gameEngine, this);
+            Munitions = new MunitionSpriteTickController(_gameEngine, this);
+            Debugs = new DebugsSpriteTickController(_gameEngine, this);
+            Enemies = new EnemiesSpriteTickController(_gameEngine, this);
+            Particles = new ParticlesSpriteTickController(_gameEngine, this);
+            Powerups = new PowerupsSpriteTickController(_gameEngine, this);
+            RadarPositions = new RadarPositionsSpriteTickController(_gameEngine, this);
+            Stars = new StarsSpriteTickController(_gameEngine, this);
+            TextBlocks = new TextBlocksSpriteTickController(_gameEngine, this);
+            PlayerDrones = new PlayerDronesSpriteTickController(_gameEngine, this);
+            EnemyDrones = new EnemyDronesSpriteTickController(_gameEngine, this);
         }
 
         public List<SpritePlayerBase> AllVisiblePlayers
@@ -77,7 +76,7 @@ namespace Si.GameEngine.Core.Managers
             get
             {
                 var players = VisibleOfType<SpritePlayerBase>();
-                players.Add(_gameCore.Player.Sprite);
+                players.Add(_gameEngine.Player.Sprite);
                 return players;
             }
         }
@@ -91,7 +90,7 @@ namespace Si.GameEngine.Core.Managers
             var fullTypeName = item.GetType().Name;
             if (fullTypeName.EndsWith("Drone") == false)
             {
-                _gameCore.Multiplay.NotifySpriteCreated(new SiSpriteLayout()
+                _gameEngine.Multiplay.NotifySpriteCreated(new SiSpriteLayout()
                 {
                     FullTypeName = fullTypeName,
                     MultiplayUID = item.MultiplayUID,
@@ -134,13 +133,13 @@ namespace Si.GameEngine.Core.Managers
 
         public void Start()
         {
-            _gameCore.Player.Sprite = new SpriteDebugPlayer(_gameCore) { Visable = false };
+            _gameEngine.Player.Sprite = new SpriteDebugPlayer(_gameEngine) { Visable = false };
 
-            PlayerStatsText = TextBlocks.Create(_gameCore.Rendering.TextFormats.RealtimePlayerStats, _gameCore.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
+            PlayerStatsText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_gameCore.Rendering.TextFormats.RealtimePlayerStats, _gameCore.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
+            DebugText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
 
-            _gameCore.Audio.BackgroundMusicSound.Play();
+            _gameEngine.Audio.BackgroundMusicSound.Play();
         }
 
         public void Shutdown()
@@ -150,11 +149,11 @@ namespace Si.GameEngine.Core.Managers
         public SpriteBase CreateByNameOfType(string typeFullName)
         {
             var type = Type.GetType(typeFullName) ?? throw new ArgumentException($"Type with FullName '{typeFullName}' not found.");
-            object[] param = { _gameCore };
+            object[] param = { _gameEngine };
             var obj = (SpriteBase)Activator.CreateInstance(type, param);
 
-            obj.Location = _gameCore.Display.RandomOffScreenLocation();
-            obj.Velocity.MaxSpeed = SiRandom.Generator.Next(_gameCore.Settings.MinEnemySpeed, _gameCore.Settings.MaxEnemySpeed);
+            obj.Location = _gameEngine.Display.RandomOffScreenLocation();
+            obj.Velocity.MaxSpeed = SiRandom.Generator.Next(_gameEngine.Settings.MinEnemySpeed, _gameEngine.Settings.MaxEnemySpeed);
             obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
 
             var enemy = obj as SpriteEnemyBase;
@@ -173,15 +172,15 @@ namespace Si.GameEngine.Core.Managers
                 o.Where(o => o.QueuedForDeletion).ToList().ForEach(p => p.Cleanup());
                 o.RemoveAll(o => o.QueuedForDeletion);
 
-                _gameCore.Events.CleanupQueuedForDeletion();
+                _gameEngine.Events.CleanupQueuedForDeletion();
 
-                _gameCore.Menus.CleanupDeletedObjects();
+                _gameEngine.Menus.CleanupDeletedObjects();
 
-                if (_gameCore.Player.Sprite.IsDeadOrExploded)
+                if (_gameEngine.Player.Sprite.IsDeadOrExploded)
                 {
-                    _gameCore.Player.Sprite.Visable = false;
-                    _gameCore.Player.Sprite.ReviveDeadOrExploded();
-                    _gameCore.Menus.Add(new MenuStartNewGame(_gameCore));
+                    _gameEngine.Player.Sprite.Visable = false;
+                    _gameEngine.Player.Sprite.ReviveDeadOrExploded();
+                    _gameEngine.Menus.Add(new MenuStartNewGame(_gameEngine));
                 }
             });
         }
@@ -292,32 +291,32 @@ namespace Si.GameEngine.Core.Managers
 
             if (RenderRadar)
             {
-                var radarBgImage = _gameCore.Assets.GetBitmap(@"Graphics\RadarTransparent.png");
+                var radarBgImage = _gameEngine.Assets.GetBitmap(@"Graphics\RadarTransparent.png");
 
-                _gameCore.Rendering.DrawBitmapAt(renderTarget, radarBgImage,
-                    _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,
-                    _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height,
+                _gameEngine.Rendering.DrawBitmapAt(renderTarget, radarBgImage,
+                    _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,
+                    _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height,
                     0);
 
                 double radarDistance = 8;
 
                 if (_radarScale == null)
                 {
-                    double radarVisionWidth = _gameCore.Display.TotalCanvasSize.Width * radarDistance;
-                    double radarVisionHeight = _gameCore.Display.TotalCanvasSize.Height * radarDistance;
+                    double radarVisionWidth = _gameEngine.Display.TotalCanvasSize.Width * radarDistance;
+                    double radarVisionHeight = _gameEngine.Display.TotalCanvasSize.Height * radarDistance;
 
                     _radarScale = new SiPoint(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
                     _radarOffset = new SiPoint(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
                 }
 
-                if (_gameCore.Player.Sprite is not null && _gameCore.Player.Sprite.Visable)
+                if (_gameEngine.Player.Sprite is not null && _gameEngine.Player.Sprite.Visable)
                 {
                     double centerOfRadarX = (int)(radarBgImage.Size.Width / 2.0) - 2.0; //Subtract half the dot size.
                     double centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0) - 2.0; //Subtract half the dot size.
 
                     _radarOffset = new SiPoint(
-                            _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _gameCore.Player.Sprite.X * _radarScale.X),
-                            _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _gameCore.Player.Sprite.Y * _radarScale.Y)
+                            _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _gameEngine.Player.Sprite.X * _radarScale.X),
+                            _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _gameEngine.Player.Sprite.Y * _radarScale.Y)
                         );
 
                     _collection.Use(o =>
@@ -329,10 +328,10 @@ namespace Si.GameEngine.Core.Managers
                             int x = (int)(_radarOffset.X + sprite.Location.X * _radarScale.X);
                             int y = (int)(_radarOffset.Y + sprite.Location.Y * _radarScale.Y);
 
-                            if (x > _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
-                                && x < _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
-                                && y > _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
-                                && y < _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
+                            if (x > _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
+                                && x < _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
+                                && y > _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
+                                && y < _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
                                 )
                             {
                                 if ((sprite is SpritePlayerBase || sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerupBase) && sprite.Visable == true)
@@ -344,11 +343,11 @@ namespace Si.GameEngine.Core.Managers
                     });
 
                     //Render player blip:
-                    _gameCore.Rendering.FillEllipseAt(
+                    _gameEngine.Rendering.FillEllipseAt(
                         renderTarget,
-                        _gameCore.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + centerOfRadarX,
-                        _gameCore.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + centerOfRadarY,
-                        2, 2, _gameCore.Rendering.Materials.Raw.Green);
+                        _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + centerOfRadarX,
+                        _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + centerOfRadarY,
+                        2, 2, _gameEngine.Rendering.Materials.Raw.Green);
                 }
             }
         }
@@ -371,16 +370,16 @@ namespace Si.GameEngine.Core.Managers
                 }
             });
 
-            _gameCore.Player.Sprite?.Render(renderTarget);
-            _gameCore.Menus.Render(renderTarget);
+            _gameEngine.Player.Sprite?.Render(renderTarget);
+            _gameEngine.Menus.Render(renderTarget);
 
-            if (_gameCore.Settings.HighlightNatrualBounds)
+            if (_gameEngine.Settings.HighlightNatrualBounds)
             {
-                var natrualScreenBounds = _gameCore.Display.NatrualScreenBounds;
+                var natrualScreenBounds = _gameEngine.Display.NatrualScreenBounds;
                 var rawRectF = new RawRectangleF(natrualScreenBounds.Left, natrualScreenBounds.Top, natrualScreenBounds.Right, natrualScreenBounds.Bottom);
 
                 //Highlight the 1:1 frame
-                _gameCore.Rendering.DrawRectangleAt(renderTarget, rawRectF, 0, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
+                _gameEngine.Rendering.DrawRectangleAt(renderTarget, rawRectF, 0, _gameEngine.Rendering.Materials.Raw.Red, 0, 1);
             }
         }
     }

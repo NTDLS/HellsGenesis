@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.TickControllers._Superclass;
+﻿using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.Shared;
 using Si.Shared.ExtensionMethods;
@@ -15,20 +14,20 @@ namespace Si.GameEngine.Core.TickControllers
     /// </summary>
     public class PlayerSpriteTickController : PlayerTickControllerBase<SpritePlayerBase>
     {
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
 
         public SpritePlayerBase Sprite { get; set; }
 
-        public PlayerSpriteTickController(Engine gameCore)
-            : base(gameCore)
+        public PlayerSpriteTickController(Engine gameEngine)
+            : base(gameEngine)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
         }
 
         public void InstantiatePlayerClass(Type playerClassType)
         {
-            Sprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerClassType, new object[] { _gameCore });
+            Sprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerClassType, new object[] { _gameEngine });
             Sprite.Visable = false;
         }
 
@@ -42,13 +41,13 @@ namespace Si.GameEngine.Core.TickControllers
 
             if (Sprite.Visable)
             {
-                if (GameCore.Input.IsKeyPressed(SiPlayerKey.PrimaryFire))
+                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.PrimaryFire))
                 {
                     if (Sprite.PrimaryWeapon != null && Sprite.PrimaryWeapon.Fire())
                     {
-                        if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && Sprite.IsDrone == false)
+                        if (_gameEngine.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && Sprite.IsDrone == false)
                         {
-                            _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiSpriteActionFireWeapon(Sprite.MultiplayUID)
+                            _gameEngine.Multiplay.RecordDroneActionFireWeapon(new SiSpriteActionFireWeapon(Sprite.MultiplayUID)
                             {
                                 WeaponTypeName = Sprite.PrimaryWeapon.GetType().Name,
                             });
@@ -65,13 +64,13 @@ namespace Si.GameEngine.Core.TickControllers
                     }
                 }
 
-                if (GameCore.Input.IsKeyPressed(SiPlayerKey.SecondaryFire))
+                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SecondaryFire))
                 {
                     if (Sprite.SelectedSecondaryWeapon != null && Sprite.SelectedSecondaryWeapon.Fire())
                     {
-                        if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && Sprite.IsDrone == false)
+                        if (_gameEngine.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && Sprite.IsDrone == false)
                         {
-                            _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiSpriteActionFireWeapon(Sprite.MultiplayUID)
+                            _gameEngine.Multiplay.RecordDroneActionFireWeapon(new SiSpriteActionFireWeapon(Sprite.MultiplayUID)
                             {
                                 WeaponTypeName = Sprite.SelectedSecondaryWeapon.GetType().Name,
                             });
@@ -92,13 +91,13 @@ namespace Si.GameEngine.Core.TickControllers
                 #region LockPlayerAngleToNearbyEnemy.
                 //This needs some work. It works, but its odd - the movement is rigid.
 
-                if (GameCore.Settings.LockPlayerAngleToNearbyEnemy)
+                if (GameEngine.Settings.LockPlayerAngleToNearbyEnemy)
                 {
-                    if (GameCore.Input.IsKeyPressed(SiPlayerKey.RotateClockwise) == false && GameCore.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) == false)
+                    if (GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise) == false && GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) == false)
                     {
                         if (_allowLockPlayerAngleToNearbyEnemy)
                         {
-                            var enemies = GameCore.Sprites.Enemies.Visible();
+                            var enemies = GameEngine.Sprites.Enemies.Visible();
                             foreach (var enemy in enemies)
                             {
                                 var distanceTo = Sprite.DistanceTo(enemy);
@@ -125,13 +124,13 @@ namespace Si.GameEngine.Core.TickControllers
                 #endregion
 
                 //Make player boost "build up" and fade-in.
-                if (GameCore.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && GameCore.Input.IsKeyPressed(SiPlayerKey.Forward)
+                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
                     && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false)
                 {
                     if (Sprite.Velocity.BoostPercentage < 1.0)
                     {
                         double boostToAdd = Sprite.Velocity.BoostPercentage > 0
-                            ? GameCore.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.BoostPercentage) : GameCore.Settings.PlayerThrustRampUp;
+                            ? GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.BoostPercentage) : GameEngine.Settings.PlayerThrustRampUp;
 
                         Sprite.Velocity.BoostPercentage += boostToAdd;
                     }
@@ -147,18 +146,18 @@ namespace Si.GameEngine.Core.TickControllers
                     //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
                     if (Sprite.Velocity.BoostPercentage > 0)
                     {
-                        Sprite.Velocity.BoostPercentage -= GameCore.Settings.PlayerThrustRampDown;
+                        Sprite.Velocity.BoostPercentage -= GameEngine.Settings.PlayerThrustRampDown;
                         if (Sprite.Velocity.BoostPercentage < 0.01)
                         {
                             Sprite.Velocity.BoostPercentage = 0;
                         }
                     }
 
-                    if (GameCore.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < GameCore.Settings.MaxPlayerBoostAmount)
+                    if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < GameEngine.Settings.MaxPlayerBoostAmount)
                     {
-                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Box(0, GameCore.Settings.MaxPlayerBoostAmount);
+                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Box(0, GameEngine.Settings.MaxPlayerBoostAmount);
 
-                        if (Sprite.Velocity.BoostRebuilding && Sprite.Velocity.AvailableBoost >= GameCore.Settings.PlayerBoostRebuildFloor)
+                        if (Sprite.Velocity.BoostRebuilding && Sprite.Velocity.AvailableBoost >= GameEngine.Settings.PlayerBoostRebuildFloor)
                         {
                             Sprite.Velocity.BoostRebuilding = false;
                         }
@@ -166,7 +165,7 @@ namespace Si.GameEngine.Core.TickControllers
                 }
 
                 //Make player thrust "build up" and fade-in.
-                if (GameCore.Input.IsKeyPressed(SiPlayerKey.Forward))
+                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward))
                 {
                     if (Sprite.Velocity.ThrottlePercentage < 1.0)
                     {
@@ -176,7 +175,7 @@ namespace Si.GameEngine.Core.TickControllers
                         //  of throttle will take a while. We do the reverse of this to stop. Stopping fast at first and slowly-slowly slowing to a stop.
 
                         double thrustToAdd = Sprite.Velocity.ThrottlePercentage > 0
-                            ? GameCore.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ThrottlePercentage) : GameCore.Settings.PlayerThrustRampUp;
+                            ? GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ThrottlePercentage) : GameEngine.Settings.PlayerThrustRampUp;
 
                         Sprite.Velocity.ThrottlePercentage += thrustToAdd;
                     }
@@ -188,7 +187,7 @@ namespace Si.GameEngine.Core.TickControllers
                     {
                         //Ramp down to a stop:
                         double thrustToRemove = Sprite.Velocity.ThrottlePercentage < 1
-                            ? GameCore.Settings.PlayerThrustRampDown * Sprite.Velocity.ThrottlePercentage : GameCore.Settings.PlayerThrustRampDown;
+                            ? GameEngine.Settings.PlayerThrustRampDown * Sprite.Velocity.ThrottlePercentage : GameEngine.Settings.PlayerThrustRampDown;
 
                         Sprite.Velocity.ThrottlePercentage -= thrustToRemove;
 
@@ -202,7 +201,7 @@ namespace Si.GameEngine.Core.TickControllers
                     {
                         //Ramp up to a stop:
                         double thrustToRemove = Sprite.Velocity.ThrottlePercentage * -1 < 1
-                            ? GameCore.Settings.PlayerThrustRampDown * (1 - Sprite.Velocity.ThrottlePercentage * -1) : GameCore.Settings.PlayerThrustRampDown;
+                            ? GameEngine.Settings.PlayerThrustRampDown * (1 - Sprite.Velocity.ThrottlePercentage * -1) : GameEngine.Settings.PlayerThrustRampDown;
 
                         Sprite.Velocity.ThrottlePercentage += thrustToRemove;
                         if (Sprite.Velocity.ThrottlePercentage > 0)
@@ -216,8 +215,8 @@ namespace Si.GameEngine.Core.TickControllers
                 if (Sprite.BoostAnimation != null)
                 {
                     Sprite.BoostAnimation.Visable =
-                        GameCore.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
-                        && GameCore.Input.IsKeyPressed(SiPlayerKey.Forward)
+                        GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
+                        && GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
                         && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false;
                 }
 
@@ -229,7 +228,7 @@ namespace Si.GameEngine.Core.TickControllers
 
                 if (Sprite.ThrustAnimation != null)
                 {
-                    Sprite.ThrustAnimation.Visable = GameCore.Input.IsKeyPressed(SiPlayerKey.Forward);
+                    Sprite.ThrustAnimation.Visable = GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward);
                 }
 
                 var thrustVector = Sprite.Velocity.MaxSpeed * (Sprite.Velocity.ThrottlePercentage + -Sprite.Velocity.RecoilPercentage);
@@ -261,13 +260,13 @@ namespace Si.GameEngine.Core.TickControllers
                 }
 
                 //We are going to restrict the rotation speed to a percentage of thrust.
-                var rotationSpeed = GameCore.Settings.MaxPlayerRotationSpeedDegrees * Sprite.Velocity.ThrottlePercentage;
+                var rotationSpeed = GameEngine.Settings.MaxPlayerRotationSpeedDegrees * Sprite.Velocity.ThrottlePercentage;
 
-                if (GameCore.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise))
+                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise))
                 {
                     Sprite.Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0));
                 }
-                else if (GameCore.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
+                else if (GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
                 {
                     Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
                 }
@@ -277,8 +276,8 @@ namespace Si.GameEngine.Core.TickControllers
             }
 
             //Scroll the background.
-            GameCore.Display.BackgroundOffset.X += displacementVector.X;
-            GameCore.Display.BackgroundOffset.Y += displacementVector.Y;
+            GameEngine.Display.BackgroundOffset.X += displacementVector.X;
+            GameEngine.Display.BackgroundOffset.Y += displacementVector.Y;
 
             //Move the player in the direction of the background. This keeps the player visually in place, which is in the center screen.
             Sprite.X += displacementVector.X;
@@ -298,7 +297,7 @@ namespace Si.GameEngine.Core.TickControllers
             var multiplayVector = Sprite.GetMultiplayVector();
             if (multiplayVector != null && Sprite.Visable)
             {
-                _gameCore.Multiplay.RecordDroneActionVector(multiplayVector);
+                _gameEngine.Multiplay.RecordDroneActionVector(multiplayVector);
             }
 
             return displacementVector;
@@ -308,8 +307,8 @@ namespace Si.GameEngine.Core.TickControllers
         {
             Sprite.Reset();
 
-            GameCore.Sprites.PlayerStatsText.Visable = true;
-            GameCore.Sprites.RenderRadar = true;
+            GameEngine.Sprites.PlayerStatsText.Visable = true;
+            GameEngine.Sprites.RenderRadar = true;
             Sprite.Visable = true;
             Sprite.ShipEngineIdleSound.Play();
             Sprite.AllSystemsGoSound.Play();
@@ -317,8 +316,8 @@ namespace Si.GameEngine.Core.TickControllers
 
         public void Show()
         {
-            GameCore.Sprites.PlayerStatsText.Visable = true;
-            GameCore.Sprites.RenderRadar = true;
+            GameEngine.Sprites.PlayerStatsText.Visable = true;
+            GameEngine.Sprites.RenderRadar = true;
             Sprite.Visable = true;
             Sprite.ShipEngineIdleSound.Play();
             Sprite.AllSystemsGoSound.Play();
@@ -326,8 +325,8 @@ namespace Si.GameEngine.Core.TickControllers
 
         public void Hide()
         {
-            GameCore.Sprites.PlayerStatsText.Visable = false;
-            GameCore.Sprites.RenderRadar = false;
+            GameEngine.Sprites.PlayerStatsText.Visable = false;
+            GameEngine.Sprites.RenderRadar = false;
             Sprite.Visable = false;
             Sprite.ShipEngineIdleSound.Stop();
             Sprite.ShipEngineRoarSound.Stop();

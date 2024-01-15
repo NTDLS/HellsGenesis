@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Managers;
+﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
@@ -16,8 +15,8 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class MunitionSpriteTickController : SpriteTickControllerBase<MunitionBase>
     {
-        public MunitionSpriteTickController(Engine gameCore, EngineSpriteManager manager)
-            : base(gameCore, manager)
+        public MunitionSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+            : base(gameEngine, manager)
         {
         }
 
@@ -28,7 +27,7 @@ namespace Si.GameEngine.Core.TickControllers
             {
                 var objectsThatCanBeHit = new List<SpriteShipBase>
                 {
-                    GameCore.Player.Sprite
+                    GameEngine.Player.Sprite
                 };
 
                 objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyBossBase>());

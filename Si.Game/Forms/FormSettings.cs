@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace Si.Game
@@ -17,7 +16,7 @@ namespace Si.Game
         {
             trackBarResolution.Scroll += TrackBarResolution_Scroll;
 
-            var settings = Engine.LoadSettings();
+            var settings = GameEngine.Core.Engine.LoadSettings();
 
             checkBoxAutoZoomWhenMoving.Checked = settings.AutoZoomWhenMoving;
             checkBoxHighlightAllSprites.Checked = settings.HighlightAllSprites;
@@ -100,7 +99,7 @@ namespace Si.Game
         {
             try
             {
-                var settings = Engine.LoadSettings();
+                var settings = GameEngine.Core.Engine.LoadSettings();
 
                 settings.AutoZoomWhenMoving = checkBoxAutoZoomWhenMoving.Checked;
                 settings.HighlightAllSprites = checkBoxHighlightAllSprites.Checked;
@@ -118,7 +117,7 @@ namespace Si.Game
 
                 settings.FullScreen = (trackBarResolution.Value == MAX_RESOLUTIONS);
 
-                Engine.SaveSettings(settings);
+                GameEngine.Core.Engine.SaveSettings(settings);
                 Close();
             }
             catch (Exception ex)

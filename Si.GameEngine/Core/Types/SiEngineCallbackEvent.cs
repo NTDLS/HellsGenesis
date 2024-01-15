@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using Si.GameEngine.Core;
 
 namespace Si.GameEngine.Core.Types
 {
@@ -10,7 +9,7 @@ namespace Si.GameEngine.Core.Types
     /// </summary>
     public class SiEngineCallbackEvent
     {
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
         private readonly object _referenceObject = null;
         private readonly TimeSpan _countdown;
         private readonly SiOnExecute _onExecute;
@@ -28,7 +27,7 @@ namespace Si.GameEngine.Core.Types
         /// <param name="core">Engine core</param>
         /// <param name="sender">The event that is being triggered</param>
         /// <param name="refObj">An optional object passed by the user code</param>
-        public delegate void SiOnExecute(Engine gameCore, SiEngineCallbackEvent sender, object refObj);
+        public delegate void SiOnExecute(Engine gameEngine, SiEngineCallbackEvent sender, object refObj);
 
         public enum SiCallbackEventMode
         {
@@ -42,11 +41,11 @@ namespace Si.GameEngine.Core.Types
             Asynchronous
         }
 
-        public SiEngineCallbackEvent(Engine gameCore, TimeSpan countdown, SiOnExecute executeCallback, object refObj,
+        public SiEngineCallbackEvent(Engine gameEngine, TimeSpan countdown, SiOnExecute executeCallback, object refObj,
             SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
             SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
             _referenceObject = refObj;
             _countdown = countdown;
             _onExecute = executeCallback;
@@ -56,18 +55,18 @@ namespace Si.GameEngine.Core.Types
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(Engine gameCore, TimeSpan countdown, SiOnExecute executeCallback, object refObj)
+        public SiEngineCallbackEvent(Engine gameEngine, TimeSpan countdown, SiOnExecute executeCallback, object refObj)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
             _countdown = countdown;
             _onExecute = executeCallback;
             _startedTime = DateTime.UtcNow;
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(Engine gameCore, TimeSpan countdown, SiOnExecute executeCallback)
+        public SiEngineCallbackEvent(Engine gameEngine, TimeSpan countdown, SiOnExecute executeCallback)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
             _countdown = countdown;
             _onExecute = executeCallback;
             _startedTime = DateTime.UtcNow;
@@ -98,12 +97,12 @@ namespace Si.GameEngine.Core.Types
                     {
                         new Thread(() =>
                         {
-                            _onExecute(_gameCore, this, _referenceObject);
+                            _onExecute(_gameEngine, this, _referenceObject);
                         }).Start();
                     }
                     else
                     {
-                        _onExecute(_gameCore, this, _referenceObject);
+                        _onExecute(_gameEngine, this, _referenceObject);
                     }
 
                     if (_callbackEventMode == SiCallbackEventMode.Recurring)

@@ -1,16 +1,16 @@
 ﻿using NTDLS.Semaphore;
-using Si.Server.Engine.Objects;
+using Si.ServerEngine.Core.Objects;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
-namespace Si.Server.Engine.Managers
+namespace Si.ServerEngine.Core.Managers
 {
     internal class SessionManager
     {
-        private readonly ServerCore _serverCore;
+        private readonly Engine _serverCore;
         private readonly PessimisticSemaphore<Dictionary<Guid, Session>> _sessions = new();
 
-        public SessionManager(ServerCore serverCore)
+        public SessionManager(Engine serverCore)
         {
             _serverCore = serverCore;
         }

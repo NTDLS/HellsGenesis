@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.Shared;
+﻿using Si.Shared;
 using Si.Shared.ExtensionMethods;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
@@ -15,7 +14,7 @@ namespace Si.GameEngine.Core.Managers
     /// </summary>
     public class EngineDisplayManager
     {
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
 
         public Dictionary<Point, SiQuadrant> Quadrants { get; private set; } = new();
 
@@ -40,8 +39,8 @@ namespace Si.GameEngine.Core.Managers
             }
 
             double weightedThrottlePercent = (
-                    _gameCore.Player.Sprite.Velocity.ThrottlePercentage * 0.60 //n-percent of the zoom is throttle.
-                    + _gameCore.Player.Sprite.Velocity.BoostPercentage * 0.40  //n-percent of the zoom is boost.
+                    _gameEngine.Player.Sprite.Velocity.ThrottlePercentage * 0.60 //n-percent of the zoom is throttle.
+                    + _gameEngine.Player.Sprite.Velocity.BoostPercentage * 0.40  //n-percent of the zoom is boost.
                 ).Box(0, 1);
 
             double remainingRatioZoom = 1 - BaseDrawScale;
@@ -49,7 +48,7 @@ namespace Si.GameEngine.Core.Managers
             return BaseDrawScale + debugFactor;
         }
 
-        public double BaseDrawScale => 100.0 / _gameCore.Settings.OverdrawScale / 100.0;
+        public double BaseDrawScale => 100.0 / _gameEngine.Settings.OverdrawScale / 100.0;
 
         /// <summary>
         /// The number of extra pixles to draw beyond the NatrualScreenSize.
@@ -154,14 +153,14 @@ namespace Si.GameEngine.Core.Managers
             }
         }
 
-        public EngineDisplayManager(Engine gameCore, Control drawingSurface, Size visibleSize)
+        public EngineDisplayManager(Engine gameEngine, Control drawingSurface, Size visibleSize)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
             DrawingSurface = drawingSurface;
             NatrualScreenSize = visibleSize;
 
-            int totalSizeX = (int)(visibleSize.Width * _gameCore.Settings.OverdrawScale);
-            int totalSizeY = (int)(visibleSize.Height * _gameCore.Settings.OverdrawScale);
+            int totalSizeX = (int)(visibleSize.Width * _gameEngine.Settings.OverdrawScale);
+            int totalSizeY = (int)(visibleSize.Height * _gameEngine.Settings.OverdrawScale);
 
             if (totalSizeX % 2 != 0) totalSizeX++;
             if (totalSizeY % 2 != 0) totalSizeY++;

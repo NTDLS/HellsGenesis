@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites.Powerup._Superclass;
+﻿using Si.GameEngine.Sprites.Powerup._Superclass;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
@@ -10,8 +9,8 @@ namespace Si.GameEngine.Sprites.Powerup
     {
         private readonly int imageCount = 3;
 
-        public SpritePowerupAmmo(Engine gameCore)
-            : base(gameCore)
+        public SpritePowerupAmmo(Core.Engine gameEngine)
+            : base(gameEngine)
         {
             PowerupAmount = 100;
 
@@ -22,12 +21,12 @@ namespace Si.GameEngine.Sprites.Powerup
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (Intersects(_gameCore.Player.Sprite))
+            if (Intersects(_gameEngine.Player.Sprite))
             {
-                _gameCore.Player.Sprite.PrimaryWeapon.RoundQuantity += PowerupAmount;
-                if (_gameCore.Player.Sprite.SelectedSecondaryWeapon != null)
+                _gameEngine.Player.Sprite.PrimaryWeapon.RoundQuantity += PowerupAmount;
+                if (_gameEngine.Player.Sprite.SelectedSecondaryWeapon != null)
                 {
-                    _gameCore.Player.Sprite.SelectedSecondaryWeapon.RoundQuantity += PowerupAmount;
+                    _gameEngine.Player.Sprite.SelectedSecondaryWeapon.RoundQuantity += PowerupAmount;
                 }
                 Explode();
             }

@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Loudouts;
+﻿using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Bosses._Superclass;
 using Si.GameEngine.Sprites.Weapons;
 using Si.GameEngine.Utility;
@@ -26,8 +25,8 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         private readonly double _initialMaxpeed;
         private readonly string _assetPath = @"Graphics\Enemy\Bosses\Spectre\";
 
-        public SpriteEnemySpectre(Engine gameCore)
-            : base(gameCore, hullHealth, bountyMultiplier)
+        public SpriteEnemySpectre(Core.Engine gameEngine)
+            : base(gameEngine, hullHealth, bountyMultiplier)
         {
             _leftGun = Attach(_assetPath + "Gun.Left.png", true, 3);
             _rightGun = Attach(_assetPath + "Gun.Right.png", true, 3);
@@ -143,7 +142,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         {
             base.ApplyIntelligence(displacementVector);
 
-            double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
+            double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
 
             //We have no engines. :(
             if (_leftThrust.IsDeadOrExploded && _rightThrust.IsDeadOrExploded)
@@ -174,7 +173,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 }
 
                 //Keep pointing at the player.
-                var deltaAngle = DeltaAngle(_gameCore.Player.Sprite);
+                var deltaAngle = DeltaAngle(_gameEngine.Player.Sprite);
 
                 if (deltaAngle.IsNotBetween(-10, 10))
                 {
@@ -211,7 +210,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
-                    PointAtAndGoto(_gameCore.Player.Sprite);
+                    PointAtAndGoto(_gameEngine.Player.Sprite);
                 }
                 else
                 {
@@ -223,7 +222,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
             if (mode == AIMode.Tailing)
             {
-                PointAtAndGoto(_gameCore.Player.Sprite);
+                PointAtAndGoto(_gameEngine.Player.Sprite);
 
                 //Stay on the players tail.
                 if (distanceToPlayer > distanceToKeep + 300)
@@ -276,7 +275,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_gameCore.Player.Sprite);
+                var deltaAngle = DeltaAngle(_gameEngine.Player.Sprite);
 
                 if (deltaAngle.IsNotBetween(-10, 10))
                 {
@@ -302,7 +301,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             if (FireWeapon<WeaponDualVulcanCannon>())
@@ -313,7 +312,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             if (FireWeapon<WeaponVulcanCannon>())

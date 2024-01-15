@@ -1,6 +1,5 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
@@ -30,15 +29,15 @@ namespace Si.GameEngine.Sprites
             set
             {
                 _text = value;
-                var size = _gameCore.Rendering.GetTextSize(_text, Format);
+                var size = _gameEngine.Rendering.GetTextSize(_text, Format);
                 _size = new Size((int)size.Width, (int)size.Height);
             }
         }
 
         #endregion
 
-        public SpriteTextBlock(Engine gameCore, TextFormat format, SolidColorBrush color, SiPoint location, bool isFixedPosition)
-            : base(gameCore)
+        public SpriteTextBlock(Core.Engine gameEngine, TextFormat format, SolidColorBrush color, SiPoint location, bool isFixedPosition)
+            : base(gameEngine)
         {
             RenderScaleOrder = Shared.SiConstants.SiRenderScaleOrder.PostScale;
             IsFixedPosition = isFixedPosition;
@@ -52,7 +51,7 @@ namespace Si.GameEngine.Sprites
         {
             if (Visable)
             {
-                _gameCore.Rendering.DrawTextAt(renderTarget,
+                _gameEngine.Rendering.DrawTextAt(renderTarget,
                     (float)RenderLocation.X,
                     (float)RenderLocation.Y,
                     0, _text ?? string.Empty, Format, Color);

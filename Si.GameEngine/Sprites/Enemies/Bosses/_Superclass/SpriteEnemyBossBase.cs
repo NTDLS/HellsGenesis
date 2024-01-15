@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites.Enemies._Superclass;
+﻿using Si.GameEngine.Sprites.Enemies._Superclass;
 
 namespace Si.GameEngine.Sprites.Enemies.Bosses._Superclass
 {
@@ -8,8 +7,8 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses._Superclass
     /// </summary>
     internal class SpriteEnemyBossBase : SpriteEnemyBase
     {
-        public SpriteEnemyBossBase(Engine gameCore, int hullHealth, int bountyMultiplier)
-            : base(gameCore, hullHealth, bountyMultiplier)
+        public SpriteEnemyBossBase(Core.Engine gameEngine, int hullHealth, int bountyMultiplier)
+            : base(gameEngine, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
@@ -19,7 +18,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses._Superclass
         {
             _explodeSound?.Play();
             _explosionAnimation?.Reset();
-            _gameCore.Sprites.Animations.AddAt(_explosionAnimation, this);
+            _gameEngine.Sprites.Animations.AddAt(_explosionAnimation, this);
 
             CreateParticlesExplosion();
 

@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Managers;
+﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Shared.Types.Geometry;
 using System;
@@ -14,7 +13,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
     /// </summary>
     public class SpriteTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
     {
-        public Engine GameCore { get; private set; }
+        public Engine GameEngine { get; private set; }
         public EngineSpriteManager SpriteManager { get; private set; }
 
         public List<subType> VisibleOfType<subType>() where subType : T => SpriteManager.VisibleOfType<subType>();
@@ -25,9 +24,9 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
 
         public virtual void ExecuteWorldClockTick(SiPoint displacementVector) { }
 
-        public SpriteTickControllerBase(Engine gameCore, EngineSpriteManager manager)
+        public SpriteTickControllerBase(Engine gameEngine, EngineSpriteManager manager)
         {
-            GameCore = gameCore;
+            GameEngine = gameEngine;
             SpriteManager = manager;
         }
 
@@ -37,7 +36,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
 
         public T Create(double x, double y, string name = "")
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
+            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
             obj.X = x;
             obj.Y = y;
             obj.SpriteTag = name;
@@ -47,9 +46,9 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
 
         public T CreateAtCenterScreen(string name = "")
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
-            obj.X = GameCore.Display.TotalCanvasSize.Width / 2;
-            obj.Y = GameCore.Display.TotalCanvasSize.Height / 2;
+            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
+            obj.X = GameEngine.Display.TotalCanvasSize.Width / 2;
+            obj.Y = GameEngine.Display.TotalCanvasSize.Height / 2;
 
             obj.SpriteTag = name;
 
@@ -59,7 +58,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
 
         public T Create(double x, double y)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
+            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
             obj.X = x;
             obj.Y = y;
             SpriteManager.Add(obj);
@@ -69,14 +68,14 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
 
         public T Create()
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
+            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
             SpriteManager.Add(obj);
             return obj;
         }
 
         public T Create(string name = "")
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameCore);
+            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
             obj.SpriteTag = name;
             SpriteManager.Add(obj);
             return obj;

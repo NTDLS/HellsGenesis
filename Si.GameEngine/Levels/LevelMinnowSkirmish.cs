@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Types;
+﻿using Si.GameEngine.Core.Types;
 using Si.GameEngine.Levels._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Enemies.Peons;
@@ -12,8 +11,8 @@ namespace Si.GameEngine.Levels
     /// </summary>
     internal class LevelMinnowSkirmish : LevelBase
     {
-        public LevelMinnowSkirmish(Engine gameCore)
-            : base(gameCore,
+        public LevelMinnowSkirmish(Core.Engine gameEngine)
+            : base(gameEngine,
                   "Minnow Skirmish",
                   "Its not just a skirmish, its a space aged dog fight."
                   )
@@ -28,18 +27,18 @@ namespace Si.GameEngine.Levels
             AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 0, 5000), AddFreshEnemiesCallback);
 
-            _gameCore.Player.Sprite.AddHullHealth(100);
-            _gameCore.Player.Sprite.AddShieldHealth(10);
+            _gameEngine.Player.Sprite.AddHullHealth(100);
+            _gameEngine.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void FirstShowPlayerCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
-            _gameCore.Player.ResetAndShow();
+            _gameEngine.Player.ResetAndShow();
         }
 
-        private void AddFreshEnemiesCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
-            if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count == 0)
+            if (_gameEngine.Sprites.OfType<SpriteEnemyBase>().Count == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {
@@ -51,18 +50,18 @@ namespace Si.GameEngine.Levels
 
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 0, SiRandom.Between(0, 800)), AddEnemyCallback);
+                    _gameEngine.Events.Create(new System.TimeSpan(0, 0, 0, 0, SiRandom.Between(0, 800)), AddEnemyCallback);
                 }
 
-                _gameCore.Audio.RadarBlipsSound.Play();
+                _gameEngine.Audio.RadarBlipsSound.Play();
 
                 CurrentWave++;
             }
         }
 
-        private void AddEnemyCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void AddEnemyCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
-            _gameCore.Sprites.Enemies.Create<SpriteEnemyMinnow>();
+            _gameEngine.Sprites.Enemies.Create<SpriteEnemyMinnow>();
         }
     }
 }

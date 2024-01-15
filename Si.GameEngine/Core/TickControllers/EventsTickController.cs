@@ -1,5 +1,4 @@
 ﻿using NTDLS.Semaphore;
-using Si.GameEngine.Core;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Menus;
@@ -13,8 +12,8 @@ namespace Si.GameEngine.Core.TickControllers
     {
         private readonly PessimisticSemaphore<List<SiEngineCallbackEvent>> _collection = new();
 
-        public EventsTickController(Engine gameCore)
-            : base(gameCore)
+        public EventsTickController(Engine gameEngine)
+            : base(gameEngine)
         {
         }
 
@@ -40,8 +39,8 @@ namespace Si.GameEngine.Core.TickControllers
         {
             Create(new TimeSpan(0, 0, 0, 5), (core, sender, refObj) =>
             {
-                GameCore.Audio.DoorIsAjarSound.Play();
-                GameCore.Menus.Add(new MenuStartNewGame(core));
+                GameEngine.Audio.DoorIsAjarSound.Play();
+                GameEngine.Menus.Add(new MenuStartNewGame(core));
             });
         }
 
@@ -53,7 +52,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(GameCore, countdown, executeCallback, refObj, callbackEventMode, callbackEventAsync);
+                var obj = new SiEngineCallbackEvent(GameEngine, countdown, executeCallback, refObj, callbackEventMode, callbackEventAsync);
                 o.Add(obj);
                 return obj;
             });
@@ -63,7 +62,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(GameCore, countdown, executeCallback, refObj);
+                var obj = new SiEngineCallbackEvent(GameEngine, countdown, executeCallback, refObj);
                 o.Add(obj);
                 return obj;
             });
@@ -73,7 +72,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(GameCore, countdown, executeCallback);
+                var obj = new SiEngineCallbackEvent(GameEngine, countdown, executeCallback);
                 o.Add(obj);
                 return obj;
             });

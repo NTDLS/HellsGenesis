@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.Shared.Types.Geometry;
 using System;
@@ -16,8 +15,8 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
         public int MaxSeekingObservationAngleDegrees { get; set; } = 20;
         public int SeekingRotationRateInDegrees { get; set; } = 4;
 
-        public SeekingMunitionBase(Engine gameCore, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
-            : base(gameCore, weapon, firedFrom, imagePath, xyOffset)
+        public SeekingMunitionBase(Core.Engine gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
+            : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
         }
 
@@ -25,9 +24,9 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
         {
             if (FiredFromType == SiFiredFromType.Enemy)
             {
-                if (DistanceTo(_gameCore.Player.Sprite) < MaxSeekingObservationDistance)
+                if (DistanceTo(_gameEngine.Player.Sprite) < MaxSeekingObservationDistance)
                 {
-                    var deltaAngle = DeltaAngle(_gameCore.Player.Sprite);
+                    var deltaAngle = DeltaAngle(_gameEngine.Player.Sprite);
 
                     if (Math.Abs((double)deltaAngle) < MaxSeekingObservationAngleDegrees)
                     {
@@ -46,7 +45,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             {
                 double? smallestAngle = null;
 
-                foreach (var enemy in _gameCore.Sprites.Enemies.Visible())
+                foreach (var enemy in _gameEngine.Sprites.Enemies.Visible())
                 {
                     if (DistanceTo(enemy) < MaxSeekingObservationDistance)
                     {

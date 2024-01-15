@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Managers;
+﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
@@ -10,8 +9,8 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class AnimationSpriteTickController : SpriteTickControllerBase<SpriteAnimation>
     {
-        public AnimationSpriteTickController(Engine gameCore, EngineSpriteManager manager)
-            : base(gameCore, manager)
+        public AnimationSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+            : base(gameEngine, manager)
         {
         }
 
@@ -38,7 +37,7 @@ namespace Si.GameEngine.Core.TickControllers
 
         public SpriteAnimation Create(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, SpriteAnimation.PlayMode playMode = null)
         {
-            SpriteAnimation obj = new SpriteAnimation(GameCore, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
+            SpriteAnimation obj = new SpriteAnimation(GameEngine, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
             SpriteManager.Add(obj);
             return obj;
         }

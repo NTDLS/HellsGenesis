@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Levels;
+﻿using Si.GameEngine.Levels;
 using Si.GameEngine.Situations._Superclass;
 
 namespace Si.GameEngine.Situations
@@ -10,15 +9,15 @@ namespace Si.GameEngine.Situations
     /// </summary>
     internal class SituationDebuggingGalore : SituationBase
     {
-        public SituationDebuggingGalore(Engine gameCore)
-            : base(gameCore,
+        public SituationDebuggingGalore(Core.Engine gameEngine)
+            : base(gameEngine,
                   "Debugging Galore",
                   "The situation is dire and the explosions here typically\r\n"
                   + "cause the entire universe to end - as well as the program."
                   )
         {
-            Levels.Add(new LevelDebuggingGalore(gameCore));
-            Levels.Add(new LevelFreeFlight(gameCore));
+            Levels.Add(new LevelDebuggingGalore(gameEngine));
+            Levels.Add(new LevelFreeFlight(gameEngine));
         }
     }
 }

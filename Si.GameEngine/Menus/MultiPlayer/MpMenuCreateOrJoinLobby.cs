@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus;
+﻿using Si.GameEngine.Menus;
 using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Menus.MultiPlayer.Client;
@@ -14,15 +13,15 @@ namespace Si.Menus.MultiPlayer
     /// </summary>
     internal class MpMenuCreateOrJoinLobby : MenuBase
     {
-        public MpMenuCreateOrJoinLobby(Engine gameCore)
-            : base(gameCore)
+        public MpMenuCreateOrJoinLobby(GameEngine.Core.Engine gameEngine)
+            : base(gameEngine)
         {
             //Set this here incase we are comming back to this menue from the join/host menu.
-            _gameCore.Multiplay.SetPlayMode(SiPlayMode.SinglePlayer);
+            _gameEngine.Multiplay.SetPlayMode(SiPlayMode.SinglePlayer);
 
-            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = _gameCore.Display.TotalCanvasSize.Width / 2;
+            double offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Multiplayer");
@@ -45,7 +44,7 @@ namespace Si.Menus.MultiPlayer
 
         private bool MenuMultiplayerHostOrJoin_OnEscape()
         {
-            _gameCore.Menus.Add(new MenuStartNewGame(_gameCore));
+            _gameEngine.Menus.Add(new MenuStartNewGame(_gameEngine));
             return true;
         }
 
@@ -53,13 +52,13 @@ namespace Si.Menus.MultiPlayer
         {
             if (item.Key == "JOIN")
             {
-                _gameCore.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);
-                _gameCore.Menus.Add(new MpMenuClientJoinLobby(_gameCore));
+                _gameEngine.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);
+                _gameEngine.Menus.Add(new MpMenuClientJoinLobby(_gameEngine));
             }
             else if (item.Key == "HOST")
             {
-                _gameCore.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerHost);
-                _gameCore.Menus.Add(new MpMenuHostCreateLobby(_gameCore));
+                _gameEngine.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerHost);
+                _gameEngine.Menus.Add(new MpMenuHostCreateLobby(_gameEngine));
             }
 
             return true;

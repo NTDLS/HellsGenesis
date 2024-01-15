@@ -1,18 +1,18 @@
-﻿using Si.Server.Engine.Objects;
+﻿using Si.ServerEngine.Core.Objects;
 using Si.Shared.Exceptions;
 using System.Text;
 using static Si.Shared.SiConstants;
 
-namespace Si.Server.Engine.Managers
+namespace Si.ServerEngine.Core.Managers
 {
     /// <summary>
     /// Public core class methods for locking, reading, writing and managing tasks related to logging.
     /// </summary>
     internal class LogManager
     {
-        private readonly ServerCore _serverCore;
+        private readonly Engine _serverCore;
 
-        public LogManager(ServerCore serverCore)
+        public LogManager(Engine serverCore)
         {
             _serverCore = serverCore;
         }

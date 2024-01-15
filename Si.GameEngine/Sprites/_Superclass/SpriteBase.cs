@@ -1,5 +1,4 @@
 ﻿using SharpDX.Mathematics.Interop;
-using Si.GameEngine.Core;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
@@ -69,7 +68,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
         #region Backend variables.
 
-        protected Engine _gameCore;
+        protected Core.Engine _gameEngine;
 
         private SharpDX.Direct2D1.Bitmap _image;
 
@@ -94,12 +93,12 @@ namespace Si.GameEngine.Sprites._Superclass
         #region Properties.
 
         public string SpriteTag { get; set; }
-        public uint UID { get; private set; } = Engine.GetNextSequentialId();
+        public uint UID { get; private set; } = Core.Engine.GetNextSequentialId();
         public uint OwnerUID { get; set; }
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
-        public bool IsWithinCurrentScaledScreenBounds => _gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds);
+        public bool IsWithinCurrentScaledScreenBounds => _gameEngine.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds);
         public bool Highlight { get; set; } = false;
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
         public int ShieldHealth { get; private set; } = 0; //Sheild hit-points, these take 1/2 damage.
@@ -153,7 +152,7 @@ namespace Si.GameEngine.Sprites._Superclass
             {
                 if (_isLockedOn == false && value == true)
                 {
-                    _gameCore.Audio.LockedOnBlip.Play();
+                    _gameEngine.Audio.LockedOnBlip.Play();
                 }
                 _isLockedOn = value;
             }
@@ -183,7 +182,7 @@ namespace Si.GameEngine.Sprites._Superclass
                 }
                 else
                 {
-                    return _location - _gameCore.Display.BackgroundOffset;
+                    return _location - _gameEngine.Display.BackgroundOffset;
                 }
             }
         }
@@ -248,15 +247,15 @@ namespace Si.GameEngine.Sprites._Superclass
 
         #endregion
 
-        public SpriteBase(Engine gameCore, string name = "")
+        public SpriteBase(Core.Engine gameEngine, string name = "")
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
 
             IsDrone = GetType().Name.EndsWith("Drone");
 
             SpriteTag = name;
             Velocity = new SiVelocity();
-            Highlight = _gameCore.Settings.HighlightAllSprites;
+            Highlight = _gameEngine.Settings.HighlightAllSprites;
         }
 
         public virtual void Initialize(string imagePath = null, Size? size = null)
@@ -281,7 +280,7 @@ namespace Si.GameEngine.Sprites._Superclass
             if (IsDeadOrExploded == false)
             {
                 //This sprite is being deleted but has not been killed. It is likely that this sprite still exists on remote clients.
-                _gameCore.Multiplay.RecordDroneActionDelete(_multiplayUID);
+                _gameEngine.Multiplay.RecordDroneActionDelete(_multiplayUID);
             }
 
             _readyForDeletion = true;
@@ -318,7 +317,7 @@ namespace Si.GameEngine.Sprites._Superclass
                 + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
                 + $"                          {Velocity.Angle.RadiansUnadjusted:n2}rad unadjusted\r\n"
                 + extraInfo
-                + $"       Background Offset: {_gameCore.Display.BackgroundOffset}\r\n"
+                + $"       Background Offset: {_gameEngine.Display.BackgroundOffset}\r\n"
                 + $"                  Thrust: {Velocity.ThrottlePercentage * 100:n2}\r\n"
                 + $"                   Boost: {Velocity.BoostPercentage * 100:n2}\r\n"
                 + $"                  Recoil: {Velocity.RecoilPercentage * 100:n2}\r\n"
@@ -345,7 +344,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <returns></returns>
         public SpriteAttachment Attach(string imagePath, bool takesDamage = false, int hullHealth = 1)
         {
-            var attachment = _gameCore.Sprites.Attachments.Create(imagePath, null, UID);
+            var attachment = _gameEngine.Sprites.Attachments.Create(imagePath, null, UID);
             attachment.TakesDamage = takesDamage;
             attachment.SetHullHealth(hullHealth);
             Attachments.Add(attachment);
@@ -355,7 +354,7 @@ namespace Si.GameEngine.Sprites._Superclass
         public virtual void AddHullHealth(int pointsToAdd)
         {
             HullHealth += pointsToAdd;
-            HullHealth = HullHealth.Box(0, _gameCore.Settings.MaxHullHealth);
+            HullHealth = HullHealth.Box(0, _gameEngine.Settings.MaxHullHealth);
         }
 
         public virtual void SetShieldHealth(int points)
@@ -367,7 +366,7 @@ namespace Si.GameEngine.Sprites._Superclass
         public virtual void AddShieldHealth(int pointsToAdd)
         {
             ShieldHealth += pointsToAdd;
-            ShieldHealth = ShieldHealth.Box(1, _gameCore.Settings.MaxShieldPoints);
+            ShieldHealth = ShieldHealth.Box(1, _gameEngine.Settings.MaxShieldPoints);
         }
 
         public void ReviveDeadOrExploded()
@@ -383,13 +382,13 @@ namespace Si.GameEngine.Sprites._Superclass
 
         public void SetImage(string imagePath)
         {
-            _image = _gameCore.Assets.GetBitmap(imagePath);
+            _image = _gameEngine.Assets.GetBitmap(imagePath);
             _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
         public void SetImage(string imagePath, Size size)
         {
-            _image = _gameCore.Assets.GetBitmap(imagePath, size.Width, size.Height);
+            _image = _gameEngine.Assets.GetBitmap(imagePath, size.Width, size.Height);
             _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
@@ -510,7 +509,7 @@ namespace Si.GameEngine.Sprites._Superclass
         {
             var intersections = new List<SpriteBase>();
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 foreach (var intersection in o)
                 {
@@ -537,7 +536,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <returns></returns>
         public virtual void Hit(int damage)
         {
-            _gameCore.Multiplay.RecordDroneActionHit(_multiplayUID);
+            _gameEngine.Multiplay.RecordDroneActionHit(_multiplayUID);
 
             if (ShieldHealth > 0)
             {
@@ -785,7 +784,7 @@ namespace Si.GameEngine.Sprites._Superclass
                 QueueForDelete();
             }
 
-            _gameCore.Multiplay.RecordDroneActionExplode(_multiplayUID);
+            _gameEngine.Multiplay.RecordDroneActionExplode(_multiplayUID);
 
             OnExplode?.Invoke(this);
         }
@@ -795,7 +794,7 @@ namespace Si.GameEngine.Sprites._Superclass
             if (_hitExplosionAnimation != null)
             {
                 _hitExplosionAnimation.Reset();
-                _gameCore.Sprites.Animations.AddAt(_hitExplosionAnimation, this);
+                _gameEngine.Sprites.Animations.AddAt(_hitExplosionAnimation, this);
             }
         }
 
@@ -1002,7 +1001,7 @@ namespace Si.GameEngine.Sprites._Superclass
                 {
                     var rectangle = new RectangleF((int)(RenderLocation.X - Size.Width / 2.0), (int)(RenderLocation.Y - Size.Height / 2.0), Size.Width, Size.Height);
                     var rawRectF = new RawRectangleF(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom);
-                    _gameCore.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Degrees, _gameCore.Rendering.Materials.Raw.Red, 0, 1);
+                    _gameEngine.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Degrees, _gameEngine.Rendering.Materials.Raw.Red, 0, 1);
                 }
             }
         }
@@ -1017,11 +1016,11 @@ namespace Si.GameEngine.Sprites._Superclass
             {
                 if (this is SpritePlayerBase player && player.IsDrone)
                 {
-                    _gameCore.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameCore.Rendering.Materials.Brushes.Orange);
+                    _gameEngine.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameEngine.Rendering.Materials.Brushes.Orange);
                 }
                 else if (this is SpriteEnemyBase)
                 {
-                    _gameCore.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameCore.Rendering.Materials.Brushes.OrangeRed);
+                    _gameEngine.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameEngine.Rendering.Materials.Brushes.OrangeRed);
                 }
                 else if (this is MunitionBase)
                 {
@@ -1031,11 +1030,11 @@ namespace Si.GameEngine.Sprites._Superclass
                     var munition = this as MunitionBase;
                     if (munition.FiredFromType == SiFiredFromType.Enemy)
                     {
-                        color = _gameCore.Rendering.Materials.Raw.Red;
+                        color = _gameEngine.Rendering.Materials.Raw.Red;
                     }
                     else
                     {
-                        color = _gameCore.Rendering.Materials.Raw.Green;
+                        color = _gameEngine.Rendering.Materials.Raw.Green;
                     }
 
                     if (munition.Weapon.ExplodesOnImpact)
@@ -1047,7 +1046,7 @@ namespace Si.GameEngine.Sprites._Superclass
                         size = 1;
                     }
 
-                    _gameCore.Rendering.FillEllipseAt(renderTarget, x, y, size, size, color);
+                    _gameEngine.Rendering.FillEllipseAt(renderTarget, x, y, size, size, color);
                 }
             }
         }
@@ -1056,7 +1055,7 @@ namespace Si.GameEngine.Sprites._Superclass
         {
             float angle = (float)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
 
-            _gameCore.Rendering.DrawBitmapAt(renderTarget, bitmap,
+            _gameEngine.Rendering.DrawBitmapAt(renderTarget, bitmap,
                 RenderLocation.X - bitmap.Size.Width / 2.0,
                 RenderLocation.Y - bitmap.Size.Height / 2.0, angle);
         }

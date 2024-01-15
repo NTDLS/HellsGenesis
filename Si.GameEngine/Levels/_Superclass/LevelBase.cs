@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Types;
+﻿using Si.GameEngine.Core.Types;
 using System;
 using System.Collections.Generic;
 using static Si.GameEngine.Core.Types.SiEngineCallbackEvent;
@@ -12,7 +11,7 @@ namespace Si.GameEngine.Levels._Superclass
     /// </summary>
     public class LevelBase
     {
-        protected Engine _gameCore;
+        protected Core.Engine _gameEngine;
         protected List<SiEngineCallbackEvent> Events = new();
 
         public Guid UID { get; private set; } = Guid.NewGuid();
@@ -22,9 +21,9 @@ namespace Si.GameEngine.Levels._Superclass
         public int TotalWaves { get; set; } = 1;
         public SiLevelState State { get; protected set; } = SiLevelState.NotYetStarted;
 
-        public LevelBase(Engine gameCore, string name, string description)
+        public LevelBase(Core.Engine gameEngine, string name, string description)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
             Name = name;
             Description = description;
         }
@@ -42,20 +41,20 @@ namespace Si.GameEngine.Levels._Superclass
         public virtual void Begin()
         {
             State = SiLevelState.Started;
-            _gameCore.Multiplay.NotifyLevelStarted();
+            _gameEngine.Multiplay.NotifyLevelStarted();
         }
 
         protected SiEngineCallbackEvent AddRecuringFireEvent(TimeSpan timeout, SiOnExecute executeCallback)
         {
             //Keep track of recurring events to we can delete them when we are done.
-            var obj = _gameCore.Events.Create(timeout, executeCallback, null, SiCallbackEventMode.Recurring);
+            var obj = _gameEngine.Events.Create(timeout, executeCallback, null, SiCallbackEventMode.Recurring);
             Events.Add(obj);
             return obj;
         }
 
         protected SiEngineCallbackEvent AddSingleFireEvent(TimeSpan timeout, SiOnExecute executeCallback)
         {
-            return _gameCore.Events.Create(timeout, executeCallback);
+            return _gameEngine.Events.Create(timeout, executeCallback);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Managers;
+﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.Shared;
@@ -9,8 +8,8 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class StarsSpriteTickController : SpriteTickControllerBase<SpriteStar>
     {
-        public StarsSpriteTickController(Engine gameCore, EngineSpriteManager manager)
-            : base(gameCore, manager)
+        public StarsSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+            : base(gameEngine, manager)
         {
         }
 
@@ -20,14 +19,14 @@ namespace Si.GameEngine.Core.TickControllers
             {
                 #region Add new stars...
 
-                if (SpriteManager.VisibleOfType<SpriteStar>().Count < GameCore.Settings.DeltaFrameTargetStarCount) //Never wan't more than n stars.
+                if (SpriteManager.VisibleOfType<SpriteStar>().Count < GameEngine.Settings.DeltaFrameTargetStarCount) //Never wan't more than n stars.
                 {
                     if (displacementVector.X > 0)
                     {
                         if (SiRandom.PercentChance(20))
                         {
-                            int x = SiRandom.Generator.Next(GameCore.Display.TotalCanvasSize.Width - (int)displacementVector.X, GameCore.Display.TotalCanvasSize.Width);
-                            int y = SiRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Height);
+                            int x = SiRandom.Generator.Next(GameEngine.Display.TotalCanvasSize.Width - (int)displacementVector.X, GameEngine.Display.TotalCanvasSize.Width);
+                            int y = SiRandom.Generator.Next(0, GameEngine.Display.TotalCanvasSize.Height);
                             SpriteManager.Stars.Create(x, y);
                         }
 
@@ -37,7 +36,7 @@ namespace Si.GameEngine.Core.TickControllers
                         if (SiRandom.PercentChance(20))
                         {
                             int x = SiRandom.Generator.Next(0, (int)-displacementVector.X);
-                            int y = SiRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Height);
+                            int y = SiRandom.Generator.Next(0, GameEngine.Display.TotalCanvasSize.Height);
                             SpriteManager.Stars.Create(x, y);
                         }
 
@@ -46,8 +45,8 @@ namespace Si.GameEngine.Core.TickControllers
                     {
                         if (SiRandom.PercentChance(20))
                         {
-                            int x = SiRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Width);
-                            int y = SiRandom.Generator.Next(GameCore.Display.TotalCanvasSize.Height - (int)displacementVector.Y, GameCore.Display.TotalCanvasSize.Height);
+                            int x = SiRandom.Generator.Next(0, GameEngine.Display.TotalCanvasSize.Width);
+                            int y = SiRandom.Generator.Next(GameEngine.Display.TotalCanvasSize.Height - (int)displacementVector.Y, GameEngine.Display.TotalCanvasSize.Height);
                             SpriteManager.Stars.Create(x, y);
                         }
 
@@ -57,7 +56,7 @@ namespace Si.GameEngine.Core.TickControllers
 
                         if (SiRandom.PercentChance(20))
                         {
-                            int x = SiRandom.Generator.Next(0, GameCore.Display.TotalCanvasSize.Width);
+                            int x = SiRandom.Generator.Next(0, GameEngine.Display.TotalCanvasSize.Width);
                             int y = SiRandom.Generator.Next(0, (int)-displacementVector.Y);
                             SpriteManager.Stars.Create(x, y);
                         }
@@ -71,7 +70,7 @@ namespace Si.GameEngine.Core.TickControllers
                 {
                     star.ApplyMotion(displacementVector);
 
-                    if (GameCore.Display.TotalCanvasBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
+                    if (GameEngine.Display.TotalCanvasBounds.IntersectsWith(star.Bounds) == false) //Remove off-screen stars.
                     {
                         star.QueueForDelete();
                     }

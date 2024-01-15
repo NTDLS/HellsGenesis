@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Levels;
+﻿using Si.GameEngine.Levels;
 using Si.GameEngine.Situations._Superclass;
 
 namespace Si.GameEngine.Situations
@@ -10,16 +9,16 @@ namespace Si.GameEngine.Situations
     /// </summary>
     internal class SituationChallenge : SituationBase
     {
-        public SituationChallenge(Engine gameCore)
-            : base(gameCore,
+        public SituationChallenge(Core.Engine gameEngine)
+            : base(gameEngine,
                   "The First Challenge",
                   "The first challenge level... play at your own risk."
                   )
         {
-            Levels.Add(new LevelPhoenixAmbush(gameCore));
-            Levels.Add(new LevelMinnowSkirmish(gameCore));
-            Levels.Add(new LevelSerfFormations(gameCore));
-            Levels.Add(new LevelFreeFlight(gameCore));
+            Levels.Add(new LevelPhoenixAmbush(gameEngine));
+            Levels.Add(new LevelMinnowSkirmish(gameEngine));
+            Levels.Add(new LevelSerfFormations(gameEngine));
+            Levels.Add(new LevelFreeFlight(gameEngine));
         }
     }
 }

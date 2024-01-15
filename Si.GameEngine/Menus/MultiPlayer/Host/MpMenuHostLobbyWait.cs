@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Menus.SinglePlayer;
 using Si.Shared.Types.Geometry;
@@ -18,12 +17,12 @@ namespace Si.Menus.MultiPlayer.Host
         private readonly SpriteMenuItem _countOfReadyPlayers;
         private readonly RectangleF _currentScaledScreenBounds;
 
-        public MpMenuHostLobbyWait(Engine gameCore)
-            : base(gameCore)
+        public MpMenuHostLobbyWait(GameEngine.Core.Engine gameEngine)
+            : base(gameEngine)
         {
-            _currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
+            _currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = _gameCore.Display.TotalCanvasSize.Width / 2;
+            double offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             double offsetY = _currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Waiting in your Lobby");
@@ -53,27 +52,27 @@ namespace Si.Menus.MultiPlayer.Host
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
 
-            _gameCore.Multiplay.SetWaitingInLobby();
+            _gameEngine.Multiplay.SetWaitingInLobby();
         }
 
         private bool MpMenuHostLobbyWait_OnEscape()
         {
-            _gameCore.Multiplay.SetLeftLobby();
-            _gameCore.Menus.Add(new MpMenuHostSelectLoadout(_gameCore));
+            _gameEngine.Multiplay.SetLeftLobby();
+            _gameEngine.Menus.Add(new MpMenuHostSelectLoadout(_gameEngine));
             return true;
         }
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            _gameCore.Multiplay.GetLobbyInfo(_gameCore.Multiplay.State.LobbyUID).ContinueWith(o =>
+            _gameEngine.Multiplay.GetLobbyInfo(_gameEngine.Multiplay.State.LobbyUID).ContinueWith(o =>
             {
                 _countOfReadyPlayers.Text = $"Players: {o.Result.WaitingCount:n0}";
-                _countOfReadyPlayers.X = (_gameCore.Display.TotalCanvasSize.Width / 2) - (_countOfReadyPlayers.Size.Width / 2);
+                _countOfReadyPlayers.X = (_gameEngine.Display.TotalCanvasSize.Width / 2) - (_countOfReadyPlayers.Size.Width / 2);
 
                 if (o.Result.RemainingSecondsUntilAutoStart != null)
                 {
                     _countdownToAutoStart.Text = $"Auto-starting in {o.Result.RemainingSecondsUntilAutoStart:n0}s.";
-                    _countdownToAutoStart.X = (_gameCore.Display.TotalCanvasSize.Width / 2) - (_countdownToAutoStart.Size.Width / 2);
+                    _countdownToAutoStart.X = (_gameEngine.Display.TotalCanvasSize.Width / 2) - (_countdownToAutoStart.Size.Width / 2);
                 }
                 else
                 {
@@ -90,7 +89,7 @@ namespace Si.Menus.MultiPlayer.Host
 
         private bool MpMenuHostLobbyWait_OnExecuteSelection(SpriteMenuItem item)
         {
-            _gameCore.StartGame();
+            _gameEngine.StartGame();
             return true;
         }
     }

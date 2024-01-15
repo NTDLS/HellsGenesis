@@ -16,11 +16,11 @@ namespace Si.GameEngine.Core
     /// </summary>
     internal class MultiplayClientEventHandlers
     {
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
 
-        public MultiplayClientEventHandlers(Engine gameCore)
+        public MultiplayClientEventHandlers(Engine gameEngine)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Si.GameEngine.Core
             //--------------------------------------------------------------------------------------
             //-- Send the enemy sprites:
             //--------------------------------------------------------------------------------------
-            var enemies = _gameCore.Sprites.Enemies.All();
+            var enemies = _gameEngine.Sprites.Enemies.All();
             foreach (var enemy in enemies)
             {
                 spriteLayouts.Add(new SiSpriteLayout(enemy.GetType().FullName, enemy.MultiplayUID)
@@ -65,7 +65,7 @@ namespace Si.GameEngine.Core
         /// </summary>
         public void OnHostLevelStarted()
         {
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var playerDrones = o.OfType<SpritePlayerBase>().Where(x => x.IsDrone).ToList();
                 playerDrones.ForEach(x => x.Visable = true);
@@ -79,19 +79,19 @@ namespace Si.GameEngine.Core
         /// <param name="playerMultiplayUID"></param>
         public void OnPlayerSpriteCreated(string selectedPlayerClass, Guid playerMultiplayUID)
         {
-            var playerDrone = SiReflection.CreateInstanceFromTypeName<SpritePlayerBase>($"{selectedPlayerClass}Drone", new[] { _gameCore });
+            var playerDrone = SiReflection.CreateInstanceFromTypeName<SpritePlayerBase>($"{selectedPlayerClass}Drone", new[] { _gameEngine });
             playerDrone.MultiplayUID = playerMultiplayUID;
             playerDrone.Visable = true;
             playerDrone.X = 0;
             playerDrone.Y = 0;
 
-            _gameCore.Sprites.PlayerDrones.Add(playerDrone);
+            _gameEngine.Sprites.PlayerDrones.Add(playerDrone);
             //Debug.WriteLine($"Inserted Multiplay Sprite: '{selectedPlayerClass}'->'{playerMultiplayUID}'->{playerDrone.UID}");
         }
 
         public void OnSpriteCreated(SiSpriteLayout layout)
         {
-            if (_gameCore.Sprites.Use(o => o.Any(s => s.MultiplayUID == layout.MultiplayUID)))
+            if (_gameEngine.Sprites.Use(o => o.Any(s => s.MultiplayUID == layout.MultiplayUID)))
             {
                 return; //We already have a sprite with this UID.
             }
@@ -101,11 +101,11 @@ namespace Si.GameEngine.Core
             //If the sprite has a dedicated "...Drone" type then create it instead.
             if (SiReflection.DoesTypeExist(layout.FullTypeName + "Drone"))
             {
-                sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName + "Drone", new[] { _gameCore });
+                sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName + "Drone", new[] { _gameEngine });
             }
             else
             {
-                sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName, new[] { _gameCore });
+                sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(layout.FullTypeName, new[] { _gameEngine });
             }
 
             sprite.IsDrone = true;
@@ -118,7 +118,7 @@ namespace Si.GameEngine.Core
             sprite.Velocity.BoostPercentage = layout.Vector.BoostPercentage;
             sprite.Velocity.ThrottlePercentage = layout.Vector.ThrottlePercentage;
 
-            _gameCore.Sprites.Add(sprite);
+            _gameEngine.Sprites.Add(sprite);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Si.GameEngine.Core
                 return;
             }
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 //Get all the sprites ahead of time. I "think" this is faster than searching in a loop.
                 var sprites = o.Where(o => allMultiplayUIDs.Contains(o.MultiplayUID)).ToList();
@@ -183,13 +183,13 @@ namespace Si.GameEngine.Core
             //  OnSpriteCreated() to add sprites to the clients that start the game with the host.
 
             /*
-            _gameCore.Sprites.Enemies.DeleteAll();
+            _gameEngine.Sprites.Enemies.DeleteAll();
 
             foreach (var spriteInfo in situationLayout.Sprites)
             {
                 //Debug.WriteLine($"Adding Sprite: {spriteInfo.MultiplayUID}->'{spriteInfo.FullTypeName}'");
 
-                var sprite = _gameCore.Sprites.CreateByNameOfType(spriteInfo.FullTypeName);
+                var sprite = _gameEngine.Sprites.CreateByNameOfType(spriteInfo.FullTypeName);
                 sprite.MultiplayUID = spriteInfo.MultiplayUID;
                 sprite.MultiplayX = spriteInfo.Vector.X;
                 sprite.MultiplayY = spriteInfo.Vector.Y;
@@ -200,7 +200,7 @@ namespace Si.GameEngine.Core
                 sprite.Velocity.Angle.Degrees = spriteInfo.Vector.AngleDegrees;
                 sprite.Velocity.ThrottlePercentage = spriteInfo.Vector.ThrottlePercentage;
                 sprite.Velocity.BoostPercentage = spriteInfo.Vector.BoostPercentage;
-                sprite.ControlledBy = _gameCore.Multiplay.State.PlayMode switch
+                sprite.ControlledBy = _gameEngine.Multiplay.State.PlayMode switch
                 {
                     SiPlayMode.MutiPlayerHost => SiControlledBy.LocalAI,
                     SiPlayMode.MutiPlayerClient => SiControlledBy.Server,

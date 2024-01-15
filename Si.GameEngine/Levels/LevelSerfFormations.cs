@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Types;
+﻿using Si.GameEngine.Core.Types;
 using Si.GameEngine.Levels._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Enemies.Peons;
@@ -16,8 +15,8 @@ namespace Si.GameEngine.Levels
     {
         private bool _waitingOnPopulation = false;
 
-        public LevelSerfFormations(Engine gameCore)
-            : base(gameCore,
+        public LevelSerfFormations(Core.Engine gameEngine)
+            : base(gameEngine,
                   "Serf Formations",
                   "They fly in formation, which look like easy targets...."
                   )
@@ -33,20 +32,20 @@ namespace Si.GameEngine.Levels
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 1), AdvanceWaveCallback);
             AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 5), RedirectFormationCallback);
 
-            _gameCore.Player.Sprite.AddHullHealth(100);
-            _gameCore.Player.Sprite.AddShieldHealth(10);
+            _gameEngine.Player.Sprite.AddHullHealth(100);
+            _gameEngine.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void RedirectFormationCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void RedirectFormationCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
-            var formationSerfs = _gameCore.Sprites.Enemies.VisibleOfType<SpriteEnemySerf>()
+            var formationSerfs = _gameEngine.Sprites.Enemies.VisibleOfType<SpriteEnemySerf>()
                 .Where(o => o.Mode == SpriteEnemySerf.AIMode.InFormation).ToList();
 
             if (formationSerfs.Count > 0)
             {
                 if (formationSerfs.Exists(o => o.IsWithinCurrentScaledScreenBounds == true) == false)
                 {
-                    double angleToPlayer = formationSerfs.First().AngleTo360(_gameCore.Player.Sprite);
+                    double angleToPlayer = formationSerfs.First().AngleTo360(_gameEngine.Player.Sprite);
 
                     foreach (SpriteEnemySerf enemy in formationSerfs)
                     {
@@ -56,14 +55,14 @@ namespace Si.GameEngine.Levels
             }
         }
 
-        private void FirstShowPlayerCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
-            _gameCore.Player.ResetAndShow();
+            _gameEngine.Player.ResetAndShow();
         }
 
-        private void AdvanceWaveCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void AdvanceWaveCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
-            if (_gameCore.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !_waitingOnPopulation)
+            if (_gameEngine.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !_waitingOnPopulation)
             {
                 if (CurrentWave == TotalWaves && _waitingOnPopulation != true)
                 {
@@ -72,22 +71,22 @@ namespace Si.GameEngine.Levels
                 }
 
                 _waitingOnPopulation = true;
-                _gameCore.Events.Create(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
+                _gameEngine.Events.Create(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
                 CurrentWave++;
             }
         }
 
-        private void AddFreshEnemiesCallback(Engine gameCore, SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(Core.Engine gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
-            SiPoint baseLocation = _gameCore.Display.RandomOffScreenLocation();
+            SiPoint baseLocation = _gameEngine.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave * 5);
-            _gameCore.Audio.RadarBlipsSound.Play();
+            _gameEngine.Audio.RadarBlipsSound.Play();
             _waitingOnPopulation = false;
         }
 
         private SpriteEnemySerf AddOneEnemyAt(double x, double y, double angle)
         {
-            var enemy = _gameCore.Sprites.Enemies.Create<SpriteEnemySerf>();
+            var enemy = _gameEngine.Sprites.Enemies.Create<SpriteEnemySerf>();
             enemy.X = x;
             enemy.Y = y;
             enemy.Velocity.ThrottlePercentage = 0.8;
@@ -98,7 +97,7 @@ namespace Si.GameEngine.Levels
 
         private void CreateTriangleFormation(SiPoint baseLocation, double spacing, int depth)
         {
-            double angle = SiMath.AngleTo360(baseLocation, _gameCore.Player.Sprite);
+            double angle = SiMath.AngleTo360(baseLocation, _gameEngine.Player.Sprite);
 
             for (int col = 0; col < depth; col++)
             {

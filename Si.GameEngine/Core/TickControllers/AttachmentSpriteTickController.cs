@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Managers;
+﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.Shared.Types.Geometry;
@@ -10,8 +9,8 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class AttachmentSpriteTickController : SpriteTickControllerBase<SpriteAttachment>
     {
-        public AttachmentSpriteTickController(Engine gameCore, EngineSpriteManager manager)
-            : base(gameCore, manager)
+        public AttachmentSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+            : base(gameEngine, manager)
         {
         }
 
@@ -36,7 +35,7 @@ namespace Si.GameEngine.Core.TickControllers
 
         public SpriteAttachment Create(string imagePath = null, Size? size = null, uint ownerUID = 0)
         {
-            var obj = new SpriteAttachment(GameCore, imagePath, size)
+            var obj = new SpriteAttachment(GameEngine, imagePath, size)
             {
                 OwnerUID = ownerUID
             };

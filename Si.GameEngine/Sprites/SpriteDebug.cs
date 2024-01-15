@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 using System.Drawing;
@@ -8,8 +7,8 @@ namespace Si.GameEngine.Sprites
 {
     public class SpriteDebug : SpriteShipBase
     {
-        public SpriteDebug(Engine gameCore)
-            : base(gameCore)
+        public SpriteDebug(Core.Engine gameEngine)
+            : base(gameEngine)
         {
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
             X = 0;
@@ -17,8 +16,8 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public SpriteDebug(Engine gameCore, double x, double y)
-            : base(gameCore)
+        public SpriteDebug(Core.Engine gameEngine, double x, double y)
+            : base(gameEngine)
         {
             Initialize(@"Graphics\Debug.png", new Size(64, 64));
             X = x;
@@ -26,8 +25,8 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public SpriteDebug(Engine gameCore, double x, double y, string imagePath)
-            : base(gameCore)
+        public SpriteDebug(Core.Engine gameEngine, double x, double y, string imagePath)
+            : base(gameEngine)
         {
             Initialize(imagePath);
             X = x;
@@ -37,7 +36,7 @@ namespace Si.GameEngine.Sprites
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            Velocity.Angle.Degrees = AngleTo360(_gameCore.Player.Sprite);
+            Velocity.Angle.Degrees = AngleTo360(_gameEngine.Player.Sprite);
             base.ApplyMotion(displacementVector);
         }
     }

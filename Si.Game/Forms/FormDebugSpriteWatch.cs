@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using System;
 using System.Drawing;
@@ -10,14 +9,14 @@ namespace Si.Game.Forms
 {
     public partial class FormDebugSpriteWatch : Form
     {
-        private readonly Engine _gameCore;
+        private readonly GameEngine.Core.Engine _gameEngine;
         private readonly SpriteBase _sprite;
         private readonly Timer _timer = new();
 
-        internal FormDebugSpriteWatch(Engine gameCore, SpriteBase sprite)
+        internal FormDebugSpriteWatch(GameEngine.Core.Engine gameEngine, SpriteBase sprite)
         {
             InitializeComponent();
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
             _sprite = sprite;
 
             _timer.Interval = 250;
@@ -57,7 +56,7 @@ namespace Si.Game.Forms
             UpsertVariable("Location", $"{_sprite.Location}");
             UpsertVariable("Location (Render)", $"{_sprite.RenderLocation},");
 
-            UpsertVariable("Background Offset", $"{_gameCore.Display.BackgroundOffset}");
+            UpsertVariable("Background Offset", $"{_gameEngine.Display.BackgroundOffset}");
             UpsertVariable("Angle Degrees", $"{_sprite.Velocity.Angle}");
             UpsertVariable("Angle Radians", $"{_sprite.Velocity.Angle.Radians:n2}");
             UpsertVariable("Angle Radians Unadjusted", $"{_sprite.Velocity.Angle.RadiansUnadjusted:n2}");

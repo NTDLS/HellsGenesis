@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Shared;
@@ -17,15 +16,15 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public MunitionThunderstrikeMissile(Engine gameCore, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
-            : base(gameCore, weapon, firedFrom, imagePath, xyOffset)
+        public MunitionThunderstrikeMissile(Core.Engine gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
+            : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
             MaxSeekingObservationDistance = 1000;
             MaxSeekingObservationAngleDegrees = 20;
             SeekingRotationRateInDegrees = 4;
 
             _selectedHitExplosionAnimationIndex = SiRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
-            _hitExplosionAnimation = new SpriteAnimation(_gameCore, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(66, 66));
+            _hitExplosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(66, 66));
         }
     }
 }

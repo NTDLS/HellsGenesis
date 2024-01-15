@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Shared;
@@ -16,15 +15,15 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
         private readonly int _hitExplosionAnimationCount = 2;
         private int _selectedHitExplosionAnimationIndex = 0;
 
-        public MunitionScramsMissile(Engine gameCore, WeaponBase weapon, SpriteBase firedFrom,
+        public MunitionScramsMissile(Core.Engine gameEngine, WeaponBase weapon, SpriteBase firedFrom,
              SpriteBase lockedTarget = null, SiPoint xyOffset = null)
-            : base(gameCore, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
+            : base(gameEngine, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             MaxGuidedObservationAngleDegrees = 90;
             GuidedRotationRateInDegrees = 10;
 
             _selectedHitExplosionAnimationIndex = SiRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
-            _hitExplosionAnimation = new SpriteAnimation(_gameCore, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
+            _hitExplosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
 
         }
     }

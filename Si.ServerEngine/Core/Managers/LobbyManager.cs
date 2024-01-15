@@ -1,16 +1,16 @@
 ﻿using NTDLS.Semaphore;
-using Si.Server.Engine.Objects;
+using Si.ServerEngine.Core.Objects;
 using Si.Shared.Payload;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Si.Server.Engine.Managers
+namespace Si.ServerEngine.Core.Managers
 {
     internal class LobbyManager
     {
-        private readonly ServerCore _serverCore;
+        private readonly Engine _serverCore;
         private readonly PessimisticSemaphore<Dictionary<Guid, Lobby>> _collection = new();
 
-        public LobbyManager(ServerCore serverCore)
+        public LobbyManager(Engine serverCore)
         {
             _serverCore = serverCore;
         }

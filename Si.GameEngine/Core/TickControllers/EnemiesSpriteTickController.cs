@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Managers;
+﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.Shared;
@@ -11,28 +10,28 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class EnemiesSpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
     {
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
 
-        public EnemiesSpriteTickController(Engine gameCore, EngineSpriteManager manager)
-            : base(gameCore, manager)
+        public EnemiesSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+            : base(gameEngine, manager)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
         }
 
         public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
             foreach (var enemy in Visible().Where(o => o.IsDrone == false))
             {
-                if (GameCore.Player.Sprite.Visable)
+                if (GameEngine.Player.Sprite.Visable)
                 {
                     enemy.ApplyIntelligence(displacementVector);
-                    GameCore.Player.Sprite.SelectedSecondaryWeapon?.ApplyWeaponsLock(enemy); //Player lock-on to enemy. :D
+                    GameEngine.Player.Sprite.SelectedSecondaryWeapon?.ApplyWeaponsLock(enemy); //Player lock-on to enemy. :D
                 }
 
                 var multiplayVector = enemy.GetMultiplayVector();
                 if (multiplayVector != null)
                 {
-                    _gameCore.Multiplay.RecordDroneActionVector(multiplayVector);
+                    _gameEngine.Multiplay.RecordDroneActionVector(multiplayVector);
                 }
 
                 enemy.ApplyMotion(displacementVector);
@@ -42,11 +41,11 @@ namespace Si.GameEngine.Core.TickControllers
 
         public T Create<T>() where T : SpriteEnemyBase
         {
-            object[] param = { GameCore };
+            object[] param = { GameEngine };
             SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
-            obj.Location = GameCore.Display.RandomOffScreenLocation();
-            obj.Velocity.MaxSpeed = SiRandom.Generator.Next(GameCore.Settings.MinEnemySpeed, GameCore.Settings.MaxEnemySpeed);
+            obj.Location = GameEngine.Display.RandomOffScreenLocation();
+            obj.Velocity.MaxSpeed = SiRandom.Generator.Next(GameEngine.Settings.MinEnemySpeed, GameEngine.Settings.MaxEnemySpeed);
             obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
 
             obj.BeforeCreate();

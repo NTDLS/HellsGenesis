@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Utility;
 using Si.Shared.Types.Geometry;
@@ -17,8 +16,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons._Superclass
         public SpriteAnimation ThrustAnimation { get; internal set; }
         public SpriteAnimation BoostAnimation { get; internal set; }
 
-        public SpriteEnemyPeonBase(Engine gameCore, int hullHealth, int bountyMultiplier)
-            : base(gameCore, hullHealth, bountyMultiplier)
+        public SpriteEnemyPeonBase(Core.Engine gameEngine, int hullHealth, int bountyMultiplier)
+            : base(gameEngine, hullHealth, bountyMultiplier)
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
@@ -32,19 +31,19 @@ namespace Si.GameEngine.Sprites.Enemies.Peons._Superclass
                 ReplayDelay = new TimeSpan(0)
             };
 
-            ThrustAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
+            ThrustAnimation = new SpriteAnimation(_gameEngine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
             {
                 OwnerUID = UID
             };
             ThrustAnimation.Reset();
-            _gameCore.Sprites.Animations.AddAt(ThrustAnimation, this);
+            _gameEngine.Sprites.Animations.AddAt(ThrustAnimation, this);
 
-            BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
+            BoostAnimation = new SpriteAnimation(_gameEngine, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
             {
                 OwnerUID = UID
             };
             BoostAnimation.Reset();
-            _gameCore.Sprites.Animations.AddAt(BoostAnimation, this);
+            _gameEngine.Sprites.Animations.AddAt(BoostAnimation, this);
 
             UpdateThrustAnimationPositions();
         }

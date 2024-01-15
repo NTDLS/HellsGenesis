@@ -1,18 +1,17 @@
 using Microsoft.Extensions.Configuration;
-using Si.Server.Engine;
 using Si.Shared;
 using Topshelf;
 
-namespace Si.Server
+namespace Si.ServerEngine
 {
     public class Program
     {
-        private static ServerCore? _serverCore = null;
-        private static ServerCore ServerCore
+        private static Core.Engine? _serverCore = null;
+        private static Core.Engine ServerCore
         {
             get
             {
-                _serverCore ??= new ServerCore(Configuration);
+                _serverCore ??= new Core.Engine(Configuration);
                 return _serverCore;
             }
         }

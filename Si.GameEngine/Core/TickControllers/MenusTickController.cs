@@ -1,6 +1,5 @@
 ﻿using NTDLS.Semaphore;
 using SharpDX.Direct2D1;
-using Si.GameEngine.Core;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Menus._Superclass;
 using System.Collections.Generic;
@@ -15,8 +14,8 @@ namespace Si.GameEngine.Core.TickControllers
 
         private readonly PessimisticSemaphore<List<MenuBase>> _collection = new();
 
-        public MenusTickController(Engine gameCore)
-            : base(gameCore)
+        public MenusTickController(Engine gameEngine)
+            : base(gameEngine)
         {
         }
 

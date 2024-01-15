@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Types;
+﻿using Si.GameEngine.Core.Types;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Shared.Types.Geometry;
@@ -14,7 +13,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
     public class WeaponBase
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
-        protected Engine _gameCore;
+        protected Core.Engine _gameEngine;
         protected SpriteShipBase _owner;
 
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
@@ -46,18 +45,18 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
         public double MaxLockDistance { get; set; } = 100;
         public bool ExplodesOnImpact { get; set; } = false;
 
-        public WeaponBase(Engine gameCore, string name, string soundPath, float soundVolume)
+        public WeaponBase(Core.Engine gameEngine, string name, string soundPath, float soundVolume)
         {
-            _gameCore = gameCore;
-            _fireSound = _gameCore.Assets.GetAudio(soundPath, soundVolume);
+            _gameEngine = gameEngine;
+            _fireSound = _gameEngine.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
         }
 
-        public WeaponBase(Engine gameCore, SpriteShipBase owner, string name, string soundPath, float soundVolume)
+        public WeaponBase(Core.Engine gameEngine, SpriteShipBase owner, string name, string soundPath, float soundVolume)
         {
             _owner = owner;
-            _gameCore = gameCore;
-            _fireSound = _gameCore.Assets.GetAudio(soundPath, soundVolume);
+            _gameEngine = gameEngine;
+            _fireSound = _gameEngine.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
         }
 
@@ -128,7 +127,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
                 RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
-                _gameCore.Sprites.Munitions.Create(this);
+                _gameEngine.Sprites.Munitions.Create(this);
 
                 ApplyRecoil();
 
@@ -142,7 +141,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
         {
             //TODO: uncomment this later, testing multiplayer.
             //_owner.Velocity.RecoilPercentage += RecoilAmount;
-            //_owner.Velocity.RecoilPercentage.Box(0, _gameCore.Settings.MaxRecoilPercentage);
+            //_owner.Velocity.RecoilPercentage.Box(0, _gameEngine.Settings.MaxRecoilPercentage);
         }
 
         public virtual void Hit()

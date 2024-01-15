@@ -1,7 +1,6 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
@@ -49,8 +48,8 @@ namespace Si.GameEngine.Sprites
             public bool DeleteSpriteAfterPlay;
         }
 
-        public SpriteAnimation(Engine gameCore, string spriteSheetFileName, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
-            : base(gameCore)
+        public SpriteAnimation(Core.Engine gameEngine, string spriteSheetFileName, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
+            : base(gameEngine)
         {
             _playMode = playMode;
 
@@ -65,7 +64,7 @@ namespace Si.GameEngine.Sprites
             }
 
             _frameDelayMilliseconds = frameDelayMilliseconds;
-            _sheetImage = _gameCore.Assets.GetBitmap(spriteSheetFileName);
+            _sheetImage = _gameEngine.Assets.GetBitmap(spriteSheetFileName);
 
             _frameSize = (Size)frameSize;
             _rows = (int)(_sheetImage.Size.Height / ((Size)frameSize).Height);
@@ -95,7 +94,7 @@ namespace Si.GameEngine.Sprites
                 _currentColumn * _frameSize.Width + _frameSize.Width,
                 _currentRow * _frameSize.Height + _frameSize.Height);
 
-            _gameCore.Rendering.DrawBitmapAt(
+            _gameEngine.Rendering.DrawBitmapAt(
                 renderTarget,
                 _sheetImage,
                 (RenderLocation.X) - _frameSize.Width / 2.0,

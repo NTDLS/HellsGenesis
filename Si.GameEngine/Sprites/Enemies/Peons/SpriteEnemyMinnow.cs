@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Loudouts;
+﻿using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
 using Si.GameEngine.Sprites.Weapons;
 using Si.GameEngine.Utility;
@@ -19,8 +18,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
 
-        public SpriteEnemyMinnow(Engine gameCore)
-            : base(gameCore, hullHealth, bountyMultiplier)
+        public SpriteEnemyMinnow(Core.Engine gameEngine)
+            : base(gameEngine, hullHealth, bountyMultiplier)
         {
             ShipClass = SiEnemyClass.Minnow;
             SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png", new Size(32, 32));
@@ -87,13 +86,13 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             base.ApplyIntelligence(displacementVector);
 
-            double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
+            double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
 
             if (mode == AIMode.Approaching)
             {
                 if (distanceToPlayer > distanceToKeep)
                 {
-                    PointAtAndGoto(_gameCore.Player.Sprite);
+                    PointAtAndGoto(_gameEngine.Player.Sprite);
                 }
                 else
                 {
@@ -105,7 +104,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             if (mode == AIMode.Tailing)
             {
-                PointAtAndGoto(_gameCore.Player.Sprite);
+                PointAtAndGoto(_gameEngine.Player.Sprite);
 
                 //Stay on the players tail.
                 if (distanceToPlayer > distanceToKeep + 300)
@@ -158,7 +157,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_gameCore.Player.Sprite);
+                var deltaAngle = DeltaAngle(_gameEngine.Player.Sprite);
 
                 if (deltaAngle.IsNotBetween(-10, 10))
                 {
@@ -184,7 +183,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             if (FireWeapon<WeaponDualVulcanCannon>())
@@ -195,7 +194,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             if (FireWeapon<WeaponVulcanCannon>())

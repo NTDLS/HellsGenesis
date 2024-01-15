@@ -1,5 +1,4 @@
 ﻿using SharpDX.DirectInput;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Shared.Types.Geometry;
 using System;
@@ -16,7 +15,7 @@ namespace Si.GameEngine.Menus._Superclass
     /// </summary>
     public class MenuBase
     {
-        protected Engine _gameCore;
+        protected Core.Engine _gameEngine;
         private DateTime _lastInputHandled = DateTime.UtcNow;
 
         public List<SpriteMenuItem> Items { get; private set; } = new();
@@ -78,9 +77,9 @@ namespace Si.GameEngine.Menus._Superclass
 
         #endregion
 
-        public MenuBase(Engine gameCore)
+        public MenuBase(Core.Engine gameEngine)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
         }
 
         //public void Show() => Items.ForEach(o => o.Visable = true);
@@ -91,7 +90,7 @@ namespace Si.GameEngine.Menus._Superclass
 
         public SpriteMenuItem CreateAndAddTitleItem(SiPoint location, string text)
         {
-            var item = new SpriteMenuItem(_gameCore, this, _gameCore.Rendering.TextFormats.MenuTitle, _gameCore.Rendering.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuItem(_gameEngine, this, _gameEngine.Rendering.TextFormats.MenuTitle, _gameEngine.Rendering.Materials.Brushes.OrangeRed, location)
             {
                 Text = text,
                 ItemType = SiMenuItemType.Title
@@ -102,7 +101,7 @@ namespace Si.GameEngine.Menus._Superclass
 
         public SpriteMenuItem CreateAndAddTextblock(SiPoint location, string text)
         {
-            var item = new SpriteMenuItem(_gameCore, this, _gameCore.Rendering.TextFormats.MenuGeneral, _gameCore.Rendering.Materials.Brushes.LawnGreen, location)
+            var item = new SpriteMenuItem(_gameEngine, this, _gameEngine.Rendering.TextFormats.MenuGeneral, _gameEngine.Rendering.Materials.Brushes.LawnGreen, location)
             {
                 Text = text,
                 ItemType = SiMenuItemType.Textblock
@@ -113,7 +112,7 @@ namespace Si.GameEngine.Menus._Superclass
 
         public SpriteMenuItem CreateAndAddSelectableItem(SiPoint location, string key, string text)
         {
-            var item = new SpriteMenuItem(_gameCore, this, _gameCore.Rendering.TextFormats.MenuItem, _gameCore.Rendering.Materials.Brushes.OrangeRed, location)
+            var item = new SpriteMenuItem(_gameEngine, this, _gameEngine.Rendering.TextFormats.MenuItem, _gameEngine.Rendering.Materials.Brushes.OrangeRed, location)
             {
                 Key = key,
                 Text = text,
@@ -125,7 +124,7 @@ namespace Si.GameEngine.Menus._Superclass
 
         public SpriteMenuSelectableTextInput CreateAndAddSelectableTextInput(SiPoint location, string key, string text = "")
         {
-            var item = new SpriteMenuSelectableTextInput(_gameCore, this, _gameCore.Rendering.TextFormats.TextInputItem, _gameCore.Rendering.Materials.Brushes.Orange, location)
+            var item = new SpriteMenuSelectableTextInput(_gameEngine, this, _gameEngine.Rendering.TextFormats.TextInputItem, _gameEngine.Rendering.Materials.Brushes.Orange, location)
             {
                 Key = key,
                 Text = text,
@@ -137,7 +136,7 @@ namespace Si.GameEngine.Menus._Superclass
 
         public void AddMenuItem(SpriteMenuItem item)
         {
-            _gameCore.Menus.Use(o => // <-- Do we really need this lock?
+            _gameEngine.Menus.Use(o => // <-- Do we really need this lock?
             {
                 Items.Add(item);
             });
@@ -153,27 +152,27 @@ namespace Si.GameEngine.Menus._Superclass
 
             var selectedTextInput = Items.OfType<SpriteMenuSelectableTextInput>().Where(o => o.Selected).FirstOrDefault();
 
-            _gameCore.Input.CollectDetailedKeyInformation(selectedTextInput != null);
+            _gameEngine.Input.CollectDetailedKeyInformation(selectedTextInput != null);
 
             //Text typing is not subject to _lastInputHandled limits because it is based on cycled keys, not depressed keys.
             if (selectedTextInput != null)
             {
                 //Since we do allow for backspace repetitions, we will enforce a _lastInputHandled limit.
-                if (_gameCore.Input.DepressedKeys.Contains(Key.Back))
+                if (_gameEngine.Input.DepressedKeys.Contains(Key.Back))
                 {
                     if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds >= 100)
                     {
                         _lastInputHandled = DateTime.UtcNow;
                         selectedTextInput.Backspace();
-                        _gameCore.Audio.Click.Play();
+                        _gameEngine.Audio.Click.Play();
                     }
                     return;
                 }
 
-                if (_gameCore.Input.TypedString.Length > 0)
+                if (_gameEngine.Input.TypedString.Length > 0)
                 {
-                    _gameCore.Audio.Click.Play();
-                    selectedTextInput.Append(_gameCore.Input.TypedString);
+                    _gameEngine.Audio.Click.Play();
+                    selectedTextInput.Append(_gameEngine.Input.TypedString);
                 }
             }
 
@@ -182,9 +181,9 @@ namespace Si.GameEngine.Menus._Superclass
                 return; //We have to keep the menues from going crazy.
             }
 
-            if (_gameCore.Input.IsKeyPressed(SiPlayerKey.Enter))
+            if (_gameEngine.Input.IsKeyPressed(SiPlayerKey.Enter))
             {
-                _gameCore.Audio.Click.Play();
+                _gameEngine.Audio.Click.Play();
 
                 _lastInputHandled = DateTime.UtcNow;
 
@@ -207,9 +206,9 @@ namespace Si.GameEngine.Menus._Superclass
                     });
                 }
             }
-            else if (_gameCore.Input.IsKeyPressed(SiPlayerKey.Escape))
+            else if (_gameEngine.Input.IsKeyPressed(SiPlayerKey.Escape))
             {
-                _gameCore.Audio.Click.Play();
+                _gameEngine.Audio.Click.Play();
 
                 _lastInputHandled = DateTime.UtcNow;
 
@@ -229,10 +228,10 @@ namespace Si.GameEngine.Menus._Superclass
                 });
             }
 
-            if (_gameCore.Input.IsKeyPressed(SiPlayerKey.Right)
-                || _gameCore.Input.IsKeyPressed(SiPlayerKey.Down)
-                //|| _gameCore.Input.IsKeyPressed(SiPlayerKey.Reverse)
-                //|| _gameCore.Input.IsKeyPressed(SiPlayerKey.RotateClockwise)
+            if (_gameEngine.Input.IsKeyPressed(SiPlayerKey.Right)
+                || _gameEngine.Input.IsKeyPressed(SiPlayerKey.Down)
+                //|| _gameEngine.Input.IsKeyPressed(SiPlayerKey.Reverse)
+                //|| _gameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise)
                 )
             {
                 _lastInputHandled = DateTime.UtcNow;
@@ -274,7 +273,7 @@ namespace Si.GameEngine.Menus._Superclass
                                             select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
-                            _gameCore.Audio.Click.Play();
+                            _gameEngine.Audio.Click.Play();
 
                             //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
                             //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
@@ -286,10 +285,10 @@ namespace Si.GameEngine.Menus._Superclass
                 }
             }
 
-            if (_gameCore.Input.IsKeyPressed(SiPlayerKey.Left)
-                || _gameCore.Input.IsKeyPressed(SiPlayerKey.Up)
-                //|| _gameCore.Input.IsKeyPressed(SiPlayerKey.Forward)
-                //|| _gameCore.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise)
+            if (_gameEngine.Input.IsKeyPressed(SiPlayerKey.Left)
+                || _gameEngine.Input.IsKeyPressed(SiPlayerKey.Up)
+                //|| _gameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
+                //|| _gameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise)
                 )
             {
                 _lastInputHandled = DateTime.UtcNow;
@@ -331,7 +330,7 @@ namespace Si.GameEngine.Menus._Superclass
                                             select o).FirstOrDefault();
                         if (selectedItem != null)
                         {
-                            _gameCore.Audio.Click.Play();
+                            _gameEngine.Audio.Click.Play();
 
                             //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
                             //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
@@ -354,14 +353,14 @@ namespace Si.GameEngine.Menus._Superclass
             var selectedItem = (from o in Items where o.Visable == true && o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
-                _gameCore.Rendering.DrawRectangleAt(renderTarget,
+                _gameEngine.Rendering.DrawRectangleAt(renderTarget,
                     new SharpDX.Mathematics.Interop.RawRectangleF(
                         selectedItem.BoundsI.X,
                         selectedItem.BoundsI.Y,
                         selectedItem.BoundsI.X + selectedItem.BoundsI.Width,
                         selectedItem.BoundsI.Y + selectedItem.BoundsI.Height),
                     0,
-                    _gameCore.Rendering.Materials.Raw.Red, 2, 2);
+                    _gameEngine.Rendering.Materials.Raw.Red, 2, 2);
             }
         }
     }

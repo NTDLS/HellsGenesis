@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.Shared.ExtensionMethods;
 using Si.Shared.Types.Geometry;
@@ -15,9 +14,9 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
         public int GuidedRotationRateInDegrees { get; set; } = 3;
         public SpriteBase LockedTarget { get; private set; }
 
-        public GuidedMunitionBase(Engine gameCore, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
+        public GuidedMunitionBase(Core.Engine gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
              SpriteBase lockedTarget = null, SiPoint xyOffset = null)
-            : base(gameCore, weapon, firedFrom, imagePath, xyOffset)
+            : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
             LockedTarget = lockedTarget;
         }

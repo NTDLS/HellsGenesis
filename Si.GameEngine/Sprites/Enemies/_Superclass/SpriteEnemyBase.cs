@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Si.GameEngine.AI;
-using Si.GameEngine.Core;
 using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites._Superclass;
@@ -33,8 +32,8 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         public bool IsHostile { get; set; } = true;
         public List<WeaponBase> Weapons { get; private set; } = new();
 
-        public SpriteEnemyBase(Engine gameCore, int hullHealth, int bountyMultiplier)
-                : base(gameCore)
+        public SpriteEnemyBase(Core.Engine gameEngine, int hullHealth, int bountyMultiplier)
+                : base(gameEngine)
         {
             Velocity.ThrottlePercentage = 1;
             Initialize();
@@ -42,11 +41,11 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             SetHullHealth(hullHealth);
             BountyWorth = HullHealth * bountyMultiplier;
 
-            RadarPositionIndicator = _gameCore.Sprites.RadarPositions.Create();
+            RadarPositionIndicator = _gameEngine.Sprites.RadarPositions.Create();
             RadarPositionIndicator.Visable = false;
-            RadarPositionText = _gameCore.Sprites.TextBlocks.CreateRadarPosition(
-                gameCore.Rendering.TextFormats.RadarPositionIndicator,
-                gameCore.Rendering.Materials.Brushes.Red, new SiPoint());
+            RadarPositionText = _gameEngine.Sprites.TextBlocks.CreateRadarPosition(
+                gameEngine.Rendering.TextFormats.RadarPositionIndicator,
+                gameEngine.Rendering.Materials.Brushes.Red, new SiPoint());
         }
 
         public virtual void BeforeCreate() { }
@@ -57,7 +56,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public override void Explode()
         {
-            _gameCore.Player.Sprite.Bounty += BountyWorth;
+            _gameEngine.Player.Sprite.Bounty += BountyWorth;
 
             if (IsDrone == false)
             {
@@ -67,19 +66,19 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                 {
                     var powerup = SiRandom.Between(0, 4) switch
                     {
-                        0 => new SpritePowerupAmmo(_gameCore),
-                        1 => new SpritePowerupBoost(_gameCore),
-                        2 => new SpritePowerupBounty(_gameCore),
-                        3 => new SpritePowerupRepair(_gameCore),
-                        4 => new SpritePowerupSheild(_gameCore),
+                        0 => new SpritePowerupAmmo(_gameEngine),
+                        1 => new SpritePowerupBoost(_gameEngine),
+                        2 => new SpritePowerupBounty(_gameEngine),
+                        3 => new SpritePowerupRepair(_gameEngine),
+                        4 => new SpritePowerupSheild(_gameEngine),
                         _ => null as SpritePowerupBase
                     };
 
                     if (powerup != null)
                     {
                         powerup.Location = Location;
-                        _gameCore.Sprites.Powerups.Add(powerup);
-                        _gameCore.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
+                        _gameEngine.Sprites.Powerups.Add(powerup);
+                        _gameEngine.Sprites.MultiplayNotifyOfSpriteCreation(powerup);
                     }
                 }
             }
@@ -88,13 +87,13 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public override SiSpriteActionVector GetMultiplayVector()
         {
-            if (_gameCore.Multiplay.State.PlayMode == SiPlayMode.MutiPlayerHost)
+            if (_gameEngine.Multiplay.State.PlayMode == SiPlayMode.MutiPlayerHost)
             {
-                if ((DateTime.UtcNow - _lastMultiplaySpriteVectorUpdate).TotalMilliseconds >= _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs)
+                if ((DateTime.UtcNow - _lastMultiplaySpriteVectorUpdate).TotalMilliseconds >= _gameEngine.Multiplay.State.PlayerAbsoluteStateDelayMs)
                 {
                     _lastMultiplaySpriteVectorUpdate = DateTime.UtcNow;
 
-                    var bgOffset = _gameCore.Display.BackgroundOffset;
+                    var bgOffset = _gameEngine.Display.BackgroundOffset;
 
                     return new SiSpriteActionVector(MultiplayUID)
                     {
@@ -211,10 +210,10 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                 return;
             }
 
-            if (X < -_gameCore.Settings.EnemySceneDistanceLimit
-                || X >= _gameCore.Display.NatrualScreenSize.Width + _gameCore.Settings.EnemySceneDistanceLimit
-                || Y < -_gameCore.Settings.EnemySceneDistanceLimit
-                || Y >= _gameCore.Display.NatrualScreenSize.Height + _gameCore.Settings.EnemySceneDistanceLimit)
+            if (X < -_gameEngine.Settings.EnemySceneDistanceLimit
+                || X >= _gameEngine.Display.NatrualScreenSize.Width + _gameEngine.Settings.EnemySceneDistanceLimit
+                || Y < -_gameEngine.Settings.EnemySceneDistanceLimit
+                || Y >= _gameEngine.Display.NatrualScreenSize.Height + _gameEngine.Settings.EnemySceneDistanceLimit)
             {
                 QueueForDelete();
                 return;
@@ -225,7 +224,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             {
                 if (Velocity.BoostPercentage < 1.0) //Ramp up the boost until it is at 100%
                 {
-                    Velocity.BoostPercentage += _gameCore.Settings.EnemyThrustRampUp;
+                    Velocity.BoostPercentage += _gameEngine.Settings.EnemyThrustRampUp;
                 }
                 Velocity.AvailableBoost -= Velocity.MaxBoost * Velocity.BoostPercentage; //Consume boost.
 
@@ -236,7 +235,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             }
             else if (Velocity.BoostPercentage > 0) //Ramp down the boost.
             {
-                Velocity.BoostPercentage -= _gameCore.Settings.EnemyThrustRampDown;
+                Velocity.BoostPercentage -= _gameEngine.Settings.EnemyThrustRampDown;
                 if (Velocity.BoostPercentage < 0)
                 {
                     Velocity.BoostPercentage = 0;
@@ -269,11 +268,11 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public virtual void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (Weapons != null && _gameCore.Player.Sprite != null)
+            if (Weapons != null && _gameEngine.Player.Sprite != null)
             {
                 foreach (var weapon in Weapons)
                 {
-                    if (weapon.ApplyWeaponsLock(_gameCore.Player.Sprite)) //Enemy lock-on to Player. :O
+                    if (weapon.ApplyWeaponsLock(_gameEngine.Player.Sprite)) //Enemy lock-on to Player. :O
                     {
                         break;
                     }
@@ -301,7 +300,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameCore, this });
+                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameEngine, this });
                 weapon.RoundQuantity += munitionCount;
                 Weapons.Add(weapon);
             }
@@ -316,7 +315,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             var weapon = GetWeaponOfType<T>();
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _gameCore, this });
+                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _gameEngine, this });
                 weapon.RoundQuantity += munitionCount;
                 Weapons.Add(weapon);
             }
@@ -345,9 +344,9 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         {
             var weapon = GetWeaponOfType<T>();
 
-            if (weapon != null && _gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && this.IsDrone == false)
+            if (weapon != null && _gameEngine.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer && this.IsDrone == false)
             {
-                _gameCore.Multiplay.RecordDroneActionFireWeapon(new SiSpriteActionFireWeapon(MultiplayUID)
+                _gameEngine.Multiplay.RecordDroneActionFireWeapon(new SiSpriteActionFireWeapon(MultiplayUID)
                 {
                     WeaponTypeName = weapon.GetType().Name,
                 });

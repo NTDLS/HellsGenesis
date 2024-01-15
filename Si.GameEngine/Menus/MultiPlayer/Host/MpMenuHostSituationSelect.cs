@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Situations._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Menus.SinglePlayer;
@@ -16,10 +15,10 @@ namespace Si.Menus.MultiPlayer.Host
     {
         private readonly SpriteMenuItem _situationBlurb;
 
-        public MpMenuHostSituationSelect(Engine gameCore)
-            : base(gameCore)
+        public MpMenuHostSituationSelect(GameEngine.Core.Engine gameEngine)
+            : base(gameEngine)
         {
-            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
             double offsetX = currentScaledScreenBounds.X + 40;
             double offsetY = currentScaledScreenBounds.Y + 100;
@@ -47,7 +46,7 @@ namespace Si.Menus.MultiPlayer.Host
 
             foreach (var situationType in situationTypes)
             {
-                var situationInstance = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { gameCore, });
+                var situationInstance = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { gameEngine, });
 
                 var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
 
@@ -67,11 +66,11 @@ namespace Si.Menus.MultiPlayer.Host
         private bool MpMenuHostSituationSelect_OnEscape()
         {
             //Create the game host on the server.
-            var lobbyUID = _gameCore.Multiplay.State.LobbyUID;
-            _gameCore.Multiplay.DeregisterLobbyUID();
-            _gameCore.Multiplay.DeleteLobby(lobbyUID);
+            var lobbyUID = _gameEngine.Multiplay.State.LobbyUID;
+            _gameEngine.Multiplay.DeregisterLobbyUID();
+            _gameEngine.Multiplay.DeleteLobby(lobbyUID);
 
-            _gameCore.Menus.Add(new MpMenuHostCreateLobby(_gameCore));
+            _gameEngine.Menus.Add(new MpMenuHostCreateLobby(_gameEngine));
             return true;
         }
 
@@ -79,9 +78,9 @@ namespace Si.Menus.MultiPlayer.Host
         {
             if (item.UserData is SituationBase situation)
             {
-                _gameCore.ResetGame();
-                _gameCore.Situations.Select(situation.GetType().Name);
-                _gameCore.Menus.Add(new MpMenuHostSelectLoadout(_gameCore));
+                _gameEngine.ResetGame();
+                _gameEngine.Situations.Select(situation.GetType().Name);
+                _gameEngine.Menus.Add(new MpMenuHostSelectLoadout(_gameEngine));
             }
             return true;
         }

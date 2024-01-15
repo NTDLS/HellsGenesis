@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Managers;
+﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
@@ -14,12 +13,12 @@ namespace Si.GameEngine.Core.TickControllers
     /// </summary>
     public class PlayerDronesSpriteTickController : SpriteTickControllerBase<SpritePlayerBase>
     {
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
 
-        public PlayerDronesSpriteTickController(Engine gameCore, EngineSpriteManager manager)
-            : base(gameCore, manager)
+        public PlayerDronesSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+            : base(gameEngine, manager)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
         }
 
         public override void ExecuteWorldClockTick(SiPoint displacementVector)

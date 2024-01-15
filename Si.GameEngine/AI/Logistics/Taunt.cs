@@ -1,6 +1,5 @@
 ﻿using NTDLS.Determinet;
 using NTDLS.Determinet.Types;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Shared;
 using Si.Shared.ExtensionMethods;
@@ -18,7 +17,7 @@ namespace Si.GameEngine.AI.Logistics
     {
         private const string _assetPath = @"Data\AI\Logistics\Taunt.txt";
 
-        private readonly Engine _gameCore;
+        private readonly Core.Engine _gameEngine;
         private readonly SpriteShipBase _owner;
         private readonly SpriteBase _observedObject;
 
@@ -80,9 +79,9 @@ namespace Si.GameEngine.AI.Logistics
         /// <param name="core">Engine core instance.</param>
         /// <param name="owner">The object which is intelligent.</param>
         /// <param name="observedObject">The object for which the intelligent object will be observing for inputs.</param>
-        public Taunt(Engine gameCore, SpriteShipBase owner, SpriteBase observedObject)
+        public Taunt(Core.Engine gameEngine, SpriteShipBase owner, SpriteBase observedObject)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
             _owner = owner;
             _observedObject = observedObject;
 
@@ -90,7 +89,7 @@ namespace Si.GameEngine.AI.Logistics
 
             _owner.RenewableResources.CreateResource(RenewableResources.Boost, 800, 0, 10);
 
-            Network = _gameCore.Assets.GetNeuralNetwork(_assetPath) ?? TrainNetwork();
+            Network = _gameEngine.Assets.GetNeuralNetwork(_assetPath) ?? TrainNetwork();
         }
 
         private void Owner_OnHit(SpriteBase sender, SiDamageType damageType, int damageAmount)
@@ -344,7 +343,7 @@ namespace Si.GameEngine.AI.Logistics
             }
             #endregion
 
-            _gameCore.Assets.PutText(_assetPath, network.Serialize());
+            _gameEngine.Assets.PutText(_assetPath, network.Serialize());
 
             return network;
         }

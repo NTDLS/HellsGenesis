@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus;
+﻿using Si.GameEngine.Menus;
 using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Situations._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
@@ -16,10 +15,10 @@ namespace Si.Menus.SinglePlayer
     {
         private readonly SpriteMenuItem _situationBlurb;
 
-        public SpMenuSituationSelect(Engine gameCore)
-            : base(gameCore)
+        public SpMenuSituationSelect(GameEngine.Core.Engine gameEngine)
+            : base(gameEngine)
         {
-            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
             double offsetX = currentScaledScreenBounds.X + 40;
             double offsetY = currentScaledScreenBounds.Y + 100;
@@ -47,7 +46,7 @@ namespace Si.Menus.SinglePlayer
 
             foreach (var situationType in situationTypes)
             {
-                var situationInstance = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { gameCore, });
+                var situationInstance = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { gameEngine, });
 
                 var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
 
@@ -66,7 +65,7 @@ namespace Si.Menus.SinglePlayer
 
         private bool SpMenuSituationSelect_OnEscape()
         {
-            _gameCore.Menus.Add(new MenuStartNewGame(_gameCore));
+            _gameEngine.Menus.Add(new MenuStartNewGame(_gameEngine));
             return true;
         }
 
@@ -74,9 +73,9 @@ namespace Si.Menus.SinglePlayer
         {
             if (item.UserData is SituationBase situation)
             {
-                _gameCore.ResetGame();
-                _gameCore.Situations.Select(situation.GetType().Name);
-                _gameCore.Menus.Add(new SpMenuSelectLoadout(_gameCore));
+                _gameEngine.ResetGame();
+                _gameEngine.Situations.Select(situation.GetType().Name);
+                _gameEngine.Menus.Add(new SpMenuSelectLoadout(_gameEngine));
             }
             return true;
         }

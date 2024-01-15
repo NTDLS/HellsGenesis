@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Menus.MultiPlayer;
 using Si.Menus.SinglePlayer;
@@ -13,12 +12,12 @@ namespace Si.GameEngine.Menus
     /// </summary>
     internal class MenuStartNewGame : MenuBase
     {
-        public MenuStartNewGame(Engine gameCore)
-            : base(gameCore)
+        public MenuStartNewGame(Core.Engine gameEngine)
+            : base(gameEngine)
         {
-            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = _gameCore.Display.TotalCanvasSize.Width / 2;
+            double offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Strikeforce Infinity");
@@ -70,13 +69,13 @@ namespace Si.GameEngine.Menus
         {
             if (item.Key == "SINGLE_PLAYER")
             {
-                _gameCore.Multiplay.SetPlayMode(SiPlayMode.SinglePlayer);
-                _gameCore.Menus.Add(new SpMenuSituationSelect(_gameCore));
+                _gameEngine.Multiplay.SetPlayMode(SiPlayMode.SinglePlayer);
+                _gameEngine.Menus.Add(new SpMenuSituationSelect(_gameEngine));
             }
             else if (item.Key == "MULTI_PLAYER")
             {
-                _gameCore.Multiplay.ConfigureConnection();
-                _gameCore.Menus.Add(new MpMenuCreateOrJoinLobby(_gameCore));
+                _gameEngine.Multiplay.ConfigureConnection();
+                _gameEngine.Menus.Add(new MpMenuCreateOrJoinLobby(_gameEngine));
             }
             return true;
         }

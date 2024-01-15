@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Menus.SinglePlayer;
 using Si.Shared.Types.Geometry;
@@ -16,14 +15,14 @@ namespace Si.Menus.MultiPlayer.Client
     {
         private readonly SpriteMenuSelectableTextInput _textboxPlayerName;
 
-        public MpMenuClientJoinLobby(Engine gameCore)
-            : base(gameCore)
+        public MpMenuClientJoinLobby(GameEngine.Core.Engine gameEngine)
+            : base(gameEngine)
         {
-            _gameCore.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);
+            _gameEngine.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);
 
-            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = _gameCore.Display.TotalCanvasSize.Width / 2;
+            double offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Join Game");
@@ -54,7 +53,7 @@ namespace Si.Menus.MultiPlayer.Client
 
             offsetY += _textboxPlayerName.Size.Height + 5;
 
-            var gameHosts = _gameCore.Multiplay.ListLobbies();
+            var gameHosts = _gameEngine.Multiplay.ListLobbies();
             foreach (var gameHost in gameHosts)
             {
                 var helpItem = CreateAndAddSelectableItem(new SiPoint(xPositionForlabel, offsetY), gameHost.UID.ToString(), gameHost.Name);
@@ -73,7 +72,7 @@ namespace Si.Menus.MultiPlayer.Client
 
         private bool MpMenuClientJoinLobby_OnEscape()
         {
-            _gameCore.Menus.Add(new MpMenuCreateOrJoinLobby(_gameCore));
+            _gameEngine.Menus.Add(new MpMenuCreateOrJoinLobby(_gameEngine));
             return true;
         }
 
@@ -81,8 +80,8 @@ namespace Si.Menus.MultiPlayer.Client
         {
             var lobbyUID = Guid.Parse(item.Key);
 
-            _gameCore.Multiplay.RegisterLobbyUID(lobbyUID, _textboxPlayerName.Text);
-            _gameCore.Menus.Add(new MpMenuClientSelectLoadout(_gameCore));
+            _gameEngine.Multiplay.RegisterLobbyUID(lobbyUID, _textboxPlayerName.Text);
+            _gameEngine.Menus.Add(new MpMenuClientSelectLoadout(_gameEngine));
 
             return true;
         }

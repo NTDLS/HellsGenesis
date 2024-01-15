@@ -1,6 +1,5 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using Si.GameEngine.Core;
 using Si.Shared.Types;
 using Si.Shared.Types.Geometry;
 
@@ -8,8 +7,8 @@ namespace Si.GameEngine.Sprites
 {
     public class SpriteRadarPositionTextBlock : SpriteTextBlock
     {
-        public SpriteRadarPositionTextBlock(Engine gameCore, TextFormat format, SolidColorBrush color, SiPoint location)
-            : base(gameCore, format, color, location, false)
+        public SpriteRadarPositionTextBlock(Core.Engine gameEngine, TextFormat format, SolidColorBrush color, SiPoint location)
+            : base(gameEngine, format, color, location, false)
         {
             RenderScaleOrder = Shared.SiConstants.SiRenderScaleOrder.PreScale;
             Visable = false;

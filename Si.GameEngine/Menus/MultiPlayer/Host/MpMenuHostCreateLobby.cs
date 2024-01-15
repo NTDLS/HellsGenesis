@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Shared.Payload;
 using Si.Shared.Types.Geometry;
@@ -17,12 +16,12 @@ namespace Si.Menus.MultiPlayer.Host
         private readonly SpriteMenuSelectableTextInput _textBoxAutoStartSeconds;
         private readonly SpriteMenuSelectableTextInput _textboxPlayerName;
 
-        public MpMenuHostCreateLobby(Engine gameCore)
-            : base(gameCore)
+        public MpMenuHostCreateLobby(GameEngine.Core.Engine gameEngine)
+            : base(gameEngine)
         {
-            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = _gameCore.Display.TotalCanvasSize.Width / 2;
+            double offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Host a Game");
@@ -84,7 +83,7 @@ namespace Si.Menus.MultiPlayer.Host
 
         private bool MpMenuHostCreateLobby_OnEscape()
         {
-            _gameCore.Menus.Add(new MpMenuCreateOrJoinLobby(_gameCore));
+            _gameEngine.Menus.Add(new MpMenuCreateOrJoinLobby(_gameEngine));
             return true;
         }
 
@@ -106,11 +105,11 @@ namespace Si.Menus.MultiPlayer.Host
             //TODO: validate user input here.
 
             //Create the game host on the server.
-            var lobbyUID = _gameCore.Multiplay.CreateLobby(new SiLobbyConfiguration(_textBoxName.Text, minxPlayers, maxPlayers, autoStartSeconds));
+            var lobbyUID = _gameEngine.Multiplay.CreateLobby(new SiLobbyConfiguration(_textBoxName.Text, minxPlayers, maxPlayers, autoStartSeconds));
 
-            _gameCore.Multiplay.RegisterLobbyUID(lobbyUID, _textboxPlayerName.Text);
+            _gameEngine.Multiplay.RegisterLobbyUID(lobbyUID, _textboxPlayerName.Text);
 
-            _gameCore.Menus.Add(new MpMenuHostSituationSelect(_gameCore));
+            _gameEngine.Menus.Add(new MpMenuHostSituationSelect(_gameEngine));
 
             return true;
         }

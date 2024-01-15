@@ -1,5 +1,4 @@
 ﻿using Si.Game.Forms;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.Shared.Types.Geometry;
@@ -18,7 +17,7 @@ namespace Si.Game
     {
         private readonly List<SpriteBase> highlightedSprites = new();
         private readonly ToolTip _interrogationTip = new();
-        private readonly Engine _gameCore;
+        private readonly GameEngine.Core.Engine _gameEngine;
         private readonly bool _fullScreen = false;
 
         public FormRenderTarget()
@@ -27,7 +26,7 @@ namespace Si.Game
 
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
 
-            var settings = Engine.LoadSettings();
+            var settings = GameEngine.Core.Engine.LoadSettings();
 
             if (settings.AlwaysOnTop)
             {
@@ -55,11 +54,11 @@ namespace Si.Game
             };
             Controls.Add(drawingSurface);
 
-            _gameCore = new Engine(drawingSurface);
+            _gameEngine = new GameEngine.Core.Engine(drawingSurface);
 
-            _gameCore.EnableDebugging(new FormDebug(_gameCore));
+            _gameEngine.EnableDebugging(new FormDebug(_gameEngine));
 
-            _gameCore.OnStopEngine += (Engine sender) =>
+            _gameEngine.OnStopEngine += (GameEngine.Core.Engine sender) =>
             {   //If the engine is stopped, close the main form.
                 Invoke((MethodInvoker)delegate
                 {
@@ -68,16 +67,16 @@ namespace Si.Game
             };
 
             Shown += (object sender, EventArgs e)
-                => _gameCore.StartEngine();
+                => _gameEngine.StartEngine();
 
             FormClosed += (sender, e)
-                => _gameCore.ShutdownEngine();
+                => _gameEngine.ShutdownEngine();
 
             drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
             drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
 
-            drawingSurface.GotFocus += (object sender, EventArgs e) => _gameCore.Display.SetIsFocused(true);
-            drawingSurface.LostFocus += (object sender, EventArgs e) => _gameCore.Display.SetIsFocused(false);
+            drawingSurface.GotFocus += (object sender, EventArgs e) => _gameEngine.Display.SetIsFocused(true);
+            drawingSurface.LostFocus += (object sender, EventArgs e) => _gameEngine.Display.SetIsFocused(false);
 
             drawingSurface.KeyUp += FormRenderTarget_KeyUp;
 
@@ -91,10 +90,10 @@ namespace Si.Game
         #region Debug interactions.
         private void FormRenderTarget_MouseMove(object sender, MouseEventArgs e)
         {
-            double x = e.X + _gameCore.Display.OverdrawSize.Width / 2;
-            double y = e.Y + _gameCore.Display.OverdrawSize.Height / 2;
+            double x = e.X + _gameEngine.Display.OverdrawSize.Width / 2;
+            double y = e.Y + _gameEngine.Display.OverdrawSize.Height / 2;
 
-            //Debug.Print($"x{x:n1}, y{y:n1} => Player x{_gameCore.Player.Sprite.X:n1},x{_gameCore.Player.Sprite.Y:n1}");
+            //Debug.Print($"x{x:n1}, y{y:n1} => Player x{_gameEngine.Player.Sprite.X:n1},x{_gameEngine.Player.Sprite.Y:n1}");
 
             foreach (var sprite in highlightedSprites)
             {
@@ -103,10 +102,10 @@ namespace Si.Game
 
             highlightedSprites.Clear();
 
-            var sprites = _gameCore.Sprites.RenderLocationIntersections(new SiPoint(x, y), new SiPoint(1, 1));
-            if (_gameCore.Player.Sprite.RenderLocationIntersects(new SiPoint(x, y), new SiPoint(1, 1)))
+            var sprites = _gameEngine.Sprites.RenderLocationIntersections(new SiPoint(x, y), new SiPoint(1, 1));
+            if (_gameEngine.Player.Sprite.RenderLocationIntersects(new SiPoint(x, y), new SiPoint(1, 1)))
             {
-                sprites.Add(_gameCore.Player.Sprite);
+                sprites.Add(_gameEngine.Player.Sprite);
             }
 
             foreach (var sprite in sprites)
@@ -118,13 +117,13 @@ namespace Si.Game
 
         private void FormRenderTarget_MouseDown(object sender, MouseEventArgs e)
         {
-            double x = e.X + _gameCore.Display.OverdrawSize.Width / 2;
-            double y = e.Y + _gameCore.Display.OverdrawSize.Height / 2;
+            double x = e.X + _gameEngine.Display.OverdrawSize.Width / 2;
+            double y = e.Y + _gameEngine.Display.OverdrawSize.Height / 2;
 
-            var sprites = _gameCore.Sprites.Intersections(new SiPoint(x, y), new SiPoint(1, 1));
-            if (_gameCore.Player.Sprite.Intersects(new SiPoint(x, y), new SiPoint(1, 1)))
+            var sprites = _gameEngine.Sprites.Intersections(new SiPoint(x, y), new SiPoint(1, 1));
+            if (_gameEngine.Player.Sprite.Intersects(new SiPoint(x, y), new SiPoint(1, 1)))
             {
-                sprites.Add(_gameCore.Player.Sprite);
+                sprites.Add(_gameEngine.Player.Sprite);
             }
 
             var sprite = sprites.FirstOrDefault();
@@ -145,7 +144,7 @@ namespace Si.Game
                     menu.Items.Add("Watch").Tag = sprite;
 
                     var location = new Point((int)e.X + 10, (int)e.Y);
-                    menu.Show(_gameCore.Display.DrawingSurface, location);
+                    menu.Show(_gameEngine.Display.DrawingSurface, location);
                 }
                 else if (e.Button == MouseButtons.Left)
                 {
@@ -174,7 +173,7 @@ namespace Si.Game
                     if (text.Length > 0)
                     {
                         var location = new Point((int)e.X, (int)e.Y - sprite.Size.Height);
-                        _interrogationTip.Show(text.ToString(), _gameCore.Display.DrawingSurface, location, 5000);
+                        _interrogationTip.Show(text.ToString(), _gameEngine.Display.DrawingSurface, location, 5000);
                     }
                 }
             }
@@ -198,7 +197,7 @@ namespace Si.Game
             {
                 new Thread(o =>
                 {
-                    using var form = new FormDebugSpriteWatch(_gameCore, sprite);
+                    using var form = new FormDebugSpriteWatch(_gameEngine, sprite);
                     form.ShowDialog();
                 }).Start();
             }
@@ -206,10 +205,10 @@ namespace Si.Game
             {
                 if (sprite is SpriteEnemyBase enemy)
                 {
-                    bool wasPaused = _gameCore.IsPaused();
+                    bool wasPaused = _gameEngine.IsPaused();
                     if (wasPaused == false)
                     {
-                        _gameCore.TogglePause();
+                        _gameEngine.TogglePause();
                     }
 
                     using (var fbd = new FolderBrowserDialog())
@@ -226,7 +225,7 @@ namespace Si.Game
 
                     if (wasPaused == false)
                     {
-                        _gameCore.TogglePause();
+                        _gameEngine.TogglePause();
                     }
                 }
             }
@@ -234,10 +233,10 @@ namespace Si.Game
             {
                 if (sprite is SpriteEnemyBase enemy)
                 {
-                    bool wasPaused = _gameCore.IsPaused();
+                    bool wasPaused = _gameEngine.IsPaused();
                     if (wasPaused == false)
                     {
-                        _gameCore.TogglePause();
+                        _gameEngine.TogglePause();
                     }
 
                     var builder = new StringBuilder();
@@ -255,7 +254,7 @@ namespace Si.Game
 
                     if (wasPaused == false)
                     {
-                        _gameCore.TogglePause();
+                        _gameEngine.TogglePause();
                     }
                 }
             }
@@ -265,14 +264,14 @@ namespace Si.Game
 
         private void FormRenderTarget_KeyUp(object sender, KeyEventArgs e)
         {
-            _gameCore.Input.HandleSingleKeyPress(e.KeyCode);
+            _gameEngine.Input.HandleSingleKeyPress(e.KeyCode);
 
             if (e.KeyCode == Keys.Escape)
             {
                 //We do not want the escape key to inturrupt menus.
-                if (_gameCore.Menus.DoesVisibleMenuHandleEscapeKey() == false)
+                if (_gameEngine.Menus.DoesVisibleMenuHandleEscapeKey() == false)
                 {
-                    _gameCore.Pause();
+                    _gameEngine.Pause();
 
                     if (MessageBox.Show("Are you sure you want to quit?", "Afraid to go on?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                     {
@@ -280,7 +279,7 @@ namespace Si.Game
                     }
                     else
                     {
-                        _gameCore.Resume();
+                        _gameEngine.Resume();
                     }
                 }
             }

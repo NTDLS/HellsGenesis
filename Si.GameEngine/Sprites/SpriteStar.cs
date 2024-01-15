@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System.IO;
@@ -12,14 +11,14 @@ namespace Si.GameEngine.Sprites
         private readonly int _imageCount = 5;
         private readonly int selectedImageIndex = 0;
 
-        public SpriteStar(Engine gameCore)
-            : base(gameCore)
+        public SpriteStar(Core.Engine gameEngine)
+            : base(gameEngine)
         {
             selectedImageIndex = SiRandom.Generator.Next(0, 1000) % _imageCount;
             Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
-            X = SiRandom.Generator.Next(0, gameCore.Display.TotalCanvasSize.Width);
-            Y = SiRandom.Generator.Next(0, gameCore.Display.TotalCanvasSize.Height);
+            X = SiRandom.Generator.Next(0, gameEngine.Display.TotalCanvasSize.Width);
+            Y = SiRandom.Generator.Next(0, gameEngine.Display.TotalCanvasSize.Height);
 
             Velocity.MaxSpeed = 3;
 
@@ -38,7 +37,7 @@ namespace Si.GameEngine.Sprites
             //LocalX -= Velocity.MaxSpeed * Velocity.ThrottlePercentage;
             //LocalY -= Velocity.MaxSpeed * Velocity.ThrottlePercentage;
 
-            if (_gameCore.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
+            if (_gameEngine.Display.TotalCanvasBounds.IntersectsWith(Bounds) == false) //Remove off-screen stars.
             {
                 QueueForDelete();
             }

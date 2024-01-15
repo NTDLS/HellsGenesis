@@ -2,8 +2,8 @@
 using NTDLS.StreamFraming.Payloads;
 using NTDLS.UDPPacketFraming;
 using NTDLS.UDPPacketFraming.Payloads;
-using Si.Server.Engine.Managers;
-using Si.Server.Engine.Objects;
+using Si.ServerEngine.Core.Managers;
+using Si.ServerEngine.Core.Objects;
 using Si.Shared;
 using Si.Shared.Messages.Notify;
 using Si.Shared.Messages.Query;
@@ -11,9 +11,9 @@ using Si.Shared.Payload;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Si.Server.Engine
+namespace Si.ServerEngine.Core
 {
-    internal class ServerCore
+    internal class ServerEngine
     {
         /// <summary>
         /// A list of IPaddress endpoints for all connections, these are used for UDP sending.
@@ -27,7 +27,7 @@ namespace Si.Server.Engine
         public LobbyManager Lobbies { get; private set; }
         public SiSettings Settings { get; private set; }
 
-        public ServerCore(SiSettings settings)
+        public ServerEngine(SiSettings settings)
         {
             Settings = settings;
 

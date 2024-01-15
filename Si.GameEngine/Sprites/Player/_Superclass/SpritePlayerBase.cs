@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Si.GameEngine.Core;
 using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Loudouts;
@@ -50,35 +49,35 @@ namespace Si.GameEngine.Sprites.Player._Superclass
         private readonly List<WeaponBase> _secondaryWeapons = new();
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
 
-        public SpritePlayerBase(Engine gameCore)
-            : base(gameCore)
+        public SpritePlayerBase(Core.Engine gameEngine)
+            : base(gameEngine)
         {
             OnHit += SpritePlayer_OnHit;
 
             if (IsDrone)
             {
-                RadarPositionIndicator = _gameCore.Sprites.RadarPositions.Create();
+                RadarPositionIndicator = _gameEngine.Sprites.RadarPositions.Create();
                 RadarPositionIndicator.Visable = false;
 
-                RadarPositionText = _gameCore.Sprites.TextBlocks.CreateRadarPosition(
-                    gameCore.Rendering.TextFormats.RadarPositionIndicator,
-                    gameCore.Rendering.Materials.Brushes.Red, new SiPoint());
+                RadarPositionText = _gameEngine.Sprites.TextBlocks.CreateRadarPosition(
+                    gameEngine.Rendering.TextFormats.RadarPositionIndicator,
+                    gameEngine.Rendering.Materials.Brushes.Red, new SiPoint());
             }
 
-            AmmoLowSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);
-            SystemsFailingSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Systems Failing.wav", 0.75f);
-            HullBreachedSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Hull Breached.wav", 0.75f);
-            IntegrityLowSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Integrity Low.wav", 0.75f);
-            ShieldFailSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Shield Fail.wav", 0.75f);
-            ShieldDownSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Shield Down.wav", 0.75f);
-            ShieldMaxSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Shield Max.wav", 0.75f);
-            ShieldNominalSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Shield Nominal.wav", 0.75f);
-            AllSystemsGoSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\All Systems Go.wav", 0.75f);
-            AmmoLowSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);
-            AmmoEmptySound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Ammo Empty.wav", 0.75f);
-            ShipEngineRoarSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Engine Roar.wav", 0.5f, true);
-            ShipEngineIdleSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
-            ShipEngineBoostSound = _gameCore.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
+            AmmoLowSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);
+            SystemsFailingSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Systems Failing.wav", 0.75f);
+            HullBreachedSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Hull Breached.wav", 0.75f);
+            IntegrityLowSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Integrity Low.wav", 0.75f);
+            ShieldFailSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Shield Fail.wav", 0.75f);
+            ShieldDownSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Shield Down.wav", 0.75f);
+            ShieldMaxSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Shield Max.wav", 0.75f);
+            ShieldNominalSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Shield Nominal.wav", 0.75f);
+            AllSystemsGoSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\All Systems Go.wav", 0.75f);
+            AmmoLowSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);
+            AmmoEmptySound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Ammo Empty.wav", 0.75f);
+            ShipEngineRoarSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Engine Roar.wav", 0.5f, true);
+            ShipEngineIdleSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
+            ShipEngineBoostSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
         }
 
         public override void VisibilityChanged()
@@ -93,9 +92,9 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
         public override SiSpriteActionVector GetMultiplayVector()
         {
-            if (_gameCore.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer)
+            if (_gameEngine.Multiplay.State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                if ((DateTime.UtcNow - _lastMultiplaySpriteVectorUpdate).TotalMilliseconds >= _gameCore.Multiplay.State.PlayerAbsoluteStateDelayMs)
+                if ((DateTime.UtcNow - _lastMultiplaySpriteVectorUpdate).TotalMilliseconds >= _gameEngine.Multiplay.State.PlayerAbsoluteStateDelayMs)
                 {
                     _lastMultiplaySpriteVectorUpdate = DateTime.UtcNow;
 
@@ -191,13 +190,13 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
             ReviveDeadOrExploded();
 
-            X = _gameCore.Display.TotalCanvasSize.Width / 2;
-            Y = _gameCore.Display.TotalCanvasSize.Height / 2;
+            X = _gameEngine.Display.TotalCanvasSize.Width / 2;
+            Y = _gameEngine.Display.TotalCanvasSize.Height / 2;
 
             Velocity.Angle = new SiAngle(45);
 
             Velocity.ThrottlePercentage = 0;
-            Velocity.AvailableBoost = _gameCore.Settings.MaxPlayerBoostAmount;
+            Velocity.AvailableBoost = _gameEngine.Settings.MaxPlayerBoostAmount;
 
             #region Reset loadout.
 
@@ -221,7 +220,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
         public override void AddShieldHealth(int pointsToAdd)
         {
-            if (ShieldHealth < _gameCore.Settings.MaxShieldPoints && ShieldHealth + pointsToAdd >= _gameCore.Settings.MaxShieldPoints)
+            if (ShieldHealth < _gameEngine.Settings.MaxShieldPoints && ShieldHealth + pointsToAdd >= _gameEngine.Settings.MaxShieldPoints)
             {
                 ShieldMaxSound.Play(); //If we didnt have full shields but now we do, tell the player.
             }
@@ -241,13 +240,13 @@ namespace Si.GameEngine.Sprites.Player._Superclass
                         DeleteSpriteAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    ThrustAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
+                    ThrustAnimation = new SpriteAnimation(_gameEngine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
                     {
                         Visable = false,
                         OwnerUID = UID
                     };
                     //ThrustAnimation.Reset();
-                    _gameCore.Sprites.Animations.AddAt(ThrustAnimation, this);
+                    _gameEngine.Sprites.Animations.AddAt(ThrustAnimation, this);
                     ThrustAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
                 }
 
@@ -259,13 +258,13 @@ namespace Si.GameEngine.Sprites.Player._Superclass
                         DeleteSpriteAfterPlay = false,
                         ReplayDelay = new TimeSpan(0)
                     };
-                    BoostAnimation = new SpriteAnimation(_gameCore, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
+                    BoostAnimation = new SpriteAnimation(_gameEngine, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
                     {
                         Visable = false,
                         OwnerUID = UID
                     };
                     //BoostAnimation.Reset();
-                    _gameCore.Sprites.Animations.AddAt(BoostAnimation, this);
+                    _gameEngine.Sprites.Animations.AddAt(BoostAnimation, this);
                     BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
                 }
             }
@@ -351,7 +350,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             }
             else
             {
-                var weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameCore, this });
+                var weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameEngine, this });
                 weapon.RoundQuantity += munitionCount;
                 PrimaryWeapon = weapon;
 
@@ -370,7 +369,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameCore, this });
+                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameEngine, this });
                 weapon.RoundQuantity += munitionCount;
                 _secondaryWeapons.Add(weapon);
             }
@@ -397,7 +396,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             }
             else
             {
-                PrimaryWeapon = SiReflection.CreateInstanceOf<T>(new object[] { _gameCore, this });
+                PrimaryWeapon = SiReflection.CreateInstanceOf<T>(new object[] { _gameEngine, this });
                 PrimaryWeapon.RoundQuantity += munitionCount;
             }
         }
@@ -411,7 +410,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             var weapon = GetSecondaryWeaponOfType<T>();
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _gameCore, this });
+                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _gameEngine, this });
                 weapon.RoundQuantity += munitionCount;
                 _secondaryWeapons.Add(weapon);
             }

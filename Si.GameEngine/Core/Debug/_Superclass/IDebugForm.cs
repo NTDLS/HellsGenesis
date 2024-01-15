@@ -1,11 +1,10 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 
 namespace Si.GameEngine.Core.Debug._Superclass
 {
     public interface IDebugForm
     {
-        public void StartWatch(Engine gameCore, SpriteBase sprite);
+        public void StartWatch(Engine gameEngine, SpriteBase sprite);
         public void WriteLine(string text, System.Drawing.Color color);
         public void Write(string text, System.Drawing.Color color);
         public void ClearText();

@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
@@ -24,8 +23,8 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
 
         SiPoint _createdAtLocation;
 
-        public MunitionBase(Engine gameCore, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
-            : base(gameCore)
+        public MunitionBase(Core.Engine gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
+            : base(gameEngine)
         {
             Initialize(imagePath);
 
@@ -82,8 +81,8 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            if (Math.Abs(_createdAtLocation.X - X) > _gameCore.Settings.MunitionSceneDistanceLimit
-               || Math.Abs(_createdAtLocation.Y - Y) > _gameCore.Settings.MunitionSceneDistanceLimit)
+            if (Math.Abs(_createdAtLocation.X - X) > _gameEngine.Settings.MunitionSceneDistanceLimit
+               || Math.Abs(_createdAtLocation.Y - Y) > _gameEngine.Settings.MunitionSceneDistanceLimit)
             {
                 QueueForDelete();
                 return;

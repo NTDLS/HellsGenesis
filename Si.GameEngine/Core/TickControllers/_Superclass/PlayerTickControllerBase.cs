@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.Shared.Types.Geometry;
+﻿using Si.Shared.Types.Geometry;
 
 namespace Si.GameEngine.Core.TickControllers._Superclass
 {
@@ -8,7 +7,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
     /// </summary>
     public class PlayerTickControllerBase<T> : TickControllerBase<T> where T : class
     {
-        public Engine GameCore { get; private set; }
+        public Engine GameEngine { get; private set; }
 
         /// <summary>
         /// Moves the player and returns the direction and amount of movment which was applied.
@@ -16,9 +15,9 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
         /// <returns>Returns the direction and amount of movement that the player has moved in the current tick.</returns>
         public virtual SiPoint ExecuteWorldClockTick() => new();
 
-        public PlayerTickControllerBase(Engine gameCore)
+        public PlayerTickControllerBase(Engine gameEngine)
         {
-            GameCore = gameCore;
+            GameEngine = gameEngine;
         }
     }
 }

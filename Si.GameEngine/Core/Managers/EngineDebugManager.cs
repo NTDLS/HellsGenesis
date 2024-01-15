@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Debug;
+﻿using Si.GameEngine.Core.Debug;
 using Si.GameEngine.Core.Debug._Superclass;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Shared;
@@ -67,16 +66,16 @@ namespace Si.GameEngine.Core.Managers
             "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean|Displays whether a given sprite is visible or not.",
         };
 
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
         private readonly Stack<string> _commandStack = new();
         private IDebugForm _debugForm;
         public DebugCommandParser CommandParser { get; } = new(_commandPrototypes);
         private readonly List<MethodInfo> _hardDebugMethods;
         public bool IsVisible { get; private set; } = false;
 
-        public EngineDebugManager(Engine gameCore, IDebugForm debugForm)
+        public EngineDebugManager(Engine gameEngine, IDebugForm debugForm)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
             _debugForm = debugForm;
             _hardDebugMethods = GetMethodsWithOnlyDebugCommandParameter();
         }
@@ -143,7 +142,7 @@ namespace Si.GameEngine.Core.Managers
 
         public void CommandHandler_Display_BackgroundOffset_Get(DebugCommand command)
         {
-            _debugForm.WriteLine($"{_gameCore.Display.BackgroundOffset}", System.Drawing.Color.Black);
+            _debugForm.WriteLine($"{_gameEngine.Display.BackgroundOffset}", System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Display_BackgroundOffset_Set(DebugCommand command)
@@ -151,10 +150,10 @@ namespace Si.GameEngine.Core.Managers
             var x = command.ParameterValue<double>("x");
             var y = command.ParameterValue<double>("y");
 
-            var deltaX = _gameCore.Display.BackgroundOffset.X - x;
-            var deltaY = _gameCore.Display.BackgroundOffset.Y - y;
+            var deltaX = _gameEngine.Display.BackgroundOffset.X - x;
+            var deltaY = _gameEngine.Display.BackgroundOffset.Y - y;
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 foreach (var sprite in o)
                 {
@@ -166,20 +165,20 @@ namespace Si.GameEngine.Core.Managers
                 }
             });
 
-            _gameCore.Display.BackgroundOffset.X = x;
-            _gameCore.Display.BackgroundOffset.Y = y;
+            _gameEngine.Display.BackgroundOffset.X = x;
+            _gameEngine.Display.BackgroundOffset.Y = y;
         }
 
         public void CommandHandler_Display_BackgroundOffset_CenterOn(DebugCommand command)
         {
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var spriteUID = command.ParameterValue<double>("spriteUID");
                 var baseSprite = o.Where(o => o.UID == spriteUID).FirstOrDefault();
                 if (baseSprite != null)
                 {
-                    var deltaX = _gameCore.Display.TotalCanvasSize.Width / 2 - baseSprite.X;
-                    var deltaY = _gameCore.Display.TotalCanvasSize.Height / 2 - baseSprite.Y;
+                    var deltaX = _gameEngine.Display.TotalCanvasSize.Width / 2 - baseSprite.X;
+                    var deltaY = _gameEngine.Display.TotalCanvasSize.Height / 2 - baseSprite.Y;
 
                     foreach (var sprite in o)
                     {
@@ -190,21 +189,21 @@ namespace Si.GameEngine.Core.Managers
                         }
                     }
 
-                    _gameCore.Display.BackgroundOffset.X = baseSprite.X;
-                    _gameCore.Display.BackgroundOffset.Y = baseSprite.Y;
+                    _gameEngine.Display.BackgroundOffset.X = baseSprite.X;
+                    _gameEngine.Display.BackgroundOffset.Y = baseSprite.Y;
                 }
             });
         }
 
         public void CommandHandler_Display_Adapters(DebugCommand command)
         {
-            var text = _gameCore.Rendering.GetGraphicsAdaptersInfo();
+            var text = _gameEngine.Rendering.GetGraphicsAdaptersInfo();
             _debugForm.Write(text, System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Enemies_DeleteAll(DebugCommand command)
         {
-            foreach (var sprite in _gameCore.Sprites.Enemies.All())
+            foreach (var sprite in _gameEngine.Sprites.Enemies.All())
             {
                 sprite.QueueForDelete();
             }
@@ -212,7 +211,7 @@ namespace Si.GameEngine.Core.Managers
 
         public void CommandHandler_Sprite_Enemies_ExplodeAll(DebugCommand command)
         {
-            foreach (var sprite in _gameCore.Sprites.Enemies.All())
+            foreach (var sprite in _gameEngine.Sprites.Enemies.All())
             {
                 sprite.Explode();
             }
@@ -220,7 +219,7 @@ namespace Si.GameEngine.Core.Managers
 
         public void CommandHandler_Sprite_Player_Explode(DebugCommand command)
         {
-            _gameCore.Player.Sprite.Explode();
+            _gameEngine.Player.Sprite.Explode();
         }
 
         public void CommandHandler_Cls(DebugCommand command)
@@ -277,66 +276,66 @@ namespace Si.GameEngine.Core.Managers
         public void CommandHandler_Display_Metrics(DebugCommand command)
         {
             var infoText =
-                  $"          Background Offset: {_gameCore.Display.BackgroundOffset}\r\n"
-                + $"            Base Draw Scale: {_gameCore.Display.BaseDrawScale:n4}\r\n"
-                + $"              Overdraw Size: {_gameCore.Display.OverdrawSize}\r\n"
-                + $"        Natrual Screen Size: {_gameCore.Display.NatrualScreenSize}\r\n"
-                + $"          Total Canvas Size: {_gameCore.Display.TotalCanvasSize}\r\n"
-                + $"        Total Canvas Bounds: {_gameCore.Display.TotalCanvasBounds}\r\n"
-                + $"      Natrual Screen Bounds: {_gameCore.Display.NatrualScreenBounds}\r\n"
-                + $" Speed Frame Scaling Factor: {_gameCore.Display.SpeedOrientedFrameScalingFactor():n4}";
+                  $"          Background Offset: {_gameEngine.Display.BackgroundOffset}\r\n"
+                + $"            Base Draw Scale: {_gameEngine.Display.BaseDrawScale:n4}\r\n"
+                + $"              Overdraw Size: {_gameEngine.Display.OverdrawSize}\r\n"
+                + $"        Natrual Screen Size: {_gameEngine.Display.NatrualScreenSize}\r\n"
+                + $"          Total Canvas Size: {_gameEngine.Display.TotalCanvasSize}\r\n"
+                + $"        Total Canvas Bounds: {_gameEngine.Display.TotalCanvasBounds}\r\n"
+                + $"      Natrual Screen Bounds: {_gameEngine.Display.NatrualScreenBounds}\r\n"
+                + $" Speed Frame Scaling Factor: {_gameEngine.Display.SpeedOrientedFrameScalingFactor():n4}";
             _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Engine_HighlightAll(DebugCommand command)
         {
             var state = command.ParameterValue<bool>("state");
-            _gameCore.Settings.HighlightAllSprites = state;
+            _gameEngine.Settings.HighlightAllSprites = state;
         }
 
         public void CommandHandler_Display_Zoom_Reset(DebugCommand command)
         {
-            _gameCore.Display.OverrideSpeedOrientedFrameScalingFactor = double.NaN;
+            _gameEngine.Display.OverrideSpeedOrientedFrameScalingFactor = double.NaN;
         }
 
         public void CommandHandler_Display_Zoom_Override(DebugCommand command)
         {
             var level = command.ParameterValue<double>("level");
-            _gameCore.Display.OverrideSpeedOrientedFrameScalingFactor = level.Box(-1, 1);
+            _gameEngine.Display.OverrideSpeedOrientedFrameScalingFactor = level.Box(-1, 1);
         }
 
         public void CommandHandler_Display_Zoom_Get(DebugCommand command)
         {
-            _debugForm.WriteLine($"{_gameCore.Display.SpeedOrientedFrameScalingFactor():n4}", System.Drawing.Color.Black);
+            _debugForm.WriteLine($"{_gameEngine.Display.SpeedOrientedFrameScalingFactor():n4}", System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Engine_Pause(DebugCommand command)
         {
             var state = command.ParameterValue<bool>("state");
 
-            if (state == true && _gameCore.IsPaused() == false)
+            if (state == true && _gameEngine.IsPaused() == false)
             {
-                _gameCore.Pause();
+                _gameEngine.Pause();
             }
-            else if (state == false && _gameCore.IsPaused() == true)
+            else if (state == false && _gameEngine.IsPaused() == true)
             {
-                _gameCore.Resume();
+                _gameEngine.Resume();
             }
         }
 
         public void CommandHandler_Display_Framerate_Set(DebugCommand command)
         {
             var rate = command.ParameterValue<double>("rate");
-            _gameCore.Settings.FramePerSecondLimit = rate;
+            _gameEngine.Settings.FramePerSecondLimit = rate;
         }
 
         public void CommandHandler_Display_Framerate_Get(DebugCommand command)
         {
             var infoText =
-                  $"Limit: {_gameCore.Settings.FramePerSecondLimit:n4}\r\n"
-                + $"  Avg: {_gameCore.Display.GameLoopCounter.AverageFrameRate:n4}\r\n"
-                + $"  Min: {_gameCore.Display.GameLoopCounter.FrameRateMin:n4}\r\n"
-                + $"  Max: {_gameCore.Display.GameLoopCounter.FrameRateMax:n4}";
+                  $"Limit: {_gameEngine.Settings.FramePerSecondLimit:n4}\r\n"
+                + $"  Avg: {_gameEngine.Display.GameLoopCounter.AverageFrameRate:n4}\r\n"
+                + $"  Min: {_gameEngine.Display.GameLoopCounter.FrameRateMin:n4}\r\n"
+                + $"  Max: {_gameEngine.Display.GameLoopCounter.FrameRateMax:n4}";
             _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
@@ -360,24 +359,24 @@ namespace Si.GameEngine.Core.Managers
             var x = command.ParameterValue<uint>("x");
             var y = command.ParameterValue<uint>("y");
 
-            var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(typeName, new[] { _gameCore });
+            var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(typeName, new[] { _gameEngine });
             sprite.X = x;
             sprite.Y = y;
             sprite.Visable = true;
 
-            _gameCore.Sprites.Add(sprite);
+            _gameEngine.Sprites.Add(sprite);
 
             _debugForm.WriteLine($"CreatedUID: {sprite.UID}, MultiplayUID: {sprite.MultiplayUID}", System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Player_Inspect(DebugCommand command)
         {
-            _debugForm.WriteLine(_gameCore.Player.Sprite.GetInspectionText(), System.Drawing.Color.Black);
+            _debugForm.WriteLine(_gameEngine.Player.Sprite.GetInspectionText(), System.Drawing.Color.Black);
         }
 
         public void CommandHandler_Sprite_Inspect(DebugCommand command)
         {
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var uid = command.ParameterValue<uint>("uid");
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
@@ -390,7 +389,7 @@ namespace Si.GameEngine.Core.Managers
 
         public void CommandHandler_Sprite_Explode(DebugCommand command)
         {
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var uid = command.ParameterValue<uint>("uid");
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
@@ -408,7 +407,7 @@ namespace Si.GameEngine.Core.Managers
             var toleranceDegrees = command.ParameterValue<double>("toleranceDegrees");
             var maxDistance = command.ParameterValue<double>("maxDistance");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var baseSprite = o.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
                 var targetSprite = o.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
@@ -428,7 +427,7 @@ namespace Si.GameEngine.Core.Managers
             var toleranceDegrees = command.ParameterValue<double>("toleranceDegrees", 10);
             var maxDistance = command.ParameterValue<double>("maxDistance", 1000);
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var baseSprite = o.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
                 var targetSprite = o.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
@@ -447,7 +446,7 @@ namespace Si.GameEngine.Core.Managers
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var baseSprite = o.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
                 var targetSprite = o.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
@@ -465,7 +464,7 @@ namespace Si.GameEngine.Core.Managers
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var baseSprite = o.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
                 var targetSprite = o.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
@@ -481,12 +480,12 @@ namespace Si.GameEngine.Core.Managers
         public void CommandHandler_Sprite_Watch(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    _debugForm.StartWatch(_gameCore, sprite);
+                    _debugForm.StartWatch(_gameEngine, sprite);
                 }
                 else
                 {
@@ -498,7 +497,7 @@ namespace Si.GameEngine.Core.Managers
         public void CommandHandler_Sprite_AngleInDegrees(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -512,7 +511,7 @@ namespace Si.GameEngine.Core.Managers
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -526,7 +525,7 @@ namespace Si.GameEngine.Core.Managers
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -540,7 +539,7 @@ namespace Si.GameEngine.Core.Managers
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -554,7 +553,7 @@ namespace Si.GameEngine.Core.Managers
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -568,7 +567,7 @@ namespace Si.GameEngine.Core.Managers
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -582,7 +581,7 @@ namespace Si.GameEngine.Core.Managers
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -596,7 +595,7 @@ namespace Si.GameEngine.Core.Managers
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -611,7 +610,7 @@ namespace Si.GameEngine.Core.Managers
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -626,20 +625,20 @@ namespace Si.GameEngine.Core.Managers
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.X = _gameCore.Display.TotalCanvasSize.Width / 2;
-                    sprite.Y = _gameCore.Display.TotalCanvasSize.Height / 2;
+                    sprite.X = _gameEngine.Display.TotalCanvasSize.Width / 2;
+                    sprite.Y = _gameEngine.Display.TotalCanvasSize.Height / 2;
                 }
             });
         }
 
         public void CommandHandler_Sprite_List(DebugCommand command)
         {
-            _gameCore.Sprites.Use(o =>
+            _gameEngine.Sprites.Use(o =>
             {
                 var sprites = o.ToList();
 

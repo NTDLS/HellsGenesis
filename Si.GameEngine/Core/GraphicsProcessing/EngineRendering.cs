@@ -4,7 +4,6 @@ using SharpDX.DirectWrite;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
-using Si.GameEngine.Core;
 using Si.GameEngine.Utility;
 using System;
 using System.Drawing;
@@ -16,7 +15,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 {
     public class EngineRendering
     {
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
 
         public SharpDX.Direct2D1.BitmapRenderTarget IntermediateRenderTarget { get; private set; }
         public WindowRenderTarget ScreenRenderTarget { get; private set; }
@@ -26,16 +25,16 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(SharpDX.Direct2D1.FactoryType.SingleThreaded);
         private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
 
-        public EngineRendering(Engine gameCore)
+        public EngineRendering(Engine gameEngine)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
 
             var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
             var renderTargetProperties = new RenderTargetProperties(pixelFormat);
             var renderProperties = new HwndRenderTargetProperties
             {
-                Hwnd = gameCore.Display.DrawingSurface.Handle,
-                PixelSize = new Size2(gameCore.Display.NatrualScreenSize.Width, gameCore.Display.NatrualScreenSize.Height),
+                Hwnd = gameEngine.Display.DrawingSurface.Handle,
+                PixelSize = new Size2(gameEngine.Display.NatrualScreenSize.Width, gameEngine.Display.NatrualScreenSize.Height),
                 PresentOptions = PresentOptions.Immediately
             };
 
@@ -45,7 +44,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Cleartype
             };
 
-            var intermediateRenderTargetSize = new Size2F(_gameCore.Display.TotalCanvasSize.Width, _gameCore.Display.TotalCanvasSize.Height);
+            var intermediateRenderTargetSize = new Size2F(_gameEngine.Display.TotalCanvasSize.Width, _gameEngine.Display.TotalCanvasSize.Height);
             IntermediateRenderTarget = new SharpDX.Direct2D1.BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
             {
                 AntialiasMode = AntialiasMode.PerPrimitive,
@@ -82,7 +81,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         public void ApplyScaling(float scale)
         {
             var sourceRect = CalculateCenterCopyRectangle(IntermediateRenderTarget.Size, scale);
-            var destRect = new RawRectangleF(0, 0, _gameCore.Display.NatrualScreenSize.Width, _gameCore.Display.NatrualScreenSize.Height);
+            var destRect = new RawRectangleF(0, 0, _gameEngine.Display.NatrualScreenSize.Width, _gameEngine.Display.NatrualScreenSize.Height);
             ScreenRenderTarget.DrawBitmap(IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
         }
 
@@ -348,8 +347,8 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         private RawMatrix3x2 GetScalingMatrix(double zoomFactor)
         {
             // Calculate the new center point (assuming your image dimensions are known)
-            float centerX = _gameCore.Display.TotalCanvasSize.Width / 2.0f;
-            float centerY = _gameCore.Display.TotalCanvasSize.Height / 2.0f;
+            float centerX = _gameEngine.Display.TotalCanvasSize.Width / 2.0f;
+            float centerY = _gameEngine.Display.TotalCanvasSize.Height / 2.0f;
 
             // Calculate the scaling transformation matrix
             var scalingMatrix = new RawMatrix3x2(

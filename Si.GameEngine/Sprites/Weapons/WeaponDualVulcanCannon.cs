@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
@@ -14,11 +13,11 @@ namespace Si.GameEngine.Sprites.Weapons
         private const string soundPath = @"Sounds\Weapons\DualVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponDualVulcanCannon(Engine gameCore, SpriteShipBase owner)
-            : base(gameCore, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+        public WeaponDualVulcanCannon(Core.Engine gameEngine, SpriteShipBase owner)
+            : base(gameEngine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
-        public WeaponDualVulcanCannon(Engine gameCore)
-            : base(gameCore, Name, soundPath, soundVolumne) => InitializeWeapon();
+        public WeaponDualVulcanCannon(Core.Engine gameEngine)
+            : base(gameEngine, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         private void InitializeWeapon()
         {
@@ -39,14 +38,14 @@ namespace Si.GameEngine.Sprites.Weapons
                 if (RoundQuantity > 0 || _owner.IsDrone)
                 {
                     var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(5, 5));
-                    _gameCore.Sprites.Munitions.Create(this, pointRight);
+                    _gameEngine.Sprites.Munitions.Create(this, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0 || _owner.IsDrone)
                 {
                     var pointLeft = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(5, 5));
-                    _gameCore.Sprites.Munitions.Create(this, pointLeft);
+                    _gameEngine.Sprites.Munitions.Create(this, pointLeft);
                     RoundQuantity--;
                 }
 
@@ -59,7 +58,7 @@ namespace Si.GameEngine.Sprites.Weapons
 
         public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
         {
-            return new MunitionVulcanCannon(_gameCore, this, _owner, xyOffset);
+            return new MunitionVulcanCannon(_gameEngine, this, _owner, xyOffset);
         }
     }
 }

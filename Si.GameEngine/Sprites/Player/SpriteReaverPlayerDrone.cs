@@ -1,12 +1,11 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 
 namespace Si.GameEngine.Sprites.Player
 {
     internal class SpriteReaverPlayerDrone : SpriteReaverPlayer, ISpriteDrone
     {
-        public SpriteReaverPlayerDrone(Engine gameCore)
-            : base(gameCore)
+        public SpriteReaverPlayerDrone(Core.Engine gameEngine)
+            : base(gameEngine)
         {
         }
     }

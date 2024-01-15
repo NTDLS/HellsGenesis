@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites.Weapons._Superclass;
+﻿using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.GameEngine.Utility;
 using Si.Shared;
@@ -41,33 +40,33 @@ namespace Si.GameEngine.Sprites._Superclass
         private readonly int _explosionSoundCount = 4;
         private int _selectedExplosionSoundIndex = 0;
 
-        public SpriteShipBase(Engine gameCore, string name = "")
-            : base(gameCore, name)
+        public SpriteShipBase(Core.Engine gameEngine, string name = "")
+            : base(gameEngine, name)
         {
             if (IsDrone)
             {
                 BuildDroneWeaponsCache();
             }
 
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
         }
 
         public override void Initialize(string imagePath = null, Size? size = null)
         {
-            _hitSound = _gameCore.Assets.GetAudio(_assetPathHitSound, 0.5f);
-            _shieldHit = _gameCore.Assets.GetAudio(_assetPathshieldHit, 0.5f);
+            _hitSound = _gameEngine.Assets.GetAudio(_assetPathHitSound, 0.5f);
+            _shieldHit = _gameEngine.Assets.GetAudio(_assetPathshieldHit, 0.5f);
 
             _selectedExplosionSoundIndex = SiRandom.Generator.Next(0, 1000) % _explosionSoundCount;
-            _explodeSound = _gameCore.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{_selectedExplosionSoundIndex}.wav"), 1.0f);
+            _explodeSound = _gameEngine.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{_selectedExplosionSoundIndex}.wav"), 1.0f);
 
             _selectedExplosionAnimationIndex = SiRandom.Generator.Next(0, 1000) % _explosionAnimationCount;
-            _explosionAnimation = new SpriteAnimation(_gameCore, Path.Combine(_assetPathExplosionAnimation, $"{_selectedExplosionAnimationIndex}.png"), new Size(256, 256));
+            _explosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathExplosionAnimation, $"{_selectedExplosionAnimationIndex}.png"), new Size(256, 256));
 
             _selectedHitExplosionAnimationIndex = SiRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
-            _hitExplosionAnimation = new SpriteAnimation(_gameCore, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
+            _hitExplosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
 
-            _lockedOnImage = _gameCore.Assets.GetBitmap(_assetPathlockedOnImage);
-            _lockedOnSoftImage = _gameCore.Assets.GetBitmap(_assetPathlockedOnSoftImage);
+            _lockedOnImage = _gameEngine.Assets.GetBitmap(_assetPathlockedOnImage);
+            _lockedOnSoftImage = _gameEngine.Assets.GetBitmap(_assetPathlockedOnSoftImage);
 
             base.Initialize(imagePath, size);
         }
@@ -108,7 +107,7 @@ namespace Si.GameEngine.Sprites._Superclass
             }
 
             var weaponType = SiReflection.GetTypeByName(weaponTypeName);
-            weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameCore, this });
+            weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _gameEngine, this });
 
             _droneWeaponsCache.Add(weaponTypeName, weapon);
 
@@ -119,14 +118,14 @@ namespace Si.GameEngine.Sprites._Superclass
         {
             _explodeSound?.Play();
             _explosionAnimation?.Reset();
-            _gameCore.Sprites.Animations.AddAt(_explosionAnimation, this);
+            _gameEngine.Sprites.Animations.AddAt(_explosionAnimation, this);
             base.Explode();
         }
 
         public void CreateParticlesExplosion()
         {
-            _gameCore.Sprites.Particles.CreateRandomShipPartParticlesAt(this, SiRandom.Between(30, 50));
-            _gameCore.Audio.PlayRandomExplosion();
+            _gameEngine.Sprites.Particles.CreateRandomShipPartParticlesAt(this, SiRandom.Between(30, 50));
+            _gameEngine.Audio.PlayRandomExplosion();
         }
 
         /// <summary>
@@ -154,22 +153,22 @@ namespace Si.GameEngine.Sprites._Superclass
         {
             if (RadarPositionIndicator != null)
             {
-                if (_gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds, -50) == false)
+                if (_gameEngine.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds, -50) == false)
                 {
-                    RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_gameCore.Player.Sprite));
+                    RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_gameEngine.Player.Sprite));
 
                     RadarPositionText.Visable = true;
                     RadarPositionText.IsFixedPosition = true;
                     RadarPositionIndicator.Visable = true;
                     RadarPositionIndicator.IsFixedPosition = true;
 
-                    double requiredAngle = _gameCore.Player.Sprite.AngleTo360(this);
+                    double requiredAngle = _gameEngine.Player.Sprite.AngleTo360(this);
 
-                    RadarPositionIndicator.Location = _gameCore.Display.CenterScreen
+                    RadarPositionIndicator.Location = _gameEngine.Display.CenterScreen
                         + SiMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle), new SiPoint(200, 200));
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
 
-                    RadarPositionText.Location = _gameCore.Display.CenterScreen
+                    RadarPositionText.Location = _gameEngine.Display.CenterScreen
                         - SiMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle) - 180, new SiPoint(120, 120));
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
                 }

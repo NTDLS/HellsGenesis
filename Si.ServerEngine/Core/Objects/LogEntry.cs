@@ -1,6 +1,6 @@
 ﻿using static Si.Shared.SiConstants;
 
-namespace Si.Server.Engine.Objects
+namespace Si.ServerEngine.Core.Objects
 {
     internal class LogEntry
     {

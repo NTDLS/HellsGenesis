@@ -1,6 +1,4 @@
-﻿using Si.GameEngine.Core;
-
-namespace Si.GameEngine.Core.TickControllers._Superclass
+﻿namespace Si.GameEngine.Core.TickControllers._Superclass
 {
     /// <summary>
     /// Tick managers that do not handle sprites or do not use a vector to update their sprites.
@@ -8,13 +6,13 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
     /// </summary>
     public class UnvectoredTickControllerBase<T> : TickControllerBase<T> where T : class
     {
-        public Engine GameCore { get; private set; }
+        public Engine GameEngine { get; private set; }
 
         public virtual void ExecuteWorldClockTick() { }
 
-        public UnvectoredTickControllerBase(Engine gameCore)
+        public UnvectoredTickControllerBase(Engine gameEngine)
         {
-            GameCore = gameCore;
+            GameEngine = gameEngine;
         }
     }
 }

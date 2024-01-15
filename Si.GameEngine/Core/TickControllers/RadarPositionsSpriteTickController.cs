@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Managers;
+﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.Shared.Types.Geometry;
@@ -13,8 +12,8 @@ namespace Si.GameEngine.Core.TickControllers
     {
         private readonly EngineSpriteManager _manager;
 
-        public RadarPositionsSpriteTickController(Engine gameCore, EngineSpriteManager manager)
-            : base(gameCore)
+        public RadarPositionsSpriteTickController(Engine gameEngine, EngineSpriteManager manager)
+            : base(gameEngine)
         {
             _manager = manager;
         }
@@ -25,7 +24,7 @@ namespace Si.GameEngine.Core.TickControllers
             {
                 var accountedFor = new HashSet<SpriteRadarPositionTextBlock>();
                 var groups = new List<List<SpriteRadarPositionTextBlock>>();
-                var radarTexts = GameCore.Sprites.VisibleOfType<SpriteRadarPositionTextBlock>();
+                var radarTexts = GameEngine.Sprites.VisibleOfType<SpriteRadarPositionTextBlock>();
 
                 foreach (var parent in radarTexts)
                 {
@@ -76,7 +75,7 @@ namespace Si.GameEngine.Core.TickControllers
 
         public SpriteRadarPositionIndicator Create()
         {
-            var obj = new SpriteRadarPositionIndicator(GameCore);
+            var obj = new SpriteRadarPositionIndicator(GameEngine);
             _manager.Add(obj);
             return obj;
         }

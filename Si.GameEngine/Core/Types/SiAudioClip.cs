@@ -1,6 +1,5 @@
 ﻿using SharpDX.Multimedia;
 using SharpDX.XAudio2;
-using Si.GameEngine.Core;
 using System;
 using System.IO;
 using System.Threading;
@@ -21,18 +20,18 @@ namespace Si.GameEngine.Core.Types
         private bool _isPlaying = false; //Only applicable when _loopForever == false;
         private bool _isFading;
         public float InitialVolumne { get; private set; }
-        private readonly Engine _gameCore;
+        private readonly Engine _gameEngine;
 
         public void SetVolume(float volumne)
         {
             _singleSourceVoice.SetVolume(volumne);
         }
 
-        public SiAudioClip(Engine gameCore, Stream stream, float initialVolumne = 1, bool loopForever = false)
+        public SiAudioClip(Engine gameEngine, Stream stream, float initialVolumne = 1, bool loopForever = false)
         {
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
 
-            if (!gameCore._isRunningHeadless)
+            if (!gameEngine._isRunningHeadless)
             {
                 _loopForever = loopForever;
                 InitialVolumne = initialVolumne;
@@ -58,7 +57,7 @@ namespace Si.GameEngine.Core.Types
 
         public void Play()
         {
-            if (_gameCore._isRunningHeadless)
+            if (_gameEngine._isRunningHeadless)
             {
                 return;
             }
@@ -96,7 +95,7 @@ namespace Si.GameEngine.Core.Types
 
         public void Fade()
         {
-            if (_gameCore._isRunningHeadless)
+            if (_gameEngine._isRunningHeadless)
             {
                 return;
             }
@@ -125,7 +124,7 @@ namespace Si.GameEngine.Core.Types
 
         public void Stop()
         {
-            if (_gameCore._isRunningHeadless)
+            if (_gameEngine._isRunningHeadless)
             {
                 return;
             }

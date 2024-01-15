@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Title>Si.Server</Title>
+    <Title>Si.ServerEngine</Title>
     <Company>NetworkDLS</Company>
     <Copyright>Copyright © 2023 NetworkDLS</Copyright>
     <AssemblyVersion>0.0.0</AssemblyVersion>
@@ -15,7 +15,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RepositoryType>git</RepositoryType>
-    <StartupObject>Si.Server.Program</StartupObject>
+    <StartupObject>Si.ServerEngine.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

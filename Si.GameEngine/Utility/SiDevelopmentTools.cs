@@ -1,5 +1,4 @@
 ﻿using NAudio.Wave;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Shared;
 using System;
@@ -44,14 +43,14 @@ namespace Si.GameEngine.Utility
         /// Tests dumping particles at a given position.
         /// </summary>
         /// <param name="core"></param>
-        public static void ParticleBlast(Engine gameCore, int particleCount, SpriteBase at)
+        public static void ParticleBlast(Core.Engine gameEngine, int particleCount, SpriteBase at)
         {
             double X = at.X;
             double Y = at.Y;
 
             for (int i = 0; i < particleCount; i++)
             {
-                var obj = gameCore.Sprites.Particles.CreateRandomShipPartParticleAt(X + SiRandom.Between(-20, 20), Y + SiRandom.Between(-20, 20));
+                var obj = gameEngine.Sprites.Particles.CreateRandomShipPartParticleAt(X + SiRandom.Between(-20, 20), Y + SiRandom.Between(-20, 20));
                 obj.Visable = true;
             }
         }

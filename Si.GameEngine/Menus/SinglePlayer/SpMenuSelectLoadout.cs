@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.Shared;
@@ -19,10 +18,10 @@ namespace Si.Menus.SinglePlayer
         private Timer _animationTimer;
         private SpritePlayerBase _selectedSprite;
 
-        public SpMenuSelectLoadout(Engine gameCore)
-            : base(gameCore)
+        public SpMenuSelectLoadout(GameEngine.Core.Engine gameEngine)
+            : base(gameEngine)
         {
-            var currentScaledScreenBounds = _gameCore.Display.GetCurrentScaledScreenBounds();
+            var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
             double offsetX = currentScaledScreenBounds.X + 40;
             double offsetY = currentScaledScreenBounds.Y + 100;
@@ -54,7 +53,7 @@ namespace Si.Menus.SinglePlayer
 
             foreach (var playerType in playerTypes)
             {
-                var playerSprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerType, new object[] { gameCore });
+                var playerSprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerType, new object[] { gameEngine });
                 playerSprite.SpriteTag = "MENU_SHIP_SELECT";
                 playerSprite.Velocity.Angle.Degrees = 45;
 
@@ -72,7 +71,7 @@ namespace Si.Menus.SinglePlayer
 
             playerSprites.ForEach(sprite =>
             {
-                _gameCore.Sprites.AddPlayer(sprite);
+                _gameEngine.Sprites.AddPlayer(sprite);
                 sprite.ThrustAnimation.Visable = true;
             });
 
@@ -88,13 +87,13 @@ namespace Si.Menus.SinglePlayer
 
         private bool SpMenuSelectLoadout_OnEscape()
         {
-            _gameCore.Menus.Add(new SpMenuSituationSelect(_gameCore));
+            _gameEngine.Menus.Add(new SpMenuSituationSelect(_gameEngine));
             return true;
         }
 
         private void PlayerLoadoutMenu_OnCleanup()
         {
-            _gameCore.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
+            _gameEngine.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
         }
 
         private bool PlayerLoadoutMenu_OnExecuteSelection(SpriteMenuItem item)
@@ -104,8 +103,8 @@ namespace Si.Menus.SinglePlayer
 
             if (item.UserData is SpritePlayerBase selectedSprite)
             {
-                _gameCore.Player.InstantiatePlayerClass(selectedSprite.GetType());
-                _gameCore.StartGame();
+                _gameEngine.Player.InstantiatePlayerClass(selectedSprite.GetType());
+                _gameEngine.StartGame();
             }
 
             return true;

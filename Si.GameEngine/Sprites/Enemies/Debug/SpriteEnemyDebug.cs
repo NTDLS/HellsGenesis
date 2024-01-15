@@ -1,5 +1,4 @@
 ﻿using Si.GameEngine.AI.Logistics;
-using Si.GameEngine.Core;
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
 using Si.GameEngine.Sprites.Weapons;
@@ -20,8 +19,8 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
 
-        public SpriteEnemyDebug(Engine gameCore)
-            : base(gameCore, hullHealth, bountyMultiplier)
+        public SpriteEnemyDebug(Core.Engine gameEngine)
+            : base(gameEngine, hullHealth, bountyMultiplier)
         {
             ShipClass = SiEnemyClass.Debug;
             SetImage(@$"Graphics\Enemy\Debug\{ShipClass}\Hull.png", new Size(32, 32));
@@ -58,9 +57,9 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
 
             ResetLoadout(loadout);
 
-            AddAIController(new HostileEngagement(_gameCore, this, _gameCore.Player.Sprite));
-            AddAIController(new Taunt(_gameCore, this, _gameCore.Player.Sprite));
-            AddAIController(new Meander(_gameCore, this, _gameCore.Player.Sprite));
+            AddAIController(new HostileEngagement(_gameEngine, this, _gameEngine.Player.Sprite));
+            AddAIController(new Taunt(_gameEngine, this, _gameEngine.Player.Sprite));
+            AddAIController(new Meander(_gameEngine, this, _gameEngine.Player.Sprite));
 
             //if (SiRandom.FlipCoin())
             //{
@@ -90,7 +89,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                 return;
             }
 
-            double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
+            double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
 
             base.ApplyIntelligence(displacementVector);
 
@@ -122,7 +121,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponDualVulcanCannon>();
@@ -130,7 +129,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameCore.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponVulcanCannon>();

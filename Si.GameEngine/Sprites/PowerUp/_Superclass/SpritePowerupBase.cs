@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.Shared;
 using Si.Shared.Types.Geometry;
 using System;
@@ -46,16 +45,16 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
             }
         }
 
-        public SpritePowerupBase(Engine gameCore)
-            : base(gameCore)
+        public SpritePowerupBase(Core.Engine gameEngine)
+            : base(gameEngine)
         {
             Initialize();
 
             int _hitImageIndex = SiRandom.Between(0, _assetHitAnimationFiles.Count());
-            _hitAnimation = new SpriteAnimation(_gameCore, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
+            _hitAnimation = new SpriteAnimation(_gameEngine, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
 
             int _soundIndex = SiRandom.Between(0, _assetExplosionSoundFiles.Count());
-            _explodeSound = _gameCore.Assets.GetAudio(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
+            _explodeSound = _gameEngine.Assets.GetAudio(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
 
             RadarDotSize = new SiPoint(4, 4);
         }
@@ -69,13 +68,13 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
         {
             _explodeSound.Play();
             _hitAnimation.Reset();
-            _gameCore.Sprites.Animations.AddAt(_hitAnimation, this);
+            _gameEngine.Sprites.Animations.AddAt(_hitAnimation, this);
             QueueForDelete();
         }
 
         public virtual void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (Intersects(_gameCore.Player.Sprite))
+            if (Intersects(_gameEngine.Player.Sprite))
             {
                 Explode();
             }

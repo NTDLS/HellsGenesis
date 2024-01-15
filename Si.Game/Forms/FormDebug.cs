@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Debug._Superclass;
+﻿using Si.GameEngine.Core.Debug._Superclass;
 using Si.GameEngine.Sprites._Superclass;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ namespace Si.Game.Forms
 {
     public partial class FormDebug : Form, IDebugForm
     {
-        private readonly Engine _gameCore;
+        private readonly GameEngine.Core.Engine _gameEngine;
         private readonly List<string> _commandHistory = new();
         private int _commandHistoryIndex = 0;
         private DateTime _lastTabKeyTimestamp = DateTime.UtcNow;
@@ -21,7 +20,7 @@ namespace Si.Game.Forms
 
         private void FormDebug_Load(object sender, EventArgs e)
         {
-            foreach (var command in _gameCore.Debug.CommandParser.Commands.OrderBy(o => o.Name))
+            foreach (var command in _gameEngine.Debug.CommandParser.Commands.OrderBy(o => o.Name))
             {
                 var item = new ListViewItem(command.Name);
 
@@ -59,7 +58,7 @@ namespace Si.Game.Forms
                 listViewCommands.Items.Add(item);
             }
 
-            var suggestions = _gameCore.Debug.CommandParser.Commands.Select(o => o.Name).ToArray();
+            var suggestions = _gameEngine.Debug.CommandParser.Commands.Select(o => o.Name).ToArray();
 
             var allowedTypes = new AutoCompleteStringCollection();
             allowedTypes.AddRange(suggestions);
@@ -68,7 +67,7 @@ namespace Si.Game.Forms
             textBoxCommand.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
 
-        internal FormDebug(Engine gameCore)
+        internal FormDebug(GameEngine.Core.Engine gameEngine)
         {
             InitializeComponent();
 
@@ -77,7 +76,7 @@ namespace Si.Game.Forms
 
             AcceptButton = buttonExecute;
 
-            _gameCore = gameCore;
+            _gameEngine = gameEngine;
 
             Shown += (object sender, EventArgs e) => textBoxCommand.Focus();
 
@@ -86,7 +85,7 @@ namespace Si.Game.Forms
 
             FormClosing += (object sender, FormClosingEventArgs e) =>
             {
-                gameCore.Debug.ToggleVisibility();
+                gameEngine.Debug.ToggleVisibility();
                 e.Cancel = true;
             };
 
@@ -170,7 +169,7 @@ namespace Si.Game.Forms
                 _commandHistory.Add(command);
                 _commandHistoryIndex = _commandHistory.Count;
 
-                _gameCore.Debug.EnqueueCommand(command);
+                _gameEngine.Debug.EnqueueCommand(command);
             }
         }
 
@@ -228,11 +227,11 @@ namespace Si.Game.Forms
             richTextBoxOutput.ResumeLayout();
         }
 
-        public void StartWatch(Engine gameCore, SpriteBase sprite)
+        public void StartWatch(GameEngine.Core.Engine gameEngine, SpriteBase sprite)
         {
             new Thread(o =>
             {
-                using (var form = new FormDebugSpriteWatch(_gameCore, sprite))
+                using (var form = new FormDebugSpriteWatch(_gameEngine, sprite))
                 {
                     form.ShowDialog();
                 }

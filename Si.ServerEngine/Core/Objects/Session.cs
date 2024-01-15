@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Si.Server.Engine.Objects
+namespace Si.ServerEngine.Core.Objects
 {
     internal class Session
     {

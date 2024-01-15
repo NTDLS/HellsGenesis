@@ -17,8 +17,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         public const int hullHealth = 10;
         public const int bountyMultiplier = 15;
 
-        public SpriteEnemyPhoenix(Engine gameCore)
-            : base(gameCore, hullHealth, bountyMultiplier)
+        public SpriteEnemyPhoenix(Core.GameEngine gameEngine)
+            : base(gameEngine, hullHealth, bountyMultiplier)
         {
             ShipClass = SiEnemyClass.Phoenix;
             SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png", new Size(32, 32));
@@ -54,9 +54,9 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             ResetLoadout(loadout);
 
-            //AddAIController(new HostileEngagement(_gameCore, this, _gameCore.Player.Sprite));
-            AddAIController(new Taunt(_gameCore, this, _gameCore.Player.Sprite));
-            //AddAIController(new Meander(_gameCore, this, _gameCore.Player.Sprite));
+            //AddAIController(new HostileEngagement(_gameEngine, this, _gameEngine.Player.Sprite));
+            AddAIController(new Taunt(_gameEngine, this, _gameEngine.Player.Sprite));
+            //AddAIController(new Meander(_gameEngine, this, _gameEngine.Player.Sprite));
 
             //if (SiRandom.FlipCoin())
             //{
@@ -80,8 +80,6 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            return;
-
             if (ControlledBy == SiControlledBy.Server)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
@@ -90,7 +88,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             }
 
 
-            //double distanceToPlayer = SiMath.DistanceTo(this, _gameCore.Player.Sprite);
+            //double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
 
             base.ApplyIntelligence(displacementVector);
 
@@ -118,7 +116,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             if (IsHostile)
             {
-                var playersIAmPointingAt = GetPointingAtOf(_gameCore.Sprites.AllVisiblePlayers, 2.0);
+                var playersIAmPointingAt = GetPointingAtOf(_gameEngine.Sprites.AllVisiblePlayers, 2.0);
                 if (playersIAmPointingAt.Any())
                 {
                     var closestDistance = ClosestDistanceOf(playersIAmPointingAt);
