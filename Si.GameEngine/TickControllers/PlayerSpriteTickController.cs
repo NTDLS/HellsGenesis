@@ -301,7 +301,7 @@ namespace Si.GameEngine.Controller
                 _gameCore.Multiplay.RecordDroneActionVector(multiplayVector);
             }
 
-            return displacementVector.ToReadonlyCopy();
+            return displacementVector;
         }
 
         public void ResetAndShow()

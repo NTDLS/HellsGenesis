@@ -66,21 +66,6 @@ namespace Si.GameEngine.Utility
         }
 
         /// <summary>
-        /// Calculates a point at a given angle and a given distance.
-        /// </summary>
-        /// <param name="degrees">The angle which the point should move to in the range of 0-259.</param>
-        /// <param name="distance">The distance to the given angle the point should be at.</param>
-        /// <returns>The calculated point at the given distance towards the given angle.</returns>
-        public static SiPoint PointFromAngleAtDistance360(double degrees, SiPoint distance)
-        {
-            double radians = degrees * (Math.PI / 180.0);
-
-            return new SiPoint(
-                Math.Cos(radians) * distance.X,
-                Math.Sin(radians) * distance.Y);
-        }
-
-        /// <summary>
         /// Calculates the angle of one objects location to another location from 0 - 360.
         /// </summary>
         /// <param name="from">The object from which the calcualtion is based.</param>
