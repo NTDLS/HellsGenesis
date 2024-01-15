@@ -39,6 +39,7 @@ namespace Si.GameEngine.Sprites
         public SpriteTextBlock(EngineCore gameCore, TextFormat format, SolidColorBrush color, SiPoint location, bool isFixedPosition)
             : base(gameCore)
         {
+            RenderScaleOrder = Shared.SiConstants.SiRenderScaleOrder.PostScale;
             IsFixedPosition = isFixedPosition;
             Location = new SiPoint(location);
             Color = color;
@@ -50,7 +51,10 @@ namespace Si.GameEngine.Sprites
         {
             if (Visable)
             {
-                _gameCore.Rendering.DrawTextAt(renderTarget, (float)X, (float)Y, 0, _text ?? string.Empty, Format, Color);
+                _gameCore.Rendering.DrawTextAt(renderTarget,
+                    (float)RenderLocation.X,
+                    (float)RenderLocation.Y,
+                    0, _text ?? string.Empty, Format, Color);
             }
         }
     }

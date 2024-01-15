@@ -84,7 +84,7 @@ namespace Si.GameEngine.Sprites
         private bool _isLockedOn = false;
         private SiVelocity _velocity;
         private bool _readyForDeletion;
-        private SiPoint _localLocation = new();
+        private SiPoint _location = new();
         private Size _size;
 
         #region Properties.
@@ -110,15 +110,25 @@ namespace Si.GameEngine.Sprites
         /// If true, the sprite does not respond to changes in background offset.
         /// </summary>
         public bool IsFixedPosition { get; set; }
+
+        /// <summary>
+        /// Width and height of the sprite.
+        /// </summary>
         public virtual Size Size => _size;
 
         /// <summary>
-        /// The Location is the center of the sprite, so the Bounds is the actual sprite rectangle.
+        /// Whether the sprite is rended before speed based scaling.
+        /// Note that pre-scaled sprite X,Y is the top, left of the natrual screen bounds.
+        /// </summary>
+        public SiRenderScaleOrder RenderScaleOrder { get; set; } = SiRenderScaleOrder.PreScale;
+
+        /// <summary>
+        /// The bounds of the sprite in the universe.
         /// </summary>
         public virtual RectangleF Bounds => new((float)((Location.X) - Size.Width / 2.0), (float)((Location.Y) - Size.Height / 2.0), Size.Width, Size.Height);
 
         /// <summary>
-        /// The RenderLocation is the center of the sprite, so the RenderBounds is the actual sprite rectangle.
+        /// The bounds of the sprite on the display.
         /// </summary>
         public virtual RectangleF RenderBounds => new((float)((RenderLocation.X) - Size.Width / 2.0), (float)((RenderLocation.Y) - Size.Height / 2.0), Size.Width, Size.Height);
 
@@ -130,6 +140,143 @@ namespace Si.GameEngine.Sprites
                 _velocity = value;
                 _velocity.OnThrottleChanged += (sender) => VelocityChanged();
             }
+        }
+
+        public bool IsLockedOn //The object is the subject of a foreign weapons lock.
+        {
+            get => _isLockedOn;
+            set
+            {
+                if (_isLockedOn == false && value == true)
+                {
+                    _gameCore.Audio.LockedOnBlip.Play();
+                }
+                _isLockedOn = value;
+            }
+        }
+
+        /// <summary>
+        /// The x,y, location of the center of the sprite in the universe.
+        /// Do not modify the X,Y of the returned location, it will have no effect.
+        /// </summary>
+        public SiPoint Location
+        {
+            get => _location.Clone(); //Changes made to the location object do not affect the sprite.
+            set => _location = value;
+        }
+
+        /// <summary>
+        /// The x,y, location of the center of the sprite on the screen.
+        /// Do not modify the X,Y of the returned location, it will have no effect.
+        /// </summary>
+        public SiPoint RenderLocation
+        {
+            get
+            {
+                if (IsFixedPosition)
+                {
+                    return _location;
+                }
+                else
+                {
+                    return _location - _gameCore.Display.BackgroundOffset;
+                }
+            }
+        }
+
+        public double X
+        {
+            get => _location.X;
+            set
+            {
+                _location.X = value;
+                LocationChanged();
+            }
+        }
+
+        public double Y
+        {
+            get => _location.Y;
+            set
+            {
+                _location.Y = value;
+                LocationChanged();
+            }
+        }
+
+        private bool _isVisible = true;
+        public bool Visable
+        {
+            get => _isVisible && !_readyForDeletion;
+            set
+            {
+                if (_isVisible != value)
+                {
+                    _isVisible = value;
+                    OnVisibilityChanged?.Invoke(this);
+                    VisibilityChanged();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Events.
+
+        public delegate void HitEvent(SpriteBase sender, SiDamageType damageType, int damageAmount);
+        public event HitEvent OnHit;
+
+        public delegate void QueuedForDeleteEvent(SpriteBase sender);
+        public event QueuedForDeleteEvent OnQueuedForDelete;
+
+        public delegate void VisibilityChangedEvent(SpriteBase sender);
+        public event VisibilityChangedEvent OnVisibilityChanged;
+
+
+        public delegate void ExplodeEvent(SpriteBase sender);
+        public event ExplodeEvent OnExplode;
+
+        #endregion
+
+        public SpriteBase(EngineCore gameCore, string name = "")
+        {
+            _gameCore = gameCore;
+
+            IsDrone = GetType().Name.EndsWith("Drone");
+
+            SpriteTag = name;
+            Velocity = new SiVelocity();
+            Highlight = _gameCore.Settings.HighlightAllSprites;
+        }
+
+        public virtual void Initialize(string imagePath = null, Size? size = null)
+        {
+            if (imagePath != null)
+            {
+                if (size == null)
+                {
+                    SetImage(imagePath);
+                }
+                else
+                {
+                    SetImage(imagePath, (Size)size);
+                }
+            }
+
+            VisibilityChanged();
+        }
+
+        public void QueueForDelete()
+        {
+            if (IsDeadOrExploded == false)
+            {
+                //This sprite is being deleted but has not been killed. It is likely that this sprite still exists on remote clients.
+                _gameCore.Multiplay.RecordDroneActionDelete(_multiplayUID);
+            }
+
+            _readyForDeletion = true;
+            Visable = false;
+            OnQueuedForDelete?.Invoke(this);
         }
 
         public string GetInspectionText()
@@ -211,143 +358,6 @@ namespace Si.GameEngine.Sprites
         {
             ShieldHealth += pointsToAdd;
             ShieldHealth = ShieldHealth.Box(1, _gameCore.Settings.MaxShieldPoints);
-        }
-
-        public bool IsLockedOn //The object is the subject of a foreign weapons lock.
-        {
-            get => _isLockedOn;
-            set
-            {
-                if (_isLockedOn == false && value == true)
-                {
-                    _gameCore.Audio.LockedOnBlip.Play();
-                }
-                _isLockedOn = value;
-            }
-        }
-
-        public void QueueForDelete()
-        {
-            if (IsDeadOrExploded == false)
-            {
-                //This sprite is being deleted but has not been killed. It is likely that this sprite still exists on remote clients.
-                _gameCore.Multiplay.RecordDroneActionDelete(_multiplayUID);
-            }
-
-            _readyForDeletion = true;
-            Visable = false;
-            OnQueuedForDelete?.Invoke(this);
-        }
-
-        /// <summary>
-        /// The location of the sprite on the local client. This is typically changed as the background scrolls.
-        /// Returns the location as a 2d point. Do not modify the X,Y of the returned location, it will have no effect.
-        /// </summary>
-        public SiPoint Location
-        {
-            get => _localLocation.Clone(); //Changes made to the location object do not affect the sprite.
-            set => _localLocation = value;
-        }
-
-        /// <summary>
-        /// This is the combined location + the background offset. This will give the sprites location in the whole universe.
-        /// This location is matched by remote multiplayer sprites.
-        /// </summary>
-        public SiPoint RenderLocation
-        {
-            get
-            {
-                if (IsFixedPosition)
-                {
-                    return Location;
-                }
-                else
-                {
-                    return Location - _gameCore.Display.BackgroundOffset;
-                }
-            }
-        }
-
-        public double X
-        {
-            get => _localLocation.X;
-            set
-            {
-                _localLocation.X = value;
-                LocationChanged();
-            }
-        }
-
-        public double Y
-        {
-            get => _localLocation.Y;
-            set
-            {
-                _localLocation.Y = value;
-                LocationChanged();
-            }
-        }
-
-        private bool _isVisible = true;
-        public bool Visable
-        {
-            get => _isVisible && !_readyForDeletion;
-            set
-            {
-                if (_isVisible != value)
-                {
-                    _isVisible = value;
-                    OnVisibilityChanged?.Invoke(this);
-                    VisibilityChanged();
-                }
-            }
-        }
-
-        #endregion
-
-        #region Events.
-
-        public delegate void HitEvent(SpriteBase sender, SiDamageType damageType, int damageAmount);
-        public event HitEvent OnHit;
-
-        public delegate void QueuedForDeleteEvent(SpriteBase sender);
-        public event QueuedForDeleteEvent OnQueuedForDelete;
-
-        public delegate void VisibilityChangedEvent(SpriteBase sender);
-        public event VisibilityChangedEvent OnVisibilityChanged;
-
-
-        public delegate void ExplodeEvent(SpriteBase sender);
-        public event ExplodeEvent OnExplode;
-
-        #endregion
-
-        public SpriteBase(EngineCore gameCore, string name = "")
-        {
-            _gameCore = gameCore;
-
-            IsDrone = GetType().Name.EndsWith("Drone");
-
-            SpriteTag = name;
-            Velocity = new SiVelocity();
-            Highlight = _gameCore.Settings.HighlightAllSprites;
-        }
-
-        public virtual void Initialize(string imagePath = null, Size? size = null)
-        {
-            if (imagePath != null)
-            {
-                if (size == null)
-                {
-                    SetImage(imagePath);
-                }
-                else
-                {
-                    SetImage(imagePath, (Size)size);
-                }
-            }
-
-            VisibilityChanged();
         }
 
         public void ReviveDeadOrExploded()

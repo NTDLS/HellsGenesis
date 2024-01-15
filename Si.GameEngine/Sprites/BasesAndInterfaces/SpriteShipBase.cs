@@ -154,21 +154,23 @@ namespace Si.GameEngine.Sprites
         {
             if (RadarPositionIndicator != null)
             {
-                if (_gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(Bounds, -50) == false)
+                if (_gameCore.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds, -50) == false)
                 {
                     RadarPositionText.DistanceValue = Math.Abs(DistanceTo(_gameCore.Player.Sprite));
 
                     RadarPositionText.Visable = true;
+                    RadarPositionText.IsFixedPosition = true;
                     RadarPositionIndicator.Visable = true;
+                    RadarPositionIndicator.IsFixedPosition = true;
 
                     double requiredAngle = _gameCore.Player.Sprite.AngleTo360(this);
 
-                    var offset = SiMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle), new SiPoint(200, 200));
+                    var angleOffset = SiMath.PointFromAngleAtDistance360(new SiAngle(requiredAngle), new SiPoint(200, 200));
 
-                    RadarPositionText.Location = _gameCore.Player.Sprite.Location + offset + new SiPoint(25, 25);
+                    RadarPositionIndicator.Location = _gameCore.Display.CenterScreen + angleOffset;
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
 
-                    RadarPositionIndicator.Location = _gameCore.Player.Sprite.Location + offset;
+                    RadarPositionText.Location = _gameCore.Display.CenterScreen + (angleOffset - new SiPoint(30, 30));
                     RadarPositionIndicator.Velocity.Angle.Degrees = requiredAngle;
                 }
                 else

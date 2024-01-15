@@ -15,6 +15,7 @@ using Si.Shared.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Si.Shared.SiConstants;
 
 namespace Si.GameEngine.Managers
 {
@@ -280,11 +281,13 @@ namespace Si.GameEngine.Managers
 
         public void RenderPostScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            //Render to display:
-            foreach (var sprite in OfType<SpriteTextBlock>().Where(o => o.Visable == true && o.IsFixedPosition == true))
+            _collection.Use(o => //Render PostScale sprites.
             {
-                sprite.Render(renderTarget);
-            }
+                foreach (var sprite in o.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PostScale))
+                {
+                    sprite.Render(renderTarget);
+                }
+            });
 
             if (RenderRadar)
             {
@@ -356,20 +359,10 @@ namespace Si.GameEngine.Managers
         /// <returns></returns>
         public void RenderPreScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            _collection.Use(o =>
+            _collection.Use(o => //Render PreScale sprites.
             {
-                //Render to display:
-                foreach (var sprite in o.Where(o => o.Visable == true))
+                foreach (var sprite in o.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PreScale))
                 {
-                    if (sprite is SpriteTextBlock spriteTextBlock)
-                    {
-                        if (spriteTextBlock.IsFixedPosition == true)
-                        {
-                            continue; //We want to add these later so they are not scaled.
-                        }
-                    }
-
-                    //TODO: Fix IsWithinCurrentScaledScreenBounds
                     if (sprite.IsWithinCurrentScaledScreenBounds)
                     {
                         sprite.Render(renderTarget);

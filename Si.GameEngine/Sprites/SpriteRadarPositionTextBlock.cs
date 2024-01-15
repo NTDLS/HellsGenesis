@@ -11,6 +11,7 @@ namespace Si.GameEngine.Sprites
         public SpriteRadarPositionTextBlock(EngineCore gameCore, TextFormat format, SolidColorBrush color, SiPoint location)
             : base(gameCore, format, color, location, false)
         {
+            RenderScaleOrder = Shared.SiConstants.SiRenderScaleOrder.PreScale;
             Visable = false;
             Velocity = new SiVelocity();
         }

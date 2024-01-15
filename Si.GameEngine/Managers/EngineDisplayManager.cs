@@ -61,6 +61,8 @@ namespace Si.GameEngine.Managers
         /// </summary>
         public Size TotalCanvasSize { get; private set; }
 
+        public SiReadonlyPoint CenterScreen;
+
         /// <summary>
         /// The size of the screen with no scaling.
         /// </summary>
@@ -165,8 +167,8 @@ namespace Si.GameEngine.Managers
             if (totalSizeY % 2 != 0) totalSizeY++;
 
             TotalCanvasSize = new Size(totalSizeX, totalSizeY);
-
             OverdrawSize = new Size(totalSizeX - NatrualScreenSize.Width, totalSizeY - NatrualScreenSize.Height);
+            CenterScreen = new SiReadonlyPoint(TotalCanvasSize.Width / 2.0f, TotalCanvasSize.Height / 2.0f);
         }
 
         public SiQuadrant GetQuadrant(double x, double y)

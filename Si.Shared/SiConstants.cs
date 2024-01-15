@@ -6,6 +6,18 @@
         public const string MultiplayServerAddress = "127.0.0.1";
         public const int MultiplayServerTCPPort = 6785;
 
+        public enum SiRenderScaleOrder
+        {
+            /// <summary>
+            /// Render this sprite before scaling the screen based on speed (the sprite will be scaled).
+            /// </summary>
+            PreScale,
+            /// <summary>
+            /// Render this sprite after scaling the screen based on speed (the sprite will not be scaled).
+            /// </summary>
+            PostScale
+        }
+
         public enum SiPlayMode
         {
             SinglePlayer,
