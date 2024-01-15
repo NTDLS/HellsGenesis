@@ -22,9 +22,7 @@ namespace Si.GameEngine.Sprites
     /// </summary>
     public class SpriteBase
     {
-        protected EngineCore _gameCore;
-
-        #region Multiplay.
+        #region Multiplayer properties.
 
         public SiControlledBy ControlledBy { get; set; }
 
@@ -69,6 +67,10 @@ namespace Si.GameEngine.Sprites
 
         #endregion
 
+        #region Backend variables.
+
+        protected EngineCore _gameCore;
+
         private SharpDX.Direct2D1.Bitmap _image;
 
         protected SharpDX.Direct2D1.Bitmap _lockedOnImage;
@@ -86,6 +88,8 @@ namespace Si.GameEngine.Sprites
         private bool _readyForDeletion;
         private SiPoint _location = new();
         private Size _size;
+
+        #endregion
 
         #region Properties.
 
@@ -184,6 +188,9 @@ namespace Si.GameEngine.Sprites
             }
         }
 
+        /// <summary>
+        /// The X location of the center of the sprite in the universe.
+        /// </summary>
         public double X
         {
             get => _location.X;
@@ -194,6 +201,9 @@ namespace Si.GameEngine.Sprites
             }
         }
 
+        /// <summary>
+        /// The Y location of the center of the sprite in the universe.
+        /// </summary>
         public double Y
         {
             get => _location.Y;
