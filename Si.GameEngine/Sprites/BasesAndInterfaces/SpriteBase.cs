@@ -118,7 +118,7 @@ namespace Si.GameEngine.Sprites
 
         /// <summary>
         /// The location is the center of the sprite, so the VisibleBounds is the actual sprite rectangle.
-        /// /// TODO: Given that this is the case, WTF is [Bounds]? It seems to be a rectangle that starts
+        /// TODO: Given that this is the case, WTF is [Bounds]? It seems to be a rectangle that starts
         ///     in the center of the sprite and extends past he lower right corner by the size of the sprite.
         /// </summary>
         public RectangleF VisibleBounds => new((float)((Location.X) - Size.Width / 2.0), (float)((Location.Y) - Size.Height / 2.0), Size.Width, Size.Height);
