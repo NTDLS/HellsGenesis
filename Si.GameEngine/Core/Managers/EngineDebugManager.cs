@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Policy;
 using System.Text;
 
 namespace Si.GameEngine.Core.Managers
@@ -28,9 +29,9 @@ namespace Si.GameEngine.Core.Managers
             "Display-Framerate-Get||Gets the currently configured target framerate.",
             "Display-Adapters||List available video adapters.",
 
-            "Display-BackgroundOffset-Get||Gets the current background offset.",
-            "Display-BackgroundOffset-Set|x:Required:Numeric,y:Required:Numeric|Sets the current background offset.",
-            "Display-BackgroundOffset-CenterOn|spriteUID:Required:Numeric|Centers the background offset on a given sprite.",
+            "Display-RenderWindowPosition-Get||Gets the current background offset.",
+            "Display-RenderWindowPosition-Set|x:Required:Numeric,y:Required:Numeric|Sets the current background offset.",
+            "Display-RenderWindowPosition-CenterOn|spriteUID:Required:Numeric|Centers the background offset on a given sprite.",
 
             "Engine-HighlightAll|state:Required:Boolean|Highlights all visible sprites.",
             "Engine-Pause|state:Required:Boolean|Pauses and unpauses the engine.",
@@ -42,6 +43,12 @@ namespace Si.GameEngine.Core.Managers
 
             "Sprite-Enemies-DeleteAll||Deletes all enemy sprites.",
             "Sprite-Enemies-ExplodeAll||Explodes all enemy sprites.",
+
+            "Sprite-Player-Reflect-List||Displays all available properties of the player sprite.",
+            "Sprite-Player-Reflect-Set|property:Required:String,value:Optional:String|Sets the given property for the player sprite.",
+
+            "Sprite-Sprite-Reflect-List|uid:Required:Numeric|Displays all available properties of the given sprite.",
+            "Sprite-Sprite-Reflect-Set|uid:Required:Numeric,property:Required:String,value:Optional:String|Sets the given property for the given sprite.",
 
             "Sprite-Player-Explode||Explodes the player sprite",
             "Sprite-Player-Inspect||Returns various metrics about the player sprite",
@@ -59,8 +66,7 @@ namespace Si.GameEngine.Core.Managers
             "Sprite-List|typeFilter:Optional:Criterion|Lists all sprites given an optional filter. Filter is a LIKE using !% and _.",
             "Sprite-MaxBoost|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured max boost speed.",
             "Sprite-MaxSpeed|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured native boost speed.",
-            "Sprite-MoveLocal|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric|Sets a new local position for a given sprite.",
-            "Sprite-MoveMultiplay|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric|Sets a new multiplay position for a given sprite.",
+            "Sprite-Move|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric|Sets a new local position for a given sprite.",
             "Sprite-Move-Center|uid:Required:Numeric|Moves a given sprite to the center of the screen.",
             "Sprite-Throttle|uid:Required:Numeric,value:Required:Numeric|Gets the current throttle percentage for a sprite.",
             "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean|Displays whether a given sprite is visible or not.",
@@ -140,36 +146,18 @@ namespace Si.GameEngine.Core.Managers
 
         #region Physical debug command handlers.
 
-        public void CommandHandler_Display_BackgroundOffset_Get(DebugCommand command)
+        public void CommandHandler_Display_RenderWindowPosition_Get(DebugCommand command)
         {
             _debugForm.WriteLine($"{_gameEngine.Display.RenderWindowPosition}", System.Drawing.Color.Black);
         }
 
-        public void CommandHandler_Display_BackgroundOffset_Set(DebugCommand command)
+        public void CommandHandler_Display_RenderWindowPosition_Set(DebugCommand command)
         {
-            var x = command.ParameterValue<double>("x");
-            var y = command.ParameterValue<double>("y");
-
-            var deltaX = _gameEngine.Display.RenderWindowPosition.X - x;
-            var deltaY = _gameEngine.Display.RenderWindowPosition.Y - y;
-
-            _gameEngine.Sprites.Use(o =>
-            {
-                foreach (var sprite in o)
-                {
-                    if (sprite.IsFixedPosition == false)
-                    {
-                        sprite.X += deltaX;
-                        sprite.Y += deltaY;
-                    }
-                }
-            });
-
-            _gameEngine.Display.RenderWindowPosition.X = x;
-            _gameEngine.Display.RenderWindowPosition.Y = y;
+            _gameEngine.Display.RenderWindowPosition.X = command.ParameterValue<double>("x");
+            _gameEngine.Display.RenderWindowPosition.Y = command.ParameterValue<double>("y");
         }
 
-        public void CommandHandler_Display_BackgroundOffset_CenterOn(DebugCommand command)
+        public void CommandHandler_Display_RenderWindowPosition_CenterOn(DebugCommand command)
         {
             _gameEngine.Sprites.Use(o =>
             {
@@ -177,18 +165,6 @@ namespace Si.GameEngine.Core.Managers
                 var baseSprite = o.Where(o => o.UID == spriteUID).FirstOrDefault();
                 if (baseSprite != null)
                 {
-                    var deltaX = _gameEngine.Display.TotalCanvasSize.Width / 2 - baseSprite.X;
-                    var deltaY = _gameEngine.Display.TotalCanvasSize.Height / 2 - baseSprite.Y;
-
-                    foreach (var sprite in o)
-                    {
-                        if (sprite.IsFixedPosition == false)
-                        {
-                            sprite.X += deltaX;
-                            sprite.Y += deltaY;
-                        }
-                    }
-
                     _gameEngine.Display.RenderWindowPosition.X = baseSprite.X;
                     _gameEngine.Display.RenderWindowPosition.Y = baseSprite.Y;
                 }
@@ -367,6 +343,86 @@ namespace Si.GameEngine.Core.Managers
             _gameEngine.Sprites.Add(sprite);
 
             _debugForm.WriteLine($"CreatedUID: {sprite.UID}, MultiplayUID: {sprite.MultiplayUID}", System.Drawing.Color.Black);
+        }
+
+        public void CommandHandler_Sprite_Player_Reflect_List(DebugCommand command)
+        {
+            var reflectionType = _gameEngine.Player.Sprite.GetType();
+            var properties = reflectionType.GetProperties().OrderBy(o => o.Name).ToList();
+
+            foreach (PropertyInfo property in properties)
+            {
+                _debugForm.WriteLine("    >[" + property.Name + "] : [" + property.PropertyType + "] = '" + property.GetValue(_gameEngine.Player.Sprite)?.ToString() + "'", System.Drawing.Color.Black);
+            }
+        }
+
+        public void CommandHandler_Sprite_Player_Reflect_Set(DebugCommand command)
+        {
+            var propertyName = command.ParameterValue<string>("property");
+            var propertyValue = command.ParameterValue<string>("value", string.Empty);
+
+            var reflectionType = _gameEngine.Player.Sprite.GetType();
+            var property = reflectionType.GetProperty(propertyName);
+
+            if (property != null)
+            {
+                var convertedValue = Convert.ChangeType(propertyValue, property.PropertyType);
+                property.SetValue(_gameEngine.Player.Sprite, convertedValue);
+
+                _debugForm.WriteLine("    New value: " + property.GetValue(_gameEngine.Player.Sprite), System.Drawing.Color.Black);
+            }
+            else
+            {
+                _debugForm.WriteLine("    Property not found: " + propertyName, System.Drawing.Color.Black);
+            }
+        }
+
+        public void CommandHandler_Sprite_Reflect_List(DebugCommand command)
+        {
+            _gameEngine.Sprites.Use(o =>
+            {
+                var uid = command.ParameterValue<uint>("uid");
+                var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
+                if (sprite != null)
+                {
+                    var reflectionType = sprite.GetType();
+                    var properties = reflectionType.GetProperties().OrderBy(o => o.Name).ToList();
+
+                    foreach (PropertyInfo property in properties)
+                    {
+                        _debugForm.WriteLine("    >[" + property.Name + "] : [" + property.PropertyType + "] = '" + property.GetValue(sprite)?.ToString() + "'", System.Drawing.Color.Black);
+                    }
+                }
+            });
+        }
+
+        public void CommandHandler_Sprite_Reflect_Set(DebugCommand command)
+        {
+            var propertyName = command.ParameterValue<string>("property");
+            var propertyValue = command.ParameterValue<string>("value", string.Empty);
+
+            _gameEngine.Sprites.Use(o =>
+            {
+                var uid = command.ParameterValue<uint>("uid");
+                var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
+                if (sprite != null)
+                {
+                    var reflectionType = sprite.GetType();
+                    var property = reflectionType.GetProperty(propertyName);
+
+                    if (property != null)
+                    {
+                        var convertedValue = Convert.ChangeType(propertyValue, property.PropertyType);
+                        property.SetValue(sprite, convertedValue);
+
+                        _debugForm.WriteLine("    New value: " + property.GetValue(sprite), System.Drawing.Color.Black);
+                    }
+                    else
+                    {
+                        _debugForm.WriteLine("    Property not found: " + propertyName, System.Drawing.Color.Black);
+                    }
+                }
+            });
         }
 
         public void CommandHandler_Sprite_Player_Inspect(DebugCommand command)
@@ -591,22 +647,7 @@ namespace Si.GameEngine.Core.Managers
             });
         }
 
-        public void CommandHandler_Sprite_MoveLocal(DebugCommand command)
-        {
-            var uid = command.ParameterValue<uint>("uid");
-
-            _gameEngine.Sprites.Use(o =>
-            {
-                var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
-                if (sprite != null)
-                {
-                    sprite.X = command.ParameterValue<double>("x");
-                    sprite.Y = command.ParameterValue<double>("y");
-                }
-            });
-        }
-
-        public void CommandHandler_Sprite_MoveMultiplay(DebugCommand command)
+        public void CommandHandler_Sprite_Move(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
