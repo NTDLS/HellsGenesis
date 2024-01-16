@@ -2,8 +2,8 @@
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
-using Si.Shared;
-using Si.Shared.Types.Geometry;
+using Si.Library;
+using Si.Library.Types.Geometry;
 
 namespace Si.GameEngine.Core.TickControllers
 {

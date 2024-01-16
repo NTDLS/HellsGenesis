@@ -1,5 +1,5 @@
 ﻿using Si.GameEngine.Sprites._Superclass;
-using Si.Shared.Types.Geometry;
+using Si.Library.Types.Geometry;
 using System;
 
 namespace Si.GameEngine.Utility

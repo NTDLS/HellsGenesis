@@ -3,12 +3,12 @@ using Si.GameEngine.Core;
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
 using Si.GameEngine.Sprites.Weapons;
-using Si.Shared;
-using Si.Shared.Types.Geometry;
+using Si.Library;
+using Si.Library.Types.Geometry;
 using System;
 using System.Drawing;
 using System.Linq;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies.Peons
 {

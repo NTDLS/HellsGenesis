@@ -1,4 +1,4 @@
-﻿using Si.Shared.Types.Geometry;
+﻿using Si.Library.Types.Geometry;
 
 namespace Si.GameEngine.Core.TickControllers._Superclass
 {

@@ -1,8 +1,8 @@
 ﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
-using Si.Shared;
-using Si.Shared.Types.Geometry;
+using Si.Library;
+using Si.Library.Types.Geometry;
 using System;
 using System.Linq;
 

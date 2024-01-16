@@ -1,8 +1,8 @@
 ﻿using Si.GameEngine.Core.Debug;
 using Si.GameEngine.Core.Debug._Superclass;
 using Si.GameEngine.Sprites._Superclass;
-using Si.Shared;
-using Si.Shared.ExtensionMethods;
+using Si.Library;
+using Si.Library.ExtensionMethods;
 using System;
 using System.Collections.Generic;
 using System.Linq;

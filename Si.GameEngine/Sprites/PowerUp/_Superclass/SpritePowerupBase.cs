@@ -1,7 +1,7 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
-using Si.Shared;
-using Si.Shared.Types.Geometry;
+using Si.Library;
+using Si.Library.Types.Geometry;
 using System;
 using System.Drawing;
 using System.Linq;

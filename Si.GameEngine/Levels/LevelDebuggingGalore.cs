@@ -3,7 +3,7 @@ using Si.GameEngine.Core.Types;
 using Si.GameEngine.Levels._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Enemies.Peons;
-using Si.Shared;
+using Si.Library;
 
 namespace Si.GameEngine.Levels
 {

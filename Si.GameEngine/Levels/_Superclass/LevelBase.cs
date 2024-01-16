@@ -3,7 +3,7 @@ using Si.GameEngine.Core.Types;
 using System;
 using System.Collections.Generic;
 using static Si.GameEngine.Core.Types.SiEngineCallbackEvent;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Levels._Superclass
 {

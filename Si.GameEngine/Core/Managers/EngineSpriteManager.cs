@@ -9,13 +9,13 @@ using Si.GameEngine.Sprites.Player;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Powerup._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
-using Si.Shared;
-using Si.Shared.Payload;
-using Si.Shared.Types.Geometry;
+using Si.Library;
+using Si.Library.Payload;
+using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Core.Managers
 {

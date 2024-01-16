@@ -3,8 +3,8 @@ using Si.GameEngine.Menus;
 using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Situations._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
-using Si.Shared;
-using Si.Shared.Types.Geometry;
+using Si.Library;
+using Si.Library.Types.Geometry;
 using System.Linq;
 
 namespace Si.Menus.SinglePlayer

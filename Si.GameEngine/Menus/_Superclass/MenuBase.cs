@@ -1,13 +1,13 @@
 ﻿using SharpDX.DirectInput;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites.MenuItems;
-using Si.Shared.Types.Geometry;
+using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Menus._Superclass
 {

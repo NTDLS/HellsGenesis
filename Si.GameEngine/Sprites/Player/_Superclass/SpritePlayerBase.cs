@@ -7,14 +7,14 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.GameEngine.Utility;
-using Si.Shared;
-using Si.Shared.Payload.SpriteActions;
-using Si.Shared.Types.Geometry;
+using Si.Library;
+using Si.Library.Payload.SpriteActions;
+using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Player._Superclass
 {

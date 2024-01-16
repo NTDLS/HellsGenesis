@@ -1,4 +1,4 @@
-﻿using static Si.Shared.SiConstants;
+﻿using static Si.Library.SiConstants;
 
 namespace Si.MultiplayClient
 {

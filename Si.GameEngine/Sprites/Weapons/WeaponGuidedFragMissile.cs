@@ -4,7 +4,7 @@ using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.GameEngine.Utility;
-using Si.Shared.Types.Geometry;
+using Si.Library.Types.Geometry;
 
 namespace Si.GameEngine.Sprites.Weapons
 {

@@ -4,7 +4,7 @@ using Si.GameEngine.Levels._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Enemies.Peons;
 using Si.GameEngine.Utility;
-using Si.Shared.Types.Geometry;
+using Si.Library.Types.Geometry;
 using System.Linq;
 
 namespace Si.GameEngine.Levels

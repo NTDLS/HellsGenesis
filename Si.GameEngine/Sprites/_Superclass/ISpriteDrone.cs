@@ -1,5 +1,5 @@
-﻿using Si.Shared.Payload.SpriteActions;
-using Si.Shared.Types.Geometry;
+﻿using Si.Library.Payload.SpriteActions;
+using Si.Library.Types.Geometry;
 
 namespace Si.GameEngine.Sprites._Superclass
 {

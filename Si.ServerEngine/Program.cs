@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
+using Si.Library;
 using Si.ServerEngine.Core;
-using Si.Shared;
 using Topshelf;
 
 namespace Si.ServerEngine

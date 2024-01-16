@@ -4,7 +4,7 @@ using Si.GameEngine.Utility;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Core.Managers
 {

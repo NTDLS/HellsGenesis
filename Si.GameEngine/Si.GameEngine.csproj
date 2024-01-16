@@ -59,8 +59,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Si.Library\Si.Library.csproj" />
     <ProjectReference Include="..\Si.MultiplayClient\Si.MultiplayClient.csproj" />
-    <ProjectReference Include="..\Si.Shared\Si.Shared.csproj" />
   </ItemGroup>
 
 </Project>

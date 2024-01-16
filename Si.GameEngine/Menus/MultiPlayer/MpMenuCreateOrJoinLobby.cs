@@ -2,10 +2,10 @@
 using Si.GameEngine.Menus;
 using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
+using Si.Library.Types.Geometry;
 using Si.Menus.MultiPlayer.Client;
 using Si.Menus.MultiPlayer.Host;
-using Si.Shared.Types.Geometry;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.Menus.MultiPlayer
 {

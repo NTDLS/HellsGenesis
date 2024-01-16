@@ -3,10 +3,10 @@ using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Bosses._Superclass;
 using Si.GameEngine.Sprites.Weapons;
 using Si.GameEngine.Utility;
-using Si.Shared;
-using Si.Shared.ExtensionMethods;
-using Si.Shared.Types.Geometry;
-using static Si.Shared.SiConstants;
+using Si.Library;
+using Si.Library.ExtensionMethods;
+using Si.Library.Types.Geometry;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies.Bosses
 {

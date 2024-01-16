@@ -218,7 +218,7 @@ namespace Si.GameEngine.Core.Managers
         public SharpDX.Direct2D1.Bitmap GetBitmap(string assetRelativePath, int newWidth, int newHeight)
         {
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
-            string key = $"Bitmap({assetRelativePath})";
+            string key = $"Bitmap({assetRelativePath}-{newWidth}x{newHeight})";
 
             return _collection.Use(o =>
             {

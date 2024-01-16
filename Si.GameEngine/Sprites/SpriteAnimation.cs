@@ -3,11 +3,11 @@ using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
-using Si.Shared.Types;
-using Si.Shared.Types.Geometry;
+using Si.Library.Types;
+using Si.Library.Types.Geometry;
 using System;
 using System.Drawing;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites
 {

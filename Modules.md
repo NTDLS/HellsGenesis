@@ -22,5 +22,5 @@ Uses the Si.Multiplay module to allow for hosting lobbies for human players inde
 ## Si.IndependentLobbyHostWithAI
 Uses the Si.Multiplay and Si.GameEngine modules to allow for hosting lobbies a situation server which includes human and AI players.
 
-## Si.Shared
+## Si.Library
 Contains various shared objects that are used between all the other modules.

@@ -1,6 +1,6 @@
 ﻿using NTDLS.Semaphore;
-using Si.Shared;
-using Si.Shared.Payload;
+using Si.Library;
+using Si.Library.Payload;
 using System.Timers;
 
 namespace Si.ServerEngine.Core.Objects

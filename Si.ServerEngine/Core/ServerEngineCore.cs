@@ -2,12 +2,12 @@
 using NTDLS.StreamFraming.Payloads;
 using NTDLS.UDPPacketFraming;
 using NTDLS.UDPPacketFraming.Payloads;
+using Si.Library;
+using Si.Library.Messages.Notify;
+using Si.Library.Messages.Query;
+using Si.Library.Payload;
 using Si.ServerEngine.Core.Managers;
 using Si.ServerEngine.Core.Objects;
-using Si.Shared;
-using Si.Shared.Messages.Notify;
-using Si.Shared.Messages.Query;
-using Si.Shared.Payload;
 using System.Net;
 using System.Net.Sockets;
 

@@ -1,4 +1,5 @@
 ﻿
+using Si.Library.Payload;
 using Si.MultiplayClient;
 
 namespace Si.IndependentLobbyHost
@@ -34,15 +35,15 @@ namespace Si.IndependentLobbyHost
             Console.WriteLine("Success!");
 
             Console.WriteLine($"Creating lobby...");
-            multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration("Boaring Hoast", 1, 10, 30) { IsHeadless = true });
+            multiplay.CreateLobby(new SiLobbyConfiguration("Boaring Hoast", 1, 10, 30) { IsHeadless = true });
             Console.WriteLine("Success!");
 
             Console.WriteLine($"Creating lobby...");
-            multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration("Werbenjägermanjensen", 2, 10, 30) { IsHeadless = true });
+            multiplay.CreateLobby(new SiLobbyConfiguration("Werbenjägermanjensen", 2, 10, 30) { IsHeadless = true });
             Console.WriteLine("Success!");
 
             Console.WriteLine($"Creating lobby...");
-            multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration("Deep Space -11", 5, 10, 30) { IsHeadless = true });
+            multiplay.CreateLobby(new SiLobbyConfiguration("Deep Space -11", 5, 10, 30) { IsHeadless = true });
             Console.WriteLine("Success!");
         }
     }

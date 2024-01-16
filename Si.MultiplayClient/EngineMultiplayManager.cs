@@ -2,13 +2,13 @@
 using NTDLS.StreamFraming.Payloads;
 using NTDLS.UDPPacketFraming;
 using NTDLS.UDPPacketFraming.Payloads;
-using Si.Shared;
-using Si.Shared.Messages.Notify;
-using Si.Shared.Messages.Query;
-using Si.Shared.Payload;
-using Si.Shared.Payload.SpriteActions;
+using Si.Library;
+using Si.Library.Messages.Notify;
+using Si.Library.Messages.Query;
+using Si.Library.Payload;
+using Si.Library.Payload.SpriteActions;
 using System.Reflection;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.MultiplayClient
 {

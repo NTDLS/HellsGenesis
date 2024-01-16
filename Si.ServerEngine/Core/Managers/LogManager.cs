@@ -1,7 +1,7 @@
-﻿using Si.ServerEngine.Core.Objects;
-using Si.Shared.Exceptions;
+﻿using Si.Library.Exceptions;
+using Si.ServerEngine.Core.Objects;
 using System.Text;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.ServerEngine.Core.Managers
 {

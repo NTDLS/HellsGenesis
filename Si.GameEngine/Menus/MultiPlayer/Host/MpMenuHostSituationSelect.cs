@@ -2,9 +2,9 @@
 using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Situations._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
+using Si.Library;
+using Si.Library.Types.Geometry;
 using Si.Menus.SinglePlayer;
-using Si.Shared;
-using Si.Shared.Types.Geometry;
 using System.Linq;
 
 namespace Si.Menus.MultiPlayer.Host

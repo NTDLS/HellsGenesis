@@ -1,10 +1,10 @@
 ﻿using Si.GameEngine.Core.Types;
 using Si.GameEngine.Sprites;
-using Si.Shared.Types.Geometry;
+using Si.Library.Types.Geometry;
 using System;
 using System.Diagnostics;
 using System.Threading;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Core
 {

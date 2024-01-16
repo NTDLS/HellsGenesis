@@ -1,4 +1,5 @@
 ﻿using Si.GameEngine.Core;
+using Si.Library.Payload;
 using Si.MultiplayClient;
 
 
@@ -39,7 +40,7 @@ namespace Si.IndependentLobbyHostWithAI
             Console.WriteLine("Success!");
 
             Console.WriteLine($"Creating lobby: '{lobbyName}'...");
-            multiplay.CreateLobby(new Shared.Payload.SiLobbyConfiguration(lobbyName, minPlayers, maxPlayers, autoStartSeconds));
+            multiplay.CreateLobby(new SiLobbyConfiguration(lobbyName, minPlayers, maxPlayers, autoStartSeconds));
             Console.WriteLine("Success!");
 
             return engine;

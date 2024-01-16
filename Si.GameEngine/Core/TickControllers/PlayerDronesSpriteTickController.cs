@@ -2,7 +2,7 @@
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
-using Si.Shared.Types.Geometry;
+using Si.Library.Types.Geometry;
 using System.Linq;
 
 namespace Si.GameEngine.Core.TickControllers

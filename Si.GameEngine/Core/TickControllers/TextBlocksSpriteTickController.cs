@@ -3,7 +3,7 @@ using SharpDX.DirectWrite;
 using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
-using Si.Shared.Types.Geometry;
+using Si.Library.Types.Geometry;
 using System.Linq;
 
 namespace Si.GameEngine.Core.TickControllers

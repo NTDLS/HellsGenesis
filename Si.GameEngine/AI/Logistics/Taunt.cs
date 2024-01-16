@@ -2,12 +2,12 @@
 using NTDLS.Determinet.Types;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
-using Si.Shared;
-using Si.Shared.ExtensionMethods;
-using Si.Shared.Types.Geometry;
+using Si.Library;
+using Si.Library.ExtensionMethods;
+using Si.Library.Types.Geometry;
 using System;
 using System.Diagnostics;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.AI.Logistics
 {

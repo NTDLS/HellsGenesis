@@ -1,11 +1,11 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
+using Si.Library.Types.Geometry;
 using Si.Menus.SinglePlayer;
-using Si.Shared.Types.Geometry;
 using System;
 using System.Linq;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.Menus.MultiPlayer.Client
 {

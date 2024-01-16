@@ -2,10 +2,10 @@
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.GameEngine.Utility;
-using Si.Shared;
-using Si.Shared.ExtensionMethods;
-using Si.Shared.Types;
-using Si.Shared.Types.Geometry;
+using Si.Library;
+using Si.Library.ExtensionMethods;
+using Si.Library.Types;
+using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

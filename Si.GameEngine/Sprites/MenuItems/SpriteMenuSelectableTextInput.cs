@@ -2,9 +2,9 @@
 using SharpDX.DirectWrite;
 using Si.GameEngine.Core;
 using Si.GameEngine.Menus._Superclass;
-using Si.Shared.Types;
-using Si.Shared.Types.Geometry;
-using static Si.Shared.SiConstants;
+using Si.Library.Types;
+using Si.Library.Types.Geometry;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.MenuItems
 {

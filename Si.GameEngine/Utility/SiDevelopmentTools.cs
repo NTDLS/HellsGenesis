@@ -1,7 +1,7 @@
 ﻿using NAudio.Wave;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
-using Si.Shared;
+using Si.Library;
 using System;
 using System.Drawing;
 using System.IO;

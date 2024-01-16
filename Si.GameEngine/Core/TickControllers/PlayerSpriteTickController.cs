@@ -1,11 +1,11 @@
 ﻿using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
-using Si.Shared;
-using Si.Shared.ExtensionMethods;
-using Si.Shared.Payload.SpriteActions;
-using Si.Shared.Types.Geometry;
+using Si.Library;
+using Si.Library.ExtensionMethods;
+using Si.Library.Payload.SpriteActions;
+using Si.Library.Types.Geometry;
 using System;
-using static Si.Shared.SiConstants;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Core.TickControllers
 {
