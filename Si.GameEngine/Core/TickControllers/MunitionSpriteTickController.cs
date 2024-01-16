@@ -82,8 +82,7 @@ namespace Si.GameEngine.Core.TickControllers
 
                 foreach (var obj in objectsThatCanBeHit)
                 {
-
-                    if (obj.IsMunitionHit(munition, hitTestPosition))
+                    if (obj.TryMunitionHit(munition, hitTestPosition))
                     {
                         return true;
                     }

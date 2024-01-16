@@ -132,11 +132,10 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <summary>
         /// Allows for the testing of hits from a munition. This is called for each movement along a munitions path.
         /// </summary>
-        /// <param name="displacementVector">The background offset vector.</param>
         /// <param name="munition">The munition object that is being tested for.</param>
         /// <param name="hitTestPosition">The position to test for hit.</param>
         /// <returns></returns>
-        public virtual bool TryMunitionHit(SiPoint displacementVector, MunitionBase munition, SiPoint hitTestPosition)
+        public virtual bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
         {
             if (Intersects(hitTestPosition))
             {

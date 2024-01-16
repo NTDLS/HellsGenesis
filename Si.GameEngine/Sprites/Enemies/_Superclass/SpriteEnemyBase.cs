@@ -181,7 +181,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             }
         }
 
-        public override bool TryMunitionHit(SiPoint displacementVector, MunitionBase munition, SiPoint hitTestPosition)
+        public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
         {
             if (munition.FiredFromType == SiFiredFromType.Player)
             {
