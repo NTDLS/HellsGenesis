@@ -1,5 +1,4 @@
 ﻿using Si.GameEngine.Core.Managers;
-using Si.GameEngine.Core.ThreadPooling;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
@@ -11,7 +10,6 @@ using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Library.Types.Geometry;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace Si.GameEngine.Core.TickControllers
 {
@@ -45,14 +43,14 @@ namespace Si.GameEngine.Core.TickControllers
                 {
                     //threadCollection.Enqueue(munition, () =>
                     //{
-                        munition.ApplyMotion(displacementVector); //Move the munition.
+                    munition.ApplyMotion(displacementVector); //Move the munition.
 
-                        if (TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit, displacementVector))
-                        {
-                            munition.Explode();
-                        }
+                    if (TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit, displacementVector))
+                    {
+                        munition.Explode();
+                    }
 
-                        munition.ApplyIntelligence(displacementVector);
+                    munition.ApplyIntelligence(displacementVector);
                     //});
                 }
 

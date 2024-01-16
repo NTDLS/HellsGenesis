@@ -6,12 +6,12 @@ using Si.Library;
 using Si.Library.Messages.Notify;
 using Si.Library.Messages.Query;
 using Si.Library.Payload;
-using Si.ServerEngine.Core.Managers;
-using Si.ServerEngine.Core.Objects;
+using Si.Server.Core.Managers;
+using Si.Server.Core.Objects;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Si.ServerEngine.Core
+namespace Si.Server.Core
 {
     internal class ServerEngineCore
     {

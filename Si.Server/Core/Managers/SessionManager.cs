@@ -1,9 +1,9 @@
 ﻿using NTDLS.Semaphore;
-using Si.ServerEngine.Core.Objects;
+using Si.Server.Core.Objects;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
-namespace Si.ServerEngine.Core.Managers
+namespace Si.Server.Core.Managers
 {
     internal class SessionManager
     {

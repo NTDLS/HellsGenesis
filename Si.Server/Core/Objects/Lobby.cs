@@ -3,7 +3,7 @@ using Si.Library;
 using Si.Library.Payload;
 using System.Timers;
 
-namespace Si.ServerEngine.Core.Objects
+namespace Si.Server.Core.Objects
 {
     internal class Lobby
     {

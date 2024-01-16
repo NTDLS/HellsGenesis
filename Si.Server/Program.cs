@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Configuration;
 using Si.Library;
-using Si.ServerEngine.Core;
+using Si.Server.Core;
 using Topshelf;
 
-namespace Si.ServerEngine
+namespace Si.Server
 {
     public class Program
     {

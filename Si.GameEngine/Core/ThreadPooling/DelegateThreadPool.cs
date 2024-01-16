@@ -47,7 +47,7 @@ namespace Si.GameEngine.Core.ThreadPooling
         public void Stop()
         {
             _keepRunning = false;
-            _threads.ForEach(o=>o.Join());
+            _threads.ForEach(o => o.Join());
         }
 
         private void InternalThreadProc()

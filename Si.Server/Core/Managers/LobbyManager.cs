@@ -1,9 +1,9 @@
 ﻿using NTDLS.Semaphore;
 using Si.Library.Payload;
-using Si.ServerEngine.Core.Objects;
+using Si.Server.Core.Objects;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Si.ServerEngine.Core.Managers
+namespace Si.Server.Core.Managers
 {
     internal class LobbyManager
     {

@@ -1,9 +1,9 @@
 ﻿using Si.Library.Exceptions;
-using Si.ServerEngine.Core.Objects;
+using Si.Server.Core.Objects;
 using System.Text;
 using static Si.Library.SiConstants;
 
-namespace Si.ServerEngine.Core.Managers
+namespace Si.Server.Core.Managers
 {
     /// <summary>
     /// Public core class methods for locking, reading, writing and managing tasks related to logging.
