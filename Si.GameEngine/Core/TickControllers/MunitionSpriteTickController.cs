@@ -1,4 +1,5 @@
 ﻿using Si.GameEngine.Core.Managers;
+using Si.GameEngine.Core.ThreadPooling;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
@@ -10,6 +11,7 @@ using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Library.Types.Geometry;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace Si.GameEngine.Core.TickControllers
 {
@@ -19,6 +21,8 @@ namespace Si.GameEngine.Core.TickControllers
             : base(gameEngine, manager)
         {
         }
+
+        //private DelegateThreadPool _hitTestPool = new(10);
 
         public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
@@ -35,17 +39,24 @@ namespace Si.GameEngine.Core.TickControllers
                 objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpritePlayerBase>());
                 objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
 
+                //var waitTokens = new DelegateThreadPoolQueueTokenCollection();
+
                 foreach (var munition in munitions)
                 {
                     munition.ApplyMotion(displacementVector); //Move the munition.
 
+                    //waitTokens.Add(_hitTestPool.Enqueue(() =>
+                    //{
                     if (TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit, displacementVector))
-                    {
-                        munition.Explode();
-                    }
+                        {
+                            munition.Explode();
+                        }
+                    //}));
 
                     munition.ApplyIntelligence(displacementVector);
                 }
+
+                //waitTokens.WaitAll();
             }
         }
 
@@ -56,13 +67,18 @@ namespace Si.GameEngine.Core.TickControllers
         /// <returns></returns>
         public bool TestObjectCollisionsAlongMunitionPath(MunitionBase munition, List<SpriteShipBase> objectsThatCanBeHit, SiPoint displacementVector)
         {
-            var hitTestPosition = munition.Location; //Grab the new location of the munition.
+            //Reverse the munition to its starting position.
+            var hitTestPosition = new SiPoint
+            {
+                X = munition.Location.X - munition.Velocity.MaxSpeed * munition.Velocity.Angle.X,
+                Y = munition.Location.Y - munition.Velocity.MaxSpeed * munition.Velocity.Angle.Y
+            };
 
-            //Loop backwards and hit-test each position along the munitions path.
+            //Hit-test each position along the munitions path.
             for (int i = 0; i < munition.Velocity.MaxSpeed; i++)
             {
-                hitTestPosition.X -= munition.Velocity.Angle.X;
-                hitTestPosition.Y -= munition.Velocity.Angle.Y;
+                hitTestPosition.X += munition.Velocity.Angle.X;
+                hitTestPosition.Y += munition.Velocity.Angle.Y;
 
                 foreach (var obj in objectsThatCanBeHit)
                 {
