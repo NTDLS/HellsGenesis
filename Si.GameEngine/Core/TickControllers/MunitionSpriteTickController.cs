@@ -22,7 +22,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        //private DelegateThreadPool _hitTestPool = new(10);
+        //private readonly DelegateThreadPool _hitTestPool = new(10);
 
         public override void ExecuteWorldClockTick(SiPoint displacementVector)
         {
@@ -39,24 +39,24 @@ namespace Si.GameEngine.Core.TickControllers
                 objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpritePlayerBase>());
                 objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
 
-                //var waitTokens = new DelegateThreadPoolQueueTokenCollection();
+                //var threadCollection = _hitTestPool.CreateCollection();
 
                 foreach (var munition in munitions)
                 {
-                    munition.ApplyMotion(displacementVector); //Move the munition.
-
-                    //waitTokens.Add(_hitTestPool.Enqueue(() =>
+                    //threadCollection.Enqueue(munition, () =>
                     //{
-                    if (TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit, displacementVector))
+                        munition.ApplyMotion(displacementVector); //Move the munition.
+
+                        if (TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit, displacementVector))
                         {
                             munition.Explode();
                         }
-                    //}));
 
-                    munition.ApplyIntelligence(displacementVector);
+                        munition.ApplyIntelligence(displacementVector);
+                    //});
                 }
 
-                //waitTokens.WaitAll();
+                //threadCollection.WaitAll();
             }
         }
 
@@ -82,7 +82,8 @@ namespace Si.GameEngine.Core.TickControllers
 
                 foreach (var obj in objectsThatCanBeHit)
                 {
-                    if (obj.TryMunitionHit(displacementVector, munition, hitTestPosition))
+
+                    if (obj.IsMunitionHit(munition, hitTestPosition))
                     {
                         return true;
                     }

@@ -8,6 +8,8 @@ namespace Si.GameEngine.Core.ThreadPooling
         public bool IsComplete { get; private set; }
         private readonly AutoResetEvent _queueWaitEvent = new(false);
 
+        public object UserObject { get; set; }
+
         public DelegateThreadPoolQueueToken(DelegateThreadPool.ThreadAction threadAction)
         {
             ThreadAction = threadAction;
@@ -23,7 +25,7 @@ namespace Si.GameEngine.Core.ThreadPooling
         {
             while (IsComplete == false)
             {
-                //_queueWaitEvent.WaitOne(1);
+                _queueWaitEvent.WaitOne(1);
             }
             return true;
         }

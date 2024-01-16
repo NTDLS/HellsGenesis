@@ -12,10 +12,12 @@ namespace Si.GameEngine.Core.ThreadPooling
         private readonly List<Thread> _threads = new();
         private readonly Queue<DelegateThreadPoolQueueToken> _actions = new();
         private readonly AutoResetEvent _queueWaitEvent = new(false);
+        private bool _keepRunning = false;
 
         public DelegateThreadPool(int threadCount)
         {
             ThreadCount = threadCount;
+            _keepRunning = true;
 
             for (int i = 0; i < threadCount; i++)
             {
@@ -23,6 +25,12 @@ namespace Si.GameEngine.Core.ThreadPooling
                 _threads.Add(thread);
                 thread.Start();
             }
+        }
+
+        public DelegateThreadPoolQueueTokenCollection CreateCollection()
+        {
+            var collection = new DelegateThreadPoolQueueTokenCollection(this);
+            return collection;
         }
 
         public DelegateThreadPoolQueueToken Enqueue(ThreadAction threadAction)
@@ -36,11 +44,17 @@ namespace Si.GameEngine.Core.ThreadPooling
             }
         }
 
+        public void Stop()
+        {
+            _keepRunning = false;
+            _threads.ForEach(o=>o.Join());
+        }
+
         private void InternalThreadProc()
         {
             DelegateThreadPoolQueueToken queueToken;
 
-            while (true)
+            while (_keepRunning)
             {
                 bool dequeued;
 
@@ -60,7 +74,7 @@ namespace Si.GameEngine.Core.ThreadPooling
                         queueToken.SetComplete();
                     }
                 }
-                //_queueWaitEvent.WaitOne(1);
+                _queueWaitEvent.WaitOne(1);
             }
         }
     }
