@@ -141,7 +141,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
             try
             {
-                if (string.IsNullOrWhiteSpace(loadoutText))
+                if (string.IsNullOrWhiteSpace(loadoutText) == false)
                 {
                     loadout = JsonConvert.DeserializeObject<EnemyShipLoadout>(loadoutText);
                 }

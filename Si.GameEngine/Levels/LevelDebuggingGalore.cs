@@ -68,9 +68,10 @@ namespace Si.GameEngine.Levels
 
         private void AddEnemies()
         {
-            var sprite = _gameEngine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            sprite.X = 1600; //This needs to go to the multiplay Multiplay.x,y
-            sprite.Y = 600;
+            _gameEngine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _gameEngine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _gameEngine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _gameEngine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
 
             //_gameEngine.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameEngine.Sprites.Enemies.Create<EnemyRepulsor>();
