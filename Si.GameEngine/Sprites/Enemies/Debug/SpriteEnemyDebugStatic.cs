@@ -21,7 +21,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
             ShipClass = SiEnemyClass.Debug;
             SetImage(@$"Graphics\Enemy\Debug\{ShipClass}\Hull.png", new Size(32, 32));
 
-            if (ControlledBy == SiControlledBy.Server)
+            if (IsDrone)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.

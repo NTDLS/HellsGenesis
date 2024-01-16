@@ -19,7 +19,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             ShipClass = SiEnemyClass.Merc;
             SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png", new Size(32, 32));
 
-            if (ControlledBy == SiControlledBy.Server)
+            if (IsDrone)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.
@@ -52,7 +52,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (ControlledBy == SiControlledBy.Server)
+            if (IsDrone)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
                 //  the reaminder of the ctor is for adding weapons and initializing AI, none of which we need.

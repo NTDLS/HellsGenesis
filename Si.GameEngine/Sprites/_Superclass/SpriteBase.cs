@@ -24,8 +24,6 @@ namespace Si.GameEngine.Sprites._Superclass
     {
         #region Multiplayer properties.
 
-        public SiControlledBy ControlledBy { get; set; }
-
         public bool IsDrone { get; set; }
 
         /// <summary>
