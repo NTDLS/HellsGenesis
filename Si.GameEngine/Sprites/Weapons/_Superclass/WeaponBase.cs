@@ -32,6 +32,10 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
         /// The variance expressed in decimal percentage that determines the loaded munitions initial velovity.
         /// </summary>
         public double SpeedVariancePercent { get; set; } = 0;
+        /// <summary>
+        /// The distance from the total canvas that the munition will be allowed to travel before it is deleted.
+        /// </summary>
+        public double MunitionSceneDistanceLimit { get; set; }
         public string Name { get; private set; }
         public int Speed { get; set; } = 25;
         public int RoundQuantity { get; set; }
@@ -51,6 +55,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
             _gameEngine = gameEngine;
             _fireSound = _gameEngine.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
+            MunitionSceneDistanceLimit = _gameEngine.Settings.MunitionSceneDistanceLimit;
         }
 
         public WeaponBase(GameEngineCore gameEngine, SpriteShipBase owner, string name, string soundPath, float soundVolume)
@@ -59,6 +64,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
             _gameEngine = gameEngine;
             _fireSound = _gameEngine.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
+            MunitionSceneDistanceLimit = _gameEngine.Settings.MunitionSceneDistanceLimit;
         }
 
         public virtual MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase lockedTarget = null)

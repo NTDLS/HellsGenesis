@@ -73,7 +73,7 @@ namespace Si.GameEngine.Core.TickControllers
                     star.ApplyMotion(displacementVector);
 
                     //Remove stars that are too far off-screen.
-                    if (GameEngine.Display.TotalCanvasBounds.Grow(1000).IntersectsWith(star.RenderBounds) == false)
+                    if (GameEngine.Display.TotalCanvasBounds.Balloon(1000).IntersectsWith(star.RenderBounds) == false)
                     {
                         star.QueueForDelete();
                     }

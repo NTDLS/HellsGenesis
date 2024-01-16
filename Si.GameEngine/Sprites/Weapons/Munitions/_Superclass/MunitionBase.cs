@@ -4,6 +4,7 @@ using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.Library;
+using Si.Library.ExtensionMethods;
 using Si.Library.Types;
 using Si.Library.Types.Geometry;
 using System;
@@ -21,8 +22,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
         public double MilisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
-
-        SiPoint _createdAtLocation;
+        public double SceneDistanceLimit { get; set; }
 
         public MunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
             : base(gameEngine)
@@ -31,6 +31,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
 
             Weapon = weapon;
             Velocity.ThrottlePercentage = 1.0;
+            SceneDistanceLimit = SiRandom.Between(weapon.MunitionSceneDistanceLimit * 0.1, weapon.MunitionSceneDistanceLimit);
 
             RadarDotSize = new SiPoint(1, 1);
 
@@ -57,7 +58,6 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             };
 
             Location = firedFrom.Location + (xyOffset ?? SiPoint.Zero);
-            _createdAtLocation = Location;
 
             if (firedFrom is SpriteEnemyBase)
             {
@@ -82,8 +82,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
 
         public override void ApplyMotion(SiPoint displacementVector)
         {
-            if (Math.Abs(_createdAtLocation.X - X) > _gameEngine.Settings.MunitionSceneDistanceLimit
-               || Math.Abs(_createdAtLocation.Y - Y) > _gameEngine.Settings.MunitionSceneDistanceLimit)
+            if (!_gameEngine.Display.TotalCanvasBounds.Balloon(SceneDistanceLimit).IntersectsWith(RenderBounds))
             {
                 QueueForDelete();
                 return;

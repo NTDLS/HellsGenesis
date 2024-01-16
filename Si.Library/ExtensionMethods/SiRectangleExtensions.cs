@@ -12,19 +12,46 @@ namespace Si.Library.ExtensionMethods
             return new RectangleF(rectangle.Location, rectangle.Size);
         }
 
-        /// <summary>
-        /// Similar to Inflate but grows the rectangle by all dimensions including the position. Returns a resized clone.
-        /// </summary>
-        /// <param name="rectangle"></param>
-        /// <param name="size"></param>
-        /// <returns></returns>
-        public static RectangleF Grow(this RectangleF rectangle, float size)
+        public static RectangleF Balloon(this RectangleF rectangle, float x, float y)
         {
-            return new RectangleF(
-                rectangle.Location.X - size / 2,
-                rectangle.Location.Y - size / 2,
-                rectangle.Size.Width + size / 2,
-                rectangle.Size.Height + size / 2);
+            var rec = rectangle.Clone();
+            rec.Inflate(x, y);
+            return rec;
+        }
+
+        public static RectangleF Balloon(this RectangleF rectangle, int x, int y)
+        {
+            var rec = rectangle.Clone();
+            rec.Inflate(x, y);
+            return rec;
+        }
+
+        public static RectangleF Balloon(this RectangleF rectangle, double x, double y)
+        {
+            var rec = rectangle.Clone();
+            rec.Inflate((float)x, (float)y);
+            return rec;
+        }
+
+        public static RectangleF Balloon(this RectangleF rectangle, float xy)
+        {
+            var rec = rectangle.Clone();
+            rec.Inflate(xy, xy);
+            return rec;
+        }
+
+        public static RectangleF Balloon(this RectangleF rectangle, int xy)
+        {
+            var rec = rectangle.Clone();
+            rec.Inflate(xy, xy);
+            return rec;
+        }
+
+        public static RectangleF Balloon(this RectangleF rectangle, double xy)
+        {
+            var rec = rectangle.Clone();
+            rec.Inflate((float)xy, (float)xy);
+            return rec;
         }
 
         /// <summary>
