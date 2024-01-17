@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Si.GameEngine.Core
@@ -8,6 +9,7 @@ namespace Si.GameEngine.Core
     /// </summary>
     public class EngineSettings
     {
+        public int MunitionTraversalThreads { get; set; } = Environment.ProcessorCount * 2;
         public bool EnableSpriteInterrogation { get; set; } = false;
         public bool HighlightNatrualBounds { get; set; } = false;
         public bool HighlightAllSprites { get; set; } = false;

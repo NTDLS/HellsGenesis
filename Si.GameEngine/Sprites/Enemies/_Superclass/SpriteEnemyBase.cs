@@ -187,11 +187,6 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             {
                 if (Intersects(hitTestPosition))
                 {
-                    Hit(munition);
-                    if (HullHealth <= 0)
-                    {
-                        Explode();
-                    }
                     return true;
                 }
             }

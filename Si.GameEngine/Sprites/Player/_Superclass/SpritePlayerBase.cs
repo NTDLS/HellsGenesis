@@ -295,16 +295,20 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             }
         }
 
+        public override void MunitionHit(MunitionBase munition)
+        {
+            Hit(munition);
+            if (HullHealth <= 0)
+            {
+                //Explode(); //We don't auto delete the player because the engine always assumes its valid. 
+            }
+        }
+
         public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
         {
             if (munition.FiredFromType == SiFiredFromType.Enemy)
             {
-                if (Intersects(hitTestPosition))
-                {
-                    //We don't auto delete the player because there is only one instance, the engine always assumes its valid.
-                    Hit(munition);
-                    return true;
-                }
+                return Intersects(hitTestPosition);
             }
             return false;
         }

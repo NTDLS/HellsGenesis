@@ -90,7 +90,7 @@ namespace Si.GameEngine.Sprites._Superclass
         #endregion
 
         #region Properties.
-
+        public SharpDX.Direct2D1.Bitmap GetImage() => _image;
         public string SpriteTag { get; set; }
         public uint UID { get; private set; } = GameEngineCore.GetNextSequentialId();
         public uint OwnerUID { get; set; }
@@ -287,6 +287,36 @@ namespace Si.GameEngine.Sprites._Superclass
             OnQueuedForDelete?.Invoke(this);
         }
 
+        /// <summary>
+        /// Allows for the testing of hits from a munition, 
+        /// </summary>
+        /// <param name="munition">The munition object that is being tested for.</param>
+        /// <param name="hitTestPosition">The position to test for hit.</param>
+        /// <returns></returns>
+        public virtual bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
+        {
+            if (Intersects(hitTestPosition))
+            {
+                Hit(munition);
+                if (HullHealth <= 0)
+                {
+                    Explode();
+                }
+                return true;
+            }
+            return false;
+        }
+
+
+        public virtual void MunitionHit(MunitionBase munition)
+        {
+            Hit(munition);
+            if (HullHealth <= 0)
+            {
+                Explode();
+            }
+        }
+
         public string GetInspectionText()
         {
             string extraInfo = string.Empty;
@@ -390,8 +420,6 @@ namespace Si.GameEngine.Sprites._Superclass
             _image = _gameEngine.Assets.GetBitmap(imagePath, size.Width, size.Height);
             _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
-
-        public SharpDX.Direct2D1.Bitmap GetImage() => _image;
 
         #region Intersections.
 

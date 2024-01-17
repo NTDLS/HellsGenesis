@@ -1,6 +1,5 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites.Weapons._Superclass;
-using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.GameEngine.Utility;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -129,25 +128,6 @@ namespace Si.GameEngine.Sprites._Superclass
             _gameEngine.Audio.PlayRandomExplosion();
         }
 
-        /// <summary>
-        /// Allows for the testing of hits from a munition. This is called for each movement along a munitions path.
-        /// </summary>
-        /// <param name="munition">The munition object that is being tested for.</param>
-        /// <param name="hitTestPosition">The position to test for hit.</param>
-        /// <returns></returns>
-        public virtual bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
-        {
-            if (Intersects(hitTestPosition))
-            {
-                Hit(munition);
-                if (HullHealth <= 0)
-                {
-                    Explode();
-                }
-                return true;
-            }
-            return false;
-        }
 
         public void FixRadarPositionIndicator()
         {
