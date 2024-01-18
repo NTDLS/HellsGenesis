@@ -1,10 +1,13 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Sprites._Superclass;
+using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
+using Si.Library.ExtensionMethods;
 using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Si.GameEngine.Sprites.Weapons._Superclass
 {
@@ -77,49 +80,89 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
 
         }
 
-        public virtual bool ApplyWeaponsLock(SpriteBase wouldFireAt)
+        /// <summary>
+        /// Removes all locks that this weapon has acquired.
+        /// </summary>
+        public virtual void ClearWeaponsLocks()
+        {
+            LockedOnObjects.ForEach(o =>
+            {
+                o.IsLockedOnHard = false;
+                o.IsLockedOnSoft = false;
+            });
+
+            LockedOnObjects.Clear();
+        }
+
+        /// <summary>
+        /// Gets soct locks on targets, these will be translated into hard locks later by HardenWeaponsLocks().
+        /// </summary>
+        /// <param name="wouldFireAt"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public virtual void AcquireSoftWeaponsLocks(SpriteBase wouldFireAt)
+        {
+            if (_owner is SpritePlayerBase)
+            {
+            }
+
+            if (_owner == null)
+            {
+                throw new ArgumentNullException("Weapon is not owned.");
+            }
+
+            if (CanLockOn)
+            {
+                if (_owner.IsPointingAt(wouldFireAt, MaxLockOnAngle))
+                {
+                    var distance = _owner.DistanceTo(wouldFireAt);
+                    if (distance.IsBetween(MinLockDistance, MaxLockDistance))
+                    {
+                        LockedOnObjects.Add(wouldFireAt);
+                        wouldFireAt.IsLockedOnSoft = true;
+                    }
+                }
+            }
+        }
+
+        class DistanceLock
+        {
+            public double Distance { get; set; }
+            public SpriteBase Sprite { get; set; }
+        }
+
+        public virtual void HardenWeaponsLocks()
         {
             if (_owner == null)
             {
                 throw new ArgumentNullException("Weapon is not owned.");
             }
 
-            bool lockOn = false;
-            bool softLockOn = false;
+            var distanceLocks = new List<DistanceLock>();
 
-            if (CanLockOn)
+            LockedOnObjects.ForEach(o =>
             {
-                LockedOnObjects.ForEach(o =>
+                distanceLocks.Add(new DistanceLock()
                 {
-                    o.IsLockedOn = false;
-                    o.IsLockedOnSoft = false;
+                    Sprite = o,
+                    Distance = _owner.DistanceTo(o)
                 });
+            });
 
-                LockedOnObjects.Clear();
+            distanceLocks = distanceLocks.OrderBy(o => o.Distance).ToList();
 
-                if (_owner.IsPointingAt(wouldFireAt, MaxLockOnAngle))
-                {
-                    var distance = _owner.DistanceTo(wouldFireAt);
-                    if (distance >= MinLockDistance && distance <= MaxLockDistance)
-                    {
-                        if (LockedOnObjects.Count < MaxLocks)
-                        {
-                            lockOn = true;
-                            LockedOnObjects.Add(wouldFireAt);
-                        }
-                        else
-                        {
-                            softLockOn = true;
-                            wouldFireAt.IsLockedOnSoft = true;
-                        }
-                    }
-                }
+            foreach (var hardLock in distanceLocks.Take((int)MaxLocks))
+            {
+                hardLock.Sprite.IsLockedOnHard = true;
+                hardLock.Sprite.IsLockedOnSoft = false;
             }
 
-            wouldFireAt.IsLockedOn = lockOn;
-            wouldFireAt.IsLockedOnSoft = softLockOn;
-
-            return lockOn || softLockOn;
+            foreach (var softLock in distanceLocks.Skip((int)MaxLocks))
+            {
+                softLock.Sprite.IsLockedOnHard = false;
+                softLock.Sprite.IsLockedOnSoft = true;
+                LockedOnObjects.Remove(softLock.Sprite);
+            }
         }
 
         public virtual bool Fire()

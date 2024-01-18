@@ -68,7 +68,7 @@ namespace Si.GameEngine.Levels
 
         private void AddEnemies()
         {
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 10; i++)
             {
                 _gameEngine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             }

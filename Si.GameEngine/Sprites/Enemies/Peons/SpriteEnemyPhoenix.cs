@@ -58,25 +58,21 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             AddAIController(new Taunt(_gameEngine, this, _gameEngine.Player.Sprite));
             //AddAIController(new Meander(_gameEngine, this, _gameEngine.Player.Sprite));
 
-            //if (SiRandom.FlipCoin())
-            //{
             SetCurrentAIController(AIControllers[typeof(Taunt)]);
-            //}
-            //else
-            //{
-            //    SetDefaultAIController(AIControllers[typeof(Meander)]);
-            //}
 
             _behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
         }
 
         #region Artificial Intelligence.
 
-        private DateTime _lastBehaviorChangeTime = DateTime.Now;
+        private DateTime _lastBehaviorChangeTime = DateTime.UtcNow;
         private double _behaviorChangeThresholdMiliseconds = 0;
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
+            Velocity.ThrottlePercentage = 0;
+
+            return;
             if (IsDrone)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
@@ -90,6 +86,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             if ((DateTime.Now - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMiliseconds)
             {
+                _lastBehaviorChangeTime = DateTime.UtcNow;
                 _behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
 
                 if (SiRandom.PercentChance(1))

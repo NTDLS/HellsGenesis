@@ -69,7 +69,7 @@ namespace Si.Game.Forms
             UpsertVariable("Attachments", $"{(_sprite.Attachments?.Count() ?? 0):n0}");
             UpsertVariable("Highlight", $"{_sprite.IsHighlighted}");
             UpsertVariable("Is Fixed Position", $"{_sprite.IsFixedPosition}");
-            UpsertVariable("Is Locked On", $"{_sprite.IsLockedOn}");
+            UpsertVariable("Is Locked On", $"{_sprite.IsLockedOnHard}");
             UpsertVariable("Is Locked On (Soft)", $"{_sprite.IsLockedOnSoft:n0}");
             UpsertVariable("In Current Scaled Bounds", $"{_sprite.IsWithinCurrentScaledScreenBounds}");
             UpsertVariable("Visible Bounds", $"{_sprite.Bounds}");

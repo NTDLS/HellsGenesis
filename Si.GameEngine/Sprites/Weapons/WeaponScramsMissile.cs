@@ -30,8 +30,8 @@ namespace Si.GameEngine.Sprites.Weapons
             SpeedVariancePercent = 0.10;
 
             CanLockOn = true;
-            MinLockDistance = 100;
-            MaxLockDistance = 600;
+            MinLockDistance = 50;
+            MaxLockDistance = 1500;
             MaxLocks = 8;
             MaxLockOnAngle = 50;
             ExplodesOnImpact = true;

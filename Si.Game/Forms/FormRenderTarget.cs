@@ -159,7 +159,7 @@ namespace Si.Game
                     if (sprite is SpriteEnemyBase enemy)
                     {
                         text.AppendLine($"Hit Points: {enemy.HullHealth:n0}");
-                        text.AppendLine($"Is Locked-on: {enemy.IsLockedOn}");
+                        text.AppendLine($"Is Locked-on: {enemy.IsLockedOnHard}");
                         text.AppendLine($"Is Locked-on (Soft): {enemy.IsLockedOnSoft:n0}");
                         text.AppendLine($"Shield Points: {enemy.ShieldHealth:n0}");
                         text.AppendLine($"MaxSpeed: {enemy.Velocity.MaxSpeed:n2}");

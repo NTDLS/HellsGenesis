@@ -3,6 +3,7 @@ using Si.GameEngine.Sprites;
 using Si.Library.Types.Geometry;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using static Si.Library.SiConstants;
 
@@ -157,8 +158,10 @@ namespace Si.GameEngine.Core
             _gameEngine.Sprites.Debugs.ExecuteWorldClockTick(displacementVector);
             _gameEngine.Sprites.PlayerDrones.ExecuteWorldClockTick(displacementVector);
             _gameEngine.Sprites.EnemyDrones.ExecuteWorldClockTick(displacementVector);
-
             _gameEngine.Sprites.RadarPositions.ExecuteWorldClockTick();
+
+            _gameEngine.Sprites.EnemyDrones.All().ForEach(e => e.HardenWeaponsLocks());
+            _gameEngine.Sprites.Enemies.All().ForEach(e => e.HardenWeaponsLocks());
 
             _gameEngine.Sprites.CleanupDeletedObjects();
 

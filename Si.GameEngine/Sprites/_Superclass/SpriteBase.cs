@@ -144,7 +144,7 @@ namespace Si.GameEngine.Sprites._Superclass
             }
         }
 
-        public bool IsLockedOn //The object is the subject of a foreign weapons lock.
+        public bool IsLockedOnHard //The object is the subject of a foreign weapons lock.
         {
             get => _isLockedOn;
             set
@@ -352,10 +352,10 @@ namespace Si.GameEngine.Sprites._Superclass
                 + $"                  Recoil: {Velocity.RecoilPercentage * 100:n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
-                + $"             Attachments: {Attachments?.Count() ?? 0:n0}\r\n"
+                + $"             Attachments: {Attachments?.Count ?? 0:n0}\r\n"
                 + $"               Highlight: {IsHighlighted}\r\n"
                 + $"       Is Fixed Position: {IsFixedPosition}\r\n"
-                + $"            Is Locked On: {IsLockedOn}\r\n"
+                + $"            Is Locked On: {IsLockedOnHard}\r\n"
                 + $"     Is Locked On (Soft): {IsLockedOnSoft:n0}\r\n"
                 + $"In Current Scaled Bounds: {IsWithinCurrentScaledScreenBounds}\r\n"
                 + $"          Visible Bounds: {Bounds}\r\n";
@@ -1015,7 +1015,7 @@ namespace Si.GameEngine.Sprites._Superclass
             {
                 DrawImage(renderTarget, _image);
 
-                if (_lockedOnImage != null && IsLockedOn)
+                if (_lockedOnImage != null && IsLockedOnHard)
                 {
                     DrawImage(renderTarget, _lockedOnImage, 0);
                 }

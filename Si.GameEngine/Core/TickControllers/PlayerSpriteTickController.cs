@@ -88,6 +88,8 @@ namespace Si.GameEngine.Core.TickControllers
                     }
                 }
 
+                _gameEngine.Player.Sprite.ClearWeaponsLocks();
+
                 #region LockPlayerAngleToNearbyEnemy.
                 //This needs some work. It works, but its odd - the movement is rigid.
 

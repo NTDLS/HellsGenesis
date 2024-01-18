@@ -81,6 +81,18 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             ShipEngineBoostSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
         }
 
+        public override void ClearWeaponsLocks()
+        {
+            _secondaryWeapons.ForEach(o => o.ClearWeaponsLocks());
+            PrimaryWeapon.ClearWeaponsLocks();
+        }
+
+        public override void HardenWeaponsLocks()
+        {
+            _secondaryWeapons.ForEach(o => o.HardenWeaponsLocks());
+            PrimaryWeapon.HardenWeaponsLocks();
+        }
+
         public override void VisibilityChanged()
         {
             UpdateThrustAnimationPositions();

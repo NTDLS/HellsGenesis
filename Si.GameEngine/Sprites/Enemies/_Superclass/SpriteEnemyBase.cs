@@ -56,6 +56,16 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public override void RotationChanged() => LocationChanged();
 
+        public override void ClearWeaponsLocks()
+        {
+            Weapons.ForEach(o => o.ClearWeaponsLocks());
+        }
+
+        public override void HardenWeaponsLocks()
+        {
+            Weapons.ForEach(o => o.HardenWeaponsLocks());
+        }
+
         public override void Explode()
         {
             _gameEngine.Player.Sprite.Bounty += BountyWorth;
@@ -94,8 +104,6 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                 if ((DateTime.UtcNow - _lastMultiplaySpriteVectorUpdate).TotalMilliseconds >= _gameEngine.Multiplay.State.PlayerAbsoluteStateDelayMs)
                 {
                     _lastMultiplaySpriteVectorUpdate = DateTime.UtcNow;
-
-                    var bgOffset = _gameEngine.Display.RenderWindowPosition;
 
                     return new SiSpriteActionVector(MultiplayUID)
                     {
@@ -266,10 +274,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             {
                 foreach (var weapon in Weapons)
                 {
-                    if (weapon.ApplyWeaponsLock(_gameEngine.Player.Sprite)) //Enemy lock-on to Player. :O
-                    {
-                        break;
-                    }
+                    weapon.AcquireSoftWeaponsLocks(_gameEngine.Player.Sprite); //Enemy lock-on to Player. :O
                 }
             }
         }

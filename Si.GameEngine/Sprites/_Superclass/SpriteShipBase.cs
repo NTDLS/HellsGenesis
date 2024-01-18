@@ -81,6 +81,14 @@ namespace Si.GameEngine.Sprites._Superclass
             return GetDroneWeaponByTypeName(weaponTypeName)?.Fire() == true;
         }
 
+        public virtual void ClearWeaponsLocks()
+        {
+        }
+
+        public virtual void HardenWeaponsLocks()
+        {
+        }
+
         /// <summary>
         /// Builds the cache of all weapons so the drone can fire quickly.
         /// </summary>
