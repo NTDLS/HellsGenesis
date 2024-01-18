@@ -54,7 +54,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             ResetLoadout(loadout);
 
-            //AddAIController(new HostileEngagement(_gameEngine, this, _gameEngine.Player.Sprite));
+            AddAIController(new HostileEngagement(_gameEngine, this, _gameEngine.Player.Sprite));
             AddAIController(new Taunt(_gameEngine, this, _gameEngine.Player.Sprite));
             //AddAIController(new Meander(_gameEngine, this, _gameEngine.Player.Sprite));
 
@@ -84,7 +84,6 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 return;
             }
 
-
             //double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
 
             base.ApplyIntelligence(displacementVector);
@@ -93,22 +92,14 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             {
                 _behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
 
-                /*
-                if (SiRandom.ChanceIn(2))
+                if (SiRandom.PercentChance(1))
                 {
-                    SetDefaultAIController(AIControllers[typeof(HostileEngagement)]);
+                    SetCurrentAIController(AIControllers[typeof(Taunt)]);
                 }
-                if (SiRandom.ChanceIn(2))
+                else if (SiRandom.PercentChance(1))
                 {
-                */
-                SetCurrentAIController(AIControllers[typeof(Taunt)]);
-                /*
+                    SetCurrentAIController(AIControllers[typeof(HostileEngagement)]);
                 }
-                else if (SiRandom.ChanceIn(2))
-                {
-                    SetDefaultAIController(AIControllers[typeof(Meander)]);
-                }
-                */
             }
 
             if (IsHostile)

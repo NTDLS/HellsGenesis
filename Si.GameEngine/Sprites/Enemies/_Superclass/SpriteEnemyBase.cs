@@ -9,6 +9,7 @@ using Si.GameEngine.Sprites.Powerup._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Library;
+using Si.Library.ExtensionMethods;
 using Si.Library.Payload.SpriteActions;
 using Si.Library.Types.Geometry;
 using System;
@@ -206,10 +207,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                 return;
             }
 
-            if (X < -_gameEngine.Settings.EnemySceneDistanceLimit
-                || X >= _gameEngine.Display.NatrualScreenSize.Width + _gameEngine.Settings.EnemySceneDistanceLimit
-                || Y < -_gameEngine.Settings.EnemySceneDistanceLimit
-                || Y >= _gameEngine.Display.NatrualScreenSize.Height + _gameEngine.Settings.EnemySceneDistanceLimit)
+            if (!_gameEngine.Display.TotalCanvasBounds.Balloon(_gameEngine.Settings.EnemySceneDistanceLimit).IntersectsWith(RenderBounds))
             {
                 QueueForDelete();
                 return;

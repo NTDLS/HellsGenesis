@@ -41,7 +41,7 @@ namespace Si.GameEngine.AI.Logistics
 
         private readonly double _approachAngle = SiRandom.Variance(45, 0.2);
         private AIActivity _currentActivity = AIActivity.None;
-        private readonly double _idealMaxDistance = SiRandom.Variance(1500, 0.20);
+        private readonly double _idealMaxDistance = SiRandom.Variance(2500, 0.20);
         private readonly double _idealMinDistance = SiRandom.Variance(800, 0.10);
         private readonly SiNormalizedAngle _evasiveLoopTargetAngle = new();
         private SiRelativeDirection _rotationDirection;
@@ -156,12 +156,12 @@ namespace Si.GameEngine.AI.Logistics
                     _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, SiRandom.Variance(250, 0.5));
                 }
 
-                double distanceToPlayer = _owner.DistanceTo(_observedObject);
-                if (distanceToPlayer > _idealMaxDistance)
+                double distanceToObservedObject = _owner.DistanceTo(_observedObject);
+                if (distanceToObservedObject > _idealMaxDistance)
                 {
                     SetCurrentActivity(AIActivity.Departing);
                 }
-                else if (distanceToPlayer < _idealMinDistance)
+                else if (distanceToObservedObject < _idealMinDistance)
                 {
                     SetCurrentActivity(AIActivity.EvasiveLoop);
                 }
