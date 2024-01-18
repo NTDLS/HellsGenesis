@@ -76,7 +76,7 @@ namespace Si.Library.Types
 
         public Dictionary<string, TimeRenewableResource> Resources { get; set; } = new();
 
-        public void CreateResource(string key, TimeRenewableResource renewableResource)
+        public void Create(string key, TimeRenewableResource renewableResource)
         {
             key = key.ToLower();
             Resources.Add(key, renewableResource);
@@ -89,7 +89,7 @@ namespace Si.Library.Types
         /// <param name="maxValue"></param>
         /// <param name="startingValue"></param>
         /// <param name="rebuildRatePerSecond"></param>
-        public void CreateResource(string key, double maxValue, double startingValue, double rebuildRatePerSecond)
+        public void Create(string key, double maxValue, double startingValue, double rebuildRatePerSecond)
         {
             key = key.ToLower();
             Resources.Add(key, new TimeRenewableResource(maxValue, startingValue, rebuildRatePerSecond));

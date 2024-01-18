@@ -4,6 +4,23 @@
     {
         public static Random Generator = new();
 
+        /// <summary>
+        /// Returns the given value with a given variance added or subtracted (at random).
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="variancePercentWholeNumber"></param>
+        /// <returns></returns>
+        public static double Variance(double value, double variancePercentDecimal)
+            => value + RandomSign(value * variancePercentDecimal);
+
+        /// <summary>
+        /// 50/50 chance to return a positive/negative of the given value.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static double RandomSign(double value)
+            => FlipCoin() ? value : -value;
+
         public static double OneOf(double one, double two)
             => OneOf([one, two]);
 

@@ -1,5 +1,6 @@
 ﻿using NTDLS.Determinet;
 using NTDLS.Determinet.Types;
+using Si.GameEngine.AI.Logistics._Superclass;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
@@ -13,7 +14,7 @@ namespace Si.GameEngine.AI.Logistics
     /// <summary>
     /// Finite-state-machine where AI decides the states.
     /// </summary>
-    internal class HostileEngagement : IAIController
+    internal class HostileEngagement : IIAController
     {
         private const string _assetPath = @"Data\Data\AI\Logistics\FlyBy.txt";
 

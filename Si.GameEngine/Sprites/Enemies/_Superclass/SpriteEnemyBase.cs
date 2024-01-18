@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Si.GameEngine.AI;
+using Si.GameEngine.AI.Logistics._Superclass;
 using Si.GameEngine.Core;
 using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Loudouts;
@@ -27,8 +27,8 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public SiEnemyClass ShipClass { get; set; }
         public EnemyShipLoadout Loadout { get; set; }
-        public IAIController CurrentAIController { get; set; }
-        public Dictionary<Type, IAIController> AIControllers { get; private set; } = new();
+        public IIAController CurrentAIController { get; set; }
+        public Dictionary<Type, IIAController> AIControllers { get; private set; } = new();
         public int BountyWorth { get; private set; } = 25;
         public bool IsHostile { get; set; } = true;
         public List<WeaponBase> Weapons { get; private set; } = new();
@@ -276,10 +276,10 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             }
         }
 
-        internal void AddAIController(IAIController controller)
+        internal void AddAIController(IIAController controller)
             => AIControllers.Add(controller.GetType(), controller);
 
-        internal void SetCurrentAIController(IAIController value)
+        internal void SetCurrentAIController(IIAController value)
         {
             CurrentAIController = value;
         }

@@ -68,9 +68,6 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             //}
 
             _behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
-
-            Velocity.ThrottlePercentage = 0;
-            Velocity.BoostPercentage = 0;
         }
 
         #region Artificial Intelligence.

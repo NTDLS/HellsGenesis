@@ -629,20 +629,20 @@ namespace Si.GameEngine.Sprites._Superclass
         }
 
         /// <summary>
-        /// Rotates the object towards the target object by the specified amount.
+        /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(SpriteBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
+        public bool RotateIfNotPointingAt(SpriteBase obj, double rotationAmount = 1, double varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngle(obj);
 
-            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
             {
-                if (deltaAngle >= -untilPointingAtDegreesFallsBetween)
+                if (deltaAngle >= -varianceDegrees)
                 {
                     Velocity.Angle.Degrees += rotationAmount;
                 }
-                else if (deltaAngle < untilPointingAtDegreesFallsBetween)
+                else if (deltaAngle < varianceDegrees)
                 {
                     Velocity.Angle.Degrees -= rotationAmount;
                 }
@@ -653,14 +653,14 @@ namespace Si.GameEngine.Sprites._Superclass
         }
 
         /// <summary>
-        /// Rotates the object towards the target object by the specified amount.
+        /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(SpriteBase obj, SiRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
+        public bool RotateIfNotPointingAt(SpriteBase obj, SiRelativeDirection direction, double rotationAmount = 1, double varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngle(obj);
 
-            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
             {
                 if (direction == SiRelativeDirection.Right)
                 {
@@ -677,20 +677,20 @@ namespace Si.GameEngine.Sprites._Superclass
         }
 
         /// <summary>
-        /// Rotates the object towards the target coordinates by the specified amount.
+        /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(SiPoint toLocation, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
+        public bool RotateIfNotPointingAt(SiPoint toLocation, double rotationAmount = 1, double varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngle(toLocation);
 
-            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
             {
-                if (deltaAngle >= -untilPointingAtDegreesFallsBetween)
+                if (deltaAngle >= -varianceDegrees)
                 {
                     Velocity.Angle.Degrees += rotationAmount;
                 }
-                else if (deltaAngle < untilPointingAtDegreesFallsBetween)
+                else if (deltaAngle < varianceDegrees)
                 {
                     Velocity.Angle.Degrees -= rotationAmount;
                 }
@@ -701,14 +701,14 @@ namespace Si.GameEngine.Sprites._Superclass
         }
 
         /// <summary>
-        /// Rotates the object towards the target coordinates by the specified amount.
+        /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(SiPoint toLocation, SiRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
+        public bool RotateIfNotPointingAt(SiPoint toLocation, SiRelativeDirection direction, double rotationAmount = 1, double varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngle(toLocation);
 
-            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
             {
                 if (direction == SiRelativeDirection.Right)
                 {
@@ -725,10 +725,10 @@ namespace Si.GameEngine.Sprites._Superclass
         }
 
         /// <summary>
-        /// Rotates the object by the specified amount until it is pointing at the target angle (with given tolerance).
+        /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateTo(double toDegrees, SiRelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
+        public bool RotateIfNotPointingAt(double toDegrees, SiRelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
         {
             toDegrees = toDegrees.DegreesNormalized();
 
@@ -749,20 +749,20 @@ namespace Si.GameEngine.Sprites._Superclass
         }
 
         /// <summary>
-        /// Rotates the object from the target object by the specified amount.
+        /// Rotates the object by the given amount if it is pointing in the given direction.
         /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateFrom(SpriteBase obj, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if the object is not pointing in the given direction.
+        public bool RotateIfPointingAt(SpriteBase obj, double rotationAmount = 1, double varianceDegrees = 10)
         {
-            var deltaAngle = obj.DeltaAngle(this);
+            var deltaAngle = DeltaAngle(obj);
 
-            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees))
             {
-                if (deltaAngle >= -untilPointingAtDegreesFallsBetween)
+                if (deltaAngle >= -varianceDegrees)
                 {
                     Velocity.Angle += rotationAmount;
                 }
-                else if (deltaAngle < untilPointingAtDegreesFallsBetween)
+                else if (deltaAngle < varianceDegrees)
                 {
                     Velocity.Angle -= rotationAmount;
                 }
@@ -773,14 +773,14 @@ namespace Si.GameEngine.Sprites._Superclass
         }
 
         /// <summary>
-        /// Rotates the object from the target object by the specified amount.
+        /// Rotates the object by the given amount if it is pointing in the given direction.
         /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object it not in the specifid range.</returns>
-        public bool RotateFrom(SpriteBase obj, SiRelativeDirection direction, double rotationAmount = 1, double untilPointingAtDegreesFallsBetween = 10)
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if the object is not pointing in the given direction.
+        public bool RotateIfPointingAt(SpriteBase obj, SiRelativeDirection direction, double rotationAmount = 1, double varianceDegrees = 10)
         {
-            var deltaAngle = obj.DeltaAngle(this);
+            var deltaAngle = DeltaAngle(obj);
 
-            if (deltaAngle.IsBetween(-untilPointingAtDegreesFallsBetween, untilPointingAtDegreesFallsBetween) == false)
+            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees))
             {
                 if (direction == SiRelativeDirection.Right)
                 {

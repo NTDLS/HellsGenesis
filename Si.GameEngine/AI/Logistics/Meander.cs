@@ -1,5 +1,6 @@
 ﻿using NTDLS.Determinet;
 using NTDLS.Determinet.Types;
+using Si.GameEngine.AI.Logistics._Superclass;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
@@ -13,7 +14,7 @@ namespace Si.GameEngine.AI.Logistics
     /// <summary>
     /// AI brain to keep an object close to another object, but at a generally safe distance.
     /// </summary>
-    internal class Meander : IAIController
+    internal class Meander : IIAController
     {
         private const string _assetPath = @"Data\AI\Logistics\FlyBy.txt";
 

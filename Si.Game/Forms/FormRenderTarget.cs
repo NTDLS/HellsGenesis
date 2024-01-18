@@ -1,4 +1,5 @@
 ﻿using Si.Game.Forms;
+using Si.GameEngine.AI.Logistics._Superclass;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
@@ -218,8 +219,11 @@ namespace Si.Game
                         {
                             foreach (var aiController in enemy.AIControllers)
                             {
-                                var fullPath = Path.Combine(fbd.SelectedPath, $"{aiController.Key}.txt");
-                                aiController.Value.Network.Save(fullPath);
+                                if (aiController.Value is IIANeuralNetworkController nn)
+                                {
+                                    var fullPath = Path.Combine(fbd.SelectedPath, $"{aiController.Key}.txt");
+                                    nn.Network.Save(fullPath);
+                                }
                             }
                         }
                     }
@@ -245,7 +249,10 @@ namespace Si.Game
                     foreach (var aiController in enemy.AIControllers)
                     {
                         builder.AppendLine($"<!-- {aiController.Key} -->");
-                        builder.AppendLine(aiController.Value.Network.Serialize());
+                        if (aiController.Value is IIANeuralNetworkController nn)
+                        {
+                            builder.AppendLine(nn.Network.Serialize());
+                        }
                     }
 
                     using (var form = new FormViewBrain(builder.ToString()))
