@@ -3,7 +3,6 @@ using Si.GameEngine.Sprites;
 using Si.Library.Types.Geometry;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using static Si.Library.SiConstants;
 

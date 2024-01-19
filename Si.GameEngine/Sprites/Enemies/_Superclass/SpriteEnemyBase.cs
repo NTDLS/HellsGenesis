@@ -56,16 +56,6 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public override void RotationChanged() => LocationChanged();
 
-        public override void ClearWeaponsLocks()
-        {
-            Weapons.ForEach(o => o.ClearWeaponsLocks());
-        }
-
-        public override void HardenWeaponsLocks()
-        {
-            Weapons.ForEach(o => o.HardenWeaponsLocks());
-        }
-
         public override void Explode()
         {
             _gameEngine.Player.Sprite.Bounty += BountyWorth;
@@ -270,11 +260,11 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public virtual void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (Weapons != null && _gameEngine.Player.Sprite != null)
+            if (Weapons != null)
             {
                 foreach (var weapon in Weapons)
                 {
-                    weapon.AcquireSoftWeaponsLocks(_gameEngine.Player.Sprite); //Enemy lock-on to Player. :O
+                    weapon.ApplyIntelligence();
                 }
             }
         }

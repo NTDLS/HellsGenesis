@@ -25,7 +25,6 @@ namespace Si.GameEngine.Core.TickControllers
                 if (GameEngine.Player.Sprite.Visable)
                 {
                     enemy.ApplyIntelligence(displacementVector);
-                    GameEngine.Player.Sprite.SelectedSecondaryWeapon?.AcquireSoftWeaponsLocks(enemy); //Player lock-on to enemy. :D
                 }
 
                 var multiplayVector = enemy.GetMultiplayVector();

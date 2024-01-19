@@ -41,6 +41,9 @@ namespace Si.GameEngine.Core.TickControllers
 
             if (Sprite.Visable)
             {
+                Sprite.PrimaryWeapon.ApplyIntelligence();
+                Sprite.SelectedSecondaryWeapon?.ApplyIntelligence();
+
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.PrimaryFire))
                 {
                     if (Sprite.PrimaryWeapon != null && Sprite.PrimaryWeapon.Fire())
@@ -87,8 +90,6 @@ namespace Si.GameEngine.Core.TickControllers
                         }
                     }
                 }
-
-                _gameEngine.Player.Sprite.ClearWeaponsLocks();
 
                 #region LockPlayerAngleToNearbyEnemy.
                 //This needs some work. It works, but its odd - the movement is rigid.
