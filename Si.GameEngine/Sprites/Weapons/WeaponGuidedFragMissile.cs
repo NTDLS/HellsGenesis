@@ -5,6 +5,7 @@ using Si.GameEngine.Sprites.Weapons.Munitions;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.GameEngine.Utility;
 using Si.Library.Types.Geometry;
+using System.Linq;
 
 namespace Si.GameEngine.Sprites.Weapons
 {
@@ -49,7 +50,7 @@ namespace Si.GameEngine.Sprites.Weapons
                 _fireSound.Play();
                 RoundQuantity--;
 
-                if (LockedOnObjects == null || LockedOnObjects.Count == 0)
+                if (WeaponLocks == null || WeaponLocks.Count == 0)
                 {
                     if (_toggle)
                     {
@@ -66,17 +67,17 @@ namespace Si.GameEngine.Sprites.Weapons
                 }
                 else
                 {
-                    foreach (var lockedOn in LockedOnObjects)
+                    foreach (var weaponLock in WeaponLocks.Where(o=>o.LockType == Library.SiConstants.SiWeaponsLockType.Hard))
                     {
                         if (_toggle)
                         {
                             var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(10, 10));
-                            _gameEngine.Sprites.Munitions.CreateLockedOnTo(this, lockedOn, pointRight);
+                            _gameEngine.Sprites.Munitions.CreateLockedOnTo(this, weaponLock.Sprite, pointRight);
                         }
                         else
                         {
                             var pointLeft = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(10, 10));
-                            _gameEngine.Sprites.Munitions.CreateLockedOnTo(this, lockedOn, pointLeft);
+                            _gameEngine.Sprites.Munitions.CreateLockedOnTo(this, weaponLock.Sprite, pointLeft);
                         }
                         _toggle = !_toggle;
                     }

@@ -15,6 +15,7 @@ using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies._Superclass
@@ -260,6 +261,9 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public virtual void ApplyIntelligence(SiPoint displacementVector)
         {
+            IsLockedOnSoft = false;
+            IsLockedOnHard = false;
+
             if (Weapons != null)
             {
                 foreach (var weapon in Weapons)

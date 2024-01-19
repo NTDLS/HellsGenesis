@@ -9,6 +9,7 @@ using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Weapons._Superclass
 {
@@ -47,7 +48,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
         public bool CanLockOn { get; set; } = false;
-        public List<SpriteBase> LockedOnObjects { get; set; } = new();
+        public List<WeaponsLock> WeaponLocks { get; set; } = new();
         public double MaxLockOnAngle { get; set; } = 10;
         public double MaxLocks { get; set; } = 1;
         public double MinLockDistance { get; set; } = 50;
@@ -81,17 +82,17 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
 
         }
 
-        private class DistanceLock
+        public class WeaponsLock
         {
             public double Distance { get; set; }
             public SpriteBase Sprite { get; set; }
+
+            public SiWeaponsLockType LockType { get; set; }
         }
 
         public virtual void ApplyIntelligence()
         {
-            LockedOnObjects.Clear();
-
-            var distanceLocks = new List<DistanceLock>();
+            WeaponLocks.Clear();
 
             if (_owner is SpritePlayerBase owner && owner.IsDrone == false)
             {
@@ -105,7 +106,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
                         var distance = _owner.DistanceTo(target);
                         if (distance.IsBetween(MinLockDistance, MaxLockDistance))
                         {
-                            distanceLocks.Add(new DistanceLock()
+                            WeaponLocks.Add(new WeaponsLock()
                             {
                                 Sprite = target,
                                 Distance = _owner.DistanceTo(target)
@@ -114,17 +115,18 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
                     }
                 }
 
-                distanceLocks = distanceLocks.OrderBy(o => o.Distance).ToList();
+                WeaponLocks = WeaponLocks.OrderBy(o => o.Distance).ToList();
 
-                foreach (var hardLock in distanceLocks.Take((int)MaxLocks))
+                foreach (var hardLock in WeaponLocks.Take((int)MaxLocks))
                 {
+                    hardLock.LockType = SiWeaponsLockType.Hard;
                     hardLock.Sprite.IsLockedOnHard = true;
                     hardLock.Sprite.IsLockedOnSoft = false;
-                    LockedOnObjects.Add(hardLock.Sprite);
                 }
 
-                foreach (var softLock in distanceLocks.Skip((int)MaxLocks))
+                foreach (var softLock in WeaponLocks.Skip((int)MaxLocks))
                 {
+                    softLock.LockType = SiWeaponsLockType.Soft;
                     softLock.Sprite.IsLockedOnHard = false;
                     softLock.Sprite.IsLockedOnSoft = true;
                 }
@@ -141,7 +143,13 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
                     {
                         _gameEngine.Player.Sprite.IsLockedOnHard = true;
                         _gameEngine.Player.Sprite.IsLockedOnSoft = false;
-                        LockedOnObjects.Add(_gameEngine.Player.Sprite);
+
+                        WeaponLocks.Add(new WeaponsLock()
+                        {
+                            Sprite = _gameEngine.Player.Sprite,
+                            Distance = _owner.DistanceTo(_gameEngine.Player.Sprite),
+                            LockType = SiWeaponsLockType.Hard
+                        });
                     }
                 }
             }
@@ -157,48 +165,17 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
                     {
                         _gameEngine.Player.Sprite.IsLockedOnHard = true;
                         _gameEngine.Player.Sprite.IsLockedOnSoft = false;
-                        LockedOnObjects.Add(_gameEngine.Player.Sprite);
+
+                        WeaponLocks.Add(new WeaponsLock()
+                        {
+                            Sprite = _gameEngine.Player.Sprite,
+                            Distance = _owner.DistanceTo(_gameEngine.Player.Sprite),
+                            LockType = SiWeaponsLockType.Hard
+                        });
                     }
                 }
             }
         }
-
-        /*
-
-        public virtual void HardenWeaponsLocks()
-        {
-            if (_owner == null)
-            {
-                throw new ArgumentNullException("Weapon is not owned.");
-            }
-
-            var distanceLocks = new List<DistanceLock>();
-
-            LockedOnObjects.ForEach(o =>
-            {
-                distanceLocks.Add(new DistanceLock()
-                {
-                    Sprite = o,
-                    Distance = _owner.DistanceTo(o)
-                });
-            });
-
-            distanceLocks = distanceLocks.OrderBy(o => o.Distance).ToList();
-
-            foreach (var hardLock in distanceLocks.Take((int)MaxLocks))
-            {
-                hardLock.Sprite.IsLockedOnHard = true;
-                hardLock.Sprite.IsLockedOnSoft = false;
-            }
-
-            foreach (var softLock in distanceLocks.Skip((int)MaxLocks))
-            {
-                softLock.Sprite.IsLockedOnHard = false;
-                softLock.Sprite.IsLockedOnSoft = true;
-                LockedOnObjects.Remove(softLock.Sprite);
-            }
-        }
-        */
 
         public virtual bool Fire()
         {

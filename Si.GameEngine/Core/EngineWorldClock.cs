@@ -159,9 +159,6 @@ namespace Si.GameEngine.Core
             _gameEngine.Sprites.EnemyDrones.ExecuteWorldClockTick(displacementVector);
             _gameEngine.Sprites.RadarPositions.ExecuteWorldClockTick();
 
-            _gameEngine.Sprites.EnemyDrones.All().ForEach(e => e.HardenWeaponsLocks());
-            _gameEngine.Sprites.Enemies.All().ForEach(e => e.HardenWeaponsLocks());
-
             _gameEngine.Sprites.CleanupDeletedObjects();
 
             _gameEngine.Multiplay.FlushSpriteVectorsToServer();

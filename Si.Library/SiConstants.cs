@@ -6,6 +6,13 @@
         public const string MultiplayServerAddress = "127.0.0.1";
         public const int MultiplayServerTCPPort = 6785;
 
+        public enum SiWeaponsLockType
+        {
+            None,
+            Hard,
+            Soft
+        }
+
         public enum SiRenderScaleOrder
         {
             /// <summary>

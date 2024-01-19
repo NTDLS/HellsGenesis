@@ -5,6 +5,7 @@ using Si.Library.ExtensionMethods;
 using Si.Library.Payload.SpriteActions;
 using Si.Library.Types.Geometry;
 using System;
+using static Si.GameEngine.Sprites.Weapons._Superclass.WeaponBase;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Core.TickControllers
@@ -38,6 +39,9 @@ namespace Si.GameEngine.Core.TickControllers
         public override SiPoint ExecuteWorldClockTick()
         {
             var displacementVector = new SiPoint();
+
+            Sprite.IsLockedOnSoft = false;
+            Sprite.IsLockedOnHard = false;
 
             if (Sprite.Visable)
             {
