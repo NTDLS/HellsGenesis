@@ -6,11 +6,11 @@ using Si.Library.Types.Geometry;
 
 namespace Si.GameEngine.Sprites.Weapons.Munitions
 {
-    internal class MunitionPulseMeson : EnergyMunitionBase
+    internal class MunitionLancer : EnergyMunitionBase
     {
-        private const string imagePath = @"Graphics\Weapon\PulseMeson.png";
+        private const string imagePath = @"Graphics\Weapon\Lancer.png";
 
-        public MunitionPulseMeson(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
+        public MunitionLancer(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
             Initialize(imagePath);

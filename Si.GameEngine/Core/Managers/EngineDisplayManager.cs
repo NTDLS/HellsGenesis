@@ -122,6 +122,7 @@ namespace Si.GameEngine.Core.Managers
                 );
         }
 
+        //TODO: Tesr and fix this.
         public SiPoint RandomOffScreenLocation(int minOffscreenDistance = 100, int maxOffscreenDistance = 500)
         {
             if (SiRandom.FlipCoin())
@@ -129,14 +130,14 @@ namespace Si.GameEngine.Core.Managers
                 if (SiRandom.FlipCoin())
                 {
                     return new SiPoint(
-                        -SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
-                        SiRandom.Between(0, TotalCanvasSize.Height));
+                        RenderWindowPosition.X + -SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                        RenderWindowPosition.Y + SiRandom.Between(0, TotalCanvasSize.Height));
                 }
                 else
                 {
                     return new SiPoint(
-                        -SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
-                        SiRandom.Between(0, TotalCanvasSize.Width));
+                        RenderWindowPosition.X + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                        RenderWindowPosition.Y + SiRandom.Between(0, TotalCanvasSize.Height));
                 }
             }
             else
@@ -144,14 +145,14 @@ namespace Si.GameEngine.Core.Managers
                 if (SiRandom.FlipCoin())
                 {
                     return new SiPoint(
-                        TotalCanvasSize.Width + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
-                        SiRandom.Between(0, TotalCanvasSize.Height));
+                        RenderWindowPosition.X + TotalCanvasSize.Width + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                        RenderWindowPosition.Y + SiRandom.Between(0, TotalCanvasSize.Height));
                 }
                 else
                 {
                     return new SiPoint(
-                        TotalCanvasSize.Height + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
-                    SiRandom.Between(0, TotalCanvasSize.Width));
+                        RenderWindowPosition.X + TotalCanvasSize.Width + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
+                        RenderWindowPosition.Y + -SiRandom.Between(0, TotalCanvasSize.Height));
                 }
             }
         }

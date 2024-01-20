@@ -261,9 +261,6 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public virtual void ApplyIntelligence(SiPoint displacementVector)
         {
-            IsLockedOnSoft = false;
-            IsLockedOnHard = false;
-
             if (Weapons != null)
             {
                 foreach (var weapon in Weapons)

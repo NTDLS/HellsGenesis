@@ -6,7 +6,7 @@
  DefaultDirName                  = {commonpf}\NetworkDLS\Strikeforce Infinity
  DefaultGroupName                = NetworkDLS\Strikeforce Infinity
  UninstallDisplayIcon            = {app}\StrikeforceInfinity.exe
- SetupIconFile                   = StrikeforceInfinity\Resources\StrikeforceInfinity.ico
+ SetupIconFile                   = @Resources\StrikeforceInfinity.ico
  PrivilegesRequired              = admin
  Uninstallable                   = Yes
  Compression                     = bZIP/9
@@ -27,10 +27,10 @@
  Name: "FontAsset";    Description: "Fonts";                Types: Full Compact Custom; Flags: Fixed;
  
 [Files]
- Source: "StrikeforceInfinity\bin\Release\net7.0-windows\*.exe";   DestDir: "{app}";         Components: Game;   Flags: IgnoreVersion; 
- Source: "StrikeforceInfinity\bin\Release\net7.0-windows\*.dll";   DestDir: "{app}";         Components: Game;   Flags: IgnoreVersion;
- Source: "StrikeforceInfinity\bin\Release\net7.0-windows\*.json";  DestDir: "{app}";         Components: Game;   Flags: IgnoreVersion;
- Source: "StrikeforceInfinity\Assets\*.*";                         DestDir: "{app}\Assets";  Components: Assets; Flags: IgnoreVersion recursesubdirs;
+ Source: "Si.Game\bin\Release\net8.0-windows7.0\*.exe";   DestDir: "{app}";         Components: Game;   Flags: IgnoreVersion; 
+ Source: "Si.Game\bin\Release\net8.0-windows7.0\*.dll";   DestDir: "{app}";         Components: Game;   Flags: IgnoreVersion;
+ Source: "Si.Game\bin\Release\net8.0-windows7.0\*.json";  DestDir: "{app}";         Components: Game;   Flags: IgnoreVersion;
+ Source: "Si.Game\Assets\*.*";                            DestDir: "{app}\Assets";  Components: Assets; Flags: IgnoreVersion recursesubdirs;
 
  Source: "Fonts\Digital-7 (Mono).ttf"; DestDir: "{commonfonts}"; Components: FontAsset; FontInstall: "Digital-7 Mono"; Flags: onlyifdoesntexist uninsneveruninstall
  Source: "Fonts\Digital-7.ttf";        DestDir: "{commonfonts}"; Components: FontAsset; FontInstall: "digital-7"; Flags: onlyifdoesntexist uninsneveruninstall
@@ -44,7 +44,7 @@
  Root: HKLM; Subkey: "Software\NetworkDLS\Strikeforce Infinity"; ValueType: STRING;ValueName: "UserAssetPath";   ValueData:"{userappdata}\StrikeforceInfinity"; Flags: CreateValueIfDoesntExist;
 
 [Icons]
- Name: "{group}\Strikeforce Infinity"; Filename: "{app}\StrikeforceInfinity.exe"; Components: Game;
+ Name: "{group}\Strikeforce Infinity"; Filename: "{app}\Si.Game.exe"; Components: Game;
  
 [Run]
- Filename: "{app}\StrikeforceInfinity.exe"; Description: "Run Strikeforce Infinity now?"; Flags: postinstall nowait skipifsilent shellexec; Components: Game;
+ Filename: "{app}\Si.Game.exe"; Description: "Run Strikeforce Infinity now?"; Flags: postinstall nowait skipifsilent shellexec; Components: Game;

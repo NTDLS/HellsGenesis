@@ -151,6 +151,7 @@ namespace Si.GameEngine.Sprites._Superclass
             {
                 if (_isLockedOn == false && value == true)
                 {
+                    //TODO: This should not play every loop.
                     _gameEngine.Audio.LockedOnBlip.Play();
                 }
                 _isLockedOn = value;

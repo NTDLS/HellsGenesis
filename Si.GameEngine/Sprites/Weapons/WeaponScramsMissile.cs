@@ -50,7 +50,7 @@ namespace Si.GameEngine.Sprites.Weapons
                 _fireSound.Play();
                 RoundQuantity--;
 
-                if (WeaponLocks == null || WeaponLocks.Count == 0)
+                if (LockedTargets == null || LockedTargets.Count == 0)
                 {
                     if (_toggle)
                     {
@@ -67,7 +67,7 @@ namespace Si.GameEngine.Sprites.Weapons
                 }
                 else
                 {
-                    foreach (var weaponLock in WeaponLocks.Where(o => o.LockType == Library.SiConstants.SiWeaponsLockType.Hard))
+                    foreach (var weaponLock in LockedTargets.Where(o => o.LockType == Library.SiConstants.SiWeaponsLockType.Hard))
                     {
                         if (_toggle)
                         {

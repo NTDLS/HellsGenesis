@@ -19,3 +19,8 @@ speed should not be excessive when fleeing so that the player has a chance to at
 ### Meander
 **Complete? []**
 > Meander should say at a moderate distance in a crude circle or elipse.
+
+### Retreat
+**Complete? []**
+> The object should attempt to escape, slowly (because it is crippled).
+

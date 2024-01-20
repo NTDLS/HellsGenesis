@@ -70,9 +70,6 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
-            Velocity.ThrottlePercentage = 0;
-
-            return;
             if (IsDrone)
             {
                 //If this is a multiplayer drone then we need to skip most of the initilization. This is becuase
@@ -80,20 +77,21 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 return;
             }
 
-            //double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
-
             base.ApplyIntelligence(displacementVector);
 
-            if ((DateTime.Now - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMiliseconds)
+            if ((DateTime.UtcNow - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMiliseconds)
             {
                 _lastBehaviorChangeTime = DateTime.UtcNow;
                 _behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
 
+                /*
                 if (SiRandom.PercentChance(1))
                 {
                     SetCurrentAIController(AIControllers[typeof(Taunt)]);
                 }
-                else if (SiRandom.PercentChance(1))
+                */
+
+                if (SiRandom.PercentChance(5))
                 {
                     SetCurrentAIController(AIControllers[typeof(HostileEngagement)]);
                 }

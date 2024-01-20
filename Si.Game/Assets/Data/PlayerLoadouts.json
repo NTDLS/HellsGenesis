@@ -51,11 +51,11 @@
           "Rounds": 100000
         },
         {
-          "Type": "WeaponPhotonTorpedo",
+          "Type": "WeaponLancer",
           "Rounds": 100000
         },
         {
-          "Type": "WeaponPulseMeson",
+          "Type": "WeaponPhotonTorpedo",
           "Rounds": 100000
         }
       ]
@@ -175,11 +175,11 @@
       },
       "SecondaryWeapons": [
         {
-          "Type": "WeaponPhotonTorpedo",
+          "Type": "WeaponLancer",
           "Rounds": 100
         },
         {
-          "Type": "WeaponPulseMeson",
+          "Type": "WeaponPhotonTorpedo",
           "Rounds": 8
         }
       ]

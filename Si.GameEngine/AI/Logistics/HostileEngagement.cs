@@ -39,7 +39,7 @@ namespace Si.GameEngine.AI.Logistics
 
         #region Instance parameters.
 
-        private readonly double _approachAngle = SiRandom.Variance(10, 0.2);
+        private readonly double _approachAngle = 1;
         private AIActivity _currentActivity = AIActivity.None;
         private readonly double _idealMaxDistance = SiRandom.Variance(1500, 0.20);
         private readonly double _idealMinDistance = SiRandom.Variance(400, 0.10);

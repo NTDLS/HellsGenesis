@@ -45,7 +45,7 @@ namespace Si.GameEngine.Sprites.Weapons
                 _fireSound.Play();
                 RoundQuantity--;
 
-                if (WeaponLocks == null || WeaponLocks.Count == 0)
+                if (LockedTargets == null || LockedTargets.Count == 0)
                 {
                     if (_toggle)
                     {

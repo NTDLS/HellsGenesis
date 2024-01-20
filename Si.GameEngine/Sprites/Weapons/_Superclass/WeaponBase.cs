@@ -48,7 +48,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
         public bool CanLockOn { get; set; } = false;
-        public List<WeaponsLock> WeaponLocks { get; set; } = new();
+        public List<WeaponsLock> LockedTargets { get; set; } = new();
         public double MaxLockOnAngle { get; set; } = 10;
         public double MaxLocks { get; set; } = 1;
         public double MinLockDistance { get; set; } = 50;
@@ -92,68 +92,53 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
 
         public virtual void ApplyIntelligence()
         {
-            WeaponLocks.Clear();
+            LockedTargets.Clear();
 
             if (_owner is SpritePlayerBase owner && owner.IsDrone == false)
             {
-                foreach (var target in _gameEngine.Sprites.Enemies.Visible())
-                {
-                    target.IsLockedOnHard = false;
-                    target.IsLockedOnSoft = false;
+                var potentialTargets = _gameEngine.Sprites.Enemies.Visible();
 
-                    if (CanLockOn && _owner.IsPointingAt(target, MaxLockOnAngle))
+                foreach (var potentialTarget in potentialTargets)
+                {
+                    if (CanLockOn && _owner.IsPointingAt(potentialTarget, MaxLockOnAngle))
                     {
-                        var distance = _owner.DistanceTo(target);
+                        var distance = _owner.DistanceTo(potentialTarget);
                         if (distance.IsBetween(MinLockDistance, MaxLockDistance))
                         {
-                            WeaponLocks.Add(new WeaponsLock()
+                            LockedTargets.Add(new WeaponsLock()
                             {
-                                Sprite = target,
-                                Distance = _owner.DistanceTo(target)
+                                Sprite = potentialTarget,
+                                Distance = _owner.DistanceTo(potentialTarget)
                             });
                         }
                     }
                 }
 
-                WeaponLocks = WeaponLocks.OrderBy(o => o.Distance).ToList();
+                LockedTargets = LockedTargets.OrderBy(o => o.Distance).ToList();
 
-                foreach (var hardLock in WeaponLocks.Take((int)MaxLocks))
+                foreach (var hardLock in LockedTargets.Take((int)MaxLocks))
                 {
                     hardLock.LockType = SiWeaponsLockType.Hard;
                     hardLock.Sprite.IsLockedOnHard = true;
                     hardLock.Sprite.IsLockedOnSoft = false;
                 }
 
-                foreach (var softLock in WeaponLocks.Skip((int)MaxLocks))
+                foreach (var softLock in LockedTargets.Skip((int)MaxLocks))
                 {
                     softLock.LockType = SiWeaponsLockType.Soft;
                     softLock.Sprite.IsLockedOnHard = false;
                     softLock.Sprite.IsLockedOnSoft = true;
                 }
-            }
-            else if (_owner is SpriteEnemyBase enemy && enemy.IsDrone == false)
-            {
-                _gameEngine.Player.Sprite.IsLockedOnSoft = false;
-                _gameEngine.Player.Sprite.IsLockedOnHard = false;
 
-                if (CanLockOn && _owner.IsPointingAt(_gameEngine.Player.Sprite, MaxLockOnAngle))
+                var lockedTargets = LockedTargets.Select(o => o.Sprite);
+
+                foreach (var potentialTarget in potentialTargets.Where(o => !lockedTargets.Contains(o)))
                 {
-                    var distance = _owner.DistanceTo(_gameEngine.Player.Sprite);
-                    if (distance.IsBetween(MinLockDistance, MaxLockDistance))
-                    {
-                        _gameEngine.Player.Sprite.IsLockedOnHard = true;
-                        _gameEngine.Player.Sprite.IsLockedOnSoft = false;
-
-                        WeaponLocks.Add(new WeaponsLock()
-                        {
-                            Sprite = _gameEngine.Player.Sprite,
-                            Distance = _owner.DistanceTo(_gameEngine.Player.Sprite),
-                            LockType = SiWeaponsLockType.Hard
-                        });
-                    }
+                    potentialTarget.IsLockedOnHard = false;
+                    potentialTarget.IsLockedOnSoft = false;
                 }
             }
-            else if (_owner is SpriteEnemyBase enemyDrone && enemyDrone.IsDrone == true)
+            else if (_owner is SpriteEnemyBase enemy)
             {
                 _gameEngine.Player.Sprite.IsLockedOnSoft = false;
                 _gameEngine.Player.Sprite.IsLockedOnHard = false;
@@ -166,7 +151,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
                         _gameEngine.Player.Sprite.IsLockedOnHard = true;
                         _gameEngine.Player.Sprite.IsLockedOnSoft = false;
 
-                        WeaponLocks.Add(new WeaponsLock()
+                        LockedTargets.Add(new WeaponsLock()
                         {
                             Sprite = _gameEngine.Player.Sprite,
                             Distance = _owner.DistanceTo(_gameEngine.Player.Sprite),
