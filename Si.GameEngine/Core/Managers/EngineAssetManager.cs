@@ -118,6 +118,7 @@ namespace Si.GameEngine.Core.Managers
             });
         }
 
+        /*
         /// <summary>
         /// Saves and caches a text file into the asset path.
         /// </summary>
@@ -142,7 +143,9 @@ namespace Si.GameEngine.Core.Managers
                 }
             });
         }
+        */
 
+        /*
         public void DeleteFile(string assetRelativePath)
         {
             string assetAbsolutePath = Path.Combine(assetRawPath, assetRelativePath).Trim().Replace("\\", "/");
@@ -154,6 +157,7 @@ namespace Si.GameEngine.Core.Managers
                 o.Remove(key);
             });
         }
+        */
 
         /// <summary>
         /// Gets and caches an audio clip from the asset path.
