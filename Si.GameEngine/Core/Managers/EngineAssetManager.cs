@@ -13,11 +13,47 @@ namespace Si.GameEngine.Core.Managers
         private readonly GameEngineCore _gameEngine;
         private readonly NTDLS.Semaphore.PessimisticSemaphore<Dictionary<string, object>> _collection = new();
 
-        private readonly string assetRawPath = @"..\..\..\";
-
         public EngineAssetManager(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
+        }
+
+        /// <summary>
+        /// Gets and caches a text files content from the asset path.
+        /// </summary>
+        /// <param name="assetRelativePath"></param>
+        /// <param name="defaultText"></param>
+        /// <returns></returns>
+        public static string GetUserText(string assetRelativePath, string defaultText = "")
+        {
+            var userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Strikeforce Infinity");
+            if (Directory.Exists(userDataPath) == false)
+            {
+                Directory.CreateDirectory(userDataPath);
+            }
+            string assetAbsolutePath = Path.Combine(userDataPath, assetRelativePath).Trim().Replace("\\", "/");
+            if (File.Exists(assetAbsolutePath) == false)
+            {
+                return defaultText;
+            }
+
+            return File.ReadAllText(assetAbsolutePath);
+        }
+
+        /// <summary>
+        /// Saves and caches a text file into the asset path.
+        /// </summary>
+        /// <param name="assetRelativePath"></param>
+        /// <param name="value"></param>
+        public static void PutUserText(string assetRelativePath, string value)
+        {
+            var userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Strikeforce Infinity");
+            if (Directory.Exists(userDataPath) == false)
+            {
+                Directory.CreateDirectory(userDataPath);
+            }
+            string assetAbsolutePath = Path.Combine(userDataPath, assetRelativePath).Trim().Replace("\\", "/");
+            File.WriteAllText(assetAbsolutePath, value);
         }
 
         public string GetText(string path, string defaultText = "")
@@ -114,11 +150,15 @@ namespace Si.GameEngine.Core.Managers
 
         private MemoryStream GetCompressedStream(string path)
         {
-            string zipFilePath = Path.Combine(assetRawPath, "Si.Assets.rez");
+#if DEBUG
+            string zipFilePath = "C:\\NTDLS\\StrikeforceInfinity\\Installer\\Si.Assets.rez";
+#else
+            string zipFilePath = "Si.Assets.rez";
+#endif
 
             using (var archive = ArchiveFactory.Open(zipFilePath, new SharpCompress.Readers.ReaderOptions() { ArchiveEncoding = new ArchiveEncoding() { Default = System.Text.Encoding.Default } }))
             {
-                string desiredFilePath = Path.Combine("Assets", path).Trim().Replace("\\", "/");
+                string desiredFilePath = path.Trim().Replace("\\", "/");
 
                 var entry = archive.Entries.FirstOrDefault(e => e.Key.Equals(desiredFilePath, StringComparison.OrdinalIgnoreCase));
                 if (entry != null)

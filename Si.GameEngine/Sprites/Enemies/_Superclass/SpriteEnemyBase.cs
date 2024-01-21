@@ -136,7 +136,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         {
             EnemyShipLoadout loadout = null;
 
-            var loadoutText = EngineAssetManagerDebug.GetUserText($"Enemy.{shipClass}.loadout.json");
+            var loadoutText = EngineAssetManager.GetUserText($"Enemy.{shipClass}.loadout.json");
 
             try
             {
@@ -156,7 +156,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         public void SaveLoadoutToFile(EnemyShipLoadout loadout)
         {
             var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
-            EngineAssetManagerDebug.PutUserText($"Enemy.{loadout.Class}.loadout.json", serializedText);
+            EngineAssetManager.PutUserText($"Enemy.{loadout.Class}.loadout.json", serializedText);
         }
 
         public void ResetLoadout(EnemyShipLoadout loadout)

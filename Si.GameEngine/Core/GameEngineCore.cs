@@ -156,12 +156,12 @@ namespace Si.GameEngine.Core
 
         public static EngineSettings LoadSettings()
         {
-            var engineSettingsText = EngineAssetManagerDebug.GetUserText("Engine.Settings.json");
+            var engineSettingsText = EngineAssetManager.GetUserText("Engine.Settings.json");
 
             if (string.IsNullOrEmpty(engineSettingsText))
             {
                 engineSettingsText = JsonConvert.SerializeObject(new EngineSettings(), Formatting.Indented);
-                EngineAssetManagerDebug.PutUserText("Engine.Settings.json", engineSettingsText);
+                EngineAssetManager.PutUserText("Engine.Settings.json", engineSettingsText);
             }
 
             return JsonConvert.DeserializeObject<EngineSettings>(engineSettingsText);
@@ -197,7 +197,7 @@ namespace Si.GameEngine.Core
 
         public static void SaveSettings(EngineSettings settings)
         {
-            EngineAssetManagerDebug.PutUserText("Engine.Settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
+            EngineAssetManager.PutUserText("Engine.Settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
         }
 
         public void Render()
