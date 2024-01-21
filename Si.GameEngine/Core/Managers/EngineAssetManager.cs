@@ -1,17 +1,25 @@
-﻿using SharpCompress.Archives;
+﻿using NTDLS.DelegateThreadPool;
+using SharpCompress.Archives;
 using SharpCompress.Common;
 using Si.GameEngine.Core.Types;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace Si.GameEngine.Core.Managers
 {
     public class EngineAssetManager
     {
+#if DEBUG
+        private const string _assetPackagePath = "../../../../Installer/Si.Assets.rez";
+#else
+        private const string _assetPackagePath = "Si.Assets.rez";
+#endif
+
         private readonly GameEngineCore _gameEngine;
-        private readonly NTDLS.Semaphore.PessimisticSemaphore<Dictionary<string, object>> _collection = new();
+        private readonly NTDLS.Semaphore.OptimisticSemaphore<Dictionary<string, object>> _collection = new();
 
         public EngineAssetManager(GameEngineCore gameEngine)
         {
@@ -26,6 +34,8 @@ namespace Si.GameEngine.Core.Managers
         /// <returns></returns>
         public static string GetUserText(string assetRelativePath, string defaultText = "")
         {
+            assetRelativePath = assetRelativePath.ToLower();
+
             var userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Strikeforce Infinity");
             if (Directory.Exists(userDataPath) == false)
             {
@@ -47,6 +57,8 @@ namespace Si.GameEngine.Core.Managers
         /// <param name="value"></param>
         public static void PutUserText(string assetRelativePath, string value)
         {
+            assetRelativePath = assetRelativePath.ToLower();
+
             var userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Strikeforce Infinity");
             if (Directory.Exists(userDataPath) == false)
             {
@@ -58,7 +70,9 @@ namespace Si.GameEngine.Core.Managers
 
         public string GetText(string path, string defaultText = "")
         {
-            return _collection.Use(o =>
+            path = path.ToLower();
+
+            return _collection.Write(o =>
             {
                 if (o.TryGetValue(path, out object value))
                 {
@@ -80,9 +94,11 @@ namespace Si.GameEngine.Core.Managers
             });
         }
 
-        public SiAudioClip GetAudio(string path, float initialVolumne, bool loopForever = false)
+        public SiAudioClip GetAudio(string path)
         {
-            return _collection.Use(o =>
+            path = path.ToLower();
+
+            return _collection.Write(o =>
             {
                 path = path.Trim().ToLower();
 
@@ -91,37 +107,64 @@ namespace Si.GameEngine.Core.Managers
                     return (SiAudioClip)value;
                 }
 
-                using (var stream = GetCompressedStream(path))
+                using var stream = GetCompressedStream(path);
+                var result = new SiAudioClip(_gameEngine, stream, 1, false);
+                o.Add(path, result);
+                stream.Close();
+                return result;
+            });
+        }
+
+        public SiAudioClip GetAudio(string path, float initialVolumne, bool loopForever = false)
+        {
+            path = path.ToLower();
+
+            return _collection.Write(o =>
+            {
+                path = path.Trim().ToLower();
+
+                if (o.TryGetValue(path, out object value))
                 {
-                    var result = new SiAudioClip(_gameEngine, stream, initialVolumne, loopForever);
-                    o.Add(path, result);
-                    stream.Close();
-                    return result;
+                    ((SiAudioClip)value).SetInitialVolumne(initialVolumne);
+                    ((SiAudioClip)value).SetLoopForever(loopForever);
+
+                    return (SiAudioClip)value;
                 }
+
+                using var stream = GetCompressedStream(path);
+                var result = new SiAudioClip(_gameEngine, stream, initialVolumne, loopForever);
+                o.Add(path, result);
+                stream.Close();
+                return result;
             });
         }
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(string path)
         {
-            return _collection.Use(o =>
-            {
-                if (o.TryGetValue(path, out object value))
-                {
-                    return (SharpDX.Direct2D1.Bitmap)value;
-                }
+            path = path.ToLower();
 
-                using (var stream = GetCompressedStream(path))
-                {
-                    var bitmap = _gameEngine.Rendering.GetBitmap(stream);
-                    o.Add(path, bitmap);
-                    return bitmap;
-                }
+            var cached = _collection.Read(o =>
+            {
+                o.TryGetValue(path, out object value);
+                return (SharpDX.Direct2D1.Bitmap)value;
             });
+
+            if (cached != null)
+            {
+                return cached;
+            }
+
+            using var stream = GetCompressedStream(path);
+            var bitmap = _gameEngine.Rendering.GetBitmap(stream);
+            _collection.Write(o => o.TryAdd(path, bitmap));
+            return bitmap;
         }
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(string path, int newWidth, int newHeight)
         {
-            return _collection.Use(o =>
+            path = path.ToLower();
+
+            return _collection.Write(o =>
             {
                 string cacheKey = $"{path}:{newWidth}:{newHeight}";
 
@@ -130,14 +173,37 @@ namespace Si.GameEngine.Core.Managers
                     return (SharpDX.Direct2D1.Bitmap)value;
                 }
 
-                using (var stream = GetCompressedStream(path))
-                {
-                    var bitmap = _gameEngine.Rendering.GetBitmap(stream, newWidth, newHeight);
-
-                    o.Add(cacheKey, bitmap);
-                    return bitmap;
-                }
+                using var stream = GetCompressedStream(path);
+                var bitmap = _gameEngine.Rendering.GetBitmap(stream, newWidth, newHeight);
+                o.Add(cacheKey, bitmap);
+                return bitmap;
             });
+        }
+
+        public void PreCacheAllAssets()
+        {
+            using (var archive = ArchiveFactory.Open(_assetPackagePath))
+            {
+                using (DelegateThreadPool dtp = new(Environment.ProcessorCount * 4))
+                {
+                    var dtpQueue = dtp.CreateQueueStateCollection();
+
+                    foreach (var entry in archive.Entries)
+                    {
+                        switch (Path.GetExtension(entry.Key).ToLower())
+                        {
+                            case ".png":
+                                dtpQueue.Enqueue(() => GetBitmap(entry.Key));
+                                break;
+                            case ".wav":
+                                dtpQueue.Enqueue(() => GetAudio(entry.Key));
+                                break;
+                        }
+                    }
+
+                    dtpQueue.WaitForCompletion();
+                }
+            }
         }
 
         private string GetCompressedText(string path)
@@ -150,26 +216,18 @@ namespace Si.GameEngine.Core.Managers
 
         private MemoryStream GetCompressedStream(string path)
         {
-#if DEBUG
-            string zipFilePath = "C:\\NTDLS\\StrikeforceInfinity\\Installer\\Si.Assets.rez";
-#else
-            string zipFilePath = "Si.Assets.rez";
-#endif
-
-            using (var archive = ArchiveFactory.Open(zipFilePath, new SharpCompress.Readers.ReaderOptions() { ArchiveEncoding = new ArchiveEncoding() { Default = System.Text.Encoding.Default } }))
+            using (var archive = ArchiveFactory.Open(_assetPackagePath, new SharpCompress.Readers.ReaderOptions() { ArchiveEncoding = new ArchiveEncoding() { Default = System.Text.Encoding.Default } }))
             {
                 string desiredFilePath = path.Trim().Replace("\\", "/");
 
                 var entry = archive.Entries.FirstOrDefault(e => e.Key.Equals(desiredFilePath, StringComparison.OrdinalIgnoreCase));
                 if (entry != null)
                 {
-                    using (var stream = entry.OpenEntryStream())
-                    {
-                        var memoryStream = new MemoryStream();
-                        stream.CopyTo(memoryStream);
-                        memoryStream.Position = 0;
-                        return memoryStream;
-                    }
+                    using var stream = entry.OpenEntryStream();
+                    var memoryStream = new MemoryStream();
+                    stream.CopyTo(memoryStream);
+                    memoryStream.Position = 0;
+                    return memoryStream;
                 }
             }
 

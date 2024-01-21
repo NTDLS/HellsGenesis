@@ -52,10 +52,12 @@ namespace Si.Game
 
             try
             {
+                /*
                 using (var player = new SoundPlayer(@"..\..\..\Assets\Splash.wav"))
                 {
                     player.Play();
                 }
+                */
             }
             catch { }
         }

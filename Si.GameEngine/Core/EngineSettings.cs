@@ -15,6 +15,8 @@ namespace Si.GameEngine.Core
         public bool HighlightAllSprites { get; set; } = false;
 
         public Size Resolution { get; set; }
+
+        public bool PreCacheAllAssets { get; set; } = true;
         public bool FullScreen { get; set; }
         public bool AlwaysOnTop { get; set; }
 

@@ -16,7 +16,7 @@ namespace Si.GameEngine.Core.Types
         private readonly AudioBuffer _buffer;
         private readonly SoundStream _soundstream;
         private SourceVoice _singleSourceVoice;
-        private readonly bool _loopForever;
+        private bool _loopForever;
         private bool _isPlaying = false; //Only applicable when _loopForever == false;
         private bool _isFading;
         public float InitialVolumne { get; private set; }
@@ -25,6 +25,16 @@ namespace Si.GameEngine.Core.Types
         public void SetVolume(float volumne)
         {
             _singleSourceVoice.SetVolume(volumne);
+        }
+
+        public void SetInitialVolumne(float volumne)
+        {
+            InitialVolumne = volumne;
+        }
+
+        public void SetLoopForever(bool loopForever)
+        {
+            _loopForever = loopForever;
         }
 
         public SiAudioClip(GameEngineCore gameEngine, Stream stream, float initialVolumne = 1, bool loopForever = false)

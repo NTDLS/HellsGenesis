@@ -106,6 +106,11 @@ namespace Si.GameEngine.Core
 
             SiReflection.BuildReflectionCacheOfType<SpriteBase>();
 
+            if (Settings.PreCacheAllAssets)
+            {
+                Assets.PreCacheAllAssets();
+            }
+
             _worldClock = new EngineWorldClock(this);
 
             Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
@@ -129,7 +134,6 @@ namespace Si.GameEngine.Core
             Menus = new MenusTickController(this);
             Player = new PlayerSpriteTickController(this);
             Rendering = new EngineRendering(this);
-
             Multiplay = new EngineMultiplayManager();
 
             _multiplayClientEventHandlers = new MultiplayClientEventHandlers(this);
@@ -142,12 +146,15 @@ namespace Si.GameEngine.Core
 
             SiReflection.BuildReflectionCacheOfType<SpriteBase>();
 
+            if (Settings.PreCacheAllAssets)
+            {
+                Assets.PreCacheAllAssets();
+            }
+
             _worldClock = new EngineWorldClock(this);
 
             Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
-
-
 
         public void EnableDebugging(IDebugForm debugForm)
         {

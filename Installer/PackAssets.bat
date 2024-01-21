@@ -6,6 +6,6 @@ Echo Deleting existing archive...
 del "Si.Assets.rez"
 
 Echo Creatng new archive...
-7z.exe a -tzip -mx9 "Si.Assets.rez" "Assets\*.*" -r
+7z.exe a -tzip -mx0 "Si.Assets.rez" "Assets/." -r
 
 Pause
