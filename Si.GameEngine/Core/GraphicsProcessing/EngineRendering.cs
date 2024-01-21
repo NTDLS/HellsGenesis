@@ -113,9 +113,9 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             }
         }
 
-        public SharpDX.Direct2D1.Bitmap GetBitmap(string path)
+        public SharpDX.Direct2D1.Bitmap GetBitmap(Stream stream)
         {
-            using (var image = System.Drawing.Image.FromFile(path))
+            using (var image = System.Drawing.Image.FromStream(stream))
             {
                 // Create a WIC stream from the System.Drawing.Image
                 using var wicFactory = new ImagingFactory();
@@ -131,9 +131,9 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             }
         }
 
-        public SharpDX.Direct2D1.Bitmap GetBitmap(string path, int newWidth, int newHeight)
+        public SharpDX.Direct2D1.Bitmap GetBitmap(Stream stream, int newWidth, int newHeight)
         {
-            using (var image = System.Drawing.Image.FromFile(path))
+            using (var image = System.Drawing.Image.FromStream(stream))
             {
                 var resizedImage = new System.Drawing.Bitmap(newWidth, newHeight);
 
@@ -156,6 +156,8 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
             }
         }
+
+
 
         /// <summary>
         /// Draws a bitmap at the specified location.

@@ -15,7 +15,6 @@ using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies._Superclass
@@ -137,7 +136,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         {
             EnemyShipLoadout loadout = null;
 
-            var loadoutText = EngineAssetManager.GetUserText($"Enemy.{shipClass}.loadout.json");
+            var loadoutText = EngineAssetManagerDebug.GetUserText($"Enemy.{shipClass}.loadout.json");
 
             try
             {
@@ -157,7 +156,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         public void SaveLoadoutToFile(EnemyShipLoadout loadout)
         {
             var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
-            EngineAssetManager.PutUserText($"Enemy.{loadout.Class}.loadout.json", serializedText);
+            EngineAssetManagerDebug.PutUserText($"Enemy.{loadout.Class}.loadout.json", serializedText);
         }
 
         public void ResetLoadout(EnemyShipLoadout loadout)

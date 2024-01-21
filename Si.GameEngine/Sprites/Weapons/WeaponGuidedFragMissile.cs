@@ -67,7 +67,7 @@ namespace Si.GameEngine.Sprites.Weapons
                 }
                 else
                 {
-                    foreach (var weaponLock in LockedTargets.Where(o=>o.LockType == Library.SiConstants.SiWeaponsLockType.Hard))
+                    foreach (var weaponLock in LockedTargets.Where(o => o.LockType == Library.SiConstants.SiWeaponsLockType.Hard))
                     {
                         if (_toggle)
                         {

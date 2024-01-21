@@ -149,7 +149,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
         {
             PlayerShipLoadout loadout = null;
 
-            var loadoutText = EngineAssetManager.GetUserText($"Player.{shipClass}.loadout.json");
+            var loadoutText = EngineAssetManagerDebug.GetUserText($"Player.{shipClass}.loadout.json");
 
             try
             {
@@ -169,7 +169,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
         public void SaveLoadoutToFile(PlayerShipLoadout loadout)
         {
             var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
-            EngineAssetManager.PutUserText($"Player.{loadout.Class}.loadout.json", serializedText);
+            EngineAssetManagerDebug.PutUserText($"Player.{loadout.Class}.loadout.json", serializedText);
         }
 
         /// <summary>
