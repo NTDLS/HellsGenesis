@@ -8,7 +8,7 @@ namespace Si.Server.Core.Objects
     internal class Lobby
     {
         private readonly ServerEngineCore _serverCore;
-        private readonly PessimisticSemaphore<Dictionary<Guid, LobbyConnection>> _connections = new();
+        private readonly PessimisticCriticalResource<Dictionary<Guid, LobbyConnection>> _connections = new();
         private readonly System.Timers.Timer _pingTimer = new(1000);
         private readonly System.Timers.Timer _lobbyStartTimer = new(1000);
         private DateTime? _countdownStartTime;

@@ -50,11 +50,14 @@
             checkBoxHighlightNatrualBounds = new System.Windows.Forms.CheckBox();
             buttonCancel = new System.Windows.Forms.Button();
             buttonSave = new System.Windows.Forms.Button();
+            tabPageAdvanced = new System.Windows.Forms.TabPage();
+            checkBoxPreCacheAllAssets = new System.Windows.Forms.CheckBox();
             tabControl1.SuspendLayout();
             tabPageDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarResolution).BeginInit();
             tabPageDisplayAdvanced.SuspendLayout();
             tabPageDebug.SuspendLayout();
+            tabPageAdvanced.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -62,6 +65,7 @@
             tabControl1.Controls.Add(tabPageDisplay);
             tabControl1.Controls.Add(tabPageDisplayAdvanced);
             tabControl1.Controls.Add(tabPageDebug);
+            tabControl1.Controls.Add(tabPageAdvanced);
             tabControl1.Location = new System.Drawing.Point(12, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -262,6 +266,27 @@
             buttonSave.UseVisualStyleBackColor = true;
             buttonSave.Click += ButtonSave_Click;
             // 
+            // tabPageAdvanced
+            // 
+            tabPageAdvanced.Controls.Add(checkBoxPreCacheAllAssets);
+            tabPageAdvanced.Location = new System.Drawing.Point(4, 24);
+            tabPageAdvanced.Name = "tabPageAdvanced";
+            tabPageAdvanced.Padding = new System.Windows.Forms.Padding(3);
+            tabPageAdvanced.Size = new System.Drawing.Size(542, 304);
+            tabPageAdvanced.TabIndex = 3;
+            tabPageAdvanced.Text = "Advanced";
+            tabPageAdvanced.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxPreCacheAllAssets
+            // 
+            checkBoxPreCacheAllAssets.AutoSize = true;
+            checkBoxPreCacheAllAssets.Location = new System.Drawing.Point(6, 20);
+            checkBoxPreCacheAllAssets.Name = "checkBoxPreCacheAllAssets";
+            checkBoxPreCacheAllAssets.Size = new System.Drawing.Size(133, 19);
+            checkBoxPreCacheAllAssets.TabIndex = 0;
+            checkBoxPreCacheAllAssets.Text = "Pre-cache all assets?";
+            checkBoxPreCacheAllAssets.UseVisualStyleBackColor = true;
+            // 
             // FormSettings
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -286,6 +311,8 @@
             tabPageDisplayAdvanced.PerformLayout();
             tabPageDebug.ResumeLayout(false);
             tabPageDebug.PerformLayout();
+            tabPageAdvanced.ResumeLayout(false);
+            tabPageAdvanced.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -311,5 +338,7 @@
         private System.Windows.Forms.CheckBox checkBoxEnableSpriteInterrogation;
         private System.Windows.Forms.CheckBox checkBoxHighlightAllSprites;
         private System.Windows.Forms.CheckBox checkBoxHighlightNatrualBounds;
+        private System.Windows.Forms.TabPage tabPageAdvanced;
+        private System.Windows.Forms.CheckBox checkBoxPreCacheAllAssets;
     }
 }

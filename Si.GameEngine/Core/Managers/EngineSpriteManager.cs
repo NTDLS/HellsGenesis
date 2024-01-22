@@ -37,7 +37,7 @@ namespace Si.GameEngine.Core.Managers
 
         #region Sprites and their factories.
 
-        private readonly PessimisticSemaphore<List<SpriteBase>> _collection = new();
+        private readonly PessimisticCriticalResource<List<SpriteBase>> _collection = new();
         public AnimationSpriteTickController Animations { get; private set; }
         public AttachmentSpriteTickController Attachments { get; private set; }
         public MunitionSpriteTickController Munitions { get; private set; }

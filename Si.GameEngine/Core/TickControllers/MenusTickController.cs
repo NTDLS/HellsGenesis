@@ -12,7 +12,7 @@ namespace Si.GameEngine.Core.TickControllers
         public delegate void CollectionAccessor(List<MenuBase> sprites);
         public delegate T CollectionAccessorT<T>(List<MenuBase> sprites);
 
-        private readonly PessimisticSemaphore<List<MenuBase>> _collection = new();
+        private readonly PessimisticCriticalResource<List<MenuBase>> _collection = new();
 
         public MenusTickController(GameEngineCore gameEngine)
             : base(gameEngine)

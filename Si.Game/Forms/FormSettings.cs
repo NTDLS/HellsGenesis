@@ -23,6 +23,7 @@ namespace Si.Game
             checkBoxHighlightAllSprites.Checked = settings.HighlightAllSprites;
             checkBoxHighlightNatrualBounds.Checked = settings.HighlightNatrualBounds;
             checkBoxEnableSpriteInterrogation.Checked = settings.EnableSpriteInterrogation;
+            checkBoxPreCacheAllAssets.Checked = settings.PreCacheAllAssets;
             textBoxFramePerSecondLimit.Text = $"{settings.FramePerSecondLimit:n0}";
             textBoxOverdrawScale.Text = $"{settings.OverdrawScale:n0}";
             textBoxInitialFrameStarCount.Text = $"{settings.InitialFrameStarCount:n0}";
@@ -106,6 +107,7 @@ namespace Si.Game
                 settings.HighlightAllSprites = checkBoxHighlightAllSprites.Checked;
                 settings.HighlightNatrualBounds = checkBoxHighlightNatrualBounds.Checked;
                 settings.EnableSpriteInterrogation = checkBoxEnableSpriteInterrogation.Checked;
+                settings.PreCacheAllAssets = checkBoxPreCacheAllAssets.Checked;
 
                 settings.FramePerSecondLimit = GetAndValidate(textBoxFramePerSecondLimit, 30, 1000, "Frame Limiter");
                 settings.OverdrawScale = GetAndValidate(textBoxOverdrawScale, 1.0, 10.0, "Overdraw scale");

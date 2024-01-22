@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 
 namespace Si.GameEngine.Core.Managers
 {
@@ -19,7 +18,7 @@ namespace Si.GameEngine.Core.Managers
 #endif
 
         private readonly GameEngineCore _gameEngine;
-        private readonly NTDLS.Semaphore.OptimisticSemaphore<Dictionary<string, object>> _collection = new();
+        private readonly NTDLS.Semaphore.OptimisticCriticalResource<Dictionary<string, object>> _collection = new();
 
         public EngineAssetManager(GameEngineCore gameEngine)
         {
@@ -72,71 +71,73 @@ namespace Si.GameEngine.Core.Managers
         {
             path = path.ToLower();
 
-            return _collection.Write(o =>
+            var cached = _collection.Read(o =>
             {
-                if (o.TryGetValue(path, out object value))
-                {
-                    return value as string;
-                }
-                else
-                {
-                    try
-                    {
-                        var text = GetCompressedText(path);
-                        o.Add(path, text);
-                        return text;
-                    }
-                    catch
-                    {
-                        return defaultText;
-                    }
-                }
+                o.TryGetValue(path, out object value);
+                return value as string;
             });
+            if (cached != null)
+            {
+                return cached;
+            }
+
+            try
+            {
+                var text = GetCompressedText(path);
+                _collection.Write(o => o.TryAdd(path, text));
+                return text;
+            }
+            catch
+            {
+                return defaultText;
+            }
         }
 
         public SiAudioClip GetAudio(string path)
         {
             path = path.ToLower();
 
-            return _collection.Write(o =>
+            var cached = _collection.Read(o =>
             {
-                path = path.Trim().ToLower();
-
-                if (o.TryGetValue(path, out object value))
-                {
-                    return (SiAudioClip)value;
-                }
-
-                using var stream = GetCompressedStream(path);
-                var result = new SiAudioClip(_gameEngine, stream, 1, false);
-                o.Add(path, result);
-                stream.Close();
-                return result;
+                o.TryGetValue(path, out object value);
+                return (SiAudioClip)value;
             });
+            if (cached != null)
+            {
+                return cached;
+            }
+
+            using var stream = GetCompressedStream(path);
+            var result = new SiAudioClip(_gameEngine, stream, 1, false);
+            _collection.Write(o => o.TryAdd(path, result));
+            stream.Close();
+            return result;
         }
 
         public SiAudioClip GetAudio(string path, float initialVolumne, bool loopForever = false)
         {
             path = path.ToLower();
 
-            return _collection.Write(o =>
+            var cached = _collection.Read(o =>
             {
-                path = path.Trim().ToLower();
-
                 if (o.TryGetValue(path, out object value))
                 {
                     ((SiAudioClip)value).SetInitialVolumne(initialVolumne);
                     ((SiAudioClip)value).SetLoopForever(loopForever);
-
                     return (SiAudioClip)value;
                 }
-
-                using var stream = GetCompressedStream(path);
-                var result = new SiAudioClip(_gameEngine, stream, initialVolumne, loopForever);
-                o.Add(path, result);
-                stream.Close();
-                return result;
+                return null;
             });
+            if (cached != null)
+            {
+                return cached;
+            }
+
+            using var stream = GetCompressedStream(path);
+            var result = new SiAudioClip(_gameEngine, stream, initialVolumne, loopForever);
+            _collection.Write(o => o.TryAdd(path, result));
+            stream.Close();
+            return result;
         }
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(string path)
@@ -148,7 +149,6 @@ namespace Si.GameEngine.Core.Managers
                 o.TryGetValue(path, out object value);
                 return (SharpDX.Direct2D1.Bitmap)value;
             });
-
             if (cached != null)
             {
                 return cached;
@@ -208,10 +208,8 @@ namespace Si.GameEngine.Core.Managers
 
         private string GetCompressedText(string path)
         {
-            using (var stream = GetCompressedStream(path))
-            {
-                return System.Text.Encoding.UTF8.GetString(stream.ToArray());
-            }
+            using var stream = GetCompressedStream(path);
+            return System.Text.Encoding.UTF8.GetString(stream.ToArray());
         }
 
         private MemoryStream GetCompressedStream(string path)

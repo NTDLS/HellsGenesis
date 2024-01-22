@@ -5,9 +5,9 @@ namespace Si.Library
 {
     public static class SiReflection
     {
-        private static readonly PessimisticSemaphore<Dictionary<string, Type>> _typeCache = new();
-        private static readonly PessimisticSemaphore<Dictionary<string, PropertyInfo>> _staticPropertyCache = new();
-        private static readonly PessimisticSemaphore<Dictionary<Type, List<Type>>> _subClassesOfCache = new();
+        private static readonly PessimisticCriticalResource<Dictionary<string, Type>> _typeCache = new();
+        private static readonly PessimisticCriticalResource<Dictionary<string, PropertyInfo>> _staticPropertyCache = new();
+        private static readonly PessimisticCriticalResource<Dictionary<Type, List<Type>>> _subClassesOfCache = new();
 
         public static IEnumerable<Type> GetSubClassesOf<T>()
         {

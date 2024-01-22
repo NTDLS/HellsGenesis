@@ -10,7 +10,7 @@ namespace Si.GameEngine.Core.TickControllers
 {
     public class EventsTickController : UnvectoredTickControllerBase<SiEngineCallbackEvent>
     {
-        private readonly PessimisticSemaphore<List<SiEngineCallbackEvent>> _collection = new();
+        private readonly PessimisticCriticalResource<List<SiEngineCallbackEvent>> _collection = new();
 
         public EventsTickController(GameEngineCore gameEngine)
             : base(gameEngine)
