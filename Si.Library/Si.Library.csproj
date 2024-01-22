@@ -23,8 +23,8 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.3.7" />
+    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.3.8" />
     <PackageReference Include="NTDLS.Semaphore" Version="3.3.0" />
-    <PackageReference Include="NTDLS.UDPPacketFraming" Version="1.0.4" />
+    <PackageReference Include="NTDLS.UDPPacketFraming" Version="1.0.5" />
   </ItemGroup>
 </Project>
