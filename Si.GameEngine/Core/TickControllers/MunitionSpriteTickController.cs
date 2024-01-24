@@ -1,4 +1,4 @@
-﻿using NTDLS.DelegateThreadPool;
+﻿using NTDLS.DelegateThreadPooling;
 using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;

@@ -1,4 +1,4 @@
-﻿using NTDLS.DelegateThreadPool;
+﻿using NTDLS.DelegateThreadPooling;
 using SharpCompress.Archives;
 using SharpCompress.Common;
 using Si.GameEngine.Core.Types;
