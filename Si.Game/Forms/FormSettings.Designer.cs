@@ -48,10 +48,10 @@
             checkBoxEnableSpriteInterrogation = new System.Windows.Forms.CheckBox();
             checkBoxHighlightAllSprites = new System.Windows.Forms.CheckBox();
             checkBoxHighlightNatrualBounds = new System.Windows.Forms.CheckBox();
-            buttonCancel = new System.Windows.Forms.Button();
-            buttonSave = new System.Windows.Forms.Button();
             tabPageAdvanced = new System.Windows.Forms.TabPage();
             checkBoxPreCacheAllAssets = new System.Windows.Forms.CheckBox();
+            buttonCancel = new System.Windows.Forms.Button();
+            buttonSave = new System.Windows.Forms.Button();
             tabControl1.SuspendLayout();
             tabPageDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarResolution).BeginInit();
@@ -246,26 +246,6 @@
             checkBoxHighlightNatrualBounds.Text = "Highlight natrual bounds?";
             checkBoxHighlightNatrualBounds.UseVisualStyleBackColor = true;
             // 
-            // buttonCancel
-            // 
-            buttonCancel.Location = new System.Drawing.Point(402, 350);
-            buttonCancel.Name = "buttonCancel";
-            buttonCancel.Size = new System.Drawing.Size(75, 23);
-            buttonCancel.TabIndex = 18;
-            buttonCancel.Text = "Cancel";
-            buttonCancel.UseVisualStyleBackColor = true;
-            buttonCancel.Click += ButtonCancel_Click;
-            // 
-            // buttonSave
-            // 
-            buttonSave.Location = new System.Drawing.Point(483, 350);
-            buttonSave.Name = "buttonSave";
-            buttonSave.Size = new System.Drawing.Size(75, 23);
-            buttonSave.TabIndex = 19;
-            buttonSave.Text = "Save";
-            buttonSave.UseVisualStyleBackColor = true;
-            buttonSave.Click += ButtonSave_Click;
-            // 
             // tabPageAdvanced
             // 
             tabPageAdvanced.Controls.Add(checkBoxPreCacheAllAssets);
@@ -286,6 +266,26 @@
             checkBoxPreCacheAllAssets.TabIndex = 0;
             checkBoxPreCacheAllAssets.Text = "Pre-cache all assets?";
             checkBoxPreCacheAllAssets.UseVisualStyleBackColor = true;
+            // 
+            // buttonCancel
+            // 
+            buttonCancel.Location = new System.Drawing.Point(402, 350);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new System.Drawing.Size(75, 23);
+            buttonCancel.TabIndex = 18;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = true;
+            buttonCancel.Click += ButtonCancel_Click;
+            // 
+            // buttonSave
+            // 
+            buttonSave.Location = new System.Drawing.Point(483, 350);
+            buttonSave.Name = "buttonSave";
+            buttonSave.Size = new System.Drawing.Size(75, 23);
+            buttonSave.TabIndex = 19;
+            buttonSave.Text = "Save";
+            buttonSave.UseVisualStyleBackColor = true;
+            buttonSave.Click += ButtonSave_Click;
             // 
             // FormSettings
             // 
