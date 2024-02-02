@@ -11,7 +11,7 @@ namespace Si.GameEngine.Core
     /// <summary>
     /// The world clock. Moves all objects forward in time, renders all objects and keeps the frame-counter in check.
     /// </summary>
-    internal class EngineWorldClock
+    internal class EngineWorldClock : IDisposable
     {
         private readonly GameEngineCore _gameEngine;
         private bool _shutdown = false;
@@ -34,7 +34,7 @@ namespace Si.GameEngine.Core
             var evt = _gameEngine.Events.Create(new TimeSpan(0, 0, 0, 0, 10), UpdateStatusText, SiEngineCallbackEvent.SiCallbackEventMode.Recurring);
         }
 
-        public void Shutdown()
+        public void Dispose()
         {
             _shutdown = true;
             _graphicsThread.Join();

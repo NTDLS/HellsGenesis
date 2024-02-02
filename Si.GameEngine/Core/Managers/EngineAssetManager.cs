@@ -1,4 +1,5 @@
 ﻿using NTDLS.DelegateThreadPooling;
+using NTDLS.Semaphore;
 using SharpCompress.Archives;
 using SharpCompress.Common;
 using Si.GameEngine.Core.Types;
@@ -9,7 +10,7 @@ using System.Linq;
 
 namespace Si.GameEngine.Core.Managers
 {
-    public class EngineAssetManager
+    public class EngineAssetManager : IDisposable
     {
 #if DEBUG
         private const string _assetPackagePath = "../../../../Installer/Si.Assets.rez";
@@ -18,11 +19,28 @@ namespace Si.GameEngine.Core.Managers
 #endif
 
         private readonly GameEngineCore _gameEngine;
-        private readonly NTDLS.Semaphore.OptimisticCriticalResource<Dictionary<string, object>> _collection = new();
+        private readonly OptimisticCriticalResource<Dictionary<string, object>> _collection = new();
+        private readonly IArchive _archive = null;
+        private readonly Dictionary<string, IArchiveEntry> _entryHashes;
 
         public EngineAssetManager(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
+
+            _archive = ArchiveFactory.Open(_assetPackagePath, new SharpCompress.Readers.ReaderOptions()
+            {
+                ArchiveEncoding = new ArchiveEncoding()
+                {
+                    Default = System.Text.Encoding.Default
+                }
+            });
+
+            _entryHashes = _archive.Entries.ToDictionary(item => item.Key.ToLower(), item => item);
+        }
+
+        public void Dispose()
+        {
+            _archive.Dispose();
         }
 
         /// <summary>
@@ -184,7 +202,7 @@ namespace Si.GameEngine.Core.Managers
         {
             using (var archive = ArchiveFactory.Open(_assetPackagePath))
             {
-                using (DelegateThreadPool dtp = new(Environment.ProcessorCount * 4))
+                using (var dtp = new DelegateThreadPool(Environment.ProcessorCount * 4))
                 {
                     var dtpQueue = dtp.CreateQueueStateCollection();
 
@@ -214,12 +232,11 @@ namespace Si.GameEngine.Core.Managers
 
         private MemoryStream GetCompressedStream(string path)
         {
-            using (var archive = ArchiveFactory.Open(_assetPackagePath, new SharpCompress.Readers.ReaderOptions() { ArchiveEncoding = new ArchiveEncoding() { Default = System.Text.Encoding.Default } }))
-            {
-                string desiredFilePath = path.Trim().Replace("\\", "/");
+            path = path.Trim().Replace("\\", "/");
 
-                var entry = archive.Entries.FirstOrDefault(e => e.Key.Equals(desiredFilePath, StringComparison.OrdinalIgnoreCase));
-                if (entry != null)
+            if (_entryHashes.TryGetValue(path, out var entry))
+            {
+                lock (_entryHashes)
                 {
                     using var stream = entry.OpenEntryStream();
                     var memoryStream = new MemoryStream();

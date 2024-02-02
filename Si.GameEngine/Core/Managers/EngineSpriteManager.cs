@@ -22,7 +22,7 @@ namespace Si.GameEngine.Core.Managers
     /// <summary>
     /// Contains the collection of all sprites and their factories.
     /// </summary>
-    public class EngineSpriteManager
+    public class EngineSpriteManager : IDisposable
     {
         public delegate void CollectionAccessor(List<SpriteBase> sprites);
         public delegate T CollectionAccessorT<T>(List<SpriteBase> sprites);
@@ -138,11 +138,9 @@ namespace Si.GameEngine.Core.Managers
             PlayerStatsText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
             PlayerStatsText.Visable = false;
             DebugText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
-
-            _gameEngine.Audio.BackgroundMusicSound.Play();
         }
 
-        public void Shutdown()
+        public void Dispose()
         {
         }
 

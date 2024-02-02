@@ -15,7 +15,7 @@ namespace Si.MultiplayClient
     /// <summary>
     /// The Multiplay manager is what we use to communicate with the Server. It is used by the game and the independent lobby hosts.
     /// </summary>
-    public class EngineMultiplayManager
+    public class EngineMultiplayManager : IDisposable
     {
         #region Events
 
@@ -494,7 +494,7 @@ namespace Si.MultiplayClient
         /// <summary>
         /// Used to cleanup any resources used by the multplay manager.
         /// </summary>
-        public void Shutdown()
+        public void Dispose()
         {
             SiUtility.TryAndIgnore(() => UdpManager?.Shutdown());
             SiUtility.TryAndIgnore(() => _internal_messageClient?.Disconnect());

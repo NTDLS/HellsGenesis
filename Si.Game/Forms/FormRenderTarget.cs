@@ -6,7 +6,6 @@ using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;

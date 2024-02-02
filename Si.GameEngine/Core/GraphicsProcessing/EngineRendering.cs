@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Si.GameEngine.Core.GraphicsProcessing
 {
-    public class EngineRendering
+    public class EngineRendering : IDisposable
     {
         private readonly GameEngineCore _gameEngine;
 
@@ -55,7 +55,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             TextFormats = new PrecreatedTextFormats(_directWriteFactory);
         }
 
-        public void Cleanup()
+        public void Dispose()
         {
             ScreenRenderTarget?.Dispose();
             ScreenRenderTarget?.Dispose();

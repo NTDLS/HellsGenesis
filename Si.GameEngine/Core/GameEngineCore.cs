@@ -5,11 +5,14 @@ using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Menus;
+using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
+using Si.Library.Types.Geometry;
 using Si.MultiplayClient;
 using System;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Si.GameEngine.Core
@@ -104,16 +107,7 @@ namespace Si.GameEngine.Core
             Multiplay.OnHostLevelStarted += _multiplayClientEventHandlers.OnHostLevelStarted;
             Multiplay.OnSpriteCreated += _multiplayClientEventHandlers.OnSpriteCreated;
 
-            SiReflection.BuildReflectionCacheOfType<SpriteBase>();
-
-            if (Settings.PreCacheAllAssets)
-            {
-                Assets.PreCacheAllAssets();
-            }
-
             _worldClock = new EngineWorldClock(this);
-
-            Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
 
         /// <summary>
@@ -144,16 +138,7 @@ namespace Si.GameEngine.Core
             Multiplay.OnHostLevelStarted += _multiplayClientEventHandlers.OnHostLevelStarted;
             Multiplay.OnSpriteCreated += _multiplayClientEventHandlers.OnSpriteCreated;
 
-            SiReflection.BuildReflectionCacheOfType<SpriteBase>();
-
-            if (Settings.PreCacheAllAssets)
-            {
-                Assets.PreCacheAllAssets();
-            }
-
             _worldClock = new EngineWorldClock(this);
-
-            Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
         }
 
         public void EnableDebugging(IDebugForm debugForm)
@@ -252,10 +237,27 @@ namespace Si.GameEngine.Core
                 IsRunning = true;
                 Sprites.Start();
                 //Sprites.ResetPlayer();
-
                 _worldClock.Start();
 
+                var textBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
+                    Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true);
+
+                textBlock.SetTextAndCenter("Building reflection cache...");
+                SiReflection.BuildReflectionCacheOfType<SpriteBase>();
+
+                if (Settings.PreCacheAllAssets)
+                {
+                    textBlock.SetTextAndCenter("Building asset cache...");
+                    Assets.PreCacheAllAssets();
+                }
+
+                textBlock.QueueForDelete();
+
                 OnStartEngine?.Invoke(this);
+
+                Audio.BackgroundMusicSound.Play();
+
+                Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
             }
         }
 
@@ -263,12 +265,15 @@ namespace Si.GameEngine.Core
         {
             if (IsRunning)
             {
-                Multiplay.Shutdown();
                 IsRunning = false;
-                _worldClock.Shutdown();
-                Sprites.Shutdown();
+
                 OnStopEngine?.Invoke(this);
-                Rendering.Cleanup();
+
+                Multiplay.Dispose();
+                _worldClock.Dispose();
+                Sprites.Dispose();
+                Rendering.Dispose();
+                Assets.Dispose();
             }
         }
 

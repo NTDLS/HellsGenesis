@@ -49,6 +49,13 @@ namespace Si.GameEngine.Sprites
             Format = format;
         }
 
+        public void SetTextAndCenter(string text)
+        {
+            Text = text;
+            X = _gameEngine.Display.NatrualScreenSize.Width / 2 - Size.Width / 2;
+            Y = _gameEngine.Display.NatrualScreenSize.Height / 2 - Size.Height / 2;
+        }
+
         public override void Render(RenderTarget renderTarget)
         {
             if (Visable)
