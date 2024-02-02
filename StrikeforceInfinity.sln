@@ -5,8 +5,8 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{5E60224E-A4A6-47B6-A293-F24A5EFE403F}"
 	ProjectSection(SolutionItems) = preProject
-		Menus.md = Menus.md
 		AIModelsmd.md = AIModelsmd.md
+		Menus.md = Menus.md
 		Modules.md = Modules.md
 		Terms.md = Terms.md
 		ToDo.md = ToDo.md
@@ -31,6 +31,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Library", "Si.Library\Si.Library.csproj", "{990E2120-BC2B-4C6D-A1B0-663A7D88A2EC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Server", "Si.Server\Si.Server.csproj", "{C37989E4-BB72-448A-8327-CCFE67510932}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{AB4BD3BA-2122-4876-8FD5-3AF65A233D1A}"
+	ProjectSection(SolutionItems) = preProject
+		Installer\Setup.Iss = Installer\Setup.Iss
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

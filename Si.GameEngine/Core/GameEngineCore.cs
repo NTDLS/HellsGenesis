@@ -5,14 +5,12 @@ using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Menus;
-using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.Types.Geometry;
 using Si.MultiplayClient;
 using System;
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace Si.GameEngine.Core
