@@ -107,7 +107,7 @@ namespace Si.GameEngine.Core.Managers
             {
                 try
                 {
-                    _debugForm.WriteLine($"Executing ↓ \"{command}\":", System.Drawing.Color.Blue);
+                    _debugForm.WriteLine($"Executing(\"{command}\") {{:", System.Drawing.Color.Blue);
 
                     var parsedCommand = CommandParser.Parse(command);
 
@@ -121,7 +121,7 @@ namespace Si.GameEngine.Core.Managers
                 {
                     _debugForm.WriteLine(ex.Message, System.Drawing.Color.DarkRed);
                 }
-                _debugForm.WriteLine($"Complete  ↑", System.Drawing.Color.Blue);
+                _debugForm.WriteLine($"}} ← Complete", System.Drawing.Color.Blue);
             }
         }
 
