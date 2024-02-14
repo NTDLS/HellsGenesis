@@ -52,6 +52,8 @@
             checkBoxPreCacheAllAssets = new System.Windows.Forms.CheckBox();
             buttonCancel = new System.Windows.Forms.Button();
             buttonSave = new System.Windows.Forms.Button();
+            comboBoxGraphicsAdapter = new System.Windows.Forms.ComboBox();
+            labelGraphicsAdapter = new System.Windows.Forms.Label();
             tabControl1.SuspendLayout();
             tabPageDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarResolution).BeginInit();
@@ -74,6 +76,8 @@
             // 
             // tabPageDisplay
             // 
+            tabPageDisplay.Controls.Add(labelGraphicsAdapter);
+            tabPageDisplay.Controls.Add(comboBoxGraphicsAdapter);
             tabPageDisplay.Controls.Add(trackBarResolution);
             tabPageDisplay.Controls.Add(checkBoxAutoZoomWhenMoving);
             tabPageDisplay.Controls.Add(labelResolutionLabel);
@@ -89,7 +93,7 @@
             // trackBarResolution
             // 
             trackBarResolution.LargeChange = 1;
-            trackBarResolution.Location = new System.Drawing.Point(16, 31);
+            trackBarResolution.Location = new System.Drawing.Point(15, 100);
             trackBarResolution.Name = "trackBarResolution";
             trackBarResolution.Size = new System.Drawing.Size(223, 45);
             trackBarResolution.TabIndex = 8;
@@ -97,7 +101,7 @@
             // checkBoxAutoZoomWhenMoving
             // 
             checkBoxAutoZoomWhenMoving.AutoSize = true;
-            checkBoxAutoZoomWhenMoving.Location = new System.Drawing.Point(16, 82);
+            checkBoxAutoZoomWhenMoving.Location = new System.Drawing.Point(15, 151);
             checkBoxAutoZoomWhenMoving.Name = "checkBoxAutoZoomWhenMoving";
             checkBoxAutoZoomWhenMoving.Size = new System.Drawing.Size(168, 19);
             checkBoxAutoZoomWhenMoving.TabIndex = 17;
@@ -107,7 +111,7 @@
             // labelResolutionLabel
             // 
             labelResolutionLabel.AutoSize = true;
-            labelResolutionLabel.Location = new System.Drawing.Point(16, 13);
+            labelResolutionLabel.Location = new System.Drawing.Point(15, 82);
             labelResolutionLabel.Name = "labelResolutionLabel";
             labelResolutionLabel.Size = new System.Drawing.Size(69, 15);
             labelResolutionLabel.TabIndex = 9;
@@ -116,7 +120,7 @@
             // labelResolution
             // 
             labelResolution.AutoSize = true;
-            labelResolution.Location = new System.Drawing.Point(91, 13);
+            labelResolution.Location = new System.Drawing.Point(90, 82);
             labelResolution.Name = "labelResolution";
             labelResolution.Size = new System.Drawing.Size(61, 15);
             labelResolution.TabIndex = 10;
@@ -287,6 +291,23 @@
             buttonSave.UseVisualStyleBackColor = true;
             buttonSave.Click += ButtonSave_Click;
             // 
+            // comboBoxGraphicsAdapter
+            // 
+            comboBoxGraphicsAdapter.FormattingEnabled = true;
+            comboBoxGraphicsAdapter.Location = new System.Drawing.Point(15, 35);
+            comboBoxGraphicsAdapter.Name = "comboBoxGraphicsAdapter";
+            comboBoxGraphicsAdapter.Size = new System.Drawing.Size(521, 23);
+            comboBoxGraphicsAdapter.TabIndex = 18;
+            // 
+            // labelGraphicsAdapter
+            // 
+            labelGraphicsAdapter.AutoSize = true;
+            labelGraphicsAdapter.Location = new System.Drawing.Point(15, 17);
+            labelGraphicsAdapter.Name = "labelGraphicsAdapter";
+            labelGraphicsAdapter.Size = new System.Drawing.Size(98, 15);
+            labelGraphicsAdapter.TabIndex = 19;
+            labelGraphicsAdapter.Text = "Graphics Adapter";
+            // 
             // FormSettings
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -340,5 +361,7 @@
         private System.Windows.Forms.CheckBox checkBoxHighlightNatrualBounds;
         private System.Windows.Forms.TabPage tabPageAdvanced;
         private System.Windows.Forms.CheckBox checkBoxPreCacheAllAssets;
+        private System.Windows.Forms.Label labelGraphicsAdapter;
+        private System.Windows.Forms.ComboBox comboBoxGraphicsAdapter;
     }
 }

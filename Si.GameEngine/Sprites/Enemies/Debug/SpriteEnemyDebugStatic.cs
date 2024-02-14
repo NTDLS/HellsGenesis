@@ -19,7 +19,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
             : base(gameEngine, hullHealth, bountyMultiplier)
         {
             ShipClass = SiEnemyClass.Debug;
-            SetImage(@$"Graphics\Enemy\Debug\{ShipClass}\Hull.png", new Size(32, 32));
+            SetImage(@$"Graphics\Enemy\Debug\{ShipClass}\Hull.png");
 
             if (IsDrone)
             {

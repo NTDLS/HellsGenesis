@@ -51,7 +51,7 @@ namespace Si.GameEngine.Sprites._Superclass
             _gameEngine = gameEngine;
         }
 
-        public override void Initialize(string imagePath = null, Size? size = null)
+        public override void Initialize(string imagePath = null)
         {
             _hitSound = _gameEngine.Assets.GetAudio(_assetPathHitSound, 0.5f);
             _shieldHit = _gameEngine.Assets.GetAudio(_assetPathshieldHit, 0.5f);
@@ -68,7 +68,7 @@ namespace Si.GameEngine.Sprites._Superclass
             _lockedOnImage = _gameEngine.Assets.GetBitmap(_assetPathlockedOnImage);
             _lockedOnSoftImage = _gameEngine.Assets.GetBitmap(_assetPathlockedOnSoftImage);
 
-            base.Initialize(imagePath, size);
+            base.Initialize(imagePath);
         }
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             : base(gameEngine, hullHealth, bountyMultiplier)
         {
             ShipClass = SiEnemyClass.Merc;
-            SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png", new Size(32, 32));
+            SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png");
 
             if (IsDrone)
             {

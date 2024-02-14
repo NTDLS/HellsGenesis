@@ -1,5 +1,8 @@
 ﻿using Si.GameEngine.Core;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Si.Game
@@ -7,6 +10,25 @@ namespace Si.Game
     public partial class FormSettings : Form
     {
         private const int MAX_RESOLUTIONS = 32;
+
+        class GraphicsAdapter
+        {
+            public int DeviceId { get; set; }
+            public string Description { get; set; }
+
+            public double VideoMemoryMb { get; set; }
+
+            public GraphicsAdapter(int deviceId, string description)
+            {
+                DeviceId = deviceId;
+                Description = description;
+            }
+
+            public override string ToString()
+            {
+                return Description;
+            }
+        }
 
         public FormSettings()
         {
@@ -52,6 +74,21 @@ namespace Si.Game
                     break;
                 }
             }
+
+            var adapters = GetGraphicsAdaptersInfo();
+            foreach (var item in adapters)
+            {
+                comboBoxGraphicsAdapter.Items.Add(item);
+                if (settings.GraphicsAdapterId == item.DeviceId)
+                {
+                    comboBoxGraphicsAdapter.SelectedItem = item;
+                }
+            }
+
+            if (comboBoxGraphicsAdapter.SelectedItem == null)
+            {
+                comboBoxGraphicsAdapter.SelectedText = adapters.OrderByDescending(o => o.VideoMemoryMb).First().Description;
+            }
         }
 
         private void TrackBarResolution_Scroll(object sender, EventArgs e)
@@ -78,6 +115,23 @@ namespace Si.Game
         private void ButtonCancel_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private List<GraphicsAdapter> GetGraphicsAdaptersInfo()
+        {
+            var result = new List<GraphicsAdapter>();
+            using (var factory = new SharpDX.DXGI.Factory1())
+            {
+                foreach (var adapter in factory.Adapters)
+                {
+                    result.Add(new GraphicsAdapter(adapter.Description.DeviceId, adapter.Description.Description)
+                    {
+                        VideoMemoryMb = adapter.Description.DedicatedVideoMemory / 1024.0 / 1024.0
+                    });
+                }
+            }
+
+            return result;
         }
 
         private double GetAndValidate(TextBox textbox, double min, double max, string fieldNameForError)
@@ -119,6 +173,14 @@ namespace Si.Game
                 settings.Resolution = new System.Drawing.Size(baseX, baseY);
 
                 settings.FullScreen = (trackBarResolution.Value == MAX_RESOLUTIONS);
+
+                var graphicsAdapter = comboBoxGraphicsAdapter.SelectedItem as GraphicsAdapter;
+                if (graphicsAdapter == null)
+                {
+                    throw new Exception("You must select a graphics adapter.");
+                }
+
+                settings.GraphicsAdapterId = graphicsAdapter.DeviceId;
 
                 GameEngineCore.SaveSettings(settings);
                 Close();

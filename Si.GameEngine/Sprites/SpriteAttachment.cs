@@ -12,10 +12,10 @@ namespace Si.GameEngine.Sprites
     {
         public bool TakesDamage { get; set; }
 
-        public SpriteAttachment(GameEngineCore gameEngine, string imagePath, Size? size = null)
+        public SpriteAttachment(GameEngineCore gameEngine, string imagePath)
             : base(gameEngine)
         {
-            Initialize(imagePath, size);
+            Initialize(imagePath);
 
             X = 0;
             Y = 0;

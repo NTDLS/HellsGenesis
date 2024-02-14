@@ -15,7 +15,7 @@ namespace Si.GameEngine.Sprites.Player
             ShipClass = SiPlayerClass.Starfighter;
 
             string imagePath = @$"Graphics\Player\Ships\{ShipClass}.png";
-            Initialize(imagePath, new Size(32, 32));
+            Initialize(imagePath);
 
             //Load the loadout from file or create a new one if it does not exist.
             PlayerShipLoadout loadout = LoadLoadoutFromFile(ShipClass);

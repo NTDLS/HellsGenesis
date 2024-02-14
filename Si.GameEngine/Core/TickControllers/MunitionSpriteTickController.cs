@@ -83,8 +83,15 @@ namespace Si.GameEngine.Core.TickControllers
                     }
                 }
 
-                //Wait on all enqueued threads to complete.
-                threadCollection.WaitForCompletion();
+                try
+                {
+                    //Wait on all enqueued threads to complete.
+                    threadCollection.WaitForCompletion();
+                }
+                catch
+                {
+                    return;
+                }
 
                 //Take actions with the munitions that hit objects.
                 foreach (var hitObject in hitObjects)

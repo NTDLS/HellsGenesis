@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Si.GameEngine.Core.Managers
 {
@@ -176,26 +177,6 @@ namespace Si.GameEngine.Core.Managers
             var bitmap = _gameEngine.Rendering.GetBitmap(stream);
             _collection.Write(o => o.TryAdd(path, bitmap));
             return bitmap;
-        }
-
-        public SharpDX.Direct2D1.Bitmap GetBitmap(string path, int newWidth, int newHeight)
-        {
-            path = path.ToLower();
-
-            return _collection.Write(o =>
-            {
-                string cacheKey = $"{path}:{newWidth}:{newHeight}";
-
-                if (o.TryGetValue(cacheKey, out object value))
-                {
-                    return (SharpDX.Direct2D1.Bitmap)value;
-                }
-
-                using var stream = GetCompressedStream(path);
-                var bitmap = _gameEngine.Rendering.GetBitmap(stream, newWidth, newHeight);
-                o.Add(cacheKey, bitmap);
-                return bitmap;
-            });
         }
 
         public void PreCacheAllAssets()

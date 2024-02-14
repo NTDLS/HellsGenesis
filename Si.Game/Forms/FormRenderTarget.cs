@@ -1,4 +1,5 @@
-﻿using Si.Game.Forms;
+
+using Si.Game.Forms;
 using Si.GameEngine.AI.Logistics._Superclass;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
@@ -15,7 +16,7 @@ using System.Windows.Forms;
 
 namespace Si.Game
 {
-    public partial class FormRenderTarget : Form
+    public partial class FormRenderTarget: Form
     {
         private readonly List<SpriteBase> highlightedSprites = new();
         private readonly ToolTip _interrogationTip = new();

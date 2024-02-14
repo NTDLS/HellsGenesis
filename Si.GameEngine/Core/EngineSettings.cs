@@ -9,6 +9,7 @@ namespace Si.GameEngine.Core
     /// </summary>
     public class EngineSettings
     {
+        public int GraphicsAdapterId { get; set; } = 0;
         public int MunitionTraversalThreads { get; set; } = Environment.ProcessorCount * 2;
         public bool EnableSpriteInterrogation { get; set; } = false;
         public bool HighlightNatrualBounds { get; set; } = false;

@@ -11,7 +11,7 @@ namespace Si.GameEngine.Sprites
         public SpriteDebug(GameEngineCore gameEngine)
             : base(gameEngine)
         {
-            Initialize(@"Graphics\Debug.png", new Size(64, 64));
+            Initialize(@"Graphics\Debug.png");
             X = 0;
             Y = 0;
             Velocity = new SiVelocity();
@@ -20,7 +20,7 @@ namespace Si.GameEngine.Sprites
         public SpriteDebug(GameEngineCore gameEngine, double x, double y)
             : base(gameEngine)
         {
-            Initialize(@"Graphics\Debug.png", new Size(64, 64));
+            Initialize(@"Graphics\Debug.png");
             X = x;
             Y = y;
             Velocity = new SiVelocity();

@@ -179,7 +179,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
         public void ResetLoadout(PlayerShipLoadout loadout)
         {
             Loadout = loadout;
-            SetImage(@$"Graphics\Player\Ships\{loadout.Name}.png", new Size(32, 32));
+            SetImage(@$"Graphics\Player\Ships\{loadout.Name}.png");
             Reset();
         }
 

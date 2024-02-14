@@ -33,9 +33,9 @@ namespace Si.GameEngine.Core.TickControllers
             });
         }
 
-        public SpriteAttachment Create(string imagePath = null, Size? size = null, uint ownerUID = 0)
+        public SpriteAttachment Create(string imagePath = null, uint ownerUID = 0)
         {
-            var obj = new SpriteAttachment(GameEngine, imagePath, size)
+            var obj = new SpriteAttachment(GameEngine, imagePath)
             {
                 OwnerUID = ownerUID
             };

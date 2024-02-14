@@ -1,13 +1,11 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
 using Si.GameEngine.Utility;
 using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
 
@@ -24,11 +22,26 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
         private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(SharpDX.Direct2D1.FactoryType.SingleThreaded);
         private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
+        private readonly ImagingFactory _wicFactory = new();
 
         public EngineRendering(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
 
+            var renderProp = new HwndRenderTargetProperties()
+            {
+                PresentOptions = PresentOptions.None,
+                Hwnd = gameEngine.Display.DrawingSurface.Handle,
+                PixelSize = new Size2(gameEngine.Display.NatrualScreenSize.Width, gameEngine.Display.NatrualScreenSize.Height)
+            };
+
+            ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, new RenderTargetProperties(), renderProp);
+
+            var intermediateRenderTargetSize = new Size2F(_gameEngine.Display.TotalCanvasSize.Width, _gameEngine.Display.TotalCanvasSize.Height);
+            IntermediateRenderTarget = new SharpDX.Direct2D1.BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize);
+
+
+            /*
             var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
             var renderTargetProperties = new RenderTargetProperties(pixelFormat);
             var renderProperties = new HwndRenderTargetProperties
@@ -40,16 +53,16 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
             ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, renderTargetProperties, renderProperties)
             {
-                AntialiasMode = AntialiasMode.PerPrimitive,
-                TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Cleartype
+                AntialiasMode = AntialiasMode.PerPrimitive
             };
 
             var intermediateRenderTargetSize = new Size2F(_gameEngine.Display.TotalCanvasSize.Width, _gameEngine.Display.TotalCanvasSize.Height);
             IntermediateRenderTarget = new SharpDX.Direct2D1.BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
             {
-                AntialiasMode = AntialiasMode.PerPrimitive,
-                TextAntialiasMode = SharpDX.Direct2D1.TextAntialiasMode.Cleartype
+                AntialiasMode = AntialiasMode.PerPrimitive
             };
+            */
+
 
             Materials = new PrecreatedMaterials(ScreenRenderTarget);
             TextFormats = new PrecreatedTextFormats(_directWriteFactory);
@@ -115,48 +128,15 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(Stream stream)
         {
-            using (var image = System.Drawing.Image.FromStream(stream))
+            using (var decoder = new BitmapDecoder(_wicFactory, stream, DecodeOptions.CacheOnLoad))
+            using (var frame = decoder.GetFrame(0))
+            using (var converter = new FormatConverter(_wicFactory))
             {
-                // Create a WIC stream from the System.Drawing.Image
-                using var wicFactory = new ImagingFactory();
-                using var imageStream = new MemoryStream();
-                image.Save(imageStream, ImageFormat.Png);
-                imageStream.Seek(0, SeekOrigin.Begin);
-
-                using var decoder = new BitmapDecoder(wicFactory, imageStream, DecodeOptions.CacheOnLoad);
-                using var converter = new FormatConverter(wicFactory);
-                converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
+                converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA);
 
                 return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
             }
         }
-
-        public SharpDX.Direct2D1.Bitmap GetBitmap(Stream stream, int newWidth, int newHeight)
-        {
-            using (var image = System.Drawing.Image.FromStream(stream))
-            {
-                var resizedImage = new System.Drawing.Bitmap(newWidth, newHeight);
-
-                using (var g = Graphics.FromImage(resizedImage))
-                {
-                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBilinear;
-                    g.DrawImage(image, 0, 0, newWidth, newHeight);
-                }
-
-                // Create a WIC stream from the System.Drawing.Image
-                using var wicFactory = new ImagingFactory();
-                using var imageStream = new MemoryStream();
-                resizedImage.Save(imageStream, ImageFormat.Png);
-                imageStream.Seek(0, SeekOrigin.Begin);
-
-                using var decoder = new BitmapDecoder(wicFactory, imageStream, DecodeOptions.CacheOnLoad);
-                using var converter = new FormatConverter(wicFactory);
-                converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppPBGRA);
-
-                return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
-            }
-        }
-
 
 
         /// <summary>

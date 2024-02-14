@@ -258,18 +258,11 @@ namespace Si.GameEngine.Sprites._Superclass
             IsHighlighted = _gameEngine.Settings.HighlightAllSprites;
         }
 
-        public virtual void Initialize(string imagePath = null, Size? size = null)
+        public virtual void Initialize(string imagePath = null)
         {
             if (imagePath != null)
             {
-                if (size == null)
-                {
-                    SetImage(imagePath);
-                }
-                else
-                {
-                    SetImage(imagePath, (Size)size);
-                }
+                SetImage(imagePath);
             }
 
             VisibilityChanged();
@@ -374,7 +367,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <returns></returns>
         public SpriteAttachment Attach(string imagePath, bool takesDamage = false, int hullHealth = 1)
         {
-            var attachment = _gameEngine.Sprites.Attachments.Create(imagePath, null, UID);
+            var attachment = _gameEngine.Sprites.Attachments.Create(imagePath, UID);
             attachment.TakesDamage = takesDamage;
             attachment.SetHullHealth(hullHealth);
             Attachments.Add(attachment);
@@ -413,12 +406,6 @@ namespace Si.GameEngine.Sprites._Superclass
         public void SetImage(string imagePath)
         {
             _image = _gameEngine.Assets.GetBitmap(imagePath);
-            _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
-        }
-
-        public void SetImage(string imagePath, Size size)
-        {
-            _image = _gameEngine.Assets.GetBitmap(imagePath, size.Width, size.Height);
             _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
         }
 
