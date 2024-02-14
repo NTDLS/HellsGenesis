@@ -2,7 +2,6 @@
 using Si.GameEngine.Sprites.Powerup._Superclass;
 using Si.Library;
 using Si.Library.Types.Geometry;
-using System.Drawing;
 
 namespace Si.GameEngine.Sprites.Powerup
 {

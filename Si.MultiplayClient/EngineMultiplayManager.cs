@@ -1,5 +1,4 @@
-﻿using NTDLS.ReliableMessaging;
-using NTDLS.StreamFraming.Payloads;
+﻿using NTDLS.TightRPC;
 using NTDLS.UDPPacketFraming;
 using NTDLS.UDPPacketFraming.Payloads;
 using Si.Library;
@@ -24,6 +23,7 @@ namespace Si.MultiplayClient
         /// Called when the multiplay manager receives a full layout of sprites and they need to be created on the map.
         /// </summary>
         public event ReceivedSituationLayout? OnReceivedLevelLayout;
+        public void InvokeReceivedLevelLayout(SiSituationLayout situationLayout) => OnReceivedLevelLayout?.Invoke(situationLayout);
 
         public delegate void ApplySpriteActions(SiSpriteActions spriteActions);
         /// <summary>
@@ -42,31 +42,36 @@ namespace Si.MultiplayClient
         /// Called when the game is starting. Lets the clients know to close their lobby waiting menus.
         /// </summary>
         public event HostIsStartingGame? OnHostIsStartingGame;
+        public void InvokeHostIsStartingGame() => OnHostIsStartingGame?.Invoke();
 
         public delegate void PlayerSpriteCreated(string selectedPlayerClass, Guid playerMultiplayUID);
         /// <summary>
         /// Called when the game is starting. Lets the clients know to close their lobby waiting menus.
         /// </summary>
         public event PlayerSpriteCreated? OnPlayerSpriteCreated;
+        public void InvokePlayerSpriteCreated(string selectedPlayerClass, Guid playerMultiplayUID)
+            => OnPlayerSpriteCreated?.Invoke(selectedPlayerClass, playerMultiplayUID);
 
         public delegate void HostLevelStarted();
         /// <summary>
         /// Called when the host owner starts the level and all connections should now show the player drones.
         /// </summary>
         public event HostLevelStarted? OnHostLevelStarted;
+        public void InvokeHostLevelStarted() => OnHostLevelStarted?.Invoke();
 
         public delegate void SpriteCreated(SiSpriteLayout layout);
         /// <summary>
         /// Called when any applicable sprite is created by a client and needs to be communictaed to other lobby clients.
         /// </summary>
         public event SpriteCreated? OnSpriteCreated;
+        public void InvokeSpriteCreated(SiSpriteLayout layout) => OnSpriteCreated?.Invoke(layout);
 
         #endregion
 
         public MultiplayState State { get; private set; } = new();
 
         public bool ShouldRecordEvents
-            => State.LobbyUID != Guid.Empty && State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true;
+            => State.LobbyUID != Guid.Empty && State.PlayMode != SiPlayMode.SinglePlayer && RpcClient?.IsConnected == true;
 
         /// <summary>
         /// This is the UDP port that the client will listen on. This is communicated to the server via ConfigureConnection().
@@ -75,7 +80,7 @@ namespace Si.MultiplayClient
 
         private readonly List<SiSpriteAction> _spriteActionBuffer = new();
         private UdpMessageManager? _internal_udpManager;
-        private MessageClient? _internal_messageClient;
+        private TightRpcClient? _internal_rpcClient;
 
         private UdpMessageManager UdpManager
         {
@@ -95,24 +100,27 @@ namespace Si.MultiplayClient
             }
         }
 
-        private MessageClient MessageClient
+        private TightRpcClient RpcClient
         {
             get
             {
                 #region Message Client Creation and Connectivity.
-                if (_internal_messageClient == null)
+                if (_internal_rpcClient == null)
                 {
                     lock (this)
                     {
-                        if (_internal_messageClient == null)
+                        if (_internal_rpcClient == null)
                         {
-                            var messageClient = new MessageClient();
+                            var messageClient = new TightRpcClient();
 
-                            messageClient.OnNotificationReceived += MessageClient_OnNotificationReceived;
-                            messageClient.OnQueryReceived += MessageClient_OnQueryReceived;
+                            messageClient.OnException += MessageClient_OnException;
+
+                            messageClient.AddHandler(new RpcClientQueryHandlers(this));
+                            messageClient.AddHandler(new RpcClientNotificationHandlers(this));
 
                             messageClient.Connect(SiConstants.MultiplayServerAddress, SiConstants.MultiplayServerTCPPort);
-                            _internal_messageClient = messageClient;
+
+                            _internal_rpcClient = messageClient;
 
                             //Hit the property to force initilization of the upd manager.
                             SiUtility.EnsureNotNull(UdpManager);
@@ -120,15 +128,20 @@ namespace Si.MultiplayClient
                     }
                 }
                 #endregion
-                return _internal_messageClient;
+                return _internal_rpcClient;
             }
+        }
+
+        private void MessageClient_OnException(TightRpcContext context, Exception ex, ITightRpcPayload? payload)
+        {
+            throw ex;
         }
 
         public void NotifySpriteCreated(SiSpriteLayout spriteLayout)
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer)
             {
-                MessageClient.Notify(new SiSpriteCreated(spriteLayout));
+                RpcClient.Notify(new SiSpriteCreated(spriteLayout));
             }
         }
 
@@ -136,7 +149,7 @@ namespace Si.MultiplayClient
         {
             if (State.PlayMode == SiPlayMode.MutiPlayerHost)
             {
-                MessageClient.Notify(new SiHostIsStartingGame(State.LobbyUID));
+                RpcClient.Notify(new SiHostIsStartingGame(State.LobbyUID));
             }
         }
 
@@ -144,7 +157,7 @@ namespace Si.MultiplayClient
         {
             if (State.PlayMode == SiPlayMode.MutiPlayerHost)
             {
-                MessageClient.Notify(new SiHostStartedLevel());
+                RpcClient.Notify(new SiHostStartedLevel());
             }
         }
 
@@ -164,7 +177,7 @@ namespace Si.MultiplayClient
             };
 
             //Tell the server hello and request any settings that the server wants to enforce on the client.
-            var reply = MessageClient.Query<SiConfigureReply>(query).Result;
+            var reply = RpcClient.Query<SiConfigureReply>(query).Result;
             SiUtility.EnsureNotNull(reply);
 
             State.ConnectionId = reply.ConnectionId;
@@ -189,7 +202,7 @@ namespace Si.MultiplayClient
                 layouts = new List<SiSpriteLayout>();
             }
 
-            MessageClient.Notify(new SiSituationLayout()
+            RpcClient.Notify(new SiSituationLayout()
             {
                 Sprites = layouts
             });
@@ -283,7 +296,7 @@ namespace Si.MultiplayClient
         /// <returns></returns>
         public async Task<SiLobbyInfo> GetLobbyInfo(Guid lobbyUID)
         {
-            var reply = await MessageClient.Query<SiGetLobbyInfoReply>(new SiGetLobbyInfo() { LobbyUID = lobbyUID });
+            var reply = await RpcClient.Query<SiGetLobbyInfoReply>(new SiGetLobbyInfo() { LobbyUID = lobbyUID });
             SiUtility.EnsureNotNull(reply);
             return reply.Info;
         }
@@ -300,7 +313,7 @@ namespace Si.MultiplayClient
                 Configuration = gameHostConfiguration
             };
 
-            var reply = MessageClient.Query<SiCreateLobbyReply>(query).Result;
+            var reply = RpcClient.Query<SiCreateLobbyReply>(query).Result;
             SiUtility.EnsureNotNull(reply);
             return reply.LobbyUID;
         }
@@ -311,7 +324,7 @@ namespace Si.MultiplayClient
         /// <returns></returns>
         public List<SiLobbyConfiguration> ListLobbies()
         {
-            var reply = MessageClient.Query<SiListLobbiesReply>(new SiListLobbies()).Result;
+            var reply = RpcClient.Query<SiListLobbiesReply>(new SiListLobbies()).Result;
             SiUtility.EnsureNotNull(reply);
             return reply.Collection;
         }
@@ -332,78 +345,6 @@ namespace Si.MultiplayClient
             else
             {
                 throw new NotImplementedException("The client UPD notification is not implemented.");
-            }
-        }
-
-        /// <summary>
-        /// A one-way TCP/IP notification packet was received.
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="connectionId"></param>
-        /// <param name="payload"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void MessageClient_OnNotificationReceived(MessageClient client, Guid connectionId, IFramePayloadNotification payload)
-        {
-            //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiHostIsStartingGame hostIsStartingGame)
-            {
-                OnHostIsStartingGame?.Invoke();
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiLobbyDeleted lobbyDeleted)
-            {
-                //TODO: The client is waiting in a lobby that no longer exists. We should do something.
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiSituationLayout situationLayout)
-            {
-                //The server is telling us to initialize the layout using the supplied sprites and their states.
-                OnReceivedLevelLayout?.Invoke(situationLayout);
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiPlayerSpriteCreated playerSpriteCreated)
-            {
-                OnPlayerSpriteCreated?.Invoke(playerSpriteCreated.SelectedPlayerClass, playerSpriteCreated.PlayerMultiplayUID);
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiSpriteCreated spriteCreated)
-            {
-                if (spriteCreated.Layout != null)
-                {
-                    OnSpriteCreated?.Invoke(spriteCreated.Layout);
-                }
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiHostStartedLevel)
-            {
-                OnHostLevelStarted?.Invoke();
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else
-            {
-                throw new NotImplementedException("The client TCP notification is not implemented.");
-            }
-        }
-
-        /// <summary>
-        /// A two-way TCP/IP wuery packet was received and expects a reply.
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="connectionId"></param>
-        /// <param name="payload"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        private IFramePayloadQueryReply MessageClient_OnQueryReceived(MessageClient client, Guid connectionId, IFramePayloadQuery payload)
-        {
-            //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiPing ping)
-            {
-                return new SiPingReply(ping);
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else
-            {
-                throw new NotImplementedException("The client TCP query is not implemented.");
             }
         }
 
@@ -466,7 +407,7 @@ namespace Si.MultiplayClient
         {
             if (State.LobbyUID != Guid.Empty && _spriteActionBuffer.Any())
             {
-                if (State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
+                if (State.PlayMode != SiPlayMode.SinglePlayer && RpcClient?.IsConnected == true)
                 {
                     var spriteActions = new SiSpriteActions(_spriteActionBuffer);
 
@@ -483,11 +424,11 @@ namespace Si.MultiplayClient
         /// Just a simple function used to send a notification with some checks.
         /// </summary>
         /// <param name="multiplayerEvent"></param>
-        public void NotifyImmediately(IFramePayloadNotification multiplayerEvent)
+        public void NotifyImmediately(ITightRpcNotification multiplayerEvent)
         {
-            if (State.PlayMode != SiPlayMode.SinglePlayer && MessageClient?.IsConnected == true)
+            if (State.PlayMode != SiPlayMode.SinglePlayer && RpcClient?.IsConnected == true)
             {
-                MessageClient?.Notify(multiplayerEvent);
+                RpcClient?.Notify(multiplayerEvent);
             }
         }
 
@@ -497,7 +438,7 @@ namespace Si.MultiplayClient
         public void Dispose()
         {
             SiUtility.TryAndIgnore(() => UdpManager?.Shutdown());
-            SiUtility.TryAndIgnore(() => _internal_messageClient?.Disconnect());
+            SiUtility.TryAndIgnore(() => _internal_rpcClient?.Disconnect());
         }
     }
 }

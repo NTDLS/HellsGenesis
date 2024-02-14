@@ -16,7 +16,7 @@ using System.Windows.Forms;
 
 namespace Si.Game
 {
-    public partial class FormRenderTarget: Form
+    public partial class FormRenderTarget : Form
     {
         private readonly List<SpriteBase> highlightedSprites = new();
         private readonly ToolTip _interrogationTip = new();

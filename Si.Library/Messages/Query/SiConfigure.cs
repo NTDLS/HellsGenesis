@@ -1,11 +1,11 @@
-﻿using NTDLS.StreamFraming.Payloads;
+﻿using NTDLS.TightRPC;
 
 namespace Si.Library.Messages.Query
 {
     /// <summary>
     /// The client has connected and the server and client are exchanging configuration/settings.
     /// </summary>
-    public class SiConfigure : IFramePayloadQuery
+    public class SiConfigure : ITightRpcQuery<SiConfigureReply>
     {
         /// <summary>
         /// The port which the client will be listening to for UDP communications from the server.
@@ -23,7 +23,7 @@ namespace Si.Library.Messages.Query
         public DateTime? ClientLocalTime { get; set; }
     }
 
-    public class SiConfigureReply : IFramePayloadQueryReply
+    public class SiConfigureReply : ITightRpcQueryReply
     {
         /// <summary>
         /// The connection id of the tcp/ip connection according to the server.

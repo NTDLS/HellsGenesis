@@ -3,7 +3,6 @@ using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
 using Si.GameEngine.Sprites.Weapons;
 using Si.Library.Types.Geometry;
-using System.Drawing;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies.Peons

@@ -1,4 +1,4 @@
-﻿using NTDLS.StreamFraming.Payloads;
+﻿using NTDLS.TightRPC;
 using Si.Library.Payload;
 
 namespace Si.Library.Messages.Query
@@ -9,7 +9,7 @@ namespace Si.Library.Messages.Query
     /// a notification to the server with all and applicable spites to that
     /// the newcommer can come up to speed.
     /// </summary>
-    public class SiRequestCurrentSituationLayout : IFramePayloadQuery
+    public class SiRequestCurrentSituationLayout : ITightRpcQuery<SiRequestCurrentSituationLayoutReply>
     {
         public SiRequestCurrentSituationLayout()
         {
@@ -17,7 +17,7 @@ namespace Si.Library.Messages.Query
         }
     }
 
-    public class SiRequestCurrentSituationLayoutReply : IFramePayloadQueryReply
+    public class SiRequestCurrentSituationLayoutReply : ITightRpcQueryReply
     {
         public List<SiSpriteLayout> Sprites { get; set; } = new();
     }

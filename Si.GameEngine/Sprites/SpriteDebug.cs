@@ -2,7 +2,6 @@
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library.Types;
 using Si.Library.Types.Geometry;
-using System.Drawing;
 
 namespace Si.GameEngine.Sprites
 {

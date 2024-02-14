@@ -1,11 +1,11 @@
-﻿using NTDLS.StreamFraming.Payloads;
+﻿using NTDLS.TightRPC;
 
 namespace Si.Library.Messages.Query
 {
     /// <summary>
     /// Just a simple ping.
     /// </summary>
-    public class SiPing : IFramePayloadQuery
+    public class SiPing : ITightRpcQuery<SiPingReply>
     {
         public DateTime Timestamp { get; set; }
         public Guid UID { get; set; }
@@ -17,7 +17,7 @@ namespace Si.Library.Messages.Query
         }
     }
 
-    public class SiPingReply : IFramePayloadQueryReply
+    public class SiPingReply : ITightRpcQueryReply
     {
         public SiPing Ping { get; set; }
 

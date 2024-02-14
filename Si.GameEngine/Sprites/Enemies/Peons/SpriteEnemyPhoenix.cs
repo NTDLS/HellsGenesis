@@ -6,7 +6,6 @@ using Si.GameEngine.Sprites.Weapons;
 using Si.Library;
 using Si.Library.Types.Geometry;
 using System;
-using System.Drawing;
 using System.Linq;
 using static Si.Library.SiConstants;
 

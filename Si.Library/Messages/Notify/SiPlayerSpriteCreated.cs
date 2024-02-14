@@ -1,4 +1,4 @@
-﻿using NTDLS.StreamFraming.Payloads;
+﻿using NTDLS.TightRPC;
 
 namespace Si.Library.Messages.Notify
 {
@@ -6,7 +6,7 @@ namespace Si.Library.Messages.Notify
     /// Tells the server that the connection has successfully received
     /// the new situation layout and is ready to actualy start playing.
     /// </summary>
-    public class SiPlayerSpriteCreated : IFramePayloadNotification
+    public class SiPlayerSpriteCreated : ITightRpcNotification
     {
         public string SelectedPlayerClass { get; set; }
         public Guid PlayerMultiplayUID { get; set; }

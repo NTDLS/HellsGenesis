@@ -6,7 +6,6 @@ using Si.GameEngine.Utility;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Types.Geometry;
-using System.Drawing;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies.Peons

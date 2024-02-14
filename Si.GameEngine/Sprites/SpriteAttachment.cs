@@ -3,7 +3,6 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Library.Types;
 using Si.Library.Types.Geometry;
-using System.Drawing;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites
