@@ -13,7 +13,7 @@ namespace Si.MultiplayClient
             _manager = manager;
         }
 
-        public void OnSiSpriteActions(RmContext context, SiSpriteActions param)
+        public void OnSiSpriteActions(DmContext context, SiSpriteActions param)
         {
             _manager.InvokeApplySpriteActions(param);
         }
