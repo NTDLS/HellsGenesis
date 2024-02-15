@@ -1,7 +1,7 @@
 ﻿using NTDLS.DatagramMessaging;
 using Si.Library.Payload.SpriteActions;
 
-namespace Si.Library.Messages.Notify
+namespace Si.Library.Messages.Notify.Datagram
 {
     /// <summary>
     /// Tells the server that a sprite has done something. Fire, move, explode, etc.

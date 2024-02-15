@@ -2,7 +2,7 @@
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.Library;
 using Si.Library.Messages.Notify;
-using Si.Library.Messages.Query;
+using Si.Library.Messages.Notify.Datagram;
 using Si.Library.Payload;
 using Si.Library.Payload.SpriteActions;
 using System;

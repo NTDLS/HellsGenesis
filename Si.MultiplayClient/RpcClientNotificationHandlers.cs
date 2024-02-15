@@ -1,6 +1,5 @@
 ﻿using NTDLS.ReliableMessaging;
 using Si.Library.Messages.Notify;
-using Si.Library.Messages.Query;
 
 namespace Si.MultiplayClient
 {

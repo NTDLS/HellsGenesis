@@ -1,7 +1,7 @@
 ﻿using NTDLS.DatagramMessaging;
 using NTDLS.ReliableMessaging;
 using Si.Library;
-using Si.Library.Messages.Notify;
+using Si.Library.Messages.Notify.Datagram;
 using Si.Library.Messages.Query;
 using Si.Server.Core.Managers;
 using Si.Server.Core.Objects;
@@ -61,7 +61,7 @@ namespace Si.Server.Core
         private void DmMessenger_ProcessNotificationCallback(IDmNotification payload)
         {
             //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiUDPHello)
+            if (payload is SiHello)
             {
                 Log.Verbose($"A client sent a UDP hello.");
             }

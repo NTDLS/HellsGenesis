@@ -1,13 +1,13 @@
 ﻿using NTDLS.DatagramMessaging;
 
-namespace Si.Library.Messages.Notify
+namespace Si.Library.Messages.Notify.Datagram
 {
     /// <summary>
     /// We need to send a UDP message to the server to populates the routers NAT table.
     /// </summary>
-    public class SiUDPHello : IDmNotification
+    public class SiHello : IDmNotification
     {
-        public SiUDPHello()
+        public SiHello()
         {
         }
     }

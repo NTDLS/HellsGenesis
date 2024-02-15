@@ -2,6 +2,7 @@
 using NTDLS.ReliableMessaging;
 using Si.Library;
 using Si.Library.Messages.Notify;
+using Si.Library.Messages.Notify.Datagram;
 using Si.Library.Messages.Query;
 using Si.Library.Payload;
 using Si.Library.Payload.SpriteActions;
@@ -91,7 +92,7 @@ namespace Si.MultiplayClient
                     lock (this)
                     {
                         _internal_udpManager ??= new DmMessenger(_clientListenUdpPort, DmMessenger_ProcessNotificationCallback);
-                        _internal_udpManager.WriteMessage(SiConstants.MultiplayServerAddress, MultiplayServerTCPPort, new SiUDPHello());
+                        _internal_udpManager.WriteMessage(SiConstants.MultiplayServerAddress, MultiplayServerTCPPort, new SiHello());
                     }
                 }
                 return _internal_udpManager;
