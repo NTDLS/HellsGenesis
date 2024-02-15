@@ -30,6 +30,7 @@ namespace Si.MultiplayClient
         /// Called when the multiplay manager receives a updated list of sprite vectors for the connection.
         /// </summary>
         public event ApplySpriteActions? OnApplySpriteActions;
+        public void InvokeApplySpriteActions(SiSpriteActions spriteActions) => OnApplySpriteActions?.Invoke(spriteActions);
 
         public delegate List<SiSpriteLayout> NeedSituationLayout();
         /// <summary>
@@ -91,8 +92,8 @@ namespace Si.MultiplayClient
                 {
                     lock (this)
                     {
-                        _internal_udpManager ??= new DmMessenger(_clientListenUdpPort, DmMessenger_ProcessNotificationCallback);
-                        _internal_udpManager.WriteMessage(SiConstants.MultiplayServerAddress, MultiplayServerTCPPort, new SiHello());
+                        _internal_udpManager ??= new DmMessenger(_clientListenUdpPort, new DatagramMessageNotificationHandlers(this));
+                        _internal_udpManager.WriteMessage(MultiplayServerAddress, MultiplayServerTCPPort, new SiHello());
                     }
                 }
                 return _internal_udpManager;
@@ -115,8 +116,8 @@ namespace Si.MultiplayClient
 
                             messageClient.OnException += MessageClient_OnException;
 
-                            messageClient.AddHandler(new RpcClientQueryHandlers(this));
-                            messageClient.AddHandler(new RpcClientNotificationHandlers(this));
+                            messageClient.AddHandler(new ReliableMessageQueryHandlers(this));
+                            messageClient.AddHandler(new ReliableMessageNotificationHandlers(this));
 
                             messageClient.Connect(SiConstants.MultiplayServerAddress, SiConstants.MultiplayServerTCPPort);
 
@@ -327,25 +328,6 @@ namespace Si.MultiplayClient
             var reply = RpcClient.Query<SiListLobbiesReply>(new SiListLobbies()).Result;
             SiUtility.EnsureNotNull(reply);
             return reply.Collection;
-        }
-
-        /// <summary>
-        /// A UDP packet was received.
-        /// </summary>
-        /// <param name="payload"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        private void DmMessenger_ProcessNotificationCallback(IDmNotification payload)
-        {
-            //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiSpriteActions spriteActions)
-            {
-                OnApplySpriteActions?.Invoke(spriteActions);
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else
-            {
-                throw new NotImplementedException("The client UPD notification is not implemented.");
-            }
         }
 
         /// <summary>

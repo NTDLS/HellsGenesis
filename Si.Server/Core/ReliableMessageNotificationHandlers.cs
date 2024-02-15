@@ -3,11 +3,11 @@ using Si.Library.Messages.Notify;
 
 namespace Si.Server.Core
 {
-    internal class RpcServerNotificationHandlers : IRmMessageHandler
+    internal class ReliableMessageNotificationHandlers : IRmMessageHandler
     {
         private readonly ServerEngineCore _serverCore;
 
-        public RpcServerNotificationHandlers(ServerEngineCore serverCore)
+        public ReliableMessageNotificationHandlers(ServerEngineCore serverCore)
         {
             _serverCore = serverCore;
         }

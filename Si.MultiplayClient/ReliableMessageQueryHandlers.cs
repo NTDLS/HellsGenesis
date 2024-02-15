@@ -3,11 +3,11 @@ using Si.Library.Messages.Query;
 
 namespace Si.MultiplayClient
 {
-    internal class RpcClientQueryHandlers : IRmMessageHandler
+    internal class ReliableMessageQueryHandlers : IRmMessageHandler
     {
         private readonly EngineMultiplayManager _manager;
 
-        public RpcClientQueryHandlers(EngineMultiplayManager manager)
+        public ReliableMessageQueryHandlers(EngineMultiplayManager manager)
         {
             _manager = manager;
         }

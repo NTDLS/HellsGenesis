@@ -3,11 +3,11 @@ using Si.Library.Messages.Notify;
 
 namespace Si.MultiplayClient
 {
-    internal class RpcClientNotificationHandlers : IRmMessageHandler
+    internal class ReliableMessageNotificationHandlers : IRmMessageHandler
     {
         private readonly EngineMultiplayManager _manager;
 
-        public RpcClientNotificationHandlers(EngineMultiplayManager manager)
+        public ReliableMessageNotificationHandlers(EngineMultiplayManager manager)
         {
             _manager = manager;
         }

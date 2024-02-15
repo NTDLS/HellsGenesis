@@ -4,11 +4,11 @@ using Si.Library.Payload;
 
 namespace Si.Server.Core
 {
-    internal class RpcServerQueryHandlers : IRmMessageHandler
+    internal class ReliableMessageQueryHandlers : IRmMessageHandler
     {
         private readonly ServerEngineCore _serverCore;
 
-        public RpcServerQueryHandlers(ServerEngineCore serverCore)
+        public ReliableMessageQueryHandlers(ServerEngineCore serverCore)
         {
             _serverCore = serverCore;
         }

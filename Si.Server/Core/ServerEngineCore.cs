@@ -1,7 +1,6 @@
 ﻿using NTDLS.DatagramMessaging;
 using NTDLS.ReliableMessaging;
 using Si.Library;
-using Si.Library.Messages.Notify.Datagram;
 using Si.Library.Messages.Query;
 using Si.Server.Core.Managers;
 using Si.Server.Core.Objects;
@@ -28,7 +27,7 @@ namespace Si.Server.Core
         {
             Settings = settings;
 
-            _udpManager = new DmMessenger(Settings.DataPort, DmMessenger_ProcessNotificationCallback);
+            _udpManager = new DmMessenger(Settings.DataPort, new DatagramMessageNotificationHandlers(this));
 
             Log = new LogManager(this);
             Sessions = new SessionManager(this);
@@ -37,8 +36,8 @@ namespace Si.Server.Core
 
         public void Start()
         {
-            _messageServer.AddHandler(new RpcServerQueryHandlers(this));
-            _messageServer.AddHandler(new RpcServerNotificationHandlers(this));
+            _messageServer.AddHandler(new ReliableMessageQueryHandlers(this));
+            _messageServer.AddHandler(new ReliableMessageNotificationHandlers(this));
 
             _messageServer.Start(Settings.DataPort);
 
@@ -56,47 +55,6 @@ namespace Si.Server.Core
         {
             var result = await _messageServer.Query(connectionId, new SiPing(), 250);
             return result?.Ping;
-        }
-
-        private void DmMessenger_ProcessNotificationCallback(IDmNotification payload)
-        {
-            //------------------------------------------------------------------------------------------------------------------------------
-            if (payload is SiHello)
-            {
-                Log.Verbose($"A client sent a UDP hello.");
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
-            else if (payload is SiSpriteActions spriteVectors)
-            {
-                if (!Sessions.TryGetByConnectionId(spriteVectors.ConnectionId, out var session))
-                {
-                    Log.Exception($"The session was not found '{spriteVectors.ConnectionId}'.");
-                    return;
-                }
-
-                if (!Lobbies.TryGetByLobbyUID(session.LobbyUID, out var lobby))
-                {
-                    Log.Exception($"The lobby was not found '{session.LobbyUID}'.");
-                    return;
-                }
-
-                //Broadcast the sprite vectors all connections except for the one that sent it to us.
-                foreach (var registeredConnectionId in lobby.GetConnectionIDs().Where(o => o != spriteVectors.ConnectionId))
-                {
-                    if (ActiveEndpoints.TryGetValue(registeredConnectionId, out var ipEndpoint))
-                    {
-                        try
-                        {
-                            _udpManager.WriteMessage(ipEndpoint, spriteVectors);
-                        }
-                        catch
-                        {
-                            //TODO: Remove this connection? Maybe track the number of errors and remove if too many occur?
-                        }
-                    }
-                }
-            }
-            //------------------------------------------------------------------------------------------------------------------------------
         }
 
         /// <summary>
