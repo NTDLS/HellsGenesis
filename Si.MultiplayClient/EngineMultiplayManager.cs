@@ -1,6 +1,5 @@
-﻿using NTDLS.TightRPC;
-using NTDLS.UDPPacketFraming;
-using NTDLS.UDPPacketFraming.Payloads;
+﻿using NTDLS.DatagramMessaging;
+using NTDLS.ReliableMessaging;
 using Si.Library;
 using Si.Library.Messages.Notify;
 using Si.Library.Messages.Query;
@@ -76,13 +75,13 @@ namespace Si.MultiplayClient
         /// <summary>
         /// This is the UDP port that the client will listen on. This is communicated to the server via ConfigureConnection().
         /// </summary>
-        private readonly int _clientListenUdpPort = UdpMessageManager.GetRandomUnusedUDPPort(5000, 8000);
+        private readonly int _clientListenUdpPort = DmMessenger.GetRandomUnusedUDPPort(5000, 8000);
 
         private readonly List<SiSpriteAction> _spriteActionBuffer = new();
-        private UdpMessageManager? _internal_udpManager;
-        private TightRpcClient? _internal_rpcClient;
+        private DmMessenger? _internal_udpManager;
+        private RmClient? _internal_messageClient;
 
-        private UdpMessageManager UdpManager
+        private DmMessenger UdpManager
         {
             get
             {
@@ -91,7 +90,7 @@ namespace Si.MultiplayClient
                 {
                     lock (this)
                     {
-                        _internal_udpManager ??= new UdpMessageManager(_clientListenUdpPort, UdpMessageManager_ProcessNotificationCallback);
+                        _internal_udpManager ??= new DmMessenger(_clientListenUdpPort, DmMessenger_ProcessNotificationCallback);
                         _internal_udpManager.WriteMessage(SiConstants.MultiplayServerAddress, MultiplayServerTCPPort, new SiUDPHello());
                     }
                 }
@@ -100,18 +99,18 @@ namespace Si.MultiplayClient
             }
         }
 
-        private TightRpcClient RpcClient
+        private RmClient RpcClient
         {
             get
             {
                 #region Message Client Creation and Connectivity.
-                if (_internal_rpcClient == null)
+                if (_internal_messageClient == null)
                 {
                     lock (this)
                     {
-                        if (_internal_rpcClient == null)
+                        if (_internal_messageClient == null)
                         {
-                            var messageClient = new TightRpcClient();
+                            var messageClient = new RmClient();
 
                             messageClient.OnException += MessageClient_OnException;
 
@@ -120,7 +119,7 @@ namespace Si.MultiplayClient
 
                             messageClient.Connect(SiConstants.MultiplayServerAddress, SiConstants.MultiplayServerTCPPort);
 
-                            _internal_rpcClient = messageClient;
+                            _internal_messageClient = messageClient;
 
                             //Hit the property to force initilization of the upd manager.
                             SiUtility.EnsureNotNull(UdpManager);
@@ -128,11 +127,11 @@ namespace Si.MultiplayClient
                     }
                 }
                 #endregion
-                return _internal_rpcClient;
+                return _internal_messageClient;
             }
         }
 
-        private void MessageClient_OnException(TightRpcContext context, Exception ex, ITightRpcPayload? payload)
+        private void MessageClient_OnException(RmContext context, Exception ex, IRmPayload? payload)
         {
             throw ex;
         }
@@ -334,7 +333,7 @@ namespace Si.MultiplayClient
         /// </summary>
         /// <param name="payload"></param>
         /// <exception cref="NotImplementedException"></exception>
-        private void UdpMessageManager_ProcessNotificationCallback(IUDPPayloadNotification payload)
+        private void DmMessenger_ProcessNotificationCallback(IDmNotification payload)
         {
             //------------------------------------------------------------------------------------------------------------------------------
             if (payload is SiSpriteActions spriteActions)
@@ -424,7 +423,7 @@ namespace Si.MultiplayClient
         /// Just a simple function used to send a notification with some checks.
         /// </summary>
         /// <param name="multiplayerEvent"></param>
-        public void NotifyImmediately(ITightRpcNotification multiplayerEvent)
+        public void NotifyImmediately(IRmNotification multiplayerEvent)
         {
             if (State.PlayMode != SiPlayMode.SinglePlayer && RpcClient?.IsConnected == true)
             {
@@ -438,7 +437,7 @@ namespace Si.MultiplayClient
         public void Dispose()
         {
             SiUtility.TryAndIgnore(() => UdpManager?.Shutdown());
-            SiUtility.TryAndIgnore(() => _internal_rpcClient?.Disconnect());
+            SiUtility.TryAndIgnore(() => _internal_messageClient?.Disconnect());
         }
     }
 }

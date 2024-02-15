@@ -1,9 +1,9 @@
-﻿using NTDLS.TightRPC;
+﻿using NTDLS.ReliableMessaging;
 using Si.Library.Messages.Query;
 
 namespace Si.MultiplayClient
 {
-    internal class RpcClientQueryHandlers : ITightRpcMessageHandler
+    internal class RpcClientQueryHandlers : IRmMessageHandler
     {
         private readonly EngineMultiplayManager _manager;
 
@@ -12,7 +12,7 @@ namespace Si.MultiplayClient
             _manager = manager;
         }
 
-        public SiPingReply OnSiPing(TightRpcContext context, SiPing param)
+        public SiPingReply OnSiPing(RmContext context, SiPing param)
         {
             return new SiPingReply(param);
         }

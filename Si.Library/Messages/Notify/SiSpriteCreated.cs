@@ -1,4 +1,4 @@
-﻿using NTDLS.TightRPC;
+﻿using NTDLS.ReliableMessaging;
 using Si.Library.Payload;
 
 namespace Si.Library.Messages.Notify
@@ -6,7 +6,7 @@ namespace Si.Library.Messages.Notify
     /// <summary>
     /// Tell the server that a client created a sprite. This should be sent to all lobby connections.
     /// </summary>
-    public class SiSpriteCreated : ITightRpcNotification
+    public class SiSpriteCreated : IRmNotification
     {
         public SiSpriteLayout? Layout { get; set; }
 

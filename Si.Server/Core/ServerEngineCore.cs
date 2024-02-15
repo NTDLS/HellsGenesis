@@ -1,6 +1,5 @@
-﻿using NTDLS.TightRPC;
-using NTDLS.UDPPacketFraming;
-using NTDLS.UDPPacketFraming.Payloads;
+﻿using NTDLS.DatagramMessaging;
+using NTDLS.ReliableMessaging;
 using Si.Library;
 using Si.Library.Messages.Notify;
 using Si.Library.Messages.Query;
@@ -17,8 +16,8 @@ namespace Si.Server.Core
         /// </summary>
         public Dictionary<Guid, IPEndPoint> ActiveEndpoints { get; private set; } = new();
 
-        private readonly TightRpcServer _messageServer = new();
-        private readonly UdpMessageManager _udpManager;
+        private readonly RmServer _messageServer = new();
+        private readonly DmMessenger _udpManager;
 
         public LogManager Log { get; private set; }
         public SessionManager Sessions { get; private set; }
@@ -29,7 +28,7 @@ namespace Si.Server.Core
         {
             Settings = settings;
 
-            _udpManager = new UdpMessageManager(Settings.DataPort, UdpMessageManager_ProcessNotificationCallback);
+            _udpManager = new DmMessenger(Settings.DataPort, DmMessenger_ProcessNotificationCallback);
 
             Log = new LogManager(this);
             Sessions = new SessionManager(this);
@@ -48,7 +47,7 @@ namespace Si.Server.Core
             _messageServer.OnException += MessageServer_OnException;
         }
 
-        private void MessageServer_OnException(TightRpcContext context, Exception ex, ITightRpcPayload? payload)
+        private void MessageServer_OnException(RmContext context, Exception ex, IRmPayload? payload)
         {
             throw ex;
         }
@@ -59,7 +58,7 @@ namespace Si.Server.Core
             return result?.Ping;
         }
 
-        private void UdpMessageManager_ProcessNotificationCallback(IUDPPayloadNotification payload)
+        private void DmMessenger_ProcessNotificationCallback(IDmNotification payload)
         {
             //------------------------------------------------------------------------------------------------------------------------------
             if (payload is SiUDPHello)
@@ -103,7 +102,7 @@ namespace Si.Server.Core
         /// <summary>
         /// Dispatches a message to all connections in the lobby exept for the one denoted by exceptConnectionId.
         /// </summary>
-        public void BroadcastNotificationToAll(Lobby lobby, Guid exceptConnectionId, ITightRpcNotification message)
+        public void BroadcastNotificationToAll(Lobby lobby, Guid exceptConnectionId, IRmNotification message)
         {
             foreach (var connectionId in lobby.GetConnectionIDs().Where(o => o != exceptConnectionId))
             {
@@ -116,7 +115,7 @@ namespace Si.Server.Core
         /// </summary>
         /// <param name="lobby"></param>
         /// <param name="message"></param>
-        private void BroadcastNotificationToAll(Lobby lobby, ITightRpcNotification message)
+        private void BroadcastNotificationToAll(Lobby lobby, IRmNotification message)
         {
             foreach (var connectionId in lobby.GetConnectionIDs())
             {
@@ -124,7 +123,7 @@ namespace Si.Server.Core
             }
         }
 
-        private void MessageServer_OnConnected(TightRpcContext context)
+        private void MessageServer_OnConnected(RmContext context)
         {
             var remoteIPAddress = ((IPEndPoint?)context.TcpClient.Client.RemoteEndPoint)?.Address;
             if (remoteIPAddress == null)
@@ -137,7 +136,7 @@ namespace Si.Server.Core
             Log.Verbose($"Accepted Connection: '{context.ConnectionId}'");
         }
 
-        private void MessageServer_OnDisconnected(TightRpcContext context)
+        private void MessageServer_OnDisconnected(RmContext context)
         {
             Sessions.Remove(context.ConnectionId);
             Log.Verbose($"Disconnected Connection: '{context.ConnectionId}'");

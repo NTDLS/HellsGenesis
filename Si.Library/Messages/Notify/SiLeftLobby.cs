@@ -1,4 +1,4 @@
-﻿using NTDLS.TightRPC;
+﻿using NTDLS.ReliableMessaging;
 
 namespace Si.Library.Messages.Notify
 {
@@ -6,7 +6,7 @@ namespace Si.Library.Messages.Notify
     /// Tells the server that the connection has left the lobby.
     /// They are still registered to play in the lobby, but they are selecting a new loadout.
     /// </summary>
-    public class SiLeftLobby : ITightRpcNotification
+    public class SiLeftLobby : IRmNotification
     {
     }
 }

@@ -1,11 +1,11 @@
-﻿using NTDLS.TightRPC;
+﻿using NTDLS.ReliableMessaging;
 
 namespace Si.Library.Messages.Query
 {
     /// <summary>
     /// Just a simple ping.
     /// </summary>
-    public class SiPing : ITightRpcQuery<SiPingReply>
+    public class SiPing : IRmQuery<SiPingReply>
     {
         public DateTime Timestamp { get; set; }
         public Guid UID { get; set; }
@@ -17,7 +17,7 @@ namespace Si.Library.Messages.Query
         }
     }
 
-    public class SiPingReply : ITightRpcQueryReply
+    public class SiPingReply : IRmQueryReply
     {
         public SiPing Ping { get; set; }
 

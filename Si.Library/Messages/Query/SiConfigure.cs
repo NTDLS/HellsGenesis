@@ -1,11 +1,11 @@
-﻿using NTDLS.TightRPC;
+﻿using NTDLS.ReliableMessaging;
 
 namespace Si.Library.Messages.Query
 {
     /// <summary>
     /// The client has connected and the server and client are exchanging configuration/settings.
     /// </summary>
-    public class SiConfigure : ITightRpcQuery<SiConfigureReply>
+    public class SiConfigure : IRmQuery<SiConfigureReply>
     {
         /// <summary>
         /// The port which the client will be listening to for UDP communications from the server.
@@ -23,7 +23,7 @@ namespace Si.Library.Messages.Query
         public DateTime? ClientLocalTime { get; set; }
     }
 
-    public class SiConfigureReply : ITightRpcQueryReply
+    public class SiConfigureReply : IRmQueryReply
     {
         /// <summary>
         /// The connection id of the tcp/ip connection according to the server.

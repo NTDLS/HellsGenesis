@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NTDLS.TightRPC" Version="1.2.4" />
-    <PackageReference Include="NTDLS.UDPPacketFraming" Version="1.0.5" />
+    <PackageReference Include="NTDLS.DatagramMessaging" Version="1.2.0" />
+    <PackageReference Include="NTDLS.ReliableMessaging" Version="1.4.0" />
   </ItemGroup>
 
   <ItemGroup>

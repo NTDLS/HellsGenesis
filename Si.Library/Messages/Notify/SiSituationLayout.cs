@@ -1,4 +1,4 @@
-﻿using NTDLS.TightRPC;
+﻿using NTDLS.ReliableMessaging;
 using Si.Library.Payload;
 
 namespace Si.Library.Messages.Query
@@ -7,7 +7,7 @@ namespace Si.Library.Messages.Query
     /// Notification from the lobby owner containing the situation layout.
     /// This is then broadcast from the server to each connection.
     /// </summary>
-    public class SiSituationLayout : ITightRpcNotification
+    public class SiSituationLayout : IRmNotification
     {
         public List<SiSpriteLayout> Sprites { get; set; } = new();
     }

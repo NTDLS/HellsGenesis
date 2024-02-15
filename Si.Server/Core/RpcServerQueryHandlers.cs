@@ -1,10 +1,10 @@
-﻿using NTDLS.TightRPC;
+﻿using NTDLS.ReliableMessaging;
 using Si.Library.Messages.Query;
 using Si.Library.Payload;
 
 namespace Si.Server.Core
 {
-    internal class RpcServerQueryHandlers : ITightRpcMessageHandler
+    internal class RpcServerQueryHandlers : IRmMessageHandler
     {
         private readonly ServerEngineCore _serverCore;
 
@@ -13,7 +13,7 @@ namespace Si.Server.Core
             _serverCore = serverCore;
         }
 
-        public SiGetLobbyInfoReply OnSiGetLobbyInfo(TightRpcContext context, SiGetLobbyInfo param)
+        public SiGetLobbyInfoReply OnSiGetLobbyInfo(RmContext context, SiGetLobbyInfo param)
         {
             _serverCore.Log.Verbose($"ConnectionId: '{context.ConnectionId}' getting lobby info for '{param.LobbyUID}'.");
 
@@ -34,7 +34,7 @@ namespace Si.Server.Core
             };
         }
 
-        public SiCreateLobbyReply OnSiCreateLobby(TightRpcContext context, SiCreateLobby param)
+        public SiCreateLobbyReply OnSiCreateLobby(RmContext context, SiCreateLobby param)
         {
             _serverCore.Log.Verbose($"ConnectionId: '{context.ConnectionId}' creating lobby '{param.Configuration.Name}'.");
 
@@ -46,7 +46,7 @@ namespace Si.Server.Core
             };
         }
 
-        public SiListLobbiesReply OnSiListLobbies(TightRpcContext context, SiListLobbies param)
+        public SiListLobbiesReply OnSiListLobbies(RmContext context, SiListLobbies param)
         {
             _serverCore.Log.Verbose($"ConnectionId: '{context.ConnectionId}' requested lobby list.");
 
@@ -58,7 +58,7 @@ namespace Si.Server.Core
             };
         }
 
-        public SiConfigureReply OnSiConfigure(TightRpcContext context, SiConfigure param)
+        public SiConfigureReply OnSiConfigure(RmContext context, SiConfigure param)
         {
             _serverCore.Log.Verbose($"ConnectionId: '{context.ConnectionId}' configuration (v{param.ClientVersion}).");
 

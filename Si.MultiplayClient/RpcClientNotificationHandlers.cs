@@ -1,10 +1,10 @@
-﻿using NTDLS.TightRPC;
+﻿using NTDLS.ReliableMessaging;
 using Si.Library.Messages.Notify;
 using Si.Library.Messages.Query;
 
 namespace Si.MultiplayClient
 {
-    internal class RpcClientNotificationHandlers : ITightRpcMessageHandler
+    internal class RpcClientNotificationHandlers : IRmMessageHandler
     {
         private readonly EngineMultiplayManager _manager;
 
@@ -13,28 +13,28 @@ namespace Si.MultiplayClient
             _manager = manager;
         }
 
-        public void OnSiHostIsStartingGame(TightRpcContext context, SiHostIsStartingGame param)
+        public void OnSiHostIsStartingGame(RmContext context, SiHostIsStartingGame param)
         {
             _manager.InvokeHostIsStartingGame();
         }
 
-        public void OnSiLobbyDeleted(TightRpcContext context, SiLobbyDeleted param)
+        public void OnSiLobbyDeleted(RmContext context, SiLobbyDeleted param)
         {
             //TODO: The client is waiting in a lobby that no longer exists. We should do something.
         }
 
-        public void OnSiSituationLayout(TightRpcContext context, SiSituationLayout param)
+        public void OnSiSituationLayout(RmContext context, SiSituationLayout param)
         {
             //The server is telling us to initialize the layout using the supplied sprites and their states.
             _manager.InvokeReceivedLevelLayout(param);
         }
 
-        public void OnSiPlayerSpriteCreated(TightRpcContext context, SiPlayerSpriteCreated param)
+        public void OnSiPlayerSpriteCreated(RmContext context, SiPlayerSpriteCreated param)
         {
             _manager.InvokePlayerSpriteCreated(param.SelectedPlayerClass, param.PlayerMultiplayUID);
         }
 
-        public void OnSiSpriteCreated(TightRpcContext context, SiSpriteCreated param)
+        public void OnSiSpriteCreated(RmContext context, SiSpriteCreated param)
         {
             if (param.Layout != null)
             {
@@ -42,7 +42,7 @@ namespace Si.MultiplayClient
             }
         }
 
-        public void OnSiHostStartedLevel(TightRpcContext context, SiHostStartedLevel param)
+        public void OnSiHostStartedLevel(RmContext context, SiHostStartedLevel param)
         {
             _manager.InvokeHostLevelStarted();
         }

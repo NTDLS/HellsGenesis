@@ -1,10 +1,10 @@
-﻿using NTDLS.TightRPC;
+﻿using NTDLS.ReliableMessaging;
 using Si.Library.Messages.Notify;
 using Si.Library.Messages.Query;
 
 namespace Si.Server.Core
 {
-    internal class RpcServerNotificationHandlers : ITightRpcMessageHandler
+    internal class RpcServerNotificationHandlers : IRmMessageHandler
     {
         private readonly ServerEngineCore _serverCore;
 
@@ -13,7 +13,7 @@ namespace Si.Server.Core
             _serverCore = serverCore;
         }
 
-        public void OnSiHostIsStartingGame(TightRpcContext context, SiHostIsStartingGame param)
+        public void OnSiHostIsStartingGame(RmContext context, SiHostIsStartingGame param)
         {
             if (!_serverCore.Sessions.TryGetByConnectionId(context.ConnectionId, out var session))
             {
@@ -33,7 +33,7 @@ namespace Si.Server.Core
             _serverCore.BroadcastNotificationToAll(lobby, context.ConnectionId, param);
         }
 
-        public void OnSiDeleteLobby(TightRpcContext context, SiDeleteLobby param)
+        public void OnSiDeleteLobby(RmContext context, SiDeleteLobby param)
         {
             if (!_serverCore.Sessions.TryGetByConnectionId(context.ConnectionId, out var session))
             {
@@ -54,7 +54,7 @@ namespace Si.Server.Core
             _serverCore.Lobbies.Delete(param.LobbyUID);
         }
 
-        public void OnSiDeregisterToLobby(TightRpcContext context, SiDeregisterToLobby param)
+        public void OnSiDeregisterToLobby(RmContext context, SiDeregisterToLobby param)
         {
             if (!_serverCore.Sessions.TryGetByConnectionId(context.ConnectionId, out var session))
             {
@@ -74,7 +74,7 @@ namespace Si.Server.Core
             session.ClearCurrentLobby();
         }
 
-        public void OnSiRegisterToLobby(TightRpcContext context, SiRegisterToLobby param)
+        public void OnSiRegisterToLobby(RmContext context, SiRegisterToLobby param)
         {
             if (!_serverCore.Sessions.TryGetByConnectionId(context.ConnectionId, out var session))
             {
@@ -94,7 +94,7 @@ namespace Si.Server.Core
             session.SetCurrentLobby(param.LobbyUID);
         }
 
-        public void OnSiWaitingInLobby(TightRpcContext context, SiWaitingInLobby param)
+        public void OnSiWaitingInLobby(RmContext context, SiWaitingInLobby param)
         {
             if (!_serverCore.Sessions.TryGetByConnectionId(context.ConnectionId, out var session))
             {
@@ -113,7 +113,7 @@ namespace Si.Server.Core
             lobby.SetConnectionAsWaitingInLobby(context.ConnectionId);
         }
 
-        public void OnSiLeftLobby(TightRpcContext context, SiLeftLobby param)
+        public void OnSiLeftLobby(RmContext context, SiLeftLobby param)
         {
             if (!_serverCore.Sessions.TryGetByConnectionId(context.ConnectionId, out var session))
             {
@@ -132,7 +132,7 @@ namespace Si.Server.Core
             lobby.SetConnectionAsLeftInLobby(context.ConnectionId);
         }
 
-        public void OnSiSituationLayout(TightRpcContext context, SiSituationLayout param)
+        public void OnSiSituationLayout(RmContext context, SiSituationLayout param)
         {
             if (!_serverCore.Sessions.TryGetByConnectionId(context.ConnectionId, out var session))
             {
@@ -152,7 +152,7 @@ namespace Si.Server.Core
             _serverCore.BroadcastNotificationToAll(lobby, context.ConnectionId, param);
         }
 
-        public void OnSiPlayerSpriteCreated(TightRpcContext context, SiPlayerSpriteCreated param)
+        public void OnSiPlayerSpriteCreated(RmContext context, SiPlayerSpriteCreated param)
         {
             if (!_serverCore.Sessions.TryGetByConnectionId(context.ConnectionId, out var session))
             {
@@ -171,7 +171,7 @@ namespace Si.Server.Core
             _serverCore.BroadcastNotificationToAll(lobby, context.ConnectionId, param);
         }
 
-        public void OnSiHostStartedLevel(TightRpcContext context, SiHostStartedLevel param)
+        public void OnSiHostStartedLevel(RmContext context, SiHostStartedLevel param)
         {
             if (!_serverCore.Sessions.TryGetByConnectionId(context.ConnectionId, out var session))
             {
@@ -190,7 +190,7 @@ namespace Si.Server.Core
             _serverCore.BroadcastNotificationToAll(lobby, context.ConnectionId, param);
         }
 
-        public void OnSiSpriteCreated(TightRpcContext context, SiSpriteCreated param)
+        public void OnSiSpriteCreated(RmContext context, SiSpriteCreated param)
         {
             if (!_serverCore.Sessions.TryGetByConnectionId(context.ConnectionId, out var session))
             {

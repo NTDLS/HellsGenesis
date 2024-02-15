@@ -1,4 +1,4 @@
-﻿using NTDLS.TightRPC;
+﻿using NTDLS.ReliableMessaging;
 using Si.Library.Payload;
 
 namespace Si.Library.Messages.Query
@@ -6,12 +6,12 @@ namespace Si.Library.Messages.Query
     /// <summary>
     /// Gets some basic information about a lobby.
     /// </summary>
-    public class SiGetLobbyInfo : ITightRpcQuery<SiGetLobbyInfoReply>
+    public class SiGetLobbyInfo : IRmQuery<SiGetLobbyInfoReply>
     {
         public Guid LobbyUID { get; set; }
     }
 
-    public class SiGetLobbyInfoReply : ITightRpcQueryReply
+    public class SiGetLobbyInfoReply : IRmQueryReply
     {
         public SiLobbyInfo Info { get; set; } = new();
     }
