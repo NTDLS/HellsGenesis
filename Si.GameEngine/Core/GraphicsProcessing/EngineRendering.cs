@@ -308,7 +308,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             return rect;
         }
 
-        public void SetTransformAngle(RenderTarget renderTarget, RawRectangleF rect, double angle, RawMatrix3x2? existimMatrix = null)
+        public void SetTransformAngle(RenderTarget renderTarget, RawRectangleF rect, double angle, RawMatrix3x2? existingMatrix = null)
         {
             angle = SiMath.DegreesToRadians(angle);
 
@@ -326,9 +326,9 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 centerY - sinAngle * centerX - cosAngle * centerY
             );
 
-            if (existimMatrix != null)
+            if (existingMatrix != null)
             {
-                rotationMatrix = MultiplyMatrices(rotationMatrix, (RawMatrix3x2)existimMatrix);
+                rotationMatrix = MultiplyMatrices(rotationMatrix, (RawMatrix3x2)existingMatrix);
             }
 
             renderTarget.Transform = rotationMatrix;
@@ -364,6 +364,8 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         }
 
         public void ResetTransform(RenderTarget renderTarget)
+        {
             => renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using SharpDX.Direct2D1;
 using Si.GameEngine.Core.Debug._Superclass;
 using Si.GameEngine.Core.GraphicsProcessing;
 using Si.GameEngine.Core.Managers;
