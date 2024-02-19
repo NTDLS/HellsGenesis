@@ -1,7 +1,7 @@
 [Setup]
 ;-- Main Setup Information
  AppName                         = Strikeforce Infinity
- AppVerName                      = Strikeforce Infinity 0.0.13.0
+ AppVerName                      = Strikeforce Infinity 0.0.14
  AppCopyright                    = Copyright © 1995-2024 NetworkDLS.
  DefaultDirName                  = {commonpf}\NetworkDLS\Strikeforce Infinity
  DefaultGroupName                = NetworkDLS\Strikeforce Infinity
@@ -19,7 +19,7 @@
  AppPublisher    = NetworkDLS
  AppPublisherURL = http://www.NetworkDLS.com/
  AppUpdatesURL   = http://www.NetworkDLS.com/
- AppVersion      = 0.0.13.0
+ AppVersion      = 0.0.14
  
 [Components]
  Name: "Game";         Description: "Strikeforce Infinity"; Types: Full Compact Custom; Flags: Fixed;
