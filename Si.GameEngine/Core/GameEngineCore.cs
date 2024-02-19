@@ -194,31 +194,34 @@ namespace Si.GameEngine.Core
         {
             if (!_isRunningHeadless)
             {
-                try
+                lock (Rendering)
                 {
-                    Rendering.ScreenRenderTarget.BeginDraw();
-                    Rendering.IntermediateRenderTarget.BeginDraw();
-
-                    Rendering.ScreenRenderTarget.Clear(Rendering.Materials.Raw.Black);
-
-                    Rendering.IntermediateRenderTarget.Clear(Rendering.Materials.Raw.Black);
-                    Sprites.RenderPreScaling(Rendering.IntermediateRenderTarget);
-                    Rendering.IntermediateRenderTarget.EndDraw();
-
-                    if (Settings.AutoZoomWhenMoving)
+                    try
                     {
-                        Rendering.ApplyScaling((float)Display.SpeedOrientedFrameScalingFactor());
-                    }
-                    else
-                    {
-                        Rendering.ApplyScaling((float)Display.BaseDrawScale);
-                    }
-                    Sprites.RenderPostScaling(Rendering.ScreenRenderTarget);
+                        Rendering.ScreenRenderTarget.BeginDraw();
+                        Rendering.IntermediateRenderTarget.BeginDraw();
 
-                    Rendering.ScreenRenderTarget.EndDraw();
-                }
-                catch
-                {
+                        Rendering.ScreenRenderTarget.Clear(Rendering.Materials.Raw.Black);
+                        Rendering.IntermediateRenderTarget.Clear(Rendering.Materials.Raw.Black);
+
+                        Sprites.RenderPreScaling(Rendering.IntermediateRenderTarget);
+                        Rendering.IntermediateRenderTarget.EndDraw();
+
+                        if (Settings.AutoZoomWhenMoving)
+                        {
+                            Rendering.ApplyScaling((float)Display.SpeedOrientedFrameScalingFactor());
+                        }
+                        else
+                        {
+                            Rendering.ApplyScaling((float)Display.BaseDrawScale);
+                        }
+                        Sprites.RenderPostScaling(Rendering.ScreenRenderTarget);
+
+                        Rendering.ScreenRenderTarget.EndDraw();
+                    }
+                    catch
+                    {
+                    }
                 }
             }
         }

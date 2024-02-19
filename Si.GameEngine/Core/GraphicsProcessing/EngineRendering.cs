@@ -40,7 +40,6 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             var intermediateRenderTargetSize = new Size2F(_gameEngine.Display.TotalCanvasSize.Width, _gameEngine.Display.TotalCanvasSize.Height);
             IntermediateRenderTarget = new SharpDX.Direct2D1.BitmapRenderTarget(ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize);
 
-
             /*
             var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
             var renderTargetProperties = new RenderTargetProperties(pixelFormat);
@@ -93,9 +92,12 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
         public void ApplyScaling(float scale)
         {
-            var sourceRect = CalculateCenterCopyRectangle(IntermediateRenderTarget.Size, scale);
-            var destRect = new RawRectangleF(0, 0, _gameEngine.Display.NatrualScreenSize.Width, _gameEngine.Display.NatrualScreenSize.Height);
-            ScreenRenderTarget.DrawBitmap(IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
+            lock (this)
+            {
+                var sourceRect = CalculateCenterCopyRectangle(IntermediateRenderTarget.Size, scale);
+                var destRect = new RawRectangleF(0, 0, _gameEngine.Display.NatrualScreenSize.Width, _gameEngine.Display.NatrualScreenSize.Height);
+                ScreenRenderTarget.DrawBitmap(IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
+            }
         }
 
         public static RawRectangleF CalculateCenterCopyRectangle(Size2F largerSize, float percentage)
@@ -128,13 +130,16 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(Stream stream)
         {
-            using (var decoder = new BitmapDecoder(_wicFactory, stream, DecodeOptions.CacheOnLoad))
-            using (var frame = decoder.GetFrame(0))
-            using (var converter = new FormatConverter(_wicFactory))
+            lock (this)
             {
-                converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA);
+                using (var decoder = new BitmapDecoder(_wicFactory, stream, DecodeOptions.CacheOnLoad))
+                using (var frame = decoder.GetFrame(0))
+                using (var converter = new FormatConverter(_wicFactory))
+                {
+                    converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA);
 
-                return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
+                    return SharpDX.Direct2D1.Bitmap.FromWicBitmap(ScreenRenderTarget, converter);
+                }
             }
         }
 
@@ -145,22 +150,28 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
         public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double x, double y, double angle)
         {
-            var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
-            SetTransformAngle(renderTarget, destRect, angle);
-            renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
-            ResetTransform(renderTarget);
-            return destRect;
+            lock (this)
+            {
+                var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
+                SetTransformAngle(renderTarget, destRect, angle);
+                renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+                ResetTransform(renderTarget);
+                return destRect;
+            }
         }
 
         /// Draws a bitmap from a specified location of a given size, to the the specified location.
         public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap,
             double x, double y, double angle, RawRectangleF sourceRect, Size2F destSize)
         {
-            var destRect = new RawRectangleF((float)x, (float)y, (float)(x + destSize.Width), (float)(y + destSize.Height));
-            SetTransformAngle(renderTarget, destRect, angle);
-            renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
-            ResetTransform(renderTarget);
-            return destRect;
+            lock (this)
+            {
+                var destRect = new RawRectangleF((float)x, (float)y, (float)(x + destSize.Width), (float)(y + destSize.Height));
+                SetTransformAngle(renderTarget, destRect, angle);
+                renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
+                ResetTransform(renderTarget);
+                return destRect;
+            }
         }
 
         /// <summary>
@@ -169,23 +180,32 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
         public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double x, double y)
         {
-            var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
-            renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
-            return destRect;
+            lock (this)
+            {
+                var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
+                renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+                return destRect;
+            }
         }
 
         public RawRectangleF GetTextRext(double x, double y, string text, TextFormat format)
         {
-            using var textLayout = new TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
-            return new RawRectangleF((float)x, (float)y, (float)(x + textLayout.Metrics.Width), (float)(y + textLayout.Metrics.Height));
+            lock (this)
+            {
+                using var textLayout = new TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
+                return new RawRectangleF((float)x, (float)y, (float)(x + textLayout.Metrics.Width), (float)(y + textLayout.Metrics.Height));
+            }
         }
 
         public SizeF GetTextSize(string text, TextFormat format)
         {
-            //We have to check the size with some ending characters becuase TextLayout() seems to want to trim the text before calculating the metrics.
-            using var textLayout = new TextLayout(_directWriteFactory, $"[{text}]", format, float.MaxValue, float.MaxValue);
-            using var spacerLayout = new TextLayout(_directWriteFactory, "[]", format, float.MaxValue, float.MaxValue);
-            return new SizeF(textLayout.Metrics.Width - spacerLayout.Metrics.Width, textLayout.Metrics.Height);
+            lock (this)
+            {
+                //We have to check the size with some ending characters becuase TextLayout() seems to want to trim the text before calculating the metrics.
+                using var textLayout = new TextLayout(_directWriteFactory, $"[{text}]", format, float.MaxValue, float.MaxValue);
+                using var spacerLayout = new TextLayout(_directWriteFactory, "[]", format, float.MaxValue, float.MaxValue);
+                return new SizeF(textLayout.Metrics.Width - spacerLayout.Metrics.Width, textLayout.Metrics.Height);
+            }
         }
 
         /// <summary>
@@ -194,31 +214,37 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
         public RawRectangleF DrawTextAt(RenderTarget renderTarget, double x, double y, double angle, string text, TextFormat format, SolidColorBrush brush)
         {
-            using var textLayout = new TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
+            lock (this)
+            {
+                using var textLayout = new TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
-            var textWidth = textLayout.Metrics.Width;
-            var textHeight = textLayout.Metrics.Height;
+                var textWidth = textLayout.Metrics.Width;
+                var textHeight = textLayout.Metrics.Height;
 
-            // Create a rectangle that fits the text
-            var textRectangle = new RawRectangleF((float)x, (float)y, (float)(x + textWidth), (float)(y + textHeight));
+                // Create a rectangle that fits the text
+                var textRectangle = new RawRectangleF((float)x, (float)y, (float)(x + textWidth), (float)(y + textHeight));
 
-            //DrawRectangleAt(renderTarget, textRectangle, 0, Materials.Raw.Blue, 0, 1);
+                //DrawRectangleAt(renderTarget, textRectangle, 0, Materials.Raw.Blue, 0, 1);
 
-            SetTransformAngle(renderTarget, textRectangle, angle);
-            renderTarget.DrawText(text, format, textRectangle, brush);
-            ResetTransform(renderTarget);
+                SetTransformAngle(renderTarget, textRectangle, angle);
+                renderTarget.DrawText(text, format, textRectangle, brush);
+                ResetTransform(renderTarget);
 
-            return textRectangle;
+                return textRectangle;
+            }
         }
 
         public void DrawLine(RenderTarget renderTarget,
             double startPointX, double startPointY, double endPointX, double endPointY,
             SolidColorBrush brush, double strokeWidth = 1)
         {
-            var startPoint = new RawVector2((float)startPointX, (float)startPointY);
-            var endPoint = new RawVector2((float)endPointX, (float)endPointY);
+            lock (this)
+            {
+                var startPoint = new RawVector2((float)startPointX, (float)startPointY);
+                var endPoint = new RawVector2((float)endPointX, (float)endPointY);
 
-            renderTarget.DrawLine(startPoint, endPoint, brush, (float)strokeWidth);
+                renderTarget.DrawLine(startPoint, endPoint, brush, (float)strokeWidth);
+            }
         }
 
         /// <summary>
@@ -227,56 +253,62 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
         public Ellipse FillEllipseAt(RenderTarget renderTarget, double x, double y, double radiusX, double radiusY, RawColor4 color)
         {
-            var ellipse = new Ellipse()
+            lock (this)
             {
-                Point = new RawVector2((float)x, (float)y),
-                RadiusX = (float)radiusX,
-                RadiusY = (float)radiusY,
-            };
+                var ellipse = new Ellipse()
+                {
+                    Point = new RawVector2((float)x, (float)y),
+                    RadiusX = (float)radiusX,
+                    RadiusY = (float)radiusY,
+                };
 
-            renderTarget.FillEllipse(ellipse, new SolidColorBrush(renderTarget, color));
+                renderTarget.FillEllipse(ellipse, new SolidColorBrush(renderTarget, color));
 
-            return ellipse;
+                return ellipse;
+            }
         }
 
         public void FillTriangleAt(RenderTarget renderTarget, double x, double y, double size, SolidColorBrush brush, double strokeWidth = 1)
         {
-            // Define the points for the triangle
-            RawVector2[] trianglePoints = new RawVector2[]
+            lock (this)
+            {
+                // Define the points for the triangle
+                RawVector2[] trianglePoints = new RawVector2[]
             {
                 new RawVector2(0, (float)size),     // Vertex 1 (bottom-left)
                 new RawVector2((float)size, (float)size),   // Vertex 2 (bottom-right)
                 new RawVector2((float)(size / 2), 0)      // Vertex 3 (top-center)
             };
 
-            // Create a PathGeometry and add the triangle to it
-            var triangleGeometry = new PathGeometry(_direct2dFactory);
-            using (GeometrySink sink = triangleGeometry.Open())
-            {
-                sink.BeginFigure(trianglePoints[0], FigureBegin.Filled);
-                sink.AddLines(trianglePoints);
-                sink.EndFigure(FigureEnd.Closed);
-                sink.Close();
+                // Create a PathGeometry and add the triangle to it
+                var triangleGeometry = new PathGeometry(_direct2dFactory);
+                using (GeometrySink sink = triangleGeometry.Open())
+                {
+                    sink.BeginFigure(trianglePoints[0], FigureBegin.Filled);
+                    sink.AddLines(trianglePoints);
+                    sink.EndFigure(FigureEnd.Closed);
+                    sink.Close();
+                }
+
+                // Calculate the center of the triangle
+                float centerX = (trianglePoints[0].X + trianglePoints[1].X + trianglePoints[2].X) / 3;
+                float centerY = (trianglePoints[0].Y + trianglePoints[1].Y + trianglePoints[2].Y) / 3;
+
+                // Calculate the adjustment needed to center the triangle at the desired position
+                x -= centerX;
+                y -= centerY;
+
+                // Create a translation transform to move the triangle to the desired position
+                renderTarget.Transform = new(
+                    1.0f, 0.0f,
+                    0.0f, 1.0f,
+                    (float)x, (float)y
+                );
+
+                renderTarget.DrawGeometry(triangleGeometry, brush, (float)strokeWidth);
+
+                ResetTransform(renderTarget);
             }
-
-            // Calculate the center of the triangle
-            float centerX = (trianglePoints[0].X + trianglePoints[1].X + trianglePoints[2].X) / 3;
-            float centerY = (trianglePoints[0].Y + trianglePoints[1].Y + trianglePoints[2].Y) / 3;
-
-            // Calculate the adjustment needed to center the triangle at the desired position
-            x -= centerX;
-            y -= centerY;
-
-            // Create a translation transform to move the triangle to the desired position
-            renderTarget.Transform = new(
-                1.0f, 0.0f,
-                0.0f, 1.0f,
-                (float)x, (float)y
-            );
-
-            renderTarget.DrawGeometry(triangleGeometry, brush, (float)strokeWidth);
-
-            ResetTransform(renderTarget);
         }
 
         /// <summary>
@@ -285,65 +317,74 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
         public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF rect, double angle, RawColor4 color, double expand = 0, double strokeWidth = 1)
         {
-            if (expand != 0)
+            lock (this)
             {
-                rect.Left -= (float)expand;
-                rect.Top -= (float)expand;
-                rect.Bottom += (float)expand;
-                rect.Right += (float)expand;
+                if (expand != 0)
+                {
+                    rect.Left -= (float)expand;
+                    rect.Top -= (float)expand;
+                    rect.Bottom += (float)expand;
+                    rect.Right += (float)expand;
+                }
+
+                SetTransformAngle(renderTarget, rect, angle);
+                renderTarget.DrawRectangle(rect, new SolidColorBrush(renderTarget, color), (float)strokeWidth);
+                ResetTransform(renderTarget);
+
+                return rect;
             }
-
-            SetTransformAngle(renderTarget, rect, angle);
-            renderTarget.DrawRectangle(rect, new SolidColorBrush(renderTarget, color), (float)strokeWidth);
-            ResetTransform(renderTarget);
-
-            return rect;
         }
 
         public void SetTransformAngle(RenderTarget renderTarget, RawRectangleF rect, double angle, RawMatrix3x2? existimMatrix = null)
         {
-            angle = SiMath.DegreesToRadians(angle);
-
-            float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
-            float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
-
-            // Calculate the rotation matrix
-            float cosAngle = (float)Math.Cos(angle);
-            float sinAngle = (float)Math.Sin(angle);
-
-            var rotationMatrix = new RawMatrix3x2(
-                cosAngle, sinAngle,
-                -sinAngle, cosAngle,
-                centerX - cosAngle * centerX + sinAngle * centerY,
-                centerY - sinAngle * centerX - cosAngle * centerY
-            );
-
-            if (existimMatrix != null)
+            lock (this)
             {
-                rotationMatrix = MultiplyMatrices(rotationMatrix, (RawMatrix3x2)existimMatrix);
-            }
+                angle = SiMath.DegreesToRadians(angle);
 
-            renderTarget.Transform = rotationMatrix;
+                float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
+                float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
+
+                // Calculate the rotation matrix
+                float cosAngle = (float)Math.Cos(angle);
+                float sinAngle = (float)Math.Sin(angle);
+
+                var rotationMatrix = new RawMatrix3x2(
+                    cosAngle, sinAngle,
+                    -sinAngle, cosAngle,
+                    centerX - cosAngle * centerX + sinAngle * centerY,
+                    centerY - sinAngle * centerX - cosAngle * centerY
+                );
+
+                if (existimMatrix != null)
+                {
+                    rotationMatrix = MultiplyMatrices(rotationMatrix, (RawMatrix3x2)existimMatrix);
+                }
+
+                renderTarget.Transform = rotationMatrix;
+            }
         }
 
         private RawMatrix3x2 GetScalingMatrix(double zoomFactor)
         {
-            // Calculate the new center point (assuming your image dimensions are known)
-            float centerX = _gameEngine.Display.TotalCanvasSize.Width / 2.0f;
-            float centerY = _gameEngine.Display.TotalCanvasSize.Height / 2.0f;
+            lock (this)
+            {
+                // Calculate the new center point (assuming your image dimensions are known)
+                float centerX = _gameEngine.Display.TotalCanvasSize.Width / 2.0f;
+                float centerY = _gameEngine.Display.TotalCanvasSize.Height / 2.0f;
 
-            // Calculate the scaling transformation matrix
-            var scalingMatrix = new RawMatrix3x2(
-                (float)zoomFactor, 0,
-                0, (float)zoomFactor,
-                (float)(centerX * (1 - zoomFactor)),
-                (float)(centerY * (1 - zoomFactor))
-            );
+                // Calculate the scaling transformation matrix
+                var scalingMatrix = new RawMatrix3x2(
+                    (float)zoomFactor, 0,
+                    0, (float)zoomFactor,
+                    (float)(centerX * (1 - zoomFactor)),
+                    (float)(centerY * (1 - zoomFactor))
+                );
 
-            return scalingMatrix;
+                return scalingMatrix;
+            }
         }
 
-        public RawMatrix3x2 MultiplyMatrices(RawMatrix3x2 matrix1, RawMatrix3x2 matrix2)
+        public static RawMatrix3x2 MultiplyMatrices(RawMatrix3x2 matrix1, RawMatrix3x2 matrix2)
         {
             return new RawMatrix3x2(
                 matrix1.M11 * matrix2.M11 + matrix1.M12 * matrix2.M21,
@@ -357,7 +398,10 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
         public void ResetTransform(RenderTarget renderTarget)
         {
-            renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+            lock (this)
+            {
+                renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+            }
         }
     }
 }
