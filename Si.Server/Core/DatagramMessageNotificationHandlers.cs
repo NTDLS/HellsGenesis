@@ -3,6 +3,9 @@ using Si.Library.Messages.Notify.Datagram;
 
 namespace Si.Server.Core
 {
+    /// <summary>
+    /// Recevies and processes time-sensitive messages from the multiplayer client (Si.MultiplayClient).
+    /// </summary>
     internal class DatagramMessageNotificationHandlers : IDmMessageHandler
     {
         private readonly ServerEngineCore _serverCore;
@@ -12,7 +15,7 @@ namespace Si.Server.Core
             _serverCore = serverCore;
         }
 
-        public void OnSiHello(DmContext context, SiHello payload)
+        public void OnSiHello(SiHello payload)
         {
             _serverCore.Log.Verbose($"A client sent a UDP hello.");
         }

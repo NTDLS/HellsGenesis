@@ -3,6 +3,9 @@ using Si.Library.Messages.Notify;
 
 namespace Si.Server.Core
 {
+    /// <summary>
+    /// Recevies and processes messages from the multiplayer client (Si.MultiplayClient).
+    /// </summary>
     internal class ReliableMessageNotificationHandlers : IRmMessageHandler
     {
         private readonly ServerEngineCore _serverCore;

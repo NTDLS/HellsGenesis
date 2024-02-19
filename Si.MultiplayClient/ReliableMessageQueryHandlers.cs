@@ -3,6 +3,9 @@ using Si.Library.Messages.Query;
 
 namespace Si.MultiplayClient
 {
+    /// <summary>
+    /// Recevies and replies to queries from the multiplayer host.
+    /// </summary>
     internal class ReliableMessageQueryHandlers : IRmMessageHandler
     {
         private readonly EngineMultiplayManager _manager;

@@ -4,6 +4,9 @@ using Si.Library.Payload;
 
 namespace Si.Server.Core
 {
+    /// <summary>
+    /// Recevies and replies to queries from the multiplayer client (Si.MultiplayClient).
+    /// </summary>
     internal class ReliableMessageQueryHandlers : IRmMessageHandler
     {
         private readonly ServerEngineCore _serverCore;
