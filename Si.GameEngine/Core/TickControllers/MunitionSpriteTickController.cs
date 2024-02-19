@@ -8,6 +8,7 @@ using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
+using Si.Library;
 using Si.Library.Types.Geometry;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,12 +84,8 @@ namespace Si.GameEngine.Core.TickControllers
                     }
                 }
 
-                try
-                {
-                    //Wait on all enqueued threads to complete.
-                    threadCollection.WaitForCompletion();
-                }
-                catch
+                //Wait on all enqueued threads to complete.
+                if (SiUtility.TryAndIgnore(() => threadCollection.WaitForCompletion()) == false)
                 {
                     return;
                 }

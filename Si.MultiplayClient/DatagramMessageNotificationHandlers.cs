@@ -1,5 +1,4 @@
 ﻿using NTDLS.DatagramMessaging;
-using NTDLS.ReliableMessaging;
 using Si.Library.Messages.Notify.Datagram;
 
 namespace Si.MultiplayClient

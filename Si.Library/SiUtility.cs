@@ -11,11 +11,13 @@ namespace Si.Library
         public delegate T TryAndIgnoreProc<T>();
 
         /// <summary>
-        /// We didnt need that exception! Did we?... DID WE?!
+        /// Executes the given delegate and returns true if successful.
         /// </summary>
-        public static void TryAndIgnore(TryAndIgnoreProc func)
+        /// <param name="func"></param>
+        /// <returns>Returns TRUE successful, returns FALSE if an error occurs.</returns>
+        public static bool TryAndIgnore(TryAndIgnoreProc func)
         {
-            try { func(); } catch { }
+            try { func(); return true; } catch { return false; }
         }
 
         /// <summary>
