@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Si.GameEngine.Core.Debug._Superclass;
 using Si.GameEngine.Core.GraphicsProcessing;
 using Si.GameEngine.Core.Managers;
@@ -194,8 +194,8 @@ namespace Si.GameEngine.Core
         {
             if (!_isRunningHeadless)
             {
-                lock (Rendering)
-                {
+                FORMATME!!
+                
                     try
                     {
                         Rendering.RenderTargets.Use(o =>
@@ -225,7 +225,7 @@ namespace Si.GameEngine.Core
                     catch
                     {
                     }
-                }
+                
             }
         }
 
