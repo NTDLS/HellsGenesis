@@ -38,7 +38,7 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
         /// </summary>
         public double TimeToLive { get; set; } = 30000;
         public DateTime CreationTime { get; set; } = DateTime.UtcNow;
-        public double AgeInMiliseconds
+        public double AgeInMilliseconds
         {
             get
             {
@@ -79,7 +79,7 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
             {
                 Explode();
             }
-            else if (AgeInMiliseconds > TimeToLive)
+            else if (AgeInMilliseconds > TimeToLive)
             {
                 Explode();
             }

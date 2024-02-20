@@ -70,7 +70,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
             //    SetDefaultAIController(AIControllers[typeof(Meander)]);
             //}
 
-            _behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
+            _behaviorChangeThresholdMilliseconds = SiRandom.Between(2000, 10000);
 
             SetCurrentAIController(AIControllers[typeof(Taunt)]);
         }
@@ -78,7 +78,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
         #region Artificial Intelligence.
 
         private DateTime _lastBehaviorChangeTime = DateTime.Now;
-        private double _behaviorChangeThresholdMiliseconds = 0;
+        private double _behaviorChangeThresholdMilliseconds = 0;
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
@@ -93,9 +93,9 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
 
             base.ApplyIntelligence(displacementVector);
 
-            if ((DateTime.Now - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMiliseconds)
+            if ((DateTime.Now - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMilliseconds)
             {
-                _behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
+                _behaviorChangeThresholdMilliseconds = SiRandom.Between(2000, 10000);
 
                 /*
                 if (SiRandom.ChanceIn(2))

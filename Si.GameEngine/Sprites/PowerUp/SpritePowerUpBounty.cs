@@ -27,7 +27,7 @@ namespace Si.GameEngine.Sprites.Powerup
 
                 Explode();
             }
-            else if (AgeInMiliseconds > TimeToLive)
+            else if (AgeInMilliseconds > TimeToLive)
             {
                 Explode();
             }

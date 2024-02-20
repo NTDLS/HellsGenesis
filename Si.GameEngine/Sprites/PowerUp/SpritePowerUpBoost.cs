@@ -26,7 +26,7 @@ namespace Si.GameEngine.Sprites.Powerup
                 _gameEngine.Player.Sprite.Velocity.AvailableBoost += PowerupAmount;
                 Explode();
             }
-            else if (AgeInMiliseconds > TimeToLive)
+            else if (AgeInMilliseconds > TimeToLive)
             {
                 Explode();
             }

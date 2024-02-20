@@ -59,13 +59,13 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             SetCurrentAIController(AIControllers[typeof(Taunt)]);
 
-            _behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
+            _behaviorChangeThresholdMilliseconds = SiRandom.Between(2000, 10000);
         }
 
         #region Artificial Intelligence.
 
         private DateTime _lastBehaviorChangeTime = DateTime.UtcNow;
-        private double _behaviorChangeThresholdMiliseconds = 0;
+        private double _behaviorChangeThresholdMilliseconds = 0;
 
         public override void ApplyIntelligence(SiPoint displacementVector)
         {
@@ -78,10 +78,10 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             base.ApplyIntelligence(displacementVector);
 
-            if ((DateTime.UtcNow - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMiliseconds)
+            if ((DateTime.UtcNow - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMilliseconds)
             {
                 _lastBehaviorChangeTime = DateTime.UtcNow;
-                _behaviorChangeThresholdMiliseconds = SiRandom.Between(2000, 10000);
+                _behaviorChangeThresholdMilliseconds = SiRandom.Between(2000, 10000);
 
                 /*
                 if (SiRandom.PercentChance(1))

@@ -194,38 +194,35 @@ namespace Si.GameEngine.Core
         {
             if (!_isRunningHeadless)
             {
-                FORMATME!!
-                
-                    try
-                    {
-                        Rendering.RenderTargets.Use(o =>
+                try
+                {
+                    Rendering.RenderTargets.Use(o =>
+                    { 
+                        o.ScreenRenderTarget.BeginDraw();
+                        o.IntermediateRenderTarget.BeginDraw();
+
+                        o.ScreenRenderTarget.Clear(Rendering.Materials.Raw.Black);
+                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Raw.Black);
+
+                        Sprites.RenderPreScaling(o.IntermediateRenderTarget);
+                        o.IntermediateRenderTarget.EndDraw();
+
+                        if (Settings.AutoZoomWhenMoving)
                         {
-                            o.ScreenRenderTarget.BeginDraw();
-                            o.IntermediateRenderTarget.BeginDraw();
+                            Rendering.ApplyScaling(o, (float)Display.SpeedOrientedFrameScalingFactor());
+                        }
+                        else
+                        {
+                            Rendering.ApplyScaling(o, (float)Display.BaseDrawScale);
+                        }
+                        Sprites.RenderPostScaling(o.ScreenRenderTarget);
 
-                            o.ScreenRenderTarget.Clear(Rendering.Materials.Raw.Black);
-                            o.IntermediateRenderTarget.Clear(Rendering.Materials.Raw.Black);
-
-                            Sprites.RenderPreScaling(o.IntermediateRenderTarget);
-                            o.IntermediateRenderTarget.EndDraw();
-
-                            if (Settings.AutoZoomWhenMoving)
-                            {
-                                Rendering.ApplyScaling(o, (float)Display.SpeedOrientedFrameScalingFactor());
-                            }
-                            else
-                            {
-                                Rendering.ApplyScaling(o, (float)Display.BaseDrawScale);
-                            }
-                            Sprites.RenderPostScaling(o.ScreenRenderTarget);
-
-                            o.ScreenRenderTarget.EndDraw();
-                        });
-                    }
-                    catch
-                    {
-                    }
-                
+                        o.ScreenRenderTarget.EndDraw();
+                    });
+                }
+                catch
+                {
+                }
             }
         }
 
@@ -246,16 +243,22 @@ namespace Si.GameEngine.Core
                 var textBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
                     Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true);
 
-                textBlock.SetTextAndCenter("Building reflection cache...");
+                textBlock.SetTextAndCenterXY("Building cache...");
+
+                var percentTextBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
+                    Rendering.Materials.Brushes.Red, new SiPoint(textBlock.X, textBlock.Y + 50), true);
+
+                textBlock.SetTextAndCenterXY("Building reflection cache...");
                 SiReflection.BuildReflectionCacheOfType<SpriteBase>();
 
                 if (Settings.PreCacheAllAssets)
                 {
-                    textBlock.SetTextAndCenter("Building asset cache...");
-                    Assets.PreCacheAllAssets();
+                    textBlock.SetTextAndCenterXY("Building asset cache...");
+                    Assets.PreCacheAllAssets(percentTextBlock);
                 }
 
                 textBlock.QueueForDelete();
+                percentTextBlock.QueueForDelete();
 
                 OnStartEngine?.Invoke(this);
 

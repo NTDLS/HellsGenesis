@@ -3,10 +3,12 @@ using NTDLS.Semaphore;
 using SharpCompress.Archives;
 using SharpCompress.Common;
 using Si.GameEngine.Core.Types;
+using Si.GameEngine.Sprites;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace Si.GameEngine.Core.Managers
 {
@@ -167,6 +169,7 @@ namespace Si.GameEngine.Core.Managers
                 o.TryGetValue(path, out object value);
                 return (SharpDX.Direct2D1.Bitmap)value;
             });
+
             if (cached != null)
             {
                 return cached;
@@ -178,30 +181,38 @@ namespace Si.GameEngine.Core.Managers
             return bitmap;
         }
 
-        public void PreCacheAllAssets()
+        public void PreCacheAllAssets(SpriteTextBlock statusBlock)
         {
-            using (var archive = ArchiveFactory.Open(_assetPackagePath))
+            using var archive = ArchiveFactory.Open(_assetPackagePath);
+            using var dtp = new DelegateThreadPool(Environment.ProcessorCount * 4);
+            var dtpQueue = dtp.CreateQueueStateCollection();
+
+            int statusIndex = 0;
+            double statusEntryCount = archive.Entries.Count();
+
+            foreach (var entry in archive.Entries)
             {
-                using (var dtp = new DelegateThreadPool(Environment.ProcessorCount * 4))
+
+                switch (Path.GetExtension(entry.Key).ToLower())
                 {
-                    var dtpQueue = dtp.CreateQueueStateCollection();
-
-                    foreach (var entry in archive.Entries)
-                    {
-                        switch (Path.GetExtension(entry.Key).ToLower())
-                        {
-                            case ".png":
-                                dtpQueue.Enqueue(() => GetBitmap(entry.Key));
-                                break;
-                            case ".wav":
-                                dtpQueue.Enqueue(() => GetAudio(entry.Key));
-                                break;
-                        }
-                    }
-
-                    dtpQueue.WaitForCompletion();
+                    case ".png":
+                        dtpQueue.Enqueue(() => GetBitmap(entry.Key), () => Interlocked.Increment(ref statusIndex));
+                        break;
+                    case ".wav":
+                        dtpQueue.Enqueue(() => GetAudio(entry.Key), () => Interlocked.Increment(ref statusIndex));
+                        break;
+                    default:
+                        Interlocked.Increment(ref statusIndex);
+                        break;
                 }
             }
+
+            dtpQueue.WaitForCompletion(10, () =>
+            {
+                statusBlock.SetTextAndCenterX($"{statusIndex / statusEntryCount * 100.0:n0}%");
+            });
+
+            statusBlock.SetTextAndCenterX($"100%");
         }
 
         private string GetCompressedText(string path)

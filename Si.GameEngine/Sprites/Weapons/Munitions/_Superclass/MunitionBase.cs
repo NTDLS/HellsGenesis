@@ -20,7 +20,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
         public SiFiredFromType FiredFromType { get; private set; }
         public WeaponBase Weapon { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
-        public double MilisecondsToLive { get; set; } = 4000;
+        public double MillisecondsToLive { get; set; } = 4000;
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
         public double SceneDistanceLimit { get; set; }
 
@@ -73,7 +73,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
 
         public virtual void ApplyIntelligence(SiPoint displacementVector)
         {
-            if (AgeInMilliseconds > MilisecondsToLive)
+            if (AgeInMilliseconds > MillisecondsToLive)
             {
                 Explode();
                 return;

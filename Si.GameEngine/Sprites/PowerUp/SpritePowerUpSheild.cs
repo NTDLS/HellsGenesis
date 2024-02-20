@@ -26,7 +26,7 @@ namespace Si.GameEngine.Sprites.Powerup
                 _gameEngine.Player.Sprite.AddShieldHealth(PowerupAmount);
                 Explode();
             }
-            else if (AgeInMiliseconds > TimeToLive)
+            else if (AgeInMilliseconds > TimeToLive)
             {
                 Explode();
             }
