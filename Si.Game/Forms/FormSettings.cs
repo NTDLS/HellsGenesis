@@ -40,6 +40,8 @@ namespace Si.Game
 
             var settings = GameEngineCore.LoadSettings();
 
+            checkBoxEnableAntiAliasing.Checked = settings.AutoZoomWhenMoving;
+            checkBoxEnableVerticalSync.Checked = settings.VerticalSync;
             checkBoxAutoZoomWhenMoving.Checked = settings.AutoZoomWhenMoving;
             checkBoxHighlightAllSprites.Checked = settings.HighlightAllSprites;
             checkBoxHighlightNatrualBounds.Checked = settings.HighlightNatrualBounds;
@@ -86,7 +88,7 @@ namespace Si.Game
 
             if (comboBoxGraphicsAdapter.SelectedItem == null)
             {
-                comboBoxGraphicsAdapter.SelectedText = adapters.OrderByDescending(o => o.VideoMemoryMb).First().Description;
+                comboBoxGraphicsAdapter.SelectedItem = adapters.OrderByDescending(o => o.VideoMemoryMb).First();
             }
         }
 
@@ -156,6 +158,8 @@ namespace Si.Game
             {
                 var settings = GameEngineCore.LoadSettings();
 
+                settings.AutoZoomWhenMoving = checkBoxEnableAntiAliasing.Checked;
+                settings.VerticalSync = checkBoxEnableVerticalSync.Checked;
                 settings.AutoZoomWhenMoving = checkBoxAutoZoomWhenMoving.Checked;
                 settings.HighlightAllSprites = checkBoxHighlightAllSprites.Checked;
                 settings.HighlightNatrualBounds = checkBoxHighlightNatrualBounds.Checked;

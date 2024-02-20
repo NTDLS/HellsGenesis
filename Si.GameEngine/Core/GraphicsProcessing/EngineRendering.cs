@@ -20,7 +20,6 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             public WindowRenderTarget ScreenRenderTarget { get; set; }
         }
 
-
         public PessimisticCriticalResource<CriticalRenderTargets> RenderTargets { get; private set; } = new();
         public PrecreatedMaterials Materials { get; private set; }
         public PrecreatedTextFormats TextFormats { get; private set; }
@@ -34,31 +33,41 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         {
             _gameEngine = gameEngine;
 
+            var presentOptions = PresentOptions.Immediately;
+            var antialiasMode = AntialiasMode.Aliased;
+
+            if (gameEngine.Settings.VerticalSync == true)
+            {
+                presentOptions = PresentOptions.None;
+            }
+
+            if (gameEngine.Settings.AntiAliasing == true)
+            {
+                antialiasMode = AntialiasMode.PerPrimitive;
+            }
+
             var renderProp = new HwndRenderTargetProperties()
             {
-                PresentOptions = PresentOptions.None,
+                PresentOptions = presentOptions,
                 Hwnd = gameEngine.Display.DrawingSurface.Handle,
                 PixelSize = new Size2(gameEngine.Display.NatrualScreenSize.Width, gameEngine.Display.NatrualScreenSize.Height)
             };
 
             var intermediateRenderTargetSize = new Size2F(_gameEngine.Display.TotalCanvasSize.Width, _gameEngine.Display.TotalCanvasSize.Height);
 
-            //This is optional:
             var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
 
             RenderTargets.Use(o =>
             {
                 o.ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, new RenderTargetProperties(pixelFormat), renderProp)
                 {
-                    AntialiasMode = AntialiasMode.PerPrimitive //This is optional.
+                    AntialiasMode = antialiasMode
                 };
 
                 o.IntermediateRenderTarget = new BitmapRenderTarget(
-                    o.ScreenRenderTarget,
-                    CompatibleRenderTargetOptions.None,
-                    intermediateRenderTargetSize)
+                    o.ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
                 {
-                    AntialiasMode = AntialiasMode.PerPrimitive //Optional.
+                    AntialiasMode = antialiasMode
                 };
 
                 Materials = new PrecreatedMaterials(o.ScreenRenderTarget);
@@ -365,7 +374,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
         public void ResetTransform(RenderTarget renderTarget)
         {
-            => renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+            renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
         }
     }
 }

@@ -44,6 +44,9 @@ namespace Si.GameEngine.Core
         public int MinEnemySpeed { get; set; } = 5;
         public int MaxEnemySpeed { get; set; } = 10;
 
+        public bool VerticalSync { get; set; } = false;
+        public bool AntiAliasing { get; set; } = true;
+
         public double FramePerSecondLimit { get; set; } = 60; //~60 seems to be a good rate.
         public double MunitionSceneDistanceLimit { get; set; } = 2500; //The distance from the scene that a munition can travel before it is cleaned up.
         public double EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
