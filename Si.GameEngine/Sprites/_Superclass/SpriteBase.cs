@@ -258,6 +258,12 @@ namespace Si.GameEngine.Sprites._Superclass
             IsHighlighted = _gameEngine.Settings.HighlightAllSprites;
         }
 
+        public virtual void Initialize(Size size)
+        {
+            _size = size;
+            VisibilityChanged();
+        }
+
         public virtual void Initialize(string imagePath = null)
         {
             if (imagePath != null)
@@ -1016,7 +1022,7 @@ namespace Si.GameEngine.Sprites._Superclass
                 {
                     var rectangle = new RectangleF((int)(RenderLocation.X - Size.Width / 2.0), (int)(RenderLocation.Y - Size.Height / 2.0), Size.Width, Size.Height);
                     var rawRectF = new RawRectangleF(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom);
-                    _gameEngine.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Degrees, _gameEngine.Rendering.Materials.Raw.Red, 0, 1);
+                    _gameEngine.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Degrees, _gameEngine.Rendering.Materials.Colors.Red, 0, 1);
                 }
             }
         }
@@ -1031,11 +1037,11 @@ namespace Si.GameEngine.Sprites._Superclass
             {
                 if (this is SpritePlayerBase player && player.IsDrone)
                 {
-                    _gameEngine.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameEngine.Rendering.Materials.Brushes.Orange);
+                    _gameEngine.Rendering.HollowTriangleAt(renderTarget, x, y, 3, 3, _gameEngine.Rendering.Materials.Colors.Orange);
                 }
                 else if (this is SpriteEnemyBase)
                 {
-                    _gameEngine.Rendering.FillTriangleAt(renderTarget, x, y, 3, _gameEngine.Rendering.Materials.Brushes.OrangeRed);
+                    _gameEngine.Rendering.HollowTriangleAt(renderTarget, x, y, 3, 3, _gameEngine.Rendering.Materials.Colors.OrangeRed);
                 }
                 else if (this is MunitionBase)
                 {
@@ -1045,11 +1051,11 @@ namespace Si.GameEngine.Sprites._Superclass
                     var munition = this as MunitionBase;
                     if (munition.FiredFromType == SiFiredFromType.Enemy)
                     {
-                        color = _gameEngine.Rendering.Materials.Raw.Red;
+                        color = _gameEngine.Rendering.Materials.Colors.Red;
                     }
                     else
                     {
-                        color = _gameEngine.Rendering.Materials.Raw.Green;
+                        color = _gameEngine.Rendering.Materials.Colors.Green;
                     }
 
                     if (munition.Weapon.ExplodesOnImpact)

@@ -361,7 +361,7 @@ namespace Si.GameEngine.Menus._Superclass
                         selectedItem.BoundsI.X + selectedItem.BoundsI.Width,
                         selectedItem.BoundsI.Y + selectedItem.BoundsI.Height),
                     0,
-                    _gameEngine.Rendering.Materials.Raw.Red, 2, 2);
+                    _gameEngine.Rendering.Materials.Colors.Red, 2, 2);
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using SharpDX.DirectInput;
 using Si.GameEngine.Sprites.Enemies._Superclass;
-using Si.GameEngine.Utility;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -262,8 +261,7 @@ namespace Si.GameEngine.Core.Managers
             }
             else if (key == Keys.F2)
             {
-                SiDevelopmentTools.ParticleBlast(_gameEngine, 50, _gameEngine.Player.Sprite);
-                //SiDevelopmentTools.CreateImageSizeVariants(@"..\..\..\Assets\Graphics\Fragments");
+                _gameEngine.Sprites.Particles.ParticleBlast(500, _gameEngine.Player.Sprite);
                 //_gameEngine.Sprites.NewGame();
                 //_gameEngine.Sprites.ResetAndShowPlayer();
             }

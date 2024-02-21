@@ -345,7 +345,7 @@ namespace Si.GameEngine.Core.Managers
                         renderTarget,
                         _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + centerOfRadarX,
                         _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + centerOfRadarY,
-                        2, 2, _gameEngine.Rendering.Materials.Raw.Green);
+                        2, 2, _gameEngine.Rendering.Materials.Colors.Green);
                 }
             }
         }
@@ -377,7 +377,7 @@ namespace Si.GameEngine.Core.Managers
                 var rawRectF = new RawRectangleF(natrualScreenBounds.Left, natrualScreenBounds.Top, natrualScreenBounds.Right, natrualScreenBounds.Bottom);
 
                 //Highlight the 1:1 frame
-                _gameEngine.Rendering.DrawRectangleAt(renderTarget, rawRectF, 0, _gameEngine.Rendering.Materials.Raw.Red, 0, 1);
+                _gameEngine.Rendering.DrawRectangleAt(renderTarget, rawRectF, 0, _gameEngine.Rendering.Materials.Colors.Red, 0, 1);
             }
         }
     }

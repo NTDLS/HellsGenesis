@@ -1,7 +1,4 @@
 ﻿using NAudio.Wave;
-using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
-using Si.Library;
 using System;
 using System.Drawing;
 using System.IO;
@@ -10,49 +7,31 @@ namespace Si.GameEngine.Utility
 {
     internal static class SiDevelopmentTools
     {
+        /// <summary>
+        /// Strips metadata chunks from WAV files in a directory.
+        /// </summary>
+        /// <param name="path"></param>
         public static void StripWavFiles(string path)
         {
             var files = Directory.EnumerateFiles(path, "*.wav", SearchOption.AllDirectories);
 
-            // Display the names of all files in the folder
             foreach (string file in files)
             {
-                Console.WriteLine(file);
+                Console.WriteLine($"Processing: '{file}'.");
 
-                using (var reader = new WaveFileReader(file))
+                using var reader = new WaveFileReader(file);
+                using var writer = new WaveFileWriter($"{file}.tmp", reader.WaveFormat);
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+
+                // Loop through the input WAV file, skipping metadata chunks
+                while ((bytesRead = reader.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    // Create a WaveFileWriter to write the output WAV file
-                    using (var writer = new WaveFileWriter($"{file}.tmp", reader.WaveFormat))
-                    {
-                        byte[] buffer = new byte[4096];
-                        int bytesRead;
-
-                        // Loop through the input WAV file, skipping metadata chunks
-                        while ((bytesRead = reader.Read(buffer, 0, buffer.Length)) > 0)
-                        {
-                            writer.Write(buffer, 0, bytesRead);
-                        }
-                    }
+                    writer.Write(buffer, 0, bytesRead);
                 }
 
                 File.Delete(file);
                 File.Move($"{file}.tmp", file);
-            }
-        }
-
-        /// <summary>
-        /// Tests dumping particles at a given position.
-        /// </summary>
-        /// <param name="core"></param>
-        public static void ParticleBlast(GameEngineCore gameEngine, int particleCount, SpriteBase at)
-        {
-            double X = at.X;
-            double Y = at.Y;
-
-            for (int i = 0; i < particleCount; i++)
-            {
-                var obj = gameEngine.Sprites.Particles.CreateRandomShipPartParticleAt(X + SiRandom.Between(-20, 20), Y + SiRandom.Between(-20, 20));
-                obj.Visable = true;
             }
         }
 

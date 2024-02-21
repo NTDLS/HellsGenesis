@@ -1,9 +1,13 @@
-﻿using Si.GameEngine.Core.Managers;
+﻿using SharpDX;
+using Si.GameEngine.Core.GraphicsProcessing;
+using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.Types.Geometry;
+using System.Drawing;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Core.TickControllers
 {
@@ -22,38 +26,53 @@ namespace Si.GameEngine.Core.TickControllers
             }
         }
 
-        public void CreateRandomShipPartParticlesAt(double x, double y, int count)
+        public void CreateAt(double x, double y, Color4 color, int count, Size? size = null)
         {
             for (int i = 0; i < count; i++)
             {
-                var obj = GameEngine.Sprites.Particles.CreateRandomShipPartParticleAt(
-                    x + SiRandom.Between(-20, 20), y + SiRandom.Between(-20, 20));
-                obj.Visable = true;
+                CreateAt(x + SiRandom.Between(-20, 20), y + SiRandom.Between(-20, 20), color, size);
             }
         }
 
-        public void CreateRandomShipPartParticlesAt(SpriteBase sprite, int count)
+        public void CreateAt(SpriteBase sprite, Color4 color, int count, Size? size = null)
         {
             for (int i = 0; i < count; i++)
             {
-                var obj = GameEngine.Sprites.Particles.CreateRandomShipPartParticleAt(
-                    sprite.X + SiRandom.Between(-20, 20), sprite.Y + SiRandom.Between(-20, 20));
-                obj.Visable = true;
+                CreateAt(sprite.X + SiRandom.Between(-20, 20), sprite.Y + SiRandom.Between(-20, 20), color, size);
             }
         }
 
-        public SpriteRandomShipPartParticle CreateRandomShipPartParticleAt(SpriteBase sprite)
+        public SpriteParticle CreateAt(SpriteBase sprite, Color4 color, Size? size = null)
         {
-            var obj = new SpriteRandomShipPartParticle(GameEngine, sprite.X, sprite.Y);
+            var obj = new SpriteParticle(GameEngine, sprite.X, sprite.Y, size ?? new Size(1, 1), color);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public SpriteRandomShipPartParticle CreateRandomShipPartParticleAt(double x, double y)
+        public SpriteParticle CreateAt(double x, double y, Color4 color, Size? size = null)
         {
-            var obj = new SpriteRandomShipPartParticle(GameEngine, x, y);
+            var obj = new SpriteParticle(GameEngine, x, y, size ?? new Size(1, 1), color)
+            {
+                Visable = true
+            };
             SpriteManager.Add(obj);
             return obj;
+        }
+
+        /// <summary>
+        /// Creates a given number of "hot" colored particles at a given location with a random speed.
+        /// </summary>
+        /// <param name="particleCount"></param>
+        /// <param name="at"></param>
+        public void ParticleBlast(int particleCount, SpriteBase at)
+        {
+            for (int i = 0; i < particleCount; i++)
+            {
+                var particle = CreateAt(at.X, at.Y, GraphicsUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 3), SiRandom.Between(1, 3)));
+                particle.Shape = ParticleShape.FilledEllipse;
+                particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
+                particle.Velocity.MaxSpeed *= SiRandom.Between(1, 3.5);
+            }
         }
     }
 }

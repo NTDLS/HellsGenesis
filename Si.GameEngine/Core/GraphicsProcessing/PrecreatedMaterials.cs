@@ -51,11 +51,11 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         }
 
         internal ColorBrushes Brushes { get; set; }
-        internal RawColors Raw { get; set; } = new();
+        internal RawColors Colors { get; set; } = new();
 
         internal PrecreatedMaterials(RenderTarget renterTarget)
         {
-            Brushes = new ColorBrushes(renterTarget, Raw);
+            Brushes = new ColorBrushes(renterTarget, Colors);
         }
     }
 }

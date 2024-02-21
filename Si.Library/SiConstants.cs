@@ -13,6 +13,20 @@
             Soft
         }
 
+        public enum ParticleCleanupMode
+        {
+            None,
+            FadeToBlack,
+            Distance
+        }
+
+        public enum ParticleShape
+        {
+            FilledEllipse,
+            HollowEllipse,
+            Triangle
+        }
+
         public enum SiRenderScaleOrder
         {
             /// <summary>

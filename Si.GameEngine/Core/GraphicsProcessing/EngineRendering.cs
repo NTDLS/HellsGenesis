@@ -20,7 +20,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             public WindowRenderTarget ScreenRenderTarget { get; set; }
         }
 
-        public PessimisticCriticalResource<CriticalRenderTargets> RenderTargets { get; private set; } = new();
+        public OptimisticCriticalResource<CriticalRenderTargets> RenderTargets { get; private set; } = new();
         public PrecreatedMaterials Materials { get; private set; }
         public PrecreatedTextFormats TextFormats { get; private set; }
 
@@ -57,7 +57,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
             var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
 
-            RenderTargets.Use(o =>
+            RenderTargets.Write(o =>
             {
                 o.ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, new RenderTargetProperties(pixelFormat), renderProp)
                 {
@@ -85,7 +85,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
         public void Dispose()
         {
-            RenderTargets.Use(o =>
+            RenderTargets.Write(o =>
             {
                 o.ScreenRenderTarget?.Dispose();
                 o.ScreenRenderTarget?.Dispose();
@@ -152,7 +152,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             using (var converter = new FormatConverter(_wicFactory))
             {
                 converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA);
-                return RenderTargets.Use(o => SharpDX.Direct2D1.Bitmap.FromWicBitmap(o.ScreenRenderTarget, converter));
+                return RenderTargets.Read(o => SharpDX.Direct2D1.Bitmap.FromWicBitmap(o.ScreenRenderTarget, converter));
             }
         }
 
@@ -209,7 +209,8 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// Draws text at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
-        public RawRectangleF DrawTextAt(RenderTarget renderTarget, double x, double y, double angle, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
+        public RawRectangleF DrawTextAt(RenderTarget renderTarget,
+            double x, double y, double angle, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
         {
             using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
@@ -239,10 +240,11 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         }
 
         /// <summary>
-        /// Draws a rectangle at the specified location.
+        /// Draws a color filled ellipse at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public Ellipse FillEllipseAt(RenderTarget renderTarget, double x, double y, double radiusX, double radiusY, RawColor4 color)
+        public Ellipse FillEllipseAt(RenderTarget renderTarget, double x, double y,
+            double radiusX, double radiusY, Color4 color, float angle = 0)
         {
             var ellipse = new Ellipse()
             {
@@ -251,20 +253,60 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 RadiusY = (float)radiusY,
             };
 
-            renderTarget.FillEllipse(ellipse, new SolidColorBrush(renderTarget, color));
+            if (angle != 0)
+            {
+                var destRect = new RawRectangleF((float)x, (float)y, (float)(x + radiusX), (float)(y + radiusY));
+                SetTransformAngle(renderTarget, destRect, angle);
+            }
+
+            using var brush = new SolidColorBrush(renderTarget, color);
+            renderTarget.FillEllipse(ellipse, brush);
 
             return ellipse;
         }
 
-        public void FillTriangleAt(RenderTarget renderTarget, double x, double y, double size, SolidColorBrush brush, double strokeWidth = 1)
+        /// <summary>
+        /// Draws a hollow ellipse at the specified location.
+        /// </summary>
+        /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
+        public Ellipse HollowEllipseAt(RenderTarget renderTarget, double x, double y,
+            double radiusX, double radiusY, Color4 color, float strokeWidth = 1, float angle = 0)
+        {
+            var ellipse = new Ellipse()
+            {
+                Point = new RawVector2((float)x, (float)y),
+                RadiusX = (float)radiusX,
+                RadiusY = (float)radiusY,
+            };
+
+            if (angle != 0)
+            {
+                var destRect = new RawRectangleF((float)x, (float)y, (float)(x + radiusX), (float)(y + radiusY));
+                SetTransformAngle(renderTarget, destRect, angle);
+            }
+
+            using var brush = new SolidColorBrush(renderTarget, color);
+            renderTarget.DrawEllipse(ellipse, brush, strokeWidth);
+
+            return ellipse;
+        }
+
+        public void HollowTriangleAt(RenderTarget renderTarget, double x, double y,
+            double height, double width, Color4 color, float strokeWidth = 1, float angle = 0)
         {
             // Define the points for the triangle
-            RawVector2[] trianglePoints = new RawVector2[]
-        {
-                new RawVector2(0, (float)size),     // Vertex 1 (bottom-left)
-                new RawVector2((float)size, (float)size),   // Vertex 2 (bottom-right)
-                new RawVector2((float)(size / 2), 0)      // Vertex 3 (top-center)
-        };
+            var trianglePoints = new RawVector2[]
+            {
+                new RawVector2(0, (float)height),           // Vertex 1 (bottom-left)
+                new RawVector2((float)width, (float)height), // Vertex 2 (bottom-right)
+                new RawVector2((float)(width / 2), 0)      // Vertex 3 (top-center)
+            };
+
+            if (angle != 0)
+            {
+                var destRect = new RawRectangleF((float)x, (float)y, (float)(x + width), (float)(y + height));
+                SetTransformAngle(renderTarget, destRect, angle);
+            }
 
             // Create a PathGeometry and add the triangle to it
             var triangleGeometry = new PathGeometry(_direct2dFactory);
@@ -291,7 +333,8 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 (float)x, (float)y
             );
 
-            renderTarget.DrawGeometry(triangleGeometry, brush, (float)strokeWidth);
+            using var brush = new SolidColorBrush(renderTarget, color);
+            renderTarget.DrawGeometry(triangleGeometry, brush, strokeWidth);
 
             ResetTransform(renderTarget);
         }
@@ -300,7 +343,8 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// Draws a rectangle at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF rect, double angle, RawColor4 color, double expand = 0, double strokeWidth = 1)
+        public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF rect,
+            double angle, RawColor4 color, double expand = 0, double strokeWidth = 1)
         {
             if (expand != 0)
             {
@@ -311,13 +355,15 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             }
 
             SetTransformAngle(renderTarget, rect, angle);
-            renderTarget.DrawRectangle(rect, new SolidColorBrush(renderTarget, color), (float)strokeWidth);
+            using var brush = new SolidColorBrush(renderTarget, color);
+            renderTarget.DrawRectangle(rect, brush, (float)strokeWidth);
             ResetTransform(renderTarget);
 
             return rect;
         }
 
-        public void SetTransformAngle(RenderTarget renderTarget, RawRectangleF rect, double angle, RawMatrix3x2? existingMatrix = null)
+        public void SetTransformAngle(RenderTarget renderTarget,
+            RawRectangleF rect, double angle, RawMatrix3x2? existingMatrix = null)
         {
             angle = SiMath.DegreesToRadians(angle);
 

@@ -196,13 +196,13 @@ namespace Si.GameEngine.Core
             {
                 try
                 {
-                    Rendering.RenderTargets.Use(o =>
-                    { 
+                    Rendering.RenderTargets.Write(o =>
+                    {
                         o.ScreenRenderTarget.BeginDraw();
                         o.IntermediateRenderTarget.BeginDraw();
 
-                        o.ScreenRenderTarget.Clear(Rendering.Materials.Raw.Black);
-                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Raw.Black);
+                        o.ScreenRenderTarget.Clear(Rendering.Materials.Colors.Black);
+                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Black);
 
                         Sprites.RenderPreScaling(o.IntermediateRenderTarget);
                         o.IntermediateRenderTarget.EndDraw();

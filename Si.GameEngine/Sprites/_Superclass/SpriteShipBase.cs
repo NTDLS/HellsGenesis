@@ -1,4 +1,5 @@
 ﻿using Si.GameEngine.Core;
+using Si.GameEngine.Core.GraphicsProcessing;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Utility;
 using Si.Library;
@@ -124,7 +125,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
         public void CreateParticlesExplosion()
         {
-            _gameEngine.Sprites.Particles.CreateRandomShipPartParticlesAt(this, SiRandom.Between(30, 50));
+            _gameEngine.Sprites.Particles.CreateAt(this, GraphicsUtility.GetRandomHotColor(), SiRandom.Between(30, 50));
             _gameEngine.Audio.PlayRandomExplosion();
         }
 

@@ -16,7 +16,6 @@ namespace Si.Library
                 o.TryGetValue(typeof(T), out var cached);
                 return cached;
             });
-
             if (cached != null)
             {
                 return cached;
