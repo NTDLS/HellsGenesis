@@ -152,7 +152,7 @@ namespace Si.GameEngine.Core.Managers
 
             obj.Location = _gameEngine.Display.RandomOffScreenLocation();
             obj.Velocity.MaxSpeed = SiRandom.Generator.Next(_gameEngine.Settings.MinEnemySpeed, _gameEngine.Settings.MaxEnemySpeed);
-            obj.Velocity.Angle.Degrees = SiRandom.Generator.Next(0, 360);
+            obj.Velocity.Angle.Degrees = SiRandom.Between(0, 359);
 
             var enemy = obj as SpriteEnemyBase;
 

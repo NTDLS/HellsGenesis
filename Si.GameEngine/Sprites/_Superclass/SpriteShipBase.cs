@@ -57,13 +57,13 @@ namespace Si.GameEngine.Sprites._Superclass
             _hitSound = _gameEngine.Assets.GetAudio(_assetPathHitSound, 0.5f);
             _shieldHit = _gameEngine.Assets.GetAudio(_assetPathshieldHit, 0.5f);
 
-            _selectedExplosionSoundIndex = SiRandom.Generator.Next(0, 1000) % _explosionSoundCount;
+            _selectedExplosionSoundIndex = SiRandom.Between(0, _explosionSoundCount - 1);
             _explodeSound = _gameEngine.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{_selectedExplosionSoundIndex}.wav"), 1.0f);
 
-            _selectedExplosionAnimationIndex = SiRandom.Generator.Next(0, 1000) % _explosionAnimationCount;
+            _selectedExplosionAnimationIndex = SiRandom.Between(0, _explosionAnimationCount - 1);
             _explosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathExplosionAnimation, $"{_selectedExplosionAnimationIndex}.png"), new Size(256, 256));
 
-            _selectedHitExplosionAnimationIndex = SiRandom.Generator.Next(0, 1000) % _hitExplosionAnimationCount;
+            _selectedHitExplosionAnimationIndex = SiRandom.Between(0, _hitExplosionAnimationCount - 1);
             _hitExplosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
 
             _lockedOnImage = _gameEngine.Assets.GetBitmap(_assetPathlockedOnImage);

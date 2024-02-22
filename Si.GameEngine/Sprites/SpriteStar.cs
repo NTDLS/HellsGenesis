@@ -15,11 +15,11 @@ namespace Si.GameEngine.Sprites
         public SpriteStar(GameEngineCore gameEngine)
             : base(gameEngine)
         {
-            selectedImageIndex = SiRandom.Generator.Next(0, 1000) % _imageCount;
+            selectedImageIndex = SiRandom.Between(0, _imageCount - 1);
             Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
-            X = SiRandom.Generator.Next(0, gameEngine.Display.TotalCanvasSize.Width);
-            Y = SiRandom.Generator.Next(0, gameEngine.Display.TotalCanvasSize.Height);
+            X = SiRandom.Between(0, gameEngine.Display.TotalCanvasSize.Width);
+            Y = SiRandom.Between(0, gameEngine.Display.TotalCanvasSize.Height);
 
             Velocity.MaxSpeed = 0.5;
 

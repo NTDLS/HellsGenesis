@@ -17,7 +17,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
         public MunitionScattershot(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
             : base(gameEngine, weapon, firedFrom, null, xyOffset)
         {
-            selectedImageIndex = SiRandom.Generator.Next(0, 1000) % imageCount;
+            selectedImageIndex = SiRandom.Between(0, imageCount - 1);
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
             Initialize();

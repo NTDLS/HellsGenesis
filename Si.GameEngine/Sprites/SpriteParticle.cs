@@ -46,7 +46,7 @@ namespace Si.GameEngine.Sprites
             Color = color;
             RotationSpeed = SiRandom.Between(1, 100) / 20.0;
             RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
-            TravelAngle.Degrees = SiRandom.Between(0, 360);
+            TravelAngle.Degrees = SiRandom.Between(0, 359);
 
             Velocity.ThrottlePercentage = 100;
             Velocity.MaxSpeed = SiRandom.Between(1.0, 4.0);
@@ -79,7 +79,7 @@ namespace Si.GameEngine.Sprites
 
             if (CleanupMode == ParticleCleanupMode.FadeToBlack)
             {
-                Color *= 1-FadeToBlackReductionAmount; // Gradually darken the particle color.
+                Color *= 1 - FadeToBlackReductionAmount; // Gradually darken the particle color.
 
                 // Check if the particle color is below a certain threshold and remove it.
                 if (Color.Red < 0.1f && Color.Green < 0.1f && Color.Blue < 0.1f)

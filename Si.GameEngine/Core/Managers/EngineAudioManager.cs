@@ -32,7 +32,7 @@ namespace Si.GameEngine.Core.Managers
         {
             const string _assetExplosionSoundPath = @"Sounds\Explode\";
             int explosionSoundCount = 4;
-            int selectedExplosionSoundIndex = SiRandom.Generator.Next(0, 1000) % explosionSoundCount;
+            int selectedExplosionSoundIndex = SiRandom.Between(0, explosionSoundCount - 1);
             var explodeSound = _gameEngine.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{selectedExplosionSoundIndex}.wav"), 1.0f);
             explodeSound?.Play();
         }
