@@ -1,7 +1,9 @@
+#define Version "0.0.18"
+
 [Setup]
 ;-- Main Setup Information
  AppName                         = Strikeforce Infinity
- AppVerName                      = Strikeforce Infinity 0.0.18
+ AppVerName                      = Strikeforce Infinity {#Version}
  AppCopyright                    = Copyright © 1995-2024 NetworkDLS.
  DefaultDirName                  = {commonpf}\NetworkDLS\Strikeforce Infinity
  DefaultGroupName                = NetworkDLS\Strikeforce Infinity
@@ -11,7 +13,7 @@
  Uninstallable                   = Yes
  Compression                     = ZIP/9
  ChangesAssociations             = Yes
- OutputBaseFilename              = Strikeforce Infinity
+ OutputBaseFilename              = Si-{#Version}
  ArchitecturesInstallIn64BitMode = x64
  ArchitecturesAllowed            = x64
 
@@ -19,7 +21,7 @@
  AppPublisher    = NetworkDLS
  AppPublisherURL = http://www.NetworkDLS.com/
  AppUpdatesURL   = http://www.NetworkDLS.com/
- AppVersion      = 0.0.18
+ AppVersion      = {#Version}
  
 [Components]
  Name: "Game";         Description: "Strikeforce Infinity"; Types: Full Compact Custom; Flags: Fixed;
