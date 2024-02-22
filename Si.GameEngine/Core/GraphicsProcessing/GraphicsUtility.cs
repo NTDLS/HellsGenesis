@@ -12,9 +12,9 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// <returns></returns>
         static public Color4 GetRandomHotColor()
         {
-            float hue = (float)SiRandom.Generator.NextDouble() * 60;                 // Random hue in the range [0, 60]
-            float saturation = (float)SiRandom.Generator.NextDouble() * 0.5f + 0.5f; // Random saturation in the range [0.5, 1.0]
-            float lightness = (float)SiRandom.Generator.NextDouble() * 0.5f + 0.5f;  // Random lightness in the range [0.5, 1.0]
+            float hue = SiRandom.Between(0, 60);
+            float saturation = (float)SiRandom.Between(0.8, 1.0);
+            float lightness = (float)SiRandom.Between(0.5, 1);
             return RGBFromHSL(hue, saturation, lightness);
         }
 
