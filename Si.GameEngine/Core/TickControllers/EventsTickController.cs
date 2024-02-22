@@ -64,7 +64,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(GameEngine, milliseconds, executeCallback, null, callbackEventMode, callbackEventAsync);
+                var obj = new SiEngineCallbackEvent(GameEngine, milliseconds, null, executeCallback, callbackEventMode, callbackEventAsync);
                 o.Add(obj);
                 return obj;
             });
@@ -75,7 +75,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(GameEngine, milliseconds, executeCallback, null, callbackEventMode);
+                var obj = new SiEngineCallbackEvent(GameEngine, milliseconds, null, executeCallback, callbackEventMode);
                 o.Add(obj);
                 return obj;
             });
@@ -114,7 +114,6 @@ namespace Si.GameEngine.Core.TickControllers
                 return obj;
             });
         }
-
 
         public SiEngineCallbackEvent Create(int milliseconds, SiOnExecuteSimple executeCallback)
         {
@@ -156,7 +155,6 @@ namespace Si.GameEngine.Core.TickControllers
                 }
             });
         }
-
 
         #endregion
     }
