@@ -210,6 +210,7 @@ namespace Si.GameEngine.Core.Managers
             dtpQueue.WaitForCompletion(10, () =>
             {
                 statusBlock.SetTextAndCenterX($"{statusIndex / statusEntryCount * 100.0:n0}%");
+                return true;
             });
 
             statusBlock.SetTextAndCenterX($"100%");
