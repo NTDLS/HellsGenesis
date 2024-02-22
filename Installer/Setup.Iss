@@ -9,7 +9,7 @@
  SetupIconFile                   = ../@Resources\StrikeforceInfinity.ico
  PrivilegesRequired              = admin
  Uninstallable                   = Yes
- Compression                     = bZIP/9
+ Compression                     = ZIP/9
  ChangesAssociations             = Yes
  OutputBaseFilename              = Strikeforce Infinity
  ArchitecturesInstallIn64BitMode = x64
