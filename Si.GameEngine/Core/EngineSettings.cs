@@ -21,6 +21,8 @@ namespace Si.GameEngine.Core
         public bool FullScreen { get; set; }
         public bool AlwaysOnTop { get; set; }
 
+        public bool PlayMusic { get; set; } = true;
+
         public bool LockPlayerAngleToNearbyEnemy { get; set; } = false;
         public bool AutoZoomWhenMoving { get; set; } = true;
 

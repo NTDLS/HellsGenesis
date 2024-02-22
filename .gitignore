@@ -9,3 +9,5 @@
 *.exe
 
 *.rez
+
+Si.Game/Properties/launchSettings.json

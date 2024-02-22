@@ -40,6 +40,7 @@ namespace Si.Game
 
             var settings = GameEngineCore.LoadSettings();
 
+            checkBoxPlayMusic.Checked = settings.PlayMusic;
             checkBoxEnableAntiAliasing.Checked = settings.AutoZoomWhenMoving;
             checkBoxEnableVerticalSync.Checked = settings.VerticalSync;
             checkBoxAutoZoomWhenMoving.Checked = settings.AutoZoomWhenMoving;
@@ -158,6 +159,7 @@ namespace Si.Game
             {
                 var settings = GameEngineCore.LoadSettings();
 
+                settings.PlayMusic = checkBoxPlayMusic.Checked;
                 settings.AutoZoomWhenMoving = checkBoxEnableAntiAliasing.Checked;
                 settings.VerticalSync = checkBoxEnableVerticalSync.Checked;
                 settings.AutoZoomWhenMoving = checkBoxAutoZoomWhenMoving.Checked;

@@ -262,7 +262,10 @@ namespace Si.GameEngine.Core
 
                 OnStartEngine?.Invoke(this);
 
-                Audio.BackgroundMusicSound.Play();
+                if (Settings.PlayMusic)
+                {
+                    Audio.BackgroundMusicSound.Play();
+                }
 
                 Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
             }

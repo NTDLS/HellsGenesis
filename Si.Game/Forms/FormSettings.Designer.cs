@@ -56,12 +56,15 @@
             checkBoxPreCacheAllAssets = new System.Windows.Forms.CheckBox();
             buttonCancel = new System.Windows.Forms.Button();
             buttonSave = new System.Windows.Forms.Button();
+            tabPageAudio = new System.Windows.Forms.TabPage();
+            checkBoxPlayMusic = new System.Windows.Forms.CheckBox();
             tabControl1.SuspendLayout();
             tabPageDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarResolution).BeginInit();
             tabPageDisplayAdvanced.SuspendLayout();
             tabPageDebug.SuspendLayout();
             tabPageAdvanced.SuspendLayout();
+            tabPageAudio.SuspendLayout();
             SuspendLayout();
             // 
             // tabControl1
@@ -70,6 +73,7 @@
             tabControl1.Controls.Add(tabPageDisplayAdvanced);
             tabControl1.Controls.Add(tabPageDebug);
             tabControl1.Controls.Add(tabPageAdvanced);
+            tabControl1.Controls.Add(tabPageAudio);
             tabControl1.Location = new System.Drawing.Point(12, 12);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
@@ -88,7 +92,7 @@
             tabPageDisplay.Controls.Add(labelResolution);
             tabPageDisplay.Location = new System.Drawing.Point(4, 24);
             tabPageDisplay.Name = "tabPageDisplay";
-            tabPageDisplay.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            tabPageDisplay.Padding = new System.Windows.Forms.Padding(3);
             tabPageDisplay.Size = new System.Drawing.Size(542, 304);
             tabPageDisplay.TabIndex = 0;
             tabPageDisplay.Text = "Display";
@@ -179,7 +183,7 @@
             tabPageDisplayAdvanced.Controls.Add(textBoxFramePerSecondLimit);
             tabPageDisplayAdvanced.Location = new System.Drawing.Point(4, 24);
             tabPageDisplayAdvanced.Name = "tabPageDisplayAdvanced";
-            tabPageDisplayAdvanced.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            tabPageDisplayAdvanced.Padding = new System.Windows.Forms.Padding(3);
             tabPageDisplayAdvanced.Size = new System.Drawing.Size(542, 304);
             tabPageDisplayAdvanced.TabIndex = 1;
             tabPageDisplayAdvanced.Text = "Display (Advanced)";
@@ -296,7 +300,7 @@
             tabPageAdvanced.Controls.Add(checkBoxPreCacheAllAssets);
             tabPageAdvanced.Location = new System.Drawing.Point(4, 24);
             tabPageAdvanced.Name = "tabPageAdvanced";
-            tabPageAdvanced.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            tabPageAdvanced.Padding = new System.Windows.Forms.Padding(3);
             tabPageAdvanced.Size = new System.Drawing.Size(542, 304);
             tabPageAdvanced.TabIndex = 3;
             tabPageAdvanced.Text = "Advanced";
@@ -332,6 +336,27 @@
             buttonSave.UseVisualStyleBackColor = true;
             buttonSave.Click += ButtonSave_Click;
             // 
+            // tabPageAudio
+            // 
+            tabPageAudio.Controls.Add(checkBoxPlayMusic);
+            tabPageAudio.Location = new System.Drawing.Point(4, 24);
+            tabPageAudio.Name = "tabPageAudio";
+            tabPageAudio.Padding = new System.Windows.Forms.Padding(3);
+            tabPageAudio.Size = new System.Drawing.Size(542, 304);
+            tabPageAudio.TabIndex = 4;
+            tabPageAudio.Text = "Audio";
+            tabPageAudio.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxPlayMusic
+            // 
+            checkBoxPlayMusic.AutoSize = true;
+            checkBoxPlayMusic.Location = new System.Drawing.Point(6, 16);
+            checkBoxPlayMusic.Name = "checkBoxPlayMusic";
+            checkBoxPlayMusic.Size = new System.Drawing.Size(88, 19);
+            checkBoxPlayMusic.TabIndex = 0;
+            checkBoxPlayMusic.Text = "Play music?";
+            checkBoxPlayMusic.UseVisualStyleBackColor = true;
+            // 
             // FormSettings
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -358,6 +383,8 @@
             tabPageDebug.PerformLayout();
             tabPageAdvanced.ResumeLayout(false);
             tabPageAdvanced.PerformLayout();
+            tabPageAudio.ResumeLayout(false);
+            tabPageAudio.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -389,5 +416,7 @@
         private System.Windows.Forms.ComboBox comboBoxGraphicsAdapter;
         private System.Windows.Forms.CheckBox checkBoxEnableVerticalSync;
         private System.Windows.Forms.CheckBox checkBoxEnableAntiAliasing;
+        private System.Windows.Forms.TabPage tabPageAudio;
+        private System.Windows.Forms.CheckBox checkBoxPlayMusic;
     }
 }
