@@ -5,17 +5,17 @@ using Si.Library.Types.Geometry;
 
 namespace Si.GameEngine.Sprites.Powerup
 {
-    internal class SpritePowerupSheild : SpritePowerupBase
+    internal class SpritePowerupShield : SpritePowerupBase
     {
         private readonly int imageCount = 3;
 
-        public SpritePowerupSheild(GameEngineCore gameEngine)
+        public SpritePowerupShield(GameEngineCore gameEngine)
             : base(gameEngine)
         {
             PowerupAmount = 100;
 
             int multiplier = SiRandom.Between(0, imageCount - 1);
-            SetImage(@$"Graphics\Powerup\Powerup\{multiplier}.png");
+            SetImage(@$"Graphics\Powerup\Shield\{multiplier}.png");
             PowerupAmount *= multiplier + 1;
         }
 

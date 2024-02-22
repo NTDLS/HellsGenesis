@@ -100,7 +100,7 @@ namespace Si.GameEngine.Sprites._Superclass
         public bool IsWithinCurrentScaledScreenBounds => _gameEngine.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds);
         public bool IsHighlighted { get; set; } = false;
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
-        public int ShieldHealth { get; private set; } = 0; //Sheild hit-points, these take 1/2 damage.
+        public int ShieldHealth { get; private set; } = 0; //Shield hit-points, these take 1/2 damage.
 
         /// <summary>
         /// The sprite still exists, but is not functional (e.g. its been shot and exploded).

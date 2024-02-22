@@ -41,7 +41,7 @@ namespace Si.GameEngine.Menus
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Warp Drive with <SHIFT>.");
+            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Surge Drive with <SHIFT>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
