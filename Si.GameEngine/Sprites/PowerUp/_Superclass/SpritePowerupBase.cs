@@ -51,10 +51,10 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
         {
             Initialize();
 
-            int _hitImageIndex = SiRandom.Between(0, _assetHitAnimationFiles.Count());
+            int _hitImageIndex = SiRandom.Between(0, _assetHitAnimationFiles.Count() - 1);
             _hitAnimation = new SpriteAnimation(_gameEngine, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
 
-            int _soundIndex = SiRandom.Between(0, _assetExplosionSoundFiles.Count());
+            int _soundIndex = SiRandom.Between(0, _assetExplosionSoundFiles.Count() - 1);
             _explodeSound = _gameEngine.Assets.GetAudio(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
 
             RadarDotSize = new SiPoint(4, 4);
