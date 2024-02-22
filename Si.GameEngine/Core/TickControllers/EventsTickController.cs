@@ -2,7 +2,6 @@
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Menus;
-using System;
 using System.Collections.Generic;
 using static Si.GameEngine.Core.Types.SiEngineCallbackEvent;
 
@@ -11,6 +10,7 @@ namespace Si.GameEngine.Core.TickControllers
     public class EventsTickController : UnvectoredTickControllerBase<SiEngineCallbackEvent>
     {
         private readonly PessimisticCriticalResource<List<SiEngineCallbackEvent>> _collection = new();
+        public delegate void SiOnExecuteSimpleT<T>(T param);
 
         public EventsTickController(GameEngineCore gameEngine)
             : base(gameEngine)
@@ -100,6 +100,21 @@ namespace Si.GameEngine.Core.TickControllers
                 return obj;
             });
         }
+
+        public SiEngineCallbackEvent Create<T>(int milliseconds, T param, SiOnExecuteSimpleT<T> executeCallback)
+        {
+            return _collection.Use(o =>
+            {
+                var obj = new SiEngineCallbackEvent(GameEngine, milliseconds,
+                    (GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj) =>
+                {
+                    executeCallback(param);
+                });
+                o.Add(obj);
+                return obj;
+            });
+        }
+
 
         public SiEngineCallbackEvent Create(int milliseconds, SiOnExecuteSimple executeCallback)
         {

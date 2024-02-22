@@ -60,19 +60,34 @@ namespace Si.GameEngine.Core.TickControllers
         }
 
         /// <summary>
-        /// Creates a given number of "hot" colored particles at a given location with a random speed.
+        /// Creates a random number of blasts consiting of "hot" colored particles at a given location.
         /// </summary>
         /// <param name="particleCount"></param>
         /// <param name="at"></param>
         public void ParticleBlast(int particleCount, SpriteBase at)
         {
-            for (int i = 0; i < particleCount; i++)
+            int explosionCount = SiRandom.Between(1, 4);
+            int particlesExplosion = particleCount / explosionCount;
+
+            int triggerDelay = 100;
+
+            for (int instance = 0; instance < explosionCount; instance++)
             {
-                var particle = CreateAt(at.X, at.Y, GraphicsUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 3), SiRandom.Between(1, 3)));
-                particle.Shape = ParticleShape.FilledEllipse;
-                particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
-                particle.Velocity.MaxSpeed *= SiRandom.Between(1, 3.5);
-                particle.VectorType = ParticleVectorType.Independent;
+                //Make sure the next delay is higher than the previous.
+                triggerDelay = SiRandom.Between(triggerDelay, 500 + triggerDelay / 4);
+
+                GameEngine.Events.Create(triggerDelay, () =>
+                {
+                    for (int i = 0; i < particlesExplosion; i++)
+                    {
+                        var particle = CreateAt(at.X, at.Y, GraphicsUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
+                        particle.Shape = ParticleShape.FilledEllipse;
+                        particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
+                        particle.Velocity.MaxSpeed *= SiRandom.Between(1, 3.5);
+                        particle.VectorType = ParticleVectorType.Independent;
+                    }
+                    GameEngine.Audio.PlayRandomExplosion();
+                });
             }
         }
 

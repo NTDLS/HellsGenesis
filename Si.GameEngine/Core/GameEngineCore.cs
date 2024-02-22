@@ -9,7 +9,6 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.Types.Geometry;
 using Si.MultiplayClient;
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
