@@ -13,7 +13,7 @@ namespace Si.GameEngine.Core.Types
         private readonly object _referenceObject = null;
         private readonly TimeSpan _countdown;
         private readonly SiOnExecute _onExecute;
-        private readonly SiCallbackEventMode _callbackEventMode;
+        private readonly SiCallbackEventMode _callbackEventMode = SiCallbackEventMode.OneTime;
         private readonly SiCallbackEventAsync _callbackEventAsync;
         private DateTime _startedTime;
 

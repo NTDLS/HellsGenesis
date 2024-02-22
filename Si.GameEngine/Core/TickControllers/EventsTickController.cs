@@ -133,5 +133,64 @@ namespace Si.GameEngine.Core.TickControllers
         }
 
         #endregion
+
+        #region Factories (milliseconds).
+
+        public SiEngineCallbackEvent Create(int milliseconds, SiOnExecute executeCallback, object refObj,
+            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
+            SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
+        {
+            return _collection.Use(o =>
+            {
+                var obj = new SiEngineCallbackEvent(GameEngine, new TimeSpan(0, 0, 0, 0, milliseconds), executeCallback, refObj, callbackEventMode, callbackEventAsync);
+                o.Add(obj);
+                return obj;
+            });
+        }
+
+        public SiEngineCallbackEvent Create(int milliseconds, SiOnExecute executeCallback,
+            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
+            SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
+        {
+            return _collection.Use(o =>
+            {
+                var obj = new SiEngineCallbackEvent(GameEngine, new TimeSpan(0, 0, 0, 0, milliseconds), executeCallback, null, callbackEventMode, callbackEventAsync);
+                o.Add(obj);
+                return obj;
+            });
+        }
+
+        public SiEngineCallbackEvent Create(int milliseconds, SiOnExecute executeCallback,
+            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime)
+        {
+            return _collection.Use(o =>
+            {
+                var obj = new SiEngineCallbackEvent(GameEngine, new TimeSpan(0, 0, 0, 0, milliseconds), executeCallback, null, callbackEventMode);
+                o.Add(obj);
+                return obj;
+            });
+        }
+
+        public SiEngineCallbackEvent Create(int milliseconds, SiOnExecute executeCallback, object refObj)
+        {
+            return _collection.Use(o =>
+            {
+                var obj = new SiEngineCallbackEvent(GameEngine, new TimeSpan(0, 0, 0, 0, milliseconds), executeCallback, refObj);
+                o.Add(obj);
+                return obj;
+            });
+        }
+
+        public SiEngineCallbackEvent Create(int milliseconds, SiOnExecute executeCallback)
+        {
+            return _collection.Use(o =>
+            {
+                var obj = new SiEngineCallbackEvent(GameEngine, new TimeSpan(0, 0, 0, 0, milliseconds), executeCallback);
+                o.Add(obj);
+                return obj;
+            });
+        }
+
+        #endregion
     }
 }

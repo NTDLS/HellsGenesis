@@ -22,7 +22,7 @@ namespace Si.GameEngine.Levels
         {
             base.Begin();
 
-            AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
+            AddSingleFireEvent(500, FirstShowPlayerCallback);
         }
 
         private void FirstShowPlayerCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)

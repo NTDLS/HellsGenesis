@@ -53,5 +53,18 @@ namespace Si.GameEngine.Levels._Superclass
         {
             return _gameEngine.Events.Create(timeout, executeCallback);
         }
+
+        protected SiEngineCallbackEvent AddRecuringFireEvent(int milliseconds, SiOnExecute executeCallback)
+        {
+            //Keep track of recurring events to we can delete them when we are done.
+            var obj = _gameEngine.Events.Create(new TimeSpan(0, 0, 0, 0, milliseconds), executeCallback, null, SiCallbackEventMode.Recurring);
+            Events.Add(obj);
+            return obj;
+        }
+
+        protected SiEngineCallbackEvent AddSingleFireEvent(int milliseconds, SiOnExecute executeCallback)
+        {
+            return _gameEngine.Events.Create(new TimeSpan(0, 0, 0, 0, milliseconds), executeCallback);
+        }
     }
 }

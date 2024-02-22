@@ -29,9 +29,9 @@ namespace Si.GameEngine.Levels
         {
             base.Begin();
 
-            AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
-            AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 1), AdvanceWaveCallback);
-            AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 5), RedirectFormationCallback);
+            AddSingleFireEvent(500, FirstShowPlayerCallback);
+            AddRecuringFireEvent(1, AdvanceWaveCallback);
+            AddRecuringFireEvent(5, RedirectFormationCallback);
 
             _gameEngine.Player.Sprite.AddHullHealth(100);
             _gameEngine.Player.Sprite.AddShieldHealth(10);
@@ -72,7 +72,8 @@ namespace Si.GameEngine.Levels
                 }
 
                 _waitingOnPopulation = true;
-                _gameEngine.Events.Create(new System.TimeSpan(0, 0, 0, 5), AddFreshEnemiesCallback);
+                AddSingleFireEvent(5, AddFreshEnemiesCallback);
+                AddSingleFireEvent(5, AddFreshEnemiesCallback);
                 CurrentWave++;
             }
         }

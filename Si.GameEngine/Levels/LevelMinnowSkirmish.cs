@@ -25,8 +25,8 @@ namespace Si.GameEngine.Levels
         {
             base.Begin();
 
-            AddSingleFireEvent(new System.TimeSpan(0, 0, 0, 0, 500), FirstShowPlayerCallback);
-            AddRecuringFireEvent(new System.TimeSpan(0, 0, 0, 0, 5000), AddFreshEnemiesCallback);
+            AddSingleFireEvent(500, FirstShowPlayerCallback);
+            AddRecuringFireEvent(5000, AddFreshEnemiesCallback);
 
             _gameEngine.Player.Sprite.AddHullHealth(100);
             _gameEngine.Player.Sprite.AddShieldHealth(10);
@@ -51,7 +51,7 @@ namespace Si.GameEngine.Levels
 
                 for (int i = 0; i < enemyCount; i++)
                 {
-                    _gameEngine.Events.Create(new System.TimeSpan(0, 0, 0, 0, SiRandom.Between(0, 800)), AddEnemyCallback);
+                    AddSingleFireEvent(SiRandom.Between(0, 800), AddEnemyCallback);
                 }
 
                 _gameEngine.Audio.RadarBlipsSound.Play();
