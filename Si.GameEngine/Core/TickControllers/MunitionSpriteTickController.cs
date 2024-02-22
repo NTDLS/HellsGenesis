@@ -93,8 +93,11 @@ namespace Si.GameEngine.Core.TickControllers
                 //Take actions with the munitions that hit objects.
                 foreach (var hitObject in hitObjects)
                 {
-                    hitObject.Munition.Explode();
-                    hitObject.Object.MunitionHit(hitObject.Munition);
+                    if (hitObject.Object.IsDeadOrExploded == false)
+                    {
+                        hitObject.Munition.Explode();
+                        hitObject.Object.MunitionHit(hitObject.Munition);
+                    }
                 }
             }
         }
