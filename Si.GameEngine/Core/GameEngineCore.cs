@@ -196,7 +196,7 @@ namespace Si.GameEngine.Core
             {
                 try
                 {
-                    Rendering.RenderTargets.Write(o =>
+                    Rendering.RenderTargets.Use(o =>
                     {
                         o.ScreenRenderTarget.BeginDraw();
                         o.IntermediateRenderTarget.BeginDraw();

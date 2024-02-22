@@ -20,7 +20,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             public WindowRenderTarget ScreenRenderTarget { get; set; }
         }
 
-        public OptimisticCriticalResource<CriticalRenderTargets> RenderTargets { get; private set; } = new();
+        public PessimisticCriticalResource<CriticalRenderTargets> RenderTargets { get; private set; } = new();
         public PrecreatedMaterials Materials { get; private set; }
         public PrecreatedTextFormats TextFormats { get; private set; }
 
@@ -57,7 +57,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
             var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
 
-            RenderTargets.Write(o =>
+            RenderTargets.Use(o =>
             {
                 o.ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, new RenderTargetProperties(pixelFormat), renderProp)
                 {
@@ -85,7 +85,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
         public void Dispose()
         {
-            RenderTargets.Write(o =>
+            RenderTargets.Use(o =>
             {
                 o.ScreenRenderTarget?.Dispose();
                 o.ScreenRenderTarget?.Dispose();
@@ -152,7 +152,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             using (var converter = new FormatConverter(_wicFactory))
             {
                 converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA);
-                return RenderTargets.Read(o => SharpDX.Direct2D1.Bitmap.FromWicBitmap(o.ScreenRenderTarget, converter));
+                return RenderTargets.Use(o => SharpDX.Direct2D1.Bitmap.FromWicBitmap(o.ScreenRenderTarget, converter));
             }
         }
 
