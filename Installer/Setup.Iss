@@ -1,4 +1,4 @@
-#define Version "0.0.18"
+#define Version "0.0.19"
 
 [Setup]
 ;-- Main Setup Information
@@ -13,7 +13,7 @@
  Uninstallable                   = Yes
  Compression                     = ZIP/9
  ChangesAssociations             = Yes
- OutputBaseFilename              = Si-{#Version}
+ OutputBaseFilename              = Si.Installer-{#Version}
  ArchitecturesInstallIn64BitMode = x64
  ArchitecturesAllowed            = x64
 
