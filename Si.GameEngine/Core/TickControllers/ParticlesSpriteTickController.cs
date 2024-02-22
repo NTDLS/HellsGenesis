@@ -81,6 +81,7 @@ namespace Si.GameEngine.Core.TickControllers
                         var particle = CreateAt(at.X, at.Y, GraphicsUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
                         particle.Shape = ParticleShape.FilledEllipse;
                         particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
+                        particle.FadeToBlackReductionAmount = SiRandom.Between(0.001, 0.01);
                         particle.Velocity.MaxSpeed *= SiRandom.Between(1, 3.5);
                         particle.VectorType = ParticleVectorType.Independent;
                     }
