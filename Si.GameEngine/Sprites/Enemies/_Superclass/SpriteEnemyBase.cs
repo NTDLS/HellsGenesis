@@ -62,9 +62,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
             if (IsDrone == false)
             {
-                //TODO: Recomment this line after testing.
-                //https://github.com/NTDLS/StrikeforceInfinity/issues/7
-                //if (SiRandom.PercentChance(10))
+                if (SiRandom.PercentChance(10))
                 {
                     var powerup = SiRandom.Between(0, 4) switch
                     {
