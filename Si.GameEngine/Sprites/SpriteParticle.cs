@@ -19,11 +19,12 @@ namespace Si.GameEngine.Sprites
 
         /// <summary>
         /// The amount of brightness to reduce the color by each time the particle is rendered.
-        /// This is ignored unless the CleanupModeOption is FadeToBlack
-
+        /// This is ignored unless the CleanupModeOption is FadeToBlack.
+        /// This should be expressed as a number between 0-1 with 0 being no reduxtion per frame and 1 being 100% reduction per frame.
         /// </summary>
-        public float FadeToBlackAmmout { get; set; } = 0.99f;
+        public float FadeToBlackReductionAmount { get; set; } = 0.01f;
 
+        public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Native;
         public ParticleShape Shape { get; set; } = ParticleShape.FilledEllipse;
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
         public double RotationSpeed { get; set; } = 0;
@@ -64,14 +65,21 @@ namespace Si.GameEngine.Sprites
                 Velocity.Angle.Degrees -= RotationSpeed;
             }
 
-            //We use a seperate angle for the travel direction because the base ApplyMotion()
-            //  moves the object in the the direction of the Velocity.Angle.
-            X += TravelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
-            Y += TravelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            if (VectorType == ParticleVectorType.Independent)
+            {
+                //We use a seperate angle for the travel direction because the base ApplyMotion()
+                //  moves the object in the the direction of the Velocity.Angle.
+                X += TravelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+                Y += TravelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            }
+            else if (VectorType == ParticleVectorType.Native)
+            {
+                base.ApplyMotion(displacementVector);
+            }
 
             if (CleanupMode == ParticleCleanupMode.FadeToBlack)
             {
-                Color *= FadeToBlackAmmout; // Gradually darken the particle color.
+                Color *= 1-FadeToBlackReductionAmount; // Gradually darken the particle color.
 
                 // Check if the particle color is below a certain threshold and remove it.
                 if (Color.Red < 0.1f && Color.Green < 0.1f && Color.Blue < 0.1f)

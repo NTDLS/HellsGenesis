@@ -72,6 +72,33 @@ namespace Si.GameEngine.Core.TickControllers
                 particle.Shape = ParticleShape.FilledEllipse;
                 particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                 particle.Velocity.MaxSpeed *= SiRandom.Between(1, 3.5);
+                particle.VectorType = ParticleVectorType.Independent;
+            }
+        }
+
+        public void ParticleCloud(int particleCount, SpriteBase at)
+        {
+            for (int i = 0; i < particleCount; i++)
+            {
+                var particle = CreateAt(at.X, at.Y, GraphicsUtility.GetRandomHotColor(), new Size(5, 5));
+
+                switch (SiRandom.Between(1, 3))
+                {
+                    case 1:
+                        particle.Shape = ParticleShape.Triangle;
+                        break;
+                    case 2:
+                        particle.Shape = ParticleShape.FilledEllipse;
+                        break;
+                    case 3:
+                        particle.Shape = ParticleShape.HollowEllipse;
+                        break;
+                }
+
+                particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
+                particle.FadeToBlackReductionAmount = 0.001f;
+                particle.Velocity.MaxSpeed *= SiRandom.Between(1, 3.5);
+                particle.VectorType = ParticleVectorType.Native;
             }
         }
     }

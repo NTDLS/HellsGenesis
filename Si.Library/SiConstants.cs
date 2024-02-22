@@ -27,6 +27,18 @@
             Triangle
         }
 
+        public enum ParticleVectorType
+        {
+            /// <summary>
+            /// Travel on the angle that is baked into the sprite Velocity.Angle.
+            /// </summary>
+            Native,
+            /// <summary>
+            /// Travel on an angle that is independent of the sprites Velocity.Angle.
+            /// </summary>
+            Independent
+        }
+
         public enum SiRenderScaleOrder
         {
             /// <summary>

@@ -265,6 +265,10 @@ namespace Si.GameEngine.Core.Managers
                 //_gameEngine.Sprites.NewGame();
                 //_gameEngine.Sprites.ResetAndShowPlayer();
             }
+            else if (key == Keys.F3)
+            {
+                _gameEngine.Sprites.Particles.ParticleCloud(500, _gameEngine.Player.Sprite);
+            }
             else if (key == Keys.Left)
             {
                 if (_gameEngine.Player?.Sprite?.Visable == true)

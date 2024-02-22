@@ -45,6 +45,6 @@
             => minValue + (maxValue - minValue) * Generator.NextDouble();
 
         public static int Between(int minValue, int maxValue)
-            => Generator.Next(minValue, maxValue);
+            => Generator.Next(minValue, maxValue + 1);
     }
 }
