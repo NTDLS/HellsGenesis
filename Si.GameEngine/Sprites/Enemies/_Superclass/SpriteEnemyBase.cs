@@ -72,7 +72,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                         1 => new SpritePowerupBoost(_gameEngine),
                         2 => new SpritePowerupBounty(_gameEngine),
                         3 => new SpritePowerupRepair(_gameEngine),
-                        4 => new SpritePowerupSheild(_gameEngine),
+                        4 => new SpritePowerupShield(_gameEngine),
                         _ => null as SpritePowerupBase
                     };
 
@@ -123,10 +123,10 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
             string result = $"          Name : {Loadout.Name}\n";
             result += $"       Weapons : {weapons.Trim()}\n";
-            result += $"       Sheilds : {Loadout.ShieldHealth:n0}\n";
+            result += $"       Shields : {Loadout.ShieldHealth:n0}\n";
             result += $" Hull Strength : {Loadout.HullHealth:n0}\n";
             result += $"     Max Speed : {Loadout.MaxSpeed:n1}\n";
-            result += $"    Warp Drive : {Loadout.MaxBoost:n1}\n";
+            result += $"   Surge Drive : {Loadout.MaxBoost:n1}\n";
             result += $"\n{Loadout.Description}";
 
             return result;

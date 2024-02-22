@@ -136,10 +136,10 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             string result = $"             Name : {Loadout.Name}\n";
             result += $"   Primary weapon : {primaryWeapon.Trim()}\n";
             result += $"Secondary Weapons : {secondaryWeapons.Trim()}\n";
-            result += $"          Sheilds : {Loadout.ShieldHealth:n0}\n";
+            result += $"          Shields : {Loadout.ShieldHealth:n0}\n";
             result += $"    Hull Strength : {Loadout.HullHealth:n0}\n";
             result += $"        Max Speed : {Loadout.MaxSpeed:n1}\n";
-            result += $"       Warp Drive : {Loadout.MaxBoost:n1}\n";
+            result += $"      Surge Drive : {Loadout.MaxBoost:n1}\n";
             result += $"\n{Loadout.Description}";
 
             return result;
