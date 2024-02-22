@@ -9,6 +9,7 @@ namespace Si.GameEngine.Core.Types
     /// </summary>
     public class SiEngineCallbackEvent
     {
+        public string Name { get; set; }
         private readonly GameEngineCore _gameEngine;
         private readonly object _referenceObject = null;
         private readonly int _milliseconds;

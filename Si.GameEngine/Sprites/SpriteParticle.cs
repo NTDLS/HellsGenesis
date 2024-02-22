@@ -22,7 +22,7 @@ namespace Si.GameEngine.Sprites
         /// This is ignored unless the CleanupModeOption is FadeToBlack.
         /// This should be expressed as a number between 0-1 with 0 being no reduxtion per frame and 1 being 100% reduction per frame.
         /// </summary>
-        public float FadeToBlackReductionAmount { get; set; } = 0.01f;
+        public double FadeToBlackReductionAmount { get; set; } = 0.01f;
 
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Native;
         public ParticleShape Shape { get; set; } = ParticleShape.FilledEllipse;
@@ -79,7 +79,7 @@ namespace Si.GameEngine.Sprites
 
             if (CleanupMode == ParticleCleanupMode.FadeToBlack)
             {
-                Color *= 1 - FadeToBlackReductionAmount; // Gradually darken the particle color.
+                Color *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
 
                 // Check if the particle color is below a certain threshold and remove it.
                 if (Color.Red < 0.1f && Color.Green < 0.1f && Color.Blue < 0.1f)
