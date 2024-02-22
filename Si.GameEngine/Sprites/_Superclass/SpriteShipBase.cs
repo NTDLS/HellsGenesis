@@ -29,9 +29,9 @@ namespace Si.GameEngine.Sprites._Superclass
         private readonly string _assetPathHitSound = @"Sounds\Ship\Object Hit.wav";
         private readonly string _assetPathshieldHit = @"Sounds\Ship\Shield Hit.wav";
 
-        private const string _assetPathExplosionAnimation = @"Graphics\Animation\Explode\Explosion 256x256\";
-        private readonly int _explosionAnimationCount = 6;
-        private int _selectedExplosionAnimationIndex = 0;
+        //private const string _assetPathExplosionAnimation = @"Graphics\Animation\Explode\Explosion 256x256\";
+        //private readonly int _explosionAnimationCount = 6;
+        //private int _selectedExplosionAnimationIndex = 0;
 
         private const string _assetPathHitExplosionAnimation = @"Graphics\Animation\Explode\Hit Explosion 22x22\";
         private readonly int _hitExplosionAnimationCount = 2;
@@ -60,8 +60,8 @@ namespace Si.GameEngine.Sprites._Superclass
             _selectedExplosionSoundIndex = SiRandom.Between(0, _explosionSoundCount - 1);
             _explodeSound = _gameEngine.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{_selectedExplosionSoundIndex}.wav"), 1.0f);
 
-            _selectedExplosionAnimationIndex = SiRandom.Between(0, _explosionAnimationCount - 1);
-            _explosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathExplosionAnimation, $"{_selectedExplosionAnimationIndex}.png"), new Size(256, 256));
+            //_selectedExplosionAnimationIndex = SiRandom.Between(0, _explosionAnimationCount - 1);
+            //_explosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathExplosionAnimation, $"{_selectedExplosionAnimationIndex}.png"), new Size(256, 256));
 
             _selectedHitExplosionAnimationIndex = SiRandom.Between(0, _hitExplosionAnimationCount - 1);
             _hitExplosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));
@@ -117,9 +117,10 @@ namespace Si.GameEngine.Sprites._Superclass
 
         public override void Explode()
         {
-            _explodeSound?.Play();
-            _explosionAnimation?.Reset();
-            _gameEngine.Sprites.Animations.AddAt(_explosionAnimation, this);
+            _gameEngine.Sprites.Particles.ParticleBlast(SiRandom.Between(200, 800), this);
+            //_explodeSound?.Play();
+            //_explosionAnimation?.Reset();
+            //_gameEngine.Sprites.Animations.AddAt(_explosionAnimation, this);
             base.Explode();
         }
 

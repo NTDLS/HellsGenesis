@@ -69,13 +69,11 @@ namespace Si.GameEngine.Core.TickControllers
             int explosionCount = SiRandom.Between(1, 4);
             int particlesExplosion = particleCount / explosionCount;
 
-            int triggerDelay = 100;
+            int triggerDelay = 0;
 
             for (int instance = 0; instance < explosionCount; instance++)
             {
                 //Make sure the next delay is higher than the previous.
-                triggerDelay = SiRandom.Between(triggerDelay, 500 + triggerDelay / 4);
-
                 GameEngine.Events.Create(triggerDelay, () =>
                 {
                     for (int i = 0; i < particlesExplosion; i++)
@@ -88,6 +86,8 @@ namespace Si.GameEngine.Core.TickControllers
                     }
                     GameEngine.Audio.PlayRandomExplosion();
                 });
+
+                triggerDelay = SiRandom.Between(triggerDelay + 10, 500 + triggerDelay / 4);
             }
         }
 
