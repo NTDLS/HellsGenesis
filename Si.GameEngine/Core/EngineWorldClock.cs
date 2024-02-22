@@ -31,7 +31,7 @@ namespace Si.GameEngine.Core
             _shutdown = false;
             _graphicsThread.Start();
 
-            var evt = _gameEngine.Events.Create(new TimeSpan(0, 0, 0, 0, 10), UpdateStatusText, SiEngineCallbackEvent.SiCallbackEventMode.Recurring);
+            var evt = _gameEngine.Events.Create(10, UpdateStatusText, SiEngineCallbackEvent.SiCallbackEventMode.Recurring);
         }
 
         public void Dispose()

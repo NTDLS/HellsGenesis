@@ -11,8 +11,9 @@ namespace Si.GameEngine.Core.Types
     {
         private readonly GameEngineCore _gameEngine;
         private readonly object _referenceObject = null;
-        private readonly TimeSpan _countdown;
-        private readonly SiOnExecute _onExecute;
+        private readonly int _milliseconds;
+        private readonly SiOnExecute _onExecute = null;
+        private readonly SiOnExecuteSimple _onExecuteSimple = null;
         private readonly SiCallbackEventMode _callbackEventMode = SiCallbackEventMode.OneTime;
         private readonly SiCallbackEventAsync _callbackEventAsync;
         private DateTime _startedTime;
@@ -29,6 +30,8 @@ namespace Si.GameEngine.Core.Types
         /// <param name="refObj">An optional object passed by the user code</param>
         public delegate void SiOnExecute(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj);
 
+        public delegate void SiOnExecuteSimple();
+
         public enum SiCallbackEventMode
         {
             OneTime,
@@ -41,13 +44,13 @@ namespace Si.GameEngine.Core.Types
             Asynchronous
         }
 
-        public SiEngineCallbackEvent(GameEngineCore gameEngine, TimeSpan countdown, SiOnExecute executeCallback, object refObj,
+        public SiEngineCallbackEvent(GameEngineCore gameEngine, int milliseconds, object refObj, SiOnExecute executeCallback,
             SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
             SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
         {
             _gameEngine = gameEngine;
             _referenceObject = refObj;
-            _countdown = countdown;
+            _milliseconds = milliseconds;
             _onExecute = executeCallback;
             _callbackEventMode = callbackEventMode;
             _callbackEventAsync = callbackEventAsync;
@@ -55,21 +58,30 @@ namespace Si.GameEngine.Core.Types
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(GameEngineCore gameEngine, TimeSpan countdown, SiOnExecute executeCallback, object refObj)
+        public SiEngineCallbackEvent(GameEngineCore gameEngine, int milliseconds, object refObj, SiOnExecute executeCallback)
         {
             _referenceObject = refObj;
             _gameEngine = gameEngine;
-            _countdown = countdown;
+            _milliseconds = milliseconds;
             _onExecute = executeCallback;
             _startedTime = DateTime.UtcNow;
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(GameEngineCore gameEngine, TimeSpan countdown, SiOnExecute executeCallback)
+        public SiEngineCallbackEvent(GameEngineCore gameEngine, int milliseconds, SiOnExecute executeCallback)
         {
             _gameEngine = gameEngine;
-            _countdown = countdown;
+            _milliseconds = milliseconds;
             _onExecute = executeCallback;
+            _startedTime = DateTime.UtcNow;
+            UID = Guid.NewGuid();
+        }
+
+        public SiEngineCallbackEvent(GameEngineCore gameEngine, int milliseconds, SiOnExecuteSimple executeCallback)
+        {
+            _gameEngine = gameEngine;
+            _milliseconds = milliseconds;
+            _onExecuteSimple = executeCallback;
             _startedTime = DateTime.UtcNow;
             UID = Guid.NewGuid();
         }
@@ -90,7 +102,7 @@ namespace Si.GameEngine.Core.Types
                     return false;
                 }
 
-                if ((DateTime.UtcNow - _startedTime).TotalMilliseconds > _countdown.TotalMilliseconds)
+                if ((DateTime.UtcNow - _startedTime).TotalMilliseconds > _milliseconds)
                 {
                     result = true;
 
@@ -103,12 +115,14 @@ namespace Si.GameEngine.Core.Types
                     {
                         new Thread(() =>
                         {
-                            _onExecute(_gameEngine, this, _referenceObject);
+                            if (_onExecute != null) _onExecute(_gameEngine, this, _referenceObject);
+                            if (_onExecuteSimple != null) _onExecuteSimple();
                         }).Start();
                     }
                     else
                     {
-                        _onExecute(_gameEngine, this, _referenceObject);
+                        if (_onExecute != null) _onExecute(_gameEngine, this, _referenceObject);
+                        if (_onExecuteSimple != null) _onExecuteSimple();
                     }
 
                     if (_callbackEventMode == SiCallbackEventMode.Recurring)

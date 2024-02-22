@@ -267,7 +267,7 @@ namespace Si.GameEngine.Core
                     Audio.BackgroundMusicSound.Play();
                 }
 
-                Events.Create(new TimeSpan(0, 0, 0, 1), NewGameMenuCallback);
+                Events.Create(1, NewGameMenuCallback);
             }
         }
 
