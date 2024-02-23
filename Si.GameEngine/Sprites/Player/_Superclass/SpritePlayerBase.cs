@@ -561,9 +561,9 @@ namespace Si.GameEngine.Sprites.Player._Superclass
         /// </summary>
         /// <param name="vector"></param>
 
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(double epoch, SiPoint displacementVector)
         {
-            base.ApplyMotion(displacementVector);
+            base.ApplyMotion(epoch, displacementVector);
 
             if (IsDrone)
             {

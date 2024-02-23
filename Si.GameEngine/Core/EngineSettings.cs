@@ -24,13 +24,15 @@ namespace Si.GameEngine.Core
         public bool PlayMusic { get; set; } = true;
 
         public bool LockPlayerAngleToNearbyEnemy { get; set; } = false;
-        public bool AutoZoomWhenMoving { get; set; } = true;
+        public bool EnableSpeedScaleFactoring { get; set; } = true;
 
-        public double EnemyThrustRampUp { get; set; } = 0.05;
-        public double EnemyThrustRampDown { get; set; } = 0.01;
+        public double WorldTicksPerSecond { get; set; } = 100; //MillisecondPerEpochs = 1000 / WorldTicksPerSecond
 
-        public double PlayerThrustRampUp { get; set; } = 0.05;
-        public double PlayerThrustRampDown { get; set; } = 0.01;
+        public double EnemyThrustRampUp { get; set; } = 0.0375;
+        public double EnemyThrustRampDown { get; set; } = 0.0075;
+
+        public double PlayerThrustRampUp { get; set; } = 0.0375;
+        public double PlayerThrustRampDown { get; set; } = 0.0075;
 
         public int MaxHullHealth { get; set; } = 100000;
         public int MaxShieldPoints { get; set; } = 100000;
@@ -38,18 +40,18 @@ namespace Si.GameEngine.Core
         public double MaxPlayerBoostAmount { get; set; } = 10000;
         public double PlayerBoostRebuildFloor { get; set; } = 1000;
         public double MaxRecoilPercentage { get; set; } = 0.4; //Max amount that will be substracted from the thrust percentage.
-        public double MaxPlayerRotationSpeedDegrees { get; set; } = 2.5;
+        public double MaxPlayerRotationSpeedDegrees { get; set; } = 1.40;
 
         public int InitialFrameStarCount { get; set; } = 100;
         public int DeltaFrameTargetStarCount { get; set; } = 200;
 
-        public int MinEnemySpeed { get; set; } = 5;
-        public int MaxEnemySpeed { get; set; } = 10;
+        public double MinEnemySpeed { get; set; } = 3.75;
+        public double MaxEnemySpeed { get; set; } = 7.5;
 
         public bool VerticalSync { get; set; } = false;
         public bool AntiAliasing { get; set; } = true;
 
-        public double FramePerSecondLimit { get; set; } = 60; //~60 seems to be a good rate.
+        public double FramePerSecondLimit { get; set; } = 60;
         public double MunitionSceneDistanceLimit { get; set; } = 2500; //The distance from the scene that a munition can travel before it is cleaned up.
         public double EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
 

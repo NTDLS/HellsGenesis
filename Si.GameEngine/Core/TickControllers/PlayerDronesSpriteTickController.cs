@@ -21,11 +21,11 @@ namespace Si.GameEngine.Core.TickControllers
             _gameEngine = gameEngine;
         }
 
-        public override void ExecuteWorldClockTick(SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
         {
             foreach (var drone in Visible().OfType<ISpriteDrone>())
             {
-                drone.ApplyMotion(displacementVector);
+                drone.ApplyMotion(epoch, displacementVector);
             }
         }
     }

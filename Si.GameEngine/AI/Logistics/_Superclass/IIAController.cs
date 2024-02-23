@@ -4,6 +4,6 @@ namespace Si.GameEngine.AI.Logistics._Superclass
 {
     public interface IIAController
     {
-        public void ApplyIntelligence(SiPoint displacementVector);
+        public void ApplyIntelligence(double epoch, SiPoint displacementVector);
     }
 }

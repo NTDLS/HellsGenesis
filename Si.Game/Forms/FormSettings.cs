@@ -41,9 +41,9 @@ namespace Si.Game
             var settings = GameEngineCore.LoadSettings();
 
             checkBoxPlayMusic.Checked = settings.PlayMusic;
-            checkBoxEnableAntiAliasing.Checked = settings.AutoZoomWhenMoving;
+            checkBoxEnableAntiAliasing.Checked = settings.EnableSpeedScaleFactoring;
             checkBoxEnableVerticalSync.Checked = settings.VerticalSync;
-            checkBoxAutoZoomWhenMoving.Checked = settings.AutoZoomWhenMoving;
+            checkBoxAutoZoomWhenMoving.Checked = settings.EnableSpeedScaleFactoring;
             checkBoxHighlightAllSprites.Checked = settings.HighlightAllSprites;
             checkBoxHighlightNatrualBounds.Checked = settings.HighlightNatrualBounds;
             checkBoxEnableSpriteInterrogation.Checked = settings.EnableSpriteInterrogation;
@@ -160,9 +160,9 @@ namespace Si.Game
                 var settings = GameEngineCore.LoadSettings();
 
                 settings.PlayMusic = checkBoxPlayMusic.Checked;
-                settings.AutoZoomWhenMoving = checkBoxEnableAntiAliasing.Checked;
+                settings.EnableSpeedScaleFactoring = checkBoxEnableAntiAliasing.Checked;
                 settings.VerticalSync = checkBoxEnableVerticalSync.Checked;
-                settings.AutoZoomWhenMoving = checkBoxAutoZoomWhenMoving.Checked;
+                settings.EnableSpeedScaleFactoring = checkBoxAutoZoomWhenMoving.Checked;
                 settings.HighlightAllSprites = checkBoxHighlightAllSprites.Checked;
                 settings.HighlightNatrualBounds = checkBoxHighlightNatrualBounds.Checked;
                 settings.EnableSpriteInterrogation = checkBoxEnableSpriteInterrogation.Checked;

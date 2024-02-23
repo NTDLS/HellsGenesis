@@ -34,10 +34,10 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(double epoch, SiPoint displacementVector)
         {
             Velocity.Angle.Degrees = AngleTo360(_gameEngine.Player.Sprite);
-            base.ApplyMotion(displacementVector);
+            base.ApplyMotion(epoch, displacementVector);
         }
     }
 }

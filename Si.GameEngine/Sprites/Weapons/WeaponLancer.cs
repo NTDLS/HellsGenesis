@@ -21,7 +21,7 @@ namespace Si.GameEngine.Sprites.Weapons
 
         private void InitializeWeapon()
         {
-            Speed = 35;
+            Speed = 26.25;
             Damage = 15;
             FireDelayMilliseconds = 100;
             AngleVarianceDegrees = 2.0;

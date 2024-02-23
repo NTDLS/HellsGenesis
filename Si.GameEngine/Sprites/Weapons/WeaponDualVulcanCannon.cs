@@ -24,7 +24,7 @@ namespace Si.GameEngine.Sprites.Weapons
         {
             Damage = 2;
             FireDelayMilliseconds = 50;
-            Speed = 18;
+            Speed = 13.5;
             AngleVarianceDegrees = 0.5;
             SpeedVariancePercent = 0.05;
             RecoilAmount = 0.10;

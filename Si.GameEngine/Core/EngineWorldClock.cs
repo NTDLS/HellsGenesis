@@ -96,14 +96,28 @@ namespace Si.GameEngine.Core
 
             #endregion
 
-            var timer = new Stopwatch();
+            var frameRateTimer = new Stopwatch();
+            var worldTickTimer = new Stopwatch();
+            var epochTimer = new Stopwatch();
+
+            Thread.Sleep((int)_gameEngine.Settings.WorldTicksPerSecond); //Make sure the first epoch isn't instantaneous.
+
+            frameRateTimer.Start();
+            worldTickTimer.Start();
+            epochTimer.Start();
 
             while (_shutdown == false)
             {
-                var targetFrameDuration = 1000000 / _gameEngine.Settings.FramePerSecondLimit; //1000000 / n-frames/second.
-                timer.Restart();
+                var frameRateDelayMicroseconds = 1000000 / _gameEngine.Settings.FramePerSecondLimit;
+                var targetWorldTickDurationMicroseconds = 1000000 / _gameEngine.Settings.WorldTicksPerSecond;
+                var millisecondPerEpoch = 1000 / _gameEngine.Settings.WorldTicksPerSecond;
 
-                _gameEngine.Display.FrameCounter.Calculate();
+                worldTickTimer.Restart();
+
+                var elapsedEpochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000.0;
+                epochTimer.Restart();
+
+                var epoch = elapsedEpochMilliseconds / millisecondPerEpoch;
 
                 _gameEngine.Menus.Use(m =>
                 {
@@ -111,21 +125,31 @@ namespace Si.GameEngine.Core
                     {
                         if (!_isPaused)
                         {
-                            ExecuteWorldClockTick();
+                            ExecuteWorldClockTick(epoch);
                         }
 
                         _gameEngine.Debug.ProcessCommand();
 
-                        _gameEngine.Render();
-                        timer.Stop();
+                        //If it is time to render, then render. Also, when VerticalSync is enabled then the directx render target seems to enforce the delay
+                        // so just call render each time and hope it doesnt affect the game time (it shouldn't unless the GPU is really crappy (< circa 1995)).
+                        if (_gameEngine.Settings.VerticalSync || (frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency) > frameRateDelayMicroseconds)
+                        {
+                            _gameEngine.Render();
+                            frameRateTimer.Restart();
+                            _gameEngine.Display.FrameCounter.Calculate();
+                        }
                     });
                 });
 
-                var clockTime = (double)timer.ElapsedTicks / Stopwatch.Frequency * 1000000;
-                var deltaClockTime = targetFrameDuration - clockTime;
-                timer.Restart();
+                //Determine how many µs it took to render the scene.
+                var actualWorldTickDurationMicroseconds = (double)worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency;
 
-                while ((double)timer.ElapsedTicks / Stopwatch.Frequency * 1000000 < deltaClockTime)
+                //Calculate how many µs we need to wait so that we can maintain the configured framerate.
+                var varianceWorldTickDurationMicroseconds = targetWorldTickDurationMicroseconds - actualWorldTickDurationMicroseconds;
+
+                worldTickTimer.Restart(); //Use the same timer to wait on the delta µs to expire.
+
+                while ((double)worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds)
                 {
                     Thread.Yield();
                 }
@@ -137,7 +161,7 @@ namespace Si.GameEngine.Core
             }
         }
 
-        private SiPoint ExecuteWorldClockTick()
+        private SiPoint ExecuteWorldClockTick(double epoch)
         {
             _gameEngine.Menus.ExecuteWorldClockTick();
             _gameEngine.Situations.ExecuteWorldClockTick();
@@ -145,18 +169,19 @@ namespace Si.GameEngine.Core
 
             _gameEngine.Input.Snapshot();
 
-            var displacementVector = _gameEngine.Player.ExecuteWorldClockTick();
+            var displacementVector = _gameEngine.Player.ExecuteWorldClockTick(epoch);
 
-            _gameEngine.Sprites.Enemies.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Particles.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Munitions.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Stars.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Animations.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.TextBlocks.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Powerups.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Debugs.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.PlayerDrones.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.EnemyDrones.ExecuteWorldClockTick(displacementVector);
+            _gameEngine.Sprites.Enemies.ExecuteWorldClockTick(epoch, displacementVector);
+            _gameEngine.Sprites.Particles.ExecuteWorldClockTick(epoch, displacementVector);
+            _gameEngine.Sprites.Munitions.ExecuteWorldClockTick(epoch, displacementVector);
+            _gameEngine.Sprites.Stars.ExecuteWorldClockTick(epoch, displacementVector);
+            _gameEngine.Sprites.Animations.ExecuteWorldClockTick(epoch, displacementVector);
+            _gameEngine.Sprites.TextBlocks.ExecuteWorldClockTick(epoch, displacementVector);
+            _gameEngine.Sprites.Powerups.ExecuteWorldClockTick(epoch, displacementVector);
+            _gameEngine.Sprites.Debugs.ExecuteWorldClockTick(epoch, displacementVector);
+            _gameEngine.Sprites.PlayerDrones.ExecuteWorldClockTick(epoch, displacementVector);
+            _gameEngine.Sprites.EnemyDrones.ExecuteWorldClockTick(epoch, displacementVector);
+
             _gameEngine.Sprites.RadarPositions.ExecuteWorldClockTick();
 
             _gameEngine.Sprites.CleanupDeletedObjects();

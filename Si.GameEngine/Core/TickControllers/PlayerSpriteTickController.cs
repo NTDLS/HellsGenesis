@@ -35,7 +35,7 @@ namespace Si.GameEngine.Core.TickControllers
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
         /// <returns></returns>
-        public override SiPoint ExecuteWorldClockTick()
+        public override SiPoint ExecuteWorldClockTick(double epoch)
         {
             var displacementVector = new SiPoint();
 
@@ -45,7 +45,7 @@ namespace Si.GameEngine.Core.TickControllers
             if (Sprite.Visable)
             {
                 //Sprite.PrimaryWeapon.ApplyIntelligence();
-                Sprite.SelectedSecondaryWeapon?.ApplyIntelligence();
+                Sprite.SelectedSecondaryWeapon?.ApplyIntelligence(epoch);
 
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.PrimaryFire))
                 {

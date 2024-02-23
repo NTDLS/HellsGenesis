@@ -39,8 +39,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Description = "→ Minnow ←\n"
                        + "TODO: Add a description\n",
-                    MaxSpeed = 3.5,
-                    MaxBoost = 1.5,
+                    MaxSpeed = 2.625,
+                    MaxBoost = 1.125,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };
@@ -75,7 +75,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         private int roundsToFireBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
-        public override void ApplyIntelligence(SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -84,7 +84,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 return;
             }
 
-            base.ApplyIntelligence(displacementVector);
+            base.ApplyIntelligence(epoch, displacementVector);
 
             double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
 

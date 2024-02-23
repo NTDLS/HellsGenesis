@@ -42,7 +42,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
         /// </summary>
         public double MunitionSceneDistanceLimit { get; set; }
         public string Name { get; private set; }
-        public int Speed { get; set; } = 25;
+        public double Speed { get; set; } = 25;
         public int RoundQuantity { get; set; }
         public int RoundsFired { get; set; }
         public int FireDelayMilliseconds { get; set; } = 100;
@@ -90,7 +90,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
             public SiWeaponsLockType LockType { get; set; }
         }
 
-        public virtual void ApplyIntelligence()
+        public virtual void ApplyIntelligence(double epoch)
         {
             LockedTargets.Clear();
 

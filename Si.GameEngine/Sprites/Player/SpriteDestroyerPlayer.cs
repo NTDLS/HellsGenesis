@@ -25,8 +25,8 @@ namespace Si.GameEngine.Sprites.Player
                     Description = "→ Vicious Annihilator ←\n"
                         + "Lives up to its name as a relentless annihilator,\n"
                         + "unleashing devastating firepower to obliterate foes.",
-                    MaxSpeed = 5.0,
-                    MaxBoost = 2.5,
+                    MaxSpeed = 3.75,
+                    MaxBoost = 1.875,
                     HullHealth = 500,
                     ShieldHealth = 1000,
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000)

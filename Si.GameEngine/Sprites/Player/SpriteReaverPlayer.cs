@@ -25,8 +25,8 @@ namespace Si.GameEngine.Sprites.Player
                     Description = "→ Rogue Reaver ←\n"
                         + "A rogue fighter, known for its hit-and-fade tactics,\n"
                         + "striking and disappearing into the cosmos with warp speed.",
-                    MaxSpeed = 5.5,
-                    MaxBoost = 3.5,
+                    MaxSpeed = 4.125,
+                    MaxBoost = 2.625,
                     HullHealth = 500,
                     ShieldHealth = 1000,
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponDualVulcanCannon), 5000)

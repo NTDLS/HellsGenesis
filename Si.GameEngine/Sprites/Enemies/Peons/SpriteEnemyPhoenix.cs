@@ -37,8 +37,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Description = "→ Phoenix ←\n"
                        + "TODO: Add a description\n",
-                    MaxSpeed = 3.5,
-                    MaxBoost = 1.5,
+                    MaxSpeed = 2.625,
+                    MaxBoost = 1.125,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };
@@ -67,7 +67,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         private DateTime _lastBehaviorChangeTime = DateTime.UtcNow;
         private double _behaviorChangeThresholdMilliseconds = 0;
 
-        public override void ApplyIntelligence(SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -76,7 +76,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 return;
             }
 
-            base.ApplyIntelligence(displacementVector);
+            base.ApplyIntelligence(epoch, displacementVector);
 
             if ((DateTime.UtcNow - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMilliseconds)
             {
@@ -117,7 +117,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 }
             }
 
-            CurrentAIController?.ApplyIntelligence(displacementVector);
+            CurrentAIController?.ApplyIntelligence(epoch, displacementVector);
         }
 
         #endregion

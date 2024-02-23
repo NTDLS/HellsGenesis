@@ -54,7 +54,7 @@ namespace Si.GameEngine.Sprites
             _gameEngine = gameEngine;
         }
 
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(double epoch, SiPoint displacementVector)
         {
             if (RotationDirection == SiRelativeDirection.Right)
             {
@@ -74,7 +74,7 @@ namespace Si.GameEngine.Sprites
             }
             else if (VectorType == ParticleVectorType.Native)
             {
-                base.ApplyMotion(displacementVector);
+                base.ApplyMotion(epoch, displacementVector);
             }
 
             if (CleanupMode == ParticleCleanupMode.FadeToBlack)

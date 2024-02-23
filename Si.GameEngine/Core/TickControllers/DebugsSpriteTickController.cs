@@ -12,7 +12,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
         {
             /*
             if (GameEngine.Player.Sprite != null)
@@ -41,7 +41,7 @@ namespace Si.GameEngine.Core.TickControllers
 
             foreach (var debug in Visible())
             {
-                debug.ApplyMotion(displacementVector);
+                debug.ApplyMotion(epoch, displacementVector);
                 debug.RenewableResources.RenewAllResources();
             }
         }

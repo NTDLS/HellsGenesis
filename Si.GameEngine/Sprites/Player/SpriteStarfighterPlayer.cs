@@ -26,8 +26,8 @@ namespace Si.GameEngine.Sprites.Player
                         + "A sleek and versatile spacecraft, built for supremacy among the stars.\n"
                         + "It's the first choice for finesse, agility, and unmatched combat prowess\n"
                         + "without all the fuss of a powerful loadout.",
-                    MaxSpeed = 5.0,
-                    MaxBoost = 3.5,
+                    MaxSpeed = 3.75,
+                    MaxBoost = 2.625,
                     HullHealth = 100,
                     ShieldHealth = 15000,
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000)
