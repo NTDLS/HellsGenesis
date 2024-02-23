@@ -24,8 +24,7 @@ namespace Si.GameEngine.Core.Managers
             "Display-Zoom-Override|level:Required:Numeric|Sets the global zoom level.",
             "Display-Zoom-Get||Gets the current global zoom level.",
             "Display-Metrics||Displays various display metrics.",
-            "Display-Framerate-Set|rate:Required:Numeric|Sets the target framerate.",
-            "Display-Framerate-Get||Gets the currently configured target framerate.",
+            "Display-Framerate||Gets the currently configured target framerate.",
             "Display-Adapters||List available video adapters.",
 
             "Display-RenderWindowPosition-Get||Gets the current background offset.",
@@ -298,19 +297,13 @@ namespace Si.GameEngine.Core.Managers
             }
         }
 
-        public void CommandHandler_Display_Framerate_Set(DebugCommand command)
-        {
-            var rate = command.ParameterValue<double>("rate");
-            _gameEngine.Settings.FramePerSecondLimit = rate;
-        }
-
-        public void CommandHandler_Display_Framerate_Get(DebugCommand command)
+        public void CommandHandler_Display_Framerate(DebugCommand command)
         {
             var infoText =
-                  $"Limit: {_gameEngine.Settings.FramePerSecondLimit:n4}\r\n"
-                + $"  Avg: {_gameEngine.Display.FrameCounter.AverageFrameRate:n4}\r\n"
-                + $"  Min: {_gameEngine.Display.FrameCounter.FrameRateMin:n4}\r\n"
-                + $"  Max: {_gameEngine.Display.FrameCounter.FrameRateMax:n4}";
+                  $" Target: {_gameEngine.Settings.TargetFrameRate:n4}\r\n"
+                + $"Average: {_gameEngine.Display.FrameCounter.AverageFrameRate:n4}\r\n"
+                + $"Minimum: {_gameEngine.Display.FrameCounter.MinimumFrameRate:n4}\r\n"
+                + $"Maximum: {_gameEngine.Display.FrameCounter.MaximumFrameRate:n4}";
             _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }
 

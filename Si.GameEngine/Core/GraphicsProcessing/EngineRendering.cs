@@ -8,6 +8,7 @@ using Si.GameEngine.Utility;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Si.GameEngine.Core.GraphicsProcessing
@@ -90,6 +91,32 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 o.ScreenRenderTarget?.Dispose();
                 o.ScreenRenderTarget?.Dispose();
             });
+        }
+
+        public double GetDisplayRefreshRate(int deviceId)
+        {
+            using (var factory = new SharpDX.DXGI.Factory1())
+            {
+                foreach (var adapter in factory.Adapters)
+                {
+                    if (adapter.Description.DeviceId == deviceId)
+                    {
+                        foreach (var output in adapter.Outputs.Where(o => o.Description.IsAttachedToDesktop))
+                        {
+                            var displayModes = output.GetDisplayModeList(Format.R8G8B8A8_UNorm, DisplayModeEnumerationFlags.Interlaced);
+
+                            var nativeMode = displayModes.OrderByDescending(mode => mode.Width * mode.Height)
+                                .ThenByDescending(o => o.RefreshRate.Numerator / o.RefreshRate.Denominator).FirstOrDefault();
+
+                            double refreshRate = nativeMode.RefreshRate.Numerator / nativeMode.RefreshRate.Denominator;
+
+                            return refreshRate < 50 ? 50 : refreshRate;
+                        }
+                    }
+                }
+            }
+
+            return 60; //A safe default, I would think.
         }
 
         public string GetGraphicsAdaptersInfo()

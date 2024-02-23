@@ -106,12 +106,22 @@ namespace Si.GameEngine.Core
             worldTickTimer.Start();
             epochTimer.Start();
 
+            var framePerSecondLimit = _gameEngine.Settings.TargetFrameRate;
+
+            if (_gameEngine.Settings.VerticalSync)
+            {
+                framePerSecondLimit = _gameEngine.Rendering.GetDisplayRefreshRate(_gameEngine.Settings.GraphicsAdapterId);
+            }
+
+            var frameRateDelayMicroseconds = 1000000 / framePerSecondLimit;
+            var targetWorldTickDurationMicroseconds = 1000000 / _gameEngine.Settings.WorldTicksPerSecond;
+            var millisecondPerEpoch = 1000 / _gameEngine.Settings.WorldTicksPerSecond;
+
+            int _frameRateAdjustCount = 0;
+            int _frameRateAdjustCadence = 100;
+
             while (_shutdown == false)
             {
-                var frameRateDelayMicroseconds = 1000000 / _gameEngine.Settings.FramePerSecondLimit;
-                var targetWorldTickDurationMicroseconds = 1000000 / _gameEngine.Settings.WorldTicksPerSecond;
-                var millisecondPerEpoch = 1000 / _gameEngine.Settings.WorldTicksPerSecond;
-
                 worldTickTimer.Restart();
 
                 var elapsedEpochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000.0;
@@ -130,13 +140,35 @@ namespace Si.GameEngine.Core
 
                         _gameEngine.Debug.ProcessCommand();
 
-                        //If it is time to render, then render. Also, when VerticalSync is enabled then the directx render target seems to enforce the delay
-                        // so just call render each time and hope it doesnt affect the game time (it shouldn't unless the GPU is really crappy (< circa 1995)).
-                        if (_gameEngine.Settings.VerticalSync || (frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency) > frameRateDelayMicroseconds)
+                        //If it is time to render, then render the frame!.
+                        if ((frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency) > frameRateDelayMicroseconds)
                         {
                             _gameEngine.Render();
                             frameRateTimer.Restart();
                             _gameEngine.Display.FrameCounter.Calculate();
+
+                            #region Framerate fine-tuning.
+                            if (_gameEngine.Settings.FineTuneFramerate)
+                            {
+                                //From time-to-time we want o check the average framerate and make sure its sane,
+                                if (_frameRateAdjustCount > _frameRateAdjustCadence)
+                                {
+                                    _frameRateAdjustCount = 0;
+                                    if (_gameEngine.Display.FrameCounter.AverageFrameRate < framePerSecondLimit && frameRateDelayMicroseconds > 1000)
+                                    {
+                                        //The framerate is too low, reduce the delay.
+                                        frameRateDelayMicroseconds -= 1000;
+                                    }
+                                    else if (_gameEngine.Display.FrameCounter.AverageFrameRate > framePerSecondLimit * 1.20)
+                                    {
+                                        //the framerate is too high increase the delay.
+                                        frameRateDelayMicroseconds += 25;
+                                    }
+                                    //System.Diagnostics.Debug.Print($"{frameRateDelayMicroseconds} -> {framePerSecondLimit} -> {_gameEngine.Display.FrameCounter.AverageFrameRate:n4}");
+                                }
+                                _frameRateAdjustCount++;
+                            }
+                            #endregion
                         }
                     });
                 });

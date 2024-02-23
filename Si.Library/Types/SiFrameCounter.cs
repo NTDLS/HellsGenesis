@@ -5,14 +5,15 @@
     /// </summary>
     public class SiFrameCounter
     {
-        public DateTime _lastFrame;
-        public int _frameRateSamples;
-        public double _totalFrameRate;
+        private DateTime _lastFrame;
+        private int _frameRateSamples;
+        private double _totalFrameRate;
+        private readonly int _maxSamples = 1000;
 
         public double CurrentFrameRate { get; private set; }
         public double AverageFrameRate { get; private set; }
-        public double FrameRateMin { get; private set; }
-        public double FrameRateMax { get; private set; }
+        public double MinimumFrameRate { get; private set; }
+        public double MaximumFrameRate { get; private set; }
 
         public SiFrameCounter()
         {
@@ -27,15 +28,15 @@
 
             CurrentFrameRate = 0;
             AverageFrameRate = double.PositiveInfinity;
-            FrameRateMin = double.PositiveInfinity;
-            FrameRateMax = double.NegativeInfinity;
+            MinimumFrameRate = double.PositiveInfinity;
+            MaximumFrameRate = double.NegativeInfinity;
         }
 
         public void Calculate()
         {
             if (_lastFrame != DateTime.MinValue)
             {
-                if (_frameRateSamples == 0 || _frameRateSamples > 1000)
+                if (_frameRateSamples == 0 || _frameRateSamples > _maxSamples)
                 {
                     _frameRateSamples = 1;
                     _totalFrameRate = 0;
@@ -46,8 +47,8 @@
 
                 if (_frameRateSamples > 100)
                 {
-                    FrameRateMin = CurrentFrameRate < FrameRateMin ? CurrentFrameRate : FrameRateMin;
-                    FrameRateMax = CurrentFrameRate > FrameRateMax ? CurrentFrameRate : FrameRateMax;
+                    MinimumFrameRate = CurrentFrameRate < MinimumFrameRate ? CurrentFrameRate : MinimumFrameRate;
+                    MaximumFrameRate = CurrentFrameRate > MaximumFrameRate ? CurrentFrameRate : MaximumFrameRate;
                     AverageFrameRate = _totalFrameRate / _frameRateSamples;
                 }
                 _frameRateSamples++;

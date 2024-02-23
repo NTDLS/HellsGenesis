@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSettings));
             tabControl1 = new System.Windows.Forms.TabControl();
             tabPageDisplay = new System.Windows.Forms.TabPage();
-            checkBoxEnableVerticalSync = new System.Windows.Forms.CheckBox();
             checkBoxEnableAntiAliasing = new System.Windows.Forms.CheckBox();
             labelGraphicsAdapter = new System.Windows.Forms.Label();
             comboBoxGraphicsAdapter = new System.Windows.Forms.ComboBox();
@@ -40,6 +39,8 @@
             labelResolutionLabel = new System.Windows.Forms.Label();
             labelResolution = new System.Windows.Forms.Label();
             tabPageDisplayAdvanced = new System.Windows.Forms.TabPage();
+            checkBoxFineTuneFrameRate = new System.Windows.Forms.CheckBox();
+            checkBoxEnableVerticalSync = new System.Windows.Forms.CheckBox();
             labelInitialStarCount = new System.Windows.Forms.Label();
             labelFrameTargetStarCount = new System.Windows.Forms.Label();
             textBoxDeltaFrameTargetStarCount = new System.Windows.Forms.TextBox();
@@ -47,17 +48,17 @@
             label2 = new System.Windows.Forms.Label();
             labelOverdrawScale = new System.Windows.Forms.Label();
             textBoxOverdrawScale = new System.Windows.Forms.TextBox();
-            textBoxFramePerSecondLimit = new System.Windows.Forms.TextBox();
+            textBoxTargetFrameRate = new System.Windows.Forms.TextBox();
             tabPageDebug = new System.Windows.Forms.TabPage();
             checkBoxEnableSpriteInterrogation = new System.Windows.Forms.CheckBox();
             checkBoxHighlightAllSprites = new System.Windows.Forms.CheckBox();
             checkBoxHighlightNatrualBounds = new System.Windows.Forms.CheckBox();
             tabPageAdvanced = new System.Windows.Forms.TabPage();
             checkBoxPreCacheAllAssets = new System.Windows.Forms.CheckBox();
-            buttonCancel = new System.Windows.Forms.Button();
-            buttonSave = new System.Windows.Forms.Button();
             tabPageAudio = new System.Windows.Forms.TabPage();
             checkBoxPlayMusic = new System.Windows.Forms.CheckBox();
+            buttonCancel = new System.Windows.Forms.Button();
+            buttonSave = new System.Windows.Forms.Button();
             tabControl1.SuspendLayout();
             tabPageDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)trackBarResolution).BeginInit();
@@ -82,7 +83,6 @@
             // 
             // tabPageDisplay
             // 
-            tabPageDisplay.Controls.Add(checkBoxEnableVerticalSync);
             tabPageDisplay.Controls.Add(checkBoxEnableAntiAliasing);
             tabPageDisplay.Controls.Add(labelGraphicsAdapter);
             tabPageDisplay.Controls.Add(comboBoxGraphicsAdapter);
@@ -97,16 +97,6 @@
             tabPageDisplay.TabIndex = 0;
             tabPageDisplay.Text = "Display";
             tabPageDisplay.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxEnableVerticalSync
-            // 
-            checkBoxEnableVerticalSync.AutoSize = true;
-            checkBoxEnableVerticalSync.Location = new System.Drawing.Point(15, 201);
-            checkBoxEnableVerticalSync.Name = "checkBoxEnableVerticalSync";
-            checkBoxEnableVerticalSync.Size = new System.Drawing.Size(137, 19);
-            checkBoxEnableVerticalSync.TabIndex = 4;
-            checkBoxEnableVerticalSync.Text = "Enable Vertical-Sync?";
-            checkBoxEnableVerticalSync.UseVisualStyleBackColor = true;
             // 
             // checkBoxEnableAntiAliasing
             // 
@@ -173,6 +163,8 @@
             // 
             // tabPageDisplayAdvanced
             // 
+            tabPageDisplayAdvanced.Controls.Add(checkBoxFineTuneFrameRate);
+            tabPageDisplayAdvanced.Controls.Add(checkBoxEnableVerticalSync);
             tabPageDisplayAdvanced.Controls.Add(labelInitialStarCount);
             tabPageDisplayAdvanced.Controls.Add(labelFrameTargetStarCount);
             tabPageDisplayAdvanced.Controls.Add(textBoxDeltaFrameTargetStarCount);
@@ -180,7 +172,7 @@
             tabPageDisplayAdvanced.Controls.Add(label2);
             tabPageDisplayAdvanced.Controls.Add(labelOverdrawScale);
             tabPageDisplayAdvanced.Controls.Add(textBoxOverdrawScale);
-            tabPageDisplayAdvanced.Controls.Add(textBoxFramePerSecondLimit);
+            tabPageDisplayAdvanced.Controls.Add(textBoxTargetFrameRate);
             tabPageDisplayAdvanced.Location = new System.Drawing.Point(4, 24);
             tabPageDisplayAdvanced.Name = "tabPageDisplayAdvanced";
             tabPageDisplayAdvanced.Padding = new System.Windows.Forms.Padding(3);
@@ -189,10 +181,30 @@
             tabPageDisplayAdvanced.Text = "Display (Advanced)";
             tabPageDisplayAdvanced.UseVisualStyleBackColor = true;
             // 
+            // checkBoxFineTuneFrameRate
+            // 
+            checkBoxFineTuneFrameRate.AutoSize = true;
+            checkBoxFineTuneFrameRate.Location = new System.Drawing.Point(17, 88);
+            checkBoxFineTuneFrameRate.Name = "checkBoxFineTuneFrameRate";
+            checkBoxFineTuneFrameRate.Size = new System.Drawing.Size(139, 19);
+            checkBoxFineTuneFrameRate.TabIndex = 3;
+            checkBoxFineTuneFrameRate.Text = "Fine-tune frame rate?";
+            checkBoxFineTuneFrameRate.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEnableVerticalSync
+            // 
+            checkBoxEnableVerticalSync.AutoSize = true;
+            checkBoxEnableVerticalSync.Location = new System.Drawing.Point(17, 63);
+            checkBoxEnableVerticalSync.Name = "checkBoxEnableVerticalSync";
+            checkBoxEnableVerticalSync.Size = new System.Drawing.Size(137, 19);
+            checkBoxEnableVerticalSync.TabIndex = 2;
+            checkBoxEnableVerticalSync.Text = "Enable Vertical-Sync?";
+            checkBoxEnableVerticalSync.UseVisualStyleBackColor = true;
+            // 
             // labelInitialStarCount
             // 
             labelInitialStarCount.AutoSize = true;
-            labelInitialStarCount.Location = new System.Drawing.Point(17, 120);
+            labelInitialStarCount.Location = new System.Drawing.Point(230, 68);
             labelInitialStarCount.Name = "labelInitialStarCount";
             labelInitialStarCount.Size = new System.Drawing.Size(100, 15);
             labelInitialStarCount.TabIndex = 33;
@@ -201,7 +213,7 @@
             // labelFrameTargetStarCount
             // 
             labelFrameTargetStarCount.AutoSize = true;
-            labelFrameTargetStarCount.Location = new System.Drawing.Point(16, 172);
+            labelFrameTargetStarCount.Location = new System.Drawing.Point(229, 120);
             labelFrameTargetStarCount.Name = "labelFrameTargetStarCount";
             labelFrameTargetStarCount.Size = new System.Drawing.Size(129, 15);
             labelFrameTargetStarCount.TabIndex = 32;
@@ -209,31 +221,31 @@
             // 
             // textBoxDeltaFrameTargetStarCount
             // 
-            textBoxDeltaFrameTargetStarCount.Location = new System.Drawing.Point(17, 190);
+            textBoxDeltaFrameTargetStarCount.Location = new System.Drawing.Point(230, 138);
             textBoxDeltaFrameTargetStarCount.Name = "textBoxDeltaFrameTargetStarCount";
             textBoxDeltaFrameTargetStarCount.Size = new System.Drawing.Size(133, 23);
-            textBoxDeltaFrameTargetStarCount.TabIndex = 4;
+            textBoxDeltaFrameTargetStarCount.TabIndex = 6;
             // 
             // textBoxInitialFrameStarCount
             // 
-            textBoxInitialFrameStarCount.Location = new System.Drawing.Point(17, 138);
+            textBoxInitialFrameStarCount.Location = new System.Drawing.Point(230, 86);
             textBoxInitialFrameStarCount.Name = "textBoxInitialFrameStarCount";
             textBoxInitialFrameStarCount.Size = new System.Drawing.Size(133, 23);
-            textBoxInitialFrameStarCount.TabIndex = 3;
+            textBoxInitialFrameStarCount.TabIndex = 5;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Location = new System.Drawing.Point(17, 16);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(80, 15);
+            label2.Size = new System.Drawing.Size(101, 15);
             label2.TabIndex = 27;
-            label2.Text = "Frame limiter:";
+            label2.Text = "Target Frame rate:";
             // 
             // labelOverdrawScale
             // 
             labelOverdrawScale.AutoSize = true;
-            labelOverdrawScale.Location = new System.Drawing.Point(17, 68);
+            labelOverdrawScale.Location = new System.Drawing.Point(230, 16);
             labelOverdrawScale.Name = "labelOverdrawScale";
             labelOverdrawScale.Size = new System.Drawing.Size(90, 15);
             labelOverdrawScale.TabIndex = 26;
@@ -241,17 +253,17 @@
             // 
             // textBoxOverdrawScale
             // 
-            textBoxOverdrawScale.Location = new System.Drawing.Point(17, 86);
+            textBoxOverdrawScale.Location = new System.Drawing.Point(230, 34);
             textBoxOverdrawScale.Name = "textBoxOverdrawScale";
             textBoxOverdrawScale.Size = new System.Drawing.Size(133, 23);
-            textBoxOverdrawScale.TabIndex = 2;
+            textBoxOverdrawScale.TabIndex = 4;
             // 
-            // textBoxFramePerSecondLimit
+            // textBoxTargetFrameRate
             // 
-            textBoxFramePerSecondLimit.Location = new System.Drawing.Point(17, 34);
-            textBoxFramePerSecondLimit.Name = "textBoxFramePerSecondLimit";
-            textBoxFramePerSecondLimit.Size = new System.Drawing.Size(133, 23);
-            textBoxFramePerSecondLimit.TabIndex = 1;
+            textBoxTargetFrameRate.Location = new System.Drawing.Point(17, 34);
+            textBoxTargetFrameRate.Name = "textBoxTargetFrameRate";
+            textBoxTargetFrameRate.Size = new System.Drawing.Size(133, 23);
+            textBoxTargetFrameRate.TabIndex = 1;
             // 
             // tabPageDebug
             // 
@@ -316,26 +328,6 @@
             checkBoxPreCacheAllAssets.Text = "Pre-cache all assets?";
             checkBoxPreCacheAllAssets.UseVisualStyleBackColor = true;
             // 
-            // buttonCancel
-            // 
-            buttonCancel.Location = new System.Drawing.Point(402, 350);
-            buttonCancel.Name = "buttonCancel";
-            buttonCancel.Size = new System.Drawing.Size(75, 23);
-            buttonCancel.TabIndex = 18;
-            buttonCancel.Text = "Cancel";
-            buttonCancel.UseVisualStyleBackColor = true;
-            buttonCancel.Click += ButtonCancel_Click;
-            // 
-            // buttonSave
-            // 
-            buttonSave.Location = new System.Drawing.Point(483, 350);
-            buttonSave.Name = "buttonSave";
-            buttonSave.Size = new System.Drawing.Size(75, 23);
-            buttonSave.TabIndex = 19;
-            buttonSave.Text = "Save";
-            buttonSave.UseVisualStyleBackColor = true;
-            buttonSave.Click += ButtonSave_Click;
-            // 
             // tabPageAudio
             // 
             tabPageAudio.Controls.Add(checkBoxPlayMusic);
@@ -356,6 +348,26 @@
             checkBoxPlayMusic.TabIndex = 0;
             checkBoxPlayMusic.Text = "Play music?";
             checkBoxPlayMusic.UseVisualStyleBackColor = true;
+            // 
+            // buttonCancel
+            // 
+            buttonCancel.Location = new System.Drawing.Point(402, 350);
+            buttonCancel.Name = "buttonCancel";
+            buttonCancel.Size = new System.Drawing.Size(75, 23);
+            buttonCancel.TabIndex = 18;
+            buttonCancel.Text = "Cancel";
+            buttonCancel.UseVisualStyleBackColor = true;
+            buttonCancel.Click += ButtonCancel_Click;
+            // 
+            // buttonSave
+            // 
+            buttonSave.Location = new System.Drawing.Point(483, 350);
+            buttonSave.Name = "buttonSave";
+            buttonSave.Size = new System.Drawing.Size(75, 23);
+            buttonSave.TabIndex = 19;
+            buttonSave.Text = "Save";
+            buttonSave.UseVisualStyleBackColor = true;
+            buttonSave.Click += ButtonSave_Click;
             // 
             // FormSettings
             // 
@@ -399,7 +411,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelOverdrawScale;
         private System.Windows.Forms.TextBox textBoxOverdrawScale;
-        private System.Windows.Forms.TextBox textBoxFramePerSecondLimit;
+        private System.Windows.Forms.TextBox textBoxTargetFrameRate;
         private System.Windows.Forms.Label labelInitialStarCount;
         private System.Windows.Forms.Label labelFrameTargetStarCount;
         private System.Windows.Forms.TextBox textBoxDeltaFrameTargetStarCount;
@@ -414,9 +426,10 @@
         private System.Windows.Forms.CheckBox checkBoxPreCacheAllAssets;
         private System.Windows.Forms.Label labelGraphicsAdapter;
         private System.Windows.Forms.ComboBox comboBoxGraphicsAdapter;
-        private System.Windows.Forms.CheckBox checkBoxEnableVerticalSync;
         private System.Windows.Forms.CheckBox checkBoxEnableAntiAliasing;
         private System.Windows.Forms.TabPage tabPageAudio;
         private System.Windows.Forms.CheckBox checkBoxPlayMusic;
+        private System.Windows.Forms.CheckBox checkBoxFineTuneFrameRate;
+        private System.Windows.Forms.CheckBox checkBoxEnableVerticalSync;
     }
 }

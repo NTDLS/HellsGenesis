@@ -40,6 +40,7 @@ namespace Si.Game
 
             var settings = GameEngineCore.LoadSettings();
 
+            checkBoxFineTuneFrameRate.Checked = settings.FineTuneFramerate;
             checkBoxPlayMusic.Checked = settings.PlayMusic;
             checkBoxEnableAntiAliasing.Checked = settings.EnableSpeedScaleFactoring;
             checkBoxEnableVerticalSync.Checked = settings.VerticalSync;
@@ -48,7 +49,7 @@ namespace Si.Game
             checkBoxHighlightNatrualBounds.Checked = settings.HighlightNatrualBounds;
             checkBoxEnableSpriteInterrogation.Checked = settings.EnableSpriteInterrogation;
             checkBoxPreCacheAllAssets.Checked = settings.PreCacheAllAssets;
-            textBoxFramePerSecondLimit.Text = $"{settings.FramePerSecondLimit:n0}";
+            textBoxTargetFrameRate.Text = $"{settings.TargetFrameRate:n0}";
             textBoxOverdrawScale.Text = $"{settings.OverdrawScale:n0}";
             textBoxInitialFrameStarCount.Text = $"{settings.InitialFrameStarCount:n0}";
             textBoxDeltaFrameTargetStarCount.Text = $"{settings.DeltaFrameTargetStarCount:n0}";
@@ -159,6 +160,7 @@ namespace Si.Game
             {
                 var settings = GameEngineCore.LoadSettings();
 
+                settings.FineTuneFramerate = checkBoxFineTuneFrameRate.Checked;
                 settings.PlayMusic = checkBoxPlayMusic.Checked;
                 settings.EnableSpeedScaleFactoring = checkBoxEnableAntiAliasing.Checked;
                 settings.VerticalSync = checkBoxEnableVerticalSync.Checked;
@@ -168,7 +170,7 @@ namespace Si.Game
                 settings.EnableSpriteInterrogation = checkBoxEnableSpriteInterrogation.Checked;
                 settings.PreCacheAllAssets = checkBoxPreCacheAllAssets.Checked;
 
-                settings.FramePerSecondLimit = GetAndValidate(textBoxFramePerSecondLimit, 30, 1000, "Frame Limiter");
+                settings.TargetFrameRate = GetAndValidate(textBoxTargetFrameRate, 10, settings.WorldTicksPerSecond, "Frame Limiter");
                 settings.OverdrawScale = GetAndValidate(textBoxOverdrawScale, 1.0, 10.0, "Overdraw scale");
                 settings.InitialFrameStarCount = GetAndValidate(textBoxInitialFrameStarCount, 0, 1000, "Initial frame star count");
                 settings.DeltaFrameTargetStarCount = GetAndValidate(textBoxDeltaFrameTargetStarCount, 0, 1000, "Delta-frame target star count");
