@@ -69,8 +69,8 @@ namespace Si.GameEngine.Sprites
             {
                 //We use a seperate angle for the travel direction because the base ApplyMotion()
                 //  moves the object in the the direction of the Velocity.Angle.
-                X += TravelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
-                Y += TravelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+                X += TravelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
+                Y += TravelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
             }
             else if (VectorType == ParticleVectorType.Native)
             {
