@@ -35,7 +35,7 @@ namespace Si.GameEngine.Core.TickControllers
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
         /// <returns></returns>
-        public override SiPoint ExecuteWorldClockTick()
+        public override SiPoint ExecuteWorldClockTick(double epochMilliseconds)
         {
             var displacementVector = new SiPoint();
 

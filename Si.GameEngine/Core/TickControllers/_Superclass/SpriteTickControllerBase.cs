@@ -22,7 +22,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
         public List<subType> OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
         public T ByTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
 
-        public virtual void ExecuteWorldClockTick(SiPoint displacementVector) { }
+        public virtual void ExecuteWorldClockTick(double epochMilliseconds, SiPoint displacementVector) { }
 
         public SpriteTickControllerBase(GameEngineCore gameEngine, EngineSpriteManager manager)
         {

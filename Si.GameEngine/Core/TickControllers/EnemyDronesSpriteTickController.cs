@@ -18,7 +18,7 @@ namespace Si.GameEngine.Core.TickControllers
             _gameEngine = gameEngine;
         }
 
-        public override void ExecuteWorldClockTick(SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epochMilliseconds, SiPoint displacementVector)
         {
             foreach (var enemy in Visible().Where(o => o.IsDrone == true))
             {

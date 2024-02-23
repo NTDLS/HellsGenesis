@@ -96,12 +96,19 @@ namespace Si.GameEngine.Core
 
             #endregion
 
-            var timer = new Stopwatch();
+            var frameRateTimer = new Stopwatch();
+
+            var epochTimer = new Stopwatch();
+
+            epochTimer.Start();
 
             while (_shutdown == false)
             {
-                var targetFrameDuration = 1000000 / _gameEngine.Settings.FramePerSecondLimit; //1000000 / n-frames/second.
-                timer.Restart();
+                var targetFrameDurationMicroseconds = 1000000 / _gameEngine.Settings.FramePerSecondLimit; //1000000 / n-frames/second.
+                frameRateTimer.Restart();
+
+                var epochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000;
+                epochTimer.Restart();
 
                 _gameEngine.Display.FrameCounter.Calculate();
 
@@ -111,21 +118,22 @@ namespace Si.GameEngine.Core
                     {
                         if (!_isPaused)
                         {
-                            ExecuteWorldClockTick();
+                            ExecuteWorldClockTick(epochMilliseconds);
                         }
 
                         _gameEngine.Debug.ProcessCommand();
 
                         _gameEngine.Render();
-                        timer.Stop();
+                        frameRateTimer.Stop();
                     });
                 });
 
-                var clockTime = (double)timer.ElapsedTicks / Stopwatch.Frequency * 1000000;
-                var deltaClockTime = targetFrameDuration - clockTime;
-                timer.Restart();
+                var clockTime = (double)frameRateTimer.ElapsedTicks / Stopwatch.Frequency * 1000000;
+                var targetDeltaMicroseconds = targetFrameDurationMicroseconds - clockTime;
 
-                while ((double)timer.ElapsedTicks / Stopwatch.Frequency * 1000000 < deltaClockTime)
+                frameRateTimer.Restart();
+
+                while ((double)frameRateTimer.ElapsedTicks / Stopwatch.Frequency * 1000000 < targetDeltaMicroseconds)
                 {
                     Thread.Yield();
                 }
@@ -137,7 +145,7 @@ namespace Si.GameEngine.Core
             }
         }
 
-        private SiPoint ExecuteWorldClockTick()
+        private SiPoint ExecuteWorldClockTick(double epochMilliseconds)
         {
             _gameEngine.Menus.ExecuteWorldClockTick();
             _gameEngine.Situations.ExecuteWorldClockTick();
@@ -145,18 +153,19 @@ namespace Si.GameEngine.Core
 
             _gameEngine.Input.Snapshot();
 
-            var displacementVector = _gameEngine.Player.ExecuteWorldClockTick();
+            var displacementVector = _gameEngine.Player.ExecuteWorldClockTick(epochMilliseconds);
 
-            _gameEngine.Sprites.Enemies.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Particles.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Munitions.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Stars.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Animations.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.TextBlocks.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Powerups.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.Debugs.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.PlayerDrones.ExecuteWorldClockTick(displacementVector);
-            _gameEngine.Sprites.EnemyDrones.ExecuteWorldClockTick(displacementVector);
+            _gameEngine.Sprites.Enemies.ExecuteWorldClockTick(epochMilliseconds, displacementVector);
+            _gameEngine.Sprites.Particles.ExecuteWorldClockTick(epochMilliseconds, displacementVector);
+            _gameEngine.Sprites.Munitions.ExecuteWorldClockTick(epochMilliseconds, displacementVector);
+            _gameEngine.Sprites.Stars.ExecuteWorldClockTick(epochMilliseconds, displacementVector);
+            _gameEngine.Sprites.Animations.ExecuteWorldClockTick(epochMilliseconds, displacementVector);
+            _gameEngine.Sprites.TextBlocks.ExecuteWorldClockTick(epochMilliseconds, displacementVector);
+            _gameEngine.Sprites.Powerups.ExecuteWorldClockTick(epochMilliseconds, displacementVector);
+            _gameEngine.Sprites.Debugs.ExecuteWorldClockTick(epochMilliseconds, displacementVector);
+            _gameEngine.Sprites.PlayerDrones.ExecuteWorldClockTick(epochMilliseconds, displacementVector);
+            _gameEngine.Sprites.EnemyDrones.ExecuteWorldClockTick(epochMilliseconds, displacementVector);
+
             _gameEngine.Sprites.RadarPositions.ExecuteWorldClockTick();
 
             _gameEngine.Sprites.CleanupDeletedObjects();

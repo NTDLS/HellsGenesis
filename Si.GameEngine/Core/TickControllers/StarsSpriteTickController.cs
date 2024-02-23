@@ -15,7 +15,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epochMilliseconds, SiPoint displacementVector)
         {
             if (Math.Abs(displacementVector.X) > 1 || Math.Abs(displacementVector.Y) > 1)
             {
