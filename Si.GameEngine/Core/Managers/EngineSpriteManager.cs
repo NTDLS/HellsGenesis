@@ -151,7 +151,7 @@ namespace Si.GameEngine.Core.Managers
             var obj = (SpriteBase)Activator.CreateInstance(type, param);
 
             obj.Location = _gameEngine.Display.RandomOffScreenLocation();
-            obj.Velocity.MaxSpeed = SiRandom.Generator.Next(_gameEngine.Settings.MinEnemySpeed, _gameEngine.Settings.MaxEnemySpeed);
+            obj.Velocity.MaxSpeed = SiRandom.Between(_gameEngine.Settings.MinEnemySpeed, _gameEngine.Settings.MaxEnemySpeed);
             obj.Velocity.Angle.Degrees = SiRandom.Between(0, 359);
 
             var enemy = obj as SpriteEnemyBase;

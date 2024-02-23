@@ -14,11 +14,11 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epochMilliseconds, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
         {
             foreach (var animation in Visible())
             {
-                animation.ApplyMotion(epochMilliseconds, displacementVector);
+                animation.ApplyMotion(epoch, displacementVector);
                 animation.AdvanceImage();
             }
         }

@@ -15,7 +15,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epochMilliseconds, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
         {
             if (Math.Abs(displacementVector.X) > 1 || Math.Abs(displacementVector.Y) > 1)
             {
@@ -70,7 +70,7 @@ namespace Si.GameEngine.Core.TickControllers
 
                 foreach (var star in All())
                 {
-                    star.ApplyMotion(epochMilliseconds, displacementVector);
+                    star.ApplyMotion(epoch, displacementVector);
 
                     //Remove stars that are too far off-screen.
                     if (GameEngine.Display.TotalCanvasBounds.Balloon(1000).IntersectsWith(star.RenderBounds) == false)

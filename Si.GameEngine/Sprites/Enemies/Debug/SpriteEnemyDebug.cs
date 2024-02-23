@@ -80,7 +80,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
         private DateTime _lastBehaviorChangeTime = DateTime.Now;
         private double _behaviorChangeThresholdMilliseconds = 0;
 
-        public override void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -91,7 +91,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
 
             double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
 
-            base.ApplyIntelligence(epochMilliseconds, displacementVector);
+            base.ApplyIntelligence(epoch, displacementVector);
 
             if ((DateTime.Now - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMilliseconds)
             {
@@ -138,7 +138,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                 }
             }
 
-            CurrentAIController?.ApplyIntelligence(epochMilliseconds, displacementVector);
+            CurrentAIController?.ApplyIntelligence(epoch, displacementVector);
         }
 
         #endregion

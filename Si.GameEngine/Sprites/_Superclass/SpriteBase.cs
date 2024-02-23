@@ -962,10 +962,10 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public virtual void ApplyMotion(double epochMilliseconds, SiPoint displacementVector)
+        public virtual void ApplyMotion(double epoch, SiPoint displacementVector)
         {
-            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
-            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
+            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
         }
 
         /// <summary>

@@ -18,13 +18,13 @@ namespace Si.GameEngine.Core.TickControllers
             _gameEngine = gameEngine;
         }
 
-        public override void ExecuteWorldClockTick(double epochMilliseconds, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
         {
             foreach (var enemy in Visible().Where(o => o.IsDrone == true))
             {
                 if (GameEngine.Player.Sprite.Visable)
                 {
-                    enemy.ApplyIntelligence(epochMilliseconds, displacementVector);
+                    enemy.ApplyIntelligence(epoch, displacementVector);
                 }
 
                 var multiplayVector = enemy.GetMultiplayVector();
@@ -33,7 +33,7 @@ namespace Si.GameEngine.Core.TickControllers
                     _gameEngine.Multiplay.RecordDroneActionVector(multiplayVector);
                 }
 
-                enemy.ApplyMotion(epochMilliseconds, displacementVector);
+                enemy.ApplyMotion(epoch, displacementVector);
                 enemy.RenewableResources.RenewAllResources();
             }
         }

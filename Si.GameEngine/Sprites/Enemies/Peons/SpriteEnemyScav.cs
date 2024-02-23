@@ -33,8 +33,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Description = "→ Scav ←\n"
                        + "TODO: Add a description\n",
-                    MaxSpeed = 3.5,
-                    MaxBoost = 1.5,
+                    MaxSpeed = 2.625,
+                    MaxBoost = 1.125,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };
@@ -49,7 +49,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             ResetLoadout(loadout);
         }
 
-        public override void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
         {
             if (IsDrone)
             {

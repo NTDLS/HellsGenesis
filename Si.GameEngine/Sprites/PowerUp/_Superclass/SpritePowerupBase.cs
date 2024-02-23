@@ -73,7 +73,7 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
             QueueForDelete();
         }
 
-        public virtual void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
+        public virtual void ApplyIntelligence(double epoch, SiPoint displacementVector)
         {
             if (Intersects(_gameEngine.Player.Sprite))
             {

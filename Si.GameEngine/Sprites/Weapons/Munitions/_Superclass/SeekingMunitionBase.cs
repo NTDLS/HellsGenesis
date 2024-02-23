@@ -21,7 +21,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
         {
         }
 
-        public override void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
         {
             if (FiredFromType == SiFiredFromType.Enemy)
             {
@@ -72,7 +72,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 }
             }
 
-            base.ApplyIntelligence(epochMilliseconds, displacementVector);
+            base.ApplyIntelligence(epoch, displacementVector);
         }
     }
 }

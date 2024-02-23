@@ -42,7 +42,7 @@ namespace Si.GameEngine.Core.TickControllers
             }
         }
 
-        public override void ExecuteWorldClockTick(double epochMilliseconds, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
         {
             var munitions = VisibleOfType<MunitionBase>();
             if (munitions.Any())
@@ -64,8 +64,8 @@ namespace Si.GameEngine.Core.TickControllers
 
                 foreach (var munition in munitions)
                 {
-                    munition.ApplyMotion(epochMilliseconds, displacementVector); //Move the munition.
-                    munition.ApplyIntelligence(epochMilliseconds, displacementVector);
+                    munition.ApplyMotion(epoch, displacementVector); //Move the munition.
+                    munition.ApplyIntelligence(epoch, displacementVector);
 
                     if (munition.IsDeadOrExploded == false)
                     {

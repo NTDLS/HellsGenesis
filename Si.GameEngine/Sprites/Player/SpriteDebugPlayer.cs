@@ -22,8 +22,8 @@ namespace Si.GameEngine.Sprites.Player
             {
                 loadout = new PlayerShipLoadout(ShipClass)
                 {
-                    MaxSpeed = 5.0,
-                    MaxBoost = 2.0,
+                    MaxSpeed = 3.75,
+                    MaxBoost = 1.5,
                     HullHealth = 10000,
                     ShieldHealth = 10000,
                     Description = "→ The code crusader ←\n"

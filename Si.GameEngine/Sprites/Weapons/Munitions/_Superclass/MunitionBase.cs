@@ -71,7 +71,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
+        public virtual void ApplyIntelligence(double epoch, SiPoint displacementVector)
         {
             if (AgeInMilliseconds > MillisecondsToLive)
             {
@@ -80,7 +80,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             }
         }
 
-        public override void ApplyMotion(double epochMilliseconds, SiPoint displacementVector)
+        public override void ApplyMotion(double epoch, SiPoint displacementVector)
         {
             if (!_gameEngine.Display.TotalCanvasBounds.Balloon(SceneDistanceLimit).IntersectsWith(RenderBounds))
             {
@@ -88,8 +88,8 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 return;
             }
 
-            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
-            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage);
+            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
+            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
         }
 
         public override void Explode()

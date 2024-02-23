@@ -36,8 +36,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Description = "→ Serf ←\n"
                        + "TODO: Add a description\n",
-                    MaxSpeed = 3.5,
-                    MaxBoost = 1.5,
+                    MaxSpeed = 2.625,
+                    MaxBoost = 1.125,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };
@@ -76,7 +76,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
         public AIMode Mode = AIMode.InFormation;
 
-        public override void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -85,7 +85,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 return;
             }
 
-            base.ApplyIntelligence(epochMilliseconds, displacementVector);
+            base.ApplyIntelligence(epoch, displacementVector);
 
             double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
 

@@ -22,7 +22,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             LockedTarget = lockedTarget;
         }
 
-        public override void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
         {
             if (LockedTarget != null)
             {
@@ -44,7 +44,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 }
             }
 
-            base.ApplyIntelligence(epochMilliseconds, displacementVector);
+            base.ApplyIntelligence(epoch, displacementVector);
         }
     }
 }

@@ -18,11 +18,11 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epochMilliseconds, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
         {
             foreach (var particle in Visible())
             {
-                particle.ApplyMotion(epochMilliseconds, displacementVector);
+                particle.ApplyMotion(epoch, displacementVector);
             }
         }
 
