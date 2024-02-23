@@ -99,7 +99,7 @@ namespace Si.GameEngine.AI.Logistics
             _currentActivity = state;
         }
 
-        public void ApplyIntelligence(SiPoint displacementVector)
+        public void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
         {
             if (_currentActivity == AIActivity.Departing)
             {

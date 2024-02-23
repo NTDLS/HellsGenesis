@@ -17,8 +17,8 @@ namespace Si.GameEngine.Core.TickControllers
         {
             foreach (var sprite in Visible())
             {
-                sprite.ApplyIntelligence(displacementVector);
-                sprite.ApplyMotion(displacementVector);
+                sprite.ApplyIntelligence(epochMilliseconds, displacementVector);
+                sprite.ApplyMotion(epochMilliseconds, displacementVector);
             }
         }
 

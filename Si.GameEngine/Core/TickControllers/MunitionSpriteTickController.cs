@@ -64,8 +64,8 @@ namespace Si.GameEngine.Core.TickControllers
 
                 foreach (var munition in munitions)
                 {
-                    munition.ApplyMotion(displacementVector); //Move the munition.
-                    munition.ApplyIntelligence(displacementVector);
+                    munition.ApplyMotion(epochMilliseconds, displacementVector); //Move the munition.
+                    munition.ApplyIntelligence(epochMilliseconds, displacementVector);
 
                     if (munition.IsDeadOrExploded == false)
                     {

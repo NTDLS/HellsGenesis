@@ -194,11 +194,11 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(double epochMilliseconds, SiPoint displacementVector)
         {
             if (IsDrone)
             {
-                base.ApplyMotion(displacementVector);
+                base.ApplyMotion(epochMilliseconds, displacementVector);
                 FixRadarPositionIndicator();
                 return;
             }
@@ -242,7 +242,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             X += Velocity.Angle.X * thrustVector;
             Y += Velocity.Angle.Y * thrustVector;
 
-            //base.ApplyMotion(displacementVector);
+            //base.ApplyMotion(epochMilliseconds, displacementVector);
 
             FixRadarPositionIndicator();
 
@@ -256,13 +256,13 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             }
         }
 
-        public virtual void ApplyIntelligence(SiPoint displacementVector)
+        public virtual void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
         {
             if (Weapons != null)
             {
                 foreach (var weapon in Weapons)
                 {
-                    weapon.ApplyIntelligence();
+                    weapon.ApplyIntelligence(epochMilliseconds);
                 }
             }
         }

@@ -25,7 +25,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             foreach (var drone in Visible().OfType<ISpriteDrone>())
             {
-                drone.ApplyMotion(displacementVector);
+                drone.ApplyMotion(epochMilliseconds, displacementVector);
             }
         }
     }

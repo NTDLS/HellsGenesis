@@ -139,9 +139,9 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         private int roundsToFireBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
-        public override void ApplyIntelligence(SiPoint displacementVector)
+        public override void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
         {
-            base.ApplyIntelligence(displacementVector);
+            base.ApplyIntelligence(epochMilliseconds, displacementVector);
 
             double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
 

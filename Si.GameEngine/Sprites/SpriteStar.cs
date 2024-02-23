@@ -33,7 +33,7 @@ namespace Si.GameEngine.Sprites
             }
         }
 
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(double epochMilliseconds, SiPoint displacementVector)
         {
             X -= Velocity.MaxSpeed * displacementVector.X * Velocity.ThrottlePercentage;
             Y -= Velocity.MaxSpeed * displacementVector.Y * Velocity.ThrottlePercentage;

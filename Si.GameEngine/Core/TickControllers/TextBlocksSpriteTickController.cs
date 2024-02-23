@@ -19,7 +19,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             foreach (var textBlock in Visible().Where(o => o.IsFixedPosition == false))
             {
-                textBlock.ApplyMotion(displacementVector);
+                textBlock.ApplyMotion(epochMilliseconds, displacementVector);
             }
         }
 

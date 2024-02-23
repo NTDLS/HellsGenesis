@@ -17,7 +17,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             foreach (var attachment in Visible())
             {
-                attachment.ApplyMotion(displacementVector);
+                attachment.ApplyMotion(epochMilliseconds, displacementVector);
             }
         }
 

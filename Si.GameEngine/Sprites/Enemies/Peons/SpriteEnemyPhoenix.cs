@@ -67,7 +67,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         private DateTime _lastBehaviorChangeTime = DateTime.UtcNow;
         private double _behaviorChangeThresholdMilliseconds = 0;
 
-        public override void ApplyIntelligence(SiPoint displacementVector)
+        public override void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -76,7 +76,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 return;
             }
 
-            base.ApplyIntelligence(displacementVector);
+            base.ApplyIntelligence(epochMilliseconds, displacementVector);
 
             if ((DateTime.UtcNow - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMilliseconds)
             {
@@ -117,7 +117,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 }
             }
 
-            CurrentAIController?.ApplyIntelligence(displacementVector);
+            CurrentAIController?.ApplyIntelligence(epochMilliseconds, displacementVector);
         }
 
         #endregion

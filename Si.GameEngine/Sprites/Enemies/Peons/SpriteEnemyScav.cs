@@ -49,7 +49,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             ResetLoadout(loadout);
         }
 
-        public override void ApplyIntelligence(SiPoint displacementVector)
+        public override void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
         {
             if (IsDrone)
             {

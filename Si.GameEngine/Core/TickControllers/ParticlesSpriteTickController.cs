@@ -22,7 +22,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             foreach (var particle in Visible())
             {
-                particle.ApplyMotion(displacementVector);
+                particle.ApplyMotion(epochMilliseconds, displacementVector);
             }
         }
 

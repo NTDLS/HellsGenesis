@@ -24,7 +24,7 @@ namespace Si.GameEngine.Core.TickControllers
             {
                 if (GameEngine.Player.Sprite.Visable)
                 {
-                    enemy.ApplyIntelligence(displacementVector);
+                    enemy.ApplyIntelligence(epochMilliseconds, displacementVector);
                 }
 
                 var multiplayVector = enemy.GetMultiplayVector();
@@ -33,7 +33,7 @@ namespace Si.GameEngine.Core.TickControllers
                     _gameEngine.Multiplay.RecordDroneActionVector(multiplayVector);
                 }
 
-                enemy.ApplyMotion(displacementVector);
+                enemy.ApplyMotion(epochMilliseconds, displacementVector);
                 enemy.RenewableResources.RenewAllResources();
             }
         }

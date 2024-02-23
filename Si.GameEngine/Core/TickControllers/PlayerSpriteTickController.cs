@@ -45,7 +45,7 @@ namespace Si.GameEngine.Core.TickControllers
             if (Sprite.Visable)
             {
                 //Sprite.PrimaryWeapon.ApplyIntelligence();
-                Sprite.SelectedSecondaryWeapon?.ApplyIntelligence();
+                Sprite.SelectedSecondaryWeapon?.ApplyIntelligence(epochMilliseconds);
 
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.PrimaryFire))
                 {

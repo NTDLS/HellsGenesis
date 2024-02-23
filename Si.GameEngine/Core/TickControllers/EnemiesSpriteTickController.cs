@@ -22,7 +22,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             foreach (var enemy in Visible().Where(o => o.IsDrone == false))
             {
-                enemy.ApplyIntelligence(displacementVector);
+                enemy.ApplyIntelligence(epochMilliseconds, displacementVector);
 
                 var multiplayVector = enemy.GetMultiplayVector();
                 if (multiplayVector != null)
@@ -30,7 +30,7 @@ namespace Si.GameEngine.Core.TickControllers
                     _gameEngine.Multiplay.RecordDroneActionVector(multiplayVector);
                 }
 
-                enemy.ApplyMotion(displacementVector);
+                enemy.ApplyMotion(epochMilliseconds, displacementVector);
                 enemy.RenewableResources.RenewAllResources();
             }
         }

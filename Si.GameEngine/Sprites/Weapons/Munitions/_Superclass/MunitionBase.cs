@@ -71,7 +71,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(SiPoint displacementVector)
+        public virtual void ApplyIntelligence(double epochMilliseconds, SiPoint displacementVector)
         {
             if (AgeInMilliseconds > MillisecondsToLive)
             {
@@ -80,7 +80,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             }
         }
 
-        public override void ApplyMotion(SiPoint displacementVector)
+        public override void ApplyMotion(double epochMilliseconds, SiPoint displacementVector)
         {
             if (!_gameEngine.Display.TotalCanvasBounds.Balloon(SceneDistanceLimit).IntersectsWith(RenderBounds))
             {

@@ -90,7 +90,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
             public SiWeaponsLockType LockType { get; set; }
         }
 
-        public virtual void ApplyIntelligence()
+        public virtual void ApplyIntelligence(double epochMilliseconds)
         {
             LockedTargets.Clear();
 

@@ -41,7 +41,7 @@ namespace Si.GameEngine.Core.TickControllers
 
             foreach (var debug in Visible())
             {
-                debug.ApplyMotion(displacementVector);
+                debug.ApplyMotion(epochMilliseconds, displacementVector);
                 debug.RenewableResources.RenewAllResources();
             }
         }
