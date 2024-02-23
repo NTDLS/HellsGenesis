@@ -24,9 +24,9 @@ namespace Si.GameEngine.Core
         public bool PlayMusic { get; set; } = true;
 
         public bool LockPlayerAngleToNearbyEnemy { get; set; } = false;
-        public bool AutoZoomWhenMoving { get; set; } = true;
+        public bool EnableSpeedScaleFactoring { get; set; } = true;
 
-        public double MillisecondPerEpochs { get; set; } = 8.3378;
+        public double WorldTicksPerSecond { get; set; } = 100; //MillisecondPerEpochs = 1000 / WorldTicksPerSecond
 
         public double EnemyThrustRampUp { get; set; } = 0.0375;
         public double EnemyThrustRampDown { get; set; } = 0.0075;
@@ -51,7 +51,7 @@ namespace Si.GameEngine.Core
         public bool VerticalSync { get; set; } = false;
         public bool AntiAliasing { get; set; } = true;
 
-        public double FramePerSecondLimit { get; set; } = 120;
+        public double FramePerSecondLimit { get; set; } = 60;
         public double MunitionSceneDistanceLimit { get; set; } = 2500; //The distance from the scene that a munition can travel before it is cleaned up.
         public double EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
 

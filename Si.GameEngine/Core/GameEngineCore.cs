@@ -206,7 +206,7 @@ namespace Si.GameEngine.Core
                         Sprites.RenderPreScaling(o.IntermediateRenderTarget);
                         o.IntermediateRenderTarget.EndDraw();
 
-                        if (Settings.AutoZoomWhenMoving)
+                        if (Settings.EnableSpeedScaleFactoring)
                         {
                             Rendering.ApplyScaling(o, (float)Display.SpeedOrientedFrameScalingFactor());
                         }

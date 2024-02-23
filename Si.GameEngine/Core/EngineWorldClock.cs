@@ -97,23 +97,27 @@ namespace Si.GameEngine.Core
             #endregion
 
             var frameRateTimer = new Stopwatch();
-
+            var worldTickTimer = new Stopwatch();
             var epochTimer = new Stopwatch();
 
+            Thread.Sleep((int)_gameEngine.Settings.WorldTicksPerSecond); //Make sure the first epoch isn't instantaneous.
+
+            frameRateTimer.Start();
+            worldTickTimer.Start();
             epochTimer.Start();
 
             while (_shutdown == false)
             {
-                var targetFrameDurationMicroseconds = 1000000 / _gameEngine.Settings.FramePerSecondLimit; //1000000 / n-frames/second.
-                frameRateTimer.Restart();
+                var frameRateDelayMicroseconds = 1000000 / _gameEngine.Settings.FramePerSecondLimit;
+                var targetWorldTickDurationMicroseconds = 1000000 / _gameEngine.Settings.WorldTicksPerSecond;
+                var millisecondPerEpoch = 1000 / _gameEngine.Settings.WorldTicksPerSecond;
 
-                var epochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000.0;
+                worldTickTimer.Restart();
+
+                var elapsedEpochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000.0;
                 epochTimer.Restart();
-                var epoch = epochMilliseconds / _gameEngine.Settings.MillisecondPerEpochs;
 
-                //System.Diagnostics.Debug.WriteLine($"{epochMilliseconds:n4} -> {epoch:n6}");
-
-                _gameEngine.Display.FrameCounter.Calculate();
+                var epoch = elapsedEpochMilliseconds / millisecondPerEpoch;
 
                 _gameEngine.Menus.Use(m =>
                 {
@@ -126,19 +130,26 @@ namespace Si.GameEngine.Core
 
                         _gameEngine.Debug.ProcessCommand();
 
-                        _gameEngine.Render();
+                        //If it is time to render, then render. Also, when VerticalSync is enabled then the directx render target seems to enforce the delay
+                        // so just call render each time and hope it doesnt affect the game time (it shouldn't unless the GPU is really crappy (< circa 1995)).
+                        if (_gameEngine.Settings.VerticalSync || (frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency) > frameRateDelayMicroseconds)
+                        {
+                            _gameEngine.Render();
+                            frameRateTimer.Restart();
+                            _gameEngine.Display.FrameCounter.Calculate();
+                        }
                     });
                 });
 
-                //Determine how man microseconds it took to render the scene.
-                var renderDurationMicroseconds = (double)frameRateTimer.ElapsedTicks / Stopwatch.Frequency * 1000000;
+                //Determine how many µs it took to render the scene.
+                var actualWorldTickDurationMicroseconds = (double)worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency;
 
-                //Calculate how many microseconds we need to wait so that we can maintain the configured framerate.
-                var targetDeltaMicroseconds = targetFrameDurationMicroseconds - renderDurationMicroseconds;
+                //Calculate how many µs we need to wait so that we can maintain the configured framerate.
+                var varianceWorldTickDurationMicroseconds = targetWorldTickDurationMicroseconds - actualWorldTickDurationMicroseconds;
 
-                frameRateTimer.Restart(); //Use the same timer to wait on the delta microseconds to expire.
+                worldTickTimer.Restart(); //Use the same timer to wait on the delta µs to expire.
 
-                while ((double)frameRateTimer.ElapsedTicks / Stopwatch.Frequency * 1000000 < targetDeltaMicroseconds)
+                while ((double)worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds)
                 {
                     Thread.Yield();
                 }
