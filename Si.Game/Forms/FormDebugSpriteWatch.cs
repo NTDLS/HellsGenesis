@@ -3,7 +3,6 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Si.Game.Forms
@@ -32,7 +31,6 @@ namespace Si.Game.Forms
             UpdateWatch();
         }
 
-
         public void UpdateWatch()
         {
             listViewVariables.BeginUpdate();
@@ -55,8 +53,7 @@ namespace Si.Game.Forms
             UpsertVariable("Ready for Delete?", $"{_sprite.IsQueuedForDeletion}");
             UpsertVariable("Is Dead?", $"{_sprite.IsDeadOrExploded}");
             UpsertVariable("Location", $"{_sprite.Location}");
-            UpsertVariable("Location (Render)", $"{_sprite.RenderLocation},");
-
+            UpsertVariable("Location (Render)", $"{_sprite.RenderLocation}");
             UpsertVariable("Background Offset", $"{_gameEngine.Display.RenderWindowPosition}");
             UpsertVariable("Angle Degrees 360", $"{_sprite.Velocity.Angle.DegreesNormalized360:n2}");
             UpsertVariable("Angle Degrees 180", $"{_sprite.Velocity.Angle.DegreesNormalized180:n2}");
@@ -66,7 +63,7 @@ namespace Si.Game.Forms
             UpsertVariable("Recoil", $"{(_sprite.Velocity.RecoilPercentage * 100):n2}");
             UpsertVariable("Hull", $"{_sprite.HullHealth:n0}");
             UpsertVariable("Shield", $"{_sprite.ShieldHealth:n0}");
-            UpsertVariable("Attachments", $"{(_sprite.Attachments?.Count() ?? 0):n0}");
+            UpsertVariable("Attachments", $"{_sprite.Attachments?.Count ?? 0:n0}");
             UpsertVariable("Highlight", $"{_sprite.IsHighlighted}");
             UpsertVariable("Is Fixed Position", $"{_sprite.IsFixedPosition}");
             UpsertVariable("Is Locked On", $"{_sprite.IsLockedOnHard}");

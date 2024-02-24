@@ -82,7 +82,7 @@ namespace Si.GameEngine.Sprites
                 Color *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
 
                 // Check if the particle color is below a certain threshold and remove it.
-                if (Color.Red < 0.1f && Color.Green < 0.1f && Color.Blue < 0.1f)
+                if (Color.Red < 0.5f && Color.Green < 0.5f && Color.Blue < 0.5f)
                 {
                     QueueForDelete();
                 }
