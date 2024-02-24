@@ -10,6 +10,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Si.GameEngine.Core.GraphicsProcessing
 {
@@ -93,24 +94,25 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             });
         }
 
-        public double GetDisplayRefreshRate(int deviceId)
+        public double GetDisplayRefreshRate(Screen screen, int deviceId)
         {
-            using (var factory = new SharpDX.DXGI.Factory1())
+            using var factory = new SharpDX.DXGI.Factory1();
+            foreach (var adapter in factory.Adapters)
             {
-                foreach (var adapter in factory.Adapters)
+                if (adapter.Description.DeviceId == deviceId)
                 {
-                    if (adapter.Description.DeviceId == deviceId)
+                    foreach (var output in adapter.Outputs)
                     {
-                        foreach (var output in adapter.Outputs.Where(o => o.Description.IsAttachedToDesktop))
+                        if (output.Description.DeviceName.Equals(screen.DeviceName, StringComparison.OrdinalIgnoreCase))
                         {
                             var displayModes = output.GetDisplayModeList(Format.R8G8B8A8_UNorm, DisplayModeEnumerationFlags.Interlaced);
 
                             var nativeMode = displayModes.OrderByDescending(mode => mode.Width * mode.Height)
                                 .ThenByDescending(o => o.RefreshRate.Numerator / o.RefreshRate.Denominator).FirstOrDefault();
 
-                            double refreshRate = nativeMode.RefreshRate.Numerator / nativeMode.RefreshRate.Denominator;
+                            var refreshRate = (double)nativeMode.RefreshRate.Numerator / (double)nativeMode.RefreshRate.Denominator;
 
-                            return refreshRate < 50 ? 50 : refreshRate;
+                            return refreshRate < 30 ? 30 : refreshRate;
                         }
                     }
                 }

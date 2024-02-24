@@ -27,6 +27,7 @@ namespace Si.GameEngine.Core.Managers
         /// </summary>
         public SiPoint RenderWindowPosition { get; private set; } = new();
         public Control DrawingSurface { get; private set; }
+        public Screen Screen { get; private set; }
 
         private bool _isFocused = false;
         public bool IsDrawingSurfaceFocused => _isFocused;
@@ -162,6 +163,8 @@ namespace Si.GameEngine.Core.Managers
             _gameEngine = gameEngine;
             DrawingSurface = drawingSurface;
             NatrualScreenSize = visibleSize;
+
+            Screen = Screen.FromHandle(drawingSurface.Handle);
 
             int totalSizeX = (int)(visibleSize.Width * _gameEngine.Settings.OverdrawScale);
             int totalSizeY = (int)(visibleSize.Height * _gameEngine.Settings.OverdrawScale);
