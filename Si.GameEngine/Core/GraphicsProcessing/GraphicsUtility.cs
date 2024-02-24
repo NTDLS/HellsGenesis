@@ -1,10 +1,16 @@
 ﻿using SharpDX;
+using SharpDX.DXGI;
+using SharpDX.Mathematics.Interop;
 using Si.Library;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 
 namespace Si.GameEngine.Core.GraphicsProcessing
 {
-    internal static class GraphicsUtility
+    public static class GraphicsUtility
     {
         /// <summary>
         /// Gets a random color that would be associated with fire.
@@ -58,6 +64,101 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             }
 
             return new Color4(r + m, g + m, b + m, 1);
+        }
+
+        public static RawRectangleF CalculateCenterCopyRectangle(Size2F largerSize, float percentage)
+        {
+            if (percentage < -1 || percentage > 1)
+            {
+                throw new ArgumentException("Percentage must be in the range [-1, 1].");
+            }
+
+            float centerX = largerSize.Width * 0.5f;
+            float centerY = largerSize.Height * 0.5f;
+
+            float smallerWidth = largerSize.Width * percentage;
+            float smallerHeight = largerSize.Height * percentage;
+
+            float left = centerX - smallerWidth * 0.5f;
+            float top = centerY - smallerHeight * 0.5f;
+            float right = left + smallerWidth;
+            float bottom = top + smallerHeight;
+
+            if (percentage >= 0)
+            {
+                return new RawRectangleF(left, top, right, bottom);
+            }
+            else
+            {
+                return new RawRectangleF(right, bottom, left, top);
+            }
+        }
+
+        public static string GetGraphicsAdaptersDescriptions()
+        {
+            var text = new StringBuilder();
+            using (var factory = new Factory1())
+            {
+                foreach (var adapter in factory.Adapters)
+                {
+                    if (adapter.Description.Description != "Microsoft Basic Render Driver")
+                    {
+                        string adapterName = adapter.Description.Description;
+                        var videoMemory = adapter.Description.DedicatedVideoMemory / 1024.0 / 1024.0;
+
+                        text.AppendLine($"\"{adapterName}\" : Dedicated Video Memory {videoMemory:n2}MB");
+                    }
+                }
+            }
+
+            return text.ToString();
+        }
+
+        public static List<SiGraphicsAdapter> GetGraphicsAdapters()
+        {
+            var result = new List<SiGraphicsAdapter>();
+            using (var factory = new SharpDX.DXGI.Factory1())
+            {
+                foreach (var adapter in factory.Adapters)
+                {
+                    if (adapter.Description.Description != "Microsoft Basic Render Driver")
+                    {
+                        result.Add(new SiGraphicsAdapter(adapter.Description.DeviceId, adapter.Description.Description)
+                        {
+                            VideoMemoryMb = adapter.Description.DedicatedVideoMemory / 1024.0 / 1024.0
+                        });
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static double GetScreenRefreshRate(Screen screen, int deviceId)
+        {
+            using var factory = new Factory1();
+            foreach (var adapter in factory.Adapters)
+            {
+                if (adapter.Description.DeviceId == deviceId)
+                {
+                    foreach (var output in adapter.Outputs)
+                    {
+                        if (output.Description.DeviceName.Equals(screen.DeviceName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            var displayModes = output.GetDisplayModeList(Format.R8G8B8A8_UNorm, DisplayModeEnumerationFlags.Interlaced);
+
+                            var nativeMode = displayModes.OrderByDescending(mode => mode.Width * mode.Height)
+                                .ThenByDescending(o => o.RefreshRate.Numerator / o.RefreshRate.Denominator).FirstOrDefault();
+
+                            var refreshRate = (double)nativeMode.RefreshRate.Numerator / (double)nativeMode.RefreshRate.Denominator;
+
+                            return refreshRate < 30 ? 30 : refreshRate;
+                        }
+                    }
+                }
+            }
+
+            return 60; //A safe default, I would think.
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Si.GameEngine.Core;
+using Si.GameEngine.Core.GraphicsProcessing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,25 +10,6 @@ namespace Si.Game
     public partial class FormSettings : Form
     {
         private const int MAX_RESOLUTIONS = 32;
-
-        class GraphicsAdapter
-        {
-            public int DeviceId { get; set; }
-            public string Description { get; set; }
-
-            public double VideoMemoryMb { get; set; }
-
-            public GraphicsAdapter(int deviceId, string description)
-            {
-                DeviceId = deviceId;
-                Description = description;
-            }
-
-            public override string ToString()
-            {
-                return Description;
-            }
-        }
 
         public FormSettings()
         {
@@ -78,7 +60,7 @@ namespace Si.Game
                 }
             }
 
-            var adapters = GetGraphicsAdaptersInfo();
+            var adapters = GraphicsUtility.GetGraphicsAdapters();
             foreach (var item in adapters)
             {
                 comboBoxGraphicsAdapter.Items.Add(item);
@@ -118,23 +100,6 @@ namespace Si.Game
         private void ButtonCancel_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private List<GraphicsAdapter> GetGraphicsAdaptersInfo()
-        {
-            var result = new List<GraphicsAdapter>();
-            using (var factory = new SharpDX.DXGI.Factory1())
-            {
-                foreach (var adapter in factory.Adapters)
-                {
-                    result.Add(new GraphicsAdapter(adapter.Description.DeviceId, adapter.Description.Description)
-                    {
-                        VideoMemoryMb = adapter.Description.DedicatedVideoMemory / 1024.0 / 1024.0
-                    });
-                }
-            }
-
-            return result;
         }
 
         private double GetAndValidate(TextBox textbox, double min, double max, string fieldNameForError)
@@ -181,7 +146,7 @@ namespace Si.Game
 
                 settings.FullScreen = (trackBarResolution.Value == MAX_RESOLUTIONS);
 
-                var graphicsAdapter = comboBoxGraphicsAdapter.SelectedItem as GraphicsAdapter;
+                var graphicsAdapter = comboBoxGraphicsAdapter.SelectedItem as SiGraphicsAdapter;
                 if (graphicsAdapter == null)
                 {
                     throw new Exception("You must select a graphics adapter.");

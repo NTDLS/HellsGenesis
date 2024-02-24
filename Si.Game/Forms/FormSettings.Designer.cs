@@ -119,6 +119,7 @@
             // 
             // comboBoxGraphicsAdapter
             // 
+            comboBoxGraphicsAdapter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             comboBoxGraphicsAdapter.FormattingEnabled = true;
             comboBoxGraphicsAdapter.Location = new System.Drawing.Point(15, 35);
             comboBoxGraphicsAdapter.Name = "comboBoxGraphicsAdapter";

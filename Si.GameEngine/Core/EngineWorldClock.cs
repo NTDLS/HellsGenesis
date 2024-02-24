@@ -1,4 +1,5 @@
-﻿using Si.GameEngine.Core.Types;
+﻿using Si.GameEngine.Core.GraphicsProcessing;
+using Si.GameEngine.Core.Types;
 using Si.GameEngine.Sprites;
 using Si.Library.Types.Geometry;
 using System;
@@ -110,7 +111,7 @@ namespace Si.GameEngine.Core
 
             if (_gameEngine.Settings.VerticalSync)
             {
-                framePerSecondLimit = _gameEngine.Rendering.GetDisplayRefreshRate(_gameEngine.Display.Screen, _gameEngine.Settings.GraphicsAdapterId);
+                framePerSecondLimit = GraphicsUtility.GetScreenRefreshRate(_gameEngine.Display.Screen, _gameEngine.Settings.GraphicsAdapterId);
             }
 
             var frameRateDelayMicroseconds = 1000000 / framePerSecondLimit;

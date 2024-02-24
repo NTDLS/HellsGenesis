@@ -1,5 +1,6 @@
 ﻿using Si.GameEngine.Core.Debug;
 using Si.GameEngine.Core.Debug._Superclass;
+using Si.GameEngine.Core.GraphicsProcessing;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -171,7 +172,7 @@ namespace Si.GameEngine.Core.Managers
 
         public void CommandHandler_Display_Adapters(DebugCommand command)
         {
-            var text = _gameEngine.Rendering.GetGraphicsAdaptersInfo();
+            var text = GraphicsUtility.GetGraphicsAdaptersDescriptions();
             _debugForm.Write(text, System.Drawing.Color.Black);
         }
 

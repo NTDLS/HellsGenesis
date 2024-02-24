@@ -8,9 +8,6 @@ using Si.GameEngine.Utility;
 using System;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 
 namespace Si.GameEngine.Core.GraphicsProcessing
 {
@@ -94,83 +91,11 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             });
         }
 
-        public double GetDisplayRefreshRate(Screen screen, int deviceId)
-        {
-            using var factory = new SharpDX.DXGI.Factory1();
-            foreach (var adapter in factory.Adapters)
-            {
-                if (adapter.Description.DeviceId == deviceId)
-                {
-                    foreach (var output in adapter.Outputs)
-                    {
-                        if (output.Description.DeviceName.Equals(screen.DeviceName, StringComparison.OrdinalIgnoreCase))
-                        {
-                            var displayModes = output.GetDisplayModeList(Format.R8G8B8A8_UNorm, DisplayModeEnumerationFlags.Interlaced);
-
-                            var nativeMode = displayModes.OrderByDescending(mode => mode.Width * mode.Height)
-                                .ThenByDescending(o => o.RefreshRate.Numerator / o.RefreshRate.Denominator).FirstOrDefault();
-
-                            var refreshRate = (double)nativeMode.RefreshRate.Numerator / (double)nativeMode.RefreshRate.Denominator;
-
-                            return refreshRate < 30 ? 30 : refreshRate;
-                        }
-                    }
-                }
-            }
-
-            return 60; //A safe default, I would think.
-        }
-
-        public string GetGraphicsAdaptersInfo()
-        {
-            var text = new StringBuilder();
-            using (var factory = new SharpDX.DXGI.Factory1())
-            {
-                foreach (var adapter in factory.Adapters)
-                {
-                    string adapterName = adapter.Description.Description;
-                    var videoMemory = adapter.Description.DedicatedVideoMemory / 1024.0 / 1024.0;
-
-                    text.AppendLine($"\"{adapterName}\" : Dedicated Video Memory {videoMemory:n2}MB");
-                }
-            }
-
-            return text.ToString();
-        }
-
         public void ApplyScaling(CriticalRenderTargets renderTargets, float scale)
         {
-            var sourceRect = CalculateCenterCopyRectangle(renderTargets.IntermediateRenderTarget.Size, scale);
+            var sourceRect = GraphicsUtility.CalculateCenterCopyRectangle(renderTargets.IntermediateRenderTarget.Size, scale);
             var destRect = new RawRectangleF(0, 0, _gameEngine.Display.NatrualScreenSize.Width, _gameEngine.Display.NatrualScreenSize.Height);
             renderTargets.ScreenRenderTarget.DrawBitmap(renderTargets.IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
-        }
-
-        public static RawRectangleF CalculateCenterCopyRectangle(Size2F largerSize, float percentage)
-        {
-            if (percentage < -1 || percentage > 1)
-            {
-                throw new ArgumentException("Percentage must be in the range [-1, 1].");
-            }
-
-            float centerX = largerSize.Width * 0.5f;
-            float centerY = largerSize.Height * 0.5f;
-
-            float smallerWidth = largerSize.Width * percentage;
-            float smallerHeight = largerSize.Height * percentage;
-
-            float left = centerX - smallerWidth * 0.5f;
-            float top = centerY - smallerHeight * 0.5f;
-            float right = left + smallerWidth;
-            float bottom = top + smallerHeight;
-
-            if (percentage >= 0)
-            {
-                return new RawRectangleF(left, top, right, bottom);
-            }
-            else
-            {
-                return new RawRectangleF(right, bottom, left, top);
-            }
         }
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(Stream stream)
