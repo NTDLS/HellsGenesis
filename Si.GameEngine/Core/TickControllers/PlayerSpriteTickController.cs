@@ -1,5 +1,6 @@
 ﻿using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
+using Si.GameEngine.Utility;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Payload.SpriteActions;
@@ -129,6 +130,7 @@ namespace Si.GameEngine.Core.TickControllers
                 }
                 #endregion
 
+
                 //Make player boost "build up" and fade-in.
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
                     && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false)
@@ -237,15 +239,25 @@ namespace Si.GameEngine.Core.TickControllers
                     Sprite.ThrustAnimation.Visable = GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward);
                 }
 
-                var thrustVector = Sprite.Velocity.MaxSpeed * (Sprite.Velocity.ThrottlePercentage + -Sprite.Velocity.RecoilPercentage);
+                var totalThrustSpeed = Sprite.Velocity.MaxSpeed * (Sprite.Velocity.ThrottlePercentage + -Sprite.Velocity.RecoilPercentage);
 
                 if (Sprite.Velocity.BoostPercentage > 0)
                 {
-                    thrustVector += Sprite.Velocity.MaxBoost * Sprite.Velocity.BoostPercentage;
+                    totalThrustSpeed += Sprite.Velocity.MaxBoost * Sprite.Velocity.BoostPercentage;
                 }
 
-                displacementVector.X += Sprite.Velocity.Angle.X * thrustVector;
-                displacementVector.Y += Sprite.Velocity.Angle.Y * thrustVector;
+                var strafeAngle = new SiPoint();
+                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && !GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
+                {
+                    strafeAngle = SiMath.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + 270), new SiPoint(1, 1));
+                }
+                else if (!GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
+                {
+                    strafeAngle = SiMath.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + 90), new SiPoint(1, 1));
+                }
+
+                displacementVector.X += (Sprite.Velocity.Angle.X + strafeAngle.X) * totalThrustSpeed;
+                displacementVector.Y += (Sprite.Velocity.Angle.Y + strafeAngle.Y) * totalThrustSpeed;
 
                 if (Sprite.Velocity.BoostPercentage > 0.1)
                 {

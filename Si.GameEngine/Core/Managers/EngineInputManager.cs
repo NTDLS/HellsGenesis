@@ -83,6 +83,8 @@ namespace Si.GameEngine.Core.Managers
 
             var keyboardState = Keyboard.GetCurrentState();
 
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Q));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.E));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
@@ -261,6 +263,12 @@ namespace Si.GameEngine.Core.Managers
             }
             else if (key == Keys.F2)
             {
+                //var bitmaps = _gameEngine.Rendering.GenerateIrregularFragments(_gameEngine.Player.Sprite.GetImage(), 2);
+                //foreach (var bitmap in bitmaps)
+                //{
+                //    //bitmaps.
+                //}
+
                 _gameEngine.Sprites.Particles.ParticleBlast(500, _gameEngine.Player.Sprite);
                 //_gameEngine.Sprites.NewGame();
                 //_gameEngine.Sprites.ResetAndShowPlayer();

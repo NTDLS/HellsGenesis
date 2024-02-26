@@ -18,6 +18,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             public RawColor4 OrangeRed { get; private set; } = new(1f, 0.2706f, 0.0000f, 1);
             public RawColor4 Orange { get; private set; } = new(1.0f, 0.6471f, 0.0f, 1);
             public RawColor4 LawnGreen { get; private set; } = new(0.4863f, 0.9882f, 0f, 1);
+            public RawColor4 Transparent { get; private set; } = new(0, 0, 0, 0);
         }
 
         public class ColorBrushes
@@ -33,20 +34,22 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             public SolidColorBrush OrangeRed { get; internal set; }
             public SolidColorBrush Orange { get; internal set; }
             public SolidColorBrush LawnGreen { get; internal set; }
+            public SolidColorBrush Transparent { get; internal set; }
 
-            public ColorBrushes(RenderTarget renterTarget, RawColors raw)
+            public ColorBrushes(RenderTarget renterTarget, RawColors color)
             {
-                Red = new SolidColorBrush(renterTarget, raw.Red);
-                Green = new SolidColorBrush(renterTarget, raw.Green);
-                Blue = new SolidColorBrush(renterTarget, raw.Blue);
-                Black = new SolidColorBrush(renterTarget, raw.Black);
-                White = new SolidColorBrush(renterTarget, raw.White);
-                Gray = new SolidColorBrush(renterTarget, raw.Gray);
-                WhiteSmoke = new SolidColorBrush(renterTarget, raw.WhiteSmoke);
-                Cyan = new SolidColorBrush(renterTarget, raw.Cyan);
-                OrangeRed = new SolidColorBrush(renterTarget, raw.OrangeRed);
-                Orange = new SolidColorBrush(renterTarget, raw.Orange);
-                LawnGreen = new SolidColorBrush(renterTarget, raw.LawnGreen);
+                Red = new SolidColorBrush(renterTarget, color.Red);
+                Green = new SolidColorBrush(renterTarget, color.Green);
+                Blue = new SolidColorBrush(renterTarget, color.Blue);
+                Black = new SolidColorBrush(renterTarget, color.Black);
+                White = new SolidColorBrush(renterTarget, color.White);
+                Gray = new SolidColorBrush(renterTarget, color.Gray);
+                WhiteSmoke = new SolidColorBrush(renterTarget, color.WhiteSmoke);
+                Cyan = new SolidColorBrush(renterTarget, color.Cyan);
+                OrangeRed = new SolidColorBrush(renterTarget, color.OrangeRed);
+                Orange = new SolidColorBrush(renterTarget, color.Orange);
+                LawnGreen = new SolidColorBrush(renterTarget, color.LawnGreen);
+                Transparent = new SolidColorBrush(renterTarget, color.Transparent);
             }
         }
 
