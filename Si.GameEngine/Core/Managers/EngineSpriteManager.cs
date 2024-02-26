@@ -40,6 +40,7 @@ namespace Si.GameEngine.Core.Managers
         private readonly PessimisticCriticalResource<List<SpriteBase>> _collection = new();
         public AnimationSpriteTickController Animations { get; private set; }
         public AttachmentSpriteTickController Attachments { get; private set; }
+        public GenericSpriteTickController GenericSprites { get; private set; }
         public MunitionSpriteTickController Munitions { get; private set; }
         public DebugsSpriteTickController Debugs { get; private set; }
         public EnemiesSpriteTickController Enemies { get; private set; }
@@ -63,6 +64,7 @@ namespace Si.GameEngine.Core.Managers
             Debugs = new DebugsSpriteTickController(_gameEngine, this);
             Enemies = new EnemiesSpriteTickController(_gameEngine, this);
             Particles = new ParticlesSpriteTickController(_gameEngine, this);
+            GenericSprites = new GenericSpriteTickController(_gameEngine, this);
             Powerups = new PowerupsSpriteTickController(_gameEngine, this);
             RadarPositions = new RadarPositionsSpriteTickController(_gameEngine, this);
             Stars = new StarsSpriteTickController(_gameEngine, this);

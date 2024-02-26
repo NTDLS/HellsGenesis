@@ -206,6 +206,7 @@ namespace Si.GameEngine.Core
 
             _gameEngine.Sprites.Enemies.ExecuteWorldClockTick(epoch, displacementVector);
             _gameEngine.Sprites.Particles.ExecuteWorldClockTick(epoch, displacementVector);
+            _gameEngine.Sprites.GenericSprites.ExecuteWorldClockTick(epoch, displacementVector);
             _gameEngine.Sprites.Munitions.ExecuteWorldClockTick(epoch, displacementVector);
             _gameEngine.Sprites.Stars.ExecuteWorldClockTick(epoch, displacementVector);
             _gameEngine.Sprites.Animations.ExecuteWorldClockTick(epoch, displacementVector);

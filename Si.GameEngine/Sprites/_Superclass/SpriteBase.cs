@@ -264,6 +264,16 @@ namespace Si.GameEngine.Sprites._Superclass
             VisibilityChanged();
         }
 
+        public virtual void Initialize(SharpDX.Direct2D1.Bitmap bitmap)
+        {
+            if (bitmap != null)
+            {
+                SetImage(bitmap);
+            }
+
+            VisibilityChanged();
+        }
+
         public virtual void Initialize(string imagePath = null)
         {
             if (imagePath != null)

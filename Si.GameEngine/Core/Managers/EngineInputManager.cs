@@ -264,6 +264,7 @@ namespace Si.GameEngine.Core.Managers
             }
             else if (key == Keys.F2)
             {
+                /*
                 var bitmaps = _gameEngine.Rendering.GenerateIrregularFragments(_gameEngine.Player.Sprite.GetImage(), 10, 3);
                 foreach (var bitmap in bitmaps)
                 {
@@ -276,7 +277,9 @@ namespace Si.GameEngine.Core.Managers
 
                     //bitmaps.
                 }
+                */
 
+                _gameEngine.Sprites.GenericSprites.FragmentBlastOf(_gameEngine.Player.Sprite);
                 _gameEngine.Sprites.Particles.ParticleBlast(500, _gameEngine.Player.Sprite);
                 //_gameEngine.Sprites.NewGame();
                 //_gameEngine.Sprites.ResetAndShowPlayer();
