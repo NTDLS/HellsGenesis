@@ -37,7 +37,11 @@ namespace Si.GameEngine.Menus
 
             offsetY += 50;
 
-            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Move with <W>, <A>, <S>.");
+            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Forward and Rotate with <W>, <A>, <S>.");
+            helpItem.X -= helpItem.Size.Width / 2;
+            offsetY += helpItem.Size.Height + 5;
+
+            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Strafe with <Q>, <E>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
