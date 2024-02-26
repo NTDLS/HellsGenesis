@@ -1,5 +1,6 @@
 ﻿using SharpDX.DirectInput;
 using Si.GameEngine.Sprites.Enemies._Superclass;
+using Si.Library;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -263,11 +264,18 @@ namespace Si.GameEngine.Core.Managers
             }
             else if (key == Keys.F2)
             {
-                //var bitmaps = _gameEngine.Rendering.GenerateIrregularFragments(_gameEngine.Player.Sprite.GetImage(), 2);
-                //foreach (var bitmap in bitmaps)
-                //{
-                //    //bitmaps.
-                //}
+                var bitmaps = _gameEngine.Rendering.GenerateIrregularFragments(_gameEngine.Player.Sprite.GetImage(), 10, 3);
+                foreach (var bitmap in bitmaps)
+                {
+                    var frag = _gameEngine.Sprites.Debugs.CreateAtCenterScreen();
+                    frag.X += SiRandom.Between(-200, 200);
+                    frag.Y += SiRandom.Between(-200, 200);
+
+                    frag.SetImage(bitmap);
+                    frag.Visable = true;
+
+                    //bitmaps.
+                }
 
                 _gameEngine.Sprites.Particles.ParticleBlast(500, _gameEngine.Player.Sprite);
                 //_gameEngine.Sprites.NewGame();

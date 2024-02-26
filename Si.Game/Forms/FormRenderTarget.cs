@@ -111,7 +111,7 @@ namespace Si.Game
                 sprites.Add(_gameEngine.Player.Sprite);
             }
 
-            foreach (var sprite in sprites)
+            foreach (var sprite in sprites.Where(o => o.IsHighlighted == false))
             {
                 highlightedSprites.Add(sprite);
                 sprite.IsHighlighted = true;

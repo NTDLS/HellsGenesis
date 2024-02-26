@@ -6,6 +6,7 @@ using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
 using Si.GameEngine.Utility;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -98,16 +99,15 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             renderTargets.ScreenRenderTarget.DrawBitmap(renderTargets.IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
         }
 
-        public SharpDX.Direct2D1.Bitmap GetBitmap(Stream stream)
+        public SharpDX.Direct2D1.Bitmap BitmapStreamToD2DBitmap(Stream stream)
         {
+            using var decoder = new BitmapDecoder(_wicFactory, stream, DecodeOptions.CacheOnLoad);
+            using var frame = decoder.GetFrame(0);
+            using var converter = new FormatConverter(_wicFactory);
 
-            using (var decoder = new BitmapDecoder(_wicFactory, stream, DecodeOptions.CacheOnLoad))
-            using (var frame = decoder.GetFrame(0))
-            using (var converter = new FormatConverter(_wicFactory))
-            {
-                converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA);
-                return RenderTargets.Use(o => SharpDX.Direct2D1.Bitmap.FromWicBitmap(o.ScreenRenderTarget, converter));
-            }
+            converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA);
+
+            return RenderTargets.Use(o => SharpDX.Direct2D1.Bitmap.FromWicBitmap(o.ScreenRenderTarget, converter));
         }
 
         /// <summary>
@@ -343,9 +343,12 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             renderTarget.Transform = rotationMatrix;
         }
 
-        private RawMatrix3x2 GetScalingMatrix(double zoomFactor)
+        public List<SharpDX.Direct2D1.Bitmap> GenerateIrregularFragments(SharpDX.Direct2D1.Bitmap originalBitmap, int countOfFragments, int countOfVertices = 3)
+            => BitmapFragmenter.GenerateIrregularFragments(this, originalBitmap, countOfFragments, countOfVertices);
+
+        public RawMatrix3x2 GetScalingMatrix(double zoomFactor)
         {
-            // Calculate the new center point (assuming your image dimensions are known)
+            // Calculate the new center point (assuming dimensions are known)
             float centerX = _gameEngine.Display.TotalCanvasSize.Width / 2.0f;
             float centerY = _gameEngine.Display.TotalCanvasSize.Height / 2.0f;
 
@@ -361,8 +364,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         }
 
         public static RawMatrix3x2 MultiplyMatrices(RawMatrix3x2 matrix1, RawMatrix3x2 matrix2)
-        {
-            return new RawMatrix3x2(
+            => new RawMatrix3x2(
                 matrix1.M11 * matrix2.M11 + matrix1.M12 * matrix2.M21,
                 matrix1.M11 * matrix2.M12 + matrix1.M12 * matrix2.M22,
                 matrix1.M21 * matrix2.M11 + matrix1.M22 * matrix2.M21,
@@ -370,11 +372,8 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 matrix1.M31 * matrix2.M11 + matrix1.M32 * matrix2.M21 + matrix2.M31,
                 matrix1.M31 * matrix2.M12 + matrix1.M32 * matrix2.M22 + matrix2.M32
             );
-        }
 
         public void ResetTransform(RenderTarget renderTarget)
-        {
-            renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
-        }
+            => renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
     }
 }

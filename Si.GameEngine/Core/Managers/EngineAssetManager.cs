@@ -176,7 +176,7 @@ namespace Si.GameEngine.Core.Managers
             }
 
             using var stream = GetCompressedStream(path);
-            var bitmap = _gameEngine.Rendering.GetBitmap(stream);
+            var bitmap = _gameEngine.Rendering.BitmapStreamToD2DBitmap(stream);
             _collection.Write(o => o.TryAdd(path, bitmap));
             return bitmap;
         }

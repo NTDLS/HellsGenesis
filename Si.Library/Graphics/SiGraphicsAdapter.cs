@@ -1,4 +1,4 @@
-﻿namespace Si.GameEngine.Core.GraphicsProcessing
+﻿namespace Si.Library.Graphics
 {
     public class SiGraphicsAdapter
     {

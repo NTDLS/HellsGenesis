@@ -2,6 +2,7 @@
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using Si.Library;
+using Si.Library.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
