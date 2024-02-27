@@ -749,7 +749,7 @@ namespace Si.GameEngine.Sprites._Superclass
         {
             toDegrees = toDegrees.DegreesNormalized();
 
-            if (Velocity.Angle.DegreesNormalized.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
+            if (Velocity.Angle.DegreesSplit.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
                 if (direction == SiRelativeDirection.Right)
                 {

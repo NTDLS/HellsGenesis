@@ -90,7 +90,7 @@
         /// <returns></returns>
         public bool IsBetween(double minValue, double maxValue)
         {
-            var normalized = DegreesNormalized;
+            var normalized = DegreesSplit;
             if (minValue > maxValue)
             {
                 return normalized >= maxValue && normalized <= minValue;
@@ -101,15 +101,24 @@
         /// <summary>
         /// Angle in degrees between 0-180 and -1--180
         /// </summary>
-        public double DegreesNormalized => (_degrees + 180) % 360 - 180;
+        public double DegreesSplit => (_degrees + 180) % 360 - 180;
 
         /// <summary>
         // If the angle is negative, adding 360 brings it into the [0, 360) range.
         /// </summary>
-        public double DegreesDenormalized => (_degrees < 0 ? _degrees + 360 : _degrees) % 360;
+        public double DegreesUnsplit => (_degrees < 0 ? _degrees + 360 : _degrees) % 360;
+
+        /// <summary>
+        /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
+        /// </summary>
+        /// <returns></returns>
+        public SiPoint Normalize()
+        {
+            var magnitude = Math.Sqrt(X * X + Y * Y);
+            return new SiPoint(X / magnitude, Y / magnitude);
+        }
 
         public double _degrees;
-
         /// <summary>
         /// Sets the angle degrees and ensures that it is stored denoramlized (0-359).
         /// </summary>

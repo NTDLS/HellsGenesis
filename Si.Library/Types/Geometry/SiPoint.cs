@@ -1,4 +1,8 @@
-﻿using System.Drawing;
+﻿using Newtonsoft.Json.Linq;
+using System.Drawing;
+using System.Numerics;
+using System.Reflection;
+using System.Security.Claims;
 
 namespace Si.Library.Types.Geometry
 {
@@ -84,6 +88,67 @@ namespace Si.Library.Types.Geometry
             return (SiAngle.RadiansToDegrees(radians) + 360.0) % 360.0;
         }
 
+        /// <summary>
+        /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        public static SiPoint Normalize(SiPoint vector)
+        {
+            var magnitude = Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+            return new SiPoint(vector.X / magnitude, vector.Y / magnitude);
+        }
+
+        /// <summary>
+        /// Calculate the dot product of two vectors.This is useful for determining the angle between vectors or projecting one vector onto another.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static double DotProduct(SiPoint a, SiPoint b)
+        {
+            return a.X * b.X + a.Y * b.Y;
+        }
+
+        /// <summary>
+        /// Calculate the angle between two points relative to the horizontal axis.
+        /// </summary>
+        /// <param name="point1"></param>
+        /// <param name="point2"></param>
+        /// <returns></returns>
+        public static double AngleBetween(SiPoint point1, SiPoint point2)
+        {
+            return Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
+        }
+
+        /// <summary>
+        /// Rotate a point around another point by a certain angle.
+        /// </summary>
+        /// <param name="pointToRotate"></param>
+        /// <param name="centerPoint"></param>
+        /// <param name="angleRadians"></param>
+        /// <returns></returns>
+        public static SiPoint RotateAroundPoint(SiPoint pointToRotate, SiPoint centerPoint, double angleRadians)
+        {
+            var cosTheta = Math.Cos(angleRadians);
+            var sinTheta = Math.Sin(angleRadians);
+            var x = cosTheta * (pointToRotate.X - centerPoint.X) - sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X;
+            var y = sinTheta * (pointToRotate.X - centerPoint.X) + cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y;
+            return new SiPoint(x, y);
+        }
+
+        /// <summary>
+        /// Reflect a vector off a surface.Useful for light reflections, bouncing effects, etc.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="normal"></param>
+        /// <returns></returns>
+        public static SiPoint Reflect(SiPoint vector, SiPoint normal)
+        {
+            var dotProduct = DotProduct(vector, normal);
+            return new SiPoint(vector.X - 2 * dotProduct * normal.X, vector.Y - 2 * dotProduct * normal.Y);
+        }
+
         #region  Unary Operator Overloading.
 
         public static SiPoint operator -(SiPoint original, SiPoint modifier)
@@ -135,5 +200,38 @@ namespace Si.Library.Types.Geometry
         public SiReadonlyPoint ToReadonlyCopy() => new SiReadonlyPoint(this);
 
         public SiPoint Clone() => new SiPoint(this);
+
+        /// <summary>
+        /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        public SiPoint Normalize()
+        {
+            var magnitude = Math.Sqrt(X * X + Y * Y);
+            return new SiPoint(X / magnitude, Y / magnitude);
+        }
+
+        /// <summary>
+        /// Calculate the dot product of two vectors.This is useful for determining the angle between vectors or projecting one vector onto another.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public double DotProduct(SiPoint b)
+        {
+            return a.X * b.X + a.Y * b.Y;
+        }
+
+        /// <summary>
+        /// Calculate the angle between two points relative to the horizontal axis.
+        /// </summary>
+        /// <param name="point1"></param>
+        /// <param name="point2"></param>
+        /// <returns></returns>
+        public double AngleBetween(SiPoint point2)
+        {
+            return Math.Atan2(point2.Y - Y, point2.X - X);
+        }
     }
 }

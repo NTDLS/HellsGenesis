@@ -55,7 +55,7 @@ namespace Si.Game.Forms
             UpsertVariable("Location", $"{_sprite.Location}");
             UpsertVariable("Location (Render)", $"{_sprite.RenderLocation}");
             UpsertVariable("Background Offset", $"{_gameEngine.Display.RenderWindowPosition}");
-            UpsertVariable("Angle Degrees 180", $"{_sprite.Velocity.Angle.DegreesNormalized:n2}");
+            UpsertVariable("Angle Degrees 180", $"{_sprite.Velocity.Angle.DegreesSplit:n2}");
             UpsertVariable("Angle Radians", $"{_sprite.Velocity.Angle.Radians:n2}");
             UpsertVariable("Thrust %", $"{(_sprite.Velocity.ThrottlePercentage * 100):n2}");
             UpsertVariable("Boost %", $"{(_sprite.Velocity.BoostPercentage * 100):n2}");
