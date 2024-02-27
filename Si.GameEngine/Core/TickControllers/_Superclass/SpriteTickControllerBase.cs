@@ -34,6 +34,15 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
 
         public void Add(T obj) => SpriteManager.Add(obj);
 
+        public T Create(SiPoint location, string name = "")
+        {
+            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
+            obj.Location = location.Clone();
+            obj.SpriteTag = name;
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
         public T Create(double x, double y, string name = "")
         {
             T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);

@@ -31,12 +31,11 @@ namespace Si.GameEngine.Sprites
         public SiRelativeDirection RotationDirection { get; set; } = SiRelativeDirection.None;
 
 
-        public SpriteGeneric(GameEngineCore gameEngine, double x, double y, SharpDX.Direct2D1.Bitmap bitmap)
+        public SpriteGeneric(GameEngineCore gameEngine, SiPoint location, SharpDX.Direct2D1.Bitmap bitmap)
             : base(gameEngine)
         {
             Initialize(bitmap);
-            X = x;
-            Y = y;
+            Location = location.Clone();
             Velocity = new SiVelocity();
 
             RotationSpeed = SiRandom.Between(1, 100) / 20.0;
@@ -51,8 +50,6 @@ namespace Si.GameEngine.Sprites
             : base(gameEngine)
         {
             Initialize(bitmap);
-            X = 0;
-            Y = 0;
             Velocity = new SiVelocity();
         }
 
@@ -60,8 +57,6 @@ namespace Si.GameEngine.Sprites
             : base(gameEngine)
         {
             SetImage(imagePath);
-            X = 0;
-            Y = 0;
             Velocity = new SiVelocity();
         }
 
@@ -80,8 +75,7 @@ namespace Si.GameEngine.Sprites
             {
                 //We use a seperate angle for the travel direction because the base ApplyMotion()
                 //  moves the object in the the direction of the Velocity.Angle.
-                X += TravelAngle.X * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
-                Y += TravelAngle.Y * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
+                Location += TravelAngle * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
             }
             else if (VectorType == ParticleVectorType.Native)
             {

@@ -277,10 +277,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
                 {
                     var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(180), new SiPoint(20, 20));
                     ThrustAnimation.Velocity.Angle = Velocity.Angle;
-
-
-                    ThrustAnimation.X = X + pointBehind.X;
-                    ThrustAnimation.Y = Y + pointBehind.Y;
+                    ThrustAnimation.Location = Location + pointBehind;
                 }
             }
 
@@ -290,8 +287,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
                 {
                     var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(180), new SiPoint(20, 20));
                     BoostAnimation.Velocity.Angle = Velocity.Angle;
-                    BoostAnimation.X = X + pointBehind.X;
-                    BoostAnimation.Y = Y + pointBehind.Y;
+                    BoostAnimation.Location = Location + pointBehind;
                 }
             }
         }

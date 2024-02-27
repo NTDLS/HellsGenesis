@@ -33,13 +33,12 @@ namespace Si.GameEngine.Sprites
         public Color4 Color { get; set; }
         public SiAngle TravelAngle { get; set; } = new SiAngle();
 
-        public SpriteParticle(GameEngineCore gameEngine, double x, double y, Size size, Color4 color)
+        public SpriteParticle(GameEngineCore gameEngine, SiPoint location, Size size, Color4 color)
             : base(gameEngine)
         {
             Initialize(size);
 
-            X = x;
-            Y = y;
+            Location = location.Clone();
 
             Color = color;
             RotationSpeed = SiRandom.Between(1, 100) / 20.0;
@@ -67,8 +66,7 @@ namespace Si.GameEngine.Sprites
             {
                 //We use a seperate angle for the travel direction because the base ApplyMotion()
                 //  moves the object in the the direction of the Velocity.Angle.
-                X += TravelAngle.X * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
-                Y += TravelAngle.Y * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
+                Location += TravelAngle * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
             }
             else if (VectorType == ParticleVectorType.Native)
             {

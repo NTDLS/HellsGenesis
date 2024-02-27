@@ -241,8 +241,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
             //Location += (Velocity.Angle * thrustAmount * epoch);
 
-            X += Velocity.Angle.X * thrustAmount * epoch;
-            Y += Velocity.Angle.Y * thrustAmount * epoch;
+            Location += Velocity.Angle * thrustAmount * epoch;
 
             //System.Diagnostics.Debug.Print($"Dbg: {newLocation}, Actual: {Location}");
 

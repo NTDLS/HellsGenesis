@@ -257,8 +257,7 @@ namespace Si.GameEngine.Core.TickControllers
                     strafeAngle = SiMath.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + SiMath.DegreesToRadians(90)), new SiPoint(1, 1));
                 }
 
-                displacementVector.X += (Sprite.Velocity.Angle.X * totalThrustSpeed) + (strafeAngle.X * ((totalThrustSpeed / 2) + 0.5));
-                displacementVector.Y += (Sprite.Velocity.Angle.Y * totalThrustSpeed) + (strafeAngle.Y * ((totalThrustSpeed / 2) + 0.5));
+                displacementVector += (Sprite.Velocity.Angle * totalThrustSpeed) + (strafeAngle * ((totalThrustSpeed / 2) + 0.5));
 
                 if (Sprite.Velocity.BoostPercentage > 0.1)
                 {
@@ -299,8 +298,7 @@ namespace Si.GameEngine.Core.TickControllers
             GameEngine.Display.RenderWindowPosition.Y += displacementVector.Y;
 
             //Move the player in the direction of the background. This keeps the player visually in place, which is in the center screen.
-            Sprite.X += displacementVector.X;
-            Sprite.Y += displacementVector.Y;
+            Sprite.Location += displacementVector;
 
             if (Sprite.Velocity.RecoilPercentage > 0)
             {

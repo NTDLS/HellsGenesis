@@ -26,7 +26,7 @@ namespace Si.GameEngine.Core.TickControllers
 
         public SpriteGeneric CreateAt(SpriteBase sprite, SharpDX.Direct2D1.Bitmap bitmap)
         {
-            var obj = new SpriteGeneric(GameEngine, sprite.X, sprite.Y, bitmap);
+            var obj = new SpriteGeneric(GameEngine, sprite.Location, bitmap);
             SpriteManager.Add(obj);
             return obj;
         }

@@ -30,8 +30,7 @@ namespace Si.GameEngine.Core.TickControllers
         /// <param name="defaultPosition"></param>
         public void AddAt(SpriteAnimation animation, SpriteBase defaultPosition)
         {
-            animation.X = defaultPosition.Location.X;
-            animation.Y = defaultPosition.Location.Y;
+            animation.Location = defaultPosition.Location.Clone();
             SpriteManager.Add(animation);
         }
 

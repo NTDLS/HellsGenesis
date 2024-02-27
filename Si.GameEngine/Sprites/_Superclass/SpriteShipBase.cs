@@ -158,7 +158,6 @@ namespace Si.GameEngine.Sprites._Superclass
             _gameEngine.Audio.PlayRandomExplosion();
         }
 
-
         public void FixRadarPositionIndicator()
         {
             if (RadarPositionIndicator != null)

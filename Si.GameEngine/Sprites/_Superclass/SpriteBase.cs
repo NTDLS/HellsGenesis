@@ -165,7 +165,11 @@ namespace Si.GameEngine.Sprites._Superclass
         public SiPoint Location
         {
             get => _location.Clone(); //Changes made to the location object do not affect the sprite.
-            set => _location = value;
+            set
+            {
+                _location = value;
+                LocationChanged();
+            }
         }
 
         /// <summary>
@@ -985,8 +989,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(double epoch, SiPoint displacementVector)
         {
-            X += Velocity.Angle.X * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
-            Y += Velocity.Angle.Y * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
+            Location += Velocity.Angle * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
         }
 
         /// <summary>

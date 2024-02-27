@@ -74,12 +74,12 @@
 
         public static SiAngle operator *(SiAngle original, SiAngle modifier)
         {
-            return new SiAngle(original.Radians * modifier.Radians);
+            return new SiAngle(original.X * modifier.X, original.Y * modifier.Y);
         }
 
-        public static SiAngle operator *(SiAngle original, double radians)
+        public static SiPoint operator *(SiAngle original, double scalar)
         {
-            return new SiAngle(original.Radians * radians);
+            return new SiPoint(original.X * scalar, original.Y * scalar);
         }
 
         public override bool Equals(object? o)
@@ -89,15 +89,8 @@
 
         #endregion
 
-        public override int GetHashCode()
-        {
-            return ToString().GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            return $"{{{Math.Round(X, 4):#.####}x,{Math.Round(Y, 4):#.####}y}}";
-        }
+        public override int GetHashCode() => ToString().GetHashCode();
+        public override string ToString() => $"{{{Math.Round(X, 4):#.####}x,{Math.Round(Y, 4):#.####}y}}";
 
         public bool IsBetween(double minValue, double maxValue)
         {
@@ -112,24 +105,13 @@
         /// <summary>
         /// Angle in degrees between 0-180 and -1--180
         /// </summary>
-        public double DegreesNormalized180
-        {
-            get
-            {
-                return (_degrees + 180) % 360 - 180;
-            }
-        }
+        public double DegreesNormalized180 => (_degrees + 180) % 360 - 180;
+
 
         /// <summary>
         /// Angle in degrees between 0-359.
         /// </summary>
-        public double DegreesNormalized360
-        {
-            get
-            {
-                return (_degrees + 360) % 360;
-            }
-        }
+        public double DegreesNormalized360 => (_degrees + 360) % 360;
 
         public double _degrees;
         public double Degrees
@@ -172,28 +154,8 @@
             }
         }
 
-        public double RadiansUnadjusted
-        {
-            get
-            {
-                return DegreesToRadians(_degrees);
-            }
-        }
-
-        public double X
-        {
-            get
-            {
-                return Math.Cos(Radians);
-            }
-        }
-
-        public double Y
-        {
-            get
-            {
-                return Math.Sin(Radians);
-            }
-        }
+        public double RadiansUnadjusted => DegreesToRadians(_degrees);
+        public double X => Math.Cos(Radians);
+        public double Y => Math.Sin(Radians);
     }
 }

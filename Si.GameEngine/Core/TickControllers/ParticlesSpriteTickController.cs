@@ -26,11 +26,11 @@ namespace Si.GameEngine.Core.TickControllers
             }
         }
 
-        public void CreateAt(double x, double y, Color4 color, int count, Size? size = null)
+        public void CreateAt(SiPoint location, Color4 color, int count, Size? size = null)
         {
             for (int i = 0; i < count; i++)
             {
-                CreateAt(x + SiRandom.Between(-20, 20), y + SiRandom.Between(-20, 20), color, size);
+                CreateAt(location + SiRandom.Between(-20, 20), color, size);
             }
         }
 
@@ -38,20 +38,20 @@ namespace Si.GameEngine.Core.TickControllers
         {
             for (int i = 0; i < count; i++)
             {
-                CreateAt(sprite.X + SiRandom.Between(-20, 20), sprite.Y + SiRandom.Between(-20, 20), color, size);
+                CreateAt(sprite.Location + SiRandom.Between(-20, 20), color, size);
             }
         }
 
         public SpriteParticle CreateAt(SpriteBase sprite, Color4 color, Size? size = null)
         {
-            var obj = new SpriteParticle(GameEngine, sprite.X, sprite.Y, size ?? new Size(1, 1), color);
+            var obj = new SpriteParticle(GameEngine, sprite.Location, size ?? new Size(1, 1), color);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public SpriteParticle CreateAt(double x, double y, Color4 color, Size? size = null)
+        public SpriteParticle CreateAt(SiPoint location, Color4 color, Size? size = null)
         {
-            var obj = new SpriteParticle(GameEngine, x, y, size ?? new Size(1, 1), color)
+            var obj = new SpriteParticle(GameEngine, location, size ?? new Size(1, 1), color)
             {
                 Visable = true
             };
@@ -78,7 +78,7 @@ namespace Si.GameEngine.Core.TickControllers
                 {
                     for (int i = 0; i < particlesExplosion; i++)
                     {
-                        var particle = CreateAt(at.X, at.Y, GraphicsUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
+                        var particle = CreateAt(at.Location, GraphicsUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
                         particle.Shape = ParticleShape.FilledEllipse;
                         particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                         particle.FadeToBlackReductionAmount = SiRandom.Between(0.001, 0.01);
@@ -96,7 +96,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             for (int i = 0; i < particleCount; i++)
             {
-                var particle = CreateAt(at.X, at.Y, GraphicsUtility.GetRandomHotColor(), new Size(5, 5));
+                var particle = CreateAt(at.Location, GraphicsUtility.GetRandomHotColor(), new Size(5, 5));
 
                 switch (SiRandom.Between(1, 3))
                 {

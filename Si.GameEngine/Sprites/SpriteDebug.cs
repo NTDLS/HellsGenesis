@@ -11,8 +11,6 @@ namespace Si.GameEngine.Sprites
             : base(gameEngine)
         {
             Initialize(@"Graphics\Debug.png");
-            X = 0;
-            Y = 0;
             Velocity = new SiVelocity();
         }
 

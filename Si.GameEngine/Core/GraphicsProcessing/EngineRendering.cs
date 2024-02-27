@@ -117,7 +117,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         {
             if (angleRadians > 6.3)
             {
-                throw new Exception($"Radians are out of range: {angleRadians:n4}");
+                //throw new Exception($"Radians are out of range: {angleRadians:n4}");
             }
 
             var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
@@ -133,7 +133,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         {
             if (angleRadians > 6.3)
             {
-                throw new Exception($"Radians are out of range: {angleRadians:n4}");
+                //throw new Exception($"Radians are out of range: {angleRadians:n4}");
             }
 
             var destRect = new RawRectangleF((float)x, (float)y, (float)(x + destSize.Width), (float)(y + destSize.Height));

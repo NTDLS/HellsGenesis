@@ -101,11 +101,19 @@ namespace Si.Library.Types.Geometry
 
         public static SiPoint operator *(SiPoint original, SiPoint modifier)
         {
+            if (modifier.X == 0.0 && modifier.Y == 0.0)
+            {
+                return new SiPoint(0, 0);
+            }
             return new SiPoint(original.X * modifier.X, original.Y * modifier.Y);
         }
 
         public static SiPoint operator *(SiPoint original, double modifier)
         {
+            if (modifier == 0.0)
+            {
+                return new SiPoint(0, 0);
+            }
             return new SiPoint(original.X * modifier, original.Y * modifier);
         }
 

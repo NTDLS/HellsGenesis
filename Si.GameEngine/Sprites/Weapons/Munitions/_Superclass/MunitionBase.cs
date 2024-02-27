@@ -89,8 +89,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 return;
             }
 
-            X += Velocity.Angle.X * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
-            Y += Velocity.Angle.Y * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
+            Location += Velocity.Angle * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
         }
 
         public override void Explode()
