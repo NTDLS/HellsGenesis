@@ -1,6 +1,7 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
+using Si.GameEngine.Utility;
 using Si.Library.ExtensionMethods;
 using Si.Library.Types.Geometry;
 
@@ -12,7 +13,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
     internal class GuidedMunitionBase : MunitionBase
     {
         public int MaxGuidedObservationAngleDegrees { get; set; } = 90;
-        public int GuidedRotationRateInDegrees { get; set; } = 3;
+        public double GuidedRotationRateInDegrees { get; set; } = SiMath.DegreesToRadians(3);
         public SpriteBase LockedTarget { get; private set; }
 
         public GuidedMunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
@@ -31,7 +32,6 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                     var deltaAngle = DeltaAngleDegrees(LockedTarget);
                     if (deltaAngle.IsBetween(-MaxGuidedObservationAngleDegrees, MaxGuidedObservationAngleDegrees))
                     {
-
                         if (deltaAngle >= 0) //We might as well turn around clock-wise
                         {
                             Velocity.Angle += GuidedRotationRateInDegrees;

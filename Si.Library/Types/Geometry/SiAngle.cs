@@ -4,42 +4,19 @@
     {
         #region Static Utilities.
 
-        const double DEG_TO_RAD = Math.PI / 180.0;
-        const double RAD_TO_DEG = 180.0 / Math.PI;
+        public const double DEG_TO_RAD = Math.PI / 180.0;
+        public const double RAD_TO_DEG = 180.0 / Math.PI;
+        public const double RADS_IN_CIRCLE = 2 * Math.PI;
 
-        public static double RadiansToDegrees(double rad)
-        {
-            return rad * RAD_TO_DEG;
-        }
-
-        public static double DegreesToRadians(double deg)
-        {
-            return deg * DEG_TO_RAD;
-        }
-
-        public static double XYToRadians(double x, double y)
-        {
-            return Math.Atan2(y, x);
-        }
-
-        public static double XYToDegrees(double x, double y)
-        {
-            return RadiansToDegrees(Math.Atan2(y, x));
-        }
-
-        public static SiPoint ToXY(SiAngle angle)
-        {
-            return new SiPoint(angle.X, angle.Y);
-        }
-
+        public static double RadiansToDegrees(double rad) => rad * RAD_TO_DEG;
+        public static double DegreesToRadians(double deg) => deg * DEG_TO_RAD;
+        public static double XYToRadians(double x, double y) => Math.Atan2(y, x);
+        public static double XYToDegrees(double x, double y) => RadiansToDegrees(Math.Atan2(y, x));
+        public static SiPoint ToXY(SiAngle angle) => new SiPoint(angle.X, angle.Y);
+        public static SiPoint RadiansToXY(double radians) => new SiPoint(Math.Cos(radians), Math.Sin(radians));
         public static SiPoint DegreesToXY(double degrees)
         {
             double radians = DegreesToRadians(degrees);
-            return new SiPoint(Math.Cos(radians), Math.Sin(radians));
-        }
-
-        public static SiPoint RadiansToXY(double radians)
-        {
             return new SiPoint(Math.Cos(radians), Math.Sin(radians));
         }
 
@@ -182,6 +159,15 @@
             }
             set
             {
+                if (value < 0)
+                {
+                    _degrees = RADS_IN_CIRCLE - Math.Abs(value) % RADS_IN_CIRCLE;
+                }
+                else
+                {
+                    _degrees = value % RADS_IN_CIRCLE;
+                }
+
                 _degrees = RadiansToDegrees(value);
             }
         }

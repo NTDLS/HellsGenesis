@@ -860,7 +860,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <returns></returns>
         public double AngleTo360(SpriteBase atObj) => SiMath.AngleTo360(this, atObj);
 
-        public double AngleToRadians(SpriteBase atObj) => SiMath.DegreesToRadians( SiMath.AngleTo360(this, atObj));
+        public double AngleToRadians(SpriteBase atObj) => SiMath.DegreesToRadians(SiMath.AngleTo360(this, atObj));
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 1-180 and -1-180
@@ -1043,7 +1043,7 @@ namespace Si.GameEngine.Sprites._Superclass
                 {
                     var rectangle = new RectangleF((int)(RenderLocation.X - Size.Width / 2.0), (int)(RenderLocation.Y - Size.Height / 2.0), Size.Width, Size.Height);
                     var rawRectF = new RawRectangleF(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom);
-                    _gameEngine.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Degrees, _gameEngine.Rendering.Materials.Colors.Red, 0, 1);
+                    _gameEngine.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Radians, _gameEngine.Rendering.Materials.Colors.Red, 0, 1);
                 }
             }
         }
@@ -1093,9 +1093,9 @@ namespace Si.GameEngine.Sprites._Superclass
             }
         }
 
-        private void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double? angleInDegrees = null)
+        private void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double? angleRadians = null)
         {
-            float angle = (float)(angleInDegrees == null ? Velocity.Angle.Degrees : angleInDegrees);
+            float angle = (float)(angleRadians == null ? Velocity.Angle.Radians : angleRadians);
 
             _gameEngine.Rendering.DrawBitmapAt(renderTarget, bitmap,
                 RenderLocation.X - bitmap.Size.Width / 2.0,

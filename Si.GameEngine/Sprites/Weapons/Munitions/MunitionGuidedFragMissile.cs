@@ -2,6 +2,7 @@
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
+using Si.GameEngine.Utility;
 using Si.Library;
 using Si.Library.Types.Geometry;
 using System.Drawing;
@@ -22,7 +23,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
             : base(gameEngine, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             MaxGuidedObservationAngleDegrees = 90;
-            GuidedRotationRateInDegrees = 3;
+            GuidedRotationRateInDegrees = SiMath.DegreesToRadians(3);
 
             _selectedHitExplosionAnimationIndex = SiRandom.Between(0, _hitExplosionAnimationCount - 1);
             _hitExplosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));

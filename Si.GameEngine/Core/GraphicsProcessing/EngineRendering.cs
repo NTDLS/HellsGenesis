@@ -4,7 +4,6 @@ using SharpDX.Direct2D1;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
-using Si.GameEngine.Utility;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -114,23 +113,33 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// Draws a bitmap at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
-        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double x, double y, double angleDegrees)
+        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double x, double y, double angleRadians)
         {
+            if (angleRadians > 6.3)
+            {
+                throw new Exception($"Radians are out of range: {angleRadians:n4}");
+            }
+
             var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
-            SetTransformAngle(renderTarget, destRect, angleDegrees);
+            if (angleRadians != 0) SetTransformAngle(renderTarget, destRect, angleRadians);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
-            ResetTransform(renderTarget);
+            if (angleRadians != 0) ResetTransform(renderTarget);
             return destRect;
         }
 
         /// Draws a bitmap from a specified location of a given size, to the the specified location.
         public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap,
-            double x, double y, double angleDegrees, RawRectangleF sourceRect, Size2F destSize)
+            double x, double y, double angleRadians, RawRectangleF sourceRect, Size2F destSize)
         {
+            if (angleRadians > 6.3)
+            {
+                throw new Exception($"Radians are out of range: {angleRadians:n4}");
+            }
+
             var destRect = new RawRectangleF((float)x, (float)y, (float)(x + destSize.Width), (float)(y + destSize.Height));
-            SetTransformAngle(renderTarget, destRect, angleDegrees);
+            if (angleRadians != 0) SetTransformAngle(renderTarget, destRect, angleRadians);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
-            ResetTransform(renderTarget);
+            if (angleRadians != 0) ResetTransform(renderTarget);
             return destRect;
         }
 
@@ -164,7 +173,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
         public RawRectangleF DrawTextAt(RenderTarget renderTarget,
-            double x, double y, double angleDegrees, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
+            double x, double y, double angleRadians, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
         {
             using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
@@ -176,9 +185,9 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
             //DrawRectangleAt(renderTarget, textRectangle, 0, Materials.Raw.Blue, 0, 1);
 
-            SetTransformAngle(renderTarget, textRectangle, angleDegrees);
+            if (angleRadians != 0) SetTransformAngle(renderTarget, textRectangle, angleRadians);
             renderTarget.DrawText(text, format, textRectangle, brush);
-            ResetTransform(renderTarget);
+            if (angleRadians != 0) ResetTransform(renderTarget);
 
             return textRectangle;
         }
@@ -298,7 +307,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
         public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF rect,
-            double angleDegrees, RawColor4 color, double expand = 0, double strokeWidth = 1)
+            double angleRadians, RawColor4 color, double expand = 0, double strokeWidth = 1)
         {
             if (expand != 0)
             {
@@ -308,7 +317,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 rect.Right += (float)expand;
             }
 
-            SetTransformAngle(renderTarget, rect, angleDegrees);
+            SetTransformAngle(renderTarget, rect, angleRadians);
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawRectangle(rect, brush, (float)strokeWidth);
             ResetTransform(renderTarget);
@@ -317,16 +326,14 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         }
 
         public void SetTransformAngle(RenderTarget renderTarget,
-            RawRectangleF rect, double angleDegrees, RawMatrix3x2? existingMatrix = null)
+            RawRectangleF rect, double angleRadians, RawMatrix3x2? existingMatrix = null)
         {
-            var radians = SiMath.DegreesToRadians(angleDegrees);
-
             float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
             float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
 
             // Calculate the rotation matrix
-            float cosAngle = (float)Math.Cos(radians);
-            float sinAngle = (float)Math.Sin(radians);
+            float cosAngle = (float)Math.Cos(angleRadians);
+            float sinAngle = (float)Math.Sin(angleRadians);
 
             var rotationMatrix = new RawMatrix3x2(
                 cosAngle, sinAngle,
