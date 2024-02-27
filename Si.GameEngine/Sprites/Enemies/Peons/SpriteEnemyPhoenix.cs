@@ -37,7 +37,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Description = "→ Phoenix ←\n"
                        + "TODO: Add a description\n",
-                    MaxSpeed = 2.625,
+                    MaxSpeed = 1.625,
                     MaxBoost = 1.125,
                     HullHealth = 20,
                     ShieldHealth = 10,

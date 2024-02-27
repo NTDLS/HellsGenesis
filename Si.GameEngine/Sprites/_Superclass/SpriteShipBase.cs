@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites._Superclass
 {
@@ -118,10 +119,37 @@ namespace Si.GameEngine.Sprites._Superclass
         public override void Explode()
         {
             _gameEngine.Sprites.Particles.ParticleBlast(SiRandom.Between(200, 800), this);
+            FragmentBlastOf();
             //_explodeSound?.Play();
             //_explosionAnimation?.Reset();
             //_gameEngine.Sprites.Animations.AddAt(_explosionAnimation, this);
             base.Explode();
+        }
+
+        public void FragmentBlastOf()
+        {
+            var image = GetImage();
+            if (image == null)
+            {
+                return;
+            }
+
+            int fragmentCount = SiRandom.Between(2, 10);
+
+            var fragmentImages = _gameEngine.Rendering.GenerateIrregularFragments(image, fragmentCount);
+
+            for (int index = 0; index < fragmentCount; index++)
+            {
+                var fragment = _gameEngine.Sprites.GenericSprites.CreateAt(this, fragmentImages[index]);
+                //TODO: Can we implement this.
+                fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
+                fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001, 0.01);
+
+                fragment.Velocity.Angle.Degrees = SiRandom.Between(0.0, 359.0);
+                fragment.Velocity.MaxSpeed = SiRandom.Between(1, 3.5);
+                fragment.Velocity.ThrottlePercentage = 1;
+                fragment.VectorType = ParticleVectorType.Independent;
+            }
         }
 
         public void CreateParticlesExplosion()

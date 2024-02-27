@@ -17,7 +17,7 @@
         {
             None,
             FadeToBlack,
-            Distance
+            DistanceOffScreen
         }
 
         public enum ParticleShape
@@ -201,6 +201,5 @@
             Down,
             Enter
         }
-
     }
 }

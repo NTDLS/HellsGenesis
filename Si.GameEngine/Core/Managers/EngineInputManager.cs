@@ -1,6 +1,5 @@
 ﻿using SharpDX.DirectInput;
 using Si.GameEngine.Sprites.Enemies._Superclass;
-using Si.Library;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -279,7 +278,7 @@ namespace Si.GameEngine.Core.Managers
                 }
                 */
 
-                _gameEngine.Sprites.GenericSprites.FragmentBlastOf(_gameEngine.Player.Sprite);
+                //_gameEngine.Sprites.GenericSprites.FragmentBlastOf(_gameEngine.Player.Sprite);
                 _gameEngine.Sprites.Particles.ParticleBlast(500, _gameEngine.Player.Sprite);
                 //_gameEngine.Sprites.NewGame();
                 //_gameEngine.Sprites.ResetAndShowPlayer();

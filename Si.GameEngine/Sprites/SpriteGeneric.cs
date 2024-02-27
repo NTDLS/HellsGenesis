@@ -1,8 +1,10 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
+using Si.Library.ExtensionMethods;
 using Si.Library.Types;
 using Si.Library.Types.Geometry;
+using System;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites
@@ -24,7 +26,6 @@ namespace Si.GameEngine.Sprites
 
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Native;
         public SiAngle TravelAngle { get; set; } = new SiAngle();
-        private readonly SiPoint _originalLocation;
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
         public double RotationSpeed { get; set; } = 0;
         public SiRelativeDirection RotationDirection { get; set; } = SiRelativeDirection.None;
@@ -36,7 +37,6 @@ namespace Si.GameEngine.Sprites
             Initialize(bitmap);
             X = x;
             Y = y;
-            _originalLocation = new SiPoint(X, Y);
             Velocity = new SiVelocity();
 
             RotationSpeed = SiRandom.Between(1, 100) / 20.0;
@@ -53,7 +53,6 @@ namespace Si.GameEngine.Sprites
             Initialize(bitmap);
             X = 0;
             Y = 0;
-            _originalLocation = new SiPoint(X, Y);
             Velocity = new SiVelocity();
         }
 
@@ -63,7 +62,6 @@ namespace Si.GameEngine.Sprites
             SetImage(imagePath);
             X = 0;
             Y = 0;
-            _originalLocation = new SiPoint(X, Y);
             Velocity = new SiVelocity();
         }
 
@@ -92,6 +90,7 @@ namespace Si.GameEngine.Sprites
 
             if (CleanupMode == ParticleCleanupMode.FadeToBlack)
             {
+                throw new NotImplementedException();
                 /*
                 Color *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
 
@@ -102,9 +101,9 @@ namespace Si.GameEngine.Sprites
                 }
                 */
             }
-            else if (CleanupMode == ParticleCleanupMode.Distance)
+            else if (CleanupMode == ParticleCleanupMode.DistanceOffScreen)
             {
-                if (DistanceTo(_originalLocation) > MaxDistance)
+                if (_gameEngine.Display.TotalCanvasBounds.Balloon(MaxDistance).IntersectsWith(RenderBounds) == false)
                 {
                     QueueForDelete();
                 }

@@ -3,6 +3,7 @@ using SharpDX.Direct2D1;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
+using Si.Library.ExtensionMethods;
 using Si.Library.Types.Geometry;
 using System.Drawing;
 using static Si.Library.SiConstants;
@@ -31,7 +32,6 @@ namespace Si.GameEngine.Sprites
         public SiRelativeDirection RotationDirection { get; set; } = SiRelativeDirection.None;
         public Color4 Color { get; set; }
         public SiAngle TravelAngle { get; set; } = new SiAngle();
-        private readonly SiPoint _originalLocation;
 
         public SpriteParticle(GameEngineCore gameEngine, double x, double y, Size size, Color4 color)
             : base(gameEngine)
@@ -40,8 +40,6 @@ namespace Si.GameEngine.Sprites
 
             X = x;
             Y = y;
-
-            _originalLocation = new SiPoint(x, y);
 
             Color = color;
             RotationSpeed = SiRandom.Between(1, 100) / 20.0;
@@ -87,9 +85,9 @@ namespace Si.GameEngine.Sprites
                     QueueForDelete();
                 }
             }
-            else if (CleanupMode == ParticleCleanupMode.Distance)
+            else if (CleanupMode == ParticleCleanupMode.DistanceOffScreen)
             {
-                if (DistanceTo(_originalLocation) > MaxDistance)
+                if (_gameEngine.Display.TotalCanvasBounds.Balloon(MaxDistance).IntersectsWith(RenderBounds) == false)
                 {
                     QueueForDelete();
                 }

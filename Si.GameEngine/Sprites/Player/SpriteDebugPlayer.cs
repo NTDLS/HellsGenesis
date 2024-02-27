@@ -22,7 +22,7 @@ namespace Si.GameEngine.Sprites.Player
             {
                 loadout = new PlayerShipLoadout(ShipClass)
                 {
-                    MaxSpeed = 3.75,
+                    MaxSpeed = 4.75,
                     MaxBoost = 1.5,
                     HullHealth = 10000,
                     ShieldHealth = 10000,

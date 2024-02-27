@@ -30,7 +30,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 var polygon = new SiPolygon(vertices);
 
                 // Clip the polygon to ensure it fits within the bounds of the original bitmap.
-                polygon = polygon.Clip(SiRandom.Between(bitmapWidth / 2, bitmapWidth), SiRandom.Between(bitmapHeight / 2, bitmapHeight));
+                polygon = polygon.Clip(SiRandom.Between(bitmapWidth / 4, bitmapWidth), SiRandom.Between(bitmapHeight / 4, bitmapHeight));
 
                 var fragment = ExtractPolygonRegion(rendering, originalBitmap, polygon);
 
