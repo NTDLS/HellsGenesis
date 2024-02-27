@@ -73,7 +73,6 @@ namespace Si.GameEngine.Levels
 
                 _waitingOnPopulation = true;
                 AddSingleFireEvent(5, AddFreshEnemiesCallback);
-                AddSingleFireEvent(5, AddFreshEnemiesCallback);
                 CurrentWave++;
             }
         }
@@ -81,7 +80,7 @@ namespace Si.GameEngine.Levels
         private void AddFreshEnemiesCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
             SiPoint baseLocation = _gameEngine.Display.RandomOffScreenLocation();
-            CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave * 5);
+            CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave + 2);
             _gameEngine.Audio.RadarBlipsSound.Play();
             _waitingOnPopulation = false;
         }
