@@ -100,7 +100,8 @@ namespace Si.GameEngine.Core.TickControllers
 
                 if (GameEngine.Settings.LockPlayerAngleToNearbyEnemy)
                 {
-                    if (GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise) == false && GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) == false)
+                    if (GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise) == false
+                        && GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) == false)
                     {
                         if (_allowLockPlayerAngleToNearbyEnemy)
                         {
@@ -280,11 +281,11 @@ namespace Si.GameEngine.Core.TickControllers
                 //We are going to restrict the rotation speed to a percentage of thrust.
                 var rotationSpeed = GameEngine.Settings.MaxPlayerRotationSpeedDegrees * Sprite.Velocity.ThrottlePercentage;
 
-                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise))
+                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) && !GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
                 {
                     Sprite.Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0));
                 }
-                else if (GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
+                if (!GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) && GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
                 {
                     Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
                 }
