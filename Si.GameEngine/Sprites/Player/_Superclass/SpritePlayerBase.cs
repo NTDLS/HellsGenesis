@@ -110,8 +110,8 @@ namespace Si.GameEngine.Sprites.Player._Superclass
                         AngleDegrees = Velocity.Angle.Degrees,
                         BoostPercentage = Velocity.BoostPercentage,
                         ThrottlePercentage = Velocity.ThrottlePercentage,
-                        MaxSpeed = Velocity.MaxSpeed,
-                        MaxBoost = Velocity.MaxBoost
+                        Speed = Velocity.Speed,
+                        Boost = Velocity.Boost
                     };
                 }
             }
@@ -140,8 +140,8 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             result += $"Secondary Weapons : {secondaryWeapons.Trim()}\n";
             result += $"          Shields : {Loadout.ShieldHealth:n0}\n";
             result += $"    Hull Strength : {Loadout.HullHealth:n0}\n";
-            result += $"        Max Speed : {Loadout.MaxSpeed:n1}\n";
-            result += $"      Surge Drive : {Loadout.MaxBoost:n1}\n";
+            result += $"        Max Speed : {Loadout.Speed:n1}\n";
+            result += $"      Surge Drive : {Loadout.Boost:n1}\n";
             result += $"\n{Loadout.Description}";
 
             return result;
@@ -202,8 +202,8 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
             #region Reset loadout.
 
-            Velocity.MaxSpeed = Loadout.MaxSpeed;
-            Velocity.MaxBoost = Loadout.MaxBoost;
+            Velocity.Speed = Loadout.Speed;
+            Velocity.Boost = Loadout.Boost;
 
             SetHullHealth(Loadout.HullHealth);
             SetShieldHealth(Loadout.ShieldHealth);

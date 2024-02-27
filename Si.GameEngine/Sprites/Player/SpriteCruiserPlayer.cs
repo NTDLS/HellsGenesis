@@ -25,8 +25,8 @@ namespace Si.GameEngine.Sprites.Player
                     Description = "→ Heavy Assault Cruiser ←\n"
                        + "A formidable heavy assault vessel, bristling with weaponry\n"
                        + "and to take on any adversary in head-to-head combat.",
-                    MaxSpeed = 3.5,
-                    MaxBoost = 1.5,
+                    Speed = 3.5,
+                    Boost = 1.5,
                     HullHealth = 2500,
                     ShieldHealth = 3000,
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000)

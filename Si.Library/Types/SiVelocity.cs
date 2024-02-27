@@ -12,8 +12,8 @@ namespace Si.Library.Types
         public event ValueChangeEvent? OnRecoilChanged;
 
         public SiAngle Angle { get; set; } = new();
-        public double MaxSpeed { get; set; }
-        public double MaxBoost { get; set; }
+        public double Speed { get; set; }
+        public double Boost { get; set; }
         public double AvailableBoost { get; set; }
         public bool BoostRebuilding { get; set; }
 

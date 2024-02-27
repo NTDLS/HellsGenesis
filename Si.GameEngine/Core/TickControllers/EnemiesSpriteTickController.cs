@@ -41,7 +41,6 @@ namespace Si.GameEngine.Core.TickControllers
             SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
             obj.Location = GameEngine.Display.RandomOffScreenLocation();
-            obj.Velocity.MaxSpeed = SiRandom.Between(GameEngine.Settings.MinEnemySpeed, GameEngine.Settings.MaxEnemySpeed);
             obj.Velocity.Angle.Degrees = SiRandom.Between(0, 359);
 
             obj.BeforeCreate();

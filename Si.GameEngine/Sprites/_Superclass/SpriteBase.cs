@@ -451,7 +451,7 @@ namespace Si.GameEngine.Sprites._Superclass
             {
                 var previousPosition = otherObject.Location;
 
-                for (int i = 0; i < otherObject.Velocity.MaxSpeed; i++)
+                for (int i = 0; i < otherObject.Velocity.Speed; i++)
                 {
                     previousPosition.X -= otherObject.Velocity.Angle.X;
                     previousPosition.Y -= otherObject.Velocity.Angle.Y;
@@ -624,7 +624,7 @@ namespace Si.GameEngine.Sprites._Superclass
             Velocity.Angle.Degrees = SiPoint.AngleTo360(Location, location);
             if (velocity != null)
             {
-                Velocity.MaxSpeed = (double)velocity;
+                Velocity.Speed = (double)velocity;
             }
         }
 
@@ -637,7 +637,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
             if (velocity != null)
             {
-                Velocity.MaxSpeed = (double)velocity;
+                Velocity.Speed = (double)velocity;
             }
         }
 
@@ -983,8 +983,8 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(double epoch, SiPoint displacementVector)
         {
-            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
-            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
+            X += Velocity.Angle.X * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
+            Y += Velocity.Angle.Y * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
         }
 
         /// <summary>
@@ -996,8 +996,8 @@ namespace Si.GameEngine.Sprites._Superclass
         {
             Velocity.ThrottlePercentage = vector.ThrottlePercentage;
             Velocity.BoostPercentage = vector.BoostPercentage;
-            Velocity.MaxSpeed = vector.MaxSpeed;
-            Velocity.MaxBoost = vector.MaxBoost;
+            Velocity.Speed = vector.Speed;
+            Velocity.Boost = vector.Boost;
             Velocity.Angle.Degrees = vector.AngleDegrees;
             Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
             X = vector.X;

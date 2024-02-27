@@ -54,7 +54,7 @@ namespace Si.GameEngine.Core.Managers
 
             "Sprite-AngleInDegrees|uid:Required:Numeric,value:Required:Numeric|Gets the angle (in degrees) from one sprite to another.",
             "Sprite-AngleTo|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric|Gets the angle (in degrees) that a sprite is pointing.",
-            "Sprite-Boost|uid:Required:Numeric,value:Required:Numeric|Gets the current boost percentage for a sprite.",
+            "Sprite-BoostThrottle|uid:Required:Numeric,value:Required:Numeric|Gets the current boost percentage for a sprite.",
             "Sprite-DistanceTo|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric|Returns the distance from one sprite to another.",
 
             "Sprite-Explode|uid:Required:Numeric|Causes a sprite to explode.",
@@ -63,11 +63,11 @@ namespace Si.GameEngine.Core.Managers
             "Sprite-IsPointingAt|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric,toleranceDegrees:Optional=10:Numeric,maxDistance:Optional=10000:Numeric|Determines if one sprite is pointing at another.",
             "Sprite-IsPointingAway|baseSpriteUID:Required:Numeric,targetSpriteUID:Required:Numeric,toleranceDegrees:Optional=10:Numeric,maxDistance:Optional=10000:Numeric|Determines if one sprite is pointing aways from another",
             "Sprite-List|typeFilter:Optional:Criterion|Lists all sprites given an optional filter. Filter is a LIKE using !% and _.",
-            "Sprite-MaxBoost|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured max boost speed.",
-            "Sprite-MaxSpeed|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured native boost speed.",
+            "Sprite-Boost|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured max boost speed.",
+            "Sprite-Speed|uid:Required:Numeric,value:Required:Numeric|Displays a sprites configured native boost speed.",
             "Sprite-Move|uid:Required:Numeric,x:Required:Numeric,y:Required:Numeric|Sets a new local position for a given sprite.",
             "Sprite-Move-Center|uid:Required:Numeric|Moves a given sprite to the center of the screen.",
-            "Sprite-Throttle|uid:Required:Numeric,value:Required:Numeric|Gets the current throttle percentage for a sprite.",
+            "Sprite-SpeedThrottle|uid:Required:Numeric,value:Required:Numeric|Gets the current throttle percentage for a sprite.",
             "Sprite-Visible|uid:Required:Numeric,state:Required:Boolean|Displays whether a given sprite is visible or not.",
         };
 
@@ -570,7 +570,7 @@ namespace Si.GameEngine.Core.Managers
             });
         }
 
-        public void CommandHandler_Sprite_Throttle(DebugCommand command)
+        public void CommandHandler_Sprite_SpeedThrottle(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -584,7 +584,7 @@ namespace Si.GameEngine.Core.Managers
             });
         }
 
-        public void CommandHandler_Sprite_MaxBoost(DebugCommand command)
+        public void CommandHandler_Sprite_BoostThrottle(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -593,12 +593,12 @@ namespace Si.GameEngine.Core.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.MaxBoost = command.ParameterValue<double>("value");
+                    sprite.Velocity.Boost = command.ParameterValue<double>("value");
                 }
             });
         }
 
-        public void CommandHandler_Sprite_MaxSpeed(DebugCommand command)
+        public void CommandHandler_Sprite_Speed(DebugCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -607,7 +607,7 @@ namespace Si.GameEngine.Core.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.MaxSpeed = command.ParameterValue<double>("value");
+                    sprite.Velocity.Speed = command.ParameterValue<double>("value");
                 }
             });
         }

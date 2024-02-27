@@ -44,8 +44,8 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 {
                     Description = "→ Repulsor ←\n"
                        + "TODO: Add a description\n",
-                    MaxSpeed = 3.5,
-                    MaxBoost = 1.5,
+                    Speed = 3.5,
+                    Boost = 1.5,
                     HullHealth = 2500,
                     ShieldHealth = 3000,
                 };
@@ -59,7 +59,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
             ResetLoadout(loadout);
 
-            _initialMaxpeed = Velocity.MaxSpeed;
+            _initialMaxpeed = Velocity.Speed;
         }
 
         public override void VelocityChanged()
@@ -140,10 +140,10 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             //If we get down to one engine, slowly cut the max thrust to half of what it originally was. If we lose both, reduce it to 1.
             if (_thrust?.IsDeadOrExploded == true)
             {
-                Velocity.MaxSpeed -= 0.5;
-                if (Velocity.MaxSpeed < 1)
+                Velocity.Speed -= 0.5;
+                if (Velocity.Speed < 1)
                 {
-                    Velocity.MaxSpeed = 1;
+                    Velocity.Speed = 1;
                 }
             }
 

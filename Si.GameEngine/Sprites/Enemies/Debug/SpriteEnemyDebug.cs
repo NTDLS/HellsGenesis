@@ -41,8 +41,8 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                     Description = "→ Debug ←\n"
                        + "Easily the scariest enemy in the universe.\n"
                        + "When this badboy is spotted, s**t has already hit the proverbial fan.\n",
-                    MaxSpeed = 3.5,
-                    MaxBoost = 1.5,
+                    Speed = 3.5,
+                    Boost = 1.5,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };

@@ -36,8 +36,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Description = "→ Serf ←\n"
                        + "TODO: Add a description\n",
-                    MaxSpeed = 1.625,
-                    MaxBoost = 1.125,
+                    Speed = 3.5,
+                    Boost = 1.5,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };
@@ -93,7 +93,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             {
                 //Since we need to handle the entire "platoon" of formation ships all at once, a good
                 //  deal of this AI is handled by the Scenerio engine(s). (see: ScenarioSerfFormations).
-                if (distanceToPlayer < 500 && SiRandom.PercentChance(10000) || HullHealth != _initialHullHealth)
+                if (distanceToPlayer < 500 && SiRandom.ChanceIn(1, 50000) || HullHealth != _initialHullHealth)
                 {
                     Mode = AIMode.MovingToFallback;
                     _fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));

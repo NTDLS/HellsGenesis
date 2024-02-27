@@ -112,12 +112,12 @@ namespace Si.GameEngine.Core.TickControllers
             //Reverse the munition to its starting position.
             var hitTestPosition = new SiPoint
             {
-                X = munition.Location.X - munition.Velocity.MaxSpeed * munition.Velocity.Angle.X,
-                Y = munition.Location.Y - munition.Velocity.MaxSpeed * munition.Velocity.Angle.Y
+                X = munition.Location.X - munition.Velocity.Speed * munition.Velocity.Angle.X,
+                Y = munition.Location.Y - munition.Velocity.Speed * munition.Velocity.Angle.Y
             };
 
             //Hit-test each position along the munitions path.
-            for (int i = 0; i < munition.Velocity.MaxSpeed; i++)
+            for (int i = 0; i < munition.Velocity.Speed; i++)
             {
                 hitTestPosition.X += munition.Velocity.Angle.X;
                 hitTestPosition.Y += munition.Velocity.Angle.Y;

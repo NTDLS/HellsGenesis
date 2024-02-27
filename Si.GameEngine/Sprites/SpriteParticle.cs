@@ -47,7 +47,7 @@ namespace Si.GameEngine.Sprites
             TravelAngle.Degrees = SiRandom.Between(0, 359);
 
             Velocity.ThrottlePercentage = 100;
-            Velocity.MaxSpeed = SiRandom.Between(1.0, 4.0);
+            Velocity.Speed = SiRandom.Between(1.0, 4.0);
 
             _gameEngine = gameEngine;
         }
@@ -67,8 +67,8 @@ namespace Si.GameEngine.Sprites
             {
                 //We use a seperate angle for the travel direction because the base ApplyMotion()
                 //  moves the object in the the direction of the Velocity.Angle.
-                X += TravelAngle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
-                Y += TravelAngle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
+                X += TravelAngle.X * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
+                Y += TravelAngle.Y * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
             }
             else if (VectorType == ParticleVectorType.Native)
             {

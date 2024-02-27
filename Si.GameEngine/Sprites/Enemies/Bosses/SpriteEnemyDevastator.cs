@@ -54,8 +54,8 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 {
                     Description = "→ Devastator ←\n"
                        + "TODO: Add a description\n",
-                    MaxSpeed = 3.5,
-                    MaxBoost = 1.5,
+                    Speed = 3.5,
+                    Boost = 1.5,
                     HullHealth = 2500,
                     ShieldHealth = 3000,
                 };
@@ -69,7 +69,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
             ResetLoadout(loadout);
 
-            _initialMaxpeed = Velocity.MaxSpeed;
+            _initialMaxpeed = Velocity.Speed;
         }
 
         public override void AfterCreate()
@@ -175,16 +175,16 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
             //If we get down to one engine, slowly cut the max thrust to half of what it originally was. If we lose both, reduce it to 1.
             int thrustHandicap = (_leftThrust.IsDeadOrExploded ? 0 : 1) + (_rightThrust.IsDeadOrExploded ? 0 : 1);
-            if (thrustHandicap == 1 && Velocity.MaxSpeed > _initialMaxpeed / 2)
+            if (thrustHandicap == 1 && Velocity.Speed > _initialMaxpeed / 2)
             {
-                Velocity.MaxSpeed -= 0.5;
+                Velocity.Speed -= 0.5;
             }
-            if (thrustHandicap == 0 && Velocity.MaxSpeed > 1)
+            if (thrustHandicap == 0 && Velocity.Speed > 1)
             {
-                Velocity.MaxSpeed -= 0.5;
-                if (Velocity.MaxSpeed < 1)
+                Velocity.Speed -= 0.5;
+                if (Velocity.Speed < 1)
                 {
-                    Velocity.MaxSpeed = 1;
+                    Velocity.Speed = 1;
                 }
             }
 

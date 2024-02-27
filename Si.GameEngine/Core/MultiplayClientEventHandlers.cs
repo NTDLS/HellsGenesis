@@ -48,8 +48,8 @@ namespace Si.GameEngine.Core
                         X = enemy.LocalX,
                         Y = enemy.LocalY,
                         AngleDegrees = enemy.Velocity.Angle.Degrees,
-                        MaxSpeed = enemy.Velocity.MaxSpeed,
-                        MaxBoost = enemy.Velocity.MaxBoost,
+                        Speed = enemy.Velocity.Speed,
+                        Boost = enemy.Velocity.Boost,
                         ThrottlePercentage = enemy.Velocity.ThrottlePercentage,
                         BoostPercentage = enemy.Velocity.BoostPercentage,
                     }
@@ -113,8 +113,8 @@ namespace Si.GameEngine.Core
             sprite.Visable = true;
             sprite.X = layout.Vector.X;
             sprite.Y = layout.Vector.Y;
-            sprite.Velocity.MaxBoost = layout.Vector.MaxBoost;
-            sprite.Velocity.MaxSpeed = layout.Vector.MaxSpeed;
+            sprite.Velocity.Boost = layout.Vector.Boost;
+            sprite.Velocity.Speed = layout.Vector.Speed;
             sprite.Velocity.BoostPercentage = layout.Vector.BoostPercentage;
             sprite.Velocity.ThrottlePercentage = layout.Vector.ThrottlePercentage;
 
@@ -195,8 +195,8 @@ namespace Si.GameEngine.Core
                 sprite.MultiplayY = spriteInfo.Vector.Y;
                 sprite.LocalX = 0;
                 sprite.LocalY = 0;
-                sprite.Velocity.MaxSpeed = spriteInfo.Vector.MaxSpeed;
-                sprite.Velocity.MaxBoost = spriteInfo.Vector.MaxBoost;
+                sprite.Velocity.Speed = spriteInfo.Vector.Speed;
+                sprite.Velocity.Boost = spriteInfo.Vector.Boost;
                 sprite.Velocity.Angle.Degrees = spriteInfo.Vector.AngleDegrees;
                 sprite.Velocity.ThrottlePercentage = spriteInfo.Vector.ThrottlePercentage;
                 sprite.Velocity.BoostPercentage = spriteInfo.Vector.BoostPercentage;

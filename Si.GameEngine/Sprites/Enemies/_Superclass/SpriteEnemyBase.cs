@@ -101,8 +101,8 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                         AngleDegrees = Velocity.Angle.Degrees,
                         BoostPercentage = Velocity.BoostPercentage,
                         ThrottlePercentage = Velocity.ThrottlePercentage,
-                        MaxBoost = Velocity.MaxBoost,
-                        MaxSpeed = Velocity.MaxSpeed
+                        Boost = Velocity.Boost,
+                        Speed = Velocity.Speed
                     };
                 }
             }
@@ -123,8 +123,8 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             result += $"       Weapons : {weapons.Trim()}\n";
             result += $"       Shields : {Loadout.ShieldHealth:n0}\n";
             result += $" Hull Strength : {Loadout.HullHealth:n0}\n";
-            result += $"     Max Speed : {Loadout.MaxSpeed:n1}\n";
-            result += $"   Surge Drive : {Loadout.MaxBoost:n1}\n";
+            result += $"     Max Speed : {Loadout.Speed:n1}\n";
+            result += $"   Surge Drive : {Loadout.Boost:n1}\n";
             result += $"\n{Loadout.Description}";
 
             return result;
@@ -165,8 +165,8 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public void Reset()
         {
-            Velocity.MaxSpeed = Loadout.MaxSpeed;
-            Velocity.MaxBoost = Loadout.MaxBoost;
+            Velocity.Speed = Loadout.Speed;
+            Velocity.Boost = Loadout.Boost;
 
             SetHullHealth(Loadout.HullHealth);
             SetShieldHealth(Loadout.ShieldHealth);
@@ -216,7 +216,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                 {
                     Velocity.BoostPercentage += _gameEngine.Settings.EnemyThrustRampUp;
                 }
-                Velocity.AvailableBoost -= Velocity.MaxBoost * Velocity.BoostPercentage; //Consume boost.
+                Velocity.AvailableBoost -= Velocity.Boost * Velocity.BoostPercentage; //Consume boost.
 
                 if (Velocity.AvailableBoost < 0) //Sanity check available boost.
                 {
@@ -232,11 +232,11 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                 }
             }
 
-            var thrustVector = Velocity.MaxSpeed * (Velocity.ThrottlePercentage + -Velocity.RecoilPercentage);
+            var thrustVector = Velocity.Speed * (Velocity.ThrottlePercentage + -Velocity.RecoilPercentage);
 
             if (Velocity.BoostPercentage > 0)
             {
-                thrustVector += Velocity.MaxBoost * Velocity.BoostPercentage;
+                thrustVector += Velocity.Boost * Velocity.BoostPercentage;
             }
 
             X += Velocity.Angle.X * thrustVector * epoch;

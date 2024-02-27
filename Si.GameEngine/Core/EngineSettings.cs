@@ -45,9 +45,6 @@ namespace Si.GameEngine.Core
         public int InitialFrameStarCount { get; set; } = 100;
         public int DeltaFrameTargetStarCount { get; set; } = 200;
 
-        public double MinEnemySpeed { get; set; } = 3.75;
-        public double MaxEnemySpeed { get; set; } = 7.5;
-
         public bool VerticalSync { get; set; } = false;
         public bool AntiAliasing { get; set; } = true;
 

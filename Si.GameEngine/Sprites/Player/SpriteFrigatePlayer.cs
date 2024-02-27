@@ -25,8 +25,8 @@ namespace Si.GameEngine.Sprites.Player
                     Description = "→ Nimble Interceptor ←\n"
                         + "A nimble interceptor, designed for hit-and-run tactics\n"
                         + "and lightning-fast strikes against enemy forces.",
-                    MaxSpeed = 3.375,
-                    MaxBoost = 1.125,
+                    Speed = 3.375,
+                    Boost = 1.125,
                     HullHealth = 500,
                     ShieldHealth = 100,
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponScattershot), 10000)

@@ -53,7 +53,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             var initialVelocity = new SiVelocity()
             {
                 Angle = new SiAngle(headingDegrees),
-                MaxSpeed = initialSpeed,
+                Speed = initialSpeed,
                 ThrottlePercentage = 1.0
             };
 
@@ -88,8 +88,8 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 return;
             }
 
-            X += Velocity.Angle.X * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
-            Y += Velocity.Angle.Y * (Velocity.MaxSpeed * Velocity.ThrottlePercentage) * epoch;
+            X += Velocity.Angle.X * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
+            Y += Velocity.Angle.Y * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
         }
 
         public override void Explode()

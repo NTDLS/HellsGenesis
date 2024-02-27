@@ -163,7 +163,7 @@ namespace Si.Game
                         text.AppendLine($"Is Locked-on: {enemy.IsLockedOnHard}");
                         text.AppendLine($"Is Locked-on (Soft): {enemy.IsLockedOnSoft:n0}");
                         text.AppendLine($"Shield Points: {enemy.ShieldHealth:n0}");
-                        text.AppendLine($"MaxSpeed: {enemy.Velocity.MaxSpeed:n2}");
+                        text.AppendLine($"Speed: {enemy.Velocity.Speed:n2}");
                         text.AppendLine($"Angle: {enemy.Velocity.Angle.Degrees:n2}° {enemy.Velocity.Angle:n2}");
                         text.AppendLine($"Throttle Percent: {enemy.Velocity.ThrottlePercentage:n2}");
 

@@ -144,7 +144,7 @@ namespace Si.GameEngine.Core.TickControllers
                         Sprite.Velocity.BoostPercentage += boostToAdd;
                     }
 
-                    Sprite.Velocity.AvailableBoost -= Sprite.Velocity.MaxBoost * Sprite.Velocity.BoostPercentage;
+                    Sprite.Velocity.AvailableBoost -= Sprite.Velocity.Boost * Sprite.Velocity.BoostPercentage;
                     if (Sprite.Velocity.AvailableBoost < 0)
                     {
                         Sprite.Velocity.AvailableBoost = 0;
@@ -240,11 +240,11 @@ namespace Si.GameEngine.Core.TickControllers
                     Sprite.ThrustAnimation.Visable = GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward);
                 }
 
-                var totalThrustSpeed = Sprite.Velocity.MaxSpeed * (Sprite.Velocity.ThrottlePercentage + -Sprite.Velocity.RecoilPercentage);
+                var totalThrustSpeed = Sprite.Velocity.Speed * (Sprite.Velocity.ThrottlePercentage + -Sprite.Velocity.RecoilPercentage);
 
                 if (Sprite.Velocity.BoostPercentage > 0)
                 {
-                    totalThrustSpeed += Sprite.Velocity.MaxBoost * Sprite.Velocity.BoostPercentage;
+                    totalThrustSpeed += Sprite.Velocity.Boost * Sprite.Velocity.BoostPercentage;
                 }
 
                 var strafeAngle = new SiPoint();

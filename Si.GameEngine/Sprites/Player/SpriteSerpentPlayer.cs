@@ -25,8 +25,8 @@ namespace Si.GameEngine.Sprites.Player
                     Description = "→ Stealthy Serpent ←\n"
                         + "A stealthy long distance fighter, expert in covert operations\n"
                         + "and ambushing unsuspecting adversaries with deadly precision.",
-                    MaxSpeed = 3.75,
-                    MaxBoost = 2.625,
+                    Speed = 3.75,
+                    Boost = 2.625,
                     HullHealth = 100,
                     ShieldHealth = 15000,
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000)

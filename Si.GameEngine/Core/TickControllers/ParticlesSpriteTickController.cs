@@ -82,7 +82,7 @@ namespace Si.GameEngine.Core.TickControllers
                         particle.Shape = ParticleShape.FilledEllipse;
                         particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                         particle.FadeToBlackReductionAmount = SiRandom.Between(0.001, 0.01);
-                        particle.Velocity.MaxSpeed *= SiRandom.Between(1, 3.5);
+                        particle.Velocity.Speed *= SiRandom.Between(1, 3.5);
                         particle.VectorType = ParticleVectorType.Independent;
                     }
                     GameEngine.Audio.PlayRandomExplosion();
@@ -113,7 +113,7 @@ namespace Si.GameEngine.Core.TickControllers
 
                 particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                 particle.FadeToBlackReductionAmount = 0.001f;
-                particle.Velocity.MaxSpeed *= SiRandom.Between(1, 3.5);
+                particle.Velocity.Speed *= SiRandom.Between(1, 3.5);
                 particle.VectorType = ParticleVectorType.Native;
             }
         }

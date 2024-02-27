@@ -91,7 +91,7 @@ namespace Si.GameEngine.Levels
             enemy.X = x;
             enemy.Y = y;
             enemy.Velocity.ThrottlePercentage = 0.8;
-            enemy.Velocity.MaxSpeed = 6;
+            enemy.Velocity.Speed = 6;
             enemy.Velocity.Angle.Degrees = angle;
             return enemy;
         }

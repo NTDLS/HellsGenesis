@@ -36,8 +36,8 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                     Description = "→ Debug Static ←\n"
                        + "Does noting. Sits where you place it..\n"
                        + "When this badboy is spotted, s**t has already hit the proverbial fan.\n",
-                    MaxSpeed = 0,
-                    MaxBoost = 0,
+                    Speed = 0,
+                    Boost = 0,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };

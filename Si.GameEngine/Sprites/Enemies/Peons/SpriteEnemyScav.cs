@@ -33,8 +33,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Description = "→ Scav ←\n"
                        + "TODO: Add a description\n",
-                    MaxSpeed = 1.625,
-                    MaxBoost = 1.125,
+                    Speed = 3.5,
+                    Boost = 1.5,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };

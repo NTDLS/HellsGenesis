@@ -21,7 +21,7 @@ namespace Si.GameEngine.Sprites
             X = SiRandom.Between(0, gameEngine.Display.TotalCanvasSize.Width);
             Y = SiRandom.Between(0, gameEngine.Display.TotalCanvasSize.Height);
 
-            Velocity.MaxSpeed = 0.5;
+            Velocity.Speed = 0.5;
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
@@ -35,8 +35,8 @@ namespace Si.GameEngine.Sprites
 
         public override void ApplyMotion(double epoch, SiPoint displacementVector)
         {
-            X -= Velocity.MaxSpeed * displacementVector.X * Velocity.ThrottlePercentage * epoch;
-            Y -= Velocity.MaxSpeed * displacementVector.Y * Velocity.ThrottlePercentage * epoch;
+            X -= Velocity.Speed * displacementVector.X * Velocity.ThrottlePercentage * epoch;
+            Y -= Velocity.Speed * displacementVector.Y * Velocity.ThrottlePercentage * epoch;
         }
     }
 }
