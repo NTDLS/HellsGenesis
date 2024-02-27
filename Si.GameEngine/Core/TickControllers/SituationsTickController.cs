@@ -23,9 +23,20 @@ namespace Si.GameEngine.Core.TickControllers
             CurrentSituation = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { _gameEngine, });
         }
 
+        public override void ExecuteWorldClockTick()
+        {
+            if (CurrentSituation?.CurrentLevel != null)
+            {
+                if (CurrentSituation.CurrentLevel.State == SiConstants.SiLevelState.Ended)
+                {
+                    CurrentSituation?.AdvanceLevel();
+                }
+            }
+        }
+
         public bool AdvanceLevel()
         {
-            return CurrentSituation?.Advance() ?? false;
+            return CurrentSituation?.AdvanceLevel() ?? false;
         }
 
         public void End()

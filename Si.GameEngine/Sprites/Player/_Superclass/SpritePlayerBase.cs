@@ -79,6 +79,8 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             ShipEngineRoarSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Engine Roar.wav", 0.5f, true);
             ShipEngineIdleSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
             ShipEngineBoostSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
+
+            CenterInUniverse();
         }
 
         public override void VisibilityChanged()
@@ -192,9 +194,6 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             ClearSecondaryWeapons();
 
             ReviveDeadOrExploded();
-
-            X = _gameEngine.Display.TotalCanvasSize.Width / 2;
-            Y = _gameEngine.Display.TotalCanvasSize.Height / 2;
 
             Velocity.Angle = new SiAngle(45);
 

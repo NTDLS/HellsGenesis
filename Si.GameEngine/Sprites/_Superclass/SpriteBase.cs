@@ -298,6 +298,15 @@ namespace Si.GameEngine.Sprites._Superclass
         }
 
         /// <summary>
+        /// Sets the sprites center to the center of the screen.
+        /// </summary>
+        public void CenterInUniverse()
+        {
+            X = _gameEngine.Display.TotalCanvasSize.Width / 2 - Size.Width / 2;
+            Y = _gameEngine.Display.TotalCanvasSize.Height / 2 - Size.Height / 2;
+        }
+
+        /// <summary>
         /// Allows for the testing of hits from a munition, 
         /// </summary>
         /// <param name="munition">The munition object that is being tested for.</param>

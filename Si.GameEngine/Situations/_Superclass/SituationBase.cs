@@ -54,7 +54,7 @@ namespace Si.GameEngine.Situations._Superclass
         /// Returns true of the situation is advanced, returns FALSE if we have have no more situations in the queue.
         /// </summary>
         /// <returns></returns>
-        public bool Advance()
+        public bool AdvanceLevel()
         {
             lock (Levels)
             {
