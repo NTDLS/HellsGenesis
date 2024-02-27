@@ -256,8 +256,8 @@ namespace Si.GameEngine.Core.TickControllers
                     strafeAngle = SiMath.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + 90), new SiPoint(1, 1));
                 }
 
-                displacementVector.X += (Sprite.Velocity.Angle.X + strafeAngle.X) * totalThrustSpeed;
-                displacementVector.Y += (Sprite.Velocity.Angle.Y + strafeAngle.Y) * totalThrustSpeed;
+                displacementVector.X += (Sprite.Velocity.Angle.X * totalThrustSpeed) + (strafeAngle.X * ((totalThrustSpeed / 2) + 0.5));
+                displacementVector.Y += (Sprite.Velocity.Angle.Y * totalThrustSpeed) + (strafeAngle.Y * ((totalThrustSpeed / 2) + 0.5));
 
                 if (Sprite.Velocity.BoostPercentage > 0.1)
                 {

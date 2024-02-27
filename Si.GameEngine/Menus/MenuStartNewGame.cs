@@ -37,11 +37,11 @@ namespace Si.GameEngine.Menus
 
             offsetY += 50;
 
-            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Forward and Rotate with <W>, <A>, <S>.");
+            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Forward and Rotate with <W>, <A> and <S>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Strafe with <Q>, <E>.");
+            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Strafe with <LEFT> and <RIGHT> arrows.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
@@ -57,13 +57,13 @@ namespace Si.GameEngine.Menus
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
-            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Change weapons with <left> and <right> arrows.");
+            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Change weapons with <Q> and <E>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
-            helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Change speed with <up> and <down> arrows.");
-            helpItem.X -= helpItem.Size.Width / 2;
-            offsetY += helpItem.Size.Height + 10;
+            //helpItem = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Change speed with <UP> and <DOWN> arrows.");
+            //helpItem.X -= helpItem.Size.Width / 2;
+            //offsetY += helpItem.Size.Height + 10;
 
             //itemYes.Selected = true;
 

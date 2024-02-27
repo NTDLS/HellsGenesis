@@ -83,8 +83,8 @@ namespace Si.GameEngine.Core.Managers
 
             var keyboardState = Keyboard.GetCurrentState();
 
-            _gameEngine.Input.KeyStateChanged(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Q));
-            _gameEngine.Input.KeyStateChanged(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.E));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Left));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.Right));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
@@ -94,7 +94,7 @@ namespace Si.GameEngine.Core.Managers
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.Left, keyboardState.IsPressed(Key.Left));
-            _gameEngine.Input.KeyStateChanged(SiPlayerKey.Right, keyboardState.IsPressed(Key.Right));
+            _gameEngine.Input.KeyStateChanged(SiPlayerKey.Right, keyboardState.IsPressed(Key.Left));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.Up, keyboardState.IsPressed(Key.Up));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.Down, keyboardState.IsPressed(Key.Down));
             _gameEngine.Input.KeyStateChanged(SiPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
@@ -287,14 +287,14 @@ namespace Si.GameEngine.Core.Managers
             {
                 _gameEngine.Sprites.Particles.ParticleCloud(500, _gameEngine.Player.Sprite);
             }
-            else if (key == Keys.Left)
+            else if (key == Keys.Q)
             {
                 if (_gameEngine.Player?.Sprite?.Visable == true)
                 {
                     _gameEngine.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
                 }
             }
-            else if (key == Keys.Right)
+            else if (key == Keys.E)
             {
                 if (_gameEngine.Player?.Sprite?.Visable == true)
                 {
