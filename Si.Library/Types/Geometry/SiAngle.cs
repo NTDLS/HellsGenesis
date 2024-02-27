@@ -48,46 +48,40 @@
         #region  Unary Operator Overloading.
 
         public static implicit operator SiPoint(SiAngle angle)
-        {
-            return new SiPoint(Math.Cos(angle.Radians), Math.Sin(angle.Radians));
-        }
+            => new SiPoint(Math.Cos(angle.Radians), Math.Sin(angle.Radians));
 
         public static SiAngle operator -(SiAngle original, SiAngle modifier)
-        {
-            return new SiAngle(original.Radians - modifier.Radians);
-        }
+            => new SiAngle(original.Radians - modifier.Radians);
 
         public static SiAngle operator -(SiAngle original, double radians)
-        {
-            return new SiAngle(original.Radians - radians);
-        }
+            => new SiAngle(original.Radians - radians);
 
         public static SiAngle operator +(SiAngle original, SiAngle modifier)
-        {
-            return new SiAngle(original.Radians + modifier.Radians);
-        }
+            => new SiAngle(original.Radians + modifier.Radians);
 
         public static SiAngle operator +(SiAngle original, double radians)
-        {
-            return new SiAngle(original.Radians + radians);
-        }
+            => new SiAngle(original.Radians + radians);
 
-        public static SiAngle operator *(SiAngle original, SiAngle modifier)
-        {
-            return new SiAngle(original.X * modifier.X, original.Y * modifier.Y);
-        }
+        public static SiAngle operator *(SiAngle original, SiAngle scaleFactor)
+            => new SiAngle(original.X * scaleFactor.X, original.Y * scaleFactor.Y);
 
-        public static SiPoint operator *(SiAngle original, double scalar)
-        {
-            return new SiPoint(original.X * scalar, original.Y * scalar);
-        }
+        public static SiPoint operator *(SiAngle original, double scaleFactor)
+            => new SiPoint(original.X * scaleFactor, original.Y * scaleFactor);
+
+        public static SiAngle operator /(SiAngle original, SiAngle scaleFactor)
+            => new SiAngle(original.X / scaleFactor.X, original.Y / scaleFactor.Y);
+
+        public static SiPoint operator /(SiAngle original, double scaleFactor)
+            => new SiPoint(original.X / scaleFactor, original.Y / scaleFactor);
 
         public override bool Equals(object? o)
-        {
-            return Math.Round(((SiAngle?)o)?.X ?? double.NaN, 4) == X && Math.Round(((SiAngle?)o)?.Y ?? double.NaN, 4) == Y;
-        }
+            => Math.Round(((SiAngle?)o)?.X ?? double.NaN, 4) == X && Math.Round(((SiAngle?)o)?.Y ?? double.NaN, 4) == Y;
 
         #endregion
+
+        public double RadiansUnadjusted => DegreesToRadians(_degrees);
+        public double X => Math.Cos(Radians);
+        public double Y => Math.Sin(Radians);
 
         public override int GetHashCode() => ToString().GetHashCode();
         public override string ToString() => $"{{{Math.Round(X, 4):#.####}x,{Math.Round(Y, 4):#.####}y}}";
@@ -107,7 +101,6 @@
         /// </summary>
         public double DegreesNormalized180 => (_degrees + 180) % 360 - 180;
 
-
         /// <summary>
         /// Angle in degrees between 0-359.
         /// </summary>
@@ -116,10 +109,8 @@
         public double _degrees;
         public double Degrees
         {
-            get
-            {
-                return _degrees;
-            }
+            get => _degrees;
+
             set
             {
                 if (value < 0)
@@ -135,10 +126,7 @@
 
         public double Radians
         {
-            get
-            {
-                return DegreesToRadians(_degrees);
-            }
+            get => DegreesToRadians(_degrees);
             set
             {
                 if (value < 0)
@@ -153,9 +141,5 @@
                 _degrees = RadiansToDegrees(value);
             }
         }
-
-        public double RadiansUnadjusted => DegreesToRadians(_degrees);
-        public double X => Math.Cos(Radians);
-        public double Y => Math.Sin(Radians);
     }
 }

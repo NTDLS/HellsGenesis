@@ -38,19 +38,13 @@ namespace Si.Library.Types.Geometry
         }
 
         public RectangleF ToRectangleF(float width, float height)
-        {
-            return new RectangleF((float)_x, (float)_y, width, height);
-        }
+            => new RectangleF((float)_x, (float)_y, width, height);
 
         public RectangleF ToRectangleF(SizeF size)
-        {
-            return new RectangleF((float)_x, (float)_y, size.Width, size.Height);
-        }
+            => new RectangleF((float)_x, (float)_y, size.Width, size.Height);
 
         public RectangleF ToRectangleF()
-        {
-            return new RectangleF((float)_x, (float)_y, 1f, 1f);
-        }
+            => new RectangleF((float)_x, (float)_y, 1f, 1f);
 
         /// <summary>
         /// Calculates the distance from one object to another.
@@ -80,59 +74,50 @@ namespace Si.Library.Types.Geometry
         #region  Unary Operator Overloading.
 
         public static SiPoint operator -(SiPoint original, SiPoint modifier)
-        {
-            return new SiPoint(original.X - modifier.X, original.Y - modifier.Y);
-        }
+            => new SiPoint(original.X - modifier.X, original.Y - modifier.Y);
 
         public static SiPoint operator -(SiPoint original, double modifier)
-        {
-            return new SiPoint(original.X - modifier, original.Y - modifier);
-        }
+           => new SiPoint(original.X - modifier, original.Y - modifier);
 
         public static SiPoint operator +(SiPoint original, SiPoint modifier)
-        {
-            return new SiPoint(original.X + modifier.X, original.Y + modifier.Y);
-        }
+            => new SiPoint(original.X + modifier.X, original.Y + modifier.Y);
 
         public static SiPoint operator +(SiPoint original, double modifier)
-        {
-            return new SiPoint(original.X + modifier, original.Y + modifier);
-        }
+            => new SiPoint(original.X + modifier, original.Y + modifier);
 
-        public static SiPoint operator *(SiPoint original, SiPoint modifier)
+        public static SiPoint operator *(SiPoint original, SiPoint scaleFactor)
+            => new SiPoint(original.X * scaleFactor.X, original.Y * scaleFactor.Y);
+
+        public static SiPoint operator *(SiPoint original, double scaleFactor)
+            => new SiPoint(original.X * scaleFactor, original.Y * scaleFactor);
+
+        public static SiPoint operator /(SiPoint original, SiPoint scaleFactor)
         {
-            if (modifier.X == 0.0 && modifier.Y == 0.0)
+            if (scaleFactor.X == 0.0 && scaleFactor.Y == 0.0)
             {
                 return new SiPoint(0, 0);
             }
-            return new SiPoint(original.X * modifier.X, original.Y * modifier.Y);
+            return new SiPoint(original.X / scaleFactor.X, original.Y / scaleFactor.Y);
         }
 
-        public static SiPoint operator *(SiPoint original, double modifier)
+        public static SiPoint operator /(SiPoint original, double scaleFactor)
         {
-            if (modifier == 0.0)
+            if (scaleFactor == 0.0)
             {
                 return new SiPoint(0, 0);
             }
-            return new SiPoint(original.X * modifier, original.Y * modifier);
+            return new SiPoint(original.X / scaleFactor, original.Y / scaleFactor);
         }
 
         public override bool Equals(object? o)
-        {
-            return Math.Round(((SiPoint?)o)?.X ?? double.NaN, 4) == X && Math.Round(((SiPoint?)o)?.Y ?? double.NaN, 4) == Y;
-        }
+            => Math.Round(((SiPoint?)o)?.X ?? double.NaN, 4) == X && Math.Round(((SiPoint?)o)?.Y ?? double.NaN, 4) == Y;
 
         #endregion
 
-        public override int GetHashCode()
-        {
-            return ToString().GetHashCode();
-        }
+        public override int GetHashCode() => ToString().GetHashCode();
 
         public override string ToString()
-        {
-            return $"{{{Math.Round(X, 4).ToString("#.####")},{Math.Round(Y, 4).ToString("#.####")}}}";
-        }
+            => $"{{{Math.Round(X, 4).ToString("#.####")},{Math.Round(Y, 4).ToString("#.####")}}}";
 
         public SiReadonlyPoint ToReadonlyCopy() => new SiReadonlyPoint(this);
 
