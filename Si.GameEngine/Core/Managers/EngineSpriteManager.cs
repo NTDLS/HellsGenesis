@@ -294,8 +294,7 @@ namespace Si.GameEngine.Core.Managers
 
                 _gameEngine.Rendering.DrawBitmapAt(renderTarget, radarBgImage,
                     _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,
-                    _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height,
-                    0);
+                    _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height, 0);
 
                 double radarDistance = 8;
 

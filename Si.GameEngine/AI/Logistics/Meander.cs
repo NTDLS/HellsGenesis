@@ -216,7 +216,7 @@ namespace Si.GameEngine.AI.Logistics
 
             aiParams.Set(Inputs.DistanceFromObservationObject, percentageOfCloseness);
 
-            var deltaAngle = _owner.DeltaAngle(_observedObject);
+            var deltaAngle = _owner.DeltaAngleDegrees(_observedObject);
 
             var angleToIn6thRadians = SiAngle.DegreesToRadians(deltaAngle) / 6.0;
 

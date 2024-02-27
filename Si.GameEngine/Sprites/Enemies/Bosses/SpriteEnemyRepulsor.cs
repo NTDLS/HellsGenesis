@@ -81,7 +81,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             {
                 if (_leftGun?.IsDeadOrExploded == false)
                 {
-                    var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - 90, new SiPoint(25, 25));
+                    var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - SiMath.DegreesToRadians(90), new SiPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _leftGun.X = X + pointLeft.X;
                     _leftGun.Y = Y + pointLeft.Y;
@@ -89,7 +89,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
                 if (_rightGun?.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 90, new SiPoint(25, 25));
+                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(90), new SiPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _rightGun.X = X + pointRight.X;
                     _rightGun.Y = Y + pointRight.Y;
@@ -97,7 +97,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
                 if (_thrust?.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + 180, new SiPoint(35, 35));
+                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(180), new SiPoint(35, 35));
                     _thrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _thrust.X = X + pointRight.X;
                     _thrust.Y = Y + pointRight.Y;
@@ -120,7 +120,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         private double distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
         private const double baseFallbackDistance = 800;
         private double fallbackDistance;
-        private SiAngle fallToAngle;
+        private SiAngle fallToAngleRadians;
         private AIMode mode = AIMode.Approaching;
         private int roundsToFireBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
@@ -155,7 +155,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 }
 
                 //Keep pointing at the player.
-                var deltaAngle = DeltaAngle(_gameEngine.Player.Sprite);
+                var deltaAngle = DeltaAngleDegrees(_gameEngine.Player.Sprite);
 
                 if (deltaAngle.IsNotBetween(-10, 10))
                 {
@@ -228,14 +228,14 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
+                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0 + SiRandom.Between(0, 10)).Radians;
                     fallbackDistance = baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 
             if (mode == AIMode.MovingToFallback)
             {
-                var deltaAngle = Velocity.Angle - fallToAngle;
+                var deltaAngle = Velocity.Angle - fallToAngleRadians;
 
                 if (deltaAngle.Degrees > 10)
                 {
@@ -257,7 +257,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_gameEngine.Player.Sprite);
+                var deltaAngle = DeltaAngleDegrees(_gameEngine.Player.Sprite);
 
                 if (deltaAngle.IsNotBetween(-10, 10))
                 {

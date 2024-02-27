@@ -74,7 +74,7 @@ namespace Si.Library.Types.Geometry
         public static double AngleTo360(SiPoint from, SiPoint to)
         {
             var radians = Math.Atan2(to.Y - from.Y, to.X - from.X);
-            return (SiAngle.RadiansToDegrees(radians) + 360.0 + SiAngle.AngleOffsetDegrees) % 360.0;
+            return (SiAngle.RadiansToDegrees(radians) + 360.0) % 360.0;
         }
 
         #region  Unary Operator Overloading.

@@ -134,10 +134,10 @@ namespace Si.GameEngine.AI.Logistics
                 var distanceToObservedObject = _owner.DistanceTo(_observedObject);
 
                 //As we get closer, make the angle more agressive.
-                double rotationAmount = (1 - (distanceToObservedObject / _idealMinDistance)) * 2.0;
+                double rotationRadians = new SiAngle((1 - (distanceToObservedObject / _idealMinDistance)) * 2.0).Radians;
 
                 //Rotate as long as we are facing the observed object. If we are no longer facing, then depart.
-                if (_owner.RotateIfPointingAt(_observedObject, _rotationDirection, rotationAmount, _approachAngle) == false)
+                if (_owner.RotateIfPointingAt(_observedObject, _rotationDirection, rotationRadians, _approachAngle) == false)
                 {
                     SetCurrentActivity(AIActivity.Departing);
                 }

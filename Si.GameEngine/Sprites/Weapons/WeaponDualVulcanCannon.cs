@@ -38,14 +38,14 @@ namespace Si.GameEngine.Sprites.Weapons
 
                 if (RoundQuantity > 0 || _owner.IsDrone)
                 {
-                    var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + 90, new SiPoint(5, 5));
+                    var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiMath.DegreesToRadians(90), new SiPoint(5, 5));
                     _gameEngine.Sprites.Munitions.Create(this, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0 || _owner.IsDrone)
                 {
-                    var pointLeft = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - 90, new SiPoint(5, 5));
+                    var pointLeft = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - SiMath.DegreesToRadians(90), new SiPoint(5, 5));
                     _gameEngine.Sprites.Munitions.Create(this, pointLeft);
                     RoundQuantity--;
                 }

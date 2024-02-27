@@ -1,6 +1,7 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
+using Si.GameEngine.Utility;
 using Si.Library.Types.Geometry;
 using System;
 using static Si.Library.SiConstants;
@@ -14,7 +15,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
     {
         public int MaxSeekingObservationDistance { get; set; } = 1000;
         public int MaxSeekingObservationAngleDegrees { get; set; } = 20;
-        public int SeekingRotationRateInDegrees { get; set; } = 4;
+        public double SeekingRotationRateRadians { get; set; } = SiMath.DegreesToRadians(4);
 
         public SeekingMunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
@@ -27,17 +28,17 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             {
                 if (DistanceTo(_gameEngine.Player.Sprite) < MaxSeekingObservationDistance)
                 {
-                    var deltaAngle = DeltaAngle(_gameEngine.Player.Sprite);
+                    var deltaAngle = DeltaAngleDegrees(_gameEngine.Player.Sprite);
 
                     if (Math.Abs((double)deltaAngle) < MaxSeekingObservationAngleDegrees)
                     {
                         if (deltaAngle >= 0) //We might as well turn around clock-wise
                         {
-                            Velocity.Angle += SeekingRotationRateInDegrees;
+                            Velocity.Angle += SeekingRotationRateRadians;
                         }
                         else if (deltaAngle < 0) //We might as well turn around counter clock-wise
                         {
-                            Velocity.Angle -= SeekingRotationRateInDegrees;
+                            Velocity.Angle -= SeekingRotationRateRadians;
                         }
                     }
                 }
@@ -50,7 +51,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 {
                     if (DistanceTo(enemy) < MaxSeekingObservationDistance)
                     {
-                        var deltaAngle = DeltaAngle(enemy);
+                        var deltaAngle = DeltaAngleDegrees(enemy);
 
                         if (smallestAngle == null || Math.Abs(deltaAngle) < Math.Abs((double)smallestAngle))
                         {
@@ -63,11 +64,11 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 {
                     if (smallestAngle >= 0) //We might as well turn around clock-wise
                     {
-                        Velocity.Angle += SeekingRotationRateInDegrees;
+                        Velocity.Angle += SeekingRotationRateRadians;
                     }
                     else if (smallestAngle < 0) //We might as well turn around counter clock-wise
                     {
-                        Velocity.Angle -= SeekingRotationRateInDegrees;
+                        Velocity.Angle -= SeekingRotationRateRadians;
                     }
                 }
             }

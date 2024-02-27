@@ -73,6 +73,8 @@ namespace Si.GameEngine.Levels
                 _gameEngine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             }
 
+            _gameEngine.Sprites.Debugs.Create(600, 600);
+
             //_gameEngine.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameEngine.Sprites.Enemies.Create<EnemyRepulsor>();
             //_gameEngine.Sprites.Enemies.Create<EnemyRepulsor>();

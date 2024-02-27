@@ -70,7 +70,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         private double distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
         private const double baseFallbackDistance = 800;
         private double fallbackDistance;
-        private SiAngle fallToAngle;
+        private SiAngle fallToAngleRadians;
         private AIMode mode = AIMode.Approaching;
         private int roundsToFireBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
@@ -128,14 +128,14 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
+                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0 + SiRandom.Between(0, 10)).Radians;
                     fallbackDistance = baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 
             if (mode == AIMode.MovingToFallback)
             {
-                var deltaAngle = Velocity.Angle - fallToAngle;
+                var deltaAngle = Velocity.Angle - fallToAngleRadians;
 
                 if (deltaAngle.Degrees > 10)
                 {
@@ -157,7 +157,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             if (mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_gameEngine.Player.Sprite);
+                var deltaAngle = DeltaAngleDegrees(_gameEngine.Player.Sprite);
 
                 if (deltaAngle.IsNotBetween(-10, 10))
                 {

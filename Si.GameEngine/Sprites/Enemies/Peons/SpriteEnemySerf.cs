@@ -72,7 +72,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         private double _distanceToKeep = _baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
         private const double _baseFallbackDistance = 400;
         private double _fallbackDistance;
-        private SiAngle _fallToAngle;
+        private SiAngle fallToAngleRadians;
 
         public AIMode Mode = AIMode.InFormation;
 
@@ -96,7 +96,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 if (distanceToPlayer < 500 && SiRandom.ChanceIn(1, 50000) || HullHealth != _initialHullHealth)
                 {
                     Mode = AIMode.MovingToFallback;
-                    _fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
+                    fallToAngleRadians = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
                     _fallbackDistance = _baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
@@ -110,14 +110,14 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 else
                 {
                     Mode = AIMode.MovingToFallback;
-                    _fallToAngle = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
+                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0 + SiRandom.Between(0, 10)).Radians;
                     _fallbackDistance = _baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
                 }
             }
 
             if (Mode == AIMode.MovingToFallback)
             {
-                var deltaAngle = Velocity.Angle - _fallToAngle;
+                var deltaAngle = Velocity.Angle - fallToAngleRadians;
 
                 if (deltaAngle.Degrees > 10)
                 {
@@ -139,7 +139,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             if (Mode == AIMode.MovingToApproach)
             {
-                var deltaAngle = DeltaAngle(_gameEngine.Player.Sprite);
+                var deltaAngle = DeltaAngleDegrees(_gameEngine.Player.Sprite);
 
                 if (deltaAngle.IsNotBetween(-10, 10))
                 {

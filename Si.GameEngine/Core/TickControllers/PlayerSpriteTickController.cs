@@ -250,11 +250,11 @@ namespace Si.GameEngine.Core.TickControllers
                 var strafeAngle = new SiPoint();
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && !GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
                 {
-                    strafeAngle = SiMath.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + 270), new SiPoint(1, 1));
+                    strafeAngle = SiMath.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + SiMath.DegreesToRadians(270)), new SiPoint(1, 1));
                 }
                 else if (!GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
                 {
-                    strafeAngle = SiMath.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + 90), new SiPoint(1, 1));
+                    strafeAngle = SiMath.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + SiMath.DegreesToRadians(90)), new SiPoint(1, 1));
                 }
 
                 displacementVector.X += (Sprite.Velocity.Angle.X * totalThrustSpeed) + (strafeAngle.X * ((totalThrustSpeed / 2) + 0.5));

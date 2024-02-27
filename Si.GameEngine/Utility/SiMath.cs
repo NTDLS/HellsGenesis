@@ -6,9 +6,6 @@ namespace Si.GameEngine.Utility
 {
     internal class SiMath
     {
-        public const double AngleOffsetDegrees = 90.0;
-        public const double AngleOffsetRadians = 1.5707963267948966; //(Math.PI / 180.0) * AngleOffsetDegrees;
-
         const double DEG_TO_RAD = Math.PI / 180.0;
         const double RAD_TO_DEG = 180.0 / Math.PI;
 

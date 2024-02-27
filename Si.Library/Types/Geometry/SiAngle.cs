@@ -4,12 +4,6 @@
     {
         #region Static Utilities.
 
-        /// <summary>
-        /// Rotate the angle counter-clockwise by 90 degrees. All of our graphics math should assume this.
-        /// </summary>
-        public const double AngleOffsetDegrees = 90.0;
-        public const double AngleOffsetRadians = 1.5707963267948966; //(Math.PI / 180.0) * AngleOffsetDegrees;
-
         const double DEG_TO_RAD = Math.PI / 180.0;
         const double RAD_TO_DEG = 180.0 / Math.PI;
 
@@ -25,12 +19,12 @@
 
         public static double XYToRadians(double x, double y)
         {
-            return Math.Atan2(y, x) + AngleOffsetRadians;
+            return Math.Atan2(y, x);
         }
 
         public static double XYToDegrees(double x, double y)
         {
-            return RadiansToDegrees(Math.Atan2(y, x)) + AngleOffsetDegrees;
+            return RadiansToDegrees(Math.Atan2(y, x));
         }
 
         public static SiPoint ToXY(SiAngle angle)
@@ -40,13 +34,12 @@
 
         public static SiPoint DegreesToXY(double degrees)
         {
-            double radians = DegreesToRadians(degrees) - AngleOffsetRadians;
+            double radians = DegreesToRadians(degrees);
             return new SiPoint(Math.Cos(radians), Math.Sin(radians));
         }
 
         public static SiPoint RadiansToXY(double radians)
         {
-            radians -= AngleOffsetRadians;
             return new SiPoint(Math.Cos(radians), Math.Sin(radians));
         }
 
@@ -60,51 +53,56 @@
 
         public SiAngle(SiAngle angle)
         {
-            Degrees = angle.Degrees;
+            Radians = angle.Radians;
         }
 
-        public SiAngle(double degrees)
+        public SiAngle(double radians)
         {
-            Degrees = degrees;
+            Radians = radians;
         }
 
         public SiAngle(double x, double y)
         {
-            Degrees = RadiansToDegrees(Math.Atan2(y, x)) + AngleOffsetDegrees;
+            Degrees = RadiansToDegrees(Math.Atan2(y, x));
         }
 
         #endregion
 
         #region  Unary Operator Overloading.
 
-        public static SiAngle operator -(SiAngle original, SiAngle modifier)
+        public static implicit operator SiPoint(SiAngle angle)
         {
-            return new SiAngle(original.Degrees - modifier.Degrees);
+            return new SiPoint(Math.Cos(angle.Radians), Math.Sin(angle.Radians));
         }
 
-        public static SiAngle operator -(SiAngle original, double degrees)
+        public static SiAngle operator -(SiAngle original, SiAngle modifier)
         {
-            return new SiAngle(original.Degrees - degrees);
+            return new SiAngle(original.Radians - modifier.Radians);
+        }
+
+        public static SiAngle operator -(SiAngle original, double radians)
+        {
+            return new SiAngle(original.Radians - radians);
         }
 
         public static SiAngle operator +(SiAngle original, SiAngle modifier)
         {
-            return new SiAngle(original.Degrees + modifier.Degrees);
+            return new SiAngle(original.Radians + modifier.Radians);
         }
 
-        public static SiAngle operator +(SiAngle original, double degrees)
+        public static SiAngle operator +(SiAngle original, double radians)
         {
-            return new SiAngle(original.Degrees + degrees);
+            return new SiAngle(original.Radians + radians);
         }
 
         public static SiAngle operator *(SiAngle original, SiAngle modifier)
         {
-            return new SiAngle(original.Degrees * modifier.Degrees);
+            return new SiAngle(original.Radians * modifier.Radians);
         }
 
-        public static SiAngle operator *(SiAngle original, double degrees)
+        public static SiAngle operator *(SiAngle original, double radians)
         {
-            return new SiAngle(original.Degrees * degrees);
+            return new SiAngle(original.Radians * radians);
         }
 
         public override bool Equals(object? o)
@@ -180,7 +178,11 @@
         {
             get
             {
-                return DegreesToRadians(_degrees) - AngleOffsetRadians;
+                return DegreesToRadians(_degrees);
+            }
+            set
+            {
+                _degrees = RadiansToDegrees(value);
             }
         }
 

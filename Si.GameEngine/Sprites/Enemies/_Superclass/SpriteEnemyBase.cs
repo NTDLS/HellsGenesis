@@ -232,15 +232,19 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                 }
             }
 
-            var thrustVector = Velocity.Speed * (Velocity.ThrottlePercentage + -Velocity.RecoilPercentage);
+            var thrustAmount = Velocity.Speed * (Velocity.ThrottlePercentage + -Velocity.RecoilPercentage);
 
             if (Velocity.BoostPercentage > 0)
             {
-                thrustVector += Velocity.Boost * Velocity.BoostPercentage;
+                thrustAmount += Velocity.Boost * Velocity.BoostPercentage;
             }
 
-            X += Velocity.Angle.X * thrustVector * epoch;
-            Y += Velocity.Angle.Y * thrustVector * epoch;
+            //Location += (Velocity.Angle * thrustAmount * epoch);
+
+            X += Velocity.Angle.X * thrustAmount * epoch;
+            Y += Velocity.Angle.Y * thrustAmount * epoch;
+
+            //System.Diagnostics.Debug.Print($"Dbg: {newLocation}, Actual: {Location}");
 
             //base.ApplyMotion(epoch, displacementVector);
 

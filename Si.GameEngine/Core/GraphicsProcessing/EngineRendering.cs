@@ -114,10 +114,10 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// Draws a bitmap at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
-        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double x, double y, double angle)
+        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double x, double y, double angleDegrees)
         {
             var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
-            SetTransformAngle(renderTarget, destRect, angle);
+            SetTransformAngle(renderTarget, destRect, angleDegrees);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
             ResetTransform(renderTarget);
             return destRect;
@@ -125,10 +125,10 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
         /// Draws a bitmap from a specified location of a given size, to the the specified location.
         public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap,
-            double x, double y, double angle, RawRectangleF sourceRect, Size2F destSize)
+            double x, double y, double angleDegrees, RawRectangleF sourceRect, Size2F destSize)
         {
             var destRect = new RawRectangleF((float)x, (float)y, (float)(x + destSize.Width), (float)(y + destSize.Height));
-            SetTransformAngle(renderTarget, destRect, angle);
+            SetTransformAngle(renderTarget, destRect, angleDegrees);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
             ResetTransform(renderTarget);
             return destRect;
@@ -164,7 +164,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
         public RawRectangleF DrawTextAt(RenderTarget renderTarget,
-            double x, double y, double angle, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
+            double x, double y, double angleDegrees, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
         {
             using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
@@ -176,7 +176,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
             //DrawRectangleAt(renderTarget, textRectangle, 0, Materials.Raw.Blue, 0, 1);
 
-            SetTransformAngle(renderTarget, textRectangle, angle);
+            SetTransformAngle(renderTarget, textRectangle, angleDegrees);
             renderTarget.DrawText(text, format, textRectangle, brush);
             ResetTransform(renderTarget);
 
@@ -298,7 +298,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
         public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF rect,
-            double angle, RawColor4 color, double expand = 0, double strokeWidth = 1)
+            double angleDegrees, RawColor4 color, double expand = 0, double strokeWidth = 1)
         {
             if (expand != 0)
             {
@@ -308,7 +308,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 rect.Right += (float)expand;
             }
 
-            SetTransformAngle(renderTarget, rect, angle);
+            SetTransformAngle(renderTarget, rect, angleDegrees);
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawRectangle(rect, brush, (float)strokeWidth);
             ResetTransform(renderTarget);
@@ -317,16 +317,16 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         }
 
         public void SetTransformAngle(RenderTarget renderTarget,
-            RawRectangleF rect, double angle, RawMatrix3x2? existingMatrix = null)
+            RawRectangleF rect, double angleDegrees, RawMatrix3x2? existingMatrix = null)
         {
-            angle = SiMath.DegreesToRadians(angle);
+            var radians = SiMath.DegreesToRadians(angleDegrees);
 
             float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
             float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
 
             // Calculate the rotation matrix
-            float cosAngle = (float)Math.Cos(angle);
-            float sinAngle = (float)Math.Sin(angle);
+            float cosAngle = (float)Math.Cos(radians);
+            float sinAngle = (float)Math.Sin(radians);
 
             var rotationMatrix = new RawMatrix3x2(
                 cosAngle, sinAngle,

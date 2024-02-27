@@ -28,7 +28,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             {
                 if (LockedTarget.Visable)
                 {
-                    var deltaAngle = DeltaAngle(LockedTarget);
+                    var deltaAngle = DeltaAngleDegrees(LockedTarget);
                     if (deltaAngle.IsBetween(-MaxGuidedObservationAngleDegrees, MaxGuidedObservationAngleDegrees))
                     {
 

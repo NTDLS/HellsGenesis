@@ -3,6 +3,7 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
+using Si.GameEngine.Utility;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Types;
@@ -35,11 +36,11 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
 
             RadarDotSize = new SiPoint(1, 1);
 
-            double headingDegrees = firedFrom.Velocity.Angle.Degrees;
+            double headingRadians = firedFrom.Velocity.Angle.Radians;
             if (weapon.AngleVarianceDegrees > 0)
             {
-                var randomNumber = SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0) / 100.0;
-                headingDegrees += (SiRandom.FlipCoin() ? 1 : -1) * randomNumber;
+                var randomNumber = SiMath.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0) / 100.0);
+                headingRadians += (SiRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 
             double initialSpeed = weapon.Speed;
@@ -52,7 +53,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
 
             var initialVelocity = new SiVelocity()
             {
-                Angle = new SiAngle(headingDegrees),
+                Angle = new SiAngle(headingRadians),
                 Speed = initialSpeed,
                 ThrottlePercentage = 1.0
             };
