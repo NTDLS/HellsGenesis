@@ -4,50 +4,41 @@ using System;
 
 namespace Si.GameEngine.Utility
 {
-    internal class SiMath
+    internal class SiSpriteVectorMath
     {
-        const double DEG_TO_RAD = Math.PI / 180.0;
-        const double RAD_TO_DEG = 180.0 / Math.PI;
+        public const double DEG_TO_RAD = Math.PI / 180.0;
+        public const double RAD_TO_DEG = 180.0 / Math.PI;
+        public const double DEG_90_RADS = 90 * DEG_TO_RAD; //LEFT
+        public const double DEG_270_RADS = 270 * DEG_TO_RAD; //RIGHT
 
         /// <summary>
         /// Converts radians to degrees
         /// </summary>
         /// <param name="rad">Given radians to convert to degrees.</param>
         /// <returns></returns>
-        public static double RadiansToDegrees(double rad)
-        {
-            return rad * RAD_TO_DEG;
-        }
+        public static double RadiansToDegrees(double radians) => radians * RAD_TO_DEG;
 
         /// <summary>
         /// Converts degrees to radians.
         /// </summary>
         /// <param name="deg">Given degrees to convert to radians.</param>
         /// <returns></returns>
-        public static double DegreesToRadians(double deg)
-        {
-            return deg * DEG_TO_RAD;
-        }
+        public static double DegreesToRadians(double degrees) => degrees * DEG_TO_RAD;
+
 
         /// <summary>
         /// Converts radians to degrees
         /// </summary>
         /// <param name="rad">Given radians to convert to degrees.</param>
         /// <returns></returns>
-        public static float RadiansToDegrees(float rad)
-        {
-            return rad * (float)RAD_TO_DEG;
-        }
+        public static float RadiansToDegrees(float radians) => radians * (float)RAD_TO_DEG;
 
         /// <summary>
         /// Converts degrees to radians.
         /// </summary>
         /// <param name="deg">Given degrees to convert to radians.</param>
         /// <returns></returns>
-        public static float DegreesToRadians(float deg)
-        {
-            return deg * (float)DEG_TO_RAD;
-        }
+        public static float DegreesToRadians(float degrees) => degrees * (float)DEG_TO_RAD;
 
         /// <summary>
         /// Calculates a point at a given angle and a given distance.
@@ -56,11 +47,7 @@ namespace Si.GameEngine.Utility
         /// <param name="distance">The distance to the given angle the point should be at.</param>
         /// <returns>The calculated point at the given distance towards the given angle.</returns>
         public static SiPoint PointFromAngleAtDistance360(SiAngle angle, SiPoint distance)
-        {
-            return new SiPoint(
-                Math.Cos(angle.Radians) * distance.X,
-                Math.Sin(angle.Radians) * distance.Y);
-        }
+            => new SiPoint(Math.Cos(angle.Radians) * distance.X, Math.Sin(angle.Radians) * distance.Y);
 
         /// <summary>
         /// Calculates the angle of one objects location to another location from 0 - 360.
@@ -69,9 +56,7 @@ namespace Si.GameEngine.Utility
         /// <param name="to">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static double AngleTo360(SpriteBase from, SpriteBase to)
-        {
-            return SiPoint.AngleTo360(from.Location, to.Location);
-        }
+            => SiPoint.AngleTo360(from.Location, to.Location);
 
         /// <summary>
         /// Calculates the angle of one objects location to another location from 1-180 to -1-180.
@@ -118,9 +103,7 @@ namespace Si.GameEngine.Utility
         /// <param name="to">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static double AngleTo360(SiPoint from, SpriteBase to)
-        {
-            return SiPoint.AngleTo360(from, to.Location);
-        }
+            => SiPoint.AngleTo360(from, to.Location);
 
         /// <summary>
         /// Calculates the angle of one objects location to another location from 0 - 360.
@@ -129,9 +112,7 @@ namespace Si.GameEngine.Utility
         /// <param name="to">The point to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static double AngleTo360(SpriteBase from, SiPoint to)
-        {
-            return SiPoint.AngleTo360(from.Location, to);
-        }
+            => SiPoint.AngleTo360(from.Location, to);
 
         /// <summary>
         /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
@@ -155,9 +136,7 @@ namespace Si.GameEngine.Utility
         /// <param name="maxDistance"></param>
         /// <returns>True if the object is pointing away from the other given the constraints.</returns>
         public static bool IsPointingAway(SpriteBase from, SpriteBase at, double toleranceDegrees, double maxDistance)
-        {
-            return IsPointingAway(from, at, toleranceDegrees) && DistanceTo(from, at) <= maxDistance;
-        }
+            => IsPointingAway(from, at, toleranceDegrees) && DistanceTo(from, at) <= maxDistance;
 
         /// <summary>
         /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
@@ -298,8 +277,6 @@ namespace Si.GameEngine.Utility
         /// <param name="to">The object to which the calculation is based.</param>
         /// <returns>The calcuated distance from one object to the other.</returns>
         public static double DistanceTo(SpriteBase from, SpriteBase to)
-        {
-            return SiPoint.DistanceTo(from.Location, to.Location);
-        }
+            => SiPoint.DistanceTo(from.Location, to.Location);
     }
 }

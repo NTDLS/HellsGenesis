@@ -87,28 +87,28 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             {
                 if (_leftGun.IsDeadOrExploded == false)
                 {
-                    var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - SiMath.DegreesToRadians(90), new SiPoint(25, 25));
+                    var pointLeft = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle - SiSpriteVectorMath.DEG_90_RADS, new SiPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _leftGun.Location += pointLeft;
                 }
 
                 if (_rightGun.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(90), new SiPoint(25, 25));
+                    var pointRight = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DEG_90_RADS, new SiPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _rightGun.Location += pointRight;
                 }
 
                 if (_leftThrust.IsDeadOrExploded == false)
                 {
-                    var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - SiMath.DegreesToRadians(135), new SiPoint(35, 35));
+                    var pointLeft = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle - SiSpriteVectorMath.DegreesToRadians(135), new SiPoint(35, 35));
                     _leftThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _leftThrust.Location += pointLeft;
                 }
 
                 if (_rightThrust.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(135), new SiPoint(35, 35));
+                    var pointRight = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DegreesToRadians(135), new SiPoint(35, 35));
                     _rightThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _rightThrust.Location += pointRight;
                 }
@@ -139,7 +139,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         {
             base.ApplyIntelligence(epoch, displacementVector);
 
-            double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
+            double distanceToPlayer = SiSpriteVectorMath.DistanceTo(this, _gameEngine.Player.Sprite);
 
             //We have no engines. :(
             if (_leftThrust.IsDeadOrExploded && _rightThrust.IsDeadOrExploded)

@@ -39,7 +39,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             double headingRadians = firedFrom.Velocity.Angle.Radians;
             if (weapon.AngleVarianceDegrees > 0)
             {
-                var randomNumber = SiMath.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0) / 100.0);
+                var randomNumber = SiSpriteVectorMath.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0) / 100.0);
                 headingRadians += (SiRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 

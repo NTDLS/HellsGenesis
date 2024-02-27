@@ -98,7 +98,7 @@ namespace Si.GameEngine.Levels
 
         private void CreateTriangleFormation(SiPoint baseLocation, double spacing, int depth)
         {
-            double angle = SiMath.AngleTo360(baseLocation, _gameEngine.Player.Sprite);
+            double angle = SiSpriteVectorMath.AngleTo360(baseLocation, _gameEngine.Player.Sprite);
 
             for (int col = 0; col < depth; col++)
             {

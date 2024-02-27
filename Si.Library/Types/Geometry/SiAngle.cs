@@ -12,13 +12,9 @@
         public static double DegreesToRadians(double deg) => deg * DEG_TO_RAD;
         public static double XYToRadians(double x, double y) => Math.Atan2(y, x);
         public static double XYToDegrees(double x, double y) => RadiansToDegrees(Math.Atan2(y, x));
-        public static SiPoint ToXY(SiAngle angle) => new SiPoint(angle.X, angle.Y);
-        public static SiPoint RadiansToXY(double radians) => new SiPoint(Math.Cos(radians), Math.Sin(radians));
-        public static SiPoint DegreesToXY(double degrees)
-        {
-            double radians = DegreesToRadians(degrees);
-            return new SiPoint(Math.Cos(radians), Math.Sin(radians));
-        }
+        public static SiPoint ToXY(SiAngle angle) => new(angle.X, angle.Y);
+        public static SiPoint RadiansToXY(double radians) => new(Math.Cos(radians), Math.Sin(radians));
+        public static SiPoint DegreesToXY(double degrees) => new(Math.Cos(degrees * RAD_TO_DEG), Math.Sin(degrees * RAD_TO_DEG));
 
         #endregion
 
@@ -86,9 +82,15 @@
         public override int GetHashCode() => ToString().GetHashCode();
         public override string ToString() => $"{{{Math.Round(X, 4):#.####}x,{Math.Round(Y, 4):#.####}y}}";
 
+        /// <summary>
+        /// Returns true if the current angle is between the given values.
+        /// </summary>
+        /// <param name="minValue"></param>
+        /// <param name="maxValue"></param>
+        /// <returns></returns>
         public bool IsBetween(double minValue, double maxValue)
         {
-            var normalized = DegreesNormalized180;
+            var normalized = DegreesNormalized;
             if (minValue > maxValue)
             {
                 return normalized >= maxValue && normalized <= minValue;
@@ -99,14 +101,18 @@
         /// <summary>
         /// Angle in degrees between 0-180 and -1--180
         /// </summary>
-        public double DegreesNormalized180 => (_degrees + 180) % 360 - 180;
+        public double DegreesNormalized => (_degrees + 180) % 360 - 180;
 
         /// <summary>
-        /// Angle in degrees between 0-359.
+        // If the angle is negative, adding 360 brings it into the [0, 360) range.
         /// </summary>
-        public double DegreesNormalized360 => (_degrees + 360) % 360;
+        public double DegreesDenormalized => (_degrees < 0 ? _degrees + 360 : _degrees) % 360;
 
         public double _degrees;
+
+        /// <summary>
+        /// Sets the angle degrees and ensures that it is stored denoramlized (0-359).
+        /// </summary>
         public double Degrees
         {
             get => _degrees;
@@ -115,7 +121,7 @@
             {
                 if (value < 0)
                 {
-                    _degrees = 360 - Math.Abs(value) % 360.0;
+                    _degrees = (value + 360) % 360;
                 }
                 else
                 {
@@ -124,6 +130,9 @@
             }
         }
 
+        /// <summary>
+        /// Sets the angle radians and ensures that it is stored denoramlized (0-6.28).
+        /// </summary>
         public double Radians
         {
             get => DegreesToRadians(_degrees);
@@ -131,7 +140,7 @@
             {
                 if (value < 0)
                 {
-                    _degrees = RADS_IN_CIRCLE - Math.Abs(value) % RADS_IN_CIRCLE;
+                    _degrees = (value + RADS_IN_CIRCLE) % RADS_IN_CIRCLE;
                 }
                 else
                 {

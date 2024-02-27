@@ -30,7 +30,7 @@ namespace Si.GameEngine.Core.TickControllers
             };
         }
 
-        private class HitObject
+        private struct HitObject
         {
             public SpriteShipBase Object { get; set; }
             public MunitionBase Munition { get; set; }

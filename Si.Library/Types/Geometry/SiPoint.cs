@@ -47,7 +47,7 @@ namespace Si.Library.Types.Geometry
             => new RectangleF((float)_x, (float)_y, 1f, 1f);
 
         /// <summary>
-        /// Calculates the distance from one object to another.
+        /// Calculates the euclidean distance between two points in a 2D space (slower but more precisie than DistanceSquaredTo);
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
@@ -57,6 +57,19 @@ namespace Si.Library.Types.Geometry
             var deltaX = Math.Pow(to.X - from.X, 2);
             var deltaY = Math.Pow(to.Y - from.Y, 2);
             return Math.Sqrt(deltaY + deltaX);
+        }
+
+        /// <summary>
+        ///  Calculates the distance squared between two points in a 2D space (faster and less precisie than DistanceTo);.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public static double DistanceSquaredTo(SiPoint from, SiPoint to)
+        {
+            var deltaX = to.X - from.X;
+            var deltaY = to.Y - from.Y;
+            return deltaX * deltaX + deltaY * deltaY;
         }
 
         /// <summary>

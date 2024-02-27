@@ -749,7 +749,7 @@ namespace Si.GameEngine.Sprites._Superclass
         {
             toDegrees = toDegrees.DegreesNormalized();
 
-            if (Velocity.Angle.DegreesNormalized180.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
+            if (Velocity.Angle.DegreesNormalized.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
                 if (direction == SiRelativeDirection.Right)
                 {
@@ -850,27 +850,27 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngleDegrees(SpriteBase toObj) => SiMath.DeltaAngle(this, toObj);
+        public double DeltaAngleDegrees(SpriteBase toObj) => SiSpriteVectorMath.DeltaAngle(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <=>s></returns>
-        public double DeltaAngleDegrees(SiPoint toLocation) => SiMath.DeltaAngle(this, toLocation);
+        public double DeltaAngleDegrees(SiPoint toLocation) => SiSpriteVectorMath.DeltaAngle(this, toLocation);
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 0-259.
         /// </summary>
         /// <returns></returns>
-        public double AngleTo360(SpriteBase atObj) => SiMath.AngleTo360(this, atObj);
+        public double AngleTo360(SpriteBase atObj) => SiSpriteVectorMath.AngleTo360(this, atObj);
 
-        public double AngleToRadians(SpriteBase atObj) => SiMath.DegreesToRadians(SiMath.AngleTo360(this, atObj));
+        public double AngleToRadians(SpriteBase atObj) => SiSpriteVectorMath.DegreesToRadians(SiSpriteVectorMath.AngleTo360(this, atObj));
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double AngleTo(SpriteBase atObj) => SiMath.AngleTo(this, atObj);
+        public double AngleTo(SpriteBase atObj) => SiSpriteVectorMath.AngleTo(this, atObj);
 
         /// <summary>
         /// Calculates the angle in degrees to a location.
@@ -878,14 +878,14 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <param name="location"></param>
         /// <returns></returns>
         [Obsolete("This method is deprecated. Use AngleTo() instead.")]
-        public double AngleTo360(SiPoint location) => SiMath.AngleTo360(this, location);
+        public double AngleTo360(SiPoint location) => SiSpriteVectorMath.AngleTo360(this, location);
 
         public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
-            => SiMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
+            => SiSpriteVectorMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiSpriteVectorMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees) => SiMath.IsPointingAt(this, atObj, toleranceDegrees);
+        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees) => SiSpriteVectorMath.IsPointingAt(this, atObj, toleranceDegrees);
 
         /// <summary>
         /// Returns true if any of the given sprites are pointing at this one.
@@ -898,7 +898,7 @@ namespace Si.GameEngine.Sprites._Superclass
         {
             foreach (var atObj in atObjs)
             {
-                if (SiMath.IsPointingAt(this, atObj, toleranceDegrees))
+                if (SiSpriteVectorMath.IsPointingAt(this, atObj, toleranceDegrees))
                 {
                     return true;
                 }
@@ -919,7 +919,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
             foreach (var atObj in atObjs)
             {
-                if (SiMath.IsPointingAt(this, atObj, toleranceDegrees))
+                if (SiSpriteVectorMath.IsPointingAt(this, atObj, toleranceDegrees))
                 {
                     results.Add(atObj);
                 }
@@ -927,11 +927,13 @@ namespace Si.GameEngine.Sprites._Superclass
             return results;
         }
 
-        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees) => SiMath.IsPointingAway(this, atObj, toleranceDegrees);
+        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees) => SiSpriteVectorMath.IsPointingAway(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiSpriteVectorMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
         public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(Location, to.Location);
+
+        public double DistanceSquaredTo(SpriteBase to) => SiPoint.DistanceSquaredTo(Location, to.Location);
 
         public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(Location, to);
 

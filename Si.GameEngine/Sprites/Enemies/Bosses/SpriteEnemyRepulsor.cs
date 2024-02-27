@@ -81,21 +81,21 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             {
                 if (_leftGun?.IsDeadOrExploded == false)
                 {
-                    var pointLeft = SiMath.PointFromAngleAtDistance360(Velocity.Angle - SiMath.DegreesToRadians(90), new SiPoint(25, 25));
+                    var pointLeft = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle - SiSpriteVectorMath.DEG_90_RADS, new SiPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _leftGun.Location += pointLeft;
                 }
 
                 if (_rightGun?.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(90), new SiPoint(25, 25));
+                    var pointRight = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DEG_90_RADS, new SiPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _rightGun.Location += pointRight;
                 }
 
                 if (_thrust?.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(180), new SiPoint(35, 35));
+                    var pointRight = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DegreesToRadians(180), new SiPoint(35, 35));
                     _thrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _thrust.Location += pointRight;
                 }
@@ -126,7 +126,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         {
             base.ApplyIntelligence(epoch, displacementVector);
 
-            double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
+            double distanceToPlayer = SiSpriteVectorMath.DistanceTo(this, _gameEngine.Player.Sprite);
 
             //We have no engines. :(
             if (_thrust?.IsDeadOrExploded == true)

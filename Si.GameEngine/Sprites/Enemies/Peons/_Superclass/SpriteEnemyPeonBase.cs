@@ -55,13 +55,13 @@ namespace Si.GameEngine.Sprites.Enemies.Peons._Superclass
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(180), new SiPoint(20, 20));
+                var pointBehind = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DegreesToRadians(180), new SiPoint(20, 20));
                 ThrustAnimation.Velocity.Angle = Velocity.Angle;
                 ThrustAnimation.Location = Location + pointBehind;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(180), new SiPoint(20, 20));
+                var pointBehind = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DegreesToRadians(180), new SiPoint(20, 20));
                 BoostAnimation.Velocity.Angle = Velocity.Angle;
                 BoostAnimation.Location = Location + pointBehind;
             }

@@ -89,7 +89,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                 return;
             }
 
-            double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
+            double distanceToPlayer = SiSpriteVectorMath.DistanceTo(this, _gameEngine.Player.Sprite);
 
             base.ApplyIntelligence(epoch, displacementVector);
 

@@ -195,7 +195,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
             ReviveDeadOrExploded();
 
-            Velocity.Angle = new SiAngle(SiMath.DegreesToRadians(45));
+            Velocity.Angle = new SiAngle(SiSpriteVectorMath.DegreesToRadians(45));
 
             Velocity.ThrottlePercentage = 0;
             Velocity.AvailableBoost = _gameEngine.Settings.MaxPlayerBoostAmount;
@@ -275,7 +275,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(180), new SiPoint(20, 20));
+                    var pointBehind = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DegreesToRadians(180), new SiPoint(20, 20));
                     ThrustAnimation.Velocity.Angle = Velocity.Angle;
                     ThrustAnimation.Location = Location + pointBehind;
                 }
@@ -285,7 +285,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiMath.PointFromAngleAtDistance360(Velocity.Angle + SiMath.DegreesToRadians(180), new SiPoint(20, 20));
+                    var pointBehind = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DegreesToRadians(180), new SiPoint(20, 20));
                     BoostAnimation.Velocity.Angle = Velocity.Angle;
                     BoostAnimation.Location = Location + pointBehind;
                 }

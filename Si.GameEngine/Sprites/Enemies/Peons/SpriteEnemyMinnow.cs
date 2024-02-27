@@ -86,7 +86,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             base.ApplyIntelligence(epoch, displacementVector);
 
-            double distanceToPlayer = SiMath.DistanceTo(this, _gameEngine.Player.Sprite);
+            double distanceToPlayer = SiSpriteVectorMath.DistanceTo(this, _gameEngine.Player.Sprite);
 
             if (mode == AIMode.Approaching)
             {

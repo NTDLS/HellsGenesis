@@ -23,7 +23,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
             : base(gameEngine, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             MaxGuidedObservationAngleDegrees = 90;
-            GuidedRotationRateInDegrees = SiMath.DegreesToRadians(8);
+            GuidedRotationRateInDegrees = SiSpriteVectorMath.DegreesToRadians(8);
 
             _selectedHitExplosionAnimationIndex = SiRandom.Between(0, _hitExplosionAnimationCount - 1);
             _hitExplosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));

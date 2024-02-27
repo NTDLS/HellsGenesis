@@ -23,7 +23,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
         {
             MaxSeekingObservationDistance = 1000;
             MaxSeekingObservationAngleDegrees = 20;
-            SeekingRotationRateRadians = SiMath.DegreesToRadians(4);
+            SeekingRotationRateRadians = SiSpriteVectorMath.DegreesToRadians(4);
 
             _selectedHitExplosionAnimationIndex = SiRandom.Between(0, _hitExplosionAnimationCount - 1);
             _hitExplosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));

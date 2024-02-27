@@ -40,7 +40,7 @@ namespace Si.GameEngine.Sprites.Weapons
                 {
                     if (RoundQuantity > 0 || _owner.IsDrone)
                     {
-                        var pointRight = SiMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiMath.DegreesToRadians(90), new SiPoint(i, i));
+                        var pointRight = SiSpriteVectorMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiSpriteVectorMath.DEG_90_RADS, new SiPoint(i, i));
                         _gameEngine.Sprites.Munitions.Create(this, pointRight);
                         RoundQuantity--;
                     }
