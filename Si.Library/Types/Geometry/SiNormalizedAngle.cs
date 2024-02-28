@@ -4,51 +4,17 @@
     {
         #region Static Utilities.
 
-        /// <summary>
-        /// Rotate the angle counter-clockwise by 90 degrees. All of our graphics math should assume this.
-        /// </summary>
-        public static double DegreeOffset = 90.0;
-        public static double RadianOffset = Math.PI / 180 * DegreeOffset; //1.5707963267948966
+        public const double DEG_TO_RAD = Math.PI / 180.0;
+        public const double RAD_TO_DEG = 180.0 / Math.PI;
+        public const double RADS_IN_CIRCLE = 2 * Math.PI;
 
-        const double DEG_TO_RAD = Math.PI / 180.0;
-        const double RAD_TO_DEG = 180.0 / Math.PI;
-
-        public static double RadiansToDegrees(double rad)
-        {
-            return rad * RAD_TO_DEG;
-        }
-
-        public static double DegreesToRadians(double deg)
-        {
-            return deg * DEG_TO_RAD;
-        }
-
-        public static double XYToRadians(double x, double y)
-        {
-            return Math.Atan2(y, x) + RadianOffset;
-        }
-
-        public static double XYToDegrees(double x, double y)
-        {
-            return RadiansToDegrees(Math.Atan2(y, x)) + DegreeOffset;
-        }
-
-        public static SiPoint ToXY(SiNormalizedAngle angle)
-        {
-            return new SiPoint(angle.X, angle.Y);
-        }
-
-        public static SiPoint DegreesToXY(double degrees)
-        {
-            double radians = DegreesToRadians(degrees) - RadianOffset;
-            return new SiPoint(Math.Cos(radians), Math.Sin(radians));
-        }
-
-        public static SiPoint RadiansToXY(double radians)
-        {
-            radians -= RadianOffset;
-            return new SiPoint(Math.Cos(radians), Math.Sin(radians));
-        }
+        public static double RadiansToDegrees(double rad) => rad * RAD_TO_DEG;
+        public static double DegreesToRadians(double deg) => deg * DEG_TO_RAD;
+        public static double XYToRadians(double x, double y) => Math.Atan2(y, x);
+        public static double XYToDegrees(double x, double y) => RadiansToDegrees(Math.Atan2(y, x));
+        public static SiPoint ToXY(SiNormalizedAngle angle) => new(angle.X, angle.Y);
+        public static SiPoint RadiansToXY(double radians) => new(Math.Cos(radians), Math.Sin(radians));
+        public static SiPoint DegreesToXY(double degrees) => new(Math.Cos(degrees * RAD_TO_DEG), Math.Sin(degrees * RAD_TO_DEG));
 
         #endregion
 
@@ -70,59 +36,51 @@
 
         public SiNormalizedAngle(double x, double y)
         {
-            Degrees = RadiansToDegrees(Math.Atan2(y, x)) + DegreeOffset;
+            Degrees = RadiansToDegrees(Math.Atan2(y, x));
         }
 
         #endregion
 
         #region  Unary Operator Overloading.
 
-        public static SiNormalizedAngle operator -(SiNormalizedAngle original, SiNormalizedAngle modifier)
-        {
-            return new SiNormalizedAngle(original.Degrees - modifier.Degrees);
-        }
+        public static implicit operator SiPoint(SiNormalizedAngle angle)
+            => new SiPoint(Math.Cos(angle.Radians), Math.Sin(angle.Radians));
 
-        public static SiNormalizedAngle operator -(SiNormalizedAngle original, double degrees)
-        {
-            return new SiNormalizedAngle(original.Degrees - degrees);
-        }
+        public static SiNormalizedAngle operator -(SiNormalizedAngle original, SiNormalizedAngle modifier)
+            => new SiNormalizedAngle(original.Radians - modifier.Radians);
+
+        public static SiNormalizedAngle operator -(SiNormalizedAngle original, double radians)
+            => new SiNormalizedAngle(original.Radians - radians);
 
         public static SiNormalizedAngle operator +(SiNormalizedAngle original, SiNormalizedAngle modifier)
-        {
-            return new SiNormalizedAngle(original.Degrees + modifier.Degrees);
-        }
+            => new SiNormalizedAngle(original.Radians + modifier.Radians);
 
-        public static SiNormalizedAngle operator +(SiNormalizedAngle original, double degrees)
-        {
-            return new SiNormalizedAngle(original.Degrees + degrees);
-        }
+        public static SiNormalizedAngle operator +(SiNormalizedAngle original, double radians)
+            => new SiNormalizedAngle(original.Radians + radians);
 
-        public static SiNormalizedAngle operator *(SiNormalizedAngle original, SiNormalizedAngle modifier)
-        {
-            return new SiNormalizedAngle(original.Degrees * modifier.Degrees);
-        }
+        public static SiNormalizedAngle operator *(SiNormalizedAngle original, SiNormalizedAngle scaleFactor)
+            => new SiNormalizedAngle(original.X * scaleFactor.X, original.Y * scaleFactor.Y);
 
-        public static SiNormalizedAngle operator *(SiNormalizedAngle original, double degrees)
-        {
-            return new SiNormalizedAngle(original.Degrees * degrees);
-        }
+        public static SiPoint operator *(SiNormalizedAngle original, double scaleFactor)
+            => new SiPoint(original.X * scaleFactor, original.Y * scaleFactor);
+
+        public static SiNormalizedAngle operator /(SiNormalizedAngle original, SiNormalizedAngle scaleFactor)
+            => new SiNormalizedAngle(original.X / scaleFactor.X, original.Y / scaleFactor.Y);
+
+        public static SiPoint operator /(SiNormalizedAngle original, double scaleFactor)
+            => new SiPoint(original.X / scaleFactor, original.Y / scaleFactor);
 
         public override bool Equals(object? o)
-        {
-            return Math.Round(((SiNormalizedAngle?)o)?.X ?? double.NaN, 4) == X && Math.Round(((SiNormalizedAngle?)o)?.Y ?? double.NaN, 4) == Y;
-        }
+            => Math.Round(((SiNormalizedAngle?)o)?.X ?? double.NaN, 4) == X && Math.Round(((SiNormalizedAngle?)o)?.Y ?? double.NaN, 4) == Y;
 
         #endregion
 
-        public override int GetHashCode()
-        {
-            return ToString().GetHashCode();
-        }
+        public double RadiansUnadjusted => DegreesToRadians(_degrees);
+        public double X => Math.Cos(Radians);
+        public double Y => Math.Sin(Radians);
 
-        public override string ToString()
-        {
-            return $"{{{Math.Round(X, 4):#.####}x,{Math.Round(Y, 4):#.####}y}}";
-        }
+        public override int GetHashCode() => ToString().GetHashCode();
+        public override string ToString() => $"{{{Math.Round(X, 4):#.####}x,{Math.Round(Y, 4):#.####}y}}";
 
         public bool IsBetween(double minValue, double maxValue)
         {
@@ -134,6 +92,10 @@
         }
 
         public double _degrees;
+
+        /// <summary>
+        /// Sets the angle degrees and ensures that it is stored noramlized (0 thorugh 180 and -0 thorugh -180).
+        /// </summary>
         public double Degrees
         {
             get
@@ -146,36 +108,26 @@
             }
         }
 
+        /// <summary>
+        /// Sets the angle radians and ensures that it is stored denoramlized (0-6.28).
+        /// </summary>
         public double Radians
         {
-            get
+            get => DegreesToRadians(_degrees);
+            set
             {
-                return DegreesToRadians(_degrees) - RadianOffset;
+                if (value < 0)
+                {
+                    _degrees = (value + RADS_IN_CIRCLE) % RADS_IN_CIRCLE;
+                }
+                else
+                {
+                    _degrees = value % RADS_IN_CIRCLE;
+                }
+
+                _degrees = RadiansToDegrees(value);
             }
         }
 
-        public double RadiansUnadjusted
-        {
-            get
-            {
-                return DegreesToRadians(_degrees);
-            }
-        }
-
-        public double X
-        {
-            get
-            {
-                return Math.Cos(Radians);
-            }
-        }
-
-        public double Y
-        {
-            get
-            {
-                return Math.Sin(Radians);
-            }
-        }
     }
 }

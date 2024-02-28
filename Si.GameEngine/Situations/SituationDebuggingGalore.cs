@@ -18,7 +18,7 @@ namespace Si.GameEngine.Situations
                   )
         {
             //Levels.Add(new LevelSerfFormations(gameEngine));
-            //Levels.Add(new LevelDebuggingGalore(gameEngine));
+            Levels.Add(new LevelDebuggingGalore(gameEngine));
             Levels.Add(new LevelFreeFlight(gameEngine));
         }
     }

@@ -311,7 +311,7 @@ namespace Si.GameEngine.Core.NativeRendering
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawGeometry(triangleGeometry, brush, strokeWidth);
 
-            if (angleRadians != 0) ResetTransform(renderTarget);
+            ResetTransform(renderTarget);
         }
 
         /// <summary>
