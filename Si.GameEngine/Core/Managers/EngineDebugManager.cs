@@ -1,6 +1,6 @@
 ﻿using Si.GameEngine.Core.Debug;
 using Si.GameEngine.Core.Debug._Superclass;
-using Si.GameEngine.Core.GraphicsProcessing;
+using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;

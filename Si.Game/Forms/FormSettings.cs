@@ -1,5 +1,5 @@
 ﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.GraphicsProcessing;
+using Si.GameEngine.Core.NativeRendering;
 using Si.Library.Graphics;
 using System;
 using System.Linq;

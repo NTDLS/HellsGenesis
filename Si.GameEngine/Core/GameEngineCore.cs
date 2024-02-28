@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using Si.GameEngine.Core.Debug._Superclass;
-using Si.GameEngine.Core.GraphicsProcessing;
 using Si.GameEngine.Core.Managers;
+using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Core.TickControllers;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Menus;
@@ -36,7 +36,7 @@ namespace Si.GameEngine.Core
         public EngineAssetManager Assets { get; private set; }
         public EngineDebugManager Debug { get; private set; }
         public MenusTickController Menus { get; private set; }
-        public EngineRendering Rendering { get; private set; }
+        public RenderingEngine Rendering { get; private set; }
         public EngineSettings Settings { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
@@ -92,7 +92,7 @@ namespace Si.GameEngine.Core
             Audio = new EngineAudioManager(this);
             Menus = new MenusTickController(this);
             Player = new PlayerSpriteTickController(this);
-            Rendering = new EngineRendering(this);
+            Rendering = new RenderingEngine(this);
 
             Multiplay = multiplayManager;
 
@@ -124,7 +124,7 @@ namespace Si.GameEngine.Core
             Audio = new EngineAudioManager(this);
             Menus = new MenusTickController(this);
             Player = new PlayerSpriteTickController(this);
-            Rendering = new EngineRendering(this);
+            Rendering = new RenderingEngine(this);
             Multiplay = new EngineMultiplayManager();
 
             _multiplayClientEventHandlers = new MultiplayClientEventHandlers(this);
@@ -208,11 +208,11 @@ namespace Si.GameEngine.Core
 
                         if (Settings.EnableSpeedScaleFactoring)
                         {
-                            Rendering.ApplyScaling(o, (float)Display.SpeedOrientedFrameScalingFactor());
+                            Rendering.TransferWithZoom(o.IntermediateRenderTarget, o.ScreenRenderTarget, (float)Display.SpeedOrientedFrameScalingFactor());
                         }
                         else
                         {
-                            Rendering.ApplyScaling(o, (float)Display.BaseDrawScale);
+                            Rendering.TransferWithZoom(o.IntermediateRenderTarget, o.ScreenRenderTarget, (float)Display.BaseDrawScale);
                         }
                         Sprites.RenderPostScaling(o.ScreenRenderTarget);
 

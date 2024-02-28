@@ -1,15 +1,15 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
-using Si.GameEngine.Core.GraphicsProcessing.Types;
+using Si.GameEngine.Core.NativeRendering.Types;
 using Si.Library;
 using System.Collections.Generic;
 
-namespace Si.GameEngine.Core.GraphicsProcessing
+namespace Si.GameEngine.Core.NativeRendering
 {
     internal static class BitmapFragmenter
     {
-        public static List<Bitmap> GenerateIrregularFragments(EngineRendering rendering,
+        public static List<Bitmap> GenerateIrregularFragments(RenderingEngine rendering,
             Bitmap originalBitmap, int countOfFragments, int countOfVertices)
         {
             var fragments = new List<Bitmap>();
@@ -40,7 +40,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             return fragments;
         }
 
-        private static Bitmap ExtractPolygonRegion(EngineRendering rendering, Bitmap bitmap, SiPolygon polygon)
+        private static Bitmap ExtractPolygonRegion(RenderingEngine rendering, Bitmap bitmap, SiPolygon polygon)
         {
             var bounds = polygon.GetBounds();
 

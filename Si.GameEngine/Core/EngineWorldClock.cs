@@ -1,4 +1,4 @@
-﻿using Si.GameEngine.Core.GraphicsProcessing;
+﻿using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Sprites;
 using Si.Library.Types.Geometry;

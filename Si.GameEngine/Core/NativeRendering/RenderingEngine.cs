@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
-namespace Si.GameEngine.Core.GraphicsProcessing
+namespace Si.GameEngine.Core.NativeRendering
 {
-    public class EngineRendering : IDisposable
+    public class RenderingEngine : IDisposable
     {
         public class CriticalRenderTargets
         {
@@ -28,7 +28,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
         private readonly ImagingFactory _wicFactory = new();
 
-        public EngineRendering(GameEngineCore gameEngine)
+        public RenderingEngine(GameEngineCore gameEngine)
         {
             _gameEngine = gameEngine;
 
@@ -91,11 +91,11 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             });
         }
 
-        public void ApplyScaling(CriticalRenderTargets renderTargets, float scale)
+        public void TransferWithZoom(BitmapRenderTarget intermediateRenderTarget, RenderTarget screenRenderTarget, float scale)
         {
-            var sourceRect = GraphicsUtility.CalculateCenterCopyRectangle(renderTargets.IntermediateRenderTarget.Size, scale);
+            var sourceRect = GraphicsUtility.CalculateCenterCopyRectangle(intermediateRenderTarget.Size, scale);
             var destRect = new RawRectangleF(0, 0, _gameEngine.Display.NatrualScreenSize.Width, _gameEngine.Display.NatrualScreenSize.Height);
-            renderTargets.ScreenRenderTarget.DrawBitmap(renderTargets.IntermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
+            screenRenderTarget.DrawBitmap(intermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
         }
 
         public SharpDX.Direct2D1.Bitmap BitmapStreamToD2DBitmap(Stream stream)
@@ -121,7 +121,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             }
 
             var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
-            if (angleRadians != 0) SetTransformAngle(renderTarget, destRect, angleRadians);
+            if (angleRadians != 0) ApplyTransformAngle(renderTarget, destRect, angleRadians);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
             if (angleRadians != 0) ResetTransform(renderTarget);
             return destRect;
@@ -137,7 +137,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             }
 
             var destRect = new RawRectangleF((float)x, (float)y, (float)(x + destSize.Width), (float)(y + destSize.Height));
-            if (angleRadians != 0) SetTransformAngle(renderTarget, destRect, angleRadians);
+            if (angleRadians != 0) ApplyTransformAngle(renderTarget, destRect, angleRadians);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
             if (angleRadians != 0) ResetTransform(renderTarget);
             return destRect;
@@ -185,7 +185,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
 
             //DrawRectangleAt(renderTarget, textRectangle, 0, Materials.Raw.Blue, 0, 1);
 
-            if (angleRadians != 0) SetTransformAngle(renderTarget, textRectangle, angleRadians);
+            if (angleRadians != 0) ApplyTransformAngle(renderTarget, textRectangle, angleRadians);
             renderTarget.DrawText(text, format, textRectangle, brush);
             if (angleRadians != 0) ResetTransform(renderTarget);
 
@@ -219,7 +219,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             if (angleRadians != 0)
             {
                 var destRect = new RawRectangleF((float)x, (float)y, (float)(x + radiusX), (float)(y + radiusY));
-                SetTransformAngle(renderTarget, destRect, angleRadians);
+                ApplyTransformAngle(renderTarget, destRect, angleRadians);
             }
 
             using var brush = new SolidColorBrush(renderTarget, color);
@@ -247,7 +247,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             if (angleRadians != 0)
             {
                 var destRect = new RawRectangleF((float)x, (float)y, (float)(x + radiusX), (float)(y + radiusY));
-                SetTransformAngle(renderTarget, destRect, angleRadians);
+                ApplyTransformAngle(renderTarget, destRect, angleRadians);
             }
 
             using var brush = new SolidColorBrush(renderTarget, color);
@@ -272,7 +272,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             if (angleRadians != 0)
             {
                 var destRect = new RawRectangleF((float)x, (float)y, (float)(x + width), (float)(y + height));
-                SetTransformAngle(renderTarget, destRect, angleRadians);
+                ApplyTransformAngle(renderTarget, destRect, angleRadians);
             }
 
             // Create a PathGeometry and add the triangle to it
@@ -321,37 +321,12 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 rect.Right += (float)expand;
             }
 
-            SetTransformAngle(renderTarget, rect, angleRadians);
+            ApplyTransformAngle(renderTarget, rect, angleRadians);
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawRectangle(rect, brush, (float)strokeWidth);
             ResetTransform(renderTarget);
 
             return rect;
-        }
-
-        public void SetTransformAngle(RenderTarget renderTarget,
-            RawRectangleF rect, double angleRadians, RawMatrix3x2? existingMatrix = null)
-        {
-            float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
-            float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
-
-            // Calculate the rotation matrix
-            float cosAngle = (float)Math.Cos(angleRadians);
-            float sinAngle = (float)Math.Sin(angleRadians);
-
-            var rotationMatrix = new RawMatrix3x2(
-                cosAngle, sinAngle,
-                -sinAngle, cosAngle,
-                centerX - cosAngle * centerX + sinAngle * centerY,
-                centerY - sinAngle * centerX - cosAngle * centerY
-            );
-
-            if (existingMatrix != null)
-            {
-                rotationMatrix = MultiplyMatrices(rotationMatrix, (RawMatrix3x2)existingMatrix);
-            }
-
-            renderTarget.Transform = rotationMatrix;
         }
 
         public List<SharpDX.Direct2D1.Bitmap> GenerateIrregularFragments(SharpDX.Direct2D1.Bitmap originalBitmap, int countOfFragments, int countOfVertices = 3)
@@ -374,17 +349,53 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             return scalingMatrix;
         }
 
-        public static RawMatrix3x2 MultiplyMatrices(RawMatrix3x2 matrix1, RawMatrix3x2 matrix2)
-            => new RawMatrix3x2(
-                matrix1.M11 * matrix2.M11 + matrix1.M12 * matrix2.M21,
-                matrix1.M11 * matrix2.M12 + matrix1.M12 * matrix2.M22,
-                matrix1.M21 * matrix2.M11 + matrix1.M22 * matrix2.M21,
-                matrix1.M21 * matrix2.M12 + matrix1.M22 * matrix2.M22,
-                matrix1.M31 * matrix2.M11 + matrix1.M32 * matrix2.M21 + matrix2.M31,
-                matrix1.M31 * matrix2.M12 + matrix1.M32 * matrix2.M22 + matrix2.M32
-            );
+        #region Native Transformations.
+
+        public void ApplyTransformAngle(RenderTarget renderTarget,
+            RawRectangleF rect, double angleRadians, Matrix3x2? existingMatrix = null)
+        {
+            float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
+            float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
+
+            var rotationMatrix = Matrix3x2.Rotation((float)angleRadians, new Vector2(centerX, centerY));
+
+            if (existingMatrix != null)
+            {
+                rotationMatrix = Matrix3x2.Multiply(rotationMatrix, (Matrix3x2)existingMatrix);
+            }
+
+            renderTarget.Transform = rotationMatrix;
+        }
+
+
+        public void ApplyScaleTransform(RenderTarget renderTarget, float scale, Vector2 centerPoint)
+        {
+            // Create a scale matrix at the specified center point
+            var scaleMatrix = Matrix3x2.Scaling(scale, scale, centerPoint);
+
+            // Apply the scale transform to the render target
+            renderTarget.Transform = scaleMatrix;
+        }
+
+        public void ApplyZoomAndPan(RenderTarget renderTarget, float scaleX, float scaleY, Vector2 panOffset, Vector2 zoomCenter)
+        {
+            // Create a scaling matrix around the zoom center
+            Matrix3x2 scalingMatrix = Matrix3x2.Scaling(scaleX, scaleY, zoomCenter);
+
+            // Create a translation matrix for panning
+            Matrix3x2 translationMatrix = Matrix3x2.Translation(panOffset);
+
+            // Combine the scaling and translation matrices
+            Matrix3x2 combinedMatrix = Matrix3x2.Multiply(scalingMatrix, translationMatrix);
+
+            // Apply the combined transform to the render target
+            renderTarget.Transform = combinedMatrix;
+        }
 
         public void ResetTransform(RenderTarget renderTarget)
-            => renderTarget.Transform = new RawMatrix3x2(1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+            => renderTarget.Transform = Matrix3x2.Identity;
+
+        #endregion
     }
 }
+

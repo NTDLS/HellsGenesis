@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Si.GameEngine.Core.GraphicsProcessing
+namespace Si.GameEngine.Core.NativeRendering
 {
     public static class GraphicsUtility
     {
@@ -34,7 +34,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         static public Color4 RGBFromHSL(float hue, float saturation, float lightness)
         {
             float c = (1 - Math.Abs(2 * lightness - 1)) * saturation;
-            float x = c * (1 - Math.Abs((hue / 60) % 2 - 1));
+            float x = c * (1 - Math.Abs(hue / 60 % 2 - 1));
             float m = lightness - c / 2;
 
             float r, g, b;
@@ -118,7 +118,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         public static List<SiGraphicsAdapter> GetGraphicsAdapters()
         {
             var result = new List<SiGraphicsAdapter>();
-            using (var factory = new SharpDX.DXGI.Factory1())
+            using (var factory = new Factory1())
             {
                 foreach (var adapter in factory.Adapters)
                 {
@@ -151,7 +151,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                             var nativeMode = displayModes.OrderByDescending(mode => mode.Width * mode.Height)
                                 .ThenByDescending(o => o.RefreshRate.Numerator / o.RefreshRate.Denominator).FirstOrDefault();
 
-                            var refreshRate = (double)nativeMode.RefreshRate.Numerator / (double)nativeMode.RefreshRate.Denominator;
+                            var refreshRate = nativeMode.RefreshRate.Numerator / (double)nativeMode.RefreshRate.Denominator;
 
                             return refreshRate < 30 ? 30 : refreshRate;
                         }

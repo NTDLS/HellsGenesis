@@ -1,5 +1,5 @@
 ﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.GraphicsProcessing;
+using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Utility;
 using Si.Library;

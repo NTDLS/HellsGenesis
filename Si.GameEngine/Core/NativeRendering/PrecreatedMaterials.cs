@@ -1,7 +1,7 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
 
-namespace Si.GameEngine.Core.GraphicsProcessing
+namespace Si.GameEngine.Core.NativeRendering
 {
     public class PrecreatedMaterials
     {

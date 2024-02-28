@@ -1,6 +1,6 @@
 ﻿using SharpDX;
-using Si.GameEngine.Core.GraphicsProcessing;
 using Si.GameEngine.Core.Managers;
+using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;

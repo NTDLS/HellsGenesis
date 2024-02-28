@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Si.GameEngine.Core.GraphicsProcessing.Types
+namespace Si.GameEngine.Core.NativeRendering.Types
 {
     public class SiPolygon
     {
@@ -46,7 +46,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing.Types
             float maxY = float.MinValue;
 
             // Find minimum and maximum X and Y coordinates of polygon vertices
-            foreach (var vertex in this.Vertices)
+            foreach (var vertex in Vertices)
             {
                 minX = Math.Min(minX, vertex.X);
                 minY = Math.Min(minY, vertex.Y);
