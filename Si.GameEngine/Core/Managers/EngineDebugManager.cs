@@ -277,7 +277,7 @@ namespace Si.GameEngine.Core.Managers
         public void CommandHandler_Display_Zoom_Override(DebugCommand command)
         {
             var level = command.ParameterValue<double>("level");
-            _gameEngine.Display.OverrideSpeedOrientedFrameScalingFactor = level.Box(-1, 1);
+            _gameEngine.Display.OverrideSpeedOrientedFrameScalingFactor = level.Clamp(-1, 1);
         }
 
         public void CommandHandler_Display_Zoom_Get(DebugCommand command)

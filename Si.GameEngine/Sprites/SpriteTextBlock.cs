@@ -1,5 +1,6 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
+using SharpDX.Mathematics.Interop;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library.Types.Geometry;
@@ -16,9 +17,10 @@ namespace Si.GameEngine.Sprites
         #region Properties.
 
         //Non-sprites (e.g. only text) bounds are simple, unlike sprites the text bounds start at X,Y and go to Width/Height.
-        public Rectangle BoundsI => new((int)(Location.X), (int)(Location.Y), Size.Width, Size.Height);
-        public override RectangleF Bounds => new((float)(Location.X), (float)(Location.Y), Size.Width, Size.Height);
+        public override RectangleF Bounds => new((float)Location.X, (float)Location.Y, Size.Width, Size.Height);
+        public override RawRectangleF RawBounds => new((float)Location.X, (float)Location.Y, (float)Location.X + Size.Width, (float)Location.Y + Size.Height);
         public override RectangleF RenderBounds => new((float)(RenderLocation.X), (float)(RenderLocation.Y), Size.Width, Size.Height);
+        public override RawRectangleF RawRenderBounds => new((float)RenderLocation.X, (float)RenderLocation.Y, (float)RenderLocation.X + Size.Width, (float)RenderLocation.Y + Size.Height);
 
         public TextFormat Format { get; set; }
         public SolidColorBrush Color { get; private set; }

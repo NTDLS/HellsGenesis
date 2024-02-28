@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Drawing;
-using System.Numerics;
-using System.Reflection;
-using System.Security.Claims;
+﻿using System.Drawing;
 
 namespace Si.Library.Types.Geometry
 {
@@ -220,7 +216,7 @@ namespace Si.Library.Types.Geometry
         /// <returns></returns>
         public double DotProduct(SiPoint b)
         {
-            return a.X * b.X + a.Y * b.Y;
+            return X * b.X + Y * b.Y;
         }
 
         /// <summary>

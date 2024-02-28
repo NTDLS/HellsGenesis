@@ -23,7 +23,7 @@ namespace Si.Library.Types
             get => _recoilPercentage;
             set
             {
-                _recoilPercentage = value.Box(0, 1);
+                _recoilPercentage = value.Clamp(0, 1);
                 OnRecoilChanged?.Invoke(this);
             }
         }
@@ -34,7 +34,7 @@ namespace Si.Library.Types
             get => _throttlePercentage;
             set
             {
-                _throttlePercentage = value.Box(-1, 1);
+                _throttlePercentage = value.Clamp(-1, 1);
                 OnThrottleChanged?.Invoke(this);
             }
         }
@@ -45,7 +45,7 @@ namespace Si.Library.Types
             get => _boostPercentage;
             set
             {
-                _boostPercentage = value.Box(-1, 1);
+                _boostPercentage = value.Clamp(-1, 1);
                 OnBoostChanged?.Invoke(this);
             }
         }

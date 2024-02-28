@@ -111,6 +111,11 @@ namespace Si.GameEngine.Sprites
                             RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Velocity.Angle.Degrees);
                         break;
                 }
+
+                if (IsHighlighted)
+                {
+                    _gameEngine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Velocity.Angle.Radians, _gameEngine.Rendering.Materials.Colors.Red, 0, 1);
+                }
             }
         }
     }

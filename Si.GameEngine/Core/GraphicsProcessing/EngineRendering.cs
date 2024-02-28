@@ -207,7 +207,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
         public Ellipse FillEllipseAt(RenderTarget renderTarget, double x, double y,
-            double radiusX, double radiusY, Color4 color, float angle = 0)
+            double radiusX, double radiusY, Color4 color, float angleRadians = 0)
         {
             var ellipse = new Ellipse()
             {
@@ -216,14 +216,16 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 RadiusY = (float)radiusY,
             };
 
-            if (angle != 0)
+            if (angleRadians != 0)
             {
                 var destRect = new RawRectangleF((float)x, (float)y, (float)(x + radiusX), (float)(y + radiusY));
-                SetTransformAngle(renderTarget, destRect, angle);
+                SetTransformAngle(renderTarget, destRect, angleRadians);
             }
 
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.FillEllipse(ellipse, brush);
+
+            if (angleRadians != 0) ResetTransform(renderTarget);
 
             return ellipse;
         }
@@ -233,7 +235,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
         public Ellipse HollowEllipseAt(RenderTarget renderTarget, double x, double y,
-            double radiusX, double radiusY, Color4 color, float strokeWidth = 1, float angle = 0)
+            double radiusX, double radiusY, Color4 color, float strokeWidth = 1, float angleRadians = 0)
         {
             var ellipse = new Ellipse()
             {
@@ -242,20 +244,22 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 RadiusY = (float)radiusY,
             };
 
-            if (angle != 0)
+            if (angleRadians != 0)
             {
                 var destRect = new RawRectangleF((float)x, (float)y, (float)(x + radiusX), (float)(y + radiusY));
-                SetTransformAngle(renderTarget, destRect, angle);
+                SetTransformAngle(renderTarget, destRect, angleRadians);
             }
 
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawEllipse(ellipse, brush, strokeWidth);
 
+            if (angleRadians != 0) ResetTransform(renderTarget);
+
             return ellipse;
         }
 
         public void HollowTriangleAt(RenderTarget renderTarget, double x, double y,
-            double height, double width, Color4 color, float strokeWidth = 1, float angle = 0)
+            double height, double width, Color4 color, float strokeWidth = 1, float angleRadians = 0)
         {
             // Define the points for the triangle
             var trianglePoints = new RawVector2[]
@@ -265,10 +269,10 @@ namespace Si.GameEngine.Core.GraphicsProcessing
                 new RawVector2((float)(width / 2), 0)      // Vertex 3 (top-center)
             };
 
-            if (angle != 0)
+            if (angleRadians != 0)
             {
                 var destRect = new RawRectangleF((float)x, (float)y, (float)(x + width), (float)(y + height));
-                SetTransformAngle(renderTarget, destRect, angle);
+                SetTransformAngle(renderTarget, destRect, angleRadians);
             }
 
             // Create a PathGeometry and add the triangle to it
@@ -299,7 +303,7 @@ namespace Si.GameEngine.Core.GraphicsProcessing
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawGeometry(triangleGeometry, brush, strokeWidth);
 
-            ResetTransform(renderTarget);
+            if (angleRadians != 0) ResetTransform(renderTarget);
         }
 
         /// <summary>

@@ -354,14 +354,7 @@ namespace Si.GameEngine.Menus._Superclass
             var selectedItem = (from o in Items where o.Visable == true && o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
-                _gameEngine.Rendering.DrawRectangleAt(renderTarget,
-                    new SharpDX.Mathematics.Interop.RawRectangleF(
-                        selectedItem.BoundsI.X,
-                        selectedItem.BoundsI.Y,
-                        selectedItem.BoundsI.X + selectedItem.BoundsI.Width,
-                        selectedItem.BoundsI.Y + selectedItem.BoundsI.Height),
-                    0,
-                    _gameEngine.Rendering.Materials.Colors.Red, 2, 2);
+                _gameEngine.Rendering.DrawRectangleAt(renderTarget, selectedItem.RawBounds, 0, _gameEngine.Rendering.Materials.Colors.Red, 2, 2);
             }
         }
     }

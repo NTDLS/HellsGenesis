@@ -164,7 +164,7 @@ namespace Si.GameEngine.Core.TickControllers
 
                     if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < GameEngine.Settings.MaxPlayerBoostAmount)
                     {
-                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Box(0, GameEngine.Settings.MaxPlayerBoostAmount);
+                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Clamp(0, GameEngine.Settings.MaxPlayerBoostAmount);
 
                         if (Sprite.Velocity.BoostRebuilding && Sprite.Velocity.AvailableBoost >= GameEngine.Settings.PlayerBoostRebuildFloor)
                         {

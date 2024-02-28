@@ -51,10 +51,19 @@
         /// <summary>
         /// Clips a value to a min/max value.
         /// </summary>
-        public static double Box(this double value, double minValue, double maxValue)
+        public static double Clamp(this double value, double minValue, double maxValue)
         {
             if (value > maxValue) return maxValue;
             else if (value < minValue) return minValue;
+            else return value;
+        }
+
+        /// <summary>
+        /// Clips a value to a max value.
+        /// </summary>
+        public static double Clamp(this double value, double maxValue)
+        {
+            if (value > maxValue) return maxValue;
             else return value;
         }
 

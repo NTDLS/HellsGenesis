@@ -45,7 +45,7 @@ namespace Si.GameEngine.Core.Managers
             double weightedThrottlePercent = (
                     _gameEngine.Player.Sprite.Velocity.ThrottlePercentage * 0.60 //n-percent of the zoom is throttle.
                     + _gameEngine.Player.Sprite.Velocity.BoostPercentage * 0.40  //n-percent of the zoom is boost.
-                ).Box(0, 1);
+                ).Clamp(0, 1);
 
             double remainingRatioZoom = 1 - BaseDrawScale;
             double debugFactor = remainingRatioZoom * weightedThrottlePercent;

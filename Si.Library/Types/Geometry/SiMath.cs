@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Si.Library.Types.Geometry
+﻿namespace Si.Library.Types.Geometry
 {
-    internal class SiMath
+    public static class SiMath
     {
         /// <summary>
         /// Restrict a value to be within a specified range.Useful for keeping objects within boundaries.

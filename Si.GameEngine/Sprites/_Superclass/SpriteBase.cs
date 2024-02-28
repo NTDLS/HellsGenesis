@@ -127,12 +127,38 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <summary>
         /// The bounds of the sprite in the universe.
         /// </summary>
-        public virtual RectangleF Bounds => new((float)(Location.X - Size.Width / 2.0), (float)(Location.Y - Size.Height / 2.0), Size.Width, Size.Height);
+        public virtual RectangleF Bounds => new(
+            (float)(Location.X - Size.Width / 2.0),
+            (float)(Location.Y - Size.Height / 2.0),
+            Size.Width,
+            Size.Height);
+
+        /// <summary>
+        /// The raw bounds of the sprite in the universe.
+        /// </summary>
+        public virtual RawRectangleF RawBounds => new(
+                        (float)(Location.X - Size.Width / 2.0),
+                        (float)(Location.Y - Size.Height / 2.0),
+                        (float)(Location.X - Size.Width / 2.0) + Size.Width,
+                        (float)(Location.Y - Size.Height / 2.0) + Size.Height);
 
         /// <summary>
         /// The bounds of the sprite on the display.
         /// </summary>
-        public virtual RectangleF RenderBounds => new((float)(RenderLocation.X - Size.Width / 2.0), (float)(RenderLocation.Y - Size.Height / 2.0), Size.Width, Size.Height);
+        public virtual RectangleF RenderBounds => new(
+                        (float)(RenderLocation.X - Size.Width / 2.0),
+                        (float)(RenderLocation.Y - Size.Height / 2.0),
+                        Size.Width,
+                        Size.Height);
+
+        /// <summary>
+        /// The raw bounds of the sprite on the display.
+        /// </summary>
+        public virtual RawRectangleF RawRenderBounds => new(
+                        (float)(RenderLocation.X - Size.Width / 2.0),
+                        (float)(RenderLocation.Y - Size.Height / 2.0),
+                        (float)(RenderLocation.X - Size.Width / 2.0) + Size.Width,
+                        (float)(RenderLocation.Y - Size.Height / 2.0) + Size.Height);
 
         public SiVelocity Velocity
         {
@@ -406,7 +432,7 @@ namespace Si.GameEngine.Sprites._Superclass
         public virtual void AddHullHealth(int pointsToAdd)
         {
             HullHealth += pointsToAdd;
-            HullHealth = HullHealth.Box(0, _gameEngine.Settings.MaxHullHealth);
+            HullHealth = HullHealth.Clamp(0, _gameEngine.Settings.MaxHullHealth);
         }
 
         public virtual void SetShieldHealth(int points)
@@ -418,7 +444,7 @@ namespace Si.GameEngine.Sprites._Superclass
         public virtual void AddShieldHealth(int pointsToAdd)
         {
             ShieldHealth += pointsToAdd;
-            ShieldHealth = ShieldHealth.Box(1, _gameEngine.Settings.MaxShieldPoints);
+            ShieldHealth = ShieldHealth.Clamp(1, _gameEngine.Settings.MaxShieldPoints);
         }
 
         public void ReviveDeadOrExploded()
@@ -793,19 +819,22 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Rotates the object by the given amount if it is pointing in the given direction.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if the object is not pointing in the given direction.
-        public bool RotateIfPointingAt(SpriteBase obj, SiRelativeDirection direction, double rotationRadians = 1, double varianceDegrees = 10)
+        public bool RotateIfPointingAt(SpriteBase obj, SiRelativeDirection direction, double maxRotationRadians = 1, double varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(obj);
+
+            //TODO: Implement LERP.
+            //var rotationRadians = SiMath.Lerp(maxRotationRadians / deltaAngle, maxRotationRadians, 0.1).Clamp(maxRotationRadians);
 
             if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees))
             {
                 if (direction == SiRelativeDirection.Right)
                 {
-                    Velocity.Angle += rotationRadians;
+                    Velocity.Angle += maxRotationRadians;
                 }
                 if (direction == SiRelativeDirection.Left)
                 {
-                    Velocity.Angle -= rotationRadians;
+                    Velocity.Angle -= maxRotationRadians;
                 }
                 return true;
             }
@@ -1046,9 +1075,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
                 if (IsHighlighted)
                 {
-                    var rectangle = new RectangleF((int)(RenderLocation.X - Size.Width / 2.0), (int)(RenderLocation.Y - Size.Height / 2.0), Size.Width, Size.Height);
-                    var rawRectF = new RawRectangleF(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom);
-                    _gameEngine.Rendering.DrawRectangleAt(renderTarget, rawRectF, Velocity.Angle.Radians, _gameEngine.Rendering.Materials.Colors.Red, 0, 1);
+                    _gameEngine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Velocity.Angle.Radians, _gameEngine.Rendering.Materials.Colors.Red, 0, 1);
                 }
             }
         }

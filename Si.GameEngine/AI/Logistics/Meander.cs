@@ -212,7 +212,7 @@ namespace Si.GameEngine.AI.Logistics
             var aiParams = new DniNamedInterfaceParameters();
 
             var distance = _owner.DistanceTo(_observedObject);
-            var percentageOfCloseness = ((100 - ((distance / DistanceToKeep) * 100.0)) / 100.0).Box(0, 1);
+            var percentageOfCloseness = ((100 - ((distance / DistanceToKeep) * 100.0)) / 100.0).Clamp(0, 1);
 
             aiParams.Set(Inputs.DistanceFromObservationObject, percentageOfCloseness);
 

@@ -68,7 +68,7 @@ namespace Si.Library.Types
 
                 AvailableResource += addedResource;
 
-                AvailableResource = AvailableResource.Box(0, MaxValue);
+                AvailableResource = AvailableResource.Clamp(0, MaxValue);
             }
         }
 
