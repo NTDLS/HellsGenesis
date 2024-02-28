@@ -45,26 +45,32 @@ namespace Si.GameEngine.Core.NativeRendering
                 antialiasMode = AntialiasMode.PerPrimitive;
             }
 
-            var renderProp = new HwndRenderTargetProperties()
+            var windowRenderProperties = new HwndRenderTargetProperties()
             {
                 PresentOptions = presentOptions,
                 Hwnd = gameEngine.Display.DrawingSurface.Handle,
                 PixelSize = new Size2(gameEngine.Display.NatrualScreenSize.Width, gameEngine.Display.NatrualScreenSize.Height)
             };
 
-            var intermediateRenderTargetSize = new Size2F(_gameEngine.Display.TotalCanvasSize.Width, _gameEngine.Display.TotalCanvasSize.Height);
+            var renderTargetProperties = new RenderTargetProperties
+            {
+                PixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied),
+                MinLevel = FeatureLevel.Level_10,
+                Type = RenderTargetType.Hardware
+            };
 
-            var pixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied);
+            //The intermediate render target is much larger than the redner target window. We create this
+            //  larger render target so that we can zoom-out when we want to see more of the universe.
+            var intermediateRenderTargetSize = new Size2F(_gameEngine.Display.TotalCanvasSize.Width, _gameEngine.Display.TotalCanvasSize.Height);
 
             RenderTargets.Use(o =>
             {
-                o.ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, new RenderTargetProperties(pixelFormat), renderProp)
+                o.ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, renderTargetProperties, windowRenderProperties)
                 {
                     AntialiasMode = antialiasMode
                 };
 
-                o.IntermediateRenderTarget = new BitmapRenderTarget(
-                    o.ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
+                o.IntermediateRenderTarget = new BitmapRenderTarget(o.ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
                 {
                     AntialiasMode = antialiasMode
                 };
@@ -72,14 +78,6 @@ namespace Si.GameEngine.Core.NativeRendering
                 Materials = new PrecreatedMaterials(o.ScreenRenderTarget);
                 TextFormats = new PrecreatedTextFormats(_directWriteFactory);
             });
-
-            var renderTargetProperties = new RenderTargetProperties(pixelFormat);
-            var renderProperties = new HwndRenderTargetProperties
-            {
-                Hwnd = gameEngine.Display.DrawingSurface.Handle,
-                PixelSize = new Size2(gameEngine.Display.NatrualScreenSize.Width, gameEngine.Display.NatrualScreenSize.Height),
-                PresentOptions = PresentOptions.Immediately
-            };
         }
 
         public void Dispose()
@@ -218,7 +216,12 @@ namespace Si.GameEngine.Core.NativeRendering
 
             if (angleRadians != 0)
             {
-                var destRect = new RawRectangleF((float)x, (float)y, (float)(x + radiusX), (float)(y + radiusY));
+                var destRect = new RawRectangleF(
+                    (float)(x - radiusX / 2.0),
+                    (float)(y - radiusY / 2.0),
+                    (float)((x - radiusX / 2.0) + radiusX),
+                    (float)((y - radiusY / 2.0) + radiusY));
+
                 ApplyTransformAngle(renderTarget, destRect, angleRadians);
             }
 
@@ -246,7 +249,12 @@ namespace Si.GameEngine.Core.NativeRendering
 
             if (angleRadians != 0)
             {
-                var destRect = new RawRectangleF((float)x, (float)y, (float)(x + radiusX), (float)(y + radiusY));
+                var destRect = new RawRectangleF(
+                    (float)(x - radiusX / 2.0),
+                    (float)(y - radiusY / 2.0),
+                    (float)((x - radiusX / 2.0) + radiusX),
+                    (float)((y - radiusY / 2.0) + radiusY));
+
                 ApplyTransformAngle(renderTarget, destRect, angleRadians);
             }
 
@@ -351,7 +359,7 @@ namespace Si.GameEngine.Core.NativeRendering
 
         #region Native Transformations.
 
-        public void ApplyTransformAngle(RenderTarget renderTarget,
+        public void ApplyTransformAngle2(RenderTarget renderTarget,
             RawRectangleF rect, double angleRadians, Matrix3x2? existingMatrix = null)
         {
             float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
@@ -363,6 +371,25 @@ namespace Si.GameEngine.Core.NativeRendering
             {
                 rotationMatrix = Matrix3x2.Multiply(rotationMatrix, (Matrix3x2)existingMatrix);
             }
+
+            renderTarget.Transform = rotationMatrix;
+        }
+
+        public void ApplyTransformAngle(RenderTarget renderTarget, RawRectangleF rect, double angleRadians)
+        {
+            float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
+            float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
+
+            // Calculate the rotation matrix
+            float cosAngle = (float)Math.Cos(angleRadians);
+            float sinAngle = (float)Math.Sin(angleRadians);
+
+            var rotationMatrix = new RawMatrix3x2(
+                cosAngle, sinAngle,
+                -sinAngle, cosAngle,
+                centerX - cosAngle * centerX + sinAngle * centerY,
+                centerY - sinAngle * centerX - cosAngle * centerY
+            );
 
             renderTarget.Transform = rotationMatrix;
         }
@@ -398,4 +425,3 @@ namespace Si.GameEngine.Core.NativeRendering
         #endregion
     }
 }
-
