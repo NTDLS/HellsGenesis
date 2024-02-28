@@ -238,7 +238,7 @@ namespace Si.GameEngine.Core.NativeRendering
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
         public Ellipse HollowEllipseAt(RenderTarget renderTarget, double x, double y,
-            double radiusX, double radiusY, Color4 color, float strokeWidth = 1, float angle = 0)
+            double radiusX, double radiusY, Color4 color, float strokeWidth = 1, float angleRadians = 0)
         {
             var ellipse = new Ellipse()
             {
@@ -247,20 +247,27 @@ namespace Si.GameEngine.Core.NativeRendering
                 RadiusY = (float)radiusY,
             };
 
-            if (angle != 0)
+            if (angleRadians != 0)
             {
-                var destRect = new RawRectangleF((float)x, (float)y, (float)(x + radiusX), (float)(y + radiusY));
-                ApplyTransformAngle(renderTarget, destRect, angle);
+                var destRect = new RawRectangleF(
+                    (float)(x - radiusX / 2.0),
+                    (float)(y - radiusY / 2.0),
+                    (float)((x - radiusX / 2.0) + radiusX),
+                    (float)((y - radiusY / 2.0) + radiusY));
+
+                ApplyTransformAngle(renderTarget, destRect, angleRadians);
             }
 
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawEllipse(ellipse, brush, strokeWidth);
 
+            if (angleRadians != 0) ResetTransform(renderTarget);
+
             return ellipse;
         }
 
         public void HollowTriangleAt(RenderTarget renderTarget, double x, double y,
-            double height, double width, Color4 color, float strokeWidth = 1, float angle = 0)
+            double height, double width, Color4 color, float strokeWidth = 1, float angleRadians = 0)
         {
             // Define the points for the triangle
             var trianglePoints = new RawVector2[]
@@ -270,10 +277,10 @@ namespace Si.GameEngine.Core.NativeRendering
                 new RawVector2((float)(width / 2), 0)      // Vertex 3 (top-center)
             };
 
-            if (angle != 0)
+            if (angleRadians != 0)
             {
                 var destRect = new RawRectangleF((float)x, (float)y, (float)(x + width), (float)(y + height));
-                ApplyTransformAngle(renderTarget, destRect, angle);
+                ApplyTransformAngle(renderTarget, destRect, angleRadians);
             }
 
             // Create a PathGeometry and add the triangle to it
@@ -304,7 +311,7 @@ namespace Si.GameEngine.Core.NativeRendering
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawGeometry(triangleGeometry, brush, strokeWidth);
 
-            ResetTransform(renderTarget);
+            if (angleRadians != 0) ResetTransform(renderTarget);
         }
 
         /// <summary>
@@ -333,25 +340,6 @@ namespace Si.GameEngine.Core.NativeRendering
         public List<SharpDX.Direct2D1.Bitmap> GenerateIrregularFragments(SharpDX.Direct2D1.Bitmap originalBitmap, int countOfFragments, int countOfVertices = 3)
             => BitmapFragmenter.GenerateIrregularFragments(this, originalBitmap, countOfFragments, countOfVertices);
 
-        #region Native Transformations.    
-
-        public void ApplyTransformAngle(RenderTarget renderTarget,
-            RawRectangleF rect, double angleRadians, Matrix3x2? existingMatrix = null)
-        {
-            float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
-            float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
-
-            var rotationMatrix = Matrix3x2.Rotation((float)angleRadians, new Vector2(centerX, centerY));
-
-            if (existingMatrix != null)
-            {
-                rotationMatrix = Matrix3x2.Multiply(rotationMatrix, (Matrix3x2)existingMatrix);
-            }
-
-            renderTarget.Transform = rotationMatrix;
-        }
-
-
         public RawMatrix3x2 GetScalingMatrix(double zoomFactor)
         {
             // Calculate the new center point (assuming dimensions are known)
@@ -368,6 +356,44 @@ namespace Si.GameEngine.Core.NativeRendering
 
             return scalingMatrix;
         }
+
+        #region Native Transformations.
+
+        public void ApplyTransformAngle2(RenderTarget renderTarget,
+            RawRectangleF rect, double angleRadians, Matrix3x2? existingMatrix = null)
+        {
+            float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
+            float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
+
+            var rotationMatrix = Matrix3x2.Rotation((float)angleRadians, new Vector2(centerX, centerY));
+
+            if (existingMatrix != null)
+            {
+                rotationMatrix = Matrix3x2.Multiply(rotationMatrix, (Matrix3x2)existingMatrix);
+            }
+
+            renderTarget.Transform = rotationMatrix;
+        }
+
+        public void ApplyTransformAngle(RenderTarget renderTarget, RawRectangleF rect, double angleRadians)
+        {
+            float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
+            float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
+
+            // Calculate the rotation matrix
+            float cosAngle = (float)Math.Cos(angleRadians);
+            float sinAngle = (float)Math.Sin(angleRadians);
+
+            var rotationMatrix = new RawMatrix3x2(
+                cosAngle, sinAngle,
+                -sinAngle, cosAngle,
+                centerX - cosAngle * centerX + sinAngle * centerY,
+                centerY - sinAngle * centerX - cosAngle * centerY
+            );
+
+            renderTarget.Transform = rotationMatrix;
+        }
+
 
         public void ApplyScaleTransform(RenderTarget renderTarget, float scale, Vector2 centerPoint)
         {
