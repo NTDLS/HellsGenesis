@@ -1,5 +1,8 @@
 ﻿namespace Si.Library.Types.Geometry
 {
+    /// <summary>
+    /// Normalized angles. Degrees, Radians and Cartesian Coordinates.
+    /// </summary>
     public class SiAngle
     {
         public const double DEG_TO_RAD = Math.PI / 180.0;
@@ -57,8 +60,14 @@
 
         #endregion
 
-        public double RadiansUnadjusted => DegreesToRadians(_degrees);
+        /// <summary>
+        /// Cartesian coordinate X.
+        /// </summary>
         public double X => Math.Cos(Radians);
+
+        /// <summary>
+        /// Cartesian coordinate Y.
+        /// </summary>
         public double Y => Math.Sin(Radians);
 
         public override int GetHashCode() => ToString().GetHashCode();
@@ -89,16 +98,6 @@
         /// Angle in radians between [−3.14,3.14]
         /// </summary>
         public double RadiansSigned => ((Radians + Math.PI) % (Math.PI * 2)) - Math.PI;
-
-        /// <summary>
-        /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
-        /// </summary>
-        /// <returns></returns>
-        public SiPoint Normalize()
-        {
-            var magnitude = Math.Sqrt(X * X + Y * Y);
-            return new SiPoint(X / magnitude, Y / magnitude);
-        }
 
         public double _degrees;
         /// <summary>
