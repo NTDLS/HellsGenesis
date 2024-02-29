@@ -391,9 +391,8 @@ namespace Si.GameEngine.Sprites._Superclass
                 + $"         Render-Location: {RenderLocation}\r\n"
                 + $"                Location: {Location}\r\n"
                 + $"                   Angle: {Velocity.Angle}\r\n"
-                + $"                          {Velocity.Angle.Degrees:n2}deg\r\n"
-                + $"                          {Velocity.Angle.Radians:n2}rad\r\n"
-                + $"                          {Velocity.Angle.RadiansUnadjusted:n2}rad unadjusted\r\n"
+                + $"                          {Velocity.Angle.DegreesSigned:n2}deg\r\n"
+                + $"                          {Velocity.Angle.RadiansSigned:n2}rad\r\n"
                 + extraInfo
                 + $"       Background Offset: {_gameEngine.Display.RenderWindowPosition}\r\n"
                 + $"                  Thrust: {Velocity.ThrottlePercentage * 100:n2}\r\n"

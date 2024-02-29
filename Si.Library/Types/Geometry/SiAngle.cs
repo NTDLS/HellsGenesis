@@ -83,12 +83,12 @@
         /// <summary>
         /// Angle in degrees between [−180,180]
         /// </summary>
-        public double DegreesSigned => (_degrees + 180) % 360 - 180;
+        public double DegreesSigned => ((_degrees + 180) % 360) - 180;
 
         /// <summary>
         /// Angle in radians between [−3.14,3.14]
         /// </summary>
-        public double RadiansSigned => (_degrees + Math.PI) % RADS_IN_CIRCLE - Math.PI;
+        public double RadiansSigned => ((Radians + Math.PI) % (Math.PI * 2)) - Math.PI;
 
         /// <summary>
         /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
