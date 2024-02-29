@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Library.Mathematics.Geometry;
 using Si.Menus.SinglePlayer;
@@ -19,7 +18,7 @@ namespace Si.Menus.MultiPlayer.Client
         private readonly SpriteMenuItem _countOfReadyPlayers;
         private readonly RectangleF _currentScaledScreenBounds;
 
-        public MpMenuClientLobbyWait(GameEngineCore gameEngine)
+        public MpMenuClientLobbyWait(GameEngine.GameEngineCore gameEngine)
             : base(gameEngine)
         {
             _gameEngine.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);

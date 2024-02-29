@@ -1,6 +1,6 @@
-﻿namespace Si.GameEngine.Core.Debug
+﻿namespace Si.GameEngine.Interrogation
 {
-    public class DebugCommandParameterPrototype
+    public class InterrogationCommandParameterPrototype
     {
         public enum DebugCommandParameterType
         {
@@ -16,7 +16,7 @@
 
         public string DefaultValue { get; private set; }
 
-        public DebugCommandParameterPrototype(string name, bool isRequired, string defautValue, DebugCommandParameterType commandParameterType)
+        public InterrogationCommandParameterPrototype(string name, bool isRequired, string defautValue, DebugCommandParameterType commandParameterType)
         {
             Name = name;
             IsRequired = isRequired;

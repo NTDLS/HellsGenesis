@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Situations._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Library;
@@ -16,7 +15,7 @@ namespace Si.Menus.MultiPlayer.Host
     {
         private readonly SpriteMenuItem _situationBlurb;
 
-        public MpMenuHostSituationSelect(GameEngineCore gameEngine)
+        public MpMenuHostSituationSelect(GameEngine.GameEngineCore gameEngine)
             : base(gameEngine)
         {
             var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();

@@ -1,13 +1,10 @@
 ﻿using Si.Audio;
-using Si.GameEngine.Core;
-using Si.GameEngine.Core.Types;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
-using Si.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;

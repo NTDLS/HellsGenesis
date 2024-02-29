@@ -68,8 +68,4 @@
     <ProjectReference Include="..\Si.Rendering\Si.Rendering.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Core\Types\" />
-  </ItemGroup>
-
 </Project>

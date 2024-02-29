@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Si.GameEngine.Core
+namespace Si.GameEngine
 {
     /// <summary>
     /// Handles the events from the Si.MultiplayClient.EngineMultiplayManager

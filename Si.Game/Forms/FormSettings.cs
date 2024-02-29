@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.Rendering;
+﻿using Si.Rendering;
 using Si.Rendering.Types;
 using System;
 using System.Linq;
@@ -20,7 +19,7 @@ namespace Si.Game
         {
             trackBarResolution.Scroll += TrackBarResolution_Scroll;
 
-            var settings = GameEngineCore.LoadSettings();
+            var settings = GameEngine.GameEngineCore.LoadSettings();
 
             checkBoxFineTuneFrameRate.Checked = settings.FineTuneFramerate;
             checkBoxPlayMusic.Checked = settings.PlayMusic;
@@ -123,7 +122,7 @@ namespace Si.Game
         {
             try
             {
-                var settings = GameEngineCore.LoadSettings();
+                var settings = GameEngine.GameEngineCore.LoadSettings();
 
                 settings.FineTuneFramerate = checkBoxFineTuneFrameRate.Checked;
                 settings.PlayMusic = checkBoxPlayMusic.Checked;
@@ -154,7 +153,7 @@ namespace Si.Game
 
                 settings.GraphicsAdapterId = graphicsAdapter.DeviceId;
 
-                GameEngineCore.SaveSettings(settings);
+                GameEngine.GameEngineCore.SaveSettings(settings);
                 Close();
             }
             catch (Exception ex)

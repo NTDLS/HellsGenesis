@@ -1,5 +1,4 @@
 ﻿using NTDLS.Semaphore;
-using Si.GameEngine.Core;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Menus;
 using Si.GameEngine.TickControllers._Superclass;

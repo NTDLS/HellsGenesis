@@ -1,5 +1,4 @@
 ﻿using SharpDX.DirectInput;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Library.Mathematics.Geometry;
 using System;

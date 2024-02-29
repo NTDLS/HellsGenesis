@@ -1,6 +1,5 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using Si.GameEngine.Core;
 using Si.GameEngine.Menus._Superclass;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;

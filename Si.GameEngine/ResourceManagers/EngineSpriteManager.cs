@@ -1,6 +1,5 @@
 ﻿using NTDLS.Semaphore;
 using SharpDX.Mathematics.Interop;
-using Si.GameEngine.Core;
 using Si.GameEngine.Menus;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;

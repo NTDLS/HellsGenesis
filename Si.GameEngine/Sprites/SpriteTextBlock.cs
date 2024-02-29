@@ -1,7 +1,6 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using SharpDX.Mathematics.Interop;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System.Drawing;

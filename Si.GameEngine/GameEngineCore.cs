@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
-using Si.GameEngine.Core.Debug._Superclass;
 using Si.GameEngine.Core.Types;
+using Si.GameEngine.Interrogation._Superclass;
 using Si.GameEngine.Menus;
 using Si.GameEngine.ResourceManagers;
 using Si.GameEngine.Sprites._Superclass;
@@ -12,7 +12,7 @@ using Si.Rendering;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Si.GameEngine.Core
+namespace Si.GameEngine
 {
     /// <summary>
     /// The core game engine. Containd the controllers and managers.
@@ -138,7 +138,7 @@ namespace Si.GameEngine.Core
             _worldClock = new EngineWorldClock(this);
         }
 
-        public void EnableDebugging(IDebugForm debugForm)
+        public void EnableDebugging(IInterrogationForm debugForm)
         {
             Debug = new EngineDebugManager(this, debugForm);
         }

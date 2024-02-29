@@ -1,6 +1,5 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using Si.GameEngine.Core;
 using Si.GameEngine.ResourceManagers;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.TickControllers._Superclass;

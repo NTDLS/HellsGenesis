@@ -1,6 +1,6 @@
 ﻿namespace Si.Game.Forms
 {
-    partial class FormDebug
+    partial class FormInterrogation
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDebug));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInterrogation));
             splitContainerBody = new System.Windows.Forms.SplitContainer();
             splitContainer1 = new System.Windows.Forms.SplitContainer();
             richTextBoxOutput = new System.Windows.Forms.RichTextBox();
@@ -140,15 +140,15 @@
             buttonExecute.UseVisualStyleBackColor = true;
             buttonExecute.Click += ButtonExecute_Click;
             // 
-            // FormDebug
+            // FormInterrogation
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1039, 563);
             Controls.Add(splitContainerBody);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
-            Name = "FormDebug";
-            Text = "Strikeforce Infinity : Debug";
+            Name = "FormInterrogation";
+            Text = "Strikeforce Infinity : Interrogation";
             Load += FormDebug_Load;
             splitContainerBody.Panel1.ResumeLayout(false);
             splitContainerBody.Panel2.ResumeLayout(false);

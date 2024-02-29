@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Si.GameEngine.Core.Debug.DebugCommandParameterPrototype;
+using static Si.GameEngine.Interrogation.InterrogationCommandParameterPrototype;
 
-namespace Si.GameEngine.Core.Debug
+namespace Si.GameEngine.Interrogation
 {
-    public class DebugCommandParser
+    public class InterrogationCommandParser
     {
-        public List<DebugCommandPrototype> Commands { get; private set; } = new();
+        public List<InterrogationCommandPrototype> Commands { get; private set; } = new();
 
-        public DebugCommandParser(string[] prototypes)
+        public InterrogationCommandParser(string[] prototypes)
         {
             foreach (var prototype in prototypes)
             {
@@ -20,7 +20,7 @@ namespace Si.GameEngine.Core.Debug
                     throw new Exception("Malformed debug command prototype.");
                 }
 
-                var command = new DebugCommandPrototype(commandParts[0], commandParts[2]);
+                var command = new InterrogationCommandPrototype(commandParts[0], commandParts[2]);
 
                 var commandParameters = commandParts[1].Split(",");
 
@@ -44,7 +44,7 @@ namespace Si.GameEngine.Core.Debug
                             defaultValue = commandParameterParts[1].Substring(indexOfEqual + 1).Trim();
                         }
 
-                        command.Parameters.Add(new DebugCommandParameterPrototype(
+                        command.Parameters.Add(new InterrogationCommandParameterPrototype(
                             commandParameterParts[0], isRequired, defaultValue,
                             Enum.Parse<DebugCommandParameterType>(commandParameterParts[2], true)
                         ));
@@ -55,7 +55,7 @@ namespace Si.GameEngine.Core.Debug
             }
         }
 
-        public DebugCommand Parse(string commandText)
+        public InterrogationCommand Parse(string commandText)
         {
             int paramStartIndex = commandText.IndexOf(' ');
 
@@ -86,7 +86,7 @@ namespace Si.GameEngine.Core.Debug
                 throw new Exception($"Too many parameters supplied to '{commandName}'.");
             }
 
-            var parsedCommand = new DebugCommand(commandName);
+            var parsedCommand = new InterrogationCommand(commandName);
 
             int paramIndex = 0;
 
@@ -94,7 +94,7 @@ namespace Si.GameEngine.Core.Debug
             for (; paramIndex < commandParameters.Length; paramIndex++)
             {
                 var paramPrototype = commandPrototype.Parameters[paramIndex];
-                parsedCommand.Parameters.Add(new DebugCommandParameter(paramPrototype, commandParameters[paramIndex]));
+                parsedCommand.Parameters.Add(new InterrogationCommandParameter(paramPrototype, commandParameters[paramIndex]));
             }
 
             //Loop through the not-supplied parameters:
@@ -106,7 +106,7 @@ namespace Si.GameEngine.Core.Debug
                     throw new Exception($"Command '{parsedCommand.Name}' parameter '{paramPrototype.Name}' is not optional.");
                 }
 
-                parsedCommand.Parameters.Add(new DebugCommandParameter(paramPrototype, null));
+                parsedCommand.Parameters.Add(new InterrogationCommandParameter(paramPrototype, null));
             }
 
             return parsedCommand;

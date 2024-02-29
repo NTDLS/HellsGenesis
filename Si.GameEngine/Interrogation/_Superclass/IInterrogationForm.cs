@@ -1,8 +1,8 @@
 ﻿using Si.Library.Sprite;
 
-namespace Si.GameEngine.Core.Debug._Superclass
+namespace Si.GameEngine.Interrogation._Superclass
 {
-    public interface IDebugForm
+    public interface IInterrogationForm
     {
         public void StartWatch(GameEngineCore gameEngine, ISprite sprite);
         public void WriteLine(string text, System.Drawing.Color color);

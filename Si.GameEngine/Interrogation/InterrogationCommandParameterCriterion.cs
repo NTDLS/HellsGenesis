@@ -1,11 +1,11 @@
-﻿namespace Si.GameEngine.Core.Debug
+﻿namespace Si.GameEngine.Interrogation
 {
-    internal class DebugCommandParameterCriterion
+    internal class InterrogationCommandParameterCriterion
     {
         public bool IsNotCriteria { get; set; }
         public string Value { get; private set; }
 
-        public DebugCommandParameterCriterion(string filterText)
+        public InterrogationCommandParameterCriterion(string filterText)
         {
             if (filterText[0] == '!')
             {

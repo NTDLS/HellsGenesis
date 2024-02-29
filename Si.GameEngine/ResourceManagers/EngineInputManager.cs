@@ -1,5 +1,4 @@
 ﻿using SharpDX.DirectInput;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using System;
 using System.Collections.Generic;

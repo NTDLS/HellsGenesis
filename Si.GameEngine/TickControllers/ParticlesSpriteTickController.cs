@@ -1,5 +1,4 @@
 ﻿using SharpDX;
-using Si.GameEngine.Core;
 using Si.GameEngine.ResourceManagers;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;

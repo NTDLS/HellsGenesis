@@ -1,6 +1,5 @@
 ﻿using NTDLS.Semaphore;
 using SharpDX.Direct2D1;
-using Si.GameEngine.Core;
 using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.TickControllers._Superclass;
 using System.Collections.Generic;

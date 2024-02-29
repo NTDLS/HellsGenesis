@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites.Enemies._Superclass;
+﻿using Si.GameEngine.Sprites.Enemies._Superclass;
 
 namespace Si.GameEngine.Sprites.Enemies.Bosses._Superclass
 {

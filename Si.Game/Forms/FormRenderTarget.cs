@@ -1,7 +1,7 @@
 
 using Si.Game.Forms;
+using Si.GameEngine;
 using Si.GameEngine.AI.Logistics._Superclass;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.Library.Mathematics.Geometry;
@@ -29,7 +29,7 @@ namespace Si.Game
 
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
 
-            var settings = GameEngineCore.LoadSettings();
+            var settings = GameEngine.GameEngineCore.LoadSettings();
 
             if (settings.AlwaysOnTop)
             {
@@ -57,11 +57,11 @@ namespace Si.Game
             };
             Controls.Add(drawingSurface);
 
-            _gameEngine = new GameEngineCore(drawingSurface);
+            _gameEngine = new GameEngine.GameEngineCore(drawingSurface);
 
-            _gameEngine.EnableDebugging(new FormDebug(_gameEngine));
+            _gameEngine.EnableDebugging(new FormInterrogation(_gameEngine));
 
-            _gameEngine.OnStopEngine += (GameEngineCore sender) =>
+            _gameEngine.OnStopEngine += (GameEngine.GameEngineCore sender) =>
             {   //If the engine is stopped, close the main form.
                 Invoke((MethodInvoker)delegate
                 {
@@ -200,7 +200,7 @@ namespace Si.Game
             {
                 new Thread(o =>
                 {
-                    using var form = new FormDebugSpriteWatch(_gameEngine, sprite);
+                    using var form = new FormInterrogationSpriteWatch(_gameEngine, sprite);
                     form.ShowDialog();
                 }).Start();
             }

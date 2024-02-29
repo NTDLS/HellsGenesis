@@ -2,7 +2,7 @@
 
 namespace Si.Game.Forms
 {
-    partial class FormDebugSpriteWatch
+    partial class FormInterrogationSpriteWatch
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace Si.Game.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormDebugSpriteWatch));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInterrogationSpriteWatch));
             splitContainerBody = new System.Windows.Forms.SplitContainer();
             listViewVariables = new BufferedListView();
             columnHeaderName = new System.Windows.Forms.ColumnHeader();

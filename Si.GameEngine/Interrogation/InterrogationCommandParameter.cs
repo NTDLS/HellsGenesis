@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using static Si.GameEngine.Core.Debug.DebugCommandParameterPrototype;
+using static Si.GameEngine.Interrogation.InterrogationCommandParameterPrototype;
 
-namespace Si.GameEngine.Core.Debug
+namespace Si.GameEngine.Interrogation
 {
-    public class DebugCommandParameter
+    public class InterrogationCommandParameter
     {
-        public DebugCommandParameterPrototype Prototype { get; private set; }
+        public InterrogationCommandParameterPrototype Prototype { get; private set; }
         public object RawValue { get; private set; }
 
-        public DebugCommandParameter(DebugCommandParameterPrototype prototype, string value)
+        public InterrogationCommandParameter(InterrogationCommandParameterPrototype prototype, string value)
         {
             Prototype = prototype;
             RawValue = value;
@@ -38,7 +38,7 @@ namespace Si.GameEngine.Core.Debug
                 }
                 else if (prototype.CommandParameterType == DebugCommandParameterType.Criterion)
                 {
-                    RawValue = new DebugCommandParameterCriterion(value);
+                    RawValue = new InterrogationCommandParameterCriterion(value);
                 }
                 else
                 {

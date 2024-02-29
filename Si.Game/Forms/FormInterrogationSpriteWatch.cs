@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+﻿using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.Library.Sprite;
 using System;
@@ -8,13 +7,13 @@ using System.Windows.Forms;
 
 namespace Si.Game.Forms
 {
-    public partial class FormDebugSpriteWatch : Form
+    public partial class FormInterrogationSpriteWatch : Form
     {
-        private readonly GameEngineCore _gameEngine;
+        private readonly GameEngine.GameEngineCore _gameEngine;
         private readonly ISprite _sprite;
         private readonly Timer _timer = new();
 
-        internal FormDebugSpriteWatch(GameEngineCore gameEngine, ISprite sprite)
+        internal FormInterrogationSpriteWatch(GameEngine.GameEngineCore gameEngine, ISprite sprite)
         {
             InitializeComponent();
             _gameEngine = gameEngine;

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Si.GameEngine.Core.Debug
+namespace Si.GameEngine.Interrogation
 {
-    public class DebugCommand
+    public class InterrogationCommand
     {
         public string Name { get; set; }
-        public List<DebugCommandParameter> Parameters { get; private set; } = new();
+        public List<InterrogationCommandParameter> Parameters { get; private set; } = new();
 
         public string PhysicalFunctionKey => $"CommandHandler_{Name}".Replace('-', '_').Replace("__", "_").ToLower();
 
@@ -57,7 +57,7 @@ namespace Si.GameEngine.Core.Debug
             return (T)Convert.ChangeType(parameter.RawValue, typeof(T));
         }
 
-        public DebugCommand(string name)
+        public InterrogationCommand(string name)
         {
             Name = name;
         }

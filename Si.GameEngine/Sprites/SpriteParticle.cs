@@ -1,6 +1,5 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
-using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;

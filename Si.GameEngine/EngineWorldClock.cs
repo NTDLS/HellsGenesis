@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Core
+namespace Si.GameEngine
 {
     /// <summary>
     /// The world clock. Moves all objects forward in time, renders all objects and keeps the frame-counter in check.
@@ -142,7 +142,7 @@ namespace Si.GameEngine.Core
                         _gameEngine.Debug.ProcessCommand();
 
                         //If it is time to render, then render the frame!.
-                        if ((frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency) > frameRateDelayMicroseconds)
+                        if (frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency > frameRateDelayMicroseconds)
                         {
                             _gameEngine.Render();
                             frameRateTimer.Restart();
@@ -175,14 +175,14 @@ namespace Si.GameEngine.Core
                 });
 
                 //Determine how many µs it took to render the scene.
-                var actualWorldTickDurationMicroseconds = (double)worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency;
+                var actualWorldTickDurationMicroseconds = worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency;
 
                 //Calculate how many µs we need to wait so that we can maintain the configured framerate.
                 var varianceWorldTickDurationMicroseconds = targetWorldTickDurationMicroseconds - actualWorldTickDurationMicroseconds;
 
                 worldTickTimer.Restart(); //Use the same timer to wait on the delta µs to expire.
 
-                while ((double)worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds)
+                while (worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds)
                 {
                     Thread.Yield();
                 }

@@ -1,6 +1,4 @@
-﻿using Si.GameEngine.Core;
-
-namespace Si.GameEngine.TickControllers._Superclass
+﻿namespace Si.GameEngine.TickControllers._Superclass
 {
     /// <summary>
     /// Tick managers that do not handle sprites or do not use a vector to update their sprites.

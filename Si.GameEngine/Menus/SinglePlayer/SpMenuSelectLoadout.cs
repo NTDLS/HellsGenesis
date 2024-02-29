@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Menus._Superclass;
+﻿using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.Library;
@@ -19,7 +18,7 @@ namespace Si.Menus.SinglePlayer
         private Timer _animationTimer;
         private SpritePlayerBase _selectedSprite;
 
-        public SpMenuSelectLoadout(GameEngineCore gameEngine)
+        public SpMenuSelectLoadout(GameEngine.GameEngineCore gameEngine)
             : base(gameEngine)
         {
             var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();

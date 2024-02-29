@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites.Player._Superclass;
+﻿using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.TickControllers._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;

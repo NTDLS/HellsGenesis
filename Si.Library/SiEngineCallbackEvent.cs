@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-
-namespace Si.GameEngine.Core.Types
+﻿namespace Si.GameEngine.Core.Types
 {
     /// <summary>
     /// Allows for deferred events to be injected into the engine. We use this so that we can

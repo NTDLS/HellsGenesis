@@ -1,5 +1,4 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Debug._Superclass;
+﻿using Si.GameEngine.Interrogation._Superclass;
 using Si.Library.Sprite;
 using System;
 using System.Collections.Generic;
@@ -11,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Si.Game.Forms
 {
-    public partial class FormDebug : Form, IDebugForm
+    public partial class FormInterrogation : Form, IInterrogationForm
     {
-        private readonly GameEngineCore _gameEngine;
+        private readonly GameEngine.GameEngineCore _gameEngine;
         private readonly List<string> _commandHistory = new();
         private int _commandHistoryIndex = 0;
         private DateTime _lastTabKeyTimestamp = DateTime.UtcNow;
@@ -68,7 +67,7 @@ namespace Si.Game.Forms
             textBoxCommand.AutoCompleteSource = AutoCompleteSource.CustomSource;
         }
 
-        internal FormDebug(GameEngineCore gameEngine)
+        internal FormInterrogation(GameEngine.GameEngineCore gameEngine)
         {
             InitializeComponent();
 
@@ -228,11 +227,11 @@ namespace Si.Game.Forms
             richTextBoxOutput.ResumeLayout();
         }
 
-        public void StartWatch(GameEngineCore gameEngine, ISprite sprite)
+        public void StartWatch(GameEngine.GameEngineCore gameEngine, ISprite sprite)
         {
             new Thread(o =>
             {
-                using (var form = new FormDebugSpriteWatch(_gameEngine, sprite))
+                using (var form = new FormInterrogationSpriteWatch(_gameEngine, sprite))
                 {
                     form.ShowDialog();
                 }

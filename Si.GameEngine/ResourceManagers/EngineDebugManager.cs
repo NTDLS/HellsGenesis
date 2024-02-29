@@ -1,6 +1,5 @@
-﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.Debug;
-using Si.GameEngine.Core.Debug._Superclass;
+﻿using Si.GameEngine.Interrogation;
+using Si.GameEngine.Interrogation._Superclass;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -75,12 +74,12 @@ namespace Si.GameEngine.ResourceManagers
 
         private readonly GameEngineCore _gameEngine;
         private readonly Stack<string> _commandStack = new();
-        private IDebugForm _debugForm;
-        public DebugCommandParser CommandParser { get; } = new(_commandPrototypes);
+        private IInterrogationForm _debugForm;
+        public InterrogationCommandParser CommandParser { get; } = new(_commandPrototypes);
         private readonly List<MethodInfo> _hardDebugMethods;
         public bool IsVisible { get; private set; } = false;
 
-        public EngineDebugManager(GameEngineCore gameEngine, IDebugForm debugForm)
+        public EngineDebugManager(GameEngineCore gameEngine, IInterrogationForm debugForm)
         {
             _gameEngine = gameEngine;
             _debugForm = debugForm;
@@ -136,7 +135,7 @@ namespace Si.GameEngine.ResourceManagers
             foreach (var method in allMethods)
             {
                 var parameters = method.GetParameters();
-                if (parameters.Length == 1 && parameters[0].ParameterType == typeof(DebugCommand))
+                if (parameters.Length == 1 && parameters[0].ParameterType == typeof(InterrogationCommand))
                 {
                     methods.Add(method);
                 }
@@ -147,18 +146,18 @@ namespace Si.GameEngine.ResourceManagers
 
         #region Physical debug command handlers.
 
-        public void CommandHandler_Display_RenderWindowPosition_Get(DebugCommand command)
+        public void CommandHandler_Display_RenderWindowPosition_Get(InterrogationCommand command)
         {
             _debugForm.WriteLine($"{_gameEngine.Display.RenderWindowPosition}", System.Drawing.Color.Black);
         }
 
-        public void CommandHandler_Display_RenderWindowPosition_Set(DebugCommand command)
+        public void CommandHandler_Display_RenderWindowPosition_Set(InterrogationCommand command)
         {
             _gameEngine.Display.RenderWindowPosition.X = command.ParameterValue<float>("x");
             _gameEngine.Display.RenderWindowPosition.Y = command.ParameterValue<float>("y");
         }
 
-        public void CommandHandler_Display_RenderWindowPosition_CenterOn(DebugCommand command)
+        public void CommandHandler_Display_RenderWindowPosition_CenterOn(InterrogationCommand command)
         {
             _gameEngine.Sprites.Use(o =>
             {
@@ -172,13 +171,13 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Display_Adapters(DebugCommand command)
+        public void CommandHandler_Display_Adapters(InterrogationCommand command)
         {
             var text = RenderingUtility.GetGraphicsAdaptersDescriptions();
             _debugForm.Write(text, System.Drawing.Color.Black);
         }
 
-        public void CommandHandler_Sprite_Enemies_DeleteAll(DebugCommand command)
+        public void CommandHandler_Sprite_Enemies_DeleteAll(InterrogationCommand command)
         {
             foreach (var sprite in _gameEngine.Sprites.Enemies.All())
             {
@@ -186,7 +185,7 @@ namespace Si.GameEngine.ResourceManagers
             }
         }
 
-        public void CommandHandler_Sprite_Enemies_ExplodeAll(DebugCommand command)
+        public void CommandHandler_Sprite_Enemies_ExplodeAll(InterrogationCommand command)
         {
             foreach (var sprite in _gameEngine.Sprites.Enemies.All())
             {
@@ -194,24 +193,24 @@ namespace Si.GameEngine.ResourceManagers
             }
         }
 
-        public void CommandHandler_Sprite_Player_Explode(DebugCommand command)
+        public void CommandHandler_Sprite_Player_Explode(InterrogationCommand command)
         {
             _gameEngine.Player.Sprite.Explode();
         }
 
-        public void CommandHandler_Cls(DebugCommand command)
+        public void CommandHandler_Cls(InterrogationCommand command)
         {
             _debugForm.ClearText();
         }
 
-        public void CommandHandler_Help(DebugCommand command)
+        public void CommandHandler_Help(InterrogationCommand command)
         {
             var commands = CommandParser.Commands.OrderBy(o => o.Name).ToList();
 
-            var typeFilter = command.ParameterValue<DebugCommandParameterCriterion>("command");
+            var typeFilter = command.ParameterValue<InterrogationCommandParameterCriterion>("command");
             if (typeFilter != null)
             {
-                commands = commands.Where(o => DebugCommandParameter.IsMatchLike(o.Name, typeFilter.Value, typeFilter.IsNotCriteria)).ToList();
+                commands = commands.Where(o => InterrogationCommandParameter.IsMatchLike(o.Name, typeFilter.Value, typeFilter.IsNotCriteria)).ToList();
             }
 
             foreach (var cmd in commands)
@@ -250,7 +249,7 @@ namespace Si.GameEngine.ResourceManagers
             }
         }
 
-        public void CommandHandler_Display_Metrics(DebugCommand command)
+        public void CommandHandler_Display_Metrics(InterrogationCommand command)
         {
             var infoText =
                   $"          Background Offset: {_gameEngine.Display.RenderWindowPosition}\r\n"
@@ -264,29 +263,29 @@ namespace Si.GameEngine.ResourceManagers
             _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
-        public void CommandHandler_Engine_HighlightAll(DebugCommand command)
+        public void CommandHandler_Engine_HighlightAll(InterrogationCommand command)
         {
             var state = command.ParameterValue<bool>("state");
             _gameEngine.Settings.HighlightAllSprites = state;
         }
 
-        public void CommandHandler_Display_Zoom_Reset(DebugCommand command)
+        public void CommandHandler_Display_Zoom_Reset(InterrogationCommand command)
         {
             _gameEngine.Display.OverrideSpeedOrientedFrameScalingFactor = float.NaN;
         }
 
-        public void CommandHandler_Display_Zoom_Override(DebugCommand command)
+        public void CommandHandler_Display_Zoom_Override(InterrogationCommand command)
         {
             var level = command.ParameterValue<float>("level");
             _gameEngine.Display.OverrideSpeedOrientedFrameScalingFactor = level.Clamp(-1, 1);
         }
 
-        public void CommandHandler_Display_Zoom_Get(DebugCommand command)
+        public void CommandHandler_Display_Zoom_Get(InterrogationCommand command)
         {
             _debugForm.WriteLine($"{_gameEngine.Display.SpeedOrientedFrameScalingFactor():n4}", System.Drawing.Color.Black);
         }
 
-        public void CommandHandler_Engine_Pause(DebugCommand command)
+        public void CommandHandler_Engine_Pause(InterrogationCommand command)
         {
             var state = command.ParameterValue<bool>("state");
 
@@ -300,7 +299,7 @@ namespace Si.GameEngine.ResourceManagers
             }
         }
 
-        public void CommandHandler_Display_Framerate(DebugCommand command)
+        public void CommandHandler_Display_Framerate(InterrogationCommand command)
         {
             var infoText =
                   $" Target: {_gameEngine.Settings.TargetFrameRate:n4}\r\n"
@@ -310,7 +309,7 @@ namespace Si.GameEngine.ResourceManagers
             _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
-        public void CommandHandler_Sprite_ListTypes(DebugCommand command)
+        public void CommandHandler_Sprite_ListTypes(InterrogationCommand command)
         {
             var spriteTypes = SiReflection.GetSubClassesOf<SpriteBase>();
 
@@ -324,7 +323,7 @@ namespace Si.GameEngine.ResourceManagers
             _debugForm.WriteLine(text.ToString(), System.Drawing.Color.Black);
         }
 
-        public void CommandHandler_Sprite_Create(DebugCommand command)
+        public void CommandHandler_Sprite_Create(InterrogationCommand command)
         {
             var typeName = command.ParameterValue<string>("typeName");
             var x = command.ParameterValue<uint>("x");
@@ -339,7 +338,7 @@ namespace Si.GameEngine.ResourceManagers
             _debugForm.WriteLine($"CreatedUID: {sprite.UID}, MultiplayUID: {sprite.MultiplayUID}", System.Drawing.Color.Black);
         }
 
-        public void CommandHandler_Sprite_Player_Reflect_List(DebugCommand command)
+        public void CommandHandler_Sprite_Player_Reflect_List(InterrogationCommand command)
         {
             var reflectionType = _gameEngine.Player.Sprite.GetType();
             var properties = reflectionType.GetProperties().OrderBy(o => o.Name).ToList();
@@ -350,7 +349,7 @@ namespace Si.GameEngine.ResourceManagers
             }
         }
 
-        public void CommandHandler_Sprite_Player_Reflect_Set(DebugCommand command)
+        public void CommandHandler_Sprite_Player_Reflect_Set(InterrogationCommand command)
         {
             var propertyName = command.ParameterValue<string>("property");
             var propertyValue = command.ParameterValue("value", string.Empty);
@@ -371,7 +370,7 @@ namespace Si.GameEngine.ResourceManagers
             }
         }
 
-        public void CommandHandler_Sprite_Reflect_List(DebugCommand command)
+        public void CommandHandler_Sprite_Reflect_List(InterrogationCommand command)
         {
             _gameEngine.Sprites.Use(o =>
             {
@@ -390,7 +389,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_Reflect_Set(DebugCommand command)
+        public void CommandHandler_Sprite_Reflect_Set(InterrogationCommand command)
         {
             var propertyName = command.ParameterValue<string>("property");
             var propertyValue = command.ParameterValue("value", string.Empty);
@@ -419,12 +418,12 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_Player_Inspect(DebugCommand command)
+        public void CommandHandler_Sprite_Player_Inspect(InterrogationCommand command)
         {
             _debugForm.WriteLine(_gameEngine.Player.Sprite.GetInspectionText(), System.Drawing.Color.Black);
         }
 
-        public void CommandHandler_Sprite_Inspect(DebugCommand command)
+        public void CommandHandler_Sprite_Inspect(InterrogationCommand command)
         {
             _gameEngine.Sprites.Use(o =>
             {
@@ -437,7 +436,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_Explode(DebugCommand command)
+        public void CommandHandler_Sprite_Explode(InterrogationCommand command)
         {
             _gameEngine.Sprites.Use(o =>
             {
@@ -450,7 +449,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_IsPointingAt(DebugCommand command)
+        public void CommandHandler_Sprite_IsPointingAt(InterrogationCommand command)
         {
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
@@ -470,7 +469,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_IsPointingAway(DebugCommand command)
+        public void CommandHandler_Sprite_IsPointingAway(InterrogationCommand command)
         {
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
@@ -491,7 +490,7 @@ namespace Si.GameEngine.ResourceManagers
         }
 
 
-        public void CommandHandler_Sprite_DistanceTo(DebugCommand command)
+        public void CommandHandler_Sprite_DistanceTo(InterrogationCommand command)
         {
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
@@ -509,7 +508,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_AngleTo(DebugCommand command)
+        public void CommandHandler_Sprite_AngleTo(InterrogationCommand command)
         {
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
@@ -527,7 +526,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_Watch(DebugCommand command)
+        public void CommandHandler_Sprite_Watch(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             _gameEngine.Sprites.Use(o =>
@@ -544,7 +543,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_AngleInDegrees(DebugCommand command)
+        public void CommandHandler_Sprite_AngleInDegrees(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
             _gameEngine.Sprites.Use(o =>
@@ -557,7 +556,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_Boost(DebugCommand command)
+        public void CommandHandler_Sprite_Boost(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -571,7 +570,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_SpeedThrottle(DebugCommand command)
+        public void CommandHandler_Sprite_SpeedThrottle(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -585,7 +584,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_BoostThrottle(DebugCommand command)
+        public void CommandHandler_Sprite_BoostThrottle(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -599,7 +598,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_Speed(DebugCommand command)
+        public void CommandHandler_Sprite_Speed(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -613,7 +612,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_Highlight(DebugCommand command)
+        public void CommandHandler_Sprite_Highlight(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -627,7 +626,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_Visible(DebugCommand command)
+        public void CommandHandler_Sprite_Visible(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -641,7 +640,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_Move(DebugCommand command)
+        public void CommandHandler_Sprite_Move(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -656,7 +655,7 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_Move_Center(DebugCommand command)
+        public void CommandHandler_Sprite_Move_Center(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
 
@@ -671,16 +670,16 @@ namespace Si.GameEngine.ResourceManagers
             });
         }
 
-        public void CommandHandler_Sprite_List(DebugCommand command)
+        public void CommandHandler_Sprite_List(InterrogationCommand command)
         {
             _gameEngine.Sprites.Use(o =>
             {
                 var sprites = o.ToList();
 
-                var typeFilter = command.ParameterValue<DebugCommandParameterCriterion>("typeFilter");
+                var typeFilter = command.ParameterValue<InterrogationCommandParameterCriterion>("typeFilter");
                 if (typeFilter != null)
                 {
-                    sprites = sprites.Where(o => DebugCommandParameter.IsMatchLike(o.GetType().Name, typeFilter.Value, typeFilter.IsNotCriteria)).ToList();
+                    sprites = sprites.Where(o => InterrogationCommandParameter.IsMatchLike(o.GetType().Name, typeFilter.Value, typeFilter.IsNotCriteria)).ToList();
                 }
 
                 foreach (var sprite in sprites)

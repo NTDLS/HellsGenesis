@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Si.GameEngine.AI.Logistics._Superclass;
-using Si.GameEngine.Core;
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.ResourceManagers;
 using Si.GameEngine.Sprites._Superclass;
