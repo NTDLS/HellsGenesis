@@ -179,10 +179,7 @@ namespace Si.GameEngine.Core.Managers
 
         public SiQuadrant GetQuadrant(double x, double y)
         {
-            var coord = new Point(
-                    (int)(x / NatrualScreenSize.Width),
-                    (int)(y / NatrualScreenSize.Height)
-                );
+            var coord = new Point((int)(x / NatrualScreenSize.Width), (int)(y / NatrualScreenSize.Height));
 
             if (Quadrants.ContainsKey(coord) == false)
             {
