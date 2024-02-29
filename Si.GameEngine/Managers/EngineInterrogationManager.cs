@@ -11,12 +11,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Si.GameEngine.ResourceManagers
+namespace Si.GameEngine.Managers
 {
     /// <summary>
     /// Handles keyboard debugging inquiries.
     /// </summary>
-    public class EngineDebugManager
+    public class EngineInterrogationManager
     {
         private static string[] _commandPrototypes = {
             "Cls||Clears the debug screen.",
@@ -79,7 +79,7 @@ namespace Si.GameEngine.ResourceManagers
         private readonly List<MethodInfo> _hardDebugMethods;
         public bool IsVisible { get; private set; } = false;
 
-        public EngineDebugManager(GameEngineCore gameEngine, IInterrogationForm debugForm)
+        public EngineInterrogationManager(GameEngineCore gameEngine, IInterrogationForm debugForm)
         {
             _gameEngine = gameEngine;
             _debugForm = debugForm;
@@ -129,7 +129,7 @@ namespace Si.GameEngine.ResourceManagers
         public List<MethodInfo> GetMethodsWithOnlyDebugCommandParameter()
         {
             var methods = new List<MethodInfo>();
-            var allMethods = typeof(EngineDebugManager)
+            var allMethods = typeof(EngineInterrogationManager)
                 .GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 
             foreach (var method in allMethods)
@@ -173,7 +173,7 @@ namespace Si.GameEngine.ResourceManagers
 
         public void CommandHandler_Display_Adapters(InterrogationCommand command)
         {
-            var text = RenderingUtility.GetGraphicsAdaptersDescriptions();
+            var text = SiRenderingUtility.GetGraphicsAdaptersDescriptions();
             _debugForm.Write(text, System.Drawing.Color.Black);
         }
 

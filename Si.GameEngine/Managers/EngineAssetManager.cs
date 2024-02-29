@@ -10,7 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-namespace Si.GameEngine.ResourceManagers
+namespace Si.GameEngine.Managers
 {
     public class EngineAssetManager : IDisposable
     {

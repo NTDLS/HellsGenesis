@@ -1,4 +1,4 @@
-﻿using Si.GameEngine.ResourceManagers;
+﻿using Si.GameEngine.Managers;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System;

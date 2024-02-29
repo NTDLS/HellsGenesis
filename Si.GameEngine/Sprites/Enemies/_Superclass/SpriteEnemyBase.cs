@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Si.GameEngine.AI.Logistics._Superclass;
 using Si.GameEngine.Loudouts;
-using Si.GameEngine.ResourceManagers;
+using Si.GameEngine.Managers;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Powerup;
 using Si.GameEngine.Sprites.Powerup._Superclass;

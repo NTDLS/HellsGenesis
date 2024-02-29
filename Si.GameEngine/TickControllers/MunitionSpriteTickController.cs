@@ -1,5 +1,5 @@
 ﻿using NTDLS.DelegateThreadPooling;
-using Si.GameEngine.ResourceManagers;
+using Si.GameEngine.Managers;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies.Bosses._Superclass;

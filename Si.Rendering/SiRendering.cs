@@ -13,26 +13,19 @@ using System.Windows.Forms;
 
 namespace Si.Rendering
 {
-    public class RenderingEngine : IDisposable
+    public class SiRendering : IDisposable
     {
-        public class CriticalRenderTargets
-        {
-            public BitmapRenderTarget? IntermediateRenderTarget { get; set; }
-            public WindowRenderTarget? ScreenRenderTarget { get; set; }
-        }
-
-        public PessimisticCriticalResource<CriticalRenderTargets> RenderTargets { get; private set; } = new();
-        public PrecreatedMaterials Materials { get; private set; }
-        public PrecreatedTextFormats TextFormats { get; private set; }
+        public PessimisticCriticalResource<SiCriticalRenderTargets> RenderTargets { get; private set; } = new();
+        public SiPrecreatedMaterials Materials { get; private set; }
+        public SiPrecreatedTextFormats TextFormats { get; private set; }
 
         private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(FactoryType.SingleThreaded);
         private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
         private readonly ImagingFactory _wicFactory = new();
-
         private Size _totalCanvasSize;
         private Size _drawingSurfaceSize;
 
-        public RenderingEngine(SiEngineSettings settings, Control drawingSurface, Size totalCanvasSize)
+        public SiRendering(SiEngineSettings settings, Control drawingSurface, Size totalCanvasSize)
         {
             _drawingSurfaceSize = drawingSurface.Size;
             _totalCanvasSize = totalCanvasSize;
@@ -69,7 +62,7 @@ namespace Si.Rendering
             //  larger render target so that we can zoom-out when we want to see more of the universe.
             var intermediateRenderTargetSize = new Size2F(_totalCanvasSize.Width, _totalCanvasSize.Height);
 
-            var renderTargets = new CriticalRenderTargets()
+            var renderTargets = new SiCriticalRenderTargets()
             {
                 ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, renderTargetProperties, windowRenderProperties)
                 {
@@ -89,8 +82,8 @@ namespace Si.Rendering
                 o.IntermediateRenderTarget = renderTargets.IntermediateRenderTarget;
             });
 
-            Materials = new PrecreatedMaterials(renderTargets.ScreenRenderTarget);
-            TextFormats = new PrecreatedTextFormats(_directWriteFactory);
+            Materials = new SiPrecreatedMaterials(renderTargets.ScreenRenderTarget);
+            TextFormats = new SiPrecreatedTextFormats(_directWriteFactory);
         }
 
         public void Dispose()
@@ -104,7 +97,7 @@ namespace Si.Rendering
 
         public void TransferWithZoom(BitmapRenderTarget intermediateRenderTarget, RenderTarget screenRenderTarget, float scale)
         {
-            var sourceRect = RenderingUtility.CalculateCenterCopyRectangle(intermediateRenderTarget.Size, scale);
+            var sourceRect = SiRenderingUtility.CalculateCenterCopyRectangle(intermediateRenderTarget.Size, scale);
             var destRect = new RawRectangleF(0, 0, _drawingSurfaceSize.Width, _drawingSurfaceSize.Height);
             screenRenderTarget.DrawBitmap(intermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
         }
@@ -351,7 +344,7 @@ namespace Si.Rendering
         }
 
         public List<SharpDX.Direct2D1.Bitmap> GenerateIrregularFragments(SharpDX.Direct2D1.Bitmap originalBitmap, int countOfFragments, int countOfVertices = 3)
-            => BitmapFragmenter.GenerateIrregularFragments(this, originalBitmap, countOfFragments, countOfVertices);
+            => SiBitmapFragmenter.GenerateIrregularFragments(this, originalBitmap, countOfFragments, countOfVertices);
 
         public RawMatrix3x2 GetScalingMatrix(float zoomFactor)
         {

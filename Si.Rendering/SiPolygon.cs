@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Si.Rendering.Types
+namespace Si.Rendering
 {
     public class SiPolygon
     {

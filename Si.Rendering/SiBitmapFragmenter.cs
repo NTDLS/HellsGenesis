@@ -2,14 +2,13 @@
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
 using Si.Library;
-using Si.Rendering.Types;
 using System.Collections.Generic;
 
 namespace Si.Rendering
 {
-    internal static class BitmapFragmenter
+    internal static class SiBitmapFragmenter
     {
-        public static List<Bitmap> GenerateIrregularFragments(RenderingEngine rendering,
+        public static List<Bitmap> GenerateIrregularFragments(SiRendering rendering,
             Bitmap originalBitmap, int countOfFragments, int countOfVertices)
         {
             var fragments = new List<Bitmap>();
@@ -40,7 +39,7 @@ namespace Si.Rendering
             return fragments;
         }
 
-        private static Bitmap ExtractPolygonRegion(RenderingEngine rendering, Bitmap bitmap, SiPolygon polygon)
+        private static Bitmap ExtractPolygonRegion(SiRendering rendering, Bitmap bitmap, SiPolygon polygon)
         {
             var bounds = polygon.GetBounds();
 

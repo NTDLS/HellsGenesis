@@ -152,7 +152,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
         public void CreateParticlesExplosion()
         {
-            _gameEngine.Sprites.Particles.CreateAt(this, RenderingUtility.GetRandomHotColor(), SiRandom.Between(30, 50));
+            _gameEngine.Sprites.Particles.CreateAt(this, SiRenderingUtility.GetRandomHotColor(), SiRandom.Between(30, 50));
             _gameEngine.Audio.PlayRandomExplosion();
         }
 

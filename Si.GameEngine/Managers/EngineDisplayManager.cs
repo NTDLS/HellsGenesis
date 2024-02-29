@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Si.GameEngine.ResourceManagers
+namespace Si.GameEngine.Managers
 {
     /// <summary>
     /// Various metrics related to display.

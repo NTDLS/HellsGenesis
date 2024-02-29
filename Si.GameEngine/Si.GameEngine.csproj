@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\ntdls\.nuget\packages\ntdls.delegatethreadpooling\1.2.11\contentFiles\any\net8.0\Image.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Resources\StrikeforceInfinity.ico" />
   </ItemGroup>
 

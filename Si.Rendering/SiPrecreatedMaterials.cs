@@ -3,7 +3,7 @@ using SharpDX.Mathematics.Interop;
 
 namespace Si.Rendering
 {
-    public class PrecreatedMaterials
+    public class SiPrecreatedMaterials
     {
         public class RawColors
         {
@@ -56,7 +56,7 @@ namespace Si.Rendering
         public ColorBrushes Brushes { get; private set; }
         public RawColors Colors { get; private set; } = new();
 
-        internal PrecreatedMaterials(RenderTarget renterTarget)
+        internal SiPrecreatedMaterials(RenderTarget renterTarget)
         {
             Brushes = new ColorBrushes(renterTarget, Colors);
         }

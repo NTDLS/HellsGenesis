@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.ResourceManagers
+namespace Si.GameEngine.Managers
 {
     /// <summary>
     /// Handles keyboard input and keeps track of key-press states.

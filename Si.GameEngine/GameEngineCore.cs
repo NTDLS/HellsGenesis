@@ -1,8 +1,8 @@
 using Newtonsoft.Json;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Interrogation._Superclass;
+using Si.GameEngine.Managers;
 using Si.GameEngine.Menus;
-using Si.GameEngine.ResourceManagers;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.TickControllers;
 using Si.Library;
@@ -34,9 +34,9 @@ namespace Si.GameEngine
         public EngineSpriteManager Sprites { get; private set; } //Also contains all of the sprite tick controllers.
         public EngineAudioManager Audio { get; private set; }
         public EngineAssetManager Assets { get; private set; }
-        public EngineDebugManager Debug { get; private set; }
+        public EngineInterrogationManager Debug { get; private set; }
         public MenusTickController Menus { get; private set; }
-        public RenderingEngine Rendering { get; private set; }
+        public SiRendering Rendering { get; private set; }
         public SiEngineSettings Settings { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
@@ -92,7 +92,7 @@ namespace Si.GameEngine
             Audio = new EngineAudioManager(this);
             Menus = new MenusTickController(this);
             Player = new PlayerSpriteTickController(this);
-            Rendering = new RenderingEngine(Settings, drawingSurface, Display.TotalCanvasSize);
+            Rendering = new SiRendering(Settings, drawingSurface, Display.TotalCanvasSize);
 
             Multiplay = multiplayManager;
 
@@ -124,7 +124,7 @@ namespace Si.GameEngine
             Audio = new EngineAudioManager(this);
             Menus = new MenusTickController(this);
             Player = new PlayerSpriteTickController(this);
-            Rendering = new RenderingEngine(Settings, drawingSurface, Display.TotalCanvasSize);
+            Rendering = new SiRendering(Settings, drawingSurface, Display.TotalCanvasSize);
             Multiplay = new EngineMultiplayManager();
 
             _multiplayClientEventHandlers = new MultiplayClientEventHandlers(this);
@@ -140,7 +140,7 @@ namespace Si.GameEngine
 
         public void EnableDebugging(IInterrogationForm debugForm)
         {
-            Debug = new EngineDebugManager(this, debugForm);
+            Debug = new EngineInterrogationManager(this, debugForm);
         }
 
         public static SiEngineSettings LoadSettings()

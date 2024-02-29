@@ -1,5 +1,5 @@
 ﻿using SharpDX;
-using Si.GameEngine.ResourceManagers;
+using Si.GameEngine.Managers;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.TickControllers._Superclass;
@@ -78,7 +78,7 @@ namespace Si.GameEngine.TickControllers
                 {
                     for (int i = 0; i < particlesExplosion; i++)
                     {
-                        var particle = CreateAt(at.Location, RenderingUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
+                        var particle = CreateAt(at.Location, SiRenderingUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
                         particle.Shape = ParticleShape.FilledEllipse;
                         particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                         particle.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
@@ -96,7 +96,7 @@ namespace Si.GameEngine.TickControllers
         {
             for (int i = 0; i < particleCount; i++)
             {
-                var particle = CreateAt(at.Location, RenderingUtility.GetRandomHotColor(), new Size(5, 5));
+                var particle = CreateAt(at.Location, SiRenderingUtility.GetRandomHotColor(), new Size(5, 5));
 
                 switch (SiRandom.Between(1, 3))
                 {

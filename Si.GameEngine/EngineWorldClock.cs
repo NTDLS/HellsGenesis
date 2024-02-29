@@ -111,7 +111,7 @@ namespace Si.GameEngine
 
             if (_gameEngine.Settings.VerticalSync)
             {
-                framePerSecondLimit = RenderingUtility.GetScreenRefreshRate(_gameEngine.Display.Screen, _gameEngine.Settings.GraphicsAdapterId);
+                framePerSecondLimit = SiRenderingUtility.GetScreenRefreshRate(_gameEngine.Display.Screen, _gameEngine.Settings.GraphicsAdapterId);
             }
 
             var frameRateDelayMicroseconds = 1000000 / framePerSecondLimit;

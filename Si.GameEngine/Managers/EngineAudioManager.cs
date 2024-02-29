@@ -2,7 +2,7 @@
 using Si.Library;
 using System.IO;
 
-namespace Si.GameEngine.ResourceManagers
+namespace Si.GameEngine.Managers
 {
     /// <summary>
     /// /// Contains global sounds and music.

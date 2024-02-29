@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Si.Audio;
 using Si.GameEngine.Loudouts;
-using Si.GameEngine.ResourceManagers;
+using Si.GameEngine.Managers;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;

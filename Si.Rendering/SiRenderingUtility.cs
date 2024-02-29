@@ -2,7 +2,6 @@
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using Si.Library;
-using Si.Rendering.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Si.Rendering
 {
-    public static class RenderingUtility
+    public static class SiRenderingUtility
     {
         /// <summary>
         /// Gets a random color that would be associated with fire.

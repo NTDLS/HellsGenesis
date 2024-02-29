@@ -1,4 +1,4 @@
-﻿using Si.GameEngine.ResourceManagers;
+﻿using Si.GameEngine.Managers;
 using Si.GameEngine.Sprites.Powerup._Superclass;
 using Si.GameEngine.TickControllers._Superclass;
 using Si.Library.Mathematics.Geometry;

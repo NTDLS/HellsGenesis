@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.ResourceManagers
+namespace Si.GameEngine.Managers
 {
     /// <summary>
     /// Contains the collection of all sprites and their factories.
