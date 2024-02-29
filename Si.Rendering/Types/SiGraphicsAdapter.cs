@@ -1,4 +1,4 @@
-﻿namespace Si.Library.Graphics
+﻿namespace Si.Rendering.Types
 {
     public class SiGraphicsAdapter
     {

@@ -158,16 +158,16 @@ namespace Si.GameEngine.Core.Managers
             }
         }
 
-        public EngineDisplayManager(GameEngineCore gameEngine, Control drawingSurface, Size visibleSize)
+        public EngineDisplayManager(GameEngineCore gameEngine, Control drawingSurface)
         {
             _gameEngine = gameEngine;
             DrawingSurface = drawingSurface;
-            NatrualScreenSize = visibleSize;
+            NatrualScreenSize = new Size(drawingSurface.Width, drawingSurface.Height);
 
             Screen = Screen.FromHandle(drawingSurface.Handle);
 
-            int totalSizeX = (int)(visibleSize.Width * _gameEngine.Settings.OverdrawScale);
-            int totalSizeY = (int)(visibleSize.Height * _gameEngine.Settings.OverdrawScale);
+            int totalSizeX = (int)(NatrualScreenSize.Width * _gameEngine.Settings.OverdrawScale);
+            int totalSizeY = (int)(NatrualScreenSize.Height * _gameEngine.Settings.OverdrawScale);
 
             if (totalSizeX % 2 != 0) totalSizeX++;
             if (totalSizeY % 2 != 0) totalSizeY++;

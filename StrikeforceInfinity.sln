@@ -37,7 +37,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{
 		Installer\Setup.Iss = Installer\Setup.Iss
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Si.Message", "Si.Message\Si.Message.csproj", "{BD4DB046-3BBC-4993-8327-28211793EB49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Message", "Si.Message\Si.Message.csproj", "{BD4DB046-3BBC-4993-8327-28211793EB49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Si.Rendering", "Si.Rendering\Si.Rendering.csproj", "{2A08F5C6-8A24-4F37-A90E-83C0DA604C7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,10 @@ Global
 		{BD4DB046-3BBC-4993-8327-28211793EB49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD4DB046-3BBC-4993-8327-28211793EB49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BD4DB046-3BBC-4993-8327-28211793EB49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A08F5C6-8A24-4F37-A90E-83C0DA604C7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A08F5C6-8A24-4F37-A90E-83C0DA604C7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A08F5C6-8A24-4F37-A90E-83C0DA604C7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A08F5C6-8A24-4F37-A90E-83C0DA604C7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,6 +96,7 @@ Global
 		{990E2120-BC2B-4C6D-A1B0-663A7D88A2EC} = {A6424186-E893-44C9-8FC6-805944EB1D84}
 		{C37989E4-BB72-448A-8327-CCFE67510932} = {C00A988A-2DBB-4EB7-8B9F-265DE8303609}
 		{BD4DB046-3BBC-4993-8327-28211793EB49} = {A6424186-E893-44C9-8FC6-805944EB1D84}
+		{2A08F5C6-8A24-4F37-A90E-83C0DA604C7A} = {A6424186-E893-44C9-8FC6-805944EB1D84}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99D468A4-85E5-41AA-912F-A2435A154952}

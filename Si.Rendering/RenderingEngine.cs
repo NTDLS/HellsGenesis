@@ -4,43 +4,48 @@ using SharpDX.Direct2D1;
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using SharpDX.WIC;
+using Si.Library;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
 
-namespace Si.GameEngine.Core.NativeRendering
+namespace Si.Rendering
 {
     public class RenderingEngine : IDisposable
     {
         public class CriticalRenderTargets
         {
-            public BitmapRenderTarget IntermediateRenderTarget { get; set; }
-            public WindowRenderTarget ScreenRenderTarget { get; set; }
+            public BitmapRenderTarget? IntermediateRenderTarget { get; set; }
+            public WindowRenderTarget? ScreenRenderTarget { get; set; }
         }
 
         public PessimisticCriticalResource<CriticalRenderTargets> RenderTargets { get; private set; } = new();
         public PrecreatedMaterials Materials { get; private set; }
         public PrecreatedTextFormats TextFormats { get; private set; }
 
-        private readonly GameEngineCore _gameEngine;
         private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(FactoryType.SingleThreaded);
         private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
         private readonly ImagingFactory _wicFactory = new();
 
-        public RenderingEngine(GameEngineCore gameEngine)
+        private Size _totalCanvasSize;
+        private Size _drawingSurfaceSize;
+
+        public RenderingEngine(SiEngineSettings settings, Control drawingSurface, Size totalCanvasSize)
         {
-            _gameEngine = gameEngine;
+            _drawingSurfaceSize = drawingSurface.Size;
+            _totalCanvasSize = totalCanvasSize;
 
             var presentOptions = PresentOptions.Immediately;
             var antialiasMode = AntialiasMode.Aliased;
 
-            if (gameEngine.Settings.VerticalSync == true)
+            if (settings.VerticalSync == true)
             {
                 presentOptions = PresentOptions.None;
             }
 
-            if (gameEngine.Settings.AntiAliasing == true)
+            if (settings.AntiAliasing == true)
             {
                 antialiasMode = AntialiasMode.PerPrimitive;
             }
@@ -48,36 +53,44 @@ namespace Si.GameEngine.Core.NativeRendering
             var windowRenderProperties = new HwndRenderTargetProperties()
             {
                 PresentOptions = presentOptions,
-                Hwnd = gameEngine.Display.DrawingSurface.Handle,
-                PixelSize = new Size2(gameEngine.Display.NatrualScreenSize.Width, gameEngine.Display.NatrualScreenSize.Height)
+                Hwnd = drawingSurface.Handle,
+                PixelSize = new Size2(_drawingSurfaceSize.Width, _drawingSurfaceSize.Height)
+                //PixelSize = new Size2(gameEngine.Display.NatrualScreenSize.Width, gameEngine.Display.NatrualScreenSize.Height)
             };
 
             var renderTargetProperties = new RenderTargetProperties
             {
                 PixelFormat = new SharpDX.Direct2D1.PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied),
-                MinLevel = FeatureLevel.Level_10,
+                //MinLevel = FeatureLevel.Level_10,
                 Type = RenderTargetType.Hardware
             };
 
             //The intermediate render target is much larger than the redner target window. We create this
             //  larger render target so that we can zoom-out when we want to see more of the universe.
-            var intermediateRenderTargetSize = new Size2F(_gameEngine.Display.TotalCanvasSize.Width, _gameEngine.Display.TotalCanvasSize.Height);
+            var intermediateRenderTargetSize = new Size2F(_totalCanvasSize.Width, _totalCanvasSize.Height);
+
+            var renderTargets = new CriticalRenderTargets()
+            {
+                ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, renderTargetProperties, windowRenderProperties)
+                {
+                    AntialiasMode = antialiasMode
+                }
+            };
+
+            renderTargets.IntermediateRenderTarget = new BitmapRenderTarget(
+                renderTargets.ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
+            {
+                AntialiasMode = antialiasMode
+            };
 
             RenderTargets.Use(o =>
             {
-                o.ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, renderTargetProperties, windowRenderProperties)
-                {
-                    AntialiasMode = antialiasMode
-                };
-
-                o.IntermediateRenderTarget = new BitmapRenderTarget(o.ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
-                {
-                    AntialiasMode = antialiasMode
-                };
-
-                Materials = new PrecreatedMaterials(o.ScreenRenderTarget);
-                TextFormats = new PrecreatedTextFormats(_directWriteFactory);
+                o.ScreenRenderTarget = renderTargets.ScreenRenderTarget;
+                o.IntermediateRenderTarget = renderTargets.IntermediateRenderTarget;
             });
+
+            Materials = new PrecreatedMaterials(renderTargets.ScreenRenderTarget);
+            TextFormats = new PrecreatedTextFormats(_directWriteFactory);
         }
 
         public void Dispose()
@@ -91,8 +104,8 @@ namespace Si.GameEngine.Core.NativeRendering
 
         public void TransferWithZoom(BitmapRenderTarget intermediateRenderTarget, RenderTarget screenRenderTarget, float scale)
         {
-            var sourceRect = GraphicsUtility.CalculateCenterCopyRectangle(intermediateRenderTarget.Size, scale);
-            var destRect = new RawRectangleF(0, 0, _gameEngine.Display.NatrualScreenSize.Width, _gameEngine.Display.NatrualScreenSize.Height);
+            var sourceRect = RenderingUtility.CalculateCenterCopyRectangle(intermediateRenderTarget.Size, scale);
+            var destRect = new RawRectangleF(0, 0, _drawingSurfaceSize.Width, _drawingSurfaceSize.Height);
             screenRenderTarget.DrawBitmap(intermediateRenderTarget.Bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
         }
 
@@ -343,8 +356,8 @@ namespace Si.GameEngine.Core.NativeRendering
         public RawMatrix3x2 GetScalingMatrix(float zoomFactor)
         {
             // Calculate the new center point (assuming dimensions are known)
-            float centerX = _gameEngine.Display.TotalCanvasSize.Width / 2.0f;
-            float centerY = _gameEngine.Display.TotalCanvasSize.Height / 2.0f;
+            float centerX = _totalCanvasSize.Width / 2.0f;
+            float centerY = _totalCanvasSize.Height / 2.0f;
 
             // Calculate the scaling transformation matrix
             var scalingMatrix = new RawMatrix3x2(

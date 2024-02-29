@@ -1,6 +1,6 @@
 ﻿using SharpDX.DirectWrite;
 
-namespace Si.GameEngine.Core.NativeRendering
+namespace Si.Rendering
 {
     public class PrecreatedTextFormats
     {

@@ -1,6 +1,6 @@
 ﻿namespace Si.Library
 {
-    public class SiSettings
+    public class SiServerEngineSettings
     {
         /// <summary>
         /// The listen port for data exchange.

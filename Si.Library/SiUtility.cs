@@ -31,9 +31,8 @@ namespace Si.Library
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static string GetCurrentMethod()
-        {
-            return (new StackTrace())?.GetFrame(1)?.GetMethod()?.Name ?? "{unknown frame}";
-        }
+            => (new StackTrace())?.GetFrame(1)?.GetMethod()?.Name ?? "{unknown frame}";
+
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void EnsureNotNull<T>([NotNull] T? value, string? message = null, [CallerArgumentExpression(nameof(value))] string strName = "")

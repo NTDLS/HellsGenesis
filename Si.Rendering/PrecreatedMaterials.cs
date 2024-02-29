@@ -1,7 +1,7 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
 
-namespace Si.GameEngine.Core.NativeRendering
+namespace Si.Rendering
 {
     public class PrecreatedMaterials
     {
@@ -53,8 +53,8 @@ namespace Si.GameEngine.Core.NativeRendering
             }
         }
 
-        internal ColorBrushes Brushes { get; set; }
-        internal RawColors Colors { get; set; } = new();
+        public ColorBrushes Brushes { get; private set; }
+        public RawColors Colors { get; private set; } = new();
 
         internal PrecreatedMaterials(RenderTarget renterTarget)
         {

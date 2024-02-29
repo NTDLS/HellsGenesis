@@ -1,10 +1,10 @@
 ﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
+using Si.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -153,7 +153,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
         public void CreateParticlesExplosion()
         {
-            _gameEngine.Sprites.Particles.CreateAt(this, GraphicsUtility.GetRandomHotColor(), SiRandom.Between(30, 50));
+            _gameEngine.Sprites.Particles.CreateAt(this, RenderingUtility.GetRandomHotColor(), SiRandom.Between(30, 50));
             _gameEngine.Audio.PlayRandomExplosion();
         }
 

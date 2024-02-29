@@ -17,8 +17,8 @@ namespace Si.Server
             }
         }
 
-        private static SiSettings? _settings = null;
-        public static SiSettings Configuration
+        private static SiServerEngineSettings? _settings = null;
+        public static SiServerEngineSettings Configuration
         {
             get
             {
@@ -28,7 +28,7 @@ namespace Si.Server
                                  .AddJsonFile("appsettings.json")
                                  .Build();
 
-                    _settings = config.GetRequiredSection("Settings").Get<SiSettings>()
+                    _settings = config.GetRequiredSection("Settings").Get<SiServerEngineSettings>()
                         ?? throw new Exception("Failed to load settings");
                 }
 

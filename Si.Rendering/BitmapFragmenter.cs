@@ -1,11 +1,11 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
-using Si.GameEngine.Core.NativeRendering.Types;
 using Si.Library;
+using Si.Rendering.Types;
 using System.Collections.Generic;
 
-namespace Si.GameEngine.Core.NativeRendering
+namespace Si.Rendering
 {
     internal static class BitmapFragmenter
     {

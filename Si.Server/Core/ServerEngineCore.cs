@@ -21,9 +21,9 @@ namespace Si.Server.Core
         public LogManager Log { get; private set; }
         public SessionManager Sessions { get; private set; }
         public LobbyManager Lobbies { get; private set; }
-        public SiSettings Settings { get; private set; }
+        public SiServerEngineSettings Settings { get; private set; }
 
-        public ServerEngineCore(SiSettings settings)
+        public ServerEngineCore(SiServerEngineSettings settings)
         {
             Settings = settings;
 

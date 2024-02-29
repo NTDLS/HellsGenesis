@@ -1,13 +1,11 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Drawing;
 
-namespace Si.GameEngine.Core
+namespace Si.Library
 {
     /// <summary>
     /// This contains all of the engine settings.
     /// </summary>
-    public class EngineSettings
+    public class SiEngineSettings
     {
         public int GraphicsAdapterId { get; set; } = 0;
         public int MunitionTraversalThreads { get; set; } = Environment.ProcessorCount * 2;
@@ -60,14 +58,5 @@ namespace Si.GameEngine.Core
         /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (2 = 2x larger than screen.).
         /// </summary>
         public float OverdrawScale { get; set; } = 1.5f;
-
-        public EngineSettings()
-        {
-            int x = (int)(Screen.PrimaryScreen.Bounds.Width * 0.75);
-            int y = (int)(Screen.PrimaryScreen.Bounds.Height * 0.75);
-            if (x % 2 != 0) x++;
-            if (y % 2 != 0) y++;
-            Resolution = new Size(x, y);
-        }
     }
 }

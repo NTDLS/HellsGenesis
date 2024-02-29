@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
 using Si.GameEngine.Core.Debug._Superclass;
 using Si.GameEngine.Core.Managers;
-using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Core.TickControllers;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Menus;
@@ -9,6 +8,7 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.MultiplayClient;
+using Si.Rendering;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -37,7 +37,7 @@ namespace Si.GameEngine.Core
         public EngineDebugManager Debug { get; private set; }
         public MenusTickController Menus { get; private set; }
         public RenderingEngine Rendering { get; private set; }
-        public EngineSettings Settings { get; private set; }
+        public SiEngineSettings Settings { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
 
@@ -83,7 +83,7 @@ namespace Si.GameEngine.Core
                 Width = 1920
             };
 
-            Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
+            Display = new EngineDisplayManager(this, drawingSurface);
             Assets = new EngineAssetManager(this);
             Sprites = new EngineSpriteManager(this);
             Input = new EngineInputManager(this);
@@ -92,7 +92,7 @@ namespace Si.GameEngine.Core
             Audio = new EngineAudioManager(this);
             Menus = new MenusTickController(this);
             Player = new PlayerSpriteTickController(this);
-            Rendering = new RenderingEngine(this);
+            Rendering = new RenderingEngine(Settings, drawingSurface, Display.TotalCanvasSize);
 
             Multiplay = multiplayManager;
 
@@ -115,7 +115,7 @@ namespace Si.GameEngine.Core
         {
             Settings = LoadSettings();
 
-            Display = new EngineDisplayManager(this, drawingSurface, new Size(drawingSurface.Width, drawingSurface.Height));
+            Display = new EngineDisplayManager(this, drawingSurface);
             Assets = new EngineAssetManager(this);
             Sprites = new EngineSpriteManager(this);
             Input = new EngineInputManager(this);
@@ -124,7 +124,7 @@ namespace Si.GameEngine.Core
             Audio = new EngineAudioManager(this);
             Menus = new MenusTickController(this);
             Player = new PlayerSpriteTickController(this);
-            Rendering = new RenderingEngine(this);
+            Rendering = new RenderingEngine(Settings, drawingSurface, Display.TotalCanvasSize);
             Multiplay = new EngineMultiplayManager();
 
             _multiplayClientEventHandlers = new MultiplayClientEventHandlers(this);
@@ -143,17 +143,25 @@ namespace Si.GameEngine.Core
             Debug = new EngineDebugManager(this, debugForm);
         }
 
-        public static EngineSettings LoadSettings()
+        public static SiEngineSettings LoadSettings()
         {
             var engineSettingsText = EngineAssetManager.GetUserText("Engine.Settings.json");
 
             if (string.IsNullOrEmpty(engineSettingsText))
             {
-                engineSettingsText = JsonConvert.SerializeObject(new EngineSettings(), Formatting.Indented);
+                var defaultSettings = new SiEngineSettings();
+
+                int x = (int)(Screen.PrimaryScreen.Bounds.Width * 0.75);
+                int y = (int)(Screen.PrimaryScreen.Bounds.Height * 0.75);
+                if (x % 2 != 0) x++;
+                if (y % 2 != 0) y++;
+                defaultSettings.Resolution = new Size(x, y);
+
+                engineSettingsText = JsonConvert.SerializeObject(defaultSettings, Formatting.Indented);
                 EngineAssetManager.PutUserText("Engine.Settings.json", engineSettingsText);
             }
 
-            return JsonConvert.DeserializeObject<EngineSettings>(engineSettingsText);
+            return JsonConvert.DeserializeObject<SiEngineSettings>(engineSettingsText);
         }
 
         public void ResetGame()
@@ -184,7 +192,7 @@ namespace Si.GameEngine.Core
             }
         }
 
-        public static void SaveSettings(EngineSettings settings)
+        public static void SaveSettings(SiEngineSettings settings)
         {
             EngineAssetManager.PutUserText("Engine.Settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
         }

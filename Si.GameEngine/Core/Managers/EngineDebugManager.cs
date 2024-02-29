@@ -1,10 +1,10 @@
 ﻿using Si.GameEngine.Core.Debug;
 using Si.GameEngine.Core.Debug._Superclass;
-using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
+using Si.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -173,7 +173,7 @@ namespace Si.GameEngine.Core.Managers
 
         public void CommandHandler_Display_Adapters(DebugCommand command)
         {
-            var text = GraphicsUtility.GetGraphicsAdaptersDescriptions();
+            var text = RenderingUtility.GetGraphicsAdaptersDescriptions();
             _debugForm.Write(text, System.Drawing.Color.Black);
         }
 

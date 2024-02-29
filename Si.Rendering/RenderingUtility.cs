@@ -2,16 +2,16 @@
 using SharpDX.DXGI;
 using SharpDX.Mathematics.Interop;
 using Si.Library;
-using Si.Library.Graphics;
+using Si.Rendering.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Si.GameEngine.Core.NativeRendering
+namespace Si.Rendering
 {
-    public static class GraphicsUtility
+    public static class RenderingUtility
     {
         /// <summary>
         /// Gets a random color that would be associated with fire.

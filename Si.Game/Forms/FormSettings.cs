@@ -1,6 +1,6 @@
 ﻿using Si.GameEngine.Core;
-using Si.GameEngine.Core.NativeRendering;
-using Si.Library.Graphics;
+using Si.Rendering;
+using Si.Rendering.Types;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -60,7 +60,7 @@ namespace Si.Game
                 }
             }
 
-            var adapters = GraphicsUtility.GetGraphicsAdapters();
+            var adapters = RenderingUtility.GetGraphicsAdapters();
             foreach (var item in adapters)
             {
                 comboBoxGraphicsAdapter.Items.Add(item);
