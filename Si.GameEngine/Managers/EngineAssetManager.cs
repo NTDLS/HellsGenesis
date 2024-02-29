@@ -55,7 +55,7 @@ namespace Si.GameEngine.Managers
         {
             assetRelativePath = assetRelativePath.ToLower();
 
-            var userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Strikeforce Infinity");
+            var userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Strikeforce Infinite");
             if (Directory.Exists(userDataPath) == false)
             {
                 Directory.CreateDirectory(userDataPath);
@@ -78,7 +78,7 @@ namespace Si.GameEngine.Managers
         {
             assetRelativePath = assetRelativePath.ToLower();
 
-            var userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Strikeforce Infinity");
+            var userDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Strikeforce Infinite");
             if (Directory.Exists(userDataPath) == false)
             {
                 Directory.CreateDirectory(userDataPath);

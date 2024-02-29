@@ -93,9 +93,9 @@ namespace Si.Server
 
                 x.RunAsLocalSystem();
 
-                x.SetDescription("StrikeforceInfinity game server service.");
-                x.SetDisplayName("StrikeforceInfinity Service");
-                x.SetServiceName("StrikeforceInfinity");
+                x.SetDescription("StrikeforceInfinite game server service.");
+                x.SetDisplayName("StrikeforceInfinite Service");
+                x.SetServiceName("StrikeforceInfinite");
             });
         }
     }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Title>StrikeforceInfinity.Shared</Title>
+    <Title>StrikeforceInfinite.Shared</Title>
     <Company>NetworkDLS</Company>
     <Copyright>Copyright © 2024 NetworkDLS</Copyright>
     <AssemblyVersion>0.0.23</AssemblyVersion>
@@ -13,12 +13,12 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>StrikeforceInfinity.ico</ApplicationIcon>
+    <ApplicationIcon>StrikeforceInfinite.ico</ApplicationIcon>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="StrikeforceInfinity.ico" />
+    <Content Include="StrikeforceInfinite.ico" />
   </ItemGroup>
 
   <ItemGroup>

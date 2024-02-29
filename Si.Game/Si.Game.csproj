@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Title>Strikeforce: Infinity</Title>
+    <Title>Strikeforce: Infinite</Title>
     <Company>NetworkDLS</Company>
     <Copyright>Copyright © 2024 NetworkDLS</Copyright>
     <AssemblyVersion>0.0.23</AssemblyVersion>
@@ -12,14 +12,14 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>StrikeforceInfinity.ico</ApplicationIcon>
+    <ApplicationIcon>StrikeforceInfinite.ico</ApplicationIcon>
     <AssemblyName>Si.Game</AssemblyName>
     <RootNamespace>Si.Game</RootNamespace>
     <StartupObject>Si.Game.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="StrikeforceInfinity.ico" />
+    <Content Include="StrikeforceInfinite.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -148,7 +148,7 @@
             Controls.Add(splitContainerBody);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "FormInterrogation";
-            Text = "Strikeforce Infinity : Interrogation";
+            Text = "Strikeforce Infinite : Interrogation";
             Load += FormDebug_Load;
             splitContainerBody.Panel1.ResumeLayout(false);
             splitContainerBody.Panel2.ResumeLayout(false);

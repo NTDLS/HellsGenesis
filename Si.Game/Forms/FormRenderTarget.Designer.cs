@@ -44,7 +44,7 @@
             Name = "FormRenderTarget";
             SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "Strikeforce Infinity";
+            Text = "Strikeforce Infinite";
             ResumeLayout(false);
         }
 

@@ -2,13 +2,13 @@
 
 [Setup]
 ;-- Main Setup Information
- AppName                         = Strikeforce Infinity
- AppVerName                      = Strikeforce Infinity {#Version}
+ AppName                         = Strikeforce Infinite
+ AppVerName                      = Strikeforce Infinite {#Version}
  AppCopyright                    = Copyright © 1995-2024 NetworkDLS.
- DefaultDirName                  = {commonpf}\NetworkDLS\Strikeforce Infinity
- DefaultGroupName                = NetworkDLS\Strikeforce Infinity
- UninstallDisplayIcon            = {app}\StrikeforceInfinity.exe
- SetupIconFile                   = ../@Resources\StrikeforceInfinity.ico
+ DefaultDirName                  = {commonpf}\NetworkDLS\Strikeforce Infinite
+ DefaultGroupName                = NetworkDLS\Strikeforce Infinite
+ UninstallDisplayIcon            = {app}\StrikeforceInfinite.exe
+ SetupIconFile                   = ../@Resources\StrikeforceInfinite.ico
  PrivilegesRequired              = admin
  Uninstallable                   = Yes
  Compression                     = ZIP/9
@@ -24,7 +24,7 @@
  AppVersion      = {#Version}
  
 [Components]
- Name: "Game";         Description: "Strikeforce Infinity"; Types: Full Compact Custom; Flags: Fixed;
+ Name: "Game";         Description: "Strikeforce Infinite"; Types: Full Compact Custom; Flags: Fixed;
  Name: "Assets";       Description: "Assets";               Types: Full Compact Custom; Flags: Fixed;
  Name: "FontAsset";    Description: "Fonts";                Types: Full Compact Custom; Flags: Fixed;
  
@@ -42,11 +42,11 @@
  Source: "Fonts\visitor1.ttf";         DestDir: "{commonfonts}"; Components: FontAsset; FontInstall: "Visitor TT1 BRK"; Flags: onlyifdoesntexist uninsneveruninstall
 
 [Registry]
- Root: HKLM; Subkey: "Software\NetworkDLS\Strikeforce Infinity"; ValueType: STRING;ValueName: "CommonAssetPath"; ValueData:"{app}\Assets";                      Flags: CreateValueIfDoesntExist;
- Root: HKLM; Subkey: "Software\NetworkDLS\Strikeforce Infinity"; ValueType: STRING;ValueName: "UserAssetPath";   ValueData:"{userappdata}\StrikeforceInfinity"; Flags: CreateValueIfDoesntExist;
+ Root: HKLM; Subkey: "Software\NetworkDLS\Strikeforce Infinite"; ValueType: STRING;ValueName: "CommonAssetPath"; ValueData:"{app}\Assets";                      Flags: CreateValueIfDoesntExist;
+ Root: HKLM; Subkey: "Software\NetworkDLS\Strikeforce Infinite"; ValueType: STRING;ValueName: "UserAssetPath";   ValueData:"{userappdata}\StrikeforceInfinite"; Flags: CreateValueIfDoesntExist;
 
 [Icons]
- Name: "{group}\Strikeforce Infinity"; Filename: "{app}\Si.Game.exe"; Components: Game;
+ Name: "{group}\Strikeforce Infinite"; Filename: "{app}\Si.Game.exe"; Components: Game;
  
 [Run]
- Filename: "{app}\Si.Game.exe"; Description: "Run Strikeforce Infinity now?"; Flags: postinstall nowait skipifsilent shellexec; Components: Game;
+ Filename: "{app}\Si.Game.exe"; Description: "Run Strikeforce Infinite now?"; Flags: postinstall nowait skipifsilent shellexec; Components: Game;

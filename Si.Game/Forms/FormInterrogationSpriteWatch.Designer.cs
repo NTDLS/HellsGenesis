@@ -98,7 +98,7 @@ namespace Si.Game.Forms
             Controls.Add(splitContainerBody);
             Icon = (System.Drawing.Icon)resources.GetObject("$this.Icon");
             Name = "FormDebugSpriteWatch";
-            Text = "Strikeforce Infinity : Sprite Watch";
+            Text = "Strikeforce Infinite : Sprite Watch";
             splitContainerBody.Panel1.ResumeLayout(false);
             splitContainerBody.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainerBody).EndInit();

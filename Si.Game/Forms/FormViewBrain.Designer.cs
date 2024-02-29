@@ -55,7 +55,7 @@ namespace Si.Game
             Name = "FormViewBrain";
             SizeGripStyle = SizeGripStyle.Show;
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Strikeforce Infinity : Brain";
+            Text = "Strikeforce Infinite : Brain";
             ResumeLayout(false);
             PerformLayout();
         }

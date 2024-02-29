@@ -20,7 +20,7 @@ namespace Si.GameEngine.Menus
             float offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             float offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Strikeforce Infinity");
+            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Strikeforce Infinite");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.IsHighlighted = true;

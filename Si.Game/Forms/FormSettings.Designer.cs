@@ -384,7 +384,7 @@
             Name = "FormSettings";
             ShowInTaskbar = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            Text = "Strikeforce Infinity : Settings";
+            Text = "Strikeforce Infinite : Settings";
             Load += FormSettings_Load;
             tabControl1.ResumeLayout(false);
             tabPageDisplay.ResumeLayout(false);

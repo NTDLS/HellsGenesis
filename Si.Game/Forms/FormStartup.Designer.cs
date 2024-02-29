@@ -70,7 +70,7 @@ namespace Si.Game
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            BackgroundImage = Resources.SiSplash;
+            BackgroundImage = (System.Drawing.Image)resources.GetObject("$this.BackgroundImage");
             ClientSize = new System.Drawing.Size(650, 448);
             ControlBox = false;
             Controls.Add(buttonSettings);
@@ -83,7 +83,7 @@ namespace Si.Game
             Opacity = 0.9D;
             ShowIcon = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            Text = "Strikeforce Infinity";
+            Text = "Strikeforce Infinite";
             Load += FormStartup_Load;
             ResumeLayout(false);
         }

@@ -157,7 +157,7 @@ namespace Si.Game
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Strikeforce Infinity", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(ex.Message, "Strikeforce Infinite", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
     }

@@ -6,11 +6,11 @@
     <Nullable>enable</Nullable>
     <OutputType>Exe</OutputType>
     <StartupObject>Si.IndependentLobbyHostWithAI.Program</StartupObject>
-    <ApplicationIcon>StrikeforceInfinity.ico</ApplicationIcon>
+    <ApplicationIcon>StrikeforceInfinite.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="StrikeforceInfinity.ico" />
+    <Content Include="StrikeforceInfinite.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Title>Strikeforce: Infinity</Title>
+    <Title>Strikeforce: Infinite</Title>
     <Company>NetworkDLS</Company>
     <Copyright>Copyright © 2024 NetworkDLS</Copyright>
     <AssemblyVersion>0.0.23</AssemblyVersion>
@@ -12,7 +12,6 @@
     <OutputType>Library</OutputType>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <ApplicationIcon>Resources\StrikeforceInfinity.ico</ApplicationIcon>
     <AssemblyName>Si.GameEngine</AssemblyName>
     <RootNamespace>Si.GameEngine</RootNamespace>
     <StartupObject></StartupObject>
@@ -20,19 +19,21 @@
 
   <ItemGroup>
     <Compile Remove="Assets\Loadouts\**" />
+    <Compile Remove="Resources\**" />
     <Compile Remove="Sprites\Player\Interfaces\**" />
+    <Compile Remove="Utility\**" />
     <EmbeddedResource Remove="Assets\Loadouts\**" />
+    <EmbeddedResource Remove="Resources\**" />
     <EmbeddedResource Remove="Sprites\Player\Interfaces\**" />
+    <EmbeddedResource Remove="Utility\**" />
     <None Remove="Assets\Loadouts\**" />
+    <None Remove="Resources\**" />
     <None Remove="Sprites\Player\Interfaces\**" />
+    <None Remove="Utility\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="C:\Users\ntdls\.nuget\packages\ntdls.delegatethreadpooling\1.2.11\contentFiles\any\net8.0\Image.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Resources\StrikeforceInfinity.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,10 +70,6 @@
     <ProjectReference Include="..\Si.Library\Si.Library.csproj" />
     <ProjectReference Include="..\Si.MultiplayClient\Si.MultiplayClient.csproj" />
     <ProjectReference Include="..\Si.Rendering\Si.Rendering.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Utility\" />
   </ItemGroup>
 
 </Project>
