@@ -10,7 +10,7 @@
         /// <summary>
         /// The ping from the server to the client.
         /// </summary>
-        public double LatencyMs { get; set; }
+        public float LatencyMs { get; set; }
 
         /// <summary>
         /// The player has selected a loadout and is waiting on the server to start the game.

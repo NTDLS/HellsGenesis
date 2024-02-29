@@ -23,10 +23,10 @@ namespace Si.GameEngine.Sprites.Weapons
         {
             Damage = 1;
             FireDelayMilliseconds = 25;
-            Speed = 11.25;
+            Speed = 11.25f;
             AngleVarianceDegrees = 8;
-            SpeedVariancePercent = 0.10;
-            RecoilAmount = 0.01;
+            SpeedVariancePercent = 0.10f;
+            RecoilAmount = 0.01f;
         }
 
         public override MunitionBase CreateMunition(SiVector xyOffset, SpriteBase targetOfLock = null)

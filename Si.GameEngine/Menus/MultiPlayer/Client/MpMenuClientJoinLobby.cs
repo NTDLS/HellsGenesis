@@ -23,8 +23,8 @@ namespace Si.Menus.MultiPlayer.Client
 
             var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
-            double offsetY = currentScaledScreenBounds.Y + 100;
+            float offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
+            float offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Join Game");
             itemTitle.X -= itemTitle.Size.Width / 2;
@@ -36,8 +36,8 @@ namespace Si.Menus.MultiPlayer.Client
             var labelName = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "Player Name: ".PadLeft(25));
             labelName.X -= (labelName.Size.Width) + 200;
 
-            double xPositionForlabel = labelName.X; //Save the X position for lables.
-            double xPositionForTextBox = labelName.X + labelName.Size.Width; //Save the X position for textboxes.
+            float xPositionForlabel = labelName.X; //Save the X position for lables.
+            float xPositionForTextBox = labelName.X + labelName.Size.Width; //Save the X position for textboxes.
 
             _textboxPlayerName = CreateAndAddSelectableTextInput(new SiVector(xPositionForTextBox, labelName.Y), "PLAYERNAME", "Player 2");
             _textboxPlayerName.Selected = true;

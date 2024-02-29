@@ -18,7 +18,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             foreach (var particle in Visible())
             {
@@ -81,8 +81,8 @@ namespace Si.GameEngine.Core.TickControllers
                         var particle = CreateAt(at.Location, GraphicsUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
                         particle.Shape = ParticleShape.FilledEllipse;
                         particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
-                        particle.FadeToBlackReductionAmount = SiRandom.Between(0.001, 0.01);
-                        particle.Velocity.Speed *= SiRandom.Between(1, 3.5);
+                        particle.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
+                        particle.Velocity.Speed *= SiRandom.Between(1, 3.5f);
                         particle.VectorType = ParticleVectorType.Independent;
                     }
                     GameEngine.Audio.PlayRandomExplosion();
@@ -113,7 +113,7 @@ namespace Si.GameEngine.Core.TickControllers
 
                 particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                 particle.FadeToBlackReductionAmount = 0.001f;
-                particle.Velocity.Speed *= SiRandom.Between(1, 3.5);
+                particle.Velocity.Speed *= SiRandom.Between(1, 3.5f);
                 particle.VectorType = ParticleVectorType.Native;
             }
         }

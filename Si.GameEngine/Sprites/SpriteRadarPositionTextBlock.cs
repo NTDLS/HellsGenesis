@@ -17,8 +17,8 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        private double _distanceValue;
-        public double DistanceValue
+        private float _distanceValue;
+        public float DistanceValue
         {
             get
             {

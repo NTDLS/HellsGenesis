@@ -557,7 +557,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
         /// </summary>
         /// <param name="vector"></param>
 
-        public override void ApplyMotion(double epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             base.ApplyMotion(epoch, displacementVector);
 

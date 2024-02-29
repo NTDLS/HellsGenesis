@@ -128,7 +128,7 @@ namespace Si.GameEngine.Core
                 var elapsedEpochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000.0;
                 epochTimer.Restart();
 
-                var epoch = elapsedEpochMilliseconds / millisecondPerEpoch;
+                var epoch = (float)(elapsedEpochMilliseconds / millisecondPerEpoch);
 
                 _gameEngine.Menus.Use(m =>
                 {
@@ -194,7 +194,7 @@ namespace Si.GameEngine.Core
             }
         }
 
-        private SiVector ExecuteWorldClockTick(double epoch)
+        private SiVector ExecuteWorldClockTick(float epoch)
         {
             _gameEngine.Menus.ExecuteWorldClockTick();
             _gameEngine.Situations.ExecuteWorldClockTick();
@@ -233,7 +233,7 @@ namespace Si.GameEngine.Core
                 //situation = $"{_gameEngine.Situations.CurrentSituation.Name} (Wave {_gameEngine.Situations.CurrentSituation.CurrentWave} of {_gameEngine.Situations.CurrentSituation.TotalWaves})";
                 string situation = $"{_gameEngine.Situations.CurrentSituation.Name}";
 
-                double boostRebuildPercent = _gameEngine.Player.Sprite.Velocity.AvailableBoost / _gameEngine.Settings.PlayerBoostRebuildFloor * 100.0;
+                float boostRebuildPercent = _gameEngine.Player.Sprite.Velocity.AvailableBoost / _gameEngine.Settings.PlayerBoostRebuildFloor * 100.0f;
 
                 _gameEngine.Sprites.PlayerStatsText.Text =
                       $" Situation: {situation}\r\n"
@@ -245,7 +245,7 @@ namespace Si.GameEngine.Core
             }
             else if (_gameEngine.Multiplay.State.PlayMode == SiPlayMode.MutiPlayerClient)
             {
-                double boostRebuildPercent = _gameEngine.Player.Sprite.Velocity.AvailableBoost / _gameEngine.Settings.PlayerBoostRebuildFloor * 100.0;
+                float boostRebuildPercent = _gameEngine.Player.Sprite.Velocity.AvailableBoost / _gameEngine.Settings.PlayerBoostRebuildFloor * 100.0f;
 
                 _gameEngine.Sprites.PlayerStatsText.Text =
                       $"      Hull: {_gameEngine.Player.Sprite.HullHealth:n0} (Shields: {_gameEngine.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_gameEngine.Player.Sprite.Bounty}\r\n"

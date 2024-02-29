@@ -20,9 +20,9 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
         public SiFiredFromType FiredFromType { get; private set; }
         public WeaponBase Weapon { get; private set; }
         public DateTime CreatedDate { get; private set; } = DateTime.UtcNow;
-        public double MillisecondsToLive { get; set; } = 4000;
-        public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
-        public double SceneDistanceLimit { get; set; }
+        public float MillisecondsToLive { get; set; } = 4000;
+        public float AgeInMilliseconds => (float)(DateTime.UtcNow - CreatedDate).TotalMilliseconds;
+        public float SceneDistanceLimit { get; set; }
 
         public MunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiVector xyOffset = null)
             : base(gameEngine)
@@ -30,22 +30,22 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             Initialize(imagePath);
 
             Weapon = weapon;
-            Velocity.ThrottlePercentage = 1.0;
-            SceneDistanceLimit = SiRandom.Between(weapon.MunitionSceneDistanceLimit * 0.1, weapon.MunitionSceneDistanceLimit);
+            Velocity.ThrottlePercentage = 1.0f;
+            SceneDistanceLimit = SiRandom.Between(weapon.MunitionSceneDistanceLimit * 0.1f, weapon.MunitionSceneDistanceLimit);
 
             RadarDotSize = new SiVector(1, 1);
 
-            double headingRadians = firedFrom.Velocity.Angle.Radians;
+            float headingRadians = firedFrom.Velocity.Angle.Radians;
             if (weapon.AngleVarianceDegrees > 0)
             {
-                var randomNumber = SiVector.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0) / 100.0);
+                var randomNumber = SiVector.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0f) / 100.0f);
                 headingRadians += (SiRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 
-            double initialSpeed = weapon.Speed;
+            float initialSpeed = weapon.Speed;
             if (Weapon.SpeedVariancePercent > 0)
             {
-                var randomNumber = SiRandom.Between(0, weapon.SpeedVariancePercent * 100.0) / 100.0;
+                var randomNumber = SiRandom.Between(0, weapon.SpeedVariancePercent * 100.0f) / 100.0f;
                 var variance = randomNumber * weapon.Speed;
                 initialSpeed += (SiRandom.FlipCoin() ? 1 : -1) * variance;
             }
@@ -54,7 +54,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             {
                 Angle = new SiAngle(headingRadians),
                 Speed = initialSpeed,
-                ThrottlePercentage = 1.0
+                ThrottlePercentage = 1.0f
             };
 
             Location = firedFrom.Location + (xyOffset ?? SiVector.Zero);
@@ -71,7 +71,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public virtual void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (AgeInMilliseconds > MillisecondsToLive)
             {
@@ -80,7 +80,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             }
         }
 
-        public override void ApplyMotion(double epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             if (!_gameEngine.Display.TotalCanvasBounds.Balloon(SceneDistanceLimit).IntersectsWith(RenderBounds))
             {

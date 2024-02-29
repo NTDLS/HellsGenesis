@@ -45,7 +45,7 @@ namespace Si.GameEngine.Levels
             {
                 if (formationSerfs.Exists(o => o.IsWithinCurrentScaledScreenBounds == true) == false)
                 {
-                    double angleToPlayer = formationSerfs.First().AngleTo360(_gameEngine.Player.Sprite);
+                    float angleToPlayer = formationSerfs.First().AngleTo360(_gameEngine.Player.Sprite);
 
                     foreach (SpriteEnemySerf enemy in formationSerfs)
                     {
@@ -84,20 +84,20 @@ namespace Si.GameEngine.Levels
             _waitingOnPopulation = false;
         }
 
-        private SpriteEnemySerf AddOneEnemyAt(double x, double y, double angle)
+        private SpriteEnemySerf AddOneEnemyAt(float x, float y, float angle)
         {
             var enemy = _gameEngine.Sprites.Enemies.Create<SpriteEnemySerf>();
             enemy.X = x;
             enemy.Y = y;
-            enemy.Velocity.ThrottlePercentage = 0.8;
+            enemy.Velocity.ThrottlePercentage = 0.8f;
             enemy.Velocity.Speed = 6;
             enemy.Velocity.Angle.Degrees = angle;
             return enemy;
         }
 
-        private void CreateTriangleFormation(SiVector baseLocation, double spacing, int depth)
+        private void CreateTriangleFormation(SiVector baseLocation, float spacing, int depth)
         {
-            double angle = SiVector.AngleTo360(baseLocation, _gameEngine.Player.Sprite);
+            float angle = SiVector.AngleTo360(baseLocation, _gameEngine.Player.Sprite);
 
             for (int col = 0; col < depth; col++)
             {

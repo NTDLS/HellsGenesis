@@ -21,10 +21,10 @@ namespace Si.GameEngine.Sprites.Weapons
 
         private void InitializeWeapon()
         {
-            Speed = 26.25;
+            Speed = 26.25f;
             Damage = 15;
             FireDelayMilliseconds = 100;
-            AngleVarianceDegrees = 2.0;
+            AngleVarianceDegrees = 2.0f;
         }
 
         public override MunitionBase CreateMunition(SiVector xyOffset, SpriteBase targetOfLock = null)

@@ -111,14 +111,14 @@ namespace Si.GameEngine.Core.NativeRendering
         /// Draws a bitmap at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
-        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double x, double y, double angleRadians)
+        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float x, float y, float angleRadians)
         {
             if (angleRadians > 6.3)
             {
                 //throw new Exception($"Radians are out of range: {angleRadians:n4}");
             }
 
-            var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
+            var destRect = new RawRectangleF(x, y, (x + bitmap.PixelSize.Width), (y + bitmap.PixelSize.Height));
             if (angleRadians != 0) ApplyTransformAngle(renderTarget, destRect, angleRadians);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
             if (angleRadians != 0) ResetTransform(renderTarget);
@@ -127,14 +127,14 @@ namespace Si.GameEngine.Core.NativeRendering
 
         /// Draws a bitmap from a specified location of a given size, to the the specified location.
         public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap,
-            double x, double y, double angleRadians, RawRectangleF sourceRect, Size2F destSize)
+            float x, float y, float angleRadians, RawRectangleF sourceRect, Size2F destSize)
         {
             if (angleRadians > 6.3)
             {
                 //throw new Exception($"Radians are out of range: {angleRadians:n4}");
             }
 
-            var destRect = new RawRectangleF((float)x, (float)y, (float)(x + destSize.Width), (float)(y + destSize.Height));
+            var destRect = new RawRectangleF(x, y, (x + destSize.Width), (y + destSize.Height));
             if (angleRadians != 0) ApplyTransformAngle(renderTarget, destRect, angleRadians);
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
             if (angleRadians != 0) ResetTransform(renderTarget);
@@ -145,17 +145,17 @@ namespace Si.GameEngine.Core.NativeRendering
         /// Draws a bitmap at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
-        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double x, double y)
+        public RawRectangleF DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float x, float y)
         {
-            var destRect = new RawRectangleF((float)x, (float)y, (float)(x + bitmap.PixelSize.Width), (float)(y + bitmap.PixelSize.Height));
+            var destRect = new RawRectangleF(x, y, (x + bitmap.PixelSize.Width), (y + bitmap.PixelSize.Height));
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
             return destRect;
         }
 
-        public RawRectangleF GetTextRext(double x, double y, string text, SharpDX.DirectWrite.TextFormat format)
+        public RawRectangleF GetTextRext(float x, float y, string text, SharpDX.DirectWrite.TextFormat format)
         {
             using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
-            return new RawRectangleF((float)x, (float)y, (float)(x + textLayout.Metrics.Width), (float)(y + textLayout.Metrics.Height));
+            return new RawRectangleF(x, y, (x + textLayout.Metrics.Width), (y + textLayout.Metrics.Height));
         }
 
         public SizeF GetTextSize(string text, SharpDX.DirectWrite.TextFormat format)
@@ -171,7 +171,7 @@ namespace Si.GameEngine.Core.NativeRendering
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
         public RawRectangleF DrawTextAt(RenderTarget renderTarget,
-            double x, double y, double angleRadians, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
+            float x, float y, float angleRadians, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
         {
             using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
 
@@ -179,7 +179,7 @@ namespace Si.GameEngine.Core.NativeRendering
             var textHeight = textLayout.Metrics.Height;
 
             // Create a rectangle that fits the text
-            var textRectangle = new RawRectangleF((float)x, (float)y, (float)(x + textWidth), (float)(y + textHeight));
+            var textRectangle = new RawRectangleF(x, y, (x + textWidth), (y + textHeight));
 
             //DrawRectangleAt(renderTarget, textRectangle, 0, Materials.Raw.Blue, 0, 1);
 
@@ -191,36 +191,36 @@ namespace Si.GameEngine.Core.NativeRendering
         }
 
         public void DrawLine(RenderTarget renderTarget,
-            double startPointX, double startPointY, double endPointX, double endPointY,
-            SolidColorBrush brush, double strokeWidth = 1)
+            float startPointX, float startPointY, float endPointX, float endPointY,
+            SolidColorBrush brush, float strokeWidth = 1)
         {
-            var startPoint = new RawVector2((float)startPointX, (float)startPointY);
-            var endPoint = new RawVector2((float)endPointX, (float)endPointY);
+            var startPoint = new RawVector2(startPointX, startPointY);
+            var endPoint = new RawVector2(endPointX, endPointY);
 
-            renderTarget.DrawLine(startPoint, endPoint, brush, (float)strokeWidth);
+            renderTarget.DrawLine(startPoint, endPoint, brush, strokeWidth);
         }
 
         /// <summary>
         /// Draws a color filled ellipse at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public Ellipse FillEllipseAt(RenderTarget renderTarget, double x, double y,
-            double radiusX, double radiusY, Color4 color, float angleRadians = 0)
+        public Ellipse FillEllipseAt(RenderTarget renderTarget, float x, float y,
+            float radiusX, float radiusY, Color4 color, float angleRadians = 0)
         {
             var ellipse = new Ellipse()
             {
-                Point = new RawVector2((float)x, (float)y),
-                RadiusX = (float)radiusX,
-                RadiusY = (float)radiusY,
+                Point = new RawVector2(x, y),
+                RadiusX = radiusX,
+                RadiusY = radiusY,
             };
 
             if (angleRadians != 0)
             {
                 var destRect = new RawRectangleF(
-                    (float)(x - radiusX / 2.0),
-                    (float)(y - radiusY / 2.0),
-                    (float)((x - radiusX / 2.0) + radiusX),
-                    (float)((y - radiusY / 2.0) + radiusY));
+                    (x - radiusX / 2.0f),
+                    (y - radiusY / 2.0f),
+                    ((x - radiusX / 2.0f) + radiusX),
+                    ((y - radiusY / 2.0f) + radiusY));
 
                 ApplyTransformAngle(renderTarget, destRect, angleRadians);
             }
@@ -237,23 +237,23 @@ namespace Si.GameEngine.Core.NativeRendering
         /// Draws a hollow ellipse at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public Ellipse HollowEllipseAt(RenderTarget renderTarget, double x, double y,
-            double radiusX, double radiusY, Color4 color, float strokeWidth = 1, float angleRadians = 0)
+        public Ellipse HollowEllipseAt(RenderTarget renderTarget, float x, float y,
+            float radiusX, float radiusY, Color4 color, float strokeWidth = 1, float angleRadians = 0)
         {
             var ellipse = new Ellipse()
             {
-                Point = new RawVector2((float)x, (float)y),
-                RadiusX = (float)radiusX,
-                RadiusY = (float)radiusY,
+                Point = new RawVector2(x, y),
+                RadiusX = radiusX,
+                RadiusY = radiusY,
             };
 
             if (angleRadians != 0)
             {
                 var destRect = new RawRectangleF(
-                    (float)(x - radiusX / 2.0),
-                    (float)(y - radiusY / 2.0),
-                    (float)((x - radiusX / 2.0) + radiusX),
-                    (float)((y - radiusY / 2.0) + radiusY));
+                    (x - radiusX / 2.0f),
+                    (y - radiusY / 2.0f),
+                    ((x - radiusX / 2.0f) + radiusX),
+                    ((y - radiusY / 2.0f) + radiusY));
 
                 ApplyTransformAngle(renderTarget, destRect, angleRadians);
             }
@@ -266,20 +266,20 @@ namespace Si.GameEngine.Core.NativeRendering
             return ellipse;
         }
 
-        public void HollowTriangleAt(RenderTarget renderTarget, double x, double y,
-            double height, double width, Color4 color, float strokeWidth = 1, float angleRadians = 0)
+        public void HollowTriangleAt(RenderTarget renderTarget, float x, float y,
+            float height, float width, Color4 color, float strokeWidth = 1, float angleRadians = 0)
         {
             // Define the points for the triangle
             var trianglePoints = new RawVector2[]
             {
-                new RawVector2(0, (float)height),           // Vertex 1 (bottom-left)
-                new RawVector2((float)width, (float)height), // Vertex 2 (bottom-right)
-                new RawVector2((float)(width / 2), 0)      // Vertex 3 (top-center)
+                new RawVector2(0, height),           // Vertex 1 (bottom-left)
+                new RawVector2(width, height), // Vertex 2 (bottom-right)
+                new RawVector2((width / 2.0f), 0)      // Vertex 3 (top-center)
             };
 
             if (angleRadians != 0)
             {
-                var destRect = new RawRectangleF((float)x, (float)y, (float)(x + width), (float)(y + height));
+                var destRect = new RawRectangleF(x, y, (x + width), (y + height));
                 ApplyTransformAngle(renderTarget, destRect, angleRadians);
             }
 
@@ -305,7 +305,7 @@ namespace Si.GameEngine.Core.NativeRendering
             renderTarget.Transform = new(
                 1.0f, 0.0f,
                 0.0f, 1.0f,
-                (float)x, (float)y
+                x, y
             );
 
             using var brush = new SolidColorBrush(renderTarget, color);
@@ -319,19 +319,19 @@ namespace Si.GameEngine.Core.NativeRendering
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
         public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF rect,
-            double angleRadians, RawColor4 color, double expand = 0, double strokeWidth = 1)
+            float angleRadians, RawColor4 color, float expand = 0, float strokeWidth = 1)
         {
             if (expand != 0)
             {
-                rect.Left -= (float)expand;
-                rect.Top -= (float)expand;
-                rect.Bottom += (float)expand;
-                rect.Right += (float)expand;
+                rect.Left -= expand;
+                rect.Top -= expand;
+                rect.Bottom += expand;
+                rect.Right += expand;
             }
 
             ApplyTransformAngle(renderTarget, rect, angleRadians);
             using var brush = new SolidColorBrush(renderTarget, color);
-            renderTarget.DrawRectangle(rect, brush, (float)strokeWidth);
+            renderTarget.DrawRectangle(rect, brush, strokeWidth);
             ResetTransform(renderTarget);
 
             return rect;
@@ -340,7 +340,7 @@ namespace Si.GameEngine.Core.NativeRendering
         public List<SharpDX.Direct2D1.Bitmap> GenerateIrregularFragments(SharpDX.Direct2D1.Bitmap originalBitmap, int countOfFragments, int countOfVertices = 3)
             => BitmapFragmenter.GenerateIrregularFragments(this, originalBitmap, countOfFragments, countOfVertices);
 
-        public RawMatrix3x2 GetScalingMatrix(double zoomFactor)
+        public RawMatrix3x2 GetScalingMatrix(float zoomFactor)
         {
             // Calculate the new center point (assuming dimensions are known)
             float centerX = _gameEngine.Display.TotalCanvasSize.Width / 2.0f;
@@ -348,10 +348,10 @@ namespace Si.GameEngine.Core.NativeRendering
 
             // Calculate the scaling transformation matrix
             var scalingMatrix = new RawMatrix3x2(
-                (float)zoomFactor, 0,
-                0, (float)zoomFactor,
-                (float)(centerX * (1 - zoomFactor)),
-                (float)(centerY * (1 - zoomFactor))
+                zoomFactor, 0,
+                0, zoomFactor,
+                (centerX * (1.0f - zoomFactor)),
+                (centerY * (1.0f - zoomFactor))
             );
 
             return scalingMatrix;
@@ -360,12 +360,12 @@ namespace Si.GameEngine.Core.NativeRendering
         #region Native Transformations.
 
         public void ApplyTransformAngle2(RenderTarget renderTarget,
-            RawRectangleF rect, double angleRadians, Matrix3x2? existingMatrix = null)
+            RawRectangleF rect, float angleRadians, Matrix3x2? existingMatrix = null)
         {
             float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
             float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
 
-            var rotationMatrix = Matrix3x2.Rotation((float)angleRadians, new Vector2(centerX, centerY));
+            var rotationMatrix = Matrix3x2.Rotation(angleRadians, new Vector2(centerX, centerY));
 
             if (existingMatrix != null)
             {
@@ -375,7 +375,7 @@ namespace Si.GameEngine.Core.NativeRendering
             renderTarget.Transform = rotationMatrix;
         }
 
-        public void ApplyTransformAngle(RenderTarget renderTarget, RawRectangleF rect, double angleRadians)
+        public void ApplyTransformAngle(RenderTarget renderTarget, RawRectangleF rect, float angleRadians)
         {
             float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
             float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;

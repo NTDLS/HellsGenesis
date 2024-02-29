@@ -14,14 +14,14 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
     {
         public int MaxSeekingObservationDistance { get; set; } = 1000;
         public int MaxSeekingObservationAngleDegrees { get; set; } = 20;
-        public double SeekingRotationRateRadians { get; set; } = SiVector.DegreesToRadians(4);
+        public float SeekingRotationRateRadians { get; set; } = SiVector.DegreesToRadians(4);
 
         public SeekingMunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiVector xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
         }
 
-        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (FiredFromType == SiFiredFromType.Enemy)
             {
@@ -29,7 +29,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 {
                     var deltaAngle = DeltaAngleDegrees(_gameEngine.Player.Sprite);
 
-                    if (Math.Abs((double)deltaAngle) < MaxSeekingObservationAngleDegrees)
+                    if (Math.Abs((float)deltaAngle) < MaxSeekingObservationAngleDegrees)
                     {
                         if (deltaAngle >= 0) //We might as well turn around clock-wise
                         {
@@ -44,7 +44,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             }
             else if (FiredFromType == SiFiredFromType.Player)
             {
-                double? smallestAngle = null;
+                float? smallestAngle = null;
 
                 foreach (var enemy in _gameEngine.Sprites.Enemies.Visible())
                 {
@@ -52,14 +52,14 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                     {
                         var deltaAngle = DeltaAngleDegrees(enemy);
 
-                        if (smallestAngle == null || Math.Abs(deltaAngle) < Math.Abs((double)smallestAngle))
+                        if (smallestAngle == null || Math.Abs(deltaAngle) < Math.Abs((float)smallestAngle))
                         {
                             smallestAngle = deltaAngle;
                         }
                     }
                 }
 
-                if (smallestAngle != null && Math.Abs((double)smallestAngle) < MaxSeekingObservationAngleDegrees)
+                if (smallestAngle != null && Math.Abs((float)smallestAngle) < MaxSeekingObservationAngleDegrees)
                 {
                     if (smallestAngle >= 0) //We might as well turn around clock-wise
                     {

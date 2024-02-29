@@ -23,10 +23,10 @@ namespace Si.GameEngine.Sprites.Weapons
         {
             Damage = 2;
             FireDelayMilliseconds = 250;
-            Speed = 22.5;
-            AngleVarianceDegrees = 10.0;
-            SpeedVariancePercent = 0.10;
-            RecoilAmount = 0.045;
+            Speed = 22.5f;
+            AngleVarianceDegrees = 10.0f;
+            SpeedVariancePercent = 0.10f;
+            RecoilAmount = 0.045f;
         }
 
         public override bool Fire()

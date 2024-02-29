@@ -25,8 +25,8 @@ namespace Si.GameEngine.Sprites.Player
                     Description = "→ Titanic Dreadnought ←\n"
                         + "Titanic force of destruction, capable of withstanding\n"
                         + "immense firepower while dishing out colossal damage.",
-                    Speed = 3.0,
-                    Boost = 1.5,
+                    Speed = 3.0f,
+                    Boost = 1.5f,
                     HullHealth = 500,
                     ShieldHealth = 1000,
                     PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 500)

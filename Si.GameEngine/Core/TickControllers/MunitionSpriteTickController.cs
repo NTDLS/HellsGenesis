@@ -42,7 +42,7 @@ namespace Si.GameEngine.Core.TickControllers
             }
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             var munitions = VisibleOfType<MunitionBase>();
             if (munitions.Any())

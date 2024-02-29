@@ -33,26 +33,26 @@ namespace Si.GameEngine.Core.Managers
         public bool IsDrawingSurfaceFocused => _isFocused;
         public void SetIsFocused(bool isFocused) => _isFocused = isFocused;
 
-        public double OverrideSpeedOrientedFrameScalingFactor { get; set; } = double.NaN;
+        public float OverrideSpeedOrientedFrameScalingFactor { get; set; } = float.NaN;
 
-        public double SpeedOrientedFrameScalingFactor()
+        public float SpeedOrientedFrameScalingFactor()
         {
-            if (OverrideSpeedOrientedFrameScalingFactor is not double.NaN)
+            if (OverrideSpeedOrientedFrameScalingFactor is not float.NaN)
             {
                 return OverrideSpeedOrientedFrameScalingFactor;
             }
 
-            double weightedThrottlePercent = (
-                    _gameEngine.Player.Sprite.Velocity.ThrottlePercentage * 0.60 //n-percent of the zoom is throttle.
-                    + _gameEngine.Player.Sprite.Velocity.BoostPercentage * 0.40  //n-percent of the zoom is boost.
+            float weightedThrottlePercent = (
+                    _gameEngine.Player.Sprite.Velocity.ThrottlePercentage * 0.60f //n-percent of the zoom is throttle.
+                    + _gameEngine.Player.Sprite.Velocity.BoostPercentage * 0.40f  //n-percent of the zoom is boost.
                 ).Clamp(0, 1);
 
-            double remainingRatioZoom = 1 - BaseDrawScale;
-            double debugFactor = remainingRatioZoom * weightedThrottlePercent;
+            float remainingRatioZoom = 1 - BaseDrawScale;
+            float debugFactor = remainingRatioZoom * weightedThrottlePercent;
             return BaseDrawScale + debugFactor;
         }
 
-        public double BaseDrawScale => 100.0 / _gameEngine.Settings.OverdrawScale / 100.0;
+        public float BaseDrawScale => 100.0f / _gameEngine.Settings.OverdrawScale / 100.0f;
 
         /// <summary>
         /// The number of extra pixles to draw beyond the NatrualScreenSize.
@@ -118,8 +118,8 @@ namespace Si.GameEngine.Core.Managers
             var currentScaledScreenBounds = GetCurrentScaledScreenBounds();
 
             return new SiVector(
-                    SiRandom.Generator.Next((int)currentScaledScreenBounds.Left, (int)(currentScaledScreenBounds.Left + currentScaledScreenBounds.Width)),
-                    SiRandom.Generator.Next((int)currentScaledScreenBounds.Top, (int)(currentScaledScreenBounds.Top + currentScaledScreenBounds.Height))
+                    SiRandom.Between((int)currentScaledScreenBounds.Left, (int)(currentScaledScreenBounds.Left + currentScaledScreenBounds.Width)),
+                    SiRandom.Between((int)currentScaledScreenBounds.Top, (int)(currentScaledScreenBounds.Top + currentScaledScreenBounds.Height))
                 );
         }
 
@@ -177,7 +177,7 @@ namespace Si.GameEngine.Core.Managers
             CenterScreen = new SiVector(TotalCanvasSize.Width / 2.0f, TotalCanvasSize.Height / 2.0f);
         }
 
-        public SiQuadrant GetQuadrant(double x, double y)
+        public SiQuadrant GetQuadrant(float x, float y)
         {
             var coord = new Point((int)(x / NatrualScreenSize.Width), (int)(y / NatrualScreenSize.Height));
 

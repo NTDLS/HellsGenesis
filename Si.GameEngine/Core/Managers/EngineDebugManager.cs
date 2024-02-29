@@ -153,15 +153,15 @@ namespace Si.GameEngine.Core.Managers
 
         public void CommandHandler_Display_RenderWindowPosition_Set(DebugCommand command)
         {
-            _gameEngine.Display.RenderWindowPosition.X = command.ParameterValue<double>("x");
-            _gameEngine.Display.RenderWindowPosition.Y = command.ParameterValue<double>("y");
+            _gameEngine.Display.RenderWindowPosition.X = command.ParameterValue<float>("x");
+            _gameEngine.Display.RenderWindowPosition.Y = command.ParameterValue<float>("y");
         }
 
         public void CommandHandler_Display_RenderWindowPosition_CenterOn(DebugCommand command)
         {
             _gameEngine.Sprites.Use(o =>
             {
-                var spriteUID = command.ParameterValue<double>("spriteUID");
+                var spriteUID = command.ParameterValue<float>("spriteUID");
                 var baseSprite = o.Where(o => o.UID == spriteUID).FirstOrDefault();
                 if (baseSprite != null)
                 {
@@ -271,12 +271,12 @@ namespace Si.GameEngine.Core.Managers
 
         public void CommandHandler_Display_Zoom_Reset(DebugCommand command)
         {
-            _gameEngine.Display.OverrideSpeedOrientedFrameScalingFactor = double.NaN;
+            _gameEngine.Display.OverrideSpeedOrientedFrameScalingFactor = float.NaN;
         }
 
         public void CommandHandler_Display_Zoom_Override(DebugCommand command)
         {
-            var level = command.ParameterValue<double>("level");
+            var level = command.ParameterValue<float>("level");
             _gameEngine.Display.OverrideSpeedOrientedFrameScalingFactor = level.Clamp(-1, 1);
         }
 
@@ -453,8 +453,8 @@ namespace Si.GameEngine.Core.Managers
         {
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
-            var toleranceDegrees = command.ParameterValue<double>("toleranceDegrees");
-            var maxDistance = command.ParameterValue<double>("maxDistance");
+            var toleranceDegrees = command.ParameterValue<float>("toleranceDegrees");
+            var maxDistance = command.ParameterValue<float>("maxDistance");
 
             _gameEngine.Sprites.Use(o =>
             {
@@ -473,8 +473,8 @@ namespace Si.GameEngine.Core.Managers
         {
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
-            var toleranceDegrees = command.ParameterValue<double>("toleranceDegrees", 10);
-            var maxDistance = command.ParameterValue<double>("maxDistance", 1000);
+            var toleranceDegrees = command.ParameterValue<float>("toleranceDegrees", 10);
+            var maxDistance = command.ParameterValue<float>("maxDistance", 1000);
 
             _gameEngine.Sprites.Use(o =>
             {
@@ -551,7 +551,7 @@ namespace Si.GameEngine.Core.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.Angle.Degrees = command.ParameterValue<double>("value");
+                    sprite.Velocity.Angle.Degrees = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -565,7 +565,7 @@ namespace Si.GameEngine.Core.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.BoostPercentage = command.ParameterValue<double>("value");
+                    sprite.Velocity.BoostPercentage = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -579,7 +579,7 @@ namespace Si.GameEngine.Core.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.ThrottlePercentage = command.ParameterValue<double>("value");
+                    sprite.Velocity.ThrottlePercentage = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -593,7 +593,7 @@ namespace Si.GameEngine.Core.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.Boost = command.ParameterValue<double>("value");
+                    sprite.Velocity.Boost = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -607,7 +607,7 @@ namespace Si.GameEngine.Core.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.Speed = command.ParameterValue<double>("value");
+                    sprite.Velocity.Speed = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -649,8 +649,8 @@ namespace Si.GameEngine.Core.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.X = command.ParameterValue<double>("x");
-                    sprite.Y = command.ParameterValue<double>("y");
+                    sprite.X = command.ParameterValue<float>("x");
+                    sprite.Y = command.ParameterValue<float>("y");
                 }
             });
         }

@@ -235,7 +235,7 @@ namespace Si.GameEngine.Core.Managers
             });
         }
 
-        public List<SpriteBase> Intersections(double x, double y, double width, double height)
+        public List<SpriteBase> Intersections(float x, float y, float width, float height)
             => Intersections(new SiVector(x, y), new SiVector(width, height));
 
         public List<SpriteBase> Intersections(SiVector location, SiVector size)
@@ -296,21 +296,21 @@ namespace Si.GameEngine.Core.Managers
                     _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,
                     _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height, 0);
 
-                double radarDistance = 8;
+                float radarDistance = 8;
 
                 if (_radarScale == null)
                 {
-                    double radarVisionWidth = _gameEngine.Display.TotalCanvasSize.Width * radarDistance;
-                    double radarVisionHeight = _gameEngine.Display.TotalCanvasSize.Height * radarDistance;
+                    float radarVisionWidth = _gameEngine.Display.TotalCanvasSize.Width * radarDistance;
+                    float radarVisionHeight = _gameEngine.Display.TotalCanvasSize.Height * radarDistance;
 
                     _radarScale = new SiVector(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
-                    _radarOffset = new SiVector(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
+                    _radarOffset = new SiVector(radarBgImage.Size.Width / 2.0f, radarBgImage.Size.Height / 2.0f); //Best guess until player is visible.
                 }
 
                 if (_gameEngine.Player.Sprite is not null && _gameEngine.Player.Sprite.Visable)
                 {
-                    double centerOfRadarX = (int)(radarBgImage.Size.Width / 2.0) - 2.0; //Subtract half the dot size.
-                    double centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0) - 2.0; //Subtract half the dot size.
+                    float centerOfRadarX = (int)(radarBgImage.Size.Width / 2.0f) - 2.0f; //Subtract half the dot size.
+                    float centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0f) - 2.0f; //Subtract half the dot size.
 
                     _radarOffset = new SiVector(
                             _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _gameEngine.Player.Sprite.X * _radarScale.X),
@@ -322,7 +322,7 @@ namespace Si.GameEngine.Core.Managers
                         //Render radar:
                         foreach (var sprite in o.Where(o => o.Visable == true))
                         {
-                            //SiPoint scale, SiPoint< double > offset
+                            //SiPoint scale, SiPoint< float > offset
                             int x = (int)(_radarOffset.X + sprite.Location.X * _radarScale.X);
                             int y = (int)(_radarOffset.Y + sprite.Location.Y * _radarScale.Y);
 

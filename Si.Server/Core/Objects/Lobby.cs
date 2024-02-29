@@ -119,7 +119,7 @@ namespace Si.Server.Core.Objects
                             {
                                 if (x.Result != null)
                                 {
-                                    var LatencyMs = (DateTime.UtcNow - x.Result.Timestamp).TotalMilliseconds;
+                                    var LatencyMs = (float)(DateTime.UtcNow - x.Result.Timestamp).TotalMilliseconds;
 
                                     _connections.Use(o =>
                                     {

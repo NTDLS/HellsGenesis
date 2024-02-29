@@ -16,19 +16,19 @@ namespace Si.GameEngine.Sprites
         /// The max travel distance from the creation x,y before the sprite is automatically deleted.
         /// This is ignored unless the CleanupModeOption is Distance.
         /// </summary>
-        public double MaxDistance { get; set; } = 1000;
+        public float MaxDistance { get; set; } = 1000;
 
         /// <summary>
         /// The amount of brightness to reduce the color by each time the particle is rendered.
         /// This is ignored unless the CleanupModeOption is FadeToBlack.
         /// This should be expressed as a number between 0-1 with 0 being no reduxtion per frame and 1 being 100% reduction per frame.
         /// </summary>
-        public double FadeToBlackReductionAmount { get; set; } = 0.01f;
+        public float FadeToBlackReductionAmount { get; set; } = 0.01f;
 
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Native;
         public ParticleShape Shape { get; set; } = ParticleShape.FilledEllipse;
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
-        public double RotationSpeed { get; set; } = 0;
+        public float RotationSpeed { get; set; } = 0;
         public SiRelativeDirection RotationDirection { get; set; } = SiRelativeDirection.None;
         public Color4 Color { get; set; }
         public SiAngle TravelAngle { get; set; } = new SiAngle();
@@ -41,17 +41,17 @@ namespace Si.GameEngine.Sprites
             Location = location.Clone();
 
             Color = color;
-            RotationSpeed = SiRandom.Between(1, 100) / 20.0;
+            RotationSpeed = SiRandom.Between(1, 100) / 20.0f;
             RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
             TravelAngle.Degrees = SiRandom.Between(0, 359);
 
             Velocity.ThrottlePercentage = 100;
-            Velocity.Speed = SiRandom.Between(1.0, 4.0);
+            Velocity.Speed = SiRandom.Between(1.0f, 4.0f);
 
             _gameEngine = gameEngine;
         }
 
-        public override void ApplyMotion(double epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             if (RotationDirection == SiRelativeDirection.Right)
             {

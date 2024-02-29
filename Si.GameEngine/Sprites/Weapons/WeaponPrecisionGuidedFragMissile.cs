@@ -26,8 +26,8 @@ namespace Si.GameEngine.Sprites.Weapons
         {
             Damage = 8;
             FireDelayMilliseconds = 800;
-            Speed = 9.75;
-            SpeedVariancePercent = 0.10;
+            Speed = 9.75f;
+            SpeedVariancePercent = 0.10f;
 
             CanLockOn = true;
             MinLockDistance = 100;

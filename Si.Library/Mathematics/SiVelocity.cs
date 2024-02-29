@@ -12,13 +12,13 @@ namespace Si.Library.Mathematics
         public event ValueChangeEvent? OnRecoilChanged;
 
         public SiAngle Angle { get; set; } = new();
-        public double Speed { get; set; }
-        public double Boost { get; set; }
-        public double AvailableBoost { get; set; }
+        public float Speed { get; set; }
+        public float Boost { get; set; }
+        public float AvailableBoost { get; set; }
         public bool BoostRebuilding { get; set; }
 
-        private double _recoilPercentage = 0;
-        public double RecoilPercentage
+        private float _recoilPercentage = 0;
+        public float RecoilPercentage
         {
             get => _recoilPercentage;
             set
@@ -28,8 +28,8 @@ namespace Si.Library.Mathematics
             }
         }
 
-        public double _throttlePercentage;
-        public double ThrottlePercentage
+        public float _throttlePercentage;
+        public float ThrottlePercentage
         {
             get => _throttlePercentage;
             set
@@ -39,8 +39,8 @@ namespace Si.Library.Mathematics
             }
         }
 
-        public double _boostPercentage;
-        public double BoostPercentage
+        public float _boostPercentage;
+        public float BoostPercentage
         {
             get => _boostPercentage;
             set

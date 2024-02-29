@@ -13,7 +13,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
         /// Moves the player and returns the direction and amount of movment which was applied.
         /// </summary>
         /// <returns>Returns the direction and amount of movement that the player has moved in the current tick.</returns>
-        public virtual SiVector ExecuteWorldClockTick(double epochTimeepoch) => new();
+        public virtual SiVector ExecuteWorldClockTick(float epochTimeepoch) => new();
 
         public PlayerTickControllerBase(GameEngineCore gameEngine)
         {

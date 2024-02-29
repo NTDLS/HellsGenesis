@@ -21,8 +21,8 @@ namespace Si.Menus.MultiPlayer.Host
         {
             var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = currentScaledScreenBounds.X + 40;
-            double offsetY = currentScaledScreenBounds.Y + 100;
+            float offsetX = currentScaledScreenBounds.X + 40;
+            float offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Whats the Situation?");
             itemTitle.X = offsetX + 200;

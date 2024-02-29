@@ -12,7 +12,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             /*
             if (GameEngine.Player.Sprite != null)
@@ -31,7 +31,7 @@ namespace Si.GameEngine.Core.TickControllers
                     pointer = GameEngine.Sprites.Debugs.ByTag("Pointer");
                 }
 
-                double requiredAngle = GameEngine.Player.Sprite.AngleTo(anchor);
+                float requiredAngle = GameEngine.Player.Sprite.AngleTo(anchor);
                 var offset = SiMath.AngleFromPointAtDistance(new SiAngle(requiredAngle), new SiPoint(200, 200));
                 pointer.Velocity.Angle.Degrees = requiredAngle;
                 pointer.Location = GameEngine.Player.Sprite.Location + offset;

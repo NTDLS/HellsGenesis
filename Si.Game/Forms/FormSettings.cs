@@ -41,8 +41,8 @@ namespace Si.Game
 
             for (int i = 0; i < MAX_RESOLUTIONS + 1; i++)
             {
-                int baseX = Screen.PrimaryScreen.Bounds.Width - (int)((double)Screen.PrimaryScreen.Bounds.Width * (1.0 - ((double)i / (double)MAX_RESOLUTIONS)));
-                int baseY = Screen.PrimaryScreen.Bounds.Height - (int)((double)Screen.PrimaryScreen.Bounds.Height * (1.0 - ((double)i / (double)MAX_RESOLUTIONS)));
+                int baseX = Screen.PrimaryScreen.Bounds.Width - (int)((float)Screen.PrimaryScreen.Bounds.Width * (1.0 - ((float)i / (float)MAX_RESOLUTIONS)));
+                int baseY = Screen.PrimaryScreen.Bounds.Height - (int)((float)Screen.PrimaryScreen.Bounds.Height * (1.0 - ((float)i / (float)MAX_RESOLUTIONS)));
 
                 if ((baseX % 2) != 0) baseX++;
                 if ((baseY % 2) != 0) baseY++;
@@ -83,8 +83,8 @@ namespace Si.Game
 
             if (trackBarResolution.Value < MAX_RESOLUTIONS)
             {
-                baseX = Screen.PrimaryScreen.Bounds.Width - (int)((double)Screen.PrimaryScreen.Bounds.Width * (1.0 - ((double)trackBarResolution.Value / (double)MAX_RESOLUTIONS)));
-                baseY = Screen.PrimaryScreen.Bounds.Height - (int)((double)Screen.PrimaryScreen.Bounds.Height * (1.0 - ((double)trackBarResolution.Value / (double)MAX_RESOLUTIONS)));
+                baseX = Screen.PrimaryScreen.Bounds.Width - (int)((float)Screen.PrimaryScreen.Bounds.Width * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
+                baseY = Screen.PrimaryScreen.Bounds.Height - (int)((float)Screen.PrimaryScreen.Bounds.Height * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
 
                 if ((baseX % 2) != 0) baseX++;
                 if ((baseY % 2) != 0) baseY++;
@@ -102,9 +102,9 @@ namespace Si.Game
             Close();
         }
 
-        private double GetAndValidate(TextBox textbox, double min, double max, string fieldNameForError)
+        private float GetAndValidate(TextBox textbox, float min, float max, string fieldNameForError)
         {
-            if (double.TryParse(textbox.Text, out var value) == false || value < min || value > max)
+            if (float.TryParse(textbox.Text, out var value) == false || value < min || value > max)
             {
                 throw new Exception($"Can invalid value has been specified for: {fieldNameForError}. Enter a whole or decimal numeric value between {min} and {max}.");
             }
@@ -136,12 +136,12 @@ namespace Si.Game
                 settings.PreCacheAllAssets = checkBoxPreCacheAllAssets.Checked;
 
                 settings.TargetFrameRate = GetAndValidate(textBoxTargetFrameRate, 10, settings.WorldTicksPerSecond, "Frame Limiter");
-                settings.OverdrawScale = GetAndValidate(textBoxOverdrawScale, 1.0, 10.0, "Overdraw scale");
+                settings.OverdrawScale = GetAndValidate(textBoxOverdrawScale, 1.0f, 10.0f, "Overdraw scale");
                 settings.InitialFrameStarCount = GetAndValidate(textBoxInitialFrameStarCount, 0, 1000, "Initial frame star count");
                 settings.DeltaFrameTargetStarCount = GetAndValidate(textBoxDeltaFrameTargetStarCount, 0, 1000, "Delta-frame target star count");
 
-                int baseX = Screen.PrimaryScreen.Bounds.Width - (int)((double)Screen.PrimaryScreen.Bounds.Width * (1.0 - ((double)trackBarResolution.Value / (double)MAX_RESOLUTIONS)));
-                int baseY = Screen.PrimaryScreen.Bounds.Height - (int)((double)Screen.PrimaryScreen.Bounds.Height * (1.0 - ((double)trackBarResolution.Value / (double)MAX_RESOLUTIONS)));
+                int baseX = Screen.PrimaryScreen.Bounds.Width - (int)((float)Screen.PrimaryScreen.Bounds.Width * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
+                int baseY = Screen.PrimaryScreen.Bounds.Height - (int)((float)Screen.PrimaryScreen.Bounds.Height * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
                 settings.Resolution = new System.Drawing.Size(baseX, baseY);
 
                 settings.FullScreen = (trackBarResolution.Value == MAX_RESOLUTIONS);

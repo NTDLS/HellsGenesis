@@ -38,8 +38,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Description = "→ Minnow ←\n"
                        + "TODO: Add a description\n",
-                    Speed = 3.5,
-                    Boost = 1.5,
+                    Speed = 3.5f,
+                    Boost = 1.5f,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };
@@ -65,16 +65,16 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             MovingToApproach,
         }
 
-        private const double baseDistanceToKeep = 200;
-        private double distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
-        private const double baseFallbackDistance = 800;
-        private double fallbackDistance;
+        private const float baseDistanceToKeep = 200;
+        private float distanceToKeep = baseDistanceToKeep * (SiRandom.NextFloat() + 1);
+        private const float baseFallbackDistance = 800;
+        private float fallbackDistance;
         private SiAngle fallToAngleRadians;
         private AIMode mode = AIMode.Approaching;
         private int roundsToFireBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
-        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (IsDrone)
             {
@@ -85,7 +85,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             base.ApplyIntelligence(epoch, displacementVector);
 
-            double distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
+            float distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
 
             if (mode == AIMode.Approaching)
             {
@@ -113,7 +113,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 }
                 else
                 {
-                    Velocity.ThrottlePercentage -= 0.05;
+                    Velocity.ThrottlePercentage -= 0.05f;
                     if (Velocity.ThrottlePercentage < 0)
                     {
                         Velocity.ThrottlePercentage = 0;
@@ -127,8 +127,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0 + SiRandom.Between(0, 10)).Radians;
-                    fallbackDistance = baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
+                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
+                    fallbackDistance = baseFallbackDistance * (SiRandom.NextFloat() + 1);
                 }
             }
 
@@ -172,7 +172,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 else
                 {
                     mode = AIMode.Approaching;
-                    distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
+                    distanceToKeep = baseDistanceToKeep * (SiRandom.NextFloat() + 1);
                 }
             }
 
@@ -182,7 +182,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0f);
                         if (isPointingAtPlayer)
                         {
                             if (FireWeapon<WeaponDualVulcanCannon>())
@@ -193,7 +193,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0f);
                         if (isPointingAtPlayer)
                         {
                             if (FireWeapon<WeaponVulcanCannon>())

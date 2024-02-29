@@ -142,10 +142,10 @@ namespace Si.GameEngine.Sprites._Superclass
                 var fragment = _gameEngine.Sprites.GenericSprites.CreateAt(this, fragmentImages[index]);
                 //TODO: Can we implement this.
                 fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
-                fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001, 0.01);
+                fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
 
-                fragment.Velocity.Angle.Degrees = SiRandom.Between(0.0, 359.0);
-                fragment.Velocity.Speed = SiRandom.Between(1, 3.5);
+                fragment.Velocity.Angle.Degrees = SiRandom.Between(0.0f, 359.0f);
+                fragment.Velocity.Speed = SiRandom.Between(1, 3.5f);
                 fragment.Velocity.ThrottlePercentage = 1;
                 fragment.VectorType = ParticleVectorType.Independent;
             }
@@ -170,7 +170,7 @@ namespace Si.GameEngine.Sprites._Superclass
                     RadarPositionIndicator.Visable = true;
                     RadarPositionIndicator.IsFixedPosition = true;
 
-                    double requiredAngleRadians = _gameEngine.Player.Sprite.AngleToRadians(this);
+                    float requiredAngleRadians = _gameEngine.Player.Sprite.AngleToRadians(this);
 
                     RadarPositionIndicator.Location = _gameEngine.Display.CenterScreen
                         + SiVector.PointFromAngleAtDistance360(new SiAngle(requiredAngleRadians), new SiVector(200, 200));

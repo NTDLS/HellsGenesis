@@ -194,7 +194,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(double epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             if (IsDrone)
             {
@@ -251,7 +251,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
             if (Velocity.RecoilPercentage > 0)
             {
-                Velocity.RecoilPercentage -= Velocity.RecoilPercentage * 0.01;
+                Velocity.RecoilPercentage -= Velocity.RecoilPercentage * 0.01f;
                 if (Velocity.RecoilPercentage < 0.01)
                 {
                     Velocity.RecoilPercentage = 0;
@@ -259,7 +259,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             }
         }
 
-        public virtual void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public virtual void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (Weapons != null)
             {

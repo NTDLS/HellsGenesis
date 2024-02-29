@@ -26,8 +26,8 @@ namespace Si.Menus.MultiPlayer.Client
 
             _currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
-            double offsetY = _currentScaledScreenBounds.Y + 100;
+            float offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
+            float offsetY = _currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Waiting in Lobby");
             itemTitle.X -= itemTitle.Size.Width / 2;

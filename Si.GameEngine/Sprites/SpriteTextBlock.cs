@@ -24,7 +24,7 @@ namespace Si.GameEngine.Sprites
 
         public TextFormat Format { get; set; }
         public SolidColorBrush Color { get; private set; }
-        public double Height => _size.Height;
+        public float Height => _size.Height;
         public override Size Size => _size;
 
         public string Text

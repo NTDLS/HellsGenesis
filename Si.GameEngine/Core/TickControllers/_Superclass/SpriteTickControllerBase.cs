@@ -22,7 +22,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
         public List<subType> OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
         public T ByTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
 
-        public virtual void ExecuteWorldClockTick(double epoch, SiVector displacementVector) { }
+        public virtual void ExecuteWorldClockTick(float epoch, SiVector displacementVector) { }
 
         public SpriteTickControllerBase(GameEngineCore gameEngine, EngineSpriteManager manager)
         {
@@ -43,7 +43,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
             return obj;
         }
 
-        public T Create(double x, double y, string name = "")
+        public T Create(float x, float y, string name = "")
         {
             T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
             obj.X = x;
@@ -65,7 +65,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
             return obj;
         }
 
-        public T Create(double x, double y)
+        public T Create(float x, float y)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
             obj.X = x;

@@ -26,21 +26,21 @@ namespace Si.GameEngine.Core
         public bool LockPlayerAngleToNearbyEnemy { get; set; } = false;
         public bool EnableSpeedScaleFactoring { get; set; } = true;
 
-        public double WorldTicksPerSecond { get; set; } = 120; //MillisecondPerEpochs = 1000 / WorldTicksPerSecond
+        public float WorldTicksPerSecond { get; set; } = 120; //MillisecondPerEpochs = 1000 / WorldTicksPerSecond
 
-        public double EnemyThrustRampUp { get; set; } = 0.0375;
-        public double EnemyThrustRampDown { get; set; } = 0.0075;
+        public float EnemyThrustRampUp { get; set; } = 0.0375f;
+        public float EnemyThrustRampDown { get; set; } = 0.0075f;
 
-        public double PlayerThrustRampUp { get; set; } = 0.0375;
-        public double PlayerThrustRampDown { get; set; } = 0.0075;
+        public float PlayerThrustRampUp { get; set; } = 0.0375f;
+        public float PlayerThrustRampDown { get; set; } = 0.0075f;
 
         public int MaxHullHealth { get; set; } = 100000;
         public int MaxShieldPoints { get; set; } = 100000;
 
-        public double MaxPlayerBoostAmount { get; set; } = 10000;
-        public double PlayerBoostRebuildFloor { get; set; } = 1000;
-        public double MaxRecoilPercentage { get; set; } = 0.4; //Max amount that will be substracted from the thrust percentage.
-        public double MaxPlayerRotationSpeedDegrees { get; set; } = 1.40;
+        public float MaxPlayerBoostAmount { get; set; } = 10000;
+        public float PlayerBoostRebuildFloor { get; set; } = 1000;
+        public float MaxRecoilPercentage { get; set; } = 0.4f; //Max amount that will be substracted from the thrust percentage.
+        public float MaxPlayerRotationSpeedDegrees { get; set; } = 1.40f;
 
         public int InitialFrameStarCount { get; set; } = 100;
         public int DeltaFrameTargetStarCount { get; set; } = 200;
@@ -52,14 +52,14 @@ namespace Si.GameEngine.Core
         /// Ensure that the average framerate is within sane limits. This is especially important for vSync since we want to make sure a frame is availbele for the GPU.
         /// </summary>
         public bool FineTuneFramerate { get; set; } = true;
-        public double TargetFrameRate { get; set; } = 70;
-        public double MunitionSceneDistanceLimit { get; set; } = 2500; //The distance from the scene that a munition can travel before it is cleaned up.
-        public double EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
+        public float TargetFrameRate { get; set; } = 70;
+        public float MunitionSceneDistanceLimit { get; set; } = 2500; //The distance from the scene that a munition can travel before it is cleaned up.
+        public float EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
 
         /// <summary>
         /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (2 = 2x larger than screen.).
         /// </summary>
-        public double OverdrawScale { get; set; } = 1.5;
+        public float OverdrawScale { get; set; } = 1.5f;
 
         public EngineSettings()
         {

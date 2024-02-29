@@ -2,13 +2,13 @@
 {
     public class SiSpriteActionVector : SiSpriteAction
     {
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double AngleDegrees { get; set; }
-        public double ThrottlePercentage { get; set; }
-        public double BoostPercentage { get; set; }
-        public double Speed { get; set; }
-        public double Boost { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float AngleDegrees { get; set; }
+        public float ThrottlePercentage { get; set; }
+        public float BoostPercentage { get; set; }
+        public float Speed { get; set; }
+        public float Boost { get; set; }
 
         public SiSpriteActionVector(Guid multiplayUID)
             : base(multiplayUID)

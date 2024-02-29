@@ -7,13 +7,13 @@
     {
         private DateTime _lastFrame;
         private int _frameRateSamples;
-        private double _totalFrameRate;
+        private float _totalFrameRate;
         private readonly int _maxSamples = 1000;
 
-        public double CurrentFrameRate { get; private set; }
-        public double AverageFrameRate { get; private set; }
-        public double MinimumFrameRate { get; private set; }
-        public double MaximumFrameRate { get; private set; }
+        public float CurrentFrameRate { get; private set; }
+        public float AverageFrameRate { get; private set; }
+        public float MinimumFrameRate { get; private set; }
+        public float MaximumFrameRate { get; private set; }
 
         public SiFrameCounter()
         {
@@ -27,9 +27,9 @@
             _frameRateSamples = 0;
 
             CurrentFrameRate = 0;
-            AverageFrameRate = double.PositiveInfinity;
-            MinimumFrameRate = double.PositiveInfinity;
-            MaximumFrameRate = double.NegativeInfinity;
+            AverageFrameRate = float.PositiveInfinity;
+            MinimumFrameRate = float.PositiveInfinity;
+            MaximumFrameRate = float.NegativeInfinity;
         }
 
         public void Calculate()
@@ -42,7 +42,7 @@
                     _totalFrameRate = 0;
                 }
 
-                CurrentFrameRate = 1000.0 / (DateTime.Now - _lastFrame).TotalMilliseconds;
+                CurrentFrameRate = 1000.0f / (float)(DateTime.Now - _lastFrame).TotalMilliseconds;
                 _totalFrameRate += CurrentFrameRate;
 
                 if (_frameRateSamples > 100)

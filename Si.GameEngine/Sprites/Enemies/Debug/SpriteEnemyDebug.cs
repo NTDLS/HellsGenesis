@@ -40,8 +40,8 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                     Description = "→ Debug ←\n"
                        + "Easily the scariest enemy in the universe.\n"
                        + "When this badboy is spotted, s**t has already hit the proverbial fan.\n",
-                    Speed = 3.5,
-                    Boost = 1.5,
+                    Speed = 3.5f,
+                    Boost = 1.5f,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };
@@ -77,9 +77,9 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
         #region Artificial Intelligence.
 
         private DateTime _lastBehaviorChangeTime = DateTime.Now;
-        private double _behaviorChangeThresholdMilliseconds = 0;
+        private float _behaviorChangeThresholdMilliseconds = 0;
 
-        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (IsDrone)
             {
@@ -88,7 +88,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                 return;
             }
 
-            double distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
+            float distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
 
             base.ApplyIntelligence(epoch, displacementVector);
 
@@ -120,7 +120,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0f);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponDualVulcanCannon>();
@@ -128,7 +128,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0f);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponVulcanCannon>();

@@ -16,7 +16,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             foreach (var particle in Visible())
             {

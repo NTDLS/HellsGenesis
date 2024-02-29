@@ -36,13 +36,13 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
         /// <summary>
         /// Time until the powerup exploded on its own.
         /// </summary>
-        public double TimeToLive { get; set; } = 30000;
+        public float TimeToLive { get; set; } = 30000;
         public DateTime CreationTime { get; set; } = DateTime.UtcNow;
-        public double AgeInMilliseconds
+        public float AgeInMilliseconds
         {
             get
             {
-                return (DateTime.UtcNow - CreationTime).TotalMilliseconds;
+                return (float)(DateTime.UtcNow - CreationTime).TotalMilliseconds;
             }
         }
 
@@ -73,7 +73,7 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
             QueueForDelete();
         }
 
-        public virtual void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public virtual void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (Intersects(_gameEngine.Player.Sprite))
             {

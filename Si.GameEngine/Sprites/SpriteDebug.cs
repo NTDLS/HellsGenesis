@@ -14,7 +14,7 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public SpriteDebug(GameEngineCore gameEngine, double x, double y)
+        public SpriteDebug(GameEngineCore gameEngine, float x, float y)
             : base(gameEngine)
         {
             Initialize(@"Graphics\Debug.png");
@@ -23,7 +23,7 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public SpriteDebug(GameEngineCore gameEngine, double x, double y, string imagePath)
+        public SpriteDebug(GameEngineCore gameEngine, float x, float y, string imagePath)
             : base(gameEngine)
         {
             Initialize(imagePath);
@@ -32,7 +32,7 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public override void ApplyMotion(double epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             Velocity.Angle.Degrees = AngleTo360(_gameEngine.Player.Sprite);
             base.ApplyMotion(epoch, displacementVector);

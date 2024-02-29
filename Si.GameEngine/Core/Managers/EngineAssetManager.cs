@@ -188,11 +188,10 @@ namespace Si.GameEngine.Core.Managers
             var dtpQueue = dtp.CreateQueueStateCollection();
 
             int statusIndex = 0;
-            double statusEntryCount = archive.Entries.Count();
+            float statusEntryCount = archive.Entries.Count();
 
             foreach (var entry in archive.Entries)
             {
-
                 switch (Path.GetExtension(entry.Key).ToLower())
                 {
                     case ".png":

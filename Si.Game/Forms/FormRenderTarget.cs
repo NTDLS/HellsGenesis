@@ -93,8 +93,8 @@ namespace Si.Game
         #region Debug interactions.
         private void FormRenderTarget_MouseMove(object sender, MouseEventArgs e)
         {
-            double x = e.X + _gameEngine.Display.OverdrawSize.Width / 2;
-            double y = e.Y + _gameEngine.Display.OverdrawSize.Height / 2;
+            float x = e.X + _gameEngine.Display.OverdrawSize.Width / 2;
+            float y = e.Y + _gameEngine.Display.OverdrawSize.Height / 2;
 
             //Debug.Print($"x{x:n1}, y{y:n1} => Player x{_gameEngine.Player.Sprite.X:n1},x{_gameEngine.Player.Sprite.Y:n1}");
 
@@ -120,8 +120,8 @@ namespace Si.Game
 
         private void FormRenderTarget_MouseDown(object sender, MouseEventArgs e)
         {
-            double x = e.X + _gameEngine.Display.OverdrawSize.Width / 2;
-            double y = e.Y + _gameEngine.Display.OverdrawSize.Height / 2;
+            float x = e.X + _gameEngine.Display.OverdrawSize.Width / 2;
+            float y = e.Y + _gameEngine.Display.OverdrawSize.Height / 2;
 
             var sprites = _gameEngine.Sprites.RenderLocationIntersections(new SiVector(x, y), new SiVector(1, 1));
             if (_gameEngine.Player.Sprite.RenderLocationIntersects(new SiVector(x, y), new SiVector(1, 1)))

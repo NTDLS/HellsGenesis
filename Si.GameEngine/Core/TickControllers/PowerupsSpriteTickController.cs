@@ -13,7 +13,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             foreach (var sprite in Visible())
             {
@@ -22,7 +22,7 @@ namespace Si.GameEngine.Core.TickControllers
             }
         }
 
-        public T Create<T>(double x, double y) where T : SpritePowerupBase
+        public T Create<T>(float x, float y) where T : SpritePowerupBase
         {
             object[] param = { GameEngine };
             var obj = (SpritePowerupBase)Activator.CreateInstance(typeof(T), param);

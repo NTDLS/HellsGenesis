@@ -14,9 +14,9 @@ namespace Si.Library.Mathematics
         /// </summary>
         public class TimeRenewableResource
         {
-            public double RebuildRatePerSecond { get; set; }
-            public double AvailableResource { get; private set; }
-            public double MaxValue { get; set; }
+            public float RebuildRatePerSecond { get; set; }
+            public float AvailableResource { get; private set; }
+            public float MaxValue { get; set; }
             public DateTime LastBuildTime { get; private set; }
 
             /// <summary>
@@ -25,7 +25,7 @@ namespace Si.Library.Mathematics
             /// <param name="maxValue">The maximum value the resource can build to.</param>
             /// <param name="startingValue">The starting value of the resource.</param>
             /// <param name="RebuildRatePerSecond">The amount of resource to add per-second.</param>
-            public TimeRenewableResource(double maxValue, double startingValue, double rebuildRatePerSecond)
+            public TimeRenewableResource(float maxValue, float startingValue, float rebuildRatePerSecond)
             {
                 MaxValue = maxValue;
                 AvailableResource = startingValue;
@@ -39,7 +39,7 @@ namespace Si.Library.Mathematics
             /// </summary>
             /// <param name="amount"></param>
             /// <returns></returns>
-            public double Consume(double amount)
+            public float Consume(float amount)
             {
                 if (AvailableResource > amount)
                 {
@@ -61,10 +61,10 @@ namespace Si.Library.Mathematics
             /// </summary>
             public void RenewResource()
             {
-                double deltaMilliseconds = (DateTime.UtcNow - LastBuildTime).TotalMilliseconds;
+                float deltaMilliseconds = (float)(DateTime.UtcNow - LastBuildTime).TotalMilliseconds;
                 LastBuildTime = DateTime.UtcNow;
 
-                double addedResource = deltaMilliseconds * RebuildRatePerSecond / 1000.0;
+                float addedResource = deltaMilliseconds * RebuildRatePerSecond / 1000.0f;
 
                 AvailableResource += addedResource;
 
@@ -89,7 +89,7 @@ namespace Si.Library.Mathematics
         /// <param name="maxValue"></param>
         /// <param name="startingValue"></param>
         /// <param name="rebuildRatePerSecond"></param>
-        public void Create(string key, double maxValue, double startingValue, double rebuildRatePerSecond)
+        public void Create(string key, float maxValue, float startingValue, float rebuildRatePerSecond)
         {
             key = key.ToLower();
             Resources.Add(key, new TimeRenewableResource(maxValue, startingValue, rebuildRatePerSecond));
@@ -101,7 +101,7 @@ namespace Si.Library.Mathematics
         /// <param name="key"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public double Consume(string key, double amount)
+        public float Consume(string key, float amount)
         {
             key = key.ToLower();
             return Resources[key].Consume(amount);
@@ -112,7 +112,7 @@ namespace Si.Library.Mathematics
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public double Observe(string key)
+        public float Observe(string key)
         {
             key = key.ToLower();
             return Resources[key].AvailableResource;

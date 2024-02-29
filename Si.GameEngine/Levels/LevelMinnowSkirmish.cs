@@ -47,7 +47,7 @@ namespace Si.GameEngine.Levels
                     return;
                 }
 
-                int enemyCount = SiRandom.Generator.Next(CurrentWave + 1, CurrentWave + 5);
+                int enemyCount = SiRandom.Between(CurrentWave + 1, CurrentWave + 5);
 
                 for (int i = 0; i < enemyCount; i++)
                 {

@@ -22,7 +22,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         private readonly SpriteAttachment _rightThrust;
         private readonly SpriteAttachment _leftThrust;
 
-        private readonly double _initialMaxpeed;
+        private readonly float _initialMaxpeed;
         private readonly string _assetPath = @"Graphics\Enemy\Bosses\Spectre\";
 
         public SpriteEnemySpectre(GameEngineCore gameEngine)
@@ -45,8 +45,8 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 {
                     Description = "→ Spectre ←\n"
                        + "TODO: Add a description\n",
-                    Speed = 3.5,
-                    Boost = 1.5,
+                    Speed = 3.5f,
+                    Boost = 1.5f,
                     HullHealth = 2500,
                     ShieldHealth = 3000,
                 };
@@ -125,20 +125,20 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             LameDuck
         }
 
-        private const double baseDistanceToKeep = 200;
-        private double distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
-        private const double baseFallbackDistance = 800;
-        private double fallbackDistance;
+        private const float baseDistanceToKeep = 200;
+        private float distanceToKeep = baseDistanceToKeep * (SiRandom.NextFloat() + 1);
+        private const float baseFallbackDistance = 800;
+        private float fallbackDistance;
         private SiAngle fallToAngleRadians;
         private AIMode mode = AIMode.Approaching;
         private int roundsToFireBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
-        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             base.ApplyIntelligence(epoch, displacementVector);
 
-            double distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
+            float distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
 
             //We have no engines. :(
             if (_leftThrust.IsDeadOrExploded && _rightThrust.IsDeadOrExploded)
@@ -150,11 +150,11 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             int thrustHandicap = (_leftThrust.IsDeadOrExploded ? 0 : 1) + (_rightThrust.IsDeadOrExploded ? 0 : 1);
             if (thrustHandicap == 1 && Velocity.Speed > _initialMaxpeed / 2)
             {
-                Velocity.Speed -= 0.5;
+                Velocity.Speed -= 0.5f;
             }
             if (thrustHandicap == 0 && Velocity.Speed > 1)
             {
-                Velocity.Speed -= 0.5;
+                Velocity.Speed -= 0.5f;
                 if (Velocity.Speed < 1)
                 {
                     Velocity.Speed = 1;
@@ -186,7 +186,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 //Try to stay close.
                 if (distanceToPlayer > 300)
                 {
-                    Velocity.ThrottlePercentage += 0.05;
+                    Velocity.ThrottlePercentage += 0.05f;
                     if (Velocity.ThrottlePercentage > 1)
                     {
                         Velocity.ThrottlePercentage = 1;
@@ -195,7 +195,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 else
                 {
                     //Slow to a stop when close.
-                    Velocity.ThrottlePercentage -= 0.05;
+                    Velocity.ThrottlePercentage -= 0.05f;
                     if (Velocity.ThrottlePercentage < 0)
                     {
                         Velocity.ThrottlePercentage = 0;
@@ -228,7 +228,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 }
                 else
                 {
-                    Velocity.ThrottlePercentage -= 0.05;
+                    Velocity.ThrottlePercentage -= 0.05f;
                     if (Velocity.ThrottlePercentage < 0)
                     {
                         Velocity.ThrottlePercentage = 0;
@@ -242,8 +242,8 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 {
                     Velocity.ThrottlePercentage = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0 + SiRandom.Between(0, 10)).Radians;
-                    fallbackDistance = baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
+                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
+                    fallbackDistance = baseFallbackDistance * (SiRandom.NextFloat() + 1);
                 }
             }
 
@@ -287,7 +287,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 else
                 {
                     mode = AIMode.Approaching;
-                    distanceToKeep = baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
+                    distanceToKeep = baseDistanceToKeep * (SiRandom.NextFloat() + 1);
                 }
             }
 
@@ -297,7 +297,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0f);
                         if (isPointingAtPlayer)
                         {
                             if (FireWeapon<WeaponDualVulcanCannon>())
@@ -308,7 +308,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0f);
                         if (isPointingAtPlayer)
                         {
                             if (FireWeapon<WeaponVulcanCannon>())

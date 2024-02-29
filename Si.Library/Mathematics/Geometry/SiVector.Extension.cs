@@ -7,38 +7,25 @@ namespace Si.Library.Mathematics.Geometry
     /// </summary>
     public partial class SiVector
     {
-        public const double DEG_TO_RAD = Math.PI / 180.0;
-        public const double RAD_TO_DEG = 180.0 / Math.PI;
-        public const double DEG_90_RADS = 90 * DEG_TO_RAD; //LEFT
-        public const double DEG_270_RADS = 270 * DEG_TO_RAD; //RIGHT
+        public const float DEG_TO_RAD = (float)(Math.PI / 180.0);
+        public const float RAD_TO_DEG = (float)(180.0 / Math.PI);
+        public const float RADS_IN_CIRCLE = (float)(2 * Math.PI);
+        public const float DEG_90_RADS = 90 * DEG_TO_RAD; //LEFT
+        public const float DEG_270_RADS = 270 * DEG_TO_RAD; //RIGHT
 
         /// <summary>
         /// Converts radians to degrees
         /// </summary>
         /// <param name="rad">Given radians to convert to degrees.</param>
         /// <returns></returns>
-        public static double RadiansToDegrees(double radians) => radians * RAD_TO_DEG;
+        public static float RadiansToDegrees(float radians) => radians * RAD_TO_DEG;
 
         /// <summary>
         /// Converts degrees to radians.
         /// </summary>
         /// <param name="deg">Given degrees to convert to radians.</param>
         /// <returns></returns>
-        public static double DegreesToRadians(double degrees) => degrees * DEG_TO_RAD;
-
-        /// <summary>
-        /// Converts radians to degrees
-        /// </summary>
-        /// <param name="rad">Given radians to convert to degrees.</param>
-        /// <returns></returns>
-        public static float RadiansToDegrees(float radians) => radians * (float)RAD_TO_DEG;
-
-        /// <summary>
-        /// Converts degrees to radians.
-        /// </summary>
-        /// <param name="deg">Given degrees to convert to radians.</param>
-        /// <returns></returns>
-        public static float DegreesToRadians(float degrees) => degrees * (float)DEG_TO_RAD;
+        public static float DegreesToRadians(float degrees) => degrees * DEG_TO_RAD;
 
         /// <summary>
         /// Calculates a point at a given angle and a given distance.
@@ -47,7 +34,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="distance">The distance to the given angle the point should be at.</param>
         /// <returns>The calculated point at the given distance towards the given angle.</returns>
         public static SiVector PointFromAngleAtDistance360(SiAngle angle, SiVector distance)
-            => new SiVector(Math.Cos(angle.Radians) * distance.X, Math.Sin(angle.Radians) * distance.Y);
+            => new SiVector((float)Math.Cos(angle.Radians) * distance.X, (float)Math.Sin(angle.Radians) * distance.Y);
 
         /// <summary>
         /// Calculates the angle of one objects location to another location from 0 - 360.
@@ -55,7 +42,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from">The object from which the calcualtion is based.</param>
         /// <param name="to">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
-        public static double AngleTo360(ISprite from, ISprite to)
+        public static float AngleTo360(ISprite from, ISprite to)
             => AngleTo360(from.Location, to.Location);
 
         /// <summary>
@@ -64,7 +51,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from">The object from which the calcualtion is based.</param>
         /// <param name="to">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
-        public static double AngleTo(ISprite from, ISprite to)
+        public static float AngleTo(ISprite from, ISprite to)
         {
             var angle360 = AngleTo360(from.Location, to.Location);
             if (angle360 > 180)
@@ -83,7 +70,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from">The object from which the calcualtion is based.</param>
         /// <param name="to">The point to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
-        public static double AngleTo(ISprite from, SiVector to)
+        public static float AngleTo(ISprite from, SiVector to)
         {
             var angle360 = AngleTo360(from.Location, to);
             if (angle360 > 180)
@@ -102,7 +89,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from">The object from which the calcualtion is based.</param>
         /// <param name="to">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
-        public static double AngleTo360(SiVector from, ISprite to)
+        public static float AngleTo360(SiVector from, ISprite to)
             => AngleTo360(from, to.Location);
 
         /// <summary>
@@ -111,7 +98,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from">The object from which the calcualtion is based.</param>
         /// <param name="to">The point to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
-        public static double AngleTo360(ISprite from, SiVector to)
+        public static float AngleTo360(ISprite from, SiVector to)
             => AngleTo360(from.Location, to);
 
         /// <summary>
@@ -121,7 +108,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="at">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees"></param>
         /// <returns>True if the object is pointing away from the other given the constraints.</returns>
-        public static bool IsPointingAway(ISprite from, ISprite at, double toleranceDegrees)
+        public static bool IsPointingAway(ISprite from, ISprite at, float toleranceDegrees)
         {
             var deltaAngle = Math.Abs(DeltaAngle360(from, at));
             return deltaAngle < 180 + toleranceDegrees && deltaAngle > 180 - toleranceDegrees;
@@ -135,7 +122,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="toleranceDegrees"></param>
         /// <param name="maxDistance"></param>
         /// <returns>True if the object is pointing away from the other given the constraints.</returns>
-        public static bool IsPointingAway(ISprite from, ISprite at, double toleranceDegrees, double maxDistance)
+        public static bool IsPointingAway(ISprite from, ISprite at, float toleranceDegrees, float maxDistance)
             => IsPointingAway(from, at, toleranceDegrees) && DistanceTo(from, at) <= maxDistance;
 
         /// <summary>
@@ -145,7 +132,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="at">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees"></param>
         /// <returns>True if the object is pointing at the other given the constraints.</returns>
-        public static bool IsPointingAt(ISprite from, ISprite at, double toleranceDegrees)
+        public static bool IsPointingAt(ISprite from, ISprite at, float toleranceDegrees)
         {
             var deltaAngle = Math.Abs(DeltaAngle(from, at));
             return deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees;
@@ -160,7 +147,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="maxDistance">The distance in consider the object to pointing at the other.</param>
         /// <param name="offsetAngle">The offset in 0-360 degrees of the angle to calculate. For instance, 90 would tell if the right side of the object is pointing at the other.</param>
         /// <returns>True if the object is pointing at the other given the constraints.</returns>
-        public static bool IsPointingAt(ISprite from, ISprite at, double toleranceDegrees, double maxDistance, double offsetAngle = 0)
+        public static bool IsPointingAt(ISprite from, ISprite at, float toleranceDegrees, float maxDistance, float offsetAngle = 0)
         {
             var deltaAngle = Math.Abs(DeltaAngle360(from, at, offsetAngle));
             if (deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees)
@@ -178,7 +165,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="to">The object to which the calculation is based.</param>
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
         /// <returns>The calculated angle in the range of 180--180.</returns>
-        public static double DeltaAngle(ISprite from, ISprite to, double offsetAngle = 0)
+        public static float DeltaAngle(ISprite from, ISprite to, float offsetAngle = 0)
         {
             var da360 = DeltaAngle360(from, to, offsetAngle);
             if (da360 > 180)
@@ -198,7 +185,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="toLocation">The location to which the calculation is based.</param>
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
         /// <returns>The calculated angle in the range of 180--180.</returns>
-        public static double DeltaAngle(ISprite from, SiVector toLocation, double offsetAngle = 0)
+        public static float DeltaAngle(ISprite from, SiVector toLocation, float offsetAngle = 0)
         {
             var da360 = DeltaAngle360(from, toLocation, offsetAngle);
             if (da360 > 180)
@@ -218,11 +205,11 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="to">The object to which the calculation is based.</param>
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
-        public static double DeltaAngle360(ISprite from, ISprite to, double offsetAngle = 0)
+        public static float DeltaAngle360(ISprite from, ISprite to, float offsetAngle = 0)
         {
-            double fromAngle = from.Velocity.Angle.Degrees + offsetAngle;
+            float fromAngle = from.Velocity.Angle.Degrees + offsetAngle;
 
-            double angleTo = AngleTo360(from, to);
+            float angleTo = AngleTo360(from, to);
 
             if (fromAngle < 0) fromAngle = 0 - fromAngle;
             if (angleTo < 0)
@@ -234,7 +221,7 @@ namespace Si.Library.Mathematics.Geometry
 
             if (angleTo < 0)
             {
-                angleTo = 360.0 - Math.Abs(angleTo) % 360.0;
+                angleTo = 360.0f - Math.Abs(angleTo) % 360.0f;
             }
 
             return angleTo;
@@ -247,11 +234,11 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="toLocation">The location to which the calculation is based.</param>
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
-        public static double DeltaAngle360(ISprite from, SiVector toLocation, double offsetAngle = 0)
+        public static float DeltaAngle360(ISprite from, SiVector toLocation, float offsetAngle = 0)
         {
-            double fromAngle = from.Velocity.Angle.Degrees + offsetAngle;
+            float fromAngle = from.Velocity.Angle.Degrees + offsetAngle;
 
-            double angleTo = AngleTo360(from, toLocation);
+            float angleTo = AngleTo360(from, toLocation);
 
             if (fromAngle < 0) fromAngle = 0 - fromAngle;
             if (angleTo < 0)
@@ -263,7 +250,7 @@ namespace Si.Library.Mathematics.Geometry
 
             if (angleTo < 0)
             {
-                angleTo = 360.0 - Math.Abs(angleTo) % 360.0;
+                angleTo = 360.0f - Math.Abs(angleTo) % 360.0f;
             }
 
             return angleTo;
@@ -276,7 +263,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from">The object from which the calcualtion is based.</param>
         /// <param name="to">The object to which the calculation is based.</param>
         /// <returns>The calcuated distance from one object to the other.</returns>
-        public static double DistanceTo(ISprite from, ISprite to)
+        public static float DistanceTo(ISprite from, ISprite to)
             => DistanceTo(from.Location, to.Location);
 
         /// <summary>
@@ -285,11 +272,11 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public static double DistanceTo(SiVector from, SiVector to)
+        public static float DistanceTo(SiVector from, SiVector to)
         {
             var deltaX = Math.Pow(to.X - from.X, 2);
             var deltaY = Math.Pow(to.Y - from.Y, 2);
-            return Math.Sqrt(deltaY + deltaX);
+            return (float)Math.Sqrt(deltaY + deltaX);
         }
 
         /// <summary>
@@ -298,7 +285,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public static double DistanceSquaredTo(SiVector from, SiVector to)
+        public static float DistanceSquaredTo(SiVector from, SiVector to)
         {
             var deltaX = to.X - from.X;
             var deltaY = to.Y - from.Y;
@@ -311,10 +298,10 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public static double AngleTo360(SiVector from, SiVector to)
+        public static float AngleTo360(SiVector from, SiVector to)
         {
-            var radians = Math.Atan2(to.Y - from.Y, to.X - from.X);
-            return (SiAngle.RadiansToDegrees(radians) + 360.0) % 360.0;
+            var radians = (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
+            return (SiAngle.RadiansToDegrees(radians) + 360.0f) % 360.0f;
         }
 
         /// <summary>
@@ -324,7 +311,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns></returns>
         public static SiVector Normalize(SiVector vector)
         {
-            var magnitude = Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
+            var magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
             return new SiVector(vector.X / magnitude, vector.Y / magnitude);
         }
 
@@ -334,7 +321,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static double DotProduct(SiVector a, SiVector b)
+        public static float DotProduct(SiVector a, SiVector b)
         {
             return a.X * b.X + a.Y * b.Y;
         }
@@ -345,9 +332,9 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="point1"></param>
         /// <param name="point2"></param>
         /// <returns></returns>
-        public static double AngleBetween(SiVector point1, SiVector point2)
+        public static float AngleBetween(SiVector point1, SiVector point2)
         {
-            return Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
+            return (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
         }
 
         /// <summary>
@@ -357,10 +344,10 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="centerPoint"></param>
         /// <param name="angleRadians"></param>
         /// <returns></returns>
-        public static SiVector RotateAroundPoint(SiVector pointToRotate, SiVector centerPoint, double angleRadians)
+        public static SiVector RotateAroundPoint(SiVector pointToRotate, SiVector centerPoint, float angleRadians)
         {
-            var cosTheta = Math.Cos(angleRadians);
-            var sinTheta = Math.Sin(angleRadians);
+            var cosTheta = (float)Math.Cos(angleRadians);
+            var sinTheta = (float)Math.Sin(angleRadians);
             var x = cosTheta * (pointToRotate.X - centerPoint.X) - sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X;
             var y = sinTheta * (pointToRotate.X - centerPoint.X) + cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y;
             return new SiVector(x, y);

@@ -35,7 +35,7 @@ namespace Si.GameEngine.Core.TickControllers
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
         /// <returns></returns>
-        public override SiVector ExecuteWorldClockTick(double epoch)
+        public override SiVector ExecuteWorldClockTick(float epoch)
         {
             var displacementVector = new SiVector();
 
@@ -137,7 +137,7 @@ namespace Si.GameEngine.Core.TickControllers
                 {
                     if (Sprite.Velocity.BoostPercentage < 1.0)
                     {
-                        double boostToAdd = Sprite.Velocity.BoostPercentage > 0
+                        float boostToAdd = Sprite.Velocity.BoostPercentage > 0
                             ? GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.BoostPercentage) : GameEngine.Settings.PlayerThrustRampUp;
 
                         Sprite.Velocity.BoostPercentage += boostToAdd;
@@ -182,7 +182,7 @@ namespace Si.GameEngine.Core.TickControllers
                         // This causes our thrust to start qucikly and acceleration to fade fast as we approach full throttle. The last few %-points
                         //  of throttle will take a while. We do the reverse of this to stop. Stopping fast at first and slowly-slowly slowing to a stop.
 
-                        double thrustToAdd = Sprite.Velocity.ThrottlePercentage > 0
+                        float thrustToAdd = Sprite.Velocity.ThrottlePercentage > 0
                             ? GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ThrottlePercentage) : GameEngine.Settings.PlayerThrustRampUp;
 
                         Sprite.Velocity.ThrottlePercentage += thrustToAdd;
@@ -194,7 +194,7 @@ namespace Si.GameEngine.Core.TickControllers
                     if (Sprite.Velocity.ThrottlePercentage > 0)
                     {
                         //Ramp down to a stop:
-                        double thrustToRemove = Sprite.Velocity.ThrottlePercentage < 1
+                        float thrustToRemove = Sprite.Velocity.ThrottlePercentage < 1
                             ? GameEngine.Settings.PlayerThrustRampDown * Sprite.Velocity.ThrottlePercentage : GameEngine.Settings.PlayerThrustRampDown;
 
                         Sprite.Velocity.ThrottlePercentage -= thrustToRemove;
@@ -208,7 +208,7 @@ namespace Si.GameEngine.Core.TickControllers
                     else if (Sprite.Velocity.ThrottlePercentage < 0)
                     {
                         //Ramp up to a stop:
-                        double thrustToRemove = Sprite.Velocity.ThrottlePercentage * -1 < 1
+                        float thrustToRemove = Sprite.Velocity.ThrottlePercentage * -1 < 1
                             ? GameEngine.Settings.PlayerThrustRampDown * (1 - Sprite.Velocity.ThrottlePercentage * -1) : GameEngine.Settings.PlayerThrustRampDown;
 
                         Sprite.Velocity.ThrottlePercentage += thrustToRemove;
@@ -256,7 +256,7 @@ namespace Si.GameEngine.Core.TickControllers
                     strafeAngle = SiVector.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + SiVector.DEG_90_RADS), new SiVector(1, 1));
                 }
 
-                displacementVector += (Sprite.Velocity.Angle * totalThrustSpeed) + (strafeAngle * ((totalThrustSpeed / 2) + 0.5));
+                displacementVector += (Sprite.Velocity.Angle * totalThrustSpeed) + (strafeAngle * ((totalThrustSpeed / 2) + 0.5f));
 
                 if (Sprite.Velocity.BoostPercentage > 0.1)
                 {
@@ -281,11 +281,11 @@ namespace Si.GameEngine.Core.TickControllers
 
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) && !GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
                 {
-                    Sprite.Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0));
+                    Sprite.Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0f));
                 }
                 if (!GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) && GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
                 {
-                    Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0);
+                    Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0f);
                 }
 
                 //insted of a fixed location, lets set the player to the center of the background offset.
@@ -301,7 +301,7 @@ namespace Si.GameEngine.Core.TickControllers
 
             if (Sprite.Velocity.RecoilPercentage > 0)
             {
-                Sprite.Velocity.RecoilPercentage -= Sprite.Velocity.RecoilPercentage * 0.10;
+                Sprite.Velocity.RecoilPercentage -= Sprite.Velocity.RecoilPercentage * 0.10f;
                 if (Sprite.Velocity.RecoilPercentage < 0.001)
                 {
                     Sprite.Velocity.RecoilPercentage = 0;

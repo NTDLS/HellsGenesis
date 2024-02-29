@@ -20,8 +20,8 @@ namespace Si.GameEngine.Core.NativeRendering
         static public Color4 GetRandomHotColor()
         {
             float hue = SiRandom.Between(0, 60);
-            float saturation = (float)SiRandom.Between(0.8, 1.0);
-            float lightness = (float)SiRandom.Between(0.5, 1);
+            float saturation = (float)SiRandom.Between(0.8f, 1.0f);
+            float lightness = (float)SiRandom.Between(0.5f, 1);
             return RGBFromHSL(hue, saturation, lightness);
         }
 
@@ -135,7 +135,7 @@ namespace Si.GameEngine.Core.NativeRendering
             return result;
         }
 
-        public static double GetScreenRefreshRate(Screen screen, int deviceId)
+        public static float GetScreenRefreshRate(Screen screen, int deviceId)
         {
             using var factory = new Factory1();
             foreach (var adapter in factory.Adapters)
@@ -151,9 +151,9 @@ namespace Si.GameEngine.Core.NativeRendering
                             var nativeMode = displayModes.OrderByDescending(mode => mode.Width * mode.Height)
                                 .ThenByDescending(o => o.RefreshRate.Numerator / o.RefreshRate.Denominator).FirstOrDefault();
 
-                            var refreshRate = nativeMode.RefreshRate.Numerator / (double)nativeMode.RefreshRate.Denominator;
+                            var refreshRate = nativeMode.RefreshRate.Numerator / (float)nativeMode.RefreshRate.Denominator;
 
-                            return refreshRate < 30 ? 30 : refreshRate;
+                            return refreshRate < 30f ? 30f : refreshRate;
                         }
                     }
                 }

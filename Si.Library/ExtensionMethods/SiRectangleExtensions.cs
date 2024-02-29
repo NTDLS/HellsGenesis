@@ -26,13 +26,6 @@ namespace Si.Library.ExtensionMethods
             return rec;
         }
 
-        public static RectangleF Balloon(this RectangleF rectangle, double x, double y)
-        {
-            var rec = rectangle.Clone();
-            rec.Inflate((float)x, (float)y);
-            return rec;
-        }
-
         public static RectangleF Balloon(this RectangleF rectangle, float xy)
         {
             var rec = rectangle.Clone();
@@ -44,13 +37,6 @@ namespace Si.Library.ExtensionMethods
         {
             var rec = rectangle.Clone();
             rec.Inflate(xy, xy);
-            return rec;
-        }
-
-        public static RectangleF Balloon(this RectangleF rectangle, double xy)
-        {
-            var rec = rectangle.Clone();
-            rec.Inflate((float)xy, (float)xy);
             return rec;
         }
 

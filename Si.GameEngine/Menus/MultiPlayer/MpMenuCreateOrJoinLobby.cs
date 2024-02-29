@@ -22,8 +22,8 @@ namespace Si.Menus.MultiPlayer
 
             var currentScaledScreenBounds = _gameEngine.Display.GetCurrentScaledScreenBounds();
 
-            double offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
-            double offsetY = currentScaledScreenBounds.Y + 100;
+            float offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
+            float offsetY = currentScaledScreenBounds.Y + 100;
 
             var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Multiplayer");
             itemTitle.X -= itemTitle.Size.Width / 2;

@@ -9,14 +9,14 @@ namespace Si.Library.Mathematics.Geometry
     {
         public static readonly SiVector Zero = new();
 
-        public double X;
-        public double Y;
+        public float X;
+        public float Y;
 
         #region ~Ctor. 
 
         public SiVector() { }
 
-        public SiVector(double x, double y)
+        public SiVector(float x, float y)
         {
             X = x;
             Y = y;
@@ -30,28 +30,28 @@ namespace Si.Library.Mathematics.Geometry
 
         #endregion
 
-        public RectangleF ToRectangleF(float width, float height) => new((float)X, (float)Y, width, height);
-        public RectangleF ToRectangleF(SizeF size) => new((float)X, (float)Y, size.Width, size.Height);
-        public RectangleF ToRectangleF() => new((float)X, (float)Y, 1f, 1f);
+        public RectangleF ToRectangleF(float width, float height) => new(X, Y, width, height);
+        public RectangleF ToRectangleF(SizeF size) => new(X, Y, size.Width, size.Height);
+        public RectangleF ToRectangleF() => new(X, Y, 1f, 1f);
 
         #region Operator Overloads.
 
         public static SiVector operator -(SiVector original, SiVector modifier)
             => new SiVector(original.X - modifier.X, original.Y - modifier.Y);
 
-        public static SiVector operator -(SiVector original, double modifier)
+        public static SiVector operator -(SiVector original, float modifier)
            => new SiVector(original.X - modifier, original.Y - modifier);
 
         public static SiVector operator +(SiVector original, SiVector modifier)
             => new SiVector(original.X + modifier.X, original.Y + modifier.Y);
 
-        public static SiVector operator +(SiVector original, double modifier)
+        public static SiVector operator +(SiVector original, float modifier)
             => new SiVector(original.X + modifier, original.Y + modifier);
 
         public static SiVector operator *(SiVector original, SiVector scaleFactor)
             => new SiVector(original.X * scaleFactor.X, original.Y * scaleFactor.Y);
 
-        public static SiVector operator *(SiVector original, double scaleFactor)
+        public static SiVector operator *(SiVector original, float scaleFactor)
             => new SiVector(original.X * scaleFactor, original.Y * scaleFactor);
 
         public static SiVector operator /(SiVector original, SiVector scaleFactor)
@@ -63,7 +63,7 @@ namespace Si.Library.Mathematics.Geometry
             return new SiVector(original.X / scaleFactor.X, original.Y / scaleFactor.Y);
         }
 
-        public static SiVector operator /(SiVector original, double scaleFactor)
+        public static SiVector operator /(SiVector original, float scaleFactor)
         {
             if (scaleFactor == 0.0)
             {
@@ -73,7 +73,7 @@ namespace Si.Library.Mathematics.Geometry
         }
 
         public override bool Equals(object? o)
-            => Math.Round(((SiVector?)o)?.X ?? double.NaN, 4) == X && Math.Round(((SiVector?)o)?.Y ?? double.NaN, 4) == Y;
+            => Math.Round(((SiVector?)o)?.X ?? float.NaN, 4) == X && Math.Round(((SiVector?)o)?.Y ?? float.NaN, 4) == Y;
 
         #endregion
 
@@ -101,7 +101,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public double DotProduct(SiVector b) => DotProduct(this);
+        public float DotProduct(SiVector b) => DotProduct(this);
 
         /// <summary>
         /// Calculate the angle between two points relative to the horizontal axis.
@@ -109,6 +109,6 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="point1"></param>
         /// <param name="point2"></param>
         /// <returns></returns>
-        public double AngleBetween(SiVector point2) => AngleBetween(this, point2);
+        public float AngleBetween(SiVector point2) => AngleBetween(this, point2);
     }
 }

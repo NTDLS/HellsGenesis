@@ -28,31 +28,31 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
         /// <summary>
         /// RecoilAmount is expressed in decimal percentage of thrust.
         /// </summary>
-        public double RecoilAmount { get; set; } = 0;
+        public float RecoilAmount { get; set; } = 0;
         /// <summary>
         /// The variance in degrees that the loaded munition will use for an initial heading angle.
         /// </summary>
-        public double AngleVarianceDegrees { get; set; } = 0;
+        public float AngleVarianceDegrees { get; set; } = 0;
         /// <summary>
         /// The variance expressed in decimal percentage that determines the loaded munitions initial velovity.
         /// </summary>
-        public double SpeedVariancePercent { get; set; } = 0;
+        public float SpeedVariancePercent { get; set; } = 0;
         /// <summary>
         /// The distance from the total canvas that the munition will be allowed to travel before it is deleted.
         /// </summary>
-        public double MunitionSceneDistanceLimit { get; set; }
+        public float MunitionSceneDistanceLimit { get; set; }
         public string Name { get; private set; }
-        public double Speed { get; set; } = 25;
+        public float Speed { get; set; } = 25;
         public int RoundQuantity { get; set; }
         public int RoundsFired { get; set; }
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
         public bool CanLockOn { get; set; } = false;
         public List<WeaponsLock> LockedTargets { get; set; } = new();
-        public double MaxLockOnAngle { get; set; } = 10;
-        public double MaxLocks { get; set; } = 1;
-        public double MinLockDistance { get; set; } = 50;
-        public double MaxLockDistance { get; set; } = 100;
+        public float MaxLockOnAngle { get; set; } = 10;
+        public float MaxLocks { get; set; } = 1;
+        public float MinLockDistance { get; set; } = 50;
+        public float MaxLockDistance { get; set; } = 100;
         public bool ExplodesOnImpact { get; set; } = false;
 
         public WeaponBase(GameEngineCore gameEngine, string name, string soundPath, float soundVolume)
@@ -84,13 +84,13 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
 
         public class WeaponsLock
         {
-            public double Distance { get; set; }
+            public float Distance { get; set; }
             public SpriteBase Sprite { get; set; }
 
             public SiWeaponsLockType LockType { get; set; }
         }
 
-        public virtual void ApplyIntelligence(double epoch)
+        public virtual void ApplyIntelligence(float epoch)
         {
             LockedTargets.Clear();
 

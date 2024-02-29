@@ -220,7 +220,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <summary>
         /// The X location of the center of the sprite in the universe.
         /// </summary>
-        public double X
+        public float X
         {
             get => _location.X;
             set
@@ -233,7 +233,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <summary>
         /// The Y location of the center of the sprite in the universe.
         /// </summary>
-        public double Y
+        public float Y
         {
             get => _location.Y;
             set
@@ -639,7 +639,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <summary>
         /// Instantly rotates this object by a given degrees.
         /// </summary>
-        public void Rotate(double degrees)
+        public void Rotate(float degrees)
         {
             Velocity.Angle.Degrees += degrees;
             RotationChanged();
@@ -648,25 +648,25 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <summary>
         /// Instantly points an object at a location and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        public void PointAtAndGoto(SiVector location, double? velocity = null)
+        public void PointAtAndGoto(SiVector location, float? velocity = null)
         {
             Velocity.Angle.Degrees = SiVector.AngleTo360(Location, location);
             if (velocity != null)
             {
-                Velocity.Speed = (double)velocity;
+                Velocity.Speed = (float)velocity;
             }
         }
 
         /// <summary>
         /// Instantly points an object at another object and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        public void PointAtAndGoto(SpriteBase obj, double? velocity = null)
+        public void PointAtAndGoto(SpriteBase obj, float? velocity = null)
         {
             Velocity.Angle.Degrees = SiVector.AngleTo360(Location, obj.Location);
 
             if (velocity != null)
             {
-                Velocity.Speed = (double)velocity;
+                Velocity.Speed = (float)velocity;
             }
         }
 
@@ -674,7 +674,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SpriteBase obj, double rotationAmount = 1, double varianceDegrees = 10)
+        public bool RotateIfNotPointingAt(SpriteBase obj, float rotationAmount = 1, float varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(obj);
 
@@ -698,7 +698,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SpriteBase obj, SiRelativeDirection direction, double rotationAmount = 1, double varianceDegrees = 10)
+        public bool RotateIfNotPointingAt(SpriteBase obj, SiRelativeDirection direction, float rotationAmount = 1, float varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(obj);
 
@@ -722,7 +722,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SiVector toLocation, double rotationAmount = 1, double varianceDegrees = 10)
+        public bool RotateIfNotPointingAt(SiVector toLocation, float rotationAmount = 1, float varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(toLocation);
 
@@ -746,7 +746,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SiVector toLocation, SiRelativeDirection direction, double rotationAmount = 1, double varianceDegrees = 10)
+        public bool RotateIfNotPointingAt(SiVector toLocation, SiRelativeDirection direction, float rotationAmount = 1, float varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(toLocation);
 
@@ -770,7 +770,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(double toDegrees, SiRelativeDirection direction, double rotationAmount = 1, double tolerance = 10)
+        public bool RotateIfNotPointingAt(float toDegrees, SiRelativeDirection direction, float rotationAmount = 1, float tolerance = 10)
         {
             toDegrees = toDegrees.DegreesNormalized();
 
@@ -794,7 +794,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Rotates the object by the given amount if it is pointing in the given direction.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if the object is not pointing in the given direction.
-        public bool RotateIfPointingAt(SpriteBase obj, double rotationRadians = 1, double varianceDegrees = 10)
+        public bool RotateIfPointingAt(SpriteBase obj, float rotationRadians = 1, float varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(obj);
 
@@ -818,7 +818,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Rotates the object by the given amount if it is pointing in the given direction.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if the object is not pointing in the given direction.
-        public bool RotateIfPointingAt(SpriteBase obj, SiRelativeDirection direction, double maxRotationRadians = 1, double varianceDegrees = 10)
+        public bool RotateIfPointingAt(SpriteBase obj, SiRelativeDirection direction, float maxRotationRadians = 1, float varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(obj);
 
@@ -878,27 +878,27 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngleDegrees(SpriteBase toObj) => SiVector.DeltaAngle(this, toObj);
+        public float DeltaAngleDegrees(SpriteBase toObj) => SiVector.DeltaAngle(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <=>s></returns>
-        public double DeltaAngleDegrees(SiVector toLocation) => SiVector.DeltaAngle(this, toLocation);
+        public float DeltaAngleDegrees(SiVector toLocation) => SiVector.DeltaAngle(this, toLocation);
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 0-259.
         /// </summary>
         /// <returns></returns>
-        public double AngleTo360(SpriteBase atObj) => SiVector.AngleTo360(this, atObj);
+        public float AngleTo360(SpriteBase atObj) => SiVector.AngleTo360(this, atObj);
 
-        public double AngleToRadians(SpriteBase atObj) => SiVector.DegreesToRadians(SiVector.AngleTo360(this, atObj));
+        public float AngleToRadians(SpriteBase atObj) => SiVector.DegreesToRadians(SiVector.AngleTo360(this, atObj));
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double AngleTo(SpriteBase atObj) => SiVector.AngleTo(this, atObj);
+        public float AngleTo(SpriteBase atObj) => SiVector.AngleTo(this, atObj);
 
         /// <summary>
         /// Calculates the angle in degrees to a location.
@@ -906,14 +906,14 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <param name="location"></param>
         /// <returns></returns>
         [Obsolete("This method is deprecated. Use AngleTo() instead.")]
-        public double AngleTo360(SiVector location) => SiVector.AngleTo360(this, location);
+        public float AngleTo360(SiVector location) => SiVector.AngleTo360(this, location);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
+        public bool IsPointingAt(SpriteBase atObj, float toleranceDegrees, float maxDistance, float offsetAngle)
             => SiVector.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiVector.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAt(SpriteBase atObj, float toleranceDegrees, float maxDistance) => SiVector.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees) => SiVector.IsPointingAt(this, atObj, toleranceDegrees);
+        public bool IsPointingAt(SpriteBase atObj, float toleranceDegrees) => SiVector.IsPointingAt(this, atObj, toleranceDegrees);
 
         /// <summary>
         /// Returns true if any of the given sprites are pointing at this one.
@@ -922,7 +922,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <param name="atObjs"></param>
         /// <param name="toleranceDegrees"></param>
         /// <returns></returns>
-        public bool IsPointingAtAny<T>(List<T> atObjs, double toleranceDegrees) where T : SpriteBase
+        public bool IsPointingAtAny<T>(List<T> atObjs, float toleranceDegrees) where T : SpriteBase
         {
             foreach (var atObj in atObjs)
             {
@@ -941,7 +941,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <param name="atObjs"></param>
         /// <param name="toleranceDegrees"></param>
         /// <returns></returns>
-        public List<T> GetPointingAtOf<T>(List<T> atObjs, double toleranceDegrees) where T : SpriteBase
+        public List<T> GetPointingAtOf<T>(List<T> atObjs, float toleranceDegrees) where T : SpriteBase
         {
             var results = new List<T>();
 
@@ -955,15 +955,15 @@ namespace Si.GameEngine.Sprites._Superclass
             return results;
         }
 
-        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees) => SiVector.IsPointingAway(this, atObj, toleranceDegrees);
+        public bool IsPointingAway(SpriteBase atObj, float toleranceDegrees) => SiVector.IsPointingAway(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiVector.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAway(SpriteBase atObj, float toleranceDegrees, float maxDistance) => SiVector.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public double DistanceTo(SpriteBase to) => SiVector.DistanceTo(Location, to.Location);
+        public float DistanceTo(SpriteBase to) => SiVector.DistanceTo(Location, to.Location);
 
-        public double DistanceSquaredTo(SpriteBase to) => SiVector.DistanceSquaredTo(Location, to.Location);
+        public float DistanceSquaredTo(SpriteBase to) => SiVector.DistanceSquaredTo(Location, to.Location);
 
-        public double DistanceTo(SiVector to) => SiVector.DistanceTo(Location, to);
+        public float DistanceTo(SiVector to) => SiVector.DistanceTo(Location, to);
 
         /// <summary>
         /// Of the given sprites, returns the sprite that is the closest.
@@ -973,7 +973,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <returns></returns>
         public T ClosestOf<T>(List<T> tos) where T : SpriteBase
         {
-            double closestDistance = double.MaxValue;
+            float closestDistance = float.MaxValue;
             T closestSprite = tos.First();
 
             foreach (var to in tos)
@@ -995,9 +995,9 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <typeparam name="T"></typeparam>
         /// <param name="tos"></param>
         /// <returns></returns>
-        public double ClosestDistanceOf<T>(List<T> tos) where T : SpriteBase
+        public float ClosestDistanceOf<T>(List<T> tos) where T : SpriteBase
         {
-            double closestDistance = double.MaxValue;
+            float closestDistance = float.MaxValue;
 
             foreach (var to in tos)
             {
@@ -1017,7 +1017,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public virtual void ApplyMotion(double epoch, SiVector displacementVector)
+        public virtual void ApplyMotion(float epoch, SiVector displacementVector)
         {
             Location += Velocity.Angle * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
         }
@@ -1124,13 +1124,13 @@ namespace Si.GameEngine.Sprites._Superclass
             }
         }
 
-        private void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, double? angleRadians = null)
+        private void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float? angleRadians = null)
         {
             float angle = (float)(angleRadians == null ? Velocity.Angle.Radians : angleRadians);
 
             _gameEngine.Rendering.DrawBitmapAt(renderTarget, bitmap,
-                RenderLocation.X - bitmap.Size.Width / 2.0,
-                RenderLocation.Y - bitmap.Size.Height / 2.0, angle);
+                RenderLocation.X - bitmap.Size.Width / 2.0f,
+                RenderLocation.Y - bitmap.Size.Height / 2.0f, angle);
         }
 
         #endregion

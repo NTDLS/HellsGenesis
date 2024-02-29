@@ -35,8 +35,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Description = "→ Serf ←\n"
                        + "TODO: Add a description\n",
-                    Speed = 3.5,
-                    Boost = 1.5,
+                    Speed = 3.5f,
+                    Boost = 1.5f,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };
@@ -67,15 +67,15 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         }
 
         private readonly int _initialHullHealth = 0;
-        private const double _baseDistanceToKeep = 100;
-        private double _distanceToKeep = _baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
-        private const double _baseFallbackDistance = 400;
-        private double _fallbackDistance;
+        private const float _baseDistanceToKeep = 100;
+        private float _distanceToKeep = _baseDistanceToKeep * (SiRandom.NextFloat() + 1f);
+        private const float _baseFallbackDistance = 400;
+        private float _fallbackDistance;
         private SiAngle fallToAngleRadians;
 
         public AIMode Mode = AIMode.InFormation;
 
-        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (IsDrone)
             {
@@ -86,7 +86,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             base.ApplyIntelligence(epoch, displacementVector);
 
-            double distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
+            float distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
 
             if (Mode == AIMode.InFormation)
             {
@@ -95,8 +95,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 if (distanceToPlayer < 500 && SiRandom.ChanceIn(1, 50000) || HullHealth != _initialHullHealth)
                 {
                     Mode = AIMode.MovingToFallback;
-                    fallToAngleRadians = Velocity.Angle + (180.0 + SiRandom.Between(0, 10));
-                    _fallbackDistance = _baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
+                    fallToAngleRadians = Velocity.Angle + (180.0f + SiRandom.Between(0, 10));
+                    _fallbackDistance = _baseFallbackDistance * (SiRandom.NextFloat() + 1);
                 }
             }
 
@@ -109,8 +109,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 else
                 {
                     Mode = AIMode.MovingToFallback;
-                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0 + SiRandom.Between(0, 10)).Radians;
-                    _fallbackDistance = _baseFallbackDistance * (SiRandom.Generator.NextDouble() + 1);
+                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
+                    _fallbackDistance = _baseFallbackDistance * (SiRandom.NextFloat() + 1);
                 }
             }
 
@@ -154,7 +154,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 else
                 {
                     Mode = AIMode.Approaching;
-                    _distanceToKeep = _baseDistanceToKeep * (SiRandom.Generator.NextDouble() + 1);
+                    _distanceToKeep = _baseDistanceToKeep * (SiRandom.NextFloat() + 1);
                 }
             }
 
@@ -164,7 +164,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0f);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponDualVulcanCannon>();
@@ -172,7 +172,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                     }
                     else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0);
+                        bool isPointingAtPlayer = IsPointingAt(_gameEngine.Player.Sprite, 2.0f);
                         if (isPointingAtPlayer)
                         {
                             FireWeapon<WeaponVulcanCannon>();

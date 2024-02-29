@@ -39,10 +39,10 @@ namespace Si.GameEngine.AI.Logistics
 
         #region Instance parameters.
 
-        private readonly double _approachAngle = SiRandom.Variance(45, 0.2);
+        private readonly float _approachAngle = SiRandom.Variance(45, 0.2f);
         private AIActivity _currentActivity = AIActivity.None;
-        private readonly double _idealMaxDistance = SiRandom.Variance(2500, 0.20);
-        private readonly double _idealMinDistance = SiRandom.Variance(800, 0.10);
+        private readonly float _idealMaxDistance = SiRandom.Variance(2500, 0.20f);
+        private readonly float _idealMinDistance = SiRandom.Variance(800, 0.10f);
         private readonly SiAngle _evasiveLoopTargetAngle = new();
         private SiRelativeDirection _rotationDirection;
 
@@ -65,7 +65,7 @@ namespace Si.GameEngine.AI.Logistics
             _owner.RenewableResources.Create(RenewableResources.Boost, 800, 0, 10);
 
             SetCurrentActivity(AIActivity.Departing);
-            _owner.Velocity.ThrottlePercentage = 1.0;
+            _owner.Velocity.ThrottlePercentage = 1.0f;
         }
 
         private void Owner_OnHit(SpriteBase sender, SiDamageType damageType, int damageAmount)
@@ -86,7 +86,7 @@ namespace Si.GameEngine.AI.Logistics
             {
                 case AIActivity.EvasiveLoop:
                     _evasiveLoopTargetAngle.Degrees = _owner.Velocity.Angle.Degrees + 180;
-                    _owner.Velocity.ThrottlePercentage = 1.0;
+                    _owner.Velocity.ThrottlePercentage = 1.0f;
                     _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, 250);
                     break;
                 case AIActivity.TransitionToDepart:
@@ -99,7 +99,7 @@ namespace Si.GameEngine.AI.Logistics
             _currentActivity = state;
         }
 
-        public void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (_currentActivity == AIActivity.Departing)
             {
@@ -134,7 +134,7 @@ namespace Si.GameEngine.AI.Logistics
                 var distanceToObservedObject = _owner.DistanceTo(_observedObject);
 
                 //As we get closer, make the angle more agressive.
-                double rotationRadians = new SiAngle((1 - (distanceToObservedObject / _idealMinDistance)) * 2.0).Radians;
+                float rotationRadians = new SiAngle((1 - (distanceToObservedObject / _idealMinDistance)) * 2.0f).Radians;
 
                 //Rotate as long as we are facing the observed object. If we are no longer facing, then depart.
                 if (_owner.RotateIfPointingAt(_observedObject, _rotationDirection, rotationRadians, _approachAngle) == false)
@@ -153,10 +153,10 @@ namespace Si.GameEngine.AI.Logistics
             {
                 if (_owner.RenewableResources.Observe(RenewableResources.Boost) > 250)
                 {
-                    _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, SiRandom.Variance(250, 0.5));
+                    _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, SiRandom.Variance(250, 0.5f));
                 }
 
-                double distanceToObservedObject = _owner.DistanceTo(_observedObject);
+                float distanceToObservedObject = _owner.DistanceTo(_observedObject);
                 if (distanceToObservedObject > _idealMaxDistance)
                 {
                     SetCurrentActivity(AIActivity.Departing);

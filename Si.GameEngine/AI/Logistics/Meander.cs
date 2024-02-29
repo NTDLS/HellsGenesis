@@ -45,7 +45,7 @@ namespace Si.GameEngine.AI.Logistics
 
         #region Instance parameters.
 
-        public double DistanceToKeep { get; set; } = 500;
+        public float DistanceToKeep { get; set; } = 500;
         public DateTime? LastDecisionTime { get; set; } = DateTime.Now.AddHours(-1);
         public int MillisecondsBetweenDecisions { get; set; } = 50;
         public SiRelativeDirection FavorateDirection = SiRelativeDirection.None;
@@ -118,32 +118,32 @@ namespace Si.GameEngine.AI.Logistics
                 newNetwork.BackPropagate(TrainingScenerio(0, 0), TrainingDecision(0, 1, 1));
                 newNetwork.BackPropagate(TrainingScenerio(0, -1), TrainingDecision(0, 1, 1));
                 newNetwork.BackPropagate(TrainingScenerio(0, 1), TrainingDecision(0, 1, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, 0.5), TrainingDecision(0, 1, 1));
-                newNetwork.BackPropagate(TrainingScenerio(0, -0.5), TrainingDecision(0, 1, 1));
+                newNetwork.BackPropagate(TrainingScenerio(0, 0.5f), TrainingDecision(0, 1, 1));
+                newNetwork.BackPropagate(TrainingScenerio(0, -0.5f), TrainingDecision(0, 1, 1));
 
                 //Pretty close to observed object, get away.
-                newNetwork.BackPropagate(TrainingScenerio(0.25, 0), TrainingDecision(0, 1, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0.25, -1), TrainingDecision(0, 1, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0.25, 1), TrainingDecision(0, 1, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0.25, 0.5), TrainingDecision(0, 1, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0.25, -0.5), TrainingDecision(0, 1, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.25f, 0), TrainingDecision(0, 1, 0.5f));
+                newNetwork.BackPropagate(TrainingScenerio(0.25f, -1), TrainingDecision(0, 1, 0.5f));
+                newNetwork.BackPropagate(TrainingScenerio(0.25f, 1), TrainingDecision(0, 1, 0.5f));
+                newNetwork.BackPropagate(TrainingScenerio(0.25f, 0.5f), TrainingDecision(0, 1, 0.5f));
+                newNetwork.BackPropagate(TrainingScenerio(0.25f, -0.5f), TrainingDecision(0, 1, 0.5f));
 
                 //Very far from observed object, get closer.
                 newNetwork.BackPropagate(TrainingScenerio(1, 0), TrainingDecision(1, 0, 1));
                 newNetwork.BackPropagate(TrainingScenerio(1, -1), TrainingDecision(1, 0, 1));
                 newNetwork.BackPropagate(TrainingScenerio(1, 1), TrainingDecision(1, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(1, 0.5), TrainingDecision(1, 0, 1));
-                newNetwork.BackPropagate(TrainingScenerio(1, -0.5), TrainingDecision(1, 0, 1));
+                newNetwork.BackPropagate(TrainingScenerio(1, 0.5f), TrainingDecision(1, 0, 1));
+                newNetwork.BackPropagate(TrainingScenerio(1, -0.5f), TrainingDecision(1, 0, 1));
 
                 //Pretty far from observed object, get closer.
-                newNetwork.BackPropagate(TrainingScenerio(0.75, 0), TrainingDecision(1, 0, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0.75, -1), TrainingDecision(1, 0, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0.75, 1), TrainingDecision(1, 0, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0.75, 0.5), TrainingDecision(1, 0, 0.5));
-                newNetwork.BackPropagate(TrainingScenerio(0.75, -0.5), TrainingDecision(1, 0, 0.5));
+                newNetwork.BackPropagate(TrainingScenerio(0.75f, 0), TrainingDecision(1, 0, 0.5f));
+                newNetwork.BackPropagate(TrainingScenerio(0.75f, -1), TrainingDecision(1, 0, 0.5f));
+                newNetwork.BackPropagate(TrainingScenerio(0.75f, 1), TrainingDecision(1, 0, 0.5f));
+                newNetwork.BackPropagate(TrainingScenerio(0.75f, 0.5f), TrainingDecision(1, 0, 0.5f));
+                newNetwork.BackPropagate(TrainingScenerio(0.75f, -0.5f), TrainingDecision(1, 0, 0.5f));
             }
 
-            static DniNamedInterfaceParameters TrainingScenerio(double distanceFromObservationObject, double angleToObservationObjectIn10thRadians)
+            static DniNamedInterfaceParameters TrainingScenerio(float distanceFromObservationObject, float angleToObservationObjectIn10thRadians)
             {
                 var param = new DniNamedInterfaceParameters();
                 param.Set(Inputs.DistanceFromObservationObject, distanceFromObservationObject);
@@ -151,7 +151,7 @@ namespace Si.GameEngine.AI.Logistics
                 return param;
             }
 
-            static DniNamedInterfaceParameters TrainingDecision(double transitionToObservationObject, double transitionFromObservationObject, double speedAdjust)
+            static DniNamedInterfaceParameters TrainingDecision(float transitionToObservationObject, float transitionFromObservationObject, float speedAdjust)
             {
                 var param = new DniNamedInterfaceParameters();
                 param.Set(Outputs.TransitionToObservationObject, transitionToObservationObject);
@@ -168,7 +168,7 @@ namespace Si.GameEngine.AI.Logistics
             Network = newNetwork.Clone();//.Mutate(0.2, 0.1)
         }
 
-        public void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             var now = DateTime.UtcNow;
 
@@ -184,9 +184,9 @@ namespace Si.GameEngine.AI.Logistics
                 var decidingFactors = GatherInputs();
                 var decisions = Network.FeedForward(decidingFactors);
 
-                var speedAdjust = decisions.Get(Outputs.SpeedAdjust);
+                var speedAdjust = (float)decisions.Get(Outputs.SpeedAdjust); //Update nuget to make these floats.
 
-                _owner.Velocity.ThrottlePercentage += (speedAdjust / 5.0);
+                _owner.Velocity.ThrottlePercentage += (speedAdjust / 5.0f);
 
                 bool transitionToObservationObject = decisions.Get(Outputs.TransitionToObservationObject) > 0.9;
                 bool transitionFromObservationObject = decisions.Get(Outputs.TransitionFromObservationObject) > 0.9;
@@ -196,11 +196,11 @@ namespace Si.GameEngine.AI.Logistics
                 }
                 else if (transitionToObservationObject)
                 {
-                    _owner.Rotate((45 * 0.05) * (FavorateDirection == SiRelativeDirection.Left ? 1 : -1));
+                    _owner.Rotate((45 * 0.05f) * (FavorateDirection == SiRelativeDirection.Left ? 1 : -1));
                 }
                 else if (transitionFromObservationObject)
                 {
-                    _owner.Rotate((-45 * 0.05) * (FavorateDirection == SiRelativeDirection.Left ? 1 : -1));
+                    _owner.Rotate((-45 * 0.05f) * (FavorateDirection == SiRelativeDirection.Left ? 1 : -1));
                 }
 
                 LastDecisionTime = now;
@@ -212,16 +212,16 @@ namespace Si.GameEngine.AI.Logistics
             var aiParams = new DniNamedInterfaceParameters();
 
             var distance = _owner.DistanceTo(_observedObject);
-            var percentageOfCloseness = ((100 - ((distance / DistanceToKeep) * 100.0)) / 100.0).Clamp(0, 1);
+            var percentageOfCloseness = ((100.0f - ((distance / DistanceToKeep) * 100.0f)) / 100.0f).Clamp(0, 1);
 
             aiParams.Set(Inputs.DistanceFromObservationObject, percentageOfCloseness);
 
             var deltaAngle = _owner.DeltaAngleDegrees(_observedObject);
 
-            var angleToIn6thRadians = SiAngle.DegreesToRadians(deltaAngle) / 6.0;
+            var angleToIn6thRadians = SiAngle.DegreesToRadians(deltaAngle) / 6.0f;
 
             aiParams.Set(Inputs.AngleToObservationObjectIn6thRadians,
-                angleToIn6thRadians.SplitToNegative(Math.PI / 6));
+                angleToIn6thRadians.SplitToSigned((float)(Math.PI / 6)));
 
             return aiParams;
         }

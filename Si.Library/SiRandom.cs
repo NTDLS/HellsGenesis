@@ -4,13 +4,15 @@
     {
         public static Random Generator = new();
 
+        public static float NextFloat() => (float)Generator.NextDouble();
+
         /// <summary>
         /// Returns the given value with a given variance added or subtracted (at random).
         /// </summary>
         /// <param name="value"></param>
         /// <param name="variancePercentWholeNumber"></param>
         /// <returns></returns>
-        public static double Variance(double value, double variancePercentDecimal)
+        public static float Variance(float value, float variancePercentDecimal)
             => value + RandomSign(value * variancePercentDecimal);
 
         /// <summary>
@@ -18,31 +20,31 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static double RandomSign(double value)
+        public static float RandomSign(float value)
             => FlipCoin() ? value : -value;
 
-        public static double OneOf(double one, double two)
+        public static float OneOf(float one, float two)
             => OneOf([one, two]);
 
-        public static double OneOf(double one, double two, double three)
+        public static float OneOf(float one, float two, float three)
             => OneOf([one, two, three]);
 
-        public static double OneOf(double one, double two, double three, double four)
+        public static float OneOf(float one, float two, float three, float four)
             => OneOf([one, two, three, four]);
 
-        public static double OneOf(double[] values)
+        public static float OneOf(float[] values)
             => values[Between(0, values.Length - 1)];
 
         public static bool ChanceIn(int chanceIn, int outOf)
             => Generator.Next(1, outOf + 1) <= chanceIn;
 
         public static bool PercentChance(int percentageWholeNumber)
-            => (Generator.NextDouble() * 100) <= percentageWholeNumber;
+            => ((float)Generator.NextDouble() * 100) <= percentageWholeNumber;
 
         public static bool FlipCoin() => (Generator.Next(2) == 0);
 
-        public static double Between(double minValue, double maxValue)
-            => minValue + (maxValue - minValue) * Generator.NextDouble();
+        public static float Between(float minValue, float maxValue)
+            => minValue + (maxValue - minValue) * (float)Generator.NextDouble();
 
         public static int Between(int minValue, int maxValue)
             => Generator.Next(minValue, maxValue + 1);

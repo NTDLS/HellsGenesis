@@ -25,6 +25,6 @@
         /// <summary>
         /// The latest measured latency from the server to the client in milliseconds.
         /// </summary>
-        public double LatencyMs { get; set; }
+        public float LatencyMs { get; set; }
     }
 }

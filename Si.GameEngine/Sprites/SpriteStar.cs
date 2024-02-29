@@ -21,19 +21,19 @@ namespace Si.GameEngine.Sprites
             X = SiRandom.Between(0, gameEngine.Display.TotalCanvasSize.Width);
             Y = SiRandom.Between(0, gameEngine.Display.TotalCanvasSize.Height);
 
-            Velocity.Speed = 0.5;
+            Velocity.Speed = 0.5f;
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
-                Velocity.ThrottlePercentage = SiRandom.Generator.Next(8, 10) / 10.0;
+                Velocity.ThrottlePercentage = SiRandom.Between(8, 10) / 10.0f;
             }
             else
             {
-                Velocity.ThrottlePercentage = SiRandom.Generator.Next(4, 8) / 10.0;
+                Velocity.ThrottlePercentage = SiRandom.Between(4, 8) / 10.0f;
             }
         }
 
-        public override void ApplyMotion(double epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             Location -= displacementVector * Velocity.Speed * Velocity.ThrottlePercentage * epoch;
         }

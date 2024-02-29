@@ -33,8 +33,8 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 {
                     Description = "→ Merc ←\n"
                        + "TODO: Add a description\n",
-                    Speed = 3.5,
-                    Boost = 1.5,
+                    Speed = 3.5f,
+                    Boost = 1.5f,
                     HullHealth = 20,
                     ShieldHealth = 10,
                 };
@@ -49,7 +49,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             ResetLoadout(loadout);
         }
 
-        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (IsDrone)
             {
