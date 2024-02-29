@@ -1,7 +1,7 @@
 ﻿using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Sprites;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -56,7 +56,7 @@ namespace Si.GameEngine.Core
             if (textBlock == null)
             {
                 textBlock = _gameEngine.Sprites.TextBlocks.Create(_gameEngine.Rendering.TextFormats.LargeBlocker,
-                    _gameEngine.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText", "Paused");
+                    _gameEngine.Rendering.Materials.Brushes.Red, new SiVector(100, 100), true, "PausedText", "Paused");
 
                 textBlock.X = _gameEngine.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
                 textBlock.Y = _gameEngine.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
@@ -194,7 +194,7 @@ namespace Si.GameEngine.Core
             }
         }
 
-        private SiPoint ExecuteWorldClockTick(double epoch)
+        private SiVector ExecuteWorldClockTick(double epoch)
         {
             _gameEngine.Menus.ExecuteWorldClockTick();
             _gameEngine.Situations.ExecuteWorldClockTick();

@@ -1,9 +1,8 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
-using Si.GameEngine.Utility;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 
 namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
 {
@@ -13,17 +12,17 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
     internal class GuidedMunitionBase : MunitionBase
     {
         public int MaxGuidedObservationAngleDegrees { get; set; } = 90;
-        public double GuidedRotationRateInDegrees { get; set; } = SiSpriteVectorMath.DegreesToRadians(3);
+        public double GuidedRotationRateInDegrees { get; set; } = SiVector.DegreesToRadians(3);
         public SpriteBase LockedTarget { get; private set; }
 
         public GuidedMunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
-             SpriteBase lockedTarget = null, SiPoint xyOffset = null)
+             SpriteBase lockedTarget = null, SiVector xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
             LockedTarget = lockedTarget;
         }
 
-        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             if (LockedTarget != null)
             {

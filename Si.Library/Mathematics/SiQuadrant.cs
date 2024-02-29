@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Si.Library.Types
+namespace Si.Library.Mathematics
 {
     public class SiQuadrant
     {

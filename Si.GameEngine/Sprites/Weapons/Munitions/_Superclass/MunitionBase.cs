@@ -3,11 +3,10 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
-using Si.GameEngine.Utility;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics;
+using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
 
@@ -25,7 +24,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
         public double AgeInMilliseconds => (DateTime.UtcNow - CreatedDate).TotalMilliseconds;
         public double SceneDistanceLimit { get; set; }
 
-        public MunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
+        public MunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiVector xyOffset = null)
             : base(gameEngine)
         {
             Initialize(imagePath);
@@ -34,12 +33,12 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             Velocity.ThrottlePercentage = 1.0;
             SceneDistanceLimit = SiRandom.Between(weapon.MunitionSceneDistanceLimit * 0.1, weapon.MunitionSceneDistanceLimit);
 
-            RadarDotSize = new SiPoint(1, 1);
+            RadarDotSize = new SiVector(1, 1);
 
             double headingRadians = firedFrom.Velocity.Angle.Radians;
             if (weapon.AngleVarianceDegrees > 0)
             {
-                var randomNumber = SiSpriteVectorMath.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0) / 100.0);
+                var randomNumber = SiVector.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0) / 100.0);
                 headingRadians += (SiRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 
@@ -58,7 +57,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 ThrottlePercentage = 1.0
             };
 
-            Location = firedFrom.Location + (xyOffset ?? SiPoint.Zero);
+            Location = firedFrom.Location + (xyOffset ?? SiVector.Zero);
 
             if (firedFrom is SpriteEnemyBase)
             {
@@ -72,7 +71,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public virtual void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             if (AgeInMilliseconds > MillisecondsToLive)
             {
@@ -81,7 +80,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             }
         }
 
-        public override void ApplyMotion(double epoch, SiPoint displacementVector)
+        public override void ApplyMotion(double epoch, SiVector displacementVector)
         {
             if (!_gameEngine.Display.TotalCanvasBounds.Balloon(SceneDistanceLimit).IntersectsWith(RenderBounds))
             {

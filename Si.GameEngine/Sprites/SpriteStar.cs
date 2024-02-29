@@ -1,7 +1,7 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.IO;
 
 namespace Si.GameEngine.Sprites
@@ -33,7 +33,7 @@ namespace Si.GameEngine.Sprites
             }
         }
 
-        public override void ApplyMotion(double epoch, SiPoint displacementVector)
+        public override void ApplyMotion(double epoch, SiVector displacementVector)
         {
             Location -= displacementVector * Velocity.Speed * Velocity.ThrottlePercentage * epoch;
         }

@@ -2,7 +2,7 @@
 using Si.GameEngine.Menus;
 using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using Si.Menus.MultiPlayer.Client;
 using Si.Menus.MultiPlayer.Host;
 using static Si.Library.SiConstants;
@@ -25,17 +25,17 @@ namespace Si.Menus.MultiPlayer
             double offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Multiplayer");
+            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Multiplayer");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.IsHighlighted = true;
 
-            var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "JOIN", " Join a Game ");
+            var helpItem = CreateAndAddSelectableItem(new SiVector(offsetX, offsetY), "JOIN", " Join a Game ");
             helpItem.Selected = true;
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "HOST", " Host a Game ");
+            helpItem = CreateAndAddSelectableItem(new SiVector(offsetX, offsetY), "HOST", " Host a Game ");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 

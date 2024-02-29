@@ -4,7 +4,7 @@ using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -330,7 +330,7 @@ namespace Si.GameEngine.Core.Managers
             var y = command.ParameterValue<uint>("y");
 
             var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(typeName, new[] { _gameEngine });
-            sprite.Location = new SiPoint(x, y);
+            sprite.Location = new SiVector(x, y);
             sprite.Visable = true;
 
             _gameEngine.Sprites.Add(sprite);

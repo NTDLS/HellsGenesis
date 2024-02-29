@@ -2,7 +2,7 @@
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
 using Si.GameEngine.Sprites.Weapons;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies.Peons
@@ -49,7 +49,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
             ResetLoadout(loadout);
         }
 
-        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             if (IsDrone)
             {

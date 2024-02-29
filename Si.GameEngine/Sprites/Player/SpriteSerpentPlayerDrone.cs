@@ -1,5 +1,5 @@
 ﻿using Si.GameEngine.Core;
-using Si.GameEngine.Sprites._Superclass;
+using Si.Library.Sprite;
 
 namespace Si.GameEngine.Sprites.Player
 {

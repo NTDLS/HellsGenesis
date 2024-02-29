@@ -1,8 +1,8 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
-using Si.Library.Types;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics;
+using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites
@@ -18,7 +18,7 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
+        public override bool TryMunitionHit(MunitionBase munition, SiVector hitTestPosition)
         {
             if (munition.FiredFromType == SiFiredFromType.Player)
             {

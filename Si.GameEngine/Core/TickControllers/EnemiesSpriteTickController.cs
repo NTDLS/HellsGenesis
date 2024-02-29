@@ -2,7 +2,7 @@
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Linq;
 
@@ -18,7 +18,7 @@ namespace Si.GameEngine.Core.TickControllers
             _gameEngine = gameEngine;
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
         {
             foreach (var enemy in Visible().Where(o => o.IsDrone == false))
             {

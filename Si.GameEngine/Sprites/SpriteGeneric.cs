@@ -2,8 +2,8 @@
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics;
+using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
 
@@ -31,7 +31,7 @@ namespace Si.GameEngine.Sprites
         public SiRelativeDirection RotationDirection { get; set; } = SiRelativeDirection.None;
 
 
-        public SpriteGeneric(GameEngineCore gameEngine, SiPoint location, SharpDX.Direct2D1.Bitmap bitmap)
+        public SpriteGeneric(GameEngineCore gameEngine, SiVector location, SharpDX.Direct2D1.Bitmap bitmap)
             : base(gameEngine)
         {
             Initialize(bitmap);
@@ -60,7 +60,7 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public override void ApplyMotion(double epoch, SiPoint displacementVector)
+        public override void ApplyMotion(double epoch, SiVector displacementVector)
         {
             if (RotationDirection == SiRelativeDirection.Right)
             {

@@ -1,7 +1,7 @@
 ﻿using Si.Library.ExtensionMethods;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 
-namespace Si.Library.Types
+namespace Si.Library.Mathematics
 {
     public class SiVelocity
     {

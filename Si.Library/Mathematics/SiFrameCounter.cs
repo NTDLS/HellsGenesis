@@ -1,4 +1,4 @@
-﻿namespace Si.Library.Types
+﻿namespace Si.Library.Mathematics
 {
     /// <summary>
     /// Used to keep track of the FPS that the world clock is executing at.

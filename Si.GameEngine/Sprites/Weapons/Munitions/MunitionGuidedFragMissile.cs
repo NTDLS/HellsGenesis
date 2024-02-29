@@ -2,9 +2,8 @@
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
-using Si.GameEngine.Utility;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.Drawing;
 using System.IO;
 
@@ -19,11 +18,11 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
         private int _selectedHitExplosionAnimationIndex = 0;
 
         public MunitionGuidedFragMissile(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom,
-             SpriteBase lockedTarget = null, SiPoint xyOffset = null)
+             SpriteBase lockedTarget = null, SiVector xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             MaxGuidedObservationAngleDegrees = 90;
-            GuidedRotationRateInDegrees = SiSpriteVectorMath.DegreesToRadians(3);
+            GuidedRotationRateInDegrees = SiVector.DegreesToRadians(3);
 
             _selectedHitExplosionAnimationIndex = SiRandom.Between(0, _hitExplosionAnimationCount - 1);
             _hitExplosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));

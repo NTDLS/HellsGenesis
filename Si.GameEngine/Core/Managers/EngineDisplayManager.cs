@@ -1,7 +1,7 @@
 ﻿using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -25,7 +25,7 @@ namespace Si.GameEngine.Core.Managers
         /// canvas which includes offscreen locations when not zoomed out. The local player
         /// will be centered in this window and the window will moved with the players movements.
         /// </summary>
-        public SiPoint RenderWindowPosition { get; private set; } = new();
+        public SiVector RenderWindowPosition { get; private set; } = new();
         public Control DrawingSurface { get; private set; }
         public Screen Screen { get; private set; }
 
@@ -64,7 +64,7 @@ namespace Si.GameEngine.Core.Managers
         /// </summary>
         public Size TotalCanvasSize { get; private set; }
 
-        public SiReadonlyPoint CenterScreen;
+        public SiVector CenterScreen;
 
         /// <summary>
         /// The size of the screen with no scaling.
@@ -113,30 +113,30 @@ namespace Si.GameEngine.Core.Managers
             }
         }
 
-        public SiPoint RandomOnScreenLocation()
+        public SiVector RandomOnScreenLocation()
         {
             var currentScaledScreenBounds = GetCurrentScaledScreenBounds();
 
-            return new SiPoint(
+            return new SiVector(
                     SiRandom.Generator.Next((int)currentScaledScreenBounds.Left, (int)(currentScaledScreenBounds.Left + currentScaledScreenBounds.Width)),
                     SiRandom.Generator.Next((int)currentScaledScreenBounds.Top, (int)(currentScaledScreenBounds.Top + currentScaledScreenBounds.Height))
                 );
         }
 
         //TODO: Tesr and fix this.
-        public SiPoint RandomOffScreenLocation(int minOffscreenDistance = 100, int maxOffscreenDistance = 500)
+        public SiVector RandomOffScreenLocation(int minOffscreenDistance = 100, int maxOffscreenDistance = 500)
         {
             if (SiRandom.FlipCoin())
             {
                 if (SiRandom.FlipCoin())
                 {
-                    return new SiPoint(
+                    return new SiVector(
                         RenderWindowPosition.X + -SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
                         RenderWindowPosition.Y + SiRandom.Between(0, TotalCanvasSize.Height));
                 }
                 else
                 {
-                    return new SiPoint(
+                    return new SiVector(
                         RenderWindowPosition.X + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
                         RenderWindowPosition.Y + SiRandom.Between(0, TotalCanvasSize.Height));
                 }
@@ -145,13 +145,13 @@ namespace Si.GameEngine.Core.Managers
             {
                 if (SiRandom.FlipCoin())
                 {
-                    return new SiPoint(
+                    return new SiVector(
                         RenderWindowPosition.X + TotalCanvasSize.Width + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
                         RenderWindowPosition.Y + SiRandom.Between(0, TotalCanvasSize.Height));
                 }
                 else
                 {
-                    return new SiPoint(
+                    return new SiVector(
                         RenderWindowPosition.X + TotalCanvasSize.Width + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
                         RenderWindowPosition.Y + -SiRandom.Between(0, TotalCanvasSize.Height));
                 }
@@ -174,7 +174,7 @@ namespace Si.GameEngine.Core.Managers
 
             TotalCanvasSize = new Size(totalSizeX, totalSizeY);
             OverdrawSize = new Size(totalSizeX - NatrualScreenSize.Width, totalSizeY - NatrualScreenSize.Height);
-            CenterScreen = new SiReadonlyPoint(TotalCanvasSize.Width / 2.0f, TotalCanvasSize.Height / 2.0f);
+            CenterScreen = new SiVector(TotalCanvasSize.Width / 2.0f, TotalCanvasSize.Height / 2.0f);
         }
 
         public SiQuadrant GetQuadrant(double x, double y)

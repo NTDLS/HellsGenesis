@@ -1,8 +1,7 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
-using Si.GameEngine.Utility;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
 
@@ -15,14 +14,14 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
     {
         public int MaxSeekingObservationDistance { get; set; } = 1000;
         public int MaxSeekingObservationAngleDegrees { get; set; } = 20;
-        public double SeekingRotationRateRadians { get; set; } = SiSpriteVectorMath.DegreesToRadians(4);
+        public double SeekingRotationRateRadians { get; set; } = SiVector.DegreesToRadians(4);
 
-        public SeekingMunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
+        public SeekingMunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiVector xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
         }
 
-        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             if (FiredFromType == SiFiredFromType.Enemy)
             {

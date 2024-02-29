@@ -1,11 +1,10 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Core.NativeRendering;
 using Si.GameEngine.Sprites.Weapons._Superclass;
-using Si.GameEngine.Utility;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -174,11 +173,11 @@ namespace Si.GameEngine.Sprites._Superclass
                     double requiredAngleRadians = _gameEngine.Player.Sprite.AngleToRadians(this);
 
                     RadarPositionIndicator.Location = _gameEngine.Display.CenterScreen
-                        + SiSpriteVectorMath.PointFromAngleAtDistance360(new SiAngle(requiredAngleRadians), new SiPoint(200, 200));
+                        + SiVector.PointFromAngleAtDistance360(new SiAngle(requiredAngleRadians), new SiVector(200, 200));
                     RadarPositionIndicator.Velocity.Angle.Radians = requiredAngleRadians;
 
                     RadarPositionText.Location = _gameEngine.Display.CenterScreen
-                        + SiSpriteVectorMath.PointFromAngleAtDistance360(new SiAngle(requiredAngleRadians), new SiPoint(120, 120));
+                        + SiVector.PointFromAngleAtDistance360(new SiAngle(requiredAngleRadians), new SiVector(120, 120));
                     RadarPositionIndicator.Velocity.Angle.Radians = requiredAngleRadians;
                 }
                 else

@@ -1,7 +1,7 @@
 ﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites.Powerup._Superclass;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 
 namespace Si.GameEngine.Core.TickControllers
@@ -13,7 +13,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
         {
             foreach (var sprite in Visible())
             {
@@ -26,7 +26,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
             object[] param = { GameEngine };
             var obj = (SpritePowerupBase)Activator.CreateInstance(typeof(T), param);
-            obj.Location = new SiPoint(x, y);
+            obj.Location = new SiVector(x, y);
             SpriteManager.Add(obj);
             return (T)obj;
         }

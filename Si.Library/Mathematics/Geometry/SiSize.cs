@@ -1,4 +1,4 @@
-﻿namespace Si.Library.Types.Geometry
+﻿namespace Si.Library.Mathematics.Geometry
 {
     public class SiSize
     {

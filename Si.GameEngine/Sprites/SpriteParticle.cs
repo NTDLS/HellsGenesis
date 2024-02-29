@@ -4,7 +4,7 @@ using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
@@ -33,7 +33,7 @@ namespace Si.GameEngine.Sprites
         public Color4 Color { get; set; }
         public SiAngle TravelAngle { get; set; } = new SiAngle();
 
-        public SpriteParticle(GameEngineCore gameEngine, SiPoint location, Size size, Color4 color)
+        public SpriteParticle(GameEngineCore gameEngine, SiVector location, Size size, Color4 color)
             : base(gameEngine)
         {
             Initialize(size);
@@ -51,7 +51,7 @@ namespace Si.GameEngine.Sprites
             _gameEngine = gameEngine;
         }
 
-        public override void ApplyMotion(double epoch, SiPoint displacementVector)
+        public override void ApplyMotion(double epoch, SiVector displacementVector)
         {
             if (RotationDirection == SiRelativeDirection.Right)
             {

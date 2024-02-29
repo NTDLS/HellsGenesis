@@ -7,7 +7,7 @@ using Si.GameEngine.Core.Types;
 using Si.GameEngine.Menus;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using Si.MultiplayClient;
 using System.Drawing;
 using System.Windows.Forms;
@@ -240,12 +240,12 @@ namespace Si.GameEngine.Core
                 _worldClock.Start();
 
                 var textBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
-                    Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true);
+                    Rendering.Materials.Brushes.Red, new SiVector(100, 100), true);
 
                 textBlock.SetTextAndCenterXY("Building cache...");
 
                 var percentTextBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
-                    Rendering.Materials.Brushes.Red, new SiPoint(textBlock.X, textBlock.Y + 50), true);
+                    Rendering.Materials.Brushes.Red, new SiVector(textBlock.X, textBlock.Y + 50), true);
 
                 textBlock.SetTextAndCenterXY("Building reflection cache...");
                 SiReflection.BuildReflectionCacheOfType<SpriteBase>();

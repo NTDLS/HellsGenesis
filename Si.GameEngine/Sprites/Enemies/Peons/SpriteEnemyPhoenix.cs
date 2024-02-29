@@ -4,7 +4,7 @@ using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
 using Si.GameEngine.Sprites.Weapons;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Linq;
 using static Si.Library.SiConstants;
@@ -67,7 +67,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         private DateTime _lastBehaviorChangeTime = DateTime.UtcNow;
         private double _behaviorChangeThresholdMilliseconds = 0;
 
-        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             if (IsDrone)
             {

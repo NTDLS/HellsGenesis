@@ -1,6 +1,6 @@
 ﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Sprites._Superclass;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +22,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
         public List<subType> OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
         public T ByTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
 
-        public virtual void ExecuteWorldClockTick(double epoch, SiPoint displacementVector) { }
+        public virtual void ExecuteWorldClockTick(double epoch, SiVector displacementVector) { }
 
         public SpriteTickControllerBase(GameEngineCore gameEngine, EngineSpriteManager manager)
         {
@@ -34,7 +34,7 @@ namespace Si.GameEngine.Core.TickControllers._Superclass
 
         public void Add(T obj) => SpriteManager.Add(obj);
 
-        public T Create(SiPoint location, string name = "")
+        public T Create(SiVector location, string name = "")
         {
             T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
             obj.Location = location.Clone();

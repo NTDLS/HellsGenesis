@@ -1,7 +1,7 @@
 ﻿using SharpDX.DirectInput;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites.MenuItems;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -89,7 +89,7 @@ namespace Si.GameEngine.Menus._Superclass
         public void QueueForDelete() => QueuedForDeletion = true;
         public void Close() => QueueForDelete();
 
-        public SpriteMenuItem CreateAndAddTitleItem(SiPoint location, string text)
+        public SpriteMenuItem CreateAndAddTitleItem(SiVector location, string text)
         {
             var item = new SpriteMenuItem(_gameEngine, this, _gameEngine.Rendering.TextFormats.MenuTitle, _gameEngine.Rendering.Materials.Brushes.OrangeRed, location)
             {
@@ -100,7 +100,7 @@ namespace Si.GameEngine.Menus._Superclass
             return item;
         }
 
-        public SpriteMenuItem CreateAndAddTextblock(SiPoint location, string text)
+        public SpriteMenuItem CreateAndAddTextblock(SiVector location, string text)
         {
             var item = new SpriteMenuItem(_gameEngine, this, _gameEngine.Rendering.TextFormats.MenuGeneral, _gameEngine.Rendering.Materials.Brushes.LawnGreen, location)
             {
@@ -111,7 +111,7 @@ namespace Si.GameEngine.Menus._Superclass
             return item;
         }
 
-        public SpriteMenuItem CreateAndAddSelectableItem(SiPoint location, string key, string text)
+        public SpriteMenuItem CreateAndAddSelectableItem(SiVector location, string key, string text)
         {
             var item = new SpriteMenuItem(_gameEngine, this, _gameEngine.Rendering.TextFormats.MenuItem, _gameEngine.Rendering.Materials.Brushes.OrangeRed, location)
             {
@@ -123,7 +123,7 @@ namespace Si.GameEngine.Menus._Superclass
             return item;
         }
 
-        public SpriteMenuSelectableTextInput CreateAndAddSelectableTextInput(SiPoint location, string key, string text = "")
+        public SpriteMenuSelectableTextInput CreateAndAddSelectableTextInput(SiVector location, string key, string text = "")
         {
             var item = new SpriteMenuSelectableTextInput(_gameEngine, this, _gameEngine.Rendering.TextFormats.TextInputItem, _gameEngine.Rendering.Materials.Brushes.Orange, location)
             {

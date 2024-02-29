@@ -10,8 +10,8 @@ using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Powerup._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Library;
+using Si.Library.Mathematics.Geometry;
 using Si.Library.Payload;
-using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +28,8 @@ namespace Si.GameEngine.Core.Managers
         public delegate T CollectionAccessorT<T>(List<SpriteBase> sprites);
 
         private readonly GameEngineCore _gameEngine;
-        private SiPoint _radarScale;
-        private SiPoint _radarOffset;
+        private SiVector _radarScale;
+        private SiVector _radarOffset;
 
         public SpriteTextBlock PlayerStatsText { get; private set; }
         public SpriteTextBlock DebugText { get; private set; }
@@ -137,9 +137,9 @@ namespace Si.GameEngine.Core.Managers
         {
             _gameEngine.Player.Sprite = new SpriteDebugPlayer(_gameEngine) { Visable = false };
 
-            PlayerStatsText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
+            PlayerStatsText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.WhiteSmoke, new SiVector(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
+            DebugText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.Cyan, new SiVector(5, PlayerStatsText.Y + 100), true);
         }
 
         public void Dispose()
@@ -225,7 +225,7 @@ namespace Si.GameEngine.Core.Managers
                 {
                     if (obj != with)
                     {
-                        if (obj.Intersects(with.Location, new SiPoint(with.Size.Width, with.Size.Height)))
+                        if (obj.Intersects(with.Location, new SiVector(with.Size.Width, with.Size.Height)))
                         {
                             objs.Add(obj);
                         }
@@ -236,9 +236,9 @@ namespace Si.GameEngine.Core.Managers
         }
 
         public List<SpriteBase> Intersections(double x, double y, double width, double height)
-            => Intersections(new SiPoint(x, y), new SiPoint(width, height));
+            => Intersections(new SiVector(x, y), new SiVector(width, height));
 
-        public List<SpriteBase> Intersections(SiPoint location, SiPoint size)
+        public List<SpriteBase> Intersections(SiVector location, SiVector size)
         {
             return _collection.Use(o =>
             {
@@ -255,7 +255,7 @@ namespace Si.GameEngine.Core.Managers
             });
         }
 
-        public List<SpriteBase> RenderLocationIntersections(SiPoint location, SiPoint size)
+        public List<SpriteBase> RenderLocationIntersections(SiVector location, SiVector size)
         {
             return _collection.Use(o =>
             {
@@ -303,8 +303,8 @@ namespace Si.GameEngine.Core.Managers
                     double radarVisionWidth = _gameEngine.Display.TotalCanvasSize.Width * radarDistance;
                     double radarVisionHeight = _gameEngine.Display.TotalCanvasSize.Height * radarDistance;
 
-                    _radarScale = new SiPoint(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
-                    _radarOffset = new SiPoint(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
+                    _radarScale = new SiVector(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
+                    _radarOffset = new SiVector(radarBgImage.Size.Width / 2.0, radarBgImage.Size.Height / 2.0); //Best guess until player is visible.
                 }
 
                 if (_gameEngine.Player.Sprite is not null && _gameEngine.Player.Sprite.Visable)
@@ -312,7 +312,7 @@ namespace Si.GameEngine.Core.Managers
                     double centerOfRadarX = (int)(radarBgImage.Size.Width / 2.0) - 2.0; //Subtract half the dot size.
                     double centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0) - 2.0; //Subtract half the dot size.
 
-                    _radarOffset = new SiPoint(
+                    _radarOffset = new SiVector(
                             _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _gameEngine.Player.Sprite.X * _radarScale.X),
                             _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _gameEngine.Player.Sprite.Y * _radarScale.Y)
                         );

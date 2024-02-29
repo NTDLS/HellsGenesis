@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Si.Library\Si.Library.csproj" />
+    <ProjectReference Include="..\Si.Message\Si.Message.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,11 +4,11 @@ using Si.GameEngine.Core.Types;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
-using Si.GameEngine.Utility;
 using Si.Library.ExtensionMethods;
+using Si.Library.Mathematics;
+using Si.Library.Mathematics.Geometry;
 using Si.Library.Payload.SpriteActions;
-using Si.Library.Types;
-using Si.Library.Types.Geometry;
+using Si.Library.Sprite;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -20,7 +20,7 @@ namespace Si.GameEngine.Sprites._Superclass
     /// <summary>
     /// Represents a single item that can be rendered to the screen. All on-screen objects are derived from this class.
     /// </summary>
-    public class SpriteBase
+    public class SpriteBase : ISprite
     {
         #region Multiplayer properties.
 
@@ -84,7 +84,7 @@ namespace Si.GameEngine.Sprites._Superclass
         private bool _isLockedOn = false;
         private SiVelocity _velocity;
         private bool _readyForDeletion;
-        private SiPoint _location = new();
+        private SiVector _location = new();
         private Size _size;
 
         #endregion
@@ -95,7 +95,7 @@ namespace Si.GameEngine.Sprites._Superclass
         public uint UID { get; private set; } = GameEngineCore.GetNextSequentialId();
         public uint OwnerUID { get; set; }
         public List<SpriteAttachment> Attachments { get; private set; } = new();
-        public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);
+        public SiVector RadarDotSize { get; set; } = new SiVector(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
         public bool IsWithinCurrentScaledScreenBounds => _gameEngine.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds);
         public bool IsHighlighted { get; set; } = false;
@@ -188,7 +188,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// The x,y, location of the center of the sprite in the universe.
         /// Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
-        public SiPoint Location
+        public SiVector Location
         {
             get => _location.Clone(); //Changes made to the location object do not affect the sprite.
             set
@@ -202,7 +202,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// The x,y, location of the center of the sprite on the screen.
         /// Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
-        public SiPoint RenderLocation
+        public SiVector RenderLocation
         {
             get
             {
@@ -342,7 +342,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <param name="munition">The munition object that is being tested for.</param>
         /// <param name="hitTestPosition">The position to test for hit.</param>
         /// <returns></returns>
-        public virtual bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
+        public virtual bool TryMunitionHit(MunitionBase munition, SiVector hitTestPosition)
         {
             if (Intersects(hitTestPosition))
             {
@@ -499,7 +499,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Intersect detection with another object using adjusted "hit box" size.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(SpriteBase otherObject, SiPoint sizeAdjust)
+        public bool Intersects(SpriteBase otherObject, SiVector sizeAdjust)
         {
             if (Visable && otherObject.Visable && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
             {
@@ -532,7 +532,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Intersect detection with a position using adjusted "hit box" size.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(SiPoint location, SiPoint size)
+        public bool Intersects(SiVector location, SiVector size)
         {
             var alteredHitBox = new RectangleF(
                 (float)location.X,
@@ -548,7 +548,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Intersect detection with a position using adjusted "hit box" size.
         /// </summary>
         /// <returns></returns>
-        public bool RenderLocationIntersects(SiPoint location, SiPoint size)
+        public bool RenderLocationIntersects(SiVector location, SiVector size)
         {
             var alteredHitBox = new RectangleF(
                 (float)location.X,
@@ -564,7 +564,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Intersect detection with a position.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(SiPoint location)
+        public bool Intersects(SiVector location)
         {
             var alteredHitBox = new RectangleF((float)location.X, (float)location.Y, 1f, 1f);
             return Bounds.IntersectsWith(alteredHitBox);
@@ -648,9 +648,9 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <summary>
         /// Instantly points an object at a location and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        public void PointAtAndGoto(SiPoint location, double? velocity = null)
+        public void PointAtAndGoto(SiVector location, double? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(Location, location);
+            Velocity.Angle.Degrees = SiVector.AngleTo360(Location, location);
             if (velocity != null)
             {
                 Velocity.Speed = (double)velocity;
@@ -662,7 +662,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, double? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(Location, obj.Location);
+            Velocity.Angle.Degrees = SiVector.AngleTo360(Location, obj.Location);
 
             if (velocity != null)
             {
@@ -722,7 +722,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SiPoint toLocation, double rotationAmount = 1, double varianceDegrees = 10)
+        public bool RotateIfNotPointingAt(SiVector toLocation, double rotationAmount = 1, double varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(toLocation);
 
@@ -746,7 +746,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SiPoint toLocation, SiRelativeDirection direction, double rotationAmount = 1, double varianceDegrees = 10)
+        public bool RotateIfNotPointingAt(SiVector toLocation, SiRelativeDirection direction, double rotationAmount = 1, double varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(toLocation);
 
@@ -878,27 +878,27 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double DeltaAngleDegrees(SpriteBase toObj) => SiSpriteVectorMath.DeltaAngle(this, toObj);
+        public double DeltaAngleDegrees(SpriteBase toObj) => SiVector.DeltaAngle(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <=>s></returns>
-        public double DeltaAngleDegrees(SiPoint toLocation) => SiSpriteVectorMath.DeltaAngle(this, toLocation);
+        public double DeltaAngleDegrees(SiVector toLocation) => SiVector.DeltaAngle(this, toLocation);
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 0-259.
         /// </summary>
         /// <returns></returns>
-        public double AngleTo360(SpriteBase atObj) => SiSpriteVectorMath.AngleTo360(this, atObj);
+        public double AngleTo360(SpriteBase atObj) => SiVector.AngleTo360(this, atObj);
 
-        public double AngleToRadians(SpriteBase atObj) => SiSpriteVectorMath.DegreesToRadians(SiSpriteVectorMath.AngleTo360(this, atObj));
+        public double AngleToRadians(SpriteBase atObj) => SiVector.DegreesToRadians(SiVector.AngleTo360(this, atObj));
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public double AngleTo(SpriteBase atObj) => SiSpriteVectorMath.AngleTo(this, atObj);
+        public double AngleTo(SpriteBase atObj) => SiVector.AngleTo(this, atObj);
 
         /// <summary>
         /// Calculates the angle in degrees to a location.
@@ -906,14 +906,14 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <param name="location"></param>
         /// <returns></returns>
         [Obsolete("This method is deprecated. Use AngleTo() instead.")]
-        public double AngleTo360(SiPoint location) => SiSpriteVectorMath.AngleTo360(this, location);
+        public double AngleTo360(SiVector location) => SiVector.AngleTo360(this, location);
 
         public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance, double offsetAngle)
-            => SiSpriteVectorMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
+            => SiVector.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiSpriteVectorMath.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiVector.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
 
-        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees) => SiSpriteVectorMath.IsPointingAt(this, atObj, toleranceDegrees);
+        public bool IsPointingAt(SpriteBase atObj, double toleranceDegrees) => SiVector.IsPointingAt(this, atObj, toleranceDegrees);
 
         /// <summary>
         /// Returns true if any of the given sprites are pointing at this one.
@@ -926,7 +926,7 @@ namespace Si.GameEngine.Sprites._Superclass
         {
             foreach (var atObj in atObjs)
             {
-                if (SiSpriteVectorMath.IsPointingAt(this, atObj, toleranceDegrees))
+                if (SiVector.IsPointingAt(this, atObj, toleranceDegrees))
                 {
                     return true;
                 }
@@ -947,7 +947,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
             foreach (var atObj in atObjs)
             {
-                if (SiSpriteVectorMath.IsPointingAt(this, atObj, toleranceDegrees))
+                if (SiVector.IsPointingAt(this, atObj, toleranceDegrees))
                 {
                     results.Add(atObj);
                 }
@@ -955,15 +955,15 @@ namespace Si.GameEngine.Sprites._Superclass
             return results;
         }
 
-        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees) => SiSpriteVectorMath.IsPointingAway(this, atObj, toleranceDegrees);
+        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees) => SiVector.IsPointingAway(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiSpriteVectorMath.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAway(SpriteBase atObj, double toleranceDegrees, double maxDistance) => SiVector.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public double DistanceTo(SpriteBase to) => SiPoint.DistanceTo(Location, to.Location);
+        public double DistanceTo(SpriteBase to) => SiVector.DistanceTo(Location, to.Location);
 
-        public double DistanceSquaredTo(SpriteBase to) => SiPoint.DistanceSquaredTo(Location, to.Location);
+        public double DistanceSquaredTo(SpriteBase to) => SiVector.DistanceSquaredTo(Location, to.Location);
 
-        public double DistanceTo(SiPoint to) => SiPoint.DistanceTo(Location, to);
+        public double DistanceTo(SiVector to) => SiVector.DistanceTo(Location, to);
 
         /// <summary>
         /// Of the given sprites, returns the sprite that is the closest.
@@ -978,7 +978,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(Location, to.Location);
+                var distance = SiVector.DistanceTo(Location, to.Location);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -1001,7 +1001,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(Location, to.Location);
+                var distance = SiVector.DistanceTo(Location, to.Location);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -1017,7 +1017,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public virtual void ApplyMotion(double epoch, SiPoint displacementVector)
+        public virtual void ApplyMotion(double epoch, SiVector displacementVector)
         {
             Location += Velocity.Angle * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
         }

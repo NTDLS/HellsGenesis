@@ -3,7 +3,7 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 
 namespace Si.GameEngine.Sprites.Weapons
 {
@@ -29,7 +29,7 @@ namespace Si.GameEngine.Sprites.Weapons
             RecoilAmount = 0.01;
         }
 
-        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(SiVector xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionScattershot(_gameEngine, this, _owner, xyOffset);
         }

@@ -3,7 +3,7 @@ using SharpDX.DirectWrite;
 using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.Linq;
 
 namespace Si.GameEngine.Core.TickControllers
@@ -15,7 +15,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
         {
             foreach (var textBlock in Visible().Where(o => o.IsFixedPosition == false))
             {
@@ -25,21 +25,21 @@ namespace Si.GameEngine.Core.TickControllers
 
         #region Factories.
 
-        public SpriteRadarPositionTextBlock CreateRadarPosition(TextFormat format, SolidColorBrush color, SiPoint location)
+        public SpriteRadarPositionTextBlock CreateRadarPosition(TextFormat format, SolidColorBrush color, SiVector location)
         {
             var obj = new SpriteRadarPositionTextBlock(GameEngine, format, color, location);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic)
+        public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiVector location, bool isPositionStatic)
         {
             var obj = new SpriteTextBlock(GameEngine, format, color, location, isPositionStatic);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name)
+        public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiVector location, bool isPositionStatic, string name)
         {
             var obj = new SpriteTextBlock(GameEngine, format, color, location, isPositionStatic);
             obj.SpriteTag = name;
@@ -47,7 +47,7 @@ namespace Si.GameEngine.Core.TickControllers
             return obj;
         }
 
-        public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name, string text)
+        public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiVector location, bool isPositionStatic, string name, string text)
         {
             var obj = new SpriteTextBlock(GameEngine, format, color, location, isPositionStatic);
             obj.SpriteTag = name;

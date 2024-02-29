@@ -1,7 +1,7 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 
 namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
 {
@@ -10,7 +10,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
     /// </summary>
     internal class ProjectileMunitionBase : MunitionBase
     {
-        public ProjectileMunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
+        public ProjectileMunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiVector xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
         }

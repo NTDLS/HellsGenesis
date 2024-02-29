@@ -5,7 +5,7 @@ using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,7 +72,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
             MunitionSceneDistanceLimit = _gameEngine.Settings.MunitionSceneDistanceLimit;
         }
 
-        public virtual MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase lockedTarget = null)
+        public virtual MunitionBase CreateMunition(SiVector xyOffset, SpriteBase lockedTarget = null)
         {
             if (_owner == null)
             {

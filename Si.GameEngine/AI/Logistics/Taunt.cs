@@ -2,7 +2,7 @@
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.Diagnostics;
 using static Si.Library.SiConstants;
 
@@ -99,7 +99,7 @@ namespace Si.GameEngine.AI.Logistics
             _currentActivity = state;
         }
 
-        public void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             if (_currentActivity == AIActivity.Departing)
             {

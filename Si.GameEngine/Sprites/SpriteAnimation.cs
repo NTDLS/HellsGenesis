@@ -3,8 +3,8 @@ using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
-using Si.Library.Types;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Drawing;
 using static Si.Library.SiConstants;
@@ -72,7 +72,7 @@ namespace Si.GameEngine.Sprites
             _columns = (int)(_sheetImage.Size.Width / ((Size)frameSize).Width);
             _frameCount = _rows * _columns;
 
-            Location = new SiPoint(0, 0);
+            Location = new SiVector(0, 0);
             Velocity = new SiVelocity();
 
             AdvanceImage();

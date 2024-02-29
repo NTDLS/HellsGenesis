@@ -1,8 +1,8 @@
 ﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
-using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
+using Si.Library.Sprite;
 using System.Linq;
 
 namespace Si.GameEngine.Core.TickControllers
@@ -21,7 +21,7 @@ namespace Si.GameEngine.Core.TickControllers
             _gameEngine = gameEngine;
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
         {
             foreach (var drone in Visible().OfType<ISpriteDrone>())
             {

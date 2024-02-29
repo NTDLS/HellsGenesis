@@ -5,7 +5,7 @@ using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
@@ -18,7 +18,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
         {
             foreach (var particle in Visible())
             {
@@ -26,7 +26,7 @@ namespace Si.GameEngine.Core.TickControllers
             }
         }
 
-        public void CreateAt(SiPoint location, Color4 color, int count, Size? size = null)
+        public void CreateAt(SiVector location, Color4 color, int count, Size? size = null)
         {
             for (int i = 0; i < count; i++)
             {
@@ -49,7 +49,7 @@ namespace Si.GameEngine.Core.TickControllers
             return obj;
         }
 
-        public SpriteParticle CreateAt(SiPoint location, Color4 color, Size? size = null)
+        public SpriteParticle CreateAt(SiVector location, Color4 color, Size? size = null)
         {
             var obj = new SpriteParticle(GameEngine, location, size ?? new Size(1, 1), color)
             {

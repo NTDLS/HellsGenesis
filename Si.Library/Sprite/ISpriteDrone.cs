@@ -1,12 +1,12 @@
-﻿using Si.Library.Payload.SpriteActions;
-using Si.Library.Types.Geometry;
+﻿using Si.Library.Mathematics.Geometry;
+using Si.Library.Payload.SpriteActions;
 
-namespace Si.GameEngine.Sprites._Superclass
+namespace Si.Library.Sprite
 {
-    internal interface ISpriteDrone
+    public interface ISpriteDrone
     {
         public void ApplyAbsoluteMultiplayVector(SiSpriteActionVector vector);
-        public void ApplyMotion(double epoch, SiPoint displacementVector);
+        public void ApplyMotion(double epoch, SiVector displacementVector);
         public void Hit(int damage);
         public void Explode();
         public void QueueForDelete();

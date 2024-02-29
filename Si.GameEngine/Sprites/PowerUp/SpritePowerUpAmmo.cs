@@ -1,7 +1,7 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites.Powerup._Superclass;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 
 namespace Si.GameEngine.Sprites.Powerup
 {
@@ -19,7 +19,7 @@ namespace Si.GameEngine.Sprites.Powerup
             PowerupAmount *= multiplier + 1;
         }
 
-        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             if (Intersects(_gameEngine.Player.Sprite))
             {

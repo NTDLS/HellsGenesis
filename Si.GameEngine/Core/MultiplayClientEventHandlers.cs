@@ -5,6 +5,7 @@ using Si.Library.Messages.Notify;
 using Si.Library.Messages.Notify.Datagram;
 using Si.Library.Payload;
 using Si.Library.Payload.SpriteActions;
+using Si.Library.Sprite;
 using System;
 using System.Collections.Generic;
 using System.Linq;

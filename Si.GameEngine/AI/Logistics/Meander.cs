@@ -5,7 +5,7 @@ using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
 
@@ -168,7 +168,7 @@ namespace Si.GameEngine.AI.Logistics
             Network = newNetwork.Clone();//.Mutate(0.2, 0.1)
         }
 
-        public void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             var now = DateTime.UtcNow;
 

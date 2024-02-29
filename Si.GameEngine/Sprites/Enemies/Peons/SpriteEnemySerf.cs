@@ -2,10 +2,9 @@
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Peons._Superclass;
 using Si.GameEngine.Sprites.Weapons;
-using Si.GameEngine.Utility;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies.Peons
@@ -76,7 +75,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
         public AIMode Mode = AIMode.InFormation;
 
-        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             if (IsDrone)
             {
@@ -87,7 +86,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             base.ApplyIntelligence(epoch, displacementVector);
 
-            double distanceToPlayer = SiSpriteVectorMath.DistanceTo(this, _gameEngine.Player.Sprite);
+            double distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
 
             if (Mode == AIMode.InFormation)
             {

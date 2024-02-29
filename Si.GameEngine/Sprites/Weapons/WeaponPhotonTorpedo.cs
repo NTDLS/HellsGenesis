@@ -3,8 +3,7 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
-using Si.GameEngine.Utility;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 
 namespace Si.GameEngine.Sprites.Weapons
 {
@@ -32,7 +31,7 @@ namespace Si.GameEngine.Sprites.Weapons
             RecoilAmount = 0.65;
         }
 
-        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(SiVector xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionPhotonTorpedo(_gameEngine, this, _owner, xyOffset);
         }
@@ -46,12 +45,12 @@ namespace Si.GameEngine.Sprites.Weapons
 
                 if (_toggle)
                 {
-                    var pointRight = SiSpriteVectorMath.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiSpriteVectorMath.DEG_90_RADS, new SiPoint(10, 10));
+                    var pointRight = SiVector.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiVector.DEG_90_RADS, new SiVector(10, 10));
                     _gameEngine.Sprites.Munitions.Create(this, pointRight);
                 }
                 else
                 {
-                    var pointLeft = SiSpriteVectorMath.PointFromAngleAtDistance360(_owner.Velocity.Angle - SiSpriteVectorMath.DEG_90_RADS, new SiPoint(10, 10));
+                    var pointLeft = SiVector.PointFromAngleAtDistance360(_owner.Velocity.Angle - SiVector.DEG_90_RADS, new SiVector(10, 10));
                     _gameEngine.Sprites.Munitions.Create(this, pointLeft);
                 }
 

@@ -1,6 +1,7 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
+using Si.Library.Sprite;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -10,10 +11,10 @@ namespace Si.Game.Forms
     public partial class FormDebugSpriteWatch : Form
     {
         private readonly GameEngineCore _gameEngine;
-        private readonly SpriteBase _sprite;
+        private readonly ISprite _sprite;
         private readonly Timer _timer = new();
 
-        internal FormDebugSpriteWatch(GameEngineCore gameEngine, SpriteBase sprite)
+        internal FormDebugSpriteWatch(GameEngineCore gameEngine, ISprite sprite)
         {
             InitializeComponent();
             _gameEngine = gameEngine;
@@ -36,42 +37,44 @@ namespace Si.Game.Forms
             listViewVariables.BeginUpdate();
             listViewVariables.SuspendLayout();
 
-            if (_sprite is SpriteEnemyBase enemy)
+            var sprite = _sprite as SpriteBase;
+
+            if (sprite is SpriteEnemyBase enemy)
             {
                 UpsertVariable("AI Controller", $"{enemy.CurrentAIController}");
                 UpsertVariable("Is Hostile", $"{enemy.IsHostile}");
             }
 
-            UpsertVariable("UID", $"{_sprite.UID}");
-            UpsertVariable("Multiplay UID", $"{_sprite.MultiplayUID}");
-            UpsertVariable("Owner UID", $"{_sprite.OwnerUID:n0}");
-            UpsertVariable("Name", $"{_sprite.GetType().Name}");
-            UpsertVariable("Tag", $"{_sprite.SpriteTag:n0}");
-            UpsertVariable("Is Visable?", $"{_sprite.Visable:n0}");
-            UpsertVariable("Size", $"{_sprite.Size:n0}");
-            UpsertVariable("Bounds", $"{_sprite.Bounds:n0}");
-            UpsertVariable("Ready for Delete?", $"{_sprite.IsQueuedForDeletion}");
-            UpsertVariable("Is Dead?", $"{_sprite.IsDeadOrExploded}");
-            UpsertVariable("Location", $"{_sprite.Location}");
-            UpsertVariable("Location (Render)", $"{_sprite.RenderLocation}");
+            UpsertVariable("UID", $"{sprite.UID}");
+            UpsertVariable("Multiplay UID", $"{sprite.MultiplayUID}");
+            UpsertVariable("Owner UID", $"{sprite.OwnerUID:n0}");
+            UpsertVariable("Name", $"{sprite.GetType().Name}");
+            UpsertVariable("Tag", $"{sprite.SpriteTag:n0}");
+            UpsertVariable("Is Visable?", $"{sprite.Visable:n0}");
+            UpsertVariable("Size", $"{sprite.Size:n0}");
+            UpsertVariable("Bounds", $"{sprite.Bounds:n0}");
+            UpsertVariable("Ready for Delete?", $"{sprite.IsQueuedForDeletion}");
+            UpsertVariable("Is Dead?", $"{sprite.IsDeadOrExploded}");
+            UpsertVariable("Location", $"{sprite.Location}");
+            UpsertVariable("Location (Render)", $"{sprite.RenderLocation}");
             UpsertVariable("Background Offset", $"{_gameEngine.Display.RenderWindowPosition}");
-            UpsertVariable("Angle", $"{_sprite.Velocity.Angle:n2}");
-            UpsertVariable("Angle Degrees", $"{_sprite.Velocity.Angle.Degrees:n2}");
-            UpsertVariable("Angle Degrees (Signed)", $"{_sprite.Velocity.Angle.DegreesSigned:n2}");
-            UpsertVariable("Angle Radians", $"{_sprite.Velocity.Angle.Radians:n2}");
-            UpsertVariable("Angle Radians (Signed)", $"{_sprite.Velocity.Angle.RadiansSigned:n2}");
-            UpsertVariable("Thrust %", $"{(_sprite.Velocity.ThrottlePercentage * 100):n2}");
-            UpsertVariable("Boost %", $"{(_sprite.Velocity.BoostPercentage * 100):n2}");
-            UpsertVariable("Recoil", $"{(_sprite.Velocity.RecoilPercentage * 100):n2}");
-            UpsertVariable("Hull", $"{_sprite.HullHealth:n0}");
-            UpsertVariable("Shield", $"{_sprite.ShieldHealth:n0}");
-            UpsertVariable("Attachments", $"{_sprite.Attachments?.Count ?? 0:n0}");
-            UpsertVariable("Highlight", $"{_sprite.IsHighlighted}");
-            UpsertVariable("Is Fixed Position", $"{_sprite.IsFixedPosition}");
-            UpsertVariable("Is Locked On", $"{_sprite.IsLockedOnHard}");
-            UpsertVariable("Is Locked On (Soft)", $"{_sprite.IsLockedOnSoft:n0}");
-            UpsertVariable("In Current Scaled Bounds", $"{_sprite.IsWithinCurrentScaledScreenBounds}");
-            UpsertVariable("Visible Bounds", $"{_sprite.Bounds}");
+            UpsertVariable("Angle", $"{sprite.Velocity.Angle:n2}");
+            UpsertVariable("Angle Degrees", $"{sprite.Velocity.Angle.Degrees:n2}");
+            UpsertVariable("Angle Degrees (Signed)", $"{sprite.Velocity.Angle.DegreesSigned:n2}");
+            UpsertVariable("Angle Radians", $"{sprite.Velocity.Angle.Radians:n2}");
+            UpsertVariable("Angle Radians (Signed)", $"{sprite.Velocity.Angle.RadiansSigned:n2}");
+            UpsertVariable("Thrust %", $"{(sprite.Velocity.ThrottlePercentage * 100):n2}");
+            UpsertVariable("Boost %", $"{(sprite.Velocity.BoostPercentage * 100):n2}");
+            UpsertVariable("Recoil", $"{(sprite.Velocity.RecoilPercentage * 100):n2}");
+            UpsertVariable("Hull", $"{sprite.HullHealth:n0}");
+            UpsertVariable("Shield", $"{sprite.ShieldHealth:n0}");
+            UpsertVariable("Attachments", $"{sprite.Attachments?.Count ?? 0:n0}");
+            UpsertVariable("Highlight", $"{sprite.IsHighlighted}");
+            UpsertVariable("Is Fixed Position", $"{sprite.IsFixedPosition}");
+            UpsertVariable("Is Locked On", $"{sprite.IsLockedOnHard}");
+            UpsertVariable("Is Locked On (Soft)", $"{sprite.IsLockedOnSoft:n0}");
+            UpsertVariable("In Current Scaled Bounds", $"{sprite.IsWithinCurrentScaledScreenBounds}");
+            UpsertVariable("Visible Bounds", $"{sprite.Bounds}");
 
             listViewVariables.ResumeLayout();
             listViewVariables.EndUpdate();

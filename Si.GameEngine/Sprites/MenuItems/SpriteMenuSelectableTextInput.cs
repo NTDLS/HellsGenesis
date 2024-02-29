@@ -2,8 +2,8 @@
 using SharpDX.DirectWrite;
 using Si.GameEngine.Core;
 using Si.GameEngine.Menus._Superclass;
-using Si.Library.Types;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics;
+using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.MenuItems
@@ -15,7 +15,7 @@ namespace Si.GameEngine.Sprites.MenuItems
     {
         public int CharacterLimit { get; set; }
 
-        public SpriteMenuSelectableTextInput(GameEngineCore gameEngine, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location, int characterLimit = 100)
+        public SpriteMenuSelectableTextInput(GameEngineCore gameEngine, MenuBase menu, TextFormat format, SolidColorBrush color, SiVector location, int characterLimit = 100)
             : base(gameEngine, menu, format, color, location)
         {
             ItemType = SiMenuItemType.SelectableTextInput;

@@ -3,7 +3,7 @@ using SharpDX.DirectWrite;
 using SharpDX.Mathematics.Interop;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
@@ -40,12 +40,12 @@ namespace Si.GameEngine.Sprites
 
         #endregion
 
-        public SpriteTextBlock(GameEngineCore gameEngine, TextFormat format, SolidColorBrush color, SiPoint location, bool isFixedPosition)
+        public SpriteTextBlock(GameEngineCore gameEngine, TextFormat format, SolidColorBrush color, SiVector location, bool isFixedPosition)
             : base(gameEngine)
         {
             RenderScaleOrder = SiRenderScaleOrder.PostScale;
             IsFixedPosition = isFixedPosition;
-            Location = new SiPoint(location);
+            Location = new SiVector(location);
             Color = color;
 
             Format = format;

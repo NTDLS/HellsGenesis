@@ -1,4 +1,4 @@
-﻿namespace Si.Library.Types.Geometry
+﻿namespace Si.Library.Mathematics.Geometry
 {
     public static class SiMath
     {
@@ -11,7 +11,7 @@
         /// <returns></returns>
         public static double Clamp(double value, double min, double max)
         {
-            return (value < min) ? min : (value > max) ? max : value;
+            return value < min ? min : value > max ? max : value;
         }
 
         /// <summary>

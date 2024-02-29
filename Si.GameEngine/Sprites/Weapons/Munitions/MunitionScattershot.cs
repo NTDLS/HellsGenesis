@@ -3,7 +3,7 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.IO;
 
 namespace Si.GameEngine.Sprites.Weapons.Munitions
@@ -14,7 +14,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
         private readonly int imageCount = 4;
         private readonly int selectedImageIndex = 0;
 
-        public MunitionScattershot(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
+        public MunitionScattershot(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiVector xyOffset = null)
             : base(gameEngine, weapon, firedFrom, null, xyOffset)
         {
             selectedImageIndex = SiRandom.Between(0, imageCount - 1);

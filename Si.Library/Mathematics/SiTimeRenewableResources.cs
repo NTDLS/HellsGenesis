@@ -1,6 +1,6 @@
 ﻿using Si.Library.ExtensionMethods;
 
-namespace Si.Library.Types
+namespace Si.Library.Mathematics
 {
     /// <summary>
     /// Keeps track of a collection of time-renewable-resources such as "boost amount" or health.

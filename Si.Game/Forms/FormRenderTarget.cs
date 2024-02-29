@@ -4,7 +4,7 @@ using Si.GameEngine.AI.Logistics._Superclass;
 using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -105,8 +105,8 @@ namespace Si.Game
 
             highlightedSprites.Clear();
 
-            var sprites = _gameEngine.Sprites.RenderLocationIntersections(new SiPoint(x, y), new SiPoint(1, 1));
-            if (_gameEngine.Player.Sprite.RenderLocationIntersects(new SiPoint(x, y), new SiPoint(1, 1)))
+            var sprites = _gameEngine.Sprites.RenderLocationIntersections(new SiVector(x, y), new SiVector(1, 1));
+            if (_gameEngine.Player.Sprite.RenderLocationIntersects(new SiVector(x, y), new SiVector(1, 1)))
             {
                 sprites.Add(_gameEngine.Player.Sprite);
             }
@@ -123,8 +123,8 @@ namespace Si.Game
             double x = e.X + _gameEngine.Display.OverdrawSize.Width / 2;
             double y = e.Y + _gameEngine.Display.OverdrawSize.Height / 2;
 
-            var sprites = _gameEngine.Sprites.RenderLocationIntersections(new SiPoint(x, y), new SiPoint(1, 1));
-            if (_gameEngine.Player.Sprite.RenderLocationIntersects(new SiPoint(x, y), new SiPoint(1, 1)))
+            var sprites = _gameEngine.Sprites.RenderLocationIntersections(new SiVector(x, y), new SiVector(1, 1));
+            if (_gameEngine.Player.Sprite.RenderLocationIntersects(new SiVector(x, y), new SiVector(1, 1)))
             {
                 sprites.Add(_gameEngine.Player.Sprite);
             }

@@ -10,8 +10,8 @@ using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
+using Si.Library.Mathematics.Geometry;
 using Si.Library.Payload.SpriteActions;
-using Si.Library.Types.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +47,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             RadarPositionIndicator.Visable = false;
             RadarPositionText = _gameEngine.Sprites.TextBlocks.CreateRadarPosition(
                 gameEngine.Rendering.TextFormats.RadarPositionIndicator,
-                gameEngine.Rendering.Materials.Brushes.Red, new SiPoint());
+                gameEngine.Rendering.Materials.Brushes.Red, new SiVector());
         }
 
         public virtual void BeforeCreate() { }
@@ -178,7 +178,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             }
         }
 
-        public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
+        public override bool TryMunitionHit(MunitionBase munition, SiVector hitTestPosition)
         {
             if (munition.FiredFromType == SiFiredFromType.Player)
             {
@@ -194,7 +194,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(double epoch, SiPoint displacementVector)
+        public override void ApplyMotion(double epoch, SiVector displacementVector)
         {
             if (IsDrone)
             {
@@ -259,7 +259,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             }
         }
 
-        public virtual void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public virtual void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             if (Weapons != null)
             {

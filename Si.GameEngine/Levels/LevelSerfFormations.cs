@@ -3,8 +3,7 @@ using Si.GameEngine.Core.Types;
 using Si.GameEngine.Levels._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Enemies.Peons;
-using Si.GameEngine.Utility;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.Linq;
 
 namespace Si.GameEngine.Levels
@@ -79,7 +78,7 @@ namespace Si.GameEngine.Levels
 
         private void AddFreshEnemiesCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
         {
-            SiPoint baseLocation = _gameEngine.Display.RandomOffScreenLocation();
+            SiVector baseLocation = _gameEngine.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave + 2);
             _gameEngine.Audio.RadarBlipsSound.Play();
             _waitingOnPopulation = false;
@@ -96,9 +95,9 @@ namespace Si.GameEngine.Levels
             return enemy;
         }
 
-        private void CreateTriangleFormation(SiPoint baseLocation, double spacing, int depth)
+        private void CreateTriangleFormation(SiVector baseLocation, double spacing, int depth)
         {
-            double angle = SiSpriteVectorMath.AngleTo360(baseLocation, _gameEngine.Player.Sprite);
+            double angle = SiVector.AngleTo360(baseLocation, _gameEngine.Player.Sprite);
 
             for (int col = 0; col < depth; col++)
             {

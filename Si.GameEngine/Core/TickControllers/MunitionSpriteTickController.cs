@@ -9,7 +9,7 @@ using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -42,7 +42,7 @@ namespace Si.GameEngine.Core.TickControllers
             }
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
         {
             var munitions = VisibleOfType<MunitionBase>();
             if (munitions.Any())
@@ -110,7 +110,7 @@ namespace Si.GameEngine.Core.TickControllers
         public SpriteShipBase TestObjectCollisionsAlongMunitionPath(MunitionBase munition, List<SpriteShipBase> objectsThatCanBeHit)
         {
             //Reverse the munition to its starting position.
-            var hitTestPosition = new SiPoint(munition.Location - munition.Velocity.Angle * munition.Velocity.Speed);
+            var hitTestPosition = new SiVector(munition.Location - munition.Velocity.Angle * munition.Velocity.Speed);
 
             //Hit-test each position along the munitions path.
             for (int i = 0; i < munition.Velocity.Speed; i++)
@@ -129,7 +129,7 @@ namespace Si.GameEngine.Core.TickControllers
             return null;
         }
 
-        public MunitionBase Create(WeaponBase weapon, SiPoint xyOffset = null)
+        public MunitionBase Create(WeaponBase weapon, SiVector xyOffset = null)
         {
             var obj = weapon.CreateMunition(xyOffset, null);
             SpriteManager.Add(obj);
@@ -143,7 +143,7 @@ namespace Si.GameEngine.Core.TickControllers
         /// <param name="lockedTarget"></param>
         /// <param name="xyOffset"></param>
         /// <returns></returns>
-        public MunitionBase CreateLockedOnTo(WeaponBase weapon, SpriteBase lockedTarget, SiPoint xyOffset = null)
+        public MunitionBase CreateLockedOnTo(WeaponBase weapon, SpriteBase lockedTarget, SiVector xyOffset = null)
         {
             var obj = weapon.CreateMunition(xyOffset, lockedTarget);
             SpriteManager.Add(obj);

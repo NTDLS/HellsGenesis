@@ -3,7 +3,7 @@ using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 
 namespace Si.GameEngine.Core.TickControllers
@@ -15,7 +15,7 @@ namespace Si.GameEngine.Core.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(double epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(double epoch, SiVector displacementVector)
         {
             if (Math.Abs(displacementVector.X) > 1 || Math.Abs(displacementVector.Y) > 1)
             {

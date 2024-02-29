@@ -1,8 +1,7 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.Sprites.Enemies._Superclass;
-using Si.GameEngine.Utility;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Drawing;
 using static Si.Library.SiConstants;
@@ -55,13 +54,13 @@ namespace Si.GameEngine.Sprites.Enemies.Peons._Superclass
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointBehind = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DegreesToRadians(180), new SiPoint(20, 20));
+                var pointBehind = SiVector.PointFromAngleAtDistance360(Velocity.Angle + SiVector.DegreesToRadians(180), new SiVector(20, 20));
                 ThrustAnimation.Velocity.Angle = Velocity.Angle;
                 ThrustAnimation.Location = Location + pointBehind;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointBehind = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DegreesToRadians(180), new SiPoint(20, 20));
+                var pointBehind = SiVector.PointFromAngleAtDistance360(Velocity.Angle + SiVector.DegreesToRadians(180), new SiVector(20, 20));
                 BoostAnimation.Velocity.Angle = Velocity.Angle;
                 BoostAnimation.Location = Location + pointBehind;
             }
@@ -83,7 +82,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons._Superclass
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(double epoch, SiPoint displacementVector)
+        public override void ApplyMotion(double epoch, SiVector displacementVector)
         {
             base.ApplyMotion(epoch, displacementVector);
 

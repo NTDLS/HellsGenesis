@@ -1,6 +1,6 @@
 ﻿using Si.GameEngine.Core;
 using Si.GameEngine.Core.Debug._Superclass;
-using Si.GameEngine.Sprites._Superclass;
+using Si.Library.Sprite;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -228,7 +228,7 @@ namespace Si.Game.Forms
             richTextBoxOutput.ResumeLayout();
         }
 
-        public void StartWatch(GameEngineCore gameEngine, SpriteBase sprite)
+        public void StartWatch(GameEngineCore gameEngine, ISprite sprite)
         {
             new Thread(o =>
             {

@@ -1,7 +1,7 @@
 ﻿using Si.GameEngine.Core.Managers;
 using Si.GameEngine.Core.TickControllers._Superclass;
 using Si.GameEngine.Sprites;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +35,7 @@ namespace Si.GameEngine.Core.TickControllers
                         {
                             if (accountedFor.Contains(child) == false)
                             {
-                                if (parent != child && parent.Intersects(child, new SiPoint(100, 100)))
+                                if (parent != child && parent.Intersects(child, new SiVector(100, 100)))
                                 {
                                     group.Add(child);
                                     accountedFor.Add(child);

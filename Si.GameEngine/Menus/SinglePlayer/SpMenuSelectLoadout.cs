@@ -3,7 +3,7 @@ using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -27,13 +27,13 @@ namespace Si.Menus.SinglePlayer
             double offsetX = currentScaledScreenBounds.X + 40;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Select a Ship Class");
+            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Select a Ship Class");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
             offsetY += itemTitle.Height;
 
-            _shipBlurb = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
+            _shipBlurb = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "");
             _shipBlurb.X = offsetX + 200;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
@@ -58,7 +58,7 @@ namespace Si.Menus.SinglePlayer
                 playerSprite.SpriteTag = "MENU_SHIP_SELECT";
                 playerSprite.Velocity.Angle.Degrees = 45;
 
-                var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), playerSprite.Loadout.Name, playerSprite.Loadout.Name);
+                var menuItem = CreateAndAddSelectableItem(new SiVector(offsetX + 25, offsetY), playerSprite.Loadout.Name, playerSprite.Loadout.Name);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
                 menuItem.UserData = playerSprite;

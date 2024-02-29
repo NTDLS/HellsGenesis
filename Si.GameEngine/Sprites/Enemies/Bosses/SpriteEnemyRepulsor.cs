@@ -2,10 +2,9 @@
 using Si.GameEngine.Loudouts;
 using Si.GameEngine.Sprites.Enemies.Bosses._Superclass;
 using Si.GameEngine.Sprites.Weapons;
-using Si.GameEngine.Utility;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprites.Enemies.Bosses
@@ -81,21 +80,21 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
             {
                 if (_leftGun?.IsDeadOrExploded == false)
                 {
-                    var pointLeft = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle - SiSpriteVectorMath.DEG_90_RADS, new SiPoint(25, 25));
+                    var pointLeft = SiVector.PointFromAngleAtDistance360(Velocity.Angle - SiVector.DEG_90_RADS, new SiVector(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _leftGun.Location += pointLeft;
                 }
 
                 if (_rightGun?.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DEG_90_RADS, new SiPoint(25, 25));
+                    var pointRight = SiVector.PointFromAngleAtDistance360(Velocity.Angle + SiVector.DEG_90_RADS, new SiVector(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _rightGun.Location += pointRight;
                 }
 
                 if (_thrust?.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiSpriteVectorMath.PointFromAngleAtDistance360(Velocity.Angle + SiSpriteVectorMath.DegreesToRadians(180), new SiPoint(35, 35));
+                    var pointRight = SiVector.PointFromAngleAtDistance360(Velocity.Angle + SiVector.DegreesToRadians(180), new SiVector(35, 35));
                     _thrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _thrust.Location += pointRight;
                 }
@@ -122,11 +121,11 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         private int roundsToFireBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
-        public override void ApplyIntelligence(double epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(double epoch, SiVector displacementVector)
         {
             base.ApplyIntelligence(epoch, displacementVector);
 
-            double distanceToPlayer = SiSpriteVectorMath.DistanceTo(this, _gameEngine.Player.Sprite);
+            double distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
 
             //We have no engines. :(
             if (_thrust?.IsDeadOrExploded == true)

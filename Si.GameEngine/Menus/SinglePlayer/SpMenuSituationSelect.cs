@@ -4,7 +4,7 @@ using Si.GameEngine.Menus._Superclass;
 using Si.GameEngine.Situations._Superclass;
 using Si.GameEngine.Sprites.MenuItems;
 using Si.Library;
-using Si.Library.Types.Geometry;
+using Si.Library.Mathematics.Geometry;
 using System.Linq;
 
 namespace Si.Menus.SinglePlayer
@@ -24,13 +24,13 @@ namespace Si.Menus.SinglePlayer
             double offsetX = currentScaledScreenBounds.X + 40;
             double offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Whats the Situation?");
+            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Whats the Situation?");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
             offsetY += itemTitle.Height;
 
-            _situationBlurb = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
+            _situationBlurb = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "");
             _situationBlurb.X = offsetX + 300;
             _situationBlurb.Y = offsetY - _situationBlurb.Size.Height;
 
@@ -49,7 +49,7 @@ namespace Si.Menus.SinglePlayer
             {
                 var situationInstance = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { gameEngine, });
 
-                var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
+                var menuItem = CreateAndAddSelectableItem(new SiVector(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
 
                 menuItem.UserData = situationInstance;
 
