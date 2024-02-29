@@ -43,7 +43,7 @@ namespace Si.GameEngine.AI.Logistics
         private AIActivity _currentActivity = AIActivity.None;
         private readonly double _idealMaxDistance = SiRandom.Variance(1500, 0.20);
         private readonly double _idealMinDistance = SiRandom.Variance(400, 0.10);
-        private readonly SiNormalizedAngle _evasiveLoopTargetAngle = new();
+        private readonly SiAngle _evasiveLoopTargetAngle = new();
         private SiRelativeDirection _rotationDirection;
 
         #endregion

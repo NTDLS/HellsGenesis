@@ -2,8 +2,6 @@
 {
     public class SiAngle
     {
-        #region Static Utilities.
-
         public const double DEG_TO_RAD = Math.PI / 180.0;
         public const double RAD_TO_DEG = 180.0 / Math.PI;
         public const double RADS_IN_CIRCLE = 2 * Math.PI;
@@ -16,28 +14,12 @@
         public static SiPoint RadiansToXY(double radians) => new(Math.Cos(radians), Math.Sin(radians));
         public static SiPoint DegreesToXY(double degrees) => new(Math.Cos(degrees * RAD_TO_DEG), Math.Sin(degrees * RAD_TO_DEG));
 
-        #endregion
-
         #region ~/CTor.
 
-        public SiAngle()
-        {
-        }
-
-        public SiAngle(SiAngle angle)
-        {
-            Radians = angle.Radians;
-        }
-
-        public SiAngle(double radians)
-        {
-            Radians = radians;
-        }
-
-        public SiAngle(double x, double y)
-        {
-            Degrees = RadiansToDegrees(Math.Atan2(y, x));
-        }
+        public SiAngle() { }
+        public SiAngle(SiAngle angle) => Radians = angle.Radians;
+        public SiAngle(double radians) => Radians = radians;
+        public SiAngle(double x, double y) => Degrees = RadiansToDegrees(Math.Atan2(y, x));
 
         #endregion
 
@@ -85,28 +67,28 @@
         /// <summary>
         /// Returns true if the current angle is between the given values.
         /// </summary>
-        /// <param name="minValue"></param>
-        /// <param name="maxValue"></param>
+        /// <param name="minSignedDegrees"></param>
+        /// <param name="maxSignedDegrees"></param>
         /// <returns></returns>
-        public bool IsBetween(double minValue, double maxValue)
+        public bool IsBetween(double minSignedDegrees, double maxSignedDegrees)
         {
-            var normalized = DegreesSplit;
-            if (minValue > maxValue)
+            var signedDegrees = DegreesSigned;
+            if (minSignedDegrees > maxSignedDegrees)
             {
-                return normalized >= maxValue && normalized <= minValue;
+                return signedDegrees >= maxSignedDegrees && signedDegrees <= minSignedDegrees;
             }
-            return normalized >= minValue && normalized <= maxValue;
+            return signedDegrees >= minSignedDegrees && signedDegrees <= maxSignedDegrees;
         }
 
         /// <summary>
-        /// Angle in degrees between 0-180 and -1--180
+        /// Angle in degrees between [−180,180]
         /// </summary>
-        public double DegreesSplit => (_degrees + 180) % 360 - 180;
+        public double DegreesSigned => (_degrees + 180) % 360 - 180;
 
         /// <summary>
-        // If the angle is negative, adding 360 brings it into the [0, 360) range.
+        /// Angle in radians between [−3.14,3.14]
         /// </summary>
-        public double DegreesUnsplit => (_degrees < 0 ? _degrees + 360 : _degrees) % 360;
+        public double RadiansSigned => (_degrees + Math.PI) % RADS_IN_CIRCLE - Math.PI;
 
         /// <summary>
         /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
