@@ -62,9 +62,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Si.Audio\Si.Audio.csproj" />
     <ProjectReference Include="..\Si.Library\Si.Library.csproj" />
     <ProjectReference Include="..\Si.MultiplayClient\Si.MultiplayClient.csproj" />
     <ProjectReference Include="..\Si.Rendering\Si.Rendering.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Core\Types\" />
   </ItemGroup>
 
 </Project>

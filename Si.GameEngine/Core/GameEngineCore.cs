@@ -1,10 +1,10 @@
 using Newtonsoft.Json;
 using Si.GameEngine.Core.Debug._Superclass;
-using Si.GameEngine.Core.Managers;
-using Si.GameEngine.Core.TickControllers;
 using Si.GameEngine.Core.Types;
 using Si.GameEngine.Menus;
+using Si.GameEngine.ResourceManagers;
 using Si.GameEngine.Sprites._Superclass;
+using Si.GameEngine.TickControllers;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.MultiplayClient;
@@ -233,7 +233,7 @@ namespace Si.GameEngine.Core
             }
         }
 
-        private void NewGameMenuCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void NewGameMenuCallback(SiEngineCallbackEvent sender, object refObj)
         {
             Menus.Add(new MenuStartNewGame(this));
         }

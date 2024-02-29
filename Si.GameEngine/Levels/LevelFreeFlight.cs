@@ -25,7 +25,7 @@ namespace Si.GameEngine.Levels
             AddSingleFireEvent(500, FirstShowPlayerCallback);
         }
 
-        private void FirstShowPlayerCallback(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(SiEngineCallbackEvent sender, object refObj)
         {
             _gameEngine.Player.ResetAndShow();
         }

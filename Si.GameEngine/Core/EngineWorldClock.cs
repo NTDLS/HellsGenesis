@@ -225,7 +225,7 @@ namespace Si.GameEngine.Core
             return displacementVector;
         }
 
-        private void UpdateStatusText(GameEngineCore gameEngine, SiEngineCallbackEvent sender, object refObj)
+        private void UpdateStatusText(SiEngineCallbackEvent sender, object refObj)
         {
             if (_gameEngine.Multiplay.State.PlayMode != SiPlayMode.MutiPlayerClient
                 && _gameEngine.Situations?.CurrentSituation?.State == SiSituationState.Started)
