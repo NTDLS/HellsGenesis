@@ -185,7 +185,10 @@ namespace Si.GameEngine.Managers
             });
         }
 
-        public void DeleteAll()
+        /// <summary>
+        /// Deletes all the non-background type of sprites.
+        /// </summary>
+        public void DeleteActionSprites()
         {
             Powerups.DeleteAll();
             Enemies.DeleteAll();
