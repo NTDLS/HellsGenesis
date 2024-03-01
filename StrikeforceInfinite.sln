@@ -5,8 +5,8 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{5E60224E-A4A6-47B6-A293-F24A5EFE403F}"
 	ProjectSection(SolutionItems) = preProject
-		AIModelsmd.md = AIModelsmd.md
 		Menus.md = Menus.md
+		AI-Models.md = AI-Models.md
 		Modules.md = Modules.md
 		Terms.md = Terms.md
 		ToDo.md = ToDo.md
@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Message", "Si.Message\Si
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Rendering", "Si.Rendering\Si.Rendering.csproj", "{2A08F5C6-8A24-4F37-A90E-83C0DA604C7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Si.Audio", "Si.Audio\Si.Audio.csproj", "{310CBE99-7666-4A1F-BCE4-96C9EE4E0C71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Audio", "Si.Audio\Si.Audio.csproj", "{310CBE99-7666-4A1F-BCE4-96C9EE4E0C71}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DirectX", "DirectX", "{E1544675-32D3-4A56-8D92-1F6264A8F147}"
 EndProject
