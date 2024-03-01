@@ -171,12 +171,12 @@ namespace Si.GameEngine
         {
             Sprites.PlayerStatsText.Visable = false;
             Situations.End();
-            Sprites.DeleteAll();
+            Sprites.DeleteActionSprites();
         }
 
         public void StartGame()
         {
-            Sprites.DeleteAll();
+            Sprites.DeleteActionSprites();
 
             switch (Multiplay.State.PlayMode)
             {
