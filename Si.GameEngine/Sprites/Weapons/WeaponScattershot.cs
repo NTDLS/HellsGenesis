@@ -9,7 +9,7 @@ namespace Si.GameEngine.Sprites.Weapons
     internal class WeaponScattershot : WeaponBase
     {
         static new string Name { get; } = "Scattershot";
-        private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
+        private const string soundPath = @"Sounds\Weapons\Scattershot.wav";
         private const float soundVolumne = 0.2f;
 
         public WeaponScattershot(GameEngineCore gameEngine, SpriteShipBase owner)

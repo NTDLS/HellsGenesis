@@ -9,7 +9,7 @@ namespace Si.GameEngine.Sprites.Weapons
     internal class WeaponBlunderbuss : WeaponBase
     {
         static new string Name { get; } = "Blunderbuss";
-        private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
+        private const string soundPath = @"Sounds\Weapons\Blunderbuss.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponBlunderbuss(GameEngineCore gameEngine, SpriteShipBase owner)
