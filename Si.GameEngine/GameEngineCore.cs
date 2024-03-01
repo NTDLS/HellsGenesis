@@ -281,18 +281,16 @@ namespace Si.GameEngine
         {
             if (IsRunning == false)
             {
-                throw new Exception("The game engine is not running.");
+                IsRunning = false;
+
+                OnStopEngine?.Invoke(this);
+
+                Multiplay.Dispose();
+                _worldClock.Dispose();
+                Sprites.Dispose();
+                Rendering.Dispose();
+                Assets.Dispose();
             }
-
-            IsRunning = false;
-
-            OnStopEngine?.Invoke(this);
-
-            Multiplay.Dispose();
-            _worldClock.Dispose();
-            Sprites.Dispose();
-            Rendering.Dispose();
-            Assets.Dispose();
         }
 
         public bool IsPaused() => _worldClock.IsPaused();

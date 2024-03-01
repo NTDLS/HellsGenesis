@@ -240,6 +240,54 @@ namespace Si.Rendering
         }
 
         /// <summary>
+        /// Draws a color gradient filled ellipse at the specified location.
+        /// </summary>
+        /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
+        public Ellipse FillEllipseAt(RenderTarget renderTarget, float x, float y,
+            float radiusX, float radiusY, Color4 startColor, Color4 endColor, float angleRadians = 0)
+        {
+            var ellipse = new Ellipse()
+            {
+                Point = new RawVector2(x, y),
+                RadiusX = radiusX,
+                RadiusY = radiusY,
+            };
+
+            if (angleRadians != 0)
+            {
+                var destRect = new RawRectangleF(
+                    (x - radiusX / 2.0f),
+                    (y - radiusY / 2.0f),
+                    ((x - radiusX / 2.0f) + radiusX),
+                    ((y - radiusY / 2.0f) + radiusY));
+
+                ApplyTransformAngle(renderTarget, destRect, angleRadians);
+            }
+
+            // Define gradient stops
+            using var gradientStops = new GradientStopCollection(renderTarget, new GradientStop[]
+            {
+                new GradientStop() { Position = 0.0f, Color = startColor },
+                new GradientStop() { Position = 1.0f, Color = endColor }
+            });
+
+            // Create linear gradient brush
+            using var linearGradientBrush = new LinearGradientBrush(renderTarget,
+                new LinearGradientBrushProperties()
+                {
+                    StartPoint = new RawVector2(x - radiusX, y),
+                    EndPoint = new RawVector2(x + radiusX, y)
+                }, gradientStops);
+
+            // Fill ellipse with gradient brush
+            renderTarget.FillEllipse(ellipse, linearGradientBrush);
+
+            if (angleRadians != 0) ResetTransform(renderTarget);
+
+            return ellipse;
+        }
+
+        /// <summary>
         /// Draws a hollow ellipse at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>

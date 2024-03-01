@@ -279,7 +279,7 @@ namespace Si.GameEngine.Managers
                 */
 
                 //_gameEngine.Sprites.GenericSprites.FragmentBlastOf(_gameEngine.Player.Sprite);
-                _gameEngine.Sprites.Particles.ParticleBlast(500, _gameEngine.Player.Sprite);
+                _gameEngine.Sprites.Particles.ParticleBlast(100, _gameEngine.Player.Sprite);
                 //_gameEngine.Sprites.NewGame();
                 //_gameEngine.Sprites.ResetAndShowPlayer();
             }

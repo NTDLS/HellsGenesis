@@ -59,6 +59,16 @@ namespace Si.GameEngine.TickControllers.SpriteTickController
             return obj;
         }
 
+        public SpriteParticle CreateAt(SiPoint location, Size? size = null)
+        {
+            var obj = new SpriteParticle(GameEngine, location, size ?? new Size(1, 1))
+            {
+                Visable = true
+            };
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
         public void ParticleBlast(int particleCount, SpriteBase at)
             => ParticleBlast(particleCount, at.Location);
 
@@ -81,8 +91,11 @@ namespace Si.GameEngine.TickControllers.SpriteTickController
                 {
                     for (int i = 0; i < particlesExplosion; i++)
                     {
-                        var particle = CreateAt(location, SiRenderingUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
+                        var particle = CreateAt(location, new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
                         particle.Shape = ParticleShape.FilledEllipse;
+                        particle.ColorType = ParticleColorType.Graident;
+                        particle.GradientStartColor = SiRenderingUtility.GetRandomHotColor();
+                        particle.GradientEndColor = SiRenderingUtility.GetRandomHotColor();
                         particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                         particle.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
                         particle.Velocity.Speed *= SiRandom.Between(1, 3.5f);

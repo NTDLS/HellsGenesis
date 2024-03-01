@@ -27,6 +27,12 @@
             Triangle
         }
 
+        public enum ParticleColorType
+        {
+            Color,
+            Graident
+        }
+
         public enum ParticleVectorType
         {
             /// <summary>

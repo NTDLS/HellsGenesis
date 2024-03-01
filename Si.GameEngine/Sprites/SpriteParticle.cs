@@ -24,22 +24,36 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public float FadeToBlackReductionAmount { get; set; } = 0.01f;
 
+        public ParticleColorType ColorType { get; set; } = ParticleColorType.Color;
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Native;
         public ParticleShape Shape { get; set; } = ParticleShape.FilledEllipse;
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
         public float RotationSpeed { get; set; } = 0;
         public SiRelativeDirection RotationDirection { get; set; } = SiRelativeDirection.None;
+
+        /// <summary>
+        /// The color of the particle when ColorType == Color;
+        /// </summary>
         public Color4 Color { get; set; }
+
+        /// <summary>
+        /// The color of the particle when ColorType == Graident;
+        /// </summary>
+        public Color4 GradientStartColor { get; set; }
+        /// <summary>
+        /// The color of the particle when ColorType == Graident;
+        /// </summary>
+        public Color4 GradientEndColor { get; set; }
         public SiAngle TravelAngle { get; set; } = new SiAngle();
 
-        public SpriteParticle(GameEngineCore gameEngine, SiPoint location, Size size, Color4 color)
+        public SpriteParticle(GameEngineCore gameEngine, SiPoint location, Size size, Color4? color = null)
             : base(gameEngine)
         {
             Initialize(size);
 
             Location = location.Clone();
 
-            Color = color;
+            Color = color ?? gameEngine.Rendering.Materials.Colors.White;
             RotationSpeed = SiRandom.Between(1, 100) / 20.0f;
             RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
             TravelAngle.Degrees = SiRandom.Between(0, 359);
@@ -74,12 +88,27 @@ namespace Si.GameEngine.Sprites
 
             if (CleanupMode == ParticleCleanupMode.FadeToBlack)
             {
-                Color *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
-
-                // Check if the particle color is below a certain threshold and remove it.
-                if (Color.Red < 0.5f && Color.Green < 0.5f && Color.Blue < 0.5f)
+                if (ColorType == ParticleColorType.Color)
                 {
-                    QueueForDelete();
+                    Color *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
+
+                    // Check if the particle color is below a certain threshold and remove it.
+                    if (Color.Red < 0.5f && Color.Green < 0.5f && Color.Blue < 0.5f)
+                    {
+                        QueueForDelete();
+                    }
+                }
+                else if (ColorType == ParticleColorType.Graident)
+                {
+                    GradientStartColor *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
+                    GradientEndColor *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
+
+                    // Check if the particle color is below a certain threshold and remove it.
+                    if ((GradientStartColor.Red < 0.5f && GradientStartColor.Green < 0.5f && GradientStartColor.Blue < 0.5f)
+                        || (GradientEndColor.Red < 0.5f && GradientEndColor.Green < 0.5f && GradientEndColor.Blue < 0.5f))
+                    {
+                        QueueForDelete();
+                    }
                 }
             }
             else if (CleanupMode == ParticleCleanupMode.DistanceOffScreen)
@@ -98,8 +127,16 @@ namespace Si.GameEngine.Sprites
                 switch (Shape)
                 {
                     case ParticleShape.FilledEllipse:
-                        _gameEngine.Rendering.FillEllipseAt(renderTarget,
-                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Velocity.Angle.Degrees);
+                        if (ColorType == ParticleColorType.Color)
+                        {
+                            _gameEngine.Rendering.FillEllipseAt(renderTarget,
+                                RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Velocity.Angle.Degrees);
+                        }
+                        else if (ColorType == ParticleColorType.Graident)
+                        {
+                            _gameEngine.Rendering.FillEllipseAt(renderTarget, RenderLocation.X, RenderLocation.Y,
+                                Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)Velocity.Angle.Degrees);
+                        }
                         break;
                     case ParticleShape.HollowEllipse:
                         _gameEngine.Rendering.HollowEllipseAt(renderTarget,

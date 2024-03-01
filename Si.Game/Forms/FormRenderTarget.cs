@@ -57,11 +57,11 @@ namespace Si.Game
             };
             Controls.Add(drawingSurface);
 
-            _gameEngine = new GameEngine.GameEngineCore(drawingSurface);
+            _gameEngine = new GameEngineCore(drawingSurface);
 
             _gameEngine.EnableDebugging(new FormInterrogation(_gameEngine));
 
-            _gameEngine.OnStopEngine += (GameEngine.GameEngineCore sender) =>
+            _gameEngine.OnStopEngine += (GameEngineCore sender) =>
             {   //If the engine is stopped, close the main form.
                 Invoke((MethodInvoker)delegate
                 {
