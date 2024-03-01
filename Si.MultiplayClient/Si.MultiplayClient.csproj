@@ -4,12 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <ApplicationIcon>StrikeforceInfinite.ico</ApplicationIcon>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Include="StrikeforceInfinite.ico" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NTDLS.DatagramMessaging" Version="1.3.1" />

@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="StrikeforceInfinite.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Si.Library\Si.Library.csproj" />
     <ProjectReference Include="..\Si.MultiplayClient\Si.MultiplayClient.csproj" />
   </ItemGroup>
