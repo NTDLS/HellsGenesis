@@ -28,7 +28,7 @@ namespace Si.GameEngine.Sprites.Weapons
             RecoilAmount = 0.01f;
         }
 
-        public override MunitionBase CreateMunition(SiVector xyOffset, SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionScattershot(_gameEngine, this, _owner, xyOffset);
         }

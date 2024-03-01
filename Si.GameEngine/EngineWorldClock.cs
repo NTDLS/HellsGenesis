@@ -32,7 +32,7 @@ namespace Si.GameEngine
             _shutdown = false;
             _graphicsThread.Start();
 
-            _gameEngine.Events.Create(10, UpdateStatusText, SiEngineCallbackEvent.SiCallbackEventMode.Recurring);
+            _gameEngine.Events.Add(10, UpdateStatusText, SiDefermentEvent.SiCallbackEventMode.Recurring);
         }
 
         public void Dispose()
@@ -56,7 +56,7 @@ namespace Si.GameEngine
             if (textBlock == null)
             {
                 textBlock = _gameEngine.Sprites.TextBlocks.Create(_gameEngine.Rendering.TextFormats.LargeBlocker,
-                    _gameEngine.Rendering.Materials.Brushes.Red, new SiVector(100, 100), true, "PausedText", "Paused");
+                    _gameEngine.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText", "Paused");
 
                 textBlock.X = _gameEngine.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
                 textBlock.Y = _gameEngine.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
@@ -130,48 +130,45 @@ namespace Si.GameEngine
 
                 var epoch = (float)(elapsedEpochMilliseconds / millisecondPerEpoch);
 
-                _gameEngine.Menus.Use(m =>
+                _gameEngine.Sprites.Use(o =>
                 {
-                    _gameEngine.Sprites.Use(o =>
+                    if (!_isPaused)
                     {
-                        if (!_isPaused)
+                        ExecuteWorldClockTick(epoch);
+                    }
+
+                    _gameEngine.Debug.ProcessCommand();
+
+                    //If it is time to render, then render the frame!.
+                    if (frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency > frameRateDelayMicroseconds)
+                    {
+                        _gameEngine.Render();
+                        frameRateTimer.Restart();
+                        _gameEngine.Display.FrameCounter.Calculate();
+
+                        #region Framerate fine-tuning.
+                        if (_gameEngine.Settings.FineTuneFramerate)
                         {
-                            ExecuteWorldClockTick(epoch);
-                        }
-
-                        _gameEngine.Debug.ProcessCommand();
-
-                        //If it is time to render, then render the frame!.
-                        if (frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency > frameRateDelayMicroseconds)
-                        {
-                            _gameEngine.Render();
-                            frameRateTimer.Restart();
-                            _gameEngine.Display.FrameCounter.Calculate();
-
-                            #region Framerate fine-tuning.
-                            if (_gameEngine.Settings.FineTuneFramerate)
+                            //From time-to-time we want o check the average framerate and make sure its sane,
+                            if (_frameRateAdjustCount > _frameRateAdjustCadence)
                             {
-                                //From time-to-time we want o check the average framerate and make sure its sane,
-                                if (_frameRateAdjustCount > _frameRateAdjustCadence)
+                                _frameRateAdjustCount = 0;
+                                if (_gameEngine.Display.FrameCounter.AverageFrameRate < framePerSecondLimit && frameRateDelayMicroseconds > 1000)
                                 {
-                                    _frameRateAdjustCount = 0;
-                                    if (_gameEngine.Display.FrameCounter.AverageFrameRate < framePerSecondLimit && frameRateDelayMicroseconds > 1000)
-                                    {
-                                        //The framerate is too low, reduce the delay.
-                                        frameRateDelayMicroseconds -= 1000;
-                                    }
-                                    else if (_gameEngine.Display.FrameCounter.AverageFrameRate > framePerSecondLimit * 1.20)
-                                    {
-                                        //the framerate is too high increase the delay.
-                                        frameRateDelayMicroseconds += 25;
-                                    }
-                                    //System.Diagnostics.Debug.Print($"{frameRateDelayMicroseconds} -> {framePerSecondLimit} -> {_gameEngine.Display.FrameCounter.AverageFrameRate:n4}");
+                                    //The framerate is too low, reduce the delay.
+                                    frameRateDelayMicroseconds -= 1000;
                                 }
-                                _frameRateAdjustCount++;
+                                else if (_gameEngine.Display.FrameCounter.AverageFrameRate > framePerSecondLimit * 1.20)
+                                {
+                                    //the framerate is too high increase the delay.
+                                    frameRateDelayMicroseconds += 25;
+                                }
+                                //System.Diagnostics.Debug.Print($"{frameRateDelayMicroseconds} -> {framePerSecondLimit} -> {_gameEngine.Display.FrameCounter.AverageFrameRate:n4}");
                             }
-                            #endregion
+                            _frameRateAdjustCount++;
                         }
-                    });
+                        #endregion
+                    }
                 });
 
                 //Determine how many µs it took to render the scene.
@@ -194,7 +191,7 @@ namespace Si.GameEngine
             }
         }
 
-        private SiVector ExecuteWorldClockTick(float epoch)
+        private SiPoint ExecuteWorldClockTick(float epoch)
         {
             _gameEngine.Menus.ExecuteWorldClockTick();
             _gameEngine.Situations.ExecuteWorldClockTick();
@@ -225,7 +222,7 @@ namespace Si.GameEngine
             return displacementVector;
         }
 
-        private void UpdateStatusText(SiEngineCallbackEvent sender, object refObj)
+        private void UpdateStatusText(SiDefermentEvent sender, object refObj)
         {
             if (_gameEngine.Multiplay.State.PlayMode != SiPlayMode.MutiPlayerClient
                 && _gameEngine.Situations?.CurrentSituation?.State == SiSituationState.Started)

@@ -25,17 +25,17 @@ namespace Si.Menus.MultiPlayer
             float offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             float offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Multiplayer");
+            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Multiplayer");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.IsHighlighted = true;
 
-            var helpItem = CreateAndAddSelectableItem(new SiVector(offsetX, offsetY), "JOIN", " Join a Game ");
+            var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "JOIN", " Join a Game ");
             helpItem.Selected = true;
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = CreateAndAddSelectableItem(new SiVector(offsetX, offsetY), "HOST", " Host a Game ");
+            helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "HOST", " Host a Game ");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
@@ -45,7 +45,7 @@ namespace Si.Menus.MultiPlayer
 
         private bool MenuMultiplayerHostOrJoin_OnEscape()
         {
-            _gameEngine.Menus.Add(new MenuStartNewGame(_gameEngine));
+            _gameEngine.Menus.Show(new MenuStartNewGame(_gameEngine));
             return true;
         }
 
@@ -54,12 +54,12 @@ namespace Si.Menus.MultiPlayer
             if (item.Key == "JOIN")
             {
                 _gameEngine.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerClient);
-                _gameEngine.Menus.Add(new MpMenuClientJoinLobby(_gameEngine));
+                _gameEngine.Menus.Show(new MpMenuClientJoinLobby(_gameEngine));
             }
             else if (item.Key == "HOST")
             {
                 _gameEngine.Multiplay.SetPlayMode(SiPlayMode.MutiPlayerHost);
-                _gameEngine.Menus.Add(new MpMenuHostCreateLobby(_gameEngine));
+                _gameEngine.Menus.Show(new MpMenuHostCreateLobby(_gameEngine));
             }
 
             return true;

@@ -11,7 +11,7 @@ namespace Si.GameEngine.Situations._Superclass
     public class SituationBase
     {
         protected GameEngineCore _gameEngine;
-        protected List<SiEngineCallbackEvent> Events = new();
+        protected List<SiDefermentEvent> Events = new();
 
         public LevelBase CurrentLevel { get; protected set; }
         private int _currentLevelIndex = 0;

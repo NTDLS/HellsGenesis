@@ -3,13 +3,13 @@ using Si.GameEngine.Core.Types;
 using Si.GameEngine.Menus;
 using Si.GameEngine.TickControllers._Superclass;
 using System.Collections.Generic;
-using static Si.GameEngine.Core.Types.SiEngineCallbackEvent;
+using static Si.GameEngine.Core.Types.SiDefermentEvent;
 
-namespace Si.GameEngine.TickControllers
+namespace Si.GameEngine.TickControllers.UnvectoredTickController
 {
-    public class EventsTickController : UnvectoredTickControllerBase<SiEngineCallbackEvent>
+    public class EventsTickController : UnvectoredTickControllerBase<SiDefermentEvent>
     {
-        private readonly PessimisticCriticalResource<List<SiEngineCallbackEvent>> _collection = new();
+        private readonly PessimisticCriticalResource<List<SiDefermentEvent>> _collection = new();
         public delegate void SiOnExecuteSimpleT<T>(T param);
 
         public EventsTickController(GameEngineCore gameEngine)
@@ -37,76 +37,76 @@ namespace Si.GameEngine.TickControllers
         /// </summary>
         public void QueueTheDoorIsAjar()
         {
-            Create(4, (sender, refObj) =>
+            Add(4, (sender, refObj) =>
             {
                 GameEngine.Audio.DoorIsAjarSound.Play();
-                GameEngine.Menus.Add(new MenuStartNewGame(GameEngine));
+                GameEngine.Menus.Show(new MenuStartNewGame(GameEngine));
             });
         }
 
         #region Factories.
 
-        public SiEngineCallbackEvent Create(int milliseconds, SiOnExecute executeCallback, object refObj,
+        public SiDefermentEvent Add(int milliseconds, SiOnExecute executeCallback, object refObj,
             SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
             SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(milliseconds, refObj, executeCallback, callbackEventMode, callbackEventAsync);
+                var obj = new SiDefermentEvent(milliseconds, refObj, executeCallback, callbackEventMode, callbackEventAsync);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiEngineCallbackEvent Create(int milliseconds, SiOnExecute executeCallback,
+        public SiDefermentEvent Add(int milliseconds, SiOnExecute executeCallback,
             SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
             SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(milliseconds, null, executeCallback, callbackEventMode, callbackEventAsync);
+                var obj = new SiDefermentEvent(milliseconds, null, executeCallback, callbackEventMode, callbackEventAsync);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiEngineCallbackEvent Create(int milliseconds, SiOnExecute executeCallback,
+        public SiDefermentEvent Add(int milliseconds, SiOnExecute executeCallback,
             SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(milliseconds, null, executeCallback, callbackEventMode);
+                var obj = new SiDefermentEvent(milliseconds, null, executeCallback, callbackEventMode);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiEngineCallbackEvent Create(int milliseconds, object refObj, SiOnExecute executeCallback)
+        public SiDefermentEvent Add(int milliseconds, object refObj, SiOnExecute executeCallback)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(milliseconds, refObj, executeCallback);
+                var obj = new SiDefermentEvent(milliseconds, refObj, executeCallback);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiEngineCallbackEvent Create(int milliseconds, SiOnExecute executeCallback)
+        public SiDefermentEvent Add(int milliseconds, SiOnExecute executeCallback)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(milliseconds, executeCallback);
+                var obj = new SiDefermentEvent(milliseconds, executeCallback);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiEngineCallbackEvent Create<T>(int milliseconds, T param, SiOnExecuteSimpleT<T> executeCallback)
+        public SiDefermentEvent Add<T>(int milliseconds, T param, SiOnExecuteSimpleT<T> executeCallback)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(milliseconds,
-                    (SiEngineCallbackEvent sender, object refObj) =>
+                var obj = new SiDefermentEvent(milliseconds,
+                    (SiDefermentEvent sender, object refObj) =>
                 {
                     executeCallback(param);
                 });
@@ -115,17 +115,27 @@ namespace Si.GameEngine.TickControllers
             });
         }
 
-        public SiEngineCallbackEvent Create(int milliseconds, SiOnExecuteSimple executeCallback)
+        public SiDefermentEvent Add(int milliseconds, SiOnExecuteSimple executeCallback)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiEngineCallbackEvent(milliseconds, executeCallback);
+                var obj = new SiDefermentEvent(milliseconds, executeCallback);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiEngineCallbackEvent Add(SiEngineCallbackEvent obj)
+        public SiDefermentEvent Add(SiOnExecuteSimple executeCallback)
+        {
+            return _collection.Use(o =>
+            {
+                var obj = new SiDefermentEvent(0, executeCallback);
+                o.Add(obj);
+                return obj;
+            });
+        }
+
+        public SiDefermentEvent Add(SiDefermentEvent obj)
         {
             return _collection.Use(o =>
             {
@@ -134,7 +144,7 @@ namespace Si.GameEngine.TickControllers
             });
         }
 
-        public void Delete(SiEngineCallbackEvent obj)
+        public void Delete(SiDefermentEvent obj)
         {
             _collection.Use(o =>
             {

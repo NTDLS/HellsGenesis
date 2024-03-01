@@ -73,7 +73,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         private int roundsToFireBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
 
-        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -84,7 +84,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             base.ApplyIntelligence(epoch, displacementVector);
 
-            float distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
+            float distanceToPlayer = SiPoint.DistanceTo(this, _gameEngine.Player.Sprite);
 
             if (mode == AIMode.Approaching)
             {

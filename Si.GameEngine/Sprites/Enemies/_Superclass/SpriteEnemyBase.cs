@@ -46,7 +46,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             RadarPositionIndicator.Visable = false;
             RadarPositionText = _gameEngine.Sprites.TextBlocks.CreateRadarPosition(
                 gameEngine.Rendering.TextFormats.RadarPositionIndicator,
-                gameEngine.Rendering.Materials.Brushes.Red, new SiVector());
+                gameEngine.Rendering.Materials.Brushes.Red, new SiPoint());
         }
 
         public virtual void BeforeCreate() { }
@@ -177,7 +177,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             }
         }
 
-        public override bool TryMunitionHit(MunitionBase munition, SiVector hitTestPosition)
+        public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
         {
             if (munition.FiredFromType == SiFiredFromType.Player)
             {
@@ -193,7 +193,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(float epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -258,7 +258,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             }
         }
 
-        public virtual void ApplyIntelligence(float epoch, SiVector displacementVector)
+        public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             if (Weapons != null)
             {

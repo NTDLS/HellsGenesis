@@ -30,7 +30,7 @@ namespace Si.GameEngine.Sprites
         public SiRelativeDirection RotationDirection { get; set; } = SiRelativeDirection.None;
 
 
-        public SpriteGeneric(GameEngineCore gameEngine, SiVector location, SharpDX.Direct2D1.Bitmap bitmap)
+        public SpriteGeneric(GameEngineCore gameEngine, SiPoint location, SharpDX.Direct2D1.Bitmap bitmap)
             : base(gameEngine)
         {
             Initialize(bitmap);
@@ -59,7 +59,7 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public override void ApplyMotion(float epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             if (RotationDirection == SiRelativeDirection.Right)
             {

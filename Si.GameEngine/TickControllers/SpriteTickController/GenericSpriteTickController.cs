@@ -4,7 +4,7 @@ using Si.GameEngine.Sprites._Superclass;
 using Si.GameEngine.TickControllers._Superclass;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.GameEngine.TickControllers
+namespace Si.GameEngine.TickControllers.SpriteTickController
 {
     /// <summary>
     /// These are just generic bitmap sprites.
@@ -16,7 +16,7 @@ namespace Si.GameEngine.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
             foreach (var particle in Visible())
             {

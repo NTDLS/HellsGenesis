@@ -8,7 +8,8 @@ using Si.GameEngine.Sprites.Player;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Powerup._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
-using Si.GameEngine.TickControllers;
+using Si.GameEngine.TickControllers.PlayerSpriteTickController;
+using Si.GameEngine.TickControllers.SpriteTickController;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.Library.Payload;
@@ -28,16 +29,17 @@ namespace Si.GameEngine.Managers
         public delegate T CollectionAccessorT<T>(List<SpriteBase> sprites);
 
         private readonly GameEngineCore _gameEngine;
-        private SiVector _radarScale;
-        private SiVector _radarOffset;
+        private SiPoint _radarScale;
+        private SiPoint _radarOffset;
 
         public SpriteTextBlock PlayerStatsText { get; private set; }
         public SpriteTextBlock DebugText { get; private set; }
         public bool RenderRadar { get; set; } = false;
 
-        #region Sprites and their factories.
-
         private readonly PessimisticCriticalResource<List<SpriteBase>> _collection = new();
+
+        #region Sprite Tick Controllerss.
+
         public AnimationSpriteTickController Animations { get; private set; }
         public AttachmentSpriteTickController Attachments { get; private set; }
         public GenericSpriteTickController GenericSprites { get; private set; }
@@ -51,6 +53,7 @@ namespace Si.GameEngine.Managers
         public TextBlocksSpriteTickController TextBlocks { get; private set; }
         public PlayerDronesSpriteTickController PlayerDrones { get; private set; }
         public EnemyDronesSpriteTickController EnemyDrones { get; private set; }
+        public PlayerSpriteTickController Player { get; private set; }
 
         #endregion
 
@@ -60,17 +63,17 @@ namespace Si.GameEngine.Managers
 
             Animations = new AnimationSpriteTickController(_gameEngine, this);
             Attachments = new AttachmentSpriteTickController(_gameEngine, this);
-            Munitions = new MunitionSpriteTickController(_gameEngine, this);
             Debugs = new DebugsSpriteTickController(_gameEngine, this);
             Enemies = new EnemiesSpriteTickController(_gameEngine, this);
-            Particles = new ParticlesSpriteTickController(_gameEngine, this);
+            EnemyDrones = new EnemyDronesSpriteTickController(_gameEngine, this);
             GenericSprites = new GenericSpriteTickController(_gameEngine, this);
+            Munitions = new MunitionSpriteTickController(_gameEngine, this);
+            Particles = new ParticlesSpriteTickController(_gameEngine, this);
+            PlayerDrones = new PlayerDronesSpriteTickController(_gameEngine, this);
             Powerups = new PowerupsSpriteTickController(_gameEngine, this);
             RadarPositions = new RadarPositionsSpriteTickController(_gameEngine, this);
             Stars = new StarsSpriteTickController(_gameEngine, this);
             TextBlocks = new TextBlocksSpriteTickController(_gameEngine, this);
-            PlayerDrones = new PlayerDronesSpriteTickController(_gameEngine, this);
-            EnemyDrones = new EnemyDronesSpriteTickController(_gameEngine, this);
         }
 
         public List<SpritePlayerBase> AllVisiblePlayers
@@ -137,9 +140,9 @@ namespace Si.GameEngine.Managers
         {
             _gameEngine.Player.Sprite = new SpriteDebugPlayer(_gameEngine) { Visable = false };
 
-            PlayerStatsText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.WhiteSmoke, new SiVector(5, 5), true);
+            PlayerStatsText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.Cyan, new SiVector(5, PlayerStatsText.Y + 100), true);
+            DebugText = TextBlocks.Create(_gameEngine.Rendering.TextFormats.RealtimePlayerStats, _gameEngine.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
         }
 
         public void Dispose()
@@ -173,13 +176,11 @@ namespace Si.GameEngine.Managers
 
                 _gameEngine.Events.CleanupQueuedForDeletion();
 
-                _gameEngine.Menus.CleanupDeletedObjects();
-
                 if (_gameEngine.Player.Sprite.IsDeadOrExploded)
                 {
                     _gameEngine.Player.Sprite.Visable = false;
                     _gameEngine.Player.Sprite.ReviveDeadOrExploded();
-                    _gameEngine.Menus.Add(new MenuStartNewGame(_gameEngine));
+                    _gameEngine.Menus.Show(new MenuStartNewGame(_gameEngine));
                 }
             });
         }
@@ -225,7 +226,7 @@ namespace Si.GameEngine.Managers
                 {
                     if (obj != with)
                     {
-                        if (obj.Intersects(with.Location, new SiVector(with.Size.Width, with.Size.Height)))
+                        if (obj.Intersects(with.Location, new SiPoint(with.Size.Width, with.Size.Height)))
                         {
                             objs.Add(obj);
                         }
@@ -236,9 +237,9 @@ namespace Si.GameEngine.Managers
         }
 
         public List<SpriteBase> Intersections(float x, float y, float width, float height)
-            => Intersections(new SiVector(x, y), new SiVector(width, height));
+            => Intersections(new SiPoint(x, y), new SiPoint(width, height));
 
-        public List<SpriteBase> Intersections(SiVector location, SiVector size)
+        public List<SpriteBase> Intersections(SiPoint location, SiPoint size)
         {
             return _collection.Use(o =>
             {
@@ -255,7 +256,7 @@ namespace Si.GameEngine.Managers
             });
         }
 
-        public List<SpriteBase> RenderLocationIntersections(SiVector location, SiVector size)
+        public List<SpriteBase> RenderLocationIntersections(SiPoint location, SiPoint size)
         {
             return _collection.Use(o =>
             {
@@ -303,8 +304,8 @@ namespace Si.GameEngine.Managers
                     float radarVisionWidth = _gameEngine.Display.TotalCanvasSize.Width * radarDistance;
                     float radarVisionHeight = _gameEngine.Display.TotalCanvasSize.Height * radarDistance;
 
-                    _radarScale = new SiVector(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
-                    _radarOffset = new SiVector(radarBgImage.Size.Width / 2.0f, radarBgImage.Size.Height / 2.0f); //Best guess until player is visible.
+                    _radarScale = new SiPoint(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
+                    _radarOffset = new SiPoint(radarBgImage.Size.Width / 2.0f, radarBgImage.Size.Height / 2.0f); //Best guess until player is visible.
                 }
 
                 if (_gameEngine.Player.Sprite is not null && _gameEngine.Player.Sprite.Visable)
@@ -312,7 +313,7 @@ namespace Si.GameEngine.Managers
                     float centerOfRadarX = (int)(radarBgImage.Size.Width / 2.0f) - 2.0f; //Subtract half the dot size.
                     float centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0f) - 2.0f; //Subtract half the dot size.
 
-                    _radarOffset = new SiVector(
+                    _radarOffset = new SiPoint(
                             _gameEngine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _gameEngine.Player.Sprite.X * _radarScale.X),
                             _gameEngine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _gameEngine.Player.Sprite.Y * _radarScale.Y)
                         );

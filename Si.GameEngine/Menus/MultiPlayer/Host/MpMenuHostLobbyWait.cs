@@ -25,22 +25,22 @@ namespace Si.Menus.MultiPlayer.Host
             float offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             float offsetY = _currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Waiting in your Lobby");
+            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Waiting in your Lobby");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.IsHighlighted = true;
 
-            _countOfReadyPlayers = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "?");
+            _countOfReadyPlayers = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "?");
             _countOfReadyPlayers.X -= _countOfReadyPlayers.Size.Width / 2;
 
             offsetY += _countOfReadyPlayers.Size.Height + 10;
 
-            _countdownToAutoStart = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "");
+            _countdownToAutoStart = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
             _countdownToAutoStart.X -= _countdownToAutoStart.Size.Width / 2;
 
             offsetY += _countdownToAutoStart.Size.Height + 10;
 
-            var helpItem = CreateAndAddSelectableItem(new SiVector(offsetX, offsetY), "START_NOW", " Start Now! ");
+            var helpItem = CreateAndAddSelectableItem(new SiPoint(offsetX, offsetY), "START_NOW", " Start Now! ");
             helpItem.Selected = true;
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
@@ -58,7 +58,7 @@ namespace Si.Menus.MultiPlayer.Host
         private bool MpMenuHostLobbyWait_OnEscape()
         {
             _gameEngine.Multiplay.SetLeftLobby();
-            _gameEngine.Menus.Add(new MpMenuHostSelectLoadout(_gameEngine));
+            _gameEngine.Menus.Show(new MpMenuHostSelectLoadout(_gameEngine));
             return true;
         }
 

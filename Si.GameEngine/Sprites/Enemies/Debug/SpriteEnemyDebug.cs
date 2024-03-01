@@ -78,7 +78,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
         private DateTime _lastBehaviorChangeTime = DateTime.Now;
         private float _behaviorChangeThresholdMilliseconds = 0;
 
-        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -87,7 +87,7 @@ namespace Si.GameEngine.Sprites.Enemies.Debug
                 return;
             }
 
-            float distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
+            float distanceToPlayer = SiPoint.DistanceTo(this, _gameEngine.Player.Sprite);
 
             base.ApplyIntelligence(epoch, displacementVector);
 

@@ -60,7 +60,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
                 RadarPositionText = _gameEngine.Sprites.TextBlocks.CreateRadarPosition(
                     gameEngine.Rendering.TextFormats.RadarPositionIndicator,
-                    gameEngine.Rendering.Materials.Brushes.Red, new SiVector());
+                    gameEngine.Rendering.Materials.Brushes.Red, new SiPoint());
             }
 
             AmmoLowSound = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Ammo Low.wav", 0.75f);
@@ -193,7 +193,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
             ReviveDeadOrExploded();
 
-            Velocity.Angle = new SiAngle(SiVector.DegreesToRadians(45));
+            Velocity.Angle = new SiAngle(SiPoint.DegreesToRadians(45));
 
             Velocity.ThrottlePercentage = 0;
             Velocity.AvailableBoost = _gameEngine.Settings.MaxPlayerBoostAmount;
@@ -273,7 +273,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiVector.PointFromAngleAtDistance360(Velocity.Angle + SiVector.DegreesToRadians(180), new SiVector(20, 20));
+                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
                     ThrustAnimation.Velocity.Angle = Velocity.Angle;
                     ThrustAnimation.Location = Location + pointBehind;
                 }
@@ -283,7 +283,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiVector.PointFromAngleAtDistance360(Velocity.Angle + SiVector.DegreesToRadians(180), new SiVector(20, 20));
+                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
                     BoostAnimation.Velocity.Angle = Velocity.Angle;
                     BoostAnimation.Location = Location + pointBehind;
                 }
@@ -299,7 +299,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             }
         }
 
-        public override bool TryMunitionHit(MunitionBase munition, SiVector hitTestPosition)
+        public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
         {
             if (munition.FiredFromType == SiFiredFromType.Enemy)
             {
@@ -556,7 +556,7 @@ namespace Si.GameEngine.Sprites.Player._Superclass
         /// </summary>
         /// <param name="vector"></param>
 
-        public override void ApplyMotion(float epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             base.ApplyMotion(epoch, displacementVector);
 

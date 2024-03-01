@@ -18,7 +18,7 @@ namespace Si.GameEngine.Sprites.Powerup
             PowerupAmount *= multiplier + 1;
         }
 
-        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             if (Intersects(_gameEngine.Player.Sprite))
             {

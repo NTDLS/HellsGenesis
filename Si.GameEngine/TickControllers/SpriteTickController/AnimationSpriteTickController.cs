@@ -5,7 +5,7 @@ using Si.GameEngine.TickControllers._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System.Drawing;
 
-namespace Si.GameEngine.TickControllers
+namespace Si.GameEngine.TickControllers.SpriteTickController
 {
     public class AnimationSpriteTickController : SpriteTickControllerBase<SpriteAnimation>
     {
@@ -14,7 +14,7 @@ namespace Si.GameEngine.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
             foreach (var animation in Visible())
             {

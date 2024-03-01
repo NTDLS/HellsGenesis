@@ -7,12 +7,12 @@ using Si.Library.Payload.SpriteActions;
 using System;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.TickControllers
+namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
 {
     /// <summary>
     /// This is the controller for the single local player.
     /// </summary>
-    public class PlayerSpriteTickController : PlayerTickControllerBase<SpritePlayerBase>
+    public class PlayerSpriteTickController : PlayerSpriteTickControllerBase<SpritePlayerBase>
     {
         private readonly GameEngineCore _gameEngine;
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
@@ -35,9 +35,9 @@ namespace Si.GameEngine.TickControllers
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
         /// <returns></returns>
-        public override SiVector ExecuteWorldClockTick(float epoch)
+        public override SiPoint ExecuteWorldClockTick(float epoch)
         {
-            var displacementVector = new SiVector();
+            var displacementVector = new SiPoint();
 
             Sprite.IsLockedOnSoft = false;
             Sprite.IsLockedOnHard = false;
@@ -246,14 +246,14 @@ namespace Si.GameEngine.TickControllers
                     totalThrustSpeed += Sprite.Velocity.Boost * Sprite.Velocity.BoostPercentage;
                 }
 
-                var strafeAngle = new SiVector();
+                var strafeAngle = new SiPoint();
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && !GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
                 {
-                    strafeAngle = SiVector.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle - SiVector.DEG_90_RADS), new SiVector(1, 1));
+                    strafeAngle = SiPoint.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle - SiPoint.DEG_90_RADS), new SiPoint(1, 1));
                 }
                 else if (!GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
                 {
-                    strafeAngle = SiVector.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + SiVector.DEG_90_RADS), new SiVector(1, 1));
+                    strafeAngle = SiPoint.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + SiPoint.DEG_90_RADS), new SiPoint(1, 1));
                 }
 
                 displacementVector += Sprite.Velocity.Angle * totalThrustSpeed + strafeAngle * (totalThrustSpeed / 2 + 0.5f);

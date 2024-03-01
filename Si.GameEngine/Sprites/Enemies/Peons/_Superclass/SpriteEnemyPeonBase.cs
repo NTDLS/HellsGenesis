@@ -53,13 +53,13 @@ namespace Si.GameEngine.Sprites.Enemies.Peons._Superclass
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointBehind = SiVector.PointFromAngleAtDistance360(Velocity.Angle + SiVector.DegreesToRadians(180), new SiVector(20, 20));
+                var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
                 ThrustAnimation.Velocity.Angle = Velocity.Angle;
                 ThrustAnimation.Location = Location + pointBehind;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointBehind = SiVector.PointFromAngleAtDistance360(Velocity.Angle + SiVector.DegreesToRadians(180), new SiVector(20, 20));
+                var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
                 BoostAnimation.Velocity.Angle = Velocity.Angle;
                 BoostAnimation.Location = Location + pointBehind;
             }
@@ -81,7 +81,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons._Superclass
         /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(float epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             base.ApplyMotion(epoch, displacementVector);
 

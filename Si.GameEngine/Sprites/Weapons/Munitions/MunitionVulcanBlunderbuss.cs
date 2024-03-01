@@ -9,7 +9,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
     {
         private const string imagePath = @"Graphics\Weapon\Blunderbuss.png";
 
-        public MunitionBlunderbuss(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiVector xyOffset = null)
+        public MunitionBlunderbuss(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, xyOffset)
         {
             Initialize(imagePath);

@@ -36,14 +36,14 @@ namespace Si.GameEngine.Sprites.Weapons
 
                 if (RoundQuantity > 0 || _owner.IsDrone)
                 {
-                    var pointRight = SiVector.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiVector.DEG_90_RADS, new SiVector(5, 5));
+                    var pointRight = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(5, 5));
                     _gameEngine.Sprites.Munitions.Create(this, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0 || _owner.IsDrone)
                 {
-                    var pointLeft = SiVector.PointFromAngleAtDistance360(_owner.Velocity.Angle - SiVector.DEG_90_RADS, new SiVector(5, 5));
+                    var pointLeft = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(5, 5));
                     _gameEngine.Sprites.Munitions.Create(this, pointLeft);
                     RoundQuantity--;
                 }
@@ -55,7 +55,7 @@ namespace Si.GameEngine.Sprites.Weapons
             return false;
         }
 
-        public override MunitionBase CreateMunition(SiVector xyOffset, SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionVulcanCannon(_gameEngine, this, _owner, xyOffset);
         }

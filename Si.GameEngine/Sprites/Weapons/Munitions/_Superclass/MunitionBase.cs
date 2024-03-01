@@ -23,7 +23,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
         public float AgeInMilliseconds => (float)(DateTime.UtcNow - CreatedDate).TotalMilliseconds;
         public float SceneDistanceLimit { get; set; }
 
-        public MunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiVector xyOffset = null)
+        public MunitionBase(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
             : base(gameEngine)
         {
             Initialize(imagePath);
@@ -32,12 +32,12 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             Velocity.ThrottlePercentage = 1.0f;
             SceneDistanceLimit = SiRandom.Between(weapon.MunitionSceneDistanceLimit * 0.1f, weapon.MunitionSceneDistanceLimit);
 
-            RadarDotSize = new SiVector(1, 1);
+            RadarDotSize = new SiPoint(1, 1);
 
             float headingRadians = firedFrom.Velocity.Angle.Radians;
             if (weapon.AngleVarianceDegrees > 0)
             {
-                var randomNumber = SiVector.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0f) / 100.0f);
+                var randomNumber = SiPoint.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0f) / 100.0f);
                 headingRadians += (SiRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 
@@ -56,7 +56,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 ThrottlePercentage = 1.0f
             };
 
-            Location = firedFrom.Location + (xyOffset ?? SiVector.Zero);
+            Location = firedFrom.Location + (xyOffset ?? SiPoint.Zero);
 
             if (firedFrom is SpriteEnemyBase)
             {
@@ -70,7 +70,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             Velocity = initialVelocity;
         }
 
-        public virtual void ApplyIntelligence(float epoch, SiVector displacementVector)
+        public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             if (AgeInMilliseconds > MillisecondsToLive)
             {
@@ -79,7 +79,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             }
         }
 
-        public override void ApplyMotion(float epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             if (!_gameEngine.Display.TotalCanvasBounds.Balloon(SceneDistanceLimit).IntersectsWith(RenderBounds))
             {

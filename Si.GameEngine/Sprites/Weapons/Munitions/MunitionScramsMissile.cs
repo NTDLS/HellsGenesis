@@ -16,11 +16,11 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
         private int _selectedHitExplosionAnimationIndex = 0;
 
         public MunitionScramsMissile(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom,
-             SpriteBase lockedTarget = null, SiVector xyOffset = null)
+             SpriteBase lockedTarget = null, SiPoint xyOffset = null)
             : base(gameEngine, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
         {
             MaxGuidedObservationAngleDegrees = 90;
-            GuidedRotationRateInDegrees = SiVector.DegreesToRadians(10);
+            GuidedRotationRateInDegrees = SiPoint.DegreesToRadians(10);
 
             _selectedHitExplosionAnimationIndex = SiRandom.Between(0, _hitExplosionAnimationCount - 1);
             _hitExplosionAnimation = new SpriteAnimation(_gameEngine, Path.Combine(_assetPathHitExplosionAnimation, $"{_selectedHitExplosionAnimationIndex}.png"), new Size(22, 22));

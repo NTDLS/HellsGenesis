@@ -40,7 +40,7 @@ namespace Si.GameEngine.Sprites.MenuItems
 
         public SiMenuItemType ItemType { get; set; }
 
-        public SpriteMenuItem(GameEngineCore gameEngine, MenuBase menu, TextFormat format, SolidColorBrush color, SiVector location)
+        public SpriteMenuItem(GameEngineCore gameEngine, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location)
             : base(gameEngine, format, color, location, true)
         {
             ItemType = SiMenuItemType.Undefined;

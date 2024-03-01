@@ -32,7 +32,7 @@ namespace Si.GameEngine.Sprites
         public Color4 Color { get; set; }
         public SiAngle TravelAngle { get; set; } = new SiAngle();
 
-        public SpriteParticle(GameEngineCore gameEngine, SiVector location, Size size, Color4 color)
+        public SpriteParticle(GameEngineCore gameEngine, SiPoint location, Size size, Color4 color)
             : base(gameEngine)
         {
             Initialize(size);
@@ -50,7 +50,7 @@ namespace Si.GameEngine.Sprites
             _gameEngine = gameEngine;
         }
 
-        public override void ApplyMotion(float epoch, SiVector displacementVector)
+        public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             if (RotationDirection == SiRelativeDirection.Right)
             {

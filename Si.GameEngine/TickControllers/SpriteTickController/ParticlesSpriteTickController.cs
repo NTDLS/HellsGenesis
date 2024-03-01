@@ -9,7 +9,7 @@ using Si.Rendering;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.TickControllers
+namespace Si.GameEngine.TickControllers.SpriteTickController
 {
     public class ParticlesSpriteTickController : SpriteTickControllerBase<SpriteParticleBase>
     {
@@ -18,7 +18,7 @@ namespace Si.GameEngine.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
             foreach (var particle in Visible())
             {
@@ -26,7 +26,7 @@ namespace Si.GameEngine.TickControllers
             }
         }
 
-        public void CreateAt(SiVector location, Color4 color, int count, Size? size = null)
+        public void CreateAt(SiPoint location, Color4 color, int count, Size? size = null)
         {
             for (int i = 0; i < count; i++)
             {
@@ -49,7 +49,7 @@ namespace Si.GameEngine.TickControllers
             return obj;
         }
 
-        public SpriteParticle CreateAt(SiVector location, Color4 color, Size? size = null)
+        public SpriteParticle CreateAt(SiPoint location, Color4 color, Size? size = null)
         {
             var obj = new SpriteParticle(GameEngine, location, size ?? new Size(1, 1), color)
             {
@@ -59,12 +59,15 @@ namespace Si.GameEngine.TickControllers
             return obj;
         }
 
+        public void ParticleBlast(int particleCount, SpriteBase at)
+            => ParticleBlast(particleCount, at.Location);
+
         /// <summary>
         /// Creates a random number of blasts consiting of "hot" colored particles at a given location.
         /// </summary>
         /// <param name="particleCount"></param>
         /// <param name="at"></param>
-        public void ParticleBlast(int particleCount, SpriteBase at)
+        public void ParticleBlast(int particleCount, SiPoint location)
         {
             int explosionCount = SiRandom.Between(1, 4);
             int particlesExplosion = particleCount / explosionCount;
@@ -74,11 +77,11 @@ namespace Si.GameEngine.TickControllers
             for (int instance = 0; instance < explosionCount; instance++)
             {
                 //Make sure the next delay is higher than the previous.
-                GameEngine.Events.Create(triggerDelay, () =>
+                GameEngine.Events.Add(triggerDelay, () =>
                 {
                     for (int i = 0; i < particlesExplosion; i++)
                     {
-                        var particle = CreateAt(at.Location, SiRenderingUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
+                        var particle = CreateAt(location, SiRenderingUtility.GetRandomHotColor(), new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
                         particle.Shape = ParticleShape.FilledEllipse;
                         particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                         particle.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
@@ -93,10 +96,13 @@ namespace Si.GameEngine.TickControllers
         }
 
         public void ParticleCloud(int particleCount, SpriteBase at)
+            => ParticleCloud(particleCount, at.Location);
+
+        public void ParticleCloud(int particleCount, SiPoint location)
         {
             for (int i = 0; i < particleCount; i++)
             {
-                var particle = CreateAt(at.Location, SiRenderingUtility.GetRandomHotColor(), new Size(5, 5));
+                var particle = CreateAt(location, SiRenderingUtility.GetRandomHotColor(), new Size(5, 5));
 
                 switch (SiRandom.Between(1, 3))
                 {

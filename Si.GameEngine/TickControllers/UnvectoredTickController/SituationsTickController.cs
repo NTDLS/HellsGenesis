@@ -3,7 +3,7 @@ using Si.GameEngine.TickControllers._Superclass;
 using Si.Library;
 using System.Linq;
 
-namespace Si.GameEngine.TickControllers
+namespace Si.GameEngine.TickControllers.UnvectoredTickController
 {
     public class SituationsTickController : UnvectoredTickControllerBase<SituationBase>
     {

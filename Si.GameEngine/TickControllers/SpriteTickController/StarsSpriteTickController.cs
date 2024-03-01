@@ -6,7 +6,7 @@ using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
 
-namespace Si.GameEngine.TickControllers
+namespace Si.GameEngine.TickControllers.SpriteTickController
 {
     public class StarsSpriteTickController : SpriteTickControllerBase<SpriteStar>
     {
@@ -15,7 +15,7 @@ namespace Si.GameEngine.TickControllers
         {
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
             if (Math.Abs(displacementVector.X) > 1 || Math.Abs(displacementVector.Y) > 1)
             {

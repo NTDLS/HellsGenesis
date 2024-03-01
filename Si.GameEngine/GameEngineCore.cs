@@ -1,14 +1,15 @@
 using Newtonsoft.Json;
-using Si.GameEngine.Core.Types;
 using Si.GameEngine.Interrogation._Superclass;
 using Si.GameEngine.Managers;
 using Si.GameEngine.Menus;
 using Si.GameEngine.Sprites._Superclass;
-using Si.GameEngine.TickControllers;
+using Si.GameEngine.TickControllers.PlayerSpriteTickController;
+using Si.GameEngine.TickControllers.UnvectoredTickController;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.MultiplayClient;
 using Si.Rendering;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -19,15 +20,25 @@ namespace Si.GameEngine
     /// </summary>
     public class GameEngineCore
     {
+        #region Backend variables.
+
+        private readonly EngineWorldClock _worldClock;
+        private readonly MultiplayClientEventHandlers _multiplayClientEventHandlers;
+
+        #endregion
+
+        #region Public properties.
+
         /// <summary>
         /// If TRUE the game can run "headless" with no diplay or audio.
         /// </summary>
-        public readonly bool _isRunningHeadless;
-        public bool IsRunningHeadless => _isRunningHeadless;
+        public bool IsRunningHeadless { get; private set; }
+        public bool IsRunning { get; private set; } = false;
 
-        public SituationsTickController Situations { get; private set; }
-        public EventsTickController Events { get; private set; }
-        public PlayerSpriteTickController Player { get; private set; }
+        #endregion
+
+        #region Managers. 
+
         public EngineMultiplayManager Multiplay { get; private set; }
         public EngineInputManager Input { get; private set; }
         public EngineDisplayManager Display { get; private set; }
@@ -35,28 +46,20 @@ namespace Si.GameEngine
         public EngineAudioManager Audio { get; private set; }
         public EngineAssetManager Assets { get; private set; }
         public EngineInterrogationManager Debug { get; private set; }
+
+        #endregion
+
+        #region Tick Controllers.
+
+        public SituationsTickController Situations { get; private set; }
+        public EventsTickController Events { get; private set; }
+        public PlayerSpriteTickController Player { get; private set; }
         public MenusTickController Menus { get; private set; }
         public SiRendering Rendering { get; private set; }
         public SiEngineSettings Settings { get; private set; }
 
-        public bool IsRunning { get; private set; } = false;
+        #endregion
 
-        private readonly EngineWorldClock _worldClock;
-        private readonly MultiplayClientEventHandlers _multiplayClientEventHandlers;
-
-        private static uint _nextSequentialId = 1;
-        private static readonly object _nextSequentialLock = new();
-        /// <summary>
-        /// Used to give all loaded sprites a unique ID. Very handy for debugging.
-        /// </summary>
-        /// <returns></returns>
-        public static uint GetNextSequentialId()
-        {
-            lock (_nextSequentialLock)
-            {
-                return _nextSequentialId++;
-            }
-        }
 
         #region Events.
 
@@ -73,7 +76,7 @@ namespace Si.GameEngine
         /// </summary>
         public GameEngineCore(EngineMultiplayManager multiplayManager)
         {
-            _isRunningHeadless = true;
+            IsRunningHeadless = true;
 
             Settings = LoadSettings();
 
@@ -199,7 +202,7 @@ namespace Si.GameEngine
 
         public void Render()
         {
-            if (!_isRunningHeadless)
+            if (!IsRunningHeadless)
             {
                 try
                 {
@@ -233,65 +236,64 @@ namespace Si.GameEngine
             }
         }
 
-        private void NewGameMenuCallback(SiEngineCallbackEvent sender, object refObj)
-        {
-            Menus.Add(new MenuStartNewGame(this));
-        }
-
         public void StartEngine()
         {
-            if (IsRunning == false)
+            if (IsRunning)
             {
-                IsRunning = true;
-                Sprites.Start();
-                //Sprites.ResetPlayer();
-                _worldClock.Start();
-
-                var textBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
-                    Rendering.Materials.Brushes.Red, new SiVector(100, 100), true);
-
-                textBlock.SetTextAndCenterXY("Building cache...");
-
-                var percentTextBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
-                    Rendering.Materials.Brushes.Red, new SiVector(textBlock.X, textBlock.Y + 50), true);
-
-                textBlock.SetTextAndCenterXY("Building reflection cache...");
-                SiReflection.BuildReflectionCacheOfType<SpriteBase>();
-
-                if (Settings.PreCacheAllAssets)
-                {
-                    textBlock.SetTextAndCenterXY("Building asset cache...");
-                    Assets.PreCacheAllAssets(percentTextBlock);
-                }
-
-                textBlock.QueueForDelete();
-                percentTextBlock.QueueForDelete();
-
-                OnStartEngine?.Invoke(this);
-
-                if (Settings.PlayMusic)
-                {
-                    Audio.BackgroundMusicSound.Play();
-                }
-
-                Events.Create(1, NewGameMenuCallback);
+                throw new Exception("The game engine is already running.");
             }
+
+            IsRunning = true;
+            Sprites.Start();
+            //Sprites.ResetPlayer();
+            _worldClock.Start();
+
+            var textBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
+                Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true);
+
+            textBlock.SetTextAndCenterXY("Building cache...");
+
+            var percentTextBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
+                Rendering.Materials.Brushes.Red, new SiPoint(textBlock.X, textBlock.Y + 50), true);
+
+            textBlock.SetTextAndCenterXY("Building reflection cache...");
+            SiReflection.BuildReflectionCacheOfType<SpriteBase>();
+
+            if (Settings.PreCacheAllAssets)
+            {
+                textBlock.SetTextAndCenterXY("Building asset cache...");
+                Assets.PreCacheAllAssets(percentTextBlock);
+            }
+
+            textBlock.QueueForDelete();
+            percentTextBlock.QueueForDelete();
+
+            OnStartEngine?.Invoke(this);
+
+            if (Settings.PlayMusic)
+            {
+                Audio.BackgroundMusicSound.Play();
+            }
+
+            Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
         }
 
         public void ShutdownEngine()
         {
-            if (IsRunning)
+            if (IsRunning == false)
             {
-                IsRunning = false;
-
-                OnStopEngine?.Invoke(this);
-
-                Multiplay.Dispose();
-                _worldClock.Dispose();
-                Sprites.Dispose();
-                Rendering.Dispose();
-                Assets.Dispose();
+                throw new Exception("The game engine is not running.");
             }
+
+            IsRunning = false;
+
+            OnStopEngine?.Invoke(this);
+
+            Multiplay.Dispose();
+            _worldClock.Dispose();
+            Sprites.Dispose();
+            Rendering.Dispose();
+            Assets.Dispose();
         }
 
         public bool IsPaused() => _worldClock.IsPaused();

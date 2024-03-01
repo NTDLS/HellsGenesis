@@ -6,26 +6,23 @@ using Si.Library.Mathematics.Geometry;
 using System;
 using System.Linq;
 
-namespace Si.GameEngine.TickControllers
+namespace Si.GameEngine.TickControllers.SpriteTickController
 {
-    public class EnemyDronesSpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
+    public class EnemiesSpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
     {
         private readonly GameEngineCore _gameEngine;
 
-        public EnemyDronesSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
+        public EnemiesSpriteTickController(GameEngineCore gameEngine, EngineSpriteManager manager)
             : base(gameEngine, manager)
         {
             _gameEngine = gameEngine;
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
-            foreach (var enemy in Visible().Where(o => o.IsDrone == true))
+            foreach (var enemy in Visible().Where(o => o.IsDrone == false))
             {
-                if (GameEngine.Player.Sprite.Visable)
-                {
-                    enemy.ApplyIntelligence(epoch, displacementVector);
-                }
+                enemy.ApplyIntelligence(epoch, displacementVector);
 
                 var multiplayVector = enemy.GetMultiplayVector();
                 if (multiplayVector != null)
@@ -49,6 +46,11 @@ namespace Si.GameEngine.TickControllers
             obj.BeforeCreate();
             SpriteManager.Add(obj);
             obj.AfterCreate();
+
+            if (obj.IsDrone == false)
+            {
+                SpriteManager.MultiplayNotifyOfSpriteCreation(obj);
+            }
 
             return (T)obj;
         }

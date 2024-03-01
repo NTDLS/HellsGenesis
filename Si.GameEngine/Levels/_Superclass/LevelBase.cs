@@ -1,7 +1,7 @@
 ﻿using Si.GameEngine.Core.Types;
 using System;
 using System.Collections.Generic;
-using static Si.GameEngine.Core.Types.SiEngineCallbackEvent;
+using static Si.GameEngine.Core.Types.SiDefermentEvent;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Levels._Superclass
@@ -12,7 +12,7 @@ namespace Si.GameEngine.Levels._Superclass
     public class LevelBase
     {
         protected GameEngineCore _gameEngine;
-        protected List<SiEngineCallbackEvent> Events = new();
+        protected List<SiDefermentEvent> Events = new();
 
         public Guid UID { get; private set; } = Guid.NewGuid();
         public string Name { get; set; }
@@ -40,17 +40,17 @@ namespace Si.GameEngine.Levels._Superclass
             _gameEngine.Multiplay.NotifyLevelStarted();
         }
 
-        protected SiEngineCallbackEvent AddRecuringFireEvent(int milliseconds, SiOnExecute executeCallback)
+        protected SiDefermentEvent AddRecuringFireEvent(int milliseconds, SiOnExecute executeCallback)
         {
             //Keep track of recurring events to we can delete them when we are done.
-            var obj = _gameEngine.Events.Create(milliseconds, executeCallback, null, SiCallbackEventMode.Recurring);
+            var obj = _gameEngine.Events.Add(milliseconds, executeCallback, null, SiCallbackEventMode.Recurring);
             Events.Add(obj);
             return obj;
         }
 
-        protected SiEngineCallbackEvent AddSingleFireEvent(int milliseconds, SiOnExecute executeCallback)
+        protected SiDefermentEvent AddSingleFireEvent(int milliseconds, SiOnExecute executeCallback)
         {
-            return _gameEngine.Events.Create(milliseconds, executeCallback);
+            return _gameEngine.Events.Add(milliseconds, executeCallback);
         }
     }
 }

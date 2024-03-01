@@ -167,7 +167,7 @@ namespace Si.GameEngine.AI.Logistics
             Network = newNetwork.Clone();//.Mutate(0.2, 0.1)
         }
 
-        public void ApplyIntelligence(float epoch, SiVector displacementVector)
+        public void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             var now = DateTime.UtcNow;
 

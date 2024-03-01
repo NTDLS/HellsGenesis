@@ -31,12 +31,12 @@ namespace Si.GameEngine.Levels
             _gameEngine.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void FirstShowPlayerCallback(SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(SiDefermentEvent sender, object refObj)
         {
             _gameEngine.Player.ResetAndShow();
         }
 
-        private void AddFreshEnemiesCallback(SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(SiDefermentEvent sender, object refObj)
         {
             if (_gameEngine.Sprites.OfType<SpriteEnemyBase>().Count == 0)
             {
@@ -59,7 +59,7 @@ namespace Si.GameEngine.Levels
             }
         }
 
-        private void AddEnemyCallback(SiEngineCallbackEvent sender, object refObj)
+        private void AddEnemyCallback(SiDefermentEvent sender, object refObj)
         {
             _gameEngine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
         }

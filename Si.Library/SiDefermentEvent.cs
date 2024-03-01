@@ -1,10 +1,10 @@
 ﻿namespace Si.GameEngine.Core.Types
 {
     /// <summary>
-    /// Allows for deferred events to be injected into the engine. We use this so that we can
-    /// defer things without sleeping and so we can inject into the sprites durring the frame logic.
+    /// Allows for deferred events to be injected into the engine. We use this so that we can defer 
+    /// tasks without sleeping and so we can inject into the sprites durring the world clock logic.
     /// </summary>
-    public class SiEngineCallbackEvent
+    public class SiDefermentEvent
     {
         public string? Name { get; set; }
         private readonly object? _referenceObject = null;
@@ -25,7 +25,7 @@
         /// <param name="core">Engine core</param>
         /// <param name="sender">The event that is being triggered</param>
         /// <param name="refObj">An optional object passed by the user code</param>
-        public delegate void SiOnExecute(SiEngineCallbackEvent sender, object? refObj);
+        public delegate void SiOnExecute(SiDefermentEvent sender, object? refObj);
 
         public delegate void SiOnExecuteSimple();
 
@@ -41,7 +41,7 @@
             Asynchronous
         }
 
-        public SiEngineCallbackEvent(int milliseconds, object refObj, SiOnExecute executeCallback,
+        public SiDefermentEvent(int milliseconds, object refObj, SiOnExecute executeCallback,
             SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
             SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
         {
@@ -54,7 +54,7 @@
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(int milliseconds, object refObj, SiOnExecute executeCallback)
+        public SiDefermentEvent(int milliseconds, object refObj, SiOnExecute executeCallback)
         {
             _referenceObject = refObj;
             _milliseconds = milliseconds;
@@ -63,7 +63,7 @@
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(int milliseconds, SiOnExecute executeCallback)
+        public SiDefermentEvent(int milliseconds, SiOnExecute executeCallback)
         {
             _milliseconds = milliseconds;
             _onExecute = executeCallback;
@@ -71,7 +71,7 @@
             UID = Guid.NewGuid();
         }
 
-        public SiEngineCallbackEvent(int milliseconds, SiOnExecuteSimple executeCallback)
+        public SiDefermentEvent(int milliseconds, SiOnExecuteSimple executeCallback)
         {
             _milliseconds = milliseconds;
             _onExecuteSimple = executeCallback;

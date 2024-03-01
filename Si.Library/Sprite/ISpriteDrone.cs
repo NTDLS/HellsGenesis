@@ -6,7 +6,7 @@ namespace Si.Library.Sprite
     public interface ISpriteDrone
     {
         public void ApplyAbsoluteMultiplayVector(SiSpriteActionVector vector);
-        public void ApplyMotion(float epoch, SiVector displacementVector);
+        public void ApplyMotion(float epoch, SiPoint displacementVector);
         public void Hit(int damage);
         public void Explode();
         public void QueueForDelete();

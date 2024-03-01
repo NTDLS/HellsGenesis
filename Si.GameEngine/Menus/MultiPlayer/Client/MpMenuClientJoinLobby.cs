@@ -25,20 +25,20 @@ namespace Si.Menus.MultiPlayer.Client
             float offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             float offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Join Game");
+            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Join Game");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.IsHighlighted = true;
 
             //---------------------------------------------------------------------------------------------------------
 
-            var labelName = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "Player Name: ".PadLeft(25));
+            var labelName = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "Player Name: ".PadLeft(25));
             labelName.X -= (labelName.Size.Width) + 200;
 
             float xPositionForlabel = labelName.X; //Save the X position for lables.
             float xPositionForTextBox = labelName.X + labelName.Size.Width; //Save the X position for textboxes.
 
-            _textboxPlayerName = CreateAndAddSelectableTextInput(new SiVector(xPositionForTextBox, labelName.Y), "PLAYERNAME", "Player 2");
+            _textboxPlayerName = CreateAndAddSelectableTextInput(new SiPoint(xPositionForTextBox, labelName.Y), "PLAYERNAME", "Player 2");
             _textboxPlayerName.Selected = true;
             _textboxPlayerName.Y = labelName.Y;
 
@@ -47,7 +47,7 @@ namespace Si.Menus.MultiPlayer.Client
             offsetY += _textboxPlayerName.Size.Height + 25;
 
             //---------------------------------------------------------------------------------------------------------
-            var labelplayerName = CreateAndAddTextblock(new SiVector(xPositionForlabel, offsetY), "Active Lobbies: ".PadLeft(25));
+            var labelplayerName = CreateAndAddTextblock(new SiPoint(xPositionForlabel, offsetY), "Active Lobbies: ".PadLeft(25));
 
             //---------------------------------------------------------------------------------------------------------
 
@@ -56,7 +56,7 @@ namespace Si.Menus.MultiPlayer.Client
             var gameHosts = _gameEngine.Multiplay.ListLobbies();
             foreach (var gameHost in gameHosts)
             {
-                var helpItem = CreateAndAddSelectableItem(new SiVector(xPositionForlabel, offsetY), gameHost.UID.ToString(), gameHost.Name);
+                var helpItem = CreateAndAddSelectableItem(new SiPoint(xPositionForlabel, offsetY), gameHost.UID.ToString(), gameHost.Name);
                 offsetY += helpItem.Size.Height + 5;
             }
 
@@ -72,7 +72,7 @@ namespace Si.Menus.MultiPlayer.Client
 
         private bool MpMenuClientJoinLobby_OnEscape()
         {
-            _gameEngine.Menus.Add(new MpMenuCreateOrJoinLobby(_gameEngine));
+            _gameEngine.Menus.Show(new MpMenuCreateOrJoinLobby(_gameEngine));
             return true;
         }
 
@@ -81,7 +81,7 @@ namespace Si.Menus.MultiPlayer.Client
             var lobbyUID = Guid.Parse(item.Key);
 
             _gameEngine.Multiplay.RegisterLobbyUID(lobbyUID, _textboxPlayerName.Text);
-            _gameEngine.Menus.Add(new MpMenuClientSelectLoadout(_gameEngine));
+            _gameEngine.Menus.Show(new MpMenuClientSelectLoadout(_gameEngine));
 
             return true;
         }

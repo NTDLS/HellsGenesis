@@ -23,20 +23,20 @@ namespace Si.Menus.SinglePlayer
             float offsetX = currentScaledScreenBounds.X + 40;
             float offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Whats the Situation?");
+            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Whats the Situation?");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
             offsetY += itemTitle.Height;
 
-            _situationBlurb = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "");
+            _situationBlurb = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
             _situationBlurb.X = offsetX + 300;
             _situationBlurb.Y = offsetY - _situationBlurb.Size.Height;
 
-            //Use reflection to get a list of possible player types.
+            //Use reflection to get a list of possible situation types.
             var situationTypes = SiReflection.GetSubClassesOf<SituationBase>().OrderBy(o => o.Name).ToList();
 
-            //Move the debug player to the top of the list.
+            //Move the debug situation to the top of the list.
             var situations = situationTypes.Where(o => o.Name.Contains("Debug")).FirstOrDefault();
             if (situations != null)
             {
@@ -48,7 +48,7 @@ namespace Si.Menus.SinglePlayer
             {
                 var situationInstance = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { gameEngine, });
 
-                var menuItem = CreateAndAddSelectableItem(new SiVector(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
+                var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
 
                 menuItem.UserData = situationInstance;
 
@@ -65,7 +65,7 @@ namespace Si.Menus.SinglePlayer
 
         private bool SpMenuSituationSelect_OnEscape()
         {
-            _gameEngine.Menus.Add(new MenuStartNewGame(_gameEngine));
+            _gameEngine.Menus.Show(new MenuStartNewGame(_gameEngine));
             return true;
         }
 
@@ -75,7 +75,7 @@ namespace Si.Menus.SinglePlayer
             {
                 _gameEngine.ResetGame();
                 _gameEngine.Situations.Select(situation.GetType().Name);
-                _gameEngine.Menus.Add(new SpMenuSelectLoadout(_gameEngine));
+                _gameEngine.Menus.Show(new SpMenuSelectLoadout(_gameEngine));
             }
             return true;
         }

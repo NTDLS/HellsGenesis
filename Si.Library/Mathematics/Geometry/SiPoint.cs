@@ -5,24 +5,24 @@ namespace Si.Library.Mathematics.Geometry
     /// <summary>
     /// Implements a basic vector.
     /// </summary>
-    public partial class SiVector
+    public partial class SiPoint
     {
-        public static readonly SiVector Zero = new();
+        public static readonly SiPoint Zero = new();
 
         public float X;
         public float Y;
 
         #region ~Ctor. 
 
-        public SiVector() { }
+        public SiPoint() { }
 
-        public SiVector(float x, float y)
+        public SiPoint(float x, float y)
         {
             X = x;
             Y = y;
         }
 
-        public SiVector(SiVector p)
+        public SiPoint(SiPoint p)
         {
             X = p.X;
             Y = p.Y;
@@ -36,44 +36,44 @@ namespace Si.Library.Mathematics.Geometry
 
         #region Operator Overloads.
 
-        public static SiVector operator -(SiVector original, SiVector modifier)
-            => new SiVector(original.X - modifier.X, original.Y - modifier.Y);
+        public static SiPoint operator -(SiPoint original, SiPoint modifier)
+            => new SiPoint(original.X - modifier.X, original.Y - modifier.Y);
 
-        public static SiVector operator -(SiVector original, float modifier)
-           => new SiVector(original.X - modifier, original.Y - modifier);
+        public static SiPoint operator -(SiPoint original, float modifier)
+           => new SiPoint(original.X - modifier, original.Y - modifier);
 
-        public static SiVector operator +(SiVector original, SiVector modifier)
-            => new SiVector(original.X + modifier.X, original.Y + modifier.Y);
+        public static SiPoint operator +(SiPoint original, SiPoint modifier)
+            => new SiPoint(original.X + modifier.X, original.Y + modifier.Y);
 
-        public static SiVector operator +(SiVector original, float modifier)
-            => new SiVector(original.X + modifier, original.Y + modifier);
+        public static SiPoint operator +(SiPoint original, float modifier)
+            => new SiPoint(original.X + modifier, original.Y + modifier);
 
-        public static SiVector operator *(SiVector original, SiVector scaleFactor)
-            => new SiVector(original.X * scaleFactor.X, original.Y * scaleFactor.Y);
+        public static SiPoint operator *(SiPoint original, SiPoint scaleFactor)
+            => new SiPoint(original.X * scaleFactor.X, original.Y * scaleFactor.Y);
 
-        public static SiVector operator *(SiVector original, float scaleFactor)
-            => new SiVector(original.X * scaleFactor, original.Y * scaleFactor);
+        public static SiPoint operator *(SiPoint original, float scaleFactor)
+            => new SiPoint(original.X * scaleFactor, original.Y * scaleFactor);
 
-        public static SiVector operator /(SiVector original, SiVector scaleFactor)
+        public static SiPoint operator /(SiPoint original, SiPoint scaleFactor)
         {
             if (scaleFactor.X == 0.0 && scaleFactor.Y == 0.0)
             {
-                return new SiVector(0, 0);
+                return new SiPoint(0, 0);
             }
-            return new SiVector(original.X / scaleFactor.X, original.Y / scaleFactor.Y);
+            return new SiPoint(original.X / scaleFactor.X, original.Y / scaleFactor.Y);
         }
 
-        public static SiVector operator /(SiVector original, float scaleFactor)
+        public static SiPoint operator /(SiPoint original, float scaleFactor)
         {
             if (scaleFactor == 0.0)
             {
-                return new SiVector(0, 0);
+                return new SiPoint(0, 0);
             }
-            return new SiVector(original.X / scaleFactor, original.Y / scaleFactor);
+            return new SiPoint(original.X / scaleFactor, original.Y / scaleFactor);
         }
 
         public override bool Equals(object? o)
-            => Math.Round(((SiVector?)o)?.X ?? float.NaN, 4) == X && Math.Round(((SiVector?)o)?.Y ?? float.NaN, 4) == Y;
+            => Math.Round(((SiPoint?)o)?.X ?? float.NaN, 4) == X && Math.Round(((SiPoint?)o)?.Y ?? float.NaN, 4) == Y;
 
         #endregion
 
@@ -86,14 +86,14 @@ namespace Si.Library.Mathematics.Geometry
 
         #endregion
 
-        public SiVector Clone() => new SiVector(this);
+        public SiPoint Clone() => new SiPoint(this);
 
         /// <summary>
         /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public SiVector Normalize() => Normalize(this);
+        public SiPoint Normalize() => Normalize(this);
 
         /// <summary>
         /// Calculate the dot product of two vectors.This is useful for determining the angle between vectors or projecting one vector onto another.
@@ -101,7 +101,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public float DotProduct(SiVector b) => DotProduct(this);
+        public float DotProduct(SiPoint b) => DotProduct(this);
 
         /// <summary>
         /// Calculate the angle between two points relative to the horizontal axis.
@@ -109,6 +109,6 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="point1"></param>
         /// <param name="point2"></param>
         /// <returns></returns>
-        public float AngleBetween(SiVector point2) => AngleBetween(this, point2);
+        public float AngleBetween(SiPoint point2) => AngleBetween(this, point2);
     }
 }

@@ -13,7 +13,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions
         private readonly int imageCount = 4;
         private readonly int selectedImageIndex = 0;
 
-        public MunitionScattershot(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiVector xyOffset = null)
+        public MunitionScattershot(GameEngineCore gameEngine, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
             : base(gameEngine, weapon, firedFrom, null, xyOffset)
         {
             selectedImageIndex = SiRandom.Between(0, imageCount - 1);

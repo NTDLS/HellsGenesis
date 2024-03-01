@@ -56,7 +56,7 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
             int _soundIndex = SiRandom.Between(0, _assetExplosionSoundFiles.Count() - 1);
             _explodeSound = _gameEngine.Assets.GetAudio(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
 
-            RadarDotSize = new SiVector(4, 4);
+            RadarDotSize = new SiPoint(4, 4);
         }
 
         public override void Cleanup()
@@ -72,7 +72,7 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
             QueueForDelete();
         }
 
-        public virtual void ApplyIntelligence(float epoch, SiVector displacementVector)
+        public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             if (Intersects(_gameEngine.Player.Sprite))
             {

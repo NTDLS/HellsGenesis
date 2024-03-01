@@ -17,7 +17,7 @@ namespace Si.GameEngine.Sprites
             Velocity = new SiVelocity();
         }
 
-        public override bool TryMunitionHit(MunitionBase munition, SiVector hitTestPosition)
+        public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
         {
             if (munition.FiredFromType == SiFiredFromType.Player)
             {

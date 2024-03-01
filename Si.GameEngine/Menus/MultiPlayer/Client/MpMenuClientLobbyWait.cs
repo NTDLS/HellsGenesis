@@ -28,17 +28,17 @@ namespace Si.Menus.MultiPlayer.Client
             float offsetX = _gameEngine.Display.TotalCanvasSize.Width / 2;
             float offsetY = _currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Waiting in Lobby");
+            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Waiting in Lobby");
             itemTitle.X -= itemTitle.Size.Width / 2;
             offsetY += itemTitle.Size.Height + 60;
             itemTitle.IsHighlighted = true;
 
-            _countOfReadyPlayers = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "?");
+            _countOfReadyPlayers = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "?");
             _countOfReadyPlayers.X -= _countOfReadyPlayers.Size.Width / 2;
 
             offsetY += _countOfReadyPlayers.Size.Height + 10;
 
-            _countdownToAutoStart = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "");
+            _countdownToAutoStart = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
             _countdownToAutoStart.X -= _countdownToAutoStart.Size.Width / 2;
 
             offsetY += _countdownToAutoStart.Size.Height + 10;
@@ -89,7 +89,7 @@ namespace Si.Menus.MultiPlayer.Client
         private bool MpMenuClientLobbyWait_OnEscape()
         {
             _gameEngine.Multiplay.SetLeftLobby();
-            _gameEngine.Menus.Add(new MpMenuClientSelectLoadout(_gameEngine));
+            _gameEngine.Menus.Show(new MpMenuClientSelectLoadout(_gameEngine));
             return true;
         }
     }

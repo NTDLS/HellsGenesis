@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Si.GameEngine.TickControllers
+namespace Si.GameEngine.TickControllers.SpriteTickController
 {
     public class RadarPositionsSpriteTickController : UnvectoredTickControllerBase<SpriteRadarPositionTextBlock>
     {
@@ -35,7 +35,7 @@ namespace Si.GameEngine.TickControllers
                         {
                             if (accountedFor.Contains(child) == false)
                             {
-                                if (parent != child && parent.Intersects(child, new SiVector(100, 100)))
+                                if (parent != child && parent.Intersects(child, new SiPoint(100, 100)))
                                 {
                                     group.Add(child);
                                     accountedFor.Add(child);

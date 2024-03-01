@@ -66,7 +66,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
         private DateTime _lastBehaviorChangeTime = DateTime.UtcNow;
         private float _behaviorChangeThresholdMilliseconds = 0;
 
-        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             if (IsDrone)
             {

@@ -71,7 +71,7 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
             MunitionSceneDistanceLimit = _gameEngine.Settings.MunitionSceneDistanceLimit;
         }
 
-        public virtual MunitionBase CreateMunition(SiVector xyOffset, SpriteBase lockedTarget = null)
+        public virtual MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase lockedTarget = null)
         {
             if (_owner == null)
             {

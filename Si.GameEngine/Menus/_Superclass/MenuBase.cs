@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Menus._Superclass
@@ -54,7 +53,6 @@ namespace Si.GameEngine.Menus._Superclass
         /// <param name="item"></param>
         public event ExecuteSelectionEvent OnExecuteSelection;
 
-
         /// <summary>
         /// The player has hit the escape key.
         /// </summary>
@@ -73,8 +71,6 @@ namespace Si.GameEngine.Menus._Superclass
         /// <param name="item"></param>
         public event CleanupEvent OnCleanup;
 
-        public void InvokeCleanup() => OnCleanup?.Invoke();
-
         #endregion
 
         public MenuBase(GameEngineCore gameEngine)
@@ -82,13 +78,16 @@ namespace Si.GameEngine.Menus._Superclass
             _gameEngine = gameEngine;
         }
 
-        //public void Show() => Items.ForEach(o => o.Visable = true);
-        //public void Hide() => Items.ForEach(o => o.Visable = false);
         public bool HandlesEscape() => (OnEscape != null);
-        public void QueueForDelete() => QueuedForDeletion = true;
-        public void Close() => QueueForDelete();
 
-        public SpriteMenuItem CreateAndAddTitleItem(SiVector location, string text)
+        public void Close()
+        {
+            QueuedForDeletion = true; //Just so we ignore any input until the menu is deleted.
+            _gameEngine.Events.Add(() => OnCleanup?.Invoke());
+            _gameEngine.Menus.Unload(this);
+        }
+
+        public SpriteMenuItem CreateAndAddTitleItem(SiPoint location, string text)
         {
             var item = new SpriteMenuItem(_gameEngine, this, _gameEngine.Rendering.TextFormats.MenuTitle, _gameEngine.Rendering.Materials.Brushes.OrangeRed, location)
             {
@@ -99,7 +98,7 @@ namespace Si.GameEngine.Menus._Superclass
             return item;
         }
 
-        public SpriteMenuItem CreateAndAddTextblock(SiVector location, string text)
+        public SpriteMenuItem CreateAndAddTextblock(SiPoint location, string text)
         {
             var item = new SpriteMenuItem(_gameEngine, this, _gameEngine.Rendering.TextFormats.MenuGeneral, _gameEngine.Rendering.Materials.Brushes.LawnGreen, location)
             {
@@ -110,7 +109,7 @@ namespace Si.GameEngine.Menus._Superclass
             return item;
         }
 
-        public SpriteMenuItem CreateAndAddSelectableItem(SiVector location, string key, string text)
+        public SpriteMenuItem CreateAndAddSelectableItem(SiPoint location, string key, string text)
         {
             var item = new SpriteMenuItem(_gameEngine, this, _gameEngine.Rendering.TextFormats.MenuItem, _gameEngine.Rendering.Materials.Brushes.OrangeRed, location)
             {
@@ -122,7 +121,7 @@ namespace Si.GameEngine.Menus._Superclass
             return item;
         }
 
-        public SpriteMenuSelectableTextInput CreateAndAddSelectableTextInput(SiVector location, string key, string text = "")
+        public SpriteMenuSelectableTextInput CreateAndAddSelectableTextInput(SiPoint location, string key, string text = "")
         {
             var item = new SpriteMenuSelectableTextInput(_gameEngine, this, _gameEngine.Rendering.TextFormats.TextInputItem, _gameEngine.Rendering.Materials.Brushes.Orange, location)
             {
@@ -134,13 +133,7 @@ namespace Si.GameEngine.Menus._Superclass
             return item;
         }
 
-        public void AddMenuItem(SpriteMenuItem item)
-        {
-            _gameEngine.Menus.Use(o => // <-- Do we really need this lock?
-            {
-                Items.Add(item);
-            });
-        }
+        public void AddMenuItem(SpriteMenuItem item) => Items.Add(item);
 
         public void HandleInput()
         {
@@ -190,18 +183,15 @@ namespace Si.GameEngine.Menus._Superclass
                 var selectedItem = (from o in Items where o.ItemType == SiMenuItemType.SelectableItem && o.Selected == true select o).FirstOrDefault();
                 if (selectedItem != null)
                 {
-                    //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
+                    //Menu executions may block execution if run in the same thread. For example, the menu execution may be looking to remove all
                     //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                     //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
-                    //  
-                    Task.Run(() => OnExecuteSelection?.Invoke(selectedItem)).ContinueWith(o =>
+
+                    _gameEngine.Events.Add(() =>
                     {
-                        if (o.Result == true)
+                        if (OnExecuteSelection?.Invoke(selectedItem) == true)
                         {
                             Close();
-                        }
-                        else
-                        {
                         }
                     });
                 }
@@ -216,14 +206,11 @@ namespace Si.GameEngine.Menus._Superclass
                 //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                 //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                 //  
-                Task.Run(() => OnEscape?.Invoke()).ContinueWith(o =>
+                _gameEngine.Events.Add(() =>
                 {
-                    if (o.Result == true)
+                    if (OnEscape?.Invoke() == true)
                     {
                         Close();
-                    }
-                    else
-                    {
                     }
                 });
             }
@@ -279,7 +266,7 @@ namespace Si.GameEngine.Menus._Superclass
                             //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                             //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                             //  
-                            Task.Run(() => OnSelectionChanged?.Invoke(selectedItem));
+                            _gameEngine.Events.Add(() => OnSelectionChanged?.Invoke(selectedItem));
                         }
                     }
                 }
@@ -336,7 +323,7 @@ namespace Si.GameEngine.Menus._Superclass
                             //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
                             //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                             //  
-                            Task.Run(() => OnSelectionChanged?.Invoke(selectedItem));
+                            _gameEngine.Events.Add(() => OnSelectionChanged?.Invoke(selectedItem));
                         }
                     }
                 }

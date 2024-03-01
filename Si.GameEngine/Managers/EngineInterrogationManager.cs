@@ -330,7 +330,7 @@ namespace Si.GameEngine.Managers
             var y = command.ParameterValue<uint>("y");
 
             var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(typeName, new[] { _gameEngine });
-            sprite.Location = new SiVector(x, y);
+            sprite.Location = new SiPoint(x, y);
             sprite.Visable = true;
 
             _gameEngine.Sprites.Add(sprite);

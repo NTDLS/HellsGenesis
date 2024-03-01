@@ -74,7 +74,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
         public AIMode Mode = AIMode.InFormation;
 
-        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             if (IsDrone)
             {
@@ -85,7 +85,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
 
             base.ApplyIntelligence(epoch, displacementVector);
 
-            float distanceToPlayer = SiVector.DistanceTo(this, _gameEngine.Player.Sprite);
+            float distanceToPlayer = SiPoint.DistanceTo(this, _gameEngine.Player.Sprite);
 
             if (Mode == AIMode.InFormation)
             {

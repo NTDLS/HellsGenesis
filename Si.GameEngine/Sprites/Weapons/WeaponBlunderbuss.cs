@@ -38,7 +38,7 @@ namespace Si.GameEngine.Sprites.Weapons
                 {
                     if (RoundQuantity > 0 || _owner.IsDrone)
                     {
-                        var pointRight = SiVector.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiVector.DEG_90_RADS, new SiVector(i, i));
+                        var pointRight = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(i, i));
                         _gameEngine.Sprites.Munitions.Create(this, pointRight);
                         RoundQuantity--;
                     }
@@ -51,7 +51,7 @@ namespace Si.GameEngine.Sprites.Weapons
             return false;
         }
 
-        public override MunitionBase CreateMunition(SiVector xyOffset, SpriteBase targetOfLock = null)
+        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
         {
             return new MunitionBlunderbuss(_gameEngine, this, _owner, xyOffset);
         }

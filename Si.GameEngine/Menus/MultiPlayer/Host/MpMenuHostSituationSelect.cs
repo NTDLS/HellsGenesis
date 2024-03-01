@@ -23,13 +23,13 @@ namespace Si.Menus.MultiPlayer.Host
             float offsetX = currentScaledScreenBounds.X + 40;
             float offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Whats the Situation?");
+            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Whats the Situation?");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
             offsetY += itemTitle.Height;
 
-            _situationBlurb = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "");
+            _situationBlurb = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
             _situationBlurb.X = offsetX + 300;
             _situationBlurb.Y = offsetY - _situationBlurb.Size.Height;
 
@@ -48,7 +48,7 @@ namespace Si.Menus.MultiPlayer.Host
             {
                 var situationInstance = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { gameEngine, });
 
-                var menuItem = CreateAndAddSelectableItem(new SiVector(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
+                var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
 
                 menuItem.UserData = situationInstance;
 
@@ -70,7 +70,7 @@ namespace Si.Menus.MultiPlayer.Host
             _gameEngine.Multiplay.DeregisterLobbyUID();
             _gameEngine.Multiplay.DeleteLobby(lobbyUID);
 
-            _gameEngine.Menus.Add(new MpMenuHostCreateLobby(_gameEngine));
+            _gameEngine.Menus.Show(new MpMenuHostCreateLobby(_gameEngine));
             return true;
         }
 
@@ -80,7 +80,7 @@ namespace Si.Menus.MultiPlayer.Host
             {
                 _gameEngine.ResetGame();
                 _gameEngine.Situations.Select(situation.GetType().Name);
-                _gameEngine.Menus.Add(new MpMenuHostSelectLoadout(_gameEngine));
+                _gameEngine.Menus.Show(new MpMenuHostSelectLoadout(_gameEngine));
             }
             return true;
         }

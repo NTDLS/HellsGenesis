@@ -5,7 +5,7 @@ using Si.Library.Mathematics.Geometry;
 using Si.Library.Sprite;
 using System.Linq;
 
-namespace Si.GameEngine.TickControllers
+namespace Si.GameEngine.TickControllers.SpriteTickController
 {
     /// <summary>
     /// This controller allows for the manipulation of multiplay drones.
@@ -21,7 +21,7 @@ namespace Si.GameEngine.TickControllers
             _gameEngine = gameEngine;
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
             foreach (var drone in Visible().OfType<ISpriteDrone>())
             {

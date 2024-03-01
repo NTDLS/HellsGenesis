@@ -35,7 +35,7 @@ namespace Si.GameEngine.Levels
             _gameEngine.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void RedirectFormationCallback(SiEngineCallbackEvent sender, object refObj)
+        private void RedirectFormationCallback(SiDefermentEvent sender, object refObj)
         {
             var formationSerfs = _gameEngine.Sprites.Enemies.VisibleOfType<SpriteEnemySerf>()
                 .Where(o => o.Mode == SpriteEnemySerf.AIMode.InFormation).ToList();
@@ -54,12 +54,12 @@ namespace Si.GameEngine.Levels
             }
         }
 
-        private void FirstShowPlayerCallback(SiEngineCallbackEvent sender, object refObj)
+        private void FirstShowPlayerCallback(SiDefermentEvent sender, object refObj)
         {
             _gameEngine.Player.ResetAndShow();
         }
 
-        private void AdvanceWaveCallback(SiEngineCallbackEvent sender, object refObj)
+        private void AdvanceWaveCallback(SiDefermentEvent sender, object refObj)
         {
             if (_gameEngine.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !_waitingOnPopulation)
             {
@@ -75,9 +75,9 @@ namespace Si.GameEngine.Levels
             }
         }
 
-        private void AddFreshEnemiesCallback(SiEngineCallbackEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(SiDefermentEvent sender, object refObj)
         {
-            SiVector baseLocation = _gameEngine.Display.RandomOffScreenLocation();
+            SiPoint baseLocation = _gameEngine.Display.RandomOffScreenLocation();
             CreateTriangleFormation(baseLocation, 100 - (CurrentWave + 1) * 10, CurrentWave + 2);
             _gameEngine.Audio.RadarBlipsSound.Play();
             _waitingOnPopulation = false;
@@ -94,9 +94,9 @@ namespace Si.GameEngine.Levels
             return enemy;
         }
 
-        private void CreateTriangleFormation(SiVector baseLocation, float spacing, int depth)
+        private void CreateTriangleFormation(SiPoint baseLocation, float spacing, int depth)
         {
-            float angle = SiVector.AngleTo360(baseLocation, _gameEngine.Player.Sprite);
+            float angle = SiPoint.AngleTo360(baseLocation, _gameEngine.Player.Sprite);
 
             for (int col = 0; col < depth; col++)
             {

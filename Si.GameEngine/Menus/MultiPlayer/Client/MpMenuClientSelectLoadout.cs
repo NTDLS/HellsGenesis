@@ -30,13 +30,13 @@ namespace Si.Menus.SinglePlayer
             float offsetX = currentScaledScreenBounds.X + 40;
             float offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiVector(offsetX, offsetY), "Select a Ship Class");
+            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Select a Ship Class");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
             offsetY += itemTitle.Height;
 
-            _shipBlurb = CreateAndAddTextblock(new SiVector(offsetX, offsetY), "");
+            _shipBlurb = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
             _shipBlurb.X = offsetX + 200;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
@@ -61,7 +61,7 @@ namespace Si.Menus.SinglePlayer
                 playerSprite.SpriteTag = "MENU_SHIP_SELECT";
                 playerSprite.Velocity.Angle.Degrees = 45;
 
-                var menuItem = CreateAndAddSelectableItem(new SiVector(offsetX + 25, offsetY), playerSprite.Loadout.Name, playerSprite.Loadout.Name);
+                var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), playerSprite.Loadout.Name, playerSprite.Loadout.Name);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
                 menuItem.UserData = playerSprite;
@@ -91,7 +91,7 @@ namespace Si.Menus.SinglePlayer
 
         private bool MpMenuClientSelectLoadout_OnEscape()
         {
-            _gameEngine.Menus.Add(new MpMenuClientJoinLobby(_gameEngine));
+            _gameEngine.Menus.Show(new MpMenuClientJoinLobby(_gameEngine));
             return true;
         }
 
@@ -115,7 +115,7 @@ namespace Si.Menus.SinglePlayer
                 _gameEngine.Player.InstantiatePlayerClass(selectedSprite.GetType());
             }
 
-            _gameEngine.Menus.Add(new MpMenuClientLobbyWait(_gameEngine));
+            _gameEngine.Menus.Show(new MpMenuClientLobbyWait(_gameEngine));
             return true;
         }
 
