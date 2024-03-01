@@ -60,7 +60,6 @@ namespace Si.GameEngine
 
         #endregion
 
-
         #region Events.
 
         public delegate void StartEngineEvent(GameEngineCore sender);
@@ -167,6 +166,11 @@ namespace Si.GameEngine
             return JsonConvert.DeserializeObject<SiEngineSettings>(engineSettingsText);
         }
 
+        public static void SaveSettings(SiEngineSettings settings)
+        {
+            EngineAssetManager.PutUserText("Engine.Settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
+        }
+
         public void ResetGame()
         {
             Sprites.PlayerStatsText.Visable = false;
@@ -195,12 +199,7 @@ namespace Si.GameEngine
             }
         }
 
-        public static void SaveSettings(SiEngineSettings settings)
-        {
-            EngineAssetManager.PutUserText("Engine.Settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
-        }
-
-        public void Render()
+        public void RenderEverything()
         {
             if (!IsRunningHeadless)
             {

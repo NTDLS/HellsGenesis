@@ -142,7 +142,7 @@ namespace Si.GameEngine
                     //If it is time to render, then render the frame!.
                     if (frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency > frameRateDelayMicroseconds)
                     {
-                        _gameEngine.Render();
+                        _gameEngine.RenderEverything();
                         frameRateTimer.Restart();
                         _gameEngine.Display.FrameCounter.Calculate();
 
