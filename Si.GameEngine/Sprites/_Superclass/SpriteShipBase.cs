@@ -90,9 +90,9 @@ namespace Si.GameEngine.Sprites._Superclass
         public override void Explode()
         {
             _gameEngine.Sprites.Animations.AddRandomExplosionAt(this);
-            _gameEngine.Rendering.AddScreenShake(8, 800);
-            _gameEngine.Sprites.Particles.ParticleBlast(SiRandom.Between(200, 800), this);
+            _gameEngine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this);
             CreateExplosionFragments();
+            _gameEngine.Rendering.AddScreenShake(4, 800);
             _gameEngine.Audio.PlayRandomExplosion();
             base.Explode();
         }

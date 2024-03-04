@@ -69,15 +69,15 @@ namespace Si.GameEngine.TickControllers.SpriteTickController
             return obj;
         }
 
-        public void ParticleBlast(int maxParticleCount, SpriteBase at)
-            => ParticleBlast(maxParticleCount, at.Location);
+        public void ParticleBlastAt(int maxParticleCount, SpriteBase at)
+            => ParticleBlastAt(maxParticleCount, at.Location);
 
         /// <summary>
         /// Creates a random number of blasts consiting of "hot" colored particles at a given location.
         /// </summary>
         /// <param name="maxParticleCount"></param>
         /// <param name="at"></param>
-        public void ParticleBlast(int maxParticleCount, SiPoint location)
+        public void ParticleBlastAt(int maxParticleCount, SiPoint location)
         {
             for (int i = 0; i < SiRandom.Between(maxParticleCount / 2, maxParticleCount); i++)
             {
