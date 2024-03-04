@@ -25,7 +25,7 @@ namespace Si.Library.Mathematics
         /// The amount of boost availble until it is depleted and requires recharging.
         /// </summary>
         public float AvailableBoost { get; set; }
-        public bool IsBoostRecharging { get; set; }
+        public bool IsBoostCoolingDown { get; set; }
 
         public float _forwardMomentium;
         /// <summary>

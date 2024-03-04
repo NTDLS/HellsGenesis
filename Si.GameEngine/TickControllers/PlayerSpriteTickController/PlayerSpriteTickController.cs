@@ -138,20 +138,18 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                 //Make player forward momentium "build up" and fade-out.
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward))
                 {
-                    Sprite.Velocity.ForwardMomentium += forwardThrustToAdd;
-                    Sprite.Velocity.ForwardMomentium.Clamp(-1, 1);
+                    Sprite.Velocity.ForwardMomentium = (Sprite.Velocity.ForwardMomentium + forwardThrustToAdd).Clamp(-1, 1);
                 }
                 else if (GameEngine.Input.IsKeyPressed(SiPlayerKey.Reverse))
                 {
-                    Sprite.Velocity.ForwardMomentium -= forwardThrustToAdd;
-                    Sprite.Velocity.ForwardMomentium.Clamp(-1, 1);
+                    Sprite.Velocity.ForwardMomentium = (Sprite.Velocity.ForwardMomentium - forwardThrustToAdd).Clamp(-1, 1);
                 }
                 else
                 {
                     float thrustToRemove = Sprite.Velocity.ForwardMomentium == 0 ? GameEngine.Settings.PlayerThrustRampDown
                         : GameEngine.Settings.PlayerThrustRampDown * Sprite.Velocity.ForwardMomentium;
 
-                    if (Math.Abs(thrustToRemove) + 0.1 >= Math.Abs(Sprite.Velocity.ForwardMomentium))
+                    if (Math.Abs(thrustToRemove) >= Math.Abs(Sprite.Velocity.ForwardMomentium))
                     {
                         Sprite.Velocity.ForwardMomentium = 0; //Don't overshoot the stop.
                     }
@@ -167,10 +165,16 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
 
                 //Make player forward momentium "build up" and fade-out.
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
-                    && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostRecharging == false)
+                    && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostCoolingDown == false)
                 {
-                    Sprite.Velocity.ForwardBoostMomentium += forwardBoostThrustToAdd;
-                    Sprite.Velocity.ForwardBoostMomentium.Clamp(-1, 1);
+                    Sprite.Velocity.ForwardBoostMomentium = (Sprite.Velocity.ForwardBoostMomentium + forwardBoostThrustToAdd).Clamp(-1, 1);
+
+                    Sprite.Velocity.AvailableBoost -= Sprite.Velocity.MaximumBoostSpeed * Sprite.Velocity.ForwardBoostMomentium;
+                    if (Sprite.Velocity.AvailableBoost < 0)
+                    {
+                        Sprite.Velocity.AvailableBoost = 0;
+                    }
+
                 }
                 else
                 {
@@ -182,6 +186,17 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                         Sprite.Velocity.ForwardBoostMomentium = 0; //Don't overshoot the stop.
                     }
                     else Sprite.Velocity.ForwardBoostMomentium -= thrustToRemove;
+
+                    if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false
+                        && Sprite.Velocity.AvailableBoost < GameEngine.Settings.MaxPlayerBoostAmount)
+                    {
+                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + (1000.0f * epoch / 1000.0f)).Clamp(0, GameEngine.Settings.MaxPlayerBoostAmount);
+
+                        if (Sprite.Velocity.IsBoostCoolingDown && Sprite.Velocity.AvailableBoost >= GameEngine.Settings.PlayerBoostRebuildFloor)
+                        {
+                            Sprite.Velocity.IsBoostCoolingDown = false;
+                        }
+                    }
                 }
 
                 #endregion
@@ -196,13 +211,11 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                 //Make player lateral momentium "build up" and fade-out.
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && !GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
                 {
-                    Sprite.Velocity.LateralMomentium += strafeThrustToAdd;
-                    Sprite.Velocity.LateralMomentium.Clamp(-1, 1);
+                    Sprite.Velocity.LateralMomentium = (Sprite.Velocity.LateralMomentium + strafeThrustToAdd).Clamp(-1, 1);
                 }
                 else if (!GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
                 {
-                    Sprite.Velocity.LateralMomentium -= strafeThrustToAdd;
-                    Sprite.Velocity.LateralMomentium.Clamp(-1, 1);
+                    Sprite.Velocity.LateralMomentium = (Sprite.Velocity.LateralMomentium - strafeThrustToAdd).Clamp(-1, 1);
                 }
                 else //Ramp down to a stop:
                 {
@@ -221,7 +234,7 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                 if (Sprite.Velocity.AvailableBoost <= 0)
                 {
                     Sprite.Velocity.AvailableBoost = 0;
-                    Sprite.Velocity.IsBoostRecharging = true;
+                    Sprite.Velocity.IsBoostCoolingDown = true;
                 }
 
                 var totalForwardThrust =
@@ -275,7 +288,7 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                     Sprite.BoostAnimation.Visable =
                         GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
                         && GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
-                        && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostRecharging == false;
+                        && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostCoolingDown == false;
                 }
 
                 #endregion

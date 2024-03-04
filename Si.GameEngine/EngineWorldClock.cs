@@ -236,7 +236,7 @@ namespace Si.GameEngine
                       $" Situation: {situation}\r\n"
                     + $"      Hull: {_gameEngine.Player.Sprite.HullHealth:n0} (Shields: {_gameEngine.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_gameEngine.Player.Sprite.Bounty}\r\n"
                     + $"     Surge: {_gameEngine.Player.Sprite.Velocity.AvailableBoost / _gameEngine.Settings.MaxPlayerBoostAmount * 100.0:n1}%"
-                        + (_gameEngine.Player.Sprite.Velocity.IsBoostRecharging ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
+                        + (_gameEngine.Player.Sprite.Velocity.IsBoostCoolingDown ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
                     + $"Pri-Weapon: {_gameEngine.Player.Sprite.PrimaryWeapon?.Name} x{_gameEngine.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
                     + $"Sec-Weapon: {_gameEngine.Player.Sprite.SelectedSecondaryWeapon?.Name} x{_gameEngine.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
             }
@@ -247,7 +247,7 @@ namespace Si.GameEngine
                 _gameEngine.Sprites.PlayerStatsText.Text =
                       $"      Hull: {_gameEngine.Player.Sprite.HullHealth:n0} (Shields: {_gameEngine.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_gameEngine.Player.Sprite.Bounty}\r\n"
                     + $"     Surge: {_gameEngine.Player.Sprite.Velocity.AvailableBoost / _gameEngine.Settings.MaxPlayerBoostAmount * 100.0:n1}%"
-                        + (_gameEngine.Player.Sprite.Velocity.IsBoostRecharging ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
+                        + (_gameEngine.Player.Sprite.Velocity.IsBoostCoolingDown ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
                     + $"Pri-Weapon: {_gameEngine.Player.Sprite.PrimaryWeapon?.Name} x{_gameEngine.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
                     + $"Sec-Weapon: {_gameEngine.Player.Sprite.SelectedSecondaryWeapon?.Name} x{_gameEngine.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
             }
