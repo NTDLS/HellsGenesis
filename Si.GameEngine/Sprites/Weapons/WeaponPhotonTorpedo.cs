@@ -55,8 +55,6 @@ namespace Si.GameEngine.Sprites.Weapons
 
                 _toggle = !_toggle;
 
-                ApplyRecoil();
-
                 return true;
             }
             return false;

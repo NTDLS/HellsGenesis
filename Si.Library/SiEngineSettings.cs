@@ -37,7 +37,6 @@ namespace Si.Library
 
         public float MaxPlayerBoostAmount { get; set; } = 10000;
         public float PlayerBoostRebuildFloor { get; set; } = 1000;
-        public float MaxRecoilPercentage { get; set; } = 0.4f; //Max amount that will be substracted from the thrust percentage.
         public float MaxPlayerRotationSpeedDegrees { get; set; } = 1.40f;
 
         public int InitialFrameStarCount { get; set; } = 100;

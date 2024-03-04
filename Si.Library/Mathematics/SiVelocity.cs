@@ -17,17 +17,6 @@ namespace Si.Library.Mathematics
         public float AvailableBoost { get; set; }
         public bool BoostRebuilding { get; set; }
 
-        private float _recoilPercentage = 0;
-        public float RecoilPercentage
-        {
-            get => _recoilPercentage;
-            set
-            {
-                _recoilPercentage = value.Clamp(0, 1);
-                OnRecoilChanged?.Invoke(this);
-            }
-        }
-
         public float _throttlePercentage;
         public float ThrottlePercentage
         {

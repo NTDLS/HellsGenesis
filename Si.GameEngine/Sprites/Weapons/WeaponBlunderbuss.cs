@@ -33,6 +33,7 @@ namespace Si.GameEngine.Sprites.Weapons
             if (CanFire)
             {
                 _fireSound.Play();
+                _gameEngine.Rendering.AddScreenShake(2, 100);
 
                 for (int i = -15; i < 15; i++)
                 {
@@ -43,8 +44,6 @@ namespace Si.GameEngine.Sprites.Weapons
                         RoundQuantity--;
                     }
                 }
-
-                ApplyRecoil();
 
                 return true;
             }

@@ -231,7 +231,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                 }
             }
 
-            var thrustAmount = Velocity.Speed * (Velocity.ThrottlePercentage + -Velocity.RecoilPercentage);
+            var thrustAmount = Velocity.Speed * Velocity.ThrottlePercentage;
 
             if (Velocity.BoostPercentage > 0)
             {
@@ -247,15 +247,6 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             //base.ApplyMotion(epoch, displacementVector);
 
             FixRadarPositionIndicator();
-
-            if (Velocity.RecoilPercentage > 0)
-            {
-                Velocity.RecoilPercentage -= Velocity.RecoilPercentage * 0.01f;
-                if (Velocity.RecoilPercentage < 0.01)
-                {
-                    Velocity.RecoilPercentage = 0;
-                }
-            }
         }
 
         public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)

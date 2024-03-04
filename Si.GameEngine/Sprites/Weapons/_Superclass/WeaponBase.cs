@@ -175,19 +175,10 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
                 _fireSound.Play();
                 _gameEngine.Sprites.Munitions.Create(this);
 
-                ApplyRecoil();
-
                 return true;
             }
 
             return false;
-        }
-
-        public void ApplyRecoil()
-        {
-            //TODO: uncomment this later, testing multiplayer.
-            //_owner.Velocity.RecoilPercentage += RecoilAmount;
-            //_owner.Velocity.RecoilPercentage.Box(0, _gameEngine.Settings.MaxRecoilPercentage);
         }
 
         public virtual void Hit()

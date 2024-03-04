@@ -389,7 +389,6 @@ namespace Si.GameEngine.Sprites._Superclass
                 + $"       Background Offset: {_gameEngine.Display.RenderWindowPosition}\r\n"
                 + $"                  Thrust: {Velocity.ThrottlePercentage * 100:n2}\r\n"
                 + $"                   Boost: {Velocity.BoostPercentage * 100:n2}\r\n"
-                + $"                  Recoil: {Velocity.RecoilPercentage * 100:n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
                 + $"             Attachments: {Attachments?.Count ?? 0:n0}\r\n"

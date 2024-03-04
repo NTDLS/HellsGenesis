@@ -48,8 +48,6 @@ namespace Si.GameEngine.Sprites.Weapons
                     RoundQuantity--;
                 }
 
-                ApplyRecoil();
-
                 return true;
             }
             return false;

@@ -239,7 +239,7 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                     Sprite.ThrustAnimation.Visable = GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward);
                 }
 
-                var totalThrustSpeed = Sprite.Velocity.Speed * (Sprite.Velocity.ThrottlePercentage + -Sprite.Velocity.RecoilPercentage);
+                var totalThrustSpeed = Sprite.Velocity.Speed * Sprite.Velocity.ThrottlePercentage;
 
                 if (Sprite.Velocity.BoostPercentage > 0)
                 {
@@ -298,15 +298,6 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
 
             //Move the player in the direction of the background. This keeps the player visually in place, which is in the center screen.
             Sprite.Location += displacementVector;
-
-            if (Sprite.Velocity.RecoilPercentage > 0)
-            {
-                Sprite.Velocity.RecoilPercentage -= Sprite.Velocity.RecoilPercentage * 0.10f;
-                if (Sprite.Velocity.RecoilPercentage < 0.001)
-                {
-                    Sprite.Velocity.RecoilPercentage = 0;
-                }
-            }
 
             Sprite.RenewableResources.RenewAllResources();
 
