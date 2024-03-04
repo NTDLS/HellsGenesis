@@ -15,6 +15,7 @@ using Si.Library.Mathematics.Geometry;
 using Si.Library.Payload;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using static Si.Library.SiConstants;
 
@@ -171,6 +172,11 @@ namespace Si.GameEngine.Managers
         {
             _collection.Use(o =>
             {
+                o.Where(o => o.IsQueuedForDeletion).ToList().ForEach(p =>
+                {
+                    Debug.WriteLine($"Cleaninig up: {p.GetType()}");
+                });
+
                 o.Where(o => o.IsQueuedForDeletion).ToList().ForEach(p => p.Cleanup());
                 o.RemoveAll(o => o.IsQueuedForDeletion);
 
@@ -251,6 +257,23 @@ namespace Si.GameEngine.Managers
                 foreach (var obj in o.Where(o => o.Visable == true))
                 {
                     if (obj.Intersects(location, size))
+                    {
+                        objs.Add(obj);
+                    }
+                }
+                return objs;
+            });
+        }
+
+        public List<SpriteBase> RenderLocationIntersectionsEvenInvisible(SiPoint location, SiPoint size)
+        {
+            return _collection.Use(o =>
+            {
+                var objs = new List<SpriteBase>();
+
+                foreach (var obj in o)
+                {
+                    if (obj.RenderLocationIntersects(location, size))
                     {
                         objs.Add(obj);
                     }

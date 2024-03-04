@@ -123,7 +123,7 @@ namespace Si.Game
             float x = e.X + _gameEngine.Display.OverdrawSize.Width / 2;
             float y = e.Y + _gameEngine.Display.OverdrawSize.Height / 2;
 
-            var sprites = _gameEngine.Sprites.RenderLocationIntersections(new SiPoint(x, y), new SiPoint(1, 1));
+            var sprites = _gameEngine.Sprites.RenderLocationIntersectionsEvenInvisible(new SiPoint(x, y), new SiPoint(1, 1));
             if (_gameEngine.Player.Sprite.RenderLocationIntersects(new SiPoint(x, y), new SiPoint(1, 1)))
             {
                 sprites.Add(_gameEngine.Player.Sprite);

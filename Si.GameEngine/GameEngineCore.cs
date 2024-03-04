@@ -274,7 +274,7 @@ namespace Si.GameEngine
                 Audio.BackgroundMusicSound.Play();
             }
 
-            Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
+            //Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
         }
 
         public void ShutdownEngine()
