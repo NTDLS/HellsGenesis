@@ -39,6 +39,7 @@ namespace Si.GameEngine.Sprites.Weapons
         {
             if (CanFire)
             {
+                _gameEngine.Rendering.AddScreenShake(4, 100);
                 _fireSound.Play();
                 RoundQuantity--;
 
