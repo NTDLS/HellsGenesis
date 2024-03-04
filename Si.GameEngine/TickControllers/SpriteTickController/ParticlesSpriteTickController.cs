@@ -69,43 +69,28 @@ namespace Si.GameEngine.TickControllers.SpriteTickController
             return obj;
         }
 
-        public void ParticleBlast(int particleCount, SpriteBase at)
-            => ParticleBlast(particleCount, at.Location);
+        public void ParticleBlast(int maxParticleCount, SpriteBase at)
+            => ParticleBlast(maxParticleCount, at.Location);
 
         /// <summary>
         /// Creates a random number of blasts consiting of "hot" colored particles at a given location.
         /// </summary>
-        /// <param name="particleCount"></param>
+        /// <param name="maxParticleCount"></param>
         /// <param name="at"></param>
-        public void ParticleBlast(int particleCount, SiPoint location)
+        public void ParticleBlast(int maxParticleCount, SiPoint location)
         {
-            int explosionCount = SiRandom.Between(1, 4);
-            int particlesExplosion = particleCount / explosionCount;
-
-            int triggerDelay = 0;
-
-            for (int instance = 0; instance < explosionCount; instance++)
+            for (int i = 0; i < SiRandom.Between(maxParticleCount / 2, maxParticleCount); i++)
             {
-                //Make sure the next delay is higher than the previous.
-                GameEngine.Events.Add(triggerDelay, () =>
-                {
-                    for (int i = 0; i < particlesExplosion; i++)
-                    {
-                        var particle = CreateAt(location, new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
-                        particle.Shape = ParticleShape.FilledEllipse;
-                        particle.ColorType = ParticleColorType.SingleColor;
-                        //particle.GradientStartColor = SiRenderingUtility.GetRandomHotColor();
-                        //particle.GradientEndColor = SiRenderingUtility.GetRandomHotColor();
-                        particle.Color = SiRenderingUtility.GetRandomHotColor();
-                        particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
-                        particle.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
-                        particle.Velocity.Speed *= SiRandom.Between(1, 3.5f);
-                        particle.VectorType = ParticleVectorType.Independent;
-                    }
-                    GameEngine.Audio.PlayRandomExplosion();
-                });
-
-                triggerDelay = SiRandom.Between(triggerDelay + 10, 500 + triggerDelay / 4);
+                var particle = CreateAt(location, new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
+                particle.Shape = ParticleShape.FilledEllipse;
+                particle.ColorType = ParticleColorType.SingleColor;
+                //particle.GradientStartColor = SiRenderingUtility.GetRandomHotColor();
+                //particle.GradientEndColor = SiRenderingUtility.GetRandomHotColor();
+                particle.Color = SiRenderingUtility.GetRandomHotColor();
+                particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
+                particle.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
+                particle.Velocity.Speed *= SiRandom.Between(1, 3.5f);
+                particle.VectorType = ParticleVectorType.Independent;
             }
         }
 

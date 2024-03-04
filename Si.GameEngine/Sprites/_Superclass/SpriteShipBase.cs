@@ -92,11 +92,12 @@ namespace Si.GameEngine.Sprites._Superclass
             _gameEngine.Sprites.Animations.AddRandomExplosionAt(this);
             _gameEngine.Rendering.AddScreenShake(8, 800);
             _gameEngine.Sprites.Particles.ParticleBlast(SiRandom.Between(200, 800), this);
-            FragmentBlastOf();
+            CreateExplosionFragments();
+            _gameEngine.Audio.PlayRandomExplosion();
             base.Explode();
         }
 
-        public void FragmentBlastOf()
+        public void CreateExplosionFragments()
         {
             var image = GetImage();
             if (image == null)
