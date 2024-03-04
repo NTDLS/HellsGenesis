@@ -64,7 +64,7 @@ namespace Si.GameEngine.AI.Logistics
             _owner.RenewableResources.Create(RenewableResources.Boost, 800, 0, 10);
 
             SetCurrentActivity(AIActivity.Departing);
-            _owner.Velocity.ThrottlePercentage = 1.0f;
+            _owner.Velocity.ForwardMomentium = 1.0f;
         }
 
         private void Owner_OnHit(SpriteBase sender, SiDamageType damageType, int damageAmount)
@@ -85,7 +85,7 @@ namespace Si.GameEngine.AI.Logistics
             {
                 case AIActivity.EvasiveLoop:
                     _evasiveLoopTargetAngle.Degrees = _owner.Velocity.Angle.Degrees + 180;
-                    _owner.Velocity.ThrottlePercentage = 1.0f;
+                    _owner.Velocity.ForwardMomentium = 1.0f;
                     _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, 250);
                     break;
                 case AIActivity.TransitionToDepart:

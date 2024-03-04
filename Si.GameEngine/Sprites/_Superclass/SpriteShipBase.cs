@@ -117,8 +117,8 @@ namespace Si.GameEngine.Sprites._Superclass
                 fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
 
                 fragment.Velocity.Angle.Degrees = SiRandom.Between(0.0f, 359.0f);
-                fragment.Velocity.Speed = SiRandom.Between(1, 3.5f);
-                fragment.Velocity.ThrottlePercentage = 1;
+                fragment.Velocity.MaximumSpeed = SiRandom.Between(1, 3.5f);
+                fragment.Velocity.ForwardMomentium = 1;
                 fragment.VectorType = ParticleVectorType.Independent;
             }
         }

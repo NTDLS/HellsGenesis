@@ -17,7 +17,6 @@ namespace Si.Library.Mathematics
             public float RebuildRatePerSecond { get; set; }
             public float AvailableResource { get; private set; }
             public float MaxValue { get; set; }
-            public DateTime LastBuildTime { get; private set; }
 
             /// <summary>
             /// Initializes the renewable resources.
@@ -30,9 +29,7 @@ namespace Si.Library.Mathematics
                 MaxValue = maxValue;
                 AvailableResource = startingValue;
                 RebuildRatePerSecond = rebuildRatePerSecond;
-                LastBuildTime = DateTime.UtcNow;
             }
-
 
             /// <summary>
             /// Consumes a given amount of resource.
@@ -59,12 +56,9 @@ namespace Si.Library.Mathematics
             /// <summary>
             /// Accumulates new resources given the resources newable rate.
             /// </summary>
-            public void RenewResource()
+            public void RenewResource(float epoch)
             {
-                float deltaMilliseconds = (float)(DateTime.UtcNow - LastBuildTime).TotalMilliseconds;
-                LastBuildTime = DateTime.UtcNow;
-
-                float addedResource = deltaMilliseconds * RebuildRatePerSecond / 1000.0f;
+                float addedResource = epoch * RebuildRatePerSecond / 1000.0f;
 
                 AvailableResource += addedResource;
 
@@ -121,11 +115,11 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Accumulates new resources given each resources newable rate.
         /// </summary>
-        public void RenewAllResources()
+        public void RenewAllResources(float epoch)
         {
             foreach (var item in Resources)
             {
-                item.Value.RenewResource();
+                item.Value.RenewResource(epoch);
             }
         }
     }

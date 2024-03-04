@@ -10,7 +10,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses._Superclass
         public SpriteEnemyBossBase(GameEngineCore gameEngine, int hullHealth, int bountyMultiplier)
             : base(gameEngine, hullHealth, bountyMultiplier)
         {
-            Velocity.ThrottlePercentage = 1;
+            Velocity.ForwardMomentium = 1;
             Initialize();
         }
 

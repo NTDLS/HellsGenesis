@@ -88,8 +88,8 @@ namespace Si.GameEngine.Levels
             var enemy = _gameEngine.Sprites.Enemies.Create<SpriteEnemySerf>();
             enemy.X = x;
             enemy.Y = y;
-            enemy.Velocity.ThrottlePercentage = 0.8f;
-            enemy.Velocity.Speed = 6;
+            enemy.Velocity.ForwardMomentium = 0.8f;
+            enemy.Velocity.MaximumSpeed = 6;
             enemy.Velocity.Angle.Degrees = angle;
             return enemy;
         }

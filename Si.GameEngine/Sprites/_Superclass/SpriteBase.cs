@@ -158,7 +158,7 @@ namespace Si.GameEngine.Sprites._Superclass
             set
             {
                 _velocity = value;
-                _velocity.OnThrottleChanged += (sender) => VelocityChanged();
+                _velocity.OnMomentiumChanged += (sender) => VelocityChanged();
             }
         }
 
@@ -387,8 +387,8 @@ namespace Si.GameEngine.Sprites._Superclass
                 + $"                          {Velocity.Angle.RadiansSigned:n2}rad\r\n"
                 + extraInfo
                 + $"       Background Offset: {_gameEngine.Display.RenderWindowPosition}\r\n"
-                + $"                  Thrust: {Velocity.ThrottlePercentage * 100:n2}\r\n"
-                + $"                   Boost: {Velocity.BoostPercentage * 100:n2}\r\n"
+                + $"                  Thrust: {Velocity.ForwardMomentium * 100:n2}\r\n"
+                + $"                   Boost: {Velocity.ForwardBoostMomentium * 100:n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
                 + $"             Attachments: {Attachments?.Count ?? 0:n0}\r\n"
@@ -471,7 +471,7 @@ namespace Si.GameEngine.Sprites._Superclass
             {
                 var previousPosition = otherObject.Location;
 
-                for (int i = 0; i < otherObject.Velocity.Speed; i++)
+                for (int i = 0; i < otherObject.Velocity.MaximumSpeed; i++)
                 {
                     previousPosition.X -= otherObject.Velocity.Angle.X;
                     previousPosition.Y -= otherObject.Velocity.Angle.Y;
@@ -644,7 +644,7 @@ namespace Si.GameEngine.Sprites._Superclass
             Velocity.Angle.Degrees = SiPoint.AngleTo360(Location, location);
             if (velocity != null)
             {
-                Velocity.Speed = (float)velocity;
+                Velocity.MaximumSpeed = (float)velocity;
             }
         }
 
@@ -657,7 +657,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
             if (velocity != null)
             {
-                Velocity.Speed = (float)velocity;
+                Velocity.MaximumSpeed = (float)velocity;
             }
         }
 
@@ -1006,7 +1006,7 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location += Velocity.Angle * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
+            Location += Velocity.Angle * (Velocity.MaximumSpeed * Velocity.ForwardMomentium) * epoch;
         }
 
         /// <summary>
@@ -1016,10 +1016,10 @@ namespace Si.GameEngine.Sprites._Superclass
         /// <param name="vector"></param>
         public virtual void ApplyAbsoluteMultiplayVector(SiSpriteActionVector vector)
         {
-            Velocity.ThrottlePercentage = vector.ThrottlePercentage;
-            Velocity.BoostPercentage = vector.BoostPercentage;
-            Velocity.Speed = vector.Speed;
-            Velocity.Boost = vector.Boost;
+            Velocity.ForwardMomentium = vector.ThrottlePercentage;
+            Velocity.ForwardBoostMomentium = vector.BoostPercentage;
+            Velocity.MaximumSpeed = vector.Speed;
+            Velocity.MaximumBoostSpeed = vector.Boost;
             Velocity.Angle.Degrees = vector.AngleDegrees;
             Velocity.AvailableBoost = 10000; //Just a high number so the drone does not run out of boost.
             X = vector.X;

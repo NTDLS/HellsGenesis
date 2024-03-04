@@ -18,7 +18,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons._Superclass
         public SpriteEnemyPeonBase(GameEngineCore gameEngine, int hullHealth, int bountyMultiplier)
             : base(gameEngine, hullHealth, bountyMultiplier)
         {
-            Velocity.ThrottlePercentage = 1;
+            Velocity.ForwardMomentium = 1;
             Initialize();
 
             OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
@@ -87,11 +87,11 @@ namespace Si.GameEngine.Sprites.Enemies.Peons._Superclass
 
             if (ThrustAnimation != null)
             {
-                ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
+                ThrustAnimation.Visable = Velocity.ForwardMomentium > 0;
             }
             if (BoostAnimation != null)
             {
-                BoostAnimation.Visable = Velocity.BoostPercentage > 0;
+                BoostAnimation.Visable = Velocity.ForwardBoostMomentium > 0;
             }
         }
 

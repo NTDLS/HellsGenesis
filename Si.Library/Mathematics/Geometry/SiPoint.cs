@@ -110,5 +110,30 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="point2"></param>
         /// <returns></returns>
         public float AngleBetween(SiPoint point2) => AngleBetween(this, point2);
+
+        public SiPoint Clamp(float minValue, float maxValue)
+        {
+            var point = Clone();
+
+            if (point.X < minValue)
+            {
+                point.X = minValue;
+            }
+            else if (point.X > maxValue)
+            {
+                point.X = maxValue;
+            }
+
+            if (point.Y < minValue)
+            {
+                point.Y = minValue;
+            }
+            else if (point.Y > maxValue)
+            {
+                point.Y = maxValue;
+            }
+
+            return point;
+        }
     }
 }

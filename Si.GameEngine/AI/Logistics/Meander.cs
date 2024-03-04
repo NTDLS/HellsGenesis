@@ -185,7 +185,7 @@ namespace Si.GameEngine.AI.Logistics
 
                 var speedAdjust = (float)decisions.Get(Outputs.SpeedAdjust); //Update nuget to make these floats.
 
-                _owner.Velocity.ThrottlePercentage += (speedAdjust / 5.0f);
+                _owner.Velocity.ForwardMomentium += (speedAdjust / 5.0f);
 
                 bool transitionToObservationObject = decisions.Get(Outputs.TransitionToObservationObject) > 0.9;
                 bool transitionFromObservationObject = decisions.Get(Outputs.TransitionFromObservationObject) > 0.9;

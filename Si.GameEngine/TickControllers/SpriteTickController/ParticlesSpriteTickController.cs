@@ -89,7 +89,7 @@ namespace Si.GameEngine.TickControllers.SpriteTickController
                 particle.Color = SiRenderingUtility.GetRandomHotColor();
                 particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                 particle.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
-                particle.Velocity.Speed *= SiRandom.Between(1, 3.5f);
+                particle.Velocity.MaximumSpeed *= SiRandom.Between(1, 3.5f);
                 particle.VectorType = ParticleVectorType.Independent;
             }
         }
@@ -118,7 +118,7 @@ namespace Si.GameEngine.TickControllers.SpriteTickController
 
                 particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                 particle.FadeToBlackReductionAmount = 0.001f;
-                particle.Velocity.Speed *= SiRandom.Between(1, 3.5f);
+                particle.Velocity.MaximumSpeed *= SiRandom.Between(1, 3.5f);
                 particle.VectorType = ParticleVectorType.Native;
             }
         }

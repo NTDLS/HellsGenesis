@@ -25,10 +25,6 @@ namespace Si.GameEngine.Sprites.Weapons._Superclass
         protected SiAudioClip _fireSound;
 
         /// <summary>
-        /// RecoilAmount is expressed in decimal percentage of thrust.
-        /// </summary>
-        public float RecoilAmount { get; set; } = 0;
-        /// <summary>
         /// The variance in degrees that the loaded munition will use for an initial heading angle.
         /// </summary>
         public float AngleVarianceDegrees { get; set; } = 0;

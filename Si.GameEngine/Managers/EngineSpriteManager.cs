@@ -104,10 +104,10 @@ namespace Si.GameEngine.Managers
                         X = item.X,
                         Y = item.Y,
                         AngleDegrees = item.Velocity.Angle.Degrees,
-                        BoostPercentage = item.Velocity.BoostPercentage,
-                        ThrottlePercentage = item.Velocity.ThrottlePercentage,
-                        Boost = item.Velocity.Boost,
-                        Speed = item.Velocity.Speed,
+                        BoostPercentage = item.Velocity.ForwardBoostMomentium,
+                        ThrottlePercentage = item.Velocity.ForwardMomentium,
+                        Boost = item.Velocity.MaximumBoostSpeed,
+                        Speed = item.Velocity.MaximumSpeed,
                     }
                 });
             }

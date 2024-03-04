@@ -25,7 +25,6 @@ namespace Si.GameEngine.Sprites.Weapons
             Speed = 22.5f;
             AngleVarianceDegrees = 10.0f;
             SpeedVariancePercent = 0.10f;
-            RecoilAmount = 0.045f;
         }
 
         public override bool Fire()

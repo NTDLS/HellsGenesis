@@ -67,7 +67,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
             ResetLoadout(loadout);
 
-            _initialMaxpeed = Velocity.Speed;
+            _initialMaxpeed = Velocity.MaximumSpeed;
         }
 
         public override void AfterCreate()
@@ -80,7 +80,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
         {
             if (_leftThrust != null && _rightThrust != null)
             {
-                bool visibleThrust = Velocity.ThrottlePercentage > 0;
+                bool visibleThrust = Velocity.ForwardMomentium > 0;
 
                 if (_leftThrust.IsDeadOrExploded == false)
                 {
@@ -168,16 +168,16 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
 
             //If we get down to one engine, slowly cut the max thrust to half of what it originally was. If we lose both, reduce it to 1.
             int thrustHandicap = (_leftThrust.IsDeadOrExploded ? 0 : 1) + (_rightThrust.IsDeadOrExploded ? 0 : 1);
-            if (thrustHandicap == 1 && Velocity.Speed > _initialMaxpeed / 2)
+            if (thrustHandicap == 1 && Velocity.MaximumSpeed > _initialMaxpeed / 2)
             {
-                Velocity.Speed -= 0.5f;
+                Velocity.MaximumSpeed -= 0.5f;
             }
-            if (thrustHandicap == 0 && Velocity.Speed > 1)
+            if (thrustHandicap == 0 && Velocity.MaximumSpeed > 1)
             {
-                Velocity.Speed -= 0.5f;
-                if (Velocity.Speed < 1)
+                Velocity.MaximumSpeed -= 0.5f;
+                if (Velocity.MaximumSpeed < 1)
                 {
-                    Velocity.Speed = 1;
+                    Velocity.MaximumSpeed = 1;
                 }
             }
 
@@ -206,19 +206,19 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 //Try to stay close.
                 if (distanceToPlayer > 300)
                 {
-                    Velocity.ThrottlePercentage += 0.05f;
-                    if (Velocity.ThrottlePercentage > 1)
+                    Velocity.ForwardMomentium += 0.05f;
+                    if (Velocity.ForwardMomentium > 1)
                     {
-                        Velocity.ThrottlePercentage = 1;
+                        Velocity.ForwardMomentium = 1;
                     }
                 }
                 else
                 {
                     //Slow to a stop when close.
-                    Velocity.ThrottlePercentage -= 0.05f;
-                    if (Velocity.ThrottlePercentage < 0)
+                    Velocity.ForwardMomentium -= 0.05f;
+                    if (Velocity.ForwardMomentium < 0)
                     {
-                        Velocity.ThrottlePercentage = 0;
+                        Velocity.ForwardMomentium = 0;
                     }
                 }
             }
@@ -243,15 +243,15 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                 //Stay on the players tail.
                 if (distanceToPlayer > distanceToKeep + 300)
                 {
-                    Velocity.ThrottlePercentage = 1;
+                    Velocity.ForwardMomentium = 1;
                     mode = AIMode.Approaching;
                 }
                 else
                 {
-                    Velocity.ThrottlePercentage -= 0.05f;
-                    if (Velocity.ThrottlePercentage < 0)
+                    Velocity.ForwardMomentium -= 0.05f;
+                    if (Velocity.ForwardMomentium < 0)
                     {
-                        Velocity.ThrottlePercentage = 0;
+                        Velocity.ForwardMomentium = 0;
                     }
                 }
 
@@ -260,7 +260,7 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses
                     || hpRemainingBeforeTailing - HullHealth > 2
                     || roundsToFireBeforeTailing <= 0)
                 {
-                    Velocity.ThrottlePercentage = 1;
+                    Velocity.ForwardMomentium = 1;
                     mode = AIMode.MovingToFallback;
                     fallToAngleRadians = Velocity.Angle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
                     fallbackDistance = baseFallbackDistance * (SiRandom.NextFloat() + 1);

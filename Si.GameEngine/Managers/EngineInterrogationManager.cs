@@ -565,7 +565,7 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.BoostPercentage = command.ParameterValue<float>("value");
+                    sprite.Velocity.ForwardBoostMomentium = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -579,7 +579,7 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.ThrottlePercentage = command.ParameterValue<float>("value");
+                    sprite.Velocity.ForwardMomentium = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -593,7 +593,7 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.Boost = command.ParameterValue<float>("value");
+                    sprite.Velocity.MaximumBoostSpeed = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -607,7 +607,7 @@ namespace Si.GameEngine.Managers
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.Speed = command.ParameterValue<float>("value");
+                    sprite.Velocity.MaximumSpeed = command.ParameterValue<float>("value");
                 }
             });
         }

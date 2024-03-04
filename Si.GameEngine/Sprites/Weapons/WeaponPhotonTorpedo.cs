@@ -27,7 +27,6 @@ namespace Si.GameEngine.Sprites.Weapons
             Speed = 18.75f;
             AngleVarianceDegrees = 0.00f;
             SpeedVariancePercent = 0.00f;
-            RecoilAmount = 0.65f;
         }
 
         public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)

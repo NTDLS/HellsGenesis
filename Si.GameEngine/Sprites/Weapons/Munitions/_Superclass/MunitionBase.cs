@@ -29,7 +29,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             Initialize(imagePath);
 
             Weapon = weapon;
-            Velocity.ThrottlePercentage = 1.0f;
+            Velocity.ForwardMomentium = 1.0f;
             SceneDistanceLimit = SiRandom.Between(weapon.MunitionSceneDistanceLimit * 0.1f, weapon.MunitionSceneDistanceLimit);
 
             RadarDotSize = new SiPoint(1, 1);
@@ -52,8 +52,8 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
             var initialVelocity = new SiVelocity()
             {
                 Angle = new SiAngle(headingRadians),
-                Speed = initialSpeed,
-                ThrottlePercentage = 1.0f
+                MaximumSpeed = initialSpeed,
+                ForwardMomentium = 1.0f
             };
 
             Location = firedFrom.Location + (xyOffset ?? SiPoint.Zero);
@@ -87,7 +87,7 @@ namespace Si.GameEngine.Sprites.Weapons.Munitions._Superclass
                 return;
             }
 
-            Location += Velocity.Angle * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
+            Location += Velocity.Angle * (Velocity.MaximumSpeed * Velocity.ForwardMomentium) * epoch;
         }
 
         public override void Explode()

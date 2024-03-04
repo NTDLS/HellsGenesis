@@ -36,7 +36,7 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
         public SpriteEnemyBase(GameEngineCore gameEngine, int hullHealth, int bountyMultiplier)
                 : base(gameEngine)
         {
-            Velocity.ThrottlePercentage = 1;
+            Velocity.ForwardMomentium = 1;
             Initialize();
 
             SetHullHealth(hullHealth);
@@ -98,10 +98,10 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
                         X = X,
                         Y = Y,
                         AngleDegrees = Velocity.Angle.Degrees,
-                        BoostPercentage = Velocity.BoostPercentage,
-                        ThrottlePercentage = Velocity.ThrottlePercentage,
-                        Boost = Velocity.Boost,
-                        Speed = Velocity.Speed
+                        BoostPercentage = Velocity.ForwardBoostMomentium,
+                        ThrottlePercentage = Velocity.ForwardMomentium,
+                        Boost = Velocity.MaximumBoostSpeed,
+                        Speed = Velocity.MaximumSpeed
                     };
                 }
             }
@@ -164,8 +164,8 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
 
         public void Reset()
         {
-            Velocity.Speed = Loadout.Speed;
-            Velocity.Boost = Loadout.Boost;
+            Velocity.MaximumSpeed = Loadout.Speed;
+            Velocity.MaximumBoostSpeed = Loadout.Boost;
 
             SetHullHealth(Loadout.HullHealth);
             SetShieldHealth(Loadout.ShieldHealth);
@@ -211,31 +211,31 @@ namespace Si.GameEngine.Sprites.Enemies._Superclass
             //When an enemy had boost available, it will use it.
             if (Velocity.AvailableBoost > 0)
             {
-                if (Velocity.BoostPercentage < 1.0) //Ramp up the boost until it is at 100%
+                if (Velocity.ForwardBoostMomentium < 1.0) //Ramp up the boost until it is at 100%
                 {
-                    Velocity.BoostPercentage += _gameEngine.Settings.EnemyThrustRampUp;
+                    Velocity.ForwardBoostMomentium += _gameEngine.Settings.EnemyThrustRampUp;
                 }
-                Velocity.AvailableBoost -= Velocity.Boost * Velocity.BoostPercentage; //Consume boost.
+                Velocity.AvailableBoost -= Velocity.MaximumBoostSpeed * Velocity.ForwardBoostMomentium; //Consume boost.
 
                 if (Velocity.AvailableBoost < 0) //Sanity check available boost.
                 {
                     Velocity.AvailableBoost = 0;
                 }
             }
-            else if (Velocity.BoostPercentage > 0) //Ramp down the boost.
+            else if (Velocity.ForwardBoostMomentium > 0) //Ramp down the boost.
             {
-                Velocity.BoostPercentage -= _gameEngine.Settings.EnemyThrustRampDown;
-                if (Velocity.BoostPercentage < 0)
+                Velocity.ForwardBoostMomentium -= _gameEngine.Settings.EnemyThrustRampDown;
+                if (Velocity.ForwardBoostMomentium < 0)
                 {
-                    Velocity.BoostPercentage = 0;
+                    Velocity.ForwardBoostMomentium = 0;
                 }
             }
 
-            var thrustAmount = Velocity.Speed * Velocity.ThrottlePercentage;
+            var thrustAmount = Velocity.MaximumSpeed * Velocity.ForwardMomentium;
 
-            if (Velocity.BoostPercentage > 0)
+            if (Velocity.ForwardBoostMomentium > 0)
             {
-                thrustAmount += Velocity.Boost * Velocity.BoostPercentage;
+                thrustAmount += Velocity.MaximumBoostSpeed * Velocity.ForwardBoostMomentium;
             }
 
             //Location += (Velocity.Angle * thrustAmount * epoch);

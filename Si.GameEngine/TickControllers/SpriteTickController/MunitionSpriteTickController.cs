@@ -110,10 +110,10 @@ namespace Si.GameEngine.TickControllers.SpriteTickController
         public SpriteShipBase TestObjectCollisionsAlongMunitionPath(MunitionBase munition, List<SpriteShipBase> objectsThatCanBeHit)
         {
             //Reverse the munition to its starting position.
-            var hitTestPosition = new SiPoint(munition.Location - munition.Velocity.Angle * munition.Velocity.Speed);
+            var hitTestPosition = new SiPoint(munition.Location - munition.Velocity.Angle * munition.Velocity.MaximumSpeed);
 
             //Hit-test each position along the munitions path.
-            for (int i = 0; i < munition.Velocity.Speed; i++)
+            for (int i = 0; i < munition.Velocity.MaximumSpeed; i++)
             {
                 hitTestPosition += munition.Velocity.Angle;
 

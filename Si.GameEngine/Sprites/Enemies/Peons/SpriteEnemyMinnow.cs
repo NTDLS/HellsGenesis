@@ -107,15 +107,15 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                 //Stay on the players tail.
                 if (distanceToPlayer > distanceToKeep + 300)
                 {
-                    Velocity.ThrottlePercentage = 1;
+                    Velocity.ForwardMomentium = 1;
                     mode = AIMode.Approaching;
                 }
                 else
                 {
-                    Velocity.ThrottlePercentage -= 0.05f;
-                    if (Velocity.ThrottlePercentage < 0)
+                    Velocity.ForwardMomentium -= 0.05f;
+                    if (Velocity.ForwardMomentium < 0)
                     {
-                        Velocity.ThrottlePercentage = 0;
+                        Velocity.ForwardMomentium = 0;
                     }
                 }
 
@@ -124,7 +124,7 @@ namespace Si.GameEngine.Sprites.Enemies.Peons
                     || hpRemainingBeforeTailing - HullHealth > 2
                     || roundsToFireBeforeTailing <= 0)
                 {
-                    Velocity.ThrottlePercentage = 1;
+                    Velocity.ForwardMomentium = 1;
                     mode = AIMode.MovingToFallback;
                     fallToAngleRadians = Velocity.Angle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
                     fallbackDistance = baseFallbackDistance * (SiRandom.NextFloat() + 1);

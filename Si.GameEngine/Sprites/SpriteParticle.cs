@@ -58,8 +58,8 @@ namespace Si.GameEngine.Sprites
             RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
             TravelAngle.Degrees = SiRandom.Between(0, 359);
 
-            Velocity.ThrottlePercentage = 100;
-            Velocity.Speed = SiRandom.Between(1.0f, 4.0f);
+            Velocity.ForwardMomentium = 100;
+            Velocity.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
 
             _gameEngine = gameEngine;
         }
@@ -79,7 +79,7 @@ namespace Si.GameEngine.Sprites
             {
                 //We use a seperate angle for the travel direction because the base ApplyMotion()
                 //  moves the object in the the direction of the Velocity.Angle.
-                Location += TravelAngle * (Velocity.Speed * Velocity.ThrottlePercentage) * epoch;
+                Location += TravelAngle * (Velocity.MaximumSpeed * Velocity.ForwardMomentium) * epoch;
             }
             else if (VectorType == ParticleVectorType.Native)
             {

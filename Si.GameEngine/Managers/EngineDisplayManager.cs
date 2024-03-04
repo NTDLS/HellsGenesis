@@ -25,7 +25,7 @@ namespace Si.GameEngine.Managers
         /// canvas which includes offscreen locations when not zoomed out. The local player
         /// will be centered in this window and the window will moved with the players movements.
         /// </summary>
-        public SiPoint RenderWindowPosition { get; private set; } = new();
+        public SiPoint RenderWindowPosition { get; set; } = new();
         public Control DrawingSurface { get; private set; }
         public Screen Screen { get; private set; }
 
@@ -43,8 +43,8 @@ namespace Si.GameEngine.Managers
             }
 
             float weightedThrottlePercent = (
-                    _gameEngine.Player.Sprite.Velocity.ThrottlePercentage * 0.60f //n-percent of the zoom is throttle.
-                    + _gameEngine.Player.Sprite.Velocity.BoostPercentage * 0.40f  //n-percent of the zoom is boost.
+                    _gameEngine.Player.Sprite.Velocity.ForwardMomentium * 0.60f //n-percent of the zoom is throttle.
+                    + _gameEngine.Player.Sprite.Velocity.ForwardBoostMomentium * 0.40f  //n-percent of the zoom is boost.
                 ).Clamp(0, 1);
 
             float remainingRatioZoom = 1 - BaseDrawScale;

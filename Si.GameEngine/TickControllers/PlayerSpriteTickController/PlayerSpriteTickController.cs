@@ -130,20 +130,19 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                 }
                 #endregion
 
-
                 //Make player boost "build up" and fade-in.
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
-                    && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false)
+                    && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostRecharging == false)
                 {
-                    if (Sprite.Velocity.BoostPercentage < 1.0)
+                    if (Sprite.Velocity.ForwardBoostMomentium < 1.0)
                     {
-                        float boostToAdd = Sprite.Velocity.BoostPercentage > 0
-                            ? GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.BoostPercentage) : GameEngine.Settings.PlayerThrustRampUp;
+                        float boostToAdd = Sprite.Velocity.ForwardBoostMomentium > 0
+                            ? GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ForwardBoostMomentium) : GameEngine.Settings.PlayerThrustRampUp;
 
-                        Sprite.Velocity.BoostPercentage += boostToAdd;
+                        Sprite.Velocity.ForwardBoostMomentium += boostToAdd;
                     }
 
-                    Sprite.Velocity.AvailableBoost -= Sprite.Velocity.Boost * Sprite.Velocity.BoostPercentage;
+                    Sprite.Velocity.AvailableBoost -= Sprite.Velocity.MaximumBoostSpeed * Sprite.Velocity.ForwardBoostMomentium;
                     if (Sprite.Velocity.AvailableBoost < 0)
                     {
                         Sprite.Velocity.AvailableBoost = 0;
@@ -152,12 +151,12 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                 else
                 {
                     //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
-                    if (Sprite.Velocity.BoostPercentage > 0)
+                    if (Sprite.Velocity.ForwardBoostMomentium > 0)
                     {
-                        Sprite.Velocity.BoostPercentage -= GameEngine.Settings.PlayerThrustRampDown;
-                        if (Sprite.Velocity.BoostPercentage < 0.01)
+                        Sprite.Velocity.ForwardBoostMomentium -= GameEngine.Settings.PlayerThrustRampDown;
+                        if (Sprite.Velocity.ForwardBoostMomentium < 0.01)
                         {
-                            Sprite.Velocity.BoostPercentage = 0;
+                            Sprite.Velocity.ForwardBoostMomentium = 0;
                         }
                     }
 
@@ -165,119 +164,92 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                     {
                         Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Clamp(0, GameEngine.Settings.MaxPlayerBoostAmount);
 
-                        if (Sprite.Velocity.BoostRebuilding && Sprite.Velocity.AvailableBoost >= GameEngine.Settings.PlayerBoostRebuildFloor)
+                        if (Sprite.Velocity.IsBoostRecharging && Sprite.Velocity.AvailableBoost >= GameEngine.Settings.PlayerBoostRebuildFloor)
                         {
-                            Sprite.Velocity.BoostRebuilding = false;
+                            Sprite.Velocity.IsBoostRecharging = false;
                         }
                     }
                 }
 
-                //Make player thrust "build up" and fade-in.
+                #region Forward and Reverse.
+
+                float forwardThrustToAdd = Sprite.Velocity.ForwardMomentium == 0 ? GameEngine.Settings.PlayerThrustRampUp
+                    : GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ForwardMomentium);
+
+                //Make player forward momentium "build up" and fade-out.
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward))
                 {
-                    if (Sprite.Velocity.ThrottlePercentage < 1.0)
-                    {
-                        //We add the first thrust amount with the amount defined in "PlayerThrustRampUp", after that we add the
-                        // calculated inversee-percentage-from-100-percent of "PlayerThrustRampUp" to the ThrottlePercentage until we reach 100%.
-                        // This causes our thrust to start qucikly and acceleration to fade fast as we approach full throttle. The last few %-points
-                        //  of throttle will take a while. We do the reverse of this to stop. Stopping fast at first and slowly-slowly slowing to a stop.
-
-                        float thrustToAdd = Sprite.Velocity.ThrottlePercentage > 0
-                            ? GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ThrottlePercentage) : GameEngine.Settings.PlayerThrustRampUp;
-
-                        Sprite.Velocity.ThrottlePercentage += thrustToAdd;
-                    }
+                    Sprite.Velocity.ForwardMomentium += forwardThrustToAdd;
+                    Sprite.Velocity.ForwardMomentium.Clamp(-1, 1);
+                }
+                else if (GameEngine.Input.IsKeyPressed(SiPlayerKey.Reverse))
+                {
+                    Sprite.Velocity.ForwardMomentium -= forwardThrustToAdd;
+                    Sprite.Velocity.ForwardMomentium.Clamp(-1, 1);
                 }
                 else
                 {
-                    //If no "forward" or "reverse" user input is received... then fade the thrust.
-                    if (Sprite.Velocity.ThrottlePercentage > 0)
+                    float thrustToRemove = Sprite.Velocity.ForwardMomentium == 0 ? GameEngine.Settings.PlayerThrustRampDown
+                        : GameEngine.Settings.PlayerThrustRampDown * Sprite.Velocity.ForwardMomentium;
+
+                    if (Math.Abs(thrustToRemove) + 0.1 >= Math.Abs(Sprite.Velocity.ForwardMomentium))
                     {
-                        //Ramp down to a stop:
-                        float thrustToRemove = Sprite.Velocity.ThrottlePercentage < 1
-                            ? GameEngine.Settings.PlayerThrustRampDown * Sprite.Velocity.ThrottlePercentage : GameEngine.Settings.PlayerThrustRampDown;
-
-                        Sprite.Velocity.ThrottlePercentage -= thrustToRemove;
-
-                        if (Sprite.Velocity.ThrottlePercentage < 0.01)
-                        {
-                            //Don't overshoot the stop.
-                            Sprite.Velocity.ThrottlePercentage = 0;
-                        }
+                        Sprite.Velocity.ForwardMomentium = 0; //Don't overshoot the stop.
                     }
-                    else if (Sprite.Velocity.ThrottlePercentage < 0)
-                    {
-                        //Ramp up to a stop:
-                        float thrustToRemove = Sprite.Velocity.ThrottlePercentage * -1 < 1
-                            ? GameEngine.Settings.PlayerThrustRampDown * (1 - Sprite.Velocity.ThrottlePercentage * -1) : GameEngine.Settings.PlayerThrustRampDown;
-
-                        Sprite.Velocity.ThrottlePercentage += thrustToRemove;
-                        if (Sprite.Velocity.ThrottlePercentage > 0)
-                        {
-                            //Don't overshoot the stop.
-                            Sprite.Velocity.ThrottlePercentage = 0;
-                        }
-                    }
+                    else Sprite.Velocity.ForwardMomentium -= thrustToRemove;
                 }
 
-                if (Sprite.BoostAnimation != null)
+                #endregion
+
+                #region Strafing.
+
+                var strafeAngle = SiPoint.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle - SiPoint.DEG_90_RADS), new SiPoint(1, 1));
+
+                float strafeThrustToAdd = Sprite.Velocity.LateralMomentium == 0 ? GameEngine.Settings.PlayerThrustRampUp
+                    : GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.LateralMomentium);
+
+                //Make player lateral momentium "build up" and fade-out.
+                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && !GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
                 {
-                    Sprite.BoostAnimation.Visable =
-                        GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
-                        && GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
-                        && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.BoostRebuilding == false;
+                    Sprite.Velocity.LateralMomentium += strafeThrustToAdd;
+                    Sprite.Velocity.LateralMomentium.Clamp(-1, 1);
                 }
+                else if (!GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
+                {
+                    Sprite.Velocity.LateralMomentium -= strafeThrustToAdd;
+                    Sprite.Velocity.LateralMomentium.Clamp(-1, 1);
+                }
+                else //Ramp down to a stop:
+                {
+                    float thrustToRemove = Sprite.Velocity.LateralMomentium == 0 ? GameEngine.Settings.PlayerThrustRampDown
+                        : GameEngine.Settings.PlayerThrustRampDown * Sprite.Velocity.LateralMomentium;
+
+                    if (Math.Abs(thrustToRemove) + 0.1 >= Math.Abs(Sprite.Velocity.LateralMomentium))
+                    {
+                        Sprite.Velocity.LateralMomentium = 0; //Don't overshoot the stop.
+                    }
+                    else Sprite.Velocity.LateralMomentium -= thrustToRemove;
+                }
+
+                #endregion 
 
                 if (Sprite.Velocity.AvailableBoost <= 0)
                 {
                     Sprite.Velocity.AvailableBoost = 0;
-                    Sprite.Velocity.BoostRebuilding = true;
+                    Sprite.Velocity.IsBoostRecharging = true;
                 }
 
-                if (Sprite.ThrustAnimation != null)
-                {
-                    Sprite.ThrustAnimation.Visable = GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward);
-                }
+                var totalForwardThrust =
+                    (Sprite.Velocity.MaximumSpeed * Sprite.Velocity.ForwardMomentium)
+                    + (Sprite.Velocity.MaximumBoostSpeed * Sprite.Velocity.ForwardBoostMomentium);
 
-                var totalThrustSpeed = Sprite.Velocity.Speed * Sprite.Velocity.ThrottlePercentage;
+                displacementVector +=
+                    (Sprite.Velocity.Angle * totalForwardThrust) +
+                    (strafeAngle * Sprite.Velocity.MaximumSpeed * Sprite.Velocity.LateralMomentium);
 
-                if (Sprite.Velocity.BoostPercentage > 0)
-                {
-                    totalThrustSpeed += Sprite.Velocity.Boost * Sprite.Velocity.BoostPercentage;
-                }
-
-                var strafeAngle = new SiPoint();
-                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && !GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
-                {
-                    strafeAngle = SiPoint.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle - SiPoint.DEG_90_RADS), new SiPoint(1, 1));
-                }
-                else if (!GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && GameEngine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
-                {
-                    strafeAngle = SiPoint.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle + SiPoint.DEG_90_RADS), new SiPoint(1, 1));
-                }
-
-                displacementVector += Sprite.Velocity.Angle * totalThrustSpeed + strafeAngle * (totalThrustSpeed / 2 + 0.5f);
-
-                if (Sprite.Velocity.BoostPercentage > 0.1)
-                {
-                    Sprite.ShipEngineBoostSound.Play();
-                }
-                else
-                {
-                    Sprite.ShipEngineBoostSound.Fade();
-                }
-
-                if (Sprite.Velocity.ThrottlePercentage > 0.1)
-                {
-                    Sprite.ShipEngineRoarSound.Play();
-                }
-                else
-                {
-                    Sprite.ShipEngineRoarSound.Fade();
-                }
-
-                //We are going to restrict the rotation speed to a percentage of thrust.
-                var rotationSpeed = GameEngine.Settings.MaxPlayerRotationSpeedDegrees * Sprite.Velocity.ThrottlePercentage;
+                //We are going to restrict the rotation speed to a percentage of momentium.
+                var rotationSpeed = GameEngine.Settings.MaxPlayerRotationSpeedDegrees
+                    * ((Sprite.Velocity.LateralMomentium + Sprite.Velocity.ForwardMomentium) / 2);
 
                 if (GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) && !GameEngine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
                 {
@@ -288,18 +260,49 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                     Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0f);
                 }
 
-                //insted of a fixed location, lets set the player to the center of the background offset.
-                //this is so bullets work right
+                #region Sounds and Animation.
+
+                if (Sprite.Velocity.ForwardBoostMomentium > 0.1)
+                {
+                    Sprite.ShipEngineBoostSound.Play();
+                }
+                else
+                {
+                    Sprite.ShipEngineBoostSound.Fade();
+                }
+
+                if (Sprite.Velocity.ForwardMomentium > 0.1)
+                {
+                    Sprite.ShipEngineRoarSound.Play();
+                }
+                else
+                {
+                    Sprite.ShipEngineRoarSound.Fade();
+                }
+
+                if (Sprite.ThrustAnimation != null)
+                {
+                    Sprite.ThrustAnimation.Visable = GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward);
+                }
+
+                if (Sprite.BoostAnimation != null)
+                {
+                    Sprite.BoostAnimation.Visable =
+                        GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
+                        && GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
+                        && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostRecharging == false;
+                }
+
+                #endregion
             }
 
             //Scroll the background.
-            GameEngine.Display.RenderWindowPosition.X += displacementVector.X;
-            GameEngine.Display.RenderWindowPosition.Y += displacementVector.Y;
+            GameEngine.Display.RenderWindowPosition += displacementVector;
 
             //Move the player in the direction of the background. This keeps the player visually in place, which is in the center screen.
             Sprite.Location += displacementVector;
 
-            Sprite.RenewableResources.RenewAllResources();
+            Sprite.RenewableResources.RenewAllResources(epoch);
 
             var multiplayVector = Sprite.GetMultiplayVector();
             if (multiplayVector != null && Sprite.Visable)

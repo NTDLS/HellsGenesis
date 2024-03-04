@@ -7,34 +7,64 @@ namespace Si.Library.Mathematics
     {
         public delegate void ValueChangeEvent(SiVelocity sender);
 
-        public event ValueChangeEvent? OnThrottleChanged;
+        public event ValueChangeEvent? OnMomentiumChanged;
         public event ValueChangeEvent? OnBoostChanged;
-        public event ValueChangeEvent? OnRecoilChanged;
 
         public SiAngle Angle { get; set; } = new();
-        public float Speed { get; set; }
-        public float Boost { get; set; }
-        public float AvailableBoost { get; set; }
-        public bool BoostRebuilding { get; set; }
+        /// <summary>
+        /// The maximum speed that this ship can travel before taking MaximumBoost into account.
+        /// </summary>
+        public float MaximumSpeed { get; set; }
 
-        public float _throttlePercentage;
-        public float ThrottlePercentage
+        /// <summary>
+        /// The additional speed that can be temporarily added to the sprites forward momentium.
+        /// </summary>
+        public float MaximumBoostSpeed { get; set; }
+
+        /// <summary>
+        /// The amount of boost availble until it is depleted and requires recharging.
+        /// </summary>
+        public float AvailableBoost { get; set; }
+        public bool IsBoostRecharging { get; set; }
+
+        public float _forwardMomentium;
+        /// <summary>
+        /// Percentage of forward or reverse momentium expressed as a decimal percentage of the Speed.
+        /// </summary>
+        public float ForwardMomentium
         {
-            get => _throttlePercentage;
+            get => _forwardMomentium;
             set
             {
-                _throttlePercentage = value.Clamp(-1, 1);
-                OnThrottleChanged?.Invoke(this);
+                _forwardMomentium = value.Clamp(-1, 1);
+                OnMomentiumChanged?.Invoke(this);
             }
         }
 
-        public float _boostPercentage;
-        public float BoostPercentage
+        public float _lateralMomentium;
+        /// <summary>
+        /// Percentage of lateral momentium expressed as a decimal percentage of the Speed.
+        /// </summary>
+        public float LateralMomentium
         {
-            get => _boostPercentage;
+            get => _lateralMomentium;
             set
             {
-                _boostPercentage = value.Clamp(-1, 1);
+                _lateralMomentium = value.Clamp(-1, 1);
+                OnMomentiumChanged?.Invoke(this);
+            }
+        }
+
+        public float _forwardBoostMomentium;
+        /// <summary>
+        /// Percentage of forward boost momentium expressed as a decimal percentage of the MaximumBoostSpeed.
+        /// </summary>
+        public float ForwardBoostMomentium
+        {
+            get => _forwardBoostMomentium;
+            set
+            {
+                _forwardBoostMomentium = value.Clamp(-1, 1);
                 OnBoostChanged?.Invoke(this);
             }
         }

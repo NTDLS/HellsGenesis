@@ -114,10 +114,10 @@ namespace Si.GameEngine
             sprite.Visable = true;
             sprite.X = layout.Vector.X;
             sprite.Y = layout.Vector.Y;
-            sprite.Velocity.Boost = layout.Vector.Boost;
-            sprite.Velocity.Speed = layout.Vector.Speed;
-            sprite.Velocity.BoostPercentage = layout.Vector.BoostPercentage;
-            sprite.Velocity.ThrottlePercentage = layout.Vector.ThrottlePercentage;
+            sprite.Velocity.MaximumBoostSpeed = layout.Vector.Boost;
+            sprite.Velocity.MaximumSpeed = layout.Vector.Speed;
+            sprite.Velocity.ForwardBoostMomentium = layout.Vector.BoostPercentage;
+            sprite.Velocity.ForwardMomentium = layout.Vector.ThrottlePercentage;
 
             _gameEngine.Sprites.Add(sprite);
         }

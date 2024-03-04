@@ -106,10 +106,10 @@ namespace Si.GameEngine.Sprites.Player._Superclass
                         X = X,
                         Y = Y,
                         AngleDegrees = Velocity.Angle.Degrees,
-                        BoostPercentage = Velocity.BoostPercentage,
-                        ThrottlePercentage = Velocity.ThrottlePercentage,
-                        Speed = Velocity.Speed,
-                        Boost = Velocity.Boost
+                        BoostPercentage = Velocity.ForwardBoostMomentium,
+                        ThrottlePercentage = Velocity.ForwardMomentium,
+                        Speed = Velocity.MaximumSpeed,
+                        Boost = Velocity.MaximumBoostSpeed
                     };
                 }
             }
@@ -195,13 +195,13 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
             Velocity.Angle = new SiAngle(SiPoint.DegreesToRadians(45));
 
-            Velocity.ThrottlePercentage = 0;
+            Velocity.ForwardMomentium = 0;
             Velocity.AvailableBoost = _gameEngine.Settings.MaxPlayerBoostAmount;
 
             #region Reset loadout.
 
-            Velocity.Speed = Loadout.Speed;
-            Velocity.Boost = Loadout.Boost;
+            Velocity.MaximumSpeed = Loadout.Speed;
+            Velocity.MaximumBoostSpeed = Loadout.Boost;
 
             SetHullHealth(Loadout.HullHealth);
             SetShieldHealth(Loadout.ShieldHealth);
@@ -562,8 +562,8 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
             if (IsDrone)
             {
-                ThrustAnimation.Visable = Velocity.ThrottlePercentage > 0;
-                BoostAnimation.Visable = Velocity.BoostPercentage > 0;
+                ThrustAnimation.Visable = Velocity.ForwardMomentium > 0;
+                BoostAnimation.Visable = Velocity.ForwardBoostMomentium > 0;
 
                 FixRadarPositionIndicator();
             }
