@@ -16,9 +16,8 @@ namespace Si.GameEngine.Sprites.Enemies.Bosses._Superclass
 
         public override void Explode()
         {
-            _explodeSound?.Play();
-            _explosionAnimation?.Reset();
-            _gameEngine.Sprites.Animations.AddAt(_explosionAnimation, this);
+            _gameEngine.Audio.PlayRandomExplosion();
+            _gameEngine.Sprites.Animations.AddRandomExplosionAt(this);
 
             CreateParticlesExplosion();
 

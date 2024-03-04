@@ -261,6 +261,10 @@ namespace Si.GameEngine.Managers
                     _gameEngine.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
                 }
             }
+            else if (key == Keys.F4)
+            {
+                _gameEngine.Rendering.AddScreenShake(4, 100);
+            }
             else if (key == Keys.F2)
             {
                 /*

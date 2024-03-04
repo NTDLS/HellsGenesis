@@ -1,9 +1,6 @@
 ﻿using Si.GameEngine.Sprites._Superclass;
-using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
-using System.Drawing;
-using System.Linq;
 
 namespace Si.GameEngine.Sprites.Powerup._Superclass
 {
@@ -12,21 +9,6 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
     /// </summary>
     public class SpritePowerupBase : SpriteBase
     {
-        private const string _assetHitAnimationPath = @"Graphics\Animation\Powerup\";
-        private readonly string[] _assetHitAnimationFiles = {
-            #region Image Paths.
-            "PowerUpShort128x128.png",
-            #endregion
-        };
-
-        private const string _assetExplosionSoundPath = @"Sounds\Powerup\";
-        private readonly string[] _assetExplosionSoundFiles = {
-            #region Sound Paths.
-            "PowerUp1.wav",
-            #endregion
-        };
-
-
         /// <summary>
         /// The power up amount (number of boost points, shield points, repair, etc.).
         /// </summary>
@@ -50,12 +32,6 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
         {
             Initialize();
 
-            int _hitImageIndex = SiRandom.Between(0, _assetHitAnimationFiles.Count() - 1);
-            _hitAnimation = new SpriteAnimation(_gameEngine, _assetHitAnimationPath + _assetHitAnimationFiles[_hitImageIndex], new Size(128, 128), 20);
-
-            int _soundIndex = SiRandom.Between(0, _assetExplosionSoundFiles.Count() - 1);
-            _explodeSound = _gameEngine.Assets.GetAudio(_assetExplosionSoundPath + _assetExplosionSoundFiles[_soundIndex], 0.25f);
-
             RadarDotSize = new SiPoint(4, 4);
         }
 
@@ -66,9 +42,7 @@ namespace Si.GameEngine.Sprites.Powerup._Superclass
 
         public override void Explode()
         {
-            _explodeSound.Play();
-            _hitAnimation.Reset();
-            _gameEngine.Sprites.Animations.AddAt(_hitAnimation, this);
+            _gameEngine.Assets.GetAudio(@"Sounds\Powerup\PowerUp1.wav", 0.25f).Play();
             QueueForDelete();
         }
 

@@ -279,7 +279,7 @@ namespace Si.GameEngine
 
         public void ShutdownEngine()
         {
-            if (IsRunning == false)
+            if (IsRunning)
             {
                 IsRunning = false;
 

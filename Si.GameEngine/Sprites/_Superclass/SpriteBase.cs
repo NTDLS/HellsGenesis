@@ -1,5 +1,4 @@
 ﻿using SharpDX.Mathematics.Interop;
-using Si.Audio;
 using Si.GameEngine.Sprites.Enemies._Superclass;
 using Si.GameEngine.Sprites.Player._Superclass;
 using Si.GameEngine.Sprites.Weapons.Munitions._Superclass;
@@ -73,13 +72,6 @@ namespace Si.GameEngine.Sprites._Superclass
 
         protected SharpDX.Direct2D1.Bitmap _lockedOnImage;
         protected SharpDX.Direct2D1.Bitmap _lockedOnSoftImage;
-        protected SiAudioClip _hitSound;
-        protected SiAudioClip _shieldHit;
-        protected SiAudioClip _explodeSound;
-
-        protected SpriteAnimation _explosionAnimation;
-        protected SpriteAnimation _hitExplosionAnimation;
-        protected SpriteAnimation _hitAnimation;
 
         private bool _isLockedOn = false;
         private SiVelocity _velocity;
@@ -609,7 +601,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
             if (ShieldHealth > 0)
             {
-                _shieldHit.Play();
+                _gameEngine.Audio.PlayRandomShieldHit();
                 damage /= 2; //Weapons do less damage to Shields. They are designed to take hits.
                 damage = damage < 1 ? 1 : damage;
                 damage = damage > ShieldHealth ? ShieldHealth : damage; //No need to go negative with the damage.
@@ -619,7 +611,7 @@ namespace Si.GameEngine.Sprites._Superclass
             }
             else
             {
-                _hitSound.Play();
+                _gameEngine.Audio.PlayRandomHullHit();
                 damage = damage > HullHealth ? HullHealth : damage; //No need to go negative with the damage.
                 HullHealth -= damage;
 
@@ -863,11 +855,7 @@ namespace Si.GameEngine.Sprites._Superclass
 
         public virtual void HitExplosion()
         {
-            if (_hitExplosionAnimation != null)
-            {
-                _hitExplosionAnimation.Reset();
-                _gameEngine.Sprites.Animations.AddAt(_hitExplosionAnimation, this);
-            }
+            _gameEngine.Sprites.Animations.AddRandomExplosionAt(this);
         }
 
         #endregion

@@ -28,13 +28,25 @@ namespace Si.GameEngine.Managers
             BackgroundMusicSound = _gameEngine.Assets.GetAudio(@"Sounds\Music\Background.wav", 0.25f, true);
         }
 
+        public void PlayRandomShieldHit()
+        {
+            var audioClip = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Shield Hit.wav", 1.0f);
+            audioClip?.Play();
+        }
+
+        public void PlayRandomHullHit()
+        {
+            var audioClip = _gameEngine.Assets.GetAudio(@"Sounds\Ship\Object Hit.wav", 1.0f);
+            audioClip?.Play();
+        }
+
         public void PlayRandomExplosion()
         {
-            const string _assetExplosionSoundPath = @"Sounds\Explode\";
-            int explosionSoundCount = 4;
-            int selectedExplosionSoundIndex = SiRandom.Between(0, explosionSoundCount - 1);
-            var explodeSound = _gameEngine.Assets.GetAudio(Path.Combine(_assetExplosionSoundPath, $"{selectedExplosionSoundIndex}.wav"), 1.0f);
-            explodeSound?.Play();
+            const string assetPath = @"Sounds\Explode\";
+            int assetCount = 4;
+            int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
+            var audioClip = _gameEngine.Assets.GetAudio(Path.Combine(assetPath, $"{selectedAssetIndex}.wav"), 1.0f);
+            audioClip?.Play();
         }
     }
 }
