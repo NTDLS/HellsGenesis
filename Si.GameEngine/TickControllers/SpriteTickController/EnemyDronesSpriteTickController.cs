@@ -34,7 +34,7 @@ namespace Si.GameEngine.TickControllers.SpriteTickController
                 }
 
                 enemy.ApplyMotion(epoch, displacementVector);
-                enemy.RenewableResources.RenewAllResources();
+                enemy.RenewableResources.RenewAllResources(epoch);
             }
         }
 

@@ -42,7 +42,7 @@ namespace Si.GameEngine.TickControllers.SpriteTickController
             foreach (var debug in Visible())
             {
                 debug.ApplyMotion(epoch, displacementVector);
-                debug.RenewableResources.RenewAllResources();
+                debug.RenewableResources.RenewAllResources(epoch);
             }
         }
     }

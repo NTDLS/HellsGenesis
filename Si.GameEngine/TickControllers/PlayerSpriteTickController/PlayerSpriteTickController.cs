@@ -130,47 +130,6 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                 }
                 #endregion
 
-                //Make player boost "build up" and fade-in.
-                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
-                    && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostRecharging == false)
-                {
-                    if (Sprite.Velocity.ForwardBoostMomentium < 1.0)
-                    {
-                        float boostToAdd = Sprite.Velocity.ForwardBoostMomentium > 0
-                            ? GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ForwardBoostMomentium) : GameEngine.Settings.PlayerThrustRampUp;
-
-                        Sprite.Velocity.ForwardBoostMomentium += boostToAdd;
-                    }
-
-                    Sprite.Velocity.AvailableBoost -= Sprite.Velocity.MaximumBoostSpeed * Sprite.Velocity.ForwardBoostMomentium;
-                    if (Sprite.Velocity.AvailableBoost < 0)
-                    {
-                        Sprite.Velocity.AvailableBoost = 0;
-                    }
-                }
-                else
-                {
-                    //If no "forward" or "reverse" user input is received... then fade the boost and rebuild available boost.
-                    if (Sprite.Velocity.ForwardBoostMomentium > 0)
-                    {
-                        Sprite.Velocity.ForwardBoostMomentium -= GameEngine.Settings.PlayerThrustRampDown;
-                        if (Sprite.Velocity.ForwardBoostMomentium < 0.01)
-                        {
-                            Sprite.Velocity.ForwardBoostMomentium = 0;
-                        }
-                    }
-
-                    if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false && Sprite.Velocity.AvailableBoost < GameEngine.Settings.MaxPlayerBoostAmount)
-                    {
-                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 5).Clamp(0, GameEngine.Settings.MaxPlayerBoostAmount);
-
-                        if (Sprite.Velocity.IsBoostRecharging && Sprite.Velocity.AvailableBoost >= GameEngine.Settings.PlayerBoostRebuildFloor)
-                        {
-                            Sprite.Velocity.IsBoostRecharging = false;
-                        }
-                    }
-                }
-
                 #region Forward and Reverse.
 
                 float forwardThrustToAdd = Sprite.Velocity.ForwardMomentium == 0 ? GameEngine.Settings.PlayerThrustRampUp
@@ -197,6 +156,32 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
                         Sprite.Velocity.ForwardMomentium = 0; //Don't overshoot the stop.
                     }
                     else Sprite.Velocity.ForwardMomentium -= thrustToRemove;
+                }
+
+                #endregion
+
+                #region Forward Boost.
+
+                float forwardBoostThrustToAdd = Sprite.Velocity.ForwardBoostMomentium == 0 ? GameEngine.Settings.PlayerThrustRampUp
+                    : GameEngine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ForwardBoostMomentium);
+
+                //Make player forward momentium "build up" and fade-out.
+                if (GameEngine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && GameEngine.Input.IsKeyPressed(SiPlayerKey.Forward)
+                    && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostRecharging == false)
+                {
+                    Sprite.Velocity.ForwardBoostMomentium += forwardBoostThrustToAdd;
+                    Sprite.Velocity.ForwardBoostMomentium.Clamp(-1, 1);
+                }
+                else
+                {
+                    float thrustToRemove = Sprite.Velocity.ForwardBoostMomentium == 0 ? GameEngine.Settings.PlayerThrustRampDown
+                        : GameEngine.Settings.PlayerThrustRampDown * Sprite.Velocity.ForwardBoostMomentium;
+
+                    if (Math.Abs(thrustToRemove) + 0.1 >= Math.Abs(Sprite.Velocity.ForwardBoostMomentium))
+                    {
+                        Sprite.Velocity.ForwardBoostMomentium = 0; //Don't overshoot the stop.
+                    }
+                    else Sprite.Velocity.ForwardBoostMomentium -= thrustToRemove;
                 }
 
                 #endregion
