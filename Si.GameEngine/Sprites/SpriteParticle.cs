@@ -24,7 +24,7 @@ namespace Si.GameEngine.Sprites
         /// </summary>
         public float FadeToBlackReductionAmount { get; set; } = 0.01f;
 
-        public ParticleColorType ColorType { get; set; } = ParticleColorType.Color;
+        public ParticleColorType ColorType { get; set; } = ParticleColorType.SingleColor;
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Native;
         public ParticleShape Shape { get; set; } = ParticleShape.FilledEllipse;
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
@@ -88,7 +88,7 @@ namespace Si.GameEngine.Sprites
 
             if (CleanupMode == ParticleCleanupMode.FadeToBlack)
             {
-                if (ColorType == ParticleColorType.Color)
+                if (ColorType == ParticleColorType.SingleColor)
                 {
                     Color *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
 
@@ -127,7 +127,7 @@ namespace Si.GameEngine.Sprites
                 switch (Shape)
                 {
                     case ParticleShape.FilledEllipse:
-                        if (ColorType == ParticleColorType.Color)
+                        if (ColorType == ParticleColorType.SingleColor)
                         {
                             _gameEngine.Rendering.FillEllipseAt(renderTarget,
                                 RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Velocity.Angle.Degrees);
