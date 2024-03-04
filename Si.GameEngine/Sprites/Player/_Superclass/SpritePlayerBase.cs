@@ -81,6 +81,13 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             CenterInUniverse();
         }
 
+        public override void Cleanup()
+        {
+            ThrustAnimation?.QueueForDelete();
+            BoostAnimation?.QueueForDelete();
+            base.Cleanup();
+        }
+
         public override void VisibilityChanged()
         {
             UpdateThrustAnimationPositions();
@@ -216,6 +223,44 @@ namespace Si.GameEngine.Sprites.Player._Superclass
             #endregion
 
             SelectFirstAvailableUsableSecondaryWeapon();
+
+            if (ThrustAnimation == null || ThrustAnimation.IsQueuedForDeletion == true)
+            {
+                var playMode = new SpriteAnimation.PlayMode()
+                {
+                    Replay = SiAnimationReplayMode.LoopedPlay,
+                    DeleteSpriteAfterPlay = false,
+                    ReplayDelay = new TimeSpan(0)
+                };
+                ThrustAnimation = new SpriteAnimation(_gameEngine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
+                {
+                    SpriteTag = "PlayerForwardThrust",
+                    Visable = false,
+                    OwnerUID = UID
+                };
+                //ThrustAnimation.Reset();
+                _gameEngine.Sprites.Animations.AddAt(ThrustAnimation, this);
+                ThrustAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
+            }
+
+            if (BoostAnimation == null || BoostAnimation.IsQueuedForDeletion == true)
+            {
+                var playMode = new SpriteAnimation.PlayMode()
+                {
+                    Replay = SiAnimationReplayMode.LoopedPlay,
+                    DeleteSpriteAfterPlay = false,
+                    ReplayDelay = new TimeSpan(0)
+                };
+                BoostAnimation = new SpriteAnimation(_gameEngine, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
+                {
+                    SpriteTag = "PlayerForwardThrust",
+                    Visable = false,
+                    OwnerUID = UID
+                };
+                //BoostAnimation.Reset();
+                _gameEngine.Sprites.Animations.AddAt(BoostAnimation, this);
+                BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
+            }
         }
 
         public override void AddShieldHealth(int pointsToAdd)
@@ -230,45 +275,6 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
         private void UpdateThrustAnimationPositions()
         {
-            if (IsQueuedForDeletion == false)
-            {
-                if (ThrustAnimation == null || ThrustAnimation.IsQueuedForDeletion == true)
-                {
-                    var playMode = new SpriteAnimation.PlayMode()
-                    {
-                        Replay = SiAnimationReplayMode.LoopedPlay,
-                        DeleteSpriteAfterPlay = false,
-                        ReplayDelay = new TimeSpan(0)
-                    };
-                    ThrustAnimation = new SpriteAnimation(_gameEngine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
-                    {
-                        Visable = false,
-                        OwnerUID = UID
-                    };
-                    //ThrustAnimation.Reset();
-                    _gameEngine.Sprites.Animations.AddAt(ThrustAnimation, this);
-                    ThrustAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
-                }
-
-                if (BoostAnimation == null || BoostAnimation.IsQueuedForDeletion == true)
-                {
-                    var playMode = new SpriteAnimation.PlayMode()
-                    {
-                        Replay = SiAnimationReplayMode.LoopedPlay,
-                        DeleteSpriteAfterPlay = false,
-                        ReplayDelay = new TimeSpan(0)
-                    };
-                    BoostAnimation = new SpriteAnimation(_gameEngine, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
-                    {
-                        Visable = false,
-                        OwnerUID = UID
-                    };
-                    //BoostAnimation.Reset();
-                    _gameEngine.Sprites.Animations.AddAt(BoostAnimation, this);
-                    BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
-                }
-            }
-
             if (ThrustAnimation != null)
             {
                 if (Visable)

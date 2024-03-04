@@ -13,8 +13,8 @@ namespace Si.Game
         static void Main(string[] args)
         {
             // Set up global exception handlers
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(GlobalExceptionHandler);
-            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(GlobalThreadExceptionHandler);
+            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(GlobalExceptionHandler);
+            //Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(GlobalThreadExceptionHandler);
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();

@@ -27,6 +27,7 @@ namespace Si.GameEngine.TickControllers.PlayerSpriteTickController
 
         public void InstantiatePlayerClass(Type playerClassType)
         {
+            Sprite.Cleanup();
             Sprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerClassType, new object[] { _gameEngine });
             Sprite.Visable = false;
         }

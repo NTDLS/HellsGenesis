@@ -1036,6 +1036,8 @@ namespace Si.GameEngine.Sprites._Superclass
         {
             Visable = false;
 
+            _gameEngine.Sprites.DeleteAllSpritesByOwner(UID);
+
             foreach (var attachments in Attachments)
             {
                 attachments.QueueForDelete();

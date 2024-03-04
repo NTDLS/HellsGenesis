@@ -17,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Managers
@@ -172,11 +173,6 @@ namespace Si.GameEngine.Managers
         {
             _collection.Use(o =>
             {
-                o.Where(o => o.IsQueuedForDeletion).ToList().ForEach(p =>
-                {
-                    Debug.WriteLine($"Cleaninig up: {p.GetType()}");
-                });
-
                 o.Where(o => o.IsQueuedForDeletion).ToList().ForEach(p => p.Cleanup());
                 o.RemoveAll(o => o.IsQueuedForDeletion);
 
@@ -218,6 +214,20 @@ namespace Si.GameEngine.Managers
                 foreach (var sprite in o)
                 {
                     if (sprite.SpriteTag == name)
+                    {
+                        sprite.QueueForDelete();
+                    }
+                }
+            });
+        }
+
+        public void DeleteAllSpritesByOwner(uint ownerUID)
+        {
+            _collection.Use(o =>
+            {
+                foreach (var sprite in o)
+                {
+                    if (sprite.OwnerUID == ownerUID)
                     {
                         sprite.QueueForDelete();
                     }
