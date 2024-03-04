@@ -93,9 +93,10 @@ namespace Si.GameEngine.TickControllers.SpriteTickController
                     {
                         var particle = CreateAt(location, new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
                         particle.Shape = ParticleShape.FilledEllipse;
-                        particle.ColorType = ParticleColorType.Graident;
-                        particle.GradientStartColor = SiRenderingUtility.GetRandomHotColor();
-                        particle.GradientEndColor = SiRenderingUtility.GetRandomHotColor();
+                        particle.ColorType = ParticleColorType.SingleColor;
+                        //particle.GradientStartColor = SiRenderingUtility.GetRandomHotColor();
+                        //particle.GradientEndColor = SiRenderingUtility.GetRandomHotColor();
+                        particle.Color = SiRenderingUtility.GetRandomHotColor();
                         particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                         particle.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
                         particle.Velocity.Speed *= SiRandom.Between(1, 3.5f);
