@@ -33,7 +33,7 @@ namespace Si.Menus.SinglePlayer
             offsetY += itemTitle.Height;
 
             _shipBlurb = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
-            _shipBlurb.X = offsetX + 200;
+            _shipBlurb.X = offsetX + 250;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
             //Use reflection to get a list of possible player types.
@@ -51,13 +51,18 @@ namespace Si.Menus.SinglePlayer
 
             List<SpritePlayerBase> playerSprites = new();
 
+            float previousSpriteSize = 0;
+
             foreach (var playerType in playerTypes)
             {
                 var playerSprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerType, new object[] { gameEngine });
                 playerSprite.SpriteTag = "MENU_SHIP_SELECT";
                 playerSprite.Velocity.Angle.Degrees = 45;
 
-                var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), playerSprite.Loadout.Name, playerSprite.Loadout.Name);
+                offsetY += (playerSprite.Size.Height / 2.0f) + (previousSpriteSize / 2.0f) + 25;
+                previousSpriteSize = playerSprite.Size.Height;
+
+                var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 75, offsetY), playerSprite.Loadout.Name, playerSprite.Loadout.Name);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
                 menuItem.UserData = playerSprite;
@@ -66,7 +71,6 @@ namespace Si.Menus.SinglePlayer
 
                 playerSprite.X = offsetX;
                 playerSprite.Y = offsetY;
-                offsetY += 50;
             }
 
             playerSprites.ForEach(sprite =>
