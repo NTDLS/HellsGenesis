@@ -15,9 +15,7 @@ using Si.Library.Mathematics.Geometry;
 using Si.Library.Payload;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Managers

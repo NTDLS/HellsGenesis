@@ -24,14 +24,11 @@ namespace Si.Rendering
             public ScreenShake() { }
         }
 
-        private readonly List<ScreenShake> _screenShakes = new();
-
         public PessimisticCriticalResource<SiCriticalRenderTargets> RenderTargets { get; private set; } = new();
         public SiPrecreatedMaterials Materials { get; private set; }
         public SiPrecreatedTextFormats TextFormats { get; private set; }
 
-        private Matrix3x2 _lastTransform = Matrix3x2.Identity;
-        private readonly Dictionary<RenderTarget, Stack<Matrix3x2>> _transformStack = new();
+        private readonly List<ScreenShake> _screenShakes = new();
         private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(FactoryType.SingleThreaded);
         private readonly SharpDX.DirectWrite.Factory _directWriteFactory = new();
         private readonly ImagingFactory _wicFactory = new();
@@ -98,8 +95,8 @@ namespace Si.Rendering
             Materials = new SiPrecreatedMaterials(renderTargets.ScreenRenderTarget);
             TextFormats = new SiPrecreatedTextFormats(_directWriteFactory);
 
-            _transformStack.Add(renderTargets.ScreenRenderTarget, new Stack<Matrix3x2>());
-            _transformStack.Add(renderTargets.IntermediateRenderTarget, new Stack<Matrix3x2>());
+            SiTransforms.RegisterRenderTarget(renderTargets.ScreenRenderTarget);
+            SiTransforms.RegisterRenderTarget(renderTargets.IntermediateRenderTarget);
         }
 
         public void Dispose()
@@ -145,7 +142,7 @@ namespace Si.Rendering
                 var offsetX = (float)(SiRandom.NextFloat() * intensity * 2 - intensity);
                 var offsetY = (float)(SiRandom.NextFloat() * intensity * 2 - intensity);
 
-                PushTransform(screenRenderTarget, Matrix3x2.Translation(offsetX, offsetY));
+                SiTransforms.PushTransform(screenRenderTarget, Matrix3x2.Translation(offsetX, offsetY));
 
                 appliedScreenShakes.Add(screenShake);
             }
@@ -159,7 +156,7 @@ namespace Si.Rendering
                     _screenShakes.Remove(screenShake);
                 }
 
-                PopTransform(screenRenderTarget);
+                SiTransforms.PopTransform(screenRenderTarget);
             }
         }
 
@@ -186,9 +183,9 @@ namespace Si.Rendering
             }
 
             var destRect = new RawRectangleF(x, y, (x + bitmap.PixelSize.Width), (y + bitmap.PixelSize.Height));
-            PushTransform(renderTarget, CreateAngleTransform(destRect, angleRadians));
+            SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
-            PopTransform(renderTarget);
+            SiTransforms.PopTransform(renderTarget);
         }
 
         /// Draws a bitmap from a specified location of a given size, to the the specified location.
@@ -201,9 +198,9 @@ namespace Si.Rendering
             }
 
             var destRect = new RawRectangleF(x, y, (x + destSize.Width), (y + destSize.Height));
-            PushTransform(renderTarget, CreateAngleTransform(destRect, angleRadians));
+            SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear, sourceRect);
-            PopTransform(renderTarget);
+            SiTransforms.PopTransform(renderTarget);
         }
 
         /// <summary>
@@ -247,9 +244,9 @@ namespace Si.Rendering
 
             //DrawRectangleAt(renderTarget, textRectangle, 0, Materials.Raw.Blue, 0, 1);
 
-            PushTransform(renderTarget, CreateAngleTransform(destRect, angleRadians));
+            SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
             renderTarget.DrawText(text, format, destRect, brush);
-            PopTransform(renderTarget);
+            SiTransforms.PopTransform(renderTarget);
         }
 
         public void DrawLine(RenderTarget renderTarget,
@@ -281,12 +278,12 @@ namespace Si.Rendering
                 (y - radiusY / 2.0f),
                 ((x - radiusX / 2.0f) + radiusX),
                 ((y - radiusY / 2.0f) + radiusY));
-            PushTransform(renderTarget, CreateAngleTransform(destRect, angleRadians));
+            SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
 
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.FillEllipse(ellipse, brush);
 
-            PopTransform(renderTarget);
+            SiTransforms.PopTransform(renderTarget);
         }
 
         /// <summary>
@@ -308,7 +305,7 @@ namespace Si.Rendering
                 (y - radiusY / 2.0f),
                 ((x - radiusX / 2.0f) + radiusX),
                 ((y - radiusY / 2.0f) + radiusY));
-            PushTransform(renderTarget, CreateAngleTransform(destRect, angleRadians));
+            SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
 
             // Define gradient stops
             using var gradientStops = new GradientStopCollection(renderTarget, new GradientStop[]
@@ -328,7 +325,7 @@ namespace Si.Rendering
             // Fill ellipse with gradient brush
             renderTarget.FillEllipse(ellipse, linearGradientBrush);
 
-            PopTransform(renderTarget);
+            SiTransforms.PopTransform(renderTarget);
         }
 
         /// <summary>
@@ -351,11 +348,11 @@ namespace Si.Rendering
                 ((x - radiusX / 2.0f) + radiusX),
                 ((y - radiusY / 2.0f) + radiusY));
 
-            PushTransform(renderTarget, CreateAngleTransform(destRect, angleRadians));
+            SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawEllipse(ellipse, brush, strokeWidth);
 
-            PopTransform(renderTarget);
+            SiTransforms.PopTransform(renderTarget);
         }
 
         public void HollowTriangleAt(RenderTarget renderTarget, float x, float y,
@@ -390,13 +387,13 @@ namespace Si.Rendering
             // Create a translation transform to move the triangle to the desired position
             var destRect = new RawRectangleF(x, y, (x + width), (y + height));
 
-            PushTransform(renderTarget,
-                Matrix3x2.Multiply(CreateOffsetTransform(x, y), CreateAngleTransform(destRect, angleRadians)));
+            SiTransforms.PushTransform(renderTarget,
+                Matrix3x2.Multiply(SiTransforms.CreateOffsetTransform(x, y), SiTransforms.CreateAngleTransform(destRect, angleRadians)));
 
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawGeometry(triangleGeometry, brush, strokeWidth);
 
-            PopTransform(renderTarget);
+            SiTransforms.PopTransform(renderTarget);
         }
 
         /// <summary>
@@ -414,10 +411,10 @@ namespace Si.Rendering
                 destRect.Right += expand;
             }
 
-            PushTransform(renderTarget, CreateAngleTransform(destRect, angleRadians));
+            SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
             using var brush = new SolidColorBrush(renderTarget, color);
             renderTarget.DrawRectangle(destRect, brush, strokeWidth);
-            PopTransform(renderTarget);
+            SiTransforms.PopTransform(renderTarget);
 
             return destRect;
         }
@@ -441,112 +438,5 @@ namespace Si.Rendering
 
             return scalingMatrix;
         }
-
-        #region Native Transformations.
-
-        public Matrix3x2 CreateOffsetTransform(float x, float y)
-        {
-            // Create a translation transform to move the drawing to the desired position;
-            return new(1.0f, 0.0f, 0.0f, 1.0f, x, y);
-        }
-
-        public RawMatrix3x2 CreateAngleTransform(RawRectangleF rect, float angleRadians)
-        {
-            float centerX = rect.Left + (rect.Right - rect.Left) / 2.0f;
-            float centerY = rect.Top + (rect.Bottom - rect.Top) / 2.0f;
-
-            // Calculate the rotation matrix
-            float cosAngle = (float)Math.Cos(angleRadians);
-            float sinAngle = (float)Math.Sin(angleRadians);
-
-            return new RawMatrix3x2(
-                cosAngle, sinAngle,
-                -sinAngle, cosAngle,
-                centerX - cosAngle * centerX + sinAngle * centerY,
-                centerY - sinAngle * centerX - cosAngle * centerY
-            );
-        }
-
-        public RawMatrix3x2 CreateScaleTransform(float scale, Vector2 centerPoint)
-        {
-            // Create a scale matrix at the specified center point
-            return Matrix3x2.Scaling(scale, scale, centerPoint);
-        }
-
-        public RawMatrix3x2 CreatePanAndZoomTransform(float scaleX, float scaleY, Vector2 panOffset, Vector2 zoomCenter)
-        {
-            // Create a scaling matrix around the zoom center
-            var scalingMatrix = Matrix3x2.Scaling(scaleX, scaleY, zoomCenter);
-
-            // Create a translation matrix for panning
-            var translationMatrix = Matrix3x2.Translation(panOffset);
-
-            // Combine the scaling and translation matrices
-            var combinedMatrix = Matrix3x2.Multiply(scalingMatrix, translationMatrix);
-
-            return combinedMatrix;
-        }
-
-        public void PushTransform(RenderTarget renderTarget, Matrix3x2 transform)
-        {
-            _transformStack[renderTarget].Push(renderTarget.Transform);
-            if (transform != _lastTransform)
-            {
-                renderTarget.Transform = transform;
-                _lastTransform = transform;
-            }
-        }
-
-        public void PopTransform(RenderTarget renderTarget)
-        {
-            var previousTransform = _transformStack[renderTarget].Pop();
-            if (previousTransform != _lastTransform)
-            {
-                renderTarget.Transform = previousTransform;
-            }
-        }
-
-        #endregion
     }
 }
-
-/*
-public class ScreenShakeEffect
-{
-    private Random random = new Random();
-    private float intensity = 0;
-    private int duration = 0;
-    private int shakeDuration = 0;
-    private float offsetX = 0;
-    private float offsetY = 0;
-
-    public void Shake(float intensity, int duration)
-    {
-        this.intensity = intensity;
-        this.duration = duration;
-        shakeDuration = duration;
-    }
-
-    public void Update(float deltaTime)
-    {
-        if (shakeDuration > 0)
-        {
-            // Randomly adjust offset within intensity range
-            offsetX = (float)random.NextDouble() * intensity * 2 - intensity;
-            offsetY = (float)random.NextDouble() * intensity * 2 - intensity;
-
-            shakeDuration -= (int)(deltaTime * 1000); // Convert deltaTime to milliseconds
-        }
-        else
-        {
-            offsetX = 0;
-            offsetY = 0;
-        }
-    }
-
-    public void ApplyTransform(RenderTarget renderTarget)
-    {
-        renderTarget.Transform = Matrix3x2.Translation(offsetX, offsetY);
-    }
-}
-*/

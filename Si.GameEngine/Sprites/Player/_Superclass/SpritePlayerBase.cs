@@ -287,8 +287,6 @@ namespace Si.GameEngine.Sprites.Player._Superclass
 
             if (BoostAnimation != null)
             {
-                BoostAnimation.Visable = true;
-
                 if (Visable)
                 {
                     var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
