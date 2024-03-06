@@ -1,4 +1,4 @@
-#define Version "0.0.25"
+#define Version "0.0.26"
 
 [Setup]
 ;-- Main Setup Information
@@ -7,7 +7,7 @@
  AppCopyright                    = Copyright © 1995-2024 NetworkDLS.
  DefaultDirName                  = {commonpf}\NetworkDLS\Strikeforce Infinite
  DefaultGroupName                = NetworkDLS\Strikeforce Infinite
- UninstallDisplayIcon            = {app}\StrikeforceInfinite.exe
+ UninstallDisplayIcon            = {app}\Si.Client.exe
  SetupIconFile                   = ../@Resources\StrikeforceInfinite.ico
  PrivilegesRequired              = admin
  Uninstallable                   = Yes
@@ -24,15 +24,15 @@
  AppVersion      = {#Version}
  
 [Components]
- Name: "Game";         Description: "Strikeforce Infinite"; Types: Full Compact Custom; Flags: Fixed;
+ Name: "Client";       Description: "Strikeforce Infinite"; Types: Full Compact Custom; Flags: Fixed;
  Name: "Assets";       Description: "Assets";               Types: Full Compact Custom; Flags: Fixed;
  Name: "FontAsset";    Description: "Fonts";                Types: Full Compact Custom; Flags: Fixed;
  
 [Files]
- Source: "../Si.Game\bin\Release\net8.0-windows7.0\*.exe";   DestDir: "{app}"; Components: Game;   Flags: IgnoreVersion; 
- Source: "../Si.Game\bin\Release\net8.0-windows7.0\*.dll";   DestDir: "{app}"; Components: Game;   Flags: IgnoreVersion;
- Source: "../Si.Game\bin\Release\net8.0-windows7.0\*.json";  DestDir: "{app}"; Components: Game;   Flags: IgnoreVersion;
- Source: "Si.Assets.rez";                                    DestDir: "{app}"; Components: Assets; Flags: IgnoreVersion recursesubdirs;
+ Source: "../Si.Client\bin\Release\net8.0-windows7.0\*.exe";   DestDir: "{app}"; Components: Client;   Flags: IgnoreVersion; 
+ Source: "../Si.Client\bin\Release\net8.0-windows7.0\*.dll";   DestDir: "{app}"; Components: Client;   Flags: IgnoreVersion;
+ Source: "../Si.Client\bin\Release\net8.0-windows7.0\*.json";  DestDir: "{app}"; Components: Client;   Flags: IgnoreVersion;
+ Source: "Si.Assets.rez";                                      DestDir: "{app}"; Components: Assets; Flags: IgnoreVersion recursesubdirs;
 
  Source: "Fonts\Digital-7 (Mono).ttf"; DestDir: "{commonfonts}"; Components: FontAsset; FontInstall: "Digital-7 Mono";  Flags: onlyifdoesntexist uninsneveruninstall
  Source: "Fonts\Digital-7.ttf";        DestDir: "{commonfonts}"; Components: FontAsset; FontInstall: "digital-7";       Flags: onlyifdoesntexist uninsneveruninstall
@@ -46,7 +46,7 @@
  Root: HKLM; Subkey: "Software\NetworkDLS\Strikeforce Infinite"; ValueType: STRING;ValueName: "UserAssetPath";   ValueData:"{userappdata}\StrikeforceInfinite"; Flags: CreateValueIfDoesntExist;
 
 [Icons]
- Name: "{group}\Strikeforce Infinite"; Filename: "{app}\Si.Game.exe"; Components: Game;
+ Name: "{group}\Strikeforce Infinite"; Filename: "{app}\Si.Client.exe"; Components: Client;
  
 [Run]
- Filename: "{app}\Si.Game.exe"; Description: "Run Strikeforce Infinite now?"; Flags: postinstall nowait skipifsilent shellexec; Components: Game;
+ Filename: "{app}\Si.Client.exe"; Description: "Run Strikeforce Infinite now?"; Flags: postinstall nowait skipifsilent shellexec; Components: Client;

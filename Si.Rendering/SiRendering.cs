@@ -58,7 +58,7 @@ namespace Si.Rendering
                 PresentOptions = presentOptions,
                 Hwnd = drawingSurface.Handle,
                 PixelSize = new Size2(_drawingSurfaceSize.Width, _drawingSurfaceSize.Height)
-                //PixelSize = new Size2(gameEngine.Display.NatrualScreenSize.Width, gameEngine.Display.NatrualScreenSize.Height)
+                //PixelSize = new Size2(engine.Display.NatrualScreenSize.Width, engine.Display.NatrualScreenSize.Height)
             };
 
             var renderTargetProperties = new RenderTargetProperties

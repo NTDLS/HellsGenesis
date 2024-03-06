@@ -3,8 +3,6 @@
     public static class SiConstants
     {
         public static string FriendlyName = "Strikeforce Infinite";
-        public const string MultiplayServerAddress = "127.0.0.1";
-        public const int MultiplayServerTCPPort = 6785;
 
         public enum SiWeaponsLockType
         {
@@ -57,40 +55,6 @@
             PostScale
         }
 
-        public enum SiPlayMode
-        {
-            SinglePlayer,
-            MutiPlayerHost,
-            MutiPlayerClient
-        }
-
-        public enum SiLogSeverity
-        {
-            Trace = 0, //Super-verbose, debug-like information.
-            Verbose = 1, //General status messages.
-            Warning = 2, //Something the user might want to be aware of.
-            Exception = 3 //An actual exception has been thrown.
-        }
-
-        public enum SiControlledBy
-        {
-            /// <summary>
-            /// This sprite is controlled by local AI and the actions are sent to the
-            /// server to control the its drone clones sprite with a matching MultiplayUID.
-            /// </summary>
-            LocalAI,
-
-            /// <summary>
-            /// This sprite is controlled by a local human player.
-            /// </summary>
-            HumanPlayer,
-
-            /// <summary>
-            /// This ship is controlled by messages from the server and not by local AI and not by the local player..
-            /// </summary>
-            Server
-        }
-
         public enum SiLevelState
         {
             NotYetStarted,
@@ -103,13 +67,6 @@
             NotYetStarted,
             Started,
             Ended
-        }
-
-        public enum SiDrawingCacheType
-        {
-            Scaling,
-            Screen,
-            Radar
         }
 
         public enum SiRelativeDirection
@@ -181,12 +138,6 @@
             Unspecified,
             Player,
             Enemy
-        }
-
-        public enum SiRotationMode
-        {
-            None, //Almost free.
-            Rotate
         }
 
         public enum SiPlayerKey

@@ -8,7 +8,6 @@ namespace Si.Audio
     /// </summary>
     public class SiAudioClip
     {
-        private bool _isRunningHeadless = false;
         private readonly XAudio2 _xaudio = new();
         private readonly WaveFormat _waveFormat;
         private readonly AudioBuffer _buffer;
@@ -34,9 +33,8 @@ namespace Si.Audio
             _loopForever = loopForever;
         }
 
-        public SiAudioClip(bool isRunningHeadless, Stream stream, float initialVolumne = 1, bool loopForever = false)
+        public SiAudioClip(Stream stream, float initialVolumne = 1, bool loopForever = false)
         {
-            _isRunningHeadless = isRunningHeadless;
             _loopForever = loopForever;
             InitialVolumne = initialVolumne;
 
@@ -60,11 +58,6 @@ namespace Si.Audio
 
         public void Play()
         {
-            if (_isRunningHeadless)
-            {
-                return;
-            }
-
             lock (this)
             {
                 if (_loopForever == true)
@@ -97,10 +90,6 @@ namespace Si.Audio
 
         public void Fade()
         {
-            if (_isRunningHeadless)
-            {
-                return;
-            }
             if (_isPlaying && _isFading == false)
             {
                 _isFading = true;
@@ -129,10 +118,6 @@ namespace Si.Audio
 
         public void Stop()
         {
-            if (_isRunningHeadless)
-            {
-                return;
-            }
             if (_loopForever == true)
             {
                 if (_singleSourceVoice != null && _isPlaying)
