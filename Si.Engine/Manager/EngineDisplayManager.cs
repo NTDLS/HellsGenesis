@@ -44,7 +44,8 @@ namespace Si.GameEngine.Manager
             }
 
             float weightedThrottlePercent = (
-                    _engine.Player.Sprite.Velocity.ForwardMomentium * 0.60f //n-percent of the zoom is throttle.
+                    (_engine.Player.Sprite.Velocity.ForwardMomentium  //n-percent of the zoom is throttle.
+                    + _engine.Player.Sprite.Velocity.LateralMomentium) * 0.60f
                     + _engine.Player.Sprite.Velocity.ForwardBoostMomentium * 0.40f  //n-percent of the zoom is boost.
                 ).Clamp(0, 1);
 

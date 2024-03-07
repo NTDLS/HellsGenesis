@@ -207,7 +207,7 @@ namespace Si.GameEngine.TickController.PlayerSpriteTickController
                     float thrustToRemove = Sprite.Velocity.LateralMomentium == 0 ? GameEngine.Settings.PlayerThrustRampDown
                         : GameEngine.Settings.PlayerThrustRampDown * Sprite.Velocity.LateralMomentium;
 
-                    if (Math.Abs(thrustToRemove) + 0.1 >= Math.Abs(Sprite.Velocity.LateralMomentium))
+                    if (Math.Abs(thrustToRemove) >= Math.Abs(Sprite.Velocity.LateralMomentium))
                     {
                         Sprite.Velocity.LateralMomentium = 0; //Don't overshoot the stop.
                     }
