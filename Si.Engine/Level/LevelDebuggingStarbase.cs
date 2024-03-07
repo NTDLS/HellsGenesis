@@ -1,7 +1,7 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Engine.Sprite.Enemy.Peon;
+using Si.Engine.Sprite.Enemy.Starbase;
 using Si.Library;
 
 namespace Si.Engine.Level
@@ -10,11 +10,11 @@ namespace Si.Engine.Level
     /// Levels are contained inside Situations. Each level contains a set of waves that are progressed. 
     /// This level is for debugging only.
     /// </summary>
-    internal class LevelDebuggingGalore : LevelBase
+    internal class LevelDebuggingStarbase : LevelBase
     {
-        public LevelDebuggingGalore(EngineCore engine)
+        public LevelDebuggingStarbase(EngineCore engine)
             : base(engine,
-                  "Debugging Galore",
+                  "Debugging Starbase",
                   "The level is dire, the explosions here typically\r\n"
                   + "cause the entire universe to end - as well as the program."
                   )
@@ -65,39 +65,7 @@ namespace Si.Engine.Level
 
         private void AddEnemies()
         {
-            for (int i = 0; i < 10; i++)
-            {
-                _engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            }
-
-            _engine.Sprites.Debugs.Create(600, 600);
-
-            //_engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
-
-            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
-
-            //_engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-
-            //_engine.Sprites.Debugs.CreateAtCenterScreen();
-            //_engine.Sprites.Enemies.Create<SpriteEnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyPhoenix>();
-            //_engine.Sprites.Enemies.Create<EnemyPhoenix>();
-            //_engine.Sprites.Enemies.Create<EnemyPhoenix>();
-            //_engine.Sprites.Enemies.Create<EnemyDevastator>();
-            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_engine.Sprites.Enemies.Create<EnemySpectre>();
-            //_engine.Sprites.Enemies.Create<EnemyDevastator>();
-            //_engine.Sprites.Enemies.Create<EnemyDevastator>();
+            _engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
         }
     }
 }
