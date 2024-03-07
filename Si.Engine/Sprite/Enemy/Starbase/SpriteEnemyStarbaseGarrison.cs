@@ -70,10 +70,9 @@ namespace Si.Engine.Sprite.Enemy.Starbase
                     Bounty = 50
                 };
 
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), int.MaxValue));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), int.MaxValue));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), int.MaxValue));
-
+                //loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), int.MaxValue));
+                //loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), int.MaxValue));
+                //loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), int.MaxValue));
 
                 SaveLoadoutToFile(loadout);
             }
@@ -83,6 +82,7 @@ namespace Si.Engine.Sprite.Enemy.Starbase
             foreach (var turrentLocation in _absoluteTurrentLocations)
             {
                 var attachment = Attach($@"{_assetPath}\Turret.png", true, 3);
+                attachment.AddWeapon<WeaponVulcanCannon>(int.MaxValue);
                 _turrets.Add(new Turret(attachment, turrentLocation));
             }
 
@@ -105,7 +105,7 @@ namespace Si.Engine.Sprite.Enemy.Starbase
                 //Point the turret at the player.
                 turret.Sprite.Velocity.Angle.Degrees = turret.Sprite.AngleTo360(_engine.Player.Sprite);
 
-                //this.FireWeapon<WeaponVulcanCannon>();
+                turret.Sprite.FireWeapon<WeaponVulcanCannon>();
             }
 
             base.ApplyMotion(epoch, displacementVector);

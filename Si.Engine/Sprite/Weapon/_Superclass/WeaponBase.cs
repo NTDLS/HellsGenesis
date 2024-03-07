@@ -38,8 +38,8 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         public float MunitionSceneDistanceLimit { get; set; }
         public string Name { get; private set; }
         public float Speed { get; set; } = 25;
-        public int RoundQuantity { get; set; }
         public int RoundsFired { get; set; }
+        public int RoundQuantity { get; set; }
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
         public bool CanLockOn { get; set; } = false;
