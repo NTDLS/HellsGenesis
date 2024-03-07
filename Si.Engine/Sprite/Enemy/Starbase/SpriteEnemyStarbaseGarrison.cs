@@ -24,7 +24,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase
 
         SiPoint[] _turrentLocations =
         [
-            new(485, 150),
+            new(583, 147),
             new(148, 419),
             new(1018, 415),
             new(146, 913),
@@ -81,23 +81,26 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase
 
             foreach (var turrentLocation in _turrentLocations)
             {
-                _turrets.Add(new Turret(Attach($@"{_assetPath}\Turret.png", true, 3), turrentLocation));
+                var attachment = Attach($@"{_assetPath}\Turret.png", true, 3);
+                attachment.IsHighlighted = true;
+                _turrets.Add(new Turret(attachment, turrentLocation));
             }
+
 
             Velocity.Angle.Degrees = 0;
         }
 
-        public override void LocationChanged()
+        public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             foreach (var turret in _turrets)
             {
                 if (turret.Sprite.IsDeadOrExploded == false)
                 {
-                    //var pointLeft = SiPoint.PointFromAngleAtDistance360(Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(25, 25));
-                    //turret.Sprite.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
-                    turret.Sprite.Location = Location + turret.BaseLocation;
+                    turret.Sprite.Location = Location - (Size / 2) + turret.BaseLocation;
+                    turret.Sprite.Velocity.Angle.Degrees = AngleTo360(_engine.Player.Sprite);
                 }
             }
+            base.ApplyMotion(epoch, displacementVector);
         }
     }
 }
