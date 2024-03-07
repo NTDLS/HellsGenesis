@@ -23,8 +23,8 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase
         public SpriteEnemyStarbaseGarrison(EngineCore engine)
             : base(engine)
         {
-            ShipClass = SiEnemyClass.Merc;
-            SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png");
+            ShipClass = SiEnemyClass.Garrison;
+            SetImage(@$"Graphics\Enemy\Starbase\{ShipClass}\Hull.png");
 
             //Load the loadout from file or create a new one if it does not exist.
             EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);

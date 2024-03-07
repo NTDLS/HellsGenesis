@@ -23,7 +23,7 @@ namespace Si.GameEngine.Sprite.Enemy.Boss
         private readonly SpriteAttachment _leftThrust;
 
         private readonly float _initialMaxpeed;
-        private readonly string _assetPath = @"Graphics\Enemy\Bosses\Spectre\";
+        private readonly string _assetPath = @"Graphics\Enemy\Boss\Spectre\";
 
         public SpriteEnemySpectre(EngineCore engine)
             : base(engine)

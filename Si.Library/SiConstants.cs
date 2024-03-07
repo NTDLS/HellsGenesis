@@ -108,7 +108,8 @@
             Scav,
             Devastator,
             Repulsor,
-            Spectre
+            Spectre,
+            Garrison,
         }
 
         public enum SiMenuItemType

@@ -15,7 +15,7 @@ namespace Si.GameEngine.Sprite.Enemy.Peon
             : base(engine)
         {
             ShipClass = SiEnemyClass.Scav;
-            SetImage(@$"Graphics\Enemy\Peons\{ShipClass}\Hull.png");
+            SetImage(@$"Graphics\Enemy\Peon\{ShipClass}\Hull.png");
 
             //Load the loadout from file or create a new one if it does not exist.
             EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);

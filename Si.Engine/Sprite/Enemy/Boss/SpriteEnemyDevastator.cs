@@ -29,7 +29,7 @@ namespace Si.GameEngine.Sprite.Enemy.Boss
         private readonly SpriteAttachment _leftThrust;
 
         private readonly float _initialMaxpeed;
-        private readonly string _assetPath = @"Graphics\Enemy\Bosses\Devastator\";
+        private readonly string _assetPath = @"Graphics\Enemy\Boss\Devastator\";
 
         public SpriteEnemyDevastator(EngineCore engine)
             : base(engine)
