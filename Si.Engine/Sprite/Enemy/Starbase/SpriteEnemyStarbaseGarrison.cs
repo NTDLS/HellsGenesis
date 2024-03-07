@@ -3,6 +3,7 @@ using Si.GameEngine.Loudout;
 using Si.GameEngine.Sprite.Enemy.Starbase._Superclass;
 using Si.GameEngine.Sprite.Weapon;
 using Si.Library.Mathematics.Geometry;
+using System;
 using System.Collections.Generic;
 using static Si.Library.SiConstants;
 
@@ -86,20 +87,36 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase
                 _turrets.Add(new Turret(attachment, turrentLocation));
             }
 
-
             Velocity.Angle.Degrees = 0;
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
+            Velocity.Angle.Degrees += 0.05f;
+
             foreach (var turret in _turrets)
             {
-                if (turret.Sprite.IsDeadOrExploded == false)
-                {
-                    turret.Sprite.Location = Location - (Size / 2) + turret.BaseLocation;
-                    turret.Sprite.Velocity.Angle.Degrees = AngleTo360(_engine.Player.Sprite);
-                }
+                // Since the turret.BaseLocation is relative to the top-left corner of the base sprite, we need
+                // to get the position relative to the center of the base sprite image so that we can rotate around that.
+                float turretOffsetX = turret.BaseLocation.X - (Size.Width / 2.0f);
+                float turretOffsetY = turret.BaseLocation.Y - (Size.Height / 2.0f);
+
+                // Rotate the turret's position around the base sprite center
+                float rotatedOffsetX = turretOffsetX * (float)Math.Cos(Velocity.Angle.Radians) - turretOffsetY * (float)Math.Sin(Velocity.Angle.Radians);
+                float rotatedOffsetY = turretOffsetX * (float)Math.Sin(Velocity.Angle.Radians) + turretOffsetY * (float)Math.Cos(Velocity.Angle.Radians);
+
+                // Apply the rotated offsets to get the new turret location relative to the base sprite center.
+                turret.Sprite.Location.X = Location.X + rotatedOffsetX;
+                turret.Sprite.Location.Y = Location.Y + rotatedOffsetY;
+
+
+                turret.Sprite.Location = new SiPoint(
+                    Location.X + rotatedOffsetX,
+                    Location.Y + rotatedOffsetY);
+
+                turret.Sprite.Velocity.Angle.Degrees = turret.Sprite.AngleTo360(_engine.Player.Sprite);
             }
+
             base.ApplyMotion(epoch, displacementVector);
         }
     }

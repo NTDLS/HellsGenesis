@@ -149,6 +149,19 @@ namespace Si.GameEngine.Sprite._Superclass
         }
 
         /// <summary>
+        /// The top left corner of the sprite in the universe.
+        /// </summary>
+        public SiPoint LocationTopLeft
+        {
+            get => _location - (Size / 2.0f); //Changes made to the location object do not affect the sprite.
+            set
+            {
+                _location = value;
+                LocationChanged();
+            }
+        }
+
+        /// <summary>
         /// The x,y, location of the center of the sprite on the screen.
         /// Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>

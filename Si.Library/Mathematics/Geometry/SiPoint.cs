@@ -36,6 +36,9 @@ namespace Si.Library.Mathematics.Geometry
 
         #region Operator Overloads.
 
+        public static SiPoint operator -(SiPoint original, SizeF modifier)
+            => new SiPoint(original.X - modifier.Width, original.Y - modifier.Height);
+
         public static SiPoint operator -(SiPoint original, Size modifier)
             => new SiPoint(original.X - modifier.Width, original.Y - modifier.Height);
 

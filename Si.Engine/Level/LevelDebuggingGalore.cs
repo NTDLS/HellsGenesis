@@ -76,7 +76,7 @@ namespace Si.GameEngine.Level
             _engine.Sprites.Debugs.Create(600, 600);
 
             var garrison = _engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
-            garrison.Location = new SiPoint(0, 0);
+            //garrison.Location = new SiPoint(0, 0);
             garrison.Velocity.Angle.Degrees = 0;
 
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
