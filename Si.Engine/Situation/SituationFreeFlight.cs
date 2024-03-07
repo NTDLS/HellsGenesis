@@ -1,8 +1,7 @@
-﻿using Si.Engine;
-using Si.GameEngine.Level;
-using Si.GameEngine.Situation._Superclass;
+﻿using Si.Engine.Level;
+using Si.Engine.Situation._Superclass;
 
-namespace Si.GameEngine.Situation
+namespace Si.Engine.Situation
 {
     /// <summary>
     /// Situations are collections of levels. Once each level is completed, the next one is loaded.

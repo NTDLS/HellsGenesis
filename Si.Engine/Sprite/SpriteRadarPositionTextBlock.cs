@@ -1,11 +1,10 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using Si.Engine;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite
+namespace Si.Engine.Sprite
 {
     public class SpriteRadarPositionTextBlock : SpriteTextBlock
     {

@@ -1,8 +1,7 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
 using System.IO;
 
-namespace Si.GameEngine.Sprite
+namespace Si.Engine.Sprite
 {
     public class SpriteRadarPositionIndicator : SpriteBase
     {

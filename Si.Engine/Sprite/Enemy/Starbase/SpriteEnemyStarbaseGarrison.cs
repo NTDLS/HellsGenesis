@@ -1,13 +1,11 @@
-﻿using Si.Engine;
-using Si.GameEngine.Loudout;
-using Si.GameEngine.Sprite.Enemy.Starbase._Superclass;
-using Si.GameEngine.Sprite.Weapon;
+﻿using Si.Engine.Loudout;
+using Si.Engine.Sprite.Enemy.Starbase._Superclass;
+using Si.Engine.Sprite.Weapon;
 using Si.Library.Mathematics.Geometry;
-using System;
 using System.Collections.Generic;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Enemy.Starbase
+namespace Si.Engine.Sprite.Enemy.Starbase
 {
     internal class SpriteEnemyStarbaseGarrison : SpriteEnemyStarbase
     {
@@ -89,6 +87,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase
             Velocity.Angle.Degrees = 0;
         }
 
+
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             Velocity.Angle.Degrees += 0.05f;
@@ -99,12 +98,8 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase
                 // to get the position relative to the center of the base sprite image so that we can rotate around that.
                 var turretOffset = turret.BaseLocation - (Size / 2.0f);
 
-                // Rotate the turret's position around the base sprite center
-                float rotatedOffsetX = turretOffset.X * (float)Math.Cos(Velocity.Angle.Radians) - turretOffset.Y * (float)Math.Sin(Velocity.Angle.Radians);
-                float rotatedOffsetY = turretOffset.X * (float)Math.Sin(Velocity.Angle.Radians) + turretOffset.Y * (float)Math.Cos(Velocity.Angle.Radians);
-
                 // Apply the rotated offsets to get the new turret location relative to the base sprite center.
-                turret.Sprite.Location = Location + new SiPoint(rotatedOffsetX, rotatedOffsetY);
+                turret.Sprite.Location = Location + turretOffset.Rotate(Velocity.Angle.Radians);
 
                 //Point the turret at the player.
                 turret.Sprite.Velocity.Angle.Degrees = turret.Sprite.AngleTo360(_engine.Player.Sprite);

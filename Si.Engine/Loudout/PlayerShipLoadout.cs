@@ -3,7 +3,7 @@ using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Loudout
+namespace Si.Engine.Loudout
 {
     /// <summary>
     /// Contains a single instance of a player loadout.

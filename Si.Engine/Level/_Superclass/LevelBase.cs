@@ -1,11 +1,10 @@
-﻿using Si.Engine;
-using Si.Engine.Core.Types;
+﻿using Si.Engine.Core.Types;
 using System;
 using System.Collections.Generic;
 using static Si.Engine.Core.Types.SiDefermentEvent;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Level._Superclass
+namespace Si.Engine.Level._Superclass
 {
     /// <summary>
     /// Levels are contained inside Situations. Each level contains a set of waves that are progressed. 

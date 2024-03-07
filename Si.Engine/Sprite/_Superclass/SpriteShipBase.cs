@@ -1,15 +1,12 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite.Weapon._Superclass;
+﻿using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
-using Si.Rendering;
 using System;
 using System.Collections.Generic;
-using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite._Superclass
+namespace Si.Engine.Sprite._Superclass
 {
     /// <summary>
     /// The ship base is a ship object that moves, can be hit, explodes and can be the subject of locking weapons.
@@ -85,44 +82,15 @@ namespace Si.GameEngine.Sprite._Superclass
 
         public override void Explode()
         {
-            _engine.Sprites.Animations.AddRandomExplosionAt(this);
-            _engine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this);
-            CreateExplosionFragments();
-            _engine.Rendering.AddScreenShake(4, 800);
-            _engine.Audio.PlayRandomExplosion();
+            _engine.Events.Add(() =>
+            {
+                _engine.Sprites.Animations.AddRandomExplosionAt(this);
+                _engine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this);
+                _engine.Sprites.CreateFragmentsOf(this);
+                _engine.Rendering.AddScreenShake(4, 800);
+                _engine.Audio.PlayRandomExplosion();
+            });
             base.Explode();
-        }
-
-        public void CreateExplosionFragments()
-        {
-            var image = GetImage();
-            if (image == null)
-            {
-                return;
-            }
-
-            int fragmentCount = SiRandom.Between(2, 10);
-
-            var fragmentImages = _engine.Rendering.GenerateIrregularFragments(image, fragmentCount);
-
-            for (int index = 0; index < fragmentCount; index++)
-            {
-                var fragment = _engine.Sprites.GenericSprites.CreateAt(this, fragmentImages[index]);
-                //TODO: Can we implement this.
-                fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
-                fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
-
-                fragment.Velocity.Angle.Degrees = SiRandom.Between(0.0f, 359.0f);
-                fragment.Velocity.MaximumSpeed = SiRandom.Between(1, 3.5f);
-                fragment.Velocity.ForwardMomentium = 1;
-                fragment.VectorType = ParticleVectorType.Independent;
-            }
-        }
-
-        public void CreateParticlesExplosion()
-        {
-            _engine.Sprites.Particles.CreateAt(this, SiRenderingUtility.GetRandomHotColor(), SiRandom.Between(30, 50));
-            _engine.Audio.PlayRandomExplosion();
         }
 
         public void FixRadarPositionIndicator()

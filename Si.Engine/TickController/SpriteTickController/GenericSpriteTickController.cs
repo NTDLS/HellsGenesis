@@ -1,11 +1,10 @@
-﻿using Si.Engine;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.TickController._Superclass;
+﻿using Si.Engine.Manager;
+using Si.Engine.Sprite;
+using Si.Engine.Sprite._Superclass;
+using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.GameEngine.TickController.SpriteTickController
+namespace Si.Engine.TickController.SpriteTickController
 {
     /// <summary>
     /// These are just generic bitmap sprites.
@@ -27,14 +26,14 @@ namespace Si.GameEngine.TickController.SpriteTickController
 
         public SpriteGeneric CreateAt(SpriteBase sprite, SharpDX.Direct2D1.Bitmap bitmap)
         {
-            var obj = new SpriteGeneric(GameEngine, sprite.Location, bitmap);
+            var obj = new SpriteGeneric(Engine, sprite.Location, bitmap);
             SpriteManager.Add(obj);
             return obj;
         }
 
         public SpriteGeneric Create(SharpDX.Direct2D1.Bitmap bitmap)
         {
-            var obj = new SpriteGeneric(GameEngine, bitmap);
+            var obj = new SpriteGeneric(Engine, bitmap);
             SpriteManager.Add(obj);
             return obj;
         }

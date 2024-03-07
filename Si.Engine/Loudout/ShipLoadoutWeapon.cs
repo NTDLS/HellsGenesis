@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Si.GameEngine.Loudout
+namespace Si.Engine.Loudout
 {
     public class ShipLoadoutWeapon
     {

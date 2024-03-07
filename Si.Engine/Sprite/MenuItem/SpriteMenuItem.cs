@@ -1,12 +1,11 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using Si.Engine;
-using Si.GameEngine.Menu._Superclass;
+using Si.Engine.Menu._Superclass;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.MenuItem
+namespace Si.Engine.Sprite.MenuItem
 {
     /// <summary>
     /// Represents a selectable menu item.

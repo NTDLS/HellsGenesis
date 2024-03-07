@@ -1,10 +1,9 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Weapon._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.GameEngine.Sprite.Weapon.Munition._Superclass
+namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 {
     /// <summary>
     /// Guided munitions need to be locked onto a target before they are fired. They will adjust heading within given parameters to hit the locked target.

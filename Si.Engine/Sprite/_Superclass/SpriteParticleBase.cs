@@ -1,6 +1,4 @@
-﻿using Si.Engine;
-
-namespace Si.GameEngine.Sprite._Superclass
+﻿namespace Si.Engine.Sprite._Superclass
 {
     public class SpriteParticleBase : SpriteBase
     {

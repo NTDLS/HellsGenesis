@@ -1,12 +1,11 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Enemy._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Enemy.Peon._Superclass
+namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 {
     /// <summary>
     /// Base class for "Peon" enemies. These guys are basically all the same in theit functionality and animations.

@@ -1,4 +1,4 @@
-﻿namespace Si.GameEngine.TickController._Superclass
+﻿namespace Si.Engine.TickController._Superclass
 {
     /// <summary>
     /// All tick-controllers are derived from this class. They control the "movement of time" for all objects..

@@ -1,12 +1,11 @@
 ﻿using SharpDX.DirectInput;
-using Si.Engine;
-using Si.GameEngine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy._Superclass;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Manager
+namespace Si.Engine.Manager
 {
     /// <summary>
     /// Handles keyboard input and keeps track of key-press states.

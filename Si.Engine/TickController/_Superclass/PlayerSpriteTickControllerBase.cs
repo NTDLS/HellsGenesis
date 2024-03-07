@@ -1,14 +1,13 @@
-﻿using Si.Engine;
-using Si.Library.Mathematics.Geometry;
+﻿using Si.Library.Mathematics.Geometry;
 
-namespace Si.GameEngine.TickController._Superclass
+namespace Si.Engine.TickController._Superclass
 {
     /// <summary>
     /// Tick manager that generates offset vectors for the one and only local player sprite.
     /// </summary>
     public class PlayerSpriteTickControllerBase<T> : TickControllerBase<T> where T : class
     {
-        public EngineCore GameEngine { get; private set; }
+        public EngineCore Engine { get; private set; }
 
         /// <summary>
         /// Moves the player and returns the direction and amount of movment which was applied.
@@ -18,7 +17,7 @@ namespace Si.GameEngine.TickController._Superclass
 
         public PlayerSpriteTickControllerBase(EngineCore engine)
         {
-            GameEngine = engine;
+            Engine = engine;
         }
     }
 }

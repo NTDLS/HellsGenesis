@@ -1,13 +1,12 @@
-﻿using Si.Engine;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite;
-using Si.GameEngine.TickController._Superclass;
+﻿using Si.Engine.Manager;
+using Si.Engine.Sprite;
+using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
 
-namespace Si.GameEngine.TickController.SpriteTickController
+namespace Si.Engine.TickController.SpriteTickController
 {
     public class StarsSpriteTickController : SpriteTickControllerBase<SpriteStar>
     {
@@ -22,18 +21,18 @@ namespace Si.GameEngine.TickController.SpriteTickController
             {
                 #region Add new stars...
 
-                if (SpriteManager.VisibleOfType<SpriteStar>().Count < GameEngine.Settings.DeltaFrameTargetStarCount) //Never wan't more than n stars.
+                if (SpriteManager.VisibleOfType<SpriteStar>().Count < Engine.Settings.DeltaFrameTargetStarCount) //Never wan't more than n stars.
                 {
                     if (displacementVector.X > 0)
                     {
                         if (SiRandom.PercentChance(20))
                         {
                             int x = SiRandom.Between(
-                                GameEngine.Display.TotalCanvasSize.Width - (int)displacementVector.X,
-                                GameEngine.Display.TotalCanvasSize.Width);
-                            int y = SiRandom.Between(0, GameEngine.Display.TotalCanvasSize.Height);
+                                Engine.Display.TotalCanvasSize.Width - (int)displacementVector.X,
+                                Engine.Display.TotalCanvasSize.Width);
+                            int y = SiRandom.Between(0, Engine.Display.TotalCanvasSize.Height);
 
-                            SpriteManager.Stars.Create(GameEngine.Display.RenderWindowPosition.X + x, GameEngine.Display.RenderWindowPosition.Y + y);
+                            SpriteManager.Stars.Create(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
                         }
 
                     }
@@ -42,8 +41,8 @@ namespace Si.GameEngine.TickController.SpriteTickController
                         if (SiRandom.PercentChance(20))
                         {
                             int x = SiRandom.Between(0, (int)-displacementVector.X);
-                            int y = SiRandom.Between(0, GameEngine.Display.TotalCanvasSize.Height);
-                            SpriteManager.Stars.Create(GameEngine.Display.RenderWindowPosition.X + x, GameEngine.Display.RenderWindowPosition.Y + y);
+                            int y = SiRandom.Between(0, Engine.Display.TotalCanvasSize.Height);
+                            SpriteManager.Stars.Create(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
                         }
 
                     }
@@ -51,18 +50,18 @@ namespace Si.GameEngine.TickController.SpriteTickController
                     {
                         if (SiRandom.PercentChance(20))
                         {
-                            int x = SiRandom.Between(0, GameEngine.Display.TotalCanvasSize.Width);
-                            int y = SiRandom.Between(GameEngine.Display.TotalCanvasSize.Height - (int)displacementVector.Y, GameEngine.Display.TotalCanvasSize.Height);
-                            SpriteManager.Stars.Create(GameEngine.Display.RenderWindowPosition.X + x, GameEngine.Display.RenderWindowPosition.Y + y);
+                            int x = SiRandom.Between(0, Engine.Display.TotalCanvasSize.Width);
+                            int y = SiRandom.Between(Engine.Display.TotalCanvasSize.Height - (int)displacementVector.Y, Engine.Display.TotalCanvasSize.Height);
+                            SpriteManager.Stars.Create(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
                         }
                     }
                     else if (displacementVector.Y < 0)
                     {
                         if (SiRandom.PercentChance(20))
                         {
-                            int x = SiRandom.Between(0, GameEngine.Display.TotalCanvasSize.Width);
+                            int x = SiRandom.Between(0, Engine.Display.TotalCanvasSize.Width);
                             int y = SiRandom.Between(0, (int)-displacementVector.Y);
-                            SpriteManager.Stars.Create(GameEngine.Display.RenderWindowPosition.X + x, GameEngine.Display.RenderWindowPosition.Y + y);
+                            SpriteManager.Stars.Create(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
                         }
                     }
                 }
@@ -74,7 +73,7 @@ namespace Si.GameEngine.TickController.SpriteTickController
                     star.ApplyMotion(epoch, displacementVector);
 
                     //Remove stars that are too far off-screen.
-                    if (GameEngine.Display.TotalCanvasBounds.Balloon(1000).IntersectsWith(star.RenderBounds) == false)
+                    if (Engine.Display.TotalCanvasBounds.Balloon(1000).IntersectsWith(star.RenderBounds) == false)
                     {
                         star.QueueForDelete();
                     }

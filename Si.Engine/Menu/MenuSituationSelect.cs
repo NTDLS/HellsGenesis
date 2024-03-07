@@ -1,12 +1,11 @@
-﻿using Si.Engine;
-using Si.GameEngine.Menu._Superclass;
-using Si.GameEngine.Situation._Superclass;
-using Si.GameEngine.Sprite.MenuItem;
+﻿using Si.Engine.Menu._Superclass;
+using Si.Engine.Situation._Superclass;
+using Si.Engine.Sprite.MenuItem;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Linq;
 
-namespace Si.GameEngine.Menu
+namespace Si.Engine.Menu
 {
     /// <summary>
     /// The menu that is displayed at game start to allow the player to select a situation.

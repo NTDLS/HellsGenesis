@@ -1,20 +1,19 @@
 ﻿using NTDLS.DelegateThreadPooling;
-using Si.Engine;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Enemy.Boss._Superclass;
-using Si.GameEngine.Sprite.Enemy.Peon._Superclass;
-using Si.GameEngine.Sprite.Player._Superclass;
-using Si.GameEngine.Sprite.Weapon._Superclass;
-using Si.GameEngine.Sprite.Weapon.Munition._Superclass;
-using Si.GameEngine.TickController._Superclass;
+using Si.Engine.Manager;
+using Si.Engine.Sprite;
+using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Enemy.Boss._Superclass;
+using Si.Engine.Sprite.Enemy.Peon._Superclass;
+using Si.Engine.Sprite.Player._Superclass;
+using Si.Engine.Sprite.Weapon._Superclass;
+using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Si.GameEngine.TickController.SpriteTickController
+namespace Si.Engine.TickController.SpriteTickController
 {
     public class MunitionSpriteTickController : SpriteTickControllerBase<MunitionBase>
     {
@@ -50,7 +49,7 @@ namespace Si.GameEngine.TickController.SpriteTickController
             {
                 var objectsThatCanBeHit = new List<SpriteShipBase>
                 {
-                    GameEngine.Player.Sprite
+                    Engine.Player.Sprite
                 };
 
                 objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyBossBase>());

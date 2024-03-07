@@ -1,8 +1,7 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Enemy._Superclass;
-using Si.GameEngine.Sprite.Player._Superclass;
-using Si.GameEngine.Sprite.Weapon._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Player._Superclass;
+using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
@@ -10,7 +9,7 @@ using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Weapon.Munition._Superclass
+namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 {
     /// <summary>
     /// The munition base is the base for all bullets/projectiles/etc.

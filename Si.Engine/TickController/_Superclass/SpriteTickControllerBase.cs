@@ -1,12 +1,11 @@
-﻿using Si.Engine;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite._Superclass;
+﻿using Si.Engine.Manager;
+using Si.Engine.Sprite._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Si.GameEngine.TickController._Superclass
+namespace Si.Engine.TickController._Superclass
 {
     /// <summary>
     /// Tick managers which update their sprites using the supplied 2D vector.
@@ -14,7 +13,7 @@ namespace Si.GameEngine.TickController._Superclass
     /// </summary>
     public class SpriteTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
     {
-        public EngineCore GameEngine { get; private set; }
+        public EngineCore Engine { get; private set; }
         public EngineSpriteManager SpriteManager { get; private set; }
 
         public List<subType> VisibleOfType<subType>() where subType : T => SpriteManager.VisibleOfType<subType>();
@@ -27,7 +26,7 @@ namespace Si.GameEngine.TickController._Superclass
 
         public SpriteTickControllerBase(EngineCore engine, EngineSpriteManager manager)
         {
-            GameEngine = engine;
+            Engine = engine;
             SpriteManager = manager;
         }
 
@@ -37,7 +36,7 @@ namespace Si.GameEngine.TickController._Superclass
 
         public T Create(SiPoint location, string name = "")
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.Location = location.Clone();
             obj.SpriteTag = name;
             SpriteManager.Add(obj);
@@ -46,7 +45,7 @@ namespace Si.GameEngine.TickController._Superclass
 
         public T Create(float x, float y, string name = "")
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.X = x;
             obj.Y = y;
             obj.SpriteTag = name;
@@ -56,9 +55,9 @@ namespace Si.GameEngine.TickController._Superclass
 
         public T CreateAtCenterScreen(string name = "")
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
-            obj.X = GameEngine.Display.TotalCanvasSize.Width / 2;
-            obj.Y = GameEngine.Display.TotalCanvasSize.Height / 2;
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            obj.X = Engine.Display.TotalCanvasSize.Width / 2;
+            obj.Y = Engine.Display.TotalCanvasSize.Height / 2;
 
             obj.SpriteTag = name;
 
@@ -68,7 +67,7 @@ namespace Si.GameEngine.TickController._Superclass
 
         public T Create(float x, float y)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.X = x;
             obj.Y = y;
             SpriteManager.Add(obj);
@@ -78,14 +77,14 @@ namespace Si.GameEngine.TickController._Superclass
 
         public T Create()
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             SpriteManager.Add(obj);
             return obj;
         }
 
         public T Create(string name = "")
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), GameEngine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.SpriteTag = name;
             SpriteManager.Add(obj);
             return obj;

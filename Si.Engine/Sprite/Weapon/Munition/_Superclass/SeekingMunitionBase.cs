@@ -1,11 +1,10 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Weapon._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Weapon.Munition._Superclass
+namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 {
     /// <summary>
     /// Seeking munitions do not lock on to targets, but they will follow a target withing some defined parameters.

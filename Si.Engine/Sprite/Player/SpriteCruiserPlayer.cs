@@ -1,10 +1,9 @@
-﻿using Si.Engine;
-using Si.GameEngine.Loudout;
-using Si.GameEngine.Sprite.Player._Superclass;
-using Si.GameEngine.Sprite.Weapon;
+﻿using Si.Engine.Loudout;
+using Si.Engine.Sprite.Player._Superclass;
+using Si.Engine.Sprite.Weapon;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Player
+namespace Si.Engine.Sprite.Player
 {
     internal class SpriteCruiserPlayer : SpritePlayerBase
     {

@@ -1,9 +1,8 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Weapon._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.GameEngine.Sprite.Weapon.Munition._Superclass
+namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 {
     /// <summary>
     /// Energy munitions just go straight - for now.... still thinkning this one out.

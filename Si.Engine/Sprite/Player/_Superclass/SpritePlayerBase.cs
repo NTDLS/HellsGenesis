@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Si.Audio;
-using Si.Engine;
-using Si.GameEngine.Loudout;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Weapon._Superclass;
-using Si.GameEngine.Sprite.Weapon.Munition._Superclass;
+using Si.Engine.Loudout;
+using Si.Engine.Manager;
+using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Weapon._Superclass;
+using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -14,7 +13,7 @@ using System.Drawing;
 using System.Linq;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Player._Superclass
+namespace Si.Engine.Sprite.Player._Superclass
 {
     /// <summary>
     /// The player base is a sub-class of the ship base. It is only used by the Player and as a model for menu selections.

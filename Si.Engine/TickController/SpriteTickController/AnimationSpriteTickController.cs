@@ -1,14 +1,13 @@
-﻿using Si.Engine;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.TickController._Superclass;
+﻿using Si.Engine.Manager;
+using Si.Engine.Sprite;
+using Si.Engine.Sprite._Superclass;
+using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Drawing;
 using System.IO;
 
-namespace Si.GameEngine.TickController.SpriteTickController
+namespace Si.Engine.TickController.SpriteTickController
 {
     public class AnimationSpriteTickController : SpriteTickControllerBase<SpriteAnimation>
     {
@@ -39,7 +38,7 @@ namespace Si.GameEngine.TickController.SpriteTickController
 
         public SpriteAnimation Create(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, SpriteAnimation.PlayMode playMode = null)
         {
-            SpriteAnimation obj = new SpriteAnimation(GameEngine, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
+            SpriteAnimation obj = new SpriteAnimation(Engine, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
             SpriteManager.Add(obj);
             return obj;
         }

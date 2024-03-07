@@ -1,5 +1,4 @@
-﻿using Si.Engine;
-using Si.Library;
+﻿using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
@@ -8,7 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Si.GameEngine.Manager
+namespace Si.Engine.Manager
 {
     /// <summary>
     /// Various metrics related to display.

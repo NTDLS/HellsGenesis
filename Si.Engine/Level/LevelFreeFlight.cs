@@ -1,8 +1,7 @@
-﻿using Si.Engine;
-using Si.Engine.Core.Types;
-using Si.GameEngine.Level._Superclass;
+﻿using Si.Engine.Core.Types;
+using Si.Engine.Level._Superclass;
 
-namespace Si.GameEngine.Level
+namespace Si.Engine.Level
 {
     /// <summary>
     /// Levels are contained inside Situations. Each level contains a set of waves that are progressed. 

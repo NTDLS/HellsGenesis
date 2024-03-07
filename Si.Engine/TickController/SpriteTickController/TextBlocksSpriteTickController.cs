@@ -1,13 +1,12 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
-using Si.Engine;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite;
-using Si.GameEngine.TickController._Superclass;
+using Si.Engine.Manager;
+using Si.Engine.Sprite;
+using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System.Linq;
 
-namespace Si.GameEngine.TickController.SpriteTickController
+namespace Si.Engine.TickController.SpriteTickController
 {
     public class TextBlocksSpriteTickController : SpriteTickControllerBase<SpriteTextBlock>
     {
@@ -28,21 +27,21 @@ namespace Si.GameEngine.TickController.SpriteTickController
 
         public SpriteRadarPositionTextBlock CreateRadarPosition(TextFormat format, SolidColorBrush color, SiPoint location)
         {
-            var obj = new SpriteRadarPositionTextBlock(GameEngine, format, color, location);
+            var obj = new SpriteRadarPositionTextBlock(Engine, format, color, location);
             SpriteManager.Add(obj);
             return obj;
         }
 
         public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic)
         {
-            var obj = new SpriteTextBlock(GameEngine, format, color, location, isPositionStatic);
+            var obj = new SpriteTextBlock(Engine, format, color, location, isPositionStatic);
             SpriteManager.Add(obj);
             return obj;
         }
 
         public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name)
         {
-            var obj = new SpriteTextBlock(GameEngine, format, color, location, isPositionStatic);
+            var obj = new SpriteTextBlock(Engine, format, color, location, isPositionStatic);
             obj.SpriteTag = name;
             SpriteManager.Add(obj);
             return obj;
@@ -50,7 +49,7 @@ namespace Si.GameEngine.TickController.SpriteTickController
 
         public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name, string text)
         {
-            var obj = new SpriteTextBlock(GameEngine, format, color, location, isPositionStatic);
+            var obj = new SpriteTextBlock(Engine, format, color, location, isPositionStatic);
             obj.SpriteTag = name;
             obj.Text = text;
             SpriteManager.Add(obj);

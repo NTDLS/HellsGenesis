@@ -1,9 +1,8 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.GameEngine.Sprite
+namespace Si.Engine.Sprite
 {
     public class SpriteDebug : SpriteShipBase
     {

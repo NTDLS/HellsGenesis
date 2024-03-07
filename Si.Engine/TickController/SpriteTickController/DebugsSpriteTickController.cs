@@ -1,10 +1,9 @@
-﻿using Si.Engine;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite;
-using Si.GameEngine.TickController._Superclass;
+﻿using Si.Engine.Manager;
+using Si.Engine.Sprite;
+using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.GameEngine.TickController.SpriteTickController
+namespace Si.Engine.TickController.SpriteTickController
 {
     public class DebugsSpriteTickController : SpriteTickControllerBase<SpriteDebug>
     {
@@ -16,27 +15,27 @@ namespace Si.GameEngine.TickController.SpriteTickController
         public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
             /*
-            if (GameEngine.Player.Sprite != null)
+            if (Engine.Player.Sprite != null)
             {
-                var anchor = GameEngine.Sprites.Debugs.ByTag("Anchor");
+                var anchor = Engine.Sprites.Debugs.ByTag("Anchor");
                 if (anchor == null)
                 {
-                    GameEngine.Sprites.Debugs.CreateAtCenterScreen("Anchor");
-                    anchor = GameEngine.Sprites.Debugs.ByTag("Anchor");
+                    Engine.Sprites.Debugs.CreateAtCenterScreen("Anchor");
+                    anchor = Engine.Sprites.Debugs.ByTag("Anchor");
                 }
 
-                var pointer = GameEngine.Sprites.Debugs.ByTag("Pointer");
+                var pointer = Engine.Sprites.Debugs.ByTag("Pointer");
                 if (pointer == null)
                 {
-                    GameEngine.Sprites.Debugs.CreateAtCenterScreen("Pointer");
-                    pointer = GameEngine.Sprites.Debugs.ByTag("Pointer");
+                    Engine.Sprites.Debugs.CreateAtCenterScreen("Pointer");
+                    pointer = Engine.Sprites.Debugs.ByTag("Pointer");
                 }
 
-                float requiredAngle = GameEngine.Player.Sprite.AngleTo(anchor);
+                float requiredAngle = Engine.Player.Sprite.AngleTo(anchor);
                 var offset = SiMath.AngleFromPointAtDistance(new SiAngle(requiredAngle), new SiPoint(200, 200));
                 pointer.Velocity.Angle.Degrees = requiredAngle;
-                pointer.Location = GameEngine.Player.Sprite.Location + offset;
-                anchor.Velocity.Angle.Degrees = anchor.AngleTo(GameEngine.Player.Sprite);
+                pointer.Location = Engine.Player.Sprite.Location + offset;
+                anchor.Velocity.Angle.Degrees = anchor.AngleTo(Engine.Player.Sprite);
             }
             */
 

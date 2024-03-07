@@ -1,11 +1,10 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Weapon._Superclass;
-using Si.GameEngine.Sprite.Weapon.Munition;
-using Si.GameEngine.Sprite.Weapon.Munition._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Weapon._Superclass;
+using Si.Engine.Sprite.Weapon.Munition;
+using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.GameEngine.Sprite.Weapon
+namespace Si.Engine.Sprite.Weapon
 {
     internal class WeaponScattershot : WeaponBase
     {

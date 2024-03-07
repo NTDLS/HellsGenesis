@@ -1,13 +1,12 @@
-﻿using Si.Engine;
-using Si.GameEngine.Loudout;
-using Si.GameEngine.Sprite.Enemy.Boss._Superclass;
-using Si.GameEngine.Sprite.Weapon;
+﻿using Si.Engine.Loudout;
+using Si.Engine.Sprite.Enemy.Boss._Superclass;
+using Si.Engine.Sprite.Weapon;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Enemy.Boss
+namespace Si.Engine.Sprite.Enemy.Boss
 {
     /// <summary>
     /// 100% Experimental

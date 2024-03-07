@@ -1,10 +1,9 @@
 ﻿using SharpDX.Direct2D1;
-using Si.Engine;
-using Si.GameEngine.Menu._Superclass;
-using Si.GameEngine.TickController._Superclass;
+using Si.Engine.Menu._Superclass;
+using Si.Engine.TickController._Superclass;
 using System.Collections.Generic;
 
-namespace Si.GameEngine.TickController.UnvectoredTickController
+namespace Si.Engine.TickController.UnvectoredTickController
 {
     public class MenusTickController : UnvectoredTickControllerBase<MenuBase>
     {

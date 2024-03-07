@@ -1,13 +1,12 @@
 ﻿using Newtonsoft.Json;
-using Si.Engine;
 using Si.Engine.AI.Logistics._Superclass;
-using Si.GameEngine.Loudout;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.PowerUp;
-using Si.GameEngine.Sprite.PowerUp._Superclass;
-using Si.GameEngine.Sprite.Weapon._Superclass;
-using Si.GameEngine.Sprite.Weapon.Munition._Superclass;
+using Si.Engine.Loudout;
+using Si.Engine.Manager;
+using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.PowerUp;
+using Si.Engine.Sprite.PowerUp._Superclass;
+using Si.Engine.Sprite.Weapon._Superclass;
+using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
@@ -16,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Enemy._Superclass
+namespace Si.Engine.Sprite.Enemy._Superclass
 {
     /// <summary>
     /// The enemy base is a sub-class of the ship base. It is used by Peon and Boss enemies.

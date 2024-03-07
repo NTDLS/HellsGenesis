@@ -1,6 +1,5 @@
 ﻿using SharpDX.DirectInput;
-using Si.Engine;
-using Si.GameEngine.Sprite.MenuItem;
+using Si.Engine.Sprite.MenuItem;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Menu._Superclass
+namespace Si.Engine.Menu._Superclass
 {
     /// <summary>
     /// A menu instance. Allows for setting title text, adding items and managing selections.

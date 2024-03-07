@@ -1,9 +1,8 @@
 ﻿using Si.Audio;
-using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Enemy._Superclass;
-using Si.GameEngine.Sprite.Player._Superclass;
-using Si.GameEngine.Sprite.Weapon.Munition._Superclass;
+using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Player._Superclass;
+using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -11,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Weapon._Superclass
+namespace Si.Engine.Sprite.Weapon._Superclass
 {
     /// <summary>
     /// A weapon is a "device" that fires a "munition" (_MunitionBase). It must be owned by another sprite.

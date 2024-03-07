@@ -1,15 +1,14 @@
-﻿using Si.Engine;
-using Si.Engine.AI.Logistics;
-using Si.GameEngine.Loudout;
-using Si.GameEngine.Sprite.Enemy.Peon._Superclass;
-using Si.GameEngine.Sprite.Weapon;
+﻿using Si.Engine.AI.Logistics;
+using Si.Engine.Loudout;
+using Si.Engine.Sprite.Enemy.Peon._Superclass;
+using Si.Engine.Sprite.Weapon;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Linq;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Enemy.Peon
+namespace Si.Engine.Sprite.Enemy.Peon
 {
     internal class SpriteEnemyPhoenix : SpriteEnemyPeonBase
     {

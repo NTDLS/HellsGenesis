@@ -3,15 +3,14 @@ using NTDLS.Semaphore;
 using SharpCompress.Archives;
 using SharpCompress.Common;
 using Si.Audio;
-using Si.Engine;
-using Si.GameEngine.Sprite;
+using Si.Engine.Sprite;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 
-namespace Si.GameEngine.Manager
+namespace Si.Engine.Manager
 {
     public class EngineAssetManager : IDisposable
     {

@@ -1,7 +1,6 @@
-﻿using Si.Engine;
-using Si.Engine.Interrogation;
+﻿using Si.Engine.Interrogation;
 using Si.Engine.Interrogation._Superclass;
-using Si.GameEngine.Sprite._Superclass;
+using Si.Engine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
@@ -12,7 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Si.GameEngine.Manager
+namespace Si.Engine.Manager
 {
     /// <summary>
     /// Handles keyboard debugging inquiries.

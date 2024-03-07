@@ -1,9 +1,8 @@
-﻿using Si.Engine;
-using Si.GameEngine.Menu._Superclass;
-using Si.GameEngine.Sprite.MenuItem;
+﻿using Si.Engine.Menu._Superclass;
+using Si.Engine.Sprite.MenuItem;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.GameEngine.Menu
+namespace Si.Engine.Menu
 {
     /// <summary>
     /// The menu that is shows when the game is first started.

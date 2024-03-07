@@ -1,15 +1,14 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
-using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
+using Si.Engine.Sprite._Superclass;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite
+namespace Si.Engine.Sprite
 {
     public class SpriteAnimation : SpriteBase
     {

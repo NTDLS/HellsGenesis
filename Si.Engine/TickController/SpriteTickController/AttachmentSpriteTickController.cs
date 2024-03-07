@@ -1,12 +1,11 @@
-﻿using Si.Engine;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.TickController._Superclass;
+﻿using Si.Engine.Manager;
+using Si.Engine.Sprite;
+using Si.Engine.Sprite._Superclass;
+using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System.Linq;
 
-namespace Si.GameEngine.TickController.SpriteTickController
+namespace Si.Engine.TickController.SpriteTickController
 {
     public class AttachmentSpriteTickController : SpriteTickControllerBase<SpriteAttachment>
     {
@@ -36,7 +35,7 @@ namespace Si.GameEngine.TickController.SpriteTickController
 
         public SpriteAttachment Create(SpriteBase owner, string imagePath = null)
         {
-            var obj = new SpriteAttachment(GameEngine, imagePath)
+            var obj = new SpriteAttachment(Engine, imagePath)
             {
                 ZOrder = owner.ZOrder + 1, //We want to make sure these go on top of the stack.
                 OwnerUID = owner.UID

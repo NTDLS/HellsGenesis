@@ -1,10 +1,9 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.IO;
 
-namespace Si.GameEngine.Sprite
+namespace Si.Engine.Sprite
 {
     public class SpriteStar : SpriteBase
     {

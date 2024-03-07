@@ -1,12 +1,11 @@
-﻿using Si.Engine;
-using Si.Engine.Core.Types;
-using Si.GameEngine.Level._Superclass;
-using Si.GameEngine.Sprite.Enemy._Superclass;
-using Si.GameEngine.Sprite.Enemy.Peon;
+﻿using Si.Engine.Core.Types;
+using Si.Engine.Level._Superclass;
+using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Peon;
 using Si.Library.Mathematics.Geometry;
 using System.Linq;
 
-namespace Si.GameEngine.Level
+namespace Si.Engine.Level
 {
     /// <summary>
     /// Levels are contained inside Situations. Each level contains a set of waves that are progressed. 

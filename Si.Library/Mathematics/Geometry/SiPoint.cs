@@ -141,5 +141,12 @@ namespace Si.Library.Mathematics.Geometry
 
             return point;
         }
+
+        /// <summary>
+        /// Rotates the given vector by the given radians.
+        /// </summary>
+        /// <param name="radians"></param>
+        /// <returns></returns>
+        public SiPoint Rotate(float radians) => Rotate(this, radians);
     }
 }

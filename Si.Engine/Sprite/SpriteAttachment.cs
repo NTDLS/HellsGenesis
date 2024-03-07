@@ -1,11 +1,10 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Weapon.Munition._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite
+namespace Si.Engine.Sprite
 {
     public class SpriteAttachment : SpriteShipBase
     {

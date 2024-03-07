@@ -1,12 +1,11 @@
 ﻿using NTDLS.Semaphore;
-using Si.Engine;
 using Si.Engine.Core.Types;
-using Si.GameEngine.Menu;
-using Si.GameEngine.TickController._Superclass;
+using Si.Engine.Menu;
+using Si.Engine.TickController._Superclass;
 using System.Collections.Generic;
 using static Si.Engine.Core.Types.SiDefermentEvent;
 
-namespace Si.GameEngine.TickController.UnvectoredTickController
+namespace Si.Engine.TickController.UnvectoredTickController
 {
     public class EventsTickController : UnvectoredTickControllerBase<SiDefermentEvent>
     {
@@ -40,8 +39,8 @@ namespace Si.GameEngine.TickController.UnvectoredTickController
         {
             Add(4, (sender, refObj) =>
             {
-                GameEngine.Audio.DoorIsAjarSound.Play();
-                GameEngine.Menus.Show(new MenuStartNewGame(GameEngine));
+                Engine.Audio.DoorIsAjarSound.Play();
+                Engine.Menus.Show(new MenuStartNewGame(Engine));
             });
         }
 

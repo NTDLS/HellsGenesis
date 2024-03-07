@@ -1,9 +1,8 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System;
 
-namespace Si.GameEngine.Sprite.PowerUp._Superclass
+namespace Si.Engine.Sprite.PowerUp._Superclass
 {
     /// <summary>
     /// Represents a "power-up" that the player can pick up to gain some ability / stat-improvement.

@@ -14,6 +14,22 @@ namespace Si.Library.Mathematics.Geometry
         public const float DEG_270_RADS = 270 * DEG_TO_RAD; //RIGHT
 
         /// <summary>
+        /// Rotates the given vector by the given radians.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="radians"></param>
+        /// <returns></returns>
+        public static SiPoint Rotate(SiPoint vector, float radians)
+        {
+            float cosTheta = (float)Math.Cos(radians);
+            float sinTheta = (float)Math.Sin(radians);
+            return new SiPoint(
+                vector.X * cosTheta - vector.Y * sinTheta,
+                vector.X * sinTheta + vector.Y * cosTheta
+            );
+        }
+
+        /// <summary>
         /// Converts radians to degrees
         /// </summary>
         /// <param name="rad">Given radians to convert to degrees.</param>

@@ -1,10 +1,9 @@
-﻿using Si.Engine;
-using Si.GameEngine.Situation._Superclass;
-using Si.GameEngine.TickController._Superclass;
+﻿using Si.Engine.Situation._Superclass;
+using Si.Engine.TickController._Superclass;
 using Si.Library;
 using System.Linq;
 
-namespace Si.GameEngine.TickController.UnvectoredTickController
+namespace Si.Engine.TickController.UnvectoredTickController
 {
     public class SituationsTickController : UnvectoredTickControllerBase<SituationBase>
     {

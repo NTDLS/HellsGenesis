@@ -1,12 +1,11 @@
-﻿using Si.Engine;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite.Enemy._Superclass;
-using Si.GameEngine.TickController._Superclass;
+﻿using Si.Engine.Manager;
+using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
 
-namespace Si.GameEngine.TickController.SpriteTickController
+namespace Si.Engine.TickController.SpriteTickController
 {
     public class EnemiesSpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
     {
@@ -30,10 +29,10 @@ namespace Si.GameEngine.TickController.SpriteTickController
 
         public T Create<T>() where T : SpriteEnemyBase
         {
-            object[] param = { GameEngine };
+            object[] param = { Engine };
             SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
-            obj.Location = GameEngine.Display.RandomOffScreenLocation();
+            obj.Location = Engine.Display.RandomOffScreenLocation();
             obj.Velocity.Angle.Degrees = SiRandom.Between(0, 359);
 
             obj.BeforeCreate();

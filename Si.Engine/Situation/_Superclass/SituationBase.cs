@@ -1,10 +1,9 @@
-﻿using Si.Engine;
-using Si.Engine.Core.Types;
-using Si.GameEngine.Level._Superclass;
+﻿using Si.Engine.Core.Types;
+using Si.Engine.Level._Superclass;
 using System.Collections.Generic;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Situation._Superclass
+namespace Si.Engine.Situation._Superclass
 {
     /// <summary>
     /// Situations are collections of levels. Once each level is completed, the next one is loaded.

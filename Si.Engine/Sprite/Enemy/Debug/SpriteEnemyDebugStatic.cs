@@ -1,10 +1,9 @@
-﻿using Si.Engine;
-using Si.GameEngine.Loudout;
-using Si.GameEngine.Sprite.Enemy.Peon._Superclass;
-using Si.GameEngine.Sprite.Weapon;
+﻿using Si.Engine.Loudout;
+using Si.Engine.Sprite.Enemy.Peon._Superclass;
+using Si.Engine.Sprite.Weapon;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Enemy.Debug
+namespace Si.Engine.Sprite.Enemy.Debug
 {
     /// <summary>
     /// Debugging enemy unit - a scary sight to see.

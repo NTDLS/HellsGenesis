@@ -1,16 +1,15 @@
 ﻿using NTDLS.Semaphore;
 using SharpDX.Mathematics.Interop;
-using Si.Engine;
-using Si.GameEngine.Menu;
-using Si.GameEngine.Sprite;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.Sprite.Enemy._Superclass;
-using Si.GameEngine.Sprite.Player;
-using Si.GameEngine.Sprite.Player._Superclass;
-using Si.GameEngine.Sprite.PowerUp._Superclass;
-using Si.GameEngine.Sprite.Weapon.Munition._Superclass;
-using Si.GameEngine.TickController.PlayerSpriteTickController;
-using Si.GameEngine.TickController.SpriteTickController;
+using Si.Engine.Menu;
+using Si.Engine.Sprite;
+using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Player;
+using Si.Engine.Sprite.Player._Superclass;
+using Si.Engine.Sprite.PowerUp._Superclass;
+using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.Engine.TickController.PlayerSpriteTickController;
+using Si.Engine.TickController.SpriteTickController;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -18,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Manager
+namespace Si.Engine.Manager
 {
     /// <summary>
     /// Contains the collection of all sprites and their factories.
@@ -385,6 +384,32 @@ namespace Si.GameEngine.Manager
 
                 //Highlight the 1:1 frame
                 _engine.Rendering.DrawRectangleAt(renderTarget, rawRectF, 0, _engine.Rendering.Materials.Colors.Red, 0, 1);
+            }
+        }
+
+        public void CreateFragmentsOf(SpriteBase sprite)
+        {
+            var image = sprite.GetImage();
+            if (image == null)
+            {
+                return;
+            }
+
+            int fragmentCount = SiRandom.Between(2, 10);
+
+            var fragmentImages = _engine.Rendering.GenerateIrregularFragments(image, fragmentCount);
+
+            for (int index = 0; index < fragmentCount; index++)
+            {
+                var fragment = _engine.Sprites.GenericSprites.CreateAt(sprite, fragmentImages[index]);
+                //TODO: Can we implement this.
+                fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
+                fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
+
+                fragment.Velocity.Angle.Degrees = SiRandom.Between(0.0f, 359.0f);
+                fragment.Velocity.MaximumSpeed = SiRandom.Between(1, 3.5f);
+                fragment.Velocity.ForwardMomentium = 1;
+                fragment.VectorType = ParticleVectorType.Independent;
             }
         }
     }

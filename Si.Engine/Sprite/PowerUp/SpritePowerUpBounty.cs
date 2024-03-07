@@ -1,9 +1,8 @@
-﻿using Si.Engine;
-using Si.GameEngine.Sprite.PowerUp._Superclass;
+﻿using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.GameEngine.Sprite.PowerUp
+namespace Si.Engine.Sprite.PowerUp
 {
     internal class SpritePowerupBounty : SpritePowerupBase
     {

@@ -1,7 +1,6 @@
 ﻿using SharpDX.Mathematics.Interop;
-using Si.Engine;
-using Si.GameEngine.Sprite.Enemy._Superclass;
-using Si.GameEngine.Sprite.Weapon.Munition._Superclass;
+using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
@@ -13,7 +12,7 @@ using System.Drawing;
 using System.Linq;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite._Superclass
+namespace Si.Engine.Sprite._Superclass
 {
     /// <summary>
     /// Represents a single item that can be rendered to the screen. All on-screen objects are derived from this class.

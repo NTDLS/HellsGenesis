@@ -1,13 +1,12 @@
-﻿using Si.Engine;
-using Si.GameEngine.Loudout;
-using Si.GameEngine.Sprite.Enemy.Peon._Superclass;
-using Si.GameEngine.Sprite.Weapon;
+﻿using Si.Engine.Loudout;
+using Si.Engine.Sprite.Enemy.Peon._Superclass;
+using Si.Engine.Sprite.Weapon;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.Sprite.Enemy.Peon
+namespace Si.Engine.Sprite.Enemy.Peon
 {
     /// <summary>
     /// 100% traditional weapons, they enforce their distance and are are moddled to provoke dog fighting. These are fast units.

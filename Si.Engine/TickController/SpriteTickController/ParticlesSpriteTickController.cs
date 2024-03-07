@@ -1,16 +1,15 @@
 ﻿using SharpDX;
-using Si.Engine;
-using Si.GameEngine.Manager;
-using Si.GameEngine.Sprite;
-using Si.GameEngine.Sprite._Superclass;
-using Si.GameEngine.TickController._Superclass;
+using Si.Engine.Manager;
+using Si.Engine.Sprite;
+using Si.Engine.Sprite._Superclass;
+using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
-namespace Si.GameEngine.TickController.SpriteTickController
+namespace Si.Engine.TickController.SpriteTickController
 {
     public class ParticlesSpriteTickController : SpriteTickControllerBase<SpriteParticleBase>
     {
@@ -45,14 +44,14 @@ namespace Si.GameEngine.TickController.SpriteTickController
 
         public SpriteParticle CreateAt(SpriteBase sprite, Color4 color, Size? size = null)
         {
-            var obj = new SpriteParticle(GameEngine, sprite.Location, size ?? new Size(1, 1), color);
+            var obj = new SpriteParticle(Engine, sprite.Location, size ?? new Size(1, 1), color);
             SpriteManager.Add(obj);
             return obj;
         }
 
         public SpriteParticle CreateAt(SiPoint location, Color4 color, Size? size = null)
         {
-            var obj = new SpriteParticle(GameEngine, location, size ?? new Size(1, 1), color)
+            var obj = new SpriteParticle(Engine, location, size ?? new Size(1, 1), color)
             {
                 Visable = true
             };
@@ -62,7 +61,7 @@ namespace Si.GameEngine.TickController.SpriteTickController
 
         public SpriteParticle CreateAt(SiPoint location, Size? size = null)
         {
-            var obj = new SpriteParticle(GameEngine, location, size ?? new Size(1, 1))
+            var obj = new SpriteParticle(Engine, location, size ?? new Size(1, 1))
             {
                 Visable = true
             };
@@ -71,7 +70,9 @@ namespace Si.GameEngine.TickController.SpriteTickController
         }
 
         public void ParticleBlastAt(int maxParticleCount, SpriteBase at)
-            => ParticleBlastAt(maxParticleCount, at.Location);
+        {
+            Engine.Events.Add(() => ParticleBlastAt(maxParticleCount, at.Location));
+        }
 
         /// <summary>
         /// Creates a random number of blasts consiting of "hot" colored particles at a given location.

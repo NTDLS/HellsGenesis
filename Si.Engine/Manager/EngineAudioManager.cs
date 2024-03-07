@@ -1,9 +1,8 @@
 ﻿using Si.Audio;
-using Si.Engine;
 using Si.Library;
 using System.IO;
 
-namespace Si.GameEngine.Manager
+namespace Si.Engine.Manager
 {
     /// <summary>
     /// /// Contains global sounds and music.

@@ -1,5 +1,5 @@
 ﻿using Si.Engine.Core.Types;
-using Si.GameEngine.Sprite;
+using Si.Engine.Sprite;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
 using System;
