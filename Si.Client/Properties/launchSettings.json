@@ -2,7 +2,7 @@
   "profiles": {
     "Si.Client": {
       "commandName": "Project",
-      "commandLineArgs": "\r\n"
+      "commandLineArgs": "/nosplash"
     }
   }
 }

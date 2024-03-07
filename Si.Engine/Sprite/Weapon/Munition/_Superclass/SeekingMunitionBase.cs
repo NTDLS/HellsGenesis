@@ -15,8 +15,8 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
         public int MaxSeekingObservationAngleDegrees { get; set; } = 20;
         public float SeekingRotationRateRadians { get; set; } = SiPoint.DegreesToRadians(4);
 
-        public SeekingMunitionBase(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
-            : base(engine, weapon, firedFrom, imagePath, xyOffset)
+        public SeekingMunitionBase(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint location = null, float? angle = null)
+            : base(engine, weapon, firedFrom, imagePath, location, angle)
         {
         }
 

@@ -1,6 +1,7 @@
 ﻿using Si.Engine.Loudout;
 using Si.Engine.Sprite.Enemy.Starbase._Superclass;
 using Si.Engine.Sprite.Weapon;
+using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Generic;
 using static Si.Library.SiConstants;
@@ -21,7 +22,10 @@ namespace Si.Engine.Sprite.Enemy.Starbase
             Fortress
         */
 
-        SiPoint[] _turrentLocations =
+        private readonly List<Turret> _turrets = new();
+        private readonly string _assetPath;
+
+        private readonly SiPoint[] _absoluteTurrentLocations =
         [
             new(583, 147),
             new(148, 419),
@@ -31,7 +35,7 @@ namespace Si.Engine.Sprite.Enemy.Starbase
             new(1016, 909),
         ];
 
-        class Turret
+        private class Turret
         {
             public SiPoint BaseLocation { get; set; }
             public SpriteAttachment Sprite { get; set; }
@@ -43,9 +47,6 @@ namespace Si.Engine.Sprite.Enemy.Starbase
             }
         }
 
-        private readonly List<Turret> _turrets = new();
-
-        string _assetPath;
 
         public SpriteEnemyStarbaseGarrison(EngineCore engine)
             : base(engine)
@@ -73,20 +74,20 @@ namespace Si.Engine.Sprite.Enemy.Starbase
                 loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), int.MaxValue));
                 loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), int.MaxValue));
 
+
                 SaveLoadoutToFile(loadout);
             }
 
             ResetLoadout(loadout);
 
-            foreach (var turrentLocation in _turrentLocations)
+            foreach (var turrentLocation in _absoluteTurrentLocations)
             {
                 var attachment = Attach($@"{_assetPath}\Turret.png", true, 3);
                 _turrets.Add(new Turret(attachment, turrentLocation));
             }
 
-            Velocity.Angle.Degrees = 0;
+            Velocity.Angle.Degrees = SiRandom.Between(0, 359);
         }
-
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
@@ -103,6 +104,8 @@ namespace Si.Engine.Sprite.Enemy.Starbase
 
                 //Point the turret at the player.
                 turret.Sprite.Velocity.Angle.Degrees = turret.Sprite.AngleTo360(_engine.Player.Sprite);
+
+                //this.FireWeapon<WeaponVulcanCannon>();
             }
 
             base.ApplyMotion(epoch, displacementVector);

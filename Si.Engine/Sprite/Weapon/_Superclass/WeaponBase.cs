@@ -19,7 +19,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected EngineCore _engine;
-        protected SpriteShipBase _owner;
+        protected SpriteShipBase Owner { get; private set; }
 
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected SiAudioClip _fireSound;
@@ -60,16 +60,17 @@ namespace Si.Engine.Sprite.Weapon._Superclass
 
         public WeaponBase(EngineCore engine, SpriteShipBase owner, string name, string soundPath, float soundVolume)
         {
-            _owner = owner;
+            Owner = owner;
             _engine = engine;
             _fireSound = _engine.Assets.GetAudio(soundPath, soundVolume);
             Name = name;
             MunitionSceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
         }
 
-        public virtual MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase lockedTarget = null)
+
+        public virtual MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
         {
-            if (_owner == null)
+            if (Owner == null)
             {
                 throw new ArgumentNullException("Weapon is not owned.");
             }
@@ -89,21 +90,21 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         {
             LockedTargets.Clear();
 
-            if (_owner is SpritePlayerBase owner)
+            if (Owner is SpritePlayerBase owner)
             {
                 var potentialTargets = _engine.Sprites.Enemies.Visible();
 
                 foreach (var potentialTarget in potentialTargets)
                 {
-                    if (CanLockOn && _owner.IsPointingAt(potentialTarget, MaxLockOnAngle))
+                    if (CanLockOn && Owner.IsPointingAt(potentialTarget, MaxLockOnAngle))
                     {
-                        var distance = _owner.DistanceTo(potentialTarget);
+                        var distance = Owner.DistanceTo(potentialTarget);
                         if (distance.IsBetween(MinLockDistance, MaxLockDistance))
                         {
                             LockedTargets.Add(new WeaponsLock()
                             {
                                 Sprite = potentialTarget,
-                                Distance = _owner.DistanceTo(potentialTarget)
+                                Distance = Owner.DistanceTo(potentialTarget)
                             });
                         }
                     }
@@ -133,14 +134,14 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                     potentialTarget.IsLockedOnSoft = false;
                 }
             }
-            else if (_owner is SpriteEnemyBase enemy)
+            else if (Owner is SpriteEnemyBase enemy)
             {
                 _engine.Player.Sprite.IsLockedOnSoft = false;
                 _engine.Player.Sprite.IsLockedOnHard = false;
 
-                if (CanLockOn && _owner.IsPointingAt(_engine.Player.Sprite, MaxLockOnAngle))
+                if (CanLockOn && Owner.IsPointingAt(_engine.Player.Sprite, MaxLockOnAngle))
                 {
-                    var distance = _owner.DistanceTo(_engine.Player.Sprite);
+                    var distance = Owner.DistanceTo(_engine.Player.Sprite);
                     if (distance.IsBetween(MinLockDistance, MaxLockDistance))
                     {
                         _engine.Player.Sprite.IsLockedOnHard = true;
@@ -149,7 +150,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                         LockedTargets.Add(new WeaponsLock()
                         {
                             Sprite = _engine.Player.Sprite,
-                            Distance = _owner.DistanceTo(_engine.Player.Sprite),
+                            Distance = Owner.DistanceTo(_engine.Player.Sprite),
                             LockType = SiWeaponsLockType.Hard
                         });
                     }
@@ -157,9 +158,29 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             }
         }
 
+        public virtual bool Fire(SiPoint location, float angle)
+        {
+            if (Owner == null)
+            {
+                throw new ArgumentNullException("Weapon is not owned.");
+            }
+
+            if (CanFire)
+            {
+                RoundsFired++;
+                RoundQuantity--;
+                _fireSound.Play();
+                _engine.Sprites.Munitions.Create(this, location, angle);
+
+                return true;
+            }
+
+            return false;
+        }
+
         public virtual bool Fire()
         {
-            if (_owner == null)
+            if (Owner == null)
             {
                 throw new ArgumentNullException("Weapon is not owned.");
             }

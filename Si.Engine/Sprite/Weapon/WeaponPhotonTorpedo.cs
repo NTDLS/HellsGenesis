@@ -29,10 +29,8 @@ namespace Si.Engine.Sprite.Weapon
             SpeedVariancePercent = 0.00f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
-        {
-            return new MunitionPhotonTorpedo(_engine, this, _owner, xyOffset);
-        }
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+            => new MunitionPhotonTorpedo(_engine, this, Owner, location, angle);
 
         public override bool Fire()
         {
@@ -44,12 +42,12 @@ namespace Si.Engine.Sprite.Weapon
 
                 if (_toggle)
                 {
-                    var pointRight = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(10, 10));
+                    var pointRight = SiPoint.PointFromAngleAtDistance360(Owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(10, 10));
                     _engine.Sprites.Munitions.Create(this, pointRight);
                 }
                 else
                 {
-                    var pointLeft = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(10, 10));
+                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Owner.Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(10, 10));
                     _engine.Sprites.Munitions.Create(this, pointLeft);
                 }
 

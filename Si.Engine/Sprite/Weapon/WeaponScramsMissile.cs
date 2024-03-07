@@ -36,10 +36,8 @@ namespace Si.Engine.Sprite.Weapon
             ExplodesOnImpact = true;
         }
 
-        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
-        {
-            return new MunitionGuidedFragMissile(_engine, this, _owner, targetOfLock, xyOffset);
-        }
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+            => new MunitionGuidedFragMissile(_engine, this, Owner, lockedTarget, location, angle);
 
         public override bool Fire()
         {
@@ -52,12 +50,12 @@ namespace Si.Engine.Sprite.Weapon
                 {
                     if (_toggle)
                     {
-                        var pointRight = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(10, 10));
+                        var pointRight = SiPoint.PointFromAngleAtDistance360(Owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(10, 10));
                         _engine.Sprites.Munitions.Create(this, pointRight);
                     }
                     else
                     {
-                        var pointLeft = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(10, 10));
+                        var pointLeft = SiPoint.PointFromAngleAtDistance360(Owner.Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(10, 10));
                         _engine.Sprites.Munitions.Create(this, pointLeft);
                     }
 
@@ -69,12 +67,12 @@ namespace Si.Engine.Sprite.Weapon
                     {
                         if (_toggle)
                         {
-                            var pointRight = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(10, 10));
+                            var pointRight = SiPoint.PointFromAngleAtDistance360(Owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(10, 10));
                             _engine.Sprites.Munitions.CreateLockedOnTo(this, weaponLock.Sprite, pointRight);
                         }
                         else
                         {
-                            var pointLeft = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(10, 10));
+                            var pointLeft = SiPoint.PointFromAngleAtDistance360(Owner.Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(10, 10));
                             _engine.Sprites.Munitions.CreateLockedOnTo(this, weaponLock.Sprite, pointLeft);
                         }
                         _toggle = !_toggle;

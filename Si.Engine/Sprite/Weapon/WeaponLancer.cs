@@ -26,10 +26,8 @@ namespace Si.Engine.Sprite.Weapon
             AngleVarianceDegrees = 2.0f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
-        {
-            return new MunitionLancer(_engine, this, _owner, xyOffset);
-        }
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+            => new MunitionLancer(_engine, this, Owner, location, angle);
     }
 }
 

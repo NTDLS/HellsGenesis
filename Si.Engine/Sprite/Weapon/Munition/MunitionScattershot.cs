@@ -13,8 +13,8 @@ namespace Si.Engine.Sprite.Weapon.Munition
         private readonly int imageCount = 4;
         private readonly int selectedImageIndex = 0;
 
-        public MunitionScattershot(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, SiPoint xyOffset = null)
-            : base(engine, weapon, firedFrom, null, xyOffset)
+        public MunitionScattershot(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, SiPoint location = null, float? angle = null)
+            : base(engine, weapon, firedFrom, null, location, angle)
         {
             selectedImageIndex = SiRandom.Between(0, imageCount - 1);
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));

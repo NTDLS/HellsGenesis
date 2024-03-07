@@ -72,7 +72,14 @@ namespace Si.Engine.TickController._Superclass
             obj.Y = y;
             SpriteManager.Add(obj);
             return obj;
+        }
 
+        public T Create(SiPoint location)
+        {
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            obj.Location = location;
+            SpriteManager.Add(obj);
+            return obj;
         }
 
         public T Create()

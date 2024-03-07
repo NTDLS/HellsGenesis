@@ -23,7 +23,16 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
         public float AgeInMilliseconds => (float)(DateTime.UtcNow - CreatedDate).TotalMilliseconds;
         public float SceneDistanceLimit { get; set; }
 
-        public MunitionBase(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
+        /// <summary>
+        /// Creates a munition for the given weapon.
+        /// </summary>
+        /// <param name="engine">Reference to the engine.</param>
+        /// <param name="weapon">The weapon to create a munition for.</param>
+        /// <param name="firedFrom">The sprite that is firing the weapon.</param>
+        /// <param name="imagePath">The image for the munition.</param>
+        /// <param name="location">The optional location for the munition to originate from (if not specified, wull use the location of the firedFrom sprite).</param>
+        /// <param name="angle">>The optional angle for the munition to travel on (if not specified, wull use the angle of the firedFrom sprite).</param>
+        public MunitionBase(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint location = null, float? angle = null)
             : base(engine)
         {
             Initialize(imagePath);
@@ -34,7 +43,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
             RadarDotSize = new SiPoint(1, 1);
 
-            float headingRadians = firedFrom.Velocity.Angle.Radians;
+            float headingRadians = angle == null ? firedFrom.Velocity.Angle.Radians : (float)angle;
             if (weapon.AngleVarianceDegrees > 0)
             {
                 var randomNumber = SiPoint.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0f) / 100.0f);
@@ -56,7 +65,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                 ForwardMomentium = 1.0f
             };
 
-            Location = firedFrom.Location + (xyOffset ?? SiPoint.Zero);
+            Location = location == null ? firedFrom.Location : location;
 
             if (firedFrom is SpriteEnemyBase)
             {

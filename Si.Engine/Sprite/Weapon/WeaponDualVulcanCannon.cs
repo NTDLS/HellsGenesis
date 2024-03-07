@@ -27,6 +27,9 @@ namespace Si.Engine.Sprite.Weapon
             SpeedVariancePercent = 0.05f;
         }
 
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+            => new MunitionVulcanCannon(_engine, this, Owner, location, angle);
+
         public override bool Fire()
         {
             if (CanFire)
@@ -35,14 +38,14 @@ namespace Si.Engine.Sprite.Weapon
 
                 if (RoundQuantity > 0)
                 {
-                    var pointRight = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(5, 5));
+                    var pointRight = SiPoint.PointFromAngleAtDistance360(Owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(5, 5));
                     _engine.Sprites.Munitions.Create(this, pointRight);
                     RoundQuantity--;
                 }
 
                 if (RoundQuantity > 0)
                 {
-                    var pointLeft = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(5, 5));
+                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Owner.Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(5, 5));
                     _engine.Sprites.Munitions.Create(this, pointLeft);
                     RoundQuantity--;
                 }
@@ -50,11 +53,6 @@ namespace Si.Engine.Sprite.Weapon
                 return true;
             }
             return false;
-        }
-
-        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
-        {
-            return new MunitionVulcanCannon(_engine, this, _owner, xyOffset);
         }
     }
 }

@@ -9,8 +9,8 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
     /// </summary>
     internal class EnergyMunitionBase : MunitionBase
     {
-        public EnergyMunitionBase(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint xyOffset = null)
-            : base(engine, weapon, firedFrom, imagePath, xyOffset)
+        public EnergyMunitionBase(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint location = null, float? angle = null)
+            : base(engine, weapon, firedFrom, imagePath, location, angle)
         {
         }
     }

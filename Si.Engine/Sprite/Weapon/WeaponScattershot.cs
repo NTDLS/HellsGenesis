@@ -27,9 +27,7 @@ namespace Si.Engine.Sprite.Weapon
             SpeedVariancePercent = 0.10f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
-        {
-            return new MunitionScattershot(_engine, this, _owner, xyOffset);
-        }
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+            => new MunitionScattershot(_engine, this, Owner, location, angle);
     }
 }

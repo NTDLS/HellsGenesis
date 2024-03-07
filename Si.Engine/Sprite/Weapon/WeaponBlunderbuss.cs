@@ -27,30 +27,28 @@ namespace Si.Engine.Sprite.Weapon
             SpeedVariancePercent = 0.10f;
         }
 
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+            => new MunitionBlunderbuss(_engine, this, Owner, location, angle);
+
         public override bool Fire()
         {
             if (CanFire)
             {
                 _fireSound.Play();
 
-                for (int i = -15; i < 15; i++)
+                if (RoundQuantity > 0)
                 {
-                    if (RoundQuantity > 0)
+                    for (int i = -15; i < 15; i++)
                     {
-                        var pointRight = SiPoint.PointFromAngleAtDistance360(_owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(i, i));
-                        _engine.Sprites.Munitions.Create(this, pointRight);
-                        RoundQuantity--;
+                        var location = Owner.Location + SiPoint.PointFromAngleAtDistance360(Owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(i, i));
+                        _engine.Sprites.Munitions.Create(this, location);
                     }
+                    RoundQuantity--;
                 }
 
                 return true;
             }
             return false;
-        }
-
-        public override MunitionBase CreateMunition(SiPoint xyOffset, SpriteBase targetOfLock = null)
-        {
-            return new MunitionBlunderbuss(_engine, this, _owner, xyOffset);
         }
     }
 }

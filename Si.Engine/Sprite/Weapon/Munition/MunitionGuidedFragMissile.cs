@@ -10,8 +10,8 @@ namespace Si.Engine.Sprite.Weapon.Munition
         private const string imagePath = @"Graphics\Weapon\GuidedFragMissile.png";
 
         public MunitionGuidedFragMissile(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom,
-             SpriteBase lockedTarget = null, SiPoint xyOffset = null)
-            : base(engine, weapon, firedFrom, imagePath, lockedTarget, xyOffset)
+             SpriteBase lockedTarget = null, SiPoint location = null, float? angle = null)
+            : base(engine, weapon, firedFrom, imagePath, lockedTarget, location, angle)
         {
             MaxGuidedObservationAngleDegrees = 90;
             GuidedRotationRateInDegrees = SiPoint.DegreesToRadians(3);
