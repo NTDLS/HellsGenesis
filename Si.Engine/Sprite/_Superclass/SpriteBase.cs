@@ -347,12 +347,6 @@ namespace Si.GameEngine.Sprite._Superclass
                 + $"          Visible Bounds: {Bounds}\r\n";
         }
 
-        public void SetHullHealth(int points)
-        {
-            HullHealth = 0;
-            AddHullHealth(points);
-        }
-
         /// <summary>
         /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
         /// </summary>
@@ -366,10 +360,15 @@ namespace Si.GameEngine.Sprite._Superclass
             return attachment;
         }
 
+        public void SetHullHealth(int points)
+        {
+            HullHealth = 0;
+            AddHullHealth(points);
+        }
+
         public virtual void AddHullHealth(int pointsToAdd)
         {
-            HullHealth += pointsToAdd;
-            HullHealth = HullHealth.Clamp(0, _engine.Settings.MaxHullHealth);
+            HullHealth = (HullHealth + pointsToAdd).Clamp(1, _engine.Settings.MaxHullHealth);
         }
 
         public virtual void SetShieldHealth(int points)
@@ -380,8 +379,7 @@ namespace Si.GameEngine.Sprite._Superclass
 
         public virtual void AddShieldHealth(int pointsToAdd)
         {
-            ShieldHealth += pointsToAdd;
-            ShieldHealth = ShieldHealth.Clamp(1, _engine.Settings.MaxShieldPoints);
+            ShieldHealth = (ShieldHealth + pointsToAdd).Clamp(1, _engine.Settings.MaxShieldHealth);
         }
 
         public void ReviveDeadOrExploded()

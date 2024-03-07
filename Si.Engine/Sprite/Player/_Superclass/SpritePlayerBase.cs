@@ -230,7 +230,7 @@ namespace Si.GameEngine.Sprite.Player._Superclass
 
         public override void AddShieldHealth(int pointsToAdd)
         {
-            if (ShieldHealth < _engine.Settings.MaxShieldPoints && ShieldHealth + pointsToAdd >= _engine.Settings.MaxShieldPoints)
+            if (ShieldHealth < _engine.Settings.MaxShieldHealth && ShieldHealth + pointsToAdd >= _engine.Settings.MaxShieldHealth)
             {
                 ShieldMaxSound.Play(); //If we didnt have full shields but now we do, tell the player.
             }
