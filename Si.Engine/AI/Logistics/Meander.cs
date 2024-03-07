@@ -1,7 +1,7 @@
 ﻿using NTDLS.Determinet;
 using NTDLS.Determinet.Types;
 using Si.Engine.AI.Logistics._Superclass;
-using Si.Engine.Sprites._Superclass;
+using Si.GameEngine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;

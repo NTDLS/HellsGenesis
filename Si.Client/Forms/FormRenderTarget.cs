@@ -1,9 +1,8 @@
-
 using Si.Client.Forms;
 using Si.Engine;
 using Si.Engine.AI.Logistics._Superclass;
-using Si.Engine.Sprites._Superclass;
-using Si.Engine.Sprites.Enemies._Superclass;
+using Si.GameEngine.Sprite._Superclass;
+using Si.GameEngine.Sprite.Enemy._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;

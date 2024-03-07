@@ -1,6 +1,6 @@
 ﻿using Si.Engine;
-using Si.Engine.Sprites._Superclass;
-using Si.Engine.Sprites.Enemies._Superclass;
+using Si.GameEngine.Sprite._Superclass;
+using Si.GameEngine.Sprite.Enemy._Superclass;
 using Si.Library.Sprite;
 using System;
 using System.Drawing;

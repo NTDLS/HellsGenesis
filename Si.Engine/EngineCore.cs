@@ -1,10 +1,10 @@
 using Newtonsoft.Json;
 using Si.Engine.Interrogation._Superclass;
-using Si.Engine.Managers;
-using Si.Engine.Menus;
-using Si.Engine.Sprites._Superclass;
-using Si.Engine.TickControllers.PlayerSpriteTickController;
-using Si.Engine.TickControllers.UnvectoredTickController;
+using Si.GameEngine.Manager;
+using Si.GameEngine.Menu;
+using Si.GameEngine.Sprite._Superclass;
+using Si.GameEngine.TickController.PlayerSpriteTickController;
+using Si.GameEngine.TickController.UnvectoredTickController;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
