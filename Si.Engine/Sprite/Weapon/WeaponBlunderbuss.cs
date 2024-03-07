@@ -38,7 +38,7 @@ namespace Si.Engine.Sprite.Weapon
 
                 if (RoundQuantity > 0)
                 {
-                    for (int i = -15; i < 15; i++)
+                    for (int i = -15; i < 15; i++) // Create an initial spread so the bullets dont come from the same point.
                     {
                         var location = Owner.Location + SiPoint.PointFromAngleAtDistance360(Owner.Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(i, i));
                         _engine.Sprites.Munitions.Create(this, location);
