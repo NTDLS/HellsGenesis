@@ -289,7 +289,7 @@ namespace Si.GameEngine.Manager
         {
             _collection.Use(o => //Render PostScale sprites.
             {
-                foreach (var sprite in o.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PostScale))
+                foreach (var sprite in o.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PostScale).OrderBy(o => o.ZOrder))
                 {
                     sprite.Render(renderTarget);
                 }
@@ -366,7 +366,7 @@ namespace Si.GameEngine.Manager
         {
             _collection.Use(o => //Render PreScale sprites.
             {
-                foreach (var sprite in o.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PreScale))
+                foreach (var sprite in o.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PreScale).OrderBy(o => o.ZOrder))
                 {
                     if (sprite.IsWithinCurrentScaledScreenBounds)
                     {

@@ -72,14 +72,16 @@ namespace Si.GameEngine.Sprite._Superclass
         /// </summary>
         public SiRenderScaleOrder RenderScaleOrder { get; set; } = SiRenderScaleOrder.PreScale;
 
+        public int ZOrder { get; set; } = 0;
+
         /// <summary>
         /// The bounds of the sprite in the universe.
         /// </summary>
         public virtual RectangleF Bounds => new(
-            (float)(Location.X - Size.Width / 2.0),
-            (float)(Location.Y - Size.Height / 2.0),
-            Size.Width,
-            Size.Height);
+                (float)(Location.X - Size.Width / 2.0),
+                (float)(Location.Y - Size.Height / 2.0),
+                Size.Width,
+                Size.Height);
 
         /// <summary>
         /// The raw bounds of the sprite in the universe.
@@ -353,7 +355,7 @@ namespace Si.GameEngine.Sprite._Superclass
         /// <returns></returns>
         public SpriteAttachment Attach(string imagePath, bool takesDamage = false, int hullHealth = 1)
         {
-            var attachment = _engine.Sprites.Attachments.Create(imagePath, UID);
+            var attachment = _engine.Sprites.Attachments.Create(this, imagePath);
             attachment.TakesDamage = takesDamage;
             attachment.SetHullHealth(hullHealth);
             Attachments.Add(attachment);

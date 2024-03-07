@@ -5,6 +5,7 @@ using Si.GameEngine.Sprite.Enemy._Superclass;
 using Si.GameEngine.Sprite.Enemy.Peon;
 using Si.GameEngine.Sprite.Enemy.Starbase;
 using Si.Library;
+using Si.Library.Mathematics.Geometry;
 
 namespace Si.GameEngine.Level
 {
@@ -74,7 +75,9 @@ namespace Si.GameEngine.Level
 
             _engine.Sprites.Debugs.Create(600, 600);
 
-            _engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
+            var garrison = _engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
+            garrison.Location = new SiPoint(0, 0);
+            garrison.Velocity.Angle.Degrees = 0;
 
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();

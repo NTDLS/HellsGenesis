@@ -2,6 +2,8 @@
 using Si.GameEngine.Loudout;
 using Si.GameEngine.Sprite.Enemy.Starbase._Superclass;
 using Si.GameEngine.Sprite.Weapon;
+using Si.Library.Mathematics.Geometry;
+using System.Collections.Generic;
 using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprite.Enemy.Starbase
@@ -20,11 +22,38 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase
             Fortress
         */
 
+        SiPoint[] _turrentLocations =
+        [
+            new(485, 150),
+            new(148, 419),
+            new(1018, 415),
+            new(146, 913),
+            new(581, 1173),
+            new(1016, 909),
+        ];
+
+        class Turret
+        {
+            public SiPoint BaseLocation { get; set; }
+            public SpriteAttachment Sprite { get; set; }
+
+            public Turret(SpriteAttachment sprite, SiPoint baseLocation)
+            {
+                BaseLocation = baseLocation;
+                Sprite = sprite;
+            }
+        }
+
+        private readonly List<Turret> _turrets = new();
+
+        string _assetPath;
+
         public SpriteEnemyStarbaseGarrison(EngineCore engine)
             : base(engine)
         {
             ShipClass = SiEnemyClass.Garrison;
-            SetImage(@$"Graphics\Enemy\Starbase\{ShipClass}\Hull.png");
+            _assetPath = @$"Graphics\Enemy\Starbase\{ShipClass}";
+            SetImage(@$"{_assetPath}\Hull.png");
 
             //Load the loadout from file or create a new one if it does not exist.
             EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
@@ -49,6 +78,26 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase
             }
 
             ResetLoadout(loadout);
+
+            foreach (var turrentLocation in _turrentLocations)
+            {
+                _turrets.Add(new Turret(Attach($@"{_assetPath}\Turret.png", true, 3), turrentLocation));
+            }
+
+            Velocity.Angle.Degrees = 0;
+        }
+
+        public override void LocationChanged()
+        {
+            foreach (var turret in _turrets)
+            {
+                if (turret.Sprite.IsDeadOrExploded == false)
+                {
+                    //var pointLeft = SiPoint.PointFromAngleAtDistance360(Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(25, 25));
+                    //turret.Sprite.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    turret.Sprite.Location = Location + turret.BaseLocation;
+                }
+            }
         }
     }
 }
