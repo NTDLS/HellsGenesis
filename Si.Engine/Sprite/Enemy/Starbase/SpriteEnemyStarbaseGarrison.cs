@@ -39,6 +39,7 @@ namespace Si.Engine.Sprite.Enemy.Starbase
         {
             public SiPoint BaseLocation { get; set; }
             public SpriteAttachment Sprite { get; set; }
+            public bool FireToggler { get; set; }
 
             public Turret(SpriteAttachment sprite, SiPoint baseLocation)
             {
@@ -82,14 +83,14 @@ namespace Si.Engine.Sprite.Enemy.Starbase
             foreach (var turrentLocation in _absoluteTurrentLocations)
             {
                 var attachment = Attach($@"{_assetPath}\Turret.png", true, 3);
-                attachment.AddWeapon<WeaponVulcanCannon>(int.MaxValue);
+                attachment.AddWeapon<WeaponLancer>(int.MaxValue);
                 _turrets.Add(new Turret(attachment, turrentLocation));
             }
 
             Velocity.Angle.Degrees = SiRandom.Between(0, 359);
         }
 
-        public override void ApplyMotion(float epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             Velocity.Angle.Degrees += 0.05f;
 
@@ -105,7 +106,16 @@ namespace Si.Engine.Sprite.Enemy.Starbase
                 //Point the turret at the player.
                 turret.Sprite.Velocity.Angle.Degrees = turret.Sprite.AngleTo360(_engine.Player.Sprite);
 
-                turret.Sprite.FireWeapon<WeaponVulcanCannon>();
+                if (turret.FireToggler)
+                {
+                    var pointRight = turret.Sprite.Location + SiPoint.PointFromAngleAtDistance360(turret.Sprite.Velocity.Angle + SiPoint.RADIANS_90, new SiPoint(21, 21));
+                    turret.FireToggler = !turret.Sprite.FireWeapon<WeaponLancer>(pointRight);
+                }
+                else
+                {
+                    var pointLeft = turret.Sprite.Location + SiPoint.PointFromAngleAtDistance360(turret.Sprite.Velocity.Angle - SiPoint.RADIANS_90, new SiPoint(21, 21));
+                    turret.FireToggler = turret.Sprite.FireWeapon<WeaponLancer>(pointLeft);
+                }
             }
 
             base.ApplyMotion(epoch, displacementVector);

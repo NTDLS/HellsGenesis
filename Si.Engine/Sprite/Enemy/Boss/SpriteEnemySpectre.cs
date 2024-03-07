@@ -86,14 +86,14 @@ namespace Si.Engine.Sprite.Enemy.Boss
             {
                 if (_leftGun.IsDeadOrExploded == false)
                 {
-                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Velocity.Angle - SiPoint.DEG_90_RADS, new SiPoint(25, 25));
+                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Velocity.Angle - SiPoint.RADIANS_90, new SiPoint(25, 25));
                     _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _leftGun.Location += pointLeft;
                 }
 
                 if (_rightGun.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DEG_90_RADS, new SiPoint(25, 25));
+                    var pointRight = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.RADIANS_90, new SiPoint(25, 25));
                     _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
                     _rightGun.Location += pointRight;
                 }

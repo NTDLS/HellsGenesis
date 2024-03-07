@@ -158,7 +158,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             }
         }
 
-        public virtual bool Fire(SiPoint location, float angle)
+        public virtual bool Fire(SiPoint location, float? angle = null)
         {
             if (Owner == null)
             {

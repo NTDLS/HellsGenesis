@@ -187,7 +187,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Strafing.
 
-                var strafeAngle = SiPoint.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle - SiPoint.DEG_90_RADS), new SiPoint(1, 1));
+                var strafeAngle = SiPoint.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle - SiPoint.RADIANS_90), new SiPoint(1, 1));
 
                 float strafeThrustToAdd = Sprite.Velocity.LateralMomentium == 0 ? Engine.Settings.PlayerThrustRampUp
                     : Engine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.LateralMomentium);

@@ -10,8 +10,16 @@ namespace Si.Library.Mathematics.Geometry
         public const float DEG_TO_RAD = (float)(Math.PI / 180.0);
         public const float RAD_TO_DEG = (float)(180.0 / Math.PI);
         public const float RADS_IN_CIRCLE = (float)(2 * Math.PI);
-        public const float DEG_90_RADS = 90 * DEG_TO_RAD; //LEFT
-        public const float DEG_270_RADS = 270 * DEG_TO_RAD; //RIGHT
+
+        /// <summary>
+        /// 90 degrees.... but in radians.
+        /// </summary>
+        public const float RADIANS_90 = 90 * DEG_TO_RAD; //LEFT
+
+        /// <summary>
+        /// 270 degrees.... but in radians.
+        /// </summary>
+        public const float RADIANS_270 = 270 * DEG_TO_RAD; //RIGHT
 
         /// <summary>
         /// Rotates the given vector by the given radians.

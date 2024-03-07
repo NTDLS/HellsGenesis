@@ -97,6 +97,12 @@ namespace Si.Engine.Sprite
             return weapon?.Fire() == true;
         }
 
+        public bool FireWeapon<T>(SiPoint location, float? angle = null) where T : WeaponBase
+        {
+            var weapon = GetWeaponOfType<T>();
+            return weapon?.Fire(location, angle) == true;
+        }
+
         public WeaponBase GetWeaponOfType<T>() where T : WeaponBase
         {
             return (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
