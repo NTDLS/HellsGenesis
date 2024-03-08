@@ -124,8 +124,9 @@ namespace Si.Engine.Manager
 
                 _engine.Input.KeyStateChangedAmount(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W) ? 1 : rightThumbY > 0 ? rightThumbY : 0);
                 _engine.Input.KeyStateChangedAmount(SiPlayerKey.Reverse, keyboardState.IsPressed(Key.S) ? 1 : rightThumbY < 0 ? rightThumbY : 0);
-                _engine.Input.KeyStateChangedAmount(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A) ? 1 : rightThumbX > 0 ? rightThumbX : 0);
-                _engine.Input.KeyStateChangedAmount(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D) ? 1 : rightThumbX < 0 ? rightThumbX : 0);
+
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A) ? 1 : rightThumbX < 0 ? rightThumbX : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D) ? 1 : rightThumbX > 0 ? rightThumbX : 0);
 
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb));
 
@@ -145,11 +146,12 @@ namespace Si.Engine.Manager
             }
             else
             {
-                _engine.Input.KeyStateChangedHard(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Right));
-                _engine.Input.KeyStateChangedHard(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.Left));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Left));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.Right));
 
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W));
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.Reverse, keyboardState.IsPressed(Key.S));
+
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D));
 

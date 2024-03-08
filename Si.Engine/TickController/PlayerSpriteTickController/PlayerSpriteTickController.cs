@@ -102,8 +102,8 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 if (Engine.Settings.LockPlayerAngleToNearbyEnemy)
                 {
-                    if (Engine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise) == false
-                        && Engine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) == false)
+                    if (Engine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) == false
+                        && Engine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise) == false)
                     {
                         if (_allowLockPlayerAngleToNearbyEnemy)
                         {
@@ -343,8 +343,8 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 var rotationSpeed = Engine.Settings.MaxPlayerRotationSpeedDegrees
                     * ((Sprite.Velocity.LateralMomentium + Sprite.Velocity.ForwardMomentium) / 2);
 
-                float rotateClockwiseAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.RotateClockwise));
-                float rotateCounterClockwiseAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.RotateCounterClockwise));
+                float rotateClockwiseAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.RotateCounterClockwise));
+                float rotateCounterClockwiseAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.RotateClockwise));
 
 
                 if (rotateClockwiseAmount > 0 && rotateCounterClockwiseAmount == 0)
