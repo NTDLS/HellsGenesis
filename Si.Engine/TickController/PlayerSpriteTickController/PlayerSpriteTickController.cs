@@ -16,14 +16,15 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
     {
         private readonly EngineCore _engine;
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
-        private readonly Stopwatch _switchWeaponsTime = new Stopwatch();
+        private readonly Stopwatch _inputDelay = new Stopwatch();
+
         public SpritePlayerBase Sprite { get; set; }
 
         public PlayerSpriteTickController(EngineCore engine)
             : base(engine)
         {
             _engine = engine;
-            _switchWeaponsTime.Restart();
+            _inputDelay.Restart();
         }
 
         public void InstantiatePlayerClass(Type playerClassType)
@@ -48,18 +49,26 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
             {
                 if (Engine.Input.IsKeyPressed(SiPlayerKey.SwitchWeaponLeft))
                 {
-                    if (_switchWeaponsTime.ElapsedMilliseconds > 200)
+                    if (_inputDelay.ElapsedMilliseconds > 200)
                     {
                         _engine.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
-                        _switchWeaponsTime.Restart();
+                        _inputDelay.Restart();
                     }
                 }
                 if (Engine.Input.IsKeyPressed(SiPlayerKey.SwitchWeaponRight))
                 {
-                    if (_switchWeaponsTime.ElapsedMilliseconds > 200)
+                    if (_inputDelay.ElapsedMilliseconds > 200)
                     {
                         _engine.Player?.Sprite?.SelectNextAvailableUsableSecondaryWeapon();
-                        _switchWeaponsTime.Restart();
+                        _inputDelay.Restart();
+                    }
+                }
+                if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost))
+                {
+                    if (_inputDelay.ElapsedMilliseconds > 200)
+                    {
+                        _engine.Player?.Sprite?.ToggleSpeedBoost();
+                        _inputDelay.Restart();
                     }
                 }
 
@@ -133,14 +142,10 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 }
                 #endregion
 
+                float LesserOf(float one, float two) => one > two ? one : two;
+
                 float momentiumRampUp = Engine.Settings.PlayerThrustRampUp * epoch;
                 float momentiumRampDown = Engine.Settings.PlayerThrustRampDown * epoch;
-
-                float SmallerOfTheTwo(float one, float two)
-                {
-                    if(one > two) return two;
-                    return one;
-                }
 
                 #region Forward and Reverse Momentium.
 
@@ -150,7 +155,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     //Handle adding forward momentium.
                     if (targetForwardAmount > Sprite.Velocity.ForwardMomentium)
                     {
-                        Sprite.Velocity.ForwardMomentium += SmallerOfTheTwo(momentiumRampUp, targetForwardAmount);
+                        Sprite.Velocity.ForwardMomentium += LesserOf(momentiumRampUp, targetForwardAmount);
                     }
                     //Handle backing off of forward momentium.
                     else if (targetForwardAmount < Sprite.Velocity.ForwardMomentium - 0.1f)
@@ -159,7 +164,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                         {
                             Sprite.Velocity.ForwardMomentium = 0; //Don't overshoot the stop.
                         }
-                        else Sprite.Velocity.ForwardMomentium -= SmallerOfTheTwo(momentiumRampDown, targetForwardAmount);
+                        else Sprite.Velocity.ForwardMomentium -= LesserOf(momentiumRampDown, targetForwardAmount);
                     }
                 }
 
@@ -169,7 +174,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     //Handle adding reverse momentium.
                     if (targetReverseAmount > -Sprite.Velocity.ForwardMomentium)
                     {
-                        Sprite.Velocity.ForwardMomentium -= SmallerOfTheTwo(momentiumRampUp, targetReverseAmount);
+                        Sprite.Velocity.ForwardMomentium -= LesserOf(momentiumRampUp, targetReverseAmount);
                     }
                     //Handle backing off of reverse momentium.
                     else if (targetReverseAmount < -Sprite.Velocity.ForwardMomentium + -0.1f)
@@ -178,7 +183,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                         {
                             Sprite.Velocity.ForwardMomentium = 0; //Don't overshoot the stop.
                         }
-                        else Sprite.Velocity.ForwardMomentium += SmallerOfTheTwo(momentiumRampDown, targetReverseAmount);
+                        else Sprite.Velocity.ForwardMomentium += LesserOf(momentiumRampDown, targetReverseAmount);
                     }
                 }
 
@@ -211,13 +216,13 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #endregion
 
-                #region Forward Boost (NOT YET WORKING FOR GAMPAD).
+                #region Forward Boost (NOT YET WORKING REVIEWED FOR GAMPAD).
 
                 float forwardBoostThrustToAdd = Sprite.Velocity.ForwardBoostMomentium == 0 ? Engine.Settings.PlayerThrustRampUp
                     : Engine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ForwardBoostMomentium);
 
                 //Make player forward momentium "build up" and fade-out.
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && Engine.Input.IsKeyPressed(SiPlayerKey.Forward)
+                if (_engine.Player?.Sprite.UseSpeedBoost == true && Engine.Input.IsKeyPressed(SiPlayerKey.Forward)
                     && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostCoolingDown == false)
                 {
                     Sprite.Velocity.ForwardBoostMomentium = (Sprite.Velocity.ForwardBoostMomentium + forwardBoostThrustToAdd).Clamp(-1, 1);
@@ -240,8 +245,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     }
                     else Sprite.Velocity.ForwardBoostMomentium -= thrustToRemove;
 
-                    if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false
-                        && Sprite.Velocity.AvailableBoost < Engine.Settings.MaxPlayerBoostAmount)
+                    if (_engine.Player?.Sprite.UseSpeedBoost != true && Sprite.Velocity.AvailableBoost < Engine.Settings.MaxPlayerBoostAmount)
                     {
                         Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 1000.0f * epoch / 1000.0f).Clamp(0, Engine.Settings.MaxPlayerBoostAmount);
 
@@ -384,7 +388,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 if (Sprite.BoostAnimation != null)
                 {
                     Sprite.BoostAnimation.Visable =
-                        Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
+                        _engine.Player?.Sprite.UseSpeedBoost == true
                         && Engine.Input.IsKeyPressed(SiPlayerKey.Forward)
                         && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostCoolingDown == false;
                 }
