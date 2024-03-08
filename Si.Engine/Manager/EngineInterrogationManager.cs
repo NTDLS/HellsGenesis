@@ -23,7 +23,6 @@ namespace Si.Engine.Manager
             "Help|command:Optional:Criterion|Displays help for all or a given command.",
 
             "Display-Zoom-Reset||Resets the global zoom level to auto.",
-            "Display-Zoom-Override|level:Required:Numeric|Sets the global zoom level.",
             "Display-Zoom-Get||Gets the current global zoom level.",
             "Display-Metrics||Displays various display metrics.",
             "Display-Framerate||Gets the currently configured target framerate.",
@@ -267,17 +266,6 @@ namespace Si.Engine.Manager
         {
             var state = command.ParameterValue<bool>("state");
             _engine.Settings.HighlightAllSprites = state;
-        }
-
-        public void CommandHandler_Display_Zoom_Reset(InterrogationCommand command)
-        {
-            _engine.Display.OverrideSpeedOrientedFrameScalingFactor = float.NaN;
-        }
-
-        public void CommandHandler_Display_Zoom_Override(InterrogationCommand command)
-        {
-            var level = command.ParameterValue<float>("level");
-            _engine.Display.OverrideSpeedOrientedFrameScalingFactor = level.Clamp(-1, 1);
         }
 
         public void CommandHandler_Display_Zoom_Get(InterrogationCommand command)

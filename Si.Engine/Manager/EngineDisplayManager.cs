@@ -29,27 +29,20 @@ namespace Si.Engine.Manager
         public Control DrawingSurface { get; private set; }
         public Screen Screen { get; private set; }
 
-        private bool _isFocused = false;
-        public bool IsDrawingSurfaceFocused => _isFocused;
-        public void SetIsFocused(bool isFocused) => _isFocused = isFocused;
-
-        public float OverrideSpeedOrientedFrameScalingFactor { get; set; } = float.NaN;
+        public bool IsDrawingSurfaceFocused { get; set; } = false;
+        public void SetIsDrawingSurfaceFocused(bool isFocused) => IsDrawingSurfaceFocused = isFocused;
 
         public float SpeedOrientedFrameScalingFactor()
         {
-            if (OverrideSpeedOrientedFrameScalingFactor is not float.NaN)
-            {
-                return OverrideSpeedOrientedFrameScalingFactor;
-            }
-
             float weightedThrottlePercent = (
-                    (Math.Abs(_engine.Player.Sprite.Velocity.ForwardMomentium)  //n-percent of the zoom is throttle.
+                    (Math.Abs(_engine.Player.Sprite.Velocity.ForwardMomentium)  //n-percent of the zoom is forward and lateral throttle.
                     + Math.Abs(_engine.Player.Sprite.Velocity.LateralMomentium)) * 0.60f
                     + _engine.Player.Sprite.Velocity.ForwardBoostMomentium * 0.40f  //n-percent of the zoom is boost.
                 ).Clamp(0, 1);
 
             float remainingRatioZoom = 1 - BaseDrawScale;
             float debugFactor = remainingRatioZoom * weightedThrottlePercent;
+
             return BaseDrawScale + debugFactor;
         }
 

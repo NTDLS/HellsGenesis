@@ -77,8 +77,8 @@ namespace Si.Client
             drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
             drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
 
-            drawingSurface.GotFocus += (object sender, EventArgs e) => _engine.Display.SetIsFocused(true);
-            drawingSurface.LostFocus += (object sender, EventArgs e) => _engine.Display.SetIsFocused(false);
+            drawingSurface.GotFocus += (object sender, EventArgs e) => _engine.Display.SetIsDrawingSurfaceFocused(true);
+            drawingSurface.LostFocus += (object sender, EventArgs e) => _engine.Display.SetIsDrawingSurfaceFocused(false);
 
             drawingSurface.KeyUp += FormRenderTarget_KeyUp;
 
