@@ -1,4 +1,4 @@
-#define Version "0.0.27"
+#define Version "0.0.28"
 
 [Setup]
 ;-- Main Setup Information
