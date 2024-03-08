@@ -1,7 +1,10 @@
 ﻿using SharpDX.DirectInput;
+using SharpDX.XInput;
 using Si.Engine.Sprite.Enemy._Superclass;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
 using System.Windows.Forms;
 using static Si.Library.SiConstants;
 
@@ -13,12 +16,14 @@ namespace Si.Engine.Manager
     public class EngineInputManager
     {
         private readonly EngineCore _engine;
-        private readonly Dictionary<SiPlayerKey, bool> _playerKeyStates = new();
+        private readonly Dictionary<SiPlayerKey, float> _playerKeyStates = new();
         private bool _collectDetailedKeyInformation = false;
         private readonly Dictionary<Key, bool> _allKeyStates = new();
 
-        public DirectInput DirectInput { get; private set; }
-        public Keyboard Keyboard { get; private set; }
+        public bool UseGamepad { get; private set; }
+        public DirectInput DxInput { get; private set; }
+        public Keyboard DxKeyboard { get; private set; }
+        public Controller DxController { get; private set; }
 
         /// <summary>
         /// Any string that was typed by the user. Must enable via a call to CollectDetailedKeyInformation().
@@ -37,19 +42,30 @@ namespace Si.Engine.Manager
         /// </summary>
         public List<Key> DepressedKeys { get; private set; } = new();
 
+        //Controller controller;
+        //Gamepad gamepad;
+
         public EngineInputManager(EngineCore engine)
         {
             _engine = engine;
 
-            DirectInput = new();
-            Keyboard = new Keyboard(DirectInput);
-            Keyboard.Acquire();
+            DxInput = new();
+            DxKeyboard = new Keyboard(DxInput);
+            DxKeyboard.Acquire();
+
+            #region Gamepad.
+
+            DxController = new Controller(UserIndex.One);
+            UseGamepad = DxController.IsConnected;
+
+            #endregion
+
         }
 
         ~EngineInputManager()
         {
-            DirectInput.Dispose();
-            Keyboard.Dispose();
+            DxInput.Dispose();
+            DxKeyboard.Dispose();
         }
 
         public void CollectDetailedKeyInformation(bool state)
@@ -77,27 +93,82 @@ namespace Si.Engine.Manager
             {
                 //We do this so that I can have more than one instance open on the same computer 
                 //  at a time without the keyboard commands to one affecting the other.
-                _playerKeyStates.Clear();
-                return;
+                //_playerKeyStates.Clear();
+                //return;
             }
 
-            var keyboardState = Keyboard.GetCurrentState();
+            var keyboardState = DxKeyboard.GetCurrentState();
 
-            _engine.Input.KeyStateChanged(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Left));
-            _engine.Input.KeyStateChanged(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.Right));
-            _engine.Input.KeyStateChanged(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
-            _engine.Input.KeyStateChanged(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W));
-            _engine.Input.KeyStateChanged(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
-            _engine.Input.KeyStateChanged(SiPlayerKey.Reverse, keyboardState.IsPressed(Key.S));
-            _engine.Input.KeyStateChanged(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D));
-            _engine.Input.KeyStateChanged(SiPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space));
-            _engine.Input.KeyStateChanged(SiPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
-            _engine.Input.KeyStateChanged(SiPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
-            _engine.Input.KeyStateChanged(SiPlayerKey.Left, keyboardState.IsPressed(Key.Left));
-            _engine.Input.KeyStateChanged(SiPlayerKey.Right, keyboardState.IsPressed(Key.Left));
-            _engine.Input.KeyStateChanged(SiPlayerKey.Up, keyboardState.IsPressed(Key.Up));
-            _engine.Input.KeyStateChanged(SiPlayerKey.Down, keyboardState.IsPressed(Key.Down));
-            _engine.Input.KeyStateChanged(SiPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
+            if (UseGamepad)
+            {
+                var gamepadState = DxController.GetState();
+
+                // Processing the left thumbstick
+                float leftThumbX = gamepadState.Gamepad.LeftThumbX;
+                float leftThumbY = gamepadState.Gamepad.LeftThumbY;
+                leftThumbX = Math.Abs(leftThumbX) > 4500 ? leftThumbX /= 32768f : 0;
+                leftThumbY = Math.Abs(leftThumbY) > 4500 ? leftThumbY /= 32768f : 0;
+
+                // Processing the right thumbstick
+                float rightThumbX = gamepadState.Gamepad.RightThumbX;
+                float rightThumbY = gamepadState.Gamepad.RightThumbY;
+                rightThumbX = Math.Abs(rightThumbX) > 4500 ? rightThumbX /= 32768f : 0;
+                rightThumbY = Math.Abs(rightThumbY) > 4500 ? rightThumbY /= 32768f : 0;
+
+                // Processing triggers
+                byte leftTrigger = gamepadState.Gamepad.LeftTrigger;
+                byte rightTrigger = gamepadState.Gamepad.RightTrigger;
+
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Left) ? 1 : leftThumbX < 0 ? leftThumbX : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.Right) ? 1 : leftThumbX > 0 ? leftThumbX : 0);
+
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W) ? 1 : rightThumbY > 0 ? rightThumbY : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.Reverse, keyboardState.IsPressed(Key.S) ? 1 : rightThumbY < 0 ? rightThumbY : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A) ? 1 : rightThumbX > 0 ? rightThumbX : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D) ? 1 : rightThumbX < 0 ? rightThumbX : 0);
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb));
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.SwitchWeaponLeft, keyboardState.IsPressed(Key.Q) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftShoulder));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.SwitchWeaponRight, keyboardState.IsPressed(Key.E) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.RightShoulder));
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space) || rightTrigger > 10);
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl) || leftTrigger > 10);
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Left, keyboardState.IsPressed(Key.Left) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadLeft) || rightThumbX < 0);
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Right, keyboardState.IsPressed(Key.Right) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadRight) || rightThumbX > 0);
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Up, keyboardState.IsPressed(Key.Up) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadUp) || leftThumbY > 0);
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Down, keyboardState.IsPressed(Key.Down) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.DPadDown) || leftThumbY < 0);
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Enter, keyboardState.IsPressed(Key.Return) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.A));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Escape, keyboardState.IsPressed(Key.Escape) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.B));
+            }
+            else
+            {
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Right));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.Left));
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Reverse, keyboardState.IsPressed(Key.S));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D));
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.SwitchWeaponLeft, keyboardState.IsPressed(Key.Q));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.SwitchWeaponLeft, keyboardState.IsPressed(Key.E));
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Left, keyboardState.IsPressed(Key.Left));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Right, keyboardState.IsPressed(Key.Right));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Up, keyboardState.IsPressed(Key.Up));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Down, keyboardState.IsPressed(Key.Down));
+
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Enter, keyboardState.IsPressed(Key.Return));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
+            }
 
             //I beleive that this information may be taxing to gather.
             //Regardless we don't typically need is to require any code that uses it to enable it.
@@ -216,11 +287,21 @@ namespace Si.Engine.Manager
             }
         }
 
-        public bool IsKeyPressed(SiPlayerKey key)
+        public float InputAmount(SiPlayerKey key)
         {
             if (_playerKeyStates.ContainsKey(key))
             {
                 return _playerKeyStates[key];
+            }
+
+            return 0;
+        }
+
+        public bool IsKeyPressed(SiPlayerKey key)
+        {
+            if (_playerKeyStates.ContainsKey(key))
+            {
+                return (_playerKeyStates[key] != 0);
             }
 
             return false;
@@ -231,15 +312,32 @@ namespace Si.Engine.Manager
         /// </summary>
         /// <param name="key"></param>
         /// <param name="state"></param>
-        public void KeyStateChanged(SiPlayerKey key, bool state, Keys? other = null)
+        public void KeyStateChangedAmount(SiPlayerKey key, float amount)
         {
             if (_playerKeyStates.ContainsKey(key))
             {
-                _playerKeyStates[key] = state;
+                _playerKeyStates[key] = amount;
             }
             else
             {
-                _playerKeyStates.Add(key, state);
+                _playerKeyStates.Add(key, amount);
+            }
+        }
+
+        /// <summary>
+        /// Allows the containing window to tell the engine about key press events.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="state"></param>
+        public void KeyStateChangedHard(SiPlayerKey key, bool state)
+        {
+            if (_playerKeyStates.ContainsKey(key))
+            {
+                _playerKeyStates[key] = state ? 1 : 0;
+            }
+            else
+            {
+                _playerKeyStates.Add(key, state ? 1 : 0);
             }
         }
 
@@ -290,20 +388,6 @@ namespace Si.Engine.Manager
             else if (key == Keys.F3)
             {
                 _engine.Sprites.Particles.ParticleCloud(500, _engine.Player.Sprite);
-            }
-            else if (key == Keys.Q)
-            {
-                if (_engine.Player?.Sprite?.Visable == true)
-                {
-                    _engine.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
-                }
-            }
-            else if (key == Keys.E)
-            {
-                if (_engine.Player?.Sprite?.Visable == true)
-                {
-                    _engine.Player?.Sprite?.SelectNextAvailableUsableSecondaryWeapon();
-                }
             }
         }
     }

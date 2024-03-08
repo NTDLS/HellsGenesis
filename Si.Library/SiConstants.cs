@@ -143,8 +143,10 @@
 
         public enum SiPlayerKey
         {
-            StrafeLeft,
+            SwitchWeaponLeft,
+            SwitchWeaponRight,
             StrafeRight,
+            StrafeLeft,
             SpeedBoost,
             Forward,
             Reverse,

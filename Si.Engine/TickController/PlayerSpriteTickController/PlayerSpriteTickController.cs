@@ -4,6 +4,7 @@ using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
+using System.Diagnostics;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.TickController.PlayerSpriteTickController
@@ -15,13 +16,14 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
     {
         private readonly EngineCore _engine;
         private bool _allowLockPlayerAngleToNearbyEnemy = true;
-
+        private readonly Stopwatch _switchWeaponsTime = new Stopwatch();
         public SpritePlayerBase Sprite { get; set; }
 
         public PlayerSpriteTickController(EngineCore engine)
             : base(engine)
         {
             _engine = engine;
+            _switchWeaponsTime.Restart();
         }
 
         public void InstantiatePlayerClass(Type playerClassType)
@@ -44,6 +46,23 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
             if (Sprite.Visable)
             {
+                if (Engine.Input.IsKeyPressed(SiPlayerKey.SwitchWeaponLeft))
+                {
+                    if (_switchWeaponsTime.ElapsedMilliseconds > 200)
+                    {
+                        _engine.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
+                        _switchWeaponsTime.Restart();
+                    }
+                }
+                if (Engine.Input.IsKeyPressed(SiPlayerKey.SwitchWeaponRight))
+                {
+                    if (_switchWeaponsTime.ElapsedMilliseconds > 200)
+                    {
+                        _engine.Player?.Sprite?.SelectNextAvailableUsableSecondaryWeapon();
+                        _switchWeaponsTime.Restart();
+                    }
+                }
+
                 //Sprite.PrimaryWeapon.ApplyIntelligence();
                 Sprite.SelectedSecondaryWeapon?.ApplyIntelligence(epoch);
 
@@ -114,35 +133,85 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 }
                 #endregion
 
-                #region Forward and Reverse.
+                float momentiumRampUp = Engine.Settings.PlayerThrustRampUp * epoch;
+                float momentiumRampDown = Engine.Settings.PlayerThrustRampDown * epoch;
 
-                float forwardThrustToAdd = Sprite.Velocity.ForwardMomentium == 0 ? Engine.Settings.PlayerThrustRampUp
-                    : Engine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ForwardMomentium);
-
-                //Make player forward momentium "build up" and fade-out.
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.Forward))
+                float SmallerOfTheTwo(float one, float two)
                 {
-                    Sprite.Velocity.ForwardMomentium = (Sprite.Velocity.ForwardMomentium + forwardThrustToAdd).Clamp(-1, 1);
+                    if(one > two) return two;
+                    return one;
                 }
-                else if (Engine.Input.IsKeyPressed(SiPlayerKey.Reverse))
-                {
-                    Sprite.Velocity.ForwardMomentium = (Sprite.Velocity.ForwardMomentium - forwardThrustToAdd).Clamp(-1, 1);
-                }
-                else
-                {
-                    float thrustToRemove = Sprite.Velocity.ForwardMomentium == 0 ? Engine.Settings.PlayerThrustRampDown
-                        : Engine.Settings.PlayerThrustRampDown * Sprite.Velocity.ForwardMomentium;
 
-                    if (Math.Abs(thrustToRemove) >= Math.Abs(Sprite.Velocity.ForwardMomentium))
+                #region Forward and Reverse Momentium.
+
+                float targetForwardAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.Forward));
+                if (targetForwardAmount > 0)
+                {
+                    //Handle adding forward momentium.
+                    if (targetForwardAmount > Sprite.Velocity.ForwardMomentium)
                     {
-                        Sprite.Velocity.ForwardMomentium = 0; //Don't overshoot the stop.
+                        Sprite.Velocity.ForwardMomentium += SmallerOfTheTwo(momentiumRampUp, targetForwardAmount);
                     }
-                    else Sprite.Velocity.ForwardMomentium -= thrustToRemove;
+                    //Handle backing off of forward momentium.
+                    else if (targetForwardAmount < Sprite.Velocity.ForwardMomentium - 0.1f)
+                    {
+                        if (momentiumRampDown > Math.Abs(Sprite.Velocity.ForwardMomentium))
+                        {
+                            Sprite.Velocity.ForwardMomentium = 0; //Don't overshoot the stop.
+                        }
+                        else Sprite.Velocity.ForwardMomentium -= SmallerOfTheTwo(momentiumRampDown, targetForwardAmount);
+                    }
+                }
+
+                float targetReverseAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.Reverse));
+                if (targetReverseAmount > 0)
+                {
+                    //Handle adding reverse momentium.
+                    if (targetReverseAmount > -Sprite.Velocity.ForwardMomentium)
+                    {
+                        Sprite.Velocity.ForwardMomentium -= SmallerOfTheTwo(momentiumRampUp, targetReverseAmount);
+                    }
+                    //Handle backing off of reverse momentium.
+                    else if (targetReverseAmount < -Sprite.Velocity.ForwardMomentium + -0.1f)
+                    {
+                        if (momentiumRampDown > Math.Abs(Sprite.Velocity.ForwardMomentium))
+                        {
+                            Sprite.Velocity.ForwardMomentium = 0; //Don't overshoot the stop.
+                        }
+                        else Sprite.Velocity.ForwardMomentium += SmallerOfTheTwo(momentiumRampDown, targetReverseAmount);
+                    }
+                }
+
+                //If there is no forward or reverse thrust, then back off of the momentium.
+                if (targetForwardAmount == 0 && targetReverseAmount == 0)
+                {
+                    if (Sprite.Velocity.ForwardMomentium > 0)
+                    {
+                        Sprite.Velocity.ForwardMomentium -= momentiumRampDown;
+                        if (Sprite.Velocity.ForwardMomentium < 0) //Make sure we do not overshoot the stop.
+                        {
+                            Sprite.Velocity.ForwardMomentium = 0;
+                        }
+                    }
+                    else if (Sprite.Velocity.ForwardMomentium < 0)
+                    {
+                        Sprite.Velocity.ForwardMomentium += momentiumRampDown;
+                        if (Sprite.Velocity.ForwardMomentium > 0) //Make sure we do not overshoot the stop.
+                        {
+                            Sprite.Velocity.ForwardMomentium = 0;
+                        }
+                    }
+                }
+
+                //Slow the crawl to a stop.
+                if (Sprite.Velocity.ForwardMomentium.IsBetween(-0.0001f, 0.0001f))
+                {
+                    Sprite.Velocity.ForwardMomentium = 0;
                 }
 
                 #endregion
 
-                #region Forward Boost.
+                #region Forward Boost (NOT YET WORKING FOR GAMPAD).
 
                 float forwardBoostThrustToAdd = Sprite.Velocity.ForwardBoostMomentium == 0 ? Engine.Settings.PlayerThrustRampUp
                     : Engine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.ForwardBoostMomentium);
@@ -185,35 +254,76 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #endregion
 
-                #region Strafing.
+                #region Strafing / Lateral Momentium.
 
                 var strafeAngle = SiPoint.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle - SiPoint.RADIANS_90), new SiPoint(1, 1));
 
-                float strafeThrustToAdd = Sprite.Velocity.LateralMomentium == 0 ? Engine.Settings.PlayerThrustRampUp
-                    : Engine.Settings.PlayerThrustRampUp * (1 - Sprite.Velocity.LateralMomentium);
-
-                //Make player lateral momentium "build up" and fade-out.
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && !Engine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
+                float targetStrafeRightAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.StrafeLeft));
+                if (targetStrafeRightAmount > 0)
                 {
-                    Sprite.Velocity.LateralMomentium = (Sprite.Velocity.LateralMomentium + strafeThrustToAdd).Clamp(-1, 1);
-                }
-                else if (!Engine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && Engine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
-                {
-                    Sprite.Velocity.LateralMomentium = (Sprite.Velocity.LateralMomentium - strafeThrustToAdd).Clamp(-1, 1);
-                }
-                else //Ramp down to a stop:
-                {
-                    float thrustToRemove = Sprite.Velocity.LateralMomentium == 0 ? Engine.Settings.PlayerThrustRampDown
-                        : Engine.Settings.PlayerThrustRampDown * Sprite.Velocity.LateralMomentium;
-
-                    if (Math.Abs(thrustToRemove) >= Math.Abs(Sprite.Velocity.LateralMomentium))
+                    //Handle adding Right lateral momentium.
+                    if (targetStrafeRightAmount > Sprite.Velocity.LateralMomentium)
                     {
-                        Sprite.Velocity.LateralMomentium = 0; //Don't overshoot the stop.
+                        Sprite.Velocity.LateralMomentium += momentiumRampUp;
                     }
-                    else Sprite.Velocity.LateralMomentium -= thrustToRemove;
+                    //Handle backing off of Right lateral momentium.
+                    else if (targetStrafeRightAmount < Sprite.Velocity.LateralMomentium + 0.1f)
+                    {
+                        if (momentiumRampDown > Math.Abs(Sprite.Velocity.LateralMomentium))
+                        {
+                            Sprite.Velocity.LateralMomentium = 0; //Don't overshoot the stop.
+                        }
+                        else Sprite.Velocity.LateralMomentium -= momentiumRampDown;
+                    }
                 }
 
-                #endregion 
+                float targetStrafeLeftAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.StrafeRight));
+                if (targetStrafeLeftAmount > 0)
+                {
+                    //Handle adding Left lateral momentium.
+                    if (targetStrafeLeftAmount > -Sprite.Velocity.LateralMomentium)
+                    {
+                        Sprite.Velocity.LateralMomentium -= momentiumRampUp;
+                    }
+                    //Handle backing off of Left lateral momentium.
+                    else if (targetStrafeLeftAmount < -Sprite.Velocity.LateralMomentium + -0.1f)
+                    {
+                        if (momentiumRampDown > Math.Abs(Sprite.Velocity.LateralMomentium))
+                        {
+                            Sprite.Velocity.LateralMomentium = 0; //Don't overshoot the stop.
+                        }
+                        else Sprite.Velocity.LateralMomentium += momentiumRampDown;
+                    }
+                }
+
+                //If there is no forward or reverse thrust, then back off of the momentium.
+                if (targetStrafeLeftAmount == 0 && targetStrafeRightAmount == 0)
+                {
+                    if (Sprite.Velocity.LateralMomentium > 0)
+                    {
+                        Sprite.Velocity.LateralMomentium -= momentiumRampDown;
+                        if (Sprite.Velocity.LateralMomentium < 0) //Make sure we do not overshoot the stop.
+                        {
+                            Sprite.Velocity.LateralMomentium = 0;
+                        }
+                    }
+                    else if (Sprite.Velocity.LateralMomentium < 0)
+                    {
+                        Sprite.Velocity.LateralMomentium += momentiumRampDown;
+                        if (Sprite.Velocity.LateralMomentium > 0) //Make sure we do not overshoot the stop.
+                        {
+                            Sprite.Velocity.LateralMomentium = 0;
+                        }
+                    }
+                }
+
+                //Slow the lateral crawl to a stop.
+                if (Sprite.Velocity.LateralMomentium.IsBetween(-0.0001f, 0.0001f))
+                {
+                    Sprite.Velocity.LateralMomentium = 0;
+                }
+
+                #endregion
 
                 if (Sprite.Velocity.AvailableBoost <= 0)
                 {
@@ -221,25 +331,29 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     Sprite.Velocity.IsBoostCoolingDown = true;
                 }
 
-                var totalForwardThrust =
+                var totalForwardMomentium =
                     Sprite.Velocity.MaximumSpeed * Sprite.Velocity.ForwardMomentium
                     + Sprite.Velocity.MaximumBoostSpeed * Sprite.Velocity.ForwardBoostMomentium;
 
                 displacementVector +=
-                    Sprite.Velocity.Angle * totalForwardThrust +
-                    strafeAngle * Sprite.Velocity.MaximumSpeed * Sprite.Velocity.LateralMomentium;
+                    (Sprite.Velocity.Angle * totalForwardMomentium) + //Forward / Reverse.
+                    (strafeAngle * Sprite.Velocity.MaximumSpeed * Sprite.Velocity.LateralMomentium); //Left/Right Strafe.
 
                 //We are going to restrict the rotation speed to a percentage of momentium.
                 var rotationSpeed = Engine.Settings.MaxPlayerRotationSpeedDegrees
                     * ((Sprite.Velocity.LateralMomentium + Sprite.Velocity.ForwardMomentium) / 2);
 
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) && !Engine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
+                float rotateClockwiseAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.RotateClockwise));
+                float rotateCounterClockwiseAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.RotateCounterClockwise));
+
+
+                if (rotateClockwiseAmount > 0 && rotateCounterClockwiseAmount == 0)
                 {
-                    Sprite.Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0f));
+                    Sprite.Rotate(-((rotationSpeed > 1.0 ? rotationSpeed : 1.0f) * rotateClockwiseAmount));
                 }
-                if (!Engine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) && Engine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
+                if (rotateClockwiseAmount == 0 && rotateCounterClockwiseAmount > 0)
                 {
-                    Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0f);
+                    Sprite.Rotate((rotationSpeed > 1.0 ? rotationSpeed : 1.0f) * rotateCounterClockwiseAmount);
                 }
 
                 #region Sounds and Animation.

@@ -2,6 +2,7 @@
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Enemy.Peon;
+using Si.Engine.Sprite.Enemy.Starbase;
 using Si.Library;
 
 namespace Si.Engine.Level
@@ -65,12 +66,17 @@ namespace Si.Engine.Level
 
         private void AddEnemies()
         {
+            /*
             for (int i = 0; i < 10; i++)
             {
                 _engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             }
 
             _engine.Sprites.Debugs.Create(600, 600);
+            */
+
+            _engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
+
 
             //_engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
 
