@@ -12,6 +12,8 @@ namespace Si.Engine.Sprite
 {
     public class SpriteAttachment : SpriteShipBase
     {
+        private SpriteBase _rootOwner = null;
+
         public bool TakesDamage { get; set; }
         public List<WeaponBase> Weapons { get; private set; } = new();
 
@@ -20,6 +22,26 @@ namespace Si.Engine.Sprite
         {
             Initialize(imagePath);
             Velocity = new SiVelocity();
+        }
+
+
+        /// <summary>
+        /// Gets and caches the root owner of this attachement.
+        /// </summary>
+        /// <returns></returns>
+        public SpriteBase RootOwner()
+        {
+            if (_rootOwner == null)
+            {
+                _rootOwner = this;
+
+                do
+                {
+                    _rootOwner = _engine.Sprites.GetSpriteByOwner<SpriteBase>(_rootOwner.OwnerUID);
+
+                } while (_rootOwner.OwnerUID != 0);
+            }
+            return _rootOwner;
         }
 
         public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)

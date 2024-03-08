@@ -167,8 +167,14 @@ namespace Si.Engine.Manager
             Animations.DeleteAll();
         }
 
-        public T GetSpriteByTag<T>(string name) where T : SpriteBase
+        public List<T> GetSpritesByTag<T>(string name) where T : SpriteBase
+            => _collection.Use(o => o.Where(o => o.SpriteTag == name).ToList() as List<T>);
+
+        public T GetSingleSpriteByTag<T>(string name) where T : SpriteBase
             => _collection.Use(o => o.Where(o => o.SpriteTag == name).SingleOrDefault() as T);
+
+        public T GetSpriteByOwner<T>(uint ownerUID) where T : SpriteBase
+            => _collection.Use(o => o.Where(o => o.UID == ownerUID).SingleOrDefault() as T);
 
         public List<T> OfType<T>() where T : class
             => _collection.Use(o => o.Where(o => o is T).Select(o => o as T).ToList());

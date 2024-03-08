@@ -7,6 +7,7 @@ using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
+using System.Net.Mail;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Weapon.Munition._Superclass
@@ -67,6 +68,12 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
             Location = location == null ? firedFrom.Location : location;
 
+            if (firedFrom is SpriteAttachment attachment)
+            {
+                //If we are firing from an attachment, get the type of the root owner.
+                firedFrom = attachment.RootOwner();
+            }
+
             if (firedFrom is SpriteEnemyBase)
             {
                 FiredFromType = SiFiredFromType.Enemy;
@@ -74,6 +81,10 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             else if (firedFrom is SpritePlayerBase)
             {
                 FiredFromType = SiFiredFromType.Player;
+            }
+            else
+            {
+                throw new Exception($"Munitions for {firedFrom.GetType().Name} are not implemented.");
             }
 
             Velocity = initialVelocity;

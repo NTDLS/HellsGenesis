@@ -47,7 +47,7 @@ namespace Si.Engine
         {
             _isPaused = !_isPaused;
 
-            var textBlock = _engine.Sprites.GetSpriteByTag<SpriteTextBlock>("PausedText");
+            var textBlock = _engine.Sprites.GetSingleSpriteByTag<SpriteTextBlock>("PausedText");
             if (textBlock == null)
             {
                 textBlock = _engine.Sprites.TextBlocks.Create(_engine.Rendering.TextFormats.LargeBlocker,
