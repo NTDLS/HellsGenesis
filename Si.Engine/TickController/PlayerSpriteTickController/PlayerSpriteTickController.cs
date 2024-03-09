@@ -144,37 +144,46 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 float LesserOf(float one, float two) => one > two ? one : two;
 
+                float throttleCap = 0.45f; //This value will be considered max throttle. This is so we can move from 100% forward to 50$ forward and 50% rotation.
                 float momentiumRampUp = Engine.Settings.PlayerThrustRampUp * epoch;
                 float momentiumRampDown = Engine.Settings.PlayerThrustRampDown * epoch;
 
                 #region Forward and Reverse Momentium.
 
-                float targetForwardAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.Forward));
+                float targetForwardAmount = (Math.Abs(Engine.Input.InputAmount(SiPlayerKey.Forward)) / throttleCap).Clamp(0, 1);
+                //Debug.WriteLine($"{targetForwardAmount:n6}\t{Sprite.Velocity.ForwardMomentium:n6}");
+
                 if (targetForwardAmount > 0)
                 {
                     //Handle adding forward momentium.
                     if (targetForwardAmount > Sprite.Velocity.ForwardMomentium)
                     {
-                        Sprite.Velocity.ForwardMomentium += LesserOf(momentiumRampUp, targetForwardAmount);
+                        Sprite.Velocity.ForwardMomentium =
+                            SiMath.Lerp(Sprite.Velocity.ForwardMomentium, targetForwardAmount, LesserOf(momentiumRampUp, targetForwardAmount));
                     }
                     //Handle backing off of forward momentium.
-                    else if (targetForwardAmount < Sprite.Velocity.ForwardMomentium - 0.1f)
+                    else if (targetForwardAmount < Sprite.Velocity.ForwardMomentium - 0.2f)
                     {
                         if (momentiumRampDown > Math.Abs(Sprite.Velocity.ForwardMomentium))
                         {
                             Sprite.Velocity.ForwardMomentium = 0; //Don't overshoot the stop.
                         }
-                        else Sprite.Velocity.ForwardMomentium -= LesserOf(momentiumRampDown, targetForwardAmount);
+                        else
+                        {
+                            Sprite.Velocity.ForwardMomentium =
+                                SiMath.Lerp(Sprite.Velocity.ForwardMomentium, targetForwardAmount, LesserOf(momentiumRampDown, targetForwardAmount));
+                        }
                     }
                 }
 
-                float targetReverseAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.Reverse));
+                float targetReverseAmount = (Math.Abs(Engine.Input.InputAmount(SiPlayerKey.Reverse)) / throttleCap).Clamp(0, 1);
                 if (targetReverseAmount > 0)
                 {
                     //Handle adding reverse momentium.
                     if (targetReverseAmount > -Sprite.Velocity.ForwardMomentium)
                     {
-                        Sprite.Velocity.ForwardMomentium -= LesserOf(momentiumRampUp, targetReverseAmount);
+                        Sprite.Velocity.ForwardMomentium =
+                            SiMath.Lerp(-targetReverseAmount, Sprite.Velocity.ForwardMomentium, -LesserOf(momentiumRampUp, targetReverseAmount));
                     }
                     //Handle backing off of reverse momentium.
                     else if (targetReverseAmount < -Sprite.Velocity.ForwardMomentium + -0.1f)
@@ -183,11 +192,15 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                         {
                             Sprite.Velocity.ForwardMomentium = 0; //Don't overshoot the stop.
                         }
-                        else Sprite.Velocity.ForwardMomentium += LesserOf(momentiumRampDown, targetReverseAmount);
+                        else
+                        {
+                            Sprite.Velocity.ForwardMomentium =
+                                SiMath.Lerp(-targetReverseAmount, Sprite.Velocity.ForwardMomentium, LesserOf(momentiumRampDown, targetReverseAmount));
+                        }
                     }
                 }
 
-                //If there is no forward or reverse thrust, then back off of the momentium.
+                //If there is no forward or reverse momentium, then back off of the momentium.
                 if (targetForwardAmount == 0 && targetReverseAmount == 0)
                 {
                     if (Sprite.Velocity.ForwardMomentium > 0)
@@ -213,6 +226,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 {
                     Sprite.Velocity.ForwardMomentium = 0;
                 }
+
 
                 #endregion
 
@@ -262,13 +276,14 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 var strafeAngle = SiPoint.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle - SiPoint.RADIANS_90), new SiPoint(1, 1));
 
-                float targetStrafeRightAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.StrafeLeft));
+                float targetStrafeRightAmount = (Math.Abs(Engine.Input.InputAmount(SiPlayerKey.StrafeLeft)) / throttleCap).Clamp(0, 1);
                 if (targetStrafeRightAmount > 0)
                 {
                     //Handle adding Right lateral momentium.
                     if (targetStrafeRightAmount > Sprite.Velocity.LateralMomentium)
                     {
-                        Sprite.Velocity.LateralMomentium += momentiumRampUp;
+                        Sprite.Velocity.LateralMomentium =
+                            SiMath.Lerp(Sprite.Velocity.LateralMomentium, targetStrafeRightAmount, LesserOf(momentiumRampUp, targetStrafeRightAmount));
                     }
                     //Handle backing off of Right lateral momentium.
                     else if (targetStrafeRightAmount < Sprite.Velocity.LateralMomentium + 0.1f)
@@ -277,30 +292,39 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                         {
                             Sprite.Velocity.LateralMomentium = 0; //Don't overshoot the stop.
                         }
-                        else Sprite.Velocity.LateralMomentium -= momentiumRampDown;
+                        else
+                        {
+                            Sprite.Velocity.LateralMomentium =
+                                SiMath.Lerp(Sprite.Velocity.LateralMomentium, targetStrafeRightAmount, LesserOf(momentiumRampDown, targetStrafeRightAmount));
+                        }
                     }
                 }
 
-                float targetStrafeLeftAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.StrafeRight));
+                float targetStrafeLeftAmount = (Math.Abs(Engine.Input.InputAmount(SiPlayerKey.StrafeRight)) / throttleCap).Clamp(0, 1);
                 if (targetStrafeLeftAmount > 0)
                 {
-                    //Handle adding Left lateral momentium.
+                    //Handle adding reverse momentium.
                     if (targetStrafeLeftAmount > -Sprite.Velocity.LateralMomentium)
                     {
-                        Sprite.Velocity.LateralMomentium -= momentiumRampUp;
+                        Sprite.Velocity.LateralMomentium =
+                            SiMath.Lerp(-targetStrafeLeftAmount, Sprite.Velocity.LateralMomentium, -LesserOf(momentiumRampUp, targetStrafeLeftAmount));
                     }
-                    //Handle backing off of Left lateral momentium.
+                    //Handle backing off of reverse momentium.
                     else if (targetStrafeLeftAmount < -Sprite.Velocity.LateralMomentium + -0.1f)
                     {
                         if (momentiumRampDown > Math.Abs(Sprite.Velocity.LateralMomentium))
                         {
                             Sprite.Velocity.LateralMomentium = 0; //Don't overshoot the stop.
                         }
-                        else Sprite.Velocity.LateralMomentium += momentiumRampDown;
+                        else
+                        {
+                            Sprite.Velocity.LateralMomentium =
+                                SiMath.Lerp(-targetStrafeLeftAmount, Sprite.Velocity.LateralMomentium, LesserOf(momentiumRampDown, targetStrafeLeftAmount));
+                        }
                     }
                 }
 
-                //If there is no forward or reverse thrust, then back off of the momentium.
+                //If there is no lateral momentium, then back off of the momentium.
                 if (targetStrafeLeftAmount == 0 && targetStrafeRightAmount == 0)
                 {
                     if (Sprite.Velocity.LateralMomentium > 0)

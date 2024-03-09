@@ -9,7 +9,7 @@
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        public static double Clamp(double value, double min, double max)
+        public static float Clamp(float value, float min, float max)
         {
             return value < min ? min : value > max ? max : value;
         }
@@ -21,7 +21,7 @@
         /// <param name="end"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public static double Lerp(double start, double end, double amount)
+        public static float Lerp(float start, float end, float amount)
         {
             return start + (end - start) * amount;
         }

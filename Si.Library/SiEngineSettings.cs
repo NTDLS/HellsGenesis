@@ -30,7 +30,7 @@ namespace Si.Library
         public float EnemyThrustRampDown { get; set; } = 0.0075f;
 
         public float PlayerThrustRampUp { get; set; } = 0.0375f;
-        public float PlayerThrustRampDown { get; set; } = 0.0075f;
+        public float PlayerThrustRampDown { get; set; } = 0.000075f;
 
         public int MaxHullHealth { get; set; } = 100000;
         public int MaxShieldHealth { get; set; } = 100000;
