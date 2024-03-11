@@ -105,7 +105,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 float momentiumRampUp = Engine.Settings.PlayerVelocityRampUp * epoch;
                 float momentiumRampDown = Engine.Settings.PlayerVelocityRampDown * epoch;
 
-                float targetForwardAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.Forward, SiPlayerKey.Reverse) / throttleCap).Clamp(-1, 1);
+                float targetForwardAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.Reverse, SiPlayerKey.Forward) / throttleCap).Clamp(-1, 1);
 
 
                 #region Forward and Reverse.
@@ -187,7 +187,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Laterial Strafing.
 
-                float targetLateralAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.StrafeLeft, SiPlayerKey.StrafeRight) / throttleCap).Clamp(-1, 1);
+                float targetLateralAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.StrafeRight, SiPlayerKey.StrafeLeft) / throttleCap).Clamp(-1, 1);
 
                 Debug.WriteLine($"{targetLateralAmount}");
 

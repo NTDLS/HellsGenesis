@@ -307,14 +307,14 @@ namespace Si.Engine.Manager
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public float GetAnalogAxisValue(SiPlayerKey key1, SiPlayerKey key2)
+        public float GetAnalogAxisValue(SiPlayerKey negativeAxisKey, SiPlayerKey positiveAxisKey)
         {
-            _playerKeyStates.TryGetValue(key1, out var value1);
+            _playerKeyStates.TryGetValue(positiveAxisKey, out var value1);
             if (value1 != 0)
             {
                 return value1;
             }
-            _playerKeyStates.TryGetValue(key2, out var value2);
+            _playerKeyStates.TryGetValue(negativeAxisKey, out var value2);
             return value2 < 0 ? value2 : -value2;
         }
 
