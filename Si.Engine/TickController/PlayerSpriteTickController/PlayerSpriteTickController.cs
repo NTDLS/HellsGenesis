@@ -155,9 +155,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #endregion
 
-                #region Strafing.
-
-                Sprite.Velocity.LateralAngle.Radians = Sprite.Velocity.ForwardAngle.Radians - SiPoint.RADIANS_90;
+                #region Laterial Strafing.
 
                 float strafeVelocityToAdd = Sprite.Velocity.LateralVelocity == 0 ? Engine.Settings.PlayerVelocityRampUp
                     : Engine.Settings.PlayerVelocityRampUp * (1 - Sprite.Velocity.LateralVelocity);
@@ -239,7 +237,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 #endregion
             }
 
-            var displacementVector = Sprite.Velocity.Vector;
+            var displacementVector = Sprite.Velocity.MovementVector;
 
             //Scroll the background.
             Engine.Display.RenderWindowPosition += displacementVector;

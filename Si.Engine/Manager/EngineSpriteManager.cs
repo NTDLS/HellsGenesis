@@ -182,6 +182,10 @@ namespace Si.Engine.Manager
         public List<T> VisibleOfType<T>() where T : class
                 => _collection.Use(o => o.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList());
 
+        public List<SpriteBase> Visible() => _collection.Use(o => o.Where(o => o.Visable == true).ToList());
+
+        public List<SpriteBase> All() => _collection.Use(o => o).ToList();
+
         public void DeleteAllSpritesByTag(string name)
         {
             _collection.Use(o =>

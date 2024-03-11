@@ -290,15 +290,23 @@ namespace Si.Engine.Sprite._Superclass
             Y = _engine.Display.TotalCanvasSize.Height / 2 - Size.Height / 2;
         }
 
-        /*
-        public List<SpriteBase> FindCollisionsAlongPath(List<SpriteShipBase> objectsThatCanBeHit)
-        {
-            var collisions = new List<SpriteBase>();   
+        /// <summary>
+        /// Returns a list of all collisions the sprite will make on is current movement vector. In order in which they would be encountered.
+        /// </summary>
+        /// <returns></returns>
+        public List<SpriteBase> FindAllCollisionsAlongPath() => FindAllCollisionsAlongPath(_engine.Sprites.Visible());
 
-            var velocity = Velocity.ForwardVelocity + Velocity
+        /// <summary>
+        /// Returns a list of all collisions the sprite will make on is current movement vector. In order in which they would be encountered.
+        /// </summary>
+        /// <param name="objectsThatCanBeHit"></param>
+        /// <returns></returns>
+        public List<SpriteBase> FindAllCollisionsAlongPath(List<SpriteBase> objectsThatCanBeHit)
+        {
+            var collisions = new List<SpriteBase>();
 
             //Reverse the munition to its starting position.
-            var hitTestPosition = new SiPoint(Location - Velocity.ForwardAngle * Velocity.MaximumSpeed);
+            var hitTestPosition = new SiPoint(Location - Velocity.MovementVector);
 
             //Hit-test each position along the munitions path.
             for (int i = 0; i < Velocity.MaximumSpeed; i++)
@@ -316,7 +324,39 @@ namespace Si.Engine.Sprite._Superclass
 
             return collisions;
         }
-        */
+
+        /// <summary>
+        /// Returns the first collisions the sprite will make on is current movement vector.
+        /// </summary>
+        /// <returns></returns>
+        public SpriteBase FindFirstCollisionAlongPath() => FindFirstCollisionAlongPath(_engine.Sprites.Visible());
+
+        /// <summary>
+        /// Returns the first collisions the sprite will make on is current movement vector.
+        /// </summary>
+        /// <param name="objectsThatCanBeHit"></param>
+        /// <returns></returns>
+        public SpriteBase FindFirstCollisionAlongPath(List<SpriteBase> objectsThatCanBeHit)
+        {
+            //Reverse the munition to its starting position.
+            var hitTestPosition = new SiPoint(Location - Velocity.MovementVector);
+
+            //Hit-test each position along the munitions path.
+            for (int i = 0; i < Velocity.MaximumSpeed; i++)
+            {
+                hitTestPosition += Velocity.ForwardAngle;
+
+                foreach (var obj in objectsThatCanBeHit)
+                {
+                    if (Intersects(hitTestPosition))
+                    {
+                        return obj;
+                    }
+                }
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Allows for the testing of hits from a munition, 

@@ -10,10 +10,7 @@ namespace Si.Library.Mathematics
         public event ValueChangeEvent? OnVelocityChanged;
         public event ValueChangeEvent? OnBoostChanged;
 
-        /// <summary>
-        /// 90 degrees to the left of the forward angle, so negative LateralVelocity is left and positive LateralVelocity is right.
-        /// </summary>
-        public SiAngle LateralAngle { get => new SiAngle(ForwardAngle.Radians - SiPoint.RADIANS_90); }
+
 
         /// <summary>
         /// The angle in which the object is pointing.
@@ -64,13 +61,19 @@ namespace Si.Library.Mathematics
             }
         }
 
-        public SiPoint Vector
+        /// <summary>
+        /// The sumation of the forward angle, laterial strafe angle, and all velocity (including boost). 
+        /// </summary>
+        public SiPoint MovementVector
         {
             get
             {
+                /// 90 degrees to the left of the forward angle, so negative LateralVelocity is left and positive LateralVelocity is right.
+                var lateralAngle = new SiAngle(ForwardAngle.Radians - SiPoint.RADIANS_90);
+
                 return
-                    (ForwardAngle * (MaximumSpeed * ForwardVelocity + MaximumBoostSpeed * ForwardBoostVelocity)) //Forward / Reverse.
-                    + (LateralAngle.Radians * MaximumSpeed * LateralVelocity); //Left/Right Strafe.
+                    (ForwardAngle * ((MaximumSpeed * ForwardVelocity) + (MaximumBoostSpeed * ForwardBoostVelocity))) //Forward / Reverse.
+                    + (lateralAngle * MaximumSpeed * LateralVelocity); //Left/Right Strafe.
             }
         }
 
