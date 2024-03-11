@@ -24,17 +24,17 @@ namespace Si.Engine.Sprite
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
-                Velocity.ForwardMomentium = SiRandom.Between(8, 10) / 10.0f;
+                Velocity.ForwardVelocity = SiRandom.Between(8, 10) / 10.0f;
             }
             else
             {
-                Velocity.ForwardMomentium = SiRandom.Between(4, 8) / 10.0f;
+                Velocity.ForwardVelocity = SiRandom.Between(4, 8) / 10.0f;
             }
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location -= displacementVector * Velocity.MaximumSpeed * Velocity.ForwardMomentium * epoch;
+            Location -= displacementVector * Velocity.MaximumSpeed * Velocity.ForwardVelocity * epoch;
         }
     }
 }

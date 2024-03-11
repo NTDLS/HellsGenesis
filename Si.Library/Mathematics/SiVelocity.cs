@@ -7,10 +7,17 @@ namespace Si.Library.Mathematics
     {
         public delegate void ValueChangeEvent(SiVelocity sender);
 
-        public event ValueChangeEvent? OnMomentiumChanged;
+        public event ValueChangeEvent? OnVelocityChanged;
         public event ValueChangeEvent? OnBoostChanged;
 
-        public SiAngle LateralAngle { get; set; } = new();
+        /// <summary>
+        /// 90 degrees to the left of the forward angle, so negative LateralVelocity is left and positive LateralVelocity is right.
+        /// </summary>
+        public SiAngle LateralAngle { get => new SiAngle(ForwardAngle.Radians - SiPoint.RADIANS_90); }
+
+        /// <summary>
+        /// The angle in which the object is pointing.
+        /// </summary>
         public SiAngle ForwardAngle { get; set; } = new();
 
         /// <summary>
@@ -19,7 +26,7 @@ namespace Si.Library.Mathematics
         public float MaximumSpeed { get; set; }
 
         /// <summary>
-        /// The additional speed that can be temporarily added to the sprites forward momentium.
+        /// The additional speed that can be temporarily added to the sprites forward velocity.
         /// </summary>
         public float MaximumBoostSpeed { get; set; }
 
@@ -29,31 +36,31 @@ namespace Si.Library.Mathematics
         public float AvailableBoost { get; set; }
         public bool IsBoostCoolingDown { get; set; }
 
-        public float _forwardMomentium;
+        public float _forwardVelocity;
         /// <summary>
-        /// Percentage of forward or reverse momentium expressed as a decimal percentage of the Speed.
+        /// Percentage of forward or reverse velocity expressed as a decimal percentage of the Speed.
         /// </summary>
-        public float ForwardMomentium
+        public float ForwardVelocity
         {
-            get => _forwardMomentium;
+            get => _forwardVelocity;
             set
             {
-                _forwardMomentium = value.Clamp(-1, 1);
-                OnMomentiumChanged?.Invoke(this);
+                _forwardVelocity = value.Clamp(-1, 1);
+                OnVelocityChanged?.Invoke(this);
             }
         }
 
-        public float _lateralMomentium;
+        public float _lateralVelocity;
         /// <summary>
-        /// Percentage of lateral momentium expressed as a decimal percentage of the Speed.
+        /// Percentage of lateral velocity expressed as a decimal percentage of the Speed.
         /// </summary>
-        public float LateralMomentium
+        public float LateralVelocity
         {
-            get => _lateralMomentium;
+            get => _lateralVelocity;
             set
             {
-                _lateralMomentium = value.Clamp(-1, 1);
-                OnMomentiumChanged?.Invoke(this);
+                _lateralVelocity = value.Clamp(-1, 1);
+                OnVelocityChanged?.Invoke(this);
             }
         }
 
@@ -62,21 +69,21 @@ namespace Si.Library.Mathematics
             get
             {
                 return
-                    (ForwardAngle * MaximumSpeed * ForwardMomentium + MaximumBoostSpeed * ForwardBoostMomentium)//Forward / Reverse.
-                    + (LateralAngle * MaximumSpeed * LateralMomentium); //Left/Right Strafe.
+                    (ForwardAngle * (MaximumSpeed * ForwardVelocity + MaximumBoostSpeed * ForwardBoostVelocity)) //Forward / Reverse.
+                    + (LateralAngle.Radians * MaximumSpeed * LateralVelocity); //Left/Right Strafe.
             }
         }
 
-        public float _forwardBoostMomentium;
+        public float _forwardBoostVelocity;
         /// <summary>
-        /// Percentage of forward boost momentium expressed as a decimal percentage of the MaximumBoostSpeed.
+        /// Percentage of forward boost velocity expressed as a decimal percentage of the MaximumBoostSpeed.
         /// </summary>
-        public float ForwardBoostMomentium
+        public float ForwardBoostVelocity
         {
-            get => _forwardBoostMomentium;
+            get => _forwardBoostVelocity;
             set
             {
-                _forwardBoostMomentium = value.Clamp(-1, 1);
+                _forwardBoostVelocity = value.Clamp(-1, 1);
                 OnBoostChanged?.Invoke(this);
             }
         }

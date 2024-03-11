@@ -21,16 +21,15 @@ namespace Si.Library
 
         public bool PlayMusic { get; set; } = true;
 
-        public bool LockPlayerAngleToNearbyEnemy { get; set; } = false;
         public bool EnableSpeedScaleFactoring { get; set; } = true;
 
         public float WorldTicksPerSecond { get; set; } = 120; //MillisecondPerEpochs = 1000 / WorldTicksPerSecond
 
-        public float EnemyThrustRampUp { get; set; } = 0.0375f;
-        public float EnemyThrustRampDown { get; set; } = 0.0075f;
+        public float EnemyVelocityRampUp { get; set; } = 0.0375f;
+        public float EnemyVelocityRampDown { get; set; } = 0.0075f;
 
-        public float PlayerThrustRampUp { get; set; } = 0.0375f;
-        public float PlayerThrustRampDown { get; set; } = 0.000075f;
+        public float PlayerVelocityRampUp { get; set; } = 0.0375f;
+        public float PlayerVelocityRampDown { get; set; } = 0.000075f;
 
         public int MaxHullHealth { get; set; } = 100000;
         public int MaxShieldHealth { get; set; } = 100000;

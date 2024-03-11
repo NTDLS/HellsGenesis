@@ -3,8 +3,6 @@ using SharpDX.XInput;
 using Si.Engine.Sprite.Enemy._Superclass;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
 using System.Windows.Forms;
 using static Si.Library.SiConstants;
 
@@ -289,7 +287,12 @@ namespace Si.Engine.Manager
             }
         }
 
-        public float InputAmount(SiPlayerKey key)
+        /// <summary>
+        /// Returns the percentage of a key that is pressed. This is for gamepad analog and triggers.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public float IsKeyPressedAmount(SiPlayerKey key)
         {
             if (_playerKeyStates.ContainsKey(key))
             {
@@ -298,6 +301,12 @@ namespace Si.Engine.Manager
 
             return 0;
         }
+
+        /// <summary>
+        /// Returns true or false depending on whether the applied key amount is zero or non-zero.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
 
         public bool IsKeyPressed(SiPlayerKey key)
         {

@@ -62,8 +62,8 @@ namespace Si.Client.Forms
             UpsertVariable("Angle Degrees (Signed)", $"{sprite.Velocity.ForwardAngle.DegreesSigned:n2}");
             UpsertVariable("Angle Radians", $"{sprite.Velocity.ForwardAngle.Radians:n2}");
             UpsertVariable("Angle Radians (Signed)", $"{sprite.Velocity.ForwardAngle.RadiansSigned:n2}");
-            UpsertVariable("Thrust %", $"{(sprite.Velocity.ForwardMomentium * 100):n2}");
-            UpsertVariable("Boost %", $"{(sprite.Velocity.ForwardBoostMomentium * 100):n2}");
+            UpsertVariable("Thrust %", $"{(sprite.Velocity.ForwardVelocity * 100):n2}");
+            UpsertVariable("Boost %", $"{(sprite.Velocity.ForwardBoostVelocity * 100):n2}");
             UpsertVariable("Hull", $"{sprite.HullHealth:n0}");
             UpsertVariable("Shield", $"{sprite.ShieldHealth:n0}");
             UpsertVariable("Attachments", $"{sprite.Attachments?.Count ?? 0:n0}");

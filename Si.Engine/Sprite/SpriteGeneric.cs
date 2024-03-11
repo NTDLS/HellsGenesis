@@ -41,7 +41,7 @@ namespace Si.Engine.Sprite
             RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
             TravelAngle.Degrees = SiRandom.Between(0, 359);
 
-            Velocity.ForwardMomentium = 100;
+            Velocity.ForwardVelocity = 100;
             Velocity.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
         }
 
@@ -74,7 +74,7 @@ namespace Si.Engine.Sprite
             {
                 //We use a seperate angle for the travel direction because the base ApplyMotion()
                 //  moves the object in the the direction of the Velocity.Angle.
-                Location += TravelAngle * (Velocity.MaximumSpeed * Velocity.ForwardMomentium) * epoch;
+                Location += TravelAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
             }
             else if (VectorType == ParticleVectorType.Native)
             {

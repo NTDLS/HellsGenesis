@@ -35,9 +35,9 @@ namespace Si.Engine.Manager
         public float SpeedOrientedFrameScalingFactor()
         {
             float weightedThrottlePercent = (
-                    (Math.Abs(_engine.Player.Sprite.Velocity.ForwardMomentium)  //n-percent of the zoom is forward and lateral throttle.
-                    + Math.Abs(_engine.Player.Sprite.Velocity.LateralMomentium)) * 0.60f
-                    + _engine.Player.Sprite.Velocity.ForwardBoostMomentium * 0.40f  //n-percent of the zoom is boost.
+                    (Math.Abs(_engine.Player.Sprite.Velocity.ForwardVelocity)  //n-percent of the zoom is forward and lateral throttle.
+                    + Math.Abs(_engine.Player.Sprite.Velocity.LateralVelocity)) * 0.60f
+                    + _engine.Player.Sprite.Velocity.ForwardBoostVelocity * 0.40f  //n-percent of the zoom is boost.
                 ).Clamp(0, 1);
 
             float remainingRatioZoom = 1 - BaseDrawScale;

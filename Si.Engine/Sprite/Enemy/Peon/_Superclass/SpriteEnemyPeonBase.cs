@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         public SpriteEnemyPeonBase(EngineCore engine)
             : base(engine)
         {
-            Velocity.ForwardMomentium = 1;
+            Velocity.ForwardVelocity = 1;
             Initialize();
 
             OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
@@ -87,11 +87,11 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 
             if (ThrustAnimation != null)
             {
-                ThrustAnimation.Visable = Velocity.ForwardMomentium > 0;
+                ThrustAnimation.Visable = Velocity.ForwardVelocity > 0;
             }
             if (BoostAnimation != null)
             {
-                BoostAnimation.Visable = Velocity.ForwardBoostMomentium > 0;
+                BoostAnimation.Visable = Velocity.ForwardBoostVelocity > 0;
             }
         }
 

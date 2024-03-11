@@ -115,7 +115,7 @@ namespace Si.Engine.Sprite._Superclass
             set
             {
                 _velocity = value;
-                _velocity.OnMomentiumChanged += (sender) => VelocityChanged();
+                _velocity.OnVelocityChanged += (sender) => VelocityChanged();
             }
         }
 
@@ -295,7 +295,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             var collisions = new List<SpriteBase>();   
 
-            var velocity = Velocity.ForwardMomentium + Velocity
+            var velocity = Velocity.ForwardVelocity + Velocity
 
             //Reverse the munition to its starting position.
             var hitTestPosition = new SiPoint(Location - Velocity.ForwardAngle * Velocity.MaximumSpeed);
@@ -376,8 +376,8 @@ namespace Si.Engine.Sprite._Superclass
                 + $"                          {Velocity.ForwardAngle.RadiansSigned:n2}rad\r\n"
                 + extraInfo
                 + $"       Background Offset: {_engine.Display.RenderWindowPosition}\r\n"
-                + $"                  Thrust: {Velocity.ForwardMomentium * 100:n2}\r\n"
-                + $"                   Boost: {Velocity.ForwardBoostMomentium * 100:n2}\r\n"
+                + $"                  Thrust: {Velocity.ForwardVelocity * 100:n2}\r\n"
+                + $"                   Boost: {Velocity.ForwardBoostVelocity * 100:n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
                 + $"             Attachments: {Attachments?.Count ?? 0:n0}\r\n"
@@ -989,7 +989,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location += Velocity.ForwardAngle * (Velocity.MaximumSpeed * Velocity.ForwardMomentium) * epoch;
+            Location += Velocity.ForwardAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
         }
 
         public virtual void VelocityChanged() { }

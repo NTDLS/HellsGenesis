@@ -2,7 +2,6 @@
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Sprite._Superclass;
 using Si.Library;
-using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
 using System;
@@ -553,7 +552,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.ForwardBoostMomentium = command.ParameterValue<float>("value");
+                    sprite.Velocity.ForwardBoostVelocity = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -567,7 +566,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.ForwardMomentium = command.ParameterValue<float>("value");
+                    sprite.Velocity.ForwardVelocity = command.ParameterValue<float>("value");
                 }
             });
         }

@@ -33,7 +33,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         public SpriteEnemyBase(EngineCore engine)
                 : base(engine)
         {
-            Velocity.ForwardMomentium = 1;
+            Velocity.ForwardVelocity = 1;
             Initialize();
 
             //SetHullHealth(hullHealth);
@@ -159,7 +159,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         }
 
         /// <summary>
-        /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
+        /// Moves the sprite based on its velocity/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
@@ -174,36 +174,36 @@ namespace Si.Engine.Sprite.Enemy._Superclass
             //When an enemy had boost available, it will use it.
             if (Velocity.AvailableBoost > 0)
             {
-                if (Velocity.ForwardBoostMomentium < 1.0) //Ramp up the boost until it is at 100%
+                if (Velocity.ForwardBoostVelocity < 1.0) //Ramp up the boost until it is at 100%
                 {
-                    Velocity.ForwardBoostMomentium += _engine.Settings.EnemyThrustRampUp;
+                    Velocity.ForwardBoostVelocity += _engine.Settings.EnemyVelocityRampUp;
                 }
-                Velocity.AvailableBoost -= Velocity.MaximumBoostSpeed * Velocity.ForwardBoostMomentium; //Consume boost.
+                Velocity.AvailableBoost -= Velocity.MaximumBoostSpeed * Velocity.ForwardBoostVelocity; //Consume boost.
 
                 if (Velocity.AvailableBoost < 0) //Sanity check available boost.
                 {
                     Velocity.AvailableBoost = 0;
                 }
             }
-            else if (Velocity.ForwardBoostMomentium > 0) //Ramp down the boost.
+            else if (Velocity.ForwardBoostVelocity > 0) //Ramp down the boost.
             {
-                Velocity.ForwardBoostMomentium -= _engine.Settings.EnemyThrustRampDown;
-                if (Velocity.ForwardBoostMomentium < 0)
+                Velocity.ForwardBoostVelocity -= _engine.Settings.EnemyVelocityRampDown;
+                if (Velocity.ForwardBoostVelocity < 0)
                 {
-                    Velocity.ForwardBoostMomentium = 0;
+                    Velocity.ForwardBoostVelocity = 0;
                 }
             }
 
-            var thrustAmount = Velocity.MaximumSpeed * Velocity.ForwardMomentium;
+            var velocityAmount = Velocity.MaximumSpeed * Velocity.ForwardVelocity;
 
-            if (Velocity.ForwardBoostMomentium > 0)
+            if (Velocity.ForwardBoostVelocity > 0)
             {
-                thrustAmount += Velocity.MaximumBoostSpeed * Velocity.ForwardBoostMomentium;
+                velocityAmount += Velocity.MaximumBoostSpeed * Velocity.ForwardBoostVelocity;
             }
 
-            //Location += (Velocity.Angle * thrustAmount * epoch);
+            //Location += (Velocity.Angle * velocityAmount * epoch);
 
-            Location += Velocity.ForwardAngle * thrustAmount * epoch;
+            Location += Velocity.ForwardAngle * velocityAmount * epoch;
 
             //System.Diagnostics.Debug.Print($"Dbg: {newLocation}, Actual: {Location}");
 

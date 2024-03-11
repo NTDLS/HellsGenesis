@@ -7,7 +7,6 @@ using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
-using System.Net.Mail;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Weapon.Munition._Superclass
@@ -39,7 +38,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             Initialize(imagePath);
 
             Weapon = weapon;
-            Velocity.ForwardMomentium = 1.0f;
+            Velocity.ForwardVelocity = 1.0f;
             SceneDistanceLimit = SiRandom.Between(weapon.MunitionSceneDistanceLimit * 0.1f, weapon.MunitionSceneDistanceLimit);
 
             RadarDotSize = new SiPoint(1, 1);
@@ -63,7 +62,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             {
                 ForwardAngle = new SiAngle(headingRadians),
                 MaximumSpeed = initialSpeed,
-                ForwardMomentium = 1.0f
+                ForwardVelocity = 1.0f
             };
 
             Location = location == null ? firedFrom.Location : location;
@@ -107,7 +106,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                 return;
             }
 
-            Location += Velocity.ForwardAngle * (Velocity.MaximumSpeed * Velocity.ForwardMomentium) * epoch;
+            Location += Velocity.ForwardAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
         }
 
         public override void Explode()

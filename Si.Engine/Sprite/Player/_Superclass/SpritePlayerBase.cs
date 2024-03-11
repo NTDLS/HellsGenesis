@@ -38,7 +38,7 @@ namespace Si.Engine.Sprite.Player._Superclass
         public int Bounty { get; set; } //Score points.
         public int MaxHullHealth { get; set; }
         public int MaxShieldPoints { get; set; }
-        public SpriteAnimation ThrustAnimation { get; private set; }
+        public SpriteAnimation ThrusterAnimation { get; private set; }
         public SpriteAnimation BoostAnimation { get; private set; }
         public WeaponBase PrimaryWeapon { get; private set; }
         private List<WeaponBase> _secondaryWeapons = new();
@@ -75,7 +75,7 @@ namespace Si.Engine.Sprite.Player._Superclass
 
         public override void Cleanup()
         {
-            ThrustAnimation?.QueueForDelete();
+            ThrusterAnimation?.QueueForDelete();
             BoostAnimation?.QueueForDelete();
             base.Cleanup();
         }
@@ -85,7 +85,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             UpdateThrustAnimationPositions();
             if (Visable == false)
             {
-                if (ThrustAnimation != null) ThrustAnimation.Visable = false;
+                if (ThrusterAnimation != null) ThrusterAnimation.Visable = false;
                 if (BoostAnimation != null) BoostAnimation.Visable = false;
                 ShipEngineIdleSound?.Stop();
                 ShipEngineRoarSound?.Stop();
@@ -171,7 +171,7 @@ namespace Si.Engine.Sprite.Player._Superclass
 
             Velocity.ForwardAngle = new SiAngle(0);
 
-            Velocity.ForwardMomentium = 0;
+            Velocity.ForwardVelocity = 0;
             Velocity.AvailableBoost = _engine.Settings.MaxPlayerBoostAmount;
 
             #region Reset loadout.
@@ -193,7 +193,7 @@ namespace Si.Engine.Sprite.Player._Superclass
 
             SelectFirstAvailableUsableSecondaryWeapon();
 
-            if (ThrustAnimation == null || ThrustAnimation.IsQueuedForDeletion == true)
+            if (ThrusterAnimation == null || ThrusterAnimation.IsQueuedForDeletion == true)
             {
                 var playMode = new SpriteAnimation.PlayMode()
                 {
@@ -201,15 +201,15 @@ namespace Si.Engine.Sprite.Player._Superclass
                     DeleteSpriteAfterPlay = false,
                     ReplayDelay = new TimeSpan(0)
                 };
-                ThrustAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
+                ThrusterAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
                 {
                     SpriteTag = "PlayerForwardThrust",
                     Visable = false,
                     OwnerUID = UID
                 };
                 //ThrustAnimation.Reset();
-                _engine.Sprites.Animations.AddAt(ThrustAnimation, this);
-                ThrustAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
+                _engine.Sprites.Animations.AddAt(ThrusterAnimation, this);
+                ThrusterAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
             }
 
             if (BoostAnimation == null || BoostAnimation.IsQueuedForDeletion == true)
@@ -244,13 +244,13 @@ namespace Si.Engine.Sprite.Player._Superclass
 
         private void UpdateThrustAnimationPositions()
         {
-            if (ThrustAnimation != null)
+            if (ThrusterAnimation != null)
             {
                 if (Visable)
                 {
                     var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
-                    ThrustAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
-                    ThrustAnimation.Location = Location + pointBehind;
+                    ThrusterAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
+                    ThrusterAnimation.Location = Location + pointBehind;
                 }
             }
 

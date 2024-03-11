@@ -414,7 +414,7 @@ namespace Si.Engine.Manager
 
                 fragment.Velocity.ForwardAngle.Degrees = SiRandom.Between(0.0f, 359.0f);
                 fragment.Velocity.MaximumSpeed = SiRandom.Between(1, 3.5f);
-                fragment.Velocity.ForwardMomentium = 1;
+                fragment.Velocity.ForwardVelocity = 1;
                 fragment.VectorType = ParticleVectorType.Independent;
             }
         }

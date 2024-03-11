@@ -164,7 +164,7 @@ namespace Si.Client
                         text.AppendLine($"Shield Points: {enemy.ShieldHealth:n0}");
                         text.AppendLine($"Speed: {enemy.Velocity.MaximumSpeed:n2}");
                         text.AppendLine($"Angle: {enemy.Velocity.ForwardAngle.Degrees:n2}° {enemy.Velocity.ForwardAngle:n2}");
-                        text.AppendLine($"Throttle Percent: {enemy.Velocity.ForwardMomentium:n2}");
+                        text.AppendLine($"Throttle Percent: {enemy.Velocity.ForwardVelocity:n2}");
 
                         if (enemy.CurrentAIController != null)
                         {

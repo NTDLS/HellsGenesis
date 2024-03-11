@@ -81,7 +81,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
         {
             if (_leftThrust != null && _rightThrust != null)
             {
-                bool visibleThrust = Velocity.ForwardMomentium > 0;
+                bool visibleThrust = Velocity.ForwardVelocity > 0;
 
                 if (_leftThrust.IsDeadOrExploded == false)
                 {
@@ -207,19 +207,19 @@ namespace Si.Engine.Sprite.Enemy.Boss
                 //Try to stay close.
                 if (distanceToPlayer > 300)
                 {
-                    Velocity.ForwardMomentium += 0.05f;
-                    if (Velocity.ForwardMomentium > 1)
+                    Velocity.ForwardVelocity += 0.05f;
+                    if (Velocity.ForwardVelocity > 1)
                     {
-                        Velocity.ForwardMomentium = 1;
+                        Velocity.ForwardVelocity = 1;
                     }
                 }
                 else
                 {
                     //Slow to a stop when close.
-                    Velocity.ForwardMomentium -= 0.05f;
-                    if (Velocity.ForwardMomentium < 0)
+                    Velocity.ForwardVelocity -= 0.05f;
+                    if (Velocity.ForwardVelocity < 0)
                     {
-                        Velocity.ForwardMomentium = 0;
+                        Velocity.ForwardVelocity = 0;
                     }
                 }
             }
@@ -244,15 +244,15 @@ namespace Si.Engine.Sprite.Enemy.Boss
                 //Stay on the players tail.
                 if (distanceToPlayer > distanceToKeep + 300)
                 {
-                    Velocity.ForwardMomentium = 1;
+                    Velocity.ForwardVelocity = 1;
                     mode = AIMode.Approaching;
                 }
                 else
                 {
-                    Velocity.ForwardMomentium -= 0.05f;
-                    if (Velocity.ForwardMomentium < 0)
+                    Velocity.ForwardVelocity -= 0.05f;
+                    if (Velocity.ForwardVelocity < 0)
                     {
-                        Velocity.ForwardMomentium = 0;
+                        Velocity.ForwardVelocity = 0;
                     }
                 }
 
@@ -261,7 +261,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
                     || hpRemainingBeforeTailing - HullHealth > 2
                     || roundsToFireBeforeTailing <= 0)
                 {
-                    Velocity.ForwardMomentium = 1;
+                    Velocity.ForwardVelocity = 1;
                     mode = AIMode.MovingToFallback;
                     fallToAngleRadians = Velocity.ForwardAngle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
                     fallbackDistance = baseFallbackDistance * (SiRandom.NextFloat() + 1);

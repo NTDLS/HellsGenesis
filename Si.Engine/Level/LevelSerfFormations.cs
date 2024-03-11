@@ -88,7 +88,7 @@ namespace Si.Engine.Level
             var enemy = _engine.Sprites.Enemies.Create<SpriteEnemySerf>();
             enemy.X = x;
             enemy.Y = y;
-            enemy.Velocity.ForwardMomentium = 0.8f;
+            enemy.Velocity.ForwardVelocity = 0.8f;
             enemy.Velocity.MaximumSpeed = 6;
             enemy.Velocity.ForwardAngle.Degrees = angle;
             return enemy;

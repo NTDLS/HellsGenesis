@@ -11,7 +11,7 @@ namespace Si.Engine.Sprite.Enemy.Starbase._Superclass
         public SpriteEnemyStarbase(EngineCore engine)
             : base(engine)
         {
-            Velocity.ForwardMomentium = 1;
+            Velocity.ForwardVelocity = 1;
             Initialize();
         }
 
