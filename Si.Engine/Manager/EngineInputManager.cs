@@ -117,14 +117,14 @@ namespace Si.Engine.Manager
                 byte leftTrigger = gamepadState.Gamepad.LeftTrigger;
                 byte rightTrigger = gamepadState.Gamepad.RightTrigger;
 
-                _engine.Input.KeyStateChangedAmount(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Left) ? 1 : leftThumbX > 0 ? leftThumbX : 0);
-                _engine.Input.KeyStateChangedAmount(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.Right) ? 1 : leftThumbX < 0 ? leftThumbX : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Left) ? 1 : rightThumbX < 0 ? rightThumbX : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.Right) ? 1 : rightThumbX > 0 ? rightThumbX : 0);
 
                 _engine.Input.KeyStateChangedAmount(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W) ? 1 : rightThumbY > 0 ? rightThumbY : 0);
                 _engine.Input.KeyStateChangedAmount(SiPlayerKey.Reverse, keyboardState.IsPressed(Key.S) ? 1 : rightThumbY < 0 ? rightThumbY : 0);
 
-                _engine.Input.KeyStateChangedAmount(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A) ? 1 : rightThumbX < 0 ? rightThumbX : 0);
-                _engine.Input.KeyStateChangedAmount(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D) ? 1 : rightThumbX > 0 ? rightThumbX : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.RotateCounterClockwise, keyboardState.IsPressed(Key.A) ? 1 : leftThumbX < 0 ? leftThumbX : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.RotateClockwise, keyboardState.IsPressed(Key.D) ? 1 : leftThumbX > 0 ? leftThumbX : 0);
 
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift) || gamepadState.Gamepad.Buttons.HasFlag(GamepadButtonFlags.LeftThumb));
 

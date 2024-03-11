@@ -98,21 +98,33 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #endregion
 
-                float LesserOf(float one, float two) => one > two ? one : two;
-
-                float throttleFloor = 0.1f;
-                float throttleCap = 0.45f; //This value will be considered max throttle. This is so we can move from 100% forward to 50$ forward and 50% rotation.
+                float throttleFloor = 0.01f;
+                float throttleCap = 0.50f; //This value will be considered max throttle. This is so we can move from 100% forward to 50% forward and 50% rotation.
                 float momentiumRampUp = Engine.Settings.PlayerVelocityRampUp * epoch;
                 float momentiumRampDown = Engine.Settings.PlayerVelocityRampDown * epoch;
 
-                float targetForwardAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.Reverse, SiPlayerKey.Forward) / throttleCap).Clamp(-1, 1);
-
-
                 #region Forward and Reverse.
+
+                float targetForwardAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.Reverse, SiPlayerKey.Forward) / throttleCap).Clamp(-1, 1);
 
                 if (targetForwardAmount > throttleFloor)
                 {
-                    Sprite.Velocity.ForwardVelocity += momentiumRampUp; //Make player forward velocity build-up.
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    #region //TODO: APPLY THIS CLAMPIG TO REVERSE AND LATERAL THRUST.
+                    if (Sprite.Velocity.ForwardVelocity < targetForwardAmount)
+                    {
+                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity + momentiumRampUp).Clamp(-100, targetForwardAmount); //Make player forward velocity build-up.
+                    }
+                    else
+                    {
+                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity - momentiumRampDown).Clamp(targetForwardAmount, 100);
+                    }
+                    #endregion
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 }
                 else if (targetForwardAmount < -throttleFloor)
                 {
@@ -187,9 +199,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Laterial Strafing.
 
-                float targetLateralAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.StrafeRight, SiPlayerKey.StrafeLeft) / throttleCap).Clamp(-1, 1);
-
-                Debug.WriteLine($"{targetLateralAmount}");
+                float targetLateralAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.StrafeLeft, SiPlayerKey.StrafeRight) / throttleCap).Clamp(-1, 1);
 
                 if (targetLateralAmount > throttleFloor)
                 {
@@ -212,18 +222,17 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Rotation.
 
-                //We are going to restrict the rotation speed to a percentage of velocity.
-                var rotationSpeed = Engine.Settings.MaxPlayerRotationSpeedDegrees
-                    * ((Sprite.Velocity.LateralVelocity + Sprite.Velocity.ForwardVelocity) / 2);
+                float targetRotationAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.RotateCounterClockwise, SiPlayerKey.RotateClockwise) / throttleCap).Clamp(-1, 1);
 
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) && !Engine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
+                var rotationSpeed = Engine.Settings.MaxPlayerRotationSpeedDegrees * targetRotationAmount * epoch;
+
+                if (rotationSpeed > 0)
                 {
-                    Sprite.Rotate(-(rotationSpeed > 1.0 ? rotationSpeed : 1.0f));
+                    Sprite.Rotate(rotationSpeed);
                 }
-
-                if (!Engine.Input.IsKeyPressed(SiPlayerKey.RotateCounterClockwise) && Engine.Input.IsKeyPressed(SiPlayerKey.RotateClockwise))
+                else if (rotationSpeed < 0)
                 {
-                    Sprite.Rotate(rotationSpeed > 1.0 ? rotationSpeed : 1.0f);
+                    Sprite.Rotate(rotationSpeed);
                 }
 
                 #endregion
@@ -253,6 +262,9 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 }
 
                 #endregion
+
+                Debug.WriteLine($" Forward: {Sprite.Velocity.ForwardVelocity:n2}, Lateral: {targetLateralAmount:n2}");
+
             }
 
             var displacementVector = Sprite.Velocity.MovementVector;
