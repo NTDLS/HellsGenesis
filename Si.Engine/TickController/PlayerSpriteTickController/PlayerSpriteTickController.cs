@@ -99,7 +99,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 #endregion
 
                 float throttleFloor = 0.01f;
-                float throttleCap = 0.50f; //This value will be considered max throttle. This is so we can move from 100% forward to 50% forward and 50% rotation.
+                float throttleCap = 0.70f; //70% will be considered max throttle in any direction, this is because the combined forward and lateral can only be as much as 0.707 each.
                 float velocityRampUp = Engine.Settings.PlayerVelocityRampUp * epoch;
                 float velocityRampDown = Engine.Settings.PlayerVelocityRampDown * epoch;
 
