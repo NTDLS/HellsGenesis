@@ -127,7 +127,7 @@ namespace Si.Engine.Manager
             var obj = (SpriteBase)Activator.CreateInstance(type, param);
 
             obj.Location = _engine.Display.RandomOffScreenLocation();
-            obj.Velocity.Angle.Degrees = SiRandom.Between(0, 359);
+            obj.Velocity.ForwardAngle.Degrees = SiRandom.Between(0, 359);
 
             var enemy = obj as SpriteEnemyBase;
 
@@ -412,7 +412,7 @@ namespace Si.Engine.Manager
                 fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
                 fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
 
-                fragment.Velocity.Angle.Degrees = SiRandom.Between(0.0f, 359.0f);
+                fragment.Velocity.ForwardAngle.Degrees = SiRandom.Between(0.0f, 359.0f);
                 fragment.Velocity.MaximumSpeed = SiRandom.Between(1, 3.5f);
                 fragment.Velocity.ForwardMomentium = 1;
                 fragment.VectorType = ParticleVectorType.Independent;

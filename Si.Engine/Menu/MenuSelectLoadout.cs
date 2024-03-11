@@ -57,7 +57,7 @@ namespace Si.Engine.Menu
             {
                 var playerSprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerType, new object[] { engine });
                 playerSprite.SpriteTag = "MENU_SHIP_SELECT";
-                playerSprite.Velocity.Angle.Degrees = 45;
+                playerSprite.Velocity.ForwardAngle.Degrees = 45;
 
                 offsetY += playerSprite.Size.Height / 2.0f + previousSpriteSize / 2.0f + 25;
                 previousSpriteSize = playerSprite.Size.Height;

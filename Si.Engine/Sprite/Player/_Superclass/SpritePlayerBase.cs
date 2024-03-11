@@ -169,7 +169,7 @@ namespace Si.Engine.Sprite.Player._Superclass
 
             ReviveDeadOrExploded();
 
-            Velocity.Angle = new SiAngle(SiPoint.DegreesToRadians(45));
+            Velocity.ForwardAngle = new SiAngle(0);
 
             Velocity.ForwardMomentium = 0;
             Velocity.AvailableBoost = _engine.Settings.MaxPlayerBoostAmount;
@@ -248,8 +248,8 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
-                    ThrustAnimation.Velocity.Angle = Velocity.Angle;
+                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
+                    ThrustAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
                     ThrustAnimation.Location = Location + pointBehind;
                 }
             }
@@ -258,8 +258,8 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
-                    BoostAnimation.Velocity.Angle = Velocity.Angle;
+                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
+                    BoostAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
                     BoostAnimation.Location = Location + pointBehind;
                 }
             }

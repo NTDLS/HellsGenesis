@@ -84,7 +84,7 @@ namespace Si.Engine.AI.Logistics
             switch (state)
             {
                 case AIActivity.EvasiveLoop:
-                    _evasiveLoopTargetAngle.Degrees = _owner.Velocity.Angle.Degrees + 180;
+                    _evasiveLoopTargetAngle.Degrees = _owner.Velocity.ForwardAngle.Degrees + 180;
                     _owner.Velocity.ForwardMomentium = 1.0f;
                     _owner.Velocity.AvailableBoost = _owner.RenewableResources.Consume(RenewableResources.Boost, 250);
                     break;

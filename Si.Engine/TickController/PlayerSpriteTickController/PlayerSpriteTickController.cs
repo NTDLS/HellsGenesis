@@ -40,8 +40,6 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
         /// <returns></returns>
         public override SiPoint ExecuteWorldClockTick(float epoch)
         {
-            var displacementVector = new SiPoint();
-
             Sprite.IsLockedOnSoft = false;
             Sprite.IsLockedOnHard = false;
 
@@ -127,7 +125,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                                         if (enemy.IsPointingAway(Sprite, 50))
                                         {
                                             var angleTo = Sprite.AngleTo360(enemy);
-                                            Sprite.Velocity.Angle.Degrees = angleTo;
+                                            Sprite.Velocity.ForwardAngle.Degrees = angleTo;
                                         }
                                     }
                                 }
@@ -274,7 +272,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Strafing / Lateral Momentium.
 
-                var strafeAngle = SiPoint.PointFromAngleAtDistance360(new SiAngle(Sprite.Velocity.Angle - SiPoint.RADIANS_90), new SiPoint(1, 1));
+                Sprite.Velocity.LateralAngle = new SiAngle(Sprite.Velocity.ForwardAngle - SiPoint.RADIANS_90);
 
                 float targetStrafeRightAmount = (Math.Abs(Engine.Input.InputAmount(SiPlayerKey.StrafeLeft)) / throttleCap).Clamp(0, 1);
                 if (targetStrafeRightAmount > 0)
@@ -353,19 +351,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #endregion
 
-                if (Sprite.Velocity.AvailableBoost <= 0)
-                {
-                    Sprite.Velocity.AvailableBoost = 0;
-                    Sprite.Velocity.IsBoostCoolingDown = true;
-                }
-
-                var totalForwardMomentium =
-                    Sprite.Velocity.MaximumSpeed * Sprite.Velocity.ForwardMomentium
-                    + Sprite.Velocity.MaximumBoostSpeed * Sprite.Velocity.ForwardBoostMomentium;
-
-                displacementVector +=
-                    (Sprite.Velocity.Angle * totalForwardMomentium) + //Forward / Reverse.
-                    (strafeAngle * Sprite.Velocity.MaximumSpeed * Sprite.Velocity.LateralMomentium); //Left/Right Strafe.
+                #region Rotation.
 
                 //We are going to restrict the rotation speed to a percentage of momentium.
                 var rotationSpeed = Engine.Settings.MaxPlayerRotationSpeedDegrees
@@ -374,7 +360,6 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 float rotateClockwiseAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.RotateCounterClockwise));
                 float rotateCounterClockwiseAmount = Math.Abs(Engine.Input.InputAmount(SiPlayerKey.RotateClockwise));
 
-
                 if (rotateClockwiseAmount > 0 && rotateCounterClockwiseAmount == 0)
                 {
                     Sprite.Rotate(-((rotationSpeed > 1.0 ? rotationSpeed : 1.0f) * rotateClockwiseAmount));
@@ -382,6 +367,14 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 if (rotateClockwiseAmount == 0 && rotateCounterClockwiseAmount > 0)
                 {
                     Sprite.Rotate((rotationSpeed > 1.0 ? rotationSpeed : 1.0f) * rotateCounterClockwiseAmount);
+                }
+
+                #endregion
+
+                if (Sprite.Velocity.AvailableBoost <= 0)
+                {
+                    Sprite.Velocity.AvailableBoost = 0;
+                    Sprite.Velocity.IsBoostCoolingDown = true;
                 }
 
                 #region Sounds and Animation.
@@ -420,11 +413,14 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 #endregion
             }
 
+            var displacementVector = Sprite.Velocity.Vector;
+
             //Scroll the background.
             Engine.Display.RenderWindowPosition += displacementVector;
 
             //Move the player in the direction of the background. This keeps the player visually in place, which is in the center screen.
             Sprite.Location += displacementVector;
+
 
             Sprite.RenewableResources.RenewAllResources(epoch);
 

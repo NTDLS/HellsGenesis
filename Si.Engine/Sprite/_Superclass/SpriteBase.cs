@@ -290,6 +290,34 @@ namespace Si.Engine.Sprite._Superclass
             Y = _engine.Display.TotalCanvasSize.Height / 2 - Size.Height / 2;
         }
 
+        /*
+        public List<SpriteBase> FindCollisionsAlongPath(List<SpriteShipBase> objectsThatCanBeHit)
+        {
+            var collisions = new List<SpriteBase>();   
+
+            var velocity = Velocity.ForwardMomentium + Velocity
+
+            //Reverse the munition to its starting position.
+            var hitTestPosition = new SiPoint(Location - Velocity.ForwardAngle * Velocity.MaximumSpeed);
+
+            //Hit-test each position along the munitions path.
+            for (int i = 0; i < Velocity.MaximumSpeed; i++)
+            {
+                hitTestPosition += Velocity.ForwardAngle;
+
+                foreach (var obj in objectsThatCanBeHit)
+                {
+                    if (Intersects(hitTestPosition))
+                    {
+                        collisions.Add(obj);
+                    }
+                }
+            }
+
+            return collisions;
+        }
+        */
+
         /// <summary>
         /// Allows for the testing of hits from a munition, 
         /// </summary>
@@ -343,9 +371,9 @@ namespace Si.Engine.Sprite._Superclass
                 + $"                Is Dead?: {IsDeadOrExploded}\r\n"
                 + $"         Render-Location: {RenderLocation}\r\n"
                 + $"                Location: {Location}\r\n"
-                + $"                   Angle: {Velocity.Angle}\r\n"
-                + $"                          {Velocity.Angle.DegreesSigned:n2}deg\r\n"
-                + $"                          {Velocity.Angle.RadiansSigned:n2}rad\r\n"
+                + $"                   Angle: {Velocity.ForwardAngle}\r\n"
+                + $"                          {Velocity.ForwardAngle.DegreesSigned:n2}deg\r\n"
+                + $"                          {Velocity.ForwardAngle.RadiansSigned:n2}rad\r\n"
                 + extraInfo
                 + $"       Background Offset: {_engine.Display.RenderWindowPosition}\r\n"
                 + $"                  Thrust: {Velocity.ForwardMomentium * 100:n2}\r\n"
@@ -432,8 +460,8 @@ namespace Si.Engine.Sprite._Superclass
 
                 for (int i = 0; i < otherObject.Velocity.MaximumSpeed; i++)
                 {
-                    previousPosition.X -= otherObject.Velocity.Angle.X;
-                    previousPosition.Y -= otherObject.Velocity.Angle.Y;
+                    previousPosition.X -= otherObject.Velocity.ForwardAngle.X;
+                    previousPosition.Y -= otherObject.Velocity.ForwardAngle.Y;
 
                     if (Intersects(previousPosition))
                     {
@@ -589,7 +617,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public void Rotate(float degrees)
         {
-            Velocity.Angle.Degrees += degrees;
+            Velocity.ForwardAngle.Degrees += degrees;
             RotationChanged();
         }
 
@@ -598,7 +626,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public void PointAtAndGoto(SiPoint location, float? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(Location, location);
+            Velocity.ForwardAngle.Degrees = SiPoint.AngleTo360(Location, location);
             if (velocity != null)
             {
                 Velocity.MaximumSpeed = (float)velocity;
@@ -610,7 +638,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, float? velocity = null)
         {
-            Velocity.Angle.Degrees = SiPoint.AngleTo360(Location, obj.Location);
+            Velocity.ForwardAngle.Degrees = SiPoint.AngleTo360(Location, obj.Location);
 
             if (velocity != null)
             {
@@ -630,11 +658,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Velocity.Angle.Degrees += rotationAmount;
+                    Velocity.ForwardAngle.Degrees += rotationAmount;
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Velocity.Angle.Degrees -= rotationAmount;
+                    Velocity.ForwardAngle.Degrees -= rotationAmount;
                 }
                 return true;
             }
@@ -654,11 +682,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (direction == SiRelativeDirection.Right)
                 {
-                    Velocity.Angle.Degrees += rotationAmount;
+                    Velocity.ForwardAngle.Degrees += rotationAmount;
                 }
                 if (direction == SiRelativeDirection.Left)
                 {
-                    Velocity.Angle.Degrees -= rotationAmount;
+                    Velocity.ForwardAngle.Degrees -= rotationAmount;
                 }
                 return true;
             }
@@ -678,11 +706,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Velocity.Angle.Degrees += rotationAmount;
+                    Velocity.ForwardAngle.Degrees += rotationAmount;
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Velocity.Angle.Degrees -= rotationAmount;
+                    Velocity.ForwardAngle.Degrees -= rotationAmount;
                 }
                 return true;
             }
@@ -702,11 +730,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (direction == SiRelativeDirection.Right)
                 {
-                    Velocity.Angle.Degrees += rotationAmount;
+                    Velocity.ForwardAngle.Degrees += rotationAmount;
                 }
                 if (direction == SiRelativeDirection.Left)
                 {
-                    Velocity.Angle.Degrees -= rotationAmount;
+                    Velocity.ForwardAngle.Degrees -= rotationAmount;
                 }
                 return true;
             }
@@ -722,15 +750,15 @@ namespace Si.Engine.Sprite._Superclass
         {
             toDegrees = toDegrees.DegreesNormalized();
 
-            if (Velocity.Angle.DegreesSigned.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
+            if (Velocity.ForwardAngle.DegreesSigned.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
                 if (direction == SiRelativeDirection.Right)
                 {
-                    Velocity.Angle.Degrees += rotationAmount;
+                    Velocity.ForwardAngle.Degrees += rotationAmount;
                 }
                 if (direction == SiRelativeDirection.Left)
                 {
-                    Velocity.Angle.Degrees -= rotationAmount;
+                    Velocity.ForwardAngle.Degrees -= rotationAmount;
                 }
                 return true;
             }
@@ -750,11 +778,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Velocity.Angle += rotationRadians;
+                    Velocity.ForwardAngle += rotationRadians;
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Velocity.Angle -= rotationRadians;
+                    Velocity.ForwardAngle -= rotationRadians;
                 }
                 return true;
             }
@@ -777,11 +805,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (direction == SiRelativeDirection.Right)
                 {
-                    Velocity.Angle += maxRotationRadians;
+                    Velocity.ForwardAngle += maxRotationRadians;
                 }
                 if (direction == SiRelativeDirection.Left)
                 {
-                    Velocity.Angle -= maxRotationRadians;
+                    Velocity.ForwardAngle -= maxRotationRadians;
                 }
                 return true;
             }
@@ -961,7 +989,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location += Velocity.Angle * (Velocity.MaximumSpeed * Velocity.ForwardMomentium) * epoch;
+            Location += Velocity.ForwardAngle * (Velocity.MaximumSpeed * Velocity.ForwardMomentium) * epoch;
         }
 
         public virtual void VelocityChanged() { }
@@ -1000,7 +1028,7 @@ namespace Si.Engine.Sprite._Superclass
 
                 if (IsHighlighted)
                 {
-                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Velocity.Angle.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
+                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Velocity.ForwardAngle.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
                 }
             }
         }
@@ -1048,7 +1076,7 @@ namespace Si.Engine.Sprite._Superclass
 
         private void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float? angleRadians = null)
         {
-            float angle = (float)(angleRadians == null ? Velocity.Angle.Radians : angleRadians);
+            float angle = (float)(angleRadians == null ? Velocity.ForwardAngle.Radians : angleRadians);
 
             _engine.Rendering.DrawBitmapAt(renderTarget, bitmap,
                 RenderLocation.X - bitmap.Size.Width / 2.0f,

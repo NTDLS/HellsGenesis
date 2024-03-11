@@ -48,7 +48,7 @@ namespace Si.Engine.Level
 
                     foreach (SpriteEnemySerf enemy in formationSerfs)
                     {
-                        enemy.Velocity.Angle.Degrees = angleToPlayer;
+                        enemy.Velocity.ForwardAngle.Degrees = angleToPlayer;
                     }
                 }
             }
@@ -90,7 +90,7 @@ namespace Si.Engine.Level
             enemy.Y = y;
             enemy.Velocity.ForwardMomentium = 0.8f;
             enemy.Velocity.MaximumSpeed = 6;
-            enemy.Velocity.Angle.Degrees = angle;
+            enemy.Velocity.ForwardAngle.Degrees = angle;
             return enemy;
         }
 

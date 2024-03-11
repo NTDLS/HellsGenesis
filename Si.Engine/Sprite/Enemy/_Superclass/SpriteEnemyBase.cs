@@ -203,7 +203,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
 
             //Location += (Velocity.Angle * thrustAmount * epoch);
 
-            Location += Velocity.Angle * thrustAmount * epoch;
+            Location += Velocity.ForwardAngle * thrustAmount * epoch;
 
             //System.Diagnostics.Debug.Print($"Dbg: {newLocation}, Actual: {Location}");
 

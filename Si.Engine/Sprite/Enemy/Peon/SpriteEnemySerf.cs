@@ -43,7 +43,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
 
             ResetLoadout(loadout);
 
-            Velocity.Angle.Degrees = AngleTo360(_engine.Player.Sprite);
+            Velocity.ForwardAngle.Degrees = AngleTo360(_engine.Player.Sprite);
 
             _initialHullHealth = HullHealth;
         }
@@ -81,7 +81,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
                 if (distanceToPlayer < 500 && SiRandom.ChanceIn(1, 50000) || HullHealth != _initialHullHealth)
                 {
                     Mode = AIMode.MovingToFallback;
-                    fallToAngleRadians = Velocity.Angle + (180.0f + SiRandom.Between(0, 10));
+                    fallToAngleRadians = Velocity.ForwardAngle + (180.0f + SiRandom.Between(0, 10));
                     _fallbackDistance = _baseFallbackDistance * (SiRandom.NextFloat() + 1);
                 }
             }
@@ -95,24 +95,24 @@ namespace Si.Engine.Sprite.Enemy.Peon
                 else
                 {
                     Mode = AIMode.MovingToFallback;
-                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
+                    fallToAngleRadians = Velocity.ForwardAngle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
                     _fallbackDistance = _baseFallbackDistance * (SiRandom.NextFloat() + 1);
                 }
             }
 
             if (Mode == AIMode.MovingToFallback)
             {
-                var deltaAngle = Velocity.Angle - fallToAngleRadians;
+                var deltaAngle = Velocity.ForwardAngle - fallToAngleRadians;
 
                 if (deltaAngle.Degrees > 10)
                 {
                     if (deltaAngle.Degrees >= 0) //We might as well turn around clock-wise
                     {
-                        Velocity.Angle += 1;
+                        Velocity.ForwardAngle += 1;
                     }
                     else if (deltaAngle.Degrees < 0) //We might as well turn around counter clock-wise
                     {
-                        Velocity.Angle -= 1;
+                        Velocity.ForwardAngle -= 1;
                     }
                 }
 
@@ -130,11 +130,11 @@ namespace Si.Engine.Sprite.Enemy.Peon
                 {
                     if (deltaAngle >= 10)
                     {
-                        Velocity.Angle += 1;
+                        Velocity.ForwardAngle += 1;
                     }
                     else if (deltaAngle < 10)
                     {
-                        Velocity.Angle -= 1;
+                        Velocity.ForwardAngle -= 1;
                     }
                 }
                 else

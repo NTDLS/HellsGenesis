@@ -44,7 +44,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
             RadarDotSize = new SiPoint(1, 1);
 
-            float headingRadians = angle == null ? firedFrom.Velocity.Angle.Radians : (float)angle;
+            float headingRadians = angle == null ? firedFrom.Velocity.ForwardAngle.Radians : (float)angle;
             if (weapon.AngleVarianceDegrees > 0)
             {
                 var randomNumber = SiPoint.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0f) / 100.0f);
@@ -61,7 +61,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
             var initialVelocity = new SiVelocity()
             {
-                Angle = new SiAngle(headingRadians),
+                ForwardAngle = new SiAngle(headingRadians),
                 MaximumSpeed = initialSpeed,
                 ForwardMomentium = 1.0f
             };
@@ -107,7 +107,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                 return;
             }
 
-            Location += Velocity.Angle * (Velocity.MaximumSpeed * Velocity.ForwardMomentium) * epoch;
+            Location += Velocity.ForwardAngle * (Velocity.MaximumSpeed * Velocity.ForwardMomentium) * epoch;
         }
 
         public override void Explode()

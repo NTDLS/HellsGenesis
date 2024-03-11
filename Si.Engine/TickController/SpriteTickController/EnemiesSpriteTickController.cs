@@ -33,7 +33,7 @@ namespace Si.Engine.TickController.SpriteTickController
             SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
             obj.Location = Engine.Display.RandomOffScreenLocation();
-            obj.Velocity.Angle.Degrees = SiRandom.Between(0, 359);
+            obj.Velocity.ForwardAngle.Degrees = SiRandom.Between(0, 359);
 
             obj.BeforeCreate();
             SpriteManager.Add(obj);

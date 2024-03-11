@@ -86,18 +86,18 @@ namespace Si.Engine.Sprite.Enemy.Starbase
             {
                 var attachment = Attach($@"{_assetPath}\Turret.png", true, 3);
                 attachment.AddWeapon<WeaponLancer>(int.MaxValue);
-                attachment.Velocity.Angle.Degrees = SiRandom.Between(0, 359);
+                attachment.Velocity.ForwardAngle.Degrees = SiRandom.Between(0, 359);
                 attachment.AddHullHealth(100);
 
                 _turrets.Add(new Turret(attachment, turrentLocation));
             }
 
-            Velocity.Angle.Degrees = SiRandom.Between(0, 359);
+            Velocity.ForwardAngle.Degrees = SiRandom.Between(0, 359);
         }
 
         public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
-            Velocity.Angle.Degrees += 0.05f;
+            Velocity.ForwardAngle.Degrees += 0.05f;
 
             foreach (var turret in _turrets.Where(o => o.Sprite.IsDeadOrExploded == false))
             {
@@ -106,7 +106,7 @@ namespace Si.Engine.Sprite.Enemy.Starbase
                 var turretOffset = turret.BaseLocation - (Size / 2.0f);
 
                 // Apply the rotated offsets to get the new turret location relative to the base sprite center.
-                turret.Sprite.Location = Location + turretOffset.Rotate(Velocity.Angle.Radians);
+                turret.Sprite.Location = Location + turretOffset.Rotate(Velocity.ForwardAngle.Radians);
 
                 if (turret.Sprite.DistanceTo(_engine.Player.Sprite) < 1000)
                 {
@@ -114,23 +114,23 @@ namespace Si.Engine.Sprite.Enemy.Starbase
                     var deltaAngltToPlayer = turret.Sprite.DeltaAngleDegrees(_engine.Player.Sprite);
                     if (deltaAngltToPlayer < 1)
                     {
-                        turret.Sprite.Velocity.Angle.Degrees -= 0.25f;
+                        turret.Sprite.Velocity.ForwardAngle.Degrees -= 0.25f;
                     }
                     else if (deltaAngltToPlayer > 1)
                     {
-                        turret.Sprite.Velocity.Angle.Degrees += 0.25f;
+                        turret.Sprite.Velocity.ForwardAngle.Degrees += 0.25f;
                     }
 
                     if (deltaAngltToPlayer.IsBetween(-10, 10))
                     {
                         if (turret.FireToggler)
                         {
-                            var pointRight = turret.Sprite.Location + SiPoint.PointFromAngleAtDistance360(turret.Sprite.Velocity.Angle + SiPoint.RADIANS_90, new SiPoint(21, 21));
+                            var pointRight = turret.Sprite.Location + SiPoint.PointFromAngleAtDistance360(turret.Sprite.Velocity.ForwardAngle + SiPoint.RADIANS_90, new SiPoint(21, 21));
                             turret.FireToggler = !turret.Sprite.FireWeapon<WeaponLancer>(pointRight);
                         }
                         else
                         {
-                            var pointLeft = turret.Sprite.Location + SiPoint.PointFromAngleAtDistance360(turret.Sprite.Velocity.Angle - SiPoint.RADIANS_90, new SiPoint(21, 21));
+                            var pointLeft = turret.Sprite.Location + SiPoint.PointFromAngleAtDistance360(turret.Sprite.Velocity.ForwardAngle - SiPoint.RADIANS_90, new SiPoint(21, 21));
                             turret.FireToggler = turret.Sprite.FireWeapon<WeaponLancer>(pointLeft);
                         }
                     }

@@ -68,11 +68,11 @@ namespace Si.Engine.Sprite
         {
             if (RotationDirection == SiRelativeDirection.Right)
             {
-                Velocity.Angle.Degrees += RotationSpeed;
+                Velocity.ForwardAngle.Degrees += RotationSpeed;
             }
             else if (RotationDirection == SiRelativeDirection.Left)
             {
-                Velocity.Angle.Degrees -= RotationSpeed;
+                Velocity.ForwardAngle.Degrees -= RotationSpeed;
             }
 
             if (VectorType == ParticleVectorType.Independent)
@@ -130,27 +130,27 @@ namespace Si.Engine.Sprite
                         if (ColorType == ParticleColorType.SingleColor)
                         {
                             _engine.Rendering.FillEllipseAt(renderTarget,
-                                RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Velocity.Angle.Degrees);
+                                RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Velocity.ForwardAngle.Degrees);
                         }
                         else if (ColorType == ParticleColorType.Graident)
                         {
                             _engine.Rendering.FillEllipseAt(renderTarget, RenderLocation.X, RenderLocation.Y,
-                                Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)Velocity.Angle.Degrees);
+                                Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)Velocity.ForwardAngle.Degrees);
                         }
                         break;
                     case ParticleShape.HollowEllipse:
                         _engine.Rendering.HollowEllipseAt(renderTarget,
-                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Velocity.Angle.Degrees);
+                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Velocity.ForwardAngle.Degrees);
                         break;
                     case ParticleShape.Triangle:
                         _engine.Rendering.HollowTriangleAt(renderTarget,
-                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Velocity.Angle.Degrees);
+                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Velocity.ForwardAngle.Degrees);
                         break;
                 }
 
                 if (IsHighlighted)
                 {
-                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Velocity.Angle.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
+                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Velocity.ForwardAngle.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
                 }
             }
         }

@@ -113,24 +113,24 @@ namespace Si.Engine.Sprite.Enemy.Peon
                 {
                     Velocity.ForwardMomentium = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
+                    fallToAngleRadians = Velocity.ForwardAngle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
                     fallbackDistance = baseFallbackDistance * (SiRandom.NextFloat() + 1);
                 }
             }
 
             if (mode == AIMode.MovingToFallback)
             {
-                var deltaAngle = Velocity.Angle - fallToAngleRadians;
+                var deltaAngle = Velocity.ForwardAngle - fallToAngleRadians;
 
                 if (deltaAngle.Degrees > 10)
                 {
                     if (deltaAngle.Degrees >= 180.0) //We might as well turn around clock-wise
                     {
-                        Velocity.Angle += 1;
+                        Velocity.ForwardAngle += 1;
                     }
                     else if (deltaAngle.Degrees < 180.0) //We might as well turn around counter clock-wise
                     {
-                        Velocity.Angle -= 1;
+                        Velocity.ForwardAngle -= 1;
                     }
                 }
 
@@ -148,11 +148,11 @@ namespace Si.Engine.Sprite.Enemy.Peon
                 {
                     if (deltaAngle >= 0)
                     {
-                        Velocity.Angle += 1;
+                        Velocity.ForwardAngle += 1;
                     }
                     else if (deltaAngle < 0)
                     {
-                        Velocity.Angle -= 1;
+                        Velocity.ForwardAngle -= 1;
                     }
                 }
                 else

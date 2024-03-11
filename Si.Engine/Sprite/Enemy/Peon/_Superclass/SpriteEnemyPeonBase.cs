@@ -53,14 +53,14 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
-                ThrustAnimation.Velocity.Angle = Velocity.Angle;
+                var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
+                ThrustAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
                 ThrustAnimation.Location = Location + pointBehind;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
-                BoostAnimation.Velocity.Angle = Velocity.Angle;
+                var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
+                BoostAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
                 BoostAnimation.Location = Location + pointBehind;
             }
         }

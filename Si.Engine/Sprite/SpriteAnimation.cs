@@ -99,7 +99,7 @@ namespace Si.Engine.Sprite
                 _sheetImage,
                 RenderLocation.X - _frameSize.Width / 2.0f,
                 RenderLocation.Y - _frameSize.Height / 2.0f,
-                Velocity.Angle.Radians,
+                Velocity.ForwardAngle.Radians,
                 sourceRect,
                 new Size2F(_frameSize.Width, _frameSize.Height)
             );

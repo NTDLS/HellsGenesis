@@ -33,7 +33,7 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Velocity.Angle.Degrees = AngleTo360(_engine.Player.Sprite);
+            Velocity.ForwardAngle.Degrees = AngleTo360(_engine.Player.Sprite);
             base.ApplyMotion(epoch, displacementVector);
         }
     }

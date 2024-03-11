@@ -10,7 +10,9 @@ namespace Si.Library.Mathematics
         public event ValueChangeEvent? OnMomentiumChanged;
         public event ValueChangeEvent? OnBoostChanged;
 
-        public SiAngle Angle { get; set; } = new();
+        public SiAngle LateralAngle { get; set; } = new();
+        public SiAngle ForwardAngle { get; set; } = new();
+
         /// <summary>
         /// The maximum speed that this ship can travel before taking MaximumBoost into account.
         /// </summary>
@@ -52,6 +54,16 @@ namespace Si.Library.Mathematics
             {
                 _lateralMomentium = value.Clamp(-1, 1);
                 OnMomentiumChanged?.Invoke(this);
+            }
+        }
+
+        public SiPoint Vector
+        {
+            get
+            {
+                return
+                    (ForwardAngle * MaximumSpeed * ForwardMomentium + MaximumBoostSpeed * ForwardBoostMomentium)//Forward / Reverse.
+                    + (LateralAngle * MaximumSpeed * LateralMomentium); //Left/Right Strafe.
             }
         }
 

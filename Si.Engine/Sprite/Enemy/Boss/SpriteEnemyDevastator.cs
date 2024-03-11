@@ -100,36 +100,36 @@ namespace Si.Engine.Sprite.Enemy.Boss
             {
                 if (_leftGun.IsDeadOrExploded == false)
                 {
-                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Velocity.Angle - SiPoint.RADIANS_90, new SiPoint(25, 25));
-                    _leftGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle - SiPoint.RADIANS_90, new SiPoint(25, 25));
+                    _leftGun.Velocity.ForwardAngle.Degrees = Velocity.ForwardAngle.Degrees;
                     _leftGun.Location += pointLeft;
                 }
 
                 if (_rightGun.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.RADIANS_90, new SiPoint(25, 25));
-                    _rightGun.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    var pointRight = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.RADIANS_90, new SiPoint(25, 25));
+                    _rightGun.Velocity.ForwardAngle.Degrees = Velocity.ForwardAngle.Degrees;
                     _rightGun.Location += pointRight;
                 }
 
                 if (_leftThrust.IsDeadOrExploded == false)
                 {
-                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Velocity.Angle - SiPoint.DegreesToRadians(135), new SiPoint(35, 35));
-                    _leftThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle - SiPoint.DegreesToRadians(135), new SiPoint(35, 35));
+                    _leftThrust.Velocity.ForwardAngle.Degrees = Velocity.ForwardAngle.Degrees;
                     _leftThrust.Location += pointLeft;
                 }
 
                 if (_rightThrust.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiPoint.PointFromAngleAtDistance360(Velocity.Angle + SiPoint.DegreesToRadians(135), new SiPoint(35, 35));
-                    _rightThrust.Velocity.Angle.Degrees = Velocity.Angle.Degrees;
+                    var pointRight = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(135), new SiPoint(35, 35));
+                    _rightThrust.Velocity.ForwardAngle.Degrees = Velocity.ForwardAngle.Degrees;
                     _rightThrust.Location += pointRight;
                 }
 
                 if (_turret.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiPoint.PointFromAngleAtDistance360(Velocity.Angle, new SiPoint(0, 0));
-                    _turret.Velocity.Angle.Degrees = AngleTo360(_engine.Player.Sprite);
+                    var pointRight = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle, new SiPoint(0, 0));
+                    _turret.Velocity.ForwardAngle.Degrees = AngleTo360(_engine.Player.Sprite);
                     _turret.Location += pointRight;
                 }
             }
@@ -196,11 +196,11 @@ namespace Si.Engine.Sprite.Enemy.Boss
                 {
                     if (deltaAngle >= 0)
                     {
-                        Velocity.Angle += 1;
+                        Velocity.ForwardAngle += 1;
                     }
                     else if (deltaAngle < 0)
                     {
-                        Velocity.Angle -= 1;
+                        Velocity.ForwardAngle -= 1;
                     }
                 }
 
@@ -263,24 +263,24 @@ namespace Si.Engine.Sprite.Enemy.Boss
                 {
                     Velocity.ForwardMomentium = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngleRadians = Velocity.Angle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
+                    fallToAngleRadians = Velocity.ForwardAngle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
                     fallbackDistance = baseFallbackDistance * (SiRandom.NextFloat() + 1);
                 }
             }
 
             if (mode == AIMode.MovingToFallback)
             {
-                var deltaAngle = Velocity.Angle - fallToAngleRadians;
+                var deltaAngle = Velocity.ForwardAngle - fallToAngleRadians;
 
                 if (deltaAngle.Degrees > 10)
                 {
                     if (deltaAngle.Degrees >= 180.0) //We might as well turn around clock-wise
                     {
-                        Velocity.Angle += 1;
+                        Velocity.ForwardAngle += 1;
                     }
                     else if (deltaAngle.Degrees < 180.0) //We might as well turn around counter clock-wise
                     {
-                        Velocity.Angle -= 1;
+                        Velocity.ForwardAngle -= 1;
                     }
                 }
 
@@ -298,11 +298,11 @@ namespace Si.Engine.Sprite.Enemy.Boss
                 {
                     if (deltaAngle >= 0)
                     {
-                        Velocity.Angle += 1;
+                        Velocity.ForwardAngle += 1;
                     }
                     else if (deltaAngle < 0)
                     {
-                        Velocity.Angle -= 1;
+                        Velocity.ForwardAngle -= 1;
                     }
                 }
                 else
