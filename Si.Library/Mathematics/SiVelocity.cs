@@ -69,7 +69,7 @@ namespace Si.Library.Mathematics
             get
             {
                 /// 90 degrees to the left of the forward angle, so negative LateralVelocity is left and positive LateralVelocity is right.
-                var lateralAngle = new SiAngle(ForwardAngle.Radians - SiPoint.RADIANS_90);
+                var lateralAngle = new SiAngle(ForwardAngle.Radians + SiPoint.RADIANS_90);
 
                 return
                     (ForwardAngle * ((MaximumSpeed * ForwardVelocity) + (MaximumBoostSpeed * ForwardBoostVelocity))) //Forward / Reverse.

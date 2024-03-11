@@ -117,8 +117,8 @@ namespace Si.Engine.Manager
                 byte leftTrigger = gamepadState.Gamepad.LeftTrigger;
                 byte rightTrigger = gamepadState.Gamepad.RightTrigger;
 
-                _engine.Input.KeyStateChangedAmount(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Left) ? 1 : leftThumbX < 0 ? leftThumbX : 0);
-                _engine.Input.KeyStateChangedAmount(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.Right) ? 1 : leftThumbX > 0 ? leftThumbX : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.StrafeLeft, keyboardState.IsPressed(Key.Left) ? 1 : leftThumbX > 0 ? leftThumbX : 0);
+                _engine.Input.KeyStateChangedAmount(SiPlayerKey.StrafeRight, keyboardState.IsPressed(Key.Right) ? 1 : leftThumbX < 0 ? leftThumbX : 0);
 
                 _engine.Input.KeyStateChangedAmount(SiPlayerKey.Forward, keyboardState.IsPressed(Key.W) ? 1 : rightThumbY > 0 ? rightThumbY : 0);
                 _engine.Input.KeyStateChangedAmount(SiPlayerKey.Reverse, keyboardState.IsPressed(Key.S) ? 1 : rightThumbY < 0 ? rightThumbY : 0);
@@ -292,7 +292,7 @@ namespace Si.Engine.Manager
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public float IsKeyPressedAmount(SiPlayerKey key)
+        public float GetAnalogValue(SiPlayerKey key)
         {
             if (_playerKeyStates.ContainsKey(key))
             {
@@ -300,6 +300,22 @@ namespace Si.Engine.Manager
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Returns the percentage of a key that is pressed and its opposite (e.g. left/right, forward/reverse). This is for gamepad analog and triggers.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public float GetAnalogAxisValue(SiPlayerKey key1, SiPlayerKey key2)
+        {
+            _playerKeyStates.TryGetValue(key1, out var value1);
+            if (value1 != 0)
+            {
+                return value1;
+            }
+            _playerKeyStates.TryGetValue(key2, out var value2);
+            return value2 < 0 ? value2 : -value2;
         }
 
         /// <summary>

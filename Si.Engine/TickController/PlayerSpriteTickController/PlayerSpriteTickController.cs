@@ -4,6 +4,7 @@ using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
+using System.Diagnostics;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.TickController.PlayerSpriteTickController
@@ -14,6 +15,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
     public class PlayerSpriteTickController : PlayerSpriteTickControllerBase<SpritePlayerBase>
     {
         private readonly EngineCore _engine;
+        private readonly Stopwatch _inputDelay = new Stopwatch();
 
         public SpritePlayerBase Sprite { get; set; }
 
@@ -21,6 +23,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
             : base(engine)
         {
             _engine = engine;
+            _inputDelay.Restart();
         }
 
         public void InstantiatePlayerClass(Type playerClassType)
@@ -41,7 +44,24 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
             if (Sprite.Visable)
             {
-                #region Weapons Fire.
+                #region Weapons Selection and Fire.
+
+                if (Engine.Input.IsKeyPressed(SiPlayerKey.SwitchWeaponLeft))
+                {
+                    if (_inputDelay.ElapsedMilliseconds > 200)
+                    {
+                        _engine.Player?.Sprite?.SelectPreviousAvailableUsableSecondaryWeapon();
+                        _inputDelay.Restart();
+                    }
+                }
+                if (Engine.Input.IsKeyPressed(SiPlayerKey.SwitchWeaponRight))
+                {
+                    if (_inputDelay.ElapsedMilliseconds > 200)
+                    {
+                        _engine.Player?.Sprite?.SelectNextAvailableUsableSecondaryWeapon();
+                        _inputDelay.Restart();
+                    }
+                }
 
                 Sprite.SelectedSecondaryWeapon?.ApplyIntelligence(epoch);
 
@@ -78,67 +98,77 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #endregion
 
+                float LesserOf(float one, float two) => one > two ? one : two;
+
+                float throttleFloor = 0.1f;
+                float throttleCap = 0.45f; //This value will be considered max throttle. This is so we can move from 100% forward to 50$ forward and 50% rotation.
+                float momentiumRampUp = Engine.Settings.PlayerVelocityRampUp * epoch;
+                float momentiumRampDown = Engine.Settings.PlayerVelocityRampDown * epoch;
+
+                float targetForwardAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.Forward, SiPlayerKey.Reverse) / throttleCap).Clamp(-1, 1);
+
+
                 #region Forward and Reverse.
 
-                float forwardVelocityToAdd = Sprite.Velocity.ForwardVelocity == 0 ? Engine.Settings.PlayerVelocityRampUp
-                    : Engine.Settings.PlayerVelocityRampUp * (1 - Sprite.Velocity.ForwardVelocity);
-
-                //Make player forward velocity "build up" and fade-out.
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.Forward))
+                if (targetForwardAmount > throttleFloor)
                 {
-                    Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity + forwardVelocityToAdd).Clamp(-1, 1);
+                    Sprite.Velocity.ForwardVelocity += momentiumRampUp; //Make player forward velocity build-up.
                 }
-                else if (Engine.Input.IsKeyPressed(SiPlayerKey.Reverse))
+                else if (targetForwardAmount < -throttleFloor)
                 {
-                    Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity - forwardVelocityToAdd).Clamp(-1, 1);
+                    Sprite.Velocity.ForwardVelocity -= momentiumRampUp; //Make player reverse velocity build-up.
                 }
-                else
+                else //No forward input was received, ramp down the forward velocity.
                 {
-                    float velocityToRemove = Sprite.Velocity.ForwardVelocity == 0 ? Engine.Settings.PlayerVelocityRampDown
-                        : Engine.Settings.PlayerVelocityRampDown * Sprite.Velocity.ForwardVelocity;
-
-                    if (Math.Abs(velocityToRemove) >= Math.Abs(Sprite.Velocity.ForwardVelocity))
+                    if (Math.Abs(momentiumRampDown) >= Math.Abs(Sprite.Velocity.ForwardVelocity))
                     {
                         Sprite.Velocity.ForwardVelocity = 0; //Don't overshoot the stop.
                     }
-                    else Sprite.Velocity.ForwardVelocity -= velocityToRemove;
+                    else Sprite.Velocity.ForwardVelocity -= Sprite.Velocity.ForwardVelocity > 0 ? momentiumRampDown : -momentiumRampDown;
                 }
 
                 #endregion
 
                 #region Forward Speed-Boost.
 
-                float forwardBoostVelocityToAdd = Sprite.Velocity.ForwardBoostVelocity == 0 ? Engine.Settings.PlayerVelocityRampUp
-                    : Engine.Settings.PlayerVelocityRampUp * (1 - Sprite.Velocity.ForwardBoostVelocity);
+                if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost))
+                {
+                    if (_inputDelay.ElapsedMilliseconds > 200)
+                    {
+                        _engine.Player?.Sprite?.ToggleSpeedBoost();
+                        _inputDelay.Restart();
+                    }
+                }
 
-                //Make player forward velocity "build up" and fade-out.
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && Engine.Input.IsKeyPressed(SiPlayerKey.Forward)
+                if (Sprite.UseSpeedBoost && Sprite.Velocity.ForwardVelocity >= throttleFloor
                     && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostCoolingDown == false)
                 {
-                    Sprite.Velocity.ForwardBoostVelocity = (Sprite.Velocity.ForwardBoostVelocity + forwardBoostVelocityToAdd).Clamp(-1, 1);
+                    Sprite.Velocity.ForwardBoostVelocity += momentiumRampUp; //Make player forward velocity build-up.
 
-                    Sprite.Velocity.AvailableBoost -= Sprite.Velocity.MaximumBoostSpeed * Sprite.Velocity.ForwardBoostVelocity;
+                    //Consume boost:
+                    Sprite.Velocity.AvailableBoost -= 10 * epoch;
                     if (Sprite.Velocity.AvailableBoost < 0)
                     {
                         Sprite.Velocity.AvailableBoost = 0;
                     }
-
                 }
-                else
+                else //No forward input was received, ramp down the forward velocity.
                 {
-                    float velocityToRemove = Sprite.Velocity.ForwardBoostVelocity == 0 ? Engine.Settings.PlayerVelocityRampDown
-                        : Engine.Settings.PlayerVelocityRampDown * Sprite.Velocity.ForwardBoostVelocity;
-
-                    if (Math.Abs(velocityToRemove) + 0.1 >= Math.Abs(Sprite.Velocity.ForwardBoostVelocity))
+                    if (Math.Abs(momentiumRampDown) >= Math.Abs(Sprite.Velocity.ForwardBoostVelocity))
                     {
                         Sprite.Velocity.ForwardBoostVelocity = 0; //Don't overshoot the stop.
                     }
-                    else Sprite.Velocity.ForwardBoostVelocity -= velocityToRemove;
+                    else Sprite.Velocity.ForwardBoostVelocity -= momentiumRampDown;
 
-                    if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false
+                    //Rebuild boost if its not being used.
+                    if ((Sprite.UseSpeedBoost == false || Sprite.Velocity.ForwardVelocity <= throttleFloor)
                         && Sprite.Velocity.AvailableBoost < Engine.Settings.MaxPlayerBoostAmount)
                     {
-                        Sprite.Velocity.AvailableBoost = (Sprite.Velocity.AvailableBoost + 1000.0f * epoch / 1000.0f).Clamp(0, Engine.Settings.MaxPlayerBoostAmount);
+                        Sprite.Velocity.AvailableBoost += (10 * epoch);
+                        if (Sprite.Velocity.AvailableBoost > Engine.Settings.MaxPlayerBoostAmount)
+                        {
+                            Sprite.Velocity.AvailableBoost = Engine.Settings.MaxPlayerBoostAmount;
+                        }
 
                         if (Sprite.Velocity.IsBoostCoolingDown && Sprite.Velocity.AvailableBoost >= Engine.Settings.PlayerBoostRebuildFloor)
                         {
@@ -157,28 +187,25 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Laterial Strafing.
 
-                float strafeVelocityToAdd = Sprite.Velocity.LateralVelocity == 0 ? Engine.Settings.PlayerVelocityRampUp
-                    : Engine.Settings.PlayerVelocityRampUp * (1 - Sprite.Velocity.LateralVelocity);
+                float targetLateralAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.StrafeLeft, SiPlayerKey.StrafeRight) / throttleCap).Clamp(-1, 1);
 
-                //Make player lateral velocity "build up" and fade-out.
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && !Engine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
-                {
-                    Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity + strafeVelocityToAdd).Clamp(-1, 1);
-                }
-                else if (!Engine.Input.IsKeyPressed(SiPlayerKey.StrafeLeft) && Engine.Input.IsKeyPressed(SiPlayerKey.StrafeRight))
-                {
-                    Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity - strafeVelocityToAdd).Clamp(-1, 1);
-                }
-                else //Ramp down to a stop:
-                {
-                    float velocityToRemove = Sprite.Velocity.LateralVelocity == 0 ? Engine.Settings.PlayerVelocityRampDown
-                        : Engine.Settings.PlayerVelocityRampDown * Sprite.Velocity.LateralVelocity;
+                Debug.WriteLine($"{targetLateralAmount}");
 
-                    if (Math.Abs(velocityToRemove) >= Math.Abs(Sprite.Velocity.LateralVelocity))
+                if (targetLateralAmount > throttleFloor)
+                {
+                    Sprite.Velocity.LateralVelocity += momentiumRampUp; //Make player forward velocity build-up.
+                }
+                else if (targetLateralAmount < -throttleFloor)
+                {
+                    Sprite.Velocity.LateralVelocity -= momentiumRampUp; //Make player reverse velocity build-up.
+                }
+                else //No lateral input was received, ramp down the lateral velocity.
+                {
+                    if (Math.Abs(momentiumRampDown) >= Math.Abs(Sprite.Velocity.LateralVelocity))
                     {
                         Sprite.Velocity.LateralVelocity = 0; //Don't overshoot the stop.
                     }
-                    else Sprite.Velocity.LateralVelocity -= velocityToRemove;
+                    else Sprite.Velocity.LateralVelocity -= Sprite.Velocity.LateralVelocity > 0 ? momentiumRampDown : -momentiumRampDown;
                 }
 
                 #endregion 
@@ -203,35 +230,26 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Sounds and Animation.
 
-                if (Sprite.Velocity.ForwardBoostVelocity > 0.1)
-                {
+                if (Sprite.Velocity.ForwardBoostVelocity >= throttleFloor)
                     Sprite.ShipEngineBoostSound.Play();
-                }
-                else
-                {
-                    Sprite.ShipEngineBoostSound.Fade();
-                }
+                else Sprite.ShipEngineBoostSound.Fade();
 
-                if (Sprite.Velocity.ForwardVelocity > 0.1)
-                {
+                if (Sprite.Velocity.ForwardVelocity >= throttleFloor)
                     Sprite.ShipEngineRoarSound.Play();
-                }
-                else
-                {
-                    Sprite.ShipEngineRoarSound.Fade();
-                }
+                else Sprite.ShipEngineRoarSound.Fade();
 
                 if (Sprite.ThrusterAnimation != null)
                 {
-                    Sprite.ThrusterAnimation.Visable = Engine.Input.IsKeyPressed(SiPlayerKey.Forward);
+                    Sprite.ThrusterAnimation.Visable = (targetForwardAmount >= throttleFloor);
                 }
 
                 if (Sprite.BoostAnimation != null)
                 {
                     Sprite.BoostAnimation.Visable =
-                        Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
-                        && Engine.Input.IsKeyPressed(SiPlayerKey.Forward)
-                        && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostCoolingDown == false;
+                        (targetForwardAmount >= throttleFloor)
+                        && Sprite.UseSpeedBoost
+                        && Sprite.Velocity.AvailableBoost > 0
+                        && Sprite.Velocity.IsBoostCoolingDown == false;
                 }
 
                 #endregion
