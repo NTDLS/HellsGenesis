@@ -20,7 +20,9 @@ using static Si.Library.SiConstants;
 namespace Si.Engine.Manager
 {
     /// <summary>
-    /// Contains the collection of all sprites and their factories.
+    /// Contains the collection of all sprites and their factories. This class stringently controlls access to the internal collection
+    ///     only allowing insertsions and deletions from it to occur within events so that it can be safely assumes that the collection
+    ///     can be enummerated in the world clock controllers without fear of collection modification durring enumeration.
     /// </summary>
     public class EngineSpriteManager : IDisposable
     {
