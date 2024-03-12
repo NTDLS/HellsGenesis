@@ -6,9 +6,9 @@ using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System.Linq;
 
-namespace Si.Engine.TickController.SpriteTickController
+namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class TextBlocksSpriteTickController : SpriteTickControllerBase<SpriteTextBlock>
+    public class TextBlocksSpriteTickController : VectoredTickControllerBase<SpriteTextBlock>
     {
         public SpriteTextBlock PlayerStatsText { get; private set; }
         public SpriteTextBlock DebugText { get; private set; }

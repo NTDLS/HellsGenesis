@@ -5,9 +5,9 @@ using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
 
-namespace Si.Engine.TickController.SpriteTickController
+namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class EnemiesSpriteTickController : SpriteTickControllerBase<SpriteEnemyBase>
+    public class EnemiesSpriteTickController : VectoredTickControllerBase<SpriteEnemyBase>
     {
         private readonly EngineCore _engine;
 

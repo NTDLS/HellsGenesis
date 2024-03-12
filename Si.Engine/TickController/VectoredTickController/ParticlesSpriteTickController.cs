@@ -9,9 +9,9 @@ using Si.Rendering;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
-namespace Si.Engine.TickController.SpriteTickController
+namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class ParticlesSpriteTickController : SpriteTickControllerBase<SpriteParticleBase>
+    public class ParticlesSpriteTickController : VectoredTickControllerBase<SpriteParticleBase>
     {
         public ParticlesSpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)

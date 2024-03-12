@@ -4,9 +4,9 @@ using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System;
 
-namespace Si.Engine.TickController.SpriteTickController
+namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class PowerupsSpriteTickController : SpriteTickControllerBase<SpritePowerupBase>
+    public class PowerupsSpriteTickController : VectoredTickControllerBase<SpritePowerupBase>
     {
         public PowerupsSpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)

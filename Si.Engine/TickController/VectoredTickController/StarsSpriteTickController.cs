@@ -6,9 +6,9 @@ using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
 
-namespace Si.Engine.TickController.SpriteTickController
+namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class StarsSpriteTickController : SpriteTickControllerBase<SpriteStar>
+    public class StarsSpriteTickController : VectoredTickControllerBase<SpriteStar>
     {
         public StarsSpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)

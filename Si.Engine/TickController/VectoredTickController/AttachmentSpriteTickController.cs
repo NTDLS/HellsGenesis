@@ -4,9 +4,9 @@ using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.Engine.TickController.SpriteTickController
+namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class AttachmentSpriteTickController : SpriteTickControllerBase<SpriteAttachment>
+    public class AttachmentSpriteTickController : VectoredTickControllerBase<SpriteAttachment>
     {
         public AttachmentSpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)

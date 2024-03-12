@@ -7,9 +7,9 @@ using Si.Library.Mathematics.Geometry;
 using System.Drawing;
 using System.IO;
 
-namespace Si.Engine.TickController.SpriteTickController
+namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class AnimationSpriteTickController : SpriteTickControllerBase<SpriteAnimation>
+    public class AnimationSpriteTickController : VectoredTickControllerBase<SpriteAnimation>
     {
         public AnimationSpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)

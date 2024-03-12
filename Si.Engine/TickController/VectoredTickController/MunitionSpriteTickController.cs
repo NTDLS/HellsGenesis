@@ -13,9 +13,9 @@ using Si.Library.Mathematics.Geometry;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Si.Engine.TickController.SpriteTickController
+namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class MunitionSpriteTickController : SpriteTickControllerBase<MunitionBase>
+    public class MunitionSpriteTickController : VectoredTickControllerBase<MunitionBase>
     {
         private readonly DelegateThreadPool _munitionTraversalThreadPool;
 

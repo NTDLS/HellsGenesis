@@ -3,9 +3,9 @@ using Si.Engine.Sprite;
 using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.Engine.TickController.SpriteTickController
+namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class DebugsSpriteTickController : SpriteTickControllerBase<SpriteDebug>
+    public class DebugsSpriteTickController : VectoredTickControllerBase<SpriteDebug>
     {
         public DebugsSpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)

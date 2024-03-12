@@ -11,7 +11,7 @@ namespace Si.Engine.TickController._Superclass
     /// Tick managers which update their sprites using the supplied 2D vector.
     /// Also contains various factory methods.
     /// </summary>
-    public class SpriteTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
+    public class VectoredTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
     {
         public EngineCore Engine { get; private set; }
         public EngineSpriteManager SpriteManager { get; private set; }
@@ -24,7 +24,7 @@ namespace Si.Engine.TickController._Superclass
 
         public virtual void ExecuteWorldClockTick(float epoch, SiPoint displacementVector) { }
 
-        public SpriteTickControllerBase(EngineCore engine, EngineSpriteManager manager)
+        public VectoredTickControllerBase(EngineCore engine, EngineSpriteManager manager)
         {
             Engine = engine;
             SpriteManager = manager;

@@ -9,7 +9,7 @@ using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Engine.TickController.PlayerSpriteTickController;
-using Si.Engine.TickController.SpriteTickController;
+using Si.Engine.TickController.VectoredTickControllerBase;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
