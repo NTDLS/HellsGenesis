@@ -13,7 +13,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 {
     public class ParticleSpriteTickController : VectoredTickControllerBase<SpriteParticleBase>
     {
-        public ParticleSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public ParticleSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
         }

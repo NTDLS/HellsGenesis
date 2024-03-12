@@ -9,9 +9,9 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
     /// <summary>
     /// These are just generic bitmap sprites.
     /// </summary>
-    public class GenericSpriteTickController : VectoredTickControllerBase<SpriteGeneric>
+    public class GenericSpriteTickController : VectoredTickControllerBase<SpriteGenericBitmap>
     {
-        public GenericSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public GenericSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
         }
@@ -24,16 +24,16 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             }
         }
 
-        public SpriteGeneric CreateAt(SpriteBase sprite, SharpDX.Direct2D1.Bitmap bitmap)
+        public SpriteGenericBitmap CreateAt(SpriteBase sprite, SharpDX.Direct2D1.Bitmap bitmap)
         {
-            var obj = new SpriteGeneric(Engine, sprite.Location, bitmap);
+            var obj = new SpriteGenericBitmap(Engine, sprite.Location, bitmap);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public SpriteGeneric Create(SharpDX.Direct2D1.Bitmap bitmap)
+        public SpriteGenericBitmap Create(SharpDX.Direct2D1.Bitmap bitmap)
         {
-            var obj = new SpriteGeneric(Engine, bitmap);
+            var obj = new SpriteGenericBitmap(Engine, bitmap);
             SpriteManager.Add(obj);
             return obj;
         }

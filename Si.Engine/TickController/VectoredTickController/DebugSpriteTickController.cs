@@ -7,7 +7,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 {
     public class DebugSpriteTickController : VectoredTickControllerBase<SpriteDebug>
     {
-        public DebugSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public DebugSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
         }

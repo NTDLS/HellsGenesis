@@ -15,7 +15,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         public SpriteTextBlock PausedText { get; private set; }
 
 
-        public TextBlocksSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public TextBlocksSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
             PlayerStatsText = Create(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);

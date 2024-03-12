@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace Si.Engine.Manager
 {
-    public class EngineAssetManager : IDisposable
+    public class AssetManager : IDisposable
     {
 #if DEBUG
         private const string _assetPackagePath = "../../../../Installer/Si.Assets.rez";
@@ -25,7 +25,7 @@ namespace Si.Engine.Manager
         private readonly IArchive _archive = null;
         private readonly Dictionary<string, IArchiveEntry> _entryHashes;
 
-        public EngineAssetManager(EngineCore engine)
+        public AssetManager(EngineCore engine)
         {
             _engine = engine;
 

@@ -1,5 +1,4 @@
 ﻿using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Library.Mathematics.Geometry;
 
 namespace Si.Engine.Sprite.Enemy.Starbase._Superclass
 {
@@ -13,15 +12,6 @@ namespace Si.Engine.Sprite.Enemy.Starbase._Superclass
         {
             Velocity.ForwardVelocity = 1;
             Initialize();
-        }
-
-        /// <summary>
-        /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
-        /// </summary>
-        /// <param name="displacementVector"></param>
-        public override void ApplyMotion(float epoch, SiPoint displacementVector)
-        {
-            base.ApplyMotion(epoch, displacementVector);
         }
 
         public override void Cleanup()

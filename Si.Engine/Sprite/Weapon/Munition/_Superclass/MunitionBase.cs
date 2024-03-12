@@ -106,7 +106,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                 return;
             }
 
-            Location += Velocity.ForwardAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
+            Location += Velocity.MovementVector * epoch;
         }
 
         public override void Explode()

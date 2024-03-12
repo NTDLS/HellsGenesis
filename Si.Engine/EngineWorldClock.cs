@@ -1,6 +1,5 @@
 ﻿using NTDLS.DelegateThreadPooling;
 using Si.Engine.Core.Types;
-using Si.Engine.Sprite;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;

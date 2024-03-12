@@ -10,8 +10,6 @@ namespace Si.Library.Mathematics
         public event ValueChangeEvent? OnVelocityChanged;
         public event ValueChangeEvent? OnBoostChanged;
 
-
-
         /// <summary>
         /// The angle in which the object is pointing.
         /// </summary>
@@ -25,7 +23,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// The additional speed that can be temporarily added to the sprites forward velocity.
         /// </summary>
-        public float MaximumBoostSpeed { get; set; }
+        public float MaximumSpeedBoost { get; set; }
 
         /// <summary>
         /// The amount of boost availble until it is depleted and requires recharging.
@@ -35,7 +33,7 @@ namespace Si.Library.Mathematics
 
         public float _forwardVelocity;
         /// <summary>
-        /// Percentage of forward or reverse velocity expressed as a decimal percentage of the Speed.
+        /// Percentage of forward or reverse velocity expressed as a decimal percentage of the MaximumSpeed.
         /// </summary>
         public float ForwardVelocity
         {
@@ -49,7 +47,7 @@ namespace Si.Library.Mathematics
 
         public float _lateralVelocity;
         /// <summary>
-        /// Percentage of lateral velocity expressed as a decimal percentage of the Speed.
+        /// Percentage of lateral velocity expressed as a decimal percentage of the MaximumSpeed.
         /// </summary>
         public float LateralVelocity
         {
@@ -62,7 +60,8 @@ namespace Si.Library.Mathematics
         }
 
         /// <summary>
-        /// The sumation of the forward angle, laterial strafe angle, and all velocity (including boost). 
+        /// The sumation of the forward angle, laterial strafe angle, and all velocity (including boost).
+        /// Sprite movement is simple: (MovementVector * epoch)
         /// </summary>
         public SiPoint MovementVector
         {
@@ -72,7 +71,7 @@ namespace Si.Library.Mathematics
                 var lateralAngle = new SiAngle(ForwardAngle.Radians + SiPoint.RADIANS_90);
 
                 return
-                    (ForwardAngle * ((MaximumSpeed * ForwardVelocity) + (MaximumBoostSpeed * ForwardBoostVelocity))) //Forward / Reverse.
+                    (ForwardAngle * ((MaximumSpeed * ForwardVelocity) + (MaximumSpeedBoost * ForwardBoostVelocity))) //Forward / Reverse.
                     + (lateralAngle * MaximumSpeed * LateralVelocity); //Left/Right Strafe.
             }
         }

@@ -11,7 +11,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
     {
         private readonly EngineCore _engine;
 
-        public EnemySpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public EnemySpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
             _engine = engine;

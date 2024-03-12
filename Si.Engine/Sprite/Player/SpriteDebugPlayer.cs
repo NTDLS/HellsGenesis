@@ -16,10 +16,10 @@ namespace Si.Engine.Sprite.Player
             Initialize(imagePath);
 
             //Load the loadout from file or create a new one if it does not exist.
-            PlayerShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
+            LoadoutPlayerShip loadout = LoadLoadoutFromFile(ShipClass);
             if (loadout == null)
             {
-                loadout = new PlayerShipLoadout(ShipClass)
+                loadout = new LoadoutPlayerShip(ShipClass)
                 {
                     Speed = 4.75f,
                     Boost = 1.5f,

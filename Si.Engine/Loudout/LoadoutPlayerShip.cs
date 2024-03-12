@@ -6,12 +6,12 @@ using static Si.Library.SiConstants;
 namespace Si.Engine.Loudout
 {
     /// <summary>
-    /// Contains a single instance of a enemy loadout.
+    /// Contains a single instance of a player loadout.
     /// </summary>
-    public class EnemyShipLoadout
+    public class LoadoutPlayerShip
     {
         [JsonConverter(typeof(StringEnumConverter))]
-        public SiEnemyClass Class { get; set; }
+        public SiPlayerClass Class { get; set; }
         [JsonIgnore]
         public int ImageIndex => (int)Class;
         [JsonIgnore]
@@ -21,15 +21,15 @@ namespace Si.Engine.Loudout
         public float Boost { get; set; }
         public int HullHealth { get; set; }
         public int ShieldHealth { get; set; }
-        public int Bounty { get; set; }
 
-        public List<ShipLoadoutWeapon> Weapons { get; set; } = new();
+        public ShipLoadoutWeapon PrimaryWeapon { get; set; }
+        public List<ShipLoadoutWeapon> SecondaryWeapons { get; set; } = new();
 
-        public EnemyShipLoadout()
+        public LoadoutPlayerShip()
         {
         }
 
-        public EnemyShipLoadout(SiEnemyClass shipClass)
+        public LoadoutPlayerShip(SiPlayerClass shipClass)
         {
             Class = shipClass;
         }

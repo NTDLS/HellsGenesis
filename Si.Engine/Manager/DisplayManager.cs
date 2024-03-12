@@ -12,7 +12,7 @@ namespace Si.Engine.Manager
     /// <summary>
     /// Various metrics related to display.
     /// </summary>
-    public class EngineDisplayManager
+    public class DisplayManager
     {
         private readonly EngineCore _engine;
 
@@ -152,7 +152,7 @@ namespace Si.Engine.Manager
             }
         }
 
-        public EngineDisplayManager(EngineCore engine, Control drawingSurface)
+        public DisplayManager(EngineCore engine, Control drawingSurface)
         {
             _engine = engine;
             DrawingSurface = drawingSurface;

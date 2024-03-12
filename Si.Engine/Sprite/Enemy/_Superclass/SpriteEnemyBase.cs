@@ -23,7 +23,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
     public class SpriteEnemyBase : SpriteShipBase
     {
         public SiEnemyClass ShipClass { get; set; }
-        public EnemyShipLoadout Loadout { get; set; }
+        public LoadoutEnemyShip Loadout { get; set; }
         public IIAController CurrentAIController { get; set; }
         public Dictionary<Type, IIAController> AIControllers { get; private set; } = new();
         public int Bounty { get; private set; } = 0;
@@ -97,17 +97,17 @@ namespace Si.Engine.Sprite.Enemy._Superclass
             return result;
         }
 
-        public EnemyShipLoadout LoadLoadoutFromFile(SiEnemyClass shipClass)
+        public LoadoutEnemyShip LoadLoadoutFromFile(SiEnemyClass shipClass)
         {
-            EnemyShipLoadout loadout = null;
+            LoadoutEnemyShip loadout = null;
 
-            var loadoutText = EngineAssetManager.GetUserText($"Enemy.{shipClass}.loadout.json");
+            var loadoutText = AssetManager.GetUserText($"Enemy.{shipClass}.loadout.json");
 
             try
             {
                 if (string.IsNullOrWhiteSpace(loadoutText) == false)
                 {
-                    loadout = JsonConvert.DeserializeObject<EnemyShipLoadout>(loadoutText);
+                    loadout = JsonConvert.DeserializeObject<LoadoutEnemyShip>(loadoutText);
                 }
             }
             catch
@@ -118,13 +118,13 @@ namespace Si.Engine.Sprite.Enemy._Superclass
             return loadout;
         }
 
-        public void SaveLoadoutToFile(EnemyShipLoadout loadout)
+        public void SaveLoadoutToFile(LoadoutEnemyShip loadout)
         {
             var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
-            EngineAssetManager.PutUserText($"Enemy.{loadout.Class}.loadout.json", serializedText);
+            AssetManager.PutUserText($"Enemy.{loadout.Class}.loadout.json", serializedText);
         }
 
-        public void ResetLoadout(EnemyShipLoadout loadout)
+        public void ResetLoadout(LoadoutEnemyShip loadout)
         {
             Loadout = loadout;
             Reset();
@@ -133,7 +133,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         public void Reset()
         {
             Velocity.MaximumSpeed = Loadout.Speed;
-            Velocity.MaximumBoostSpeed = Loadout.Boost;
+            Velocity.MaximumSpeedBoost = Loadout.Boost;
             Bounty = Loadout.Bounty;
 
             SetHullHealth(Loadout.HullHealth);
@@ -164,7 +164,6 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         /// <param name="displacementVector"></param>
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-
             if (!_engine.Display.TotalCanvasBounds.Balloon(_engine.Settings.EnemySceneDistanceLimit).IntersectsWith(RenderBounds))
             {
                 QueueForDelete();
@@ -178,7 +177,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
                 {
                     Velocity.ForwardBoostVelocity += _engine.Settings.EnemyVelocityRampUp;
                 }
-                Velocity.AvailableBoost -= Velocity.MaximumBoostSpeed * Velocity.ForwardBoostVelocity; //Consume boost.
+                Velocity.AvailableBoost -= Velocity.MaximumSpeedBoost * Velocity.ForwardBoostVelocity; //Consume boost.
 
                 if (Velocity.AvailableBoost < 0) //Sanity check available boost.
                 {
@@ -194,16 +193,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
                 }
             }
 
-            var velocityAmount = Velocity.MaximumSpeed * Velocity.ForwardVelocity;
-
-            if (Velocity.ForwardBoostVelocity > 0)
-            {
-                velocityAmount += Velocity.MaximumBoostSpeed * Velocity.ForwardBoostVelocity;
-            }
-
-            //Location += (Velocity.Angle * velocityAmount * epoch);
-
-            Location += Velocity.ForwardAngle * velocityAmount * epoch;
+            Location += Velocity.MovementVector * epoch;
 
             //System.Diagnostics.Debug.Print($"Dbg: {newLocation}, Actual: {Location}");
 

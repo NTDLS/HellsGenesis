@@ -14,7 +14,7 @@ namespace Si.Engine.TickController._Superclass
     public class VectoredTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
     {
         public EngineCore Engine { get; private set; }
-        public EngineSpriteManager SpriteManager { get; private set; }
+        public SpriteManager SpriteManager { get; private set; }
 
         public List<subType> VisibleOfType<subType>() where subType : T => SpriteManager.VisibleOfType<subType>();
         public List<T> Visible() => SpriteManager.VisibleOfType<T>();
@@ -24,7 +24,7 @@ namespace Si.Engine.TickController._Superclass
 
         public virtual void ExecuteWorldClockTick(float epoch, SiPoint displacementVector) { }
 
-        public VectoredTickControllerBase(EngineCore engine, EngineSpriteManager manager)
+        public VectoredTickControllerBase(EngineCore engine, SpriteManager manager)
         {
             Engine = engine;
             SpriteManager = manager;

@@ -20,10 +20,10 @@ namespace Si.Engine.Sprite.Enemy.Debug
             SetImage(@$"Graphics\Enemy\Debug\{ShipClass}\Hull.png");
 
             //Load the loadout from file or create a new one if it does not exist.
-            EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
+            LoadoutEnemyShip loadout = LoadLoadoutFromFile(ShipClass);
             if (loadout == null)
             {
-                loadout = new EnemyShipLoadout(ShipClass)
+                loadout = new LoadoutEnemyShip(ShipClass)
                 {
                     Description = "→ Debug Static ←\n"
                        + "Does noting. Sits where you place it..\n"

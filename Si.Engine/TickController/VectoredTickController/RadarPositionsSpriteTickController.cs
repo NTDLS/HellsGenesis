@@ -10,9 +10,9 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 {
     public class RadarPositionsSpriteTickController : UnvectoredTickControllerBase<SpriteRadarPositionTextBlock>
     {
-        private readonly EngineSpriteManager _manager;
+        private readonly SpriteManager _manager;
 
-        public RadarPositionsSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public RadarPositionsSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine)
         {
             _manager = manager;

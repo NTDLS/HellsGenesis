@@ -21,7 +21,7 @@ namespace Si.Engine.Sprite.Player._Superclass
     public class SpritePlayerBase : SpriteShipBase
     {
         public SiPlayerClass ShipClass { get; set; }
-        public PlayerShipLoadout Loadout { get; private set; }
+        public LoadoutPlayerShip Loadout { get; private set; }
         public SiAudioClip AmmoLowSound { get; private set; }
         public SiAudioClip AmmoEmptySound { get; private set; }
         public SiAudioClip ShipEngineRoarSound { get; private set; }
@@ -115,17 +115,17 @@ namespace Si.Engine.Sprite.Player._Superclass
             return result;
         }
 
-        public PlayerShipLoadout LoadLoadoutFromFile(SiPlayerClass shipClass)
+        public LoadoutPlayerShip LoadLoadoutFromFile(SiPlayerClass shipClass)
         {
-            PlayerShipLoadout loadout = null;
+            LoadoutPlayerShip loadout = null;
 
-            var loadoutText = EngineAssetManager.GetUserText($"Player.{shipClass}.loadout.json");
+            var loadoutText = AssetManager.GetUserText($"Player.{shipClass}.loadout.json");
 
             try
             {
                 if (string.IsNullOrWhiteSpace(loadoutText) == false)
                 {
-                    loadout = JsonConvert.DeserializeObject<PlayerShipLoadout>(loadoutText);
+                    loadout = JsonConvert.DeserializeObject<LoadoutPlayerShip>(loadoutText);
                 }
             }
             catch
@@ -136,17 +136,17 @@ namespace Si.Engine.Sprite.Player._Superclass
             return loadout;
         }
 
-        public void SaveLoadoutToFile(PlayerShipLoadout loadout)
+        public void SaveLoadoutToFile(LoadoutPlayerShip loadout)
         {
             var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
-            EngineAssetManager.PutUserText($"Player.{loadout.Class}.loadout.json", serializedText);
+            AssetManager.PutUserText($"Player.{loadout.Class}.loadout.json", serializedText);
         }
 
         /// <summary>
         /// Resets ship image, state, health etc while allowing you to change the class.
         /// </summary>
         /// <param name="playerClass"></param>
-        public void ResetLoadout(PlayerShipLoadout loadout)
+        public void ResetLoadout(LoadoutPlayerShip loadout)
         {
             Loadout = loadout;
             SetImage(@$"Graphics\Player\Ships\{loadout.Name}.png");
@@ -171,7 +171,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             #region Reset loadout.
 
             Velocity.MaximumSpeed = Loadout.Speed;
-            Velocity.MaximumBoostSpeed = Loadout.Boost;
+            Velocity.MaximumSpeedBoost = Loadout.Boost;
 
             SetHullHealth(Loadout.HullHealth);
             SetShieldHealth(Loadout.ShieldHealth);
@@ -518,16 +518,5 @@ namespace Si.Engine.Sprite.Player._Superclass
         }
 
         #endregion
-
-        /// <summary>
-        /// Moves the sprite to the exact location as dictated by the remote connection.
-        /// Also sets the current vector of the remote sprite so that we can move the sprite along that vector between updates.
-        /// </summary>
-        /// <param name="vector"></param>
-
-        public override void ApplyMotion(float epoch, SiPoint displacementVector)
-        {
-            base.ApplyMotion(epoch, displacementVector);
-        }
     }
 }

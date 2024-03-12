@@ -11,7 +11,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 {
     public class AnimationSpriteTickController : VectoredTickControllerBase<SpriteAnimation>
     {
-        public AnimationSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public AnimationSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
         }

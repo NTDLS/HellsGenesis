@@ -1,10 +1,8 @@
 ﻿using NTDLS.Semaphore;
 using SharpDX.Mathematics.Interop;
 using Si.Engine.Menu;
-using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Engine.Sprite.Player;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
@@ -24,7 +22,7 @@ namespace Si.Engine.Manager
     ///     only allowing insertsions and deletions from it to occur within events so that it can be safely assumes that the collection
     ///     can be enummerated in the world clock controllers without fear of collection modification durring enumeration.
     /// </summary>
-    public class EngineSpriteManager : IDisposable
+    public class SpriteManager : IDisposable
     {
         public delegate void CollectionAccessor(List<SpriteBase> sprites);
         public delegate T CollectionAccessorT<T>(List<SpriteBase> sprites);
@@ -54,7 +52,7 @@ namespace Si.Engine.Manager
 
         #endregion
 
-        public EngineSpriteManager(EngineCore engine)
+        public SpriteManager(EngineCore engine)
         {
             _engine = engine;
 

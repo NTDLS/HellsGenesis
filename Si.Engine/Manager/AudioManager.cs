@@ -7,7 +7,7 @@ namespace Si.Engine.Manager
     /// <summary>
     /// /// Contains global sounds and music.
     /// </summary>
-    public class EngineAudioManager
+    public class AudioManager
     {
         private readonly EngineCore _engine;
 
@@ -17,7 +17,7 @@ namespace Si.Engine.Manager
         public SiAudioClip LockedOnBlip { get; private set; }
         public SiAudioClip Click { get; private set; }
 
-        public EngineAudioManager(EngineCore engine)
+        public AudioManager(EngineCore engine)
         {
             _engine = engine;
 

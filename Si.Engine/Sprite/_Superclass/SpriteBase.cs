@@ -1001,12 +1001,12 @@ namespace Si.Engine.Sprite._Superclass
         #endregion
 
         /// <summary>
-        /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
+        /// Moves the sprite based on its thrust/boost (velocity).
         /// </summary>
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location += Velocity.ForwardAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
+            Location += Velocity.MovementVector * epoch;
         }
 
         public virtual void VelocityChanged() { }

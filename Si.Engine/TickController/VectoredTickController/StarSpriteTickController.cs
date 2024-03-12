@@ -10,7 +10,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 {
     public class StarSpriteTickController : VectoredTickControllerBase<SpriteStar>
     {
-        public StarSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public StarSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
         }

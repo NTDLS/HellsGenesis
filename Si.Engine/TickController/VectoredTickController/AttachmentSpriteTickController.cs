@@ -8,7 +8,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 {
     public class AttachmentSpriteTickController : VectoredTickControllerBase<SpriteAttachment>
     {
-        public AttachmentSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public AttachmentSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
         }

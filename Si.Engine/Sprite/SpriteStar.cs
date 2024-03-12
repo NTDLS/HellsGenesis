@@ -36,7 +36,7 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location -= displacementVector * Velocity.MaximumSpeed * Velocity.ForwardVelocity * epoch;
+            Location -= Velocity.MovementVector * epoch;
         }
     }
 }

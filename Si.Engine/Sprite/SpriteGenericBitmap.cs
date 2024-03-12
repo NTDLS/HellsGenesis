@@ -8,7 +8,7 @@ using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite
 {
-    public class SpriteGeneric : SpriteBase
+    public class SpriteGenericBitmap : SpriteBase
     {
         /// <summary>
         /// The max travel distance from the creation x,y before the sprite is automatically deleted.
@@ -30,7 +30,7 @@ namespace Si.Engine.Sprite
         public SiRelativeDirection RotationDirection { get; set; } = SiRelativeDirection.None;
 
 
-        public SpriteGeneric(EngineCore engine, SiPoint location, SharpDX.Direct2D1.Bitmap bitmap)
+        public SpriteGenericBitmap(EngineCore engine, SiPoint location, SharpDX.Direct2D1.Bitmap bitmap)
             : base(engine)
         {
             Initialize(bitmap);
@@ -45,14 +45,14 @@ namespace Si.Engine.Sprite
             Velocity.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
         }
 
-        public SpriteGeneric(EngineCore engine, SharpDX.Direct2D1.Bitmap bitmap)
+        public SpriteGenericBitmap(EngineCore engine, SharpDX.Direct2D1.Bitmap bitmap)
             : base(engine)
         {
             Initialize(bitmap);
             Velocity = new SiVelocity();
         }
 
-        public SpriteGeneric(EngineCore engine, string imagePath)
+        public SpriteGenericBitmap(EngineCore engine, string imagePath)
             : base(engine)
         {
             SetImage(imagePath);

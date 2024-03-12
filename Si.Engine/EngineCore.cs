@@ -33,12 +33,12 @@ namespace Si.Engine
 
         #region Managers. 
 
-        public EngineInputManager Input { get; private set; }
-        public EngineDisplayManager Display { get; private set; }
-        public EngineSpriteManager Sprites { get; private set; } //Also contains all of the sprite tick controllers.
-        public EngineAudioManager Audio { get; private set; }
-        public EngineAssetManager Assets { get; private set; }
-        public EngineInterrogationManager Debug { get; private set; }
+        public InputManager Input { get; private set; }
+        public DisplayManager Display { get; private set; }
+        public SpriteManager Sprites { get; private set; } //Also contains all of the sprite tick controllers.
+        public AudioManager Audio { get; private set; }
+        public AssetManager Assets { get; private set; }
+        public InterrogationManager Debug { get; private set; }
 
         #endregion
 
@@ -71,14 +71,14 @@ namespace Si.Engine
         {
             Settings = LoadSettings();
 
-            Display = new EngineDisplayManager(this, drawingSurface);
+            Display = new DisplayManager(this, drawingSurface);
             Rendering = new SiRendering(Settings, drawingSurface, Display.TotalCanvasSize);
-            Assets = new EngineAssetManager(this);
+            Assets = new AssetManager(this);
             Events = new EventTickController(this);
-            Sprites = new EngineSpriteManager(this);
-            Input = new EngineInputManager(this);
+            Sprites = new SpriteManager(this);
+            Input = new InputManager(this);
             Situations = new SituationTickController(this);
-            Audio = new EngineAudioManager(this);
+            Audio = new AudioManager(this);
             Menus = new MenuTickController(this);
             Player = new PlayerSpriteTickController(this);
 
@@ -87,12 +87,12 @@ namespace Si.Engine
 
         public void EnableDebugging(IInterrogationForm debugForm)
         {
-            Debug = new EngineInterrogationManager(this, debugForm);
+            Debug = new InterrogationManager(this, debugForm);
         }
 
         public static SiEngineSettings LoadSettings()
         {
-            var engineSettingsText = EngineAssetManager.GetUserText("Engine.Settings.json");
+            var engineSettingsText = AssetManager.GetUserText("Engine.Settings.json");
 
             if (string.IsNullOrEmpty(engineSettingsText))
             {
@@ -105,7 +105,7 @@ namespace Si.Engine
                 defaultSettings.Resolution = new Size(x, y);
 
                 engineSettingsText = JsonConvert.SerializeObject(defaultSettings, Formatting.Indented);
-                EngineAssetManager.PutUserText("Engine.Settings.json", engineSettingsText);
+                AssetManager.PutUserText("Engine.Settings.json", engineSettingsText);
             }
 
             return JsonConvert.DeserializeObject<SiEngineSettings>(engineSettingsText);
@@ -113,7 +113,7 @@ namespace Si.Engine
 
         public static void SaveSettings(SiEngineSettings settings)
         {
-            EngineAssetManager.PutUserText("Engine.Settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
+            AssetManager.PutUserText("Engine.Settings.json", JsonConvert.SerializeObject(settings, Formatting.Indented));
         }
 
         public void ResetGame()

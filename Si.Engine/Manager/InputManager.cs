@@ -11,7 +11,7 @@ namespace Si.Engine.Manager
     /// <summary>
     /// Handles keyboard input and keeps track of key-press states.
     /// </summary>
-    public class EngineInputManager
+    public class InputManager
     {
         private readonly EngineCore _engine;
         private readonly Dictionary<SiPlayerKey, float> _playerKeyStates = new();
@@ -43,7 +43,7 @@ namespace Si.Engine.Manager
         //Controller controller;
         //Gamepad gamepad;
 
-        public EngineInputManager(EngineCore engine)
+        public InputManager(EngineCore engine)
         {
             _engine = engine;
 
@@ -60,7 +60,7 @@ namespace Si.Engine.Manager
 
         }
 
-        ~EngineInputManager()
+        ~InputManager()
         {
             DxInput.Dispose();
             DxKeyboard.Dispose();

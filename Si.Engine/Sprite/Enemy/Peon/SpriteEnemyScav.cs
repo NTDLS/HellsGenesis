@@ -17,10 +17,10 @@ namespace Si.Engine.Sprite.Enemy.Peon
             SetImage(@$"Graphics\Enemy\Peon\{ShipClass}\Hull.png");
 
             //Load the loadout from file or create a new one if it does not exist.
-            EnemyShipLoadout loadout = LoadLoadoutFromFile(ShipClass);
+            LoadoutEnemyShip loadout = LoadLoadoutFromFile(ShipClass);
             if (loadout == null)
             {
-                loadout = new EnemyShipLoadout(ShipClass)
+                loadout = new LoadoutEnemyShip(ShipClass)
                 {
                     Description = "→ Scav ←\n"
                        + "TODO: Add a description\n",

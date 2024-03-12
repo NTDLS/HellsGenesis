@@ -78,7 +78,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         }
 
         /// <summary>
-        /// Moves the sprite based on its thrust/boost (velocity) taking into account the background scroll.
+        /// Moves the sprite based on its thrust/boost (velocity).
         /// </summary>
         /// <param name="displacementVector"></param>
         public override void ApplyMotion(float epoch, SiPoint displacementVector)

@@ -19,7 +19,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
     {
         private readonly DelegateThreadPool _munitionTraversalThreadPool;
 
-        public MunitionSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public MunitionSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
             _munitionTraversalThreadPool = new(engine.Settings.MunitionTraversalThreads);

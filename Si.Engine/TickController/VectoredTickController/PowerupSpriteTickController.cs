@@ -8,7 +8,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 {
     public class PowerupSpriteTickController : VectoredTickControllerBase<SpritePowerupBase>
     {
-        public PowerupSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public PowerupSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
         }

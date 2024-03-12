@@ -15,7 +15,7 @@ namespace Si.Engine.Manager
     /// <summary>
     /// Handles keyboard debugging inquiries.
     /// </summary>
-    public class EngineInterrogationManager
+    public class InterrogationManager
     {
         private static string[] _commandPrototypes = {
             "Cls||Clears the debug screen.",
@@ -77,7 +77,7 @@ namespace Si.Engine.Manager
         private readonly List<MethodInfo> _hardDebugMethods;
         public bool IsVisible { get; private set; } = false;
 
-        public EngineInterrogationManager(EngineCore engine, IInterrogationForm debugForm)
+        public InterrogationManager(EngineCore engine, IInterrogationForm debugForm)
         {
             _engine = engine;
             _debugForm = debugForm;
@@ -127,7 +127,7 @@ namespace Si.Engine.Manager
         public List<MethodInfo> GetMethodsWithOnlyDebugCommandParameter()
         {
             var methods = new List<MethodInfo>();
-            var allMethods = typeof(EngineInterrogationManager)
+            var allMethods = typeof(InterrogationManager)
                 .GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
 
             foreach (var method in allMethods)
@@ -580,7 +580,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.MaximumBoostSpeed = command.ParameterValue<float>("value");
+                    sprite.Velocity.MaximumSpeedBoost = command.ParameterValue<float>("value");
                 }
             });
         }
