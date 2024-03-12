@@ -1,5 +1,8 @@
-﻿using Si.Engine.Core.Types;
+﻿using NTDLS.DelegateThreadPooling;
+using Si.Engine.Core.Types;
+using Si.Engine.Manager;
 using Si.Engine.Sprite;
+using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
 using System;
@@ -19,8 +22,17 @@ namespace Si.Engine
         private bool _isPaused = false;
         private readonly Thread _graphicsThread;
 
+        private readonly DelegateThreadPool _worldClockThreadPool;
+
         public EngineWorldClock(EngineCore engine)
         {
+            _worldClockThreadPool = new(engine.Settings.WorldClockThreads);
+
+            engine.OnStopEngine += (sender) =>
+            {
+                _worldClockThreadPool.Stop();
+            };
+
             _engine = engine;
             _graphicsThread = new Thread(GraphicsThreadProc);
         }
@@ -116,46 +128,43 @@ namespace Si.Engine
 
                 var epoch = (float)(elapsedEpochMilliseconds / millisecondPerEpoch);
 
-                _engine.Sprites.Use(o =>
+                if (!_isPaused)
                 {
-                    if (!_isPaused)
+                    ExecuteWorldClockTick(epoch);
+                }
+
+                _engine.Debug.ProcessCommand();
+
+                //If it is time to render, then render the frame!.
+                if (frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency > frameRateDelayMicroseconds)
+                {
+                    _engine.RenderEverything();
+                    frameRateTimer.Restart();
+                    _engine.Display.FrameCounter.Calculate();
+
+                    #region Framerate fine-tuning.
+                    if (_engine.Settings.FineTuneFramerate)
                     {
-                        ExecuteWorldClockTick(epoch);
-                    }
-
-                    _engine.Debug.ProcessCommand();
-
-                    //If it is time to render, then render the frame!.
-                    if (frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency > frameRateDelayMicroseconds)
-                    {
-                        _engine.RenderEverything();
-                        frameRateTimer.Restart();
-                        _engine.Display.FrameCounter.Calculate();
-
-                        #region Framerate fine-tuning.
-                        if (_engine.Settings.FineTuneFramerate)
+                        //From time-to-time we want o check the average framerate and make sure its sane,
+                        if (_frameRateAdjustCount > _frameRateAdjustCadence)
                         {
-                            //From time-to-time we want o check the average framerate and make sure its sane,
-                            if (_frameRateAdjustCount > _frameRateAdjustCadence)
+                            _frameRateAdjustCount = 0;
+                            if (_engine.Display.FrameCounter.AverageFrameRate < framePerSecondLimit && frameRateDelayMicroseconds > 1000)
                             {
-                                _frameRateAdjustCount = 0;
-                                if (_engine.Display.FrameCounter.AverageFrameRate < framePerSecondLimit && frameRateDelayMicroseconds > 1000)
-                                {
-                                    //The framerate is too low, reduce the delay.
-                                    frameRateDelayMicroseconds -= 1000;
-                                }
-                                else if (_engine.Display.FrameCounter.AverageFrameRate > framePerSecondLimit * 1.20)
-                                {
-                                    //the framerate is too high increase the delay.
-                                    frameRateDelayMicroseconds += 25;
-                                }
-                                //System.Diagnostics.Debug.Print($"{frameRateDelayMicroseconds} -> {framePerSecondLimit} -> {_engine.Display.FrameCounter.AverageFrameRate:n4}");
+                                //The framerate is too low, reduce the delay.
+                                frameRateDelayMicroseconds -= 1000;
                             }
-                            _frameRateAdjustCount++;
+                            else if (_engine.Display.FrameCounter.AverageFrameRate > framePerSecondLimit * 1.20)
+                            {
+                                //the framerate is too high increase the delay.
+                                frameRateDelayMicroseconds += 25;
+                            }
+                            //System.Diagnostics.Debug.Print($"{frameRateDelayMicroseconds} -> {framePerSecondLimit} -> {_engine.Display.FrameCounter.AverageFrameRate:n4}");
                         }
-                        #endregion
+                        _frameRateAdjustCount++;
                     }
-                });
+                    #endregion
+                }
 
                 //Determine how many µs it took to render the scene.
                 var actualWorldTickDurationMicroseconds = worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency;
@@ -179,6 +188,13 @@ namespace Si.Engine
 
         private SiPoint ExecuteWorldClockTick(float epoch)
         {
+            //This is where we execute the world clock for each type of object.
+            //Note that this function does emply threads but I do not beleive it is necessary for performance.
+            //The idea is that sprites are created in Events.ExecuteWorldClockTick(), input is snapshotted,
+            // the player is moved (so we have a displacment vector) and then we should be free to do all
+            // other operations in paralell with the exception of deleting sprites that are queued for deletion -
+            // which is why we do that after the threads have completed.
+
             _engine.Menus.ExecuteWorldClockTick();
             _engine.Situations.ExecuteWorldClockTick();
             _engine.Events.ExecuteWorldClockTick();
@@ -187,16 +203,26 @@ namespace Si.Engine
 
             var displacementVector = _engine.Player.ExecuteWorldClockTick(epoch);
 
-            _engine.Sprites.Enemies.ExecuteWorldClockTick(epoch, displacementVector);
-            _engine.Sprites.Particles.ExecuteWorldClockTick(epoch, displacementVector);
-            _engine.Sprites.GenericSprites.ExecuteWorldClockTick(epoch, displacementVector);
-            _engine.Sprites.Munitions.ExecuteWorldClockTick(epoch, displacementVector);
-            _engine.Sprites.Stars.ExecuteWorldClockTick(epoch, displacementVector);
-            _engine.Sprites.Animations.ExecuteWorldClockTick(epoch, displacementVector);
-            _engine.Sprites.TextBlocks.ExecuteWorldClockTick(epoch, displacementVector);
-            _engine.Sprites.Powerups.ExecuteWorldClockTick(epoch, displacementVector);
-            _engine.Sprites.Debugs.ExecuteWorldClockTick(epoch, displacementVector);
+            //Create a collection of threads so we can wait on the ones that we start.
+            var threadPoolTracker = _worldClockThreadPool.CreateQueueStateTracker();
 
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Enemies.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Particles.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.GenericSprites.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Munitions.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Stars.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Animations.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.TextBlocks.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Powerups.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Debugs.ExecuteWorldClockTick(epoch, displacementVector));
+
+            //Wait on all enqueued threads to complete.
+            if (SiUtility.TryAndIgnore(() => threadPoolTracker.WaitForCompletion()) == false)
+            {
+                return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
+            }
+
+            //Radar position indicators just look glitchy when they are multithreaded.
             _engine.Sprites.RadarPositions.ExecuteWorldClockTick();
 
             _engine.Sprites.CleanupDeletedObjects();

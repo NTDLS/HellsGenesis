@@ -180,7 +180,7 @@ namespace Si.Engine.Manager
             => _collection.Use(o => o.Where(o => o is T).Select(o => o as T).ToList());
 
         public List<T> VisibleOfType<T>() where T : class
-                => _collection.Use(o => o.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList());
+            => _collection.Use(o => o.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList());
 
         public List<SpriteBase> Visible() => _collection.Use(o => o.Where(o => o.Visable == true).ToList());
 

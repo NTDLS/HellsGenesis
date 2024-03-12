@@ -58,7 +58,7 @@ namespace Si.Engine.TickController.SpriteTickController
                 objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
 
                 //Create a collection of threads so we can wait on the ones that we start.
-                var threadCollection = _munitionTraversalThreadPool.CreateQueueStateCollection();
+                var threadPoolTracker = _munitionTraversalThreadPool.CreateQueueStateTracker();
 
                 List<HitObject> hitObjects = new();
 
@@ -70,7 +70,7 @@ namespace Si.Engine.TickController.SpriteTickController
                     if (munition.IsDeadOrExploded == false)
                     {
                         //Enqueue an item into the thread pool.
-                        threadCollection.Enqueue(() =>
+                        threadPoolTracker.Enqueue(() =>
                         {
                             var hitObject = TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit);
                             if (hitObject != null)
@@ -85,7 +85,7 @@ namespace Si.Engine.TickController.SpriteTickController
                 }
 
                 //Wait on all enqueued threads to complete.
-                if (SiUtility.TryAndIgnore(() => threadCollection.WaitForCompletion()) == false)
+                if (SiUtility.TryAndIgnore(() => threadPoolTracker.WaitForCompletion()) == false)
                 {
                     return;
                 }
