@@ -7,11 +7,11 @@ using System;
 
 namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class EnemiesSpriteTickController : VectoredTickControllerBase<SpriteEnemyBase>
+    public class EnemySpriteTickController : VectoredTickControllerBase<SpriteEnemyBase>
     {
         private readonly EngineCore _engine;
 
-        public EnemiesSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public EnemySpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)
         {
             _engine = engine;

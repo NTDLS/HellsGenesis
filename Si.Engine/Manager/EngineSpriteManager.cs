@@ -43,12 +43,12 @@ namespace Si.Engine.Manager
         public AttachmentSpriteTickController Attachments { get; private set; }
         public GenericSpriteTickController GenericSprites { get; private set; }
         public MunitionSpriteTickController Munitions { get; private set; }
-        public DebugsSpriteTickController Debugs { get; private set; }
-        public EnemiesSpriteTickController Enemies { get; private set; }
-        public ParticlesSpriteTickController Particles { get; private set; }
-        public PowerupsSpriteTickController Powerups { get; private set; }
+        public DebugSpriteTickController Debugs { get; private set; }
+        public EnemySpriteTickController Enemies { get; private set; }
+        public ParticleSpriteTickController Particles { get; private set; }
+        public PowerupSpriteTickController Powerups { get; private set; }
         public RadarPositionsSpriteTickController RadarPositions { get; set; }
-        public StarsSpriteTickController Stars { get; private set; }
+        public StarSpriteTickController Stars { get; private set; }
         public TextBlocksSpriteTickController TextBlocks { get; private set; }
         public PlayerSpriteTickController Player { get; private set; }
 
@@ -60,14 +60,14 @@ namespace Si.Engine.Manager
 
             Animations = new AnimationSpriteTickController(_engine, this);
             Attachments = new AttachmentSpriteTickController(_engine, this);
-            Debugs = new DebugsSpriteTickController(_engine, this);
-            Enemies = new EnemiesSpriteTickController(_engine, this);
+            Debugs = new DebugSpriteTickController(_engine, this);
+            Enemies = new EnemySpriteTickController(_engine, this);
             GenericSprites = new GenericSpriteTickController(_engine, this);
             Munitions = new MunitionSpriteTickController(_engine, this);
-            Particles = new ParticlesSpriteTickController(_engine, this);
-            Powerups = new PowerupsSpriteTickController(_engine, this);
+            Particles = new ParticleSpriteTickController(_engine, this);
+            Powerups = new PowerupSpriteTickController(_engine, this);
             RadarPositions = new RadarPositionsSpriteTickController(_engine, this);
-            Stars = new StarsSpriteTickController(_engine, this);
+            Stars = new StarSpriteTickController(_engine, this);
             TextBlocks = new TextBlocksSpriteTickController(_engine, this);
         }
 

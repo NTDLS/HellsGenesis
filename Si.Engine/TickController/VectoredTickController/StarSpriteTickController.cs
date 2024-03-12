@@ -8,9 +8,9 @@ using System;
 
 namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class StarsSpriteTickController : VectoredTickControllerBase<SpriteStar>
+    public class StarSpriteTickController : VectoredTickControllerBase<SpriteStar>
     {
-        public StarsSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public StarSpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)
         {
         }

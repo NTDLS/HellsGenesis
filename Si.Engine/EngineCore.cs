@@ -44,10 +44,10 @@ namespace Si.Engine
 
         #region Tick Controllers.
 
-        public SituationsTickController Situations { get; private set; }
-        public EventsTickController Events { get; private set; }
+        public SituationTickController Situations { get; private set; }
+        public EventTickController Events { get; private set; }
         public PlayerSpriteTickController Player { get; private set; }
-        public MenusTickController Menus { get; private set; }
+        public MenuTickController Menus { get; private set; }
         public SiRendering Rendering { get; private set; }
         public SiEngineSettings Settings { get; private set; }
 
@@ -74,12 +74,12 @@ namespace Si.Engine
             Display = new EngineDisplayManager(this, drawingSurface);
             Rendering = new SiRendering(Settings, drawingSurface, Display.TotalCanvasSize);
             Assets = new EngineAssetManager(this);
-            Events = new EventsTickController(this);
+            Events = new EventTickController(this);
             Sprites = new EngineSpriteManager(this);
             Input = new EngineInputManager(this);
-            Situations = new SituationsTickController(this);
+            Situations = new SituationTickController(this);
             Audio = new EngineAudioManager(this);
-            Menus = new MenusTickController(this);
+            Menus = new MenuTickController(this);
             Player = new PlayerSpriteTickController(this);
 
             _worldClock = new EngineWorldClock(this);

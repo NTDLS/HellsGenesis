@@ -11,9 +11,9 @@ using static Si.Library.SiConstants;
 
 namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class ParticlesSpriteTickController : VectoredTickControllerBase<SpriteParticleBase>
+    public class ParticleSpriteTickController : VectoredTickControllerBase<SpriteParticleBase>
     {
-        public ParticlesSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public ParticleSpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)
         {
         }

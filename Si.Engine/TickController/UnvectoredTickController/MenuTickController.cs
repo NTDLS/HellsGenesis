@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Si.Engine.TickController.UnvectoredTickController
 {
-    public class MenusTickController : UnvectoredTickControllerBase<MenuBase>
+    public class MenuTickController : UnvectoredTickControllerBase<MenuBase>
     {
         public delegate void CollectionAccessor(List<MenuBase> sprites);
         public delegate T CollectionAccessorT<T>(List<MenuBase> sprites);
@@ -13,7 +13,7 @@ namespace Si.Engine.TickController.UnvectoredTickController
         private MenuBase _current = null;
         public MenuBase Current { get => _current; }
 
-        public MenusTickController(EngineCore engine)
+        public MenuTickController(EngineCore engine)
             : base(engine) { }
 
         public void Render(RenderTarget renderTarget) => _current?.Render(renderTarget);

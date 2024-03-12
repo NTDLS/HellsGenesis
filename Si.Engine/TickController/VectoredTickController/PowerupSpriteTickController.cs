@@ -6,9 +6,9 @@ using System;
 
 namespace Si.Engine.TickController.VectoredTickControllerBase
 {
-    public class PowerupsSpriteTickController : VectoredTickControllerBase<SpritePowerupBase>
+    public class PowerupSpriteTickController : VectoredTickControllerBase<SpritePowerupBase>
     {
-        public PowerupsSpriteTickController(EngineCore engine, EngineSpriteManager manager)
+        public PowerupSpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)
         {
         }
