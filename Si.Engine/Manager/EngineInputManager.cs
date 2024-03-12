@@ -156,7 +156,7 @@ namespace Si.Engine.Manager
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.SpeedBoost, keyboardState.IsPressed(Key.LeftShift));
 
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.SwitchWeaponLeft, keyboardState.IsPressed(Key.Q));
-                _engine.Input.KeyStateChangedHard(SiPlayerKey.SwitchWeaponLeft, keyboardState.IsPressed(Key.E));
+                _engine.Input.KeyStateChangedHard(SiPlayerKey.SwitchWeaponRight, keyboardState.IsPressed(Key.E));
 
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.PrimaryFire, keyboardState.IsPressed(Key.Space));
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.SecondaryFire, keyboardState.IsPressed(Key.RightControl));
