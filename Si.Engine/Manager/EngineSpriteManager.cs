@@ -81,25 +81,14 @@ namespace Si.Engine.Manager
             }
         }
 
-        public void Add(SpriteBase item)
-            => _engine.Events.Add(() => _collection.Write(o => o.Add(item)));
-
-        public void HardDelete(SpriteBase item)
-        {
-            _collection.Write(o =>
-            {
-                item.Cleanup();
-                o.Remove(item);
-            });
-        }
-
-        public void Read(CollectionAccessor collectionAccessor)
+        /// <summary>
+        /// This is to be used ONLY for the debugger to access the collection. Otherwise, this class managed all access to the internal collection,
+        /// </summary>
+        /// <param name="collectionAccessor"></param>
+        public void DebugOnlyAccess(CollectionAccessor collectionAccessor)
             => _collection.Read(o => collectionAccessor(o));
 
-        public T Read<T>(CollectionAccessorT<T> collectionAccessor)
-            => _collection.Read(o => collectionAccessor(o));
-
-        public void QueueAllForDeleteOfType<T>() where T : SpriteBase
+        public void QueueAllForDeletionOfType<T>() where T : SpriteBase
         {
             _collection.Read(o =>
             {
@@ -138,7 +127,19 @@ namespace Si.Engine.Manager
             return obj;
         }
 
-        public void HardDeleteQueuedDeletions()
+        public void Add(SpriteBase item)
+            => _engine.Events.Add(() => _collection.Write(o => o.Add(item)));
+
+        public void HardDelete(SpriteBase item)
+        {
+            _collection.Write(o =>
+            {
+                item.Cleanup();
+                o.Remove(item);
+            });
+        }
+
+        public void HardDeleteAllQueuedDeletions()
         {
             _collection.Write(o =>
             {
@@ -159,12 +160,12 @@ namespace Si.Engine.Manager
         /// <summary>
         /// Deletes all the non-background type of sprites.
         /// </summary>
-        public void DeleteActionSprites()
+        public void QueueDeletionOfActionSprites()
         {
-            Powerups.QueueAllForDelete();
-            Enemies.QueueAllForDelete();
-            Munitions.QueueAllForDelete();
-            Animations.QueueAllForDelete();
+            Powerups.QueueAllForDeletion();
+            Enemies.QueueAllForDeletion();
+            Munitions.QueueAllForDeletion();
+            Animations.QueueAllForDeletion();
         }
 
         public List<T> GetSpritesByTag<T>(string name) where T : SpriteBase
@@ -186,7 +187,7 @@ namespace Si.Engine.Manager
 
         public List<SpriteBase> All() => _collection.Read(o => o).ToList();
 
-        public void QueueAllForDeleteByTag(string name)
+        public void QueueAllForDeletionByTag(string name)
         {
             _collection.Read(o =>
             {
@@ -200,7 +201,7 @@ namespace Si.Engine.Manager
             });
         }
 
-        public void QueueAllForDeleteByOwner(uint ownerUID)
+        public void QueueAllForDeletionByOwner(uint ownerUID)
         {
             _collection.Read(o =>
             {

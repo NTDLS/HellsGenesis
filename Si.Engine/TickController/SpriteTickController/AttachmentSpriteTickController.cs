@@ -3,7 +3,6 @@ using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
-using System.Linq;
 
 namespace Si.Engine.TickController.SpriteTickController
 {
@@ -20,17 +19,6 @@ namespace Si.Engine.TickController.SpriteTickController
             {
                 attachment.ApplyMotion(epoch, displacementVector);
             }
-        }
-
-        public void QueueForDeletionByOwner(uint owerId)
-        {
-            SpriteManager.Read(o =>
-            {
-                SpriteManager.OfType<SpriteAttachment>()
-                    .Where(o => o.OwnerUID == owerId)
-                    .ToList()
-                    .ForEach(c => c.QueueForDelete());
-            });
         }
 
         public SpriteAttachment Create(SpriteBase owner, string imagePath = null)

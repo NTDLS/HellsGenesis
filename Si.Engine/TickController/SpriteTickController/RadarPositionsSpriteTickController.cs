@@ -80,12 +80,6 @@ namespace Si.Engine.TickController.SpriteTickController
             return obj;
         }
 
-        public void HardDelete(SpriteRadarPositionIndicator obj)
-        {
-            obj.Visable = false;
-            _manager.HardDelete(obj);
-        }
-
         #endregion
     }
 }

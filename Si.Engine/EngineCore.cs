@@ -120,12 +120,12 @@ namespace Si.Engine
         {
             Sprites.PlayerStatsText.Visable = false;
             Situations.End();
-            Sprites.DeleteActionSprites();
+            Sprites.QueueDeletionOfActionSprites();
         }
 
         public void StartGame()
         {
-            Sprites.DeleteActionSprites();
+            Sprites.QueueDeletionOfActionSprites();
             Situations.AdvanceLevel();
         }
 

@@ -588,30 +588,7 @@ namespace Si.Engine.Sprite._Superclass
             return Bounds.IntersectsWith(alteredHitBox);
         }
 
-        /// <summary>
-        /// Gets a list of all ov this objects intersections.
-        /// </summary>
-        /// <returns></returns>
-        public List<SpriteBase> Intersections()
-        {
-            var intersections = new List<SpriteBase>();
 
-            _engine.Sprites.Read(o =>
-            {
-                foreach (var intersection in o)
-                {
-                    if (intersection != this && intersection.Visable && intersection is not SpriteTextBlock)
-                    {
-                        if (Intersects(intersection))
-                        {
-                            intersections.Add(intersection);
-                        }
-                    }
-                }
-            });
-
-            return intersections;
-        }
 
         #endregion
 
@@ -1041,7 +1018,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             Visable = false;
 
-            _engine.Sprites.QueueAllForDeleteByOwner(UID);
+            _engine.Sprites.QueueAllForDeletionByOwner(UID);
 
             foreach (var attachments in Attachments)
             {

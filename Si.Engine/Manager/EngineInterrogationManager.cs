@@ -157,7 +157,7 @@ namespace Si.Engine.Manager
 
         public void CommandHandler_Display_RenderWindowPosition_CenterOn(InterrogationCommand command)
         {
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var spriteUID = command.ParameterValue<float>("spriteUID");
                 var baseSprite = o.Where(o => o.UID == spriteUID).FirstOrDefault();
@@ -359,7 +359,7 @@ namespace Si.Engine.Manager
 
         public void CommandHandler_Sprite_Reflect_List(InterrogationCommand command)
         {
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var uid = command.ParameterValue<uint>("uid");
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
@@ -381,7 +381,7 @@ namespace Si.Engine.Manager
             var propertyName = command.ParameterValue<string>("property");
             var propertyValue = command.ParameterValue("value", string.Empty);
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var uid = command.ParameterValue<uint>("uid");
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
@@ -412,7 +412,7 @@ namespace Si.Engine.Manager
 
         public void CommandHandler_Sprite_Inspect(InterrogationCommand command)
         {
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var uid = command.ParameterValue<uint>("uid");
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
@@ -425,7 +425,7 @@ namespace Si.Engine.Manager
 
         public void CommandHandler_Sprite_Explode(InterrogationCommand command)
         {
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var uid = command.ParameterValue<uint>("uid");
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
@@ -443,7 +443,7 @@ namespace Si.Engine.Manager
             var toleranceDegrees = command.ParameterValue<float>("toleranceDegrees");
             var maxDistance = command.ParameterValue<float>("maxDistance");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var baseSprite = o.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
                 var targetSprite = o.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
@@ -463,7 +463,7 @@ namespace Si.Engine.Manager
             var toleranceDegrees = command.ParameterValue<float>("toleranceDegrees", 10);
             var maxDistance = command.ParameterValue<float>("maxDistance", 1000);
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var baseSprite = o.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
                 var targetSprite = o.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
@@ -482,7 +482,7 @@ namespace Si.Engine.Manager
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var baseSprite = o.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
                 var targetSprite = o.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
@@ -500,7 +500,7 @@ namespace Si.Engine.Manager
             var baseSpriteUID = command.ParameterValue<uint>("baseSpriteUID");
             var targetSpriteUID = command.ParameterValue<uint>("targetSpriteUID");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var baseSprite = o.Where(o => o.UID == baseSpriteUID).FirstOrDefault();
                 var targetSprite = o.Where(o => o.UID == targetSpriteUID).FirstOrDefault();
@@ -516,7 +516,7 @@ namespace Si.Engine.Manager
         public void CommandHandler_Sprite_Watch(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -533,7 +533,7 @@ namespace Si.Engine.Manager
         public void CommandHandler_Sprite_AngleInDegrees(InterrogationCommand command)
         {
             var uid = command.ParameterValue<uint>("uid");
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -547,7 +547,7 @@ namespace Si.Engine.Manager
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -561,7 +561,7 @@ namespace Si.Engine.Manager
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -575,7 +575,7 @@ namespace Si.Engine.Manager
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -589,7 +589,7 @@ namespace Si.Engine.Manager
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -603,7 +603,7 @@ namespace Si.Engine.Manager
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -617,7 +617,7 @@ namespace Si.Engine.Manager
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -631,7 +631,7 @@ namespace Si.Engine.Manager
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -646,7 +646,7 @@ namespace Si.Engine.Manager
         {
             var uid = command.ParameterValue<uint>("uid");
 
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
@@ -659,7 +659,7 @@ namespace Si.Engine.Manager
 
         public void CommandHandler_Sprite_List(InterrogationCommand command)
         {
-            _engine.Sprites.Read(o =>
+            _engine.Sprites.DebugOnlyAccess(o =>
             {
                 var sprites = o.ToList();
 

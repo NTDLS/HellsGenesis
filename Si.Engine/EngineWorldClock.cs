@@ -1,14 +1,11 @@
 ﻿using NTDLS.DelegateThreadPooling;
-using SharpCompress;
 using Si.Engine.Core.Types;
 using Si.Engine.Sprite;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using static Si.Library.SiConstants;
 
@@ -224,7 +221,7 @@ namespace Si.Engine
                 return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
             }
 
-            _engine.Sprites.HardDeleteQueuedDeletions();
+            _engine.Sprites.HardDeleteAllQueuedDeletions();
 
             return displacementVector;
         }
