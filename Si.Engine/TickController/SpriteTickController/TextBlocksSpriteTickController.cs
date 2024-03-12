@@ -10,9 +10,23 @@ namespace Si.Engine.TickController.SpriteTickController
 {
     public class TextBlocksSpriteTickController : SpriteTickControllerBase<SpriteTextBlock>
     {
+        public SpriteTextBlock PlayerStatsText { get; private set; }
+        public SpriteTextBlock DebugText { get; private set; }
+        public SpriteTextBlock PausedText { get; private set; }
+
+
         public TextBlocksSpriteTickController(EngineCore engine, EngineSpriteManager manager)
             : base(engine, manager)
         {
+            PlayerStatsText = Create(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
+            PlayerStatsText.Visable = false;
+            DebugText = Create(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
+
+            //We have to create this ahead of time because we cant create pause text when paused since sprires are created via events.
+            PausedText = Create(engine.Rendering.TextFormats.LargeBlocker,
+                    engine.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText", "Paused");
+
+            PausedText.Visable = false;
         }
 
         public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)

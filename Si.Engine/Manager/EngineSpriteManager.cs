@@ -33,8 +33,6 @@ namespace Si.Engine.Manager
         private SiPoint _radarScale;
         private SiPoint _radarOffset;
 
-        public SpriteTextBlock PlayerStatsText { get; private set; }
-        public SpriteTextBlock DebugText { get; private set; }
         public bool RenderRadar { get; set; } = false;
 
         private readonly OptimisticCriticalResource<List<SpriteBase>> _collection = new();
@@ -96,15 +94,6 @@ namespace Si.Engine.Manager
             {
                 OfType<T>().ForEach(c => c.QueueForDelete());
             });
-        }
-
-        public void Start()
-        {
-            _engine.Player.Sprite = new SpriteDebugPlayer(_engine) { Visable = false };
-
-            PlayerStatsText = TextBlocks.Create(_engine.Rendering.TextFormats.RealtimePlayerStats, _engine.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
-            PlayerStatsText.Visable = false;
-            DebugText = TextBlocks.Create(_engine.Rendering.TextFormats.RealtimePlayerStats, _engine.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
         }
 
         public void Dispose()

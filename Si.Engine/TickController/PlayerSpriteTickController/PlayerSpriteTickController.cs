@@ -1,4 +1,5 @@
-﻿using Si.Engine.Sprite.Player._Superclass;
+﻿using Si.Engine.Sprite.Player;
+using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -22,6 +23,9 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
         public PlayerSpriteTickController(EngineCore engine)
             : base(engine)
         {
+            //This is where the player is created.
+            Sprite = new SpriteDebugPlayer(engine) { Visable = false };
+
             _engine = engine;
             _inputDelay.Restart();
         }
@@ -270,7 +274,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 //Debug.WriteLine($" Forward: [Target:{targetForwardAmount:n2}, Actual: {Sprite.Velocity.ForwardVelocity:n2}], Lateral: [Target {targetLateralAmount:n2}, Actual: {Sprite.Velocity.LateralVelocity:n2}");
             }
 
-            var displacementVector = Sprite.Velocity.MovementVector;
+            var displacementVector = Sprite.Velocity.MovementVector * epoch;
 
             //Scroll the background.
             Engine.Display.RenderWindowPosition += displacementVector;
@@ -287,7 +291,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
         {
             Sprite.Reset();
 
-            Engine.Sprites.PlayerStatsText.Visable = true;
+            Engine.Sprites.TextBlocks.PlayerStatsText.Visable = true;
             Engine.Sprites.RenderRadar = true;
             Sprite.Visable = true;
             Sprite.ShipEngineIdleSound.Play();
@@ -296,7 +300,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
         public void Show()
         {
-            Engine.Sprites.PlayerStatsText.Visable = true;
+            Engine.Sprites.TextBlocks.PlayerStatsText.Visable = true;
             Engine.Sprites.RenderRadar = true;
             Sprite.Visable = true;
             Sprite.ShipEngineIdleSound.Play();
@@ -305,7 +309,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
         public void Hide()
         {
-            Engine.Sprites.PlayerStatsText.Visable = false;
+            Engine.Sprites.TextBlocks.PlayerStatsText.Visable = false;
             Engine.Sprites.RenderRadar = false;
             Sprite.Visable = false;
             Sprite.ShipEngineIdleSound.Stop();

@@ -58,17 +58,9 @@ namespace Si.Engine
         {
             _isPaused = !_isPaused;
 
-            var textBlock = _engine.Sprites.GetSingleSpriteByTag<SpriteTextBlock>("PausedText");
-            if (textBlock == null)
-            {
-                textBlock = _engine.Sprites.TextBlocks.Create(_engine.Rendering.TextFormats.LargeBlocker,
-                    _engine.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText", "Paused");
-
-                textBlock.X = _engine.Display.NatrualScreenSize.Width / 2 - textBlock.Size.Width / 2;
-                textBlock.Y = _engine.Display.NatrualScreenSize.Height / 2 - textBlock.Size.Height / 2;
-            }
-
-            textBlock.Visable = _isPaused;
+            _engine.Sprites.TextBlocks.PausedText.X = _engine.Display.NatrualScreenSize.Width / 2 - _engine.Sprites.TextBlocks.PausedText.Size.Width / 2;
+            _engine.Sprites.TextBlocks.PausedText.Y = _engine.Display.NatrualScreenSize.Height / 2 - _engine.Sprites.TextBlocks.PausedText.Size.Height / 2;
+            _engine.Sprites.TextBlocks.PausedText.Visable = _isPaused;
         }
 
         public void Pause()
@@ -235,7 +227,7 @@ namespace Si.Engine
 
                 float boostRebuildPercent = _engine.Player.Sprite.Velocity.AvailableBoost / _engine.Settings.PlayerBoostRebuildFloor * 100.0f;
 
-                _engine.Sprites.PlayerStatsText.Text =
+                _engine.Sprites.TextBlocks.PlayerStatsText.Text =
                       $" Situation: {situation}\r\n"
                     + $"      Hull: {_engine.Player.Sprite.HullHealth:n0} (Shields: {_engine.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_engine.Player.Sprite.Bounty}\r\n"
                     + $"     Surge: {_engine.Player.Sprite.Velocity.AvailableBoost / _engine.Settings.MaxPlayerBoostAmount * 100.0:n1}%"

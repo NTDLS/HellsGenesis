@@ -72,15 +72,15 @@ namespace Si.Engine
             Settings = LoadSettings();
 
             Display = new EngineDisplayManager(this, drawingSurface);
+            Rendering = new SiRendering(Settings, drawingSurface, Display.TotalCanvasSize);
             Assets = new EngineAssetManager(this);
+            Events = new EventsTickController(this);
             Sprites = new EngineSpriteManager(this);
             Input = new EngineInputManager(this);
             Situations = new SituationsTickController(this);
-            Events = new EventsTickController(this);
             Audio = new EngineAudioManager(this);
             Menus = new MenusTickController(this);
             Player = new PlayerSpriteTickController(this);
-            Rendering = new SiRendering(Settings, drawingSurface, Display.TotalCanvasSize);
 
             _worldClock = new EngineWorldClock(this);
         }
@@ -118,7 +118,7 @@ namespace Si.Engine
 
         public void ResetGame()
         {
-            Sprites.PlayerStatsText.Visable = false;
+            Sprites.TextBlocks.PlayerStatsText.Visable = false;
             Situations.End();
             Sprites.QueueDeletionOfActionSprites();
         }
@@ -170,7 +170,6 @@ namespace Si.Engine
             }
 
             IsRunning = true;
-            Sprites.Start();
             //Sprites.ResetPlayer();
             _worldClock.Start();
 
