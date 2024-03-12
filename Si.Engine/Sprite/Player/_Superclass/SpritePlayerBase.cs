@@ -43,7 +43,6 @@ namespace Si.Engine.Sprite.Player._Superclass
         public WeaponBase PrimaryWeapon { get; private set; }
         private List<WeaponBase> _secondaryWeapons = new();
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
-        public bool UseSpeedBoost { get; private set; }
 
         public SpritePlayerBase(EngineCore engine)
             : base(engine)
@@ -66,11 +65,6 @@ namespace Si.Engine.Sprite.Player._Superclass
             ShipEngineBoostSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
 
             CenterInUniverse();
-        }
-
-        public void ToggleSpeedBoost()
-        {
-            UseSpeedBoost = !UseSpeedBoost;
         }
 
         public override void Cleanup()

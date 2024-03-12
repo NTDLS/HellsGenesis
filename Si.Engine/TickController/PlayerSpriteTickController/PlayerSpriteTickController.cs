@@ -142,16 +142,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Forward Speed-Boost.
 
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost))
-                {
-                    if (_inputDelay.ElapsedMilliseconds > 200)
-                    {
-                        _engine.Player?.Sprite?.ToggleSpeedBoost();
-                        _inputDelay.Restart();
-                    }
-                }
-
-                if (Sprite.UseSpeedBoost && Sprite.Velocity.ForwardVelocity >= throttleFloor
+                if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && Sprite.Velocity.ForwardVelocity >= throttleFloor
                     && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostCoolingDown == false)
                 {
                     Sprite.Velocity.ForwardBoostVelocity += velocityRampUp; //Make player forward velocity build-up.
@@ -172,7 +163,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     else Sprite.Velocity.ForwardBoostVelocity -= velocityRampDown;
 
                     //Rebuild boost if its not being used.
-                    if ((Sprite.UseSpeedBoost == false || Sprite.Velocity.ForwardVelocity <= throttleFloor)
+                    if ((Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false || Sprite.Velocity.ForwardVelocity <= throttleFloor)
                         && Sprite.Velocity.AvailableBoost < Engine.Settings.MaxPlayerBoostAmount)
                     {
                         Sprite.Velocity.AvailableBoost += (10 * epoch);
@@ -269,7 +260,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 {
                     Sprite.BoostAnimation.Visable =
                         (targetForwardAmount >= throttleFloor)
-                        && Sprite.UseSpeedBoost
+                        && Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
                         && Sprite.Velocity.AvailableBoost > 0
                         && Sprite.Velocity.IsBoostCoolingDown == false;
                 }

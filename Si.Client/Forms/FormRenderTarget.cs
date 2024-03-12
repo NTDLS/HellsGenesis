@@ -277,11 +277,12 @@ namespace Si.Client
             if (e.KeyCode == Keys.Escape)
             {
                 //We do not want the escape key to inturrupt menus.
-                if (_engine.Menus.Current?.HandlesEscape() == false)
+                if (_engine.Menus.Current?.HandlesEscape() != true)
                 {
                     _engine.Pause();
 
-                    if (MessageBox.Show("Are you sure you want to quit?", "Afraid to go on?", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+                    if (MessageBox.Show("Are you sure you want to quit?", "Afraid to go on?",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
                     {
                         Close();
                     }

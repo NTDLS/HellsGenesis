@@ -20,6 +20,8 @@ namespace Si.Engine.Sprite
             X = SiRandom.Between(0, engine.Display.TotalCanvasSize.Width);
             Y = SiRandom.Between(0, engine.Display.TotalCanvasSize.Height);
 
+            ZOrder = int.MinValue;
+
             Velocity.MaximumSpeed = 0.5f;
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)

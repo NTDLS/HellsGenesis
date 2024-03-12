@@ -37,7 +37,7 @@ namespace Si.Engine.TickController.SpriteTickController
         {
             var obj = new SpriteAttachment(Engine, imagePath)
             {
-                ZOrder = owner.ZOrder + 1, //We want to make sure these go on top of the stack.
+                ZOrder = owner.ZOrder + 1, //We want to make sure these go on top of the parent.
                 OwnerUID = owner.UID
             };
             SpriteManager.Add(obj);

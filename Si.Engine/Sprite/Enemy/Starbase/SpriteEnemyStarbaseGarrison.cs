@@ -29,12 +29,15 @@ namespace Si.Engine.Sprite.Enemy.Starbase
 
         private readonly SiPoint[] _absoluteTurrentLocations =
         [
-            new(583, 147),
-            new(148, 419),
-            new(1018, 415),
-            new(146, 913),
-            new(581, 1173),
-            new(1016, 909),
+            new(58, 379),
+            new(583, 158),
+            new(1107, 380),
+            new(582, 386),
+            new(56, 1005),
+            new(582, 1226),
+            new(583, 1000),
+            new(1106, 1004),
+            new(586, 691)
         ];
 
         private class Turret
@@ -97,7 +100,7 @@ namespace Si.Engine.Sprite.Enemy.Starbase
 
         public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
-            Velocity.ForwardAngle.Degrees += 0.05f;
+            Velocity.ForwardAngle.Degrees += 0.005f;
 
             foreach (var turret in _turrets.Where(o => o.Sprite.IsDeadOrExploded == false))
             {
