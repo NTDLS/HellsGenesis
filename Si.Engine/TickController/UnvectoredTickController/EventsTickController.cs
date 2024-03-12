@@ -144,7 +144,7 @@ namespace Si.Engine.TickController.UnvectoredTickController
             });
         }
 
-        public void Delete(SiDefermentEvent obj)
+        public void HardDelete(SiDefermentEvent obj)
         {
             _collection.Use(o =>
             {

@@ -596,7 +596,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             var intersections = new List<SpriteBase>();
 
-            _engine.Sprites.Use(o =>
+            _engine.Sprites.Read(o =>
             {
                 foreach (var intersection in o)
                 {
@@ -1041,7 +1041,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             Visable = false;
 
-            _engine.Sprites.DeleteAllSpritesByOwner(UID);
+            _engine.Sprites.QueueAllForDeleteByOwner(UID);
 
             foreach (var attachments in Attachments)
             {

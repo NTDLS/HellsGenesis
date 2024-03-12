@@ -97,7 +97,7 @@ namespace Si.Engine.Menu
 
         private void PlayerLoadoutMenu_OnCleanup()
         {
-            _engine.Sprites.DeleteAllSpritesByTag("MENU_SHIP_SELECT");
+            _engine.Sprites.QueueAllForDeleteByTag("MENU_SHIP_SELECT");
         }
 
         private bool PlayerLoadoutMenu_OnExecuteSelection(SpriteMenuItem item)

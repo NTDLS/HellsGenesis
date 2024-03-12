@@ -129,18 +129,16 @@ namespace Si.Engine.TickController.SpriteTickController
             return null;
         }
 
-        public MunitionBase Create(WeaponBase weapon)
+        public void Create(WeaponBase weapon)
         {
             var obj = weapon.CreateMunition();
             SpriteManager.Add(obj);
-            return obj;
         }
 
-        public MunitionBase Create(WeaponBase weapon, SiPoint location = null, float? angle = null)
+        public void Create(WeaponBase weapon, SiPoint location = null, float? angle = null)
         {
             var obj = weapon.CreateMunition(location, angle);
             SpriteManager.Add(obj);
-            return obj;
         }
 
         /// <summary>
@@ -150,11 +148,10 @@ namespace Si.Engine.TickController.SpriteTickController
         /// <param name="lockedTarget"></param>
         /// <param name="xyOffset"></param>
         /// <returns></returns>
-        public MunitionBase CreateLockedOnTo(WeaponBase weapon, SpriteBase lockedTarget, SiPoint location = null, float? angle = null)
+        public void CreateLockedOnTo(WeaponBase weapon, SpriteBase lockedTarget, SiPoint location = null, float? angle = null)
         {
             var obj = weapon.CreateMunition(location, angle, lockedTarget);
             SpriteManager.Add(obj);
-            return obj;
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Si.Engine.Manager
         public SpriteTextBlock DebugText { get; private set; }
         public bool RenderRadar { get; set; } = false;
 
-        private readonly PessimisticCriticalResource<List<SpriteBase>> _collection = new();
+        private readonly OptimisticCriticalResource<List<SpriteBase>> _collection = new();
 
         #region Sprite Tick Controllerss.
 
@@ -82,26 +82,26 @@ namespace Si.Engine.Manager
         }
 
         public void Add(SpriteBase item)
-            => _collection.Use(o => o.Add(item));
+            => _engine.Events.Add(() => _collection.Write(o => o.Add(item)));
 
-        public void Delete(SpriteBase item)
+        public void HardDelete(SpriteBase item)
         {
-            _collection.Use(o =>
+            _collection.Write(o =>
             {
                 item.Cleanup();
                 o.Remove(item);
             });
         }
 
-        public void Use(CollectionAccessor collectionAccessor)
-            => _collection.Use(o => collectionAccessor(o));
+        public void Read(CollectionAccessor collectionAccessor)
+            => _collection.Read(o => collectionAccessor(o));
 
-        public T Use<T>(CollectionAccessorT<T> collectionAccessor)
-            => _collection.Use(o => collectionAccessor(o));
+        public T Read<T>(CollectionAccessorT<T> collectionAccessor)
+            => _collection.Read(o => collectionAccessor(o));
 
-        public void DeleteAllOfType<T>() where T : SpriteBase
+        public void QueueAllForDeleteOfType<T>() where T : SpriteBase
         {
-            _collection.Use(o =>
+            _collection.Read(o =>
             {
                 OfType<T>().ForEach(c => c.QueueForDelete());
             });
@@ -138,9 +138,9 @@ namespace Si.Engine.Manager
             return obj;
         }
 
-        public void CleanupDeletedObjects()
+        public void HardDeleteQueuedDeletions()
         {
-            _collection.Use(o =>
+            _collection.Write(o =>
             {
                 o.Where(o => o.IsQueuedForDeletion).ToList().ForEach(p => p.Cleanup());
                 o.RemoveAll(o => o.IsQueuedForDeletion);
@@ -161,34 +161,34 @@ namespace Si.Engine.Manager
         /// </summary>
         public void DeleteActionSprites()
         {
-            Powerups.DeleteAll();
-            Enemies.DeleteAll();
-            Munitions.DeleteAll();
-            Animations.DeleteAll();
+            Powerups.QueueAllForDelete();
+            Enemies.QueueAllForDelete();
+            Munitions.QueueAllForDelete();
+            Animations.QueueAllForDelete();
         }
 
         public List<T> GetSpritesByTag<T>(string name) where T : SpriteBase
-            => _collection.Use(o => o.Where(o => o.SpriteTag == name).ToList() as List<T>);
+            => _collection.Read(o => o.Where(o => o.SpriteTag == name).ToList() as List<T>);
 
         public T GetSingleSpriteByTag<T>(string name) where T : SpriteBase
-            => _collection.Use(o => o.Where(o => o.SpriteTag == name).SingleOrDefault() as T);
+            => _collection.Read(o => o.Where(o => o.SpriteTag == name).SingleOrDefault() as T);
 
         public T GetSpriteByOwner<T>(uint ownerUID) where T : SpriteBase
-            => _collection.Use(o => o.Where(o => o.UID == ownerUID).SingleOrDefault() as T);
+            => _collection.Read(o => o.Where(o => o.UID == ownerUID).SingleOrDefault() as T);
 
         public List<T> OfType<T>() where T : class
-            => _collection.Use(o => o.Where(o => o is T).Select(o => o as T).ToList());
+            => _collection.Read(o => o.Where(o => o is T).Select(o => o as T).ToList());
 
         public List<T> VisibleOfType<T>() where T : class
-            => _collection.Use(o => o.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList());
+            => _collection.Read(o => o.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList());
 
-        public List<SpriteBase> Visible() => _collection.Use(o => o.Where(o => o.Visable == true).ToList());
+        public List<SpriteBase> Visible() => _collection.Read(o => o.Where(o => o.Visable == true).ToList());
 
-        public List<SpriteBase> All() => _collection.Use(o => o).ToList();
+        public List<SpriteBase> All() => _collection.Read(o => o).ToList();
 
-        public void DeleteAllSpritesByTag(string name)
+        public void QueueAllForDeleteByTag(string name)
         {
-            _collection.Use(o =>
+            _collection.Read(o =>
             {
                 foreach (var sprite in o)
                 {
@@ -200,9 +200,9 @@ namespace Si.Engine.Manager
             });
         }
 
-        public void DeleteAllSpritesByOwner(uint ownerUID)
+        public void QueueAllForDeleteByOwner(uint ownerUID)
         {
-            _collection.Use(o =>
+            _collection.Read(o =>
             {
                 foreach (var sprite in o)
                 {
@@ -216,7 +216,7 @@ namespace Si.Engine.Manager
 
         public List<SpriteBase> Intersections(SpriteBase with)
         {
-            return _collection.Use(o =>
+            return _collection.Read(o =>
             {
                 var objs = new List<SpriteBase>();
 
@@ -239,7 +239,7 @@ namespace Si.Engine.Manager
 
         public List<SpriteBase> Intersections(SiPoint location, SiPoint size)
         {
-            return _collection.Use(o =>
+            return _collection.Read(o =>
             {
                 var objs = new List<SpriteBase>();
 
@@ -256,7 +256,7 @@ namespace Si.Engine.Manager
 
         public List<SpriteBase> RenderLocationIntersectionsEvenInvisible(SiPoint location, SiPoint size)
         {
-            return _collection.Use(o =>
+            return _collection.Read(o =>
             {
                 var objs = new List<SpriteBase>();
 
@@ -273,7 +273,7 @@ namespace Si.Engine.Manager
 
         public List<SpriteBase> RenderLocationIntersections(SiPoint location, SiPoint size)
         {
-            return _collection.Use(o =>
+            return _collection.Read(o =>
             {
                 var objs = new List<SpriteBase>();
 
@@ -296,7 +296,7 @@ namespace Si.Engine.Manager
 
         public void RenderPostScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            _collection.Use(o => //Render PostScale sprites.
+            _collection.Read(o => //Render PostScale sprites.
             {
                 foreach (var sprite in o.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PostScale).OrderBy(o => o.ZOrder))
                 {
@@ -333,7 +333,7 @@ namespace Si.Engine.Manager
                             _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _engine.Player.Sprite.Y * _radarScale.Y)
                         );
 
-                    _collection.Use(o =>
+                    _collection.Read(o =>
                     {
                         //Render radar:
                         foreach (var sprite in o.Where(o => o.Visable == true))
@@ -373,7 +373,7 @@ namespace Si.Engine.Manager
         /// <returns></returns>
         public void RenderPreScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            _collection.Use(o => //Render PreScale sprites.
+            _collection.Read(o => //Render PreScale sprites.
             {
                 foreach (var sprite in o.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PreScale).OrderBy(o => o.ZOrder))
                 {

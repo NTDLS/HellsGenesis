@@ -1,12 +1,14 @@
 ﻿using NTDLS.DelegateThreadPooling;
+using SharpCompress;
 using Si.Engine.Core.Types;
-using Si.Engine.Manager;
 using Si.Engine.Sprite;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using static Si.Library.SiConstants;
 
@@ -222,10 +224,7 @@ namespace Si.Engine
                 return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
             }
 
-            //Radar position indicators just look glitchy when they are multithreaded.
-            _engine.Sprites.RadarPositions.ExecuteWorldClockTick();
-
-            _engine.Sprites.CleanupDeletedObjects();
+            _engine.Sprites.HardDeleteQueuedDeletions();
 
             return displacementVector;
         }

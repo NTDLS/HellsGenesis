@@ -22,9 +22,9 @@ namespace Si.Engine.TickController.SpriteTickController
             }
         }
 
-        public void DeleteAllByOwner(uint owerId)
+        public void QueueForDeletionByOwner(uint owerId)
         {
-            SpriteManager.Use(o =>
+            SpriteManager.Read(o =>
             {
                 SpriteManager.OfType<SpriteAttachment>()
                     .Where(o => o.OwnerUID == owerId)

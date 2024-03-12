@@ -30,7 +30,7 @@ namespace Si.Engine.TickController._Superclass
             SpriteManager = manager;
         }
 
-        public void DeleteAll() => SpriteManager.DeleteAllOfType<T>();
+        public void QueueAllForDelete() => SpriteManager.QueueAllForDeleteOfType<T>();
 
         public void Add(T obj) => SpriteManager.Add(obj);
 
@@ -97,7 +97,7 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
-        public void Delete(T obj)
-            => SpriteManager.Delete(obj);
+        public void HardDelete(T obj)
+            => SpriteManager.HardDelete(obj);
     }
 }
