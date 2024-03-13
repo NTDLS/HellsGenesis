@@ -1,4 +1,6 @@
-﻿namespace Si.Engine.Core.Types
+﻿using static Si.Engine.Core.Types.SiDefermentEvent;
+
+namespace Si.Engine.Core.Types
 {
     /// <summary>
     /// Allows for deferred events to be injected into the engine. We use this so that we can defer 
