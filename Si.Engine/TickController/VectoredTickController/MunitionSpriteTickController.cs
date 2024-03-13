@@ -4,6 +4,7 @@ using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy.Boss._Superclass;
 using Si.Engine.Sprite.Enemy.Peon._Superclass;
+using Si.Engine.Sprite.Enemy.Starbase._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
@@ -11,8 +12,6 @@ using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Si.Engine.TickController.VectoredTickControllerBase
 {
@@ -56,7 +55,9 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                     typeof(SpritePlayerBase),
                     typeof(SpriteEnemyBossBase),
                     typeof(SpriteEnemyPeonBase),
-                    typeof(SpriteAttachment)
+                    typeof(SpriteAttachment),
+                    typeof(SpriteDebug),
+                    typeof(SpriteEnemyStarbase)
                     ]);
 
                 //Create a collection of threads so we can wait on the ones that we start.
@@ -71,10 +72,9 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 
                     if (munition.IsDeadOrExploded == false)
                     {
-                        //Enqueue an item into the thread pool.
-                        threadPoolTracker.Enqueue(() =>
+                        threadPoolTracker.Enqueue(() => //Enqueue an item into the thread pool.
                         {
-                            var hitObject = TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit);
+                            var hitObject = munition.FindFirstCollisionAlongPathAfterMove(objectsThatCanBeHit, epoch);
                             if (hitObject != null)
                             {
                                 hitObjects.Add(new(munition, hitObject));
@@ -99,33 +99,6 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Takes the position of a munition object after it has been moved and tests each location
-        ///     betwwen where it ended up and where it should have come from given its velocity.
-        /// </summary>
-        /// <returns></returns>
-        public SpriteBase TestObjectCollisionsAlongMunitionPath(MunitionBase munition, List<SpriteBase> objectsThatCanBeHit)
-        {
-            //Reverse the munition to its starting position.
-            var hitTestPosition = new SiPoint(munition.Location - munition.Velocity.MovementVector);
-
-            //Hit-test each position along the munitions path.
-            for (int i = 0; i < munition.Velocity.MaximumSpeed; i++)
-            {
-                hitTestPosition += munition.Velocity.ForwardAngle;
-
-                foreach (var obj in objectsThatCanBeHit)
-                {
-                    if (obj.TryMunitionHit(munition, hitTestPosition))
-                    {
-                        return obj;
-                    }
-                }
-            }
-
-            return null;
         }
 
         public void Create(WeaponBase weapon)

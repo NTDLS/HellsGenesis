@@ -60,6 +60,12 @@ namespace Si.Library.Mathematics.Geometry
         public static SiPoint operator *(SiPoint original, float scaleFactor)
             => new SiPoint(original.X * scaleFactor, original.Y * scaleFactor);
 
+        public static bool operator >(SiPoint v1, SiPoint v2)
+            => v1.Length() > v2.Length();
+
+        public static bool operator <(SiPoint v1, SiPoint v2)
+            => v1.Length() < v2.Length();
+
         public static SiPoint operator /(SiPoint original, SiPoint scaleFactor)
         {
             if (scaleFactor.X == 0.0 && scaleFactor.Y == 0.0)
@@ -107,7 +113,28 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public float DotProduct(SiPoint b) => DotProduct(this);
+        public float DotProduct(SiPoint b) => DotProduct(this, b);
+
+        /// <summary>
+        /// Gets the length of the a vector. This represents the distance from its tail (starting point) to its head (end point) in the vector space.
+        /// It provides a measure of how "long" the vector is in the specified direction.
+        /// </summary>
+        /// <returns></returns>
+        public double Length() => Length(this);
+
+        /// <summary>
+        /// Calculates the euclidean distance between two points in a 2D space (slower and precisie, but not compatible with DistanceSquaredTo(...)).
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public double DistanceTo(SiPoint other) => DistanceTo(this, other);
+
+        /// <summary>
+        /// Calculates the distance squared between two points in a 2D space (faster and but not compatible with DistanceTo(...)).
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public double DistanceSquaredTo(SiPoint other) => DistanceSquaredTo(this, other);
 
         /// <summary>
         /// Calculate the angle between two points relative to the horizontal axis.

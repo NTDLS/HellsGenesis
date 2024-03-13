@@ -291,31 +291,45 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Returns a list of all collisions the sprite will make on is current movement vector. In order in which they would be encountered.
+        /// Returns a list of all collisions the sprite made on is current movement vector, in the order in which they would be encountered.
         /// </summary>
         /// <returns></returns>
-        public List<SpriteBase> FindAllCollisionsAlongPath() => FindAllCollisionsAlongPath(_engine.Sprites.Visible());
+        public List<SpriteBase> FindAllCollisionsAlongPathAfterMove(float epoch)
+            => FindAllCollisionsAlongPathAfterMove(_engine.Sprites.Visible(), epoch);
 
         /// <summary>
-        /// Returns a list of all collisions the sprite will make on is current movement vector. In order in which they would be encountered.
+        /// Returns a list of all collisions the sprite made on is current movement vector, in the order in which they would be encountered.
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public List<SpriteBase> FindAllCollisionsAlongPath(List<SpriteBase> objectsThatCanBeHit)
+        public List<SpriteBase> FindAllCollisionsAlongPathAfterMove(List<SpriteBase> objectsThatCanBeHit, float epoch)
         {
+            /// Takes the position of an object after it has been moved and tests each location
+            ///     betwwen where it ended up and where it should have come from given its velocity.
+
             var collisions = new List<SpriteBase>();
 
-            //Reverse the munition to its starting position.
-            var hitTestPosition = new SiPoint(Location - Velocity.MovementVector);
+            //Get the starting position of the sprite before it was last moved.
+            var hitTestPosition = new SiPoint(Location - (Velocity.MovementVector * epoch));
+            var directionVector = Velocity.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
-            //Hit-test each position along the munitions path.
-            for (int i = 0; i < Velocity.MaximumSpeed; i++)
+            if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
             {
-                hitTestPosition += Velocity.ForwardAngle;
+                //This is just a sanity check, if the epoch is super high then the engine is
+                //  lagging like mad and the last thing we want is to trace a giant vector path.
+                // Keep in mind that we are tracing the individual steps per "frame", so this IS NOT
+                //  going to greatly effect collision detection even if the lagging is really bad.
+                totalTravelDistance = _engine.Display.TotalCanvasDiagonal;
+            }
 
+            //Hit-test each position along the sprite path.
+            for (int i = 0; i < totalTravelDistance; i++)
+            {
+                hitTestPosition += directionVector;
                 foreach (var obj in objectsThatCanBeHit)
                 {
-                    if (Intersects(hitTestPosition))
+                    if (obj.Intersects(hitTestPosition))
                     {
                         collisions.Add(obj);
                     }
@@ -326,29 +340,40 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Returns the first collisions the sprite will make on is current movement vector.
+        /// Returns the first collision (if any) the sprite made on is current movement vector.
         /// </summary>
         /// <returns></returns>
-        public SpriteBase FindFirstCollisionAlongPath() => FindFirstCollisionAlongPath(_engine.Sprites.Visible());
+        public SpriteBase FindFirstCollisionAlongPathAfterMove(float epoch)
+            => FindFirstCollisionAlongPathAfterMove(_engine.Sprites.Visible(), epoch);
 
         /// <summary>
-        /// Returns the first collisions the sprite will make on is current movement vector.
+        /// Returns the first collision (if any) the sprite made on is current movement vector.
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public SpriteBase FindFirstCollisionAlongPath(List<SpriteBase> objectsThatCanBeHit)
+        public SpriteBase FindFirstCollisionAlongPathAfterMove(List<SpriteBase> objectsThatCanBeHit, float epoch)
         {
-            //Reverse the munition to its starting position.
-            var hitTestPosition = new SiPoint(Location - Velocity.MovementVector);
+            //Get the starting position of the sprite before it was last moved.
+            var hitTestPosition = new SiPoint(Location - (Velocity.MovementVector * epoch));
+            var directionVector = Velocity.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
-            //Hit-test each position along the munitions path.
-            for (int i = 0; i < Velocity.MaximumSpeed; i++)
+            if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
             {
-                hitTestPosition += Velocity.ForwardAngle;
+                //This is just a sanity check, if the epoch is super high then the engine is
+                //  lagging like mad and the last thing we want is to trace a giant vector path.
+                // Keep in mind that we are tracing the individual steps per "frame", so this IS NOT
+                //  going to greatly effect collision detection even if the lagging is really bad.
+                totalTravelDistance = _engine.Display.TotalCanvasDiagonal;
+            }
 
+            //Hit-test each position along the sprite path.
+            for (int i = 0; i < totalTravelDistance; i++)
+            {
+                hitTestPosition += directionVector;
                 foreach (var obj in objectsThatCanBeHit)
                 {
-                    if (Intersects(hitTestPosition))
+                    if (obj.Intersects(hitTestPosition))
                     {
                         return obj;
                     }

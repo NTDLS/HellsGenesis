@@ -11,6 +11,8 @@ namespace Si.Engine.Sprite
         {
             Initialize(@"Graphics\Debug.png");
             Velocity = new SiVelocity();
+
+            SetHullHealth(100000);
         }
 
         public SpriteDebug(EngineCore engine, float x, float y)
@@ -20,6 +22,8 @@ namespace Si.Engine.Sprite
             X = x;
             Y = y;
             Velocity = new SiVelocity();
+
+            SetHullHealth(100000);
         }
 
         public SpriteDebug(EngineCore engine, float x, float y, string imagePath)
@@ -29,6 +33,8 @@ namespace Si.Engine.Sprite
             X = x;
             Y = y;
             Velocity = new SiVelocity();
+
+            SetHullHealth(100000);
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)

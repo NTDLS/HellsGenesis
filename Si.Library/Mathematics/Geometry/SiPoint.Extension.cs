@@ -291,7 +291,7 @@ namespace Si.Library.Mathematics.Geometry
             => DistanceTo(from.Location, to.Location);
 
         /// <summary>
-        /// Calculates the euclidean distance between two points in a 2D space (slower but more precisie than DistanceSquaredTo);
+        /// Calculates the euclidean distance between two points in a 2D space (slower and precisie, but not compatible with DistanceSquaredTo(...)).
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
@@ -304,7 +304,7 @@ namespace Si.Library.Mathematics.Geometry
         }
 
         /// <summary>
-        ///  Calculates the distance squared between two points in a 2D space (faster and less precisie than DistanceTo);.
+        /// Calculates the distance squared between two points in a 2D space (faster and but not compatible with DistanceTo(...)).
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
@@ -346,9 +346,10 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="b"></param>
         /// <returns></returns>
         public static float DotProduct(SiPoint a, SiPoint b)
-        {
-            return a.X * b.X + a.Y * b.Y;
-        }
+            => a.X * b.X + a.Y * b.Y;
+
+        public static float Length(SiPoint vector)
+            => (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
 
         /// <summary>
         /// Calculate the angle between two points relative to the horizontal axis.

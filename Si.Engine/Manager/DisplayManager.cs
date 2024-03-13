@@ -58,6 +58,8 @@ namespace Si.Engine.Manager
         /// </summary>
         public Size TotalCanvasSize { get; private set; }
 
+        public float TotalCanvasDiagonal { get; private set; }
+
         public SiPoint CenterScreen;
 
         /// <summary>
@@ -169,6 +171,8 @@ namespace Si.Engine.Manager
             TotalCanvasSize = new Size(totalSizeX, totalSizeY);
             OverdrawSize = new Size(totalSizeX - NatrualScreenSize.Width, totalSizeY - NatrualScreenSize.Height);
             CenterScreen = new SiPoint(TotalCanvasSize.Width / 2.0f, TotalCanvasSize.Height / 2.0f);
+
+            TotalCanvasDiagonal = (float)Math.Sqrt(TotalCanvasSize.Width * TotalCanvasSize.Width + TotalCanvasSize.Height * TotalCanvasSize.Height);
         }
 
         public SiQuadrant GetQuadrant(float x, float y)
