@@ -33,7 +33,8 @@ namespace Si.Engine.Manager
 
         public bool RenderRadar { get; set; } = false;
 
-        private readonly OptimisticCriticalResource<List<SpriteBase>> _collection = new();
+        //private readonly OptimisticCriticalResource<List<SpriteBase>> _collection = new();
+        private readonly List<SpriteBase> _collection = new();
 
         #region Sprite Tick Controllerss.
 
@@ -84,14 +85,11 @@ namespace Si.Engine.Manager
         /// </summary>
         /// <param name="collectionAccessor"></param>
         public void DebugOnlyAccess(CollectionAccessor collectionAccessor)
-            => _collection.Read(o => collectionAccessor(o));
+            => collectionAccessor(_collection);
 
         public void QueueAllForDeletionOfType<T>() where T : SpriteBase
         {
-            _collection.Read(o =>
-            {
-                OfType<T>().ForEach(c => c.QueueForDelete());
-            });
+            OfType<T>().ForEach(c => c.QueueForDelete());
         }
 
         public void Dispose()
@@ -117,33 +115,27 @@ namespace Si.Engine.Manager
         }
 
         public void Add(SpriteBase item)
-            => _engine.Events.Add(() => _collection.Write(o => o.Add(item)));
+            => _engine.Events.Add(() => _collection.Add(item));
 
         public void HardDelete(SpriteBase item)
         {
-            _collection.Write(o =>
-            {
-                item.Cleanup();
-                o.Remove(item);
-            });
+            item.Cleanup();
+            _collection.Remove(item);
         }
 
         public void HardDeleteAllQueuedDeletions()
         {
-            _collection.Write(o =>
+            _collection.Where(o => o.IsQueuedForDeletion).ToList().ForEach(p => p.Cleanup());
+            _collection.RemoveAll(o => o.IsQueuedForDeletion);
+
+            _engine.Events.CleanupQueuedForDeletion();
+
+            if (_engine.Player.Sprite.IsDeadOrExploded)
             {
-                o.Where(o => o.IsQueuedForDeletion).ToList().ForEach(p => p.Cleanup());
-                o.RemoveAll(o => o.IsQueuedForDeletion);
-
-                _engine.Events.CleanupQueuedForDeletion();
-
-                if (_engine.Player.Sprite.IsDeadOrExploded)
-                {
-                    _engine.Player.Sprite.Visable = false;
-                    _engine.Player.Sprite.ReviveDeadOrExploded();
-                    _engine.Menus.Show(new MenuStartNewGame(_engine));
-                }
-            });
+                _engine.Player.Sprite.Visable = false;
+                _engine.Player.Sprite.ReviveDeadOrExploded();
+                _engine.Menus.Show(new MenuStartNewGame(_engine));
+            }
         }
 
         /// <summary>
@@ -158,70 +150,61 @@ namespace Si.Engine.Manager
         }
 
         public List<T> GetSpritesByTag<T>(string name) where T : SpriteBase
-            => _collection.Read(o => o.Where(o => o.SpriteTag == name).ToList() as List<T>);
+            => _collection.Where(o => o.SpriteTag == name).ToList() as List<T>;
 
         public T GetSingleSpriteByTag<T>(string name) where T : SpriteBase
-            => _collection.Read(o => o.Where(o => o.SpriteTag == name).SingleOrDefault() as T);
+            => _collection.Where(o => o.SpriteTag == name).SingleOrDefault() as T;
 
         public T GetSpriteByOwner<T>(uint ownerUID) where T : SpriteBase
-            => _collection.Read(o => o.Where(o => o.UID == ownerUID).SingleOrDefault() as T);
+            => _collection.Where(o => o.UID == ownerUID).SingleOrDefault() as T;
 
         public List<T> OfType<T>() where T : class
-            => _collection.Read(o => o.Where(o => o is T).Select(o => o as T).ToList());
+            => _collection.Where(o => o is T).Select(o => o as T).ToList();
 
         public List<T> VisibleOfType<T>() where T : class
-            => _collection.Read(o => o.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList());
+            => _collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList();
 
-        public List<SpriteBase> Visible() => _collection.Read(o => o.Where(o => o.Visable == true).ToList());
+        public List<SpriteBase> Visible() => _collection.Where(o => o.Visable == true).ToList();
 
-        public List<SpriteBase> All() => _collection.Read(o => o).ToList();
+        public List<SpriteBase> All() => _collection.ToList();
 
         public void QueueAllForDeletionByTag(string name)
         {
-            _collection.Read(o =>
+            foreach (var sprite in _collection)
             {
-                foreach (var sprite in o)
+                if (sprite.SpriteTag == name)
                 {
-                    if (sprite.SpriteTag == name)
-                    {
-                        sprite.QueueForDelete();
-                    }
+                    sprite.QueueForDelete();
                 }
-            });
+            }
         }
 
         public void QueueAllForDeletionByOwner(uint ownerUID)
         {
-            _collection.Read(o =>
+            foreach (var sprite in _collection)
             {
-                foreach (var sprite in o)
+                if (sprite.OwnerUID == ownerUID)
                 {
-                    if (sprite.OwnerUID == ownerUID)
-                    {
-                        sprite.QueueForDelete();
-                    }
+                    sprite.QueueForDelete();
                 }
-            });
+            }
         }
 
         public List<SpriteBase> Intersections(SpriteBase with)
         {
-            return _collection.Read(o =>
-            {
-                var objs = new List<SpriteBase>();
+            var objs = new List<SpriteBase>();
 
-                foreach (var obj in o.Where(o => o.Visable == true))
+            foreach (var obj in _collection.Where(o => o.Visable == true))
+            {
+                if (obj != with)
                 {
-                    if (obj != with)
+                    if (obj.Intersects(with.Location, new SiPoint(with.Size.Width, with.Size.Height)))
                     {
-                        if (obj.Intersects(with.Location, new SiPoint(with.Size.Width, with.Size.Height)))
-                        {
-                            objs.Add(obj);
-                        }
+                        objs.Add(obj);
                     }
                 }
-                return objs;
-            });
+            }
+            return objs;
         }
 
         public List<SpriteBase> Intersections(float x, float y, float width, float height)
@@ -229,53 +212,44 @@ namespace Si.Engine.Manager
 
         public List<SpriteBase> Intersections(SiPoint location, SiPoint size)
         {
-            return _collection.Read(o =>
-            {
-                var objs = new List<SpriteBase>();
+            var objs = new List<SpriteBase>();
 
-                foreach (var obj in o.Where(o => o.Visable == true))
+            foreach (var obj in _collection.Where(o => o.Visable == true))
+            {
+                if (obj.Intersects(location, size))
                 {
-                    if (obj.Intersects(location, size))
-                    {
-                        objs.Add(obj);
-                    }
+                    objs.Add(obj);
                 }
-                return objs;
-            });
+            }
+            return objs;
         }
 
         public List<SpriteBase> RenderLocationIntersectionsEvenInvisible(SiPoint location, SiPoint size)
         {
-            return _collection.Read(o =>
-            {
-                var objs = new List<SpriteBase>();
+            var objs = new List<SpriteBase>();
 
-                foreach (var obj in o)
+            foreach (var obj in _collection)
+            {
+                if (obj.RenderLocationIntersects(location, size))
                 {
-                    if (obj.RenderLocationIntersects(location, size))
-                    {
-                        objs.Add(obj);
-                    }
+                    objs.Add(obj);
                 }
-                return objs;
-            });
+            }
+            return objs;
         }
 
         public List<SpriteBase> RenderLocationIntersections(SiPoint location, SiPoint size)
         {
-            return _collection.Read(o =>
-            {
-                var objs = new List<SpriteBase>();
+            var objs = new List<SpriteBase>();
 
-                foreach (var obj in o.Where(o => o.Visable == true))
+            foreach (var obj in _collection.Where(o => o.Visable == true))
+            {
+                if (obj.RenderLocationIntersects(location, size))
                 {
-                    if (obj.RenderLocationIntersects(location, size))
-                    {
-                        objs.Add(obj);
-                    }
+                    objs.Add(obj);
                 }
-                return objs;
-            });
+            }
+            return objs;
         }
 
         public SpritePlayerBase AddPlayer(SpritePlayerBase sprite)
@@ -286,13 +260,10 @@ namespace Si.Engine.Manager
 
         public void RenderPostScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            _collection.Read(o => //Render PostScale sprites.
+            foreach (var sprite in _collection.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PostScale).OrderBy(o => o.ZOrder))
             {
-                foreach (var sprite in o.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PostScale).OrderBy(o => o.ZOrder))
-                {
-                    sprite.Render(renderTarget);
-                }
-            });
+                sprite.Render(renderTarget);
+            }
 
             if (RenderRadar)
             {
@@ -323,28 +294,25 @@ namespace Si.Engine.Manager
                             _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _engine.Player.Sprite.Y * _radarScale.Y)
                         );
 
-                    _collection.Read(o =>
+                    //Render radar:
+                    foreach (var sprite in _collection.Where(o => o.Visable == true))
                     {
-                        //Render radar:
-                        foreach (var sprite in o.Where(o => o.Visable == true))
-                        {
-                            //SiPoint scale, SiPoint< float > offset
-                            int x = (int)(_radarOffset.X + sprite.Location.X * _radarScale.X);
-                            int y = (int)(_radarOffset.Y + sprite.Location.Y * _radarScale.Y);
+                        //SiPoint scale, SiPoint< float > offset
+                        int x = (int)(_radarOffset.X + sprite.Location.X * _radarScale.X);
+                        int y = (int)(_radarOffset.Y + sprite.Location.Y * _radarScale.Y);
 
-                            if (x > _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
-                                && x < _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
-                                && y > _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
-                                && y < _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
-                                )
+                        if (x > _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
+                            && x < _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
+                            && y > _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
+                            && y < _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
+                            )
+                        {
+                            if ((sprite is SpritePlayerBase || sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerupBase) && sprite.Visable == true)
                             {
-                                if ((sprite is SpritePlayerBase || sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerupBase) && sprite.Visable == true)
-                                {
-                                    sprite.RenderRadar(renderTarget, x, y);
-                                }
+                                sprite.RenderRadar(renderTarget, x, y);
                             }
                         }
-                    });
+                    }
 
                     //Render player blip:
                     _engine.Rendering.FillEllipseAt(
@@ -363,16 +331,13 @@ namespace Si.Engine.Manager
         /// <returns></returns>
         public void RenderPreScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            _collection.Read(o => //Render PreScale sprites.
+            foreach (var sprite in _collection.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PreScale).OrderBy(o => o.ZOrder))
             {
-                foreach (var sprite in o.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PreScale).OrderBy(o => o.ZOrder))
+                if (sprite.IsWithinCurrentScaledScreenBounds)
                 {
-                    if (sprite.IsWithinCurrentScaledScreenBounds)
-                    {
-                        sprite.Render(renderTarget);
-                    }
+                    sprite.Render(renderTarget);
                 }
-            });
+            }
 
             _engine.Player.Sprite?.Render(renderTarget);
             _engine.Menus.Render(renderTarget);
