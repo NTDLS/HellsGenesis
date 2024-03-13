@@ -74,7 +74,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                             munition.ApplyMotion(epoch, displacementVector); //Move the munition.
                             munition.ApplyIntelligence(epoch, displacementVector);
 
-                            var hitObject = munition.FindFirstCollisionAlongPathAfterMove(objectsThatCanBeHit, epoch);
+                            var hitObject = munition.FindFirstReverseCollisionAlongMovementVector(objectsThatCanBeHit, epoch);
                             if (hitObject != null)
                             {
                                 hitObjects.Add(new(munition, hitObject));
