@@ -49,12 +49,24 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         /// <param name="defaultPosition"></param>
         public void AddRandomHitExplosionAt(SpriteBase defaultPosition)
         {
-            const string assetPath = @"Graphics\Animation\Explode\Hit Explosion 22x22";
-            int assetCount = 2;
-            int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
+            if (SiRandom.ChanceIn(1, 5))
+            {
+                const string assetPath = @"Graphics\Animation\Explode\Hit Explosion 66x66";
+                int assetCount = 2;
+                int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
-            var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(22, 22));
-            animation.Location = defaultPosition.Location.Clone();
+                var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(66, 66));
+                animation.Location = defaultPosition.Location.Clone();
+            }
+            else
+            {
+                const string assetPath = @"Graphics\Animation\Explode\Hit Explosion 22x22";
+                int assetCount = 2;
+                int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
+
+                var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(22, 22));
+                animation.Location = defaultPosition.Location.Clone();
+            }
         }
 
         /// <summary>
