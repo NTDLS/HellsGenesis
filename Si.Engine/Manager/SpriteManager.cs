@@ -1,5 +1,4 @@
-﻿using NTDLS.Semaphore;
-using SharpDX.Mathematics.Interop;
+﻿using SharpDX.Mathematics.Interop;
 using Si.Engine.Menu;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;

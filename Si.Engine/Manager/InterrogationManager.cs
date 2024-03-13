@@ -17,7 +17,7 @@ namespace Si.Engine.Manager
     /// </summary>
     public class InterrogationManager
     {
-        private static string[] _commandPrototypes = {
+        private static readonly string[] _commandPrototypes = {
             "Cls||Clears the debug screen.",
             "Help|command:Optional:Criterion|Displays help for all or a given command.",
 
@@ -72,7 +72,8 @@ namespace Si.Engine.Manager
 
         private readonly EngineCore _engine;
         private readonly Stack<string> _commandStack = new();
-        private IInterrogationForm _debugForm;
+        private readonly IInterrogationForm _debugForm;
+
         public InterrogationCommandParser CommandParser { get; } = new(_commandPrototypes);
         private readonly List<MethodInfo> _hardDebugMethods;
         public bool IsVisible { get; private set; } = false;
