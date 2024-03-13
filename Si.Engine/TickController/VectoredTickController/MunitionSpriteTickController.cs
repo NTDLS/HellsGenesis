@@ -52,12 +52,12 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             if (munitions.Count != 0)
             {
                 var objectsThatCanBeHit = SpriteManager.VisibleOfTypes([
-                    typeof(SpritePlayerBase),
-                    typeof(SpriteEnemyBossBase),
-                    typeof(SpriteEnemyPeonBase),
-                    typeof(SpriteAttachment),
-                    typeof(SpriteDebug),
-                    typeof(SpriteEnemyStarbase)
+                        typeof(SpritePlayerBase),
+                        typeof(SpriteEnemyBossBase),
+                        typeof(SpriteEnemyPeonBase),
+                        typeof(SpriteAttachment),
+                        typeof(SpriteDebug),
+                        typeof(SpriteEnemyStarbase)
                     ]);
 
                 //Create a collection of threads so we can wait on the ones that we start.
@@ -67,13 +67,13 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 
                 foreach (var munition in munitions)
                 {
-                    munition.ApplyMotion(epoch, displacementVector); //Move the munition.
-                    munition.ApplyIntelligence(epoch, displacementVector);
-
                     if (munition.IsDeadOrExploded == false)
                     {
                         threadPoolTracker.Enqueue(() => //Enqueue an item into the thread pool.
                         {
+                            munition.ApplyMotion(epoch, displacementVector); //Move the munition.
+                            munition.ApplyIntelligence(epoch, displacementVector);
+
                             var hitObject = munition.FindFirstCollisionAlongPathAfterMove(objectsThatCanBeHit, epoch);
                             if (hitObject != null)
                             {

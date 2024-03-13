@@ -879,7 +879,7 @@ namespace Si.Engine.Sprite._Superclass
 
         public virtual void HitExplosion()
         {
-            _engine.Sprites.Animations.AddRandomExplosionAt(this);
+            _engine.Sprites.Animations.AddRandomHitExplosionAt(this);
         }
 
         #endregion
