@@ -163,6 +163,17 @@ namespace Si.Engine.Manager
         public List<T> VisibleOfType<T>() where T : class
             => _collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList();
 
+        public List<SpriteBase> VisibleOfTypes(Type[] types)
+        {
+            var result = new List<SpriteBase>();
+            foreach (var type in types)
+            {
+                result.AddRange(_collection.Where(o => o.Visable == true && type.IsAssignableFrom(o.GetType())));
+            }
+
+            return result;
+        }
+
         public List<SpriteBase> Visible() => _collection.Where(o => o.Visable == true).ToList();
 
         public List<SpriteBase> All() => _collection.ToList();

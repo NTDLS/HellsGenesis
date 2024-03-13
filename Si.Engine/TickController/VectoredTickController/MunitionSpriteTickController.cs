@@ -10,6 +10,7 @@ using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,6 +18,22 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 {
     public class MunitionSpriteTickController : VectoredTickControllerBase<MunitionBase>
     {
+        #region Private Classes.
+
+        private struct MunitionObjectHit
+        {
+            public SpriteBase Object { get; set; }
+            public MunitionBase Munition { get; set; }
+
+            public MunitionObjectHit(MunitionBase munition, SpriteBase obj)
+            {
+                Object = obj;
+                Munition = munition;
+            }
+        }
+
+        #endregion
+
         private readonly DelegateThreadPool _munitionTraversalThreadPool;
 
         public MunitionSpriteTickController(EngineCore engine, SpriteManager manager)
@@ -24,43 +41,28 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         {
             _munitionTraversalThreadPool = new(engine.Settings.MunitionTraversalThreads);
 
-            engine.OnStopEngine += (sender) =>
+            engine.OnShutdown += (engine) =>
             {
                 _munitionTraversalThreadPool.Stop();
             };
         }
 
-        private struct HitObject
-        {
-            public SpriteShipBase Object { get; set; }
-            public MunitionBase Munition { get; set; }
-
-            public HitObject(MunitionBase munition, SpriteShipBase obj)
-            {
-                Object = obj;
-                Munition = munition;
-            }
-        }
-
         public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
             var munitions = VisibleOfType<MunitionBase>();
-            if (munitions.Any())
+            if (munitions.Count != 0)
             {
-                var objectsThatCanBeHit = new List<SpriteShipBase>
-                {
-                    Engine.Player.Sprite
-                };
-
-                objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyBossBase>());
-                objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteEnemyPeonBase>());
-                objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpritePlayerBase>());
-                objectsThatCanBeHit.AddRange(SpriteManager.VisibleOfType<SpriteAttachment>());
+                var objectsThatCanBeHit = SpriteManager.VisibleOfTypes([
+                    typeof(SpritePlayerBase),
+                    typeof(SpriteEnemyBossBase),
+                    typeof(SpriteEnemyPeonBase),
+                    typeof(SpriteAttachment)
+                    ]);
 
                 //Create a collection of threads so we can wait on the ones that we start.
                 var threadPoolTracker = _munitionTraversalThreadPool.CreateQueueStateTracker();
 
-                List<HitObject> hitObjects = new();
+                var hitObjects = new ConcurrentBag<MunitionObjectHit>();
 
                 foreach (var munition in munitions)
                 {
@@ -75,10 +77,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                             var hitObject = TestObjectCollisionsAlongMunitionPath(munition, objectsThatCanBeHit);
                             if (hitObject != null)
                             {
-                                lock (hitObjects)
-                                {
-                                    hitObjects.Add(new(munition, hitObject));
-                                }
+                                hitObjects.Add(new(munition, hitObject));
                             }
                         });
                     }
@@ -107,7 +106,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         ///     betwwen where it ended up and where it should have come from given its velocity.
         /// </summary>
         /// <returns></returns>
-        public SpriteShipBase TestObjectCollisionsAlongMunitionPath(MunitionBase munition, List<SpriteShipBase> objectsThatCanBeHit)
+        public SpriteBase TestObjectCollisionsAlongMunitionPath(MunitionBase munition, List<SpriteBase> objectsThatCanBeHit)
         {
             //Reverse the munition to its starting position.
             var hitTestPosition = new SiPoint(munition.Location - munition.Velocity.MovementVector);

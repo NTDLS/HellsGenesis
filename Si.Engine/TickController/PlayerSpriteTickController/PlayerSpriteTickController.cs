@@ -25,6 +25,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
         {
             //This is where the player is created.
             Sprite = new SpriteDebugPlayer(engine) { Visable = false };
+            engine.Sprites.Add(Sprite);
 
             _engine = engine;
             _inputDelay.Restart();

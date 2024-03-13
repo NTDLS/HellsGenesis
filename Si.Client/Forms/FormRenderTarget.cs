@@ -60,7 +60,7 @@ namespace Si.Client
 
             _engine.EnableDebugging(new FormInterrogation(_engine));
 
-            _engine.OnStopEngine += (EngineCore sender) =>
+            _engine.OnShutdown += (EngineCore sender) =>
             {   //If the engine is stopped, close the main form.
                 Invoke((MethodInvoker)delegate
                 {

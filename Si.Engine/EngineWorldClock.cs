@@ -26,7 +26,7 @@ namespace Si.Engine
         {
             _worldClockThreadPool = new(engine.Settings.WorldClockThreads);
 
-            engine.OnStopEngine += (sender) =>
+            engine.OnShutdown += (sender) =>
             {
                 _worldClockThreadPool.Stop();
             };

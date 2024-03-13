@@ -55,11 +55,11 @@ namespace Si.Engine
 
         #region Events.
 
-        public delegate void StartEngineEvent(EngineCore sender);
-        public event StartEngineEvent OnStartEngine;
+        public delegate void InitializationEvent(EngineCore engine);
+        public event InitializationEvent OnInitialization;
 
-        public delegate void StopEngineEvent(EngineCore sender);
-        public event StopEngineEvent OnStopEngine;
+        public delegate void ShutdownEvent(EngineCore engine);
+        public event ShutdownEvent OnShutdown;
 
         #endregion
 
@@ -193,7 +193,7 @@ namespace Si.Engine
             textBlock.QueueForDelete();
             percentTextBlock.QueueForDelete();
 
-            OnStartEngine?.Invoke(this);
+            OnInitialization?.Invoke(this);
 
             if (Settings.PlayMusic)
             {
@@ -209,7 +209,7 @@ namespace Si.Engine
             {
                 IsRunning = false;
 
-                OnStopEngine?.Invoke(this);
+                OnShutdown?.Invoke(this);
 
                 _worldClock.Dispose();
                 Sprites.Dispose();
