@@ -53,11 +53,11 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             {
                 var objectsThatCanBeHit = SpriteManager.VisibleOfTypes([
                         typeof(SpritePlayerBase),
-                        typeof(SpriteEnemyBossBase),
-                        typeof(SpriteEnemyPeonBase),
-                        typeof(SpriteAttachment),
-                        typeof(SpriteDebug),
-                        typeof(SpriteEnemyStarbase)
+                    typeof(SpriteEnemyBossBase),
+                    typeof(SpriteEnemyPeonBase),
+                    typeof(SpriteAttachment),
+                    typeof(SpriteDebug),
+                    typeof(SpriteEnemyStarbase)
                     ]);
 
                 //Create a collection of threads so we can wait on the ones that we start.
