@@ -10,7 +10,13 @@ namespace Si.Engine.TickController.UnvectoredTickController
     public class EventTickController : UnvectoredTickControllerBase<SiDefermentEvent>
     {
         private readonly PessimisticCriticalResource<List<SiDefermentEvent>> _collection = new();
-        public delegate void SiOnExecuteSimpleT<T>(T param);
+
+        /// <summary>
+        /// Delegate for the event exection callback.
+        /// </summary>
+        /// <typeparam name="T">Type of the parameter for the event.</typeparam>
+        /// <param name="parameter">An object passed by the user code</param>
+        public delegate void SiDefermentSimpleExecuteCallbackT<T>(T parameter);
 
         public EventTickController(EngineCore engine)
             : base(engine)
@@ -37,7 +43,7 @@ namespace Si.Engine.TickController.UnvectoredTickController
         /// </summary>
         public void QueueTheDoorIsAjar()
         {
-            Add(4, (sender, refObj) =>
+            Add(4, (sender, parameter) =>
             {
                 Engine.Audio.DoorIsAjarSound.Play();
                 Engine.Menus.Show(new MenuStartNewGame(Engine));
@@ -46,95 +52,157 @@ namespace Si.Engine.TickController.UnvectoredTickController
 
         #region Factories.
 
-        public SiDefermentEvent Add(int milliseconds, SiOnExecute executeCallback, object refObj,
-            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
-            SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
+        /// <summary>
+        /// Creates a new event. This can be a recurring event, single event, synchronous, asynchronous and can be passed parameters.
+        /// </summary>
+        /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
+        /// <param name="parameter">An object that will be passed to the execution callback.</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        /// <param name="eventMode">Whether the event is one time or recurring.</param>
+        /// <param name="threadModel">Wheter the event callback is run synchronous or asynchronous.</param>
+        /// <returns></returns>
+        public SiDefermentEvent Add(int timeoutMilliseconds, SiDefermentExecuteCallback executionCallback, object parameter,
+            SiDefermentEventMode eventMode = SiDefermentEventMode.OneTime,
+            SiDefermentEventThreadModel threadModel = SiDefermentEventThreadModel.Synchronous)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiDefermentEvent(milliseconds, refObj, executeCallback, callbackEventMode, callbackEventAsync);
+                var obj = new SiDefermentEvent(timeoutMilliseconds, parameter, executionCallback, eventMode, threadModel);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiDefermentEvent Add(int milliseconds, SiOnExecute executeCallback,
-            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
-            SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
+        /// <summary>
+        /// Creates a new event. This can be a recurring event, single event, synchronous or asynchronous.
+        /// </summary>
+        /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        /// <param name="eventMode">Whether the event is one time or recurring.</param>
+        /// <param name="threadModel">Wheter the event callback is run synchronous or asynchronous.</param>
+        /// <returns></returns>
+        public SiDefermentEvent Add(int timeoutMilliseconds, SiDefermentExecuteCallback executionCallback,
+            SiDefermentEventMode eventMode = SiDefermentEventMode.OneTime,
+            SiDefermentEventThreadModel threadModel = SiDefermentEventThreadModel.Synchronous)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiDefermentEvent(milliseconds, null, executeCallback, callbackEventMode, callbackEventAsync);
+                var obj = new SiDefermentEvent(timeoutMilliseconds, null, executionCallback, eventMode, threadModel);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiDefermentEvent Add(int milliseconds, SiOnExecute executeCallback,
-            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime)
+        /// <summary>
+        /// Creates a new single threaded event. This can be a recurring event, single event.
+        /// </summary>
+        /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        /// <param name="eventMode">Whether the event is one time or recurring.</param>
+        /// <returns></returns>
+        public SiDefermentEvent Add(int timeoutMilliseconds, SiDefermentExecuteCallback executionCallback,
+            SiDefermentEventMode eventMode = SiDefermentEventMode.OneTime)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiDefermentEvent(milliseconds, null, executeCallback, callbackEventMode);
+                var obj = new SiDefermentEvent(timeoutMilliseconds, null, executionCallback, eventMode);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiDefermentEvent Add(int milliseconds, object refObj, SiOnExecute executeCallback)
+        /// <summary>
+        /// Creates a new single threaded event.
+        /// </summary>
+        /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
+        /// <param name="parameter">An object that will be passed to the execution callback.</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        /// <returns></returns>
+        public SiDefermentEvent Add(int timeoutMilliseconds, object parameter, SiDefermentExecuteCallback executionCallback)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiDefermentEvent(milliseconds, refObj, executeCallback);
+                var obj = new SiDefermentEvent(timeoutMilliseconds, parameter, executionCallback);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiDefermentEvent Add(int milliseconds, SiOnExecute executeCallback)
+        /// <summary>
+        /// Creates a new single threaded event.
+        /// </summary>
+        /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        /// <returns></returns>
+        public SiDefermentEvent Add(int timeoutMilliseconds, SiDefermentExecuteCallback executionCallback)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiDefermentEvent(milliseconds, executeCallback);
+                var obj = new SiDefermentEvent(timeoutMilliseconds, executionCallback);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiDefermentEvent Add<T>(int milliseconds, T param, SiOnExecuteSimpleT<T> executeCallback)
+        /// <summary>
+        /// Creates a new single threaded event and passes a parameter of the given type T.
+        /// </summary>
+        /// <typeparam name="T">Type of the parameter for the event.</typeparam>
+        /// <param name="timeoutMilliseconds"></param>
+        /// <param name="parameter">An object passed by the user code</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        /// <returns></returns>
+        public SiDefermentEvent Add<T>(int timeoutMilliseconds, T parameter, SiDefermentSimpleExecuteCallbackT<T> executionCallback)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiDefermentEvent(milliseconds,
+                var obj = new SiDefermentEvent(timeoutMilliseconds,
                     (SiDefermentEvent sender, object refObj) =>
                 {
-                    executeCallback(param);
+                    executionCallback(parameter);
                 });
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiDefermentEvent Add(int milliseconds, SiOnExecuteSimple executeCallback)
+        /// <summary>
+        /// Creates a new single threaded, single-fire event.
+        /// </summary>
+        /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        /// <returns></returns>
+        public SiDefermentEvent Add(int timeoutMilliseconds, SiDefermentSimpleExecuteCallback executionCallback)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiDefermentEvent(milliseconds, executeCallback);
+                var obj = new SiDefermentEvent(timeoutMilliseconds, executionCallback);
                 o.Add(obj);
                 return obj;
             });
         }
 
-        public SiDefermentEvent Add(SiOnExecuteSimple executeCallback)
+        /// <summary>
+        /// Creates a new single threaded, single-fire event.
+        /// </summary>
+        /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        /// <returns></returns>
+        public SiDefermentEvent Add(SiDefermentSimpleExecuteCallback executionCallback)
         {
             return _collection.Use(o =>
             {
-                var obj = new SiDefermentEvent(0, executeCallback);
+                var obj = new SiDefermentEvent(0, executionCallback);
                 o.Add(obj);
                 return obj;
             });
         }
 
+        /// <summary>
+        /// Adds an existing even to the collection.
+        /// </summary>
+        /// <param name="SiDefermentEvent">An existing event to add.</param>
+        /// <returns></returns>
         public SiDefermentEvent Add(SiDefermentEvent obj)
         {
             return _collection.Use(o =>
@@ -144,6 +212,10 @@ namespace Si.Engine.TickController.UnvectoredTickController
             });
         }
 
+        /// <summary>
+        /// Deletes an event from the collection.
+        /// </summary>
+        /// <param name="obj"></param>
         public void HardDelete(SiDefermentEvent obj)
         {
             _collection.Use(o =>
@@ -152,6 +224,9 @@ namespace Si.Engine.TickController.UnvectoredTickController
             });
         }
 
+        /// <summary>
+        /// Queues an event for deletion from the collection.
+        /// </summary>
         public void CleanupQueuedForDeletion()
         {
             _collection.Use(o =>

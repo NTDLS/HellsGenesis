@@ -39,15 +39,15 @@ namespace Si.Engine.Level._Superclass
             State = SiLevelState.Started;
         }
 
-        protected SiDefermentEvent AddRecuringFireEvent(int milliseconds, SiOnExecute executeCallback)
+        protected SiDefermentEvent AddRecuringFireEvent(int milliseconds, SiDefermentExecuteCallback executeCallback)
         {
             //Keep track of recurring events to we can delete them when we are done.
-            var obj = _engine.Events.Add(milliseconds, executeCallback, null, SiCallbackEventMode.Recurring);
+            var obj = _engine.Events.Add(milliseconds, executeCallback, null, SiDefermentEventMode.Recurring);
             Events.Add(obj);
             return obj;
         }
 
-        protected SiDefermentEvent AddSingleFireEvent(int milliseconds, SiOnExecute executeCallback)
+        protected SiDefermentEvent AddSingleFireEvent(int milliseconds, SiDefermentExecuteCallback executeCallback)
         {
             return _engine.Events.Add(milliseconds, executeCallback);
         }

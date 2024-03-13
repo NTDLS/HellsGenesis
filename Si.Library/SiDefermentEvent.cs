@@ -1,4 +1,6 @@
-﻿namespace Si.Engine.Core.Types
+﻿using static Si.Engine.Core.Types.SiDefermentEvent;
+
+namespace Si.Engine.Core.Types
 {
     /// <summary>
     /// Allows for deferred events to be injected into the engine. We use this so that we can defer 
@@ -7,75 +9,97 @@
     public class SiDefermentEvent
     {
         public string? Name { get; set; }
-        private readonly object? _referenceObject = null;
-        private readonly int _milliseconds;
-        private readonly SiOnExecute? _onExecute = null;
-        private readonly SiOnExecuteSimple? _onExecuteSimple = null;
-        private readonly SiCallbackEventMode _callbackEventMode = SiCallbackEventMode.OneTime;
-        private readonly SiCallbackEventAsync _callbackEventAsync;
-        private DateTime _startedTime;
+        private readonly object? _parameter = null;
+        private readonly int _timeoutMilliseconds;
+        private readonly SiDefermentExecuteCallback? _executionCallback = null;
+        private readonly SiDefermentSimpleExecuteCallback? _simpleExecutionCallback = null;
+        private readonly SiDefermentEventMode _eventMode = SiDefermentEventMode.OneTime;
+        private readonly SiDefermentEventThreadModel _threadModel;
+        private DateTime _eventTriggerBaseTime;
 
         public Guid UID { get; private set; }
 
         public bool IsQueuedForDeletion { get; private set; } = false;
 
         /// <summary>
-        /// 
+        /// Delegate for the event exection callback.
         /// </summary>
         /// <param name="core">Engine core</param>
         /// <param name="sender">The event that is being triggered</param>
-        /// <param name="refObj">An optional object passed by the user code</param>
-        public delegate void SiOnExecute(SiDefermentEvent sender, object? refObj);
+        /// <param name="parameter">An optional object passed by the user code</param>
+        public delegate void SiDefermentExecuteCallback(SiDefermentEvent sender, object? parameter);
 
-        public delegate void SiOnExecuteSimple();
+        /// <summary>
+        /// Delegate for the event exection callback.
+        /// </summary>
+        public delegate void SiDefermentSimpleExecuteCallback();
 
-        public enum SiCallbackEventMode
+        public enum SiDefermentEventMode
         {
             OneTime,
             Recurring
         }
 
-        public enum SiCallbackEventAsync
+        public enum SiDefermentEventThreadModel
         {
             Synchronous,
             Asynchronous
         }
 
-        public SiDefermentEvent(int milliseconds, object refObj, SiOnExecute executeCallback,
-            SiCallbackEventMode callbackEventMode = SiCallbackEventMode.OneTime,
-            SiCallbackEventAsync callbackEventAsync = SiCallbackEventAsync.Synchronous)
+        /// <summary>
+        /// Creates a new event. This can be a recurring event, single event, synchronous, asynchronous and can be passed parameters.
+        /// </summary>
+        /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
+        /// <param name="parameter">An object that will be passed to the execution callback.</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        /// <param name="eventMode">Whether the event is one time or recurring.</param>
+        /// <param name="threadModel">Wheter the event callback is run synchronous or asynchronous.</param>
+        public SiDefermentEvent(int timeoutMilliseconds, object parameter, SiDefermentExecuteCallback executionCallback,
+            SiDefermentEventMode eventMode = SiDefermentEventMode.OneTime,
+            SiDefermentEventThreadModel threadModel = SiDefermentEventThreadModel.Synchronous)
         {
-            _referenceObject = refObj;
-            _milliseconds = milliseconds;
-            _onExecute = executeCallback;
-            _callbackEventMode = callbackEventMode;
-            _callbackEventAsync = callbackEventAsync;
-            _startedTime = DateTime.UtcNow;
+            _parameter = parameter;
+            _timeoutMilliseconds = timeoutMilliseconds;
+            _executionCallback = executionCallback;
+            _eventMode = eventMode;
+            _threadModel = threadModel;
+            _eventTriggerBaseTime = DateTime.UtcNow;
             UID = Guid.NewGuid();
         }
 
-        public SiDefermentEvent(int milliseconds, object refObj, SiOnExecute executeCallback)
+        /// <summary>
+        /// Creates a new one-time synchronous event that is passed a parameter.
+        /// </summary>
+        /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
+        /// <param name="parameter">An object that will be passed to the execution callback.</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        public SiDefermentEvent(int timeoutMilliseconds, object parameter, SiDefermentExecuteCallback executionCallback)
         {
-            _referenceObject = refObj;
-            _milliseconds = milliseconds;
-            _onExecute = executeCallback;
-            _startedTime = DateTime.UtcNow;
+            _parameter = parameter;
+            _timeoutMilliseconds = timeoutMilliseconds;
+            _executionCallback = executionCallback;
+            _eventTriggerBaseTime = DateTime.UtcNow;
             UID = Guid.NewGuid();
         }
 
-        public SiDefermentEvent(int milliseconds, SiOnExecute executeCallback)
+        /// <summary>
+        /// Creates a new one-time no-parameter synchronous event.
+        /// </summary>
+        /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
+        /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
+        public SiDefermentEvent(int timeoutMilliseconds, SiDefermentExecuteCallback executionCallback)
         {
-            _milliseconds = milliseconds;
-            _onExecute = executeCallback;
-            _startedTime = DateTime.UtcNow;
+            _timeoutMilliseconds = timeoutMilliseconds;
+            _executionCallback = executionCallback;
+            _eventTriggerBaseTime = DateTime.UtcNow;
             UID = Guid.NewGuid();
         }
 
-        public SiDefermentEvent(int milliseconds, SiOnExecuteSimple executeCallback)
+        public SiDefermentEvent(int timeoutMilliseconds, SiDefermentSimpleExecuteCallback simpleExecutionCallback)
         {
-            _milliseconds = milliseconds;
-            _onExecuteSimple = executeCallback;
-            _startedTime = DateTime.UtcNow;
+            _timeoutMilliseconds = timeoutMilliseconds;
+            _simpleExecutionCallback = simpleExecutionCallback;
+            _eventTriggerBaseTime = DateTime.UtcNow;
             UID = Guid.NewGuid();
         }
 
@@ -95,32 +119,32 @@
                     return false;
                 }
 
-                if ((DateTime.UtcNow - _startedTime).TotalMilliseconds > _milliseconds)
+                if ((DateTime.UtcNow - _eventTriggerBaseTime).TotalMilliseconds >= _timeoutMilliseconds)
                 {
                     result = true;
 
-                    if (_callbackEventMode == SiCallbackEventMode.OneTime)
+                    if (_eventMode == SiDefermentEventMode.OneTime)
                     {
                         IsQueuedForDeletion = true;
                     }
 
-                    if (_callbackEventAsync == SiCallbackEventAsync.Asynchronous)
+                    if (_threadModel == SiDefermentEventThreadModel.Asynchronous)
                     {
                         new Thread(() =>
                         {
-                            if (_onExecute != null) _onExecute(this, _referenceObject);
-                            if (_onExecuteSimple != null) _onExecuteSimple();
+                            if (_executionCallback != null) _executionCallback(this, _parameter);
+                            if (_simpleExecutionCallback != null) _simpleExecutionCallback();
                         }).Start();
                     }
                     else
                     {
-                        if (_onExecute != null) _onExecute(this, _referenceObject);
-                        if (_onExecuteSimple != null) _onExecuteSimple();
+                        if (_executionCallback != null) _executionCallback(this, _parameter);
+                        if (_simpleExecutionCallback != null) _simpleExecutionCallback();
                     }
 
-                    if (_callbackEventMode == SiCallbackEventMode.Recurring)
+                    if (_eventMode == SiDefermentEventMode.Recurring)
                     {
-                        _startedTime = DateTime.UtcNow;
+                        _eventTriggerBaseTime = DateTime.UtcNow;
                     }
                 }
                 return result;

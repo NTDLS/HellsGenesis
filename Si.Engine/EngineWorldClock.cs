@@ -42,7 +42,7 @@ namespace Si.Engine
             _shutdown = false;
             _graphicsThread.Start();
 
-            _engine.Events.Add(10, UpdateStatusText, SiDefermentEvent.SiCallbackEventMode.Recurring);
+            _engine.Events.Add(10, UpdateStatusText, SiDefermentEvent.SiDefermentEventMode.Recurring);
         }
 
         public void Dispose()
