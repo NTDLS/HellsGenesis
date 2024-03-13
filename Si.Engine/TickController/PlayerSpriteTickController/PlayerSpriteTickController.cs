@@ -116,22 +116,22 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 {
                     if (Sprite.Velocity.ForwardVelocity < targetForwardAmount) //The target forward throttle is more than we have applied: ramp-up.
                     {
-                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity + velocityRampUp).Clamp(-100, targetForwardAmount); //Make player forward velocity build-up.
+                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity + velocityRampUp).Clamp(-1, targetForwardAmount); //Make player forward velocity build-up.
                     }
                     else //The target forward throttle is less than we have applied: ramp-down.
                     {
-                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity - velocityRampDown).Clamp(targetForwardAmount, 100);
+                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity - velocityRampDown).Clamp(targetForwardAmount, 1);
                     }
                 }
                 else if (targetForwardAmount < -throttleFloor)
                 {
                     if (Sprite.Velocity.ForwardVelocity > targetForwardAmount) //The target reverse throttle is more than we have applied: ramp-up.
                     {
-                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity - velocityRampUp).Clamp(-100, targetForwardAmount); //Make player forward velocity build-up.
+                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity - velocityRampUp).Clamp(targetForwardAmount, 1); //Make player forward velocity build-up.
                     }
                     else //The target reverse throttle is less than we have applied: ramp-down.
                     {
-                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity + velocityRampDown).Clamp(targetForwardAmount, 100);
+                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity + velocityRampDown).Clamp(targetForwardAmount, 1);
                     }
                 }
                 else //No forward input was received, ramp down the forward velocity.
@@ -200,22 +200,22 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 {
                     if (Sprite.Velocity.LateralVelocity < targetLateralAmount) //The target lateral throttle is more than we have applied: ramp-up.
                     {
-                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity + velocityRampUp).Clamp(-100, targetLateralAmount); //Make player lateral velocity build-up.
+                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity + velocityRampUp).Clamp(-1, targetLateralAmount); //Make player lateral velocity build-up.
                     }
                     else //The target lateral throttle is less than we have applied: ramp-down.
                     {
-                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity - velocityRampDown).Clamp(targetLateralAmount, 100);
+                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity - velocityRampDown).Clamp(targetLateralAmount, 1);
                     }
                 }
                 else if (targetLateralAmount < -throttleFloor)
                 {
                     if (Sprite.Velocity.LateralVelocity > targetLateralAmount) //The target reverse lateral throttle is more than we have applied: ramp-up.
                     {
-                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity - velocityRampUp).Clamp(-100, targetLateralAmount); //Make player forward velocity build-up.
+                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity - velocityRampUp).Clamp(targetLateralAmount, 1); //Make player forward velocity build-up.
                     }
                     else //The target reverse lateral throttle is less than we have applied: ramp-down.
                     {
-                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity + velocityRampDown).Clamp(targetLateralAmount, 100);
+                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity + velocityRampDown).Clamp(targetLateralAmount, 1);
                     }
                 }
                 else //No lateral input was received, ramp down the lateral velocity.
