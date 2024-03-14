@@ -34,7 +34,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 
         public SpriteAttachment CreateTypeOf<T>(SpriteBase owner, string imagePath = null) where T : SpriteAttachment
         {
-            var sprite = SpriteManager.CreateTypeOf<T>();
+            var sprite = SpriteManager.CreateByType<T>();
 
             if (imagePath != null) sprite.SetImage(imagePath);
             sprite.ZOrder = owner.ZOrder + 1; //We want to make sure these go on top of the parent.
@@ -46,7 +46,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 
         public SpriteAttachment CreateTypeOf(string typeName, SpriteBase owner, SiPoint locationRelativeToOwner)
         {
-            var sprite = SpriteManager.CreateTypeOf(typeName);
+            var sprite = SpriteManager.CreateByTypeName(typeName);
 
             sprite.ZOrder = owner.ZOrder + 1; //We want to make sure these go on top of the parent.
             sprite.OwnerUID = owner.UID;

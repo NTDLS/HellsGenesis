@@ -1,10 +1,8 @@
-﻿using Si.Engine.Loudout;
-using Si.Engine.Sprite.Enemy.Boss._Superclass;
+﻿using Si.Engine.Sprite.Enemy.Boss._Superclass;
 using Si.Engine.Sprite.Weapon;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
-using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Enemy.Boss
 {
@@ -32,33 +30,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
             _leftThrust = Attach(_assetPath + "Jet.png", true, 3);
             _rightThrust = Attach(_assetPath + "Jet.png", true, 3);
 
-            SetImage(_assetPath + "Hull.png");
-
-            ShipClass = SiEnemyClass.Spectre;
-
-            //Load the loadout from file or create a new one if it does not exist.
-            LoadoutEnemyShip loadout = LoadLoadoutFromFile(ShipClass);
-            if (loadout == null)
-            {
-                loadout = new LoadoutEnemyShip(ShipClass)
-                {
-                    Description = "→ Spectre ←\n"
-                       + "TODO: Add a description\n",
-                    Speed = 3.5f,
-                    Boost = 1.5f,
-                    HullHealth = 2500,
-                    ShieldHealth = 3000,
-                    Bounty = 100
-                };
-
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
-
-                SaveLoadoutToFile(loadout);
-            }
-
-            ResetLoadout(loadout);
+            InitializeSpriteFromMetadata(@"Graphics\Enemy\Boss\Spectre\Hull.png");
 
             _initialMaxpeed = Velocity.MaximumSpeed;
         }

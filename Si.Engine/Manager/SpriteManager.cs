@@ -95,40 +95,20 @@ namespace Si.Engine.Manager
         {
         }
 
-        public T CreateTypeOf<T>() where T : SpriteBase
+        public T CreateByType<T>() where T : SpriteBase
         {
             object[] param = { _engine };
             var sprite = Activator.CreateInstance(typeof(T), param) as T;
             return sprite;
         }
 
-        public SpriteBase CreateTypeOf(string typeName)
+        public SpriteBase CreateByTypeName(string typeName)
         {
-            var type = Type.GetType(typeName) ?? throw new ArgumentException($"Type with FullName '{typeName}' not found.");
+            var type = SiReflection.GetTypeByName(typeName) ?? throw new ArgumentException($"Type with FullName '{typeName}' not found.");
             object[] param = { _engine };
             var sprite = (SpriteBase)Activator.CreateInstance(type, param);
             return sprite;
         }
-
-        /*
-        public SpriteBase CreateAndAddByNameOfType(string typeFullName)
-        {
-            var type = Type.GetType(typeFullName) ?? throw new ArgumentException($"Type with FullName '{typeFullName}' not found.");
-            object[] param = { _engine };
-            var sprite = (SpriteBase)Activator.CreateInstance(type, param);
-
-            sprite.Location = _engine.Display.RandomOffScreenLocation();
-            sprite.Velocity.ForwardAngle.Degrees = SiRandom.Between(0, 359);
-
-            var enemy = sprite as SpriteEnemyBase;
-
-            enemy?.BeforeCreate();
-            Add(sprite);
-            enemy?.AfterCreate();
-
-            return sprite;
-        }
-        */
 
         public void Add(SpriteBase item)
             => _engine.Events.Add(() => _collection.Add(item));

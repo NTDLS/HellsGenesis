@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Si.GameEngine.Loudout
 {
-    public class SpriteLayoutAttachment
+    public class SpriteMetadataAttachment
     {
         public string Type { get; set; }
         public float X { get; set; }

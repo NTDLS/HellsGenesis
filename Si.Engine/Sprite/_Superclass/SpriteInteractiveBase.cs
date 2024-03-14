@@ -12,17 +12,17 @@ using static Si.Library.SiConstants;
 namespace Si.Engine.Sprite._Superclass
 {
     /// <summary>
-    /// Somthing the player can see, probably shoot and destroy.
+    /// A sprite that the player can see, probably shoot and destroy and might even shoot back.
     /// </summary>
-    public class SpriteInteractive : SpriteBase
+    public class SpriteInteractiveBase : SpriteBase
     {
-        public bool TakesDamage { get; set; }
+        public bool TakesDamage { get; set; } = true;
 
         public List<WeaponBase> Weapons { get; private set; } = new();
 
         public int Bounty { get; set; } = 0;
 
-        public SpriteInteractive(EngineCore engine, string name = "")
+        public SpriteInteractiveBase(EngineCore engine, string name = "")
             : base(engine, name)
         {
             _engine = engine;
@@ -35,11 +35,12 @@ namespace Si.Engine.Sprite._Superclass
             string metadataFile = $"{Path.GetDirectoryName(spriteImagePath)}\\{Path.GetFileNameWithoutExtension(spriteImagePath)}.json";
             var metadataJson = _engine.Assets.GetText(metadataFile);
 
-            var metadata = JsonConvert.DeserializeObject<LoadoutEnemyShip>(metadataJson);
+            var metadata = JsonConvert.DeserializeObject<SpriteMetadata>(metadataJson);
 
             Velocity.MaximumSpeed = metadata.Speed;
             Velocity.MaximumSpeedBoost = metadata.Boost;
             Bounty = metadata.Bounty;
+            TakesDamage = metadata.TakesDamage;
 
             SetHullHealth(metadata.HullHealth);
             SetShieldHealth(metadata.ShieldHealth);
@@ -128,19 +129,29 @@ namespace Si.Engine.Sprite._Superclass
 
         public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
         {
-            if (munition.FiredFromType == SiFiredFromType.Player)
+            if (Intersects(hitTestPosition))
             {
-                if (Intersects(hitTestPosition))
+                Hit(munition);
+                if (HullHealth <= 0)
                 {
-                    Hit(munition);
-                    if (HullHealth <= 0)
-                    {
-                        Explode();
-                    }
-                    return true;
+                    Explode();
                 }
+                return true;
             }
             return false;
+        }
+
+        public override void Explode()
+        {
+            _engine.Events.Add(() =>
+            {
+                _engine.Sprites.Animations.AddRandomExplosionAt(this);
+                _engine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this);
+                _engine.Sprites.CreateFragmentsOf(this);
+                _engine.Rendering.AddScreenShake(4, 800);
+                _engine.Audio.PlayRandomExplosion();
+            });
+            base.Explode();
         }
     }
 }

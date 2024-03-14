@@ -9,9 +9,11 @@ using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Engine.TickController._Superclass;
+using Si.GameEngine.Manager;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Concurrent;
+using System.Linq;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.TickController.VectoredTickControllerBase
@@ -52,7 +54,10 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             var munitions = VisibleOfType<MunitionBase>();
             if (munitions.Count != 0)
             {
-                var objectsPlayerCanHit = SpriteManager.VisibleOfTypes([
+                var interactiveSprites = SpriteManager.VisibleOfType<SpriteInteractiveBase>()
+                    .Where(o => o.TakesDamage == true).ToList<SpriteBase>();
+
+                var objectsPlayerCanHit = interactiveSprites.OfTypes([
                     typeof(SpritePlayerBase),
                     typeof(SpriteEnemyBossBase),
                     typeof(SpriteEnemyPeonBase),
@@ -61,7 +66,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                     typeof(SpriteEnemyStarbase)
                 ]);
 
-                var objectsEnemyCanHit = SpriteManager.VisibleOfTypes([
+                var objectsEnemyCanHit = interactiveSprites.OfTypes([
                     typeof(SpritePlayerBase)
                 ]);
 
@@ -78,6 +83,8 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                         {
                             munition.ApplyMotion(epoch, displacementVector); //Move the munition.
                             munition.ApplyIntelligence(epoch, displacementVector);
+
+                            var dd = munition.FiredFromType == SiFiredFromType.Player ? objectsPlayerCanHit : objectsEnemyCanHit;
 
                             var hitObject = munition.FindFirstReverseCollisionAlongMovementVector(munition.FiredFromType == SiFiredFromType.Player ? objectsPlayerCanHit : objectsEnemyCanHit, epoch);
                             if (hitObject != null)

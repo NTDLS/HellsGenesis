@@ -11,10 +11,9 @@ namespace Si.Engine.Sprite._Superclass
     /// <summary>
     /// The ship base is a ship object that moves, can be hit, explodes and can be the subject of locking weapons.
     /// </summary>
-    public class SpriteShipBase : SpriteInteractive
+    public class SpriteShipBase : SpriteInteractiveBase
     {
         private readonly Dictionary<string, WeaponBase> _droneWeaponsCache = new();
-
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
         public SiTimeRenewableResources RenewableResources { get; set; } = new();
@@ -77,19 +76,6 @@ namespace Si.Engine.Sprite._Superclass
             _droneWeaponsCache.Add(weaponTypeName, weapon);
 
             return weapon;
-        }
-
-        public override void Explode()
-        {
-            _engine.Events.Add(() =>
-            {
-                _engine.Sprites.Animations.AddRandomExplosionAt(this);
-                _engine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this);
-                _engine.Sprites.CreateFragmentsOf(this);
-                _engine.Rendering.AddScreenShake(4, 800);
-                _engine.Audio.PlayRandomExplosion();
-            });
-            base.Explode();
         }
 
         public void FixRadarPositionIndicator()

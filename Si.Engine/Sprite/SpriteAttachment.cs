@@ -3,7 +3,7 @@ using Si.Library.Mathematics;
 
 namespace Si.Engine.Sprite
 {
-    public class SpriteAttachment : SpriteInteractive
+    public class SpriteAttachment : SpriteInteractiveBase
     {
         private SpriteBase _rootOwner = null;
 

@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using Si.Engine.AI.Logistics._Superclass;
-using Si.Engine.Loudout;
-using Si.Engine.Manager;
+﻿using Si.Engine.AI.Logistics._Superclass;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.PowerUp;
 using Si.Engine.Sprite.PowerUp._Superclass;
@@ -10,7 +7,6 @@ using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
-using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Enemy._Superclass
 {
@@ -19,8 +15,6 @@ namespace Si.Engine.Sprite.Enemy._Superclass
     /// </summary>
     public class SpriteEnemyBase : SpriteShipBase
     {
-        public SiEnemyClass ShipClass { get; set; }
-        public LoadoutEnemyShip Loadout { get; set; }
         public IIAController CurrentAIController { get; set; }
         public Dictionary<Type, IIAController> AIControllers { get; private set; } = new();
         public bool IsHostile { get; set; } = true;
@@ -69,6 +63,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
             base.Explode();
         }
 
+        /*
         public string GetLoadoutHelpText()
         {
             string weapons = string.Empty;
@@ -88,40 +83,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
 
             return result;
         }
-
-        public LoadoutEnemyShip LoadLoadoutFromFile(SiEnemyClass shipClass)
-        {
-            LoadoutEnemyShip loadout = null;
-
-            var loadoutText = AssetManager.GetUserText($"Enemy.{shipClass}.loadout.json");
-
-            try
-            {
-                if (string.IsNullOrWhiteSpace(loadoutText) == false)
-                {
-                    loadout = JsonConvert.DeserializeObject<LoadoutEnemyShip>(loadoutText);
-                }
-            }
-            catch
-            {
-                loadout = null;
-            }
-
-            return loadout;
-        }
-
-        public void SaveLoadoutToFile(LoadoutEnemyShip loadout)
-        {
-            var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
-            AssetManager.PutUserText($"Enemy.{loadout.Class}.loadout.json", serializedText);
-        }
-
-        public void ResetLoadout(LoadoutEnemyShip loadout)
-        {
-            //TODO: Delete this funciton.
-            //Loadout = loadout;
-        }
-
+        */
 
         /// <summary>
         /// Moves the sprite based on its velocity/boost (velocity) taking into account the background scroll.
