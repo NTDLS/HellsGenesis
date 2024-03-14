@@ -5,14 +5,11 @@ using Si.Engine.Manager;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.PowerUp;
 using Si.Engine.Sprite.PowerUp._Superclass;
-using Si.Engine.Sprite.Weapon._Superclass;
-using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Enemy._Superclass
@@ -26,18 +23,13 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         public LoadoutEnemyShip Loadout { get; set; }
         public IIAController CurrentAIController { get; set; }
         public Dictionary<Type, IIAController> AIControllers { get; private set; } = new();
-        public int Bounty { get; private set; } = 0;
         public bool IsHostile { get; set; } = true;
-        public List<WeaponBase> Weapons { get; private set; } = new();
 
         public SpriteEnemyBase(EngineCore engine)
                 : base(engine)
         {
             Velocity.ForwardVelocity = 1;
             Initialize();
-
-            //SetHullHealth(hullHealth);
-            //BountyWorth = HullHealth * bountyMultiplier;
 
             RadarPositionIndicator = _engine.Sprites.RadarPositions.Create();
             RadarPositionIndicator.Visable = false;
@@ -126,37 +118,10 @@ namespace Si.Engine.Sprite.Enemy._Superclass
 
         public void ResetLoadout(LoadoutEnemyShip loadout)
         {
-            Loadout = loadout;
-            Reset();
+            //TODO: Delete this funciton.
+            //Loadout = loadout;
         }
 
-        public void Reset()
-        {
-            Velocity.MaximumSpeed = Loadout.Speed;
-            Velocity.MaximumSpeedBoost = Loadout.Boost;
-            Bounty = Loadout.Bounty;
-
-            SetHullHealth(Loadout.HullHealth);
-            SetShieldHealth(Loadout.ShieldHealth);
-
-            Weapons.Clear();
-            foreach (var weapon in Loadout.Weapons)
-            {
-                AddWeapon(weapon.Type, weapon.MunitionCount);
-            }
-        }
-
-        public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
-        {
-            if (munition.FiredFromType == SiFiredFromType.Player)
-            {
-                if (Intersects(hitTestPosition))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
 
         /// <summary>
         /// Moves the sprite based on its velocity/boost (velocity) taking into account the background scroll.
@@ -193,11 +158,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
                 }
             }
 
-            Location += Velocity.MovementVector * epoch;
-
-            //System.Diagnostics.Debug.Print($"Dbg: {newLocation}, Actual: {Location}");
-
-            //base.ApplyMotion(epoch, displacementVector);
+            base.ApplyMotion(epoch, displacementVector);
 
             FixRadarPositionIndicator();
         }
@@ -220,76 +181,5 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         {
             CurrentAIController = value;
         }
-
-        #region Weapons selection and evaluation.
-
-        public void ClearWeapons() => Weapons.Clear();
-
-        public void AddWeapon(string weaponTypeName, int munitionCount)
-        {
-            var weaponType = SiReflection.GetTypeByName(weaponTypeName);
-
-            var weapon = Weapons.Where(o => o.GetType() == weaponType).SingleOrDefault();
-
-            if (weapon == null)
-            {
-                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _engine, this });
-                weapon.RoundQuantity += munitionCount;
-                Weapons.Add(weapon);
-            }
-            else
-            {
-                weapon.RoundQuantity += munitionCount;
-            }
-        }
-
-        public void AddWeapon<T>(int munitionCount) where T : WeaponBase
-        {
-            var weapon = GetWeaponOfType<T>();
-            if (weapon == null)
-            {
-                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _engine, this });
-                weapon.RoundQuantity += munitionCount;
-                Weapons.Add(weapon);
-            }
-            else
-            {
-                weapon.RoundQuantity += munitionCount;
-            }
-        }
-
-        public int TotalAvailableWeaponRounds() => (from o in Weapons select o.RoundQuantity).Sum();
-        public int TotalWeaponFiredRounds() => (from o in Weapons select o.RoundsFired).Sum();
-
-        public bool HasWeapon<T>() where T : WeaponBase
-        {
-            var existingWeapon = (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
-            return existingWeapon != null;
-        }
-
-        public bool HasWeaponAndAmmo<T>() where T : WeaponBase
-        {
-            var existingWeapon = (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
-            return existingWeapon != null && existingWeapon.RoundQuantity > 0;
-        }
-
-        public bool FireWeapon<T>() where T : WeaponBase
-        {
-            var weapon = GetWeaponOfType<T>();
-            return weapon?.Fire() == true;
-        }
-
-        public bool FireWeapon<T>(SiPoint location, float? angle = null) where T : WeaponBase
-        {
-            var weapon = GetWeaponOfType<T>();
-            return weapon?.Fire(location, angle) == true;
-        }
-
-        public WeaponBase GetWeaponOfType<T>() where T : WeaponBase
-        {
-            return (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
-        }
-
-        #endregion
     }
 }

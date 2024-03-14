@@ -35,7 +35,6 @@ namespace Si.Engine.Sprite.Player._Superclass
         public SiAudioClip HullBreachedSound { get; private set; }
         public SiAudioClip IntegrityLowSound { get; private set; }
         public SiAudioClip ShipEngineBoostSound { get; private set; }
-        public int Bounty { get; set; } //Score points.
         public int MaxHullHealth { get; set; }
         public int MaxShieldPoints { get; set; }
         public SpriteAnimation ThrusterAnimation { get; private set; }

@@ -14,7 +14,7 @@ namespace Si.Engine.Sprite.Weapon
 
         private bool _toggle = false;
 
-        public WeaponPhotonTorpedo(EngineCore engine, SpriteShipBase owner)
+        public WeaponPhotonTorpedo(EngineCore engine, SpriteBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponPhotonTorpedo(EngineCore engine)

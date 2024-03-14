@@ -15,7 +15,7 @@ namespace Si.Engine.Sprite.Weapon
 
         private bool _toggle = false;
 
-        public WeaponPrecisionGuidedFragMissile(EngineCore engine, SpriteShipBase owner)
+        public WeaponPrecisionGuidedFragMissile(EngineCore engine, SpriteBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponPrecisionGuidedFragMissile(EngineCore engine)

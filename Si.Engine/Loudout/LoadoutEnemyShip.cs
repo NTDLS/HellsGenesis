@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using Si.GameEngine.Loudout;
 using System.Collections.Generic;
 using static Si.Library.SiConstants;
 
@@ -22,6 +23,8 @@ namespace Si.Engine.Loudout
         public int HullHealth { get; set; }
         public int ShieldHealth { get; set; }
         public int Bounty { get; set; }
+
+        public List<SpriteLayoutAttachment> Attachments { get; set; } = new();
 
         public List<ShipLoadoutWeapon> Weapons { get; set; } = new();
 

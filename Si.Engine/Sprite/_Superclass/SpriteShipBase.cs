@@ -11,7 +11,7 @@ namespace Si.Engine.Sprite._Superclass
     /// <summary>
     /// The ship base is a ship object that moves, can be hit, explodes and can be the subject of locking weapons.
     /// </summary>
-    public class SpriteShipBase : SpriteBase
+    public class SpriteShipBase : SpriteInteractive
     {
         private readonly Dictionary<string, WeaponBase> _droneWeaponsCache = new();
 
@@ -30,7 +30,6 @@ namespace Si.Engine.Sprite._Superclass
 
         public override void Initialize(string imagePath = null)
         {
-
             _lockedOnImage = _engine.Assets.GetBitmap(_assetPathlockedOnImage);
             _lockedOnSoftImage = _engine.Assets.GetBitmap(_assetPathlockedOnSoftImage);
 

@@ -15,7 +15,7 @@ namespace Si.Engine.Sprite.Weapon
 
         private bool _toggle = false;
 
-        public WeaponScramsMissile(EngineCore engine, SpriteShipBase owner)
+        public WeaponScramsMissile(EngineCore engine, SpriteBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponScramsMissile(EngineCore engine)

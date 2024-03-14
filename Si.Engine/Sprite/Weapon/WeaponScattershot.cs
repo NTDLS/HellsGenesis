@@ -12,7 +12,7 @@ namespace Si.Engine.Sprite.Weapon
         private const string soundPath = @"Sounds\Weapons\Scattershot.wav";
         private const float soundVolumne = 0.2f;
 
-        public WeaponScattershot(EngineCore engine, SpriteShipBase owner)
+        public WeaponScattershot(EngineCore engine, SpriteBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponScattershot(EngineCore engine)

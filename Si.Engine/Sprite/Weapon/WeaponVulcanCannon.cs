@@ -12,7 +12,7 @@ namespace Si.Engine.Sprite.Weapon
         private const string soundPath = @"Sounds\Weapons\VulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponVulcanCannon(EngineCore engine, SpriteShipBase owner)
+        public WeaponVulcanCannon(EngineCore engine, SpriteBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponVulcanCannon(EngineCore engine)

@@ -12,7 +12,7 @@ namespace Si.Engine.Sprite.Weapon
         private const string soundPath = @"Sounds\Weapons\Lancer.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponLancer(EngineCore engine, SpriteShipBase owner)
+        public WeaponLancer(EngineCore engine, SpriteBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponLancer(EngineCore engine)

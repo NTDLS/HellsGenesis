@@ -1,14 +1,8 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Engine.Sprite.Enemy.Peon;
-using Si.Engine.Sprite.Enemy.Starbase;
+using Si.GameEngine.Sprite.Enemy.Starbase.Garrison;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
-using System;
-using System.Drawing;
-using static Si.Engine.Sprite.SpriteAnimation;
-using static Si.Library.SiConstants;
 
 namespace Si.Engine.Level
 {
@@ -73,9 +67,10 @@ namespace Si.Engine.Level
         {
             for (int i = 0; i < 10; i++)
             {
-                _engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+                //_engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             }
 
+            /*
             _engine.Sprites.Debugs.Create(1000, 1000);
 
             var playMode = new PlayMode()
@@ -95,6 +90,7 @@ namespace Si.Engine.Level
             var ani3 = _engine.Sprites.Animations.Create(@"Graphics\Animation\Asteroid\LargePurple.png", new Size(264, 241), 22, playMode);
             ani3.CenterInUniverse();
             ani3.Location += new SiPoint(256, 0);
+            */
 
             _engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
 
