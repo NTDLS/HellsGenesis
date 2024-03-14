@@ -26,16 +26,19 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
             //This is where the player is created.
             Sprite = new SpriteDebugPlayer(engine) { Visable = false };
             engine.Sprites.Add(Sprite);
-
             _engine = engine;
             _inputDelay.Restart();
         }
 
         public void InstantiatePlayerClass(Type playerClassType)
         {
+            //Remove the player from the sprite collection.
+            Sprite.QueueForDelete();
             Sprite.Cleanup();
+
             Sprite = SiReflection.CreateInstanceFromType<SpritePlayerBase>(playerClassType, new object[] { _engine });
             Sprite.Visable = false;
+            _engine.Sprites.Add(Sprite); //Add the player back to the sprite collection.
         }
 
         /// <summary>

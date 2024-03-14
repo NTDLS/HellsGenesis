@@ -13,7 +13,6 @@ using Si.GameEngine.Manager;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using static Si.Library.SiConstants;
 
@@ -67,7 +66,9 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                     typeof(SpriteEnemyStarbase)
                 ]);
 
-                var objectsEnemyCanHit = new List<SpriteBase>() { Engine.Player.Sprite };
+                var objectsEnemyCanHit = interactiveSprites.OfTypes([
+                    typeof(SpritePlayerBase)
+                ]);
 
                 //Create a collection of threads so we can wait on the ones that we start.
                 var threadPoolTracker = _munitionTraversalThreadPool.CreateQueueStateTracker();
