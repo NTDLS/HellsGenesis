@@ -1,7 +1,9 @@
 using Newtonsoft.Json;
+using Si.Engine.Core.Types;
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
 using Si.Engine.Menu;
+using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.UnvectoredTickController;
@@ -11,6 +13,9 @@ using Si.Rendering;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using static Si.Engine.Core.Types.SiDefermentEvent;
+using static Si.Engine.Sprite.SpriteAnimation;
+using static Si.Library.SiConstants;
 
 namespace Si.Engine
 {
@@ -173,6 +178,16 @@ namespace Si.Engine
             //Sprites.ResetPlayer();
             _worldClock.Start();
 
+            /*
+            var loadingSprite = Sprites.GenericSprites.CreateFromImagePath(@"Graphics\Loading.png");
+            loadingSprite.CenterInUniverse();
+
+            var loadingEvent = Events.Add(10, (sender, parameter) =>
+            {
+                loadingSprite.Velocity.ForwardAngle.Degrees -= 0.1f;
+            }, SiDefermentEventMode.Recurring );
+            */
+
             var textBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
                 Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true);
 
@@ -188,6 +203,8 @@ namespace Si.Engine
             {
                 textBlock.SetTextAndCenterXY("Building asset cache...");
                 Assets.PreCacheAllAssets(percentTextBlock);
+                //loadingSprite.QueueForDelete();
+                //loadingEvent.QueueForDeletion();
             }
 
             textBlock.QueueForDelete();

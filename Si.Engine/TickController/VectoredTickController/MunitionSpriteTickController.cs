@@ -12,6 +12,7 @@ using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Concurrent;
+using static Si.Library.SiConstants;
 
 namespace Si.Engine.TickController.VectoredTickControllerBase
 {
@@ -51,14 +52,18 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             var munitions = VisibleOfType<MunitionBase>();
             if (munitions.Count != 0)
             {
-                var objectsThatCanBeHit = SpriteManager.VisibleOfTypes([
-                        typeof(SpritePlayerBase),
+                var objectsPlayerCanHit = SpriteManager.VisibleOfTypes([
+                    typeof(SpritePlayerBase),
                     typeof(SpriteEnemyBossBase),
                     typeof(SpriteEnemyPeonBase),
                     typeof(SpriteAttachment),
                     typeof(SpriteDebug),
                     typeof(SpriteEnemyStarbase)
-                    ]);
+                ]);
+
+                var objectsEnemyCanHit = SpriteManager.VisibleOfTypes([
+                    typeof(SpritePlayerBase)
+                ]);
 
                 //Create a collection of threads so we can wait on the ones that we start.
                 var threadPoolTracker = _munitionTraversalThreadPool.CreateQueueStateTracker();
@@ -74,7 +79,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                             munition.ApplyMotion(epoch, displacementVector); //Move the munition.
                             munition.ApplyIntelligence(epoch, displacementVector);
 
-                            var hitObject = munition.FindFirstReverseCollisionAlongMovementVector(objectsThatCanBeHit, epoch);
+                            var hitObject = munition.FindFirstReverseCollisionAlongMovementVector(munition.FiredFromType == SiFiredFromType.Player ? objectsPlayerCanHit : objectsEnemyCanHit, epoch);
                             if (hitObject != null)
                             {
                                 hitObjects.Add(new(munition, hitObject));

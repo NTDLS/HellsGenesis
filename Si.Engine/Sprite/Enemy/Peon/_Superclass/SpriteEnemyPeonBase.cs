@@ -30,14 +30,14 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
                 ReplayDelay = new TimeSpan(0)
             };
 
-            ThrustAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
+            ThrustAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 100, playMode)
             {
                 OwnerUID = UID
             };
             ThrustAnimation.Reset();
             _engine.Sprites.Animations.AddAt(ThrustAnimation, this);
 
-            BoostAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
+            BoostAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
             {
                 OwnerUID = UID
             };

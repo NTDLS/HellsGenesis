@@ -48,22 +48,18 @@ namespace Si.Engine.Sprite
             public bool DeleteSpriteAfterPlay;
         }
 
-        public SpriteAnimation(EngineCore engine, string spriteSheetFileName, Size? frameSize, int frameDelayMilliseconds = 10, PlayMode playMode = null)
+        public SpriteAnimation(EngineCore engine, string spriteSheetFileName, Size? frameSize, float framesPerSecond, PlayMode playMode = null)
             : base(engine)
         {
-            _playMode = playMode;
+            _frameDelayMilliseconds = (int)((1.0f / framesPerSecond) * 1000.0f);
 
-            if (_playMode == null)
+            _playMode = playMode != null ? playMode : new PlayMode() //Create a default playmode.
             {
-                _playMode = new PlayMode()
-                {
-                    DeleteSpriteAfterPlay = true,
-                    Replay = SiAnimationReplayMode.SinglePlay,
-                    ReplayDelay = new TimeSpan(0, 0, 0, 0, frameDelayMilliseconds)
-                };
-            }
+                DeleteSpriteAfterPlay = true,
+                Replay = SiAnimationReplayMode.SinglePlay,
+                ReplayDelay = new TimeSpan(0, 0, 0, 0, _frameDelayMilliseconds)
+            };
 
-            _frameDelayMilliseconds = frameDelayMilliseconds;
             _sheetImage = _engine.Assets.GetBitmap(spriteSheetFileName);
 
             _frameSize = (Size)frameSize;

@@ -55,16 +55,16 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                 int assetCount = 2;
                 int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
-                var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(66, 66));
+                var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(66, 66), 50);
                 animation.Location = defaultPosition.Location.Clone();
             }
             else
             {
                 const string assetPath = @"Graphics\Animation\Explode\Hit Explosion 22x22";
-                int assetCount = 2;
+                int assetCount = 4;
                 int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
-                var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(22, 22));
+                var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(22, 22), 50);
                 animation.Location = defaultPosition.Location.Clone();
             }
         }
@@ -79,7 +79,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             int assetCount = 6;
             int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
-            var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(256, 256));
+            var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(256, 256), 50);
             animation.Location = defaultPosition.Location.Clone();
         }
     }

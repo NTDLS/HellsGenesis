@@ -195,7 +195,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                     DeleteSpriteAfterPlay = false,
                     ReplayDelay = new TimeSpan(0)
                 };
-                ThrusterAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 10, playMode)
+                ThrusterAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 100, playMode)
                 {
                     SpriteTag = "PlayerForwardThrust",
                     Visable = false,
@@ -214,7 +214,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                     DeleteSpriteAfterPlay = false,
                     ReplayDelay = new TimeSpan(0)
                 };
-                BoostAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 10, playMode)
+                BoostAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
                 {
                     SpriteTag = "PlayerForwardThrust",
                     Visable = false,

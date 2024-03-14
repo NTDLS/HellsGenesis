@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Modules.md = Modules.md
 		Terms.md = Terms.md
 		ToDo.md = ToDo.md
+		Tools.md = Tools.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Si.Library", "Si.Library\Si.Library.csproj", "{990E2120-BC2B-4C6D-A1B0-663A7D88A2EC}"

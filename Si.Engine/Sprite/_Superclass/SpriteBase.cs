@@ -286,8 +286,8 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public void CenterInUniverse()
         {
-            X = _engine.Display.TotalCanvasSize.Width / 2 - Size.Width / 2;
-            Y = _engine.Display.TotalCanvasSize.Height / 2 - Size.Height / 2;
+            X = _engine.Display.TotalCanvasSize.Width / 2 /*- Size.Width / 2*/;
+            Y = _engine.Display.TotalCanvasSize.Height / 2 /*- Size.Height / 2*/;
         }
 
         #region Post-movement movement vector collision detection.

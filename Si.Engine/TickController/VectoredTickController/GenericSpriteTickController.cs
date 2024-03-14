@@ -31,6 +31,13 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             return obj;
         }
 
+        public SpriteGenericBitmap CreateFromImagePath(string imagePath)
+        {
+            var obj = new SpriteGenericBitmap(Engine, imagePath);
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
         public SpriteGenericBitmap Create(SharpDX.Direct2D1.Bitmap bitmap)
         {
             var obj = new SpriteGenericBitmap(Engine, bitmap);

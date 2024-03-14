@@ -212,6 +212,8 @@ namespace Si.Engine
                 return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
             }
 
+            _engine.Sprites.RadarPositions.ExecuteWorldClockTick();
+
             _engine.Sprites.HardDeleteAllQueuedDeletions();
 
             return displacementVector;
