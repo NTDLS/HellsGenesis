@@ -1,9 +1,7 @@
 using Newtonsoft.Json;
-using Si.Engine.Core.Types;
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
 using Si.Engine.Menu;
-using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.UnvectoredTickController;
@@ -13,9 +11,6 @@ using Si.Rendering;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using static Si.Engine.Core.Types.SiDefermentEvent;
-using static Si.Engine.Sprite.SpriteAnimation;
-using static Si.Library.SiConstants;
 
 namespace Si.Engine
 {

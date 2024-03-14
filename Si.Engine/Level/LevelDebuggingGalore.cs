@@ -1,15 +1,14 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Peon;
+using Si.Engine.Sprite.Enemy.Starbase;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
-using Si.Library.Sprite;
-using static Si.Engine.Sprite.SpriteAnimation;
-using System.Drawing;
-using Si.Engine.Sprite.Enemy.Peon;
-using static Si.Library.SiConstants;
 using System;
-using Si.Engine.Sprite.Enemy.Starbase;
+using System.Drawing;
+using static Si.Engine.Sprite.SpriteAnimation;
+using static Si.Library.SiConstants;
 
 namespace Si.Engine.Level
 {
