@@ -9,7 +9,7 @@ namespace Si.Engine.Sprite.Weapon.Munition
     {
         private const string imagePath = @"Graphics\Weapon\ThunderstrikeMissile.png";
 
-        public MunitionThunderstrikeMissile(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, SiPoint location = null, float? angle = null)
+        public MunitionThunderstrikeMissile(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null, float? angle = null)
             : base(engine, weapon, firedFrom, imagePath, location, angle)
         {
             MaxSeekingObservationDistance = 1000;

@@ -12,7 +12,7 @@ namespace Si.Engine.Sprite.Weapon
         private const string soundPath = @"Sounds\Weapons\Lancer.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponLancer(EngineCore engine, SpriteBase owner)
+        public WeaponLancer(EngineCore engine, SpriteInteractiveBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponLancer(EngineCore engine)
@@ -26,7 +26,7 @@ namespace Si.Engine.Sprite.Weapon
             AngleVarianceDegrees = 2.0f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
             => new MunitionLancer(_engine, this, Owner, location, angle);
     }
 }

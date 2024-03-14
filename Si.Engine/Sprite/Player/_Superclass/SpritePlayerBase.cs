@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Player._Superclass
     /// <summary>
     /// The player base is a sub-class of the ship base. It is only used by the Player and as a model for menu selections.
     /// </summary>
-    public class SpritePlayerBase : SpriteShipBase
+    public class SpritePlayerBase : SpriteInteractiveBase
     {
         public SiPlayerClass ShipClass { get; set; }
         public LoadoutPlayerShip Loadout { get; private set; }

@@ -5,7 +5,6 @@ using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
-using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.VectoredTickControllerBase;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
@@ -48,7 +47,6 @@ namespace Si.Engine.Manager
         public RadarPositionsSpriteTickController RadarPositions { get; set; }
         public StarSpriteTickController Stars { get; private set; }
         public TextBlocksSpriteTickController TextBlocks { get; private set; }
-        public PlayerSpriteTickController Player { get; private set; }
 
         #endregion
 

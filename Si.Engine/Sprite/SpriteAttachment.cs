@@ -5,7 +5,7 @@ namespace Si.Engine.Sprite
 {
     public class SpriteAttachment : SpriteInteractiveBase
     {
-        private SpriteBase _rootOwner = null;
+        private SpriteInteractiveBase _rootOwner = null;
 
         public SpriteAttachment(EngineCore engine)
             : base(engine)
@@ -25,7 +25,7 @@ namespace Si.Engine.Sprite
         /// Gets and caches the root owner of this attachement.
         /// </summary>
         /// <returns></returns>
-        public SpriteBase OwnerSprite
+        public SpriteInteractiveBase OwnerSprite
         {
             get
             {
@@ -35,7 +35,7 @@ namespace Si.Engine.Sprite
 
                     do
                     {
-                        _rootOwner = _engine.Sprites.GetSpriteByOwner<SpriteBase>(_rootOwner.OwnerUID);
+                        _rootOwner = _engine.Sprites.GetSpriteByOwner<SpriteInteractiveBase>(_rootOwner.OwnerUID);
 
                     } while (_rootOwner.OwnerUID != 0);
                 }

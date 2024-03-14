@@ -3,11 +3,11 @@ using Si.Engine.Loudout;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite._Superclass
 {
@@ -16,6 +16,8 @@ namespace Si.Engine.Sprite._Superclass
     /// </summary>
     public class SpriteInteractiveBase : SpriteBase
     {
+        public SiTimeRenewableResources RenewableResources { get; set; } = new();
+
         public bool TakesDamage { get; set; } = true;
 
         public List<WeaponBase> Weapons { get; private set; } = new();

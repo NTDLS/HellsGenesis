@@ -14,7 +14,7 @@ namespace Si.Engine.Sprite.Weapon
 
         private bool _toggle = false;
 
-        public WeaponPhotonTorpedo(EngineCore engine, SpriteBase owner)
+        public WeaponPhotonTorpedo(EngineCore engine, SpriteInteractiveBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponPhotonTorpedo(EngineCore engine)
@@ -29,7 +29,7 @@ namespace Si.Engine.Sprite.Weapon
             SpeedVariancePercent = 0.00f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
             => new MunitionPhotonTorpedo(_engine, this, Owner, location, angle);
 
         public override bool Fire()

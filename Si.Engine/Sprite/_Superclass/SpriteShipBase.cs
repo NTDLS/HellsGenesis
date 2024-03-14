@@ -1,7 +1,6 @@
 ﻿using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,6 @@ namespace Si.Engine.Sprite._Superclass
         private readonly Dictionary<string, WeaponBase> _droneWeaponsCache = new();
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
-        public SiTimeRenewableResources RenewableResources { get; set; } = new();
 
         private readonly string _assetPathlockedOnImage = @"Graphics\Weapon\Locked On.png";
         private readonly string _assetPathlockedOnSoftImage = @"Graphics\Weapon\Locked Soft.png";

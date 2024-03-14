@@ -12,7 +12,7 @@ namespace Si.Engine.Sprite.Weapon
         private const string soundPath = @"Sounds\Weapons\DualVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponDualVulcanCannon(EngineCore engine, SpriteBase owner)
+        public WeaponDualVulcanCannon(EngineCore engine, SpriteInteractiveBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponDualVulcanCannon(EngineCore engine)
@@ -27,7 +27,7 @@ namespace Si.Engine.Sprite.Weapon
             SpeedVariancePercent = 0.05f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
             => new MunitionVulcanCannon(_engine, this, Owner, location, angle);
 
         public override bool Fire()
