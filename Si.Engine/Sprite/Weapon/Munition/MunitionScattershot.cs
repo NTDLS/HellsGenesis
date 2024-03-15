@@ -9,7 +9,7 @@ namespace Si.Engine.Sprite.Weapon.Munition
 {
     internal class MunitionScattershot : ProjectileMunitionBase
     {
-        private const string _assetPath = @"Graphics\Weapon\Scattershot";
+        private const string _assetPath = @"Sprites\Weapon\Scattershot";
         private readonly int imageCount = 4;
         private readonly int selectedImageIndex = 0;
 

@@ -19,7 +19,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
         private readonly SpriteAttachment _thrust;
 
         private readonly float _initialMaxpeed;
-        private readonly string _assetPath = @"Graphics\Enemy\Boss\Repulsor\";
+        private readonly string _assetPath = @"Sprites\Enemy\Boss\Repulsor\";
 
         public SpriteEnemyRepulsor(EngineCore engine)
             : base(engine)
@@ -28,7 +28,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
             _rightGun = Attach(_assetPath + "Gun.Right.png", true, 3);
             _thrust = Attach(_assetPath + "Jet.png", true, 3);
 
-            InitializeSpriteFromMetadata(@"Graphics\Enemy\Boss\Repulsor\Hull.png");
+            InitializeSpriteFromMetadata(@"Sprites\Enemy\Boss\Repulsor\Hull.png");
 
             _initialMaxpeed = Velocity.MaximumSpeed;
         }

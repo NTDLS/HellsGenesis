@@ -20,7 +20,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
         private readonly SpriteAttachment _leftThrust;
 
         private readonly float _initialMaxpeed;
-        private readonly string _assetPath = @"Graphics\Enemy\Boss\Spectre\";
+        private readonly string _assetPath = @"Sprites\Enemy\Boss\Spectre\";
 
         public SpriteEnemySpectre(EngineCore engine)
             : base(engine)
@@ -30,7 +30,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
             _leftThrust = Attach(_assetPath + "Jet.png", true, 3);
             _rightThrust = Attach(_assetPath + "Jet.png", true, 3);
 
-            InitializeSpriteFromMetadata(@"Graphics\Enemy\Boss\Spectre\Hull.png");
+            InitializeSpriteFromMetadata(@"Sprites\Enemy\Boss\Spectre\Hull.png");
 
             _initialMaxpeed = Velocity.MaximumSpeed;
         }

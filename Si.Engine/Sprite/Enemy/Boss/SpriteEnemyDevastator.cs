@@ -26,7 +26,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
         private readonly SpriteAttachment _leftThrust;
 
         private readonly float _initialMaxpeed;
-        private readonly string _assetPath = @"Graphics\Enemy\Boss\Devastator\";
+        private readonly string _assetPath = @"Sprites\Enemy\Boss\Devastator\";
 
         public SpriteEnemyDevastator(EngineCore engine)
             : base(engine)
@@ -38,7 +38,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
             _leftThrust = Attach(_assetPath + "Jet.Left.png", true, 3);
             _rightThrust = Attach(_assetPath + "Jet.Right.png", true, 3);
 
-            InitializeSpriteFromMetadata(@"Graphics\Enemy\Boss\Devastator\Hull.png");
+            InitializeSpriteFromMetadata(@"Sprites\Enemy\Boss\Devastator\Hull.png");
 
             _initialMaxpeed = Velocity.MaximumSpeed;
         }

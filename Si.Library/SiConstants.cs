@@ -97,21 +97,6 @@
             Starfighter
         }
 
-        public enum SiEnemyClass
-        {
-            Debug,
-            AITracer,
-            Serf,
-            Phoenix,
-            Minnow,
-            Merc,
-            Scav,
-            Devastator,
-            Repulsor,
-            Spectre,
-            Garrison,
-        }
-
         public enum SiMenuItemType
         {
             Undefined,

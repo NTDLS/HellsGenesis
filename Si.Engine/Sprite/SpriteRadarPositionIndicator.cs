@@ -5,7 +5,7 @@ namespace Si.Engine.Sprite
 {
     public class SpriteRadarPositionIndicator : SpriteBase
     {
-        private const string _assetPath = @"Graphics\Radar Indicator\";
+        private const string _assetPath = @"Sprites\Radar Indicator\";
         private readonly string _assetFile = "16x16.png";
 
         public SpriteRadarPositionIndicator(EngineCore engine)

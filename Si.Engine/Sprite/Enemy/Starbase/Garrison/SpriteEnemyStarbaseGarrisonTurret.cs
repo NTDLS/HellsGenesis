@@ -13,7 +13,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
         public SpriteEnemyStarbaseGarrisonTurret(EngineCore engine)
             : base(engine)
         {
-            InitializeSpriteFromMetadata($@"Graphics\Enemy\Starbase\Garrison\Turret.png");
+            InitializeSpriteFromMetadata($@"Sprites\Enemy\Starbase\Garrison\Turret.png");
             TakesDamage = true;
             SetHullHealth(10);
         }

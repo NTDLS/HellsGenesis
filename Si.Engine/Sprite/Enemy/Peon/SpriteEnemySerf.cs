@@ -11,7 +11,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
         public SpriteEnemySerf(EngineCore engine)
             : base(engine)
         {
-            InitializeSpriteFromMetadata(@"Graphics\Enemy\Peon\Serf\Hull.png");
+            InitializeSpriteFromMetadata(@"Sprites\Enemy\Peon\Serf\Hull.png");
 
             Velocity.ForwardAngle.Degrees = AngleTo360(_engine.Player.Sprite);
             _initialHullHealth = HullHealth;

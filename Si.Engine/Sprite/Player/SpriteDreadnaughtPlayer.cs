@@ -12,7 +12,7 @@ namespace Si.Engine.Sprite.Player
         {
             ShipClass = SiPlayerClass.Dreadnaught;
 
-            string imagePath = @$"Graphics\Player\Ships\{ShipClass}.png";
+            string imagePath = @$"Sprites\Player\Ships\{ShipClass}.png";
             Initialize(imagePath);
 
             //Load the loadout from file or create a new one if it does not exist.

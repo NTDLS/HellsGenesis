@@ -7,7 +7,7 @@ namespace Si.Engine.Sprite.Weapon.Munition
 {
     internal class MunitionPhotonTorpedo : EnergyMunitionBase
     {
-        private const string imagePath = @"Graphics\Weapon\PhotonTorpedo.png";
+        private const string imagePath = @"Sprites\Weapon\PhotonTorpedo.png";
 
         public MunitionPhotonTorpedo(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null, float? angle = null)
             : base(engine, weapon, firedFrom, imagePath, location, angle)

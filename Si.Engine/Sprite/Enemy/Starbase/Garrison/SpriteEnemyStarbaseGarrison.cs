@@ -12,7 +12,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
         public SpriteEnemyStarbaseGarrison(EngineCore engine)
             : base(engine)
         {
-            InitializeSpriteFromMetadata(@"Graphics\Enemy\Starbase\Garrison\Hull.png");
+            InitializeSpriteFromMetadata(@"Sprites\Enemy\Starbase\Garrison\Hull.png");
 
             Velocity.ForwardAngle.Degrees = SiRandom.Between(0, 359);
         }

@@ -14,7 +14,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
         public SpriteEnemyMinnow(EngineCore engine)
             : base(engine)
         {
-            InitializeSpriteFromMetadata(@"Graphics\Enemy\Peon\Minnow\Hull.png");
+            InitializeSpriteFromMetadata(@"Sprites\Enemy\Peon\Minnow\Hull.png");
         }
 
         #region Artificial Intelligence.

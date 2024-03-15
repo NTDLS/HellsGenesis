@@ -148,7 +148,7 @@ namespace Si.Engine.Sprite.Player._Superclass
         public void ResetLoadout(LoadoutPlayerShip loadout)
         {
             Loadout = loadout;
-            SetImage(@$"Graphics\Player\Ships\{loadout.Name}.png");
+            SetImage(@$"Sprites\Player\Ships\{loadout.Name}.png");
             Reset();
         }
 
@@ -194,7 +194,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                     DeleteSpriteAfterPlay = false,
                     ReplayDelay = new TimeSpan(0)
                 };
-                ThrusterAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 100, playMode)
+                ThrusterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png", new Size(32, 32), 100, playMode)
                 {
                     SpriteTag = "PlayerForwardThrust",
                     Visable = false,
@@ -213,7 +213,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                     DeleteSpriteAfterPlay = false,
                     ReplayDelay = new TimeSpan(0)
                 };
-                BoostAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
+                BoostAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
                 {
                     SpriteTag = "PlayerForwardThrust",
                     Visable = false,

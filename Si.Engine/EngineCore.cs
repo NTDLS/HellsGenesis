@@ -174,7 +174,7 @@ namespace Si.Engine
             _worldClock.Start();
 
             /*
-            var loadingSprite = Sprites.GenericSprites.CreateFromImagePath(@"Graphics\Loading.png");
+            var loadingSprite = Sprites.GenericSprites.CreateFromImagePath(@"Sprites\Loading.png");
             loadingSprite.CenterInUniverse();
 
             var loadingEvent = Events.Add(10, (sender, parameter) =>

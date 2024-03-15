@@ -272,7 +272,7 @@ namespace Si.Engine.Manager
 
             if (RenderRadar)
             {
-                var radarBgImage = _engine.Assets.GetBitmap(@"Graphics\RadarTransparent.png");
+                var radarBgImage = _engine.Assets.GetBitmap(@"Sprites\RadarTransparent.png");
 
                 _engine.Rendering.DrawBitmapAt(renderTarget, radarBgImage,
                     _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,

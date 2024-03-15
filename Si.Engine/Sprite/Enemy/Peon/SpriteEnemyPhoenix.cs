@@ -13,7 +13,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
         public SpriteEnemyPhoenix(EngineCore engine)
             : base(engine)
         {
-            InitializeSpriteFromMetadata(@"Graphics\Enemy\Peon\Phoenix\Hull.png");
+            InitializeSpriteFromMetadata(@"Sprites\Enemy\Peon\Phoenix\Hull.png");
 
             AddAIController(new HostileEngagement(_engine, this, _engine.Player.Sprite));
             AddAIController(new Taunt(_engine, this, _engine.Player.Sprite));

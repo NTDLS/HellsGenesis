@@ -13,7 +13,7 @@ namespace Si.Engine.Sprite.Enemy.Debug
         public SpriteEnemyDebugStatic(EngineCore engine)
             : base(engine)
         {
-            InitializeSpriteFromMetadata(@"Graphics\Enemy\Debug\Hull.png");
+            InitializeSpriteFromMetadata(@"Sprites\Enemy\Debug\Hull.png");
         }
     }
 }

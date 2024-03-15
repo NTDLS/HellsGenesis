@@ -7,7 +7,7 @@ namespace Si.Engine.Sprite.Weapon.Munition
 {
     internal class MunitionScramsMissile : GuidedMunitionBase
     {
-        private const string imagePath = @"Graphics\Weapon\ScramsMissile.png";
+        private const string imagePath = @"Sprites\Weapon\ScramsMissile.png";
 
         public MunitionScramsMissile(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom,
              SpriteInteractiveBase lockedTarget = null, SiPoint location = null, float? angle = null)

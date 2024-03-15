@@ -7,7 +7,7 @@ namespace Si.Engine.Sprite.Weapon.Munition
 {
     internal class MunitionThunderstrikeMissile : SeekingMunitionBase
     {
-        private const string imagePath = @"Graphics\Weapon\ThunderstrikeMissile.png";
+        private const string imagePath = @"Sprites\Weapon\ThunderstrikeMissile.png";
 
         public MunitionThunderstrikeMissile(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null, float? angle = null)
             : base(engine, weapon, firedFrom, imagePath, location, angle)
