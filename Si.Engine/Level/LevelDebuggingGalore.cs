@@ -66,7 +66,7 @@ namespace Si.Engine.Level
 
         private void AddEnemies()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 1; i++)
             {
                 _engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
             }
@@ -93,7 +93,7 @@ namespace Si.Engine.Level
             ani3.Location += new SiPoint(256, 0);
             */
 
-            _engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
+            //_engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
 
             //_engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
 

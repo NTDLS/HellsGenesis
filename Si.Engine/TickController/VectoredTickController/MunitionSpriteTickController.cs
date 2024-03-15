@@ -58,7 +58,6 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                     .Where(o => o.TakesDamage == true).ToList<SpriteBase>();
 
                 var objectsPlayerCanHit = interactiveSprites.OfTypes([
-                    typeof(SpritePlayerBase),
                     typeof(SpriteEnemyBossBase),
                     typeof(SpriteEnemyPeonBase),
                     typeof(SpriteAttachment),

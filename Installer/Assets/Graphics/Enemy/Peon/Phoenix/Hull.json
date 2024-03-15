@@ -5,6 +5,19 @@
   "HullHealth": 20,
   "ShieldHealth": 10,
   "Bounty": 10,
-  "Weapons": [],
+  "Weapons": [
+	{
+	  "Type": "WeaponVulcanCannon",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponLancer",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponThunderstrikeMissile",
+	  "MunitionCount": 2147483647
+	}
+	],
   "Attachments": []
 }
