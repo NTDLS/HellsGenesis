@@ -11,6 +11,7 @@ using Si.Rendering;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using static Si.Library.SiConstants;
 
 namespace Si.Engine
 {
@@ -26,6 +27,8 @@ namespace Si.Engine
         #endregion
 
         #region Public properties.
+
+        public SiEngineInitilizationType ExecutionType { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
 
@@ -67,8 +70,10 @@ namespace Si.Engine
         /// Initializes a new instace of the game engine.
         /// </summary>
         /// <param name="drawingSurface">The window that the game will be rendered to.</param>
-        public EngineCore(Control drawingSurface)
+        public EngineCore(Control drawingSurface, SiEngineInitilizationType executionType)
         {
+            ExecutionType = executionType;
+
             Settings = LoadSettings();
 
             Display = new DisplayManager(this, drawingSurface);
@@ -138,8 +143,14 @@ namespace Si.Engine
                     o.ScreenRenderTarget.BeginDraw();
                     o.IntermediateRenderTarget.BeginDraw();
 
-                    o.ScreenRenderTarget.Clear(Rendering.Materials.Colors.Black);
-                    o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Black);
+                    if (ExecutionType == SiEngineInitilizationType.Play)
+                    {
+                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Black);
+                    }
+                    else
+                    {
+                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Gray);
+                    }
 
                     Sprites.RenderPreScaling(o.IntermediateRenderTarget);
                     o.IntermediateRenderTarget.EndDraw();
@@ -207,12 +218,14 @@ namespace Si.Engine
 
             OnInitialization?.Invoke(this);
 
-            if (Settings.PlayMusic)
+            if (ExecutionType == SiEngineInitilizationType.Play)
             {
-                Audio.BackgroundMusicSound.Play();
+                if (Settings.PlayMusic)
+                {
+                    Audio.BackgroundMusicSound.Play();
+                }
+                Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
             }
-
-            Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
         }
 
         public void ShutdownEngine()

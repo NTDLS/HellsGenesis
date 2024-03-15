@@ -4,6 +4,12 @@
     {
         public static string FriendlyName = "Strikeforce Infinite";
 
+        public enum SiEngineInitilizationType
+        {
+            Play,
+            Edit
+        }
+
         public enum SiWeaponsLockType
         {
             None,
