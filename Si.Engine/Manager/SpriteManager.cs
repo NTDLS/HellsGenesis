@@ -1,4 +1,5 @@
-﻿using SharpDX.Mathematics.Interop;
+﻿using SharpCompress;
+using SharpDX.Mathematics.Interop;
 using Si.Engine.Menu;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
@@ -73,7 +74,7 @@ namespace Si.Engine.Manager
         {
             get
             {
-                var players = VisibleOfType<SpritePlayerBase>();
+                var players = VisibleOfType<SpritePlayerBase>().ToList();
                 players.Add(_engine.Player.Sprite);
                 return players;
             }
@@ -87,9 +88,7 @@ namespace Si.Engine.Manager
             => collectionAccessor(_collection);
 
         public void QueueAllForDeletionOfType<T>() where T : SpriteBase
-        {
-            OfType<T>().ForEach(c => c.QueueForDelete());
-        }
+            => OfType<T>().ForEach(c => c.QueueForDelete());
 
         public void Dispose()
         {
@@ -145,8 +144,8 @@ namespace Si.Engine.Manager
             Animations.QueueAllForDeletion();
         }
 
-        public List<T> GetSpritesByTag<T>(string name) where T : SpriteBase
-            => _collection.Where(o => o.SpriteTag == name).ToList() as List<T>;
+        public T[] GetSpritesByTag<T>(string name) where T : SpriteBase
+            => _collection.Where(o => o.SpriteTag == name).ToList() as T[];
 
         public T GetSingleSpriteByTag<T>(string name) where T : SpriteBase
             => _collection.Where(o => o.SpriteTag == name).SingleOrDefault() as T;
@@ -154,11 +153,11 @@ namespace Si.Engine.Manager
         public T GetSpriteByOwner<T>(uint ownerUID) where T : SpriteBase
             => _collection.Where(o => o.UID == ownerUID).SingleOrDefault() as T;
 
-        public List<T> OfType<T>() where T : class
-            => _collection.Where(o => o is T).Select(o => o as T).ToList();
+        public T[] OfType<T>() where T : class
+            => _collection.Where(o => o is T).Select(o => o as T).ToArray();
 
-        public List<T> VisibleOfType<T>() where T : class
-            => _collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToList();
+        public T[] VisibleOfType<T>() where T : class
+            => _collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToArray();
 
         public List<SpriteBase> VisibleOfTypes(Type[] types)
         {
@@ -171,7 +170,7 @@ namespace Si.Engine.Manager
             return result;
         }
 
-        public List<SpriteBase> Visible() => _collection.Where(o => o.Visable == true).ToList();
+        public SpriteBase[] Visible() => _collection.Where(o => o.Visable == true).ToArray();
 
         public List<SpriteBase> All() => _collection.ToList();
 

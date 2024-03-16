@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using Si.Library.Mathematics.Geometry;
+using System.Drawing;
 
 namespace Si.Library.ExtensionMethods
 {
@@ -10,6 +11,13 @@ namespace Si.Library.ExtensionMethods
         public static RectangleF Clone(this RectangleF rectangle)
         {
             return new RectangleF(rectangle.Location, rectangle.Size);
+        }
+
+        public static RectangleF Balloon(this RectangleF rectangle, SiPoint size)
+        {
+            var rec = rectangle.Clone();
+            rec.Inflate(size.X, size.Y);
+            return rec;
         }
 
         public static RectangleF Balloon(this RectangleF rectangle, float x, float y)

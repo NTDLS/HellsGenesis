@@ -310,7 +310,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public List<SpriteBase> FindReverseCollisionsAlongMovementVector(List<SpriteBase> objectsThatCanBeHit, float epoch)
+        public List<SpriteBase> FindReverseCollisionsAlongMovementVector(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object after it has been moved and tests each location
             ///     betwwen where it ended up and where it should have come from given its movement vector.
@@ -359,7 +359,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public SpriteBase FindFirstReverseCollisionAlongMovementVector(List<SpriteBase> objectsThatCanBeHit, float epoch)
+        public SpriteBase FindFirstReverseCollisionAlongMovementVector(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object after it has been moved and tests each location
             ///     betwwen where it ended up and where it should have come from given its movement vector.
@@ -410,7 +410,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public List<SpriteBase> FindForwardCollisionsAlongMovementVector(List<SpriteBase> objectsThatCanBeHit, float epoch)
+        public List<SpriteBase> FindForwardCollisionsAlongMovementVector(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object before it has been moved and tests each location
             ///     betwwen where it is and where it will end up given its movement vector.
@@ -460,7 +460,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public SpriteBase FindFirstForwardCollisionAlongMovementVector(List<SpriteBase> objectsThatCanBeHit, float epoch)
+        public SpriteBase FindFirstForwardCollisionAlongMovementVector(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object before it has been moved and tests each location
             ///     betwwen where it is and where it will end up given its movement vector.
@@ -482,6 +482,90 @@ namespace Si.Engine.Sprite._Superclass
 
             //Hit-test each position along the sprite path.
             for (int i = 0; i < totalTravelDistance; i++)
+            {
+                hitTestPosition += directionVector;
+                foreach (var obj in objectsThatCanBeHit)
+                {
+                    if (obj.Intersects(hitTestPosition))
+                    {
+                        return obj;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
+
+        #region Vector distance collision detection.
+
+        /// <summary>
+        /// Returns a list of all collisions the sprite will make over a given distance and optional angle, in the order in which they would be encountered.
+        /// </summary>
+        /// <param name="distance">Distance to detect collisions.</param>
+        /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
+        /// <returns></returns>
+        public List<SpriteBase> FindCollisionsAlongDistanceVector(float distance, SiAngle angle = null)
+            => FindCollisionsAlongDistanceVector(_engine.Sprites.Visible(), distance, angle);
+
+        /// <summary>
+        ///  Returns a list of all collisions the sprite will make over a given distance and optional angle, in the order in which they would be encountered.
+        /// </summary>
+        /// <param name="objectsThatCanBeHit">List of objects to test for collisions.</param>
+        /// <param name="distance">Distance to detect collisions.</param>
+        /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
+        /// <returns></returns>
+        public List<SpriteBase> FindCollisionsAlongDistanceVector(SpriteBase[] objectsThatCanBeHit, float distance, SiAngle angle = null)
+        {
+            var collisions = new List<SpriteBase>();
+            var hitTestPosition = new SiPoint(Location);
+            var directionVector = angle != null ? angle : Velocity.ForwardAngle;
+
+            //Hit-test each position along the sprite path.
+            for (int i = 0; i < distance; i++)
+            {
+                hitTestPosition += directionVector;
+                foreach (var obj in objectsThatCanBeHit)
+                {
+                    if (obj.Intersects(hitTestPosition))
+                    {
+                        collisions.Add(obj);
+                    }
+                }
+            }
+
+            return collisions;
+        }
+
+        public void blarg(SpriteBase[] objectsThatCanBeHit)
+        {
+        }
+
+
+        /// <summary>
+        /// Returns a the first object the sprite will collide with over a given distance and optional angle.
+        /// </summary>
+        /// <param name="distance">Distance to detect collisions.</param>
+        /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
+        /// <returns></returns>
+        public SpriteBase FindFirstCollisionAlongDistanceVector(float distance, SiAngle angle = null)
+            => FindFirstCollisionAlongDistanceVector(_engine.Sprites.Visible(), distance, angle);
+
+        /// <summary>
+        /// Returns a the first object the sprite will collide with over a given distance and optional angle.
+        /// </summary>
+        /// <param name="objectsThatCanBeHit">List of objects to test for collisions.</param>
+        /// <param name="distance">Distance to detect collisions.</param>
+        /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
+        /// <returns></returns>
+        public SpriteBase FindFirstCollisionAlongDistanceVector(SpriteBase[] objectsThatCanBeHit, float distance, SiAngle angle = null)
+        {
+            var hitTestPosition = new SiPoint(Location);
+            var directionVector = angle != null ? angle : Velocity.ForwardAngle;
+
+            //Hit-test each position along the sprite path.
+            for (int i = 0; i < distance; i++)
             {
                 hitTestPosition += directionVector;
                 foreach (var obj in objectsThatCanBeHit)

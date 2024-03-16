@@ -61,7 +61,7 @@ namespace Si.Engine.Level
 
         private void AdvanceWaveCallback(SiDefermentEvent sender, object refObj)
         {
-            if (_engine.Sprites.OfType<SpriteEnemyBase>().Count == 0 && !_waitingOnPopulation)
+            if (_engine.Sprites.OfType<SpriteEnemyBase>().Count() == 0 && !_waitingOnPopulation)
             {
                 if (CurrentWave == TotalWaves && _waitingOnPopulation != true)
                 {

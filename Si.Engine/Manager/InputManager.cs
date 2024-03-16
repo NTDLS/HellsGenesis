@@ -3,6 +3,7 @@ using SharpDX.XInput;
 using Si.Engine.Sprite.Enemy._Superclass;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using static Si.Library.SiConstants;
 
@@ -381,7 +382,7 @@ namespace Si.Engine.Manager
             }
             else if (key == Keys.F1)
             {
-                if (_engine.Sprites.OfType<SpriteEnemyBase>().Count > 0)
+                if (_engine.Sprites.OfType<SpriteEnemyBase>().Count() > 0)
                 {
                     _engine.Sprites.OfType<SpriteEnemyBase>()[0].Explode();
                 }

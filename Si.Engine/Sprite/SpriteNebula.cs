@@ -38,6 +38,7 @@ namespace Si.Engine.Sprite
         {
             if (displacementVector.Sum() != 0)
             {
+                //Location -= displacementVector;// - (displacementVector.Normalize() * Velocity.MaximumSpeed);
                 Location += displacementVector - (displacementVector.Normalize() * Velocity.MaximumSpeed);
             }
         }

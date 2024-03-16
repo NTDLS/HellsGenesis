@@ -52,10 +52,10 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
             var munitions = VisibleOfType<MunitionBase>();
-            if (munitions.Count != 0)
+            if (munitions.Count() != 0)
             {
                 var interactiveSprites = SpriteManager.VisibleOfType<SpriteInteractiveBase>()
-                    .Where(o => o.TakesDamage == true).ToList<SpriteBase>();
+                    .Where(o => o.TakesDamage == true).ToList();
 
                 var objectsPlayerCanHit = interactiveSprites.OfTypes([
                     typeof(SpriteEnemyBossBase),
@@ -64,11 +64,11 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                     typeof(SpriteDebug),
                     typeof(SpriteEnemyStarbase),
                     typeof(SpriteAnimation)
-                ]);
+                ]).ToArray();
 
                 var objectsEnemyCanHit = interactiveSprites.OfTypes([
                     typeof(SpritePlayerBase)
-                ]);
+                ]).ToArray();
 
                 //Create a collection of threads so we can wait on the ones that we start.
                 var threadPoolTracker = _munitionTraversalThreadPool.CreateQueueStateTracker();

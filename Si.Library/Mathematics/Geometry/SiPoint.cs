@@ -120,8 +120,7 @@ namespace Si.Library.Mathematics.Geometry
         /// It provides a measure of how "long" the vector is in the specified direction.
         /// </summary>
         /// <returns></returns>
-        public double Length() => Length(this);
-
+        public float Length() => Length(this);
 
         /// <summary>
         /// Returns the X + Y;
@@ -129,7 +128,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public double Sum() => Sum(this);
+        public float Sum() => Sum(this);
 
         /// <summary>
         /// Calculates the euclidean distance between two points in a 2D space (slower and precisie, but not compatible with DistanceSquaredTo(...)).

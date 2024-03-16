@@ -226,7 +226,7 @@ namespace Si.Engine
                     Audio.BackgroundMusicSound.Play();
                 }
 
-                Sprites.Nebulas.AddAtCenterScreen();
+                Sprites.Nebulas.AddAtCenterUniverse();
 
                 Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
             }

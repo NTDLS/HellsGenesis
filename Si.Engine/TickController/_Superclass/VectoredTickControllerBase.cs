@@ -16,10 +16,10 @@ namespace Si.Engine.TickController._Superclass
         public EngineCore Engine { get; private set; }
         public SpriteManager SpriteManager { get; private set; }
 
-        public List<subType> VisibleOfType<subType>() where subType : T => SpriteManager.VisibleOfType<subType>();
-        public List<T> Visible() => SpriteManager.VisibleOfType<T>();
-        public List<T> All() => SpriteManager.OfType<T>();
-        public List<subType> OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
+        public subType[] VisibleOfType<subType>() where subType : T => SpriteManager.VisibleOfType<subType>();
+        public T[] Visible() => SpriteManager.VisibleOfType<T>();
+        public T[] All() => SpriteManager.OfType<T>();
+        public subType[] OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
         public T ByTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
 
         public virtual void ExecuteWorldClockTick(float epoch, SiPoint displacementVector) { }
@@ -54,6 +54,22 @@ namespace Si.Engine.TickController._Superclass
         public T AddAtCenterScreen()
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            obj.Location = Engine.Display.CenterOfCurrentScreen;
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
+        public T AddAtCenterScreen(string bitmapPath)
+        {
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
+            obj.Location = Engine.Display.CenterOfCurrentScreen;
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
+        public T AddAtCenterUniverse()
+        {
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.X = Engine.Display.TotalCanvasSize.Width / 2;
             obj.Y = Engine.Display.TotalCanvasSize.Height / 2;
 
@@ -61,7 +77,7 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
-        public T AddAtCenterScreen(string bitmapPath)
+        public T AddAtCenterUniverse(string bitmapPath)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
             obj.X = Engine.Display.TotalCanvasSize.Width / 2;
@@ -81,6 +97,22 @@ namespace Si.Engine.TickController._Superclass
         }
 
         public T Add(SiPoint location)
+        {
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            obj.Location = location.Clone();
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
+        public T AddAt(SpriteBase locationOf)
+        {
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            obj.Location = locationOf.Location.Clone();
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
+        public T AddAt(SiPoint location)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.Location = location.Clone();

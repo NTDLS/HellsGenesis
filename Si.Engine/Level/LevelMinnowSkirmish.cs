@@ -3,6 +3,7 @@ using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Enemy.Peon;
 using Si.Library;
+using System.Linq;
 
 namespace Si.Engine.Level
 {
@@ -38,7 +39,7 @@ namespace Si.Engine.Level
 
         private void AddFreshEnemiesCallback(SiDefermentEvent sender, object refObj)
         {
-            if (_engine.Sprites.OfType<SpriteEnemyBase>().Count == 0)
+            if (_engine.Sprites.OfType<SpriteEnemyBase>().Count() == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {

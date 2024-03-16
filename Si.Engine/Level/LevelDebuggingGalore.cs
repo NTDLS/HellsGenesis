@@ -8,6 +8,7 @@ using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Drawing;
+using System.Linq;
 using static Si.Engine.Sprite.SpriteAnimation;
 using static Si.Library.SiConstants;
 
@@ -48,7 +49,7 @@ namespace Si.Engine.Level
 
         private void AddFreshEnemiesCallback(SiDefermentEvent sender, object refObj)
         {
-            if (_engine.Sprites.OfType<SpriteEnemyBase>().Count == 0)
+            if (_engine.Sprites.OfType<SpriteEnemyBase>().Count() == 0)
             {
                 if (CurrentWave == TotalWaves)
                 {

@@ -60,7 +60,9 @@ namespace Si.Engine.Manager
 
         public float TotalCanvasDiagonal { get; private set; }
 
-        public SiPoint CenterScreen;
+        public SiPoint CenterCanvas;
+        public SiPoint CenterOfCurrentScreen => RenderWindowPosition + CenterCanvas;
+
 
         /// <summary>
         /// The size of the screen with no scaling.
@@ -170,7 +172,7 @@ namespace Si.Engine.Manager
 
             TotalCanvasSize = new Size(totalSizeX, totalSizeY);
             OverdrawSize = new Size(totalSizeX - NatrualScreenSize.Width, totalSizeY - NatrualScreenSize.Height);
-            CenterScreen = new SiPoint(TotalCanvasSize.Width / 2.0f, TotalCanvasSize.Height / 2.0f);
+            CenterCanvas = new SiPoint(TotalCanvasSize.Width / 2.0f, TotalCanvasSize.Height / 2.0f);
 
             TotalCanvasDiagonal = (float)Math.Sqrt(TotalCanvasSize.Width * TotalCanvasSize.Width + TotalCanvasSize.Height * TotalCanvasSize.Height);
         }
