@@ -73,10 +73,10 @@ namespace Si.Engine.Level
         {
             for (int i = 0; i < 10; i++)
             {
-                _engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+                _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
-            _engine.Sprites.Debugs.CreateAndAdd(1000, 1000);
+            _engine.Sprites.Debugs.Add(1000, 1000);
 
             var playMode = new PlayMode()
             {
@@ -85,19 +85,19 @@ namespace Si.Engine.Level
                 ReplayDelay = new TimeSpan(0)
             };
 
-            var ani1 = _engine.Sprites.Animations.Create(@"Sprites\Animation\Asteroid\LargeIce.png", new Size(246, 248), 22, playMode);
+            var ani1 = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeIce.png", new Size(246, 248), 22, playMode);
             ani1.CenterInUniverse();
             ani1.Location -= new SiPoint(256, 0);
 
-            var ani2 = _engine.Sprites.Animations.Create(@"Sprites\Animation\Asteroid\LargeLava.png", new Size(256, 225), 22, playMode);
+            var ani2 = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeLava.png", new Size(256, 225), 22, playMode);
             ani2.CenterInUniverse();
 
-            var ani3 = _engine.Sprites.Animations.Create(@"Sprites\Animation\Asteroid\LargeStandard.png", new Size(264, 241), 22, playMode);
+            var ani3 = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeStandard.png", new Size(264, 241), 22, playMode);
             ani3.CenterInUniverse();
             ani3.Location += new SiPoint(256, 0);
 
 
-            _engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
+            _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
             //_engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
 

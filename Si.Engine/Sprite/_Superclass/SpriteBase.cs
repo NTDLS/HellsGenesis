@@ -570,7 +570,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public SpriteAttachment Attach(string imagePath, bool takesDamage = false, int hullHealth = 1)
         {
-            var attachment = _engine.Sprites.Attachments.Create(this, imagePath);
+            var attachment = _engine.Sprites.Attachments.Add(this, imagePath);
             attachment.TakesDamage = takesDamage;
             attachment.SetHullHealth(hullHealth);
             Attachments.Add(attachment);
@@ -583,7 +583,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public SpriteAttachment Attach<T>(string imagePath, bool takesDamage = false, int hullHealth = 1) where T : SpriteAttachment
         {
-            var attachment = _engine.Sprites.Attachments.CreateTypeOf<T>(this, imagePath);
+            var attachment = _engine.Sprites.Attachments.AddTypeOf<T>(this, imagePath);
             attachment.TakesDamage = takesDamage;
             attachment.SetHullHealth(hullHealth);
             Attachments.Add(attachment);
@@ -596,7 +596,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public SpriteAttachment AttachOfType<T>() where T : SpriteAttachment
         {
-            var attachment = _engine.Sprites.Attachments.CreateTypeOf<T>(this);
+            var attachment = _engine.Sprites.Attachments.AddTypeOf<T>(this);
             Attachments.Add(attachment);
             return attachment;
         }
@@ -607,7 +607,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public SpriteAttachment AttachOfType(string typeName, SiPoint locationRelativeToOwner)
         {
-            var attachment = _engine.Sprites.Attachments.CreateTypeOf(typeName, this, locationRelativeToOwner);
+            var attachment = _engine.Sprites.Attachments.AddTypeOf(typeName, this, locationRelativeToOwner);
             Attachments.Add(attachment);
             return attachment;
         }

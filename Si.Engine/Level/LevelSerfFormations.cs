@@ -85,7 +85,7 @@ namespace Si.Engine.Level
 
         private SpriteEnemySerf AddOneEnemyAt(float x, float y, float angle)
         {
-            var enemy = _engine.Sprites.Enemies.Create<SpriteEnemySerf>();
+            var enemy = _engine.Sprites.Enemies.AddTypeOf<SpriteEnemySerf>();
             enemy.X = x;
             enemy.Y = y;
             enemy.Velocity.ForwardVelocity = 0.8f;

@@ -61,7 +61,7 @@ namespace Si.Engine.Level
 
         private void AddEnemyCallback(SiDefermentEvent sender, object refObj)
         {
-            _engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
         }
     }
 }

@@ -170,7 +170,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                 RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
-                _engine.Sprites.Munitions.Create(this, location, angle);
+                _engine.Sprites.Munitions.Add(this, location, angle);
 
                 return true;
             }
@@ -190,7 +190,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                 RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
-                _engine.Sprites.Munitions.Create(this);
+                _engine.Sprites.Munitions.Add(this);
 
                 return true;
             }

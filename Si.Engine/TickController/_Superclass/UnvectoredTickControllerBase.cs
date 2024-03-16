@@ -4,7 +4,7 @@
     /// Tick managers that do not handle sprites or do not use a vector to update their sprites.
     /// Things like Events, Menues, Radar Position Indicators, etc.
     /// </summary>
-    public class UnvectoredTickControllerBase<T> : TickControllerBase<T> where T : class
+    public class UnvectoredTickControllerBase<T> : ITickController<T> where T : class
     {
         public EngineCore Engine { get; private set; }
 

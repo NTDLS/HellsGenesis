@@ -371,7 +371,7 @@ namespace Si.Engine.Manager
 
             for (int index = 0; index < fragmentCount; index++)
             {
-                var fragment = _engine.Sprites.GenericSprites.CreateAt(sprite, fragmentImages[index]);
+                var fragment = _engine.Sprites.GenericSprites.AddAt(fragmentImages[index], sprite);
                 //TODO: Can we implement this.
                 fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
                 fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);

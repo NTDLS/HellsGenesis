@@ -11,7 +11,7 @@ namespace Si.Engine.TickController._Superclass
     /// Tick managers which update their sprites using the supplied 2D vector.
     /// Also contains various factory methods.
     /// </summary>
-    public class VectoredTickControllerBase<T> : TickControllerBase<T> where T : SpriteBase
+    public class VectoredTickControllerBase<T> : ITickController<T> where T : SpriteBase
     {
         public EngineCore Engine { get; private set; }
         public SpriteManager SpriteManager { get; private set; }
@@ -34,38 +34,34 @@ namespace Si.Engine.TickController._Superclass
 
         public void Add(T obj) => SpriteManager.Add(obj);
 
-        public T CreateAndAdd(SiPoint location, string name = "")
+        public T Add(string bitmapPath, SiPoint location)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
             obj.Location = location.Clone();
-            obj.SpriteTag = name;
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public T CreateAndAdd(float x, float y, string name = "")
+        public T Add(string bitmapPath, float x, float y)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
             obj.X = x;
             obj.Y = y;
-            obj.SpriteTag = name;
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public T CreateAndAddAtCenterScreen(string name = "")
+        public T AddAtCenterScreen(string bitmapPath)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
             obj.X = Engine.Display.TotalCanvasSize.Width / 2;
             obj.Y = Engine.Display.TotalCanvasSize.Height / 2;
 
-            obj.SpriteTag = name;
-
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public T CreateAndAdd(float x, float y)
+        public T Add(float x, float y)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.X = x;
@@ -74,25 +70,39 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
-        public T CreateAndAdd(SiPoint location)
+        public T Add(SiPoint location)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
-            obj.Location = location;
+            obj.Location = location.Clone();
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public T CreateAndAdd()
+        public T AddAt(SharpDX.Direct2D1.Bitmap bitmap, SpriteBase locationOf)
+        {
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmap);
+            obj.Location = locationOf.Location.Clone();
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
+        public T Add()
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public T CreateAndAdd(string name = "")
+        public T Add(string bitmapPath)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
-            obj.SpriteTag = name;
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
+        public T Add(SharpDX.Direct2D1.Bitmap bitmap)
+        {
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmap);
             SpriteManager.Add(obj);
             return obj;
         }

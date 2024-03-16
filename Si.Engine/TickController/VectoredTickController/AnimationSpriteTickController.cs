@@ -30,13 +30,13 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         /// </summary>
         /// <param name="animation"></param>
         /// <param name="defaultPosition"></param>
-        public void AddAt(SpriteAnimation animation, SpriteBase defaultPosition)
+        public void Insert(SpriteAnimation animation, SpriteBase defaultPosition)
         {
             animation.Location = defaultPosition.Location.Clone();
             SpriteManager.Add(animation);
         }
 
-        public SpriteAnimation Create(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, SpriteAnimation.PlayMode playMode = null)
+        public SpriteAnimation Add(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, SpriteAnimation.PlayMode playMode = null)
         {
             SpriteAnimation obj = new SpriteAnimation(Engine, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
             SpriteManager.Add(obj);
@@ -46,8 +46,8 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         /// <summary>
         /// Small explosion for a objecting hitting another.
         /// </summary>
-        /// <param name="defaultPosition"></param>
-        public void AddRandomHitExplosionAt(SpriteBase defaultPosition)
+        /// <param name="positionOf"></param>
+        public void AddRandomHitExplosionAt(SpriteBase positionOf)
         {
             if (SiRandom.ChanceIn(1, 5))
             {
@@ -55,8 +55,8 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                 int assetCount = 2;
                 int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
-                var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(66, 66), 50);
-                animation.Location = defaultPosition.Location.Clone();
+                var animation = Add(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(66, 66), 50);
+                animation.Location = positionOf.Location.Clone();
             }
             else
             {
@@ -64,23 +64,23 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                 int assetCount = 4;
                 int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
-                var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(22, 22), 50);
-                animation.Location = defaultPosition.Location.Clone();
+                var animation = Add(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(22, 22), 50);
+                animation.Location = positionOf.Location.Clone();
             }
         }
 
         /// <summary>
         /// Fairly large firey explosion.
         /// </summary>
-        /// <param name="defaultPosition"></param>
-        public void AddRandomExplosionAt(SpriteBase defaultPosition)
+        /// <param name="PositionOf"></param>
+        public void AddRandomExplosionAt(SpriteBase PositionOf)
         {
             const string assetPath = @"Sprites\Animation\Explode\Explosion 256x256\";
             int assetCount = 6;
             int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
-            var animation = Create(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(256, 256), 50);
-            animation.Location = defaultPosition.Location.Clone();
+            var animation = Add(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(256, 256), 50);
+            animation.Location = PositionOf.Location.Clone();
         }
     }
 }

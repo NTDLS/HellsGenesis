@@ -73,7 +73,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 
         #region Factories.
 
-        public SpriteRadarPositionIndicator Create()
+        public SpriteRadarPositionIndicator Add()
         {
             var obj = new SpriteRadarPositionIndicator(Engine);
             _manager.Add(obj);

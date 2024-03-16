@@ -21,7 +21,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             }
         }
 
-        public SpriteAttachment Create(SpriteBase owner, string imagePath = null)
+        public SpriteAttachment Add(SpriteBase owner, string imagePath = null)
         {
             var obj = new SpriteAttachment(Engine, imagePath)
             {
@@ -32,7 +32,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             return obj;
         }
 
-        public SpriteAttachment CreateTypeOf<T>(SpriteBase owner, string imagePath = null) where T : SpriteAttachment
+        public SpriteAttachment AddTypeOf<T>(SpriteBase owner, string imagePath = null) where T : SpriteAttachment
         {
             var sprite = SpriteManager.CreateByType<T>();
 
@@ -44,7 +44,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             return sprite;
         }
 
-        public SpriteAttachment CreateTypeOf(string typeName, SpriteBase owner, SiPoint locationRelativeToOwner)
+        public SpriteAttachment AddTypeOf(string typeName, SpriteBase owner, SiPoint locationRelativeToOwner)
         {
             var sprite = SpriteManager.CreateByTypeName(typeName);
 

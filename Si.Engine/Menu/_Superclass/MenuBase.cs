@@ -87,7 +87,7 @@ namespace Si.Engine.Menu._Superclass
             _engine.Menus.Unload(this);
         }
 
-        public SpriteMenuItem CreateAndAddTitleItem(SiPoint location, string text)
+        public SpriteMenuItem AddTitleItem(SiPoint location, string text)
         {
             var item = new SpriteMenuItem(_engine, this, _engine.Rendering.TextFormats.MenuTitle, _engine.Rendering.Materials.Brushes.OrangeRed, location)
             {
@@ -98,7 +98,7 @@ namespace Si.Engine.Menu._Superclass
             return item;
         }
 
-        public SpriteMenuItem CreateAndAddTextblock(SiPoint location, string text)
+        public SpriteMenuItem AddTextblock(SiPoint location, string text)
         {
             var item = new SpriteMenuItem(_engine, this, _engine.Rendering.TextFormats.MenuGeneral, _engine.Rendering.Materials.Brushes.LawnGreen, location)
             {
@@ -109,7 +109,7 @@ namespace Si.Engine.Menu._Superclass
             return item;
         }
 
-        public SpriteMenuItem CreateAndAddSelectableItem(SiPoint location, string key, string text)
+        public SpriteMenuItem AddSelectableItem(SiPoint location, string key, string text)
         {
             var item = new SpriteMenuItem(_engine, this, _engine.Rendering.TextFormats.MenuItem, _engine.Rendering.Materials.Brushes.OrangeRed, location)
             {
@@ -121,7 +121,7 @@ namespace Si.Engine.Menu._Superclass
             return item;
         }
 
-        public SpriteMenuSelectableTextInput CreateAndAddSelectableTextInput(SiPoint location, string key, string text = "")
+        public SpriteMenuSelectableTextInput AddSelectableTextInput(SiPoint location, string key, string text = "")
         {
             var item = new SpriteMenuSelectableTextInput(_engine, this, _engine.Rendering.TextFormats.TextInputItem, _engine.Rendering.Materials.Brushes.Orange, location)
             {

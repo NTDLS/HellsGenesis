@@ -87,7 +87,6 @@ namespace Si.Engine
             Menus = new MenuTickController(this);
             Player = new PlayerSpriteTickController(this);
 
-
             _worldClock = new EngineWorldClock(this);
         }
 
@@ -129,13 +128,9 @@ namespace Si.Engine
             Sprites.QueueDeletionOfActionSprites();
         }
 
-        //public SpriteGenericBitmap skybox;
-
         public void StartGame()
         {
-            //skybox = Sprites.GenericSprites.Create("SkyBoxTransparent50Pct.png");
-            //skybox.Visable = true;
-
+            //var skybox = Sprites.GenericSprites.Add(@"Sprites\Nebula\Blue.png");
             //skybox.CenterInUniverse();
             //skybox.ZOrder = int.MinValue;
             //skybox.IsFixedPosition = true;
@@ -159,18 +154,11 @@ namespace Si.Engine
                     }
                     else
                     {
-                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Gray);
+                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.EditorBackground);
                     }
 
                     Sprites.RenderPreScaling(o.IntermediateRenderTarget);
                     o.IntermediateRenderTarget.EndDraw();
-
-                    /*
-                    if (skybox != null)
-                    {
-                        o.ScreenRenderTarget.DrawBitmap(skybox.GetImage(), 1, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
-                    }
-                    */
 
                     if (Settings.EnableSpeedScaleFactoring)
                     {
@@ -212,12 +200,12 @@ namespace Si.Engine
             }, SiDefermentEventMode.Recurring );
             */
 
-            var textBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
+            var textBlock = Sprites.TextBlocks.Add(Rendering.TextFormats.Loading,
                 Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true);
 
             textBlock.SetTextAndCenterXY("Building cache...");
 
-            var percentTextBlock = Sprites.TextBlocks.Create(Rendering.TextFormats.Loading,
+            var percentTextBlock = Sprites.TextBlocks.Add(Rendering.TextFormats.Loading,
                 Rendering.Materials.Brushes.Red, new SiPoint(textBlock.X, textBlock.Y + 50), true);
 
             textBlock.SetTextAndCenterXY("Building reflection cache...");

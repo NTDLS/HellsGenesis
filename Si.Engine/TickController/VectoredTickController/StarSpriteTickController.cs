@@ -32,7 +32,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                                 Engine.Display.TotalCanvasSize.Width);
                             int y = SiRandom.Between(0, Engine.Display.TotalCanvasSize.Height);
 
-                            SpriteManager.Stars.CreateAndAdd(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
+                            SpriteManager.Stars.Add(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
                         }
 
                     }
@@ -42,7 +42,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                         {
                             int x = SiRandom.Between(0, (int)-displacementVector.X);
                             int y = SiRandom.Between(0, Engine.Display.TotalCanvasSize.Height);
-                            SpriteManager.Stars.CreateAndAdd(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
+                            SpriteManager.Stars.Add(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
                         }
 
                     }
@@ -52,7 +52,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                         {
                             int x = SiRandom.Between(0, Engine.Display.TotalCanvasSize.Width);
                             int y = SiRandom.Between(Engine.Display.TotalCanvasSize.Height - (int)displacementVector.Y, Engine.Display.TotalCanvasSize.Height);
-                            SpriteManager.Stars.CreateAndAdd(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
+                            SpriteManager.Stars.Add(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
                         }
                     }
                     else if (displacementVector.Y < 0)
@@ -61,7 +61,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                         {
                             int x = SiRandom.Between(0, Engine.Display.TotalCanvasSize.Width);
                             int y = SiRandom.Between(0, (int)-displacementVector.Y);
-                            SpriteManager.Stars.CreateAndAdd(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
+                            SpriteManager.Stars.Add(Engine.Display.RenderWindowPosition.X + x, Engine.Display.RenderWindowPosition.Y + y);
                         }
                     }
                 }

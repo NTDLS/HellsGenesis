@@ -22,13 +22,13 @@ namespace Si.Engine.Menu
             float offsetX = currentScaledScreenBounds.X + 40;
             float offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = CreateAndAddTitleItem(new SiPoint(offsetX, offsetY), "Whats the Situation?");
+            var itemTitle = AddTitleItem(new SiPoint(offsetX, offsetY), "Whats the Situation?");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
             offsetY += itemTitle.Height;
 
-            _situationBlurb = CreateAndAddTextblock(new SiPoint(offsetX, offsetY), "");
+            _situationBlurb = AddTextblock(new SiPoint(offsetX, offsetY), "");
             _situationBlurb.X = offsetX + 300;
             _situationBlurb.Y = offsetY - _situationBlurb.Size.Height;
 
@@ -47,7 +47,7 @@ namespace Si.Engine.Menu
             {
                 var situationInstance = SiReflection.CreateInstanceFromType<SituationBase>(situationType, new object[] { engine, });
 
-                var menuItem = CreateAndAddSelectableItem(new SiPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
+                var menuItem = AddSelectableItem(new SiPoint(offsetX + 25, offsetY), situationInstance.Name, $"> {situationInstance.Name}");
 
                 menuItem.UserData = situationInstance;
 

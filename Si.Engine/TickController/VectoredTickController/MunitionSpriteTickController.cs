@@ -112,13 +112,13 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             }
         }
 
-        public void Create(WeaponBase weapon)
+        public void Add(WeaponBase weapon)
         {
             var obj = weapon.CreateMunition();
             SpriteManager.Add(obj);
         }
 
-        public void Create(WeaponBase weapon, SiPoint location = null, float? angle = null)
+        public void Add(WeaponBase weapon, SiPoint location = null, float? angle = null)
         {
             var obj = weapon.CreateMunition(location, angle);
             SpriteManager.Add(obj);
@@ -131,7 +131,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         /// <param name="lockedTarget"></param>
         /// <param name="xyOffset"></param>
         /// <returns></returns>
-        public void CreateLockedOnTo(WeaponBase weapon, SpriteInteractiveBase lockedTarget, SiPoint location = null, float? angle = null)
+        public void AddLockedOnTo(WeaponBase weapon, SpriteInteractiveBase lockedTarget, SiPoint location = null, float? angle = null)
         {
             var obj = weapon.CreateMunition(location, angle, lockedTarget);
             SpriteManager.Add(obj);

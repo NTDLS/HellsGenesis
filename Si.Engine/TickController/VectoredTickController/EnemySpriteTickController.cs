@@ -27,7 +27,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             }
         }
 
-        public T Create<T>() where T : SpriteEnemyBase
+        public T AddTypeOf<T>() where T : SpriteEnemyBase
         {
             object[] param = { Engine };
             SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);

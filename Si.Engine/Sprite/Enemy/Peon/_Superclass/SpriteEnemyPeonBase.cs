@@ -35,14 +35,14 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
                 OwnerUID = UID
             };
             ThrustAnimation.Reset();
-            _engine.Sprites.Animations.AddAt(ThrustAnimation, this);
+            _engine.Sprites.Animations.Insert(ThrustAnimation, this);
 
             BoostAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
             {
                 OwnerUID = UID
             };
             BoostAnimation.Reset();
-            _engine.Sprites.Animations.AddAt(BoostAnimation, this);
+            _engine.Sprites.Animations.Insert(BoostAnimation, this);
 
             UpdateThrustAnimationPositions();
         }

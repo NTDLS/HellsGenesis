@@ -5,7 +5,7 @@ namespace Si.Engine.TickController._Superclass
     /// <summary>
     /// Tick manager that generates offset vectors for the one and only local player sprite.
     /// </summary>
-    public class PlayerSpriteTickControllerBase<T> : TickControllerBase<T> where T : class
+    public class PlayerSpriteTickControllerBase<T> : ITickController<T> where T : class
     {
         public EngineCore Engine { get; private set; }
 

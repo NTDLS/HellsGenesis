@@ -18,12 +18,12 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         public TextBlocksSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
-            PlayerStatsText = Create(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
+            PlayerStatsText = Add(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = Create(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
+            DebugText = Add(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
 
             //We have to create this ahead of time because we cant create pause text when paused since sprires are created via events.
-            PausedText = Create(engine.Rendering.TextFormats.LargeBlocker,
+            PausedText = Add(engine.Rendering.TextFormats.LargeBlocker,
                     engine.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText", "Paused");
 
             PausedText.Visable = false;
@@ -46,14 +46,14 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             return obj;
         }
 
-        public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic)
+        public SpriteTextBlock Add(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic)
         {
             var obj = new SpriteTextBlock(Engine, format, color, location, isPositionStatic);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name)
+        public SpriteTextBlock Add(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name)
         {
             var obj = new SpriteTextBlock(Engine, format, color, location, isPositionStatic);
             obj.SpriteTag = name;
@@ -61,7 +61,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             return obj;
         }
 
-        public SpriteTextBlock Create(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name, string text)
+        public SpriteTextBlock Add(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name, string text)
         {
             var obj = new SpriteTextBlock(Engine, format, color, location, isPositionStatic);
             obj.SpriteTag = name;

@@ -12,6 +12,7 @@ namespace Si.Rendering
             public RawColor4 Blue { get; private set; } = new(0, 0, 1, 1);
             public RawColor4 Black { get; private set; } = new(0, 0, 0, 1);
             public RawColor4 White { get; private set; } = new(1, 1, 1, 1);
+            public RawColor4 EditorBackground { get; private set; } = new(30 / 255.0f, 50 / 255.0f, 40 / 255.0f, 1);
             public RawColor4 Gray { get; private set; } = new(0.25f, 0.25f, 0.25f, 1);
             public RawColor4 WhiteSmoke { get; private set; } = new(0.9608f, 0.9608f, 0.9608f, 1);
             public RawColor4 Cyan { get; private set; } = new(0, 1f, 1f, 1f);

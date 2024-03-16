@@ -26,30 +26,30 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             }
         }
 
-        public void CreateAt(SiPoint location, Color4 color, int count, Size? size = null)
+        public void AddAt(SiPoint location, Color4 color, int count, Size? size = null)
         {
             for (int i = 0; i < count; i++)
             {
-                CreateAt(location + SiRandom.Between(-20, 20), color, size);
+                AddAt(location + SiRandom.Between(-20, 20), color, size);
             }
         }
 
-        public void CreateAt(SpriteBase sprite, Color4 color, int count, Size? size = null)
+        public void AddAt(SpriteBase sprite, Color4 color, int count, Size? size = null)
         {
             for (int i = 0; i < count; i++)
             {
-                CreateAt(sprite.Location + SiRandom.Between(-20, 20), color, size);
+                AddAt(sprite.Location + SiRandom.Between(-20, 20), color, size);
             }
         }
 
-        public SpriteParticle CreateAt(SpriteBase sprite, Color4 color, Size? size = null)
+        public SpriteParticle AddAt(SpriteBase sprite, Color4 color, Size? size = null)
         {
             var obj = new SpriteParticle(Engine, sprite.Location, size ?? new Size(1, 1), color);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public SpriteParticle CreateAt(SiPoint location, Color4 color, Size? size = null)
+        public SpriteParticle AddAt(SiPoint location, Color4 color, Size? size = null)
         {
             var obj = new SpriteParticle(Engine, location, size ?? new Size(1, 1), color)
             {
@@ -59,7 +59,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             return obj;
         }
 
-        public SpriteParticle CreateAt(SiPoint location, Size? size = null)
+        public SpriteParticle AddAt(SiPoint location, Size? size = null)
         {
             var obj = new SpriteParticle(Engine, location, size ?? new Size(1, 1))
             {
@@ -83,7 +83,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         {
             for (int i = 0; i < SiRandom.Between(maxParticleCount / 2, maxParticleCount); i++)
             {
-                var particle = CreateAt(location, new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
+                var particle = AddAt(location, new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
                 particle.Shape = ParticleShape.FilledEllipse;
                 particle.ColorType = ParticleColorType.SingleColor;
                 //particle.GradientStartColor = SiRenderingUtility.GetRandomHotColor();
@@ -103,7 +103,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         {
             for (int i = 0; i < particleCount; i++)
             {
-                var particle = CreateAt(location, SiRenderingUtility.GetRandomHotColor(), new Size(5, 5));
+                var particle = AddAt(location, SiRenderingUtility.GetRandomHotColor(), new Size(5, 5));
 
                 switch (SiRandom.Between(1, 3))
                 {

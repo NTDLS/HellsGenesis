@@ -22,7 +22,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             }
         }
 
-        public T Create<T>(float x, float y) where T : SpritePowerupBase
+        public T AddAt<T>(float x, float y) where T : SpritePowerupBase
         {
             object[] param = { Engine };
             var obj = (SpritePowerupBase)Activator.CreateInstance(typeof(T), param);

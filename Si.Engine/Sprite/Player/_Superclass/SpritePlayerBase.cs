@@ -201,7 +201,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                     OwnerUID = UID
                 };
                 //ThrustAnimation.Reset();
-                _engine.Sprites.Animations.AddAt(ThrusterAnimation, this);
+                _engine.Sprites.Animations.Insert(ThrusterAnimation, this);
                 ThrusterAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
             }
 
@@ -220,7 +220,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                     OwnerUID = UID
                 };
                 //BoostAnimation.Reset();
-                _engine.Sprites.Animations.AddAt(BoostAnimation, this);
+                _engine.Sprites.Animations.Insert(BoostAnimation, this);
                 BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
             }
         }
