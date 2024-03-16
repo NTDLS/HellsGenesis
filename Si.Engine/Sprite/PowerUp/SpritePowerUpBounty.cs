@@ -14,7 +14,7 @@ namespace Si.Engine.Sprite.PowerUp
             PowerupAmount = 100;
 
             int multiplier = SiRandom.Between(0, imageCount - 1);
-            SetImage(@$"Graphics\Powerup\Bounty\{multiplier}.png");
+            SetImage(@$"Sprites\Powerup\Bounty\{multiplier}.png");
             PowerupAmount *= multiplier + 1;
         }
 

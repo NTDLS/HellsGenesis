@@ -12,7 +12,7 @@ namespace Si.Engine.Sprite.Weapon
         private const string soundPath = @"Sounds\Weapons\Blunderbuss.wav";
         private const float soundVolumne = 0.4f;
 
-        public WeaponBlunderbuss(EngineCore engine, SpriteShipBase owner)
+        public WeaponBlunderbuss(EngineCore engine, SpriteInteractiveBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponBlunderbuss(EngineCore engine)
@@ -27,7 +27,7 @@ namespace Si.Engine.Sprite.Weapon
             SpeedVariancePercent = 0.10f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
             => new MunitionBlunderbuss(_engine, this, Owner, location, angle);
 
         public override bool Fire()

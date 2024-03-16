@@ -51,7 +51,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         {
             if (SiRandom.ChanceIn(1, 5))
             {
-                const string assetPath = @"Graphics\Animation\Explode\Hit Explosion 66x66";
+                const string assetPath = @"Sprites\Animation\Explode\Hit Explosion 66x66";
                 int assetCount = 2;
                 int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
@@ -60,7 +60,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             }
             else
             {
-                const string assetPath = @"Graphics\Animation\Explode\Hit Explosion 22x22";
+                const string assetPath = @"Sprites\Animation\Explode\Hit Explosion 22x22";
                 int assetCount = 4;
                 int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
@@ -75,7 +75,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
         /// <param name="defaultPosition"></param>
         public void AddRandomExplosionAt(SpriteBase defaultPosition)
         {
-            const string assetPath = @"Graphics\Animation\Explode\Explosion 256x256\";
+            const string assetPath = @"Sprites\Animation\Explode\Explosion 256x256\";
             int assetCount = 6;
             int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 

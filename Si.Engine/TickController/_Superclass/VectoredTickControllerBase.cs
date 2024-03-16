@@ -34,7 +34,7 @@ namespace Si.Engine.TickController._Superclass
 
         public void Add(T obj) => SpriteManager.Add(obj);
 
-        public T Create(SiPoint location, string name = "")
+        public T CreateAndAdd(SiPoint location, string name = "")
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.Location = location.Clone();
@@ -43,7 +43,7 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
-        public T Create(float x, float y, string name = "")
+        public T CreateAndAdd(float x, float y, string name = "")
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.X = x;
@@ -53,7 +53,7 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
-        public T CreateAtCenterScreen(string name = "")
+        public T CreateAndAddAtCenterScreen(string name = "")
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.X = Engine.Display.TotalCanvasSize.Width / 2;
@@ -65,7 +65,7 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
-        public T Create(float x, float y)
+        public T CreateAndAdd(float x, float y)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.X = x;
@@ -74,7 +74,7 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
-        public T Create(SiPoint location)
+        public T CreateAndAdd(SiPoint location)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.Location = location;
@@ -82,19 +82,29 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
-        public T Create()
+        public T CreateAndAdd()
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public T Create(string name = "")
+        public T CreateAndAdd(string name = "")
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.SpriteTag = name;
             SpriteManager.Add(obj);
             return obj;
+        }
+
+        public T Create()
+        {
+            return (T)Activator.CreateInstance(typeof(T), Engine);
+        }
+
+        public T Create(string bitmapPath)
+        {
+            return (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
         }
     }
 }

@@ -12,10 +12,10 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
     {
         public int MaxGuidedObservationAngleDegrees { get; set; } = 90;
         public float GuidedRotationRateInDegrees { get; set; } = SiPoint.DegreesToRadians(3);
-        public SpriteBase LockedTarget { get; private set; }
+        public SpriteInteractiveBase LockedTarget { get; private set; }
 
-        public GuidedMunitionBase(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, string imagePath,
-             SpriteBase lockedTarget = null, SiPoint location = null, float? angle = null)
+        public GuidedMunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath,
+             SpriteInteractiveBase lockedTarget = null, SiPoint location = null, float? angle = null)
             : base(engine, weapon, firedFrom, imagePath, location, angle)
         {
             LockedTarget = lockedTarget;

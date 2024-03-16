@@ -5,7 +5,6 @@ using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
-using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.VectoredTickControllerBase;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
@@ -48,7 +47,6 @@ namespace Si.Engine.Manager
         public RadarPositionsSpriteTickController RadarPositions { get; set; }
         public StarSpriteTickController Stars { get; private set; }
         public TextBlocksSpriteTickController TextBlocks { get; private set; }
-        public PlayerSpriteTickController Player { get; private set; }
 
         #endregion
 
@@ -95,22 +93,19 @@ namespace Si.Engine.Manager
         {
         }
 
-        public SpriteBase CreateByNameOfType(string typeFullName)
+        public T CreateByType<T>() where T : SpriteBase
         {
-            var type = Type.GetType(typeFullName) ?? throw new ArgumentException($"Type with FullName '{typeFullName}' not found.");
             object[] param = { _engine };
-            var obj = (SpriteBase)Activator.CreateInstance(type, param);
+            var sprite = Activator.CreateInstance(typeof(T), param) as T;
+            return sprite;
+        }
 
-            obj.Location = _engine.Display.RandomOffScreenLocation();
-            obj.Velocity.ForwardAngle.Degrees = SiRandom.Between(0, 359);
-
-            var enemy = obj as SpriteEnemyBase;
-
-            enemy?.BeforeCreate();
-            Add(obj);
-            enemy?.AfterCreate();
-
-            return obj;
+        public SpriteBase CreateByTypeName(string typeName)
+        {
+            var type = SiReflection.GetTypeByName(typeName) ?? throw new ArgumentException($"Type with FullName '{typeName}' not found.");
+            object[] param = { _engine };
+            var sprite = (SpriteBase)Activator.CreateInstance(type, param);
+            return sprite;
         }
 
         public void Add(SpriteBase item)
@@ -277,7 +272,7 @@ namespace Si.Engine.Manager
 
             if (RenderRadar)
             {
-                var radarBgImage = _engine.Assets.GetBitmap(@"Graphics\RadarTransparent.png");
+                var radarBgImage = _engine.Assets.GetBitmap(@"Sprites\RadarTransparent.png");
 
                 _engine.Rendering.DrawBitmapAt(renderTarget, radarBgImage,
                     _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,

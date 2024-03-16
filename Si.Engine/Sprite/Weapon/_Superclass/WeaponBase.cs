@@ -19,7 +19,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
     {
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected EngineCore _engine;
-        protected SpriteShipBase Owner { get; private set; }
+        protected SpriteInteractiveBase Owner { get; private set; }
 
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected SiAudioClip _fireSound;
@@ -58,7 +58,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             MunitionSceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
         }
 
-        public WeaponBase(EngineCore engine, SpriteShipBase owner, string name, string soundPath, float soundVolume)
+        public WeaponBase(EngineCore engine, SpriteInteractiveBase owner, string name, string soundPath, float soundVolume)
         {
             Owner = owner;
             _engine = engine;
@@ -68,7 +68,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         }
 
 
-        public virtual MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+        public virtual MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
         {
             if (Owner == null)
             {
@@ -81,7 +81,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         public class WeaponsLock
         {
             public float Distance { get; set; }
-            public SpriteBase Sprite { get; set; }
+            public SpriteInteractiveBase Sprite { get; set; }
 
             public SiWeaponsLockType LockType { get; set; }
         }

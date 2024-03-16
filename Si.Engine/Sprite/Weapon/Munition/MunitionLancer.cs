@@ -7,9 +7,9 @@ namespace Si.Engine.Sprite.Weapon.Munition
 {
     internal class MunitionLancer : EnergyMunitionBase
     {
-        private const string imagePath = @"Graphics\Weapon\Lancer.png";
+        private const string imagePath = @"Sprites\Weapon\Lancer.png";
 
-        public MunitionLancer(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, SiPoint location = null, float? angle = null)
+        public MunitionLancer(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null, float? angle = null)
             : base(engine, weapon, firedFrom, imagePath, location, angle)
         {
             Initialize(imagePath);

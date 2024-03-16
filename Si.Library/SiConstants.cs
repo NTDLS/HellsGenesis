@@ -4,6 +4,12 @@
     {
         public static string FriendlyName = "Strikeforce Infinite";
 
+        public enum SiEngineInitilizationType
+        {
+            Play,
+            Edit
+        }
+
         public enum SiWeaponsLockType
         {
             None,
@@ -95,21 +101,6 @@
             Reaver,
             Serpent,
             Starfighter
-        }
-
-        public enum SiEnemyClass
-        {
-            Debug,
-            AITracer,
-            Serf,
-            Phoenix,
-            Minnow,
-            Merc,
-            Scav,
-            Devastator,
-            Repulsor,
-            Spectre,
-            Garrison,
         }
 
         public enum SiMenuItemType

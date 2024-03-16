@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
 using Si.Engine.Menu;
+using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.UnvectoredTickController;
@@ -11,6 +12,7 @@ using Si.Rendering;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using static Si.Library.SiConstants;
 
 namespace Si.Engine
 {
@@ -26,6 +28,8 @@ namespace Si.Engine
         #endregion
 
         #region Public properties.
+
+        public SiEngineInitilizationType ExecutionType { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
 
@@ -67,8 +71,10 @@ namespace Si.Engine
         /// Initializes a new instace of the game engine.
         /// </summary>
         /// <param name="drawingSurface">The window that the game will be rendered to.</param>
-        public EngineCore(Control drawingSurface)
+        public EngineCore(Control drawingSurface, SiEngineInitilizationType executionType)
         {
+            ExecutionType = executionType;
+
             Settings = LoadSettings();
 
             Display = new DisplayManager(this, drawingSurface);
@@ -81,6 +87,7 @@ namespace Si.Engine
             Audio = new AudioManager(this);
             Menus = new MenuTickController(this);
             Player = new PlayerSpriteTickController(this);
+
 
             _worldClock = new EngineWorldClock(this);
         }
@@ -123,8 +130,17 @@ namespace Si.Engine
             Sprites.QueueDeletionOfActionSprites();
         }
 
+        //public SpriteGenericBitmap skybox;
+
         public void StartGame()
         {
+            //skybox = Sprites.GenericSprites.Create("SkyBoxTransparent50Pct.png");
+            //skybox.Visable = true;
+
+            //skybox.CenterInUniverse();
+            //skybox.ZOrder = int.MinValue;
+            //skybox.IsFixedPosition = true;
+
             Sprites.QueueDeletionOfActionSprites();
             Situations.AdvanceLevel();
         }
@@ -138,11 +154,24 @@ namespace Si.Engine
                     o.ScreenRenderTarget.BeginDraw();
                     o.IntermediateRenderTarget.BeginDraw();
 
-                    o.ScreenRenderTarget.Clear(Rendering.Materials.Colors.Black);
-                    o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Black);
+                    if (ExecutionType == SiEngineInitilizationType.Play)
+                    {
+                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Black);
+                    }
+                    else
+                    {
+                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Gray);
+                    }
 
                     Sprites.RenderPreScaling(o.IntermediateRenderTarget);
                     o.IntermediateRenderTarget.EndDraw();
+
+                    /*
+                    if (skybox != null)
+                    {
+                        o.ScreenRenderTarget.DrawBitmap(skybox.GetImage(), 1, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+                    }
+                    */
 
                     if (Settings.EnableSpeedScaleFactoring)
                     {
@@ -152,6 +181,7 @@ namespace Si.Engine
                     {
                         Rendering.TransferWithZoom(o.IntermediateRenderTarget, o.ScreenRenderTarget, (float)Display.BaseDrawScale);
                     }
+
                     Sprites.RenderPostScaling(o.ScreenRenderTarget);
 
                     o.ScreenRenderTarget.EndDraw();
@@ -174,7 +204,7 @@ namespace Si.Engine
             _worldClock.Start();
 
             /*
-            var loadingSprite = Sprites.GenericSprites.CreateFromImagePath(@"Graphics\Loading.png");
+            var loadingSprite = Sprites.GenericSprites.CreateFromImagePath(@"Sprites\Loading.png");
             loadingSprite.CenterInUniverse();
 
             var loadingEvent = Events.Add(10, (sender, parameter) =>
@@ -207,12 +237,14 @@ namespace Si.Engine
 
             OnInitialization?.Invoke(this);
 
-            if (Settings.PlayMusic)
+            if (ExecutionType == SiEngineInitilizationType.Play)
             {
-                Audio.BackgroundMusicSound.Play();
+                if (Settings.PlayMusic)
+                {
+                    Audio.BackgroundMusicSound.Play();
+                }
+                Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
             }
-
-            Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
         }
 
         public void ShutdownEngine()

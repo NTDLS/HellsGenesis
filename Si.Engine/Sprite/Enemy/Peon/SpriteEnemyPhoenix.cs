@@ -1,50 +1,19 @@
 ﻿using Si.Engine.AI.Logistics;
-using Si.Engine.Loudout;
 using Si.Engine.Sprite.Enemy.Peon._Superclass;
 using Si.Engine.Sprite.Weapon;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Linq;
-using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Enemy.Peon
 {
     internal class SpriteEnemyPhoenix : SpriteEnemyPeonBase
     {
-        public const int hullHealth = 10;
-        public const int bountyMultiplier = 15;
-
         public SpriteEnemyPhoenix(EngineCore engine)
             : base(engine)
         {
-            ShipClass = SiEnemyClass.Phoenix;
-            SetImage(@$"Graphics\Enemy\Peon\{ShipClass}\Hull.png");
-
-            //Load the loadout from file or create a new one if it does not exist.
-            LoadoutEnemyShip loadout = LoadLoadoutFromFile(ShipClass);
-            if (loadout == null)
-            {
-                loadout = new LoadoutEnemyShip(ShipClass)
-                {
-                    Description = "→ Phoenix ←\n"
-                       + "TODO: Add a description\n",
-                    Speed = 3.5f,
-                    Boost = 1.5f,
-                    HullHealth = 20,
-                    ShieldHealth = 10,
-                    Bounty = 10
-                };
-
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponDualVulcanCannon), 2500));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
-
-                SaveLoadoutToFile(loadout);
-            }
-
-            ResetLoadout(loadout);
+            InitializeSpriteFromMetadata(@"Sprites\Enemy\Peon\Phoenix\Hull.png");
 
             AddAIController(new HostileEngagement(_engine, this, _engine.Player.Sprite));
             AddAIController(new Taunt(_engine, this, _engine.Player.Sprite));

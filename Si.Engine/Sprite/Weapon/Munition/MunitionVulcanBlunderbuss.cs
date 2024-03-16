@@ -7,9 +7,9 @@ namespace Si.Engine.Sprite.Weapon.Munition
 {
     internal class MunitionBlunderbuss : ProjectileMunitionBase
     {
-        private const string imagePath = @"Graphics\Weapon\Blunderbuss.png";
+        private const string imagePath = @"Sprites\Weapon\Blunderbuss.png";
 
-        public MunitionBlunderbuss(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, SiPoint location = null, float? angle = null)
+        public MunitionBlunderbuss(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null, float? angle = null)
             : base(engine, weapon, firedFrom, imagePath, location, angle)
         {
             Initialize(imagePath);

@@ -41,6 +41,7 @@ namespace Si.Engine.Sprite._Superclass
         public string SpriteTag { get; set; }
         public uint UID { get; private set; } = SiSequenceGenerator.Next();
         public uint OwnerUID { get; set; }
+        public SiPoint LocationRelativeToOwner { get; set; }
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);
         public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
@@ -572,6 +573,41 @@ namespace Si.Engine.Sprite._Superclass
             var attachment = _engine.Sprites.Attachments.Create(this, imagePath);
             attachment.TakesDamage = takesDamage;
             attachment.SetHullHealth(hullHealth);
+            Attachments.Add(attachment);
+            return attachment;
+        }
+
+        /// <summary>
+        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
+        /// </summary>
+        /// <returns></returns>
+        public SpriteAttachment Attach<T>(string imagePath, bool takesDamage = false, int hullHealth = 1) where T : SpriteAttachment
+        {
+            var attachment = _engine.Sprites.Attachments.CreateTypeOf<T>(this, imagePath);
+            attachment.TakesDamage = takesDamage;
+            attachment.SetHullHealth(hullHealth);
+            Attachments.Add(attachment);
+            return attachment;
+        }
+
+        /// <summary>
+        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
+        /// </summary>
+        /// <returns></returns>
+        public SpriteAttachment AttachOfType<T>() where T : SpriteAttachment
+        {
+            var attachment = _engine.Sprites.Attachments.CreateTypeOf<T>(this);
+            Attachments.Add(attachment);
+            return attachment;
+        }
+
+        /// <summary>
+        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
+        /// </summary>
+        /// <returns></returns>
+        public SpriteAttachment AttachOfType(string typeName, SiPoint locationRelativeToOwner)
+        {
+            var attachment = _engine.Sprites.Attachments.CreateTypeOf(typeName, this, locationRelativeToOwner);
             Attachments.Add(attachment);
             return attachment;
         }
@@ -1141,6 +1177,10 @@ namespace Si.Engine.Sprite._Superclass
         public virtual void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             Location += Velocity.MovementVector * epoch;
+            foreach (var attachment in Attachments)
+            {
+                attachment.ApplyMotion(epoch, displacementVector);
+            }
         }
 
         public virtual void VelocityChanged() { }

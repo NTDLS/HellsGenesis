@@ -1,11 +1,9 @@
 ﻿using Si.Engine.AI.Logistics;
-using Si.Engine.Loudout;
 using Si.Engine.Sprite.Enemy.Peon._Superclass;
 using Si.Engine.Sprite.Weapon;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
-using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Enemy.Debug
 {
@@ -20,33 +18,7 @@ namespace Si.Engine.Sprite.Enemy.Debug
         public SpriteEnemyDebug(EngineCore engine)
             : base(engine)
         {
-            ShipClass = SiEnemyClass.Debug;
-            SetImage(@$"Graphics\Enemy\Debug\{ShipClass}\Hull.png");
-
-            //Load the loadout from file or create a new one if it does not exist.
-            LoadoutEnemyShip loadout = LoadLoadoutFromFile(ShipClass);
-            if (loadout == null)
-            {
-                loadout = new LoadoutEnemyShip(ShipClass)
-                {
-                    Description = "→ Debug ←\n"
-                       + "Easily the scariest enemy in the universe.\n"
-                       + "When this badboy is spotted, s**t has already hit the proverbial fan.\n",
-                    Speed = 3.5f,
-                    Boost = 1.5f,
-                    HullHealth = 20,
-                    ShieldHealth = 10,
-                };
-
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponDualVulcanCannon), 5000));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
-                loadout.Weapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
-
-                SaveLoadoutToFile(loadout);
-            }
-
-            ResetLoadout(loadout);
+            InitializeSpriteFromMetadata(@"Sprites\Enemy\Debug\Hull.png");
 
             AddAIController(new HostileEngagement(_engine, this, _engine.Player.Sprite));
             AddAIController(new Taunt(_engine, this, _engine.Player.Sprite));

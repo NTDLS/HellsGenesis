@@ -7,7 +7,7 @@ namespace Si.Engine.Sprite
 {
     public class SpriteStar : SpriteBase
     {
-        private const string _assetPath = @"Graphics\Star\";
+        private const string _assetPath = @"Sprites\Star\";
         private readonly int _imageCount = 5;
         private readonly int selectedImageIndex = 0;
 

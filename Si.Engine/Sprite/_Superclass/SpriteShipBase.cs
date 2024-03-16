@@ -1,7 +1,6 @@
 ﻿using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
@@ -11,16 +10,14 @@ namespace Si.Engine.Sprite._Superclass
     /// <summary>
     /// The ship base is a ship object that moves, can be hit, explodes and can be the subject of locking weapons.
     /// </summary>
-    public class SpriteShipBase : SpriteBase
+    public class SpriteShipBase : SpriteInteractiveBase
     {
         private readonly Dictionary<string, WeaponBase> _droneWeaponsCache = new();
-
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
-        public SiTimeRenewableResources RenewableResources { get; set; } = new();
 
-        private readonly string _assetPathlockedOnImage = @"Graphics\Weapon\Locked On.png";
-        private readonly string _assetPathlockedOnSoftImage = @"Graphics\Weapon\Locked Soft.png";
+        private readonly string _assetPathlockedOnImage = @"Sprites\Weapon\Locked On.png";
+        private readonly string _assetPathlockedOnSoftImage = @"Sprites\Weapon\Locked Soft.png";
 
         public SpriteShipBase(EngineCore engine, string name = "")
             : base(engine, name)
@@ -30,7 +27,6 @@ namespace Si.Engine.Sprite._Superclass
 
         public override void Initialize(string imagePath = null)
         {
-
             _lockedOnImage = _engine.Assets.GetBitmap(_assetPathlockedOnImage);
             _lockedOnSoftImage = _engine.Assets.GetBitmap(_assetPathlockedOnSoftImage);
 
@@ -78,19 +74,6 @@ namespace Si.Engine.Sprite._Superclass
             _droneWeaponsCache.Add(weaponTypeName, weapon);
 
             return weapon;
-        }
-
-        public override void Explode()
-        {
-            _engine.Events.Add(() =>
-            {
-                _engine.Sprites.Animations.AddRandomExplosionAt(this);
-                _engine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this);
-                _engine.Sprites.CreateFragmentsOf(this);
-                _engine.Rendering.AddScreenShake(4, 800);
-                _engine.Audio.PlayRandomExplosion();
-            });
-            base.Explode();
         }
 
         public void FixRadarPositionIndicator()

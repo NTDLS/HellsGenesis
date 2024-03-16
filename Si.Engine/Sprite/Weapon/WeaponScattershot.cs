@@ -12,7 +12,7 @@ namespace Si.Engine.Sprite.Weapon
         private const string soundPath = @"Sounds\Weapons\Scattershot.wav";
         private const float soundVolumne = 0.2f;
 
-        public WeaponScattershot(EngineCore engine, SpriteShipBase owner)
+        public WeaponScattershot(EngineCore engine, SpriteInteractiveBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponScattershot(EngineCore engine)
@@ -27,7 +27,7 @@ namespace Si.Engine.Sprite.Weapon
             SpeedVariancePercent = 0.10f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
             => new MunitionScattershot(_engine, this, Owner, location, angle);
     }
 }

@@ -32,7 +32,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
         /// <param name="imagePath">The image for the munition.</param>
         /// <param name="location">The optional location for the munition to originate from (if not specified, wull use the location of the firedFrom sprite).</param>
         /// <param name="angle">>The optional angle for the munition to travel on (if not specified, wull use the angle of the firedFrom sprite).</param>
-        public MunitionBase(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, string imagePath, SiPoint location = null, float? angle = null)
+        public MunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath, SiPoint location = null, float? angle = null)
             : base(engine)
         {
             Initialize(imagePath);
@@ -70,7 +70,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             if (firedFrom is SpriteAttachment attachment)
             {
                 //If we are firing from an attachment, get the type of the root owner.
-                firedFrom = attachment.RootOwner();
+                firedFrom = attachment.OwnerSprite;
             }
 
             if (firedFrom is SpriteEnemyBase)

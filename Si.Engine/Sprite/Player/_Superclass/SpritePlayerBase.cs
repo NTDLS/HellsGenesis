@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Player._Superclass
     /// <summary>
     /// The player base is a sub-class of the ship base. It is only used by the Player and as a model for menu selections.
     /// </summary>
-    public class SpritePlayerBase : SpriteShipBase
+    public class SpritePlayerBase : SpriteInteractiveBase
     {
         public SiPlayerClass ShipClass { get; set; }
         public LoadoutPlayerShip Loadout { get; private set; }
@@ -35,7 +35,6 @@ namespace Si.Engine.Sprite.Player._Superclass
         public SiAudioClip HullBreachedSound { get; private set; }
         public SiAudioClip IntegrityLowSound { get; private set; }
         public SiAudioClip ShipEngineBoostSound { get; private set; }
-        public int Bounty { get; set; } //Score points.
         public int MaxHullHealth { get; set; }
         public int MaxShieldPoints { get; set; }
         public SpriteAnimation ThrusterAnimation { get; private set; }
@@ -149,7 +148,7 @@ namespace Si.Engine.Sprite.Player._Superclass
         public void ResetLoadout(LoadoutPlayerShip loadout)
         {
             Loadout = loadout;
-            SetImage(@$"Graphics\Player\Ships\{loadout.Name}.png");
+            SetImage(@$"Sprites\Player\Ships\{loadout.Name}.png");
             Reset();
         }
 
@@ -195,7 +194,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                     DeleteSpriteAfterPlay = false,
                     ReplayDelay = new TimeSpan(0)
                 };
-                ThrusterAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustStandard32x32.png", new Size(32, 32), 100, playMode)
+                ThrusterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png", new Size(32, 32), 100, playMode)
                 {
                     SpriteTag = "PlayerForwardThrust",
                     Visable = false,
@@ -214,7 +213,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                     DeleteSpriteAfterPlay = false,
                     ReplayDelay = new TimeSpan(0)
                 };
-                BoostAnimation = new SpriteAnimation(_engine, @"Graphics\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
+                BoostAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
                 {
                     SpriteTag = "PlayerForwardThrust",
                     Visable = false,

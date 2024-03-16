@@ -31,5 +31,29 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             SpriteManager.Add(obj);
             return obj;
         }
+
+        public SpriteAttachment CreateTypeOf<T>(SpriteBase owner, string imagePath = null) where T : SpriteAttachment
+        {
+            var sprite = SpriteManager.CreateByType<T>();
+
+            if (imagePath != null) sprite.SetImage(imagePath);
+            sprite.ZOrder = owner.ZOrder + 1; //We want to make sure these go on top of the parent.
+            sprite.OwnerUID = owner.UID;
+
+            SpriteManager.Add(sprite);
+            return sprite;
+        }
+
+        public SpriteAttachment CreateTypeOf(string typeName, SpriteBase owner, SiPoint locationRelativeToOwner)
+        {
+            var sprite = SpriteManager.CreateByTypeName(typeName);
+
+            sprite.ZOrder = owner.ZOrder + 1; //We want to make sure these go on top of the parent.
+            sprite.OwnerUID = owner.UID;
+            sprite.LocationRelativeToOwner = locationRelativeToOwner;
+
+            SpriteManager.Add(sprite);
+            return sprite as SpriteAttachment;
+        }
     }
 }

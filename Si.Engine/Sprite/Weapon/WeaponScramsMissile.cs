@@ -15,7 +15,7 @@ namespace Si.Engine.Sprite.Weapon
 
         private bool _toggle = false;
 
-        public WeaponScramsMissile(EngineCore engine, SpriteShipBase owner)
+        public WeaponScramsMissile(EngineCore engine, SpriteInteractiveBase owner)
             : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
 
         public WeaponScramsMissile(EngineCore engine)
@@ -36,7 +36,7 @@ namespace Si.Engine.Sprite.Weapon
             ExplodesOnImpact = true;
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteBase lockedTarget = null)
+        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
             => new MunitionGuidedFragMissile(_engine, this, Owner, lockedTarget, location, angle);
 
         public override bool Fire()

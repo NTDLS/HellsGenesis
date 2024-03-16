@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using static Si.Library.SiConstants;
 
 namespace Si.Client
 {
@@ -56,7 +57,7 @@ namespace Si.Client
             };
             Controls.Add(drawingSurface);
 
-            _engine = new EngineCore(drawingSurface);
+            _engine = new EngineCore(drawingSurface, SiEngineInitilizationType.Play);
 
             _engine.EnableDebugging(new FormInterrogation(_engine));
 

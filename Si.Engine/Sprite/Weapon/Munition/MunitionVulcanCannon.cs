@@ -7,9 +7,9 @@ namespace Si.Engine.Sprite.Weapon.Munition
 {
     internal class MunitionVulcanCannon : ProjectileMunitionBase
     {
-        private const string imagePath = @"Graphics\Weapon\VulcanCannon.png";
+        private const string imagePath = @"Sprites\Weapon\VulcanCannon.png";
 
-        public MunitionVulcanCannon(EngineCore engine, WeaponBase weapon, SpriteBase firedFrom, SiPoint location = null, float? angle = null)
+        public MunitionVulcanCannon(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null, float? angle = null)
             : base(engine, weapon, firedFrom, imagePath, location, angle)
         {
             Initialize(imagePath);
