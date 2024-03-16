@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
 using Si.Engine.Menu;
+using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.UnvectoredTickController;
@@ -87,6 +88,7 @@ namespace Si.Engine
             Menus = new MenuTickController(this);
             Player = new PlayerSpriteTickController(this);
 
+
             _worldClock = new EngineWorldClock(this);
         }
 
@@ -128,8 +130,17 @@ namespace Si.Engine
             Sprites.QueueDeletionOfActionSprites();
         }
 
+        //public SpriteGenericBitmap skybox;
+
         public void StartGame()
         {
+            //skybox = Sprites.GenericSprites.Create("SkyBoxTransparent50Pct.png");
+            //skybox.Visable = true;
+
+            //skybox.CenterInUniverse();
+            //skybox.ZOrder = int.MinValue;
+            //skybox.IsFixedPosition = true;
+
             Sprites.QueueDeletionOfActionSprites();
             Situations.AdvanceLevel();
         }
@@ -155,6 +166,13 @@ namespace Si.Engine
                     Sprites.RenderPreScaling(o.IntermediateRenderTarget);
                     o.IntermediateRenderTarget.EndDraw();
 
+                    /*
+                    if (skybox != null)
+                    {
+                        o.ScreenRenderTarget.DrawBitmap(skybox.GetImage(), 1, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+                    }
+                    */
+
                     if (Settings.EnableSpeedScaleFactoring)
                     {
                         Rendering.TransferWithZoom(o.IntermediateRenderTarget, o.ScreenRenderTarget, (float)Display.SpeedOrientedFrameScalingFactor());
@@ -163,6 +181,7 @@ namespace Si.Engine
                     {
                         Rendering.TransferWithZoom(o.IntermediateRenderTarget, o.ScreenRenderTarget, (float)Display.BaseDrawScale);
                     }
+
                     Sprites.RenderPostScaling(o.ScreenRenderTarget);
 
                     o.ScreenRenderTarget.EndDraw();

@@ -80,7 +80,7 @@ namespace Si.Engine
 
             for (int i = 0; i < _engine.Settings.InitialFrameStarCount; i++)
             {
-                _engine.Sprites.Stars.Create();
+                _engine.Sprites.Stars.CreateAndAdd();
             }
 
             #endregion
