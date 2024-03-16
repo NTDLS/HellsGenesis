@@ -20,7 +20,7 @@ namespace Si.Engine.Sprite
             X = SiRandom.Between(0, engine.Display.TotalCanvasSize.Width);
             Y = SiRandom.Between(0, engine.Display.TotalCanvasSize.Height);
 
-            ZOrder = int.MinValue;
+            ZOrder = int.MinValue + 1000;
 
             Velocity.MaximumSpeed = 0.5f;
 
@@ -36,7 +36,7 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location -= Velocity.MovementVector * epoch;
+            Location -= displacementVector * Velocity.ForwardVelocity * Velocity.MaximumSpeed * epoch;
         }
     }
 }

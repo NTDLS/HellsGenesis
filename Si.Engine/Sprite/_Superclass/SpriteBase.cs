@@ -758,8 +758,6 @@ namespace Si.Engine.Sprite._Superclass
             return Bounds.IntersectsWith(alteredHitBox);
         }
 
-
-
         #endregion
 
         #region Actions.

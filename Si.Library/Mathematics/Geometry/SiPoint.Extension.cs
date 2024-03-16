@@ -280,7 +280,6 @@ namespace Si.Library.Mathematics.Geometry
             return angleTo;
         }
 
-
         /// <summary>
         /// Returns the distance from one object to another.
         /// </summary>
@@ -338,6 +337,14 @@ namespace Si.Library.Mathematics.Geometry
             var magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
             return new SiPoint(vector.X / magnitude, vector.Y / magnitude);
         }
+
+        /// <summary>
+        /// Returns the X + Y;
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static float Sum(SiPoint a) => a.X + a.Y;
 
         /// <summary>
         /// Calculate the dot product of two vectors.This is useful for determining the angle between vectors or projecting one vector onto another.

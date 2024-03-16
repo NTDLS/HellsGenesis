@@ -47,6 +47,7 @@ namespace Si.Engine.Manager
         public RadarPositionsSpriteTickController RadarPositions { get; set; }
         public StarSpriteTickController Stars { get; private set; }
         public TextBlocksSpriteTickController TextBlocks { get; private set; }
+        public NebulaSpriteTickController Nebulas { get; private set; }
 
         #endregion
 
@@ -63,6 +64,7 @@ namespace Si.Engine.Manager
             Particles = new ParticleSpriteTickController(_engine, this);
             Powerups = new PowerupSpriteTickController(_engine, this);
             RadarPositions = new RadarPositionsSpriteTickController(_engine, this);
+            Nebulas = new NebulaSpriteTickController(_engine, this);
             Stars = new StarSpriteTickController(_engine, this);
             TextBlocks = new TextBlocksSpriteTickController(_engine, this);
         }

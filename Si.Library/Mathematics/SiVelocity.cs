@@ -16,7 +16,7 @@ namespace Si.Library.Mathematics
         public SiAngle ForwardAngle { get; set; } = new();
 
         /// <summary>
-        /// The maximum speed that this ship can travel before taking MaximumBoost into account.
+        /// The maximum speed that this object can travel in any direction (not including MaximumSpeedBoost).
         /// </summary>
         public float MaximumSpeed { get; set; }
 

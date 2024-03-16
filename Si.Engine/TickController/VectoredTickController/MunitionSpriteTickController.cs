@@ -62,7 +62,8 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                     typeof(SpriteEnemyPeonBase),
                     typeof(SpriteAttachment),
                     typeof(SpriteDebug),
-                    typeof(SpriteEnemyStarbase)
+                    typeof(SpriteEnemyStarbase),
+                    typeof(SpriteAnimation)
                 ]);
 
                 var objectsEnemyCanHit = interactiveSprites.OfTypes([
@@ -82,8 +83,6 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                         {
                             munition.ApplyMotion(epoch, displacementVector); //Move the munition.
                             munition.ApplyIntelligence(epoch, displacementVector);
-
-                            var dd = munition.FiredFromType == SiFiredFromType.Player ? objectsPlayerCanHit : objectsEnemyCanHit;
 
                             var hitObject = munition.FindFirstReverseCollisionAlongMovementVector(munition.FiredFromType == SiFiredFromType.Player ? objectsPlayerCanHit : objectsEnemyCanHit, epoch);
                             if (hitObject != null)

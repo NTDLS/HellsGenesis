@@ -130,11 +130,6 @@ namespace Si.Engine
 
         public void StartGame()
         {
-            //var skybox = Sprites.GenericSprites.Add(@"Sprites\Nebula\Blue.png");
-            //skybox.CenterInUniverse();
-            //skybox.ZOrder = int.MinValue;
-            //skybox.IsFixedPosition = true;
-
             Sprites.QueueDeletionOfActionSprites();
             Situations.AdvanceLevel();
         }
@@ -230,6 +225,9 @@ namespace Si.Engine
                 {
                     Audio.BackgroundMusicSound.Play();
                 }
+
+                Sprites.Nebulas.AddAtCenterScreen();
+
                 Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
             }
         }

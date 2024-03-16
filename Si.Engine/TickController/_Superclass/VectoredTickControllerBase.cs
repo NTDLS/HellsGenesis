@@ -51,6 +51,16 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
+        public T AddAtCenterScreen()
+        {
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            obj.X = Engine.Display.TotalCanvasSize.Width / 2;
+            obj.Y = Engine.Display.TotalCanvasSize.Height / 2;
+
+            SpriteManager.Add(obj);
+            return obj;
+        }
+
         public T AddAtCenterScreen(string bitmapPath)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);

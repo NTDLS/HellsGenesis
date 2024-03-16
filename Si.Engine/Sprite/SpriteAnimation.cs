@@ -10,7 +10,7 @@ using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite
 {
-    public class SpriteAnimation : SpriteBase
+    public class SpriteAnimation : SpriteInteractiveBase
     {
         private readonly SharpDX.Direct2D1.Bitmap _sheetImage;
         private readonly int _frameCount;
