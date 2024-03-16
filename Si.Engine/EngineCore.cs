@@ -2,7 +2,6 @@ using Newtonsoft.Json;
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
 using Si.Engine.Menu;
-using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.UnvectoredTickController;
