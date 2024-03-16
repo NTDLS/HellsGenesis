@@ -265,6 +265,11 @@ namespace Si.Engine.Sprite._Superclass
             VisibilityChanged();
         }
 
+        public void SetSize(Size size)
+        {
+            _size = size;
+        }
+
         public virtual void Initialize(string imagePath = null)
         {
             if (imagePath != null)

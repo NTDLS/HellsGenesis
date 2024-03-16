@@ -48,7 +48,7 @@ namespace Si.Engine.Sprite
             public bool DeleteSpriteAfterPlay;
         }
 
-        public SpriteAnimation(EngineCore engine, string spriteSheetFileName, Size? frameSize, float framesPerSecond, PlayMode playMode = null)
+        public SpriteAnimation(EngineCore engine, string spriteSheetFileName, Size frameSize, float framesPerSecond, PlayMode playMode = null)
             : base(engine)
         {
             _frameDelayMilliseconds = (int)((1.0f / framesPerSecond) * 1000.0f);
@@ -62,6 +62,7 @@ namespace Si.Engine.Sprite
 
             _sheetImage = _engine.Assets.GetBitmap(spriteSheetFileName);
 
+            SetSize(frameSize);
             _frameSize = (Size)frameSize;
             _rows = (int)(_sheetImage.Size.Height / ((Size)frameSize).Height);
             _columns = (int)(_sheetImage.Size.Width / ((Size)frameSize).Width);
@@ -69,6 +70,7 @@ namespace Si.Engine.Sprite
 
             Location = new SiPoint(0, 0);
             Velocity = new SiVelocity();
+            TakesDamage = false; //By default, animation DO NOT take damage, but they can if enabled.
 
             AdvanceImage();
         }

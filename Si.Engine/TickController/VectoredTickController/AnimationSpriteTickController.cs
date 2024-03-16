@@ -36,9 +36,9 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             SpriteManager.Add(animation);
         }
 
-        public SpriteAnimation Add(string imageFrames, Size frameSize, int _frameDelayMilliseconds = 10, SpriteAnimation.PlayMode playMode = null)
+        public SpriteAnimation Add(string imageFrames, Size frameSize, float framesPerSecond, SpriteAnimation.PlayMode playMode = null)
         {
-            SpriteAnimation obj = new SpriteAnimation(Engine, imageFrames, frameSize, _frameDelayMilliseconds, playMode);
+            SpriteAnimation obj = new SpriteAnimation(Engine, imageFrames, frameSize, framesPerSecond, playMode);
             SpriteManager.Add(obj);
             return obj;
         }

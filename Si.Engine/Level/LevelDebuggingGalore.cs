@@ -1,5 +1,6 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
+using Si.Engine.Sprite;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Enemy.Peon;
 using Si.GameEngine.Sprite.Enemy.Starbase.Garrison;
@@ -33,7 +34,7 @@ namespace Si.Engine.Level
             base.Begin();
 
             AddSingleFireEvent(500, FirstShowPlayerCallback);
-            //AddRecuringFireEvent(5000, AddFreshEnemiesCallback);
+            AddRecuringFireEvent(5000, AddFreshEnemiesCallback);
 
             _engine.Player.Sprite.AddHullHealth(100);
             _engine.Player.Sprite.AddShieldHealth(10);
@@ -73,10 +74,10 @@ namespace Si.Engine.Level
         {
             for (int i = 0; i < 10; i++)
             {
-                //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
+                _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
-            //_engine.Sprites.Debugs.Add(1000, 1000);
+            _engine.Sprites.Debugs.Add(1000, 1000);
 
             var playMode = new PlayMode()
             {
@@ -85,35 +86,45 @@ namespace Si.Engine.Level
                 ReplayDelay = new TimeSpan(0)
             };
 
-            var ani1 = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeIce.png", new Size(246, 248), 22, playMode);
-            ani1.CenterInUniverse();
-            ani1.Location -= new SiPoint(256, 0);
-            //ani1.Velocity.ForwardAngle.Degrees = SiRandom.Between(0, 360);
-            //ani1.Velocity.MaximumSpeed = 0.5f;
-            //ani1.Velocity.ForwardVelocity = 1f;
-            ani1.TakesDamage = true;
-            ani1.SetHullHealth(100000);
-            /*
-            var ani2 = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeLava.png", new Size(256, 225), 22, playMode);
-            ani2.CenterInUniverse();
-            //ani2.Velocity.ForwardAngle.Degrees = SiRandom.Between(0, 360);
-            //ani2.Velocity.MaximumSpeed = 0.5f;
-            //ani2.Velocity.ForwardVelocity = 1f;
-            ani2.TakesDamage = true;
-            ani2.SetHullHealth(100000);
+            int rowCount = 8;
+            int colCount = 8;
 
-            var ani3 = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeStandard.png", new Size(264, 241), 22, playMode);
-            ani3.CenterInUniverse();
-            ani3.Location += new SiPoint(256, 0);
-            //ani3.Velocity.ForwardAngle.Degrees = SiRandom.Between(0, 360);
-            //ani3.Velocity.MaximumSpeed = 0.5f;
-            //ani3.Velocity.ForwardVelocity = 1f;
-            ani3.TakesDamage = true;
-            ani3.SetHullHealth(100000);
-            */
-            //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
+            for (int row = 0; row < rowCount; row++)
+            {
+                for (int col = 0; col < colCount; col++)
+                {
+                    SpriteAnimation ani;
 
-            //_engine.Sprites.Enemies.Create<SpriteEnemyStarbaseGarrison>();
+                    float framesPerSecond = SiRandom.Between(20, 60); //These are native 22fps.
+
+                    switch (SiRandom.Between(1, 3))
+                    {
+                        case 1:
+                            ani = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeIce.png", new Size(246, 248), framesPerSecond, playMode);
+                            break;
+                        case 2:
+                            ani = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeStandard.png", new Size(264, 241), framesPerSecond, playMode);
+                            break;
+                        default:
+                            ani = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeLava.png", new Size(256, 225), framesPerSecond, playMode);
+                            break;
+                    }
+
+                    float totalXOffset = -(ani.Size.Width * colCount);
+                    float totalYOffset = (_engine.Display.TotalCanvasSize.Height + (ani.Size.Height * rowCount));
+
+
+                    ani.Location = new SiPoint(totalXOffset + ani.Size.Width * col, totalYOffset - ani.Size.Height * row);
+                    ani.Velocity.ForwardAngle.Degrees = -45 + SiRandom.Between(-10, 10);
+                    ani.Velocity.MaximumSpeed = 2f + SiRandom.Between(-0.5f, 0.5f);
+                    ani.Velocity.ForwardVelocity = 1.0f;
+                    ani.TakesDamage = true;
+                    ani.SetHullHealth(100);
+                }
+            }
+
+            _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
+
 
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
