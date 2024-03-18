@@ -1,6 +1,8 @@
-﻿using Si.Engine.Sprite._Superclass;
+﻿using SharpDX.DirectWrite;
+using Si.Engine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
+using System;
 using System.IO;
 
 namespace Si.Engine.Sprite
@@ -34,12 +36,21 @@ namespace Si.Engine.Sprite
             }
         }
 
+        private SiPoint _currentOfset = new();
+        private readonly float _maxOffset = 200;
+
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             if (displacementVector.Sum() != 0)
             {
-                //Location -= displacementVector;// - (displacementVector.Normalize() * Velocity.MaximumSpeed);
-                Location += displacementVector - (displacementVector.Normalize() * Velocity.MaximumSpeed);
+                var offsetIncrement = new SiPoint(displacementVector.Normalize());
+
+                offsetIncrement.X *= (1 - (Math.Abs(_currentOfset.X) / _maxOffset));
+                offsetIncrement.Y *= (1 - (Math.Abs(_currentOfset.Y) / _maxOffset));
+
+                _currentOfset += offsetIncrement;
+
+                Location = _engine.Display.CenterOfCurrentScreen - _currentOfset;
             }
         }
     }

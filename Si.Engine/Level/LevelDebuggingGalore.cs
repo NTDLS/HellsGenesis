@@ -80,15 +80,44 @@ namespace Si.Engine.Level
 
             _engine.Sprites.Debugs.Add(1000, 1000);
 
+            //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
+
+            AddAsteroidField(8, 8);
+
+            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
+
+            //_engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+            //_engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
+
+            //_engine.Sprites.Debugs.CreateAtCenterScreen();
+            //_engine.Sprites.Enemies.Create<SpriteEnemyDebug>();
+            //_engine.Sprites.Enemies.Create<EnemyDebug>();
+            //_engine.Sprites.Enemies.Create<EnemyDebug>();
+            //_engine.Sprites.Enemies.Create<EnemyDebug>();
+            //_engine.Sprites.Enemies.Create<EnemyDebug>();
+            //_engine.Sprites.Enemies.Create<EnemyDebug>();
+            //_engine.Sprites.Enemies.Create<EnemyPhoenix>();
+            //_engine.Sprites.Enemies.Create<EnemyPhoenix>();
+            //_engine.Sprites.Enemies.Create<EnemyPhoenix>();
+            //_engine.Sprites.Enemies.Create<EnemyDevastator>();
+            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
+            //_engine.Sprites.Enemies.Create<EnemySpectre>();
+            //_engine.Sprites.Enemies.Create<EnemyDevastator>();
+            //_engine.Sprites.Enemies.Create<EnemyDevastator>();
+        }
+
+        public void AddAsteroidField(int rowCount, int colCount)
+        {
             var playMode = new PlayMode()
             {
                 Replay = SiAnimationReplayMode.LoopedPlay,
                 DeleteSpriteAfterPlay = false,
                 ReplayDelay = new TimeSpan(0)
             };
-
-            int rowCount = 8;
-            int colCount = 8;
 
             for (int row = 0; row < rowCount; row++)
             {
@@ -124,33 +153,7 @@ namespace Si.Engine.Level
                 }
             }
 
-            _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
-
-            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
-
-            //_engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-            //_engine.Sprites.Enemies.Create<SpriteEnemyPhoenix>();
-
-            //_engine.Sprites.Debugs.CreateAtCenterScreen();
-            //_engine.Sprites.Enemies.Create<SpriteEnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyDebug>();
-            //_engine.Sprites.Enemies.Create<EnemyPhoenix>();
-            //_engine.Sprites.Enemies.Create<EnemyPhoenix>();
-            //_engine.Sprites.Enemies.Create<EnemyPhoenix>();
-            //_engine.Sprites.Enemies.Create<EnemyDevastator>();
-            //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
-            //_engine.Sprites.Enemies.Create<EnemySpectre>();
-            //_engine.Sprites.Enemies.Create<EnemyDevastator>();
-            //_engine.Sprites.Enemies.Create<EnemyDevastator>();
         }
     }
 }
