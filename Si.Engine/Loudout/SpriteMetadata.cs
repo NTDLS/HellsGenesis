@@ -19,7 +19,6 @@ namespace Si.Engine.Loudout
         public bool TakesDamage { get; set; } = true;
 
         public List<SpriteMetadataAttachment> Attachments { get; set; } = new();
-
         public List<ShipLoadoutWeapon> Weapons { get; set; } = new();
 
         public SpriteMetadata()

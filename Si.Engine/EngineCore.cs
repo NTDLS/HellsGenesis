@@ -5,6 +5,7 @@ using Si.Engine.Menu;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.UnvectoredTickController;
+using Si.GameEngine.AI._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
@@ -205,6 +206,7 @@ namespace Si.Engine
 
             textBlock.SetTextAndCenterXY("Building reflection cache...");
             SiReflection.BuildReflectionCacheOfType<SpriteBase>();
+            SiReflection.BuildReflectionCacheOfType<AIStateMachine>();
 
             if (Settings.PreCacheAllAssets)
             {

@@ -7,13 +7,13 @@ using static Si.Library.SiConstants;
 namespace Si.Engine.AI.Logistics
 {
     /// <summary>
-    /// Finite-state-machine where AI decides the states. "Taunt" keeps an object swooping in and out. Very near and somewhat aggressively.
+    /// Keeps an object swooping past an object at an indirect angle.
     /// </summary>
-    internal class AIModelTaunt : AIStateMachine
+    internal class AILogisticsTaunt : AIStateMachine
     {
         #region Instance parameters.
 
-        private readonly string _boostResourceName = "AIModelTaunt_Boost";
+        private readonly string _boostResourceName = "AILogisticsTaunt_Boost";
         private readonly float _idealMaxDistance = SiRandom.Variance(2500, 0.20f);
         private readonly float _idealMinDistance = SiRandom.Variance(800, 0.10f);
 
@@ -63,7 +63,7 @@ namespace Si.Engine.AI.Logistics
 
         #endregion
 
-        public AIModelTaunt(EngineCore engine, SpriteShipBase owner, SpriteBase observedObject)
+        public AILogisticsTaunt(EngineCore engine, SpriteShipBase owner, SpriteBase observedObject)
             : base(engine, owner, observedObject)
         {
             owner.OnHit += Owner_OnHit;
@@ -73,7 +73,7 @@ namespace Si.Engine.AI.Logistics
             ChangeState(new AIStateDeparting());
             Owner.Velocity.ForwardVelocity = 1.0f;
 
-            OnApplyIntelligence += AIModelTaunt_OnApplyIntelligence;
+            OnApplyIntelligence += AILogistics_OnApplyIntelligence;
         }
 
         private void Owner_OnHit(SpriteBase sender, SiDamageType damageType, int damageAmount)
@@ -84,7 +84,7 @@ namespace Si.Engine.AI.Logistics
             }
         }
 
-        private void AIModelTaunt_OnApplyIntelligence(float epoch, SiPoint displacementVector, AIState state)
+        private void AILogistics_OnApplyIntelligence(float epoch, SiPoint displacementVector, AIState state)
         {
             var distanceToObservedObject = Owner.DistanceTo(ObservedObject);
 

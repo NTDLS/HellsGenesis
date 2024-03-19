@@ -88,6 +88,8 @@ namespace Si.Engine.Sprite.Weapon._Superclass
 
         public virtual void ApplyIntelligence(float epoch)
         {
+            //We're just doing "locked on" magic here.
+
             LockedTargets.Clear();
 
             if (Owner is SpritePlayerBase owner)

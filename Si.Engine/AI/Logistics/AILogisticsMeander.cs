@@ -7,13 +7,13 @@ using static Si.Library.SiConstants;
 namespace Si.Engine.AI.Logistics
 {
     /// <summary>
-    /// Finite-state-machine where AI decides the states. "Taunt" keeps an object swooping in and out. Very near and somewhat aggressively.
+    /// Keeps an object at a generally safe distance from another object.
     /// </summary>
-    internal class AIModelHostileEngagement : AIStateMachine
+    internal class AILogisticsMeander : AIStateMachine
     {
         #region Instance parameters.
 
-        private readonly string _boostResourceName = "AIModelHostileEngagement_Boost";
+        private readonly string _boostResourceName = "AILogisticsMeander_Boost";
         private readonly float _idealMaxDistance = SiRandom.Variance(1500, 0.20f);
         private readonly float _idealMinDistance = SiRandom.Variance(400, 0.10f);
 
@@ -63,7 +63,7 @@ namespace Si.Engine.AI.Logistics
 
         #endregion
 
-        public AIModelHostileEngagement(EngineCore engine, SpriteShipBase owner, SpriteBase observedObject)
+        public AILogisticsMeander(EngineCore engine, SpriteShipBase owner, SpriteBase observedObject)
             : base(engine, owner, observedObject)
         {
             owner.OnHit += Owner_OnHit;
@@ -73,7 +73,7 @@ namespace Si.Engine.AI.Logistics
             ChangeState(new AIStateDeparting());
             Owner.Velocity.ForwardVelocity = 1.0f;
 
-            OnApplyIntelligence += AIModelHostileEngagement_OnApplyIntelligence;
+            OnApplyIntelligence += AILogistics_OnApplyIntelligence;
         }
 
         private void Owner_OnHit(SpriteBase sender, SiDamageType damageType, int damageAmount)
@@ -84,7 +84,7 @@ namespace Si.Engine.AI.Logistics
             }
         }
 
-        private void AIModelHostileEngagement_OnApplyIntelligence(float epoch, SiPoint displacementVector, AIState state)
+        private void AILogistics_OnApplyIntelligence(float epoch, SiPoint displacementVector, AIState state)
         {
             var distanceToObservedObject = Owner.DistanceTo(ObservedObject);
 

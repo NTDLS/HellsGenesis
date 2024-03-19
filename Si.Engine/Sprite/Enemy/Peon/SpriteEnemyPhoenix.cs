@@ -10,44 +10,51 @@ namespace Si.Engine.Sprite.Enemy.Peon
 {
     internal class SpriteEnemyPhoenix : SpriteEnemyPeonBase
     {
+        private DateTime _behaviorChangeTimestamp = DateTime.UtcNow;
+        private float _behaviorChangeDelayMilliseconds = 0;
+
         public SpriteEnemyPhoenix(EngineCore engine)
             : base(engine)
         {
             SetImageAndLoadMetadata(@"Sprites\Enemy\Peon\Phoenix\Hull.png");
 
-            AddAIController(new AIModelHostileEngagement(_engine, this, _engine.Player.Sprite));
-            AddAIController(new AIModelTaunt(_engine, this, _engine.Player.Sprite));
-            //AddAIController(new Meander(_engine, this, _engine.Player.Sprite));
+            AddAIController(new AILogisticsHostileEngagement(_engine, this, _engine.Player.Sprite));
+            AddAIController(new AILogisticsTaunt(_engine, this, _engine.Player.Sprite));
+            AddAIController(new AILogisticsMeander(_engine, this, _engine.Player.Sprite));
 
-            SetCurrentAIController<AIModelTaunt>();
+            SetCurrentAIController<AILogisticsTaunt>();
 
-            _behaviorChangeThresholdMilliseconds = SiRandom.Between(2000, 10000);
+            _behaviorChangeDelayMilliseconds = SiRandom.Between(2000, 10000);
         }
-
-        #region Artificial Intelligence.
-
-        private DateTime _lastBehaviorChangeTime = DateTime.UtcNow;
-        private float _behaviorChangeThresholdMilliseconds = 0;
 
         public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             base.ApplyIntelligence(epoch, displacementVector);
 
-            if ((DateTime.UtcNow - _lastBehaviorChangeTime).TotalMilliseconds > _behaviorChangeThresholdMilliseconds)
+            ChangeAIModes();
+            FireAtPlayer();
+        }
+
+        private void ChangeAIModes()
+        {
+            if ((DateTime.UtcNow - _behaviorChangeTimestamp).TotalMilliseconds > _behaviorChangeDelayMilliseconds)
             {
-                _lastBehaviorChangeTime = DateTime.UtcNow;
-                _behaviorChangeThresholdMilliseconds = SiRandom.Between(2000, 10000);
+                _behaviorChangeTimestamp = DateTime.UtcNow;
+                _behaviorChangeDelayMilliseconds = SiRandom.Between(2000, 10000);
 
                 if (SiRandom.PercentChance(10))
                 {
-                    SetCurrentAIController<AIModelTaunt>();
+                    SetCurrentAIController<AILogisticsTaunt>();
                 }
                 else if (SiRandom.PercentChance(1))
                 {
-                    SetCurrentAIController<AIModelHostileEngagement>();
+                    SetCurrentAIController<AILogisticsHostileEngagement>();
                 }
             }
+        }
 
+        private void FireAtPlayer()
+        {
             var playersIAmPointingAt = GetPointingAtOf(_engine.Sprites.AllVisiblePlayers, 2.0f);
             if (playersIAmPointingAt.Any())
             {
@@ -66,9 +73,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
                 }
             }
 
-            CurrentAIController?.ApplyIntelligence(epoch, displacementVector);
-        }
 
-        #endregion
+        }
     }
 }
