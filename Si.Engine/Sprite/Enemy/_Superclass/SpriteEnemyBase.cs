@@ -82,13 +82,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         /// <param name="displacementVector"></param>
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            if (!_engine.Display.TotalCanvasBounds.Balloon(_engine.Settings.EnemySceneDistanceLimit).IntersectsWith(RenderBounds))
-            {
-                QueueForDelete();
-                return;
-            }
-
-            //When an enemy had boost available, it will use it.
+            //When an enemy has boost available, it will use it.
             if (Velocity.AvailableBoost > 0)
             {
                 if (Velocity.ForwardBoostVelocity < 1.0) //Ramp up the boost until it is at 100%

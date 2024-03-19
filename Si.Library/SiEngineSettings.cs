@@ -51,7 +51,6 @@ namespace Si.Library
         public bool FineTuneFramerate { get; set; } = true;
         public float TargetFrameRate { get; set; } = 70;
         public float MunitionSceneDistanceLimit { get; set; } = 2500; //The distance from the scene that a munition can travel before it is cleaned up.
-        public float EnemySceneDistanceLimit { get; set; } = 5000; //The distance from the scene that a enemy can travel before it is cleaned up.
 
         /// <summary>
         /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (2 = 2x larger than screen.).

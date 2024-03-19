@@ -393,6 +393,8 @@ namespace Si.Engine.Manager
             }
             else if (key == Keys.F2)
             {
+                _engine.Sprites.CreateFragmentsOf(_engine.Player.Sprite);
+
                 /*
                 var bitmaps = _engine.Rendering.GenerateIrregularFragments(_engine.Player.Sprite.GetImage(), 10, 3);
                 foreach (var bitmap in bitmaps)
@@ -409,7 +411,7 @@ namespace Si.Engine.Manager
                 */
 
                 //_engine.Sprites.GenericSprites.FragmentBlastOf(_engine.Player.Sprite);
-                _engine.Sprites.Particles.ParticleBlastAt(100, _engine.Player.Sprite);
+                //_engine.Sprites.Particles.ParticleBlastAt(100, _engine.Player.Sprite);
                 //_engine.Sprites.NewGame();
                 //_engine.Sprites.ResetAndShowPlayer();
             }

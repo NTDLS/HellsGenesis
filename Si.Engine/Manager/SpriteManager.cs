@@ -11,6 +11,7 @@ using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using static Si.Library.SiConstants;
 
@@ -373,14 +374,14 @@ namespace Si.Engine.Manager
             for (int index = 0; index < fragmentCount; index++)
             {
                 var fragment = _engine.Sprites.GenericSprites.AddAt(fragmentImages[index], sprite);
-                //TODO: Can we implement this.
                 fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
-                fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
-
-                fragment.Velocity.ForwardAngle.Degrees = SiRandom.Between(0.0f, 359.0f);
+                fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f); //TODO: Can we implement this?
+                fragment.RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Right : SiRelativeDirection.Left;
+                fragment.RotationSpeed = SiRandom.Between(1.0f, 4.0f);
                 fragment.Velocity.MaximumSpeed = SiRandom.Between(1, 3.5f);
                 fragment.Velocity.ForwardVelocity = 1;
-                fragment.VectorType = ParticleVectorType.Independent;
+                fragment.VectorType = ParticleVectorType.UseTravelAngle;
+                fragment.TravelAngle.Degrees = SiRandom.Between(0.0f, 359.0f);
             }
         }
     }

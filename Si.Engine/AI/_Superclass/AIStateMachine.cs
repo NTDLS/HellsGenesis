@@ -60,10 +60,7 @@ namespace Si.GameEngine.AI._Superclass
 
         void IAIController.ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
-            if (CurrentState != null)
-            {
-                OnApplyIntelligence?.Invoke(epoch, displacementVector, CurrentState);
-            }
+            OnApplyIntelligence?.Invoke(epoch, displacementVector, CurrentState);
         }
 
         /// <summary>

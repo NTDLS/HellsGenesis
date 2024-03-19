@@ -1,5 +1,6 @@
 ﻿using SharpDX.Mathematics.Interop;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Peon;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -877,7 +878,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public void PointAtAndGoto(SiPoint location, float? velocity = null)
         {
-            Velocity.ForwardAngle.Degrees = SiPoint.AngleTo360(Location, location);
+            Velocity.ForwardAngle.Degrees = SiPoint.AngleInDegreesTo360(Location, location);
             if (velocity != null)
             {
                 Velocity.MaximumSpeed = (float)velocity;
@@ -889,7 +890,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, float? velocity = null)
         {
-            Velocity.ForwardAngle.Degrees = SiPoint.AngleTo360(Location, obj.Location);
+            Velocity.ForwardAngle.Degrees = SiPoint.AngleInDegreesTo360(Location, obj.Location);
 
             if (velocity != null)
             {

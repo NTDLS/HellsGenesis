@@ -3,7 +3,6 @@ using Si.GameEngine.AI._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
-using static Si.Library.SiConstants;
 namespace Si.Engine.AI.Logistics
 {
     /// <summary>
@@ -11,159 +10,51 @@ namespace Si.Engine.AI.Logistics
     /// </summary>
     internal class AILogisticsMeander : AIStateMachine
     {
-        #region Instance parameters.
-
-        private readonly string _boostResourceName = "AILogisticsMeander_Boost";
-        private readonly float _idealMaxDistance = SiRandom.Variance(1500, 0.20f);
-        private readonly float _idealMinDistance = SiRandom.Variance(400, 0.10f);
-
-        #endregion
-
-        #region AI States.
-
-        private class AIStateApproaching : AIState
-        {
-            public float VarianceAngle = SiRandom.Variance(1, 0.2f);
-        }
-
-        private class AIStateDeparting : AIState
-        {
-            public float VarianceAngle = SiRandom.Variance(45, 0.2f);
-        }
-
-        private class AIStateTransitionToApproach : AIState
-        {
-            public float VarianceAngle = SiRandom.Variance(1, 0.2f);
-            public SiRelativeDirection RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
-        }
-
-        private class AIStateTransitionToDepart : AIState
-        {
-            public float VarianceAngle = SiRandom.Variance(45, 0.2f);
-            public SiRelativeDirection RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
-        }
-
-        private class AIStateTransitionToEvasiveEscape : AIState
-        {
-            public float VarianceAngle = SiRandom.Variance(45, 0.2f);
-            public SiRelativeDirection RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
-            public SiAngle TargetAngle = new();
-
-            public AIStateTransitionToEvasiveEscape(AIStateMachine machine)
-            {
-                TargetAngle.Degrees = machine.Owner.Velocity.ForwardAngle.Degrees + 180;
-            }
-        }
-
-        class AIStateEvasiveEscape : AIState
-        {
-            public float VarianceAngle = SiRandom.Variance(45, 0.2f);
-            public SiRelativeDirection RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
-        }
-
-        #endregion
+        private DateTime _lastDecisionTime = DateTime.UtcNow;
+        private readonly float _millisecndsBetweenDecisions = SiRandom.Between(2000, 10000);
+        private float _angleToAdd = SiRandom.Between(0.004f, 0.006f);
+        private readonly float _varianceAngleForTravel = SiRandom.Between(5, 15);
+        private readonly float _idealMaxDistance = SiRandom.Variance(8000, 0.20f);
+        private readonly float _idealMinDistance = SiRandom.Variance(2500, 0.10f);
 
         public AILogisticsMeander(EngineCore engine, SpriteShipBase owner, SpriteBase observedObject)
             : base(engine, owner, observedObject)
         {
-            owner.OnHit += Owner_OnHit;
-
-            Owner.RenewableResources.Create(_boostResourceName, 800, 0, 10);
-
-            ChangeState(new AIStateDeparting());
             Owner.Velocity.ForwardVelocity = 1.0f;
-
             OnApplyIntelligence += AILogistics_OnApplyIntelligence;
-        }
-
-        private void Owner_OnHit(SpriteBase sender, SiDamageType damageType, int damageAmount)
-        {
-            if (sender.HullHealth <= 10)
-            {
-                ChangeState(new AIStateTransitionToEvasiveEscape(this));
-            }
         }
 
         private void AILogistics_OnApplyIntelligence(float epoch, SiPoint displacementVector, AIState state)
         {
             var distanceToObservedObject = Owner.DistanceTo(ObservedObject);
 
-            switch (state)
+            if (distanceToObservedObject > _idealMaxDistance)
             {
-                //----------------------------------------------------------------------------------------------------------------------------------------------------
-                //The object is moving towards the observed object.
-                case AIStateApproaching approaching:
-                    //Attempt to follow the observed object.
-                    Owner.RotateIfNotPointingAt(ObservedObject, 1, approaching.VarianceAngle);
+                if (Owner.IsPointingAt(ObservedObject, _varianceAngleForTravel) == false)
+                {
+                    Owner.Velocity.ForwardAngle.Radians += (_angleToAdd * epoch);
+                }
+            }
+            else if (distanceToObservedObject < _idealMinDistance)
+            {
+                if (Owner.IsPointingAway(ObservedObject, _varianceAngleForTravel) == false)
+                {
+                    Owner.Velocity.ForwardAngle.Radians += (_angleToAdd * epoch);
+                }
+            }
+            else
+            {
+                Owner.Velocity.ForwardAngle.Radians += (_angleToAdd * epoch); //Just do loops.
 
-                    if (Owner.DistanceTo(ObservedObject) < _idealMinDistance)
+                if ((DateTime.UtcNow - _lastDecisionTime).TotalMilliseconds > _millisecndsBetweenDecisions) //Change directions from time to time.
+                {
+                    _angleToAdd = SiRandom.Between(0.004f, 0.006f);
+                    if (SiRandom.PercentChance(50))
                     {
-                        ChangeState(new AIStateTransitionToDepart());
+                        _angleToAdd *= -1;
                     }
-                    break;
-                //----------------------------------------------------------------------------------------------------------------------------------------------------
-                //The object is rotating away from the observed object.
-                case AIStateTransitionToDepart transitionToDepart:
-                    //As we get closer, make the angle more agressive.
-                    var rotationRadians = new SiAngle((1 - (distanceToObservedObject / _idealMinDistance)) * 2.0f).Radians;
-
-                    //Rotate as long as we are facing the observed object. If we are no longer facing, then depart.
-                    if (Owner.RotateIfPointingAt(ObservedObject, transitionToDepart.RotationDirection, rotationRadians, transitionToDepart.VarianceAngle) == false)
-                    {
-                        ChangeState(new AIStateDeparting());
-                    }
-
-                    //Once we find the correct angle, we go into departing mode.
-                    ChangeState(new AIStateDeparting());
-                    break;
-                //----------------------------------------------------------------------------------------------------------------------------------------------------
-                //The object is moving away from the observed object.
-                case AIStateDeparting departing:
-                    //Onve we are sufficiently far away, we turn back.
-                    if (Owner.DistanceTo(ObservedObject) > _idealMaxDistance)
-                    {
-                        ChangeState(new AIStateTransitionToApproach());
-                    }
-                    break;
-                //----------------------------------------------------------------------------------------------------------------------------------------------------
-                //The object is rotating towards the observed object.
-                case AIStateTransitionToApproach transitionToApproach:
-                    //Once we find the correct angle, we go into approaching mode.
-                    if (Owner.RotateIfNotPointingAt(ObservedObject, transitionToApproach.RotationDirection, 1, transitionToApproach.VarianceAngle) == false)
-                    {
-                        ChangeState(new AIStateApproaching());
-                    }
-                    break;
-                //----------------------------------------------------------------------------------------------------------------------------------------------------
-                //The object is rotating agressively away from the observed object.
-                case AIStateTransitionToEvasiveEscape transitionToEvasiveEscape:
-                    if (Owner.RotateIfNotPointingAt(transitionToEvasiveEscape.TargetAngle.Degrees, transitionToEvasiveEscape.RotationDirection, 1, transitionToEvasiveEscape.VarianceAngle) == false)
-                    {
-                        ChangeState(new AIStateEvasiveEscape());
-                    }
-                    break;
-                //----------------------------------------------------------------------------------------------------------------------------------------------------
-                //The object is quickly moving away from the observed object.
-                case AIStateEvasiveEscape evasiveEscape:
-                    if (Owner.RenewableResources.Observe(_boostResourceName) > 250)
-                    {
-                        Owner.Velocity.AvailableBoost = Owner.RenewableResources.Consume(_boostResourceName, SiRandom.Variance(250, 0.5f));
-                    }
-
-                    if (distanceToObservedObject > _idealMaxDistance)
-                    {
-                        //the object got away and is now going to transition back to approach.
-                        ChangeState(new AIStateTransitionToApproach());
-                    }
-                    else if (distanceToObservedObject < _idealMinDistance)
-                    {
-                        //The observed object got close again, agressively transition away again.
-                        ChangeState(new AIStateTransitionToEvasiveEscape(this));
-                    }
-                    break;
-                //----------------------------------------------------------------------------------------------------------------------------------------------------
-                default:
-                    throw new Exception($"Unknown AI state: {state.GetType()}");
+                    _lastDecisionTime = DateTime.UtcNow;
+                }
             }
         }
     }

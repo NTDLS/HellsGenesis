@@ -42,11 +42,11 @@
             /// <summary>
             /// Travel on the angle that is baked into the sprite Velocity.Angle.
             /// </summary>
-            Native,
+            UseNativeForwardAngle,
             /// <summary>
             /// Travel on an angle that is independent of the sprites Velocity.Angle.
             /// </summary>
-            Independent
+            UseTravelAngle
         }
 
         public enum SiRenderScaleOrder

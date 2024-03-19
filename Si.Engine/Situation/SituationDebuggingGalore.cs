@@ -16,7 +16,6 @@ namespace Si.Engine.Situation
                   + "cause the entire universe to end - as well as the program."
                   )
         {
-            //Levels.Add(new LevelSerfFormations(engine));
             Levels.Add(new LevelDebuggingGalore(engine));
             Levels.Add(new LevelFreeFlight(engine));
         }

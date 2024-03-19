@@ -92,7 +92,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                 particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                 particle.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
                 particle.Velocity.MaximumSpeed *= SiRandom.Between(1, 3.5f);
-                particle.VectorType = ParticleVectorType.Independent;
+                particle.VectorType = ParticleVectorType.UseTravelAngle;
             }
         }
 
@@ -121,7 +121,7 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
                 particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                 particle.FadeToBlackReductionAmount = 0.001f;
                 particle.Velocity.MaximumSpeed *= SiRandom.Between(1, 3.5f);
-                particle.VectorType = ParticleVectorType.Native;
+                particle.VectorType = ParticleVectorType.UseNativeForwardAngle;
             }
         }
     }

@@ -22,7 +22,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
             AddAIController(new AILogisticsTaunt(_engine, this, _engine.Player.Sprite));
             AddAIController(new AILogisticsMeander(_engine, this, _engine.Player.Sprite));
 
-            SetCurrentAIController<AILogisticsTaunt>();
+            SetCurrentAIController<AILogisticsMeander>();
 
             _behaviorChangeDelayMilliseconds = SiRandom.Between(2000, 10000);
         }
@@ -31,29 +31,33 @@ namespace Si.Engine.Sprite.Enemy.Peon
         {
             base.ApplyIntelligence(epoch, displacementVector);
 
-            ChangeAIModes();
-            FireAtPlayer();
+            IntermittentAiModeChange();
+            ApplyWeaponsLogic();
         }
 
-        private void ChangeAIModes()
+        private void IntermittentAiModeChange()
         {
             if ((DateTime.UtcNow - _behaviorChangeTimestamp).TotalMilliseconds > _behaviorChangeDelayMilliseconds)
             {
                 _behaviorChangeTimestamp = DateTime.UtcNow;
                 _behaviorChangeDelayMilliseconds = SiRandom.Between(2000, 10000);
 
-                if (SiRandom.PercentChance(10))
+                if (SiRandom.PercentChance(50))
+                {
+                    SetCurrentAIController<AILogisticsMeander>();
+                }
+                else if (SiRandom.PercentChance(50))
                 {
                     SetCurrentAIController<AILogisticsTaunt>();
                 }
-                else if (SiRandom.PercentChance(1))
+                else if (SiRandom.PercentChance(50))
                 {
                     SetCurrentAIController<AILogisticsHostileEngagement>();
                 }
             }
         }
 
-        private void FireAtPlayer()
+        private void ApplyWeaponsLogic()
         {
             var playersIAmPointingAt = GetPointingAtOf(_engine.Sprites.AllVisiblePlayers, 2.0f);
             if (playersIAmPointingAt.Any())
@@ -72,8 +76,6 @@ namespace Si.Engine.Sprite.Enemy.Peon
                     }
                 }
             }
-
-
         }
     }
 }

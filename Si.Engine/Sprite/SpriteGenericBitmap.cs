@@ -23,7 +23,7 @@ namespace Si.Engine.Sprite
         /// </summary>
         public float FadeToBlackReductionAmount { get; set; } = 0.01f;
 
-        public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Native;
+        public ParticleVectorType VectorType { get; set; } = ParticleVectorType.UseNativeForwardAngle;
         public SiAngle TravelAngle { get; set; } = new SiAngle();
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
         public float RotationSpeed { get; set; } = 0;
@@ -70,13 +70,13 @@ namespace Si.Engine.Sprite
                 Velocity.ForwardAngle.Degrees -= RotationSpeed;
             }
 
-            if (VectorType == ParticleVectorType.Independent)
+            if (VectorType == ParticleVectorType.UseTravelAngle)
             {
                 //We use a seperate angle for the travel direction because the base ApplyMotion()
                 //  moves the object in the the direction of the Velocity.Angle.
                 Location += TravelAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
             }
-            else if (VectorType == ParticleVectorType.Native)
+            else if (VectorType == ParticleVectorType.UseNativeForwardAngle)
             {
                 base.ApplyMotion(epoch, displacementVector);
             }
