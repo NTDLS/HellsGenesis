@@ -30,7 +30,12 @@ namespace Si.Engine.Sprite._Superclass
             _engine = engine;
         }
 
-        public void InitializeSpriteFromMetadata(string spriteImagePath)
+        /// <summary>
+        /// Sets the sprites image, sets speed, shields, adds attachements and weapons
+        /// from a .json file in the same path with the same name as the sprite image.
+        /// </summary>
+        /// <param name="spriteImagePath"></param>
+        public void SetImageAndLoadMetadata(string spriteImagePath)
         {
             SetImage(spriteImagePath);
 

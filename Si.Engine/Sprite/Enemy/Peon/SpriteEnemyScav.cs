@@ -7,7 +7,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
         public SpriteEnemyScav(EngineCore engine)
             : base(engine)
         {
-            InitializeSpriteFromMetadata(@"Sprites\Enemy\Peon\Scav\Hull.png");
+            SetImageAndLoadMetadata(@"Sprites\Enemy\Peon\Scav\Hull.png");
         }
     }
 }

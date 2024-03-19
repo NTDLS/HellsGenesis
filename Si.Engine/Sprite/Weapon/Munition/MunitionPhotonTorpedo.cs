@@ -12,7 +12,7 @@ namespace Si.Engine.Sprite.Weapon.Munition
         public MunitionPhotonTorpedo(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null, float? angle = null)
             : base(engine, weapon, firedFrom, imagePath, location, angle)
         {
-            Initialize(imagePath);
+            SetImage(imagePath);
         }
     }
 }

@@ -10,14 +10,13 @@ namespace Si.Engine.Sprite
         public SpriteAttachment(EngineCore engine)
             : base(engine)
         {
-            Initialize();
             Velocity = new SiVelocity();
         }
 
         public SpriteAttachment(EngineCore engine, string imagePath)
             : base(engine)
         {
-            Initialize(imagePath);
+            SetImage(imagePath);
             Velocity = new SiVelocity();
         }
 

@@ -16,8 +16,6 @@ namespace Si.Engine.Situation
                   )
         {
             Levels.Add(new LevelPhoenixAmbush(engine));
-            Levels.Add(new LevelMinnowSkirmish(engine));
-            Levels.Add(new LevelSerfFormations(engine));
             Levels.Add(new LevelFreeFlight(engine));
         }
     }

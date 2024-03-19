@@ -19,7 +19,6 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
             : base(engine)
         {
             Velocity.ForwardVelocity = 1;
-            Initialize();
 
             OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
 

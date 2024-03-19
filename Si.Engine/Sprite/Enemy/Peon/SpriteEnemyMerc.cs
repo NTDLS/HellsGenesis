@@ -7,7 +7,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
         public SpriteEnemyMerc(EngineCore engine)
             : base(engine)
         {
-            InitializeSpriteFromMetadata(@"Sprites\Enemy\Peon\Merc\Hull.png");
+            SetImageAndLoadMetadata(@"Sprites\Enemy\Peon\Merc\Hull.png");
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Si.Engine.Sprite.Player
             ShipClass = SiPlayerClass.Debug;
 
             string imagePath = @$"Sprites\Player\Ships\{ShipClass}.png";
-            Initialize(imagePath);
+            SetImage(imagePath);
 
             //Load the loadout from file or create a new one if it does not exist.
             LoadoutPlayerShip loadout = LoadLoadoutFromFile(ShipClass);

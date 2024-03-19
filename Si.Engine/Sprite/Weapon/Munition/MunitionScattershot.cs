@@ -18,8 +18,6 @@ namespace Si.Engine.Sprite.Weapon.Munition
         {
             selectedImageIndex = SiRandom.Between(0, imageCount - 1);
             SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
-
-            Initialize();
         }
     }
 }

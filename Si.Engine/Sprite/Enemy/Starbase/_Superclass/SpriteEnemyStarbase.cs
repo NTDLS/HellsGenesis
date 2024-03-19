@@ -11,7 +11,6 @@ namespace Si.Engine.Sprite.Enemy.Starbase._Superclass
             : base(engine)
         {
             Velocity.ForwardVelocity = 1;
-            Initialize();
         }
 
         public override void Cleanup()

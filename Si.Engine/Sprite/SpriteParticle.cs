@@ -49,7 +49,7 @@ namespace Si.Engine.Sprite
         public SpriteParticle(EngineCore engine, SiPoint location, Size size, Color4? color = null)
             : base(engine)
         {
-            Initialize(size);
+            SetSize(size);
 
             Location = location.Clone();
 

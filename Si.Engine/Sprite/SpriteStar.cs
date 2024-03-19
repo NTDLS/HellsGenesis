@@ -15,7 +15,7 @@ namespace Si.Engine.Sprite
             : base(engine)
         {
             selectedImageIndex = SiRandom.Between(0, _imageCount - 1);
-            Initialize(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
+            SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
 
             X = SiRandom.Between(0, engine.Display.TotalCanvasSize.Width);
             Y = SiRandom.Between(0, engine.Display.TotalCanvasSize.Height);

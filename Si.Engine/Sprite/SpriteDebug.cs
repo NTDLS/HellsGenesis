@@ -9,7 +9,7 @@ namespace Si.Engine.Sprite
         public SpriteDebug(EngineCore engine)
             : base(engine)
         {
-            Initialize(@"Sprites\Debug.png");
+            SetImage(@"Sprites\Debug.png");
             Velocity = new SiVelocity();
 
             SetHullHealth(100000);
@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite
         public SpriteDebug(EngineCore engine, float x, float y)
             : base(engine)
         {
-            Initialize(@"Sprites\Debug.png");
+            SetImage(@"Sprites\Debug.png");
             X = x;
             Y = y;
             Velocity = new SiVelocity();
@@ -29,7 +29,7 @@ namespace Si.Engine.Sprite
         public SpriteDebug(EngineCore engine, float x, float y, string imagePath)
             : base(engine)
         {
-            Initialize(imagePath);
+            SetImage(imagePath);
             X = x;
             Y = y;
             Velocity = new SiVelocity();

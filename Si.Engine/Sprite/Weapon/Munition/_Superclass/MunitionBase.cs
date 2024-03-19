@@ -35,8 +35,6 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
         public MunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath, SiPoint location = null, float? angle = null)
             : base(engine)
         {
-            Initialize(imagePath);
-
             Weapon = weapon;
             Velocity.ForwardVelocity = 1.0f;
             SceneDistanceLimit = SiRandom.Between(weapon.MunitionSceneDistanceLimit * 0.1f, weapon.MunitionSceneDistanceLimit);

@@ -30,7 +30,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
             _leftThrust = Attach(_assetPath + "Jet.png", true, 3);
             _rightThrust = Attach(_assetPath + "Jet.png", true, 3);
 
-            InitializeSpriteFromMetadata(@"Sprites\Enemy\Boss\Spectre\Hull.png");
+            SetImageAndLoadMetadata(@"Sprites\Enemy\Boss\Spectre\Hull.png");
 
             _initialMaxpeed = Velocity.MaximumSpeed;
         }
@@ -263,30 +263,27 @@ namespace Si.Engine.Sprite.Enemy.Boss
                 }
             }
 
-            if (IsHostile)
+            if (distanceToPlayer < 1000 && (_rightGun?.IsDeadOrExploded == false || _leftGun?.IsDeadOrExploded == false))
             {
-                if (distanceToPlayer < 1000 && (_rightGun?.IsDeadOrExploded == false || _leftGun?.IsDeadOrExploded == false))
+                if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
                 {
-                    if (distanceToPlayer > 500 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
+                    bool isPointingAtPlayer = IsPointingAt(_engine.Player.Sprite, 2.0f);
+                    if (isPointingAtPlayer)
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_engine.Player.Sprite, 2.0f);
-                        if (isPointingAtPlayer)
+                        if (FireWeapon<WeaponDualVulcanCannon>())
                         {
-                            if (FireWeapon<WeaponDualVulcanCannon>())
-                            {
-                                roundsToFireBeforeTailing++;
-                            }
+                            roundsToFireBeforeTailing++;
                         }
                     }
-                    else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
+                }
+                else if (distanceToPlayer > 0 && HasWeaponAndAmmo<WeaponVulcanCannon>())
+                {
+                    bool isPointingAtPlayer = IsPointingAt(_engine.Player.Sprite, 2.0f);
+                    if (isPointingAtPlayer)
                     {
-                        bool isPointingAtPlayer = IsPointingAt(_engine.Player.Sprite, 2.0f);
-                        if (isPointingAtPlayer)
+                        if (FireWeapon<WeaponVulcanCannon>())
                         {
-                            if (FireWeapon<WeaponVulcanCannon>())
-                            {
-                                roundsToFireBeforeTailing++;
-                            }
+                            roundsToFireBeforeTailing++;
                         }
                     }
                 }

@@ -70,6 +70,10 @@ namespace Si.Engine.Manager
             TextBlocks = new TextBlocksSpriteTickController(_engine, this);
         }
 
+        public SpriteBase[] Visible() => _collection.Where(o => o.Visable == true).ToArray();
+
+        public List<SpriteBase> All() => _collection.ToList();
+
         public List<SpritePlayerBase> AllVisiblePlayers
         {
             get
@@ -134,7 +138,7 @@ namespace Si.Engine.Manager
         }
 
         /// <summary>
-        /// Deletes all the non-background type of sprites.
+        /// Deletes all the non-background sprite types.
         /// </summary>
         public void QueueDeletionOfActionSprites()
         {
@@ -169,10 +173,6 @@ namespace Si.Engine.Manager
 
             return result;
         }
-
-        public SpriteBase[] Visible() => _collection.Where(o => o.Visable == true).ToArray();
-
-        public List<SpriteBase> All() => _collection.ToList();
 
         public void QueueAllForDeletionByTag(string name)
         {

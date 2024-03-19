@@ -33,7 +33,7 @@ namespace Si.Engine.Sprite
         public SpriteGenericBitmap(EngineCore engine, SiPoint location, SharpDX.Direct2D1.Bitmap bitmap)
             : base(engine)
         {
-            Initialize(bitmap);
+            SetImage(bitmap);
             Location = location.Clone();
             Velocity = new SiVelocity();
 
@@ -48,7 +48,7 @@ namespace Si.Engine.Sprite
         public SpriteGenericBitmap(EngineCore engine, SharpDX.Direct2D1.Bitmap bitmap)
             : base(engine)
         {
-            Initialize(bitmap);
+            SetImage(bitmap);
             Velocity = new SiVelocity();
         }
 

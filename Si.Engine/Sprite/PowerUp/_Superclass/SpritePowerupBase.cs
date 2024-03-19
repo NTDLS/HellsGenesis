@@ -30,8 +30,6 @@ namespace Si.Engine.Sprite.PowerUp._Superclass
         public SpritePowerupBase(EngineCore engine)
             : base(engine)
         {
-            Initialize();
-
             RadarDotSize = new SiPoint(4, 4);
         }
 

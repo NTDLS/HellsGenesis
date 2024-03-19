@@ -2,7 +2,6 @@
 using Si.Engine.Sprite._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Si.Engine.TickController._Superclass

@@ -249,37 +249,6 @@ namespace Si.Engine.Sprite._Superclass
             IsHighlighted = _engine.Settings.HighlightAllSprites;
         }
 
-        public virtual void Initialize(Size size)
-        {
-            _size = size;
-            VisibilityChanged();
-        }
-
-        public virtual void Initialize(SharpDX.Direct2D1.Bitmap bitmap)
-        {
-            if (bitmap != null)
-            {
-                SetImage(bitmap);
-            }
-
-            VisibilityChanged();
-        }
-
-        public void SetSize(Size size)
-        {
-            _size = size;
-        }
-
-        public virtual void Initialize(string imagePath = null)
-        {
-            if (imagePath != null)
-            {
-                SetImage(imagePath);
-            }
-
-            VisibilityChanged();
-        }
-
         public void QueueForDelete()
         {
             _readyForDeletion = true;
@@ -619,8 +588,7 @@ namespace Si.Engine.Sprite._Superclass
             if (this is SpriteEnemyBase enemy)
             {
                 extraInfo =
-                      $"           AI Controller: {enemy.CurrentAIController}\r\n"
-                    + $"              Is Hostile: {enemy.IsHostile}\r\n";
+                      $"           AI Controller: {enemy.CurrentAIController}\r\n";
             }
 
             return
@@ -738,6 +706,15 @@ namespace Si.Engine.Sprite._Superclass
         {
             _image = _engine.Assets.GetBitmap(imagePath);
             _size = new Size((int)_image.Size.Width, (int)_image.Size.Height);
+        }
+
+        /// <summary>
+        /// Sets the size of the sprite. This is generally set by a call to SetImage() but some sprites (such as particles) have no images.
+        /// </summary>
+        /// <param name="size"></param>
+        public void SetSize(Size size)
+        {
+            _size = size;
         }
 
         #region Intersections.

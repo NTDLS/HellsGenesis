@@ -13,13 +13,13 @@ namespace Si.Engine.Sprite.Enemy.Peon
         public SpriteEnemyPhoenix(EngineCore engine)
             : base(engine)
         {
-            InitializeSpriteFromMetadata(@"Sprites\Enemy\Peon\Phoenix\Hull.png");
+            SetImageAndLoadMetadata(@"Sprites\Enemy\Peon\Phoenix\Hull.png");
 
-            AddAIController(new HostileEngagement(_engine, this, _engine.Player.Sprite));
-            AddAIController(new Taunt(_engine, this, _engine.Player.Sprite));
+            AddAIController(new AIModelHostileEngagement(_engine, this, _engine.Player.Sprite));
+            AddAIController(new AIModelTaunt(_engine, this, _engine.Player.Sprite));
             //AddAIController(new Meander(_engine, this, _engine.Player.Sprite));
 
-            SetCurrentAIController(AIControllers[typeof(Taunt)]);
+            SetCurrentAIController<AIModelTaunt>();
 
             _behaviorChangeThresholdMilliseconds = SiRandom.Between(2000, 10000);
         }
@@ -38,36 +38,30 @@ namespace Si.Engine.Sprite.Enemy.Peon
                 _lastBehaviorChangeTime = DateTime.UtcNow;
                 _behaviorChangeThresholdMilliseconds = SiRandom.Between(2000, 10000);
 
-                /*
-                if (SiRandom.PercentChance(1))
+                if (SiRandom.PercentChance(10))
                 {
-                    SetCurrentAIController(AIControllers[typeof(Taunt)]);
+                    SetCurrentAIController<AIModelTaunt>();
                 }
-                */
-
-                if (SiRandom.PercentChance(5))
+                else if (SiRandom.PercentChance(1))
                 {
-                    SetCurrentAIController(AIControllers[typeof(HostileEngagement)]);
+                    SetCurrentAIController<AIModelHostileEngagement>();
                 }
             }
 
-            if (IsHostile)
+            var playersIAmPointingAt = GetPointingAtOf(_engine.Sprites.AllVisiblePlayers, 2.0f);
+            if (playersIAmPointingAt.Any())
             {
-                var playersIAmPointingAt = GetPointingAtOf(_engine.Sprites.AllVisiblePlayers, 2.0f);
-                if (playersIAmPointingAt.Any())
-                {
-                    var closestDistance = ClosestDistanceOf(playersIAmPointingAt);
+                var closestDistance = ClosestDistanceOf(playersIAmPointingAt);
 
-                    if (closestDistance < 1000)
+                if (closestDistance < 1000)
+                {
+                    if (closestDistance > 500 && HasWeaponAndAmmo<WeaponVulcanCannon>())
                     {
-                        if (closestDistance > 500 && HasWeaponAndAmmo<WeaponVulcanCannon>())
-                        {
-                            FireWeapon<WeaponVulcanCannon>();
-                        }
-                        else if (closestDistance > 0 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
-                        {
-                            FireWeapon<WeaponDualVulcanCannon>();
-                        }
+                        FireWeapon<WeaponVulcanCannon>();
+                    }
+                    else if (closestDistance > 0 && HasWeaponAndAmmo<WeaponDualVulcanCannon>())
+                    {
+                        FireWeapon<WeaponDualVulcanCannon>();
                     }
                 }
             }

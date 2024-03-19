@@ -12,8 +12,7 @@ namespace Si.Engine.Sprite.Player
         {
             ShipClass = SiPlayerClass.Destroyer;
 
-            string imagePath = @$"Sprites\Player\Ships\{ShipClass}.png";
-            Initialize(imagePath);
+            SetImage(@$"Sprites\Player\Ships\{ShipClass}.png");
 
             //Load the loadout from file or create a new one if it does not exist.
             LoadoutPlayerShip loadout = LoadLoadoutFromFile(ShipClass);

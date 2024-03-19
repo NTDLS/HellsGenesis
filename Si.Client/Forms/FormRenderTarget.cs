@@ -1,13 +1,11 @@
 using Si.Client.Forms;
 using Si.Engine;
-using Si.Engine.AI.Logistics._Superclass;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -204,6 +202,7 @@ namespace Si.Client
                     form.ShowDialog();
                 }).Start();
             }
+            /*
             else if (e.ClickedItem?.Text == "Save Brain")
             {
                 if (sprite is SpriteEnemyBase enemy)
@@ -235,6 +234,8 @@ namespace Si.Client
                     }
                 }
             }
+            */
+            /*
             else if (e.ClickedItem?.Text == "View Brain")
             {
                 if (sprite is SpriteEnemyBase enemy)
@@ -267,6 +268,7 @@ namespace Si.Client
                     }
                 }
             }
+            */
         }
 
         #endregion

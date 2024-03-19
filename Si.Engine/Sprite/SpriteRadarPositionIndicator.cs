@@ -11,7 +11,7 @@ namespace Si.Engine.Sprite
         public SpriteRadarPositionIndicator(EngineCore engine)
             : base(engine)
         {
-            Initialize(Path.Combine(_assetPath, _assetFile));
+            SetImage(Path.Combine(_assetPath, _assetFile));
 
             X = 0;
             Y = 0;

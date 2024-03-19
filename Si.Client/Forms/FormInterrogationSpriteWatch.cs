@@ -42,7 +42,6 @@ namespace Si.Client.Forms
             if (sprite is SpriteEnemyBase enemy)
             {
                 UpsertVariable("AI Controller", $"{enemy.CurrentAIController}");
-                UpsertVariable("Is Hostile", $"{enemy.IsHostile}");
             }
 
             UpsertVariable("UID", $"{sprite.UID}");

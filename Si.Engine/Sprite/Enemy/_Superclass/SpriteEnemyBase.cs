@@ -1,7 +1,7 @@
-﻿using Si.Engine.AI.Logistics._Superclass;
-using Si.Engine.Sprite._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.PowerUp;
 using Si.Engine.Sprite.PowerUp._Superclass;
+using Si.GameEngine.AI._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
@@ -15,18 +15,14 @@ namespace Si.Engine.Sprite.Enemy._Superclass
     /// </summary>
     public class SpriteEnemyBase : SpriteShipBase
     {
-        public IIAController CurrentAIController { get; set; }
-        public Dictionary<Type, IIAController> AIControllers { get; private set; } = new();
-        public bool IsHostile { get; set; } = true;
-
         public SpriteEnemyBase(EngineCore engine)
                 : base(engine)
         {
             Velocity.ForwardVelocity = 1;
-            Initialize();
 
             RadarPositionIndicator = _engine.Sprites.RadarPositions.Add();
             RadarPositionIndicator.Visable = false;
+
             RadarPositionText = _engine.Sprites.TextBlocks.CreateRadarPosition(
                 engine.Rendering.TextFormats.RadarPositionIndicator,
                 engine.Rendering.Materials.Brushes.Red, new SiPoint());
@@ -37,6 +33,23 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         public virtual void AfterCreate() { }
 
         public override void RotationChanged() => LocationChanged();
+
+        #region Artificial Intelligence.
+
+        public IAIController CurrentAIController { get; set; }
+        private readonly Dictionary<Type, IAIController> _aiControllers = new();
+
+        public void AddAIController(IAIController controller)
+            => _aiControllers.Add(controller.GetType(), controller);
+
+        public IAIController GetAIController<T>() where T : IAIController => _aiControllers[typeof(T)];
+
+        public void SetCurrentAIController<T>() where T : IAIController
+        {
+            CurrentAIController = GetAIController<T>();
+        }
+
+        #endregion
 
         public override void Explode()
         {
@@ -62,28 +75,6 @@ namespace Si.Engine.Sprite.Enemy._Superclass
             }
             base.Explode();
         }
-
-        /*
-        public string GetLoadoutHelpText()
-        {
-            string weapons = string.Empty;
-            foreach (var weapon in Loadout.Weapons)
-            {
-                var weaponName = SiReflection.GetStaticPropertyValue(weapon.Type, "Name");
-                weapons += $"{weaponName} x{weapon.MunitionCount}\n{new string(' ', 20)}";
-            }
-
-            string result = $"          Name : {Loadout.Name}\n";
-            result += $"       Weapons : {weapons.Trim()}\n";
-            result += $"       Shields : {Loadout.ShieldHealth:n0}\n";
-            result += $" Hull Strength : {Loadout.HullHealth:n0}\n";
-            result += $"     Max Speed : {Loadout.Speed:n1}\n";
-            result += $"   Surge Drive : {Loadout.Boost:n1}\n";
-            result += $"\n{Loadout.Description}";
-
-            return result;
-        }
-        */
 
         /// <summary>
         /// Moves the sprite based on its velocity/boost (velocity) taking into account the background scroll.
@@ -127,6 +118,8 @@ namespace Si.Engine.Sprite.Enemy._Superclass
 
         public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
+            CurrentAIController?.ApplyIntelligence(epoch, displacementVector);
+
             if (Weapons != null)
             {
                 foreach (var weapon in Weapons)
@@ -134,14 +127,6 @@ namespace Si.Engine.Sprite.Enemy._Superclass
                     weapon.ApplyIntelligence(epoch);
                 }
             }
-        }
-
-        internal void AddAIController(IIAController controller)
-            => AIControllers.Add(controller.GetType(), controller);
-
-        internal void SetCurrentAIController(IIAController value)
-        {
-            CurrentAIController = value;
         }
     }
 }

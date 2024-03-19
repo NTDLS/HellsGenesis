@@ -1,13 +1,7 @@
 ﻿using Si.Engine.Manager;
 using Si.Engine.Sprite;
-using Si.Engine.Sprite.Enemy.Boss._Superclass;
-using Si.Engine.Sprite.Enemy.Peon._Superclass;
-using Si.Engine.Sprite.Enemy.Starbase._Superclass;
 using Si.Engine.TickController._Superclass;
-using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
-using Si.Library.Sprite;
-using System.Diagnostics;
 
 namespace Si.Engine.TickController.VectoredTickControllerBase
 {
