@@ -152,6 +152,11 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns></returns>
         public float AngleBetween(SiPoint point2) => AngleBetween(this, point2);
 
+        public float AngleInDegreesTo360(SiPoint point2) => AngleInDegreesTo360(this, point2);
+
+        public float AngleToInSignedRadians(SiPoint point2) => AngleToInSignedRadians(this, point2);
+
+
         public SiPoint Clamp(float minValue, float maxValue)
         {
             var point = Clone();

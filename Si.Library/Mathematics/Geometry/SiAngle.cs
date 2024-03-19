@@ -13,9 +13,11 @@
         public static float DegreesToRadians(float deg) => deg * DEG_TO_RAD;
         public static float XYToRadians(float x, float y) => (float)Math.Atan2(y, x);
         public static float XYToDegrees(float x, float y) => RadiansToDegrees((float)Math.Atan2(y, x));
+
         public static SiPoint ToXY(SiAngle angle) => new(angle.X, angle.Y);
         public static SiPoint RadiansToXY(float radians) => new((float)Math.Cos(radians), (float)Math.Sin(radians));
         public static SiPoint DegreesToXY(float degrees) => new((float)Math.Cos(degrees * RAD_TO_DEG), (float)Math.Sin(degrees * RAD_TO_DEG));
+        public static SiAngle FromXY(SiPoint point) => new SiAngle(XYToRadians(point.X, point.Y));
 
         #region ~/CTor.
 
@@ -130,11 +132,11 @@
             {
                 if (value < 0)
                 {
-                    _degrees = (value + RADS_IN_CIRCLE) % RADS_IN_CIRCLE;
+                    value = (value + RADS_IN_CIRCLE) % RADS_IN_CIRCLE;
                 }
                 else
                 {
-                    _degrees = value % RADS_IN_CIRCLE;
+                    value %= RADS_IN_CIRCLE;
                 }
 
                 _degrees = RadiansToDegrees(value);

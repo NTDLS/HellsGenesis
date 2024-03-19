@@ -67,7 +67,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="to">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static float AngleTo360(ISprite from, ISprite to)
-            => AngleTo360(from.Location, to.Location);
+            => AngleInDegreesTo360(from.Location, to.Location);
 
         /// <summary>
         /// Calculates the angle of one objects location to another location from 1-180 to -1-180.
@@ -77,7 +77,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
         public static float AngleTo(ISprite from, ISprite to)
         {
-            var angle360 = AngleTo360(from.Location, to.Location);
+            var angle360 = AngleInDegreesTo360(from.Location, to.Location);
             if (angle360 > 180)
             {
                 angle360 -= 180;
@@ -96,7 +96,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
         public static float AngleTo(ISprite from, SiPoint to)
         {
-            var angle360 = AngleTo360(from.Location, to);
+            var angle360 = AngleInDegreesTo360(from.Location, to);
             if (angle360 > 180)
             {
                 angle360 -= 180;
@@ -114,7 +114,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="to">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static float AngleTo360(SiPoint from, ISprite to)
-            => AngleTo360(from, to.Location);
+            => AngleInDegreesTo360(from, to.Location);
 
         /// <summary>
         /// Calculates the angle of one objects location to another location from 0 - 360.
@@ -123,7 +123,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="to">The point to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static float AngleTo360(ISprite from, SiPoint to)
-            => AngleTo360(from.Location, to);
+            => AngleInDegreesTo360(from.Location, to);
 
         /// <summary>
         /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
@@ -316,12 +316,23 @@ namespace Si.Library.Mathematics.Geometry
         }
 
         /// <summary>
-        /// Calculates the angle from one obect to another, returns the degrees.
+        /// Calculates the angle from one object to another, returns the radians.
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public static float AngleTo360(SiPoint from, SiPoint to)
+        public static float AngleToInSignedRadians(SiPoint from, SiPoint to)
+        {
+            return (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
+        }
+
+        /// <summary>
+        /// Calculates the angle from one object to another, returns the degrees.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        public static float AngleInDegreesTo360(SiPoint from, SiPoint to)
         {
             var radians = (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
             return (SiAngle.RadiansToDegrees(radians) + 360.0f) % 360.0f;
