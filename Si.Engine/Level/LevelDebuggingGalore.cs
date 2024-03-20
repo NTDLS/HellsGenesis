@@ -143,7 +143,6 @@ namespace Si.Engine.Level
                     float totalXOffset = -(ani.Size.Width * colCount);
                     float totalYOffset = (_engine.Display.TotalCanvasSize.Height + (ani.Size.Height * rowCount));
 
-
                     ani.Location = new SiPoint(totalXOffset + ani.Size.Width * col, totalYOffset - ani.Size.Height * row);
                     ani.Velocity.ForwardAngle.Degrees = -45 + SiRandom.Between(-10, 10);
                     ani.Velocity.MaximumSpeed = 2f + SiRandom.Between(-0.5f, 0.5f);
@@ -152,8 +151,6 @@ namespace Si.Engine.Level
                     ani.SetHullHealth(100);
                 }
             }
-
-
         }
     }
 }
