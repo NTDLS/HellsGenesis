@@ -160,5 +160,14 @@ namespace Si.Engine.Sprite._Superclass
             });
             base.Explode();
         }
+
+        /// <summary>
+        /// Provides a way to make decisions about the sprite that do not necessirily have anyhting to do with movement.
+        /// </summary>
+        /// <param name="epoch"></param>
+        /// <param name="displacementVector"></param>
+        public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
+        {
+        }
     }
 }

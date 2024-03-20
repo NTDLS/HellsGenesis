@@ -8,7 +8,7 @@
     <FileVersion>0.0.34</FileVersion>
     <VersionPrefix>0.0.34</VersionPrefix>
     <Authors>NetworkDLS</Authors>
-    
+
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>

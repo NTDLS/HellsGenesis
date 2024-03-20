@@ -3,7 +3,6 @@ using Si.Engine.Sprite.PowerUp;
 using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.GameEngine.AI._Superclass;
 using Si.Library;
-using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
@@ -110,7 +109,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
             FixRadarPositionIndicator();
         }
 
-        public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
             CurrentAIController?.ApplyIntelligence(epoch, displacementVector);
 

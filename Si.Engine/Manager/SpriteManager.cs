@@ -11,7 +11,6 @@ using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using static Si.Library.SiConstants;
 

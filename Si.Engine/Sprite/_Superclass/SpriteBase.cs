@@ -1,6 +1,5 @@
 ﻿using SharpDX.Mathematics.Interop;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Engine.Sprite.Enemy.Peon;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -1236,7 +1235,7 @@ namespace Si.Engine.Sprite._Superclass
         #endregion
 
         /// <summary>
-        /// Moves the sprite based on its thrust/boost (velocity).
+        /// Moves the sprite based on its movement vector and the epoch.
         /// </summary>
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(float epoch, SiPoint displacementVector)
