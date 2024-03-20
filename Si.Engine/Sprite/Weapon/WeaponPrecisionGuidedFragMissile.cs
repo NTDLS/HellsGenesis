@@ -9,35 +9,24 @@ namespace Si.Engine.Sprite.Weapon
 {
     internal class WeaponPrecisionGuidedFragMissile : WeaponBase
     {
-        static new string Name { get; } = "Precision Guided Frag Missile";
+        static string Name { get; } = "Precision Guided Frag Missile";
         private const string soundPath = @"Sounds\Weapons\GuidedFragMissile.wav";
         private const float soundVolumne = 0.4f;
 
         private bool _toggle = false;
 
         public WeaponPrecisionGuidedFragMissile(EngineCore engine, SpriteInteractiveBase owner)
-            : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
-
-        public WeaponPrecisionGuidedFragMissile(EngineCore engine)
-            : base(engine, Name, soundPath, soundVolumne) => InitializeWeapon();
-
-        private void InitializeWeapon()
+            : base(engine, owner, Name, soundPath, soundVolumne)
         {
-            Damage = 8;
-            FireDelayMilliseconds = 800;
-            Speed = 9.75f;
-            SpeedVariancePercent = 0.10f;
-
-            CanLockOn = true;
-            MinLockDistance = 100;
-            MaxLockDistance = 1000;
-            MaxLocks = 1;
-            MaxLockOnAngle = 45;
-            ExplodesOnImpact = true;
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
-            => new MunitionGuidedFragMissile(_engine, this, Owner, lockedTarget, location, angle);
+        public WeaponPrecisionGuidedFragMissile(EngineCore engine)
+            : base(engine, Name, soundPath, soundVolumne)
+        {
+        }
+
+        public override MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
+            => new MunitionGuidedFragMissile(_engine, this, Owner, lockedTarget, location);
 
         public override bool Fire()
         {

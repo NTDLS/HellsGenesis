@@ -1,8 +1,8 @@
 ﻿using Si.Audio;
-using Si.Engine.Loudout;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.GameEngine.Sprite.Metadata;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -17,7 +17,7 @@ namespace Si.Engine.Sprite.Player._Superclass
     /// </summary>
     public class SpritePlayerBase : SpriteInteractiveBase
     {
-        public SpriteMetadata Meta { get; set; }
+        public InteractiveSpriteMetadata Meta { get; set; }
         public SiAudioClip AmmoLowSound { get; private set; }
         public SiAudioClip AmmoEmptySound { get; private set; }
         public SiAudioClip ShipEngineRoarSound { get; private set; }

@@ -15,8 +15,8 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
         public SpriteInteractiveBase LockedTarget { get; private set; }
 
         public GuidedMunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath,
-             SpriteInteractiveBase lockedTarget = null, SiPoint location = null, float? angle = null)
-            : base(engine, weapon, firedFrom, imagePath, location, angle)
+             SpriteInteractiveBase lockedTarget = null, SiPoint location = null)
+            : base(engine, weapon, firedFrom, imagePath, location)
         {
             LockedTarget = lockedTarget;
         }

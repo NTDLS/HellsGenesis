@@ -1,0 +1,9 @@
+{
+  "Name": "Dual Vulcan Cannon",
+  "Description": "",
+  "Damage": 2,
+  "FireDelayMilliseconds": 25,
+  "Speed": 15,
+  "AngleVarianceDegrees": 1.5,
+  "SpeedVariancePercent": 0.05
+}

@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace Si.Engine.Loudout
+namespace Si.GameEngine.Sprite.Metadata
 {
-    public class ShipLoadoutWeapon
+    public class InteractiveSpriteWeapon
     {
         public string Type { get; set; }
         public int MunitionCount { get; set; }
 
-        public ShipLoadoutWeapon() { }
+        public InteractiveSpriteWeapon() { }
 
-        public ShipLoadoutWeapon(Type type, int munitionCount)
+        public InteractiveSpriteWeapon(Type type, int munitionCount)
         {
             Type = type.Name;
             MunitionCount = munitionCount;

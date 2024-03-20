@@ -1,12 +1,11 @@
-﻿using Si.GameEngine.Loudout;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Si.Engine.Loudout
+namespace Si.GameEngine.Sprite.Metadata
 {
     /// <summary>
     /// Contains sprite metadata.
     /// </summary>
-    public class SpriteMetadata
+    public class InteractiveSpriteMetadata
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -20,8 +19,8 @@ namespace Si.Engine.Loudout
         /// <summary>
         /// Used for the players "primary weapon slot".
         /// </summary>
-        public ShipLoadoutWeapon PrimaryWeapon { get; set; }
-        public List<SpriteMetadataAttachment> Attachments { get; set; } = new();
-        public List<ShipLoadoutWeapon> Weapons { get; set; } = new();
+        public InteractiveSpriteWeapon PrimaryWeapon { get; set; }
+        public List<InteractiveSpriteAttachment> Attachments { get; set; } = new();
+        public List<InteractiveSpriteWeapon> Weapons { get; set; } = new();
     }
 }

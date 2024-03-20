@@ -8,27 +8,22 @@ namespace Si.Engine.Sprite.Weapon
 {
     internal class WeaponDualVulcanCannon : WeaponBase
     {
-        static new string Name { get; } = "Dual Vulcan Cannon";
+        static string Name { get; } = "Dual Vulcan Cannon";
         private const string soundPath = @"Sounds\Weapons\DualVulcanCannon.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponDualVulcanCannon(EngineCore engine, SpriteInteractiveBase owner)
-            : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
-
-        public WeaponDualVulcanCannon(EngineCore engine)
-            : base(engine, Name, soundPath, soundVolumne) => InitializeWeapon();
-
-        private void InitializeWeapon()
+            : base(engine, owner, Name, soundPath, soundVolumne)
         {
-            Damage = 2;
-            FireDelayMilliseconds = 50;
-            Speed = 13.5f;
-            AngleVarianceDegrees = 0.5f;
-            SpeedVariancePercent = 0.05f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
-            => new MunitionVulcanCannon(_engine, this, Owner, location, angle);
+        public WeaponDualVulcanCannon(EngineCore engine)
+            : base(engine, Name, soundPath, soundVolumne)
+        {
+        }
+
+        public override MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
+            => new MunitionVulcanCannon(_engine, this, Owner, location);
 
         public override bool Fire()
         {

@@ -8,27 +8,22 @@ namespace Si.Engine.Sprite.Weapon
 {
     internal class WeaponBlunderbuss : WeaponBase
     {
-        static new string Name { get; } = "Blunderbuss";
+        static string Name { get; } = "Blunderbuss";
         private const string soundPath = @"Sounds\Weapons\Blunderbuss.wav";
         private const float soundVolumne = 0.4f;
 
         public WeaponBlunderbuss(EngineCore engine, SpriteInteractiveBase owner)
-            : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
-
-        public WeaponBlunderbuss(EngineCore engine)
-            : base(engine, Name, soundPath, soundVolumne) => InitializeWeapon();
-
-        private void InitializeWeapon()
+            : base(engine, owner, Name, soundPath, soundVolumne)
         {
-            Damage = 2;
-            FireDelayMilliseconds = 250;
-            Speed = 22.5f;
-            AngleVarianceDegrees = 10.0f;
-            SpeedVariancePercent = 0.10f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
-            => new MunitionBlunderbuss(_engine, this, Owner, location, angle);
+        public WeaponBlunderbuss(EngineCore engine)
+        : base(engine, Name, soundPath, soundVolumne)
+        {
+        }
+
+        public override MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
+            => new MunitionBlunderbuss(_engine, this, Owner, location);
 
         public override bool Fire()
         {

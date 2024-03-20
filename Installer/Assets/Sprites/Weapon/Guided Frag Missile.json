@@ -1,0 +1,14 @@
+{
+  "Name": "Guided Frag Missile",
+  "Description": "",
+  "Damage": 10,
+  "FireDelayMilliseconds": 1000,
+  "Speed": 9,
+  "SpeedVariancePercent": 0.10,
+  "CanLockOn": true,
+  "MinLockDistance": 100,
+  "MaxLockDistance": 600,
+  "MaxLocks": 2,
+  "MaxLockOnAngle": 40,
+  "ExplodesOnImpact": true
+}

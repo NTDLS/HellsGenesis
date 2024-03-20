@@ -859,7 +859,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public virtual void Hit(MunitionBase munition)
         {
-            Hit(munition?.Weapon?.Damage ?? 0);
+            Hit(munition?.Weapon.Meta?.Damage ?? 0);
         }
 
         /// <summary>
@@ -1314,7 +1314,7 @@ namespace Si.Engine.Sprite._Superclass
                         color = _engine.Rendering.Materials.Colors.Green;
                     }
 
-                    if (munition.Weapon.ExplodesOnImpact)
+                    if (munition.Weapon.Meta.ExplodesOnImpact)
                     {
                         size = 2;
                     }

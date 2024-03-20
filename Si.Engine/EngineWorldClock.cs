@@ -234,8 +234,8 @@ namespace Si.Engine
                     + $"      Hull: {_engine.Player.Sprite.HullHealth:n0} (Shields: {_engine.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_engine.Player.Sprite.Bounty}\r\n"
                     + $"     Surge: {_engine.Player.Sprite.Velocity.AvailableBoost / _engine.Settings.MaxPlayerBoostAmount * 100.0:n1}%"
                         + (_engine.Player.Sprite.Velocity.IsBoostCoolingDown ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
-                    + $"Pri-Weapon: {_engine.Player.Sprite.PrimaryWeapon?.Name} x{_engine.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
-                    + $"Sec-Weapon: {_engine.Player.Sprite.SelectedSecondaryWeapon?.Name} x{_engine.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
+                    + $"Pri-Weapon: {_engine.Player.Sprite.PrimaryWeapon?.Meta.Name} x{_engine.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
+                    + $"Sec-Weapon: {_engine.Player.Sprite.SelectedSecondaryWeapon?.Meta.Name} x{_engine.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
             }
 
             //_engine.Sprites.DebugText.Text = "Anything we need to know about?";

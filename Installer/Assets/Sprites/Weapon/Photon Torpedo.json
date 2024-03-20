@@ -1,0 +1,9 @@
+{
+  "Name": "Photon Torpedo",
+  "Description": "",
+  "Damage": 25,
+  "FireDelayMilliseconds": 1000,
+  "Speed": 18.75,
+  "AngleVarianceDegrees": 0.00,
+  "SpeedVariancePercent": 0.00
+}

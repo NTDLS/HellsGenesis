@@ -1,0 +1,11 @@
+{
+  "Name": "Frag Missile",
+  "Description": "",
+  "Damage": 10,
+  "Speed": 8.25,
+  "FireDelayMilliseconds": 250,
+  "AngleVarianceDegrees": 0,
+  "SpeedVariancePercent": 0.10,
+  "CanLockOn": false,
+  "ExplodesOnImpact": true
+}

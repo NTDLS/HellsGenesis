@@ -1,0 +1,9 @@
+{
+  "Name": "Blunderbuss",
+  "Description": "",
+  "Damage": 2,
+  "Speed": 22.5,
+  "FireDelayMilliseconds": 250,
+  "AngleVarianceDegrees": 10.0,
+  "SpeedVariancePercent": 0.10
+}

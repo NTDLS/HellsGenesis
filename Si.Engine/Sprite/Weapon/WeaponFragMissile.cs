@@ -8,31 +8,20 @@ namespace Si.Engine.Sprite.Weapon
 {
     internal class WeaponFragMissile : WeaponBase
     {
-        static new string Name { get; } = "Frag Missile";
+        static string Name { get; } = "Frag Missile";
         private const string soundPath = @"Sounds\Weapons\FragMissile.wav";
         private const float soundVolumne = 0.4f;
 
         private bool _toggle = false;
 
         public WeaponFragMissile(EngineCore engine, SpriteInteractiveBase owner)
-            : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
+            : base(engine, owner, Name, soundPath, soundVolumne) { }
 
         public WeaponFragMissile(EngineCore engine)
-            : base(engine, Name, soundPath, soundVolumne) => InitializeWeapon();
+            : base(engine, Name, soundPath, soundVolumne) { }
 
-        private void InitializeWeapon()
-        {
-            Damage = 10;
-            FireDelayMilliseconds = 250;
-            Speed = 8.25f;
-            SpeedVariancePercent = 0.10f;
-
-            CanLockOn = false;
-            ExplodesOnImpact = true;
-        }
-
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
-            => new MunitionFragMissile(_engine, this, Owner, location, angle);
+        public override MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
+            => new MunitionFragMissile(_engine, this, Owner, location);
 
         public override bool Fire()
         {

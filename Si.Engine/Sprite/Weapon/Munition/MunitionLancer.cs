@@ -9,10 +9,9 @@ namespace Si.Engine.Sprite.Weapon.Munition
     {
         private const string imagePath = @"Sprites\Weapon\Lancer.png";
 
-        public MunitionLancer(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null, float? angle = null)
-            : base(engine, weapon, firedFrom, imagePath, location, angle)
+        public MunitionLancer(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null)
+            : base(engine, weapon, firedFrom, imagePath, location)
         {
-            SetImage(imagePath);
         }
     }
 }

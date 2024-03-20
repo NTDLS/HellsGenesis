@@ -8,29 +8,24 @@ namespace Si.Engine.Sprite.Weapon
 {
     internal class WeaponPhotonTorpedo : WeaponBase
     {
-        static new string Name { get; } = "Photon Torpedo";
+        static string Name { get; } = "Photon Torpedo";
         private const string soundPath = @"Sounds\Weapons\PhotonTorpedo.wav";
         private const float soundVolumne = 0.4f;
 
         private bool _toggle = false;
 
         public WeaponPhotonTorpedo(EngineCore engine, SpriteInteractiveBase owner)
-            : base(engine, owner, Name, soundPath, soundVolumne) => InitializeWeapon();
-
-        public WeaponPhotonTorpedo(EngineCore engine)
-            : base(engine, Name, soundPath, soundVolumne) => InitializeWeapon();
-
-        private void InitializeWeapon()
+            : base(engine, owner, Name, soundPath, soundVolumne)
         {
-            Damage = 25;
-            FireDelayMilliseconds = 1000;
-            Speed = 18.75f;
-            AngleVarianceDegrees = 0.00f;
-            SpeedVariancePercent = 0.00f;
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
-            => new MunitionPhotonTorpedo(_engine, this, Owner, location, angle);
+        public WeaponPhotonTorpedo(EngineCore engine)
+            : base(engine, Name, soundPath, soundVolumne)
+        {
+        }
+
+        public override MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
+            => new MunitionPhotonTorpedo(_engine, this, Owner, location);
 
         public override bool Fire()
         {

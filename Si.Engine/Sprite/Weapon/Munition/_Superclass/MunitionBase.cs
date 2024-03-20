@@ -35,24 +35,33 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
         public MunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath, SiPoint location = null, float? angle = null)
             : base(engine)
         {
+            if (imagePath != null)
+            {
+                SetImage(imagePath);
+            }
+            else
+            {
+                //The image is likely being set in the derived class.
+            }
+
             Weapon = weapon;
             Velocity.ForwardVelocity = 1.0f;
-            SceneDistanceLimit = SiRandom.Between(weapon.MunitionSceneDistanceLimit * 0.1f, weapon.MunitionSceneDistanceLimit);
+            SceneDistanceLimit = SiRandom.Between(weapon.Meta.MunitionSceneDistanceLimit * 0.1f, weapon.Meta.MunitionSceneDistanceLimit);
 
             RadarDotSize = new SiPoint(1, 1);
 
             float headingRadians = angle == null ? firedFrom.Velocity.ForwardAngle.Radians : (float)angle;
-            if (weapon.AngleVarianceDegrees > 0)
+            if (weapon.Meta.AngleVarianceDegrees > 0)
             {
-                var randomNumber = SiPoint.DegreesToRadians(SiRandom.Between(0, weapon.AngleVarianceDegrees * 100.0f) / 100.0f);
+                var randomNumber = SiPoint.DegreesToRadians(SiRandom.Between(0, weapon.Meta.AngleVarianceDegrees * 100.0f) / 100.0f);
                 headingRadians += (SiRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 
-            float initialSpeed = weapon.Speed;
-            if (Weapon.SpeedVariancePercent > 0)
+            float initialSpeed = weapon.Meta.Speed;
+            if (weapon.Meta.SpeedVariancePercent > 0)
             {
-                var randomNumber = SiRandom.Between(0, weapon.SpeedVariancePercent * 100.0f) / 100.0f;
-                var variance = randomNumber * weapon.Speed;
+                var randomNumber = SiRandom.Between(0, weapon.Meta.SpeedVariancePercent * 100.0f) / 100.0f;
+                var variance = randomNumber * weapon.Meta.Speed;
                 initialSpeed += (SiRandom.FlipCoin() ? 1 : -1) * variance;
             }
 
@@ -109,7 +118,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
         public override void Explode()
         {
-            if (Weapon != null && Weapon.ExplodesOnImpact)
+            if (Weapon != null && Weapon.Meta.ExplodesOnImpact)
             {
                 HitExplosion();
             }

@@ -9,8 +9,8 @@ namespace Si.Engine.Sprite.Weapon.Munition
     {
         private const string imagePath = @"Sprites\Weapon\FragMissile.png";
 
-        public MunitionFragMissile(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null, float? angle = null)
-            : base(engine, weapon, firedFrom, imagePath, location, angle)
+        public MunitionFragMissile(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null)
+            : base(engine, weapon, firedFrom, imagePath, location)
         {
             MaxSeekingObservationDistance = 1000;
             MaxSeekingObservationAngleDegrees = 20;

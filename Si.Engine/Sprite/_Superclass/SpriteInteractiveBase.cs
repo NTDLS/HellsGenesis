@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Si.Engine.Loudout;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.GameEngine.Sprite.Metadata;
 using Si.Library;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
@@ -43,7 +43,7 @@ namespace Si.Engine.Sprite._Superclass
             string metadataFile = $"{Path.GetDirectoryName(spriteImagePath)}\\{Path.GetFileNameWithoutExtension(spriteImagePath)}.json";
             var metadataJson = _engine.Assets.GetText(metadataFile);
 
-            var metadata = JsonConvert.DeserializeObject<SpriteMetadata>(metadataJson);
+            var metadata = JsonConvert.DeserializeObject<InteractiveSpriteMetadata>(metadataJson);
 
             Velocity.MaximumSpeed = metadata.Speed;
             Velocity.MaximumSpeedBoost = metadata.Boost;
@@ -71,7 +71,6 @@ namespace Si.Engine.Sprite._Superclass
 
                 player.SelectFirstAvailableUsableSecondaryWeapon();
             }
-
         }
 
         #region Weapons selection and evaluation.
@@ -132,10 +131,10 @@ namespace Si.Engine.Sprite._Superclass
             return weapon?.Fire() == true;
         }
 
-        public bool FireWeapon<T>(SiPoint location, float? angle = null) where T : WeaponBase
+        public bool FireWeapon<T>(SiPoint location) where T : WeaponBase
         {
             var weapon = GetWeaponOfType<T>();
-            return weapon?.Fire(location, angle) == true;
+            return weapon?.Fire(location) == true;
         }
 
         public WeaponBase GetWeaponOfType<T>() where T : WeaponBase

@@ -1,8 +1,10 @@
-﻿using Si.Audio;
+﻿using Newtonsoft.Json;
+using Si.Audio;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.GameEngine.Sprite.Metadata;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -20,42 +22,19 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         public Guid UID { get; private set; } = Guid.NewGuid();
         protected EngineCore _engine;
         protected SpriteInteractiveBase Owner { get; private set; }
-
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected SiAudioClip _fireSound;
 
-        /// <summary>
-        /// The variance in degrees that the loaded munition will use for an initial heading angle.
-        /// </summary>
-        public float AngleVarianceDegrees { get; set; } = 0;
-        /// <summary>
-        /// The variance expressed in decimal percentage that determines the loaded munitions initial velovity.
-        /// </summary>
-        public float SpeedVariancePercent { get; set; } = 0;
-        /// <summary>
-        /// The distance from the total canvas that the munition will be allowed to travel before it is deleted.
-        /// </summary>
-        public float MunitionSceneDistanceLimit { get; set; }
-        public string Name { get; private set; }
-        public float Speed { get; set; } = 25;
+        public WeaponMetadata Meta { get; set; }
+        public List<WeaponsLock> LockedTargets { get; set; } = new();
         public int RoundsFired { get; set; }
         public int RoundQuantity { get; set; }
-        public int FireDelayMilliseconds { get; set; } = 100;
-        public int Damage { get; set; } = 1;
-        public bool CanLockOn { get; set; } = false;
-        public List<WeaponsLock> LockedTargets { get; set; } = new();
-        public float MaxLockOnAngle { get; set; } = 10;
-        public float MaxLocks { get; set; } = 1;
-        public float MinLockDistance { get; set; } = 50;
-        public float MaxLockDistance { get; set; } = 100;
-        public bool ExplodesOnImpact { get; set; } = false;
 
         public WeaponBase(EngineCore engine, string name, string soundPath, float soundVolume)
         {
             _engine = engine;
             _fireSound = _engine.Assets.GetAudio(soundPath, soundVolume);
-            Name = name;
-            MunitionSceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
+            LoadMetadata(name);
         }
 
         public WeaponBase(EngineCore engine, SpriteInteractiveBase owner, string name, string soundPath, float soundVolume)
@@ -63,12 +42,22 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             Owner = owner;
             _engine = engine;
             _fireSound = _engine.Assets.GetAudio(soundPath, soundVolume);
-            Name = name;
-            MunitionSceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
+            LoadMetadata(name);
         }
 
+        /// <summary>
+        /// Sets the sprites image, sets speed, shields, adds attachements and weapons
+        /// from a .json file in the same path with the same name as the sprite image.
+        /// </summary>
+        /// <param name="spriteImagePath"></param>
+        public void LoadMetadata(string weaponName)
+        {
+            var metadataJson = _engine.Assets.GetText($@"Sprites\Weapon\{weaponName}.json");
+            Meta = JsonConvert.DeserializeObject<WeaponMetadata>(metadataJson);
+            Meta.MunitionSceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
+        }
 
-        public virtual MunitionBase CreateMunition(SiPoint location = null, float? angle = null, SpriteInteractiveBase lockedTarget = null)
+        public virtual MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
         {
             if (Owner == null)
             {
@@ -98,10 +87,10 @@ namespace Si.Engine.Sprite.Weapon._Superclass
 
                 foreach (var potentialTarget in potentialTargets)
                 {
-                    if (CanLockOn && Owner.IsPointingAt(potentialTarget, MaxLockOnAngle))
+                    if (Meta.CanLockOn && Owner.IsPointingAt(potentialTarget, Meta.MaxLockOnAngle))
                     {
                         var distance = Owner.DistanceTo(potentialTarget);
-                        if (distance.IsBetween(MinLockDistance, MaxLockDistance))
+                        if (distance.IsBetween(Meta.MinLockDistance, Meta.MaxLockDistance))
                         {
                             LockedTargets.Add(new WeaponsLock()
                             {
@@ -114,14 +103,14 @@ namespace Si.Engine.Sprite.Weapon._Superclass
 
                 LockedTargets = LockedTargets.OrderBy(o => o.Distance).ToList();
 
-                foreach (var hardLock in LockedTargets.Take((int)MaxLocks))
+                foreach (var hardLock in LockedTargets.Take(Meta.MaxLocks))
                 {
                     hardLock.LockType = SiWeaponsLockType.Hard;
                     hardLock.Sprite.IsLockedOnHard = true;
                     hardLock.Sprite.IsLockedOnSoft = false;
                 }
 
-                foreach (var softLock in LockedTargets.Skip((int)MaxLocks))
+                foreach (var softLock in LockedTargets.Skip(Meta.MaxLocks))
                 {
                     softLock.LockType = SiWeaponsLockType.Soft;
                     softLock.Sprite.IsLockedOnHard = false;
@@ -141,10 +130,10 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                 _engine.Player.Sprite.IsLockedOnSoft = false;
                 _engine.Player.Sprite.IsLockedOnHard = false;
 
-                if (CanLockOn && Owner.IsPointingAt(_engine.Player.Sprite, MaxLockOnAngle))
+                if (Meta.CanLockOn && Owner.IsPointingAt(_engine.Player.Sprite, Meta.MaxLockOnAngle))
                 {
                     var distance = Owner.DistanceTo(_engine.Player.Sprite);
-                    if (distance.IsBetween(MinLockDistance, MaxLockDistance))
+                    if (distance.IsBetween(Meta.MinLockDistance, Meta.MaxLockDistance))
                     {
                         _engine.Player.Sprite.IsLockedOnHard = true;
                         _engine.Player.Sprite.IsLockedOnSoft = false;
@@ -160,7 +149,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             }
         }
 
-        public virtual bool Fire(SiPoint location, float? angle = null)
+        public virtual bool Fire(SiPoint location)
         {
             if (Owner == null)
             {
@@ -172,7 +161,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                 RoundsFired++;
                 RoundQuantity--;
                 _fireSound.Play();
-                _engine.Sprites.Munitions.Add(this, location, angle);
+                _engine.Sprites.Munitions.Add(this, location);
 
                 return true;
             }
@@ -211,7 +200,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                 bool result = false;
                 if (RoundQuantity > 0)
                 {
-                    result = (DateTime.Now - _lastFired).TotalMilliseconds > FireDelayMilliseconds;
+                    result = (DateTime.Now - _lastFired).TotalMilliseconds > Meta.FireDelayMilliseconds;
                     if (result)
                     {
                         _lastFired = DateTime.Now;

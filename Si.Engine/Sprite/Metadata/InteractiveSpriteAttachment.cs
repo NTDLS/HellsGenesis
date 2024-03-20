@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Si.Engine.Loudout;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Generic;
 
-namespace Si.GameEngine.Loudout
+namespace Si.GameEngine.Sprite.Metadata
 {
-    public class SpriteMetadataAttachment
+    public class InteractiveSpriteAttachment
     {
         public string Type { get; set; }
         public float X { get; set; }
@@ -14,6 +13,6 @@ namespace Si.GameEngine.Loudout
         [JsonIgnore]
         public SiPoint LocationRelativeToOwner { get => new SiPoint(X, Y); }
 
-        public List<ShipLoadoutWeapon> Weapons { get; set; } = new();
+        public List<InteractiveSpriteWeapon> Weapons { get; set; } = new();
     }
 }
