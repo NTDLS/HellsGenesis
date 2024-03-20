@@ -92,18 +92,6 @@
             West
         }
 
-        public enum SiPlayerClass
-        {
-            Debug,
-            Frigate,
-            Cruiser,
-            Destroyer,
-            Dreadnaught,
-            Reaver,
-            Serpent,
-            Starfighter
-        }
-
         public enum SiMenuItemType
         {
             Undefined,

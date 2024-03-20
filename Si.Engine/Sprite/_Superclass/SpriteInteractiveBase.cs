@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Si.Engine.Loudout;
+using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
@@ -61,6 +62,16 @@ namespace Si.Engine.Sprite._Superclass
             {
                 AttachOfType(attachment.Type, attachment.LocationRelativeToOwner);
             }
+
+            if (this is SpritePlayerBase player)
+            {
+                player.Meta = metadata;
+
+                player.SetPrimaryWeapon(metadata.PrimaryWeapon.Type, metadata.PrimaryWeapon.MunitionCount);
+
+                player.SelectFirstAvailableUsableSecondaryWeapon();
+            }
+
         }
 
         #region Weapons selection and evaluation.

@@ -1,7 +1,4 @@
-﻿using Si.Engine.Loudout;
-using Si.Engine.Sprite.Player._Superclass;
-using Si.Engine.Sprite.Weapon;
-using static Si.Library.SiConstants;
+﻿using Si.Engine.Sprite.Player._Superclass;
 
 namespace Si.Engine.Sprite.Player
 {
@@ -10,34 +7,7 @@ namespace Si.Engine.Sprite.Player
         public SpriteCruiserPlayer(EngineCore engine)
             : base(engine)
         {
-            ShipClass = SiPlayerClass.Cruiser;
-
-            SetImage(@$"Sprites\Player\Ships\{ShipClass}.png");
-
-            //Load the loadout from file or create a new one if it does not exist.
-            LoadoutPlayerShip loadout = LoadLoadoutFromFile(ShipClass);
-            if (loadout == null)
-            {
-                loadout = new LoadoutPlayerShip(ShipClass)
-                {
-                    Description = "→ Heavy Assault Cruiser ←\n"
-                       + "A formidable heavy assault vessel, bristling with weaponry\n"
-                       + "and to take on any adversary in head-to-head combat.",
-                    Speed = 3.5f,
-                    Boost = 1.5f,
-                    HullHealth = 2500,
-                    ShieldHealth = 3000,
-                    PrimaryWeapon = new ShipLoadoutWeapon(typeof(WeaponVulcanCannon), 5000)
-                };
-
-                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponFragMissile), 42));
-                loadout.SecondaryWeapons.Add(new ShipLoadoutWeapon(typeof(WeaponThunderstrikeMissile), 16));
-
-
-                SaveLoadoutToFile(loadout);
-            }
-
-            ResetLoadout(loadout);
+            SetImageAndLoadMetadata(@"Sprites\Player\Ships\Cruiser.png");
         }
     }
 }

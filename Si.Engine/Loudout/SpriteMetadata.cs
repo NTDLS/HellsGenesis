@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Si.GameEngine.Loudout;
+﻿using Si.GameEngine.Loudout;
 using System.Collections.Generic;
 
 namespace Si.Engine.Loudout
@@ -9,8 +8,8 @@ namespace Si.Engine.Loudout
     /// </summary>
     public class SpriteMetadata
     {
-        [JsonIgnore]
-        public string Description { get; set; } = string.Empty;
+        public string Name { get; set; }
+        public string Description { get; set; }
         public float Speed { get; set; } = 1f;
         public float Boost { get; set; } = 0f;
         public int HullHealth { get; set; } = 0;
@@ -18,11 +17,11 @@ namespace Si.Engine.Loudout
         public int Bounty { get; set; } = 0;
         public bool TakesDamage { get; set; } = true;
 
+        /// <summary>
+        /// Used for the players "primary weapon slot".
+        /// </summary>
+        public ShipLoadoutWeapon PrimaryWeapon { get; set; }
         public List<SpriteMetadataAttachment> Attachments { get; set; } = new();
         public List<ShipLoadoutWeapon> Weapons { get; set; } = new();
-
-        public SpriteMetadata()
-        {
-        }
     }
 }

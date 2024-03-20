@@ -1,0 +1,59 @@
+{
+  "Name": "Debug",
+  "Description": "→ The code crusader ←\nCrude in design but equipped with advanced diagnostics and repair systems.\nNearly indestructible and inconceivably fast. Its mission is to discover\nglitches in the vast cosmic code, ensuring a smooth journey for all that follow...",
+  "Speed": 4.75,
+  "Boost": 1.5,
+  "HullHealth": 100000,
+  "ShieldHealth": 10000,
+  "PrimaryWeapon":
+  {
+	"Type": "WeaponDualVulcanCannon",
+	"MunitionCount": 2147483647
+  },
+  "Weapons": [
+	{
+	  "Type": "WeaponPhotonTorpedo",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponLancer",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponDualVulcanCannon",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponThunderstrikeMissile",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponScramsMissile",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponPrecisionGuidedFragMissile",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponGuidedFragMissile",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponBlunderbuss",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponFragMissile",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponScattershot",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponVulcanCannon",
+	  "MunitionCount": 2147483647
+	}
+	]
+}

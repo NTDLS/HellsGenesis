@@ -1,14 +1,11 @@
-﻿using Newtonsoft.Json;
-using Si.Audio;
+﻿using Si.Audio;
 using Si.Engine.Loudout;
-using Si.Engine.Manager;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using static Si.Library.SiConstants;
@@ -20,8 +17,7 @@ namespace Si.Engine.Sprite.Player._Superclass
     /// </summary>
     public class SpritePlayerBase : SpriteInteractiveBase
     {
-        public SiPlayerClass ShipClass { get; set; }
-        public LoadoutPlayerShip Loadout { get; private set; }
+        public SpriteMetadata Meta { get; set; }
         public SiAudioClip AmmoLowSound { get; private set; }
         public SiAudioClip AmmoEmptySound { get; private set; }
         public SiAudioClip ShipEngineRoarSound { get; private set; }
@@ -40,7 +36,6 @@ namespace Si.Engine.Sprite.Player._Superclass
         public SpriteAnimation ThrusterAnimation { get; private set; }
         public SpriteAnimation BoostAnimation { get; private set; }
         public WeaponBase PrimaryWeapon { get; private set; }
-        private List<WeaponBase> _secondaryWeapons = new();
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
 
         public SpritePlayerBase(EngineCore engine)
@@ -63,128 +58,9 @@ namespace Si.Engine.Sprite.Player._Superclass
             ShipEngineIdleSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
             ShipEngineBoostSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
 
-            CenterInUniverse();
-        }
-
-        public override void Cleanup()
-        {
-            ThrusterAnimation?.QueueForDelete();
-            BoostAnimation?.QueueForDelete();
-            base.Cleanup();
-        }
-
-        public override void VisibilityChanged()
-        {
-            UpdateThrustAnimationPositions();
-            if (Visable == false)
-            {
-                if (ThrusterAnimation != null) ThrusterAnimation.Visable = false;
-                if (BoostAnimation != null) BoostAnimation.Visable = false;
-                ShipEngineIdleSound?.Stop();
-                ShipEngineRoarSound?.Stop();
-            }
-        }
-
-        public override void RotationChanged() => UpdateThrustAnimationPositions();
-
-        //The player position does not change, only the background offset changes... hmmmm. :/
-        public override void LocationChanged() => UpdateThrustAnimationPositions();
-
-        public string GetLoadoutHelpText()
-        {
-            string weaponName = SiReflection.GetStaticPropertyValue(Loadout.PrimaryWeapon.Type, "Name");
-            string primaryWeapon = $"{weaponName} x{Loadout.PrimaryWeapon.MunitionCount}";
-
-            string secondaryWeapons = string.Empty;
-            foreach (var weapon in Loadout.SecondaryWeapons)
-            {
-                weaponName = SiReflection.GetStaticPropertyValue(weapon.Type, "Name");
-                secondaryWeapons += $"{weaponName} x{weapon.MunitionCount}\n{new string(' ', 20)}";
-            }
-
-            string result = $"             Name : {Loadout.Name}\n";
-            result += $"   Primary weapon : {primaryWeapon.Trim()}\n";
-            result += $"Secondary Weapons : {secondaryWeapons.Trim()}\n";
-            result += $"          Shields : {Loadout.ShieldHealth:n0}\n";
-            result += $"    Hull Strength : {Loadout.HullHealth:n0}\n";
-            result += $"        Max Speed : {Loadout.Speed:n1}\n";
-            result += $"      Surge Drive : {Loadout.Boost:n1}\n";
-            result += $"\n{Loadout.Description}";
-
-            return result;
-        }
-
-        public LoadoutPlayerShip LoadLoadoutFromFile(SiPlayerClass shipClass)
-        {
-            LoadoutPlayerShip loadout = null;
-
-            var loadoutText = AssetManager.GetUserText($"Player.{shipClass}.loadout.json");
-
-            try
-            {
-                if (string.IsNullOrWhiteSpace(loadoutText) == false)
-                {
-                    loadout = JsonConvert.DeserializeObject<LoadoutPlayerShip>(loadoutText);
-                }
-            }
-            catch
-            {
-                loadout = null;
-            }
-
-            return loadout;
-        }
-
-        public void SaveLoadoutToFile(LoadoutPlayerShip loadout)
-        {
-            var serializedText = JsonConvert.SerializeObject(loadout, Formatting.Indented);
-            AssetManager.PutUserText($"Player.{loadout.Class}.loadout.json", serializedText);
-        }
-
-        /// <summary>
-        /// Resets ship image, state, health etc while allowing you to change the class.
-        /// </summary>
-        /// <param name="playerClass"></param>
-        public void ResetLoadout(LoadoutPlayerShip loadout)
-        {
-            Loadout = loadout;
-            SetImage(@$"Sprites\Player\Ships\{loadout.Name}.png");
-            Reset();
-        }
-
-        /// <summary>
-        /// Resets ship state, health etc while keeping the existing class.
-        /// </summary>
-        public void Reset()
-        {
-            ClearPrimaryWeapon();
-            ClearSecondaryWeapons();
-
-            ReviveDeadOrExploded();
-
             Velocity.ForwardAngle = new SiAngle(0);
-
             Velocity.ForwardVelocity = 0;
             Velocity.AvailableBoost = _engine.Settings.MaxPlayerBoostAmount;
-
-            #region Reset loadout.
-
-            Velocity.MaximumSpeed = Loadout.Speed;
-            Velocity.MaximumSpeedBoost = Loadout.Boost;
-
-            SetHullHealth(Loadout.HullHealth);
-            SetShieldHealth(Loadout.ShieldHealth);
-
-            SetPrimaryWeapon(Loadout.PrimaryWeapon.Type, Loadout.PrimaryWeapon.MunitionCount);
-
-            foreach (var secondaryWeapon in Loadout.SecondaryWeapons)
-            {
-                AddSecondaryWeapon(secondaryWeapon.Type, secondaryWeapon.MunitionCount);
-            }
-
-            #endregion
-
-            SelectFirstAvailableUsableSecondaryWeapon();
 
             if (ThrusterAnimation == null || ThrusterAnimation.IsQueuedForDeletion == true)
             {
@@ -223,6 +99,66 @@ namespace Si.Engine.Sprite.Player._Superclass
                 _engine.Sprites.Animations.Insert(BoostAnimation, this);
                 BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
             }
+
+            CenterInUniverse();
+        }
+
+        public override void Cleanup()
+        {
+            ThrusterAnimation?.QueueForDelete();
+            BoostAnimation?.QueueForDelete();
+            base.Cleanup();
+        }
+
+        public override void VisibilityChanged()
+        {
+            UpdateThrustAnimationPositions();
+            if (Visable == false)
+            {
+                if (ThrusterAnimation != null) ThrusterAnimation.Visable = false;
+                if (BoostAnimation != null) BoostAnimation.Visable = false;
+                ShipEngineIdleSound?.Stop();
+                ShipEngineRoarSound?.Stop();
+            }
+        }
+
+        public override void RotationChanged() => UpdateThrustAnimationPositions();
+
+        //The player position does not change, only the background offset changes... hmmmm. :/
+        public override void LocationChanged() => UpdateThrustAnimationPositions();
+
+        public string GetLoadoutHelpText()
+        {
+            string weaponName = SiReflection.GetStaticPropertyValue(Meta.PrimaryWeapon.Type, "Name");
+            string primaryWeapon = $"{weaponName} x{Meta.PrimaryWeapon.MunitionCount}";
+
+            string secondaryWeapons = string.Empty;
+            foreach (var weapon in Meta.Weapons)
+            {
+                weaponName = SiReflection.GetStaticPropertyValue(weapon.Type, "Name");
+                secondaryWeapons += $"{weaponName} x{weapon.MunitionCount}\n{new string(' ', 20)}";
+            }
+
+            string result = $"             Name : {Meta.Name}\n";
+            result += $"   Primary weapon : {primaryWeapon.Trim()}\n";
+            result += $"Secondary Weapons : {secondaryWeapons.Trim()}\n";
+            result += $"          Shields : {Meta.ShieldHealth:n0}\n";
+            result += $"    Hull Strength : {Meta.HullHealth:n0}\n";
+            result += $"        Max Speed : {Meta.Speed:n1}\n";
+            result += $"      Surge Drive : {Meta.Boost:n1}\n";
+            result += $"\n{Meta.Description}";
+
+            return result;
+        }
+
+        /// <summary>
+        /// Resets ship state, health etc while keeping the existing class.
+        /// </summary>
+        public void Reset()
+        {
+            ReviveDeadOrExploded();
+
+            //TODO: We should reload Meta and reapply it.
         }
 
         public override void AddShieldHealth(int pointsToAdd)
@@ -303,106 +239,19 @@ namespace Si.Engine.Sprite.Player._Superclass
 
         #region Weapons selection and evaluation.
 
-        public void ClearPrimaryWeapon()
-        {
-            PrimaryWeapon = null;
-        }
-
-        public void ClearSecondaryWeapons() => _secondaryWeapons.Clear();
-
         public void SetPrimaryWeapon(string weaponTypeName, int munitionCount)
         {
             var weaponType = SiReflection.GetTypeByName(weaponTypeName);
 
-            if (PrimaryWeapon?.GetType() == weaponType)
-            {
-                PrimaryWeapon.RoundQuantity += munitionCount;
-            }
-            else
-            {
-                var weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _engine, this });
-                weapon.RoundQuantity += munitionCount;
-                PrimaryWeapon = weapon;
-
-                if (PrimaryWeapon == null) //If there is no primary weapon selected, then default to the newly added one.
-                {
-                    PrimaryWeapon = weapon;
-                }
-            }
+            PrimaryWeapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, [_engine, this]);
+            PrimaryWeapon.RoundQuantity = munitionCount;
         }
-
-        public void AddSecondaryWeapon(string weaponTypeName, int munitionCount)
-        {
-            var weaponType = SiReflection.GetTypeByName(weaponTypeName);
-
-            var weapon = _secondaryWeapons.Where(o => o.GetType() == weaponType).SingleOrDefault();
-
-            if (weapon == null)
-            {
-                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _engine, this });
-                weapon.RoundQuantity += munitionCount;
-                _secondaryWeapons.Add(weapon);
-            }
-            else
-            {
-                weapon.RoundQuantity += munitionCount;
-            }
-
-            if (SelectedSecondaryWeapon == null) //If there is no secondary weapon selected, then default to the newly added one.
-            {
-                SelectedSecondaryWeapon = weapon;
-            }
-        }
-
-        /// <summary>
-        /// Adds a new primary weapon or adds its ammo to the current of its type.
-        /// </summary>
-        /// <param name="weapon"></param>
-        public void SetPrimaryWeapon<T>(int munitionCount) where T : WeaponBase
-        {
-            if (PrimaryWeapon is T)
-            {
-                PrimaryWeapon.RoundQuantity += munitionCount;
-            }
-            else
-            {
-                PrimaryWeapon = SiReflection.CreateInstanceOf<T>(new object[] { _engine, this });
-                PrimaryWeapon.RoundQuantity += munitionCount;
-            }
-        }
-
-        /// <summary>
-        /// Adds a new secondary weapon or adds its ammo to the current of its type.
-        /// </summary>
-        /// <param name="weapon"></param>
-        public void AddSecondaryWeapon<T>(int munitionCount) where T : WeaponBase
-        {
-            var weapon = GetSecondaryWeaponOfType<T>();
-            if (weapon == null)
-            {
-                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _engine, this });
-                weapon.RoundQuantity += munitionCount;
-                _secondaryWeapons.Add(weapon);
-            }
-            else
-            {
-                weapon.RoundQuantity += munitionCount;
-            }
-
-            if (SelectedSecondaryWeapon == null) //If there is no secondary weapon selected, then default to the newly added one.
-            {
-                SelectedSecondaryWeapon = weapon;
-            }
-        }
-
-        public int TotalAvailableSecondaryWeaponRounds() => (from o in _secondaryWeapons select o.RoundQuantity).Sum();
-        public int TotalSecondaryWeaponFiredRounds() => (from o in _secondaryWeapons select o.RoundsFired).Sum();
 
         public WeaponBase SelectPreviousAvailableUsableSecondaryWeapon()
         {
             WeaponBase previousWeapon = null;
 
-            foreach (var weapon in _secondaryWeapons)
+            foreach (var weapon in Weapons)
             {
                 if (weapon == SelectedSecondaryWeapon)
                 {
@@ -424,7 +273,7 @@ namespace Si.Engine.Sprite.Player._Superclass
         {
             bool selectNextWeapon = false;
 
-            foreach (var weapon in _secondaryWeapons)
+            foreach (var weapon in Weapons)
             {
                 if (selectNextWeapon)
                 {
@@ -441,45 +290,23 @@ namespace Si.Engine.Sprite.Player._Superclass
             return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
         }
 
-        public bool HasSecondaryWeapon<T>() where T : WeaponBase
+        public WeaponBase SelectFirstAvailableUsableSecondaryWeapon()
         {
-            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
-            return existingWeapon != null;
-        }
-
-        public bool HasSecondaryWeaponAndAmmo<T>() where T : WeaponBase
-        {
-            var existingWeapon = (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
-            return existingWeapon != null && existingWeapon.RoundQuantity > 0;
-        }
-
-        public bool HasPrimaryWeaponAndAmmo<T>() where T : WeaponBase
-        {
-            if (PrimaryWeapon is T)
+            var existingWeapon = (from o in Weapons where o.RoundQuantity > 0 select o).FirstOrDefault();
+            if (existingWeapon != null)
             {
-                return PrimaryWeapon.RoundQuantity > 0;
+                SelectedSecondaryWeapon = existingWeapon;
             }
-            return false;
-        }
-
-        public bool HasPrimaryWeaponAndAmmo()
-        {
-            return PrimaryWeapon?.RoundQuantity > 0;
-        }
-
-        public bool HasSelectedPrimaryWeaponAndAmmo()
-        {
-            return PrimaryWeapon != null && PrimaryWeapon.RoundQuantity > 0;
-        }
-
-        public bool HasSelectedSecondaryWeaponAndAmmo()
-        {
-            return SelectedSecondaryWeapon != null && SelectedSecondaryWeapon.RoundQuantity > 0;
+            else
+            {
+                SelectedSecondaryWeapon = null;
+            }
+            return SelectedSecondaryWeapon;
         }
 
         public WeaponBase SelectLastAvailableUsableSecondaryWeapon()
         {
-            var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).LastOrDefault();
+            var existingWeapon = (from o in Weapons where o.RoundQuantity > 0 select o).LastOrDefault();
             if (existingWeapon != null)
             {
                 SelectedSecondaryWeapon = existingWeapon;
@@ -488,31 +315,6 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 SelectedSecondaryWeapon = null;
             }
-            return SelectedSecondaryWeapon;
-        }
-
-        public WeaponBase SelectFirstAvailableUsableSecondaryWeapon()
-        {
-            var existingWeapon = (from o in _secondaryWeapons where o.RoundQuantity > 0 select o).FirstOrDefault();
-            if (existingWeapon != null)
-            {
-                SelectedSecondaryWeapon = existingWeapon;
-            }
-            else
-            {
-                SelectedSecondaryWeapon = null;
-            }
-            return SelectedSecondaryWeapon;
-        }
-
-        public WeaponBase GetSecondaryWeaponOfType<T>() where T : WeaponBase
-        {
-            return (from o in _secondaryWeapons where o.GetType() == typeof(T) select o).FirstOrDefault();
-        }
-
-        public WeaponBase SelectSecondaryWeapon<T>() where T : WeaponBase
-        {
-            SelectedSecondaryWeapon = GetSecondaryWeaponOfType<T>();
             return SelectedSecondaryWeapon;
         }
 

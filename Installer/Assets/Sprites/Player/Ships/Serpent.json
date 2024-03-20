@@ -1,0 +1,39 @@
+{
+  "Name": "Serpent",
+  "Description": "→ This ship is a placeholder ←\nLook no further, there is nothing to see here.",
+  "Speed": 4.75,
+  "Boost": 1.5,
+  "HullHealth": 100000,
+  "ShieldHealth": 10000,
+  "PrimaryWeapon":
+  {
+	"Type": "WeaponDualVulcanCannon",
+	"MunitionCount": 2147483647
+  },
+  "Weapons": [
+	{
+	  "Type": "WeaponPhotonTorpedo",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponLancer",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponDualVulcanCannon",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponThunderstrikeMissile",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponScramsMissile",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponPrecisionGuidedFragMissile",
+	  "MunitionCount": 2147483647
+	}
+	]
+}
