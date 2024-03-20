@@ -79,7 +79,8 @@
         {
             None,
             Left,
-            Right
+            Right,
+            Random
         }
 
         public enum SiCardinalDirection

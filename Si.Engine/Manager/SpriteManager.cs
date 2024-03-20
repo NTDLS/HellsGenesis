@@ -157,11 +157,18 @@ namespace Si.Engine.Manager
         public T GetSpriteByOwner<T>(uint ownerUID) where T : SpriteBase
             => _collection.Where(o => o.UID == ownerUID).SingleOrDefault() as T;
 
-        public T[] OfType<T>() where T : class
-            => _collection.Where(o => o is T).Select(o => o as T).ToArray();
+        public T[] OfType<T>() where T : SpriteBase
+            => _collection.OfType<T>().ToArray();
 
-        public T[] VisibleOfType<T>() where T : class
-            => _collection.Where(o => o is T && o.Visable == true).Select(o => o as T).ToArray();
+        public T[] VisibleOfType<T>() where T : SpriteBase
+            => _collection.OfType<T>().Where(o => o.Visable).ToArray();
+
+        public T[] VisibleDamagable<T>() where T : class
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.TakesDamage).Select(o => o as T).ToArray();
+
+        //Probably faster than VisibleDamagable<T>().
+        public SpriteInteractiveBase[] VisibleDamagable()
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.TakesDamage).ToArray();
 
         public List<SpriteBase> VisibleOfTypes(Type[] types)
         {

@@ -1,5 +1,4 @@
 ﻿using Si.Engine.Sprite._Superclass;
-using Si.Library.Mathematics;
 
 namespace Si.Engine.Sprite
 {
@@ -10,14 +9,12 @@ namespace Si.Engine.Sprite
         public SpriteAttachment(EngineCore engine)
             : base(engine)
         {
-            Velocity = new SiVelocity();
         }
 
         public SpriteAttachment(EngineCore engine, string imagePath)
             : base(engine)
         {
-            SetImage(imagePath);
-            Velocity = new SiVelocity();
+            SetImageAndLoadMetadata(imagePath);
         }
 
         /// <summary>

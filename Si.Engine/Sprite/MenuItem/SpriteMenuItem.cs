@@ -1,7 +1,6 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using Si.Engine.Menu._Superclass;
-using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using static Si.Library.SiConstants;
 
@@ -46,9 +45,6 @@ namespace Si.Engine.Sprite.MenuItem
             ItemType = SiMenuItemType.Undefined;
             Menu = menu;
             Visable = true;
-            Velocity = new SiVelocity();
-
-
         }
     }
 }

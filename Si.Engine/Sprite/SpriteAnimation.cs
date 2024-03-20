@@ -2,7 +2,6 @@
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
 using Si.Engine.Sprite._Superclass;
-using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Drawing;
@@ -69,8 +68,6 @@ namespace Si.Engine.Sprite
             _frameCount = _rows * _columns;
 
             Location = new SiPoint(0, 0);
-            Velocity = new SiVelocity();
-            TakesDamage = false; //By default, animation DO NOT take damage, but they can if enabled.
 
             AdvanceImage();
         }

@@ -1,15 +1,10 @@
 ﻿using NTDLS.DelegateThreadPooling;
 using Si.Engine.Manager;
-using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
-using Si.Engine.Sprite.Enemy.Boss._Superclass;
-using Si.Engine.Sprite.Enemy.Peon._Superclass;
-using Si.Engine.Sprite.Enemy.Starbase._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Engine.TickController._Superclass;
-using Si.GameEngine.Manager;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Concurrent;
@@ -54,21 +49,9 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             var munitions = VisibleOfType<MunitionBase>();
             if (munitions.Count() != 0)
             {
-                var interactiveSprites = SpriteManager.VisibleOfType<SpriteInteractiveBase>()
-                    .Where(o => o.TakesDamage == true).ToList();
-
-                var objectsPlayerCanHit = interactiveSprites.OfTypes([
-                    typeof(SpriteEnemyBossBase),
-                    typeof(SpriteEnemyPeonBase),
-                    typeof(SpriteAttachment),
-                    typeof(SpriteDebug),
-                    typeof(SpriteEnemyStarbase),
-                    typeof(SpriteAnimation)
-                ]).ToArray();
-
-                var objectsEnemyCanHit = interactiveSprites.OfTypes([
-                    typeof(SpritePlayerBase)
-                ]).ToArray();
+                var interactiveSprites = SpriteManager.VisibleDamagable();
+                var objectsPlayerCanHit = interactiveSprites.Where(o => o is not SpritePlayerBase).ToArray();
+                var objectsEnemyCanHit = interactiveSprites.Where(o => o is SpritePlayerBase).ToArray();
 
                 //Create a collection of threads so we can wait on the ones that we start.
                 var threadPoolTracker = _munitionTraversalThreadPool.CreateQueueStateTracker();

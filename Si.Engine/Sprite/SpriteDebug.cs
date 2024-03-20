@@ -1,5 +1,4 @@
 ﻿using Si.Engine.Sprite._Superclass;
-using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 
 namespace Si.Engine.Sprite
@@ -9,31 +8,25 @@ namespace Si.Engine.Sprite
         public SpriteDebug(EngineCore engine)
             : base(engine)
         {
-            SetImage(@"Sprites\Debug.png");
-            Velocity = new SiVelocity();
-
+            SetImageAndLoadMetadata(@"Sprites\Debug.png");
             SetHullHealth(100000);
         }
 
         public SpriteDebug(EngineCore engine, float x, float y)
             : base(engine)
         {
-            SetImage(@"Sprites\Debug.png");
+            SetImageAndLoadMetadata(@"Sprites\Debug.png");
             X = x;
             Y = y;
-            Velocity = new SiVelocity();
-
             SetHullHealth(100000);
         }
 
         public SpriteDebug(EngineCore engine, float x, float y, string imagePath)
             : base(engine)
         {
-            SetImage(imagePath);
+            SetImageAndLoadMetadata(imagePath);
             X = x;
             Y = y;
-            Velocity = new SiVelocity();
-
             SetHullHealth(100000);
         }
 

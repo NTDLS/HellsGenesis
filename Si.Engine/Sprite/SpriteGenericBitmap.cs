@@ -1,14 +1,12 @@
 ﻿using Si.Engine.Sprite._Superclass;
-using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite
 {
-    public class SpriteGenericBitmap : SpriteBase
+    public class SpriteGenericBitmap : SpriteInteractiveBase
     {
         /// <summary>
         /// The max travel distance from the creation x,y before the sprite is automatically deleted.
@@ -27,36 +25,18 @@ namespace Si.Engine.Sprite
         public SiAngle TravelAngle { get; set; } = new SiAngle();
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
         public float RotationSpeed { get; set; } = 0;
-        public SiRelativeDirection RotationDirection { get; set; } = SiRelativeDirection.None;
-
-
-        public SpriteGenericBitmap(EngineCore engine, SiPoint location, SharpDX.Direct2D1.Bitmap bitmap)
-            : base(engine)
-        {
-            SetImage(bitmap);
-            Location = location.Clone();
-            Velocity = new SiVelocity();
-
-            RotationSpeed = SiRandom.Between(1, 100) / 20.0f;
-            RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
-            TravelAngle.Degrees = SiRandom.Between(0, 359);
-
-            Velocity.ForwardVelocity = 100;
-            Velocity.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
-        }
+        public SiRelativeDirection RotationDirection { get; set; }
 
         public SpriteGenericBitmap(EngineCore engine, SharpDX.Direct2D1.Bitmap bitmap)
             : base(engine)
         {
             SetImage(bitmap);
-            Velocity = new SiVelocity();
         }
 
         public SpriteGenericBitmap(EngineCore engine, string imagePath)
             : base(engine)
         {
-            SetImage(imagePath);
-            Velocity = new SiVelocity();
+            SetImageAndLoadMetadata(imagePath);
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)

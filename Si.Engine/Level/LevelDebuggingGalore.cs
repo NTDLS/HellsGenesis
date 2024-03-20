@@ -1,15 +1,12 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
-using Si.Engine.Sprite;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Enemy.Peon;
 using Si.GameEngine.Sprite.Enemy.Starbase.Garrison;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
-using System.Drawing;
 using System.Linq;
-using static Si.Engine.Sprite.SpriteAnimation;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Level
@@ -112,43 +109,26 @@ namespace Si.Engine.Level
 
         public void AddAsteroidField(int rowCount, int colCount)
         {
-            var playMode = new PlayMode()
-            {
-                Replay = SiAnimationReplayMode.LoopedPlay,
-                DeleteSpriteAfterPlay = false,
-                ReplayDelay = new TimeSpan(0)
-            };
-
             for (int row = 0; row < rowCount; row++)
             {
                 for (int col = 0; col < colCount; col++)
                 {
-                    SpriteAnimation ani;
+                    var asteroid = _engine.Sprites.GenericSprites.Add($@"Sprites\Asteroid\{SiRandom.Between(0, 23)}.png");
 
-                    float framesPerSecond = SiRandom.Between(20, 60); //These are native 22fps.
+                    float totalXOffset = -(asteroid.Size.Width * colCount);
+                    float totalYOffset = (_engine.Display.TotalCanvasSize.Height + (asteroid.Size.Height * rowCount));
 
-                    switch (SiRandom.Between(1, 3))
-                    {
-                        case 1:
-                            ani = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeIce.png", new Size(246, 248), framesPerSecond, playMode);
-                            break;
-                        case 2:
-                            ani = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeStandard.png", new Size(264, 241), framesPerSecond, playMode);
-                            break;
-                        default:
-                            ani = _engine.Sprites.Animations.Add(@"Sprites\Animation\Asteroid\LargeLava.png", new Size(256, 225), framesPerSecond, playMode);
-                            break;
-                    }
+                    asteroid.Location = new SiPoint(totalXOffset + asteroid.Size.Width * col, totalYOffset - asteroid.Size.Height * row);
 
-                    float totalXOffset = -(ani.Size.Width * colCount);
-                    float totalYOffset = (_engine.Display.TotalCanvasSize.Height + (ani.Size.Height * rowCount));
+                    asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
+                    asteroid.Velocity.MaximumSpeed = SiRandom.Variance(asteroid.Velocity.MaximumSpeed, 0.20f);
+                    asteroid.Velocity.ForwardVelocity = 1.0f;
 
-                    ani.Location = new SiPoint(totalXOffset + ani.Size.Width * col, totalYOffset - ani.Size.Height * row);
-                    ani.Velocity.ForwardAngle.Degrees = -45 + SiRandom.Between(-10, 10);
-                    ani.Velocity.MaximumSpeed = 2f + SiRandom.Between(-0.5f, 0.5f);
-                    ani.Velocity.ForwardVelocity = 1.0f;
-                    ani.TakesDamage = true;
-                    ani.SetHullHealth(100);
+                    asteroid.VectorType = ParticleVectorType.UseTravelAngle;
+                    asteroid.RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Right : SiRelativeDirection.Left;
+                    asteroid.RotationSpeed = SiRandom.Between(-1f, 1f);
+
+                    asteroid.SetHullHealth(100);
                 }
             }
         }

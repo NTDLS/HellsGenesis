@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite._Superclass
     {
         public SiTimeRenewableResources RenewableResources { get; set; } = new();
 
-        public bool TakesDamage { get; set; } = true;
+        public bool TakesDamage { get; set; }
 
         public List<WeaponBase> Weapons { get; private set; } = new();
 

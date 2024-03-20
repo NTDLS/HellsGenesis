@@ -29,7 +29,7 @@ namespace Si.Engine.Sprite._Superclass
         protected SharpDX.Direct2D1.Bitmap _lockedOnSoftImage;
 
         private bool _isLockedOn = false;
-        private SiVelocity _velocity;
+        private SiVelocity _velocity = new();
         private bool _readyForDeletion;
         private SiPoint _location = new();
         private Size _size;
@@ -245,7 +245,6 @@ namespace Si.Engine.Sprite._Superclass
             _engine = engine;
 
             SpriteTag = spriteTag;
-            Velocity = new SiVelocity();
             IsHighlighted = _engine.Settings.HighlightAllSprites;
         }
 
