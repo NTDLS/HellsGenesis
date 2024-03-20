@@ -7,7 +7,9 @@ using Si.Library.Mathematics.Geometry;
 namespace Si.Engine.Sprite.Enemy.Boss
 {
     /// <summary>
-    /// 100% Experimental
+    /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /// !!! This is OLD code and is provided as an example, this should not be used !!!
+    /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /// </summary>
     internal class SpriteEnemySpectre : SpriteEnemyBossBase
     {

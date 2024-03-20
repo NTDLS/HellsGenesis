@@ -228,7 +228,7 @@ namespace Si.Engine
                     Audio.BackgroundMusicSound.Play();
                 }
 
-                Sprites.Nebulas.AddAtCenterUniverse();
+                Sprites.SkyBoxes.AddAtCenterUniverse();
 
                 Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
             }
