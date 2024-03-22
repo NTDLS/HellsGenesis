@@ -1,4 +1,5 @@
-﻿using Si.Library.Mathematics.Geometry;
+﻿using Si.Engine.Sprite._Superclass;
+using Si.Library.Mathematics.Geometry;
 
 namespace Si.Engine.TickController._Superclass
 {
@@ -13,7 +14,7 @@ namespace Si.Engine.TickController._Superclass
         /// Moves the player and returns the direction and amount of movment which was applied.
         /// </summary>
         /// <returns>Returns the direction and amount of movement that the player has moved in the current tick.</returns>
-        public virtual SiPoint ExecuteWorldClockTick(float epochTimeepoch) => new();
+        public virtual SiPoint ExecuteWorldClockTick(float epochTimeepoch, SpriteInteractiveBase[] collidables) => new();
 
         public PlayerSpriteTickControllerBase(EngineCore engine)
         {

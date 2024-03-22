@@ -1,10 +1,11 @@
-﻿using Si.Engine.Manager;
+﻿using Si.Engine;
+using Si.Engine.Manager;
 using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
 
-namespace Si.Engine.TickController.VectoredTickControllerBase
+namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
 {
     public class AttachmentSpriteTickController : VectoredTickControllerBase<SpriteAttachment>
     {

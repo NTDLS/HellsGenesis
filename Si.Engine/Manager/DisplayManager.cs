@@ -43,8 +43,11 @@ namespace Si.Engine.Manager
             float remainingRatioZoom = 1 - BaseDrawScale;
             float debugFactor = remainingRatioZoom * weightedThrottlePercent;
 
-            //return BaseDrawScale + debugFactor;
+#if DEBUG
             return 1;
+#else
+            return BaseDrawScale + debugFactor;
+#endif
         }
 
         public float BaseDrawScale => 100.0f / _engine.Settings.OverdrawScale / 100.0f;

@@ -191,21 +191,23 @@ namespace Si.Engine
 
             _engine.Input.Snapshot();
 
-            var displacementVector = _engine.Player.ExecuteWorldClockTick(epoch);
+            var collidables = _engine.Sprites.VisibleColliadble();
+
+            var displacementVector = _engine.Player.ExecuteWorldClockTick(epoch, collidables);
 
             //Create a collection of threads so we can wait on the ones that we start.
             var threadPoolTracker = _worldClockThreadPool.CreateQueueStateTracker();
 
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Enemies.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Enemies.ExecuteWorldClockTick(epoch, displacementVector, collidables));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Particles.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.GenericSprites.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.GenericSprites.ExecuteWorldClockTick(epoch, displacementVector, collidables));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Munitions.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Stars.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.SkyBoxes.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Animations.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.TextBlocks.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Powerups.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Debugs.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Debugs.ExecuteWorldClockTick(epoch, displacementVector, collidables));
 
             //Wait on all enqueued threads to complete.
             if (SiUtility.TryAndIgnore(() => threadPoolTracker.WaitForCompletion()) == false)

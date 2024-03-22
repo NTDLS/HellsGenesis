@@ -10,6 +10,12 @@ namespace Si.Library
         public delegate void TryAndIgnoreProc();
         public delegate T TryAndIgnoreProc<T>();
 
+        public static int GreaterOf(int one, int two) => (one > two) ? one : two;
+        public static int LssserOf(int one, int two) => (one < two) ? one : two;
+
+        public static uint GreaterOf(uint one, uint two) => (one > two) ? one : two;
+        public static uint LssserOf(uint one, uint two) => (one < two) ? one : two;
+
         /// <summary>
         /// Executes the given delegate and returns true if successful.
         /// </summary>

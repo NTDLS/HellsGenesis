@@ -1,4 +1,5 @@
-﻿using Si.Engine.Manager;
+﻿using Si.Engine;
+using Si.Engine.Manager;
 using Si.Engine.Sprite;
 using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
@@ -6,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Si.Engine.TickController.VectoredTickControllerBase
+namespace Si.GameEngine.TickController.UnvectoredTickController
 {
     public class RadarPositionsSpriteTickController : UnvectoredTickControllerBase<SpriteRadarPositionTextBlock>
     {

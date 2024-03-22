@@ -1,13 +1,15 @@
-﻿using Si.Engine.Manager;
+﻿using Si.Engine;
+using Si.Engine.Manager;
+using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
 
-namespace Si.Engine.TickController.VectoredTickControllerBase
+namespace Si.GameEngine.TickController.VectoredTickController.Collidable
 {
-    public class EnemySpriteTickController : VectoredTickControllerBase<SpriteEnemyBase>
+    public class EnemySpriteTickController : VectoredCollidableTickControllerBase<SpriteEnemyBase>
     {
         private readonly EngineCore _engine;
 
@@ -17,12 +19,13 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
             _engine = engine;
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector, SpriteInteractiveBase[] collidables)
         {
             foreach (var enemy in Visible())
             {
                 enemy.ApplyIntelligence(epoch, displacementVector);
                 enemy.ApplyMotion(epoch, displacementVector);
+                enemy.PerformCollisionDetection(collidables);
                 enemy.RenewableResources.RenewAllResources(epoch);
             }
         }

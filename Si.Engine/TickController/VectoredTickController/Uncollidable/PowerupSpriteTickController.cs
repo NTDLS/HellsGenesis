@@ -1,10 +1,11 @@
-﻿using Si.Engine.Manager;
+﻿using Si.Engine;
+using Si.Engine.Manager;
 using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics.Geometry;
 using System;
 
-namespace Si.Engine.TickController.VectoredTickControllerBase
+namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
 {
     public class PowerupSpriteTickController : VectoredTickControllerBase<SpritePowerupBase>
     {

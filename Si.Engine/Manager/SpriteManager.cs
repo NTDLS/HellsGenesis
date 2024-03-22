@@ -6,7 +6,9 @@ using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
-using Si.Engine.TickController.VectoredTickControllerBase;
+using Si.GameEngine.TickController.UnvectoredTickController;
+using Si.GameEngine.TickController.VectoredTickController.Collidable;
+using Si.GameEngine.TickController.VectoredTickController.Uncollidable;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -168,7 +170,14 @@ namespace Si.Engine.Manager
 
         //Probably faster than VisibleDamagable<T>().
         public SpriteInteractiveBase[] VisibleDamagable()
-            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata.TakesMunitionDamage).ToArray();
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata?.TakesMunitionDamage == true).ToArray();
+
+        public T[] VisibleColliadble<T>() where T : class
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata.CollisionDetection).Select(o => o as T).ToArray();
+
+        //Probably faster than VisibleColliadble<T>().
+        public SpriteInteractiveBase[] VisibleColliadble()
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata?.CollisionDetection == true).ToArray();
 
         public List<SpriteBase> VisibleOfTypes(Type[] types)
         {

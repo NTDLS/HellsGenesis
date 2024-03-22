@@ -1,4 +1,5 @@
 ﻿using SharpDX;
+using Si.Engine;
 using Si.Engine.Manager;
 using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
@@ -9,7 +10,7 @@ using Si.Rendering;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
-namespace Si.Engine.TickController.VectoredTickControllerBase
+namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
 {
     public class ParticleSpriteTickController : VectoredTickControllerBase<SpriteParticleBase>
     {

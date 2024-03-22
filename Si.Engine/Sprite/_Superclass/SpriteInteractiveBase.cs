@@ -7,6 +7,7 @@ using Si.Library;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -171,6 +172,31 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="displacementVector"></param>
         public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
+        }
+
+        /// <summary>
+        /// Performs collision detection for this one sprite using the passed in collection of collidable objects.
+        /// 
+        /// This is called before ApplyMotion().
+        /// </summary>
+        /// <param name="collidables"></param>
+        public virtual void PerformCollisionDetection(SpriteInteractiveBase[] collidables)
+        {
+            IsHighlighted = true;
+
+            foreach (var other in collidables)
+            {
+                if (this == other)
+                {
+                    continue;
+                }
+
+                if (Intersects(other))
+                {
+                    //HEY PAT!
+                    Debug.WriteLine($"{this.UID}->{other.UID}");
+                }
+            }
         }
     }
 }

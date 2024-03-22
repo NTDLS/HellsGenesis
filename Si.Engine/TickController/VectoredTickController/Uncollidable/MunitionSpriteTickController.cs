@@ -1,4 +1,5 @@
 ﻿using NTDLS.DelegateThreadPooling;
+using Si.Engine;
 using Si.Engine.Manager;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
@@ -11,7 +12,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using static Si.Library.SiConstants;
 
-namespace Si.Engine.TickController.VectoredTickControllerBase
+namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
 {
     public class MunitionSpriteTickController : VectoredTickControllerBase<MunitionBase>
     {
