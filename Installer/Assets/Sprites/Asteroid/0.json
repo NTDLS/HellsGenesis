@@ -2,5 +2,6 @@
   "Speed": 3,
   "HullHealth": 100,
   "Bounty": 0,
-  "TakesDamage": true
+  "TakesMunitionDamage": true,
+  "CollisionDetection": true
 }

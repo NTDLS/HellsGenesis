@@ -19,11 +19,9 @@ namespace Si.Engine.Sprite._Superclass
     {
         public SiTimeRenewableResources RenewableResources { get; set; } = new();
 
-        public bool TakesDamage { get; set; }
+        public InteractiveSpriteMetadata Metadata { get; set; }
 
         public List<WeaponBase> Weapons { get; private set; } = new();
-
-        public int Bounty { get; set; } = 0;
 
         public SpriteInteractiveBase(EngineCore engine, string name = "")
             : base(engine, name)
@@ -43,32 +41,27 @@ namespace Si.Engine.Sprite._Superclass
             string metadataFile = $"{Path.GetDirectoryName(spriteImagePath)}\\{Path.GetFileNameWithoutExtension(spriteImagePath)}.json";
             var metadataJson = _engine.Assets.GetText(metadataFile);
 
-            var metadata = JsonConvert.DeserializeObject<InteractiveSpriteMetadata>(metadataJson);
+            Metadata = JsonConvert.DeserializeObject<InteractiveSpriteMetadata>(metadataJson);
 
-            Velocity.MaximumSpeed = metadata.Speed;
-            Velocity.MaximumSpeedBoost = metadata.Boost;
-            Bounty = metadata.Bounty;
-            TakesDamage = metadata.TakesDamage;
+            Velocity.MaximumSpeed = Metadata.Speed;
+            Velocity.MaximumSpeedBoost = Metadata.Boost;
 
-            SetHullHealth(metadata.HullHealth);
-            SetShieldHealth(metadata.ShieldHealth);
+            SetHullHealth(Metadata.HullHealth);
+            SetShieldHealth(Metadata.ShieldHealth);
 
-            foreach (var weapon in metadata.Weapons)
+            foreach (var weapon in Metadata.Weapons)
             {
                 AddWeapon(weapon.Type, weapon.MunitionCount);
             }
 
-            foreach (var attachment in metadata.Attachments)
+            foreach (var attachment in Metadata.Attachments)
             {
                 AttachOfType(attachment.Type, attachment.LocationRelativeToOwner);
             }
 
             if (this is SpritePlayerBase player)
             {
-                player.Meta = metadata;
-
-                player.SetPrimaryWeapon(metadata.PrimaryWeapon.Type, metadata.PrimaryWeapon.MunitionCount);
-
+                player.SetPrimaryWeapon(Metadata.PrimaryWeapon.Type, Metadata.PrimaryWeapon.MunitionCount);
                 player.SelectFirstAvailableUsableSecondaryWeapon();
             }
         }

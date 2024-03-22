@@ -27,10 +27,10 @@ namespace Si.Engine.Sprite.Enemy.Boss
         public SpriteEnemySpectre(EngineCore engine)
             : base(engine)
         {
-            _leftGun = Attach(_assetPath + "Gun.Left.png", true, 3);
-            _rightGun = Attach(_assetPath + "Gun.Right.png", true, 3);
-            _leftThrust = Attach(_assetPath + "Jet.png", true, 3);
-            _rightThrust = Attach(_assetPath + "Jet.png", true, 3);
+            _leftGun = Attach(_assetPath + "Gun.Left.png");
+            _rightGun = Attach(_assetPath + "Gun.Right.png");
+            _leftThrust = Attach(_assetPath + "Jet.png");
+            _rightThrust = Attach(_assetPath + "Jet.png");
 
             SetImageAndLoadMetadata(@"Sprites\Enemy\Boss\Spectre\Hull.png");
 

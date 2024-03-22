@@ -22,8 +22,6 @@ namespace Si.Engine.Sprite.PowerUp
         {
             if (Intersects(_engine.Player.Sprite))
             {
-                _engine.Player.Sprite.Bounty += PowerupAmount;
-
                 Explode();
             }
             else if (AgeInMilliseconds > TimeToLive)

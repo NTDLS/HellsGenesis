@@ -2,7 +2,6 @@
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
-using Si.GameEngine.Sprite.Metadata;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -17,7 +16,6 @@ namespace Si.Engine.Sprite.Player._Superclass
     /// </summary>
     public class SpritePlayerBase : SpriteInteractiveBase
     {
-        public InteractiveSpriteMetadata Meta { get; set; }
         public SiAudioClip AmmoLowSound { get; private set; }
         public SiAudioClip AmmoEmptySound { get; private set; }
         public SiAudioClip ShipEngineRoarSound { get; private set; }
@@ -129,24 +127,24 @@ namespace Si.Engine.Sprite.Player._Superclass
 
         public string GetLoadoutHelpText()
         {
-            string weaponName = SiReflection.GetStaticPropertyValue(Meta.PrimaryWeapon.Type, "Name");
-            string primaryWeapon = $"{weaponName} x{Meta.PrimaryWeapon.MunitionCount}";
+            string weaponName = SiReflection.GetStaticPropertyValue(Metadata.PrimaryWeapon.Type, "Name");
+            string primaryWeapon = $"{weaponName} x{Metadata.PrimaryWeapon.MunitionCount}";
 
             string secondaryWeapons = string.Empty;
-            foreach (var weapon in Meta.Weapons)
+            foreach (var weapon in Metadata.Weapons)
             {
                 weaponName = SiReflection.GetStaticPropertyValue(weapon.Type, "Name");
                 secondaryWeapons += $"{weaponName} x{weapon.MunitionCount}\n{new string(' ', 20)}";
             }
 
-            string result = $"             Name : {Meta.Name}\n";
+            string result = $"             Name : {Metadata.Name}\n";
             result += $"   Primary weapon : {primaryWeapon.Trim()}\n";
             result += $"Secondary Weapons : {secondaryWeapons.Trim()}\n";
-            result += $"          Shields : {Meta.ShieldHealth:n0}\n";
-            result += $"    Hull Strength : {Meta.HullHealth:n0}\n";
-            result += $"        Max Speed : {Meta.Speed:n1}\n";
-            result += $"      Surge Drive : {Meta.Boost:n1}\n";
-            result += $"\n{Meta.Description}";
+            result += $"          Shields : {Metadata.ShieldHealth:n0}\n";
+            result += $"    Hull Strength : {Metadata.HullHealth:n0}\n";
+            result += $"        Max Speed : {Metadata.Speed:n1}\n";
+            result += $"      Surge Drive : {Metadata.Boost:n1}\n";
+            result += $"\n{Metadata.Description}";
 
             return result;
         }
@@ -158,7 +156,7 @@ namespace Si.Engine.Sprite.Player._Superclass
         {
             ReviveDeadOrExploded();
 
-            //TODO: We should reload Meta and reapply it.
+            //TODO: We should reload metadata and reapply it.
         }
 
         public override void AddShieldHealth(int pointsToAdd)

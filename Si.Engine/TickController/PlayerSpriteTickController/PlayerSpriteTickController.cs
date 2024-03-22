@@ -1,6 +1,7 @@
 ﻿using Si.Engine.Sprite.Player;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.TickController._Superclass;
+using Si.GameEngine.Persistent;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
@@ -18,6 +19,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
         private readonly EngineCore _engine;
         private readonly Stopwatch _inputDelay = new Stopwatch();
 
+        public PlayerStats Stats { get; set; } = new(); //This should be saved.
         public SpritePlayerBase Sprite { get; set; }
 
         public PlayerSpriteTickController(EngineCore engine)

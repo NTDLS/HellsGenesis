@@ -46,22 +46,22 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
             Weapon = weapon;
             Velocity.ForwardVelocity = 1.0f;
-            SceneDistanceLimit = SiRandom.Between(weapon.Meta.MunitionSceneDistanceLimit * 0.1f, weapon.Meta.MunitionSceneDistanceLimit);
+            SceneDistanceLimit = SiRandom.Between(weapon.Metadata.MunitionSceneDistanceLimit * 0.1f, weapon.Metadata.MunitionSceneDistanceLimit);
 
             RadarDotSize = new SiPoint(1, 1);
 
             float headingRadians = angle == null ? firedFrom.Velocity.ForwardAngle.Radians : (float)angle;
-            if (weapon.Meta.AngleVarianceDegrees > 0)
+            if (weapon.Metadata.AngleVarianceDegrees > 0)
             {
-                var randomNumber = SiPoint.DegreesToRadians(SiRandom.Between(0, weapon.Meta.AngleVarianceDegrees * 100.0f) / 100.0f);
+                var randomNumber = SiPoint.DegreesToRadians(SiRandom.Between(0, weapon.Metadata.AngleVarianceDegrees * 100.0f) / 100.0f);
                 headingRadians += (SiRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 
-            float initialSpeed = weapon.Meta.Speed;
-            if (weapon.Meta.SpeedVariancePercent > 0)
+            float initialSpeed = weapon.Metadata.Speed;
+            if (weapon.Metadata.SpeedVariancePercent > 0)
             {
-                var randomNumber = SiRandom.Between(0, weapon.Meta.SpeedVariancePercent * 100.0f) / 100.0f;
-                var variance = randomNumber * weapon.Meta.Speed;
+                var randomNumber = SiRandom.Between(0, weapon.Metadata.SpeedVariancePercent * 100.0f) / 100.0f;
+                var variance = randomNumber * weapon.Metadata.Speed;
                 initialSpeed += (SiRandom.FlipCoin() ? 1 : -1) * variance;
             }
 
@@ -118,7 +118,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
         public override void Explode()
         {
-            if (Weapon != null && Weapon.Meta.ExplodesOnImpact)
+            if (Weapon != null && Weapon.Metadata.ExplodesOnImpact)
             {
                 HitExplosion();
             }

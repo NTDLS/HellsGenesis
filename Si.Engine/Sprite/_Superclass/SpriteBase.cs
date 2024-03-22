@@ -624,11 +624,9 @@ namespace Si.Engine.Sprite._Superclass
         /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
         /// </summary>
         /// <returns></returns>
-        public SpriteAttachment Attach(string imagePath, bool takesDamage = false, int hullHealth = 1)
+        public SpriteAttachment Attach(string imagePath)
         {
             var attachment = _engine.Sprites.Attachments.Add(this, imagePath);
-            attachment.TakesDamage = takesDamage;
-            attachment.SetHullHealth(hullHealth);
             Attachments.Add(attachment);
             return attachment;
         }
@@ -637,11 +635,9 @@ namespace Si.Engine.Sprite._Superclass
         /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
         /// </summary>
         /// <returns></returns>
-        public SpriteAttachment Attach<T>(string imagePath, bool takesDamage = false, int hullHealth = 1) where T : SpriteAttachment
+        public SpriteAttachment Attach<T>(string imagePath) where T : SpriteAttachment
         {
             var attachment = _engine.Sprites.Attachments.AddTypeOf<T>(this, imagePath);
-            attachment.TakesDamage = takesDamage;
-            attachment.SetHullHealth(hullHealth);
             Attachments.Add(attachment);
             return attachment;
         }
@@ -859,7 +855,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public virtual void Hit(MunitionBase munition)
         {
-            Hit(munition?.Weapon.Meta?.Damage ?? 0);
+            Hit(munition?.Weapon.Metadata?.Damage ?? 0);
         }
 
         /// <summary>
@@ -1314,7 +1310,7 @@ namespace Si.Engine.Sprite._Superclass
                         color = _engine.Rendering.Materials.Colors.Green;
                     }
 
-                    if (munition.Weapon.Meta.ExplodesOnImpact)
+                    if (munition.Weapon.Metadata.ExplodesOnImpact)
                     {
                         size = 2;
                     }

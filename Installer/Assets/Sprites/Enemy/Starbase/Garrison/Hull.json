@@ -1,6 +1,6 @@
 {
   "Description": "→ Garrison ←\nTODO: Add a description\n",
-  "TakesDamage": false,
+  "TakesMunitionDamage": false,
   "Speed": 0.0,
   "Boost": 0.0,
   "HullHealth": 200,

@@ -26,9 +26,9 @@ namespace Si.Engine.Sprite.Enemy.Boss
         public SpriteEnemyRepulsor(EngineCore engine)
             : base(engine)
         {
-            _leftGun = Attach(_assetPath + "Gun.Left.png", true, 3);
-            _rightGun = Attach(_assetPath + "Gun.Right.png", true, 3);
-            _thrust = Attach(_assetPath + "Jet.png", true, 3);
+            _leftGun = Attach(_assetPath + "Gun.Left.png");
+            _rightGun = Attach(_assetPath + "Gun.Right.png");
+            _thrust = Attach(_assetPath + "Jet.png");
 
             SetImageAndLoadMetadata(@"Sprites\Enemy\Boss\Repulsor\Hull.png");
 

@@ -25,7 +25,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected SiAudioClip _fireSound;
 
-        public WeaponMetadata Meta { get; set; }
+        public WeaponMetadata Metadata { get; set; }
         public List<WeaponsLock> LockedTargets { get; set; } = new();
         public int RoundsFired { get; set; }
         public int RoundQuantity { get; set; }
@@ -53,8 +53,8 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         public void LoadMetadata(string weaponName)
         {
             var metadataJson = _engine.Assets.GetText($@"Sprites\Weapon\{weaponName}.json");
-            Meta = JsonConvert.DeserializeObject<WeaponMetadata>(metadataJson);
-            Meta.MunitionSceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
+            Metadata = JsonConvert.DeserializeObject<WeaponMetadata>(metadataJson);
+            Metadata.MunitionSceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
         }
 
         public virtual MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
@@ -64,7 +64,6 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                 throw new ArgumentNullException("Weapon is not owned.");
             }
             throw new Exception("Create munition should always be overridden by the owning weapon.");
-
         }
 
         public class WeaponsLock
@@ -87,10 +86,10 @@ namespace Si.Engine.Sprite.Weapon._Superclass
 
                 foreach (var potentialTarget in potentialTargets)
                 {
-                    if (Meta.CanLockOn && Owner.IsPointingAt(potentialTarget, Meta.MaxLockOnAngle))
+                    if (Metadata.CanLockOn && Owner.IsPointingAt(potentialTarget, Metadata.MaxLockOnAngle))
                     {
                         var distance = Owner.DistanceTo(potentialTarget);
-                        if (distance.IsBetween(Meta.MinLockDistance, Meta.MaxLockDistance))
+                        if (distance.IsBetween(Metadata.MinLockDistance, Metadata.MaxLockDistance))
                         {
                             LockedTargets.Add(new WeaponsLock()
                             {
@@ -103,14 +102,14 @@ namespace Si.Engine.Sprite.Weapon._Superclass
 
                 LockedTargets = LockedTargets.OrderBy(o => o.Distance).ToList();
 
-                foreach (var hardLock in LockedTargets.Take(Meta.MaxLocks))
+                foreach (var hardLock in LockedTargets.Take(Metadata.MaxLocks))
                 {
                     hardLock.LockType = SiWeaponsLockType.Hard;
                     hardLock.Sprite.IsLockedOnHard = true;
                     hardLock.Sprite.IsLockedOnSoft = false;
                 }
 
-                foreach (var softLock in LockedTargets.Skip(Meta.MaxLocks))
+                foreach (var softLock in LockedTargets.Skip(Metadata.MaxLocks))
                 {
                     softLock.LockType = SiWeaponsLockType.Soft;
                     softLock.Sprite.IsLockedOnHard = false;
@@ -130,10 +129,10 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                 _engine.Player.Sprite.IsLockedOnSoft = false;
                 _engine.Player.Sprite.IsLockedOnHard = false;
 
-                if (Meta.CanLockOn && Owner.IsPointingAt(_engine.Player.Sprite, Meta.MaxLockOnAngle))
+                if (Metadata.CanLockOn && Owner.IsPointingAt(_engine.Player.Sprite, Metadata.MaxLockOnAngle))
                 {
                     var distance = Owner.DistanceTo(_engine.Player.Sprite);
-                    if (distance.IsBetween(Meta.MinLockDistance, Meta.MaxLockDistance))
+                    if (distance.IsBetween(Metadata.MinLockDistance, Metadata.MaxLockDistance))
                     {
                         _engine.Player.Sprite.IsLockedOnHard = true;
                         _engine.Player.Sprite.IsLockedOnSoft = false;
@@ -200,7 +199,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                 bool result = false;
                 if (RoundQuantity > 0)
                 {
-                    result = (DateTime.Now - _lastFired).TotalMilliseconds > Meta.FireDelayMilliseconds;
+                    result = (DateTime.Now - _lastFired).TotalMilliseconds > Metadata.FireDelayMilliseconds;
                     if (result)
                     {
                         _lastFired = DateTime.Now;

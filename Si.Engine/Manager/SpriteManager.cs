@@ -164,11 +164,11 @@ namespace Si.Engine.Manager
             => _collection.OfType<T>().Where(o => o.Visable).ToArray();
 
         public T[] VisibleDamagable<T>() where T : class
-            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.TakesDamage).Select(o => o as T).ToArray();
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata.TakesMunitionDamage).Select(o => o as T).ToArray();
 
         //Probably faster than VisibleDamagable<T>().
         public SpriteInteractiveBase[] VisibleDamagable()
-            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.TakesDamage).ToArray();
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata.TakesMunitionDamage).ToArray();
 
         public List<SpriteBase> VisibleOfTypes(Type[] types)
         {

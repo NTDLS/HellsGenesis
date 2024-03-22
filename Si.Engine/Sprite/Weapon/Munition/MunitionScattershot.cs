@@ -10,14 +10,11 @@ namespace Si.Engine.Sprite.Weapon.Munition
     internal class MunitionScattershot : ProjectileMunitionBase
     {
         private const string _assetPath = @"Sprites\Weapon\Scattershot";
-        private readonly int imageCount = 4;
-        private readonly int selectedImageIndex = 0;
 
         public MunitionScattershot(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null)
             : base(engine, weapon, firedFrom, null, location)
         {
-            selectedImageIndex = SiRandom.Between(0, imageCount - 1);
-            SetImage(Path.Combine(_assetPath, $"{selectedImageIndex}.png"));
+            SetImage(Path.Combine(_assetPath, $"{SiRandom.Between(0, 3)}.png"));
         }
     }
 }

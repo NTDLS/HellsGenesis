@@ -14,7 +14,8 @@ namespace Si.GameEngine.Sprite.Metadata
         public int HullHealth { get; set; } = 0;
         public int ShieldHealth { get; set; } = 0;
         public int Bounty { get; set; } = 0;
-        public bool TakesDamage { get; set; } = true;
+        public bool TakesMunitionDamage { get; set; } = true;
+        public bool CollisionDetection { get; set; } = true;
 
         /// <summary>
         /// Used for the players "primary weapon slot".

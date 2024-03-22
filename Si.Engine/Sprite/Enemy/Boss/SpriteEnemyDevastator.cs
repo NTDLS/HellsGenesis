@@ -33,12 +33,12 @@ namespace Si.Engine.Sprite.Enemy.Boss
         public SpriteEnemyDevastator(EngineCore engine)
             : base(engine)
         {
-            _leftCannon = Attach(_assetPath + "Gun.Cannon.Left.png", true, 3);
-            _rightCannon = Attach(_assetPath + "Gun.Cannon.Right.png", true, 3);
-            _leftGun = Attach(_assetPath + "Gun.Left.png", true, 3);
-            _rightGun = Attach(_assetPath + "Gun.Right.png", true, 3);
-            _leftThrust = Attach(_assetPath + "Jet.Left.png", true, 3);
-            _rightThrust = Attach(_assetPath + "Jet.Right.png", true, 3);
+            _leftCannon = Attach(_assetPath + "Gun.Cannon.Left.png");
+            _rightCannon = Attach(_assetPath + "Gun.Cannon.Right.png");
+            _leftGun = Attach(_assetPath + "Gun.Left.png");
+            _rightGun = Attach(_assetPath + "Gun.Right.png");
+            _leftThrust = Attach(_assetPath + "Jet.Left.png");
+            _rightThrust = Attach(_assetPath + "Jet.Right.png");
 
             SetImageAndLoadMetadata(@"Sprites\Enemy\Boss\Devastator\Hull.png");
 
@@ -47,7 +47,7 @@ namespace Si.Engine.Sprite.Enemy.Boss
 
         public override void AfterCreate()
         {
-            _turret = Attach(_assetPath + "Gun.Turret.png", true, 3);
+            _turret = Attach(_assetPath + "Gun.Turret.png");
             base.AfterCreate();
         }
 

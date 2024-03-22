@@ -17,9 +17,10 @@ namespace Si.Engine.TickController.VectoredTickControllerBase
 
         public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
-            foreach (var particle in Visible())
+            foreach (var sprite in Visible())
             {
-                particle.ApplyMotion(epoch, displacementVector);
+
+                sprite.ApplyMotion(epoch, displacementVector);
             }
         }
     }

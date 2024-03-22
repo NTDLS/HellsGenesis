@@ -1,8 +1,6 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Engine.Sprite.Enemy.Peon;
-using Si.GameEngine.Sprite.Enemy.Starbase.Garrison;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -32,7 +30,7 @@ namespace Si.Engine.Level
             base.Begin();
 
             AddSingleFireEvent(500, FirstShowPlayerCallback);
-            AddRecuringFireEvent(5000, AddFreshEnemiesCallback);
+            //AddRecuringFireEvent(5000, AddFreshEnemiesCallback);
 
             _engine.Player.Sprite.AddHullHealth(100);
             _engine.Player.Sprite.AddShieldHealth(10);
@@ -72,14 +70,14 @@ namespace Si.Engine.Level
         {
             for (int i = 0; i < 1; i++)
             {
-                _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
+                //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
             //_engine.Sprites.Debugs.Add(1000, 1000);
 
             //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
-            //AddAsteroidField(8, 8);
+            AddAsteroidField(new SiPoint(), 8, 8);
 
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
@@ -107,26 +105,29 @@ namespace Si.Engine.Level
             //_engine.Sprites.Enemies.Create<EnemyDevastator>();
         }
 
-        public void AddAsteroidField(int rowCount, int colCount)
+        public void AddAsteroidField(SiPoint offset, int rowCount, int colCount)
         {
             for (int row = 0; row < rowCount; row++)
             {
                 for (int col = 0; col < colCount; col++)
                 {
-                    var asteroid = _engine.Sprites.GenericSprites.Add($@"Sprites\Asteroid\{SiRandom.Between(0, 23)}.png");
+                    var asteroid = _engine.Sprites.GenericSprites.Add($@"Sprites\Asteroid\{SiRandom.Between(0, 0)}.png");
 
-                    float totalXOffset = -(asteroid.Size.Width * colCount);
-                    float totalYOffset = (_engine.Display.TotalCanvasSize.Height + (asteroid.Size.Height * rowCount));
+                    var asteroidSize = asteroid.Size.Width + asteroid.Size.Height;
 
-                    asteroid.Location = new SiPoint(totalXOffset + asteroid.Size.Width * col, totalYOffset - asteroid.Size.Height * row);
+                    float totalXOffset = (offset.X + asteroidSize * colCount);
+                    float totalYOffset = (offset.Y + (asteroidSize * rowCount));
+
+                    asteroid.Location = new SiPoint(totalXOffset - asteroidSize * col, totalYOffset - asteroidSize * row);
 
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
                     asteroid.Velocity.MaximumSpeed = SiRandom.Variance(asteroid.Velocity.MaximumSpeed, 0.20f);
-                    asteroid.Velocity.ForwardVelocity = 1.0f;
+                    //asteroid.Velocity.ForwardVelocity = 1.0f;
+                    asteroid.Velocity.ForwardVelocity = 0.0f;
 
                     asteroid.VectorType = ParticleVectorType.UseTravelAngle;
                     asteroid.RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Right : SiRelativeDirection.Left;
-                    asteroid.RotationSpeed = SiRandom.Between(-1f, 1f);
+                    asteroid.RotationSpeed = SiRandom.Between(0.4f, 1.5f);
 
                     asteroid.SetHullHealth(100);
                 }
