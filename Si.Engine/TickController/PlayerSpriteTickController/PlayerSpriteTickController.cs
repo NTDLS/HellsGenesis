@@ -3,6 +3,7 @@ using Si.Engine.Sprite.Player;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.GameEngine.Persistent;
+using Si.GameEngine.Sprite.SupportingClasses;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
@@ -48,7 +49,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
         /// <returns></returns>
-        public override SiPoint ExecuteWorldClockTick(float epoch, SpriteInteractiveBase[] collidables)
+        public override SiPoint ExecuteWorldClockTick(float epoch, PredictedSpriteRegion[] collidables)
         {
             Sprite.IsLockedOnSoft = false;
             Sprite.IsLockedOnHard = false;
@@ -291,7 +292,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
             Sprite.RenewableResources.RenewAllResources(epoch);
 
-            Sprite.PerformCollisionDetection(collidables);
+            Sprite.PerformCollisionDetection(epoch, collidables);
 
             return displacementVector;
         }

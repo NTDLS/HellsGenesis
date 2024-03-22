@@ -4,7 +4,7 @@ using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
-using Si.GameEngine.Sprite.Metadata;
+using Si.GameEngine.Sprite.SupportingClasses.Metadata;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;

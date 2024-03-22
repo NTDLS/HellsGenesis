@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Si.GameEngine.Sprite.Metadata
+namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
 {
     /// <summary>
     /// Contains sprite metadata.

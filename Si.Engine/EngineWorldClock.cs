@@ -1,10 +1,13 @@
 ﻿using NTDLS.DelegateThreadPooling;
 using Si.Engine.Core.Types;
+using Si.Engine.Sprite._Superclass;
 using Si.Library;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using static Si.Library.SiConstants;
 
@@ -176,6 +179,11 @@ namespace Si.Engine
             }
         }
 
+        class ColliadbleSprite
+        {
+
+        }
+
         private SiPoint ExecuteWorldClockTick(float epoch)
         {
             //This is where we execute the world clock for each type of object.
@@ -191,7 +199,7 @@ namespace Si.Engine
 
             _engine.Input.Snapshot();
 
-            var collidables = _engine.Sprites.VisibleColliadble();
+            var collidables = _engine.Sprites.VisibleColliadblePredictiveMove(epoch);
 
             var displacementVector = _engine.Player.ExecuteWorldClockTick(epoch, collidables);
 

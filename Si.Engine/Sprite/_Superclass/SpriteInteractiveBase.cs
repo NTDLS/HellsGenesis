@@ -2,7 +2,8 @@
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
-using Si.GameEngine.Sprite.Metadata;
+using Si.GameEngine.Sprite.SupportingClasses;
+using Si.GameEngine.Sprite.SupportingClasses.Metadata;
 using Si.Library;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
@@ -179,22 +180,34 @@ namespace Si.Engine.Sprite._Superclass
         /// 
         /// This is called before ApplyMotion().
         /// </summary>
-        /// <param name="collidables"></param>
-        public virtual void PerformCollisionDetection(SpriteInteractiveBase[] collidables)
+        /// <param name="collidables">Contains all objects that have CollisionDetection enabled with their predicted new locations.</param>
+        public virtual void PerformCollisionDetection(float epoch, PredictedSpriteRegion[] collidables)
         {
+            //HEY PAT!
+            // - This function (PerformCollisionDetection) is called before ApplyMotion().
+            // - collidables[] contains all objects that have CollisionDetection enabled.
+            // - Each element in collidables[] has a Position property which is the location where
+            //      the sprite will be AFTER the next call to ApplyMotion() (e.g. the sprite has not
+            //      yet moved but this will tell you where it will be when it next moves).
+            //      We should? be able to use this to detect a collision and back each of the sprites
+            //      velocities off... right?
+            // - Note that thisCollidable also contains the predicted location after the move.
+            // - How the hell do we handle collateral collisions? Please tell me we dont have to iterate.... 
+
             IsHighlighted = true;
+
+            var thisCollidable = new PredictedSpriteRegion(this, epoch);
 
             foreach (var other in collidables)
             {
-                if (this == other)
+                if (thisCollidable.Sprite == other.Sprite)
                 {
                     continue;
                 }
 
-                if (Intersects(other))
+                if (thisCollidable.Intersects(other))
                 {
-                    //HEY PAT!
-                    Debug.WriteLine($"{this.UID}->{other.UID}");
+                    Debug.WriteLine($"{thisCollidable.Sprite.UID}->{other.Sprite.UID}");
                 }
             }
         }

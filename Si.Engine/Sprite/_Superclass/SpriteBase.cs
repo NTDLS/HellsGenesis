@@ -78,8 +78,8 @@ namespace Si.Engine.Sprite._Superclass
         /// The bounds of the sprite in the universe.
         /// </summary>
         public virtual RectangleF Bounds => new(
-                (float)(Location.X - Size.Width / 2.0),
-                (float)(Location.Y - Size.Height / 2.0),
+                (Location.X - Size.Width / 2.0f),
+                (Location.Y - Size.Height / 2.0f),
                 Size.Width,
                 Size.Height);
 
@@ -87,17 +87,17 @@ namespace Si.Engine.Sprite._Superclass
         /// The raw bounds of the sprite in the universe.
         /// </summary>
         public virtual RawRectangleF RawBounds => new(
-                        (float)(Location.X - Size.Width / 2.0),
-                        (float)(Location.Y - Size.Height / 2.0),
-                        (float)(Location.X - Size.Width / 2.0) + Size.Width,
-                        (float)(Location.Y - Size.Height / 2.0) + Size.Height);
+                        (Location.X - Size.Width / 2.0f),
+                        (Location.Y - Size.Height / 2.0f),
+                        (Location.X - Size.Width / 2.0f) + Size.Width,
+                        (Location.Y - Size.Height / 2.0f) + Size.Height);
 
         /// <summary>
         /// The bounds of the sprite on the display.
         /// </summary>
         public virtual RectangleF RenderBounds => new(
-                        (float)(RenderLocation.X - Size.Width / 2.0),
-                        (float)(RenderLocation.Y - Size.Height / 2.0),
+                        (RenderLocation.X - Size.Width / 2.0f),
+                        (RenderLocation.Y - Size.Height / 2.0f),
                         Size.Width,
                         Size.Height);
 
@@ -105,10 +105,10 @@ namespace Si.Engine.Sprite._Superclass
         /// The raw bounds of the sprite on the display.
         /// </summary>
         public virtual RawRectangleF RawRenderBounds => new(
-                        (float)(RenderLocation.X - Size.Width / 2.0),
-                        (float)(RenderLocation.Y - Size.Height / 2.0),
-                        (float)(RenderLocation.X - Size.Width / 2.0) + Size.Width,
-                        (float)(RenderLocation.Y - Size.Height / 2.0) + Size.Height);
+                        (RenderLocation.X - Size.Width / 2.0f),
+                        (RenderLocation.Y - Size.Height / 2.0f),
+                        (RenderLocation.X - Size.Width / 2.0f) + Size.Width,
+                        (RenderLocation.Y - Size.Height / 2.0f) + Size.Height);
 
         public SiVelocity Velocity
         {
@@ -753,10 +753,10 @@ namespace Si.Engine.Sprite._Superclass
             if (Visable && otherObject.Visable && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
             {
                 var alteredHitBox = new RectangleF(
-                    otherObject.Bounds.X - (float)(sizeAdjust.X / 2),
-                    otherObject.Bounds.Y - (float)(sizeAdjust.Y / 2),
-                    otherObject.Bounds.Width + (float)(sizeAdjust.X / 2),
-                    otherObject.Bounds.Height + (float)(sizeAdjust.Y / 2));
+                    otherObject.Bounds.X - (sizeAdjust.X / 2.0f),
+                    otherObject.Bounds.Y - (sizeAdjust.Y / 2.0f),
+                    otherObject.Bounds.Width + (sizeAdjust.X / 2.0f),
+                    otherObject.Bounds.Height + (sizeAdjust.Y / 2.0f));
 
                 return Bounds.IntersectsWith(alteredHitBox);
             }
@@ -770,8 +770,8 @@ namespace Si.Engine.Sprite._Superclass
         public bool Intersects(SpriteBase with, int variance = 0)
         {
             var alteredHitBox = new RectangleF(
-                (float)(with.Bounds.X - variance),
-                (float)(with.Bounds.Y - variance),
+                (with.Bounds.X - variance),
+                (with.Bounds.Y - variance),
                 with.Size.Width + variance * 2, with.Size.Height + variance * 2);
 
             return Bounds.IntersectsWith(alteredHitBox);

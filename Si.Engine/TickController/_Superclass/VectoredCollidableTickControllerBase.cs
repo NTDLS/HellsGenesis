@@ -1,5 +1,6 @@
 ﻿using Si.Engine.Manager;
 using Si.Engine.Sprite._Superclass;
+using Si.GameEngine.Sprite.SupportingClasses;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Si.Engine.TickController._Superclass
         public subType[] OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
         public T ByTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
 
-        public virtual void ExecuteWorldClockTick(float epoch, SiPoint displacementVector, SpriteInteractiveBase[] collidables) { }
+        public virtual void ExecuteWorldClockTick(float epoch, SiPoint displacementVector, PredictedSpriteRegion[] collidables) { }
 
         public VectoredCollidableTickControllerBase(EngineCore engine, SpriteManager manager)
         {

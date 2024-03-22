@@ -6,6 +6,7 @@ using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.GameEngine.Sprite.SupportingClasses;
 using Si.GameEngine.TickController.UnvectoredTickController;
 using Si.GameEngine.TickController.VectoredTickController.Collidable;
 using Si.GameEngine.TickController.VectoredTickController.Uncollidable;
@@ -178,6 +179,9 @@ namespace Si.Engine.Manager
         //Probably faster than VisibleColliadble<T>().
         public SpriteInteractiveBase[] VisibleColliadble()
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata?.CollisionDetection == true).ToArray();
+
+        public PredictedSpriteRegion[] VisibleColliadblePredictiveMove(float epoch)
+            => _engine.Sprites.VisibleColliadble().Select(o => new PredictedSpriteRegion(o, epoch)).ToArray();
 
         public List<SpriteBase> VisibleOfTypes(Type[] types)
         {
