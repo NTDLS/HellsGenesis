@@ -207,7 +207,7 @@ namespace Si.Engine.Sprite._Superclass
 
                 if (thisCollidable.Intersects(other))
                 {
-                    Debug.WriteLine($"{thisCollidable.Sprite.UID}->{other.Sprite.UID}");
+                    //Debug.WriteLine($"{thisCollidable.Sprite.UID}->{other.Sprite.UID}");
                 }
             }
         }

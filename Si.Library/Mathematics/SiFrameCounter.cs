@@ -11,6 +11,7 @@ namespace Si.Library.Mathematics
         private readonly CircularBuffer<float> _samples = new(1000);
 
         public float CurrentFrameRate { get; private set; }
+        public float ElapsedMilliseconds { get; private set; }
         public float AverageFrameRate => SiUtility.Interlock(_samples, (obj) => obj.Items.Average());
         public float MinimumFrameRate => SiUtility.Interlock(_samples, (obj) => obj.Items.Min());
         public float MaximumFrameRate => SiUtility.Interlock(_samples, (obj) => obj.Items.Max());
@@ -23,12 +24,11 @@ namespace Si.Library.Mathematics
         public void Calculate()
         {
             // Calculate elapsed time in seconds.
-            var elapsedSeconds = (double)_stopwatch.ElapsedTicks / Stopwatch.Frequency;
-
-            CurrentFrameRate = (float)(1.0 / elapsedSeconds);
-
-            _samples.Push(CurrentFrameRate);
+            ElapsedMilliseconds = (float)(((double)_stopwatch.ElapsedTicks / Stopwatch.Frequency) * 1000.0);
             _stopwatch.Restart();
+
+            CurrentFrameRate = (float)(1000.0f / ElapsedMilliseconds);
+            _samples.Push(CurrentFrameRate);
         }
     }
 }

@@ -102,10 +102,11 @@ namespace Si.Engine
                 framePerSecondLimit = SiRenderingUtility.GetScreenRefreshRate(_engine.Display.Screen, _engine.Settings.GraphicsAdapterId);
             }
 
-            var frameRateDelayMicroseconds = 1000000 / framePerSecondLimit;
-            var targetWorldTickDurationMicroseconds = 1000000 / _engine.Settings.WorldTicksPerSecond;
-            var millisecondPerEpoch = 1000 / _engine.Settings.WorldTicksPerSecond;
-            int _spinCountAugmentation = 0;
+            var frameRateDelayMicroseconds = 1000000f / framePerSecondLimit;
+            var targetWorldTickDurationMicroseconds = 1000000f / _engine.Settings.WorldTicksPerSecond;
+            var millisecondPerEpoch = 1000f / _engine.Settings.WorldTicksPerSecond;
+            int spinCountAugmentation = 0;
+            int framerateAutoAdjustCadence = 0;
 
             while (_shutdown == false)
             {
@@ -113,6 +114,10 @@ namespace Si.Engine
 
                 var elapsedEpochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000.0;
                 epochTimer.Restart();
+
+                //PAT??!?!?!
+                //How in the hell are these different?!?!?!?!?!?!
+                Debug.WriteLine($"{_engine.Display.FrameCounter.ElapsedMilliseconds} -> {elapsedEpochMilliseconds}");
 
                 var epoch = (float)(elapsedEpochMilliseconds / millisecondPerEpoch);
 
@@ -132,24 +137,29 @@ namespace Si.Engine
 
                     #region Framerate fine-tuning.
 
+                    /*
+                     * I had to remove frame-rate auto adjust because there seems to be a variance between how we are calculating FPS here
+                     * and how we are doing it in _engine.Display.FrameCounter. I think we just need to use _engine.Display.FrameCounter
+                     * and stop doing the calculations directly inside GraphicsThreadProc().
+                     * 
                     if (_engine.Settings.FineTuneFramerate)
                     {
                         //From time-to-time we want to check the average framerate and make sure its sane.
-                        if (_spinCountAugmentation > _engine.Settings.TargetFrameRate) //Check ~1 time per second.
+                        if (framerateAutoAdjustCadence > _engine.Settings.TargetFrameRate) //Check ~1 time per second.
                         {
-                            _spinCountAugmentation = 0;
-                            if (_engine.Display.FrameCounter.CurrentFrameRate < framePerSecondLimit && frameRateDelayMicroseconds > 1000)
+                            framerateAutoAdjustCadence = 0;
+                            if (_engine.Display.FrameCounter.CurrentFrameRate < framePerSecondLimit)
                             {
-                                frameRateDelayMicroseconds -= 100; //The framerate is too low, reduce the delay.
+                                spinCountAugmentation -= 1000; //The framerate is too low, reduce the delay.
                             }
                             else if (_engine.Display.FrameCounter.CurrentFrameRate > framePerSecondLimit * 1.20)
                             {
-                                frameRateDelayMicroseconds += 100; //the framerate is too high increase the delay.
+                                spinCountAugmentation += 100; //the framerate is too high increase the delay.
                             }
                         }
-                        _spinCountAugmentation++;
+                        framerateAutoAdjustCadence++;
                     }
-
+                    */
                     #endregion
                 }
 
@@ -161,7 +171,7 @@ namespace Si.Engine
 
                 worldTickTimer.Restart(); //Use the same timer to wait on the delta µs to expire.
 
-                while (worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds + _spinCountAugmentation)
+                while (worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds + spinCountAugmentation)
                 {
                     Thread.Yield();
                 }
