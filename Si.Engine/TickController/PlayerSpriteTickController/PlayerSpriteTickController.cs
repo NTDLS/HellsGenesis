@@ -1,5 +1,4 @@
-﻿using Si.Engine.Sprite._Superclass;
-using Si.Engine.Sprite.Player;
+﻿using Si.Engine.Sprite.Player;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.GameEngine.Persistent;

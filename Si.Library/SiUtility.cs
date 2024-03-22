@@ -11,10 +11,28 @@ namespace Si.Library
         public delegate T TryAndIgnoreProc<T>();
 
         public static int GreaterOf(int one, int two) => (one > two) ? one : two;
-        public static int LssserOf(int one, int two) => (one < two) ? one : two;
-
+        public static int LesserOf(int one, int two) => (one < two) ? one : two;
         public static uint GreaterOf(uint one, uint two) => (one > two) ? one : two;
-        public static uint LssserOf(uint one, uint two) => (one < two) ? one : two;
+        public static uint LesserOf(uint one, uint two) => (one < two) ? one : two;
+
+
+        public delegate ReturnType InterlockProc<ReturnType, LockObjType>(LockObjType obj);
+
+        /// <summary>
+        /// Returns a value allowing for only single threaded access.
+        /// </summary>
+        /// <typeparam name="ReturnType"></typeparam>
+        /// <typeparam name="LockObjType"></typeparam>
+        /// <param name="objectToLock"></param>
+        /// <param name="proc"></param>
+        /// <returns></returns>
+        public static ReturnType? Interlock<ReturnType, LockObjType>(LockObjType objectToLock, InterlockProc<ReturnType, LockObjType> proc) where LockObjType : class
+        {
+            lock (objectToLock)
+            {
+                return proc(objectToLock);
+            }
+        }
 
         /// <summary>
         /// Executes the given delegate and returns true if successful.

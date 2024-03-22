@@ -1,13 +1,10 @@
 ﻿using NTDLS.DelegateThreadPooling;
 using Si.Engine.Core.Types;
-using Si.Engine.Sprite._Superclass;
 using Si.Library;
-using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using static Si.Library.SiConstants;
 
@@ -108,9 +105,7 @@ namespace Si.Engine
             var frameRateDelayMicroseconds = 1000000 / framePerSecondLimit;
             var targetWorldTickDurationMicroseconds = 1000000 / _engine.Settings.WorldTicksPerSecond;
             var millisecondPerEpoch = 1000 / _engine.Settings.WorldTicksPerSecond;
-
-            int _frameRateAdjustCount = 0;
-            int _frameRateAdjustCadence = 100;
+            int _spinCountAugmentation = 0;
 
             while (_shutdown == false)
             {
@@ -136,26 +131,25 @@ namespace Si.Engine
                     _engine.Display.FrameCounter.Calculate();
 
                     #region Framerate fine-tuning.
+
                     if (_engine.Settings.FineTuneFramerate)
                     {
-                        //From time-to-time we want o check the average framerate and make sure its sane,
-                        if (_frameRateAdjustCount > _frameRateAdjustCadence)
+                        //From time-to-time we want to check the average framerate and make sure its sane.
+                        if (_spinCountAugmentation > _engine.Settings.TargetFrameRate) //Check ~1 time per second.
                         {
-                            _frameRateAdjustCount = 0;
-                            if (_engine.Display.FrameCounter.AverageFrameRate < framePerSecondLimit && frameRateDelayMicroseconds > 1000)
+                            _spinCountAugmentation = 0;
+                            if (_engine.Display.FrameCounter.CurrentFrameRate < framePerSecondLimit && frameRateDelayMicroseconds > 1000)
                             {
-                                //The framerate is too low, reduce the delay.
-                                frameRateDelayMicroseconds -= 1000;
+                                frameRateDelayMicroseconds -= 100; //The framerate is too low, reduce the delay.
                             }
-                            else if (_engine.Display.FrameCounter.AverageFrameRate > framePerSecondLimit * 1.20)
+                            else if (_engine.Display.FrameCounter.CurrentFrameRate > framePerSecondLimit * 1.20)
                             {
-                                //the framerate is too high increase the delay.
-                                frameRateDelayMicroseconds += 25;
+                                frameRateDelayMicroseconds += 100; //the framerate is too high increase the delay.
                             }
-                            //System.Diagnostics.Debug.Print($"{frameRateDelayMicroseconds} -> {framePerSecondLimit} -> {_engine.Display.FrameCounter.AverageFrameRate:n4}");
                         }
-                        _frameRateAdjustCount++;
+                        _spinCountAugmentation++;
                     }
+
                     #endregion
                 }
 
@@ -167,7 +161,7 @@ namespace Si.Engine
 
                 worldTickTimer.Restart(); //Use the same timer to wait on the delta µs to expire.
 
-                while (worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds)
+                while (worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds + _spinCountAugmentation)
                 {
                     Thread.Yield();
                 }
@@ -245,7 +239,8 @@ namespace Si.Engine
                     + $"     Surge: {_engine.Player.Sprite.Velocity.AvailableBoost / _engine.Settings.MaxPlayerBoostAmount * 100.0:n1}%"
                         + (_engine.Player.Sprite.Velocity.IsBoostCoolingDown ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
                     + $"Pri-Weapon: {_engine.Player.Sprite.PrimaryWeapon?.Metadata.Name} x{_engine.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
-                    + $"Sec-Weapon: {_engine.Player.Sprite.SelectedSecondaryWeapon?.Metadata.Name} x{_engine.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
+                    + $"Sec-Weapon: {_engine.Player.Sprite.SelectedSecondaryWeapon?.Metadata.Name} x{_engine.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n"
+                    + $"{_engine.Display.FrameCounter.AverageFrameRate:n2}fps";
             }
 
             //_engine.Sprites.DebugText.Text = "Anything we need to know about?";
