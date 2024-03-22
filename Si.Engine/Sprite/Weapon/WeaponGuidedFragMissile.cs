@@ -35,44 +35,26 @@ namespace Si.Engine.Sprite.Weapon
                 _fireSound.Play();
                 RoundQuantity--;
 
-                if (LockedTargets == null || LockedTargets.Count == 0)
-                {
-                    if (_toggle)
-                    {
-                        var pointRight = Owner.Location + SiPoint.PointFromAngleAtDistance360(Owner.Velocity.ForwardAngle + SiPoint.RADIANS_90, new SiPoint(10, 10));
-                        _engine.Sprites.Munitions.Add(this, pointRight);
-                    }
-                    else
-                    {
-                        var pointLeft = Owner.Location + SiPoint.PointFromAngleAtDistance360(Owner.Velocity.ForwardAngle - SiPoint.RADIANS_90, new SiPoint(10, 10));
-                        _engine.Sprites.Munitions.Add(this, pointLeft);
-                    }
+                var basePosition = Owner.Location + SiPoint.PointFromAngleAtDistance360(
+                    Owner.Velocity.ForwardAngle + SiPoint.RADIANS_90 * (_toggle ? 1 : -1), new SiPoint(10, 10));
 
-                    _toggle = !_toggle;
-                }
-                else
+                _toggle = !_toggle;
+
+                if (LockedTargets?.Count > 0)
                 {
                     foreach (var weaponLock in LockedTargets.Where(o => o.LockType == Library.SiConstants.SiWeaponsLockType.Hard))
                     {
-                        if (_toggle)
-                        {
-                            var pointRight = SiPoint.PointFromAngleAtDistance360(Owner.Velocity.ForwardAngle + SiPoint.RADIANS_90, new SiPoint(10, 10));
-                            _engine.Sprites.Munitions.AddLockedOnTo(this, weaponLock.Sprite, pointRight);
-                        }
-                        else
-                        {
-                            var pointLeft = SiPoint.PointFromAngleAtDistance360(Owner.Velocity.ForwardAngle - SiPoint.RADIANS_90, new SiPoint(10, 10));
-                            _engine.Sprites.Munitions.AddLockedOnTo(this, weaponLock.Sprite, pointLeft);
-                        }
-                        _toggle = !_toggle;
+                        _engine.Sprites.Munitions.AddLockedOnTo(this, weaponLock.Sprite, basePosition);
                     }
                 }
-
+                else
+                {
+                    _engine.Sprites.Munitions.Add(this, basePosition);
+                }
 
                 return true;
             }
             return false;
-
         }
     }
 }

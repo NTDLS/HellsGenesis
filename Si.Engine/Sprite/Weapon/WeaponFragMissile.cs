@@ -30,21 +30,12 @@ namespace Si.Engine.Sprite.Weapon
                 _fireSound.Play();
                 RoundQuantity--;
 
-                if (LockedTargets == null || LockedTargets.Count == 0)
-                {
-                    if (_toggle)
-                    {
-                        var pointRight = Owner.Location + SiPoint.PointFromAngleAtDistance360(Owner.Velocity.ForwardAngle + SiPoint.RADIANS_90, new SiPoint(10, 10));
-                        _engine.Sprites.Munitions.Add(this, pointRight);
-                    }
-                    else
-                    {
-                        var pointLeft = Owner.Location + SiPoint.PointFromAngleAtDistance360(Owner.Velocity.ForwardAngle - SiPoint.RADIANS_90, new SiPoint(10, 10));
-                        _engine.Sprites.Munitions.Add(this, pointLeft);
-                    }
+                var basePosition = Owner.Location + SiPoint.PointFromAngleAtDistance360(
+                    Owner.Velocity.ForwardAngle + SiPoint.RADIANS_90 * (_toggle ? 1 : -1), new SiPoint(10, 10));
 
-                    _toggle = !_toggle;
-                }
+                _engine.Sprites.Munitions.Add(this, basePosition);
+
+                _toggle = !_toggle;
 
                 return true;
             }

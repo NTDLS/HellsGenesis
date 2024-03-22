@@ -70,16 +70,16 @@ namespace Si.Engine.Level
 
         private void AddEnemies()
         {
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < 1; i++)
             {
                 _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
             //_engine.Sprites.Debugs.Add(1000, 1000);
 
-            _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
+            //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
-            AddAsteroidField(8, 8);
+            //AddAsteroidField(8, 8);
 
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
