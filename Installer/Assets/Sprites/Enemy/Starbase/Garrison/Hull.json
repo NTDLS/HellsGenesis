@@ -10,48 +10,48 @@
   "Attachments": [
     {
       "Type": "SpriteEnemyStarbaseGarrisonTurret",
-      "X": 58.0,
-      "Y": 379.0
+      "X": 563,
+      "Y": 151
     },
     {
       "Type": "SpriteEnemyStarbaseGarrisonTurret",
-      "X": 583.0,
-      "Y": 158.0
+      "X": 563,
+      "Y": 372
     },
     {
       "Type": "SpriteEnemyStarbaseGarrisonTurret",
-      "X": 1107.0,
-      "Y": 380.0
+      "X": 567,
+      "Y": 668
     },
     {
       "Type": "SpriteEnemyStarbaseGarrisonTurret",
-      "X": 582.0,
-      "Y": 386.0
+      "X": 563,
+      "Y": 964
     },
     {
       "Type": "SpriteEnemyStarbaseGarrisonTurret",
-      "X": 56.0,
-      "Y": 1005.0
+      "X": 563,
+      "Y": 1186
     },
     {
       "Type": "SpriteEnemyStarbaseGarrisonTurret",
-      "X": 582.0,
-      "Y": 1226.0
+      "X": 58,
+      "Y": 368
     },
     {
       "Type": "SpriteEnemyStarbaseGarrisonTurret",
-      "X": 583.0,
-      "Y": 1000.0
+      "X": 55,
+      "Y": 969
     },
     {
       "Type": "SpriteEnemyStarbaseGarrisonTurret",
-      "X": 1106.0,
-      "Y": 1004.0
+      "X": 1067,
+      "Y": 365
     },
     {
       "Type": "SpriteEnemyStarbaseGarrisonTurret",
-      "X": 586.0,
-      "Y": 691.0
+      "X": 1070,
+      "Y": 971
     }
   ]  
 }
