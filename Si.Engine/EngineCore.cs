@@ -43,6 +43,7 @@ namespace Si.Engine
         public AudioManager Audio { get; private set; }
         public AssetManager Assets { get; private set; }
         public InterrogationManager Debug { get; private set; }
+        public CollisionManager Collisions { get; private set; }
 
         #endregion
 
@@ -83,6 +84,8 @@ namespace Si.Engine
             Events = new EventTickController(this);
             Sprites = new SpriteManager(this);
             Input = new InputManager(this);
+            Collisions = new CollisionManager(this);
+
             Situations = new SituationTickController(this);
             Audio = new AudioManager(this);
             Menus = new MenuTickController(this);

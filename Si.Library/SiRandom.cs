@@ -43,6 +43,12 @@
 
         public static bool FlipCoin() => (Generator.Next(2) == 0);
 
+        /// <summary>
+        /// Returns either -1 or 1.
+        /// </summary>
+        /// <returns></returns>
+        public static float PositiveOrNegative() => (Generator.Next(2) == 0 ? 1 : -1);
+
         public static float Between(float minValue, float maxValue)
             => minValue + (maxValue - minValue) * (float)Generator.NextDouble();
 

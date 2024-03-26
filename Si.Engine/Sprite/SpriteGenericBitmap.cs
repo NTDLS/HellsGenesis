@@ -24,8 +24,6 @@ namespace Si.Engine.Sprite
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.UseNativeForwardAngle;
         public SiAngle TravelAngle { get; set; } = new SiAngle();
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
-        public float RotationSpeed { get; set; } = 0;
-        public SiRelativeDirection RotationDirection { get; set; }
 
         public SpriteGenericBitmap(EngineCore engine, SharpDX.Direct2D1.Bitmap bitmap)
             : base(engine)
@@ -41,14 +39,7 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            if (RotationDirection == SiRelativeDirection.Right)
-            {
-                Velocity.ForwardAngle.Degrees += RotationSpeed * epoch;
-            }
-            else if (RotationDirection == SiRelativeDirection.Left)
-            {
-                Velocity.ForwardAngle.Degrees -= RotationSpeed * epoch;
-            }
+            Velocity.ForwardAngle.Degrees += Velocity.RotationSpeed * epoch;
 
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {

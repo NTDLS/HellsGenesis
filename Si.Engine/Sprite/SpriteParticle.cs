@@ -28,8 +28,6 @@ namespace Si.Engine.Sprite
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.UseNativeForwardAngle;
         public ParticleShape Shape { get; set; } = ParticleShape.FilledEllipse;
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
-        public float RotationSpeed { get; set; } = 0;
-        public SiRelativeDirection RotationDirection { get; set; } = SiRelativeDirection.None;
 
         /// <summary>
         /// The color of the particle when ColorType == Color;
@@ -54,8 +52,7 @@ namespace Si.Engine.Sprite
             Location = location.Clone();
 
             Color = color ?? engine.Rendering.Materials.Colors.White;
-            RotationSpeed = SiRandom.Between(1, 100) / 20.0f;
-            RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Left : SiRelativeDirection.Right;
+            Velocity.RotationSpeed = SiRandom.Between(1, 100) / 20.0f * SiRandom.PositiveOrNegative();
             TravelAngle.Degrees = SiRandom.Between(0, 359);
 
             Velocity.ForwardVelocity = 100;
@@ -66,14 +63,7 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            if (RotationDirection == SiRelativeDirection.Right)
-            {
-                Velocity.ForwardAngle.Degrees += RotationSpeed * epoch;
-            }
-            else if (RotationDirection == SiRelativeDirection.Left)
-            {
-                Velocity.ForwardAngle.Degrees -= RotationSpeed * epoch;
-            }
+            Velocity.ForwardAngle.Degrees -= Velocity.RotationSpeed * epoch;
 
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {

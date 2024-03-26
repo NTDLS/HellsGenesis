@@ -126,8 +126,7 @@ namespace Si.Engine.Level
                     asteroid.Velocity.ForwardVelocity = 0.0f;
 
                     asteroid.VectorType = ParticleVectorType.UseTravelAngle;
-                    asteroid.RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Right : SiRelativeDirection.Left;
-                    asteroid.RotationSpeed = SiRandom.Between(0.4f, 1.5f);
+                    asteroid.Velocity.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
 
                     asteroid.SetHullHealth(100);
                 }

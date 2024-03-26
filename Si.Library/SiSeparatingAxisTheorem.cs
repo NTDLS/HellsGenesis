@@ -2,10 +2,18 @@
 
 namespace Si.Library
 {
-    public class SiCollisionDetection
+    /// <summary>
+    /// The Separating Axis Theorem (SAT) is a method used in computational geometry to determine if two convex shapes are intersecting (colliding).
+    /// It's widely used in computer graphics, physics engines for simulations, and video game development for collision detection.
+    /// The theorem can be applied to any pair of convex polygons or convex polyhedra in two or three dimensions, respectively.
+    /// 
+    /// Here is my poor-mans implementation.
+    /// </summary>
+    public class SiSeparatingAxisTheorem
     {
         /// <summary>
         /// Determines if two (non-axis-aligned) rectangles interset using Separating Axis Theorem (SAT).
+        /// This allows us to determine if a rotated rectangle interescts another rotated rectangle.
         /// </summary>
         /// <param name="bounds1"></param>
         /// <param name="angleRadians1"></param>
@@ -20,8 +28,8 @@ namespace Si.Library
             // For each rectangle, there are 2 axes to test (perpendicular to its 2 unique sides)
             for (int i = 0; i < 2; i++)
             {
-                PointF axisA = Perpendicular(Normalize(Subtract(corners1[(i + 1) % 4], corners1[i])));
-                PointF axisB = Perpendicular(Normalize(Subtract(corners2[(i + 1) % 4], corners2[i])));
+                var axisA = Perpendicular(Normalize(Subtract(corners1[(i + 1) % 4], corners1[i])));
+                var axisB = Perpendicular(Normalize(Subtract(corners2[(i + 1) % 4], corners2[i])));
 
                 if (!Overlaps(corners1, corners2, axisA) || !Overlaps(corners1, corners2, axisB))
                 {
@@ -32,6 +40,12 @@ namespace Si.Library
             return true; // Overlap on all tested axes, so rectangles intersect
         }
 
+        /// <summary>
+        /// Returns the points of a rotated rectangle.
+        /// </summary>
+        /// <param name="bounds"></param>
+        /// <param name="angleRadians"></param>
+        /// <returns></returns>
         public static PointF[] GetRotatedRectangleCorners(RectangleF bounds, float angleRadians)
         {
             var center = new PointF(bounds.Left + bounds.Width / 2, bounds.Top + bounds.Height / 2);
@@ -59,21 +73,40 @@ namespace Si.Library
             return corners;
         }
 
-        // Subtract two points to get the vector
+        /// <summary>
+        /// Subtract two points to get the vector.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static PointF Subtract(PointF a, PointF b)
             => new(a.X - b.X, a.Y - b.Y);
 
-        // Normalize a vector
+        /// <summary>
+        /// Normalize a vector.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public static PointF Normalize(PointF v)
         {
             float length = (float)Math.Sqrt(v.X * v.X + v.Y * v.Y);
             return new PointF(v.X / length, v.Y / length);
         }
 
-        // Get a vector that is perpendicular to the given vector
+        /// <summary>
+        /// Get a vector that is perpendicular to the given vector.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public static PointF Perpendicular(PointF v) => new(-v.Y, v.X);
 
-        // Check if projections of two rectangles on a given axis overlap
+        /// <summary>
+        /// Check if projections of two rectangles on a given axis overlap
+        /// </summary>
+        /// <param name="cornersA"></param>
+        /// <param name="cornersB"></param>
+        /// <param name="axis"></param>
+        /// <returns></returns>
         public static bool Overlaps(PointF[] cornersA, PointF[] cornersB, PointF axis)
         {
             (float minA, float maxA) = Project(cornersA, axis);
@@ -81,7 +114,15 @@ namespace Si.Library
             return minA <= maxB && minB <= maxA; // Check for overlap
         }
 
-        // Project the corners of a rectangle onto an axis and return the min and max scalar values
+        /// <summary>
+        /// The Project function projects the corners of a polygon (in this case, a rectangle
+        ///   or any shape represented by its corners) onto an axis and returns the minimum and
+        ///   maximum values of these projections. This is a key part of implementing the Separating
+        ///   Axis Theorem (SAT) for collision detection.
+        /// </summary>
+        /// <param name="corners"></param>
+        /// <param name="axis"></param>
+        /// <returns></returns>
         public static (float, float) Project(PointF[] corners, PointF axis)
         {
             float min = Dot(corners[0], axis);
@@ -95,7 +136,13 @@ namespace Si.Library
             return (min, max);
         }
 
-        // Dot product of two vectors
-        public static float Dot(PointF a, PointF axis) => a.X * axis.X + a.Y * axis.Y;
+        /// <summary>
+        /// The Dot function calculates the dot product of two vectors.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="axis"></param>
+        /// <returns></returns>
+        public static float Dot(PointF a, PointF axis)
+            => a.X * axis.X + a.Y * axis.Y;
     }
 }

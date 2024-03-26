@@ -11,6 +11,31 @@ namespace Si.Library.Mathematics
         public event ValueChangeEvent? OnBoostChanged;
 
         /// <summary>
+        /// Number that defines how much motion a sprite is in.
+        /// </summary>
+        public float TotalRelativeVelocity
+        {
+            get
+            {
+                return (((MaximumSpeed * ForwardVelocity) + (MaximumSpeedBoost * ForwardBoostVelocity))) //Forward / Reverse.
+                + RotationSpeed //Rotation
+                + (MaximumSpeed * LateralVelocity); //Left/Right Strafe.
+            }
+        }
+
+        /// <summary>
+        /// The total velocity multiplied by the given mass.
+        /// </summary>
+        /// <param name="mass"></param>
+        /// <returns></returns>
+        public float TotalRelativeMomentum(float mass) => TotalRelativeVelocity * mass;
+
+        /// <summary>
+        /// Number or radians to rotate the sprite along its center. Negative for counter-clockwise, positive for clockwise.
+        /// </summary>
+        public float RotationSpeed { get; set; } = 0;
+
+        /// <summary>
         /// The angle in which the object is pointing.
         /// </summary>
         public SiAngle ForwardAngle { get; set; } = new();

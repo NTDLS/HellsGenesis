@@ -3,6 +3,7 @@
   "TakesMunitionDamage": false,
   "Speed": 0.0,
   "Boost": 0.0,
+  "Mass": 200,
   "HullHealth": 200,
   "ShieldHealth": 100,
   "Bounty": 50,

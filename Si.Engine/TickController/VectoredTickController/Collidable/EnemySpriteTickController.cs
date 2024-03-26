@@ -2,7 +2,6 @@
 using Si.Engine.Manager;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.TickController._Superclass;
-using Si.GameEngine.Sprite.SupportingClasses;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -19,13 +18,13 @@ namespace Si.GameEngine.TickController.VectoredTickController.Collidable
             _engine = engine;
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector, PredictedSpriteRegion[] collidables)
+        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
             foreach (var enemy in Visible())
             {
                 enemy.ApplyIntelligence(epoch, displacementVector);
                 enemy.ApplyMotion(epoch, displacementVector);
-                enemy.PerformCollisionDetection(epoch, collidables);
+                enemy.PerformCollisionDetection(epoch);
                 enemy.RenewableResources.RenewAllResources(epoch);
             }
         }

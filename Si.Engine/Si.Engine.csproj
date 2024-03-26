@@ -12,8 +12,8 @@
     <OutputType>Library</OutputType>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyName>Si.GameEngine</AssemblyName>
-    <RootNamespace>Si.GameEngine</RootNamespace>
+    <AssemblyName>Si.Engine</AssemblyName>
+    <RootNamespace>Si.Engine</RootNamespace>
     <StartupObject></StartupObject>
   </PropertyGroup>
 

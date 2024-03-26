@@ -110,7 +110,10 @@ namespace Si.Engine
 
             while (_shutdown == false)
             {
-                worldTickTimer.Restart();
+                if (_engine.Settings.YeildDeltaFrametime)
+                {
+                    worldTickTimer.Restart();
+                }
 
                 var elapsedEpochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000.0;
                 epochTimer.Restart();
@@ -189,29 +192,29 @@ namespace Si.Engine
             // other operations in paralell with the exception of deleting sprites that are queued for deletion -
             // which is why we do that after the threads have completed.
 
+            _engine.Collisions.Reset(epoch);
+
             _engine.Menus.ExecuteWorldClockTick();
             _engine.Situations.ExecuteWorldClockTick();
             _engine.Events.ExecuteWorldClockTick();
 
             _engine.Input.Snapshot();
 
-            var collidables = _engine.Sprites.VisibleColliadblePredictiveMove(epoch);
-
-            var displacementVector = _engine.Player.ExecuteWorldClockTick(epoch, collidables);
+            var displacementVector = _engine.Player.ExecuteWorldClockTick(epoch);
 
             //Create a collection of threads so we can wait on the ones that we start.
             var threadPoolTracker = _worldClockThreadPool.CreateQueueStateTracker();
 
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Enemies.ExecuteWorldClockTick(epoch, displacementVector, collidables));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Enemies.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Particles.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.GenericSprites.ExecuteWorldClockTick(epoch, displacementVector, collidables));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.GenericSprites.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Munitions.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Stars.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.SkyBoxes.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Animations.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.TextBlocks.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Powerups.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Debugs.ExecuteWorldClockTick(epoch, displacementVector, collidables));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Debugs.ExecuteWorldClockTick(epoch, displacementVector));
 
             //Wait on all enqueued threads to complete.
             if (SiUtility.TryAndIgnore(() => threadPoolTracker.WaitForCompletion()) == false)

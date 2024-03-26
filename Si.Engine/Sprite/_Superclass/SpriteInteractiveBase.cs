@@ -8,6 +8,7 @@ using Si.Library;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -180,7 +181,7 @@ namespace Si.Engine.Sprite._Superclass
         /// This is called before ApplyMotion().
         /// </summary>
         /// <param name="collidables">Contains all objects that have CollisionDetection enabled with their predicted new locations.</param>
-        public virtual void PerformCollisionDetection(float epoch, PredictedSpriteRegion[] collidables)
+        public virtual void PerformCollisionDetection(float epoch)
         {
             //HEY PAT!
             // - This function (PerformCollisionDetection) is called before ApplyMotion().
@@ -192,22 +193,28 @@ namespace Si.Engine.Sprite._Superclass
             //      velocities off... right?
             // - Note that thisCollidable also contains the predicted location after the move.
             // - How the hell do we handle collateral collisions? Please tell me we dont have to iterate.... 
+            // - Turns out a big problem is going to be that each colliding sprite will have two seperate handlers.
+            //      this might make it difficult.... not sure yet.
+            // - I think we need to determine the angle of the "collider" and do the bounce math on that.
 
             IsHighlighted = true;
 
             var thisCollidable = new PredictedSpriteRegion(this, epoch);
 
-            foreach (var other in collidables)
+            foreach (var other in _engine.Collisions.Colliadbles)
             {
-                if (thisCollidable.Sprite == other.Sprite)
+                if (thisCollidable.Sprite == other.Sprite || _engine.Collisions.IsAlreadyHandled(thisCollidable.Sprite, other.Sprite))
                 {
                     continue;
                 }
 
                 if (thisCollidable.IntersectsSAT(other))
                 {
-                    thisCollidable.Sprite.Velocity.ForwardVelocity = 0;
-                    //Debug.WriteLine($"{thisCollidable.Sprite.UID}->{other.Sprite.UID}");
+                    _engine.Collisions.Add(thisCollidable.Sprite, other.Sprite);
+
+                    thisCollidable.Sprite.Velocity.ForwardVelocity *= -1;
+
+                    Debug.WriteLine($"{thisCollidable.Sprite.UID}->{other.Sprite.UID}");
                 }
             }
         }

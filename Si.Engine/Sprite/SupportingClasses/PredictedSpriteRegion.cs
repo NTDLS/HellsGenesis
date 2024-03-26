@@ -1,7 +1,6 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
-using System;
 using System.Drawing;
 
 namespace Si.GameEngine.Sprite.SupportingClasses
@@ -51,11 +50,12 @@ namespace Si.GameEngine.Sprite.SupportingClasses
 
         /// <summary>
         /// Determines if two (non-axis-aligned) rectangles interset using Separating Axis Theorem (SAT).
+        /// This allows us to determine if a rotated rectangle interescts another rotated rectangle.
         /// </summary>
         /// <param name="otherObject"></param>
         /// <returns></returns>
         public bool IntersectsSAT(PredictedSpriteRegion otherObject)
-            => SiCollisionDetection.IntersectsRotated(Bounds, Sprite.Velocity.ForwardAngle.Radians,
+            => SiSeparatingAxisTheorem.IntersectsRotated(Bounds, Sprite.Velocity.ForwardAngle.Radians,
                 otherObject.Bounds, otherObject.Sprite.Velocity.ForwardAngle.Radians);
     }
 }

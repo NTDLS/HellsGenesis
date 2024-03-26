@@ -2,7 +2,6 @@
 using Si.Engine.Manager;
 using Si.Engine.Sprite;
 using Si.Engine.TickController._Superclass;
-using Si.GameEngine.Sprite.SupportingClasses;
 using Si.Library.Mathematics.Geometry;
 
 namespace Si.GameEngine.TickController.VectoredTickController.Collidable
@@ -14,13 +13,13 @@ namespace Si.GameEngine.TickController.VectoredTickController.Collidable
         {
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector, PredictedSpriteRegion[] collidables)
+        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
         {
             foreach (var sprite in Visible())
             {
                 sprite.ApplyIntelligence(epoch, displacementVector);
                 sprite.ApplyMotion(epoch, displacementVector);
-                sprite.PerformCollisionDetection(epoch, collidables);
+                sprite.PerformCollisionDetection(epoch);
             }
         }
     }

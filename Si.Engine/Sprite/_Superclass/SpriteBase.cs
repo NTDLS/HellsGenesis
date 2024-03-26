@@ -925,30 +925,6 @@ namespace Si.Engine.Sprite._Superclass
         /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SpriteBase obj, SiRelativeDirection direction, float rotationAmount = 1, float varianceDegrees = 10)
-        {
-            var deltaAngle = DeltaAngleDegrees(obj);
-
-            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
-            {
-                if (direction == SiRelativeDirection.Right)
-                {
-                    Velocity.ForwardAngle.Degrees += rotationAmount;
-                }
-                if (direction == SiRelativeDirection.Left)
-                {
-                    Velocity.ForwardAngle.Degrees -= rotationAmount;
-                }
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
-        /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
         public bool RotateIfNotPointingAt(SiPoint toLocation, float rotationAmount = 1, float varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(toLocation);
@@ -973,44 +949,13 @@ namespace Si.Engine.Sprite._Superclass
         /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SiPoint toLocation, SiRelativeDirection direction, float rotationAmount = 1, float varianceDegrees = 10)
-        {
-            var deltaAngle = DeltaAngleDegrees(toLocation);
-
-            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
-            {
-                if (direction == SiRelativeDirection.Right)
-                {
-                    Velocity.ForwardAngle.Degrees += rotationAmount;
-                }
-                if (direction == SiRelativeDirection.Left)
-                {
-                    Velocity.ForwardAngle.Degrees -= rotationAmount;
-                }
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
-        /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(float toDegrees, SiRelativeDirection direction, float rotationAmount = 1, float tolerance = 10)
+        public bool RotateIfNotPointingAt(float toDegrees, float rotationAmount = 1, float tolerance = 10)
         {
             toDegrees = toDegrees.DegreesNormalized();
 
             if (Velocity.ForwardAngle.DegreesSigned.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
-                if (direction == SiRelativeDirection.Right)
-                {
-                    Velocity.ForwardAngle.Degrees += rotationAmount;
-                }
-                if (direction == SiRelativeDirection.Left)
-                {
-                    Velocity.ForwardAngle.Degrees -= rotationAmount;
-                }
+                Velocity.ForwardAngle.Degrees -= rotationAmount;
                 return true;
             }
 
@@ -1034,33 +979,6 @@ namespace Si.Engine.Sprite._Superclass
                 else if (deltaAngle < varianceDegrees)
                 {
                     Velocity.ForwardAngle -= rotationRadians;
-                }
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Rotates the object by the given amount if it is pointing in the given direction.
-        /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if the object is not pointing in the given direction.
-        public bool RotateIfPointingAt(SpriteBase obj, SiRelativeDirection direction, float maxRotationRadians = 1, float varianceDegrees = 10)
-        {
-            var deltaAngle = DeltaAngleDegrees(obj);
-
-            //TODO: Implement LERP.
-            //var rotationRadians = SiMath.Lerp(maxRotationRadians / deltaAngle, maxRotationRadians, 0.1).Clamp(maxRotationRadians);
-
-            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees))
-            {
-                if (direction == SiRelativeDirection.Right)
-                {
-                    Velocity.ForwardAngle += maxRotationRadians;
-                }
-                if (direction == SiRelativeDirection.Left)
-                {
-                    Velocity.ForwardAngle -= maxRotationRadians;
                 }
                 return true;
             }
@@ -1241,6 +1159,8 @@ namespace Si.Engine.Sprite._Superclass
         public virtual void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             Location += Velocity.MovementVector * epoch;
+            Velocity.ForwardAngle.Degrees -= Velocity.RotationSpeed * epoch;
+
             foreach (var attachment in Attachments)
             {
                 attachment.ApplyMotion(epoch, displacementVector);

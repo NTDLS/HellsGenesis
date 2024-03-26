@@ -75,14 +75,6 @@
             Ended
         }
 
-        public enum SiRelativeDirection
-        {
-            None,
-            Left,
-            Right,
-            Random
-        }
-
         public enum SiCardinalDirection
         {
             None,
