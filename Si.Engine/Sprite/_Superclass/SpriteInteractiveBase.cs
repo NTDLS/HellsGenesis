@@ -68,6 +68,29 @@ namespace Si.Engine.Sprite._Superclass
             }
         }
 
+        /// <summary>
+        /// The total velocity multiplied by the given mass.
+        /// </summary>
+        /// <param name="mass"></param>
+        /// <returns></returns>
+        public float TotalRelativeMomentum() => Velocity.TotalRelativeVelocity * Metadata.Mass;
+
+        /// <summary>
+        /// The total velocity multiplied by the given mass, excpet for the mass is returned when the velocity is 0;
+        /// </summary>
+        /// <param name="mass"></param>
+        /// <returns></returns>
+        public float TotalRelativeMomentumWithRestingMass()
+        {
+            var totalRelativeVelocity = Velocity.TotalRelativeVelocity;
+            if (totalRelativeVelocity == 0)
+            {
+                return Metadata.Mass;
+            }
+            return Velocity.TotalRelativeVelocity * Metadata.Mass;
+        }
+
+
         #region Weapons selection and evaluation.
 
         public void ClearWeapons() => Weapons.Clear();
@@ -196,6 +219,7 @@ namespace Si.Engine.Sprite._Superclass
             // - Turns out a big problem is going to be that each colliding sprite will have two seperate handlers.
             //      this might make it difficult.... not sure yet.
             // - I think we need to determine the angle of the "collider" and do the bounce math on that.
+            // - I added sprite mass, velocity and momemtium. This should help us determine whos gonna get moved and by what amount.
 
             IsHighlighted = true;
 
@@ -214,7 +238,11 @@ namespace Si.Engine.Sprite._Superclass
 
                     thisCollidable.Sprite.Velocity.ForwardVelocity *= -1;
 
-                    Debug.WriteLine($"{thisCollidable.Sprite.UID}->{other.Sprite.UID}");
+                    //Who the fuck is moving out of the way now?
+                    var thisMomentum = thisCollidable.Sprite.TotalRelativeMomentumWithRestingMass();
+                    var otherMomentum = other.Sprite.TotalRelativeMomentumWithRestingMass();
+
+                    Debug.WriteLine($"Collision of UID {thisCollidable.Sprite.UID} and {other.Sprite.UID}, mass of {thisMomentum:n1} and {otherMomentum:n1}.");
                 }
             }
         }

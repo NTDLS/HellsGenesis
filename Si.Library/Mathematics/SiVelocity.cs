@@ -17,18 +17,11 @@ namespace Si.Library.Mathematics
         {
             get
             {
-                return (((MaximumSpeed * ForwardVelocity) + (MaximumSpeedBoost * ForwardBoostVelocity))) //Forward / Reverse.
-                + RotationSpeed //Rotation
-                + (MaximumSpeed * LateralVelocity); //Left/Right Strafe.
+                return Math.Abs((((MaximumSpeed * ForwardVelocity) + (MaximumSpeedBoost * ForwardBoostVelocity)))) //Forward / Reverse.
+                + Math.Abs(RotationSpeed) //Rotation
+                + Math.Abs((MaximumSpeed * LateralVelocity)); //Left/Right Strafe.
             }
         }
-
-        /// <summary>
-        /// The total velocity multiplied by the given mass.
-        /// </summary>
-        /// <param name="mass"></param>
-        /// <returns></returns>
-        public float TotalRelativeMomentum(float mass) => TotalRelativeVelocity * mass;
 
         /// <summary>
         /// Number or radians to rotate the sprite along its center. Negative for counter-clockwise, positive for clockwise.
