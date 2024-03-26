@@ -194,6 +194,9 @@ namespace Si.Engine.Manager
             {
                 switch (Path.GetExtension(entry.Key).ToLower())
                 {
+                    case ".json":
+                        threadPoolTracker.Enqueue(() => GetText(entry.Key), () => Interlocked.Increment(ref statusIndex));
+                        break;
                     case ".png":
                         threadPoolTracker.Enqueue(() => GetBitmap(entry.Key), () => Interlocked.Increment(ref statusIndex));
                         break;
