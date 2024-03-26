@@ -23,16 +23,16 @@
         public static float RandomSign(float value)
             => FlipCoin() ? value : -value;
 
-        public static float OneOf(float one, float two)
+        public static T OneOf<T>(T one, T two)
             => OneOf([one, two]);
 
-        public static float OneOf(float one, float two, float three)
+        public static T OneOf<T>(T one, T two, T three)
             => OneOf([one, two, three]);
 
-        public static float OneOf(float one, float two, float three, float four)
+        public static T OneOf<T>(T one, T two, T three, T four)
             => OneOf([one, two, three, four]);
 
-        public static float OneOf(float[] values)
+        public static T OneOf<T>(T[] values)
             => values[Between(0, values.Length - 1)];
 
         public static bool ChanceIn(int chanceIn, int outOf)

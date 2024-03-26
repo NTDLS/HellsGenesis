@@ -117,7 +117,7 @@ namespace Si.Engine
 
                 //PAT??!?!?!
                 //How in the hell are these different?!?!?!?!?!?!
-                Debug.WriteLine($"{_engine.Display.FrameCounter.ElapsedMilliseconds} -> {elapsedEpochMilliseconds}");
+                //Debug.WriteLine($"{_engine.Display.FrameCounter.ElapsedMilliseconds} -> {elapsedEpochMilliseconds}");
 
                 var epoch = (float)(elapsedEpochMilliseconds / millisecondPerEpoch);
 

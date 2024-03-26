@@ -35,6 +35,25 @@ namespace Si.Library
         }
 
         /// <summary>
+        /// Returns if the number square (the product of a number multiplied my itself).
+        /// </summary>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public static bool IsSquareNumber(int number)
+        {
+            if (number < 0)
+            {
+                return false; // Negative numbers cannot be square numbers.
+            }
+
+            // Calculate the square root of the number.
+            int sqrt = (int)Math.Sqrt(number);
+
+            // Check if the square of the square root is equal to the original number.
+            return sqrt * sqrt == number;
+        }
+
+        /// <summary>
         /// Executes the given delegate and returns true if successful.
         /// </summary>
         /// <param name="func"></param>

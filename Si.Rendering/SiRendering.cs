@@ -419,8 +419,11 @@ namespace Si.Rendering
             return destRect;
         }
 
-        public List<SharpDX.Direct2D1.Bitmap> GenerateIrregularFragments(SharpDX.Direct2D1.Bitmap originalBitmap, int countOfFragments, int countOfVertices = 3)
+        public List<SharpDX.Direct2D1.Bitmap> GenerateIrregularFragments(SharpDX.Direct2D1.Bitmap originalBitmap, int countOfFragments, int countOfVertices = 8)
             => SiBitmapFragmenter.GenerateIrregularFragments(this, originalBitmap, countOfFragments, countOfVertices);
+
+        public List<SharpDX.Direct2D1.Bitmap> GenerateIrregularFragments(SharpDX.Direct2D1.Bitmap originalBitmap)
+            => SiBitmapFragmenter.GenerateIrregularFragments(this, originalBitmap);
 
         public RawMatrix3x2 GetScalingMatrix(float zoomFactor)
         {

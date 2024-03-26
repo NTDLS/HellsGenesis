@@ -386,13 +386,11 @@ namespace Si.Engine.Manager
                 return;
             }
 
-            int fragmentCount = SiRandom.Between(2, 10);
+            var fragmentImages = _engine.Rendering.GenerateIrregularFragments(image);
 
-            var fragmentImages = _engine.Rendering.GenerateIrregularFragments(image, fragmentCount);
-
-            for (int index = 0; index < fragmentCount; index++)
+            foreach (var fragmentImage in fragmentImages)
             {
-                var fragment = _engine.Sprites.GenericSprites.AddAt(fragmentImages[index], sprite);
+                var fragment = _engine.Sprites.GenericSprites.AddAt(fragmentImage, sprite);
                 fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
                 fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f); //TODO: Can we implement this?
                 fragment.RotationDirection = SiRandom.FlipCoin() ? SiRelativeDirection.Right : SiRelativeDirection.Left;
