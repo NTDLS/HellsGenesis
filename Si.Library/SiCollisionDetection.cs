@@ -5,7 +5,7 @@ namespace Si.Library
     public class SiCollisionDetection
     {
         /// <summary>
-        /// Determines if two (non-axix-aligned) rectangles interset using Separating Axis Theorem (SAT).
+        /// Determines if two (non-axis-aligned) rectangles interset using Separating Axis Theorem (SAT).
         /// </summary>
         /// <param name="bounds1"></param>
         /// <param name="angleRadians1"></param>

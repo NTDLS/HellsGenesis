@@ -50,7 +50,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
             Bounds.IntersectsWith(otherObject.Bounds);
 
         /// <summary>
-        /// Determines if two (non-axix-aligned) rectangles interset using Separating Axis Theorem (SAT).
+        /// Determines if two (non-axis-aligned) rectangles interset using Separating Axis Theorem (SAT).
         /// </summary>
         /// <param name="otherObject"></param>
         /// <returns></returns>
