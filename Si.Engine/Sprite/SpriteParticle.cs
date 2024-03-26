@@ -68,11 +68,11 @@ namespace Si.Engine.Sprite
         {
             if (RotationDirection == SiRelativeDirection.Right)
             {
-                Velocity.ForwardAngle.Degrees += RotationSpeed;
+                Velocity.ForwardAngle.Degrees += RotationSpeed * epoch;
             }
             else if (RotationDirection == SiRelativeDirection.Left)
             {
-                Velocity.ForwardAngle.Degrees -= RotationSpeed;
+                Velocity.ForwardAngle.Degrees -= RotationSpeed * epoch;
             }
 
             if (VectorType == ParticleVectorType.UseTravelAngle)

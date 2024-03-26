@@ -85,13 +85,13 @@ namespace Si.Engine
 
             #endregion
 
-            var frameRateTimer = new Stopwatch();
+            //var frameRateTimer = new Stopwatch();
             var worldTickTimer = new Stopwatch();
             var epochTimer = new Stopwatch();
 
             Thread.Sleep((int)_engine.Settings.WorldTicksPerSecond); //Make sure the first epoch isn't instantaneous.
 
-            frameRateTimer.Start();
+            //frameRateTimer.Start();
             worldTickTimer.Start();
             epochTimer.Start();
 
@@ -115,10 +115,6 @@ namespace Si.Engine
                 var elapsedEpochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000.0;
                 epochTimer.Restart();
 
-                //PAT??!?!?!
-                //How in the hell are these different?!?!?!?!?!?!
-                //Debug.WriteLine($"{_engine.Display.FrameCounter.ElapsedMilliseconds} -> {elapsedEpochMilliseconds}");
-
                 var epoch = (float)(elapsedEpochMilliseconds / millisecondPerEpoch);
 
                 if (!_isPaused)
@@ -129,19 +125,13 @@ namespace Si.Engine
                 _engine.Debug.ProcessCommand();
 
                 //If it is time to render, then render the frame!.
-                if (frameRateTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency > frameRateDelayMicroseconds)
+                if (_engine.Display.FrameCounter.ElapsedMicroseconds > frameRateDelayMicroseconds)
                 {
                     _engine.RenderEverything();
-                    frameRateTimer.Restart();
                     _engine.Display.FrameCounter.Calculate();
 
                     #region Framerate fine-tuning.
 
-                    /*
-                     * I had to remove frame-rate auto adjust because there seems to be a variance between how we are calculating FPS here
-                     * and how we are doing it in _engine.Display.FrameCounter. I think we just need to use _engine.Display.FrameCounter
-                     * and stop doing the calculations directly inside GraphicsThreadProc().
-                     * 
                     if (_engine.Settings.FineTuneFramerate)
                     {
                         //From time-to-time we want to check the average framerate and make sure its sane.
@@ -150,30 +140,32 @@ namespace Si.Engine
                             framerateAutoAdjustCadence = 0;
                             if (_engine.Display.FrameCounter.CurrentFrameRate < framePerSecondLimit)
                             {
-                                spinCountAugmentation -= 1000; //The framerate is too low, reduce the delay.
+                                frameRateDelayMicroseconds -= 100; //The framerate is too low, reduce the delay.
                             }
-                            else if (_engine.Display.FrameCounter.CurrentFrameRate > framePerSecondLimit * 1.20)
+                            else if (_engine.Display.FrameCounter.CurrentFrameRate > framePerSecondLimit)
                             {
-                                spinCountAugmentation += 100; //the framerate is too high increase the delay.
+                                frameRateDelayMicroseconds += 100; //the framerate is too high increase the delay.
                             }
                         }
                         framerateAutoAdjustCadence++;
                     }
-                    */
                     #endregion
                 }
 
-                //Determine how many µs it took to render the scene.
-                var actualWorldTickDurationMicroseconds = worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency;
-
-                //Calculate how many µs we need to wait so that we can maintain the configured framerate.
-                var varianceWorldTickDurationMicroseconds = targetWorldTickDurationMicroseconds - actualWorldTickDurationMicroseconds;
-
-                worldTickTimer.Restart(); //Use the same timer to wait on the delta µs to expire.
-
-                while (worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds + spinCountAugmentation)
+                if (_engine.Settings.YeildDeltaFrametime)
                 {
-                    Thread.Yield();
+                    //Determine how many µs it took to render the scene.
+                    var actualWorldTickDurationMicroseconds = worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency;
+
+                    //Calculate how many µs we need to wait so that we can maintain the configured framerate.
+                    var varianceWorldTickDurationMicroseconds = targetWorldTickDurationMicroseconds - actualWorldTickDurationMicroseconds;
+
+                    worldTickTimer.Restart(); //Use the same timer to wait on the delta µs to expire.
+
+                    while (worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds + spinCountAugmentation)
+                    {
+                        Thread.Yield();
+                    }
                 }
 
                 if (_isPaused)

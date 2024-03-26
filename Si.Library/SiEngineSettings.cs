@@ -42,6 +42,11 @@ namespace Si.Library
         public int InitialFrameStarCount { get; set; } = 100;
         public int DeltaFrameTargetStarCount { get; set; } = 200;
 
+        /// <summary>
+        /// After the frame has been generated, if it takes less time than the framerate - yeild the time instead of rending the next frame too early.
+        /// this is really just an effort to keep epoch time reasonably close to frame time.
+        /// </summary>
+        public bool YeildDeltaFrametime { get; set; } = true;
         public bool VerticalSync { get; set; } = false;
         public bool AntiAliasing { get; set; } = true;
 
