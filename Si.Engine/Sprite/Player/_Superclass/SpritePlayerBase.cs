@@ -205,7 +205,7 @@ namespace Si.Engine.Sprite.Player._Superclass
         {
             if (munition.FiredFromType == SiFiredFromType.Enemy)
             {
-                return Intersects(hitTestPosition);
+                return IntersectsAABB(hitTestPosition);
             }
             return false;
         }

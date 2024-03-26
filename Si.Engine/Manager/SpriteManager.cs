@@ -224,7 +224,7 @@ namespace Si.Engine.Manager
             {
                 if (obj != with)
                 {
-                    if (obj.Intersects(with.Location, new SiPoint(with.Size.Width, with.Size.Height)))
+                    if (obj.IntersectsAABB(with.Location, new SiPoint(with.Size.Width, with.Size.Height)))
                     {
                         objs.Add(obj);
                     }
@@ -242,7 +242,7 @@ namespace Si.Engine.Manager
 
             foreach (var obj in _collection.Where(o => o.Visable == true))
             {
-                if (obj.Intersects(location, size))
+                if (obj.IntersectsAABB(location, size))
                 {
                     objs.Add(obj);
                 }
@@ -256,7 +256,7 @@ namespace Si.Engine.Manager
 
             foreach (var obj in _collection)
             {
-                if (obj.RenderLocationIntersects(location, size))
+                if (obj.RenderLocationIntersectsAABB(location, size))
                 {
                     objs.Add(obj);
                 }
@@ -270,7 +270,7 @@ namespace Si.Engine.Manager
 
             foreach (var obj in _collection.Where(o => o.Visable == true))
             {
-                if (obj.RenderLocationIntersects(location, size))
+                if (obj.RenderLocationIntersectsAABB(location, size))
                 {
                     objs.Add(obj);
                 }

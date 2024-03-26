@@ -20,7 +20,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            if(this.IsDeadOrExploded) return;
+            if (IsDeadOrExploded) return;
 
             // Since the turret.BaseLocation is relative to the top-left corner of the base sprite, we need
             // to get the position relative to the center of the base sprite image so that we can rotate around that.

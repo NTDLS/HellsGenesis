@@ -1,5 +1,7 @@
 ﻿using Si.Engine.Sprite._Superclass;
+using Si.Library;
 using Si.Library.Mathematics.Geometry;
+using System;
 using System.Drawing;
 
 namespace Si.GameEngine.Sprite.SupportingClasses
@@ -39,7 +41,21 @@ namespace Si.GameEngine.Sprite.SupportingClasses
             Location = sprite.Location + sprite.Velocity.MovementVector * epoch;
         }
 
-        public bool Intersects(PredictedSpriteRegion otherObject) =>
+        /// <summary>
+        /// Determines if two axis-aligned bounding boxes (AABB) intersect.
+        /// </summary>
+        /// <param name="otherObject"></param>
+        /// <returns></returns>
+        public bool IntersectsAABB(PredictedSpriteRegion otherObject) =>
             Bounds.IntersectsWith(otherObject.Bounds);
+
+        /// <summary>
+        /// Determines if two (non-axix-aligned) rectangles interset using Separating Axis Theorem (SAT).
+        /// </summary>
+        /// <param name="otherObject"></param>
+        /// <returns></returns>
+        public bool IntersectsSAT(PredictedSpriteRegion otherObject)
+            => SiCollisionDetection.IntersectsRotated(Bounds, Sprite.Velocity.ForwardAngle.Radians,
+                otherObject.Bounds, otherObject.Sprite.Velocity.ForwardAngle.Radians);
     }
 }

@@ -20,7 +20,7 @@ namespace Si.Engine.Sprite.PowerUp
 
         public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
-            if (Intersects(_engine.Player.Sprite))
+            if (IntersectsAABB(_engine.Player.Sprite))
             {
                 _engine.Player.Sprite.Velocity.AvailableBoost += PowerupAmount;
                 Explode();

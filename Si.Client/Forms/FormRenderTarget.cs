@@ -104,7 +104,7 @@ namespace Si.Client
             highlightedSprites.Clear();
 
             var sprites = _engine.Sprites.RenderLocationIntersections(new SiPoint(x, y), new SiPoint(1, 1));
-            if (_engine.Player.Sprite.RenderLocationIntersects(new SiPoint(x, y), new SiPoint(1, 1)))
+            if (_engine.Player.Sprite.RenderLocationIntersectsAABB(new SiPoint(x, y), new SiPoint(1, 1)))
             {
                 sprites.Add(_engine.Player.Sprite);
             }
@@ -122,7 +122,7 @@ namespace Si.Client
             float y = e.Y + _engine.Display.OverdrawSize.Height / 2;
 
             var sprites = _engine.Sprites.RenderLocationIntersectionsEvenInvisible(new SiPoint(x, y), new SiPoint(1, 1));
-            if (_engine.Player.Sprite.RenderLocationIntersects(new SiPoint(x, y), new SiPoint(1, 1)))
+            if (_engine.Player.Sprite.RenderLocationIntersectsAABB(new SiPoint(x, y), new SiPoint(1, 1)))
             {
                 sprites.Add(_engine.Player.Sprite);
             }

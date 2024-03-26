@@ -46,7 +46,7 @@ namespace Si.Engine.Sprite.PowerUp._Superclass
 
         public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
         {
-            if (Intersects(_engine.Player.Sprite))
+            if (IntersectsAABB(_engine.Player.Sprite))
             {
                 Explode();
             }

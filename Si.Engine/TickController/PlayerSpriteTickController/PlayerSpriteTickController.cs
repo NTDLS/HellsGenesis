@@ -281,6 +281,10 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 //Debug.WriteLine($" Forward: [Target:{targetForwardAmount:n2}, Actual: {Sprite.Velocity.ForwardVelocity:n2}], Lateral: [Target {targetLateralAmount:n2}, Actual: {Sprite.Velocity.LateralVelocity:n2}");
             }
 
+            Sprite.RenewableResources.RenewAllResources(epoch);
+
+            Sprite.PerformCollisionDetection(epoch, collidables);
+
             var displacementVector = Sprite.Velocity.MovementVector * epoch;
 
             //Scroll the background.
@@ -288,10 +292,6 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
             //Move the player in the direction of the background. This keeps the player visually in place, which is in the center screen.
             Sprite.Location += displacementVector;
-
-            Sprite.RenewableResources.RenewAllResources(epoch);
-
-            Sprite.PerformCollisionDetection(epoch, collidables);
 
             return displacementVector;
         }

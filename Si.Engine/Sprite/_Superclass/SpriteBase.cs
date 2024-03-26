@@ -305,7 +305,7 @@ namespace Si.Engine.Sprite._Superclass
                 hitTestPosition += directionVector;
                 foreach (var obj in objectsThatCanBeHit)
                 {
-                    if (obj.Intersects(hitTestPosition))
+                    if (obj.IntersectsAABB(hitTestPosition))
                     {
                         collisions.Add(obj);
                     }
@@ -352,7 +352,7 @@ namespace Si.Engine.Sprite._Superclass
                 hitTestPosition += directionVector;
                 foreach (var obj in objectsThatCanBeHit)
                 {
-                    if (obj.Intersects(hitTestPosition))
+                    if (obj.IntersectsAABB(hitTestPosition))
                     {
                         return obj;
                     }
@@ -406,7 +406,7 @@ namespace Si.Engine.Sprite._Superclass
                 hitTestPosition += directionVector;
                 foreach (var obj in objectsThatCanBeHit)
                 {
-                    if (obj.Intersects(hitTestPosition))
+                    if (obj.IntersectsAABB(hitTestPosition))
                     {
                         collisions.Add(obj);
                     }
@@ -454,7 +454,7 @@ namespace Si.Engine.Sprite._Superclass
                 hitTestPosition += directionVector;
                 foreach (var obj in objectsThatCanBeHit)
                 {
-                    if (obj.Intersects(hitTestPosition))
+                    if (obj.IntersectsAABB(hitTestPosition))
                     {
                         return obj;
                     }
@@ -496,7 +496,7 @@ namespace Si.Engine.Sprite._Superclass
                 hitTestPosition += directionVector;
                 foreach (var obj in objectsThatCanBeHit)
                 {
-                    if (obj.Intersects(hitTestPosition))
+                    if (obj.IntersectsAABB(hitTestPosition))
                     {
                         collisions.Add(obj);
                     }
@@ -538,7 +538,7 @@ namespace Si.Engine.Sprite._Superclass
                 hitTestPosition += directionVector;
                 foreach (var obj in objectsThatCanBeHit)
                 {
-                    if (obj.Intersects(hitTestPosition))
+                    if (obj.IntersectsAABB(hitTestPosition))
                     {
                         return obj;
                     }
@@ -558,7 +558,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public virtual bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
         {
-            if (Intersects(hitTestPosition))
+            if (IntersectsAABB(hitTestPosition))
             {
                 Hit(munition);
                 if (HullHealth <= 0)
@@ -714,7 +714,12 @@ namespace Si.Engine.Sprite._Superclass
 
         #region Intersections.
 
-        public bool Intersects(SpriteBase otherObject)
+        /// <summary>
+        /// Determines if two axis-aligned bounding boxes (AABB) intersect.
+        /// </summary>
+        /// <param name="otherObject"></param>
+        /// <returns></returns>
+        public bool IntersectsAABB(SpriteBase otherObject)
         {
             if (Visable && otherObject.Visable && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
             {
@@ -734,7 +739,7 @@ namespace Si.Engine.Sprite._Superclass
                     previousPosition.X -= otherObject.Velocity.ForwardAngle.X;
                     previousPosition.Y -= otherObject.Velocity.ForwardAngle.Y;
 
-                    if (Intersects(previousPosition))
+                    if (IntersectsAABB(previousPosition))
                     {
                         return true;
 
@@ -745,10 +750,10 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Intersect detection with another object using adjusted "hit box" size.
+        /// Determines if two axis-aligned bounding boxes (AABB) intersect.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(SpriteBase otherObject, SiPoint sizeAdjust)
+        public bool IntersectsAABB(SpriteBase otherObject, SiPoint sizeAdjust)
         {
             if (Visable && otherObject.Visable && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
             {
@@ -778,10 +783,10 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Intersect detection with a position using adjusted "hit box" size.
+        /// Determines if two axis-aligned bounding boxes (AABB) intersect.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(SiPoint location, SiPoint size)
+        public bool IntersectsAABB(SiPoint location, SiPoint size)
         {
             var alteredHitBox = new RectangleF(
                 location.X,
@@ -794,10 +799,10 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Intersect detection with a position using adjusted "hit box" size.
+        /// Determines if two axis-aligned bounding boxes (AABB) intersect.
         /// </summary>
         /// <returns></returns>
-        public bool RenderLocationIntersects(SiPoint location, SiPoint size)
+        public bool RenderLocationIntersectsAABB(SiPoint location, SiPoint size)
         {
             var alteredHitBox = new RectangleF(
                 location.X,
@@ -810,10 +815,10 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Intersect detection with a position.
+        /// Determines if two axis-aligned bounding boxes (AABB) intersect.
         /// </summary>
         /// <returns></returns>
-        public bool Intersects(SiPoint location)
+        public bool IntersectsAABB(SiPoint location)
         {
             var alteredHitBox = new RectangleF(location.X, location.Y, 1f, 1f);
             return Bounds.IntersectsWith(alteredHitBox);

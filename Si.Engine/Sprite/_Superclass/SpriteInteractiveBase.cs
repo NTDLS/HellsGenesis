@@ -140,7 +140,7 @@ namespace Si.Engine.Sprite._Superclass
 
         public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
         {
-            if (Intersects(hitTestPosition))
+            if (IntersectsAABB(hitTestPosition))
             {
                 Hit(munition);
                 if (HullHealth <= 0)
@@ -204,8 +204,9 @@ namespace Si.Engine.Sprite._Superclass
                     continue;
                 }
 
-                if (thisCollidable.Intersects(other))
+                if (thisCollidable.IntersectsSAT(other))
                 {
+                    thisCollidable.Sprite.Velocity.ForwardVelocity = 0;
                     //Debug.WriteLine($"{thisCollidable.Sprite.UID}->{other.Sprite.UID}");
                 }
             }

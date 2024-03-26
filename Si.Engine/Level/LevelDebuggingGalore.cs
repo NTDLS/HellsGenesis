@@ -1,8 +1,6 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Engine.Sprite.Enemy.Peon;
-using Si.GameEngine.Sprite.Enemy.Starbase.Garrison;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
