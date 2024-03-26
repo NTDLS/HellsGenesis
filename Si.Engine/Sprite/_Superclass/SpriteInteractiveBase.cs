@@ -73,21 +73,21 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         /// <param name="mass"></param>
         /// <returns></returns>
-        public float TotalRelativeMomentum() => Velocity.TotalRelativeVelocity * Metadata.Mass;
+        public float TotalMomentum() => Velocity.TotalVelocity * Metadata.Mass;
 
         /// <summary>
         /// The total velocity multiplied by the given mass, excpet for the mass is returned when the velocity is 0;
         /// </summary>
         /// <param name="mass"></param>
         /// <returns></returns>
-        public float TotalRelativeMomentumWithRestingMass()
+        public float TotalMomentumWithRestingMass()
         {
-            var totalRelativeVelocity = Velocity.TotalRelativeVelocity;
+            var totalRelativeVelocity = Velocity.TotalVelocity;
             if (totalRelativeVelocity == 0)
             {
                 return Metadata.Mass;
             }
-            return Velocity.TotalRelativeVelocity * Metadata.Mass;
+            return Velocity.TotalVelocity * Metadata.Mass;
         }
 
 
@@ -239,10 +239,13 @@ namespace Si.Engine.Sprite._Superclass
                     thisCollidable.Sprite.Velocity.ForwardVelocity *= -1;
 
                     //Who the fuck is moving out of the way now?
-                    var thisMomentum = thisCollidable.Sprite.TotalRelativeMomentumWithRestingMass();
-                    var otherMomentum = other.Sprite.TotalRelativeMomentumWithRestingMass();
+                    var thisMomentum = thisCollidable.Sprite.TotalMomentumWithRestingMass();
+                    var otherMomentum = other.Sprite.TotalMomentumWithRestingMass();
+                    var totalMomentum = thisMomentum + otherMomentum;
+                    thisMomentum /= totalMomentum;
+                    otherMomentum /= totalMomentum;
 
-                    Debug.WriteLine($"Collision of UID {thisCollidable.Sprite.UID} and {other.Sprite.UID}, mass of {thisMomentum:n1} and {otherMomentum:n1}.");
+                    Debug.WriteLine($"Collision of UID {thisCollidable.Sprite.UID} and {other.Sprite.UID}, mass of {thisMomentum:n4} and {otherMomentum:n4}.");
                 }
             }
         }

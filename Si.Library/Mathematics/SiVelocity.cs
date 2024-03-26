@@ -13,7 +13,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Number that defines how much motion a sprite is in.
         /// </summary>
-        public float TotalRelativeVelocity
+        public float TotalVelocity
         {
             get
             {
