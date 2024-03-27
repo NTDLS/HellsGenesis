@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SharpDX.Direct2D1;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
@@ -20,16 +21,40 @@ namespace Si.Engine.Sprite._Superclass
     /// </summary>
     public class SpriteInteractiveBase : SpriteBase
     {
+        #region Locking Indicator.
+
+        public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
+        protected Bitmap _lockedOnImage;
+        protected Bitmap _lockedOnSoftImage;
+        private bool _isLockedOn = false;
+
+        public bool IsLockedOnHard //The object is the subject of a foreign weapons lock.
+        {
+            get => _isLockedOn;
+            set
+            {
+                if (_isLockedOn == false && value == true)
+                {
+                    //TODO: This should not play every loop.
+                    _engine.Audio.LockedOnBlip.Play();
+                }
+                _isLockedOn = value;
+            }
+        }
+
+        #endregion
+
         public SiTimeRenewableResources RenewableResources { get; set; } = new();
-
         public InteractiveSpriteMetadata Metadata { get; set; }
-
         public List<WeaponBase> Weapons { get; private set; } = new();
 
         public SpriteInteractiveBase(EngineCore engine, string name = "")
             : base(engine, name)
         {
             _engine = engine;
+
+            _lockedOnImage = _engine.Assets.GetBitmap(@"Sprites\Weapon\Locked On.png");
+            _lockedOnSoftImage = _engine.Assets.GetBitmap(@"Sprites\Weapon\Locked Soft.png");
         }
 
         /// <summary>
@@ -46,11 +71,13 @@ namespace Si.Engine.Sprite._Superclass
 
             Metadata = JsonConvert.DeserializeObject<InteractiveSpriteMetadata>(metadataJson);
 
+            // Set standard variables here:
             Speed = Metadata.Speed;
-            //MaximumBoostSpeed = Metadata.Boost;
+            Throttle = Metadata.Throttle;
+            MaxThrottle = Metadata.MaxThrottle;
 
-            SetHullHealth(Metadata.HullHealth);
-            SetShieldHealth(Metadata.ShieldHealth);
+            SetHullHealth(Metadata.Hull);
+            SetShieldHealth(Metadata.Shields);
 
             foreach (var weapon in Metadata.Weapons)
             {
@@ -169,6 +196,23 @@ namespace Si.Engine.Sprite._Superclass
 
         #endregion
 
+        public override void Render(RenderTarget renderTarget)
+        {
+            base.Render(renderTarget);
+
+            if (Visable)
+            {
+                if (_lockedOnImage != null && IsLockedOnHard)
+                {
+                    DrawImage(renderTarget, _lockedOnImage, 0);
+                }
+                else if (_lockedOnImage != null && IsLockedOnSoft)
+                {
+                    DrawImage(renderTarget, _lockedOnSoftImage, 0);
+                }
+            }
+        }
+
         public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
         {
             if (IntersectsAABB(hitTestPosition))
@@ -243,14 +287,23 @@ namespace Si.Engine.Sprite._Superclass
                 {
                     _engine.Collisions.Add(thisCollidable.Sprite, other.Sprite);
 
-                    thisCollidable.Sprite.Velocity *= -1;
-
-                    //Who the fuck is moving out of the way now?
                     var thisMomentum = thisCollidable.Sprite.TotalMomentumWithRestingMass();
                     var otherMomentum = other.Sprite.TotalMomentumWithRestingMass();
+
                     var totalMomentum = thisMomentum + otherMomentum;
+
                     thisMomentum /= totalMomentum;
                     otherMomentum /= totalMomentum;
+
+                    //Who the fuck is moving out of the way now?
+                    if (thisMomentum < otherMomentum)
+                    {
+                        thisCollidable.Sprite.Velocity *= -1;
+                    }
+                    else
+                    {
+                        other.Sprite.Velocity *= -1;
+                    }
 
                     Debug.WriteLine($"Collision of UID {thisCollidable.Sprite.UID} and {other.Sprite.UID}, mass of {thisMomentum:n4} and {otherMomentum:n4}.");
                 }

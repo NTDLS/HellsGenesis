@@ -1,8 +1,8 @@
 {
   "Speed": 3,
-  "HullHealth": 100,
+  "Hull": 100,
   "Mass": 100,
   "Bounty": 0,
-  "TakesMunitionDamage": true,
+  "MunitionDetection": true,
   "CollisionDetection": true
 }

@@ -52,7 +52,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
             Velocity = Direction * Velocity.Length();
 
             //Determine the sprites new location
-            Location = sprite.Location + Velocity * sprite.ThrottlePercentage * epoch;
+            Location = sprite.Location + Velocity * sprite.Throttle * epoch;
         }
 
         /// <summary>

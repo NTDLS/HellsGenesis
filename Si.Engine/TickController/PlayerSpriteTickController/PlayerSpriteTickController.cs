@@ -263,7 +263,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Sounds and Animation.
 
-                if (Sprite.ThrottlePercentage >= throttleFloor)
+                if (Sprite.Throttle >= throttleFloor)
                     Sprite.ShipEngineBoostSound.Play();
                 else Sprite.ShipEngineBoostSound.Fade();
 

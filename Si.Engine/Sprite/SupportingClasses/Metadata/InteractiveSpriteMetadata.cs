@@ -9,17 +9,19 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
     {
         public string Name { get; set; }
         public string Description { get; set; }
+
         public float Speed { get; set; } = 1f;
-        public float Boost { get; set; } = 0f;
+        public float MaxThrottle { get; set; } = 0f;
+        public float Throttle { get; set; } = 1f;
 
         /// <summary>
         /// How much does the sprite weigh?
         /// </summary>
         public float Mass { get; set; } = 1f;
-        public int HullHealth { get; set; } = 0;
-        public int ShieldHealth { get; set; } = 0;
+        public int Hull { get; set; } = 0;
+        public int Shields { get; set; } = 0;
         public int Bounty { get; set; } = 0;
-        public bool TakesMunitionDamage { get; set; } = false;
+        public bool MunitionDetection { get; set; } = false;
         public bool CollisionDetection { get; set; } = false;
 
         /// <summary>

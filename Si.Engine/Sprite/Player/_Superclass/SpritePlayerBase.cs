@@ -140,10 +140,10 @@ namespace Si.Engine.Sprite.Player._Superclass
             string result = $"             Name : {Metadata.Name}\n";
             result += $"   Primary weapon : {primaryWeapon.Trim()}\n";
             result += $"Secondary Weapons : {secondaryWeapons.Trim()}\n";
-            result += $"          Shields : {Metadata.ShieldHealth:n0}\n";
-            result += $"    Hull Strength : {Metadata.HullHealth:n0}\n";
-            result += $"        Max Speed : {Metadata.Speed:n1}\n";
-            result += $"      Surge Drive : {Metadata.Boost:n1}\n";
+            result += $"          Shields : {Metadata.Shields:n0}\n";
+            result += $"             Hull : {Metadata.Hull:n0}\n";
+            result += $"            Speed : {Metadata.Speed:n1}\n";
+            result += $"         Throttle : {Metadata.MaxThrottle:n1}\n";
             result += $"\n{Metadata.Description}";
 
             return result;

@@ -1,10 +1,10 @@
 {
   "Description": "",
   "Speed": 3.5,
-  "Boost": 1.5,
-  "HullHealth": 20,
-  "TakesMunitionDamage": true,
-  "ShieldHealth": 10,
+  "MaxThrottle": 1.5,
+  "Hull": 20,
+  "MunitionDetection": true,
+  "Shields": 10,
   "Bounty": 10,
   "Weapons": [
 	{

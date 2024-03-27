@@ -553,7 +553,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.ThrottlePercentage = command.ParameterValue<float>("value");
+                    sprite.Throttle = command.ParameterValue<float>("value");
                 }
             });
         }

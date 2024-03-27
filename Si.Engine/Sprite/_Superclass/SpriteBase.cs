@@ -23,11 +23,6 @@ namespace Si.Engine.Sprite._Superclass
         protected EngineCore _engine;
 
         private SharpDX.Direct2D1.Bitmap _image;
-
-        protected SharpDX.Direct2D1.Bitmap _lockedOnImage;
-        protected SharpDX.Direct2D1.Bitmap _lockedOnSoftImage;
-
-        private bool _isLockedOn = false;
         private bool _readyForDeletion;
         private SiPoint _location = new();
         private Size _size;
@@ -41,7 +36,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public float Speed { get; set; }
 
-        public SiPoint _velocity = new();
+        private SiPoint _velocity = new();
         /// <summary>
         /// Omni-directional velocity.
         /// </summary>
@@ -59,23 +54,27 @@ namespace Si.Engine.Sprite._Superclass
         /// The sumation of the angle and all velocity .
         /// Sprite movement is simple: (MovementVector * epoch)
         /// </summary>
-        public SiPoint MovementVector => Velocity * ThrottlePercentage;
+        public SiPoint MovementVector => Velocity * Throttle;
 
-        public float _throttlePercentage = 1.0f;
+        private float _throttle = 1.0f;
         /// <summary>
-        /// Percentage of speed expressed as a decimal percentage from 0 to 2.
+        /// Percentage of speed expressed as a decimal percentage from 0.0 (stopped) to 10.0 (10x the normal speed).
         /// </summary>
-        public float ThrottlePercentage
+        public float Throttle
         {
-            get => _throttlePercentage;
+            get => _throttle;
             set
             {
-                _throttlePercentage = value.Clamp(0, 2);
+                _throttle = value.Clamp(0, 10);
             }
         }
 
-        #endregion
+        /// <summary>
+        /// The general maximum throttle that can be applied. This can be considered the "boost" speed.
+        /// </summary>
+        public float MaxThrottle { get; set; }
 
+        #endregion
 
         #region Properties.
 
@@ -96,7 +95,6 @@ namespace Si.Engine.Sprite._Superclass
         public SiPoint LocationRelativeToOwner { get; set; }
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);
-        public bool IsLockedOnSoft { get; set; } //This is just graphics candy, the object would be subject of a foreign weapons lock, but the other foreign weapon owner has too many locks.
         public bool IsWithinCurrentScaledScreenBounds => _engine.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds);
         public bool IsHighlighted { get; set; } = false;
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
@@ -162,19 +160,6 @@ namespace Si.Engine.Sprite._Superclass
                         (RenderLocation.X - Size.Width / 2.0f) + Size.Width,
                         (RenderLocation.Y - Size.Height / 2.0f) + Size.Height);
 
-        public bool IsLockedOnHard //The object is the subject of a foreign weapons lock.
-        {
-            get => _isLockedOn;
-            set
-            {
-                if (_isLockedOn == false && value == true)
-                {
-                    //TODO: This should not play every loop.
-                    _engine.Audio.LockedOnBlip.Play();
-                }
-                _isLockedOn = value;
-            }
-        }
 
         /// <summary>
         /// The x,y, location of the center of the sprite in the universe.
@@ -678,14 +663,14 @@ namespace Si.Engine.Sprite._Superclass
                 + extraInfo
                 + $"       Background Offset: {_engine.Display.RenderWindowPosition}\r\n"
                 + $"                  Thrust: {Velocity * 100:n2}\r\n"
-                + $"                   Boost: {ThrottlePercentage * 100:n2}\r\n"
+                + $"                   Boost: {Throttle * 100:n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
                 + $"             Attachments: {Attachments?.Count ?? 0:n0}\r\n"
                 + $"               Highlight: {IsHighlighted}\r\n"
                 + $"       Is Fixed Position: {IsFixedPosition}\r\n"
-                + $"            Is Locked On: {IsLockedOnHard}\r\n"
-                + $"     Is Locked On (Soft): {IsLockedOnSoft:n0}\r\n"
+                //+ $"            Is Locked On: {IsLockedOnHard}\r\n"
+                //+ $"     Is Locked On (Soft): {IsLockedOnSoft:n0}\r\n"
                 + $"In Current Scaled Bounds: {IsWithinCurrentScaledScreenBounds}\r\n"
                 + $"          Visible Bounds: {Bounds}\r\n";
         }
@@ -1268,15 +1253,6 @@ namespace Si.Engine.Sprite._Superclass
             {
                 DrawImage(renderTarget, _image);
 
-                if (_lockedOnImage != null && IsLockedOnHard)
-                {
-                    DrawImage(renderTarget, _lockedOnImage, 0);
-                }
-                else if (_lockedOnImage != null && IsLockedOnSoft)
-                {
-                    DrawImage(renderTarget, _lockedOnSoftImage, 0);
-                }
-
                 if (IsHighlighted)
                 {
                     _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Direction.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
@@ -1325,7 +1301,7 @@ namespace Si.Engine.Sprite._Superclass
             }
         }
 
-        private void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float? angleRadians = null)
+        public void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float? angleRadians = null)
         {
             float angle = (float)(angleRadians == null ? Direction.Radians : angleRadians);
 

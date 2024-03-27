@@ -2,11 +2,11 @@
   "Name": "Debug",
   "Description": "→ The code crusader ←\nCrude in design but equipped with advanced diagnostics and repair systems.\nNearly indestructible and inconceivably fast. Its mission is to discover\nglitches in the vast cosmic code, ensuring a smooth journey for all that follow...",
   "Speed": 4.75,
-  "Boost": 1.5,
+  "MaxThrottle": 1.5,
   "Mass": 10,
-  "HullHealth": 100000,
-  "ShieldHealth": 10000,
-  "TakesMunitionDamage": true,
+  "Hull": 100000,
+  "Shields": 10000,
+  "MunitionDetection": true,
   "PrimaryWeapon":
   {
 	"Type": "WeaponDualVulcanCannon",

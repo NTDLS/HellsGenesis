@@ -62,14 +62,14 @@ namespace Si.Client.Forms
             UpsertVariable("Angle Radians", $"{sprite.Direction.Radians:n2}");
             UpsertVariable("Angle Radians (Signed)", $"{sprite.Direction.RadiansSigned:n2}");
             //UpsertVariable("Thrust %", $"{(sprite.Velocity.ForwardVelocity * 100):n2}");
-            UpsertVariable("Boost %", $"{(sprite.ThrottlePercentage * 100):n2}");
+            UpsertVariable("Boost %", $"{(sprite.Throttle * 100):n2}");
             UpsertVariable("Hull", $"{sprite.HullHealth:n0}");
             UpsertVariable("Shield", $"{sprite.ShieldHealth:n0}");
             UpsertVariable("Attachments", $"{sprite.Attachments?.Count ?? 0:n0}");
             UpsertVariable("Highlight", $"{sprite.IsHighlighted}");
             UpsertVariable("Is Fixed Position", $"{sprite.IsFixedPosition}");
-            UpsertVariable("Is Locked On", $"{sprite.IsLockedOnHard}");
-            UpsertVariable("Is Locked On (Soft)", $"{sprite.IsLockedOnSoft:n0}");
+            //UpsertVariable("Is Locked On", $"{sprite.IsLockedOnHard}");
+            //UpsertVariable("Is Locked On (Soft)", $"{sprite.IsLockedOnSoft:n0}");
             UpsertVariable("In Current Scaled Bounds", $"{sprite.IsWithinCurrentScaledScreenBounds}");
             UpsertVariable("Visible Bounds", $"{sprite.Bounds}");
 

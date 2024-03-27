@@ -90,7 +90,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
             }
             if (BoostAnimation != null)
             {
-                BoostAnimation.Visable = ThrottlePercentage > 0;
+                BoostAnimation.Visable = Throttle > 0;
             }
         }
 
