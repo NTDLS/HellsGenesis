@@ -1197,8 +1197,15 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(float epoch, SiPoint displacementVector)
         {
+            //Perform any auto-rotation.
+            Direction.Degrees += RotationSpeed * epoch;
+
+            //Direction is a vector with a magnitude of 1 and so is Velocity, so we
+            //  do this to keep the velocity following the direction the sprite is pointing.
+            Travel.Velocity = Direction;
+
+            //Move the sprite based on its vector.
             Location += Travel.MovementVector * epoch;
-            Direction.Degrees -= RotationSpeed * epoch;
 
             foreach (var attachment in Attachments)
             {

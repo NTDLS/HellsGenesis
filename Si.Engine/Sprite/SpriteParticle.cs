@@ -4,6 +4,8 @@ using Si.Engine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
+using System;
+using System.Diagnostics;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
@@ -57,10 +59,26 @@ namespace Si.Engine.Sprite
 
             Color = color ?? engine.Rendering.Materials.Colors.White;
             RotationSpeed = SiRandom.Between(1, 100) / 20.0f * SiRandom.PositiveOrNegative();
+
+            TravelAngle.Degrees = SiRandom.Between(0, 359);
+            Direction.Degrees = SiRandom.Between(0, 359);
+
+            Travel.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
+
+            var magnatude = SiRandom.Between(0.5f, 1.0f);
+
+            Travel.Velocity = VelocityInDirection(magnatude);
+
+            /*
+            Location = location.Clone();
+
+            Color = color ?? engine.Rendering.Materials.Colors.White;
+            Velocity.RotationSpeed = SiRandom.Between(1, 100) / 20.0f * SiRandom.PositiveOrNegative();
             TravelAngle.Degrees = SiRandom.Between(0, 359);
 
-            Travel.Velocity = VelocityInDirection(1.0f);
-            Travel.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
+            Velocity.ForwardVelocity = 100;
+            Velocity.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
+             */
 
             _engine = engine;
         }

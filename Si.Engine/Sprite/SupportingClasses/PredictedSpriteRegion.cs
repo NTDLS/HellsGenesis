@@ -1,5 +1,6 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.Library;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System.Drawing;
 
@@ -24,20 +25,35 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// <summary>
         /// Predicted location after next call to ApplyMotion().
         /// </summary>
-        public SiPoint Location { get; set; }
+        public SiPoint Location { get; private set; }
+
+        /// <summary>
+        /// Predicted velocity after next call to ApplyMotion().
+        /// </summary>
+        public SiVelocity Velocity { get; private set; }
+
+        /// <summary>
+        /// Predicted direction after next call to ApplyMotion().
+        /// </summary>
+        public SiAngle Direction { get; private set; }
 
         /// <summary>
         /// Predicted bounds after next call to ApplyMotion().
         /// </summary>
-        public RectangleF Bounds => new(
-                Location.X - Size.Width / 2.0f,
-                Location.Y - Size.Height / 2.0f,
-                Size.Width, Size.Height);
+        public RectangleF Bounds => new(Location.X - Size.Width / 2.0f, Location.Y - Size.Height / 2.0f, Size.Width, Size.Height);
 
         public PredictedSpriteRegion(SpriteInteractiveBase sprite, float epoch)
         {
             Sprite = sprite;
-            Location = sprite.Location + sprite.Travel.MovementVector * epoch;
+
+            //Assume the sprite is using rotation.
+            Direction = new SiAngle(sprite.Direction.Degrees + sprite.RotationSpeed * epoch);
+
+            //Assuming the sprite is moving in the direction it is pointing.
+            Velocity = new SiVelocity(Direction);
+
+            //Determine the sprites new location
+            Location = sprite.Location + Velocity.MovementVector * epoch;
         }
 
         /// <summary>
@@ -55,7 +71,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// <param name="otherObject"></param>
         /// <returns></returns>
         public bool IntersectsSAT(PredictedSpriteRegion otherObject)
-            => SiSeparatingAxisTheorem.IntersectsRotated(Bounds, Sprite.Direction.Radians,
-                otherObject.Bounds, otherObject.Sprite.Direction.Radians);
+            => SiSeparatingAxisTheorem.IntersectsRotated(Bounds, Direction.Radians,
+                otherObject.Bounds, otherObject.Direction.Radians);
     }
 }

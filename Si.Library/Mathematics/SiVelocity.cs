@@ -28,7 +28,7 @@ namespace Si.Library.Mathematics
 
         public SiPoint _velocity = new();
         /// <summary>
-        /// Percentage of velocity expressed as a decimal percentage of the MaximumSpeed in any direction.
+        /// Omni-directional velocity with a magnatude of 1. Expressed as a decimal percentage of the MaximumSpeed in any direction.
         /// </summary>
         public SiPoint Velocity
         {
@@ -44,8 +44,7 @@ namespace Si.Library.Mathematics
         /// The sumation of the angle, and all velocity (including boost).
         /// Sprite movement is simple: (MovementVector * epoch)
         /// </summary>
-        public SiPoint MovementVector
-            => (Velocity * (MaximumSpeed + (MaximumBoostSpeed * SpeedBoostPercentage)));
+        public SiPoint MovementVector => (Velocity * (MaximumSpeed + (MaximumBoostSpeed * SpeedBoostPercentage)));
 
         public float _speedBoostPercentage;
         /// <summary>
@@ -59,6 +58,15 @@ namespace Si.Library.Mathematics
                 _speedBoostPercentage = value.Clamp(-1, 1);
                 OnBoostChanged?.Invoke(this);
             }
+        }
+
+        public SiVelocity()
+        {
+        }
+
+        public SiVelocity(SiAngle velocity)
+        {
+            Velocity = velocity;
         }
     }
 }
