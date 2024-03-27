@@ -553,7 +553,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Travel.ThrottlePercentage = command.ParameterValue<float>("value");
+                    sprite.ThrottlePercentage = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -581,7 +581,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    //sprite.Travel.MaximumBoostSpeed = command.ParameterValue<float>("value");
+                    //sprite.MaximumBoostSpeed = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -595,7 +595,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Travel.Speed = command.ParameterValue<float>("value");
+                    sprite.Speed = command.ParameterValue<float>("value");
                 }
             });
         }

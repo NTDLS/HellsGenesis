@@ -394,8 +394,8 @@ namespace Si.Engine.Manager
                 fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
                 fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f); //TODO: Can we implement this?
                 fragment.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
-                fragment.Travel.Speed = SiRandom.Between(1, 3.5f);
-                fragment.Travel.Velocity = fragment.VelocityInDirection(1.0f);
+                fragment.Speed = SiRandom.Between(1, 3.5f);
+                fragment.Velocity = fragment.VelocityInDirection(1.0f);
                 fragment.VectorType = ParticleVectorType.UseTravelAngle;
                 fragment.TravelAngle.Degrees = SiRandom.Between(0.0f, 359.0f);
             }

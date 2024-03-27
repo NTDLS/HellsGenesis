@@ -236,13 +236,13 @@ namespace Si.Engine
                 //situation = $"{_engine.Situations.CurrentSituation.Name} (Wave {_engine.Situations.CurrentSituation.CurrentWave} of {_engine.Situations.CurrentSituation.TotalWaves})";
                 string situation = $"{_engine.Situations.CurrentSituation.Name}";
 
-                //float boostRebuildPercent = _engine.Player.Sprite.Travel.AvailableBoost / _engine.Settings.PlayerBoostRebuildFloor * 100.0f;
+                //float boostRebuildPercent = _engine.Player.Sprite.AvailableBoost / _engine.Settings.PlayerBoostRebuildFloor * 100.0f;
 
                 _engine.Sprites.TextBlocks.PlayerStatsText.Text =
                       $" Situation: {situation}\r\n"
                     + $"      Hull: {_engine.Player.Sprite.HullHealth:n0} (Shields: {_engine.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_engine.Player.Sprite.Metadata.Bounty}\r\n"
-                    //+ $"     Surge: {_engine.Player.Sprite.Travel.AvailableBoost / _engine.Settings.MaxPlayerBoostAmount * 100.0:n1}%"
-                        //+ (_engine.Player.Sprite.Travel.IsBoostCoolingDown ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
+                    //+ $"     Surge: {_engine.Player.Sprite.AvailableBoost / _engine.Settings.MaxPlayerBoostAmount * 100.0:n1}%"
+                    //+ (_engine.Player.Sprite.IsBoostCoolingDown ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
                     + $"Pri-Weapon: {_engine.Player.Sprite.PrimaryWeapon?.Metadata.Name} x{_engine.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
                     + $"Sec-Weapon: {_engine.Player.Sprite.SelectedSecondaryWeapon?.Metadata.Name} x{_engine.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n"
                     + $"{_engine.Display.FrameCounter.AverageFrameRate:n2}fps";

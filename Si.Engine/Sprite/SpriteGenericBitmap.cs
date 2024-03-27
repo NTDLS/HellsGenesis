@@ -47,7 +47,7 @@ namespace Si.Engine.Sprite
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {
                 //We use a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
-                Location += TravelAngle * Travel.Speed * epoch;
+                Location += TravelAngle * Speed * epoch;
             }
             else if (VectorType == ParticleVectorType.UseNativeForwardAngle)
             {

@@ -4,8 +4,6 @@ using Si.Engine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
-using System;
-using System.Diagnostics;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
@@ -63,7 +61,7 @@ namespace Si.Engine.Sprite
             TravelAngle.Degrees = SiRandom.Between(0, 359);
             Direction.Degrees = SiRandom.Between(0, 359);
 
-            Travel.Velocity = Direction * SiRandom.Between(1.0f, 4.0f);
+            Velocity = Direction * SiRandom.Between(1.0f, 4.0f);
 
             /*
             Location = location.Clone();
@@ -85,7 +83,7 @@ namespace Si.Engine.Sprite
             {
                 Direction.Degrees += RotationSpeed * epoch;
                 //We use a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
-                Location += TravelAngle * Travel.Speed * epoch;
+                Location += TravelAngle * Speed * epoch;
             }
             else if (VectorType == ParticleVectorType.UseNativeForwardAngle)
             {

@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         public SpriteEnemyPeonBase(EngineCore engine)
             : base(engine)
         {
-            Travel.Velocity = VelocityInDirection(1.0f);
+            Velocity = VelocityInDirection(1.0f);
 
             OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
 
@@ -86,11 +86,11 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 
             if (ThrustAnimation != null)
             {
-                ThrustAnimation.Visable = Travel.Velocity.Sum() > 0;
+                ThrustAnimation.Visable = Velocity.Sum() > 0;
             }
             if (BoostAnimation != null)
             {
-                BoostAnimation.Visable = Travel.ThrottlePercentage > 0;
+                BoostAnimation.Visable = ThrottlePercentage > 0;
             }
         }
 

@@ -3,12 +3,10 @@ using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using Si.Library.Sprite;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using static Si.Library.SiConstants;
@@ -30,12 +28,54 @@ namespace Si.Engine.Sprite._Superclass
         protected SharpDX.Direct2D1.Bitmap _lockedOnSoftImage;
 
         private bool _isLockedOn = false;
-        private SiTravelVector _travel = new();
         private bool _readyForDeletion;
         private SiPoint _location = new();
         private Size _size;
 
         #endregion
+
+        #region Travel Vector.
+
+        /// <summary>
+        /// The speed that this object can generally travel in any direction.
+        /// </summary>
+        public float Speed { get; set; }
+
+        public SiPoint _velocity = new();
+        /// <summary>
+        /// Omni-directional velocity.
+        /// </summary>
+        public SiPoint Velocity
+        {
+            get => _velocity;
+            set
+            {
+                _velocity = value;
+                VelocityChanged();
+            }
+        }
+
+        /// <summary>
+        /// The sumation of the angle and all velocity .
+        /// Sprite movement is simple: (MovementVector * epoch)
+        /// </summary>
+        public SiPoint MovementVector => Velocity * ThrottlePercentage;
+
+        public float _throttlePercentage = 1.0f;
+        /// <summary>
+        /// Percentage of speed expressed as a decimal percentage from 0 to 2.
+        /// </summary>
+        public float ThrottlePercentage
+        {
+            get => _throttlePercentage;
+            set
+            {
+                _throttlePercentage = value.Clamp(0, 2);
+            }
+        }
+
+        #endregion
+
 
         #region Properties.
 
@@ -121,16 +161,6 @@ namespace Si.Engine.Sprite._Superclass
                         (RenderLocation.Y - Size.Height / 2.0f),
                         (RenderLocation.X - Size.Width / 2.0f) + Size.Width,
                         (RenderLocation.Y - Size.Height / 2.0f) + Size.Height);
-
-        public SiTravelVector Travel
-        {
-            get => _travel;
-            set
-            {
-                _travel = value;
-                _travel.OnVelocityChanged += (sender) => VelocityChanged();
-            }
-        }
 
         public bool IsLockedOnHard //The object is the subject of a foreign weapons lock.
         {
@@ -262,17 +292,17 @@ namespace Si.Engine.Sprite._Superclass
 
         /// <summary>
         /// Returns the vector in the direction of the sprite in the given percentage.
-        /// This is typically used to set the Travel.Velocity and it will be used in conjunction with the max sprite movement speed.
+        /// This is typically used to set the Velocity and it will be used in conjunction with the max sprite movement speed.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
         public SiPoint VelocityInDirection(float percentage)
 
-            => Direction * Travel.Speed * percentage.Clamp(-1.0f, 1.0f);
+            => Direction * Speed * percentage.Clamp(-1.0f, 1.0f);
 
         /// <summary>
         /// Returns the vector in the given direction and in the given percentage.
-        /// This is typically used to set the Travel.Velocity and it will be used in conjunction with the max sprite movement speed.
+        /// This is typically used to set the Velocity and it will be used in conjunction with the max sprite movement speed.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
@@ -281,7 +311,7 @@ namespace Si.Engine.Sprite._Superclass
 
         /// <summary>
         /// Returns the vector in the given direction and in the given percentage.
-        /// This is typically used to set the Travel.Velocity and it will be used in conjunction with the max sprite movement speed.
+        /// This is typically used to set the Velocity and it will be used in conjunction with the max sprite movement speed.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
@@ -326,8 +356,8 @@ namespace Si.Engine.Sprite._Superclass
             var collisions = new List<SpriteBase>();
 
             //Get the starting position of the sprite before it was last moved.
-            var hitTestPosition = new SiPoint(Location - (Travel.MovementVector * epoch));
-            var directionVector = Travel.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var hitTestPosition = new SiPoint(Location - (MovementVector * epoch));
+            var directionVector = MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -373,8 +403,8 @@ namespace Si.Engine.Sprite._Superclass
             ///     betwwen where it ended up and where it should have come from given its movement vector.
 
             //Get the starting position of the sprite before it was last moved.
-            var hitTestPosition = new SiPoint(Location - (Travel.MovementVector * epoch));
-            var directionVector = Travel.Velocity;
+            var hitTestPosition = new SiPoint(Location - (MovementVector * epoch));
+            var directionVector = Velocity;
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -427,8 +457,8 @@ namespace Si.Engine.Sprite._Superclass
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location);
-            var destinationPoint = new SiPoint(Location + (Travel.MovementVector * epoch));
-            var directionVector = Travel.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var destinationPoint = new SiPoint(Location + (MovementVector * epoch));
+            var directionVector = MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
             var totalTravelDistance = Math.Abs(destinationPoint.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -475,8 +505,8 @@ namespace Si.Engine.Sprite._Superclass
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location);
-            var destinationPoint = new SiPoint(Location + (Travel.MovementVector * epoch));
-            var directionVector = Travel.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var destinationPoint = new SiPoint(Location + (MovementVector * epoch));
+            var directionVector = MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
             var totalTravelDistance = Math.Abs(destinationPoint.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -647,8 +677,8 @@ namespace Si.Engine.Sprite._Superclass
                 + $"                          {Direction.RadiansSigned:n2}rad\r\n"
                 + extraInfo
                 + $"       Background Offset: {_engine.Display.RenderWindowPosition}\r\n"
-                + $"                  Thrust: {Travel.Velocity * 100:n2}\r\n"
-                + $"                   Boost: {Travel.ThrottlePercentage * 100:n2}\r\n"
+                + $"                  Thrust: {Velocity * 100:n2}\r\n"
+                + $"                   Boost: {ThrottlePercentage * 100:n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
                 + $"             Attachments: {Attachments?.Count ?? 0:n0}\r\n"
@@ -774,7 +804,7 @@ namespace Si.Engine.Sprite._Superclass
             {
                 var previousPosition = otherObject.Location;
 
-                for (int i = 0; i < otherObject.Travel.Speed; i++)
+                for (int i = 0; i < otherObject.Speed; i++)
                 {
                     previousPosition.X -= otherObject.Direction.X;
                     previousPosition.Y -= otherObject.Direction.Y;
@@ -920,7 +950,7 @@ namespace Si.Engine.Sprite._Superclass
             Direction.Degrees = SiPoint.AngleInDegreesTo360(Location, location);
             if (velocity != null)
             {
-                Travel.Speed = (float)velocity;
+                Speed = (float)velocity;
             }
         }
 
@@ -933,7 +963,7 @@ namespace Si.Engine.Sprite._Superclass
 
             if (velocity != null)
             {
-                Travel.Speed = (float)velocity;
+                Speed = (float)velocity;
             }
         }
 
@@ -1202,10 +1232,10 @@ namespace Si.Engine.Sprite._Superclass
             Direction.Degrees += RotationSpeed * epoch;
 
             //Keep the velocity following the direction the sprite is pointing.
-            Travel.Velocity = Direction * Travel.Velocity.Length();
+            Velocity = Direction * Velocity.Length();
 
             //Move the sprite based on its vector.
-            Location += Travel.MovementVector * epoch;
+            Location += MovementVector * epoch;
 
             foreach (var attachment in Attachments)
             {

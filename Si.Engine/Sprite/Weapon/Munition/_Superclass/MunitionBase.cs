@@ -4,7 +4,6 @@ using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
@@ -65,11 +64,8 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
             Location = location ?? firedFrom.Location;
             Direction = new SiAngle(headingRadians);
-            Travel = new SiTravelVector()
-            {
-                Speed = initialSpeed,
-                Velocity = Direction * initialSpeed
-            };
+            Speed = initialSpeed;
+            Velocity = Direction * initialSpeed;
 
             if (firedFrom is SpriteAttachment attachment)
             {
@@ -108,7 +104,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                 return;
             }
 
-            Location += Travel.MovementVector * epoch;
+            Location += MovementVector * epoch;
         }
 
         public override void Explode()

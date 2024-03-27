@@ -1,5 +1,4 @@
-﻿using Si.Library.Mathematics;
-using Si.Library.Mathematics.Geometry;
+﻿using Si.Library.Mathematics.Geometry;
 
 namespace Si.Library.Sprite
 {
@@ -9,7 +8,6 @@ namespace Si.Library.Sprite
     public interface ISprite
     {
         public SiPoint Location { get; set; }
-        public SiTravelVector Travel { get; set; }
         public float RotationSpeed { get; set; }
         public SiAngle Direction { get; set; }
     }

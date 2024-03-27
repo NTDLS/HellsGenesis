@@ -3,7 +3,6 @@ using Si.Engine.Sprite.PowerUp;
 using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.GameEngine.AI._Superclass;
 using Si.Library;
-using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         public SpriteEnemyBase(EngineCore engine)
                 : base(engine)
         {
-            Travel.Velocity = VelocityInDirection(1.0f);
+            Velocity = VelocityInDirection(1.0f);
 
             RadarPositionIndicator = _engine.Sprites.RadarPositions.Add();
             RadarPositionIndicator.Visable = false;
@@ -84,25 +83,25 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         {
             /*
             //When an enemy has boost available, it will use it.
-            if (Travel.AvailableBoost > 0)
+            if (AvailableBoost > 0)
             {
-                if (Travel.ThrottlePercentage < 1.0) //Ramp up the boost until it is at 100%
+                if (ThrottlePercentage < 1.0) //Ramp up the boost until it is at 100%
                 {
-                    Travel.ThrottlePercentage += _engine.Settings.EnemyVelocityRampUp;
+                    ThrottlePercentage += _engine.Settings.EnemyVelocityRampUp;
                 }
-                Travel.AvailableBoost -= Travel.MaximumBoostSpeed * Travel.ThrottlePercentage; //Consume boost.
+                AvailableBoost -= MaximumBoostSpeed * ThrottlePercentage; //Consume boost.
 
-                if (Travel.AvailableBoost < 0) //Sanity check available boost.
+                if (AvailableBoost < 0) //Sanity check available boost.
                 {
-                    Travel.AvailableBoost = 0;
+                    AvailableBoost = 0;
                 }
             }
-            else if (Travel.ThrottlePercentage > 0) //Ramp down the boost.
+            else if (ThrottlePercentage > 0) //Ramp down the boost.
             {
-                Travel.ThrottlePercentage -= _engine.Settings.EnemyVelocityRampDown;
-                if (Travel.ThrottlePercentage < 0)
+                ThrottlePercentage -= _engine.Settings.EnemyVelocityRampDown;
+                if (ThrottlePercentage < 0)
                 {
-                    Travel.ThrottlePercentage = 0;
+                    ThrottlePercentage = 0;
                 }
             }
             */

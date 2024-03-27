@@ -161,46 +161,46 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 #region Forward Speed-Boost.
                 /*
                 if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && _forwardVelocity >= throttleFloor
-                    && Sprite.Travel.AvailableBoost > 0 && Sprite.Travel.IsBoostCoolingDown == false)
+                    && Sprite.AvailableBoost > 0 && Sprite.IsBoostCoolingDown == false)
                 {
-                    Sprite.Travel.SpeedBoostPercentage += velocityRampUp; //Make player forward velocity build-up.
+                    Sprite.SpeedBoostPercentage += velocityRampUp; //Make player forward velocity build-up.
 
                     //Consume boost:
-                    Sprite.Travel.AvailableBoost -= 10 * epoch;
-                    if (Sprite.Travel.AvailableBoost < 0)
+                    Sprite.AvailableBoost -= 10 * epoch;
+                    if (Sprite.AvailableBoost < 0)
                     {
-                        Sprite.Travel.AvailableBoost = 0;
+                        Sprite.AvailableBoost = 0;
                     }
                 }
                 else //No forward input was received, ramp down the forward velocity.
                 {
-                    if (Math.Abs(velocityRampDown) >= Math.Abs(Sprite.Travel.SpeedBoostPercentage))
+                    if (Math.Abs(velocityRampDown) >= Math.Abs(Sprite.SpeedBoostPercentage))
                     {
-                        Sprite.Travel.SpeedBoostPercentage = 0; //Don't overshoot the stop.
+                        Sprite.SpeedBoostPercentage = 0; //Don't overshoot the stop.
                     }
-                    else Sprite.Travel.SpeedBoostPercentage -= velocityRampDown;
+                    else Sprite.SpeedBoostPercentage -= velocityRampDown;
 
                     //Rebuild boost if its not being used.
                     if ((Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false || _forwardVelocity <= throttleFloor)
-                        && Sprite.Travel.AvailableBoost < Engine.Settings.MaxPlayerBoostAmount)
+                        && Sprite.AvailableBoost < Engine.Settings.MaxPlayerBoostAmount)
                     {
-                        Sprite.Travel.AvailableBoost += (10 * epoch);
-                        if (Sprite.Travel.AvailableBoost > Engine.Settings.MaxPlayerBoostAmount)
+                        Sprite.AvailableBoost += (10 * epoch);
+                        if (Sprite.AvailableBoost > Engine.Settings.MaxPlayerBoostAmount)
                         {
-                            Sprite.Travel.AvailableBoost = Engine.Settings.MaxPlayerBoostAmount;
+                            Sprite.AvailableBoost = Engine.Settings.MaxPlayerBoostAmount;
                         }
 
-                        if (Sprite.Travel.IsBoostCoolingDown && Sprite.Travel.AvailableBoost >= Engine.Settings.PlayerBoostRebuildFloor)
+                        if (Sprite.IsBoostCoolingDown && Sprite.AvailableBoost >= Engine.Settings.PlayerBoostRebuildFloor)
                         {
-                            Sprite.Travel.IsBoostCoolingDown = false;
+                            Sprite.IsBoostCoolingDown = false;
                         }
                     }
                 }
 
-                if (Sprite.Travel.AvailableBoost <= 0)
+                if (Sprite.AvailableBoost <= 0)
                 {
-                    Sprite.Travel.AvailableBoost = 0;
-                    Sprite.Travel.IsBoostCoolingDown = true;
+                    Sprite.AvailableBoost = 0;
+                    Sprite.IsBoostCoolingDown = true;
                 }
 
                 */
@@ -263,7 +263,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Sounds and Animation.
 
-                if (Sprite.Travel.ThrottlePercentage >= throttleFloor)
+                if (Sprite.ThrottlePercentage >= throttleFloor)
                     Sprite.ShipEngineBoostSound.Play();
                 else Sprite.ShipEngineBoostSound.Fade();
 
@@ -281,8 +281,8 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     Sprite.BoostAnimation.Visable =
                         (targetForwardAmount >= throttleFloor)
                         && Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost);
-                        //&& Sprite.Travel.AvailableBoost > 0
-                        //&& Sprite.Travel.IsBoostCoolingDown == false
+                    //&& Sprite.AvailableBoost > 0
+                    //&& Sprite.IsBoostCoolingDown == false
                 }
 
                 #endregion
@@ -290,12 +290,12 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
             Sprite.RenewableResources.RenewAllResources(epoch);
 
-            Sprite.Travel.Velocity = Sprite.VelocityInDirection(_forwardVelocity) //Forward / Reverse
+            Sprite.Velocity = Sprite.VelocityInDirection(_forwardVelocity) //Forward / Reverse
                 + (new SiAngle(Sprite.Direction.Radians + SiPoint.RADIANS_90) * _lateralVelocity); //Lateral strafing.
 
             Sprite.PerformCollisionDetection(epoch);
 
-            var displacementVector = Sprite.Travel.MovementVector * epoch;
+            var displacementVector = Sprite.MovementVector * epoch;
 
             //Scroll the background.
             Engine.Display.RenderWindowPosition += displacementVector;
