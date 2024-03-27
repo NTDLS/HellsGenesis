@@ -63,11 +63,7 @@ namespace Si.Engine.Sprite
             TravelAngle.Degrees = SiRandom.Between(0, 359);
             Direction.Degrees = SiRandom.Between(0, 359);
 
-            Travel.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
-
-            var magnatude = SiRandom.Between(0.5f, 1.0f);
-
-            Travel.Velocity = VelocityInDirection(magnatude);
+            Travel.Velocity = Direction * SiRandom.Between(1.0f, 4.0f);
 
             /*
             Location = location.Clone();
@@ -85,12 +81,11 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Direction.Degrees -= RotationSpeed * epoch;
-
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {
+                Direction.Degrees += RotationSpeed * epoch;
                 //We use a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
-                Location += TravelAngle * Travel.MaximumSpeed * epoch;
+                Location += TravelAngle * Travel.Speed * epoch;
             }
             else if (VectorType == ParticleVectorType.UseNativeForwardAngle)
             {

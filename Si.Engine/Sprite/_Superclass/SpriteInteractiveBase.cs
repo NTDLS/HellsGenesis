@@ -46,7 +46,7 @@ namespace Si.Engine.Sprite._Superclass
 
             Metadata = JsonConvert.DeserializeObject<InteractiveSpriteMetadata>(metadataJson);
 
-            Travel.MaximumSpeed = Metadata.Speed;
+            Travel.Speed = Metadata.Speed;
             //Travel.MaximumBoostSpeed = Metadata.Boost;
 
             SetHullHealth(Metadata.HullHealth);

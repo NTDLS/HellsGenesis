@@ -67,7 +67,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             Direction = new SiAngle(headingRadians);
             Travel = new SiTravelVector()
             {
-                MaximumSpeed = initialSpeed,
+                Speed = initialSpeed,
                 Velocity = Direction * initialSpeed
             };
 

@@ -268,7 +268,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public SiPoint VelocityInDirection(float percentage)
 
-            => Direction * Travel.MaximumSpeed * percentage.Clamp(-1.0f, 1.0f);
+            => Direction * Travel.Speed * percentage.Clamp(-1.0f, 1.0f);
 
         /// <summary>
         /// Returns the vector in the given direction and in the given percentage.
@@ -774,7 +774,7 @@ namespace Si.Engine.Sprite._Superclass
             {
                 var previousPosition = otherObject.Location;
 
-                for (int i = 0; i < otherObject.Travel.MaximumSpeed; i++)
+                for (int i = 0; i < otherObject.Travel.Speed; i++)
                 {
                     previousPosition.X -= otherObject.Direction.X;
                     previousPosition.Y -= otherObject.Direction.Y;
@@ -920,7 +920,7 @@ namespace Si.Engine.Sprite._Superclass
             Direction.Degrees = SiPoint.AngleInDegreesTo360(Location, location);
             if (velocity != null)
             {
-                Travel.MaximumSpeed = (float)velocity;
+                Travel.Speed = (float)velocity;
             }
         }
 
@@ -933,7 +933,7 @@ namespace Si.Engine.Sprite._Superclass
 
             if (velocity != null)
             {
-                Travel.MaximumSpeed = (float)velocity;
+                Travel.Speed = (float)velocity;
             }
         }
 

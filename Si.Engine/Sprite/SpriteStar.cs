@@ -22,7 +22,7 @@ namespace Si.Engine.Sprite
 
             ZOrder = int.MinValue + 1000;
 
-            Travel.MaximumSpeed = 0.5f;
+            Travel.Speed = 0.5f;
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
@@ -36,7 +36,7 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location -= displacementVector * Travel.Velocity * Travel.MaximumSpeed * epoch;
+            Location -= displacementVector * Travel.Velocity * Travel.Speed * epoch;
         }
     }
 }

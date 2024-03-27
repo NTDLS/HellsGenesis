@@ -10,9 +10,9 @@ namespace Si.Library.Mathematics
         public event ValueChangeEvent? OnVelocityChanged;
 
         /// <summary>
-        /// The maximum speed that this object can travel in any direction.
+        /// The speed that this object can generally travel in any direction.
         /// </summary>
-        public float MaximumSpeed { get; set; }
+        public float Speed { get; set; }
 
         public SiPoint _velocity = new();
         /// <summary>

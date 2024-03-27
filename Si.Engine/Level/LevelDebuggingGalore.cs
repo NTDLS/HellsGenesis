@@ -122,7 +122,7 @@ namespace Si.Engine.Level
                     asteroid.Location = new SiPoint(totalXOffset - asteroidSize * col, totalYOffset - asteroidSize * row);
 
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
-                    asteroid.Travel.MaximumSpeed = SiRandom.Variance(asteroid.Travel.MaximumSpeed, 0.20f);
+                    asteroid.Travel.Speed = SiRandom.Variance(asteroid.Travel.Speed, 0.20f);
                     //asteroid.Velocity.ForwardVelocity = asteroid.DirectionMag(1.0f);
                     asteroid.Travel.Velocity = asteroid.VelocityInDirection(0);
 

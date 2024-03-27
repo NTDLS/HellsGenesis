@@ -23,7 +23,7 @@ namespace Si.Engine.Sprite
 
             ZOrder = int.MinValue;
 
-            Travel.MaximumSpeed = 0.10f;
+            Travel.Speed = 0.10f;
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {

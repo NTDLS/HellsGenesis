@@ -595,7 +595,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Travel.MaximumSpeed = command.ParameterValue<float>("value");
+                    sprite.Travel.Speed = command.ParameterValue<float>("value");
                 }
             });
         }
