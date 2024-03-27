@@ -37,6 +37,17 @@ namespace Si.Engine.Sprite._Superclass
         #endregion
 
         #region Properties.
+
+        /// <summary>
+        /// Number or radians to rotate the sprite along its center. Negative for counter-clockwise, positive for clockwise.
+        /// </summary>
+        public float RotationSpeed { get; set; } = 0;
+
+        /// <summary>
+        /// The angle in which the sprite is pointing.
+        /// </summary>
+        public SiAngle Direction { get; set; } = new();
+
         public SharpDX.Direct2D1.Bitmap GetImage() => _image;
         public string SpriteTag { get; set; }
         public uint UID { get; private set; } = SiSequenceGenerator.Next();
@@ -240,22 +251,6 @@ namespace Si.Engine.Sprite._Superclass
 
         #endregion
 
-
-        /// <summary>
-        /// Number or radians to rotate the sprite along its center. Negative for counter-clockwise, positive for clockwise.
-        /// </summary>
-        public float RotationSpeed { get; set; } = 0;
-
-        /// <summary>
-        /// The angle in which the object is pointing.
-        /// </summary>
-        public SiAngle Direction { get; set; } = new();
-
-        public SiPoint HeadingSpeed(float percentage)
-        {
-            return Direction * percentage.Clamp(-1.0f, 1.0f);
-        }
-
         public SpriteBase(EngineCore engine, string spriteTag = "")
         {
             _engine = engine;
@@ -263,6 +258,34 @@ namespace Si.Engine.Sprite._Superclass
             SpriteTag = spriteTag;
             IsHighlighted = _engine.Settings.HighlightAllSprites;
         }
+
+        /// <summary>
+        /// Returns the vector in the direction of the sprite in the given percentage.
+        /// This is typically used to set the Travel.Velocity and it will be used in conjunction with the max sprite movement speed.
+        /// </summary>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
+        public SiPoint VelocityInDirection(float percentage)
+
+            => Direction * percentage.Clamp(-1.0f, 1.0f);
+
+        /// <summary>
+        /// Returns the vector in the given direction and in the given percentage.
+        /// This is typically used to set the Travel.Velocity and it will be used in conjunction with the max sprite movement speed.
+        /// </summary>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
+        public SiPoint VelocityInDirection(float percentage, float angleInRadians)
+            => new SiAngle(angleInRadians) * percentage.Clamp(-1.0f, 1.0f);
+
+        /// <summary>
+        /// Returns the vector in the given direction and in the given percentage.
+        /// This is typically used to set the Travel.Velocity and it will be used in conjunction with the max sprite movement speed.
+        /// </summary>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
+        public SiPoint VelocityInDirection(float percentage, SiAngle angle)
+            => angle * percentage.Clamp(-1.0f, 1.0f);
 
         public void QueueForDelete()
         {

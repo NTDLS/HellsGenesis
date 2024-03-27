@@ -1,10 +1,4 @@
-﻿using Si.Engine.Sprite.Enemy.Boss._Superclass;
-using Si.Engine.Sprite.Weapon;
-using Si.Library;
-using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics.Geometry;
-
-namespace Si.Engine.Sprite.Enemy.Boss
+﻿namespace Si.Engine.Sprite.Enemy.Boss
 {
     /*
     /// <summary>

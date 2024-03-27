@@ -27,11 +27,11 @@ namespace Si.Engine.Sprite
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
-                Travel.Velocity = HeadingSpeed(SiRandom.Between(8, 10) / 10.0f);
+                Travel.Velocity = VelocityInDirection(SiRandom.Between(8, 10) / 10.0f);
             }
             else
             {
-                Travel.Velocity = HeadingSpeed(SiRandom.Between(4, 8) / 10.0f);
+                Travel.Velocity = VelocityInDirection(SiRandom.Between(4, 8) / 10.0f);
             }
         }
 

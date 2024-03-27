@@ -71,7 +71,7 @@ namespace Si.Engine.AI.Logistics
             Owner.RenewableResources.Create(_boostResourceName, 800, 0, 10);
 
             ChangeState(new AIStateDeparting());
-            Owner.Travel.Velocity = Owner.HeadingSpeed(1.0f);
+            Owner.Travel.Velocity = Owner.VelocityInDirection(1.0f);
 
             OnApplyIntelligence += AILogistics_OnApplyIntelligence;
         }

@@ -77,7 +77,7 @@ namespace Si.Engine.Level
 
             //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
-            AddAsteroidField(new SiPoint(), 8, 8);
+            //AddAsteroidField(new SiPoint(), 8, 8);
 
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
@@ -123,7 +123,7 @@ namespace Si.Engine.Level
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
                     asteroid.Travel.MaximumSpeed = SiRandom.Variance(asteroid.Travel.MaximumSpeed, 0.20f);
                     //asteroid.Velocity.ForwardVelocity = asteroid.DirectionMag(1.0f);
-                    asteroid.Travel.Velocity = asteroid.HeadingSpeed(0);
+                    asteroid.Travel.Velocity = asteroid.VelocityInDirection(0);
 
                     asteroid.VectorType = ParticleVectorType.UseTravelAngle;
                     //asteroid.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);

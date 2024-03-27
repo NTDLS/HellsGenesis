@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         public SpriteEnemyPeonBase(EngineCore engine)
             : base(engine)
         {
-            Travel.Velocity = HeadingSpeed(1.0f);
+            Travel.Velocity = VelocityInDirection(1.0f);
 
             OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
 

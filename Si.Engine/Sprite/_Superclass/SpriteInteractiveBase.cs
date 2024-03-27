@@ -95,7 +95,7 @@ namespace Si.Engine.Sprite._Superclass
             {
                 return Metadata.Mass;
             }
-            return TotalVelocity * Metadata.Mass;
+            return TotalVelocity * Metadata?.Mass ?? 1;
         }
 
         #region Weapons selection and evaluation.

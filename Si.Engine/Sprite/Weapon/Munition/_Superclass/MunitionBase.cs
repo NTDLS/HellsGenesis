@@ -45,10 +45,8 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             }
 
             Weapon = weapon;
-            Travel.Velocity = HeadingSpeed(1.0f);
-            SceneDistanceLimit = SiRandom.Between(weapon.Metadata.MunitionSceneDistanceLimit * 0.1f, weapon.Metadata.MunitionSceneDistanceLimit);
-
             RadarDotSize = new SiPoint(1, 1);
+            SceneDistanceLimit = SiRandom.Between(weapon.Metadata.MunitionSceneDistanceLimit * 0.1f, weapon.Metadata.MunitionSceneDistanceLimit);
 
             float headingRadians = angle == null ? firedFrom.Direction.Radians : (float)angle;
             if (weapon.Metadata.AngleVarianceDegrees > 0)
@@ -65,15 +63,13 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                 initialSpeed += (SiRandom.FlipCoin() ? 1 : -1) * variance;
             }
 
-            var initialVelocity = new SiVelocity()
+            Location = location ?? firedFrom.Location;
+            Direction = new SiAngle(headingRadians);
+            Travel = new SiVelocity()
             {
                 MaximumSpeed = initialSpeed,
-                Velocity = HeadingSpeed(1.0f)
+                Velocity = firedFrom.VelocityInDirection(1.0f, Direction)
             };
-
-            Direction = new SiAngle(headingRadians);
-
-            Location = location == null ? firedFrom.Location : location;
 
             if (firedFrom is SpriteAttachment attachment)
             {
@@ -93,8 +89,6 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             {
                 throw new Exception($"Munitions for {firedFrom.GetType().Name} are not implemented.");
             }
-
-            Travel = initialVelocity;
         }
 
         public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)

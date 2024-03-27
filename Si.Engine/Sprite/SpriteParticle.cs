@@ -42,6 +42,10 @@ namespace Si.Engine.Sprite
         /// The color of the particle when ColorType == Graident;
         /// </summary>
         public Color4 GradientEndColor { get; set; }
+
+        /// <summary>
+        /// Allow for a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
+        /// </summary>
         public SiAngle TravelAngle { get; set; } = new SiAngle();
 
         public SpriteParticle(EngineCore engine, SiPoint location, Size size, Color4? color = null)
@@ -55,7 +59,7 @@ namespace Si.Engine.Sprite
             RotationSpeed = SiRandom.Between(1, 100) / 20.0f * SiRandom.PositiveOrNegative();
             TravelAngle.Degrees = SiRandom.Between(0, 359);
 
-            Travel.Velocity = HeadingSpeed(1.0f);
+            Travel.Velocity = VelocityInDirection(1.0f);
             Travel.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
 
             _engine = engine;
@@ -67,9 +71,8 @@ namespace Si.Engine.Sprite
 
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {
-                //We use a seperate angle for the travel direction because the base ApplyMotion()
-                //  moves the object in the the direction of the Velocity.Angle.
-                //Location += TravelAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
+                //We use a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
+                Location += TravelAngle * Travel.MaximumSpeed * epoch;
             }
             else if (VectorType == ParticleVectorType.UseNativeForwardAngle)
             {

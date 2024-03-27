@@ -7,7 +7,6 @@ using Si.Library.Mathematics.Geometry;
 using System;
 using System.Drawing;
 using System.Linq;
-using System.Xml.Linq;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Player._Superclass
@@ -58,7 +57,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             ShipEngineBoostSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
 
             Direction = new SiAngle(0);
-            Travel.Velocity = HeadingSpeed(0);
+            Travel.Velocity = VelocityInDirection(0);
             Travel.AvailableBoost = _engine.Settings.MaxPlayerBoostAmount;
 
             if (ThrusterAnimation == null || ThrusterAnimation.IsQueuedForDeletion == true)

@@ -10,7 +10,7 @@ namespace Si.Library.Sprite
     {
         public SiPoint Location { get; set; }
         public SiVelocity Travel { get; set; }
-        public float RotationSpeed { get; set; } 
+        public float RotationSpeed { get; set; }
         public SiAngle Direction { get; set; }
     }
 }

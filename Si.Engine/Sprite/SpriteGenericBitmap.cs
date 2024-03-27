@@ -22,6 +22,9 @@ namespace Si.Engine.Sprite
         public float FadeToBlackReductionAmount { get; set; } = 0.01f;
 
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.UseNativeForwardAngle;
+        /// <summary>
+        /// Allow for a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
+        /// </summary>
         public SiAngle TravelAngle { get; set; } = new SiAngle();
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
 
@@ -43,9 +46,8 @@ namespace Si.Engine.Sprite
 
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {
-                //We use a seperate angle for the travel direction because the base ApplyMotion()
-                //  moves the object in the the direction of the Velocity.Angle.
-                //Location += TravelAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
+                //We use a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
+                Location += TravelAngle * Travel.MaximumSpeed * epoch;
             }
             else if (VectorType == ParticleVectorType.UseNativeForwardAngle)
             {

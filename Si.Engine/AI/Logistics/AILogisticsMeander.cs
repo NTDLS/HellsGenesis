@@ -20,7 +20,7 @@ namespace Si.Engine.AI.Logistics
         public AILogisticsMeander(EngineCore engine, SpriteShipBase owner, SpriteBase observedObject)
             : base(engine, owner, observedObject)
         {
-            Owner.Travel.Velocity = Owner.HeadingSpeed(1.0f);
+            Owner.Travel.Velocity = Owner.VelocityInDirection(1.0f);
             OnApplyIntelligence += AILogistics_OnApplyIntelligence;
         }
 
