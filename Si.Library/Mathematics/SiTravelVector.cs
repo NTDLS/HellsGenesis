@@ -15,17 +15,6 @@ namespace Si.Library.Mathematics
         /// </summary>
         public float MaximumSpeed { get; set; }
 
-        public float _throttlePercentage = 1.0f;
-        public float ThrottlePercentage
-        {
-            get => _throttlePercentage;
-            set
-            {
-                _throttlePercentage = value.Clamp(0, 1);
-                OnVelocityChanged?.Invoke(this);
-            }
-        }
-
         /// <summary>
         /// The additional speed that can be temporarily added to the sprites velocity.
         /// </summary>
@@ -56,7 +45,7 @@ namespace Si.Library.Mathematics
         /// Sprite movement is simple: (MovementVector * epoch)
         /// </summary>
         public SiPoint MovementVector =>
-            DirectionalVelocity * (MaximumSpeed * ThrottlePercentage + (MaximumBoostSpeed * ThrottlePercentage * SpeedBoostPercentage));
+            DirectionalVelocity * (MaximumSpeed + (MaximumBoostSpeed * SpeedBoostPercentage));
 
         public float _speedBoostPercentage;
         /// <summary>
