@@ -26,17 +26,17 @@ namespace Si.Engine.Sprite
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
-                Travel.Velocity = VelocityInDirection(SiRandom.Between(8, 10) / 10.0f);
+                Travel.DirectionalVelocity = VelocityInDirection(SiRandom.Between(8, 10) / 10.0f);
             }
             else
             {
-                Travel.Velocity = VelocityInDirection(SiRandom.Between(4, 8) / 10.0f);
+                Travel.DirectionalVelocity = VelocityInDirection(SiRandom.Between(4, 8) / 10.0f);
             }
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location -= displacementVector * Travel.Velocity * Travel.MaximumSpeed * epoch;
+            Location -= displacementVector * Travel.DirectionalVelocity * Travel.MaximumSpeed * epoch;
         }
     }
 }

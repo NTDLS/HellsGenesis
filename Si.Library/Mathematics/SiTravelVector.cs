@@ -3,9 +3,9 @@ using Si.Library.Mathematics.Geometry;
 
 namespace Si.Library.Mathematics
 {
-    public class SiVelocity
+    public class SiTravelVector
     {
-        public delegate void ValueChangeEvent(SiVelocity sender);
+        public delegate void ValueChangeEvent(SiTravelVector sender);
 
         public event ValueChangeEvent? OnVelocityChanged;
         public event ValueChangeEvent? OnBoostChanged;
@@ -14,6 +14,17 @@ namespace Si.Library.Mathematics
         /// The maximum speed that this object can travel in any direction (not including MaximumSpeedBoost).
         /// </summary>
         public float MaximumSpeed { get; set; }
+
+        public float _throttlePercentage = 1.0f;
+        public float ThrottlePercentage
+        {
+            get => _throttlePercentage;
+            set
+            {
+                _throttlePercentage = value.Clamp(0, 1);
+                OnVelocityChanged?.Invoke(this);
+            }
+        }
 
         /// <summary>
         /// The additional speed that can be temporarily added to the sprites velocity.
@@ -26,16 +37,16 @@ namespace Si.Library.Mathematics
         public float AvailableBoost { get; set; }
         public bool IsBoostCoolingDown { get; set; }
 
-        public SiPoint _velocity = new();
+        public SiPoint _directionalVelocity = new();
         /// <summary>
         /// Omni-directional velocity with a magnatude of 1. Expressed as a decimal percentage of the MaximumSpeed in any direction.
         /// </summary>
-        public SiPoint Velocity
+        public SiPoint DirectionalVelocity
         {
-            get => _velocity;
+            get => _directionalVelocity;
             set
             {
-                _velocity = value.Clamp(-1, 1);
+                _directionalVelocity = value.Clamp(-1, 1);
                 OnVelocityChanged?.Invoke(this);
             }
         }
@@ -44,7 +55,8 @@ namespace Si.Library.Mathematics
         /// The sumation of the angle, and all velocity (including boost).
         /// Sprite movement is simple: (MovementVector * epoch)
         /// </summary>
-        public SiPoint MovementVector => (Velocity * (MaximumSpeed + (MaximumBoostSpeed * SpeedBoostPercentage)));
+        public SiPoint MovementVector =>
+            DirectionalVelocity * (MaximumSpeed * ThrottlePercentage + (MaximumBoostSpeed * ThrottlePercentage * SpeedBoostPercentage));
 
         public float _speedBoostPercentage;
         /// <summary>
@@ -60,13 +72,13 @@ namespace Si.Library.Mathematics
             }
         }
 
-        public SiVelocity()
+        public SiTravelVector()
         {
         }
 
-        public SiVelocity(SiAngle velocity)
+        public SiTravelVector(SiAngle velocity)
         {
-            Velocity = velocity;
+            DirectionalVelocity = velocity;
         }
     }
 }

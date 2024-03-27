@@ -81,7 +81,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Number that defines how much motion a sprite is in.
         /// </summary>
         public float TotalVelocity
-            => Travel.Velocity.Sum() + Math.Abs(RotationSpeed);
+            => Travel.DirectionalVelocity.Sum() + Math.Abs(RotationSpeed);
 
         /// <summary>
         /// The total velocity multiplied by the given mass, excpet for the mass is returned when the velocity is 0;
@@ -243,7 +243,7 @@ namespace Si.Engine.Sprite._Superclass
                 {
                     _engine.Collisions.Add(thisCollidable.Sprite, other.Sprite);
 
-                    thisCollidable.Sprite.Travel.Velocity *= -1;
+                    thisCollidable.Sprite.Travel.DirectionalVelocity *= -1;
 
                     //Who the fuck is moving out of the way now?
                     var thisMomentum = thisCollidable.Sprite.TotalMomentumWithRestingMass();

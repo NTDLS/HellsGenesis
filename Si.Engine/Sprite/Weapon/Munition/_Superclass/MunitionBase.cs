@@ -65,10 +65,10 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
             Location = location ?? firedFrom.Location;
             Direction = new SiAngle(headingRadians);
-            Travel = new SiVelocity()
+            Travel = new SiTravelVector()
             {
                 MaximumSpeed = initialSpeed,
-                Velocity = firedFrom.VelocityInDirection(1.0f, Direction)
+                DirectionalVelocity = firedFrom.VelocityInDirection(1.0f, Direction)
             };
 
             if (firedFrom is SpriteAttachment attachment)

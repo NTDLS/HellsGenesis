@@ -6,6 +6,7 @@
   "Mass": 100,
   "HullHealth": 100000,
   "ShieldHealth": 10000,
+  "TakesMunitionDamage": true,
   "PrimaryWeapon":
   {
 	"Type": "WeaponLancer",

@@ -29,7 +29,7 @@ namespace Si.Engine.Sprite._Superclass
         protected SharpDX.Direct2D1.Bitmap _lockedOnSoftImage;
 
         private bool _isLockedOn = false;
-        private SiVelocity _travel = new();
+        private SiTravelVector _travel = new();
         private bool _readyForDeletion;
         private SiPoint _location = new();
         private Size _size;
@@ -121,7 +121,7 @@ namespace Si.Engine.Sprite._Superclass
                         (RenderLocation.X - Size.Width / 2.0f) + Size.Width,
                         (RenderLocation.Y - Size.Height / 2.0f) + Size.Height);
 
-        public SiVelocity Travel
+        public SiTravelVector Travel
         {
             get => _travel;
             set
@@ -373,7 +373,7 @@ namespace Si.Engine.Sprite._Superclass
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location - (Travel.MovementVector * epoch));
-            var directionVector = Travel.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var directionVector = Travel.DirectionalVelocity;
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -646,7 +646,7 @@ namespace Si.Engine.Sprite._Superclass
                 + $"                          {Direction.RadiansSigned:n2}rad\r\n"
                 + extraInfo
                 + $"       Background Offset: {_engine.Display.RenderWindowPosition}\r\n"
-                + $"                  Thrust: {Travel.Velocity * 100:n2}\r\n"
+                + $"                  Thrust: {Travel.DirectionalVelocity * 100:n2}\r\n"
                 + $"                   Boost: {Travel.SpeedBoostPercentage * 100:n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
@@ -1202,7 +1202,7 @@ namespace Si.Engine.Sprite._Superclass
 
             //Direction is a vector with a magnitude of 1 and so is Velocity, so we
             //  do this to keep the velocity following the direction the sprite is pointing.
-            Travel.Velocity = Direction;
+            Travel.DirectionalVelocity = Direction;
 
             //Move the sprite based on its vector.
             Location += Travel.MovementVector * epoch;

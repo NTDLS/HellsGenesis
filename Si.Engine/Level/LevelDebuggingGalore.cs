@@ -69,12 +69,12 @@ namespace Si.Engine.Level
 
         private void AddEnemies()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 1; i++)
             {
                 _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
-            //_engine.Sprites.Debugs.Add(1000, 1000);
+            _engine.Sprites.Debugs.Add(1000, 1000);
 
             //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
@@ -124,7 +124,7 @@ namespace Si.Engine.Level
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
                     asteroid.Travel.MaximumSpeed = SiRandom.Variance(asteroid.Travel.MaximumSpeed, 0.20f);
                     //asteroid.Velocity.ForwardVelocity = asteroid.DirectionMag(1.0f);
-                    asteroid.Travel.Velocity = asteroid.VelocityInDirection(0);
+                    asteroid.Travel.DirectionalVelocity = asteroid.VelocityInDirection(0);
 
                     asteroid.VectorType = ParticleVectorType.UseTravelAngle;
                     //asteroid.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);

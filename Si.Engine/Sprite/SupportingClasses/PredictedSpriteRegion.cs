@@ -30,7 +30,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// <summary>
         /// Predicted velocity after next call to ApplyMotion().
         /// </summary>
-        public SiVelocity Velocity { get; private set; }
+        public SiTravelVector Velocity { get; private set; }
 
         /// <summary>
         /// Predicted direction after next call to ApplyMotion().
@@ -50,7 +50,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
             Direction = new SiAngle(sprite.Direction.Degrees + sprite.RotationSpeed * epoch);
 
             //Assuming the sprite is moving in the direction it is pointing.
-            Velocity = new SiVelocity(Direction);
+            Velocity = new SiTravelVector(Direction);
 
             //Determine the sprites new location
             Location = sprite.Location + Velocity.MovementVector * epoch;
