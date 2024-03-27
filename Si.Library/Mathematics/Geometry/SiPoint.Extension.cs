@@ -231,7 +231,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static float DeltaAngle360(ISprite from, ISprite to, float offsetAngle = 0)
         {
-            float fromAngle = from.Velocity.ForwardAngle.Degrees + offsetAngle;
+            float fromAngle = from.Direction.Degrees + offsetAngle;
 
             float angleTo = AngleTo360(from, to);
 
@@ -260,7 +260,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static float DeltaAngle360(ISprite from, SiPoint toLocation, float offsetAngle = 0)
         {
-            float fromAngle = from.Velocity.ForwardAngle.Degrees + offsetAngle;
+            float fromAngle = from.Direction.Degrees + offsetAngle;
 
             float angleTo = AngleTo360(from, toLocation);
 

@@ -7,6 +7,7 @@ using Si.Library.Mathematics.Geometry;
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Xml.Linq;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Player._Superclass
@@ -56,9 +57,9 @@ namespace Si.Engine.Sprite.Player._Superclass
             ShipEngineIdleSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
             ShipEngineBoostSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
 
-            Velocity.ForwardAngle = new SiAngle(0);
-            Velocity.ForwardVelocity = 0;
-            Velocity.AvailableBoost = _engine.Settings.MaxPlayerBoostAmount;
+            Direction = new SiAngle(0);
+            Travel.Velocity = HeadingSpeed(0);
+            Travel.AvailableBoost = _engine.Settings.MaxPlayerBoostAmount;
 
             if (ThrusterAnimation == null || ThrusterAnimation.IsQueuedForDeletion == true)
             {
@@ -175,8 +176,8 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(40, 40));
-                    ThrusterAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
+                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(180), new SiPoint(40, 40));
+                    ThrusterAnimation.Direction = Direction;
                     ThrusterAnimation.Location = Location + pointBehind;
                 }
             }
@@ -185,8 +186,8 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(40, 40));
-                    BoostAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
+                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(180), new SiPoint(40, 40));
+                    BoostAnimation.Direction = Direction;
                     BoostAnimation.Location = Location + pointBehind;
                 }
             }

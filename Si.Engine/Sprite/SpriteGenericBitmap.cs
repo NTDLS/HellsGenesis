@@ -39,13 +39,13 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Velocity.ForwardAngle.Degrees += Velocity.RotationSpeed * epoch;
+            Direction.Degrees += RotationSpeed * epoch;
 
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {
                 //We use a seperate angle for the travel direction because the base ApplyMotion()
                 //  moves the object in the the direction of the Velocity.Angle.
-                Location += TravelAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
+                //Location += TravelAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
             }
             else if (VectorType == ParticleVectorType.UseNativeForwardAngle)
             {

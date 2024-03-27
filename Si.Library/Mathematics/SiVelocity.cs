@@ -11,37 +11,14 @@ namespace Si.Library.Mathematics
         public event ValueChangeEvent? OnBoostChanged;
 
         /// <summary>
-        /// Number that defines how much motion a sprite is in.
-        /// </summary>
-        public float TotalVelocity
-        {
-            get
-            {
-                return Math.Abs((((MaximumSpeed * ForwardVelocity) + (MaximumSpeedBoost * ForwardBoostVelocity)))) //Forward / Reverse.
-                + Math.Abs(RotationSpeed) //Rotation
-                + Math.Abs((MaximumSpeed * LateralVelocity)); //Left/Right Strafe.
-            }
-        }
-
-        /// <summary>
-        /// Number or radians to rotate the sprite along its center. Negative for counter-clockwise, positive for clockwise.
-        /// </summary>
-        public float RotationSpeed { get; set; } = 0;
-
-        /// <summary>
-        /// The angle in which the object is pointing.
-        /// </summary>
-        public SiAngle ForwardAngle { get; set; } = new();
-
-        /// <summary>
         /// The maximum speed that this object can travel in any direction (not including MaximumSpeedBoost).
         /// </summary>
         public float MaximumSpeed { get; set; }
 
         /// <summary>
-        /// The additional speed that can be temporarily added to the sprites forward velocity.
+        /// The additional speed that can be temporarily added to the sprites velocity.
         /// </summary>
-        public float MaximumSpeedBoost { get; set; }
+        public float MaximumBoostSpeed { get; set; }
 
         /// <summary>
         /// The amount of boost availble until it is depleted and requires recharging.
@@ -49,61 +26,37 @@ namespace Si.Library.Mathematics
         public float AvailableBoost { get; set; }
         public bool IsBoostCoolingDown { get; set; }
 
-        public float _forwardVelocity;
+        public SiPoint _velocity = new();
         /// <summary>
-        /// Percentage of forward or reverse velocity expressed as a decimal percentage of the MaximumSpeed.
+        /// Percentage of velocity expressed as a decimal percentage of the MaximumSpeed in any direction.
         /// </summary>
-        public float ForwardVelocity
+        public SiPoint Velocity
         {
-            get => _forwardVelocity;
+            get => _velocity;
             set
             {
-                _forwardVelocity = value.Clamp(-1, 1);
-                OnVelocityChanged?.Invoke(this);
-            }
-        }
-
-        public float _lateralVelocity;
-        /// <summary>
-        /// Percentage of lateral velocity expressed as a decimal percentage of the MaximumSpeed.
-        /// </summary>
-        public float LateralVelocity
-        {
-            get => _lateralVelocity;
-            set
-            {
-                _lateralVelocity = value.Clamp(-1, 1);
+                _velocity = value.Clamp(-1, 1);
                 OnVelocityChanged?.Invoke(this);
             }
         }
 
         /// <summary>
-        /// The sumation of the forward angle, laterial strafe angle, and all velocity (including boost).
+        /// The sumation of the angle, and all velocity (including boost).
         /// Sprite movement is simple: (MovementVector * epoch)
         /// </summary>
         public SiPoint MovementVector
-        {
-            get
-            {
-                /// 90 degrees to the left of the forward angle, so negative LateralVelocity is left and positive LateralVelocity is right.
-                var lateralAngle = new SiAngle(ForwardAngle.Radians + SiPoint.RADIANS_90);
+            => (Velocity * (MaximumSpeed + (MaximumBoostSpeed * SpeedBoostPercentage)));
 
-                return
-                    (ForwardAngle * ((MaximumSpeed * ForwardVelocity) + (MaximumSpeedBoost * ForwardBoostVelocity))) //Forward / Reverse.
-                    + (lateralAngle * MaximumSpeed * LateralVelocity); //Left/Right Strafe.
-            }
-        }
-
-        public float _forwardBoostVelocity;
+        public float _speedBoostPercentage;
         /// <summary>
-        /// Percentage of forward boost velocity expressed as a decimal percentage of the MaximumBoostSpeed.
+        /// Percentage of speed boost expressed as a decimal percentage of the MaximumBoostSpeed.
         /// </summary>
-        public float ForwardBoostVelocity
+        public float SpeedBoostPercentage
         {
-            get => _forwardBoostVelocity;
+            get => _speedBoostPercentage;
             set
             {
-                _forwardBoostVelocity = value.Clamp(-1, 1);
+                _speedBoostPercentage = value.Clamp(-1, 1);
                 OnBoostChanged?.Invoke(this);
             }
         }

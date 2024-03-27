@@ -20,7 +20,7 @@ namespace Si.Engine.AI.Logistics
         public AILogisticsMeander(EngineCore engine, SpriteShipBase owner, SpriteBase observedObject)
             : base(engine, owner, observedObject)
         {
-            Owner.Velocity.ForwardVelocity = 1.0f;
+            Owner.Travel.Velocity = Owner.HeadingSpeed(1.0f);
             OnApplyIntelligence += AILogistics_OnApplyIntelligence;
         }
 
@@ -32,19 +32,19 @@ namespace Si.Engine.AI.Logistics
             {
                 if (Owner.IsPointingAt(ObservedObject, _varianceAngleForTravel) == false)
                 {
-                    Owner.Velocity.ForwardAngle.Radians += (_angleToAdd * epoch);
+                    Owner.Direction.Radians += (_angleToAdd * epoch);
                 }
             }
             else if (distanceToObservedObject < _idealMinDistance)
             {
                 if (Owner.IsPointingAway(ObservedObject, _varianceAngleForTravel) == false)
                 {
-                    Owner.Velocity.ForwardAngle.Radians += (_angleToAdd * epoch);
+                    Owner.Direction.Radians += (_angleToAdd * epoch);
                 }
             }
             else
             {
-                Owner.Velocity.ForwardAngle.Radians += (_angleToAdd * epoch); //Just do loops.
+                Owner.Direction.Radians += (_angleToAdd * epoch); //Just do loops.
 
                 if ((DateTime.UtcNow - _lastDecisionTime).TotalMilliseconds > _millisecndsBetweenDecisions) //Change directions from time to time.
                 {

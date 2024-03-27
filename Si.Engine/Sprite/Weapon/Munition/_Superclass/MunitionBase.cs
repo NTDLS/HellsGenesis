@@ -45,12 +45,12 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             }
 
             Weapon = weapon;
-            Velocity.ForwardVelocity = 1.0f;
+            Travel.Velocity = HeadingSpeed(1.0f);
             SceneDistanceLimit = SiRandom.Between(weapon.Metadata.MunitionSceneDistanceLimit * 0.1f, weapon.Metadata.MunitionSceneDistanceLimit);
 
             RadarDotSize = new SiPoint(1, 1);
 
-            float headingRadians = angle == null ? firedFrom.Velocity.ForwardAngle.Radians : (float)angle;
+            float headingRadians = angle == null ? firedFrom.Direction.Radians : (float)angle;
             if (weapon.Metadata.AngleVarianceDegrees > 0)
             {
                 var randomNumber = SiPoint.DegreesToRadians(SiRandom.Between(0, weapon.Metadata.AngleVarianceDegrees * 100.0f) / 100.0f);
@@ -67,10 +67,11 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
             var initialVelocity = new SiVelocity()
             {
-                ForwardAngle = new SiAngle(headingRadians),
                 MaximumSpeed = initialSpeed,
-                ForwardVelocity = 1.0f
+                Velocity = HeadingSpeed(1.0f)
             };
+
+            Direction = new SiAngle(headingRadians);
 
             Location = location == null ? firedFrom.Location : location;
 
@@ -93,7 +94,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                 throw new Exception($"Munitions for {firedFrom.GetType().Name} are not implemented.");
             }
 
-            Velocity = initialVelocity;
+            Travel = initialVelocity;
         }
 
         public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
@@ -113,7 +114,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                 return;
             }
 
-            Location += Velocity.MovementVector * epoch;
+            Location += Travel.MovementVector * epoch;
         }
 
         public override void Explode()

@@ -52,24 +52,24 @@ namespace Si.Engine.Sprite
             Location = location.Clone();
 
             Color = color ?? engine.Rendering.Materials.Colors.White;
-            Velocity.RotationSpeed = SiRandom.Between(1, 100) / 20.0f * SiRandom.PositiveOrNegative();
+            RotationSpeed = SiRandom.Between(1, 100) / 20.0f * SiRandom.PositiveOrNegative();
             TravelAngle.Degrees = SiRandom.Between(0, 359);
 
-            Velocity.ForwardVelocity = 100;
-            Velocity.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
+            Travel.Velocity = HeadingSpeed(1.0f);
+            Travel.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
 
             _engine = engine;
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Velocity.ForwardAngle.Degrees -= Velocity.RotationSpeed * epoch;
+            Direction.Degrees -= RotationSpeed * epoch;
 
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {
                 //We use a seperate angle for the travel direction because the base ApplyMotion()
                 //  moves the object in the the direction of the Velocity.Angle.
-                Location += TravelAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
+                //Location += TravelAngle * (Velocity.MaximumSpeed * Velocity.ForwardVelocity) * epoch;
             }
             else if (VectorType == ParticleVectorType.UseNativeForwardAngle)
             {
@@ -120,27 +120,27 @@ namespace Si.Engine.Sprite
                         if (ColorType == ParticleColorType.SingleColor)
                         {
                             _engine.Rendering.FillEllipseAt(renderTarget,
-                                RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Velocity.ForwardAngle.Degrees);
+                                RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Direction.Degrees);
                         }
                         else if (ColorType == ParticleColorType.Graident)
                         {
                             _engine.Rendering.FillEllipseAt(renderTarget, RenderLocation.X, RenderLocation.Y,
-                                Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)Velocity.ForwardAngle.Degrees);
+                                Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)Direction.Degrees);
                         }
                         break;
                     case ParticleShape.HollowEllipse:
                         _engine.Rendering.HollowEllipseAt(renderTarget,
-                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Velocity.ForwardAngle.Degrees);
+                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Direction.Degrees);
                         break;
                     case ParticleShape.Triangle:
                         _engine.Rendering.HollowTriangleAt(renderTarget,
-                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Velocity.ForwardAngle.Degrees);
+                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Direction.Degrees);
                         break;
                 }
 
                 if (IsHighlighted)
                 {
-                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Velocity.ForwardAngle.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
+                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Direction.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
                 }
             }
         }

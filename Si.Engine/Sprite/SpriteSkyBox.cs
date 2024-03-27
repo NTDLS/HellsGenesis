@@ -23,15 +23,15 @@ namespace Si.Engine.Sprite
 
             ZOrder = int.MinValue;
 
-            Velocity.MaximumSpeed = 0.10f;
+            Travel.MaximumSpeed = 0.10f;
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
-                Velocity.ForwardVelocity = SiRandom.Between(8, 10) / 10.0f;
+                Travel.Velocity = HeadingSpeed(SiRandom.Between(8, 10) / 10.0f);
             }
             else
             {
-                Velocity.ForwardVelocity = SiRandom.Between(4, 8) / 10.0f;
+                Travel.Velocity = HeadingSpeed(SiRandom.Between(4, 8) / 10.0f);
             }
         }
 

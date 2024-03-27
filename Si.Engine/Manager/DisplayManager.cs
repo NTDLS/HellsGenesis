@@ -34,6 +34,7 @@ namespace Si.Engine.Manager
 
         public float SpeedOrientedFrameScalingFactor()
         {
+            /*
             float weightedThrottlePercent = (
                     ((Math.Abs(_engine.Player.Sprite.Velocity.ForwardVelocity)
                         + Math.Abs(_engine.Player.Sprite.Velocity.LateralVelocity))).Clamp(0, 1) * 0.60f //60% of soom is forward and lateral velocity
@@ -42,7 +43,7 @@ namespace Si.Engine.Manager
 
             float remainingRatioZoom = 1 - BaseDrawScale;
             float debugFactor = remainingRatioZoom * weightedThrottlePercent;
-
+            */
 #if DEBUG
             return 1;
 #else

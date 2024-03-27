@@ -17,7 +17,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         public SpriteEnemyBase(EngineCore engine)
                 : base(engine)
         {
-            Velocity.ForwardVelocity = 1;
+            Travel.Velocity = HeadingSpeed(1.0f);
 
             RadarPositionIndicator = _engine.Sprites.RadarPositions.Add();
             RadarPositionIndicator.Visable = false;
@@ -82,25 +82,25 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
             //When an enemy has boost available, it will use it.
-            if (Velocity.AvailableBoost > 0)
+            if (Travel.AvailableBoost > 0)
             {
-                if (Velocity.ForwardBoostVelocity < 1.0) //Ramp up the boost until it is at 100%
+                if (Travel.SpeedBoostPercentage < 1.0) //Ramp up the boost until it is at 100%
                 {
-                    Velocity.ForwardBoostVelocity += _engine.Settings.EnemyVelocityRampUp;
+                    Travel.SpeedBoostPercentage += _engine.Settings.EnemyVelocityRampUp;
                 }
-                Velocity.AvailableBoost -= Velocity.MaximumSpeedBoost * Velocity.ForwardBoostVelocity; //Consume boost.
+                Travel.AvailableBoost -= Travel.MaximumBoostSpeed * Travel.SpeedBoostPercentage; //Consume boost.
 
-                if (Velocity.AvailableBoost < 0) //Sanity check available boost.
+                if (Travel.AvailableBoost < 0) //Sanity check available boost.
                 {
-                    Velocity.AvailableBoost = 0;
+                    Travel.AvailableBoost = 0;
                 }
             }
-            else if (Velocity.ForwardBoostVelocity > 0) //Ramp down the boost.
+            else if (Travel.SpeedBoostPercentage > 0) //Ramp down the boost.
             {
-                Velocity.ForwardBoostVelocity -= _engine.Settings.EnemyVelocityRampDown;
-                if (Velocity.ForwardBoostVelocity < 0)
+                Travel.SpeedBoostPercentage -= _engine.Settings.EnemyVelocityRampDown;
+                if (Travel.SpeedBoostPercentage < 0)
                 {
-                    Velocity.ForwardBoostVelocity = 0;
+                    Travel.SpeedBoostPercentage = 0;
                 }
             }
 

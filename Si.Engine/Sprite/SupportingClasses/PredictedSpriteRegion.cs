@@ -37,7 +37,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         public PredictedSpriteRegion(SpriteInteractiveBase sprite, float epoch)
         {
             Sprite = sprite;
-            Location = sprite.Location + sprite.Velocity.MovementVector * epoch;
+            Location = sprite.Location + sprite.Travel.MovementVector * epoch;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// <param name="otherObject"></param>
         /// <returns></returns>
         public bool IntersectsSAT(PredictedSpriteRegion otherObject)
-            => SiSeparatingAxisTheorem.IntersectsRotated(Bounds, Sprite.Velocity.ForwardAngle.Radians,
-                otherObject.Bounds, otherObject.Sprite.Velocity.ForwardAngle.Radians);
+            => SiSeparatingAxisTheorem.IntersectsRotated(Bounds, Sprite.Direction.Radians,
+                otherObject.Bounds, otherObject.Sprite.Direction.Radians);
     }
 }

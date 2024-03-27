@@ -121,12 +121,13 @@ namespace Si.Engine.Level
                     asteroid.Location = new SiPoint(totalXOffset - asteroidSize * col, totalYOffset - asteroidSize * row);
 
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
-                    asteroid.Velocity.MaximumSpeed = SiRandom.Variance(asteroid.Velocity.MaximumSpeed, 0.20f);
-                    //asteroid.Velocity.ForwardVelocity = 1.0f;
-                    asteroid.Velocity.ForwardVelocity = 0.0f;
+                    asteroid.Travel.MaximumSpeed = SiRandom.Variance(asteroid.Travel.MaximumSpeed, 0.20f);
+                    //asteroid.Velocity.ForwardVelocity = asteroid.DirectionMag(1.0f);
+                    asteroid.Travel.Velocity = asteroid.HeadingSpeed(0);
 
                     asteroid.VectorType = ParticleVectorType.UseTravelAngle;
-                    asteroid.Velocity.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
+                    //asteroid.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
+                    asteroid.RotationSpeed = 0;
 
                     asteroid.SetHullHealth(100);
                 }

@@ -27,7 +27,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
             var turretOffset = LocationRelativeToOwner - (OwnerSprite.Size / 2.0f);
 
             // Apply the rotated offsets to get the new turret location relative to the base sprite center.
-            Location = OwnerSprite.Location + turretOffset.Rotate(OwnerSprite.Velocity.ForwardAngle.Radians);
+            Location = OwnerSprite.Location + turretOffset.Rotate(OwnerSprite.Direction.Radians);
 
             if (DistanceTo(_engine.Player.Sprite) < 1000)
             {
@@ -35,23 +35,23 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
                 var deltaAngltToPlayer = DeltaAngleDegrees(_engine.Player.Sprite);
                 if (deltaAngltToPlayer < 1)
                 {
-                    Velocity.ForwardAngle.Degrees -= 0.25f;
+                    Direction.Degrees -= 0.25f;
                 }
                 else if (deltaAngltToPlayer > 1)
                 {
-                    Velocity.ForwardAngle.Degrees += 0.25f;
+                    Direction.Degrees += 0.25f;
                 }
 
                 if (deltaAngltToPlayer.IsBetween(-10, 10))
                 {
                     if (FireToggler)
                     {
-                        var pointRight = Location + SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.RADIANS_90, new SiPoint(21, 21));
+                        var pointRight = Location + SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.RADIANS_90, new SiPoint(21, 21));
                         FireToggler = !FireWeapon<WeaponLancer>(pointRight);
                     }
                     else
                     {
-                        var pointLeft = Location + SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle - SiPoint.RADIANS_90, new SiPoint(21, 21));
+                        var pointLeft = Location + SiPoint.PointFromAngleAtDistance360(Direction - SiPoint.RADIANS_90, new SiPoint(21, 21));
                         FireToggler = FireWeapon<WeaponLancer>(pointLeft);
                     }
                 }

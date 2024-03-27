@@ -29,7 +29,7 @@ namespace Si.Engine.Sprite._Superclass
         protected SharpDX.Direct2D1.Bitmap _lockedOnSoftImage;
 
         private bool _isLockedOn = false;
-        private SiVelocity _velocity = new();
+        private SiVelocity _travel = new();
         private bool _readyForDeletion;
         private SiPoint _location = new();
         private Size _size;
@@ -110,13 +110,13 @@ namespace Si.Engine.Sprite._Superclass
                         (RenderLocation.X - Size.Width / 2.0f) + Size.Width,
                         (RenderLocation.Y - Size.Height / 2.0f) + Size.Height);
 
-        public SiVelocity Velocity
+        public SiVelocity Travel
         {
-            get => _velocity;
+            get => _travel;
             set
             {
-                _velocity = value;
-                _velocity.OnVelocityChanged += (sender) => VelocityChanged();
+                _travel = value;
+                _travel.OnVelocityChanged += (sender) => VelocityChanged();
             }
         }
 
@@ -240,6 +240,22 @@ namespace Si.Engine.Sprite._Superclass
 
         #endregion
 
+
+        /// <summary>
+        /// Number or radians to rotate the sprite along its center. Negative for counter-clockwise, positive for clockwise.
+        /// </summary>
+        public float RotationSpeed { get; set; } = 0;
+
+        /// <summary>
+        /// The angle in which the object is pointing.
+        /// </summary>
+        public SiAngle Direction { get; set; } = new();
+
+        public SiPoint HeadingSpeed(float percentage)
+        {
+            return Direction * percentage.Clamp(-1.0f, 1.0f);
+        }
+
         public SpriteBase(EngineCore engine, string spriteTag = "")
         {
             _engine = engine;
@@ -286,8 +302,8 @@ namespace Si.Engine.Sprite._Superclass
             var collisions = new List<SpriteBase>();
 
             //Get the starting position of the sprite before it was last moved.
-            var hitTestPosition = new SiPoint(Location - (Velocity.MovementVector * epoch));
-            var directionVector = Velocity.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var hitTestPosition = new SiPoint(Location - (Travel.MovementVector * epoch));
+            var directionVector = Travel.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -333,8 +349,8 @@ namespace Si.Engine.Sprite._Superclass
             ///     betwwen where it ended up and where it should have come from given its movement vector.
 
             //Get the starting position of the sprite before it was last moved.
-            var hitTestPosition = new SiPoint(Location - (Velocity.MovementVector * epoch));
-            var directionVector = Velocity.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var hitTestPosition = new SiPoint(Location - (Travel.MovementVector * epoch));
+            var directionVector = Travel.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -387,8 +403,8 @@ namespace Si.Engine.Sprite._Superclass
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location);
-            var destinationPoint = new SiPoint(Location + (Velocity.MovementVector * epoch));
-            var directionVector = Velocity.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var destinationPoint = new SiPoint(Location + (Travel.MovementVector * epoch));
+            var directionVector = Travel.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
             var totalTravelDistance = Math.Abs(destinationPoint.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -435,8 +451,8 @@ namespace Si.Engine.Sprite._Superclass
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location);
-            var destinationPoint = new SiPoint(Location + (Velocity.MovementVector * epoch));
-            var directionVector = Velocity.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var destinationPoint = new SiPoint(Location + (Travel.MovementVector * epoch));
+            var directionVector = Travel.MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
             var totalTravelDistance = Math.Abs(destinationPoint.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -488,7 +504,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             var collisions = new List<SpriteBase>();
             var hitTestPosition = new SiPoint(Location);
-            var directionVector = angle != null ? angle : Velocity.ForwardAngle;
+            var directionVector = angle != null ? angle : Direction;
 
             //Hit-test each position along the sprite path.
             for (int i = 0; i < distance; i++)
@@ -530,7 +546,7 @@ namespace Si.Engine.Sprite._Superclass
         public SpriteBase FindFirstCollisionAlongDistanceVector(SpriteBase[] objectsThatCanBeHit, float distance, SiAngle angle = null)
         {
             var hitTestPosition = new SiPoint(Location);
-            var directionVector = angle != null ? angle : Velocity.ForwardAngle;
+            var directionVector = angle != null ? angle : Direction;
 
             //Hit-test each position along the sprite path.
             for (int i = 0; i < distance; i++)
@@ -602,13 +618,13 @@ namespace Si.Engine.Sprite._Superclass
                 + $"                Is Dead?: {IsDeadOrExploded}\r\n"
                 + $"         Render-Location: {RenderLocation}\r\n"
                 + $"                Location: {Location}\r\n"
-                + $"                   Angle: {Velocity.ForwardAngle}\r\n"
-                + $"                          {Velocity.ForwardAngle.DegreesSigned:n2}deg\r\n"
-                + $"                          {Velocity.ForwardAngle.RadiansSigned:n2}rad\r\n"
+                + $"                   Angle: {Direction}\r\n"
+                + $"                          {Direction.DegreesSigned:n2}deg\r\n"
+                + $"                          {Direction.RadiansSigned:n2}rad\r\n"
                 + extraInfo
                 + $"       Background Offset: {_engine.Display.RenderWindowPosition}\r\n"
-                + $"                  Thrust: {Velocity.ForwardVelocity * 100:n2}\r\n"
-                + $"                   Boost: {Velocity.ForwardBoostVelocity * 100:n2}\r\n"
+                + $"                  Thrust: {Travel.Velocity * 100:n2}\r\n"
+                + $"                   Boost: {Travel.SpeedBoostPercentage * 100:n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
                 + $"             Attachments: {Attachments?.Count ?? 0:n0}\r\n"
@@ -734,10 +750,10 @@ namespace Si.Engine.Sprite._Superclass
             {
                 var previousPosition = otherObject.Location;
 
-                for (int i = 0; i < otherObject.Velocity.MaximumSpeed; i++)
+                for (int i = 0; i < otherObject.Travel.MaximumSpeed; i++)
                 {
-                    previousPosition.X -= otherObject.Velocity.ForwardAngle.X;
-                    previousPosition.Y -= otherObject.Velocity.ForwardAngle.Y;
+                    previousPosition.X -= otherObject.Direction.X;
+                    previousPosition.Y -= otherObject.Direction.Y;
 
                     if (IntersectsAABB(previousPosition))
                     {
@@ -868,7 +884,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public void Rotate(float degrees)
         {
-            Velocity.ForwardAngle.Degrees += degrees;
+            Direction.Degrees += degrees;
             RotationChanged();
         }
 
@@ -877,10 +893,10 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public void PointAtAndGoto(SiPoint location, float? velocity = null)
         {
-            Velocity.ForwardAngle.Degrees = SiPoint.AngleInDegreesTo360(Location, location);
+            Direction.Degrees = SiPoint.AngleInDegreesTo360(Location, location);
             if (velocity != null)
             {
-                Velocity.MaximumSpeed = (float)velocity;
+                Travel.MaximumSpeed = (float)velocity;
             }
         }
 
@@ -889,11 +905,11 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, float? velocity = null)
         {
-            Velocity.ForwardAngle.Degrees = SiPoint.AngleInDegreesTo360(Location, obj.Location);
+            Direction.Degrees = SiPoint.AngleInDegreesTo360(Location, obj.Location);
 
             if (velocity != null)
             {
-                Velocity.MaximumSpeed = (float)velocity;
+                Travel.MaximumSpeed = (float)velocity;
             }
         }
 
@@ -909,11 +925,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Velocity.ForwardAngle.Degrees += rotationAmount;
+                    Direction.Degrees += rotationAmount;
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Velocity.ForwardAngle.Degrees -= rotationAmount;
+                    Direction.Degrees -= rotationAmount;
                 }
                 return true;
             }
@@ -933,11 +949,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Velocity.ForwardAngle.Degrees += rotationAmount;
+                    Direction.Degrees += rotationAmount;
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Velocity.ForwardAngle.Degrees -= rotationAmount;
+                    Direction.Degrees -= rotationAmount;
                 }
                 return true;
             }
@@ -953,9 +969,9 @@ namespace Si.Engine.Sprite._Superclass
         {
             toDegrees = toDegrees.DegreesNormalized();
 
-            if (Velocity.ForwardAngle.DegreesSigned.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
+            if (Direction.DegreesSigned.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
-                Velocity.ForwardAngle.Degrees -= rotationAmount;
+                Direction.Degrees -= rotationAmount;
                 return true;
             }
 
@@ -974,11 +990,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Velocity.ForwardAngle += rotationRadians;
+                    Direction += rotationRadians;
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Velocity.ForwardAngle -= rotationRadians;
+                    Direction -= rotationRadians;
                 }
                 return true;
             }
@@ -1158,8 +1174,8 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="displacementVector"></param>
         public virtual void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location += Velocity.MovementVector * epoch;
-            Velocity.ForwardAngle.Degrees -= Velocity.RotationSpeed * epoch;
+            Location += Travel.MovementVector * epoch;
+            Direction.Degrees -= RotationSpeed * epoch;
 
             foreach (var attachment in Attachments)
             {
@@ -1203,7 +1219,7 @@ namespace Si.Engine.Sprite._Superclass
 
                 if (IsHighlighted)
                 {
-                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Velocity.ForwardAngle.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
+                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Direction.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
                 }
             }
         }
@@ -1251,7 +1267,7 @@ namespace Si.Engine.Sprite._Superclass
 
         private void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float? angleRadians = null)
         {
-            float angle = (float)(angleRadians == null ? Velocity.ForwardAngle.Radians : angleRadians);
+            float angle = (float)(angleRadians == null ? Direction.Radians : angleRadians);
 
             _engine.Rendering.DrawBitmapAt(renderTarget, bitmap,
                 RenderLocation.X - bitmap.Size.Width / 2.0f,

@@ -10,7 +10,7 @@ namespace Si.Engine.Sprite.Enemy.Boss._Superclass
         public SpriteEnemyBossBase(EngineCore engine)
             : base(engine)
         {
-            Velocity.ForwardVelocity = 1;
+            Travel.Velocity = HeadingSpeed(1.0f);
         }
     }
 }

@@ -9,6 +9,8 @@ namespace Si.Library.Sprite
     public interface ISprite
     {
         public SiPoint Location { get; set; }
-        public SiVelocity Velocity { get; set; }
+        public SiVelocity Travel { get; set; }
+        public float RotationSpeed { get; set; } 
+        public SiAngle Direction { get; set; }
     }
 }

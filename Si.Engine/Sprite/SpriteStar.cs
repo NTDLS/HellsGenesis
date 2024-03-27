@@ -22,21 +22,21 @@ namespace Si.Engine.Sprite
 
             ZOrder = int.MinValue + 1000;
 
-            Velocity.MaximumSpeed = 0.5f;
+            Travel.MaximumSpeed = 0.5f;
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
-                Velocity.ForwardVelocity = SiRandom.Between(8, 10) / 10.0f;
+                Travel.Velocity = HeadingSpeed(SiRandom.Between(8, 10) / 10.0f);
             }
             else
             {
-                Velocity.ForwardVelocity = SiRandom.Between(4, 8) / 10.0f;
+                Travel.Velocity = HeadingSpeed(SiRandom.Between(4, 8) / 10.0f);
             }
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location -= displacementVector * Velocity.ForwardVelocity * Velocity.MaximumSpeed * epoch;
+            Location -= displacementVector * Travel.Velocity * Travel.MaximumSpeed * epoch;
         }
     }
 }
