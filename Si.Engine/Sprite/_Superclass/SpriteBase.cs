@@ -8,6 +8,7 @@ using Si.Library.Mathematics.Geometry;
 using Si.Library.Sprite;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using static Si.Library.SiConstants;
@@ -267,7 +268,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public SiPoint VelocityInDirection(float percentage)
 
-            => Direction * percentage.Clamp(-1.0f, 1.0f);
+            => Direction * Travel.MaximumSpeed * percentage.Clamp(-1.0f, 1.0f);
 
         /// <summary>
         /// Returns the vector in the given direction and in the given percentage.
@@ -373,7 +374,7 @@ namespace Si.Engine.Sprite._Superclass
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location - (Travel.MovementVector * epoch));
-            var directionVector = Travel.DirectionalVelocity;
+            var directionVector = Travel.Velocity;
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -646,8 +647,8 @@ namespace Si.Engine.Sprite._Superclass
                 + $"                          {Direction.RadiansSigned:n2}rad\r\n"
                 + extraInfo
                 + $"       Background Offset: {_engine.Display.RenderWindowPosition}\r\n"
-                + $"                  Thrust: {Travel.DirectionalVelocity * 100:n2}\r\n"
-                + $"                   Boost: {Travel.SpeedBoostPercentage * 100:n2}\r\n"
+                + $"                  Thrust: {Travel.Velocity * 100:n2}\r\n"
+                + $"                   Boost: {Travel.ThrottlePercentage * 100:n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
                 + $"             Attachments: {Attachments?.Count ?? 0:n0}\r\n"
@@ -1200,9 +1201,8 @@ namespace Si.Engine.Sprite._Superclass
             //Perform any auto-rotation.
             Direction.Degrees += RotationSpeed * epoch;
 
-            //Direction is a vector with a magnitude of 1 and so is Velocity, so we
-            //  do this to keep the velocity following the direction the sprite is pointing.
-            Travel.DirectionalVelocity = Direction;
+            //Keep the velocity following the direction the sprite is pointing.
+            Travel.Velocity = Direction * Travel.Velocity.Length();
 
             //Move the sprite based on its vector.
             Location += Travel.MovementVector * epoch;

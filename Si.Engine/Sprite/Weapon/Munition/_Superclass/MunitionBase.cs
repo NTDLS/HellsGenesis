@@ -68,7 +68,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             Travel = new SiTravelVector()
             {
                 MaximumSpeed = initialSpeed,
-                DirectionalVelocity = firedFrom.VelocityInDirection(1.0f, Direction)
+                Velocity = Direction * initialSpeed
             };
 
             if (firedFrom is SpriteAttachment attachment)

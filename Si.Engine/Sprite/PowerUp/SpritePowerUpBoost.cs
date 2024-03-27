@@ -22,7 +22,7 @@ namespace Si.Engine.Sprite.PowerUp
         {
             if (IntersectsAABB(_engine.Player.Sprite))
             {
-                _engine.Player.Sprite.Travel.AvailableBoost += PowerupAmount;
+                //_engine.Player.Sprite.Travel.AvailableBoost += PowerupAmount;
                 Explode();
             }
             else if (AgeInMilliseconds > TimeToLive)

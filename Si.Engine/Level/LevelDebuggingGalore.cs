@@ -124,7 +124,7 @@ namespace Si.Engine.Level
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
                     asteroid.Travel.MaximumSpeed = SiRandom.Variance(asteroid.Travel.MaximumSpeed, 0.20f);
                     //asteroid.Velocity.ForwardVelocity = asteroid.DirectionMag(1.0f);
-                    asteroid.Travel.DirectionalVelocity = asteroid.VelocityInDirection(0);
+                    asteroid.Travel.Velocity = asteroid.VelocityInDirection(0);
 
                     asteroid.VectorType = ParticleVectorType.UseTravelAngle;
                     //asteroid.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);

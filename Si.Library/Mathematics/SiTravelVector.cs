@@ -8,56 +8,42 @@ namespace Si.Library.Mathematics
         public delegate void ValueChangeEvent(SiTravelVector sender);
 
         public event ValueChangeEvent? OnVelocityChanged;
-        public event ValueChangeEvent? OnBoostChanged;
 
         /// <summary>
-        /// The maximum speed that this object can travel in any direction (not including MaximumSpeedBoost).
+        /// The maximum speed that this object can travel in any direction.
         /// </summary>
         public float MaximumSpeed { get; set; }
 
+        public SiPoint _velocity = new();
         /// <summary>
-        /// The additional speed that can be temporarily added to the sprites velocity.
+        /// Omni-directional velocity.
         /// </summary>
-        public float MaximumBoostSpeed { get; set; }
-
-        /// <summary>
-        /// The amount of boost availble until it is depleted and requires recharging.
-        /// </summary>
-        public float AvailableBoost { get; set; }
-        public bool IsBoostCoolingDown { get; set; }
-
-        public SiPoint _directionalVelocity = new();
-        /// <summary>
-        /// Omni-directional velocity with a magnatude of 1. Expressed as a decimal percentage of the MaximumSpeed in any direction.
-        /// </summary>
-        public SiPoint DirectionalVelocity
+        public SiPoint Velocity
         {
-            get => _directionalVelocity;
+            get => _velocity;
             set
             {
-                _directionalVelocity = value.Clamp(-1, 1);
+                _velocity = value;
                 OnVelocityChanged?.Invoke(this);
             }
         }
 
         /// <summary>
-        /// The sumation of the angle, and all velocity (including boost).
+        /// The sumation of the angle and all velocity .
         /// Sprite movement is simple: (MovementVector * epoch)
         /// </summary>
-        public SiPoint MovementVector =>
-            DirectionalVelocity * (MaximumSpeed + (MaximumBoostSpeed * SpeedBoostPercentage));
+        public SiPoint MovementVector => Velocity * ThrottlePercentage;
 
-        public float _speedBoostPercentage;
+        public float _throttlePercentage = 1.0f;
         /// <summary>
-        /// Percentage of speed boost expressed as a decimal percentage of the MaximumBoostSpeed.
+        /// Percentage of speed expressed as a decimal percentage from 0 to 2.
         /// </summary>
-        public float SpeedBoostPercentage
+        public float ThrottlePercentage
         {
-            get => _speedBoostPercentage;
+            get => _throttlePercentage;
             set
             {
-                _speedBoostPercentage = value.Clamp(-1, 1);
-                OnBoostChanged?.Invoke(this);
+                _throttlePercentage = value.Clamp(0, 2);
             }
         }
 
@@ -67,7 +53,7 @@ namespace Si.Library.Mathematics
 
         public SiTravelVector(SiAngle velocity)
         {
-            DirectionalVelocity = velocity;
+            Velocity = velocity;
         }
     }
 }

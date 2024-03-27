@@ -159,7 +159,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 #endregion
 
                 #region Forward Speed-Boost.
-
+                /*
                 if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && _forwardVelocity >= throttleFloor
                     && Sprite.Travel.AvailableBoost > 0 && Sprite.Travel.IsBoostCoolingDown == false)
                 {
@@ -202,6 +202,8 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     Sprite.Travel.AvailableBoost = 0;
                     Sprite.Travel.IsBoostCoolingDown = true;
                 }
+
+                */
 
                 #endregion
 
@@ -261,7 +263,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Sounds and Animation.
 
-                if (Sprite.Travel.SpeedBoostPercentage >= throttleFloor)
+                if (Sprite.Travel.ThrottlePercentage >= throttleFloor)
                     Sprite.ShipEngineBoostSound.Play();
                 else Sprite.ShipEngineBoostSound.Fade();
 
@@ -278,9 +280,9 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 {
                     Sprite.BoostAnimation.Visable =
                         (targetForwardAmount >= throttleFloor)
-                        && Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
-                        && Sprite.Travel.AvailableBoost > 0
-                        && Sprite.Travel.IsBoostCoolingDown == false;
+                        && Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost);
+                        //&& Sprite.Travel.AvailableBoost > 0
+                        //&& Sprite.Travel.IsBoostCoolingDown == false
                 }
 
                 #endregion
@@ -288,7 +290,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
             Sprite.RenewableResources.RenewAllResources(epoch);
 
-            Sprite.Travel.DirectionalVelocity = Sprite.VelocityInDirection(_forwardVelocity) //Forward / Reverse
+            Sprite.Travel.Velocity = Sprite.VelocityInDirection(_forwardVelocity) //Forward / Reverse
                 + (new SiAngle(Sprite.Direction.Radians + SiPoint.RADIANS_90) * _lateralVelocity); //Lateral strafing.
 
             Sprite.PerformCollisionDetection(epoch);

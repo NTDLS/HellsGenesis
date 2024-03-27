@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         public SpriteEnemyBase(EngineCore engine)
                 : base(engine)
         {
-            Travel.DirectionalVelocity = VelocityInDirection(1.0f);
+            Travel.Velocity = VelocityInDirection(1.0f);
 
             RadarPositionIndicator = _engine.Sprites.RadarPositions.Add();
             RadarPositionIndicator.Visable = false;
@@ -82,28 +82,30 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         /// <param name="displacementVector"></param>
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
+            /*
             //When an enemy has boost available, it will use it.
             if (Travel.AvailableBoost > 0)
             {
-                if (Travel.SpeedBoostPercentage < 1.0) //Ramp up the boost until it is at 100%
+                if (Travel.ThrottlePercentage < 1.0) //Ramp up the boost until it is at 100%
                 {
-                    Travel.SpeedBoostPercentage += _engine.Settings.EnemyVelocityRampUp;
+                    Travel.ThrottlePercentage += _engine.Settings.EnemyVelocityRampUp;
                 }
-                Travel.AvailableBoost -= Travel.MaximumBoostSpeed * Travel.SpeedBoostPercentage; //Consume boost.
+                Travel.AvailableBoost -= Travel.MaximumBoostSpeed * Travel.ThrottlePercentage; //Consume boost.
 
                 if (Travel.AvailableBoost < 0) //Sanity check available boost.
                 {
                     Travel.AvailableBoost = 0;
                 }
             }
-            else if (Travel.SpeedBoostPercentage > 0) //Ramp down the boost.
+            else if (Travel.ThrottlePercentage > 0) //Ramp down the boost.
             {
-                Travel.SpeedBoostPercentage -= _engine.Settings.EnemyVelocityRampDown;
-                if (Travel.SpeedBoostPercentage < 0)
+                Travel.ThrottlePercentage -= _engine.Settings.EnemyVelocityRampDown;
+                if (Travel.ThrottlePercentage < 0)
                 {
-                    Travel.SpeedBoostPercentage = 0;
+                    Travel.ThrottlePercentage = 0;
                 }
             }
+            */
 
             base.ApplyMotion(epoch, displacementVector);
 

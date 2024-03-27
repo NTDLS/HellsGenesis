@@ -67,7 +67,7 @@ namespace Si.Engine.Sprite
 
             var magnatude = SiRandom.Between(0.5f, 1.0f);
 
-            Travel.DirectionalVelocity = VelocityInDirection(magnatude);
+            Travel.Velocity = VelocityInDirection(magnatude);
 
             /*
             Location = location.Clone();
