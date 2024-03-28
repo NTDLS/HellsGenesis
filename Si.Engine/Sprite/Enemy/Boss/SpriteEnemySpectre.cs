@@ -1,11 +1,6 @@
-﻿using Si.Engine.Sprite.Enemy.Boss._Superclass;
-using Si.Engine.Sprite.Weapon;
-using Si.Library;
-using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics.Geometry;
-
-namespace Si.Engine.Sprite.Enemy.Boss
+﻿namespace Si.Engine.Sprite.Enemy.Boss
 {
+    /*
     /// <summary>
     /// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /// !!! This is OLD code and is provided as an example, this should not be used !!!
@@ -60,29 +55,29 @@ namespace Si.Engine.Sprite.Enemy.Boss
             {
                 if (_leftGun.IsDeadOrExploded == false)
                 {
-                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle - SiPoint.RADIANS_90, new SiPoint(25, 25));
-                    _leftGun.Velocity.ForwardAngle.Degrees = Velocity.ForwardAngle.Degrees;
+                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Direction - SiPoint.RADIANS_90, new SiPoint(25, 25));
+                    _leftGun.Direction.Degrees = Direction.Degrees;
                     _leftGun.Location += pointLeft;
                 }
 
                 if (_rightGun.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.RADIANS_90, new SiPoint(25, 25));
-                    _rightGun.Velocity.ForwardAngle.Degrees = Velocity.ForwardAngle.Degrees;
+                    var pointRight = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.RADIANS_90, new SiPoint(25, 25));
+                    _rightGun.Direction.Degrees = Direction.Degrees;
                     _rightGun.Location += pointRight;
                 }
 
                 if (_leftThrust.IsDeadOrExploded == false)
                 {
-                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle - SiPoint.DegreesToRadians(135), new SiPoint(35, 35));
-                    _leftThrust.Velocity.ForwardAngle.Degrees = Velocity.ForwardAngle.Degrees;
+                    var pointLeft = SiPoint.PointFromAngleAtDistance360(Direction - SiPoint.DegreesToRadians(135), new SiPoint(35, 35));
+                    _leftThrust.Direction.Degrees = Direction.Degrees;
                     _leftThrust.Location += pointLeft;
                 }
 
                 if (_rightThrust.IsDeadOrExploded == false)
                 {
-                    var pointRight = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(135), new SiPoint(35, 35));
-                    _rightThrust.Velocity.ForwardAngle.Degrees = Velocity.ForwardAngle.Degrees;
+                    var pointRight = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(135), new SiPoint(35, 35));
+                    _rightThrust.Direction.Degrees = Direction.Degrees;
                     _rightThrust.Location += pointRight;
                 }
             }
@@ -149,11 +144,11 @@ namespace Si.Engine.Sprite.Enemy.Boss
                 {
                     if (deltaAngle >= 0)
                     {
-                        Velocity.ForwardAngle += 1;
+                        Direction += 1;
                     }
                     else if (deltaAngle < 0)
                     {
-                        Velocity.ForwardAngle -= 1;
+                        Direction -= 1;
                     }
                 }
 
@@ -216,24 +211,24 @@ namespace Si.Engine.Sprite.Enemy.Boss
                 {
                     Velocity.ForwardVelocity = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngleRadians = Velocity.ForwardAngle + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
+                    fallToAngleRadians = Direction + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
                     fallbackDistance = baseFallbackDistance * (SiRandom.NextFloat() + 1);
                 }
             }
 
             if (mode == AIMode.MovingToFallback)
             {
-                var deltaAngle = Velocity.ForwardAngle - fallToAngleRadians;
+                var deltaAngle = Direction - fallToAngleRadians;
 
                 if (deltaAngle.Degrees > 10)
                 {
                     if (deltaAngle.Degrees >= 180.0) //We might as well turn around clock-wise
                     {
-                        Velocity.ForwardAngle += 1;
+                        Direction += 1;
                     }
                     else if (deltaAngle.Degrees < 180.0) //We might as well turn around counter clock-wise
                     {
-                        Velocity.ForwardAngle -= 1;
+                        Direction -= 1;
                     }
                 }
 
@@ -251,11 +246,11 @@ namespace Si.Engine.Sprite.Enemy.Boss
                 {
                     if (deltaAngle >= 0)
                     {
-                        Velocity.ForwardAngle += 1;
+                        Direction += 1;
                     }
                     else if (deltaAngle < 0)
                     {
-                        Velocity.ForwardAngle -= 1;
+                        Direction -= 1;
                     }
                 }
                 else
@@ -294,4 +289,5 @@ namespace Si.Engine.Sprite.Enemy.Boss
 
         #endregion
     }
+    */
 }

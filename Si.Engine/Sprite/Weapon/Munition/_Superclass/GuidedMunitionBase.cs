@@ -32,11 +32,11 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                     {
                         if (deltaAngle >= 0) //We might as well turn around clock-wise
                         {
-                            Velocity.ForwardAngle += GuidedRotationRateInDegrees;
+                            Direction += GuidedRotationRateInDegrees;
                         }
                         else if (deltaAngle < 0) //We might as well turn around counter clock-wise
                         {
-                            Velocity.ForwardAngle -= GuidedRotationRateInDegrees;
+                            Direction -= GuidedRotationRateInDegrees;
                         }
                     }
                 }

@@ -51,7 +51,7 @@ namespace Si.Engine.AI.Logistics
 
             public AIStateTransitionToEvasiveEscape(AIStateMachine machine)
             {
-                TargetAngle.Degrees = machine.Owner.Velocity.ForwardAngle.Degrees + 180;
+                TargetAngle.Degrees = machine.Owner.Direction.Degrees + 180;
             }
         }
 
@@ -71,7 +71,7 @@ namespace Si.Engine.AI.Logistics
             Owner.RenewableResources.Create(_boostResourceName, 800, 0, 10);
 
             ChangeState(new AIStateDeparting());
-            Owner.Velocity.ForwardVelocity = 1.0f;
+            Owner.Velocity = Owner.VelocityInDirection(1.0f);
 
             OnApplyIntelligence += AILogistics_OnApplyIntelligence;
         }
@@ -147,7 +147,7 @@ namespace Si.Engine.AI.Logistics
                 case AIStateEvasiveEscape evasiveEscape:
                     if (Owner.RenewableResources.Observe(_boostResourceName) > 250)
                     {
-                        Owner.Velocity.AvailableBoost = Owner.RenewableResources.Consume(_boostResourceName, SiRandom.Variance(250, 0.5f));
+                        //Owner.AvailableBoost = Owner.RenewableResources.Consume(_boostResourceName, SiRandom.Variance(250, 0.5f));
                     }
 
                     if (distanceToObservedObject > _idealMaxDistance)

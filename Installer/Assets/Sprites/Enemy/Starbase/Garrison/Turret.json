@@ -1,8 +1,8 @@
 {
   "Description": "",
-  "HullHealth": 200,
+  "Hull": 200,
   "Mass": 15,
-  "ShieldHealth": 0,
+  "Shields": 0,
   "Bounty": 50,
   "Weapons": [
 	{

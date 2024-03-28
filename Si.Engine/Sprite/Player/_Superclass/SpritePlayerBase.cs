@@ -16,6 +16,8 @@ namespace Si.Engine.Sprite.Player._Superclass
     /// </summary>
     public class SpritePlayerBase : SpriteInteractiveBase
     {
+        public readonly string BoostResourceName = "SpritePlayerBase:Boost";
+
         public SiAudioClip AmmoLowSound { get; private set; }
         public SiAudioClip AmmoEmptySound { get; private set; }
         public SiAudioClip ShipEngineRoarSound { get; private set; }
@@ -56,9 +58,11 @@ namespace Si.Engine.Sprite.Player._Superclass
             ShipEngineIdleSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
             ShipEngineBoostSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
 
-            Velocity.ForwardAngle = new SiAngle(0);
-            Velocity.ForwardVelocity = 0;
-            Velocity.AvailableBoost = _engine.Settings.MaxPlayerBoostAmount;
+            Direction = new SiAngle(0);
+            Velocity = VelocityInDirection(0);
+
+            RenewableResources.Create(BoostResourceName, _engine.Settings.MaxPlayerBoostAmount,
+                _engine.Settings.MaxPlayerBoostAmount, 250f, _engine.Settings.MaxPlayerBoostAmount / 10);
 
             if (ThrusterAnimation == null || ThrusterAnimation.IsQueuedForDeletion == true)
             {
@@ -140,10 +144,10 @@ namespace Si.Engine.Sprite.Player._Superclass
             string result = $"             Name : {Metadata.Name}\n";
             result += $"   Primary weapon : {primaryWeapon.Trim()}\n";
             result += $"Secondary Weapons : {secondaryWeapons.Trim()}\n";
-            result += $"          Shields : {Metadata.ShieldHealth:n0}\n";
-            result += $"    Hull Strength : {Metadata.HullHealth:n0}\n";
-            result += $"        Max Speed : {Metadata.Speed:n1}\n";
-            result += $"      Surge Drive : {Metadata.Boost:n1}\n";
+            result += $"          Shields : {Metadata.Shields:n0}\n";
+            result += $"             Hull : {Metadata.Hull:n0}\n";
+            result += $"            Speed : {Metadata.Speed:n1}\n";
+            result += $"         Throttle : {Metadata.MaxThrottle:n1}\n";
             result += $"\n{Metadata.Description}";
 
             return result;
@@ -175,8 +179,8 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(40, 40));
-                    ThrusterAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
+                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(180), new SiPoint(40, 40));
+                    ThrusterAnimation.Direction = Direction;
                     ThrusterAnimation.Location = Location + pointBehind;
                 }
             }
@@ -185,8 +189,8 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(40, 40));
-                    BoostAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
+                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(180), new SiPoint(40, 40));
+                    BoostAnimation.Direction = Direction;
                     BoostAnimation.Location = Location + pointBehind;
                 }
             }

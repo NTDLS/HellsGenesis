@@ -167,11 +167,11 @@ namespace Si.Engine.Manager
             => _collection.OfType<T>().Where(o => o.Visable).ToArray();
 
         public T[] VisibleDamagable<T>() where T : class
-            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata.TakesMunitionDamage).Select(o => o as T).ToArray();
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata.MunitionDetection).Select(o => o as T).ToArray();
 
         //Probably faster than VisibleDamagable<T>().
         public SpriteInteractiveBase[] VisibleDamagable()
-            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata?.TakesMunitionDamage == true).ToArray();
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata?.MunitionDetection == true).ToArray();
 
         public T[] VisibleColliadble<T>() where T : class
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata.CollisionDetection).Select(o => o as T).ToArray();
@@ -393,9 +393,9 @@ namespace Si.Engine.Manager
                 var fragment = _engine.Sprites.GenericSprites.AddAt(fragmentImage, sprite);
                 fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
                 fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f); //TODO: Can we implement this?
-                fragment.Velocity.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
-                fragment.Velocity.MaximumSpeed = SiRandom.Between(1, 3.5f);
-                fragment.Velocity.ForwardVelocity = 1;
+                fragment.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
+                fragment.Speed = SiRandom.Between(1, 3.5f);
+                fragment.Velocity = fragment.VelocityInDirection(1.0f);
                 fragment.VectorType = ParticleVectorType.UseTravelAngle;
                 fragment.TravelAngle.Degrees = SiRandom.Between(0.0f, 359.0f);
             }

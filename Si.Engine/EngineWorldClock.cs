@@ -104,7 +104,6 @@ namespace Si.Engine
 
             var frameRateDelayMicroseconds = 1000000f / framePerSecondLimit;
             var targetWorldTickDurationMicroseconds = 1000000f / _engine.Settings.WorldTicksPerSecond;
-            var millisecondPerEpoch = 1000f / _engine.Settings.WorldTicksPerSecond;
             int spinCountAugmentation = 0;
             int framerateAutoAdjustCadence = 0;
 
@@ -118,7 +117,7 @@ namespace Si.Engine
                 var elapsedEpochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000.0;
                 epochTimer.Restart();
 
-                var epoch = (float)(elapsedEpochMilliseconds / millisecondPerEpoch);
+                var epoch = (float)(elapsedEpochMilliseconds / _engine.Settings.MillisecondPerEpoch);
 
                 if (!_isPaused)
                 {
@@ -236,15 +235,19 @@ namespace Si.Engine
                 //situation = $"{_engine.Situations.CurrentSituation.Name} (Wave {_engine.Situations.CurrentSituation.CurrentWave} of {_engine.Situations.CurrentSituation.TotalWaves})";
                 string situation = $"{_engine.Situations.CurrentSituation.Name}";
 
-                float boostRebuildPercent = _engine.Player.Sprite.Velocity.AvailableBoost / _engine.Settings.PlayerBoostRebuildFloor * 100.0f;
+                var player = _engine.Player.Sprite;
+
+                var boost = player.RenewableResources.Snapshot(player.BoostResourceName);
+
+                float boostRebuildPercent = boost.RawAvailableResource / boost.CooldownFloor * 100.0f;
 
                 _engine.Sprites.TextBlocks.PlayerStatsText.Text =
                       $" Situation: {situation}\r\n"
-                    + $"      Hull: {_engine.Player.Sprite.HullHealth:n0} (Shields: {_engine.Player.Sprite.ShieldHealth:n0}) | Bounty: ${_engine.Player.Sprite.Metadata.Bounty}\r\n"
-                    + $"     Surge: {_engine.Player.Sprite.Velocity.AvailableBoost / _engine.Settings.MaxPlayerBoostAmount * 100.0:n1}%"
-                        + (_engine.Player.Sprite.Velocity.IsBoostCoolingDown ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
-                    + $"Pri-Weapon: {_engine.Player.Sprite.PrimaryWeapon?.Metadata.Name} x{_engine.Player.Sprite.PrimaryWeapon?.RoundQuantity:n0}\r\n"
-                    + $"Sec-Weapon: {_engine.Player.Sprite.SelectedSecondaryWeapon?.Metadata.Name} x{_engine.Player.Sprite.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n"
+                    + $"      Hull: {player.HullHealth:n0} (Shields: {player.ShieldHealth:n0}) | Bounty: ${player.Metadata.Bounty}\r\n"
+                    + $"     Surge: {boost.RawAvailableResource / _engine.Settings.MaxPlayerBoostAmount * 100.0:n1}%"
+                    + (boost.IsCoolingDown ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
+                    + $"Pri-Weapon: {player.PrimaryWeapon?.Metadata.Name} x{player.PrimaryWeapon?.RoundQuantity:n0}\r\n"
+                    + $"Sec-Weapon: {player.SelectedSecondaryWeapon?.Metadata.Name} x{player.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n"
                     + $"{_engine.Display.FrameCounter.AverageFrameRate:n2}fps";
             }
 

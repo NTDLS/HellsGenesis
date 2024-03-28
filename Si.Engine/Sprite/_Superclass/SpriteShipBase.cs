@@ -16,16 +16,10 @@ namespace Si.Engine.Sprite._Superclass
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
 
-        private readonly string _assetPathlockedOnImage = @"Sprites\Weapon\Locked On.png";
-        private readonly string _assetPathlockedOnSoftImage = @"Sprites\Weapon\Locked Soft.png";
-
         public SpriteShipBase(EngineCore engine, string name = "")
             : base(engine, name)
         {
             _engine = engine;
-
-            _lockedOnImage = _engine.Assets.GetBitmap(_assetPathlockedOnImage);
-            _lockedOnSoftImage = _engine.Assets.GetBitmap(_assetPathlockedOnSoftImage);
         }
 
         /// <summary>
@@ -88,11 +82,11 @@ namespace Si.Engine.Sprite._Superclass
 
                     RadarPositionIndicator.Location = _engine.Display.CenterCanvas
                         + SiPoint.PointFromAngleAtDistance360(new SiAngle(requiredAngleRadians), new SiPoint(200, 200));
-                    RadarPositionIndicator.Velocity.ForwardAngle.Radians = requiredAngleRadians;
+                    RadarPositionIndicator.Direction.Radians = requiredAngleRadians;
 
                     RadarPositionText.Location = _engine.Display.CenterCanvas
                         + SiPoint.PointFromAngleAtDistance360(new SiAngle(requiredAngleRadians), new SiPoint(120, 120));
-                    RadarPositionIndicator.Velocity.ForwardAngle.Radians = requiredAngleRadians;
+                    RadarPositionIndicator.Direction.Radians = requiredAngleRadians;
                 }
                 else
                 {

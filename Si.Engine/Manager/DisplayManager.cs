@@ -35,19 +35,11 @@ namespace Si.Engine.Manager
         public float SpeedOrientedFrameScalingFactor()
         {
             float weightedThrottlePercent = (
-                    ((Math.Abs(_engine.Player.Sprite.Velocity.ForwardVelocity)
-                        + Math.Abs(_engine.Player.Sprite.Velocity.LateralVelocity))).Clamp(0, 1) * 0.60f //60% of soom is forward and lateral velocity
-                    + _engine.Player.Sprite.Velocity.ForwardBoostVelocity * 0.40f  //40% of the zoom is boost.
+                (_engine.Player.Sprite.Velocity.Length() / _engine.Player.Sprite.Speed) * 0.8f //80% of zoom is standard velocity
+                 + (_engine.Player.Sprite.Throttle <= 1 ? 1 : _engine.Player.Sprite.Throttle / _engine.Player.Sprite.MaxThrottle) * 0.2f //20% of the zoom will be the "boost".
                 ).Clamp(0, 1);
 
-            float remainingRatioZoom = 1 - BaseDrawScale;
-            float debugFactor = remainingRatioZoom * weightedThrottlePercent;
-
-#if DEBUG
-            return 1;
-#else
-            return BaseDrawScale + debugFactor;
-#endif
+            return BaseDrawScale + ((1 - BaseDrawScale) * weightedThrottlePercent);
         }
 
         public float BaseDrawScale => 100.0f / _engine.Settings.OverdrawScale / 100.0f;

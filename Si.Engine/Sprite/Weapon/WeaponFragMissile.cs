@@ -31,7 +31,7 @@ namespace Si.Engine.Sprite.Weapon
                 RoundQuantity--;
 
                 var basePosition = Owner.Location + SiPoint.PointFromAngleAtDistance360(
-                    Owner.Velocity.ForwardAngle + SiPoint.RADIANS_90 * (_toggle ? 1 : -1), new SiPoint(10, 10));
+                    Owner.Direction + SiPoint.RADIANS_90 * (_toggle ? 1 : -1), new SiPoint(10, 10));
 
                 _engine.Sprites.Munitions.Add(this, basePosition);
 

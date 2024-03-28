@@ -231,7 +231,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static float DeltaAngle360(ISprite from, ISprite to, float offsetAngle = 0)
         {
-            float fromAngle = from.Velocity.ForwardAngle.Degrees + offsetAngle;
+            float fromAngle = from.Direction.Degrees + offsetAngle;
 
             float angleTo = AngleTo360(from, to);
 
@@ -260,7 +260,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns>The calculated angle in the range of 0-360.</returns>
         public static float DeltaAngle360(ISprite from, SiPoint toLocation, float offsetAngle = 0)
         {
-            float fromAngle = from.Velocity.ForwardAngle.Degrees + offsetAngle;
+            float fromAngle = from.Direction.Degrees + offsetAngle;
 
             float angleTo = AngleTo360(from, toLocation);
 
@@ -356,6 +356,14 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="b"></param>
         /// <returns></returns>
         public static float Sum(SiPoint a) => a.X + a.Y;
+
+        /// <summary>
+        /// Returns the Abs(X) + Abs(Y);
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static float SumAbs(SiPoint a) => Math.Abs(a.X) + Math.Abs(a.Y);
 
         /// <summary>
         /// Calculate the dot product of two vectors.This is useful for determining the angle between vectors or projecting one vector onto another.

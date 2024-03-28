@@ -32,11 +32,11 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                     {
                         if (deltaAngle >= 0) //We might as well turn around clock-wise
                         {
-                            Velocity.ForwardAngle += SeekingRotationRateRadians;
+                            Direction += SeekingRotationRateRadians;
                         }
                         else if (deltaAngle < 0) //We might as well turn around counter clock-wise
                         {
-                            Velocity.ForwardAngle -= SeekingRotationRateRadians;
+                            Direction -= SeekingRotationRateRadians;
                         }
                     }
                 }
@@ -62,11 +62,11 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                 {
                     if (smallestAngle >= 0) //We might as well turn around clock-wise
                     {
-                        Velocity.ForwardAngle += SeekingRotationRateRadians;
+                        Direction += SeekingRotationRateRadians;
                     }
                     else if (smallestAngle < 0) //We might as well turn around counter clock-wise
                     {
-                        Velocity.ForwardAngle -= SeekingRotationRateRadians;
+                        Direction -= SeekingRotationRateRadians;
                     }
                 }
             }

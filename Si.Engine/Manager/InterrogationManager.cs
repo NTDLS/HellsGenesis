@@ -539,7 +539,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.ForwardAngle.Degrees = command.ParameterValue<float>("value");
+                    sprite.Direction.Degrees = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -553,7 +553,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.ForwardBoostVelocity = command.ParameterValue<float>("value");
+                    sprite.Throttle = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -567,7 +567,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.ForwardVelocity = command.ParameterValue<float>("value");
+                    //sprite.Velocity.ForwardVelocity = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -581,7 +581,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.MaximumSpeedBoost = command.ParameterValue<float>("value");
+                    //sprite.MaximumBoostSpeed = command.ParameterValue<float>("value");
                 }
             });
         }
@@ -595,7 +595,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Velocity.MaximumSpeed = command.ParameterValue<float>("value");
+                    sprite.Speed = command.ParameterValue<float>("value");
                 }
             });
         }

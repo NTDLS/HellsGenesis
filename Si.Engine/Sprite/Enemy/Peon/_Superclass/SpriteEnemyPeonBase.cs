@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         public SpriteEnemyPeonBase(EngineCore engine)
             : base(engine)
         {
-            Velocity.ForwardVelocity = 1;
+            Velocity = VelocityInDirection(1.0f);
 
             OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
 
@@ -52,14 +52,14 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
-                ThrustAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
+                var pointBehind = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
+                ThrustAnimation.Direction = Direction;
                 ThrustAnimation.Location = Location + pointBehind;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointBehind = SiPoint.PointFromAngleAtDistance360(Velocity.ForwardAngle + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
-                BoostAnimation.Velocity.ForwardAngle = Velocity.ForwardAngle;
+                var pointBehind = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
+                BoostAnimation.Direction = Direction;
                 BoostAnimation.Location = Location + pointBehind;
             }
         }
@@ -86,11 +86,11 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 
             if (ThrustAnimation != null)
             {
-                ThrustAnimation.Visable = Velocity.ForwardVelocity > 0;
+                ThrustAnimation.Visable = Velocity.Sum() > 0;
             }
             if (BoostAnimation != null)
             {
-                BoostAnimation.Visable = Velocity.ForwardBoostVelocity > 0;
+                BoostAnimation.Visable = Throttle > 0;
             }
         }
 

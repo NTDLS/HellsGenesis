@@ -10,6 +10,7 @@ namespace Si.Engine.Sprite
         {
             SetImageAndLoadMetadata(@"Sprites\Debug.png");
             SetHullHealth(100000);
+            Throttle = 0;
         }
 
         public SpriteDebug(EngineCore engine, float x, float y)
@@ -19,6 +20,7 @@ namespace Si.Engine.Sprite
             X = x;
             Y = y;
             SetHullHealth(100000);
+            Throttle = 0;
         }
 
         public SpriteDebug(EngineCore engine, float x, float y, string imagePath)
@@ -28,11 +30,12 @@ namespace Si.Engine.Sprite
             X = x;
             Y = y;
             SetHullHealth(100000);
+            Throttle = 0;
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Velocity.ForwardAngle.Degrees = AngleTo360(_engine.Player.Sprite);
+            Direction.Degrees = AngleTo360(_engine.Player.Sprite);
             base.ApplyMotion(epoch, displacementVector);
         }
     }

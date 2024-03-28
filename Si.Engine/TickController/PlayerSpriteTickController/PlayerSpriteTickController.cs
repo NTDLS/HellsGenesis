@@ -43,6 +43,9 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
             _engine.Sprites.Add(Sprite); //Add the player back to the sprite collection.
         }
 
+        private float _forwardVelocity = 0;
+        private float _lateralVelocity = 0;
+
         /// <summary>
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
@@ -108,8 +111,13 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #endregion
 
+                // We have to do some creative stuff here since we allow forward/reverse and right/left strafing.
+                // No other sprite can strafe, so we're going to make all of this a special case. In the end, the
+                //  gathered inputs here are baked into the player sprite's Travel.Velocity just like any other sprite.
+
                 float throttleFloor = 0.01f;
-                float throttleCap = 0.70f; //70% will be considered max throttle in any direction, this is because the combined forward and lateral can only be as much as 0.707 each.
+                float throttleCap = 0.70f; // 70% will be considered max throttle in any direction, this is because
+                                           //   the combined forward and lateral can only be as much as 0.707 each.
                 float velocityRampUp = Engine.Settings.PlayerVelocityRampUp * epoch;
                 float velocityRampDown = Engine.Settings.PlayerVelocityRampDown * epoch;
 
@@ -119,81 +127,57 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 if (targetForwardAmount > throttleFloor)
                 {
-                    if (Sprite.Velocity.ForwardVelocity < targetForwardAmount) //The target forward throttle is more than we have applied: ramp-up.
+                    if (_forwardVelocity <= targetForwardAmount) //The target forward throttle is more than we have applied: ramp-up.
                     {
-                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity + velocityRampUp).Clamp(-1, targetForwardAmount); //Make player forward velocity build-up.
+                        _forwardVelocity = (_forwardVelocity + velocityRampUp).Clamp(-1, targetForwardAmount); //Make player forward velocity build-up.
                     }
                     else //The target forward throttle is less than we have applied: ramp-down.
                     {
-                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity - velocityRampDown).Clamp(targetForwardAmount, 1);
+                        _forwardVelocity = (_forwardVelocity - velocityRampDown).Clamp(targetForwardAmount, 1);
                     }
                 }
                 else if (targetForwardAmount < -throttleFloor)
                 {
-                    if (Sprite.Velocity.ForwardVelocity > targetForwardAmount) //The target reverse throttle is more than we have applied: ramp-up.
+                    if (_forwardVelocity >= targetForwardAmount) //The target reverse throttle is more than we have applied: ramp-up.
                     {
-                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity - velocityRampUp).Clamp(targetForwardAmount, 1); //Make player forward velocity build-up.
+                        _forwardVelocity = (_forwardVelocity - velocityRampUp).Clamp(targetForwardAmount, 1); //Make player forward velocity build-up.
                     }
                     else //The target reverse throttle is less than we have applied: ramp-down.
                     {
-                        Sprite.Velocity.ForwardVelocity = (Sprite.Velocity.ForwardVelocity + velocityRampDown).Clamp(targetForwardAmount, 1);
+                        _forwardVelocity = (_forwardVelocity + velocityRampDown).Clamp(targetForwardAmount, 1);
                     }
                 }
                 else //No forward input was received, ramp down the forward velocity.
                 {
-                    if (Math.Abs(velocityRampDown) >= Math.Abs(Sprite.Velocity.ForwardVelocity))
+                    if (Math.Abs(velocityRampDown) >= Math.Abs(_forwardVelocity))
                     {
-                        Sprite.Velocity.ForwardVelocity = 0; //Don't overshoot the stop.
+                        _forwardVelocity = 0; //Don't overshoot the stop.
                     }
-                    else Sprite.Velocity.ForwardVelocity -= Sprite.Velocity.ForwardVelocity > 0 ? velocityRampDown : -velocityRampDown;
+                    else _forwardVelocity -= _forwardVelocity > 0 ? velocityRampDown : -velocityRampDown;
                 }
 
                 #endregion
 
                 #region Forward Speed-Boost.
 
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && Sprite.Velocity.ForwardVelocity >= throttleFloor
-                    && Sprite.Velocity.AvailableBoost > 0 && Sprite.Velocity.IsBoostCoolingDown == false)
+                if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
+                    && _forwardVelocity >= throttleFloor
+                    && Sprite.RenewableResources.Observe(Sprite.BoostResourceName) > 0)
                 {
-                    Sprite.Velocity.ForwardBoostVelocity += velocityRampUp; //Make player forward velocity build-up.
+                    var boostAmount = Sprite.RenewableResources.Consume(Sprite.BoostResourceName, epoch);
 
-                    //Consume boost:
-                    Sprite.Velocity.AvailableBoost -= 10 * epoch;
-                    if (Sprite.Velocity.AvailableBoost < 0)
+                    if (Sprite.Throttle < Sprite.MaxThrottle)
                     {
-                        Sprite.Velocity.AvailableBoost = 0;
+                        Sprite.Throttle += boostAmount;
                     }
                 }
-                else //No forward input was received, ramp down the forward velocity.
+                else if (Sprite.Throttle > 1)
                 {
-                    if (Math.Abs(velocityRampDown) >= Math.Abs(Sprite.Velocity.ForwardBoostVelocity))
-                    {
-                        Sprite.Velocity.ForwardBoostVelocity = 0; //Don't overshoot the stop.
-                    }
-                    else Sprite.Velocity.ForwardBoostVelocity -= velocityRampDown;
-
-                    //Rebuild boost if its not being used.
-                    if ((Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false || Sprite.Velocity.ForwardVelocity <= throttleFloor)
-                        && Sprite.Velocity.AvailableBoost < Engine.Settings.MaxPlayerBoostAmount)
-                    {
-                        Sprite.Velocity.AvailableBoost += (10 * epoch);
-                        if (Sprite.Velocity.AvailableBoost > Engine.Settings.MaxPlayerBoostAmount)
-                        {
-                            Sprite.Velocity.AvailableBoost = Engine.Settings.MaxPlayerBoostAmount;
-                        }
-
-                        if (Sprite.Velocity.IsBoostCoolingDown && Sprite.Velocity.AvailableBoost >= Engine.Settings.PlayerBoostRebuildFloor)
-                        {
-                            Sprite.Velocity.IsBoostCoolingDown = false;
-                        }
-                    }
+                    //Ramp down the over-throttle.
+                    Sprite.Throttle -= velocityRampDown;
                 }
 
-                if (Sprite.Velocity.AvailableBoost <= 0)
-                {
-                    Sprite.Velocity.AvailableBoost = 0;
-                    Sprite.Velocity.IsBoostCoolingDown = true;
-                }
+                Sprite.Throttle = Sprite.Throttle.Clamp(1, Sprite.MaxThrottle);
 
                 #endregion
 
@@ -201,38 +185,38 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 float targetLateralAmount = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.StrafeLeft, SiPlayerKey.StrafeRight) / throttleCap).Clamp(-1, 1);
 
-                if (targetLateralAmount > throttleFloor)
+                if (targetLateralAmount >= throttleFloor) //Strafe right.
                 {
-                    if (Sprite.Velocity.LateralVelocity < targetLateralAmount) //The target lateral throttle is more than we have applied: ramp-up.
+                    if (_lateralVelocity <= targetLateralAmount) //The target lateral throttle is more than we have applied: ramp-up.
                     {
-                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity + velocityRampUp).Clamp(-1, targetLateralAmount); //Make player lateral velocity build-up.
+                        _lateralVelocity = (_lateralVelocity + velocityRampUp).Clamp(-1, targetLateralAmount); //Make player lateral velocity build-up.
                     }
                     else //The target lateral throttle is less than we have applied: ramp-down.
                     {
-                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity - velocityRampDown).Clamp(targetLateralAmount, 1);
+                        _lateralVelocity = (_lateralVelocity - velocityRampDown).Clamp(targetLateralAmount, 1);
                     }
                 }
-                else if (targetLateralAmount < -throttleFloor)
+                else if (targetLateralAmount <= -throttleFloor) //Strafe left.
                 {
-                    if (Sprite.Velocity.LateralVelocity > targetLateralAmount) //The target reverse lateral throttle is more than we have applied: ramp-up.
+                    if (_lateralVelocity >= targetLateralAmount) //The target reverse lateral throttle is more than we have applied: ramp-up.
                     {
-                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity - velocityRampUp).Clamp(targetLateralAmount, 1); //Make player forward velocity build-up.
+                        _lateralVelocity = (_lateralVelocity - velocityRampUp).Clamp(targetLateralAmount, 1); //Make player forward velocity build-up.
                     }
                     else //The target reverse lateral throttle is less than we have applied: ramp-down.
                     {
-                        Sprite.Velocity.LateralVelocity = (Sprite.Velocity.LateralVelocity + velocityRampDown).Clamp(targetLateralAmount, 1);
+                        _lateralVelocity = (_lateralVelocity + velocityRampDown).Clamp(targetLateralAmount, 1);
                     }
                 }
                 else //No lateral input was received, ramp down the lateral velocity.
                 {
-                    if (Math.Abs(velocityRampDown) >= Math.Abs(Sprite.Velocity.LateralVelocity))
+                    if (Math.Abs(velocityRampDown) >= Math.Abs(_lateralVelocity))
                     {
-                        Sprite.Velocity.LateralVelocity = 0; //Don't overshoot the stop.
+                        _lateralVelocity = 0; //Don't overshoot the stop.
                     }
-                    else Sprite.Velocity.LateralVelocity -= Sprite.Velocity.LateralVelocity > 0 ? velocityRampDown : -velocityRampDown;
+                    else _lateralVelocity -= _lateralVelocity > 0 ? velocityRampDown : -velocityRampDown;
                 }
 
-                #endregion 
+                #endregion
 
                 #region Rotation.
 
@@ -253,11 +237,11 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Sounds and Animation.
 
-                if (Sprite.Velocity.ForwardBoostVelocity >= throttleFloor)
+                if (Sprite.Throttle > 1)
                     Sprite.ShipEngineBoostSound.Play();
                 else Sprite.ShipEngineBoostSound.Fade();
 
-                if (Sprite.Velocity.ForwardVelocity >= throttleFloor)
+                if (_forwardVelocity >= throttleFloor)
                     Sprite.ShipEngineRoarSound.Play();
                 else Sprite.ShipEngineRoarSound.Fade();
 
@@ -271,20 +255,21 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     Sprite.BoostAnimation.Visable =
                         (targetForwardAmount >= throttleFloor)
                         && Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
-                        && Sprite.Velocity.AvailableBoost > 0
-                        && Sprite.Velocity.IsBoostCoolingDown == false;
+                        && Sprite.Throttle > 1
+                        && Sprite.RenewableResources.IsCoolingDown(Sprite.BoostResourceName) == false;
                 }
 
                 #endregion
-
-                //Debug.WriteLine($" Forward: [Target:{targetForwardAmount:n2}, Actual: {Sprite.Velocity.ForwardVelocity:n2}], Lateral: [Target {targetLateralAmount:n2}, Actual: {Sprite.Velocity.LateralVelocity:n2}");
             }
 
             Sprite.RenewableResources.RenewAllResources(epoch);
 
+            Sprite.Velocity = Sprite.VelocityInDirection(_forwardVelocity) //Forward / Reverse
+                + (new SiAngle(Sprite.Direction.Radians + SiPoint.RADIANS_90) * _lateralVelocity); //Lateral strafing.
+
             Sprite.PerformCollisionDetection(epoch);
 
-            var displacementVector = Sprite.Velocity.MovementVector * epoch;
+            var displacementVector = Sprite.MovementVector * epoch;
 
             //Scroll the background.
             Engine.Display.RenderWindowPosition += displacementVector;

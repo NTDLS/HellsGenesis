@@ -17,7 +17,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         public SpriteEnemyBase(EngineCore engine)
                 : base(engine)
         {
-            Velocity.ForwardVelocity = 1;
+            Velocity = VelocityInDirection(1.0f);
 
             RadarPositionIndicator = _engine.Sprites.RadarPositions.Add();
             RadarPositionIndicator.Visable = false;
@@ -81,28 +81,30 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         /// <param name="displacementVector"></param>
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
+            /*
             //When an enemy has boost available, it will use it.
-            if (Velocity.AvailableBoost > 0)
+            if (AvailableBoost > 0)
             {
-                if (Velocity.ForwardBoostVelocity < 1.0) //Ramp up the boost until it is at 100%
+                if (ThrottlePercentage < 1.0) //Ramp up the boost until it is at 100%
                 {
-                    Velocity.ForwardBoostVelocity += _engine.Settings.EnemyVelocityRampUp;
+                    ThrottlePercentage += _engine.Settings.EnemyVelocityRampUp;
                 }
-                Velocity.AvailableBoost -= Velocity.MaximumSpeedBoost * Velocity.ForwardBoostVelocity; //Consume boost.
+                AvailableBoost -= MaximumBoostSpeed * ThrottlePercentage; //Consume boost.
 
-                if (Velocity.AvailableBoost < 0) //Sanity check available boost.
+                if (AvailableBoost < 0) //Sanity check available boost.
                 {
-                    Velocity.AvailableBoost = 0;
+                    AvailableBoost = 0;
                 }
             }
-            else if (Velocity.ForwardBoostVelocity > 0) //Ramp down the boost.
+            else if (ThrottlePercentage > 0) //Ramp down the boost.
             {
-                Velocity.ForwardBoostVelocity -= _engine.Settings.EnemyVelocityRampDown;
-                if (Velocity.ForwardBoostVelocity < 0)
+                ThrottlePercentage -= _engine.Settings.EnemyVelocityRampDown;
+                if (ThrottlePercentage < 0)
                 {
-                    Velocity.ForwardBoostVelocity = 0;
+                    ThrottlePercentage = 0;
                 }
             }
+            */
 
             base.ApplyMotion(epoch, displacementVector);
 

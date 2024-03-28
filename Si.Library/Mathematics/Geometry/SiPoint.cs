@@ -118,6 +118,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <summary>
         /// Gets the length of the a vector. This represents the distance from its tail (starting point) to its head (end point) in the vector space.
         /// It provides a measure of how "long" the vector is in the specified direction.
+        /// The length also serves as the vector magnatude.
         /// </summary>
         /// <returns></returns>
         public float Length() => Length(this);
@@ -129,6 +130,14 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="b"></param>
         /// <returns></returns>
         public float Sum() => Sum(this);
+
+        /// <summary>
+        /// Returns the Abs(X) + Abs(Y);
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public float SumAbs() => SumAbs(this);
 
         /// <summary>
         /// Calculates the euclidean distance between two points in a 2D space (slower and precisie, but not compatible with DistanceSquaredTo(...)).

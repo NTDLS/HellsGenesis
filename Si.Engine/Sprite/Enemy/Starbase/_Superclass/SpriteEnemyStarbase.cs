@@ -10,7 +10,7 @@ namespace Si.Engine.Sprite.Enemy.Starbase._Superclass
         public SpriteEnemyStarbase(EngineCore engine)
             : base(engine)
         {
-            Velocity.ForwardVelocity = 1;
+            Velocity = VelocityInDirection(1.0f);
         }
 
         public override void Cleanup()

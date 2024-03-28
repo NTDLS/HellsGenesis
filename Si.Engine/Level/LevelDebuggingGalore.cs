@@ -1,6 +1,7 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Peon;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -70,14 +71,14 @@ namespace Si.Engine.Level
         {
             for (int i = 0; i < 1; i++)
             {
-                //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
+                _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
-            //_engine.Sprites.Debugs.Add(1000, 1000);
+            _engine.Sprites.Debugs.Add(1000, 1000);
 
             //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
-            AddAsteroidField(new SiPoint(), 8, 8);
+            //AddAsteroidField(new SiPoint(), 8, 8);
 
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
@@ -121,12 +122,13 @@ namespace Si.Engine.Level
                     asteroid.Location = new SiPoint(totalXOffset - asteroidSize * col, totalYOffset - asteroidSize * row);
 
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
-                    asteroid.Velocity.MaximumSpeed = SiRandom.Variance(asteroid.Velocity.MaximumSpeed, 0.20f);
-                    //asteroid.Velocity.ForwardVelocity = 1.0f;
-                    asteroid.Velocity.ForwardVelocity = 0.0f;
+                    asteroid.Speed = SiRandom.Variance(asteroid.Speed, 0.20f);
+                    //asteroid.Velocity.ForwardVelocity = asteroid.DirectionMag(1.0f);
+                    asteroid.Velocity = asteroid.VelocityInDirection(0);
 
                     asteroid.VectorType = ParticleVectorType.UseTravelAngle;
-                    asteroid.Velocity.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
+                    //asteroid.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
+                    asteroid.RotationSpeed = 0;
 
                     asteroid.SetHullHealth(100);
                 }
