@@ -26,6 +26,8 @@ namespace Si.Library
 
         public float WorldTicksPerSecond { get; set; } = 120; //MillisecondPerEpochs = 1000 / WorldTicksPerSecond
 
+        public float MillisecondPerEpoch => 1000f / WorldTicksPerSecond;
+
         public float EnemyVelocityRampUp { get; set; } = 0.0375f;
         public float EnemyVelocityRampDown { get; set; } = 0.0075f;
 
@@ -36,7 +38,6 @@ namespace Si.Library
         public int MaxShieldHealth { get; set; } = 100000;
 
         public float MaxPlayerBoostAmount { get; set; } = 10000;
-        public float PlayerBoostRebuildFloor { get; set; } = 1000;
         public float MaxPlayerRotationSpeedDegrees { get; set; } = 1.40f;
 
         public int InitialFrameStarCount { get; set; } = 100;

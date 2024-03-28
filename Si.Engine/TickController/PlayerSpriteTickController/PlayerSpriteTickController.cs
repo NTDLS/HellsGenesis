@@ -159,51 +159,25 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 #endregion
 
                 #region Forward Speed-Boost.
-                /*
-                if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) && _forwardVelocity >= throttleFloor
-                    && Sprite.AvailableBoost > 0 && Sprite.IsBoostCoolingDown == false)
-                {
-                    Sprite.SpeedBoostPercentage += velocityRampUp; //Make player forward velocity build-up.
 
-                    //Consume boost:
-                    Sprite.AvailableBoost -= 10 * epoch;
-                    if (Sprite.AvailableBoost < 0)
+                if (Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
+                    && _forwardVelocity >= throttleFloor
+                    && Sprite.RenewableResources.Observe(Sprite.BoostResourceName) > 0)
+                {
+                    var boostAmount = Sprite.RenewableResources.Consume(Sprite.BoostResourceName, epoch);
+
+                    if (Sprite.Throttle < Sprite.MaxThrottle)
                     {
-                        Sprite.AvailableBoost = 0;
+                        Sprite.Throttle += boostAmount;
                     }
                 }
-                else //No forward input was received, ramp down the forward velocity.
+                else if (Sprite.Throttle > 1)
                 {
-                    if (Math.Abs(velocityRampDown) >= Math.Abs(Sprite.SpeedBoostPercentage))
-                    {
-                        Sprite.SpeedBoostPercentage = 0; //Don't overshoot the stop.
-                    }
-                    else Sprite.SpeedBoostPercentage -= velocityRampDown;
-
-                    //Rebuild boost if its not being used.
-                    if ((Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost) == false || _forwardVelocity <= throttleFloor)
-                        && Sprite.AvailableBoost < Engine.Settings.MaxPlayerBoostAmount)
-                    {
-                        Sprite.AvailableBoost += (10 * epoch);
-                        if (Sprite.AvailableBoost > Engine.Settings.MaxPlayerBoostAmount)
-                        {
-                            Sprite.AvailableBoost = Engine.Settings.MaxPlayerBoostAmount;
-                        }
-
-                        if (Sprite.IsBoostCoolingDown && Sprite.AvailableBoost >= Engine.Settings.PlayerBoostRebuildFloor)
-                        {
-                            Sprite.IsBoostCoolingDown = false;
-                        }
-                    }
+                    //Ramp down the over-throttle.
+                    Sprite.Throttle -= velocityRampDown;
                 }
 
-                if (Sprite.AvailableBoost <= 0)
-                {
-                    Sprite.AvailableBoost = 0;
-                    Sprite.IsBoostCoolingDown = true;
-                }
-
-                */
+                Sprite.Throttle = Sprite.Throttle.Clamp(1, Sprite.MaxThrottle);
 
                 #endregion
 
@@ -263,7 +237,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Sounds and Animation.
 
-                if (Sprite.Throttle >= throttleFloor)
+                if (Sprite.Throttle > 1)
                     Sprite.ShipEngineBoostSound.Play();
                 else Sprite.ShipEngineBoostSound.Fade();
 
@@ -280,9 +254,9 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 {
                     Sprite.BoostAnimation.Visable =
                         (targetForwardAmount >= throttleFloor)
-                        && Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost);
-                    //&& Sprite.AvailableBoost > 0
-                    //&& Sprite.IsBoostCoolingDown == false
+                        && Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
+                        && Sprite.Throttle > 1
+                        && Sprite.RenewableResources.IsCoolingDown(Sprite.BoostResourceName) == false;
                 }
 
                 #endregion

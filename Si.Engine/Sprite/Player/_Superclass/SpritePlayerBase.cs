@@ -16,6 +16,8 @@ namespace Si.Engine.Sprite.Player._Superclass
     /// </summary>
     public class SpritePlayerBase : SpriteInteractiveBase
     {
+        public readonly string BoostResourceName = "SpritePlayerBase:Boost";
+
         public SiAudioClip AmmoLowSound { get; private set; }
         public SiAudioClip AmmoEmptySound { get; private set; }
         public SiAudioClip ShipEngineRoarSound { get; private set; }
@@ -58,7 +60,9 @@ namespace Si.Engine.Sprite.Player._Superclass
 
             Direction = new SiAngle(0);
             Velocity = VelocityInDirection(0);
-            //AvailableBoost = _engine.Settings.MaxPlayerBoostAmount;
+
+            RenewableResources.Create(BoostResourceName, _engine.Settings.MaxPlayerBoostAmount,
+                _engine.Settings.MaxPlayerBoostAmount, 250f, _engine.Settings.MaxPlayerBoostAmount / 10);
 
             if (ThrusterAnimation == null || ThrusterAnimation.IsQueuedForDeletion == true)
             {
