@@ -58,15 +58,12 @@ namespace Si.Engine.Sprite._Superclass
 
         private float _throttle = 1.0f;
         /// <summary>
-        /// Percentage of speed expressed as a decimal percentage from 0.0 (stopped) to 10.0 (10x the normal speed).
+        /// Percentage of speed expressed as a decimal percentage from 0.0 (stopped) to 1000.0 (1000x the normal speed).
         /// </summary>
         public float Throttle
         {
             get => _throttle;
-            set
-            {
-                _throttle = value.Clamp(0, 10);
-            }
+            set =>  _throttle = value.Clamp(0, 1000);
         }
 
         /// <summary>

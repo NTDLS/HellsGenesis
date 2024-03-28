@@ -358,6 +358,14 @@ namespace Si.Library.Mathematics.Geometry
         public static float Sum(SiPoint a) => a.X + a.Y;
 
         /// <summary>
+        /// Returns the Abs(X) + Abs(Y);
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static float SumAbs(SiPoint a) => Math.Abs(a.X) + Math.Abs(a.Y);
+
+        /// <summary>
         /// Calculate the dot product of two vectors.This is useful for determining the angle between vectors or projecting one vector onto another.
         /// </summary>
         /// <param name="a"></param>

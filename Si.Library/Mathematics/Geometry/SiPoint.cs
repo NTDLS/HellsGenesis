@@ -132,6 +132,14 @@ namespace Si.Library.Mathematics.Geometry
         public float Sum() => Sum(this);
 
         /// <summary>
+        /// Returns the Abs(X) + Abs(Y);
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public float SumAbs() => SumAbs(this);
+
+        /// <summary>
         /// Calculates the euclidean distance between two points in a 2D space (slower and precisie, but not compatible with DistanceSquaredTo(...)).
         /// </summary>
         /// <param name="other"></param>
