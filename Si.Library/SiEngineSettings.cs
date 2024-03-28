@@ -8,8 +8,8 @@ namespace Si.Library
     public class SiEngineSettings
     {
         public int GraphicsAdapterId { get; set; } = 0;
-        public int MunitionTraversalThreads { get; set; } = Environment.ProcessorCount * 2;
-        public int WorldClockThreads { get; set; } = Environment.ProcessorCount * 2;
+        public int MunitionTraversalThreads { get; set; } = SiUtility.LesserOf(Environment.ProcessorCount * 2, 16);
+        public int WorldClockThreads { get; set; } = 10;
         public bool EnableSpriteInterrogation { get; set; } = false;
         public bool HighlightNatrualBounds { get; set; } = false;
         public bool HighlightAllSprites { get; set; } = false;

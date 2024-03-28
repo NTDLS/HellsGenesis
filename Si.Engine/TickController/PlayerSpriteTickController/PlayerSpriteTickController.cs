@@ -17,7 +17,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
     public class PlayerSpriteTickController : PlayerSpriteTickControllerBase<SpritePlayerBase>
     {
         private readonly EngineCore _engine;
-        private readonly Stopwatch _inputDelay = new Stopwatch();
+        private readonly Stopwatch _inputDelay = new();
 
         public PlayerStats Stats { get; set; } = new(); //This should be saved.
         public SpritePlayerBase Sprite { get; set; }

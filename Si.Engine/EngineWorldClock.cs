@@ -120,11 +120,12 @@ namespace Si.Engine
         private SiPoint ExecuteWorldClockTick(float epoch)
         {
             //This is where we execute the world clock for each type of object.
-            //Note that this function does emply threads but I do not beleive it is necessary for performance.
+            //Note that this function does employ threads but I DO NOT beleive it is necessary for performance.
+            //
             //The idea is that sprites are created in Events.ExecuteWorldClockTick(), input is snapshotted,
-            // the player is moved (so we have a displacment vector) and then we should be free to do all
-            // other operations in paralell with the exception of deleting sprites that are queued for deletion -
-            // which is why we do that after the threads have completed.
+            //  the player is moved (so we have a displacment vector) and then we should be free to do all
+            //  other operations in paralell with the exception of deleting sprites that are queued for deletion -
+            //  which is why we do that after the threads have completed.
 
             _engine.Collisions.Reset(epoch);
 
@@ -151,7 +152,7 @@ namespace Si.Engine
             threadPoolTracker.Enqueue(() => _engine.Sprites.Debugs.ExecuteWorldClockTick(epoch, displacementVector));
 
             //Wait on all enqueued threads to complete.
-            if (SiUtility.TryAndIgnore(() => threadPoolTracker.WaitForCompletion()) == false)
+            if (!SiUtility.TryAndIgnore(threadPoolTracker.WaitForCompletion))
             {
                 return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
             }

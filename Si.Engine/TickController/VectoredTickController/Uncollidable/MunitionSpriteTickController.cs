@@ -68,7 +68,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
                             munition.ApplyMotion(epoch, displacementVector); //Move the munition.
                             munition.ApplyIntelligence(epoch, displacementVector);
 
-                            var hitObject = munition.FindFirstReverseCollisionAlongMovementVector(munition.FiredFromType == SiFiredFromType.Player ? objectsPlayerCanHit : objectsEnemyCanHit, epoch);
+                            var hitObject = munition.FindFirstReverseCollisionAlongMovementVectorAABB(munition.FiredFromType == SiFiredFromType.Player ? objectsPlayerCanHit : objectsEnemyCanHit, epoch);
                             if (hitObject != null)
                             {
                                 hitObjects.Add(new(munition, hitObject));

@@ -339,7 +339,7 @@ namespace Si.Engine.Sprite._Superclass
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location - (MovementVector * epoch));
-            var directionVector = MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
+            var directionVector = Velocity.Normalize();
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -371,22 +371,22 @@ namespace Si.Engine.Sprite._Superclass
         /// Returns the first collision (if any) the sprite made on is current movement vector.
         /// </summary>
         /// <returns></returns>
-        public SpriteBase FindFirstReverseCollisionAlongMovementVector(float epoch)
-            => FindFirstReverseCollisionAlongMovementVector(_engine.Sprites.Visible(), epoch);
+        public SpriteBase FindFirstReverseCollisionAlongMovementVectorAABB(float epoch)
+            => FindFirstReverseCollisionAlongMovementVectorAABB(_engine.Sprites.Visible(), epoch);
 
         /// <summary>
         /// Returns the first collision (if any) the sprite made on is current movement vector.
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public SpriteBase FindFirstReverseCollisionAlongMovementVector(SpriteBase[] objectsThatCanBeHit, float epoch)
+        public SpriteBase FindFirstReverseCollisionAlongMovementVectorAABB(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object after it has been moved and tests each location
             ///     betwwen where it ended up and where it should have come from given its movement vector.
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location - (MovementVector * epoch));
-            var directionVector = Velocity;
+            var directionVector = Velocity.Normalize();
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -422,26 +422,25 @@ namespace Si.Engine.Sprite._Superclass
         /// Returns a list of all collisions the sprite will make on is current movement vector, in the order in which they would be encountered.
         /// </summary>
         /// <returns></returns>
-        public List<SpriteBase> FindForwardCollisionsAlongMovementVector(float epoch)
-            => FindForwardCollisionsAlongMovementVector(_engine.Sprites.Visible(), epoch);
+        public List<SpriteBase> FindForwardCollisionsAlongMovementVectorAABB(float epoch)
+            => FindForwardCollisionsAlongMovementVectorAABB(_engine.Sprites.Visible(), epoch);
 
         /// <summary>
         /// Returns a list of all collisions the sprite will make on is current movement vector, in the order in which they would be encountered.
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public List<SpriteBase> FindForwardCollisionsAlongMovementVector(SpriteBase[] objectsThatCanBeHit, float epoch)
+        public List<SpriteBase> FindForwardCollisionsAlongMovementVectorAABB(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object before it has been moved and tests each location
             ///     betwwen where it is and where it will end up given its movement vector.
 
             var collisions = new List<SpriteBase>();
 
-            //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location);
             var destinationPoint = new SiPoint(Location + (MovementVector * epoch));
-            var directionVector = MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
-            var totalTravelDistance = Math.Abs(destinationPoint.DistanceTo(hitTestPosition));
+            var directionVector = Velocity.Normalize();
+            var totalTravelDistance = Math.Abs(Location.DistanceTo(destinationPoint));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
             {
@@ -472,24 +471,23 @@ namespace Si.Engine.Sprite._Superclass
         /// Returns the first collision (if any) the sprite will make on is current movement vector.
         /// </summary>
         /// <returns></returns>
-        public SpriteBase FindFirstForwardCollisionAlongMovementVector(float epoch)
-            => FindFirstForwardCollisionAlongMovementVector(_engine.Sprites.Visible(), epoch);
+        public SpriteBase FindFirstForwardCollisionAlongMovementVectorAABB(float epoch)
+            => FindFirstForwardCollisionAlongMovementVectorAABB(_engine.Sprites.Visible(), epoch);
 
         /// <summary>
         /// Returns the first collision (if any) the sprite will make on is current movement vector.
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public SpriteBase FindFirstForwardCollisionAlongMovementVector(SpriteBase[] objectsThatCanBeHit, float epoch)
+        public SpriteBase FindFirstForwardCollisionAlongMovementVectorAABB(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object before it has been moved and tests each location
             ///     betwwen where it is and where it will end up given its movement vector.
 
-            //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location);
             var destinationPoint = new SiPoint(Location + (MovementVector * epoch));
-            var directionVector = MovementVector.Normalize(); //Drop the magnatude and retain the vector direction.
-            var totalTravelDistance = Math.Abs(destinationPoint.DistanceTo(hitTestPosition));
+            var directionVector = Velocity.Normalize();
+            var totalTravelDistance = Math.Abs(Location.DistanceTo(destinationPoint));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
             {
@@ -526,8 +524,8 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="distance">Distance to detect collisions.</param>
         /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
         /// <returns></returns>
-        public List<SpriteBase> FindCollisionsAlongDistanceVector(float distance, SiAngle angle = null)
-            => FindCollisionsAlongDistanceVector(_engine.Sprites.Visible(), distance, angle);
+        public List<SpriteBase> FindCollisionsAlongDistanceVectorAABB(float distance, SiAngle angle = null)
+            => FindCollisionsAlongDistanceVectorAABB(_engine.Sprites.Visible(), distance, angle);
 
         /// <summary>
         ///  Returns a list of all collisions the sprite will make over a given distance and optional angle, in the order in which they would be encountered.
@@ -536,11 +534,12 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="distance">Distance to detect collisions.</param>
         /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
         /// <returns></returns>
-        public List<SpriteBase> FindCollisionsAlongDistanceVector(SpriteBase[] objectsThatCanBeHit, float distance, SiAngle angle = null)
+        public List<SpriteBase> FindCollisionsAlongDistanceVectorAABB(SpriteBase[] objectsThatCanBeHit, float distance, SiAngle angle = null)
         {
             var collisions = new List<SpriteBase>();
+
             var hitTestPosition = new SiPoint(Location);
-            var directionVector = angle != null ? angle : Direction;
+            var directionVector = angle ?? Direction;
 
             //Hit-test each position along the sprite path.
             for (int i = 0; i < distance; i++)
@@ -558,19 +557,14 @@ namespace Si.Engine.Sprite._Superclass
             return collisions;
         }
 
-        public void blarg(SpriteBase[] objectsThatCanBeHit)
-        {
-        }
-
-
         /// <summary>
         /// Returns a the first object the sprite will collide with over a given distance and optional angle.
         /// </summary>
         /// <param name="distance">Distance to detect collisions.</param>
         /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
         /// <returns></returns>
-        public SpriteBase FindFirstCollisionAlongDistanceVector(float distance, SiAngle angle = null)
-            => FindFirstCollisionAlongDistanceVector(_engine.Sprites.Visible(), distance, angle);
+        public SpriteBase FindFirstCollisionAlongDistanceVectorAABB(float distance, SiAngle angle = null)
+            => FindFirstCollisionAlongDistanceVectorAABB(_engine.Sprites.Visible(), distance, angle);
 
         /// <summary>
         /// Returns a the first object the sprite will collide with over a given distance and optional angle.
@@ -579,10 +573,10 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="distance">Distance to detect collisions.</param>
         /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
         /// <returns></returns>
-        public SpriteBase FindFirstCollisionAlongDistanceVector(SpriteBase[] objectsThatCanBeHit, float distance, SiAngle angle = null)
+        public SpriteBase FindFirstCollisionAlongDistanceVectorAABB(SpriteBase[] objectsThatCanBeHit, float distance, SiAngle angle = null)
         {
             var hitTestPosition = new SiPoint(Location);
-            var directionVector = angle != null ? angle : Direction;
+            var directionVector = angle ?? Direction;
 
             //Hit-test each position along the sprite path.
             for (int i = 0; i < distance; i++)
