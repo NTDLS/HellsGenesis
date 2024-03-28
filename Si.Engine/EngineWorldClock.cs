@@ -4,7 +4,6 @@ using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using Si.Rendering;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using static Si.Library.SiConstants;
 
@@ -85,101 +84,37 @@ namespace Si.Engine
 
             #endregion
 
-            //var frameRateTimer = new Stopwatch();
-            var worldTickTimer = new Stopwatch();
-            var epochTimer = new Stopwatch();
+            var framePerSecondLimit = _engine.Settings.VerticalSync ?
+                SiRenderingUtility.GetScreenRefreshRate(_engine.Display.Screen, _engine.Settings.GraphicsAdapterId)
+                : _engine.Settings.TargetFrameRate;
 
-            Thread.Sleep((int)_engine.Settings.WorldTicksPerSecond); //Make sure the first epoch isn't instantaneous.
-
-            //frameRateTimer.Start();
-            worldTickTimer.Start();
-            epochTimer.Start();
-
-            var framePerSecondLimit = _engine.Settings.TargetFrameRate;
-
-            if (_engine.Settings.VerticalSync)
-            {
-                framePerSecondLimit = SiRenderingUtility.GetScreenRefreshRate(_engine.Display.Screen, _engine.Settings.GraphicsAdapterId);
-            }
-
-            var frameRateDelayMicroseconds = 1000000f / framePerSecondLimit;
-            var targetWorldTickDurationMicroseconds = 1000000f / _engine.Settings.WorldTicksPerSecond;
-            int spinCountAugmentation = 0;
-            int framerateAutoAdjustCadence = 0;
+            float targetTimePerFrameMicroseconds = 1000000.0f / framePerSecondLimit;
+            float elapsedEpochMilliseconds = 100;
 
             while (_shutdown == false)
             {
-                if (_engine.Settings.YeildDeltaFrametime)
-                {
-                    worldTickTimer.Restart();
-                }
-
-                var elapsedEpochMilliseconds = (double)epochTimer.ElapsedTicks / Stopwatch.Frequency * 1000.0;
-                epochTimer.Restart();
-
                 var epoch = (float)(elapsedEpochMilliseconds / _engine.Settings.MillisecondPerEpoch);
 
-                if (!_isPaused)
-                {
-                    ExecuteWorldClockTick(epoch);
-                }
+                if (!_isPaused) ExecuteWorldClockTick(epoch);
 
                 _engine.Debug.ProcessCommand();
+                _engine.RenderEverything();
 
-                //If it is time to render, then render the frame!.
-                if (_engine.Display.FrameCounter.ElapsedMicroseconds > frameRateDelayMicroseconds)
+                var elapsedFrameTime = _engine.Display.FrameCounter.ElapsedMicroseconds;
+
+                // Enforce the framerate by figuring out how long it took to render the frame,
+                //  then spin for the difference between how long we wanted it to take.
+                while (_engine.Display.FrameCounter.ElapsedMicroseconds - elapsedFrameTime < targetTimePerFrameMicroseconds - elapsedFrameTime)
                 {
-                    _engine.RenderEverything();
-                    _engine.Display.FrameCounter.Calculate();
-
-                    #region Framerate fine-tuning.
-
-                    if (_engine.Settings.FineTuneFramerate)
-                    {
-                        //From time-to-time we want to check the average framerate and make sure its sane.
-                        if (framerateAutoAdjustCadence > _engine.Settings.TargetFrameRate) //Check ~1 time per second.
-                        {
-                            framerateAutoAdjustCadence = 0;
-                            if (_engine.Display.FrameCounter.CurrentFrameRate < framePerSecondLimit)
-                            {
-                                frameRateDelayMicroseconds -= 100; //The framerate is too low, reduce the delay.
-                            }
-                            else if (_engine.Display.FrameCounter.CurrentFrameRate > framePerSecondLimit)
-                            {
-                                frameRateDelayMicroseconds += 100; //the framerate is too high increase the delay.
-                            }
-                        }
-                        framerateAutoAdjustCadence++;
-                    }
-                    #endregion
+                    if (_engine.Settings.YeildRemainingFrameTime) Thread.Yield();
                 }
 
-                if (_engine.Settings.YeildDeltaFrametime)
-                {
-                    //Determine how many µs it took to render the scene.
-                    var actualWorldTickDurationMicroseconds = worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency;
+                if (_isPaused) Thread.Yield();
 
-                    //Calculate how many µs we need to wait so that we can maintain the configured framerate.
-                    var varianceWorldTickDurationMicroseconds = targetWorldTickDurationMicroseconds - actualWorldTickDurationMicroseconds;
+                elapsedEpochMilliseconds = _engine.Display.FrameCounter.ElapsedMilliseconds;
 
-                    worldTickTimer.Restart(); //Use the same timer to wait on the delta µs to expire.
-
-                    while (worldTickTimer.ElapsedTicks * 1000000.0 / Stopwatch.Frequency < varianceWorldTickDurationMicroseconds + spinCountAugmentation)
-                    {
-                        Thread.Yield();
-                    }
-                }
-
-                if (_isPaused)
-                {
-                    Thread.Yield();
-                }
+                _engine.Display.FrameCounter.Calculate();
             }
-        }
-
-        class ColliadbleSprite
-        {
-
         }
 
         private SiPoint ExecuteWorldClockTick(float epoch)
