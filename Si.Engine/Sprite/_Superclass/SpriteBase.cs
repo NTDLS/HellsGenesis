@@ -63,7 +63,7 @@ namespace Si.Engine.Sprite._Superclass
         public float Throttle
         {
             get => _throttle;
-            set =>  _throttle = value.Clamp(0, 1000);
+            set => _throttle = value.Clamp(0, 1000);
         }
 
         /// <summary>

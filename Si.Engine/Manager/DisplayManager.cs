@@ -4,7 +4,6 @@ using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
