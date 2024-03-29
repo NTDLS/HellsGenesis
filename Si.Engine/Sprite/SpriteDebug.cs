@@ -20,7 +20,7 @@ namespace Si.Engine.Sprite
             X = x;
             Y = y;
             SetHullHealth(100000);
-            Throttle = 0;
+            Throttle = 1;
         }
 
         public SpriteDebug(EngineCore engine, float x, float y, string imagePath)
@@ -30,7 +30,7 @@ namespace Si.Engine.Sprite
             X = x;
             Y = y;
             SetHullHealth(100000);
-            Throttle = 0;
+            Throttle = 1;
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)

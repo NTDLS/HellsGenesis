@@ -5,6 +5,15 @@ using System.Drawing;
 
 namespace Si.Engine.Manager
 {
+    /// <summary>
+    /// This class is used to keep track of which sprites are collidable and which collisions have been handled.
+    /// I do no yet know how to really "handle" collisions, but I do know that if we detect a collision with
+    ///     sprite "A" then we will also detect a seperate collision with sprite "B" and I wanted a way to determine
+    ///     if that "collision" interaction had already been addressed with the first objects detection.
+    ///     
+    /// Each time the game loop begins, CollisionManager.Reset() is called to (1) clear all the detected collisions,
+    ///     (2) create a list of collidable sprites, and (3) calculate the predicted location and rotation of those sprites.
+    /// </summary>
     public class CollisionManager
     {
         private readonly EngineCore _engine;
@@ -12,13 +21,27 @@ namespace Si.Engine.Manager
 
         public PredictedSpriteRegion[] Colliadbles { get; private set; }
 
+        /// <summary>
+        /// Holds information about a collision event.
+        /// </summary>
         public struct Collision
         {
+            /// <summary>
+            /// The key that identifies the collision pair.
+            /// </summary>
             public string Key { get; private set; }
+
             public PredictedSpriteRegion Predicted1 { get; private set; }
             public PredictedSpriteRegion Predicted2 { get; private set; }
 
+            /// <summary>
+            /// The overlapping rectangle of the two sprites. This is mostly for concept - I dont know what to do with it yet.
+            /// </summary>
             public RectangleF OverlapRectangle { get; set; }
+
+            /// <summary>
+            /// The overlapping polygon of the two sprites. This is mostly for concept - I dont know what to do with it yet.
+            /// </summary>
             public PointF[] OverlapPolygon { get; set; }
 
             public Collision(string key, PredictedSpriteRegion sprite1, PredictedSpriteRegion sprite2)
@@ -34,12 +57,18 @@ namespace Si.Engine.Manager
             _engine = engine;
         }
 
+        /// <summary>
+        /// Creates a unique string key for a pair of sprites.
+        /// </summary>
+        /// <param name="uid1"></param>
+        /// <param name="uid2"></param>
+        /// <returns></returns>
         public static string MakeCollisionKey(uint uid1, uint uid2)
             => uid1 > uid2 ? $"{uid1}:{uid2}" : $"{uid2}:{uid1}";
 
         public Collision Add(PredictedSpriteRegion predicted1, PredictedSpriteRegion predicted2)
         {
-            var key = MakeCollisionKey(predicted1.Sprite.UID, predicted1.Sprite.UID);
+            var key = MakeCollisionKey(predicted1.Sprite.UID, predicted2.Sprite.UID);
 
             var collision = new Collision(key, predicted1, predicted2)
             {

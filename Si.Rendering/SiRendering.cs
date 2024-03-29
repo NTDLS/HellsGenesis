@@ -403,11 +403,7 @@ namespace Si.Rendering
 
         public void DrawPolygon(RenderTarget renderTarget, float x, float y, PointF[] points, RawColor4 color, float strokeWidth = 1.0f)
         {
-            if (points.Length < 3) // A polygon needs at least 3 points
-                throw new ArgumentException("A polygon requires at least 3 points.");
-
-            // Convert PointF to RawVector2
-            RawVector2[] rawPoints = Array.ConvertAll(points, point => new RawVector2(point.X + x, point.Y + y));
+            var rawPoints = Array.ConvertAll(points, point => new RawVector2(point.X + x, point.Y + y));
 
             // Create a PathGeometry to define the shape of the polygon
             using (var pathGeometry = new PathGeometry(_direct2dFactory))

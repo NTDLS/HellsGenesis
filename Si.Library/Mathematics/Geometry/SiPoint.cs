@@ -113,7 +113,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public float DotProduct(SiPoint b) => DotProduct(this, b);
+        public float Dot(SiPoint b) => Dot(this, b);
 
         /// <summary>
         /// Gets the length of the a vector. This represents the distance from its tail (starting point) to its head (end point) in the vector space.

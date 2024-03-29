@@ -371,7 +371,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static float DotProduct(SiPoint a, SiPoint b)
+        public static float Dot(SiPoint a, SiPoint b)
             => a.X * b.X + a.Y * b.Y;
 
         public static float Length(SiPoint vector)
@@ -412,7 +412,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns></returns>
         public static SiPoint Reflect(SiPoint vector, SiPoint normal)
         {
-            var dotProduct = DotProduct(vector, normal);
+            var dotProduct = Dot(vector, normal);
             return new SiPoint(vector.X - 2 * dotProduct * normal.X, vector.Y - 2 * dotProduct * normal.Y);
         }
     }
