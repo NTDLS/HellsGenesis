@@ -12,6 +12,35 @@ namespace Si.Library
     public class SiSeparatingAxisTheorem
     {
         /// <summary>
+        /// Returns an aproximation of the overlap area for two rotated rectangles.
+        /// This is the axis-Aligned Bounding Box (AABB) of the overlap of the AABBs of the rotated rectangles,
+        /// not the actual overlap of the rotated rectangles themselves.
+        ///
+        /// The AABB of the overlap will often be larger than the actual rotated overlap, especially when the overlap is
+        /// small and the rectangles are at sharp angles, as is likely the case in your example. This discrepancy is due
+        /// to the nature of AABBs, which are not rotation-aware. So, just an FYI hommie - this is expected. :/
+        /// 
+        /// </summary>
+        /// <param name="bounds1"></param>
+        /// <param name="angleRadians1"></param>
+        /// <param name="bounds2"></param>
+        /// <param name="angleRadians2"></param>
+        /// <returns></returns>
+        public static RectangleF GetOverlapRectangle(RectangleF bounds1, float angleRadians1, RectangleF bounds2, float angleRadians2)
+        {
+            var aabb1 = GetAxisAlignedBoundingBox(GetRotatedRectangleCorners(bounds1, angleRadians1));
+            var aabb2 = GetAxisAlignedBoundingBox(GetRotatedRectangleCorners(bounds2, angleRadians2));
+
+            // Calculate Overlap
+            float overlapLeft = Math.Max(aabb1.Left, aabb2.Left);
+            float overlapTop = Math.Max(aabb1.Top, aabb2.Top);
+            float overlapRight = Math.Min(aabb1.Right, aabb2.Right);
+            float overlapBottom = Math.Min(aabb1.Bottom, aabb2.Bottom);
+
+            return new RectangleF(overlapLeft, overlapTop, overlapRight - overlapLeft, overlapBottom - overlapTop);
+        }
+
+        /// <summary>
         /// Determines if two (non-axis-aligned) rectangles interset using Separating Axis Theorem (SAT).
         /// This allows us to determine if a rotated rectangle interescts another rotated rectangle.
         /// </summary>
@@ -144,5 +173,15 @@ namespace Si.Library
         /// <returns></returns>
         public static float Dot(PointF a, PointF axis)
             => a.X * axis.X + a.Y * axis.Y;
+
+        public static RectangleF GetAxisAlignedBoundingBox(PointF[] corners)
+        {
+            float minX = corners.Min(c => c.X);
+            float maxX = corners.Max(c => c.X);
+            float minY = corners.Min(c => c.Y);
+            float maxY = corners.Max(c => c.Y);
+
+            return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+        }
     }
 }

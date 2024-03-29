@@ -1,7 +1,6 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Engine.Sprite.Enemy.Peon;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;

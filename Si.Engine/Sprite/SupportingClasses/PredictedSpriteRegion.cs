@@ -8,7 +8,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
 {
     /// <summary>
     /// Contains the sprite and the bounds that it is predicted to occupy after ApplyMotion().
-    /// Keep in mind that this is rudimentary in the way that it predicts the next location but decisively so.
+    /// Keep in mind that this is somewhat rudimentary in the way that it predicts the next location but decisively so.
     /// </summary>
     public class PredictedSpriteRegion
     {
@@ -17,6 +17,9 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// </summary>
         public SpriteInteractiveBase Sprite { get; set; }
 
+        /// <summary>
+        /// The location of the render window when the prediction was made.
+        /// </summary>
         public SiPoint RenderWindowPosition { get; private set; }
 
         /// <summary>
@@ -44,12 +47,18 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// </summary>
         public RectangleF Bounds => new(Location.X - Size.Width / 2.0f, Location.Y - Size.Height / 2.0f, Size.Width, Size.Height);
 
+        /// <summary>
+        /// Predicted render bounds after next call to ApplyMotion().
+        /// </summary>
         public virtual RawRectangleF RawRenderBounds => new(
                         (RenderLocation.X - Size.Width / 2.0f),
                         (RenderLocation.Y - Size.Height / 2.0f),
                         (RenderLocation.X - Size.Width / 2.0f) + Size.Width,
                         (RenderLocation.Y - Size.Height / 2.0f) + Size.Height);
 
+        /// <summary>
+        /// Predicted render location after next call to ApplyMotion().
+        /// </summary>
         public SiPoint RenderLocation => Location - RenderWindowPosition;
 
         public PredictedSpriteRegion(SpriteInteractiveBase sprite, SiPoint renderWindowPosition, float epoch)
@@ -85,5 +94,17 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         public bool IntersectsSAT(PredictedSpriteRegion otherObject)
             => SiSeparatingAxisTheorem.IntersectsRotated(Bounds, Direction.Radians,
                 otherObject.Bounds, otherObject.Direction.Radians);
+
+        public RectangleF GetOverlapRectangleSAT(PredictedSpriteRegion otherObject)
+            => SiSeparatingAxisTheorem.GetOverlapRectangle(Bounds, Direction.Radians,
+                otherObject.Bounds, otherObject.Direction.Radians);
+
+        public RectangleF GetIntersectionBoundingBox(PredictedSpriteRegion otherObject)
+            => SiSutherlandHodgmanPolygonIntersection.GetIntersectionBoundingBox(Bounds, Direction.Radians,
+                otherObject.Bounds, otherObject.Direction.Radians);
+
+        public PointF[] GetIntersectedPolygon(PredictedSpriteRegion otherObject)
+            => SiSutherlandHodgmanPolygonIntersection.GetIntersectedPolygon(Bounds, Direction.Radians,
+            otherObject.Bounds, otherObject.Direction.Radians);
     }
 }

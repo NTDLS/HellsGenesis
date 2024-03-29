@@ -285,7 +285,7 @@ namespace Si.Engine.Sprite._Superclass
 
                 if (thisCollidable.IntersectsSAT(other))
                 {
-                    _engine.Collisions.Add(thisCollidable, other);
+                    var collision = _engine.Collisions.Add(thisCollidable, other);
 
                     var thisMomentum = thisCollidable.Sprite.TotalMomentumWithRestingMass();
                     var otherMomentum = other.Sprite.TotalMomentumWithRestingMass();
@@ -298,13 +298,13 @@ namespace Si.Engine.Sprite._Superclass
                     //Who the fuck is moving out of the way now?
                     if (thisMomentum < otherMomentum)
                     {
-                        Debug.WriteLine("Moved sprite 1");
-                        thisCollidable.Sprite.Velocity *= -1;
+                        //Debug.WriteLine("Moved sprite 1");
+                        //thisCollidable.Sprite.Velocity *= -1;
                     }
                     else
                     {
-                        Debug.WriteLine("Moved sprite 2");
-                        other.Sprite.Velocity *= -1;
+                        //Debug.WriteLine("Moved sprite 2");
+                        //other.Sprite.Velocity *= -1;
                     }
 
                     Debug.WriteLine($"Collision of UID {thisCollidable.Sprite.UID} and {other.Sprite.UID}, mass of {thisMomentum:n4} and {otherMomentum:n4}.");
