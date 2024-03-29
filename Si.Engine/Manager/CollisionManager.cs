@@ -7,38 +7,53 @@ namespace Si.Engine.Manager
     public class CollisionManager
     {
         private readonly EngineCore _engine;
-        private readonly HashSet<string> _collisions = new();
+        public Dictionary<string, DetectedCollision> Detected { get; private set; } = new();
 
         public PredictedSpriteRegion[] Colliadbles { get; private set; }
+
+        public struct DetectedCollision
+        {
+            public string Key { get; private set; }
+            public PredictedSpriteRegion Predicted1 { get; private set; }
+            public PredictedSpriteRegion Predicted2 { get; private set; }
+
+            public DetectedCollision(string key, PredictedSpriteRegion sprite1, PredictedSpriteRegion sprite2)
+            {
+                Key = key;
+                Predicted1 = sprite1;
+                Predicted2 = sprite2;
+            }
+        }
+
+        public static string MakeCollisionKey(uint uid1, uint uid2)
+        {
+            if (uid1 > uid2) return $"{uid1}:{uid2}";
+            return $"{uid2}:{uid1}";
+        }
 
         public CollisionManager(EngineCore engine)
         {
             _engine = engine;
         }
 
-        public string MakeCollisionKey(SpriteBase sprite1, SpriteBase sprite2)
+        public void Add(PredictedSpriteRegion predicted1, PredictedSpriteRegion predicted2)
         {
-            if (sprite1.UID > sprite2.UID)
-            {
-                return $"{sprite1.UID}:{sprite2.UID}";
-            }
-            return $"{sprite2.UID}:{sprite1.UID}";
-        }
+            var key = MakeCollisionKey(predicted1.Sprite.UID, predicted1.Sprite.UID);
 
-        public void Add(SpriteBase sprite1, SpriteBase sprite2)
-        {
-            _collisions.Add(MakeCollisionKey(sprite1, sprite2));
+            Detected.Add(key, new DetectedCollision(key, predicted1, predicted2));
         }
 
         public void Reset(float epoch)
         {
             Colliadbles = _engine.Sprites.VisibleColliadblePredictiveMove(epoch);
-            _collisions.Clear();
+            Detected.Clear();
         }
 
-        public bool IsAlreadyHandled(SpriteBase sprite1, SpriteBase sprite2)
-        {
-            return _collisions.Contains(MakeCollisionKey(sprite1, sprite2));
-        }
+        public bool IsAlreadyHandled(SpriteInteractiveBase sprite1, SpriteInteractiveBase sprite2)
+            => Detected.ContainsKey(MakeCollisionKey(sprite1.UID, sprite2.UID));
+
+        public bool IsAlreadyHandled(PredictedSpriteRegion predicted1, PredictedSpriteRegion predicted2)
+            => Detected.ContainsKey(MakeCollisionKey(predicted1.Sprite.UID, predicted2.Sprite.UID));
     }
 }
+

@@ -1,4 +1,5 @@
-﻿using Si.Engine.Sprite._Superclass;
+﻿using SharpDX.Mathematics.Interop;
+using Si.Engine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Drawing;
@@ -15,6 +16,8 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// Reference to the sprite.
         /// </summary>
         public SpriteInteractiveBase Sprite { get; set; }
+
+        public SiPoint RenderWindowPosition { get; private set; }
 
         /// <summary>
         /// Size of the referenced sprite.
@@ -41,12 +44,22 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// </summary>
         public RectangleF Bounds => new(Location.X - Size.Width / 2.0f, Location.Y - Size.Height / 2.0f, Size.Width, Size.Height);
 
-        public PredictedSpriteRegion(SpriteInteractiveBase sprite, float epoch)
+        public virtual RawRectangleF RawRenderBounds => new(
+                        (RenderLocation.X - Size.Width / 2.0f),
+                        (RenderLocation.Y - Size.Height / 2.0f),
+                        (RenderLocation.X - Size.Width / 2.0f) + Size.Width,
+                        (RenderLocation.Y - Size.Height / 2.0f) + Size.Height);
+
+        public SiPoint RenderLocation => Location - RenderWindowPosition;
+
+        public PredictedSpriteRegion(SpriteInteractiveBase sprite, SiPoint renderWindowPosition, float epoch)
         {
+            RenderWindowPosition = renderWindowPosition;
+
             Sprite = sprite;
 
             //Assume the sprite is using rotation.
-            Direction = new SiAngle(sprite.Direction.Degrees + sprite.RotationSpeed * epoch);
+            Direction = new SiAngle(sprite.Direction.Radians + sprite.RotationSpeed * epoch);
 
             //Assuming the sprite is moving in the direction it is pointing.
             Velocity = Direction * Velocity.Length();

@@ -13,6 +13,7 @@ namespace Si.Library
         public bool EnableSpriteInterrogation { get; set; } = false;
         public bool HighlightNatrualBounds { get; set; } = false;
         public bool HighlightAllSprites { get; set; } = false;
+        public bool HighlightCollisions { get; set; } = false;
 
         public Size Resolution { get; set; }
 

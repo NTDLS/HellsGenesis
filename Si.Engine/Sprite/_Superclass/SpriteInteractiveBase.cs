@@ -274,7 +274,7 @@ namespace Si.Engine.Sprite._Superclass
 
             IsHighlighted = true;
 
-            var thisCollidable = new PredictedSpriteRegion(this, epoch);
+            var thisCollidable = new PredictedSpriteRegion(this, _engine.Display.RenderWindowPosition, epoch);
 
             foreach (var other in _engine.Collisions.Colliadbles)
             {
@@ -285,7 +285,7 @@ namespace Si.Engine.Sprite._Superclass
 
                 if (thisCollidable.IntersectsSAT(other))
                 {
-                    _engine.Collisions.Add(thisCollidable.Sprite, other.Sprite);
+                    _engine.Collisions.Add(thisCollidable, other);
 
                     var thisMomentum = thisCollidable.Sprite.TotalMomentumWithRestingMass();
                     var otherMomentum = other.Sprite.TotalMomentumWithRestingMass();
@@ -298,10 +298,12 @@ namespace Si.Engine.Sprite._Superclass
                     //Who the fuck is moving out of the way now?
                     if (thisMomentum < otherMomentum)
                     {
+                        Debug.WriteLine("Moved sprite 1");
                         thisCollidable.Sprite.Velocity *= -1;
                     }
                     else
                     {
+                        Debug.WriteLine("Moved sprite 2");
                         other.Sprite.Velocity *= -1;
                     }
 

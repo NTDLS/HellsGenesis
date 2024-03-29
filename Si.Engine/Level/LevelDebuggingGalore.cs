@@ -71,10 +71,10 @@ namespace Si.Engine.Level
         {
             for (int i = 0; i < 1; i++)
             {
-                _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
+                //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
-            _engine.Sprites.Debugs.Add(1000, 1000);
+            _engine.Sprites.Debugs.Add(1000, 1000).Location = new SiPoint(800, 900);
 
             //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 

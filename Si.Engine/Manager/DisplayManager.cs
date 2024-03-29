@@ -24,6 +24,7 @@ namespace Si.Engine.Manager
         /// The X,Y of the top left of the render window. This is the corner of the total
         /// canvas which includes offscreen locations when not zoomed out. The local player
         /// will be centered in this window and the window will moved with the players movements.
+        /// This can be though of as the camera.
         /// </summary>
         public SiPoint RenderWindowPosition { get; set; } = new();
         public Control DrawingSurface { get; private set; }

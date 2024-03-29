@@ -157,6 +157,27 @@ namespace Si.Engine
                     }
 
                     Sprites.RenderPreScaling(o.IntermediateRenderTarget);
+
+                    #region Render Collisions.
+
+                    if (Settings.HighlightCollisions)
+                    {
+                        foreach (var collision in Collisions.Detected)
+                        {
+                            Rendering.DrawRectangleAt(o.IntermediateRenderTarget,
+                                collision.Value.Predicted1.RawRenderBounds,
+                                collision.Value.Predicted1.Direction.Radians,
+                                Rendering.Materials.Colors.Cyan, 1, 3);
+
+                            Rendering.DrawRectangleAt(o.IntermediateRenderTarget,
+                                collision.Value.Predicted2.RawRenderBounds,
+                                collision.Value.Predicted2.Direction.Radians,
+                                Rendering.Materials.Colors.Orange, 1, 3);
+                        }
+                    }
+                    #endregion
+
+
                     o.IntermediateRenderTarget.EndDraw();
 
                     if (Settings.EnableSpeedScaleFactoring)
