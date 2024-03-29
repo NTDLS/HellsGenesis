@@ -265,7 +265,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
             Sprite.RenewableResources.RenewAllResources(epoch);
 
             Sprite.Velocity = Sprite.VelocityInDirection(_forwardVelocity) //Forward / Reverse
-                + (new SiAngle(Sprite.Direction.Radians + SiPoint.RADIANS_90) * _lateralVelocity); //Lateral strafing.
+                + Sprite.VelocityInDirection(_lateralVelocity, Sprite.Direction.Radians + SiPoint.RADIANS_90);  //Lateral strafing.
 
             Sprite.PerformCollisionDetection(epoch);
 

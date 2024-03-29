@@ -289,7 +289,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="percentage"></param>
         /// <returns></returns>
         public SiPoint VelocityInDirection(float percentage, float angleInRadians)
-            => new SiAngle(angleInRadians) * percentage.Clamp(-1.0f, 1.0f);
+            => new SiAngle(angleInRadians) * Speed * percentage.Clamp(-1.0f, 1.0f);
 
         /// <summary>
         /// Returns the vector in the given direction and in the given percentage.
@@ -298,7 +298,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="percentage"></param>
         /// <returns></returns>
         public SiPoint VelocityInDirection(float percentage, SiAngle angle)
-            => angle * percentage.Clamp(-1.0f, 1.0f);
+            => angle * Speed * percentage.Clamp(-1.0f, 1.0f);
 
         public void QueueForDelete()
         {
