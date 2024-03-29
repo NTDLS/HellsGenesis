@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
-using SharpDX;
-using SharpDX.Mathematics.Interop;
+using Si.Engine.EngineLibrary;
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
 using Si.Engine.Menu;
@@ -14,9 +13,7 @@ using Si.Rendering;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ZstdSharp.Unsafe;
 using static Si.Library.SiConstants;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Si.Engine
 {
@@ -168,29 +165,24 @@ namespace Si.Engine
                     {
                         foreach (var collision in Collisions.Detected)
                         {
-
-                            RawRectangleF collisionOverlap = new(
-                                        collision.Value.OverlapRectangle.X - Display.RenderWindowPosition.X,
-                                        collision.Value.OverlapRectangle.Y - Display.RenderWindowPosition.Y,
-                                        collision.Value.OverlapRectangle.X - Display.RenderWindowPosition.X + collision.Value.OverlapRectangle.Width,
-                                        collision.Value.OverlapRectangle.Y - Display.RenderWindowPosition.Y + collision.Value.OverlapRectangle.Height);
-
                             Rendering.DrawRectangleAt(o.IntermediateRenderTarget,
-                                collisionOverlap,
-                                0, //collision.Value.Predicted1.Direction.Radians,
-                                Rendering.Materials.Colors.Cyan, 1, 1);
+                                -Display.RenderWindowPosition.X, -Display.RenderWindowPosition.Y,
+                                collision.Value.OverlapRectangle.ToRawRectangleF(),
+                                0, Rendering.Materials.Colors.Orange, 1, 2);
 
-                            /*
+                            Rendering.DrawPolygon(o.IntermediateRenderTarget, -Display.RenderWindowPosition.X, -Display.RenderWindowPosition.Y,
+                                collision.Value.OverlapPolygon,
+                                Rendering.Materials.Colors.Cyan, 3);
+
                             Rendering.DrawRectangleAt(o.IntermediateRenderTarget,
                                 collision.Value.Predicted1.RawRenderBounds,
                                 collision.Value.Predicted1.Direction.Radians,
-                                Rendering.Materials.Colors.Cyan, 1, 3);
+                                Rendering.Materials.Colors.Red, 1, 1);
 
                             Rendering.DrawRectangleAt(o.IntermediateRenderTarget,
                                 collision.Value.Predicted2.RawRenderBounds,
                                 collision.Value.Predicted2.Direction.Radians,
-                                Rendering.Materials.Colors.Orange, 1, 3);
-                            */
+                                Rendering.Materials.Colors.LawnGreen, 1, 1);
                         }
                     }
                     #endregion

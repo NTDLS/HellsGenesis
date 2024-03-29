@@ -272,7 +272,7 @@ namespace Si.Engine.Sprite._Superclass
             // - I think we need to determine the angle of the "collider" and do the bounce math on that.
             // - I added sprite mass, velocity and momemtium. This should help us determine whos gonna get moved and by what amount.
 
-            IsHighlighted = true;
+            //IsHighlighted = true;
 
             var thisCollidable = new PredictedSpriteRegion(this, _engine.Display.RenderWindowPosition, epoch);
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace Si.Library
 {
@@ -22,17 +17,16 @@ namespace Si.Library
         /// The intersection of two rotated rectangles is a convex polygon, not necessarily a rectangle.
         /// So we are going to approximate the intersection as a rectangle.
         /// </summary>
-        /// <param name="bounds1"></param>
-        /// <param name="angleRadians1"></param>
-        /// <param name="bounds2"></param>
-        /// <param name="angleRadians2"></param>
-        /// <returns></returns>
         public static RectangleF GetIntersectionBoundingBox(RectangleF bounds1, float angleRadians1, RectangleF bounds2, float angleRadians2)
         {
             var rectangle1Corners = SiSeparatingAxisTheorem.GetRotatedRectangleCorners(bounds1, angleRadians1).ToArray();
             var rectangle2Corners = SiSeparatingAxisTheorem.GetRotatedRectangleCorners(bounds2, angleRadians2).ToArray();
+            return GetIntersectionBoundingBox(rectangle1Corners, rectangle2Corners);
+        }
 
-            var intersectionPolygon = GetIntersectedPolygon(rectangle1Corners, rectangle2Corners);
+        public static RectangleF GetIntersectionBoundingBox(PointF[] poly1, PointF[] poly2)
+        {
+            var intersectionPolygon = GetIntersectedPolygon(poly1, poly2);
 
             if (intersectionPolygon.Count() == 0)
             {

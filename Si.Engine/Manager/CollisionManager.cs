@@ -43,6 +43,12 @@ namespace Si.Engine.Manager
 
             var collision = new Collision(key, predicted1, predicted2)
             {
+                //We are just adding these here for demonstration purposes. This is probably over the top
+                // and we DEFINITELY do not need GetIntersectionBoundingBox() AND GetIntersectedPolygon().
+                //
+                // Q: Also note that this is just the collision for predicted1→predicted2, which I am thinkning might be different??
+                // A: I tested it, they are definitely different.
+                //https://github.com/NTDLS/StrikeforceInfinite/wiki/Collision-Detection-Issues
                 OverlapRectangle = predicted1.GetIntersectionBoundingBox(predicted2),
                 OverlapPolygon = predicted1.GetIntersectedPolygon(predicted2)
             };

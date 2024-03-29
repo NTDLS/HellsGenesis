@@ -3,6 +3,7 @@ using Si.Engine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System.Drawing;
+using System.Linq;
 
 namespace Si.GameEngine.Sprite.SupportingClasses
 {
@@ -106,5 +107,8 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         public PointF[] GetIntersectedPolygon(PredictedSpriteRegion otherObject)
             => SiSutherlandHodgmanPolygonIntersection.GetIntersectedPolygon(Bounds, Direction.Radians,
             otherObject.Bounds, otherObject.Direction.Radians);
+
+        public PointF[] GetRotatedRectangleCorners()
+            => SiSeparatingAxisTheorem.GetRotatedRectangleCorners(Bounds, Direction.Radians).ToArray();
     }
 }

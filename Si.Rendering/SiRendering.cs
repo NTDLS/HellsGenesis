@@ -396,11 +396,53 @@ namespace Si.Rendering
             SiTransforms.PopTransform(renderTarget);
         }
 
+        public void DrawPolygon(RenderTarget renderTarget, PointF[] points, RawColor4 color, float strokeWidth = 1.0f)
+        {
+            DrawPolygon(renderTarget, 0, 0, points, color, strokeWidth);
+        }
+
+        public void DrawPolygon(RenderTarget renderTarget, float x, float y, PointF[] points, RawColor4 color, float strokeWidth = 1.0f)
+        {
+            if (points.Length < 3) // A polygon needs at least 3 points
+                throw new ArgumentException("A polygon requires at least 3 points.");
+
+            // Convert PointF to RawVector2
+            RawVector2[] rawPoints = Array.ConvertAll(points, point => new RawVector2(point.X + x, point.Y + y));
+
+            // Create a PathGeometry to define the shape of the polygon
+            using (var pathGeometry = new PathGeometry(_direct2dFactory))
+            {
+                using (var geometrySink = pathGeometry.Open())
+                {
+                    geometrySink.BeginFigure(rawPoints[0], FigureBegin.Filled);
+                    geometrySink.AddLines(rawPoints);
+                    geometrySink.EndFigure(FigureEnd.Closed);
+                    geometrySink.Close();
+                }
+
+                // Draw the polygon
+                using (var brush = new SolidColorBrush(renderTarget, color))
+                {
+                    renderTarget.DrawGeometry(pathGeometry, brush, strokeWidth);
+                }
+            }
+        }
+
+
+
         /// <summary>
         /// Draws a rectangle at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
         public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF destRect,
+            float angleRadians, RawColor4 color, float expand = 0, float strokeWidth = 1)
+            => DrawRectangleAt(renderTarget, 0, 0, destRect, angleRadians, color, expand, strokeWidth);
+
+        /// <summary>
+        /// Draws a rectangle at the specified location.
+        /// </summary>
+        /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
+        public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, float x, float y, RawRectangleF destRect,
             float angleRadians, RawColor4 color, float expand = 0, float strokeWidth = 1)
         {
             if (expand != 0)
@@ -409,6 +451,14 @@ namespace Si.Rendering
                 destRect.Top -= expand;
                 destRect.Bottom += expand;
                 destRect.Right += expand;
+            }
+
+            if (x != 0 && y != 0)
+            {
+                destRect.Left += x;
+                destRect.Top += y;
+                destRect.Bottom += y;
+                destRect.Right += x;
             }
 
             SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
