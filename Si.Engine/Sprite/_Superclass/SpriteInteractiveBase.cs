@@ -286,7 +286,10 @@ namespace Si.Engine.Sprite._Superclass
 
                 if (thisCollidable.IntersectsSAT(other))
                 {
-                    RespondToMassCollision(_engine.Collisions.Add(thisCollidable, other));
+                    //The items added to this collection are rendered to the screen via
+                    //  EngineCore.RenderEverything() when Engine.Settings.HighlightCollisions is true.
+                    RespondToMassCollision(
+                        _engine.Collisions.Add(thisCollidable, other));
                 }
             }
         }
