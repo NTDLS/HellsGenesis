@@ -109,7 +109,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Number that defines how much motion a sprite is in.
         /// </summary>
         public float TotalVelocity
-            => Math.Abs(Velocity.Sum()) + Math.Abs(RotationSpeed);
+            => Math.Abs(MovementVector.Sum()) + Math.Abs(RotationSpeed);
 
         /// <summary>
         /// The total velocity multiplied by the given mass, excpet for the mass is returned when the velocity is 0;
@@ -296,8 +296,8 @@ namespace Si.Engine.Sprite._Superclass
 
         public void RespondToMassCollision(Collision collision)
         {
-            var sprite1Momentum = collision.Predicted1.Sprite.TotalMomentumWithRestingMass();
-            var sprite2Momentum = collision.Predicted2.Sprite.TotalMomentumWithRestingMass();
+            var sprite1Momentum = collision.Object1.Sprite.TotalMomentumWithRestingMass();
+            var sprite2Momentum = collision.Object2.Sprite.TotalMomentumWithRestingMass();
 
             var sprite1MomentumMagnitude = (sprite1Momentum / (sprite1Momentum + sprite2Momentum));
             var sprite2MomentumMagnitude = (sprite2Momentum / (sprite1Momentum + sprite2Momentum));
@@ -305,16 +305,18 @@ namespace Si.Engine.Sprite._Superclass
             Debug.WriteLine($"Collision of UIDs {collision.Key}. Mass: {sprite1MomentumMagnitude:n} and {sprite2MomentumMagnitude:n2}");
 
             //Who the fuck is moving out of the way now?
-            //if (sprite1MomentumMagnitude < sprite2MomentumMagnitude)
-            //{
-            //  Debug.WriteLine("Moved sprite 1");
-            //  thisCollidable.Sprite.Velocity *= -1;
-            //}
-            //else
-            //{
-            //  Debug.WriteLine("Moved sprite 2");
-            //  other.Sprite.Velocity *= -1;
-            //}
+            if (sprite1MomentumMagnitude < sprite2MomentumMagnitude)
+            {
+                //Debug.WriteLine("Moved sprite 1");
+                //collision.Object1.Sprite.Throttle = 1;
+                //collision.Object1.Sprite.MovementVector = collision.Object1.Sprite.MovementVector * -1.5f;
+            }
+            else
+            {
+                //Debug.WriteLine("Moved sprite 2");
+                //collision.Object2.Sprite.Throttle = 1;
+                //collision.Object2.Sprite.MovementVector = collision.Object2.Sprite.MovementVector * -1.5f;
+            }
         }
     }
 }

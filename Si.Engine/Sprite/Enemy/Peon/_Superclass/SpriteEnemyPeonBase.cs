@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         public SpriteEnemyPeonBase(EngineCore engine)
             : base(engine)
         {
-            Velocity = VelocityInDirection(1.0f);
+            MovementVector = MakeMovementVector();
 
             OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
 
@@ -86,7 +86,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 
             if (ThrustAnimation != null)
             {
-                ThrustAnimation.Visable = Velocity.Sum() > 0;
+                ThrustAnimation.Visable = MovementVector.Sum() > 0;
             }
             if (BoostAnimation != null)
             {

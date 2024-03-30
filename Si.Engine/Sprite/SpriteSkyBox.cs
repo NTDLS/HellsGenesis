@@ -25,13 +25,15 @@ namespace Si.Engine.Sprite
 
             Speed = 0.10f;
 
+            MovementVector = MakeMovementVector();
+
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
-                Velocity = VelocityInDirection(SiRandom.Between(8, 10) / 10.0f);
+                Throttle = SiRandom.Between(8, 10) / 10.0f;
             }
             else
             {
-                Velocity = VelocityInDirection(SiRandom.Between(4, 8) / 10.0f);
+                Throttle = SiRandom.Between(4, 8) / 10.0f;
             }
         }
 

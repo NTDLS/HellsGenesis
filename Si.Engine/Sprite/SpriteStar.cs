@@ -23,20 +23,21 @@ namespace Si.Engine.Sprite
             ZOrder = int.MinValue + 1000;
 
             Speed = 0.5f;
+            MovementVector = MakeMovementVector();
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {
-                Velocity = VelocityInDirection(SiRandom.Between(8, 10) / 10.0f);
+                Throttle = SiRandom.Between(8, 10) / 10.0f;
             }
             else
             {
-                Velocity = VelocityInDirection(SiRandom.Between(4, 8) / 10.0f);
+                Throttle = SiRandom.Between(4, 8) / 10.0f;
             }
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
         {
-            Location -= displacementVector * Velocity * Speed * epoch;
+            Location -= displacementVector * MovementVector * Speed * epoch;
         }
     }
 }

@@ -31,8 +31,8 @@ namespace Si.Engine.Manager
             /// </summary>
             public string Key { get; private set; }
 
-            public PredictedSpriteRegion Predicted1 { get; private set; }
-            public PredictedSpriteRegion Predicted2 { get; private set; }
+            public PredictedSpriteRegion Object1 { get; private set; }
+            public PredictedSpriteRegion Object2 { get; private set; }
 
             /// <summary>
             /// The overlapping rectangle of the two sprites. This is mostly for concept - I dont know what to do with it yet.
@@ -47,8 +47,8 @@ namespace Si.Engine.Manager
             public Collision(string key, PredictedSpriteRegion sprite1, PredictedSpriteRegion sprite2)
             {
                 Key = key;
-                Predicted1 = sprite1;
-                Predicted2 = sprite2;
+                Object1 = sprite1;
+                Object2 = sprite2;
             }
         }
 
@@ -66,11 +66,11 @@ namespace Si.Engine.Manager
         public static string MakeCollisionKey(uint uid1, uint uid2)
             => uid1 > uid2 ? $"{uid1}:{uid2}" : $"{uid2}:{uid1}";
 
-        public Collision Add(PredictedSpriteRegion predicted1, PredictedSpriteRegion predicted2)
+        public Collision Add(PredictedSpriteRegion object1, PredictedSpriteRegion object2)
         {
-            var key = MakeCollisionKey(predicted1.Sprite.UID, predicted2.Sprite.UID);
+            var key = MakeCollisionKey(object1.Sprite.UID, object2.Sprite.UID);
 
-            var collision = new Collision(key, predicted1, predicted2)
+            var collision = new Collision(key, object1, object2)
             {
                 //We are just adding these here for demonstration purposes. This is probably over the top
                 // and we DEFINITELY do not need GetIntersectionBoundingBox() AND GetIntersectedPolygon().
@@ -78,8 +78,8 @@ namespace Si.Engine.Manager
                 // Q: Also note that this is just the collision for predicted1→predicted2, which I am thinkning might be different??
                 // A: I tested it, they are definitely different.
                 //https://github.com/NTDLS/StrikeforceInfinite/wiki/Collision-Detection-Issues
-                OverlapRectangle = predicted1.GetIntersectionBoundingBox(predicted2),
-                OverlapPolygon = predicted1.GetIntersectedPolygon(predicted2)
+                OverlapRectangle = object1.GetIntersectionBoundingBox(object2),
+                OverlapPolygon = object1.GetIntersectedPolygon(object2)
             };
 
             Detected.Add(key, collision);
@@ -95,7 +95,7 @@ namespace Si.Engine.Manager
         public bool IsAlreadyHandled(SpriteInteractiveBase sprite1, SpriteInteractiveBase sprite2)
             => Detected.ContainsKey(MakeCollisionKey(sprite1.UID, sprite2.UID));
 
-        public bool IsAlreadyHandled(PredictedSpriteRegion predicted1, PredictedSpriteRegion predicted2)
-            => Detected.ContainsKey(MakeCollisionKey(predicted1.Sprite.UID, predicted2.Sprite.UID));
+        public bool IsAlreadyHandled(PredictedSpriteRegion object1, PredictedSpriteRegion object2)
+            => Detected.ContainsKey(MakeCollisionKey(object1.Sprite.UID, object2.Sprite.UID));
     }
 }

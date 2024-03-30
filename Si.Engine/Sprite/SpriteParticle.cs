@@ -61,7 +61,7 @@ namespace Si.Engine.Sprite
             TravelAngle.Degrees = SiRandom.Between(0, 359);
             Direction.Degrees = SiRandom.Between(0, 359);
 
-            Velocity = Direction * SiRandom.Between(1.0f, 4.0f);
+            MovementVector = Direction * SiRandom.Between(1.0f, 4.0f);
 
             /*
             Location = location.Clone();

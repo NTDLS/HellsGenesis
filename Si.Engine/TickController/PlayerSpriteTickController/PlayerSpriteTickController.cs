@@ -44,6 +44,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
         }
 
         private float _forwardVelocity = 0;
+        private float _boostForwardVelocity = 0;
         private float _lateralVelocity = 0;
 
         /// <summary>
@@ -166,18 +167,18 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                 {
                     var boostAmount = Sprite.RenewableResources.Consume(Sprite.BoostResourceName, epoch);
 
-                    if (Sprite.Throttle < Sprite.MaxThrottle)
+                    if (_boostForwardVelocity < (Sprite.MaxThrottle - 1.0f))
                     {
-                        Sprite.Throttle += boostAmount;
+                        _boostForwardVelocity += boostAmount;
                     }
                 }
-                else if (Sprite.Throttle > 1)
+                else if (_boostForwardVelocity > 0)
                 {
                     //Ramp down the over-throttle.
-                    Sprite.Throttle -= velocityRampDown;
+                    _boostForwardVelocity -= velocityRampDown;
                 }
 
-                Sprite.Throttle = Sprite.Throttle.Clamp(1, Sprite.MaxThrottle);
+                _boostForwardVelocity = _boostForwardVelocity.Clamp(0, Sprite.MaxThrottle - 1.0f);
 
                 #endregion
 
@@ -237,7 +238,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 #region Sounds and Animation.
 
-                if (Sprite.Throttle > 1)
+                if (_boostForwardVelocity > 0)
                     Sprite.ShipEngineBoostSound.Play();
                 else Sprite.ShipEngineBoostSound.Fade();
 
@@ -255,7 +256,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     Sprite.BoostAnimation.Visable =
                         (targetForwardAmount >= throttleFloor)
                         && Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
-                        && Sprite.Throttle > 1
+                        && _boostForwardVelocity > 0
                         && Sprite.RenewableResources.IsCoolingDown(Sprite.BoostResourceName) == false;
                 }
 
@@ -264,8 +265,10 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
             Sprite.RenewableResources.RenewAllResources(epoch);
 
-            Sprite.Velocity = Sprite.VelocityInDirection(_forwardVelocity) //Forward / Reverse
-                + Sprite.VelocityInDirection(_lateralVelocity, Sprite.Direction.Radians + SiPoint.RADIANS_90);  //Lateral strafing.
+            Sprite.Throttle = 1 + _boostForwardVelocity;
+
+            Sprite.MovementVector = (Sprite.MakeMovementVector() * _forwardVelocity) //Forward / Reverse
+                            + (Sprite.MakeMovementVector(Sprite.Direction + SiPoint.RADIANS_90) * _lateralVelocity);  //Lateral strafing.
 
             Sprite.PerformCollisionDetection(epoch);
 

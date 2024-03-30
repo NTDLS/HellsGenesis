@@ -36,25 +36,19 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public float Speed { get; set; }
 
-        private SiPoint _velocity = new();
+        private SiPoint _movementVector = new();
         /// <summary>
         /// Omni-directional velocity.
         /// </summary>
-        public SiPoint Velocity
+        public SiPoint MovementVector
         {
-            get => _velocity;
+            get => _movementVector;
             set
             {
-                _velocity = value;
+                _movementVector = value;
                 VelocityChanged();
             }
         }
-
-        /// <summary>
-        /// The sumation of the angle and all velocity .
-        /// Sprite movement is simple: (MovementVector * epoch)
-        /// </summary>
-        public SiPoint MovementVector => Velocity * Throttle;
 
         private float _throttle = 1.0f;
         /// <summary>
@@ -273,32 +267,25 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Returns the vector in the direction of the sprite in the given percentage.
-        /// This is typically used to set the Velocity and it will be used in conjunction with the max sprite movement speed.
+        /// Returns the movement vector in the direction of the sprite.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        public SiPoint VelocityInDirection(float percentage)
-
-            => Direction * Speed * percentage.Clamp(-1.0f, 1.0f);
+        public SiPoint MakeMovementVector() => Direction * Speed * Throttle;
 
         /// <summary>
-        /// Returns the vector in the given direction and in the given percentage.
-        /// This is typically used to set the Velocity and it will be used in conjunction with the max sprite movement speed.
+        /// Returns the movement vector in the given.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        public SiPoint VelocityInDirection(float percentage, float angleInRadians)
-            => new SiAngle(angleInRadians) * Speed * percentage.Clamp(-1.0f, 1.0f);
+        public SiPoint MakeMovementVector(float angleInRadians) => new SiAngle(angleInRadians) * Speed * Throttle;
 
         /// <summary>
-        /// Returns the vector in the given direction and in the given percentage.
-        /// This is typically used to set the Velocity and it will be used in conjunction with the max sprite movement speed.
+        /// Returns the movement vector in the given.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        public SiPoint VelocityInDirection(float percentage, SiAngle angle)
-            => angle * Speed * percentage.Clamp(-1.0f, 1.0f);
+        public SiPoint MakeMovementVector(SiAngle angle) => angle * Speed * Throttle;
 
         public void QueueForDelete()
         {
@@ -339,7 +326,7 @@ namespace Si.Engine.Sprite._Superclass
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location - (MovementVector * epoch));
-            var directionVector = Velocity.Normalize();
+            var directionVector = MovementVector.Normalize();
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -386,7 +373,7 @@ namespace Si.Engine.Sprite._Superclass
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiPoint(Location - (MovementVector * epoch));
-            var directionVector = Velocity.Normalize();
+            var directionVector = MovementVector.Normalize();
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -439,7 +426,7 @@ namespace Si.Engine.Sprite._Superclass
 
             var hitTestPosition = new SiPoint(Location);
             var destinationPoint = new SiPoint(Location + (MovementVector * epoch));
-            var directionVector = Velocity.Normalize();
+            var directionVector = MovementVector.Normalize();
             var totalTravelDistance = Math.Abs(Location.DistanceTo(destinationPoint));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -486,7 +473,7 @@ namespace Si.Engine.Sprite._Superclass
 
             var hitTestPosition = new SiPoint(Location);
             var destinationPoint = new SiPoint(Location + (MovementVector * epoch));
-            var directionVector = Velocity.Normalize();
+            var directionVector = MovementVector.Normalize();
             var totalTravelDistance = Math.Abs(Location.DistanceTo(destinationPoint));
 
             if (totalTravelDistance > _engine.Display.TotalCanvasDiagonal)
@@ -653,7 +640,7 @@ namespace Si.Engine.Sprite._Superclass
                 + $"                          {Direction.RadiansSigned:n2}rad\r\n"
                 + extraInfo
                 + $"       Background Offset: {_engine.Display.RenderWindowPosition}\r\n"
-                + $"                  Thrust: {Velocity * 100:n2}\r\n"
+                + $"                  Thrust: {MovementVector * 100:n2}\r\n"
                 + $"                   Boost: {Throttle * 100:n2}\r\n"
                 + $"                    Hull: {HullHealth:n0}\r\n"
                 + $"                  Shield: {ShieldHealth:n0}\r\n"
@@ -1208,7 +1195,7 @@ namespace Si.Engine.Sprite._Superclass
             Direction.Degrees += RotationSpeed * epoch;
 
             //Keep the velocity following the direction the sprite is pointing.
-            Velocity = Direction * Velocity.Length();
+            MovementVector = Direction * MovementVector.Length();
 
             //Move the sprite based on its vector.
             Location += MovementVector * epoch;

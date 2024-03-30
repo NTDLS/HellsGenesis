@@ -8,29 +8,32 @@ namespace Si.Engine.Sprite
         public SpriteDebug(EngineCore engine)
             : base(engine)
         {
-            SetImageAndLoadMetadata(@"Sprites\Debug.png");
-            SetHullHealth(100000);
-            Throttle = 0;
+            Initialize(@"Sprites\Debug.png");
         }
 
         public SpriteDebug(EngineCore engine, float x, float y)
             : base(engine)
         {
-            SetImageAndLoadMetadata(@"Sprites\Debug.png");
+            Initialize(@"Sprites\Debug.png");
             X = x;
             Y = y;
-            SetHullHealth(100000);
-            Throttle = 1;
         }
 
         public SpriteDebug(EngineCore engine, float x, float y, string imagePath)
             : base(engine)
         {
-            SetImageAndLoadMetadata(imagePath);
+            Initialize(imagePath);
             X = x;
             Y = y;
+        }
+
+        private void Initialize(string imagePath)
+        {
+            SetImageAndLoadMetadata(imagePath);
             SetHullHealth(100000);
-            Throttle = 1;
+            Speed = 1.5f;
+            Throttle = 0.05f;
+            MovementVector = MakeMovementVector();
         }
 
         public override void ApplyMotion(float epoch, SiPoint displacementVector)
