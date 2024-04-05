@@ -24,7 +24,7 @@ namespace Si.Engine.Sprite._Superclass
 
         private SharpDX.Direct2D1.Bitmap _image;
         private bool _readyForDeletion;
-        private SiPoint _location = new();
+        private SiVector _location = new();
         private Size _size;
 
         #endregion
@@ -36,11 +36,11 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public float Speed { get; set; }
 
-        private SiPoint _movementVector = new();
+        private SiVector _movementVector = new();
         /// <summary>
         /// Omni-directional velocity.
         /// </summary>
-        public SiPoint MovementVector
+        public SiVector MovementVector
         {
             get => _movementVector;
             set
@@ -83,9 +83,9 @@ namespace Si.Engine.Sprite._Superclass
         public string SpriteTag { get; set; }
         public uint UID { get; private set; } = SiSequenceGenerator.Next();
         public uint OwnerUID { get; set; }
-        public SiPoint LocationRelativeToOwner { get; set; }
+        public SiVector LocationRelativeToOwner { get; set; }
         public List<SpriteAttachment> Attachments { get; private set; } = new();
-        public SiPoint RadarDotSize { get; set; } = new SiPoint(4, 4);
+        public SiVector RadarDotSize { get; set; } = new SiVector(4, 4);
         public bool IsWithinCurrentScaledScreenBounds => _engine.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds);
         public bool IsHighlighted { get; set; } = false;
         public int HullHealth { get; private set; } = 0; //Ship hit-points.
@@ -156,7 +156,7 @@ namespace Si.Engine.Sprite._Superclass
         /// The x,y, location of the center of the sprite in the universe.
         /// Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
-        public SiPoint Location
+        public SiVector Location
         {
             get => _location.Clone(); //Changes made to the location object do not affect the sprite.
             set
@@ -169,7 +169,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <summary>
         /// The top left corner of the sprite in the universe.
         /// </summary>
-        public SiPoint LocationTopLeft
+        public SiVector LocationTopLeft
         {
             get => _location - (Size / 2.0f); //Changes made to the location object do not affect the sprite.
             set
@@ -183,7 +183,7 @@ namespace Si.Engine.Sprite._Superclass
         /// The x,y, location of the center of the sprite on the screen.
         /// Do not modify the X,Y of the returned location, it will have no effect.
         /// </summary>
-        public SiPoint RenderLocation
+        public SiVector RenderLocation
         {
             get
             {
@@ -271,21 +271,21 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        public SiPoint MakeMovementVector() => Direction * Speed * Throttle;
+        public SiVector MakeMovementVector() => Direction * Speed * Throttle;
 
         /// <summary>
         /// Returns the movement vector in the given.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        public SiPoint MakeMovementVector(float angleInRadians) => new SiAngle(angleInRadians) * Speed * Throttle;
+        public SiVector MakeMovementVector(float angleInRadians) => new SiAngle(angleInRadians) * Speed * Throttle;
 
         /// <summary>
         /// Returns the movement vector in the given.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        public SiPoint MakeMovementVector(SiAngle angle) => angle * Speed * Throttle;
+        public SiVector MakeMovementVector(SiAngle angle) => angle * Speed * Throttle;
 
         public void QueueForDelete()
         {
@@ -325,7 +325,7 @@ namespace Si.Engine.Sprite._Superclass
             var collisions = new List<SpriteBase>();
 
             //Get the starting position of the sprite before it was last moved.
-            var hitTestPosition = new SiPoint(Location - (MovementVector * epoch));
+            var hitTestPosition = new SiVector(Location - (MovementVector * epoch));
             var directionVector = MovementVector.Normalize();
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
@@ -372,7 +372,7 @@ namespace Si.Engine.Sprite._Superclass
             ///     betwwen where it ended up and where it should have come from given its movement vector.
 
             //Get the starting position of the sprite before it was last moved.
-            var hitTestPosition = new SiPoint(Location - (MovementVector * epoch));
+            var hitTestPosition = new SiVector(Location - (MovementVector * epoch));
             var directionVector = MovementVector.Normalize();
             var totalTravelDistance = Math.Abs(Location.DistanceTo(hitTestPosition));
 
@@ -424,8 +424,8 @@ namespace Si.Engine.Sprite._Superclass
 
             var collisions = new List<SpriteBase>();
 
-            var hitTestPosition = new SiPoint(Location);
-            var destinationPoint = new SiPoint(Location + (MovementVector * epoch));
+            var hitTestPosition = new SiVector(Location);
+            var destinationPoint = new SiVector(Location + (MovementVector * epoch));
             var directionVector = MovementVector.Normalize();
             var totalTravelDistance = Math.Abs(Location.DistanceTo(destinationPoint));
 
@@ -471,8 +471,8 @@ namespace Si.Engine.Sprite._Superclass
             /// Takes the position of an object before it has been moved and tests each location
             ///     betwwen where it is and where it will end up given its movement vector.
 
-            var hitTestPosition = new SiPoint(Location);
-            var destinationPoint = new SiPoint(Location + (MovementVector * epoch));
+            var hitTestPosition = new SiVector(Location);
+            var destinationPoint = new SiVector(Location + (MovementVector * epoch));
             var directionVector = MovementVector.Normalize();
             var totalTravelDistance = Math.Abs(Location.DistanceTo(destinationPoint));
 
@@ -525,7 +525,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             var collisions = new List<SpriteBase>();
 
-            var hitTestPosition = new SiPoint(Location);
+            var hitTestPosition = new SiVector(Location);
             var directionVector = angle ?? Direction;
 
             //Hit-test each position along the sprite path.
@@ -562,7 +562,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public SpriteBase FindFirstCollisionAlongDistanceVectorAABB(SpriteBase[] objectsThatCanBeHit, float distance, SiAngle angle = null)
         {
-            var hitTestPosition = new SiPoint(Location);
+            var hitTestPosition = new SiVector(Location);
             var directionVector = angle ?? Direction;
 
             //Hit-test each position along the sprite path.
@@ -589,7 +589,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="munition">The munition object that is being tested for.</param>
         /// <param name="hitTestPosition">The position to test for hit.</param>
         /// <returns></returns>
-        public virtual bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
+        public virtual bool TryMunitionHit(MunitionBase munition, SiVector hitTestPosition)
         {
             if (IntersectsAABB(hitTestPosition))
             {
@@ -690,7 +690,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
         /// </summary>
         /// <returns></returns>
-        public SpriteAttachment AttachOfType(string typeName, SiPoint locationRelativeToOwner)
+        public SpriteAttachment AttachOfType(string typeName, SiVector locationRelativeToOwner)
         {
             var attachment = _engine.Sprites.Attachments.AddTypeOf(typeName, this, locationRelativeToOwner);
             Attachments.Add(attachment);
@@ -786,7 +786,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Determines if two axis-aligned bounding boxes (AABB) intersect.
         /// </summary>
         /// <returns></returns>
-        public bool IntersectsAABB(SpriteBase otherObject, SiPoint sizeAdjust)
+        public bool IntersectsAABB(SpriteBase otherObject, SiVector sizeAdjust)
         {
             if (Visable && otherObject.Visable && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
             {
@@ -819,7 +819,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Determines if two axis-aligned bounding boxes (AABB) intersect.
         /// </summary>
         /// <returns></returns>
-        public bool IntersectsAABB(SiPoint location, SiPoint size)
+        public bool IntersectsAABB(SiVector location, SiVector size)
         {
             var alteredHitBox = new RectangleF(
                 location.X,
@@ -835,7 +835,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Determines if two axis-aligned bounding boxes (AABB) intersect.
         /// </summary>
         /// <returns></returns>
-        public bool RenderLocationIntersectsAABB(SiPoint location, SiPoint size)
+        public bool RenderLocationIntersectsAABB(SiVector location, SiVector size)
         {
             var alteredHitBox = new RectangleF(
                 location.X,
@@ -851,7 +851,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Determines if two axis-aligned bounding boxes (AABB) intersect.
         /// </summary>
         /// <returns></returns>
-        public bool IntersectsAABB(SiPoint location)
+        public bool IntersectsAABB(SiVector location)
         {
             var alteredHitBox = new RectangleF(location.X, location.Y, 1f, 1f);
             return Bounds.IntersectsWith(alteredHitBox);
@@ -908,9 +908,9 @@ namespace Si.Engine.Sprite._Superclass
         /// <summary>
         /// Instantly points an object at a location and sets the travel speed. Only used for off-screen transitions.
         /// </summary>
-        public void PointAtAndGoto(SiPoint location, float? velocity = null)
+        public void PointAtAndGoto(SiVector location, float? velocity = null)
         {
-            Direction.Degrees = SiPoint.AngleInDegreesTo360(Location, location);
+            Direction.Degrees = SiVector.AngleInDegreesTo360(Location, location);
             if (velocity != null)
             {
                 Speed = (float)velocity;
@@ -922,7 +922,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, float? velocity = null)
         {
-            Direction.Degrees = SiPoint.AngleInDegreesTo360(Location, obj.Location);
+            Direction.Degrees = SiVector.AngleInDegreesTo360(Location, obj.Location);
 
             if (velocity != null)
             {
@@ -958,7 +958,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SiPoint toLocation, float rotationAmount = 1, float varianceDegrees = 10)
+        public bool RotateIfNotPointingAt(SiVector toLocation, float rotationAmount = 1, float varianceDegrees = 10)
         {
             var deltaAngle = DeltaAngleDegrees(toLocation);
 
@@ -1050,27 +1050,27 @@ namespace Si.Engine.Sprite._Superclass
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public float DeltaAngleDegrees(SpriteBase toObj) => SiPoint.DeltaAngle(this, toObj);
+        public float DeltaAngleDegrees(SpriteBase toObj) => SiVector.DeltaAngle(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <=>s></returns>
-        public float DeltaAngleDegrees(SiPoint toLocation) => SiPoint.DeltaAngle(this, toLocation);
+        public float DeltaAngleDegrees(SiVector toLocation) => SiVector.DeltaAngle(this, toLocation);
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 0-259.
         /// </summary>
         /// <returns></returns>
-        public float AngleTo360(SpriteBase atObj) => SiPoint.AngleTo360(this, atObj);
+        public float AngleTo360(SpriteBase atObj) => SiVector.AngleTo360(this, atObj);
 
-        public float AngleToRadians(SpriteBase atObj) => SiPoint.DegreesToRadians(SiPoint.AngleTo360(this, atObj));
+        public float AngleToRadians(SpriteBase atObj) => SiVector.DegreesToRadians(SiVector.AngleTo360(this, atObj));
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public float AngleTo(SpriteBase atObj) => SiPoint.AngleTo(this, atObj);
+        public float AngleTo(SpriteBase atObj) => SiVector.AngleTo(this, atObj);
 
         /// <summary>
         /// Calculates the angle in degrees to a location.
@@ -1078,14 +1078,14 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="location"></param>
         /// <returns></returns>
         [Obsolete("This method is deprecated. Use AngleTo() instead.")]
-        public float AngleTo360(SiPoint location) => SiPoint.AngleTo360(this, location);
+        public float AngleTo360(SiVector location) => SiVector.AngleTo360(this, location);
 
         public bool IsPointingAt(SpriteBase atObj, float toleranceDegrees, float maxDistance, float offsetAngle)
-            => SiPoint.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
+            => SiVector.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);
 
-        public bool IsPointingAt(SpriteBase atObj, float toleranceDegrees, float maxDistance) => SiPoint.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAt(SpriteBase atObj, float toleranceDegrees, float maxDistance) => SiVector.IsPointingAt(this, atObj, toleranceDegrees, maxDistance);
 
-        public bool IsPointingAt(SpriteBase atObj, float toleranceDegrees) => SiPoint.IsPointingAt(this, atObj, toleranceDegrees);
+        public bool IsPointingAt(SpriteBase atObj, float toleranceDegrees) => SiVector.IsPointingAt(this, atObj, toleranceDegrees);
 
         /// <summary>
         /// Returns true if any of the given sprites are pointing at this one.
@@ -1098,7 +1098,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             foreach (var atObj in atObjs)
             {
-                if (SiPoint.IsPointingAt(this, atObj, toleranceDegrees))
+                if (SiVector.IsPointingAt(this, atObj, toleranceDegrees))
                 {
                     return true;
                 }
@@ -1119,7 +1119,7 @@ namespace Si.Engine.Sprite._Superclass
 
             foreach (var atObj in atObjs)
             {
-                if (SiPoint.IsPointingAt(this, atObj, toleranceDegrees))
+                if (SiVector.IsPointingAt(this, atObj, toleranceDegrees))
                 {
                     results.Add(atObj);
                 }
@@ -1127,15 +1127,15 @@ namespace Si.Engine.Sprite._Superclass
             return results;
         }
 
-        public bool IsPointingAway(SpriteBase atObj, float toleranceDegrees) => SiPoint.IsPointingAway(this, atObj, toleranceDegrees);
+        public bool IsPointingAway(SpriteBase atObj, float toleranceDegrees) => SiVector.IsPointingAway(this, atObj, toleranceDegrees);
 
-        public bool IsPointingAway(SpriteBase atObj, float toleranceDegrees, float maxDistance) => SiPoint.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
+        public bool IsPointingAway(SpriteBase atObj, float toleranceDegrees, float maxDistance) => SiVector.IsPointingAway(this, atObj, toleranceDegrees, maxDistance);
 
-        public float DistanceTo(SpriteBase to) => SiPoint.DistanceTo(Location, to.Location);
+        public float DistanceTo(SpriteBase to) => SiVector.DistanceTo(Location, to.Location);
 
-        public float DistanceSquaredTo(SpriteBase to) => SiPoint.DistanceSquaredTo(Location, to.Location);
+        public float DistanceSquaredTo(SpriteBase to) => SiVector.DistanceSquaredTo(Location, to.Location);
 
-        public float DistanceTo(SiPoint to) => SiPoint.DistanceTo(Location, to);
+        public float DistanceTo(SiVector to) => SiVector.DistanceTo(Location, to);
 
         /// <summary>
         /// Of the given sprites, returns the sprite that is the closest.
@@ -1150,7 +1150,7 @@ namespace Si.Engine.Sprite._Superclass
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(Location, to.Location);
+                var distance = SiVector.DistanceTo(Location, to.Location);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -1173,7 +1173,7 @@ namespace Si.Engine.Sprite._Superclass
 
             foreach (var to in tos)
             {
-                var distance = SiPoint.DistanceTo(Location, to.Location);
+                var distance = SiVector.DistanceTo(Location, to.Location);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -1189,7 +1189,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Moves the sprite based on its movement vector and the epoch.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public virtual void ApplyMotion(float epoch, SiPoint displacementVector)
+        public virtual void ApplyMotion(float epoch, SiVector displacementVector)
         {
             //Perform any auto-rotation.
             Direction.Degrees += RotationSpeed * epoch;

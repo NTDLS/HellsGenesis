@@ -11,17 +11,17 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
     internal class GuidedMunitionBase : MunitionBase
     {
         public int MaxGuidedObservationAngleDegrees { get; set; } = 90;
-        public float GuidedRotationRateInDegrees { get; set; } = SiPoint.DegreesToRadians(3);
+        public float GuidedRotationRateInDegrees { get; set; } = SiVector.DegreesToRadians(3);
         public SpriteInteractiveBase LockedTarget { get; private set; }
 
         public GuidedMunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath,
-             SpriteInteractiveBase lockedTarget = null, SiPoint location = null)
+             SpriteInteractiveBase lockedTarget = null, SiVector location = null)
             : base(engine, weapon, firedFrom, imagePath, location)
         {
             LockedTarget = lockedTarget;
         }
 
-        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (LockedTarget != null)
             {

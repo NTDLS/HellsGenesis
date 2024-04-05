@@ -30,8 +30,8 @@ namespace Si.Engine.Manager
         public delegate T CollectionAccessorT<T>(List<SpriteBase> sprites);
 
         private readonly EngineCore _engine;
-        private SiPoint _radarScale;
-        private SiPoint _radarOffset;
+        private SiVector _radarScale;
+        private SiVector _radarOffset;
 
         public bool RenderRadar { get; set; } = false;
 
@@ -224,7 +224,7 @@ namespace Si.Engine.Manager
             {
                 if (obj != with)
                 {
-                    if (obj.IntersectsAABB(with.Location, new SiPoint(with.Size.Width, with.Size.Height)))
+                    if (obj.IntersectsAABB(with.Location, new SiVector(with.Size.Width, with.Size.Height)))
                     {
                         objs.Add(obj);
                     }
@@ -234,9 +234,9 @@ namespace Si.Engine.Manager
         }
 
         public List<SpriteBase> Intersections(float x, float y, float width, float height)
-            => Intersections(new SiPoint(x, y), new SiPoint(width, height));
+            => Intersections(new SiVector(x, y), new SiVector(width, height));
 
-        public List<SpriteBase> Intersections(SiPoint location, SiPoint size)
+        public List<SpriteBase> Intersections(SiVector location, SiVector size)
         {
             var objs = new List<SpriteBase>();
 
@@ -250,7 +250,7 @@ namespace Si.Engine.Manager
             return objs;
         }
 
-        public List<SpriteBase> RenderLocationIntersectionsEvenInvisible(SiPoint location, SiPoint size)
+        public List<SpriteBase> RenderLocationIntersectionsEvenInvisible(SiVector location, SiVector size)
         {
             var objs = new List<SpriteBase>();
 
@@ -264,7 +264,7 @@ namespace Si.Engine.Manager
             return objs;
         }
 
-        public List<SpriteBase> RenderLocationIntersections(SiPoint location, SiPoint size)
+        public List<SpriteBase> RenderLocationIntersections(SiVector location, SiVector size)
         {
             var objs = new List<SpriteBase>();
 
@@ -306,8 +306,8 @@ namespace Si.Engine.Manager
                     float radarVisionWidth = _engine.Display.TotalCanvasSize.Width * radarDistance;
                     float radarVisionHeight = _engine.Display.TotalCanvasSize.Height * radarDistance;
 
-                    _radarScale = new SiPoint(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
-                    _radarOffset = new SiPoint(radarBgImage.Size.Width / 2.0f, radarBgImage.Size.Height / 2.0f); //Best guess until player is visible.
+                    _radarScale = new SiVector(radarBgImage.Size.Width / radarVisionWidth, radarBgImage.Size.Height / radarVisionHeight);
+                    _radarOffset = new SiVector(radarBgImage.Size.Width / 2.0f, radarBgImage.Size.Height / 2.0f); //Best guess until player is visible.
                 }
 
                 if (_engine.Player.Sprite is not null && _engine.Player.Sprite.Visable)
@@ -315,7 +315,7 @@ namespace Si.Engine.Manager
                     float centerOfRadarX = (int)(radarBgImage.Size.Width / 2.0f) - 2.0f; //Subtract half the dot size.
                     float centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0f) - 2.0f; //Subtract half the dot size.
 
-                    _radarOffset = new SiPoint(
+                    _radarOffset = new SiVector(
                             _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _engine.Player.Sprite.X * _radarScale.X),
                             _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _engine.Player.Sprite.Y * _radarScale.Y)
                         );

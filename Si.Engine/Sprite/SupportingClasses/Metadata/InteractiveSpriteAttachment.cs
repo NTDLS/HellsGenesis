@@ -11,7 +11,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
         public float Y { get; set; }
 
         [JsonIgnore]
-        public SiPoint LocationRelativeToOwner { get => new SiPoint(X, Y); }
+        public SiVector LocationRelativeToOwner { get => new SiVector(X, Y); }
 
         public List<InteractiveSpriteWeapon> Weapons { get; set; } = new();
     }

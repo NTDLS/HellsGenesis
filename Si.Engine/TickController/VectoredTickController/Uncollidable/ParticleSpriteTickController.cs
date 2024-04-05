@@ -19,7 +19,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         {
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             foreach (var particle in Visible())
             {
@@ -27,7 +27,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             }
         }
 
-        public void AddAt(SiPoint location, Color4 color, int count, Size? size = null)
+        public void AddAt(SiVector location, Color4 color, int count, Size? size = null)
         {
             for (int i = 0; i < count; i++)
             {
@@ -50,7 +50,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             return obj;
         }
 
-        public SpriteParticle AddAt(SiPoint location, Color4 color, Size? size = null)
+        public SpriteParticle AddAt(SiVector location, Color4 color, Size? size = null)
         {
             var obj = new SpriteParticle(Engine, location, size ?? new Size(1, 1), color)
             {
@@ -60,7 +60,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             return obj;
         }
 
-        public SpriteParticle AddAt(SiPoint location, Size? size = null)
+        public SpriteParticle AddAt(SiVector location, Size? size = null)
         {
             var obj = new SpriteParticle(Engine, location, size ?? new Size(1, 1))
             {
@@ -80,7 +80,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         /// </summary>
         /// <param name="maxParticleCount"></param>
         /// <param name="at"></param>
-        public void ParticleBlastAt(int maxParticleCount, SiPoint location)
+        public void ParticleBlastAt(int maxParticleCount, SiVector location)
         {
             for (int i = 0; i < SiRandom.Between(maxParticleCount / 2, maxParticleCount); i++)
             {
@@ -100,7 +100,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         public void ParticleCloud(int particleCount, SpriteBase at)
             => ParticleCloud(particleCount, at.Location);
 
-        public void ParticleCloud(int particleCount, SiPoint location)
+        public void ParticleCloud(int particleCount, SiVector location)
         {
             for (int i = 0; i < particleCount; i++)
             {

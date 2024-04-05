@@ -25,7 +25,7 @@ namespace Si.Engine.Sprite.Weapon
         {
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
+        public override MunitionBase CreateMunition(SiVector location = null, SpriteInteractiveBase lockedTarget = null)
             => new MunitionGuidedFragMissile(_engine, this, Owner, lockedTarget, location);
 
         public override bool Fire()
@@ -35,8 +35,8 @@ namespace Si.Engine.Sprite.Weapon
                 _fireSound.Play();
                 RoundQuantity--;
 
-                var basePosition = Owner.Location + SiPoint.PointFromAngleAtDistance360(
-                    Owner.Direction + SiPoint.RADIANS_90 * (_toggle ? 1 : -1), new SiPoint(10, 10));
+                var basePosition = Owner.Location + SiVector.PointFromAngleAtDistance360(
+                    Owner.Direction + SiVector.RADIANS_90 * (_toggle ? 1 : -1), new SiVector(10, 10));
 
                 _toggle = !_toggle;
 

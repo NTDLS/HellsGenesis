@@ -318,7 +318,7 @@ namespace Si.Engine.Manager
             var y = command.ParameterValue<uint>("y");
 
             var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(typeName, new[] { _engine });
-            sprite.Location = new SiPoint(x, y);
+            sprite.Location = new SiVector(x, y);
             sprite.Visable = true;
 
             _engine.Sprites.Add(sprite);

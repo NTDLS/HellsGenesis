@@ -11,7 +11,7 @@ namespace Si.Engine.Sprite.Weapon.Munition
     {
         private const string _assetPath = @"Sprites\Weapon\Scattershot";
 
-        public MunitionScattershot(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null)
+        public MunitionScattershot(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiVector location = null)
             : base(engine, weapon, firedFrom, null, location)
         {
             SetImage(Path.Combine(_assetPath, $"{SiRandom.Between(0, 3)}.png"));

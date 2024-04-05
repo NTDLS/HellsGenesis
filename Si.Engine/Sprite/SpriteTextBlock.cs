@@ -39,12 +39,12 @@ namespace Si.Engine.Sprite
 
         #endregion
 
-        public SpriteTextBlock(EngineCore engine, TextFormat format, SolidColorBrush color, SiPoint location, bool isFixedPosition)
+        public SpriteTextBlock(EngineCore engine, TextFormat format, SolidColorBrush color, SiVector location, bool isFixedPosition)
             : base(engine)
         {
             RenderScaleOrder = SiRenderScaleOrder.PostScale;
             IsFixedPosition = isFixedPosition;
-            Location = new SiPoint(location);
+            Location = new SiVector(location);
             Color = color;
 
             Format = format;

@@ -73,7 +73,7 @@ namespace Si.Engine.Level
                 //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
-            _engine.Sprites.Debugs.Add(1000, 1000).Location = new SiPoint(800, 900);
+            _engine.Sprites.Debugs.Add(1000, 1000).Location = new SiVector(800, 900);
 
             //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
@@ -105,7 +105,7 @@ namespace Si.Engine.Level
             //_engine.Sprites.Enemies.Create<EnemyDevastator>();
         }
 
-        public void AddAsteroidField(SiPoint offset, int rowCount, int colCount)
+        public void AddAsteroidField(SiVector offset, int rowCount, int colCount)
         {
             for (int row = 0; row < rowCount; row++)
             {
@@ -118,7 +118,7 @@ namespace Si.Engine.Level
                     float totalXOffset = (offset.X + asteroidSize * colCount);
                     float totalYOffset = (offset.Y + (asteroidSize * rowCount));
 
-                    asteroid.Location = new SiPoint(totalXOffset - asteroidSize * col, totalYOffset - asteroidSize * row);
+                    asteroid.Location = new SiVector(totalXOffset - asteroidSize * col, totalYOffset - asteroidSize * row);
 
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
                     asteroid.Speed = SiRandom.Variance(asteroid.Speed, 0.20f);

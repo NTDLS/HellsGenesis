@@ -17,7 +17,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         {
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             foreach (var animation in Visible())
             {

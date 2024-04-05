@@ -117,7 +117,7 @@ namespace Si.Engine
             }
         }
 
-        private SiPoint ExecuteWorldClockTick(float epoch)
+        private SiVector ExecuteWorldClockTick(float epoch)
         {
             //This is where we execute the world clock for each type of object.
             //Note that this function does employ threads but I DO NOT beleive it is necessary for performance.

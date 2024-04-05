@@ -52,13 +52,13 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointBehind = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
+                var pointBehind = SiVector.PointFromAngleAtDistance360(Direction + SiVector.DegreesToRadians(180), new SiVector(20, 20));
                 ThrustAnimation.Direction = Direction;
                 ThrustAnimation.Location = Location + pointBehind;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointBehind = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(180), new SiPoint(20, 20));
+                var pointBehind = SiVector.PointFromAngleAtDistance360(Direction + SiVector.DegreesToRadians(180), new SiVector(20, 20));
                 BoostAnimation.Direction = Direction;
                 BoostAnimation.Location = Location + pointBehind;
             }
@@ -80,7 +80,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         /// Moves the sprite based on its thrust/boost (velocity).
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(float epoch, SiPoint displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             base.ApplyMotion(epoch, displacementVector);
 

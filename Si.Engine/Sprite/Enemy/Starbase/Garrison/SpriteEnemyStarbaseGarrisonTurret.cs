@@ -18,7 +18,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
             SetHullHealth(10);
         }
 
-        public override void ApplyMotion(float epoch, SiPoint displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             if (IsDeadOrExploded) return;
 
@@ -46,12 +46,12 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
                 {
                     if (FireToggler)
                     {
-                        var pointRight = Location + SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.RADIANS_90, new SiPoint(21, 21));
+                        var pointRight = Location + SiVector.PointFromAngleAtDistance360(Direction + SiVector.RADIANS_90, new SiVector(21, 21));
                         FireToggler = !FireWeapon<WeaponLancer>(pointRight);
                     }
                     else
                     {
-                        var pointLeft = Location + SiPoint.PointFromAngleAtDistance360(Direction - SiPoint.RADIANS_90, new SiPoint(21, 21));
+                        var pointLeft = Location + SiVector.PointFromAngleAtDistance360(Direction - SiVector.RADIANS_90, new SiVector(21, 21));
                         FireToggler = FireWeapon<WeaponLancer>(pointLeft);
                     }
                 }

@@ -21,7 +21,7 @@ namespace Si.Engine.TickController._Superclass
         public subType[] OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
         public T ByTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
 
-        public virtual void ExecuteWorldClockTick(float epoch, SiPoint displacementVector) { }
+        public virtual void ExecuteWorldClockTick(float epoch, SiVector displacementVector) { }
 
         public VectoredCollidableTickControllerBase(EngineCore engine, SpriteManager manager)
         {
@@ -33,7 +33,7 @@ namespace Si.Engine.TickController._Superclass
 
         public void Add(T obj) => SpriteManager.Add(obj);
 
-        public T Add(string bitmapPath, SiPoint location)
+        public T Add(string bitmapPath, SiVector location)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
             obj.Location = location.Clone();
@@ -95,7 +95,7 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
-        public T Add(SiPoint location)
+        public T Add(SiVector location)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.Location = location.Clone();
@@ -111,7 +111,7 @@ namespace Si.Engine.TickController._Superclass
             return obj;
         }
 
-        public T AddAt(SiPoint location)
+        public T AddAt(SiVector location)
         {
             T obj = (T)Activator.CreateInstance(typeof(T), Engine);
             obj.Location = location.Clone();

@@ -231,12 +231,12 @@ namespace Si.Engine
             */
 
             var textBlock = Sprites.TextBlocks.Add(Rendering.TextFormats.Loading,
-                Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true);
+                Rendering.Materials.Brushes.Red, new SiVector(100, 100), true);
 
             textBlock.SetTextAndCenterXY("Building cache...");
 
             var percentTextBlock = Sprites.TextBlocks.Add(Rendering.TextFormats.Loading,
-                Rendering.Materials.Brushes.Red, new SiPoint(textBlock.X, textBlock.Y + 50), true);
+                Rendering.Materials.Brushes.Red, new SiVector(textBlock.X, textBlock.Y + 50), true);
 
             textBlock.SetTextAndCenterXY("Building reflection cache...");
             SiReflection.BuildReflectionCacheOfType<SpriteBase>();

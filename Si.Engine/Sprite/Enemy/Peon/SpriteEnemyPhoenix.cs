@@ -27,7 +27,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
             _behaviorChangeDelayMilliseconds = SiRandom.Between(2000, 10000);
         }
 
-        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             base.ApplyIntelligence(epoch, displacementVector);
 

@@ -7,7 +7,7 @@ namespace Si.Library.Sprite
     /// </summary>
     public interface ISprite
     {
-        public SiPoint Location { get; set; }
+        public SiVector Location { get; set; }
         public float RotationSpeed { get; set; }
         public SiAngle Direction { get; set; }
     }

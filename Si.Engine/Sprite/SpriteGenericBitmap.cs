@@ -40,7 +40,7 @@ namespace Si.Engine.Sprite
             SetImageAndLoadMetadata(imagePath);
         }
 
-        public override void ApplyMotion(float epoch, SiPoint displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             Direction.Degrees += RotationSpeed * epoch;
 

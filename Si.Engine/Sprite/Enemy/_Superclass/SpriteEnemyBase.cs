@@ -24,7 +24,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
 
             RadarPositionText = _engine.Sprites.TextBlocks.CreateRadarPosition(
                 engine.Rendering.TextFormats.RadarPositionIndicator,
-                engine.Rendering.Materials.Brushes.Red, new SiPoint());
+                engine.Rendering.Materials.Brushes.Red, new SiVector());
         }
 
         public virtual void BeforeCreate() { }
@@ -79,7 +79,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
         /// Moves the sprite based on its velocity/boost (velocity) taking into account the background scroll.
         /// </summary>
         /// <param name="displacementVector"></param>
-        public override void ApplyMotion(float epoch, SiPoint displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             /*
             //When an enemy has boost available, it will use it.
@@ -111,7 +111,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
             FixRadarPositionIndicator();
         }
 
-        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             CurrentAIController?.ApplyIntelligence(epoch, displacementVector);
 

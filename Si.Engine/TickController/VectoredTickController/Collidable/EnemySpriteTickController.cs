@@ -18,7 +18,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Collidable
             _engine = engine;
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             foreach (var enemy in Visible())
             {

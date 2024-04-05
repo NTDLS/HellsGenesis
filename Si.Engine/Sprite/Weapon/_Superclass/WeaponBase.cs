@@ -57,7 +57,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             Metadata.MunitionSceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
         }
 
-        public virtual MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
+        public virtual MunitionBase CreateMunition(SiVector location = null, SpriteInteractiveBase lockedTarget = null)
         {
             if (Owner == null)
             {
@@ -148,7 +148,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             }
         }
 
-        public virtual bool Fire(SiPoint location)
+        public virtual bool Fire(SiVector location)
         {
             if (Owner == null)
             {

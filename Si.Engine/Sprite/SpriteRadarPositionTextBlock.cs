@@ -7,7 +7,7 @@ namespace Si.Engine.Sprite
 {
     public class SpriteRadarPositionTextBlock : SpriteTextBlock
     {
-        public SpriteRadarPositionTextBlock(EngineCore engine, TextFormat format, SolidColorBrush color, SiPoint location)
+        public SpriteRadarPositionTextBlock(EngineCore engine, TextFormat format, SolidColorBrush color, SiVector location)
             : base(engine, format, color, location, false)
         {
             RenderScaleOrder = SiRenderScaleOrder.PreScale;

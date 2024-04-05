@@ -14,7 +14,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         {
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             foreach (var attachment in Visible())
             {
@@ -45,7 +45,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             return sprite;
         }
 
-        public SpriteAttachment AddTypeOf(string typeName, SpriteBase owner, SiPoint locationRelativeToOwner)
+        public SpriteAttachment AddTypeOf(string typeName, SpriteBase owner, SiVector locationRelativeToOwner)
         {
             var sprite = SpriteManager.CreateByTypeName(typeName);
 

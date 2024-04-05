@@ -22,7 +22,7 @@ namespace Si.Engine.Sprite.Weapon
         {
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
+        public override MunitionBase CreateMunition(SiVector location = null, SpriteInteractiveBase lockedTarget = null)
             => new MunitionVulcanCannon(_engine, this, Owner, location);
     }
 }

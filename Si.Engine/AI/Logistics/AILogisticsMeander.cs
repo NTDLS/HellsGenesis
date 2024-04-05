@@ -24,7 +24,7 @@ namespace Si.Engine.AI.Logistics
             OnApplyIntelligence += AILogistics_OnApplyIntelligence;
         }
 
-        private void AILogistics_OnApplyIntelligence(float epoch, SiPoint displacementVector, AIState state)
+        private void AILogistics_OnApplyIntelligence(float epoch, SiVector displacementVector, AIState state)
         {
             var distanceToObservedObject = Owner.DistanceTo(ObservedObject);
 

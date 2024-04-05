@@ -21,7 +21,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// <summary>
         /// The location of the render window when the prediction was made.
         /// </summary>
-        public SiPoint RenderWindowPosition { get; private set; }
+        public SiVector RenderWindowPosition { get; private set; }
 
         /// <summary>
         /// Size of the referenced sprite.
@@ -31,12 +31,12 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// <summary>
         /// Predicted location after next call to ApplyMotion().
         /// </summary>
-        public SiPoint Location { get; private set; }
+        public SiVector Location { get; private set; }
 
         /// <summary>
         /// Predicted velocity after next call to ApplyMotion().
         /// </summary>
-        public SiPoint Velocity = new();
+        public SiVector Velocity = new();
 
         /// <summary>
         /// Predicted direction after next call to ApplyMotion().
@@ -60,9 +60,9 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// <summary>
         /// Predicted render location after next call to ApplyMotion().
         /// </summary>
-        public SiPoint RenderLocation => Location - RenderWindowPosition;
+        public SiVector RenderLocation => Location - RenderWindowPosition;
 
-        public PredictedSpriteRegion(SpriteInteractiveBase sprite, SiPoint renderWindowPosition, float epoch)
+        public PredictedSpriteRegion(SpriteInteractiveBase sprite, SiVector renderWindowPosition, float epoch)
         {
             RenderWindowPosition = renderWindowPosition;
 

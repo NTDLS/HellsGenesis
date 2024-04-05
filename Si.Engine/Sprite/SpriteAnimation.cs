@@ -67,7 +67,7 @@ namespace Si.Engine.Sprite
             _columns = (int)(_sheetImage.Size.Width / ((Size)frameSize).Width);
             _frameCount = _rows * _columns;
 
-            Location = new SiPoint(0, 0);
+            Location = new SiVector(0, 0);
 
             AdvanceImage();
         }

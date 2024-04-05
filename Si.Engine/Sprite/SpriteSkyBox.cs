@@ -37,14 +37,14 @@ namespace Si.Engine.Sprite
             }
         }
 
-        private SiPoint _currentOfset = new();
+        private SiVector _currentOfset = new();
         private readonly float _maxOffset = 200;
 
-        public override void ApplyMotion(float epoch, SiPoint displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             if (displacementVector.Sum() != 0)
             {
-                var offsetIncrement = new SiPoint(displacementVector.Normalize());
+                var offsetIncrement = new SiVector(displacementVector.Normalize());
 
                 offsetIncrement.X *= (1 - (Math.Abs(_currentOfset.X) / _maxOffset));
                 offsetIncrement.Y *= (1 - (Math.Abs(_currentOfset.Y) / _maxOffset));

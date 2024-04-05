@@ -16,7 +16,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
             Direction.Degrees = SiRandom.Between(0, 359);
         }
 
-        public override void ApplyMotion(float epoch, SiPoint displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             Direction.Degrees += 0.005f;
             base.ApplyMotion(epoch, displacementVector);

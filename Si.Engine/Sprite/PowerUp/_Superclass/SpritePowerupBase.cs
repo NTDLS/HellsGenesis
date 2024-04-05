@@ -30,7 +30,7 @@ namespace Si.Engine.Sprite.PowerUp._Superclass
         public SpritePowerupBase(EngineCore engine)
             : base(engine)
         {
-            RadarDotSize = new SiPoint(4, 4);
+            RadarDotSize = new SiVector(4, 4);
         }
 
         public override void Cleanup()
@@ -44,7 +44,7 @@ namespace Si.Engine.Sprite.PowerUp._Superclass
             QueueForDelete();
         }
 
-        public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
+        public virtual void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (IntersectsAABB(_engine.Player.Sprite))
             {

@@ -22,7 +22,7 @@ namespace Si.Engine.Sprite.Weapon
         {
         }
 
-        public override MunitionBase CreateMunition(SiPoint location = null, SpriteInteractiveBase lockedTarget = null)
+        public override MunitionBase CreateMunition(SiVector location = null, SpriteInteractiveBase lockedTarget = null)
             => new MunitionVulcanCannon(_engine, this, Owner, location);
 
         public override bool Fire()
@@ -33,12 +33,12 @@ namespace Si.Engine.Sprite.Weapon
 
                 if (RoundQuantity > 0)
                 {
-                    var pointRight = Owner.Location + SiPoint.PointFromAngleAtDistance360(
-                        Owner.Direction + SiPoint.RADIANS_90, new SiPoint(5, 5));
+                    var pointRight = Owner.Location + SiVector.PointFromAngleAtDistance360(
+                        Owner.Direction + SiVector.RADIANS_90, new SiVector(5, 5));
                     _engine.Sprites.Munitions.Add(this, pointRight);
 
-                    var pointLeft = Owner.Location + SiPoint.PointFromAngleAtDistance360(
-                        Owner.Direction - SiPoint.RADIANS_90, new SiPoint(5, 5));
+                    var pointLeft = Owner.Location + SiVector.PointFromAngleAtDistance360(
+                        Owner.Direction - SiVector.RADIANS_90, new SiVector(5, 5));
                     _engine.Sprites.Munitions.Add(this, pointLeft);
                 }
 

@@ -51,7 +51,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
         /// Moves the player taking into account any inputs and returns a X,Y describing the amount and direction of movement.
         /// </summary>
         /// <returns></returns>
-        public override SiPoint ExecuteWorldClockTick(float epoch)
+        public override SiVector ExecuteWorldClockTick(float epoch)
         {
             Sprite.IsLockedOnSoft = false;
             Sprite.IsLockedOnHard = false;
@@ -268,7 +268,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
             Sprite.Throttle = 1 + _boostForwardVelocity;
 
             Sprite.MovementVector = (Sprite.MakeMovementVector() * _forwardVelocity) //Forward / Reverse
-                            + (Sprite.MakeMovementVector(Sprite.Direction + SiPoint.RADIANS_90) * _lateralVelocity);  //Lateral strafing.
+                            + (Sprite.MakeMovementVector(Sprite.Direction + SiVector.RADIANS_90) * _lateralVelocity);  //Lateral strafing.
 
             Sprite.PerformCollisionDetection(epoch);
 

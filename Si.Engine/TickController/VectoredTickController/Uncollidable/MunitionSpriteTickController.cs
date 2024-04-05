@@ -45,7 +45,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             };
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             var munitions = VisibleOfType<MunitionBase>();
             if (munitions.Count() != 0)
@@ -101,7 +101,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             SpriteManager.Add(obj);
         }
 
-        public void Add(WeaponBase weapon, SiPoint location = null)
+        public void Add(WeaponBase weapon, SiVector location = null)
         {
             var obj = weapon.CreateMunition(location);
             SpriteManager.Add(obj);
@@ -114,7 +114,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         /// <param name="lockedTarget"></param>
         /// <param name="xyOffset"></param>
         /// <returns></returns>
-        public void AddLockedOnTo(WeaponBase weapon, SpriteInteractiveBase lockedTarget, SiPoint location = null)
+        public void AddLockedOnTo(WeaponBase weapon, SpriteInteractiveBase lockedTarget, SiVector location = null)
         {
             var obj = weapon.CreateMunition(location, lockedTarget);
             SpriteManager.Add(obj);

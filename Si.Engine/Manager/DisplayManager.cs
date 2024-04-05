@@ -26,7 +26,7 @@ namespace Si.Engine.Manager
         /// will be centered in this window and the window will moved with the players movements.
         /// This can be though of as the camera.
         /// </summary>
-        public SiPoint RenderWindowPosition { get; set; } = new();
+        public SiVector RenderWindowPosition { get; set; } = new();
         public Control DrawingSurface { get; private set; }
         public Screen Screen { get; private set; }
 
@@ -57,8 +57,8 @@ namespace Si.Engine.Manager
 
         public float TotalCanvasDiagonal { get; private set; }
 
-        public SiPoint CenterCanvas;
-        public SiPoint CenterOfCurrentScreen => RenderWindowPosition + CenterCanvas;
+        public SiVector CenterCanvas;
+        public SiVector CenterOfCurrentScreen => RenderWindowPosition + CenterCanvas;
 
 
         /// <summary>
@@ -108,30 +108,30 @@ namespace Si.Engine.Manager
             }
         }
 
-        public SiPoint RandomOnScreenLocation()
+        public SiVector RandomOnScreenLocation()
         {
             var currentScaledScreenBounds = GetCurrentScaledScreenBounds();
 
-            return new SiPoint(
+            return new SiVector(
                     SiRandom.Between((int)currentScaledScreenBounds.Left, (int)(currentScaledScreenBounds.Left + currentScaledScreenBounds.Width)),
                     SiRandom.Between((int)currentScaledScreenBounds.Top, (int)(currentScaledScreenBounds.Top + currentScaledScreenBounds.Height))
                 );
         }
 
         //TODO: Tesr and fix this.
-        public SiPoint RandomOffScreenLocation(int minOffscreenDistance = 100, int maxOffscreenDistance = 500)
+        public SiVector RandomOffScreenLocation(int minOffscreenDistance = 100, int maxOffscreenDistance = 500)
         {
             if (SiRandom.FlipCoin())
             {
                 if (SiRandom.FlipCoin())
                 {
-                    return new SiPoint(
+                    return new SiVector(
                         RenderWindowPosition.X + -SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
                         RenderWindowPosition.Y + SiRandom.Between(0, TotalCanvasSize.Height));
                 }
                 else
                 {
-                    return new SiPoint(
+                    return new SiVector(
                         RenderWindowPosition.X + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
                         RenderWindowPosition.Y + SiRandom.Between(0, TotalCanvasSize.Height));
                 }
@@ -140,13 +140,13 @@ namespace Si.Engine.Manager
             {
                 if (SiRandom.FlipCoin())
                 {
-                    return new SiPoint(
+                    return new SiVector(
                         RenderWindowPosition.X + TotalCanvasSize.Width + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
                         RenderWindowPosition.Y + SiRandom.Between(0, TotalCanvasSize.Height));
                 }
                 else
                 {
-                    return new SiPoint(
+                    return new SiVector(
                         RenderWindowPosition.X + TotalCanvasSize.Width + SiRandom.Between(minOffscreenDistance, maxOffscreenDistance),
                         RenderWindowPosition.Y + -SiRandom.Between(0, TotalCanvasSize.Height));
                 }
@@ -169,7 +169,7 @@ namespace Si.Engine.Manager
 
             TotalCanvasSize = new Size(totalSizeX, totalSizeY);
             OverdrawSize = new Size(totalSizeX - NatrualScreenSize.Width, totalSizeY - NatrualScreenSize.Height);
-            CenterCanvas = new SiPoint(TotalCanvasSize.Width / 2.0f, TotalCanvasSize.Height / 2.0f);
+            CenterCanvas = new SiVector(TotalCanvasSize.Width / 2.0f, TotalCanvasSize.Height / 2.0f);
 
             TotalCanvasDiagonal = (float)Math.Sqrt(TotalCanvasSize.Width * TotalCanvasSize.Width + TotalCanvasSize.Height * TotalCanvasSize.Height);
         }

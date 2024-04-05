@@ -26,13 +26,13 @@ namespace Si.Engine.Menu
             float offsetX = currentScaledScreenBounds.X + 40;
             float offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = AddTitleItem(new SiPoint(offsetX, offsetY), "Select a Ship Class");
+            var itemTitle = AddTitleItem(new SiVector(offsetX, offsetY), "Select a Ship Class");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
             offsetY += itemTitle.Height;
 
-            _shipBlurb = AddTextblock(new SiPoint(offsetX, offsetY), "");
+            _shipBlurb = AddTextblock(new SiVector(offsetX, offsetY), "");
             _shipBlurb.X = offsetX + 250;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 
@@ -62,7 +62,7 @@ namespace Si.Engine.Menu
                 offsetY += playerSprite.Size.Height / 2.0f + previousSpriteSize / 2.0f + 25;
                 previousSpriteSize = playerSprite.Size.Height;
 
-                var menuItem = AddSelectableItem(new SiPoint(offsetX + 75, offsetY), playerSprite.Metadata.Name, playerSprite.Metadata.Name);
+                var menuItem = AddSelectableItem(new SiVector(offsetX + 75, offsetY), playerSprite.Metadata.Name, playerSprite.Metadata.Name);
                 menuItem.Y -= menuItem.Size.Height / 2;
 
                 menuItem.UserData = playerSprite;

@@ -7,6 +7,6 @@ namespace Si.GameEngine.AI._Superclass
     /// </summary>
     public interface IAIController
     {
-        public void ApplyIntelligence(float epoch, SiPoint displacementVector);
+        public void ApplyIntelligence(float epoch, SiVector displacementVector);
     }
 }

@@ -36,7 +36,7 @@ namespace Si.GameEngine.TickController.UnvectoredTickController
                         {
                             if (accountedFor.Contains(child) == false)
                             {
-                                if (parent != child && parent.IntersectsAABB(child, new SiPoint(100, 100)))
+                                if (parent != child && parent.IntersectsAABB(child, new SiVector(100, 100)))
                                 {
                                     group.Add(child);
                                     accountedFor.Add(child);

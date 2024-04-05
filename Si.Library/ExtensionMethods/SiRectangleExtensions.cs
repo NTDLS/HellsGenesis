@@ -13,7 +13,7 @@ namespace Si.Library.ExtensionMethods
             return new RectangleF(rectangle.Location, rectangle.Size);
         }
 
-        public static RectangleF Balloon(this RectangleF rectangle, SiPoint size)
+        public static RectangleF Balloon(this RectangleF rectangle, SiVector size)
         {
             var rec = rectangle.Clone();
             rec.Inflate(size.X, size.Y);

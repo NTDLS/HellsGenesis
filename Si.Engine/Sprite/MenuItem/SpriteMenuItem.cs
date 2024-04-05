@@ -39,7 +39,7 @@ namespace Si.Engine.Sprite.MenuItem
 
         public SiMenuItemType ItemType { get; set; }
 
-        public SpriteMenuItem(EngineCore engine, MenuBase menu, TextFormat format, SolidColorBrush color, SiPoint location)
+        public SpriteMenuItem(EngineCore engine, MenuBase menu, TextFormat format, SolidColorBrush color, SiVector location)
             : base(engine, format, color, location, true)
         {
             ItemType = SiMenuItemType.Undefined;

@@ -9,7 +9,7 @@ namespace Si.Engine.Sprite.Weapon.Munition
     {
         private const string imagePath = @"Sprites\Weapon\VulcanCannon.png";
 
-        public MunitionVulcanCannon(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null)
+        public MunitionVulcanCannon(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiVector location = null)
             : base(engine, weapon, firedFrom, imagePath, location)
         {
         }

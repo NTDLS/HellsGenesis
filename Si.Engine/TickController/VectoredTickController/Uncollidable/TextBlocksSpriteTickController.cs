@@ -19,18 +19,18 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         public TextBlocksSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
-            PlayerStatsText = Add(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.WhiteSmoke, new SiPoint(5, 5), true);
+            PlayerStatsText = Add(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.WhiteSmoke, new SiVector(5, 5), true);
             PlayerStatsText.Visable = false;
-            DebugText = Add(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.Cyan, new SiPoint(5, PlayerStatsText.Y + 100), true);
+            DebugText = Add(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.Cyan, new SiVector(5, PlayerStatsText.Y + 100), true);
 
             //We have to create this ahead of time because we cant create pause text when paused since sprires are created via events.
             PausedText = Add(engine.Rendering.TextFormats.LargeBlocker,
-                    engine.Rendering.Materials.Brushes.Red, new SiPoint(100, 100), true, "PausedText", "Paused");
+                    engine.Rendering.Materials.Brushes.Red, new SiVector(100, 100), true, "PausedText", "Paused");
 
             PausedText.Visable = false;
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             foreach (var textBlock in Visible().Where(o => o.IsFixedPosition == false))
             {
@@ -40,21 +40,21 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
 
         #region Factories.
 
-        public SpriteRadarPositionTextBlock CreateRadarPosition(TextFormat format, SolidColorBrush color, SiPoint location)
+        public SpriteRadarPositionTextBlock CreateRadarPosition(TextFormat format, SolidColorBrush color, SiVector location)
         {
             var obj = new SpriteRadarPositionTextBlock(Engine, format, color, location);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public SpriteTextBlock Add(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic)
+        public SpriteTextBlock Add(TextFormat format, SolidColorBrush color, SiVector location, bool isPositionStatic)
         {
             var obj = new SpriteTextBlock(Engine, format, color, location, isPositionStatic);
             SpriteManager.Add(obj);
             return obj;
         }
 
-        public SpriteTextBlock Add(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name)
+        public SpriteTextBlock Add(TextFormat format, SolidColorBrush color, SiVector location, bool isPositionStatic, string name)
         {
             var obj = new SpriteTextBlock(Engine, format, color, location, isPositionStatic);
             obj.SpriteTag = name;
@@ -62,7 +62,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             return obj;
         }
 
-        public SpriteTextBlock Add(TextFormat format, SolidColorBrush color, SiPoint location, bool isPositionStatic, string name, string text)
+        public SpriteTextBlock Add(TextFormat format, SolidColorBrush color, SiVector location, bool isPositionStatic, string name, string text)
         {
             var obj = new SpriteTextBlock(Engine, format, color, location, isPositionStatic);
             obj.SpriteTag = name;

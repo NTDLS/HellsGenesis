@@ -14,7 +14,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         {
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             foreach (var sprite in Visible())
             {
@@ -27,7 +27,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         {
             object[] param = { Engine };
             var obj = (SpritePowerupBase)Activator.CreateInstance(typeof(T), param);
-            obj.Location = new SiPoint(x, y);
+            obj.Location = new SiVector(x, y);
             SpriteManager.Add(obj);
             return (T)obj;
         }

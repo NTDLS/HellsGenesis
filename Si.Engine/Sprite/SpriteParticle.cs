@@ -48,7 +48,7 @@ namespace Si.Engine.Sprite
         /// </summary>
         public SiAngle TravelAngle { get; set; } = new SiAngle();
 
-        public SpriteParticle(EngineCore engine, SiPoint location, Size size, Color4? color = null)
+        public SpriteParticle(EngineCore engine, SiVector location, Size size, Color4? color = null)
             : base(engine)
         {
             SetSize(size);
@@ -77,7 +77,7 @@ namespace Si.Engine.Sprite
             _engine = engine;
         }
 
-        public override void ApplyMotion(float epoch, SiPoint displacementVector)
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {

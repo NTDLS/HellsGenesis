@@ -13,7 +13,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         {
         }
 
-        public override void ExecuteWorldClockTick(float epoch, SiPoint displacementVector)
+        public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
             if (displacementVector.Sum() != 0)
             {

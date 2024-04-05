@@ -13,14 +13,14 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
     {
         public int MaxSeekingObservationDistance { get; set; } = 1000;
         public int MaxSeekingObservationAngleDegrees { get; set; } = 20;
-        public float SeekingRotationRateRadians { get; set; } = SiPoint.DegreesToRadians(4);
+        public float SeekingRotationRateRadians { get; set; } = SiVector.DegreesToRadians(4);
 
-        public SeekingMunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath, SiPoint location = null)
+        public SeekingMunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath, SiVector location = null)
             : base(engine, weapon, firedFrom, imagePath, location)
         {
         }
 
-        public override void ApplyIntelligence(float epoch, SiPoint displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
             if (FiredFromType == SiFiredFromType.Enemy)
             {

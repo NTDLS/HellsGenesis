@@ -14,10 +14,10 @@
         public static float XYToRadians(float x, float y) => (float)Math.Atan2(y, x);
         public static float XYToDegrees(float x, float y) => RadiansToDegrees((float)Math.Atan2(y, x));
 
-        public static SiPoint ToXY(SiAngle angle) => new(angle.X, angle.Y);
-        public static SiPoint RadiansToXY(float radians) => new((float)Math.Cos(radians), (float)Math.Sin(radians));
-        public static SiPoint DegreesToXY(float degrees) => new((float)Math.Cos(degrees * RAD_TO_DEG), (float)Math.Sin(degrees * RAD_TO_DEG));
-        public static SiAngle FromXY(SiPoint point) => new SiAngle(XYToRadians(point.X, point.Y));
+        public static SiVector ToXY(SiAngle angle) => new(angle.X, angle.Y);
+        public static SiVector RadiansToXY(float radians) => new((float)Math.Cos(radians), (float)Math.Sin(radians));
+        public static SiVector DegreesToXY(float degrees) => new((float)Math.Cos(degrees * RAD_TO_DEG), (float)Math.Sin(degrees * RAD_TO_DEG));
+        public static SiAngle FromXY(SiVector point) => new SiAngle(XYToRadians(point.X, point.Y));
 
         #region ~/CTor.
 
@@ -30,8 +30,8 @@
 
         #region  Unary Operator Overloading.
 
-        public static implicit operator SiPoint(SiAngle angle)
-            => new SiPoint((float)Math.Cos(angle.Radians), (float)Math.Sin(angle.Radians));
+        public static implicit operator SiVector(SiAngle angle)
+            => new SiVector((float)Math.Cos(angle.Radians), (float)Math.Sin(angle.Radians));
 
         public static SiAngle operator -(SiAngle original, SiAngle modifier)
             => new SiAngle(original.Radians - modifier.Radians);
@@ -48,14 +48,14 @@
         public static SiAngle operator *(SiAngle original, SiAngle scaleFactor)
             => new SiAngle(original.X * scaleFactor.X, original.Y * scaleFactor.Y);
 
-        public static SiPoint operator *(SiAngle original, float scaleFactor)
-            => new SiPoint(original.X * scaleFactor, original.Y * scaleFactor);
+        public static SiVector operator *(SiAngle original, float scaleFactor)
+            => new SiVector(original.X * scaleFactor, original.Y * scaleFactor);
 
         public static SiAngle operator /(SiAngle original, SiAngle scaleFactor)
             => new SiAngle(original.X / scaleFactor.X, original.Y / scaleFactor.Y);
 
-        public static SiPoint operator /(SiAngle original, float scaleFactor)
-            => new SiPoint(original.X / scaleFactor, original.Y / scaleFactor);
+        public static SiVector operator /(SiAngle original, float scaleFactor)
+            => new SiVector(original.X / scaleFactor, original.Y / scaleFactor);
 
         public override bool Equals(object? o)
             => Math.Round(((SiAngle?)o)?.X ?? float.NaN, 4) == X && Math.Round(((SiAngle?)o)?.Y ?? float.NaN, 4) == Y;

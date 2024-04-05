@@ -5,7 +5,7 @@ namespace Si.Library.Mathematics.Geometry
     /// <summary>
     /// Static vector math helpers.
     /// </summary>
-    public partial class SiPoint
+    public partial class SiVector
     {
         public const float DEG_TO_RAD = (float)(Math.PI / 180.0);
         public const float RAD_TO_DEG = (float)(180.0 / Math.PI);
@@ -27,11 +27,11 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="vector"></param>
         /// <param name="radians"></param>
         /// <returns></returns>
-        public static SiPoint Rotate(SiPoint vector, float radians)
+        public static SiVector Rotate(SiVector vector, float radians)
         {
             float cosTheta = (float)Math.Cos(radians);
             float sinTheta = (float)Math.Sin(radians);
-            return new SiPoint(
+            return new SiVector(
                 vector.X * cosTheta - vector.Y * sinTheta,
                 vector.X * sinTheta + vector.Y * cosTheta
             );
@@ -57,8 +57,8 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="angle">The angle which the point should move to in the range of 0-259.</param>
         /// <param name="distance">The distance to the given angle the point should be at.</param>
         /// <returns>The calculated point at the given distance towards the given angle.</returns>
-        public static SiPoint PointFromAngleAtDistance360(SiAngle angle, SiPoint distance)
-            => new SiPoint((float)Math.Cos(angle.Radians) * distance.X, (float)Math.Sin(angle.Radians) * distance.Y);
+        public static SiVector PointFromAngleAtDistance360(SiAngle angle, SiVector distance)
+            => new SiVector((float)Math.Cos(angle.Radians) * distance.X, (float)Math.Sin(angle.Radians) * distance.Y);
 
         /// <summary>
         /// Calculates the angle of one objects location to another location from 0 - 360.
@@ -94,7 +94,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from">The object from which the calcualtion is based.</param>
         /// <param name="to">The point to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
-        public static float AngleTo(ISprite from, SiPoint to)
+        public static float AngleTo(ISprite from, SiVector to)
         {
             var angle360 = AngleInDegreesTo360(from.Location, to);
             if (angle360 > 180)
@@ -113,7 +113,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from">The object from which the calcualtion is based.</param>
         /// <param name="to">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
-        public static float AngleTo360(SiPoint from, ISprite to)
+        public static float AngleTo360(SiVector from, ISprite to)
             => AngleInDegreesTo360(from, to.Location);
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from">The object from which the calcualtion is based.</param>
         /// <param name="to">The point to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
-        public static float AngleTo360(ISprite from, SiPoint to)
+        public static float AngleTo360(ISprite from, SiVector to)
             => AngleInDegreesTo360(from.Location, to);
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="toLocation">The location to which the calculation is based.</param>
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
         /// <returns>The calculated angle in the range of 180--180.</returns>
-        public static float DeltaAngle(ISprite from, SiPoint toLocation, float offsetAngle = 0)
+        public static float DeltaAngle(ISprite from, SiVector toLocation, float offsetAngle = 0)
         {
             var da360 = DeltaAngle360(from, toLocation, offsetAngle);
             if (da360 > 180)
@@ -258,7 +258,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="toLocation">The location to which the calculation is based.</param>
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
-        public static float DeltaAngle360(ISprite from, SiPoint toLocation, float offsetAngle = 0)
+        public static float DeltaAngle360(ISprite from, SiVector toLocation, float offsetAngle = 0)
         {
             float fromAngle = from.Direction.Degrees + offsetAngle;
 
@@ -295,7 +295,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public static float DistanceTo(SiPoint from, SiPoint to)
+        public static float DistanceTo(SiVector from, SiVector to)
         {
             var deltaX = Math.Pow(to.X - from.X, 2);
             var deltaY = Math.Pow(to.Y - from.Y, 2);
@@ -308,7 +308,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public static float DistanceSquaredTo(SiPoint from, SiPoint to)
+        public static float DistanceSquaredTo(SiVector from, SiVector to)
         {
             var deltaX = to.X - from.X;
             var deltaY = to.Y - from.Y;
@@ -321,7 +321,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public static float AngleToInSignedRadians(SiPoint from, SiPoint to)
+        public static float AngleToInSignedRadians(SiVector from, SiVector to)
         {
             return (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
         }
@@ -332,7 +332,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        public static float AngleInDegreesTo360(SiPoint from, SiPoint to)
+        public static float AngleInDegreesTo360(SiVector from, SiVector to)
         {
             var radians = (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
             return (SiAngle.RadiansToDegrees(radians) + 360.0f) % 360.0f;
@@ -343,10 +343,10 @@ namespace Si.Library.Mathematics.Geometry
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
-        public static SiPoint Normalize(SiPoint vector)
+        public static SiVector Normalize(SiVector vector)
         {
             var magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
-            return new SiPoint(vector.X / magnitude, vector.Y / magnitude);
+            return new SiVector(vector.X / magnitude, vector.Y / magnitude);
         }
 
         /// <summary>
@@ -355,7 +355,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static float Sum(SiPoint a) => a.X + a.Y;
+        public static float Sum(SiVector a) => a.X + a.Y;
 
         /// <summary>
         /// Returns the Abs(X) + Abs(Y);
@@ -363,7 +363,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static float SumAbs(SiPoint a) => Math.Abs(a.X) + Math.Abs(a.Y);
+        public static float SumAbs(SiVector a) => Math.Abs(a.X) + Math.Abs(a.Y);
 
         /// <summary>
         /// Calculate the dot product of two vectors.This is useful for determining the angle between vectors or projecting one vector onto another.
@@ -371,10 +371,10 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
-        public static float Dot(SiPoint a, SiPoint b)
+        public static float Dot(SiVector a, SiVector b)
             => a.X * b.X + a.Y * b.Y;
 
-        public static float Length(SiPoint vector)
+        public static float Length(SiVector vector)
             => (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
 
         /// <summary>
@@ -383,7 +383,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="point1"></param>
         /// <param name="point2"></param>
         /// <returns></returns>
-        public static float AngleBetween(SiPoint point1, SiPoint point2)
+        public static float AngleBetween(SiVector point1, SiVector point2)
         {
             return (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
         }
@@ -395,13 +395,13 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="centerPoint"></param>
         /// <param name="angleRadians"></param>
         /// <returns></returns>
-        public static SiPoint RotateAroundPoint(SiPoint pointToRotate, SiPoint centerPoint, float angleRadians)
+        public static SiVector RotateAroundPoint(SiVector pointToRotate, SiVector centerPoint, float angleRadians)
         {
             var cosTheta = (float)Math.Cos(angleRadians);
             var sinTheta = (float)Math.Sin(angleRadians);
             var x = cosTheta * (pointToRotate.X - centerPoint.X) - sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X;
             var y = sinTheta * (pointToRotate.X - centerPoint.X) + cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y;
-            return new SiPoint(x, y);
+            return new SiVector(x, y);
         }
 
         /// <summary>
@@ -410,10 +410,10 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="vector"></param>
         /// <param name="normal"></param>
         /// <returns></returns>
-        public static SiPoint Reflect(SiPoint vector, SiPoint normal)
+        public static SiVector Reflect(SiVector vector, SiVector normal)
         {
             var dotProduct = Dot(vector, normal);
-            return new SiPoint(vector.X - 2 * dotProduct * normal.X, vector.Y - 2 * dotProduct * normal.Y);
+            return new SiVector(vector.X - 2 * dotProduct * normal.X, vector.Y - 2 * dotProduct * normal.Y);
         }
     }
 }

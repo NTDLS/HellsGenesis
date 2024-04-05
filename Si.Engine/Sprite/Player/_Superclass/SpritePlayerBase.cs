@@ -180,7 +180,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(180), new SiPoint(40, 40));
+                    var pointBehind = SiVector.PointFromAngleAtDistance360(Direction + SiVector.DegreesToRadians(180), new SiVector(40, 40));
                     ThrusterAnimation.Direction = Direction;
                     ThrusterAnimation.Location = Location + pointBehind;
                 }
@@ -190,7 +190,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiPoint.PointFromAngleAtDistance360(Direction + SiPoint.DegreesToRadians(180), new SiPoint(40, 40));
+                    var pointBehind = SiVector.PointFromAngleAtDistance360(Direction + SiVector.DegreesToRadians(180), new SiVector(40, 40));
                     BoostAnimation.Direction = Direction;
                     BoostAnimation.Location = Location + pointBehind;
                 }
@@ -206,7 +206,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             }
         }
 
-        public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
+        public override bool TryMunitionHit(MunitionBase munition, SiVector hitTestPosition)
         {
             if (munition.FiredFromType == SiFiredFromType.Enemy)
             {

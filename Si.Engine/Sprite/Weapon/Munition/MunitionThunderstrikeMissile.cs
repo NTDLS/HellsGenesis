@@ -9,12 +9,12 @@ namespace Si.Engine.Sprite.Weapon.Munition
     {
         private const string imagePath = @"Sprites\Weapon\ThunderstrikeMissile.png";
 
-        public MunitionThunderstrikeMissile(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiPoint location = null)
+        public MunitionThunderstrikeMissile(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, SiVector location = null)
             : base(engine, weapon, firedFrom, imagePath, location)
         {
             MaxSeekingObservationDistance = 1000;
             MaxSeekingObservationAngleDegrees = 20;
-            SeekingRotationRateRadians = SiPoint.DegreesToRadians(4);
+            SeekingRotationRateRadians = SiVector.DegreesToRadians(4);
         }
     }
 }
