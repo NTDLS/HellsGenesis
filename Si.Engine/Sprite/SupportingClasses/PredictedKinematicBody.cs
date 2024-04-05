@@ -8,10 +8,13 @@ using System.Linq;
 namespace Si.GameEngine.Sprite.SupportingClasses
 {
     /// <summary>
-    /// Contains the sprite and the bounds that it is predicted to occupy after ApplyMotion().
+    /// Contains the prediction of sprite location, bounds, velocity and direction after the up comming call to ApplyMotion()
     /// Keep in mind that this is somewhat rudimentary in the way that it predicts the next location but decisively so.
+    /// 
+    /// An object that contains both the location (position) and the velocity (vector indicating both
+    /// speed and direction) of another object is commonly referred to as a "Kinematic" object.
     /// </summary>
-    public class PredictedSpriteRegion
+    public class PredictedKinematicBody
     {
         /// <summary>
         /// Reference to the sprite.
@@ -62,7 +65,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// </summary>
         public SiVector RenderLocation => Location - RenderWindowPosition;
 
-        public PredictedSpriteRegion(SpriteInteractiveBase sprite, SiVector renderWindowPosition, float epoch)
+        public PredictedKinematicBody(SpriteInteractiveBase sprite, SiVector renderWindowPosition, float epoch)
         {
             RenderWindowPosition = renderWindowPosition;
 
@@ -83,7 +86,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// </summary>
         /// <param name="otherObject"></param>
         /// <returns></returns>
-        public bool IntersectsAABB(PredictedSpriteRegion otherObject) =>
+        public bool IntersectsAABB(PredictedKinematicBody otherObject) =>
             Bounds.IntersectsWith(otherObject.Bounds);
 
         /// <summary>
@@ -92,19 +95,19 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// </summary>
         /// <param name="otherObject"></param>
         /// <returns></returns>
-        public bool IntersectsSAT(PredictedSpriteRegion otherObject)
+        public bool IntersectsSAT(PredictedKinematicBody otherObject)
             => SiSeparatingAxisTheorem.IntersectsRotated(Bounds, Direction.Radians,
                 otherObject.Bounds, otherObject.Direction.Radians);
 
-        public RectangleF GetOverlapRectangleSAT(PredictedSpriteRegion otherObject)
+        public RectangleF GetOverlapRectangleSAT(PredictedKinematicBody otherObject)
             => SiSeparatingAxisTheorem.GetOverlapRectangle(Bounds, Direction.Radians,
                 otherObject.Bounds, otherObject.Direction.Radians);
 
-        public RectangleF GetIntersectionBoundingBox(PredictedSpriteRegion otherObject)
+        public RectangleF GetIntersectionBoundingBox(PredictedKinematicBody otherObject)
             => SiSutherlandHodgmanPolygonIntersection.GetIntersectionBoundingBox(Bounds, Direction.Radians,
                 otherObject.Bounds, otherObject.Direction.Radians);
 
-        public PointF[] GetIntersectedPolygon(PredictedSpriteRegion otherObject)
+        public PointF[] GetIntersectedPolygon(PredictedKinematicBody otherObject)
             => SiSutherlandHodgmanPolygonIntersection.GetIntersectedPolygon(Bounds, Direction.Radians,
             otherObject.Bounds, otherObject.Direction.Radians);
 

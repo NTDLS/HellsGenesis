@@ -180,8 +180,8 @@ namespace Si.Engine.Manager
         public SpriteInteractiveBase[] VisibleColliadble()
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata?.CollisionDetection == true).ToArray();
 
-        public PredictedSpriteRegion[] VisibleColliadblePredictiveMove(float epoch)
-            => _engine.Sprites.VisibleColliadble().Select(o => new PredictedSpriteRegion(o, _engine.Display.RenderWindowPosition, epoch)).ToArray();
+        public PredictedKinematicBody[] VisibleColliadblePredictiveMove(float epoch)
+            => _engine.Sprites.VisibleColliadble().Select(o => new PredictedKinematicBody(o, _engine.Display.RenderWindowPosition, epoch)).ToArray();
 
         public List<SpriteBase> VisibleOfTypes(Type[] types)
         {

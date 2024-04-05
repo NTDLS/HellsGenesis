@@ -1,7 +1,7 @@
 ﻿using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite.SupportingClasses;
 using Si.GameEngine.Sprite.SupportingClasses;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace Si.Engine.Manager
 {
@@ -17,60 +17,20 @@ namespace Si.Engine.Manager
     public class CollisionManager
     {
         private readonly EngineCore _engine;
-        public Dictionary<string, CollisionPair> Detected { get; private set; } = new();
+        public Dictionary<string, OverlappingKinematicBodyPair> Detected { get; private set; } = new();
 
-        public PredictedSpriteRegion[] Colliadbles { get; private set; }
-
-        /// <summary>
-        /// Holds information about a collision event.
-        /// </summary>
-        public struct CollisionPair
-        {
-            /// <summary>
-            /// The key that identifies the collision pair.
-            /// </summary>
-            public string Key { get; private set; }
-
-            public PredictedSpriteRegion Object1 { get; private set; }
-            public PredictedSpriteRegion Object2 { get; private set; }
-
-            /// <summary>
-            /// The overlapping rectangle of the two sprites. This is mostly for concept - I dont know what to do with it yet.
-            /// </summary>
-            public RectangleF OverlapRectangle { get; set; }
-
-            /// <summary>
-            /// The overlapping polygon of the two sprites. This is mostly for concept - I dont know what to do with it yet.
-            /// </summary>
-            public PointF[] OverlapPolygon { get; set; }
-
-            public CollisionPair(string key, PredictedSpriteRegion sprite1, PredictedSpriteRegion sprite2)
-            {
-                Key = key;
-                Object1 = sprite1;
-                Object2 = sprite2;
-            }
-        }
+        public PredictedKinematicBody[] Colliadbles { get; private set; }
 
         public CollisionManager(EngineCore engine)
         {
             _engine = engine;
         }
 
-        /// <summary>
-        /// Creates a unique string key for a pair of sprites.
-        /// </summary>
-        /// <param name="uid1"></param>
-        /// <param name="uid2"></param>
-        /// <returns></returns>
-        public static string MakeCollisionKey(uint uid1, uint uid2)
-            => uid1 > uid2 ? $"{uid1}:{uid2}" : $"{uid2}:{uid1}";
-
-        public CollisionPair CreateAndRecord(PredictedSpriteRegion object1, PredictedSpriteRegion object2)
+        public OverlappingKinematicBodyPair Create(PredictedKinematicBody body1, PredictedKinematicBody body2)
         {
-            var key = MakeCollisionKey(object1.Sprite.UID, object2.Sprite.UID);
+            var key = OverlappingKinematicBodyPair.MakeKey(body1.Sprite.UID, body2.Sprite.UID);
 
-            var collision = new CollisionPair(key, object1, object2)
+            var collisionPair = new OverlappingKinematicBodyPair(key, body1, body2)
             {
                 //We are just adding these here for demonstration purposes. This is probably over the top
                 // and we DEFINITELY do not need GetIntersectionBoundingBox() AND GetIntersectedPolygon().
@@ -78,12 +38,23 @@ namespace Si.Engine.Manager
                 // Q: Also note that this is just the collision for predicted1→predicted2, which I am thinkning might be different??
                 // A: I tested it, they are definitely different.
                 //https://github.com/NTDLS/StrikeforceInfinite/wiki/Collision-Detection-Issues
-                OverlapRectangle = object1.GetIntersectionBoundingBox(object2),
-                OverlapPolygon = object1.GetIntersectedPolygon(object2)
+                OverlapRectangle = body1.GetIntersectionBoundingBox(body2),
+                OverlapPolygon = body1.GetIntersectedPolygon(body2)
             };
 
-            Detected.Add(key, collision);
-            return collision;
+            return collisionPair;
+        }
+
+        public void Record(OverlappingKinematicBodyPair pair)
+        {
+            Detected.Add(pair.Key, pair);
+        }
+
+        public OverlappingKinematicBodyPair CreateAndRecord(PredictedKinematicBody body1, PredictedKinematicBody body2)
+        {
+            var collisionPair = Create(body1, body2);
+            Record(collisionPair);
+            return collisionPair;
         }
 
         public void Reset(float epoch)
@@ -93,9 +64,9 @@ namespace Si.Engine.Manager
         }
 
         public bool IsAlreadyHandled(SpriteInteractiveBase sprite1, SpriteInteractiveBase sprite2)
-            => Detected.ContainsKey(MakeCollisionKey(sprite1.UID, sprite2.UID));
+            => Detected.ContainsKey(OverlappingKinematicBodyPair.MakeKey(sprite1.UID, sprite2.UID));
 
-        public bool IsAlreadyHandled(PredictedSpriteRegion object1, PredictedSpriteRegion object2)
-            => Detected.ContainsKey(MakeCollisionKey(object1.Sprite.UID, object2.Sprite.UID));
+        public bool IsAlreadyHandled(PredictedKinematicBody body1, PredictedKinematicBody body2)
+            => Detected.ContainsKey(OverlappingKinematicBodyPair.MakeKey(body1.Sprite.UID, body2.Sprite.UID));
     }
 }

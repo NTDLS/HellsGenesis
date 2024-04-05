@@ -175,13 +175,13 @@ namespace Si.Engine
                                 Rendering.Materials.Colors.Cyan, 3);
 
                             Rendering.DrawRectangleAt(o.IntermediateRenderTarget,
-                                collision.Value.Object1.RawRenderBounds,
-                                collision.Value.Object1.Direction.Radians,
+                                collision.Value.Body1.RawRenderBounds,
+                                collision.Value.Body1.Direction.Radians,
                                 Rendering.Materials.Colors.Red, 1, 1);
 
                             Rendering.DrawRectangleAt(o.IntermediateRenderTarget,
-                                collision.Value.Object2.RawRenderBounds,
-                                collision.Value.Object2.Direction.Radians,
+                                collision.Value.Body2.RawRenderBounds,
+                                collision.Value.Body2.Direction.Radians,
                                 Rendering.Materials.Colors.LawnGreen, 1, 1);
                         }
                     }
