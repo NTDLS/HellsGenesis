@@ -287,8 +287,10 @@ namespace Si.Engine.Sprite._Superclass
                 {
                     //The items added to this collection are rendered to the screen via
                     //  EngineCore.RenderEverything() when Engine.Settings.HighlightCollisions is true.
-                    RespondToCollisions(
-                        _engine.Collisions.Add(thisCollidable, other));
+
+                    var collisionPair = _engine.Collisions.CreateAndRecord(thisCollidable, other);
+
+                    RespondToCollisions(collisionPair);
                 }
             }
         }
@@ -297,7 +299,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Chanegs the movement vector of two sprites involved in a collision.
         /// </summary>
         /// <param name="collision"></param>
-        public void RespondToCollisions(Collision collision)
+        public void RespondToCollisions(CollisionPair collision)
         {
             //We have to save the movement vectors because the calle to sssssss is going to change then.
             var originalSprite1Velocity = collision.Object1.Sprite.MovementVector;
@@ -308,7 +310,6 @@ namespace Si.Engine.Sprite._Superclass
 
             RespondToCollision(collision.Object1.Sprite, originalSprite1Velocity, collision.Object2.Sprite, originalSprite2Velocity);
             RespondToCollision(collision.Object2.Sprite, originalSprite2Velocity, collision.Object1.Sprite, originalSprite1Velocity);
-
         }
 
         /// <summary>

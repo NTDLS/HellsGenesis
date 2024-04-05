@@ -17,14 +17,14 @@ namespace Si.Engine.Manager
     public class CollisionManager
     {
         private readonly EngineCore _engine;
-        public Dictionary<string, Collision> Detected { get; private set; } = new();
+        public Dictionary<string, CollisionPair> Detected { get; private set; } = new();
 
         public PredictedSpriteRegion[] Colliadbles { get; private set; }
 
         /// <summary>
         /// Holds information about a collision event.
         /// </summary>
-        public struct Collision
+        public struct CollisionPair
         {
             /// <summary>
             /// The key that identifies the collision pair.
@@ -44,7 +44,7 @@ namespace Si.Engine.Manager
             /// </summary>
             public PointF[] OverlapPolygon { get; set; }
 
-            public Collision(string key, PredictedSpriteRegion sprite1, PredictedSpriteRegion sprite2)
+            public CollisionPair(string key, PredictedSpriteRegion sprite1, PredictedSpriteRegion sprite2)
             {
                 Key = key;
                 Object1 = sprite1;
@@ -66,11 +66,11 @@ namespace Si.Engine.Manager
         public static string MakeCollisionKey(uint uid1, uint uid2)
             => uid1 > uid2 ? $"{uid1}:{uid2}" : $"{uid2}:{uid1}";
 
-        public Collision Add(PredictedSpriteRegion object1, PredictedSpriteRegion object2)
+        public CollisionPair CreateAndRecord(PredictedSpriteRegion object1, PredictedSpriteRegion object2)
         {
             var key = MakeCollisionKey(object1.Sprite.UID, object2.Sprite.UID);
 
-            var collision = new Collision(key, object1, object2)
+            var collision = new CollisionPair(key, object1, object2)
             {
                 //We are just adding these here for demonstration purposes. This is probably over the top
                 // and we DEFINITELY do not need GetIntersectionBoundingBox() AND GetIntersectedPolygon().
