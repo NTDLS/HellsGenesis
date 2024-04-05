@@ -8,6 +8,7 @@ using Si.GameEngine.Sprite.SupportingClasses.Metadata;
 using Si.Library;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
+using Si.Library.Sprite;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -184,7 +185,7 @@ namespace Si.Engine.Sprite._Superclass
             return weapon?.Fire() == true;
         }
 
-        public bool FireWeapon<T>(SiPoint location) where T : WeaponBase
+        public bool FireWeapon<T>(SiVector location) where T : WeaponBase
         {
             var weapon = GetWeaponOfType<T>();
             return weapon?.Fire(location) == true;
@@ -214,7 +215,7 @@ namespace Si.Engine.Sprite._Superclass
             }
         }
 
-        public override bool TryMunitionHit(MunitionBase munition, SiPoint hitTestPosition)
+        public override bool TryMunitionHit(MunitionBase munition, SiVector hitTestPosition)
         {
             if (IntersectsAABB(hitTestPosition))
             {
@@ -246,7 +247,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         /// <param name="epoch"></param>
         /// <param name="displacementVector"></param>
-        public virtual void ApplyIntelligence(float epoch, SiPoint displacementVector)
+        public virtual void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
         }
 
@@ -288,35 +289,46 @@ namespace Si.Engine.Sprite._Superclass
                 {
                     //The items added to this collection are rendered to the screen via
                     //  EngineCore.RenderEverything() when Engine.Settings.HighlightCollisions is true.
-                    RespondToMassCollision(
+                    RespondToCollisions(
                         _engine.Collisions.Add(thisCollidable, other));
                 }
             }
         }
 
-        public void RespondToMassCollision(Collision collision)
+        /// <summary>
+        /// Chanegs the movement vector of two sprites involved in a collision.
+        /// </summary>
+        /// <param name="collision"></param>
+        public void RespondToCollisions(Collision collision)
         {
-            var sprite1Momentum = collision.Object1.Sprite.TotalMomentumWithRestingMass();
-            var sprite2Momentum = collision.Object2.Sprite.TotalMomentumWithRestingMass();
+            //We have to save the movement vectors because the calle to sssssss is going to change then.
+            var originalSprite1Velocity = collision.Object1.Sprite.MovementVector;
+            var originalSprite2Velocity = collision.Object2.Sprite.MovementVector;
 
-            var sprite1MomentumMagnitude = (sprite1Momentum / (sprite1Momentum + sprite2Momentum));
-            var sprite2MomentumMagnitude = (sprite2Momentum / (sprite1Momentum + sprite2Momentum));
+            RespondToCollision(collision.Object1.Sprite, originalSprite1Velocity, collision.Object2.Sprite, originalSprite2Velocity);
+            RespondToCollision(collision.Object2.Sprite, originalSprite2Velocity, collision.Object1.Sprite, originalSprite1Velocity);
 
-            Debug.WriteLine($"Collision of UIDs {collision.Key}. Mass: {sprite1MomentumMagnitude:n} and {sprite2MomentumMagnitude:n2}");
+        }
 
-            //Who the fuck is moving out of the way now?
-            if (sprite1MomentumMagnitude < sprite2MomentumMagnitude)
-            {
-                //Debug.WriteLine("Moved sprite 1");
-                //collision.Object1.Sprite.Throttle = 1;
-                //collision.Object1.Sprite.MovementVector = collision.Object1.Sprite.MovementVector * -1.5f;
-            }
-            else
-            {
-                //Debug.WriteLine("Moved sprite 2");
-                //collision.Object2.Sprite.Throttle = 1;
-                //collision.Object2.Sprite.MovementVector = collision.Object2.Sprite.MovementVector * -1.5f;
-            }
+        /// <summary>
+        /// Chanegs the movement vector of the action sprite in response to a collision with collideWithSprite.
+        /// </summary>
+        /// <param name="actionSprite">The sprite which will have its movement vector modified in response to the collision.</param>
+        /// <param name="actionSpriteVelocity">The movement vector of the actionSprite</param>
+        /// <param name="collideWithSprite">The sprite that the actionSprite is colliding with. This sprite will not be altered.</param>
+        /// <param name="collideWithSpriteVelocity">The movement vector of the collideWithSprite</param>
+        public void RespondToCollision(SpriteInteractiveBase actionSprite, SiVector actionSpriteVelocity,
+                                        SpriteInteractiveBase collideWithSprite, SiVector collideWithSpriteVelocity)
+        {
+           float massA = actionSprite.Metadata.Mass;
+            float massB = collideWithSprite.Metadata.Mass;
+
+            var r = (collideWithSprite.Location - actionSprite.Location).Normalize(); // Collision normal
+
+            var vA_prime = actionSpriteVelocity - (2 * massB / (massA + massB))
+                * SiVector.Dot(actionSpriteVelocity - collideWithSpriteVelocity, r) / r.Length() * r;
+
+            actionSprite.MovementVector = vA_prime * actionSprite.Throttle;
         }
     }
 }
