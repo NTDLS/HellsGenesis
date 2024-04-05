@@ -20,7 +20,7 @@ namespace Si.Engine.AI.Logistics
         public AILogisticsMeander(EngineCore engine, SpriteShipBase owner, SpriteBase observedObject)
             : base(engine, owner, observedObject)
         {
-            Owner.MovementVector = Owner.MakeMovementVector();
+            owner.SetMovementVector();
             OnApplyIntelligence += AILogistics_OnApplyIntelligence;
         }
 

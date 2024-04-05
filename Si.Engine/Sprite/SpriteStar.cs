@@ -23,7 +23,7 @@ namespace Si.Engine.Sprite
             ZOrder = int.MinValue + 1000;
 
             Speed = 0.5f;
-            MovementVector = MakeMovementVector();
+            SetMovementVector();
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {

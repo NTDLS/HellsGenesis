@@ -42,12 +42,14 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
-            Direction.Degrees += RotationSpeed * epoch;
+            //Direction.Degrees += RotationSpeed * epoch;
 
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {
                 //We use a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
-                Location += TravelAngle * Speed * epoch;
+                //Location += TravelAngle * Speed * epoch;
+
+                base.ApplyMotion(epoch, displacementVector);
             }
             else if (VectorType == ParticleVectorType.UseNativeForwardAngle)
             {

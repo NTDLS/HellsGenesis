@@ -1,9 +1,11 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Peon;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using static Si.Library.SiConstants;
 
@@ -73,11 +75,16 @@ namespace Si.Engine.Level
                 //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
-            _engine.Sprites.Debugs.Add(1000, 1000).Location = new SiVector(800, 900);
+            //var debug = _engine.Sprites.Debugs.Add(1000, 1000);
+            //debug.Speed = 0.5f;
+            //debug.Location = new SiVector(900, 900);
+            //debug.MovementVector = debug.CalculateMovementVector();
 
             //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
-            //AddAsteroidField(new SiPoint(), 8, 8);
+            AddAsteroidField(new SiVector(), 8, 8);
+
+            //AddSingleAsteroid();
 
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
             //_engine.Sprites.Enemies.Create<EnemyRepulsor>();
@@ -105,6 +112,18 @@ namespace Si.Engine.Level
             //_engine.Sprites.Enemies.Create<EnemyDevastator>();
         }
 
+        public void AddSingleAsteroid()
+        {
+            var asteroid = _engine.Sprites.GenericSprites.Add($@"Sprites\Asteroid\{SiRandom.Between(0, 0)}.png");
+
+            asteroid.Location = new SiVector(800, 800);
+            asteroid.Speed = 1.0f;
+            asteroid.Direction = SiAngle.FromDegrees(-45);
+            asteroid.SetMovementVector();
+
+            asteroid.SetHullHealth(100);
+        }
+
         public void AddAsteroidField(SiVector offset, int rowCount, int colCount)
         {
             for (int row = 0; row < rowCount; row++)
@@ -122,12 +141,13 @@ namespace Si.Engine.Level
 
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
                     asteroid.Speed = SiRandom.Variance(asteroid.Speed, 0.20f);
-                    //asteroid.Velocity.ForwardVelocity = asteroid.DirectionMag(1.0f);
-                    asteroid.Throttle = 0;
+                    asteroid.Direction = SiAngle.FromDegrees(-45);
+                    asteroid.Throttle = 1;
+                    asteroid.SetMovementVector();
 
-                    asteroid.VectorType = ParticleVectorType.UseTravelAngle;
+                    asteroid.VectorType = ParticleVectorType.UseNativeForwardAngle;
                     //asteroid.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
-                    asteroid.RotationSpeed = 0;
+                    //asteroid.RotationSpeed = 0;
 
                     asteroid.SetHullHealth(100);
                 }

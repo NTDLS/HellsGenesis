@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static Si.Engine.Manager.CollisionManager;
 
 namespace Si.Engine.Sprite._Superclass
 {
@@ -257,6 +256,11 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public virtual void PerformCollisionDetection(float epoch)
         {
+            if (Metadata?.CollisionDetection != true)
+            {
+                return;
+            }
+
             //HEY PAT!
             // - [] This function (PerformCollisionDetection) is called before ApplyMotion().
             // - [] _engine.Collisions.Colliadbles contains all objects that have CollisionDetection enabled.
@@ -328,7 +332,7 @@ namespace Si.Engine.Sprite._Superclass
 
             var relativeVelocity = actionSpriteVelocity - collideWithSpriteVelocity;
 
-            if (collisionNormal.Dot(relativeVelocity) < 0) // Sprites are moving towards each other
+            if (collisionNormal.Dot(relativeVelocity) > 0) // Sprites are moving towards each other
             {
                 var vA_prime = actionSpriteVelocity - (2 * massB / (massA + massB))
                     * SiVector.Dot(actionSpriteVelocity - collideWithSpriteVelocity, collisionNormal) / collisionNormal.Length() * collisionNormal;

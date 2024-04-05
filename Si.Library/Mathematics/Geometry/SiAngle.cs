@@ -9,8 +9,11 @@
         public const float RAD_TO_DEG = (float)(180.0 / Math.PI);
         public const float RADS_IN_CIRCLE = (float)(2 * Math.PI);
 
+        public static SiAngle FromDegrees(float rad) => new SiAngle(DegreesToRadians(rad));
+
         public static float RadiansToDegrees(float rad) => rad * RAD_TO_DEG;
         public static float DegreesToRadians(float deg) => deg * DEG_TO_RAD;
+
         public static float XYToRadians(float x, float y) => (float)Math.Atan2(y, x);
         public static float XYToDegrees(float x, float y) => RadiansToDegrees((float)Math.Atan2(y, x));
 

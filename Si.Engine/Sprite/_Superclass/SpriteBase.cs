@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Metadata;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite._Superclass
@@ -267,6 +268,27 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
+        /// Sets the movement vector in the direction of the sprite.
+        /// </summary>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
+        public void SetMovementVector() => MovementVector = MakeMovementVector();
+
+        /// <summary>
+        /// Sets the movement vector in the given direction.
+        /// </summary>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
+        public void SetMovementVector(float angleInRadians) => MovementVector = MakeMovementVector(angleInRadians);
+
+        /// <summary>
+        /// Sets the movement vector in the given direction.
+        /// </summary>
+        /// <param name="percentage"></param>
+        /// <returns></returns>
+        public void SetMovementVector(SiAngle angle) => MovementVector = MakeMovementVector(angle);
+
+        /// <summary>
         /// Returns the movement vector in the direction of the sprite.
         /// </summary>
         /// <param name="percentage"></param>
@@ -274,14 +296,14 @@ namespace Si.Engine.Sprite._Superclass
         public SiVector MakeMovementVector() => Direction * Speed * Throttle;
 
         /// <summary>
-        /// Returns the movement vector in the given.
+        /// Returns the movement vector in the given direction.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
         public SiVector MakeMovementVector(float angleInRadians) => new SiAngle(angleInRadians) * Speed * Throttle;
 
         /// <summary>
-        /// Returns the movement vector in the given.
+        /// Returns the movement vector in the given direction.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
@@ -1194,7 +1216,7 @@ namespace Si.Engine.Sprite._Superclass
             //Perform any auto-rotation.
             Direction.Degrees += RotationSpeed * epoch;
 
-            //Keep the velocity following the direction the sprite is pointing.
+            //Be default, we keep the MovementVector following the direction the sprite is pointing.
             MovementVector = Direction * MovementVector.Length();
 
             //Move the sprite based on its vector.

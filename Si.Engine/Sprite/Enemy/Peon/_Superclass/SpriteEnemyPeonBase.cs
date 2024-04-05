@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         public SpriteEnemyPeonBase(EngineCore engine)
             : base(engine)
         {
-            MovementVector = MakeMovementVector();
+            SetMovementVector();
 
             OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
 
