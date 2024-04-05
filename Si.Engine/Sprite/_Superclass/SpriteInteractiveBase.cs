@@ -290,7 +290,8 @@ namespace Si.Engine.Sprite._Superclass
 
                     var collisionPair = _engine.Collisions.CreateAndRecord(thisCollidable, other);
 
-                    RespondToCollisions(collisionPair);
+                    //Comment this out to see the collision overlaps.
+                    //RespondToCollisions(collisionPair);
                 }
             }
         }
