@@ -8,10 +8,8 @@ using Si.GameEngine.Sprite.SupportingClasses.Metadata;
 using Si.Library;
 using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
-using Si.Library.Sprite;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using static Si.Engine.Manager.CollisionManager;
@@ -305,6 +303,9 @@ namespace Si.Engine.Sprite._Superclass
             var originalSprite1Velocity = collision.Object1.Sprite.MovementVector;
             var originalSprite2Velocity = collision.Object2.Sprite.MovementVector;
 
+            //TODO: One issue we have is that if a sprite is moving away from the collision, then this code
+            //  will reverse that and move the sprite into the collision causing them to overlap and become stuck.
+
             RespondToCollision(collision.Object1.Sprite, originalSprite1Velocity, collision.Object2.Sprite, originalSprite2Velocity);
             RespondToCollision(collision.Object2.Sprite, originalSprite2Velocity, collision.Object1.Sprite, originalSprite1Velocity);
 
@@ -320,7 +321,7 @@ namespace Si.Engine.Sprite._Superclass
         public void RespondToCollision(SpriteInteractiveBase actionSprite, SiVector actionSpriteVelocity,
                                         SpriteInteractiveBase collideWithSprite, SiVector collideWithSpriteVelocity)
         {
-           float massA = actionSprite.Metadata.Mass;
+            float massA = actionSprite.Metadata.Mass;
             float massB = collideWithSprite.Metadata.Mass;
 
             var r = (collideWithSprite.Location - actionSprite.Location).Normalize(); // Collision normal
