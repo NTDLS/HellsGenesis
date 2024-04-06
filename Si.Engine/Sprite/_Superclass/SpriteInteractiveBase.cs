@@ -328,11 +328,11 @@ namespace Si.Engine.Sprite._Superclass
             float massA = actionBody.Sprite.Metadata.Mass;
             float massB = collideWithBody.Sprite.Metadata.Mass;
 
-            var collisionNormal = (collideWithBody.Location - actionBody.Location).Normalize();
+            var collisionNormal = (actionBody.Location - collideWithBody.Location).Normalize();
 
             var relativeVelocity = actionSpriteVelocity - collideWithSpriteVelocity;
 
-            if (collisionNormal.Dot(relativeVelocity) > 0) // Sprites are moving towards each other
+            if (collisionNormal.Dot(relativeVelocity) < 0) // Sprites are moving towards each other
             {
                 var vA_prime = actionSpriteVelocity - (2 * massB / (massA + massB))
                     * SiVector.Dot(actionSpriteVelocity - collideWithSpriteVelocity, collisionNormal) / collisionNormal.Length() * collisionNormal;

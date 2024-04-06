@@ -25,6 +25,7 @@
         #region ~/CTor.
 
         public SiAngle() { }
+        public SiAngle(SiVector vector) => Degrees = RadiansToDegrees((float)Math.Atan2(vector.Y, vector.X));
         public SiAngle(SiAngle angle) => Radians = angle.Radians;
         public SiAngle(float radians) => Radians = radians;
         public SiAngle(float x, float y) => Degrees = RadiansToDegrees((float)Math.Atan2(y, x));

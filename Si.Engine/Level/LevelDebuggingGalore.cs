@@ -82,7 +82,7 @@ namespace Si.Engine.Level
 
             //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
-            AddAsteroidField(new SiVector(), 8, 8);
+            //AddAsteroidField(new SiVector(), 8, 8);
 
             //AddSingleAsteroid();
 

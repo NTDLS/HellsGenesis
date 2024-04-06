@@ -1,6 +1,8 @@
 ﻿using SharpDX.DirectInput;
 using SharpDX.XInput;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Library.Mathematics.Geometry;
+using Si.Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -369,6 +371,38 @@ namespace Si.Engine.Manager
             }
         }
 
+        public void AddAsteroidField(SiVector offset, int rowCount, int colCount)
+        {
+            for (int row = 0; row < rowCount; row++)
+            {
+                for (int col = 0; col < colCount; col++)
+                {
+                    var asteroid = _engine.Sprites.GenericSprites.Add($@"Sprites\Asteroid\{SiRandom.Between(0, 0)}.png");
+
+                    asteroid.SpriteTag = "DEBUG_ASTEROID";
+
+                    var asteroidSize = asteroid.Size.Width + asteroid.Size.Height;
+
+                    float totalXOffset = (offset.X + asteroidSize * colCount);
+                    float totalYOffset = (offset.Y + (asteroidSize * rowCount));
+
+                    asteroid.Location = new SiVector(totalXOffset - asteroidSize * col, totalYOffset - asteroidSize * row);
+
+                    asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
+                    asteroid.Speed = SiRandom.Variance(asteroid.Speed, 0.20f);
+                    asteroid.Direction = SiAngle.FromDegrees(-45);
+                    asteroid.Throttle = 1;
+                    asteroid.SetMovementVector();
+
+                    asteroid.VectorType = ParticleVectorType.UseNativeForwardAngle;
+                    //asteroid.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
+                    //asteroid.RotationSpeed = 0;
+
+                    asteroid.SetHullHealth(100);
+                }
+            }
+        }
+
         public void HandleSingleKeyPress(Keys key)
         {
             if (key == Keys.Oem3)
@@ -389,7 +423,23 @@ namespace Si.Engine.Manager
             }
             else if (key == Keys.F4)
             {
-                _engine.Rendering.AddScreenShake(4, 100);
+                _engine.Sprites.QueueAllForDeletionByTag("DEBUG_ASTEROID");
+                AddAsteroidField(new SiVector(), 4, 4);
+                //_engine.Rendering.AddScreenShake(4, 100);
+            }
+            else if (key == Keys.F5)
+            {
+                _engine.Sprites.QueueAllForDeletionByTag("DEBUG_ASTEROID");
+
+                var asteroid = _engine.Sprites.GenericSprites.Add($@"Sprites\Asteroid\{SiRandom.Between(0, 0)}.png");
+
+                asteroid.SpriteTag = "DEBUG_ASTEROID";
+                asteroid.Location = _engine.Player.Sprite.Location + new SiVector(100, 100);
+                asteroid.Speed = 1.0f;
+                asteroid.Direction = SiAngle.FromDegrees(-45);
+                asteroid.SetMovementVector();
+
+                asteroid.SetHullHealth(100);
             }
             else if (key == Keys.F2)
             {

@@ -1217,7 +1217,7 @@ namespace Si.Engine.Sprite._Superclass
             Direction.Degrees += RotationSpeed * epoch;
 
             //Be default, we keep the MovementVector following the direction the sprite is pointing.
-            MovementVector = Direction * MovementVector.Length();
+            //MovementVector = Direction * MovementVector.Length(); //This feel like a hack...
 
             //Move the sprite based on its vector.
             Location += MovementVector * epoch;
