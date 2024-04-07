@@ -36,6 +36,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Collidable
 
             obj.Location = Engine.Display.RandomOffScreenLocation();
             obj.PointingAngle.Degrees = SiRandom.Between(0, 359);
+            obj.RecalculateMovementVector();
 
             obj.BeforeCreate();
             SpriteManager.Add(obj);

@@ -1,6 +1,7 @@
 ﻿using SharpDX.DirectInput;
 using SharpDX.XInput;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Peon;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -443,7 +444,9 @@ namespace Si.Engine.Manager
             }
             else if (key == Keys.F2)
             {
-                _engine.Sprites.CreateFragmentsOf(_engine.Player.Sprite);
+                _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
+
+                //_engine.Sprites.CreateFragmentsOf(_engine.Player.Sprite);
 
                 /*
                 var bitmaps = _engine.Rendering.GenerateIrregularFragments(_engine.Player.Sprite.GetImage(), 10, 3);
