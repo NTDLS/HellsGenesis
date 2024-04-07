@@ -734,6 +734,6 @@ namespace Si.Library.Mathematics.Geometry
         /// <summary>
         /// Determines whether the vector is normalized.
         /// </summary>
-        public bool IsNormalized() => MathUtil.IsOne(X * X + Y * Y);
+        public bool IsNormalized() => SiMath.IsOne(X * X + Y * Y);
     }
 }
