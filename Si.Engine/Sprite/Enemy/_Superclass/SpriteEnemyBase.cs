@@ -12,7 +12,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
     /// <summary>
     /// The enemy base is a sub-class of the ship base. It is used by Peon and Boss enemies.
     /// </summary>
-    public class SpriteEnemyBase : SpriteShipBase
+    public class SpriteEnemyBase : SpriteInteractiveShipBase
     {
         public SpriteEnemyBase(EngineCore engine)
                 : base(engine)

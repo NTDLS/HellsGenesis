@@ -1,8 +1,8 @@
 ﻿using SharpDX.DirectInput;
 using SharpDX.XInput;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Library.Mathematics.Geometry;
 using Si.Library;
+using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -390,7 +390,7 @@ namespace Si.Engine.Manager
 
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
                     asteroid.Speed = SiRandom.Variance(asteroid.Speed, 0.20f);
-                    asteroid.Direction = SiAngle.FromDegrees(-45);
+                    asteroid.Direction = SiAngle.FromDeg(-45);
                     asteroid.Throttle = 1;
                     asteroid.SetMovementVector();
 
@@ -436,7 +436,7 @@ namespace Si.Engine.Manager
                 asteroid.SpriteTag = "DEBUG_ASTEROID";
                 asteroid.Location = _engine.Player.Sprite.Location + new SiVector(100, 100);
                 asteroid.Speed = 1.0f;
-                asteroid.Direction = SiAngle.FromDegrees(-45);
+                asteroid.Direction = SiAngle.FromDeg(-45);
                 asteroid.SetMovementVector();
 
                 asteroid.SetHullHealth(100);

@@ -63,7 +63,7 @@ namespace Si.Engine.AI.Logistics
 
         #endregion
 
-        public AILogisticsTaunt(EngineCore engine, SpriteShipBase owner, SpriteBase observedObject)
+        public AILogisticsTaunt(EngineCore engine, SpriteInteractiveShipBase owner, SpriteBase observedObject)
             : base(engine, owner, observedObject)
         {
             owner.OnHit += Owner_OnHit;

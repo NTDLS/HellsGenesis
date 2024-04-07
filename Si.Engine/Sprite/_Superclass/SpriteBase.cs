@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection.Metadata;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite._Superclass

@@ -3,7 +3,7 @@ using Si.Library.Mathematics.Geometry;
 
 namespace Si.Engine.Sprite
 {
-    public class SpriteDebug : SpriteShipBase
+    public class SpriteDebug : SpriteInteractiveShipBase
     {
         public SpriteDebug(EngineCore engine)
             : base(engine)

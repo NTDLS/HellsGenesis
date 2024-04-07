@@ -17,7 +17,7 @@ namespace Si.Engine.AI.Logistics
         private readonly float _idealMaxDistance = SiRandom.Variance(8000, 0.20f);
         private readonly float _idealMinDistance = SiRandom.Variance(2500, 0.10f);
 
-        public AILogisticsMeander(EngineCore engine, SpriteShipBase owner, SpriteBase observedObject)
+        public AILogisticsMeander(EngineCore engine, SpriteInteractiveShipBase owner, SpriteBase observedObject)
             : base(engine, owner, observedObject)
         {
             owner.SetMovementVector();

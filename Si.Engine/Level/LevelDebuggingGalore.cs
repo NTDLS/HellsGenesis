@@ -1,11 +1,9 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Engine.Sprite.Enemy.Peon;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
-using System.Diagnostics;
 using System.Linq;
 using static Si.Library.SiConstants;
 
@@ -118,7 +116,7 @@ namespace Si.Engine.Level
 
             asteroid.Location = new SiVector(800, 800);
             asteroid.Speed = 1.0f;
-            asteroid.Direction = SiAngle.FromDegrees(-45);
+            asteroid.Direction = SiAngle.FromDeg(-45);
             asteroid.SetMovementVector();
 
             asteroid.SetHullHealth(100);
@@ -141,7 +139,7 @@ namespace Si.Engine.Level
 
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
                     asteroid.Speed = SiRandom.Variance(asteroid.Speed, 0.20f);
-                    asteroid.Direction = SiAngle.FromDegrees(-45);
+                    asteroid.Direction = SiAngle.FromDeg(-45);
                     asteroid.Throttle = 1;
                     asteroid.SetMovementVector();
 
