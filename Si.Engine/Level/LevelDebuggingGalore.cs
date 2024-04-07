@@ -1,6 +1,7 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Peon;
 using Si.Library;
 using Si.Library.Mathematics.Geometry;
 using System;
@@ -70,7 +71,7 @@ namespace Si.Engine.Level
         {
             for (int i = 0; i < 1; i++)
             {
-                //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
+                _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
             //var debug = _engine.Sprites.Debugs.Add(1000, 1000);
@@ -116,8 +117,8 @@ namespace Si.Engine.Level
 
             asteroid.Location = new SiVector(800, 800);
             asteroid.Speed = 1.0f;
-            asteroid.Direction = SiAngle.FromDeg(-45);
-            asteroid.SetMovementVector();
+            asteroid.PointingAngle = SiAngle.FromDeg(-45);
+            asteroid.RecalculateMovementVector();
 
             asteroid.SetHullHealth(100);
         }
@@ -139,9 +140,9 @@ namespace Si.Engine.Level
 
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
                     asteroid.Speed = SiRandom.Variance(asteroid.Speed, 0.20f);
-                    asteroid.Direction = SiAngle.FromDeg(-45);
+                    asteroid.PointingAngle = SiAngle.FromDeg(-45);
                     asteroid.Throttle = 1;
-                    asteroid.SetMovementVector();
+                    asteroid.RecalculateMovementVector();
 
                     asteroid.VectorType = ParticleVectorType.UseNativeForwardAngle;
                     //asteroid.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);

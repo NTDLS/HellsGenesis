@@ -51,7 +51,7 @@ namespace Si.Engine.AI.Logistics
 
             public AIStateTransitionToEvasiveEscape(AIStateMachine machine)
             {
-                TargetAngle.Degrees = machine.Owner.Direction.Degrees + 180;
+                TargetAngle.Degrees = machine.Owner.PointingAngle.Degrees + 180;
             }
         }
 
@@ -71,7 +71,7 @@ namespace Si.Engine.AI.Logistics
             Owner.RenewableResources.Create(_boostResourceName, 800, 0, 10);
 
             ChangeState(new AIStateDeparting());
-            Owner.SetMovementVector();
+            Owner.RecalculateMovementVector();
 
             OnApplyIntelligence += AILogistics_OnApplyIntelligence;
         }

@@ -405,7 +405,7 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float DeltaAngle360(ISprite from, ISprite to, float offsetAngle = 0)
         {
-            float fromAngle = from.Direction.Degrees + offsetAngle;
+            float fromAngle = from.PointingAngle.Degrees + offsetAngle;
 
             float angleTo = AngleTo360(from, to);
 
@@ -435,7 +435,7 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float DeltaAngle360(ISprite from, SiVector toLocation, float offsetAngle = 0)
         {
-            float fromAngle = from.Direction.Degrees + offsetAngle;
+            float fromAngle = from.PointingAngle.Degrees + offsetAngle;
 
             float angleTo = AngleTo360(from, toLocation);
 

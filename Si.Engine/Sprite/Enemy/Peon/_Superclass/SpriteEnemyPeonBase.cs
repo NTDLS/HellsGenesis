@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         public SpriteEnemyPeonBase(EngineCore engine)
             : base(engine)
         {
-            SetMovementVector();
+            RecalculateMovementVector();
 
             OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
 
@@ -52,14 +52,14 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         {
             if (ThrustAnimation != null && ThrustAnimation.Visable)
             {
-                var pointBehind = SiVector.PointFromAngleAtDistance360(Direction + SiVector.DegreesToRadians(180), new SiVector(20, 20));
-                ThrustAnimation.Direction = Direction;
+                var pointBehind = SiVector.PointFromAngleAtDistance360(PointingAngle + SiVector.DegreesToRadians(180), new SiVector(20, 20));
+                ThrustAnimation.PointingAngle = PointingAngle;
                 ThrustAnimation.Location = Location + pointBehind;
             }
             if (BoostAnimation != null && BoostAnimation.Visable)
             {
-                var pointBehind = SiVector.PointFromAngleAtDistance360(Direction + SiVector.DegreesToRadians(180), new SiVector(20, 20));
-                BoostAnimation.Direction = Direction;
+                var pointBehind = SiVector.PointFromAngleAtDistance360(PointingAngle + SiVector.DegreesToRadians(180), new SiVector(20, 20));
+                BoostAnimation.PointingAngle = PointingAngle;
                 BoostAnimation.Location = Location + pointBehind;
             }
         }

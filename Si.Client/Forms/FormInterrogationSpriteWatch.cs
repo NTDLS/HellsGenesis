@@ -56,11 +56,11 @@ namespace Si.Client.Forms
             UpsertVariable("Location", $"{sprite.Location}");
             UpsertVariable("Location (Render)", $"{sprite.RenderLocation}");
             UpsertVariable("Background Offset", $"{_engine.Display.RenderWindowPosition}");
-            UpsertVariable("Angle", $"{sprite.Direction:n2}");
-            UpsertVariable("Angle Degrees", $"{sprite.Direction.Degrees:n2}");
-            UpsertVariable("Angle Degrees (Signed)", $"{sprite.Direction.DegreesSigned:n2}");
-            UpsertVariable("Angle Radians", $"{sprite.Direction.Radians:n2}");
-            UpsertVariable("Angle Radians (Signed)", $"{sprite.Direction.RadiansSigned:n2}");
+            UpsertVariable("Angle", $"{sprite.PointingAngle:n2}");
+            UpsertVariable("Angle Degrees", $"{sprite.PointingAngle.Degrees:n2}");
+            UpsertVariable("Angle Degrees (Signed)", $"{sprite.PointingAngle.DegreesSigned:n2}");
+            UpsertVariable("Angle Radians", $"{sprite.PointingAngle.Radians:n2}");
+            UpsertVariable("Angle Radians (Signed)", $"{sprite.PointingAngle.RadiansSigned:n2}");
             //UpsertVariable("Thrust %", $"{(sprite.Velocity.ForwardVelocity * 100):n2}");
             UpsertVariable("Boost %", $"{(sprite.Throttle * 100):n2}");
             UpsertVariable("Hull", $"{sprite.HullHealth:n0}");

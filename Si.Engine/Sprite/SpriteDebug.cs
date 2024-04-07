@@ -33,12 +33,12 @@ namespace Si.Engine.Sprite
             SetHullHealth(100000);
             Speed = 1.5f;
             Throttle = 0.05f;
-            SetMovementVector();
+            RecalculateMovementVector();
         }
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
-            Direction.Degrees = AngleTo360(_engine.Player.Sprite);
+            PointingAngle.Degrees = AngleTo360(_engine.Player.Sprite);
             base.ApplyMotion(epoch, displacementVector);
         }
     }

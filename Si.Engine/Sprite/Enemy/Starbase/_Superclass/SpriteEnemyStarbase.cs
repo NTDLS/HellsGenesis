@@ -10,7 +10,7 @@ namespace Si.Engine.Sprite.Enemy.Starbase._Superclass
         public SpriteEnemyStarbase(EngineCore engine)
             : base(engine)
         {
-            SetMovementVector();
+            RecalculateMovementVector();
         }
 
         public override void Cleanup()

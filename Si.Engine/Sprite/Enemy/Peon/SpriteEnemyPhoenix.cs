@@ -22,7 +22,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
             AddAIController(new AILogisticsTaunt(_engine, this, _engine.Player.Sprite));
             AddAIController(new AILogisticsMeander(_engine, this, _engine.Player.Sprite));
 
-            SetCurrentAIController<AILogisticsMeander>();
+            SetCurrentAIController<AILogisticsTaunt>();
 
             _behaviorChangeDelayMilliseconds = SiRandom.Between(2000, 10000);
         }
@@ -37,6 +37,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
 
         private void IntermittentAiModeChange()
         {
+            /*
             if ((DateTime.UtcNow - _behaviorChangeTimestamp).TotalMilliseconds > _behaviorChangeDelayMilliseconds)
             {
                 _behaviorChangeTimestamp = DateTime.UtcNow;
@@ -55,6 +56,7 @@ namespace Si.Engine.Sprite.Enemy.Peon
                     SetCurrentAIController<AILogisticsHostileEngagement>();
                 }
             }
+            */
         }
 
         private void ApplyWeaponsLogic()

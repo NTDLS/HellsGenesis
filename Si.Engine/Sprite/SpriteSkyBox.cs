@@ -25,7 +25,7 @@ namespace Si.Engine.Sprite
 
             Speed = 0.10f;
 
-            SetMovementVector();
+            RecalculateMovementVector();
 
             if (selectedImageIndex >= 0 && selectedImageIndex <= 0)
             {

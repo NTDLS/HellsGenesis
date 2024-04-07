@@ -47,7 +47,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             RadarDotSize = new SiVector(1, 1);
             SceneDistanceLimit = SiRandom.Between(weapon.Metadata.MunitionSceneDistanceLimit * 0.1f, weapon.Metadata.MunitionSceneDistanceLimit);
 
-            float headingRadians = angle == null ? firedFrom.Direction.Radians : (float)angle;
+            float headingRadians = angle == null ? firedFrom.PointingAngle.Radians : (float)angle;
             if (weapon.Metadata.AngleVarianceDegrees > 0)
             {
                 var randomNumber = SiVector.DegreesToRadians(SiRandom.Between(0, weapon.Metadata.AngleVarianceDegrees * 100.0f) / 100.0f);
@@ -63,9 +63,9 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             }
 
             Location = location ?? firedFrom.Location;
-            Direction = new SiAngle(headingRadians);
+            PointingAngle = new SiAngle(headingRadians);
             Speed = initialSpeed;
-            MovementVector = Direction * initialSpeed;
+            MovementVector = PointingAngle * initialSpeed;
 
             if (firedFrom is SpriteAttachment attachment)
             {

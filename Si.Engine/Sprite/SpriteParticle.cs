@@ -59,9 +59,9 @@ namespace Si.Engine.Sprite
             RotationSpeed = SiRandom.Between(1, 100) / 20.0f * SiRandom.PositiveOrNegative();
 
             TravelAngle.Degrees = SiRandom.Between(0, 359);
-            Direction.Degrees = SiRandom.Between(0, 359);
+            PointingAngle.Degrees = SiRandom.Between(0, 359);
 
-            MovementVector = Direction * SiRandom.Between(1.0f, 4.0f);
+            MovementVector = PointingAngle * SiRandom.Between(1.0f, 4.0f);
 
             /*
             Location = location.Clone();
@@ -81,7 +81,7 @@ namespace Si.Engine.Sprite
         {
             if (VectorType == ParticleVectorType.UseTravelAngle)
             {
-                Direction.Degrees += RotationSpeed * epoch;
+                PointingAngle.Degrees += RotationSpeed * epoch;
                 //We use a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
                 Location += TravelAngle * Speed * epoch;
             }
@@ -134,27 +134,27 @@ namespace Si.Engine.Sprite
                         if (ColorType == ParticleColorType.SingleColor)
                         {
                             _engine.Rendering.FillEllipseAt(renderTarget,
-                                RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Direction.Degrees);
+                                RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)PointingAngle.Degrees);
                         }
                         else if (ColorType == ParticleColorType.Graident)
                         {
                             _engine.Rendering.FillEllipseAt(renderTarget, RenderLocation.X, RenderLocation.Y,
-                                Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)Direction.Degrees);
+                                Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)PointingAngle.Degrees);
                         }
                         break;
                     case ParticleShape.HollowEllipse:
                         _engine.Rendering.HollowEllipseAt(renderTarget,
-                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Direction.Degrees);
+                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)PointingAngle.Degrees);
                         break;
                     case ParticleShape.Triangle:
                         _engine.Rendering.HollowTriangleAt(renderTarget,
-                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Direction.Degrees);
+                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)PointingAngle.Degrees);
                         break;
                 }
 
                 if (IsHighlighted)
                 {
-                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Direction.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
+                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, PointingAngle.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
                 }
             }
         }

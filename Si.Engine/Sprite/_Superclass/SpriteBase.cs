@@ -75,9 +75,12 @@ namespace Si.Engine.Sprite._Superclass
         public float RotationSpeed { get; set; } = 0;
 
         /// <summary>
-        /// The angle in which the sprite is pointing.
+        /// The angle in which the sprite is pointing, note that this is NOT the travel angle.
+        /// The travel angle is baked into the MovementVector. If you need the movement vector
+        /// to follow this direction angle then call RecalculateMovementVector() after modifying
+        /// the PointingAngle.
         /// </summary>
-        public SiAngle Direction { get; set; } = new();
+        public SiAngle PointingAngle { get; set; } = new();
 
         public SharpDX.Direct2D1.Bitmap GetImage() => _image;
         public string SpriteTag { get; set; }
@@ -267,42 +270,42 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Sets the movement vector in the direction of the sprite.
+        /// Sets the movement vector in the direction of the sprite taking into accoun the speed and throttle percentage.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        public void SetMovementVector() => MovementVector = MakeMovementVector();
+        public void RecalculateMovementVector() => MovementVector = MakeMovementVector();
 
         /// <summary>
-        /// Sets the movement vector in the given direction.
+        /// Sets the movement vector in the given direction taking into accoun the speed and throttle percentage.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        public void SetMovementVector(float angleInRadians) => MovementVector = MakeMovementVector(angleInRadians);
+        public void RecalculateMovementVector(float angleInRadians) => MovementVector = MakeMovementVector(angleInRadians);
 
         /// <summary>
-        /// Sets the movement vector in the given direction.
+        /// Sets the movement vector in the given direction taking into accoun the speed and throttle percentage.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        public void SetMovementVector(SiAngle angle) => MovementVector = MakeMovementVector(angle);
+        public void RecalculateMovementVector(SiAngle angle) => MovementVector = MakeMovementVector(angle);
 
         /// <summary>
-        /// Returns the movement vector in the direction of the sprite.
+        /// Returns the movement vector in the direction of the sprite taking into accoun the speed and throttle percentage.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
-        public SiVector MakeMovementVector() => Direction * Speed * Throttle;
+        public SiVector MakeMovementVector() => PointingAngle * Speed * Throttle;
 
         /// <summary>
-        /// Returns the movement vector in the given direction.
+        /// Returns the movement vector in the given direction taking into accoun the speed and throttle percentage.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
         public SiVector MakeMovementVector(float angleInRadians) => new SiAngle(angleInRadians) * Speed * Throttle;
 
         /// <summary>
-        /// Returns the movement vector in the given direction.
+        /// Returns the movement vector in the given direction taking into accoun the speed and throttle percentage.
         /// </summary>
         /// <param name="percentage"></param>
         /// <returns></returns>
@@ -547,7 +550,7 @@ namespace Si.Engine.Sprite._Superclass
             var collisions = new List<SpriteBase>();
 
             var hitTestPosition = new SiVector(Location);
-            var directionVector = angle ?? Direction;
+            var directionVector = angle ?? PointingAngle;
 
             //Hit-test each position along the sprite path.
             for (int i = 0; i < distance; i++)
@@ -584,7 +587,7 @@ namespace Si.Engine.Sprite._Superclass
         public SpriteBase FindFirstCollisionAlongDistanceVectorAABB(SpriteBase[] objectsThatCanBeHit, float distance, SiAngle angle = null)
         {
             var hitTestPosition = new SiVector(Location);
-            var directionVector = angle ?? Direction;
+            var directionVector = angle ?? PointingAngle;
 
             //Hit-test each position along the sprite path.
             for (int i = 0; i < distance; i++)
@@ -656,9 +659,9 @@ namespace Si.Engine.Sprite._Superclass
                 + $"                Is Dead?: {IsDeadOrExploded}\r\n"
                 + $"         Render-Location: {RenderLocation}\r\n"
                 + $"                Location: {Location}\r\n"
-                + $"                   Angle: {Direction}\r\n"
-                + $"                          {Direction.DegreesSigned:n2}deg\r\n"
-                + $"                          {Direction.RadiansSigned:n2}rad\r\n"
+                + $"                   Angle: {PointingAngle}\r\n"
+                + $"                          {PointingAngle.DegreesSigned:n2}deg\r\n"
+                + $"                          {PointingAngle.RadiansSigned:n2}rad\r\n"
                 + extraInfo
                 + $"       Background Offset: {_engine.Display.RenderWindowPosition}\r\n"
                 + $"                  Thrust: {MovementVector * 100:n2}\r\n"
@@ -790,8 +793,8 @@ namespace Si.Engine.Sprite._Superclass
 
                 for (int i = 0; i < otherObject.Speed; i++)
                 {
-                    previousPosition.X -= otherObject.Direction.X;
-                    previousPosition.Y -= otherObject.Direction.Y;
+                    previousPosition.X -= otherObject.PointingAngle.X;
+                    previousPosition.Y -= otherObject.PointingAngle.Y;
 
                     if (IntersectsAABB(previousPosition))
                     {
@@ -918,32 +921,48 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Instantly rotates this object by a given degrees.
+        /// Instantly rotates this object by the given degrees and recalculates the movement vector.
         /// </summary>
-        public void Rotate(float degrees)
+        public void RotateDegrees(float degrees)
         {
-            Direction.Degrees += degrees;
+            PointingAngle.Degrees += degrees;
+            RecalculateMovementVector();
             RotationChanged();
         }
 
         /// <summary>
-        /// Instantly points an object at a location and sets the travel speed. Only used for off-screen transitions.
+        /// Instantly rotates this object by the given radians and recalculates the movement vector.
+        /// </summary>
+        public void RotateRadians(float radians)
+        {
+            PointingAngle.Radians += radians;
+            RecalculateMovementVector();
+            RotationChanged();
+        }
+
+        /// <summary>
+        /// Instantly points an object at a location, sets the travel speed and recalculates the movement vector. Only used for off-screen transitions.
         /// </summary>
         public void PointAtAndGoto(SiVector location, float? velocity = null)
         {
-            Direction.Degrees = SiVector.AngleInDegreesTo360(Location, location);
+            PointingAngle.Degrees = SiVector.AngleInDegreesTo360(Location, location);
+
             if (velocity != null)
             {
                 Speed = (float)velocity;
             }
+
+            RecalculateMovementVector();
         }
 
         /// <summary>
-        /// Instantly points an object at another object and sets the travel speed. Only used for off-screen transitions.
+        /// Instantly points an object at another object, sets the travel speed and recalculates the movement vector. Only used for off-screen transitions.
         /// </summary>
         public void PointAtAndGoto(SpriteBase obj, float? velocity = null)
         {
-            Direction.Degrees = SiVector.AngleInDegreesTo360(Location, obj.Location);
+            PointingAngle.Degrees = SiVector.AngleInDegreesTo360(Location, obj.Location);
+
+            RecalculateMovementVector();
 
             if (velocity != null)
             {
@@ -952,23 +971,27 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
+        /// Rotates the object by the specified amount if it not pointing at the target
+        /// angle (with given tolerance) then recalculates the movement vector.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
         public bool RotateIfNotPointingAt(SpriteBase obj, float rotationAmount = 1, float varianceDegrees = 10)
         {
-            var deltaAngle = DeltaAngleDegrees(obj);
+            var deltaAngle = DeltaAngleDegrees360(obj);
 
             if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Direction.Degrees += rotationAmount;
+                    PointingAngle.Degrees += rotationAmount;
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Direction.Degrees -= rotationAmount;
+                    PointingAngle.Degrees -= rotationAmount;
                 }
+
+                RecalculateMovementVector();
+
                 return true;
             }
 
@@ -976,23 +999,27 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
+        /// Rotates the object by the specified amount if it not pointing at the target
+        /// angle (with given tolerance) then recalculates the movement vector.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
         public bool RotateIfNotPointingAt(SiVector toLocation, float rotationAmount = 1, float varianceDegrees = 10)
         {
-            var deltaAngle = DeltaAngleDegrees(toLocation);
+            var deltaAngle = DeltaAngleDegrees360(toLocation);
 
             if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Direction.Degrees += rotationAmount;
+                    PointingAngle.Degrees += rotationAmount;
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Direction.Degrees -= rotationAmount;
+                    PointingAngle.Degrees -= rotationAmount;
                 }
+
+                RecalculateMovementVector();
+
                 return true;
             }
 
@@ -1000,16 +1027,20 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Rotates the object by the specified amount if it not pointing at the target angle (with given tolerance).
+        /// Rotates the object by the specified amount if it not pointing at the target angle
+        /// (with given tolerance) then recalculates the movement vector.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
         public bool RotateIfNotPointingAt(float toDegrees, float rotationAmount = 1, float tolerance = 10)
         {
             toDegrees = toDegrees.DegreesNormalized();
 
-            if (Direction.DegreesSigned.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
+            if (PointingAngle.DegreesSigned.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
-                Direction.Degrees -= rotationAmount;
+                PointingAngle.Degrees -= rotationAmount;
+
+                RecalculateMovementVector();
+
                 return true;
             }
 
@@ -1017,23 +1048,26 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Rotates the object by the given amount if it is pointing in the given direction.
+        /// Rotates the object by the given amount if it is pointing in the given direction then recalculates the movement vector.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if the object is not pointing in the given direction.
         public bool RotateIfPointingAt(SpriteBase obj, float rotationRadians = 1, float varianceDegrees = 10)
         {
-            var deltaAngle = DeltaAngleDegrees(obj);
+            var deltaAngle = DeltaAngleDegrees360(obj);
 
             if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees))
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Direction += rotationRadians;
+                    PointingAngle += rotationRadians;
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Direction -= rotationRadians;
+                    PointingAngle -= rotationRadians;
                 }
+
+                RecalculateMovementVector();
+
                 return true;
             }
 
@@ -1074,10 +1108,23 @@ namespace Si.Engine.Sprite._Superclass
         public float DeltaAngleDegrees(SpriteBase toObj) => SiVector.DeltaAngle(this, toObj);
 
         /// <summary>
+        /// Calculates the difference in heading angle from one object to get to another between 0-359.
+        /// </summary>
+        /// <param name="toObj"></param>
+        /// <returns></returns>
+        public float DeltaAngleDegrees360(SpriteBase toObj) => SiVector.DeltaAngle360(this, toObj);
+
+        /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
         /// </summary>
         /// <=>s></returns>
         public float DeltaAngleDegrees(SiVector toLocation) => SiVector.DeltaAngle(this, toLocation);
+
+        /// <summary>
+        /// Calculates the difference in heading angle from one object to get to another between 0-359.
+        /// </summary>
+        /// <=>s></returns>
+        public float DeltaAngleDegrees360(SiVector toLocation) => SiVector.DeltaAngle360(this, toLocation);
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 0-259.
@@ -1213,7 +1260,7 @@ namespace Si.Engine.Sprite._Superclass
         public virtual void ApplyMotion(float epoch, SiVector displacementVector)
         {
             //Perform any auto-rotation.
-            Direction.Degrees += RotationSpeed * epoch;
+            PointingAngle.Degrees += RotationSpeed * epoch;
 
             //Be default, we keep the MovementVector following the direction the sprite is pointing.
             //MovementVector = Direction * MovementVector.Length(); //This feel like a hack...
@@ -1254,7 +1301,7 @@ namespace Si.Engine.Sprite._Superclass
 
                 if (IsHighlighted)
                 {
-                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Direction.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
+                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, PointingAngle.Radians, _engine.Rendering.Materials.Colors.Red, 0, 1);
                 }
             }
         }
@@ -1302,7 +1349,7 @@ namespace Si.Engine.Sprite._Superclass
 
         public void DrawImage(SharpDX.Direct2D1.RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float? angleRadians = null)
         {
-            float angle = (float)(angleRadians == null ? Direction.Radians : angleRadians);
+            float angle = (float)(angleRadians == null ? PointingAngle.Radians : angleRadians);
 
             _engine.Rendering.DrawBitmapAt(renderTarget, bitmap,
                 RenderLocation.X - bitmap.Size.Width / 2.0f,

@@ -58,8 +58,8 @@ namespace Si.Engine.Sprite.Player._Superclass
             ShipEngineIdleSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
             ShipEngineBoostSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
 
-            Direction = new SiAngle(0);
-            SetMovementVector();
+            PointingAngle = new SiAngle(0);
+            RecalculateMovementVector();
             Throttle = 0;
 
             RenewableResources.Create(BoostResourceName, _engine.Settings.MaxPlayerBoostAmount,
@@ -180,8 +180,8 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiVector.PointFromAngleAtDistance360(Direction + SiVector.DegreesToRadians(180), new SiVector(40, 40));
-                    ThrusterAnimation.Direction = Direction;
+                    var pointBehind = SiVector.PointFromAngleAtDistance360(PointingAngle + SiVector.DegreesToRadians(180), new SiVector(40, 40));
+                    ThrusterAnimation.PointingAngle = PointingAngle;
                     ThrusterAnimation.Location = Location + pointBehind;
                 }
             }
@@ -190,8 +190,8 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiVector.PointFromAngleAtDistance360(Direction + SiVector.DegreesToRadians(180), new SiVector(40, 40));
-                    BoostAnimation.Direction = Direction;
+                    var pointBehind = SiVector.PointFromAngleAtDistance360(PointingAngle + SiVector.DegreesToRadians(180), new SiVector(40, 40));
+                    BoostAnimation.PointingAngle = PointingAngle;
                     BoostAnimation.Location = Location + pointBehind;
                 }
             }
