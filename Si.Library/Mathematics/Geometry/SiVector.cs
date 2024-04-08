@@ -10,8 +10,8 @@ namespace Si.Library.Mathematics.Geometry
     public partial class SiVector : IComparable<SiVector>
     {
         public static readonly SiVector Zero = new();
-        public static readonly SiVector UnitX = new(1f, 0f);
-        public static readonly SiVector UnitY = new(0f, 1f);
+        public static readonly SiVector UnitOfX = new(1f, 0f);
+        public static readonly SiVector UnitOfY = new(0f, 1f);
         public static readonly SiVector One = new(1f, 1f);
 
         public float X;
