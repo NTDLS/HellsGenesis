@@ -125,7 +125,7 @@ namespace Si.Engine.Menu
 
         private void PlayerLoadoutMenu_Tick(object sender)
         {
-            _selectedSprite?.RotateDegrees(1);
+            _selectedSprite?.Rotate(0.01f);
         }
     }
 }

@@ -508,7 +508,7 @@ namespace Si.Engine.Manager
 
                 if (baseSprite != null && targetSprite != null)
                 {
-                    var result = baseSprite.AngleTo360(targetSprite);
+                    var result = baseSprite.AngleToInUnsignedDegrees(targetSprite);
                     _debugForm.WriteLine($"AngleTo: {result:n4}", System.Drawing.Color.Black);
                 }
             });

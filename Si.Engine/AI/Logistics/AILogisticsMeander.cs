@@ -32,14 +32,14 @@ namespace Si.Engine.AI.Logistics
             {
                 if (Owner.IsPointingAt(ObservedObject, _varianceAngleForTravel) == false)
                 {
-                    Owner.RotateRadians(_angleToAdd * epoch);
+                    Owner.Rotate(_angleToAdd * epoch);
                 }
             }
             else if (distanceToObservedObject < _idealMinDistance)
             {
                 if (Owner.IsPointingAway(ObservedObject, _varianceAngleForTravel) == false)
                 {
-                    Owner.RotateRadians(_angleToAdd * epoch);
+                    Owner.Rotate(_angleToAdd * epoch);
                 }
             }
             else

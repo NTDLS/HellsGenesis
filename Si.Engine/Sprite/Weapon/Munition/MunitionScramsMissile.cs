@@ -14,7 +14,7 @@ namespace Si.Engine.Sprite.Weapon.Munition
             : base(engine, weapon, firedFrom, imagePath, lockedTarget, location)
         {
             MaxGuidedObservationAngleDegrees = 90;
-            GuidedRotationRateInDegrees = SiVector.DegreesToRadians(10);
+            GuidedRotationRateInDegrees = SiVector.DegToRad(10);
         }
     }
 }

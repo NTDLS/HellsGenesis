@@ -35,7 +35,7 @@ namespace Si.Engine.Sprite.Weapon
                 {
                     for (int i = -15; i < 15; i++) // Create an initial spread so the bullets dont come from the same point.
                     {
-                        var location = Owner.Location + SiVector.PointFromAngleAtDistance360(Owner.PointingAngle + SiVector.RADIANS_90, new SiVector(i, i));
+                        var location = Owner.Location + SiVector.PointFromAngleAtDistanceInUnsignedDegrees(Owner.PointingAngle + SiVector.RADIANS_90, new SiVector(i, i));
                         _engine.Sprites.Munitions.Add(this, location);
                     }
                     RoundQuantity--;

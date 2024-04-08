@@ -78,14 +78,14 @@ namespace Si.Engine.Sprite._Superclass
                     RadarPositionIndicator.Visable = true;
                     RadarPositionIndicator.IsFixedPosition = true;
 
-                    float requiredAngleRadians = _engine.Player.Sprite.AngleToRadians(this);
+                    float requiredAngleRadians = _engine.Player.Sprite.AngleToInRadians(this);
 
                     RadarPositionIndicator.Location = _engine.Display.CenterCanvas
-                        + SiVector.PointFromAngleAtDistance360(new SiAngle(requiredAngleRadians), new SiVector(200, 200));
+                        + SiVector.PointFromAngleAtDistanceInUnsignedDegrees(new SiAngle(requiredAngleRadians), new SiVector(200, 200));
                     RadarPositionIndicator.PointingAngle.Radians = requiredAngleRadians;
 
                     RadarPositionText.Location = _engine.Display.CenterCanvas
-                        + SiVector.PointFromAngleAtDistance360(new SiAngle(requiredAngleRadians), new SiVector(120, 120));
+                        + SiVector.PointFromAngleAtDistanceInUnsignedDegrees(new SiAngle(requiredAngleRadians), new SiVector(120, 120));
                     RadarPositionIndicator.PointingAngle.Radians = requiredAngleRadians;
                 }
                 else

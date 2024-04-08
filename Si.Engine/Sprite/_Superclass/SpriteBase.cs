@@ -921,76 +921,45 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Instantly rotates this object by the given degrees and recalculates the movement vector.
+        /// Instantly rotates this objects movement vector by the given radians and then recalculates the PointingAngle.
         /// </summary>
-        public void RotateDegrees(float degrees)
+        public void Rotate(float radians)
         {
-            PointingAngle.Degrees += degrees;
-            RecalculateMovementVector();
+            MovementVector.Rotate(radians);
+            PointingAngle = MovementVector.ToAngle();
             RotationChanged();
         }
 
         /// <summary>
-        /// Instantly rotates this object by the given radians and recalculates the movement vector.
+        /// Instantly points a sprite at another by rotating the movement vector and then recalculates the PointingAngle.
         /// </summary>
-        public void RotateRadians(float radians)
+        public void Goto(SiVector location)
         {
-            PointingAngle.Radians += radians;
-            RecalculateMovementVector();
-            RotationChanged();
+            var radians = SiVector.AngleToInSignedRadians(Location, location);
+
+            MovementVector.RotateTo(radians);
+            PointingAngle = MovementVector.ToAngle();
         }
 
         /// <summary>
-        /// Instantly points an object at a location, sets the travel speed and recalculates the movement vector. Only used for off-screen transitions.
-        /// </summary>
-        public void PointAtAndGoto(SiVector location, float? velocity = null)
-        {
-            PointingAngle.Degrees = SiVector.AngleInDegreesTo360(Location, location);
-
-            if (velocity != null)
-            {
-                Speed = (float)velocity;
-            }
-
-            RecalculateMovementVector();
-        }
-
-        /// <summary>
-        /// Instantly points an object at another object, sets the travel speed and recalculates the movement vector. Only used for off-screen transitions.
-        /// </summary>
-        public void PointAtAndGoto(SpriteBase obj, float? velocity = null)
-        {
-            PointingAngle.Degrees = SiVector.AngleInDegreesTo360(Location, obj.Location);
-
-            RecalculateMovementVector();
-
-            if (velocity != null)
-            {
-                Speed = (float)velocity;
-            }
-        }
-
-        /// <summary>
-        /// Rotates the object by the specified amount if it not pointing at the target
-        /// angle (with given tolerance) then recalculates the movement vector.
+        /// Rotates the objects movment vector by the specified amount if it not pointing at the target
+        ///     angle (with given tolerance) then recalculates PointingAngle.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SpriteBase obj, float rotationAmount = 1, float varianceDegrees = 10)
+        public bool RotateIfNotPointingAt(SpriteBase obj, float rotationAmountDegrees, float varianceDegrees = 10)
         {
-            var deltaAngle = DeltaAngleDegrees360(obj);
+            var deltaAngle = DeltaAngleInUnsignedDegrees(obj);
 
             if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    PointingAngle.Degrees += rotationAmount;
+                    Rotate(SiVector.DegToRad(rotationAmountDegrees));
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    PointingAngle.Degrees -= rotationAmount;
+                    Rotate(-SiVector.DegToRad(rotationAmountDegrees));
                 }
-
-                RecalculateMovementVector();
 
                 return true;
             }
@@ -999,26 +968,24 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Rotates the object by the specified amount if it not pointing at the target
-        /// angle (with given tolerance) then recalculates the movement vector.
+        /// Rotates the objects movement vector by the specified amount if it not pointing at the target
+        /// angle (with given tolerance) then recalculates the PointingAngle.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(SiVector toLocation, float rotationAmount = 1, float varianceDegrees = 10)
+        public bool RotateIfNotPointingAt(SiVector toLocation, float rotationAmountDegrees, float varianceDegrees = 10)
         {
-            var deltaAngle = DeltaAngleDegrees360(toLocation);
+            var deltaAngle = DeltaAngleInUnsignedDegrees(toLocation);
 
             if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    PointingAngle.Degrees += rotationAmount;
+                    Rotate(SiVector.DegToRad(rotationAmountDegrees));
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    PointingAngle.Degrees -= rotationAmount;
+                    Rotate(-SiVector.DegToRad(rotationAmountDegrees));
                 }
-
-                RecalculateMovementVector();
 
                 return true;
             }
@@ -1027,19 +994,17 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Rotates the object by the specified amount if it not pointing at the target angle
-        /// (with given tolerance) then recalculates the movement vector.
+        /// Rotates the objects movement vector by the specified amount if it not pointing at the target angle
+        /// (with given tolerance) then recalculates the PointingAngle.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
-        public bool RotateIfNotPointingAt(float toDegrees, float rotationAmount = 1, float tolerance = 10)
+        public bool RotateIfNotPointingAt(float toDegrees, float rotationAmountDegrees, float tolerance = 10)
         {
             toDegrees = toDegrees.DegreesNormalized();
 
             if (PointingAngle.DegreesSigned.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
-                PointingAngle.Degrees -= rotationAmount;
-
-                RecalculateMovementVector();
+                Rotate(-SiVector.DegToRad(rotationAmountDegrees));
 
                 return true;
             }
@@ -1048,22 +1013,22 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Rotates the object by the given amount if it is pointing in the given direction then recalculates the movement vector.
+        /// Rotates the objects movement vector by the given amount if it is pointing in the given direction then recalculates the PointingAngle.
         /// </summary>
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if the object is not pointing in the given direction.
-        public bool RotateIfPointingAt(SpriteBase obj, float rotationRadians = 1, float varianceDegrees = 10)
+        public bool RotateIfPointingAt(SpriteBase obj, float rotationAmountDegrees, float varianceDegrees = 10)
         {
-            var deltaAngle = DeltaAngleDegrees360(obj);
+            var deltaAngle = DeltaAngleInUnsignedDegrees(obj);
 
             if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees))
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    PointingAngle += rotationRadians;
+                    Rotate(SiVector.DegToRad(rotationAmountDegrees));
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    PointingAngle -= rotationRadians;
+                    Rotate(-SiVector.DegToRad(rotationAmountDegrees));
                 }
 
                 RecalculateMovementVector();
@@ -1112,7 +1077,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         /// <param name="toObj"></param>
         /// <returns></returns>
-        public float DeltaAngleDegrees360(SpriteBase toObj) => SiVector.DeltaAngle360(this, toObj);
+        public float DeltaAngleInUnsignedDegrees(SpriteBase toObj) => SiVector.DeltaAngleInUnsignedDegrees(this, toObj);
 
         /// <summary>
         /// Calculates the difference in heading angle from one object to get to another between 1-180 and -1-180
@@ -1124,15 +1089,15 @@ namespace Si.Engine.Sprite._Superclass
         /// Calculates the difference in heading angle from one object to get to another between 0-359.
         /// </summary>
         /// <=>s></returns>
-        public float DeltaAngleDegrees360(SiVector toLocation) => SiVector.DeltaAngle360(this, toLocation);
+        public float DeltaAngleInUnsignedDegrees(SiVector toLocation) => SiVector.DeltaAngleInUnsignedDegrees(this, toLocation);
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 0-259.
         /// </summary>
         /// <returns></returns>
-        public float AngleTo360(SpriteBase atObj) => SiVector.AngleTo360(this, atObj);
+        public float AngleToInUnsignedDegrees(SpriteBase atObj) => SiVector.AngleToInUnsignedDegrees(this, atObj);
 
-        public float AngleToRadians(SpriteBase atObj) => SiVector.DegreesToRadians(SiVector.AngleTo360(this, atObj));
+        public float AngleToInRadians(SpriteBase atObj) => SiVector.DegToRad(SiVector.AngleToInUnsignedDegrees(this, atObj));
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 1-180 and -1-180
@@ -1145,8 +1110,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
-        [Obsolete("This method is deprecated. Use AngleTo() instead.")]
-        public float AngleTo360(SiVector location) => SiVector.AngleTo360(this, location);
+        public float AngleToInUnsignedDegrees(SiVector location) => SiVector.AngleToInUnsignedDegrees(this, location);
 
         public bool IsPointingAt(SpriteBase atObj, float toleranceDegrees, float maxDistance, float offsetAngle)
             => SiVector.IsPointingAt(this, atObj, toleranceDegrees, maxDistance, offsetAngle);

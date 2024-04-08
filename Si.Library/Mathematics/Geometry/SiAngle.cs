@@ -93,7 +93,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="vector"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiAngle FromXy(SiVector vector) => new SiAngle(vector);
+        public static SiAngle FromVector(SiVector vector) => new SiAngle(vector);
 
         /// <summary>
         /// Returns a normailized vector from an SiAngle.

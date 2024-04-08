@@ -11,7 +11,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
     internal class GuidedMunitionBase : MunitionBase
     {
         public int MaxGuidedObservationAngleDegrees { get; set; } = 90;
-        public float GuidedRotationRateInDegrees { get; set; } = SiVector.DegreesToRadians(3);
+        public float GuidedRotationRateInDegrees { get; set; } = SiVector.DegToRad(3);
         public SpriteInteractiveBase LockedTarget { get; private set; }
 
         public GuidedMunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath,
