@@ -1103,7 +1103,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Calculates the angle in degrees to another object between 1-180 and -1-180
         /// </summary>
         /// <returns></returns>
-        public float AngleTo(SpriteBase atObj) => SiVector.AngleTo(this, atObj);
+        public float AngleTo(SpriteBase atObj) => SiVector.AngleToInSignedDegrees(this, atObj);
 
         /// <summary>
         /// Calculates the angle in degrees to a location.

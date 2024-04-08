@@ -5,9 +5,9 @@ using System.Runtime.CompilerServices;
 namespace Si.Library.Mathematics.Geometry
 {
     /// <summary>
-    /// Implements a basic vector.
+    /// 2d vector and associated halpers.
     /// </summary>
-    public partial class SiVector
+    public partial class SiVector : IComparable<SiVector>
     {
         public float X;
         public float Y;
@@ -30,6 +30,8 @@ namespace Si.Library.Mathematics.Geometry
 
         #endregion
 
+        #region Converters.
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RectangleF ToRectangleF(float width, float height) => new(X, Y, width, height);
 
@@ -42,18 +44,9 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public SiAngle ToAngle() => SiAngle.FromVector(this);
 
+        #endregion
 
-        #region Operator Overloads.
-
-        #region Float first.
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator -(SizeF modifier, SiVector original)
-            => new SiVector(modifier.Width - original.X, -modifier.Height - original.Y);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator -(Size modifier, SiVector original)
-            => new SiVector(modifier.Width - original.X, modifier.Height - original.Y);
+        #region Operator Overloads: Float first.
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SiVector operator -(float modifier, SiVector original)
@@ -80,69 +73,96 @@ namespace Si.Library.Mathematics.Geometry
 
         #endregion
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator -(SiVector original, SizeF modifier)
-            => new SiVector(original.X - modifier.Width, original.Y - modifier.Height);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator -(SiVector original, Size modifier)
-            => new SiVector(original.X - modifier.Width, original.Y - modifier.Height);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator -(SiVector original, SiVector modifier)
-            => new SiVector(original.X - modifier.X, original.Y - modifier.Y);
+        #region Operator Overloads: Float Second.
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SiVector operator -(SiVector original, float modifier)
            => new SiVector(original.X - modifier, original.Y - modifier);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator +(SiVector original, SiVector modifier)
-            => new SiVector(original.X + modifier.X, original.Y + modifier.Y);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SiVector operator +(SiVector original, float modifier)
             => new SiVector(original.X + modifier, original.Y + modifier);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator *(SiVector original, SiVector scaleFactor)
-            => new SiVector(original.X * scaleFactor.X, original.Y * scaleFactor.Y);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SiVector operator *(SiVector original, float scaleFactor)
             => new SiVector(original.X * scaleFactor, original.Y * scaleFactor);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector operator /(SiVector original, float scaleFactor)
+            => scaleFactor == 0 ? Zero : new SiVector(original.X / scaleFactor, original.Y / scaleFactor);
+
+        #endregion
+
+        #region Operator Overloads: SizeF.
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector operator -(SizeF modifier, SiVector original)
+            => new SiVector(modifier.Width - original.X, -modifier.Height - original.Y);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector operator -(SiVector original, SizeF modifier)
+            => new SiVector(original.X - modifier.Width, original.Y - modifier.Height);
+
+        #endregion
+
+        #region Operator Overloads: Size.
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector operator -(Size modifier, SiVector original)
+            => new SiVector(modifier.Width - original.X, modifier.Height - original.Y);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector operator -(SiVector original, Size modifier)
+            => new SiVector(original.X - modifier.Width, original.Y - modifier.Height);
+
+        #endregion
+
+        #region Operator Overloads: Vector -> Vector.
+
+        public static bool operator ==(SiVector? left, SiVector? right)
+        {
+            if (ReferenceEquals(left, right))
+            {
+                return true;
+            }
+
+            if (left is null || right is null)
+            {
+                return false;
+            }
+
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(SiVector? left, SiVector? right)
+            => !(left == right);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector operator -(SiVector original, SiVector modifier)
+            => new SiVector(original.X - modifier.X, original.Y - modifier.Y);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector operator +(SiVector original, SiVector modifier)
+            => new SiVector(original.X + modifier.X, original.Y + modifier.Y);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector operator *(SiVector original, SiVector scaleFactor)
+            => new SiVector(original.X * scaleFactor.X, original.Y * scaleFactor.Y);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator >(SiVector v1, SiVector v2)
-            => v1.Length() > v2.Length();
+            => v1.Magnitude() > v2.Magnitude();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator <(SiVector v1, SiVector v2)
-            => v1.Length() < v2.Length();
+            => v1.Magnitude() < v2.Magnitude();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SiVector operator /(SiVector original, SiVector scaleFactor)
         {
-            if (scaleFactor.X == 0.0 && scaleFactor.Y == 0.0)
-            {
-                return new SiVector(0, 0);
-            }
-            return new SiVector(original.X / scaleFactor.X, original.Y / scaleFactor.Y);
+            return scaleFactor.X == 0.0 && scaleFactor.Y == 0.0 ? One :
+                new SiVector(original.X / scaleFactor.X, original.Y / scaleFactor.Y);
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator /(SiVector original, float scaleFactor)
-        {
-            if (scaleFactor == 0.0)
-            {
-                return new SiVector(0, 0);
-            }
-            return new SiVector(original.X / scaleFactor, original.Y / scaleFactor);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override bool Equals(object? o)
-            => Math.Round(((SiVector?)o)?.X ?? float.NaN, 4) == X && Math.Round(((SiVector?)o)?.Y ?? float.NaN, 4) == Y;
 
         #endregion
 
@@ -151,8 +171,26 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode() => ToString().GetHashCode();
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override string ToString()
             => $"{{{Math.Round(X, 4).ToString("#.####")},{Math.Round(Y, 4).ToString("#.####")}}}";
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public override bool Equals(object? o)
+            => Math.Round(((SiVector?)o)?.X ?? float.NaN, 4) == X && Math.Round(((SiVector?)o)?.Y ?? float.NaN, 4) == Y;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public int CompareTo(SiVector? other)
+        {
+            if (other == null) return 1; // Consider this instance greater if other is null
+
+            // Calculate the magnitudes
+            var thisMagnitude = Math.Sqrt(X * X + Y * Y);
+            var otherMagnitude = Math.Sqrt(other.X * other.X + other.Y * other.Y);
+
+            // Use the magnitudes to determine ordering
+            return thisMagnitude.CompareTo(otherMagnitude);
+        }
 
         #endregion
 
@@ -177,11 +215,116 @@ namespace Si.Library.Mathematics.Geometry
         /// </summary>
         public const float RADIANS_270 = 270 * DEG_TO_RAD;
 
+        #region AngleTo...Degrees (Signed and Unsigned).
+
         /// <summary>
-        /// Determines whether the vector is normalized.
+        /// Calculates the angle of one objects location to another location from 0 - 360.
         /// </summary>
-        public static bool IsNormalized(SiVector vector)
-            => SiMath.IsOne(vector.X * vector.X + vector.Y * vector.Y);
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="to">The object to which the calculation is based.</param>
+        /// <returns>The calculated angle in the range of 0-360.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float AngleToInUnsignedDegrees(ISprite from, ISprite to)
+            => AngleToInUnsignedDegrees(from.Location, to.Location);
+
+        /// <summary>
+        /// Calculates the angle of one objects location to another location from 1-180 to -1-180.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="to">The object to which the calculation is based.</param>
+        /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float AngleToInSignedDegrees(ISprite from, ISprite to)
+        {
+            var angle = AngleToInUnsignedDegrees(from.Location, to.Location);
+            if (angle > 180)
+            {
+                angle -= 180;
+                angle = 180 - angle;
+                angle *= -1;
+            }
+
+            return -angle;
+        }
+
+        /// <summary>
+        /// Calculates the angle of one objects location to another location from 1-180 to -1-180.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="to">The point to which the calculation is based.</param>
+        /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float AngleToInSignedDegrees(ISprite from, SiVector to)
+        {
+            var angle = AngleToInUnsignedDegrees(from.Location, to);
+            if (angle > 180)
+            {
+                angle -= 180;
+                angle = 180 - angle;
+                angle *= -1;
+            }
+
+            return -angle;
+        }
+
+        /// <summary>
+        /// Calculates the angle of one objects location to another location from 0 - 360.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="to">The object to which the calculation is based.</param>
+        /// <returns>The calculated angle in the range of 0-360.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float AngleToInUnsignedDegrees(SiVector from, ISprite to)
+            => AngleToInUnsignedDegrees(from, to.Location);
+
+        /// <summary>
+        /// Calculates the angle of one objects location to another location from 0 - 360.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="to">The point to which the calculation is based.</param>
+        /// <returns>The calculated angle in the range of 0-360.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float AngleToInUnsignedDegrees(ISprite from, SiVector to)
+            => AngleToInUnsignedDegrees(from.Location, to);
+
+        /// <summary>
+        /// Calculates the angle from one object to another, returns the degrees.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float AngleToInUnsignedDegrees(SiVector from, SiVector to)
+        {
+            var radians = (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
+            return (SiAngle.Rad2Deg(radians) + 360.0f) % 360.0f;
+        }
+
+        #endregion
+
+        #region AngleTo...Radians (Signed and Unsigned).
+
+        /// <summary>
+        /// Calculates the angle from one object to another, returns the radians.
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float AngleToInSignedRadians(SiVector from, SiVector to)
+            => (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
+
+        /// <summary>
+        /// Calculate the angle between two points relative to the horizontal axis.
+        /// </summary>
+        /// <param name="point1"></param>
+        /// <param name="point2"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float AngleToInUnsignedRadians(SiVector point1, SiVector point2)
+            => (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
+
+        #endregion
 
         /// <summary>
         /// Rotates the given vector by the given radians.
@@ -225,76 +368,6 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SiVector PointFromAngleAtDistanceInUnsignedDegrees(SiAngle angle, SiVector distance)
             => new SiVector((float)Math.Cos(angle.Radians) * distance.X, (float)Math.Sin(angle.Radians) * distance.Y);
-
-        /// <summary>
-        /// Calculates the angle of one objects location to another location from 0 - 360.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The object to which the calculation is based.</param>
-        /// <returns>The calculated angle in the range of 0-360.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInUnsignedDegrees(ISprite from, ISprite to)
-            => AngleToInUnsignedDegrees(from.Location, to.Location);
-
-        /// <summary>
-        /// Calculates the angle of one objects location to another location from 1-180 to -1-180.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The object to which the calculation is based.</param>
-        /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleTo(ISprite from, ISprite to)
-        {
-            var angle = AngleToInUnsignedDegrees(from.Location, to.Location);
-            if (angle > 180)
-            {
-                angle -= 180;
-                angle = 180 - angle;
-                angle *= -1;
-            }
-
-            return -angle;
-        }
-
-        /// <summary>
-        /// Calculates the angle of one objects location to another location from 1-180 to -1-180.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The point to which the calculation is based.</param>
-        /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleTo(ISprite from, SiVector to)
-        {
-            var angle = AngleToInUnsignedDegrees(from.Location, to);
-            if (angle > 180)
-            {
-                angle -= 180;
-                angle = 180 - angle;
-                angle *= -1;
-            }
-
-            return -angle;
-        }
-
-        /// <summary>
-        /// Calculates the angle of one objects location to another location from 0 - 360.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The object to which the calculation is based.</param>
-        /// <returns>The calculated angle in the range of 0-360.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInUnsignedDegrees(SiVector from, ISprite to)
-            => AngleToInUnsignedDegrees(from, to.Location);
-
-        /// <summary>
-        /// Calculates the angle of one objects location to another location from 0 - 360.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The point to which the calculation is based.</param>
-        /// <returns>The calculated angle in the range of 0-360.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInUnsignedDegrees(ISprite from, SiVector to)
-            => AngleToInUnsignedDegrees(from.Location, to);
 
         /// <summary>
         /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
@@ -498,31 +571,6 @@ namespace Si.Library.Mathematics.Geometry
         }
 
         /// <summary>
-        /// Calculates the angle from one object to another, returns the radians.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInSignedRadians(SiVector from, SiVector to)
-        {
-            return (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
-        }
-
-        /// <summary>
-        /// Calculates the angle from one object to another, returns the degrees.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInUnsignedDegrees(SiVector from, SiVector to)
-        {
-            var radians = (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
-            return (SiAngle.Rad2Deg(radians) + 360.0f) % 360.0f;
-        }
-
-        /// <summary>
         /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
         /// </summary>
         /// <param name="vector"></param>
@@ -533,6 +581,12 @@ namespace Si.Library.Mathematics.Geometry
             var magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
             return new SiVector(vector.X / magnitude, vector.Y / magnitude);
         }
+
+        /// <summary>
+        /// Determines whether the vector is normalized.
+        /// </summary>
+        public static bool IsNormalized(SiVector vector)
+            => SiMath.IsOne(vector.X * vector.X + vector.Y * vector.Y);
 
         /// <summary>
         /// Returns the X + Y;
@@ -555,12 +609,22 @@ namespace Si.Library.Mathematics.Geometry
         /// <summary>
         /// Calculate the dot product of two vectors.This is useful for determining the angle between vectors or projecting one vector onto another.
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <altmember cref="LengthSquared"/>
+        /// <altmember cref="Magnitude"/>
+        /// <altmember cref="Magnitude"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Dot(SiVector a, SiVector b)
-            => a.X * b.X + a.Y * b.Y;
+        public static float Dot(SiVector v1, SiVector v2) => v1.X * v2.X + v1.Y * v2.Y;
+
+        /// <summary>
+        /// The length squared of a vector is the dot product of the vector with itself.
+        /// This is useful for determining the angle between vectors or projecting one vector onto another.
+        /// The length squared of a vector is the dot product of the vector with itself, and it's often used in optimizations where the actual
+        /// distance (magnitude) isn't necessary. Calculating the square root (as in the magnitude) is computationally expensive, so using
+        /// length squared can save resources when comparing distances or checking thresholds.
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static float LengthSquared(SiVector v) => v.X * v.X + v.Y * v.Y;
 
         /// <summary>
         /// Gets the length of a vector from its tail to its head.
@@ -568,28 +632,10 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="vector"></param>
         /// <returns></returns>
         /// <altmember cref="LengthSquared"/>
+        /// <altmember cref="Magnitude"/>
         /// [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Length(SiVector vector)
+        public static float Magnitude(SiVector vector)
             => (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
-
-        /// <summary>Returns the length of the vector squared.</summary>
-        /// <returns>The vector's length squared.</returns>
-        /// <remarks>This operation offers better performance than a call to the <see cref="Length" /> method.</remarks>
-        /// <altmember cref="Length"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float LengthSquared() => Dot(this, this);
-
-        /// <summary>
-        /// Calculate the angle between two points relative to the horizontal axis.
-        /// </summary>
-        /// <param name="point1"></param>
-        /// <param name="point2"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleBetween(SiVector point1, SiVector point2)
-        {
-            return (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
-        }
 
         /// <summary>
         /// Rotate a point around another point by a certain angle.
@@ -623,6 +669,12 @@ namespace Si.Library.Mathematics.Geometry
 
         #endregion
 
+        /// <summary>
+        /// Returns the clone of this vector.
+        /// </summary>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public SiVector Clone() => new SiVector(this);
 
         /// <summary>
         /// Returns a new rotated vector by the given radians.
@@ -638,8 +690,8 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="angleRadians"></param>
         public void Rotate(float angleRadians)
         {
-            float cosTheta = (float)Math.Cos(angleRadians);
-            float sinTheta = (float)Math.Sin(angleRadians);
+            var cosTheta = (float)Math.Cos(angleRadians);
+            var sinTheta = (float)Math.Sin(angleRadians);
 
             var x = X * cosTheta - Y * sinTheta;
             var y = X * sinTheta + Y * cosTheta;
@@ -654,13 +706,10 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="angleRadians"></param>
         public void RotateTo(float angleRadians)
         {
-            float magnitude = Length();
+            float magnitude = Magnitude();
             X = magnitude * (float)Math.Cos(angleRadians);
             Y = magnitude * (float)Math.Sin(angleRadians);
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public SiVector Clone() => new SiVector(this);
 
         /// <summary>
         /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
@@ -684,9 +733,23 @@ namespace Si.Library.Mathematics.Geometry
         /// It provides a measure of how "long" the vector is in the specified direction.
         /// The length also serves as the vector magnatude.
         /// </summary>
+        /// <altmember cref="LengthSquared"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float Magnitude() => Magnitude(this);
+
+
+        /// <summary>
+        /// The length squared of a vector is the dot product of the vector with itself.
+        /// This is useful for determining the angle between vectors or projecting one vector onto another.
+        /// The length squared of a vector is the dot product of the vector with itself, and it's often used in optimizations where the actual
+        /// distance (magnitude) isn't necessary. Calculating the square root (as in the magnitude) is computationally expensive, so using
+        /// length squared can save resources when comparing distances or checking thresholds.
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float Length() => Length(this);
+        public float LengthSquared() => LengthSquared(this);
 
         /// <summary>
         /// Returns the X + Y;
@@ -729,7 +792,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="point2"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float AngleBetween(SiVector point2) => AngleBetween(this, point2);
+        public float AngleToInUnsignedRadians(SiVector point2) => AngleToInUnsignedRadians(this, point2);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float AngleToInUnsignedDegrees(SiVector point2) => AngleToInUnsignedDegrees(this, point2);

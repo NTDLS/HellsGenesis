@@ -335,7 +335,7 @@ namespace Si.Engine.Sprite._Superclass
             if (collisionNormal.Dot(relativeVelocity) < 0) // Sprites are moving towards each other
             {
                 var vA_prime = actionSpriteVelocity - (2 * massB / (massA + massB))
-                    * SiVector.Dot(actionSpriteVelocity - collideWithSpriteVelocity, collisionNormal) / collisionNormal.Length() * collisionNormal;
+                    * SiVector.Dot(actionSpriteVelocity - collideWithSpriteVelocity, collisionNormal) / collisionNormal.Magnitude() * collisionNormal;
 
                 actionBody.Sprite.MovementVector = vA_prime * actionBody.Sprite.Throttle;
             }

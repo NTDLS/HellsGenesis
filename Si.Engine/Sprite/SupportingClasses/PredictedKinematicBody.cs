@@ -75,7 +75,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
             Direction = new SiAngle(sprite.PointingAngle.Radians + sprite.RotationSpeed * epoch);
 
             //Assuming the sprite is moving in the direction it is pointing.
-            Velocity = Direction * Velocity.Length();
+            Velocity = Direction * Velocity.Magnitude();
 
             //Determine the sprites new location
             Location = sprite.Location + Velocity * sprite.Throttle * epoch;
