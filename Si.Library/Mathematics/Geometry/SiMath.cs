@@ -76,7 +76,7 @@ namespace Si.Library.Mathematics.Geometry
         public static float DegToRad(float degrees) => degrees * DEG_TO_RAD;
 
         /// <summary>
-        /// Converts Cardinal x,y to degrees.
+        /// Converts cardinal x,y to degrees.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -85,7 +85,7 @@ namespace Si.Library.Mathematics.Geometry
         public static float CardinalToDeg(float x, float y) => RadToDeg((float)Math.Atan2(y, x));
 
         /// <summary>
-        /// Converts Cardinal x,y to radians.
+        /// Converts cardinal x,y to radians.
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
@@ -93,6 +93,14 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float CardinalToRad(float x, float y) => (float)Math.Atan2(y, x);
 
+
+        /// <summary>
+        /// Converts radians to cardinal x,y.
+        /// </summary>
+        /// <param name="radians"></param>
+        /// <returns></returns>
+        public static (float X, float Y) RadToCardinal(float radians)
+            => ((float)Math.Cos(radians), (float)Math.Sin(radians));
 
         /// <summary>
         /// Restrict a value to be within a specified range.Useful for keeping objects within boundaries.
@@ -203,16 +211,6 @@ namespace Si.Library.Mathematics.Geometry
         }
 
         /// <summary>
-        /// Converts degrees to radians.
-        /// </summary>
-        /// <param name="degree">The value to convert.</param>
-        /// <returns>The converted value.</returns>
-        public static float DegreesToRadians(float degree)
-        {
-            return degree * (Pi / 180.0f);
-        }
-
-        /// <summary>
         /// Converts radians to revolutions.
         /// </summary>
         /// <param name="radian">The value to convert.</param>
@@ -260,16 +258,6 @@ namespace Si.Library.Mathematics.Geometry
         public static float GradiansToRadians(float gradian)
         {
             return gradian * (Pi / 200.0f);
-        }
-
-        /// <summary>
-        /// Converts radians to degrees.
-        /// </summary>
-        /// <param name="radian">The value to convert.</param>
-        /// <returns>The converted value.</returns>
-        public static float RadiansToDegrees(float radian)
-        {
-            return radian * (180.0f / Pi);
         }
 
         /// <summary>

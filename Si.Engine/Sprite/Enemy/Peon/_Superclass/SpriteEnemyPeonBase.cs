@@ -12,8 +12,8 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
     /// </summary>
     internal class SpriteEnemyPeonBase : SpriteEnemyBase
     {
-        public SpriteAnimation ThrustAnimation { get; internal set; }
-        public SpriteAnimation BoostAnimation { get; internal set; }
+        public SpriteAnimation ThrusterAnimation { get; internal set; }
+        public SpriteAnimation BoosterAnimation { get; internal set; }
 
         public SpriteEnemyPeonBase(EngineCore engine)
             : base(engine)
@@ -29,19 +29,19 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
                 ReplayDelay = new TimeSpan(0)
             };
 
-            ThrustAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png", new Size(32, 32), 100, playMode)
+            ThrusterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png", new Size(32, 32), 100, playMode)
             {
                 OwnerUID = UID
             };
-            ThrustAnimation.Reset();
-            _engine.Sprites.Animations.Insert(ThrustAnimation, this);
+            ThrusterAnimation.Reset();
+            _engine.Sprites.Animations.Insert(ThrusterAnimation, this);
 
-            BoostAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
+            BoosterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
             {
                 OwnerUID = UID
             };
-            BoostAnimation.Reset();
-            _engine.Sprites.Animations.Insert(BoostAnimation, this);
+            BoosterAnimation.Reset();
+            _engine.Sprites.Animations.Insert(BoosterAnimation, this);
 
             UpdateThrustAnimationPositions();
         }
@@ -50,29 +50,30 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 
         private void UpdateThrustAnimationPositions()
         {
-            if (ThrustAnimation != null && ThrustAnimation.Visable)
+            var reverseVector = PointingAngle.Rotation(SiMath.DegToRad(180)).Normalize();
+            var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(reverseVector, new SiVector(20, 20));
+
+            if (ThrusterAnimation != null && ThrusterAnimation.Visable)
             {
-                var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(PointingAngle + SiMath.DegToRad(180), new SiVector(20, 20));
-                ThrustAnimation.PointingAngle = PointingAngle;
-                ThrustAnimation.Location = Location + pointBehind;
+                ThrusterAnimation.PointingAngle = PointingAngle;
+                ThrusterAnimation.Location = Location + pointBehind;
             }
-            if (BoostAnimation != null && BoostAnimation.Visable)
+            if (BoosterAnimation != null && BoosterAnimation.Visable)
             {
-                var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(PointingAngle + SiMath.DegToRad(180), new SiVector(20, 20));
-                BoostAnimation.PointingAngle = PointingAngle;
-                BoostAnimation.Location = Location + pointBehind;
+                BoosterAnimation.PointingAngle = PointingAngle;
+                BoosterAnimation.Location = Location + pointBehind;
             }
         }
 
         private void EnemyBase_OnVisibilityChanged(SpriteBase sender)
         {
-            if (ThrustAnimation != null)
+            if (ThrusterAnimation != null)
             {
-                ThrustAnimation.Visable = false;
+                ThrusterAnimation.Visable = false;
             }
-            if (BoostAnimation != null)
+            if (BoosterAnimation != null)
             {
-                BoostAnimation.Visable = false;
+                BoosterAnimation.Visable = false;
             }
         }
 
@@ -84,20 +85,20 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         {
             base.ApplyMotion(epoch, displacementVector);
 
-            if (ThrustAnimation != null)
+            if (ThrusterAnimation != null)
             {
-                ThrustAnimation.Visable = MovementVector.Sum() > 0;
+                ThrusterAnimation.Visable = MovementVector.Sum() > 0;
             }
-            if (BoostAnimation != null)
+            if (BoosterAnimation != null)
             {
-                BoostAnimation.Visable = Throttle > 0;
+                BoosterAnimation.Visable = Throttle > 0;
             }
         }
 
         public override void Cleanup()
         {
-            ThrustAnimation?.QueueForDelete();
-            BoostAnimation?.QueueForDelete();
+            ThrusterAnimation?.QueueForDelete();
+            BoosterAnimation?.QueueForDelete();
 
             base.Cleanup();
         }

@@ -34,7 +34,7 @@ namespace Si.Engine.Sprite.Player._Superclass
         public int MaxHullHealth { get; set; }
         public int MaxShieldPoints { get; set; }
         public SpriteAnimation ThrusterAnimation { get; private set; }
-        public SpriteAnimation BoostAnimation { get; private set; }
+        public SpriteAnimation BoosterAnimation { get; private set; }
         public WeaponBase PrimaryWeapon { get; private set; }
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
 
@@ -58,7 +58,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             ShipEngineIdleSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Idle.wav", 0.5f, true);
             ShipEngineBoostSound = _engine.Assets.GetAudio(@"Sounds\Ship\Engine Boost.wav", 0.5f, true);
 
-            PointingAngle = new SiAngle(0);
+            PointingAngle = new SiVector(0);
             RecalculateMovementVector();
             Throttle = 0;
 
@@ -84,7 +84,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                 ThrusterAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
             }
 
-            if (BoostAnimation == null || BoostAnimation.IsQueuedForDeletion == true)
+            if (BoosterAnimation == null || BoosterAnimation.IsQueuedForDeletion == true)
             {
                 var playMode = new SpriteAnimation.PlayMode()
                 {
@@ -92,15 +92,15 @@ namespace Si.Engine.Sprite.Player._Superclass
                     DeleteSpriteAfterPlay = false,
                     ReplayDelay = new TimeSpan(0)
                 };
-                BoostAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
+                BoosterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
                 {
                     SpriteTag = "PlayerForwardThrust",
                     Visable = false,
                     OwnerUID = UID
                 };
                 //BoostAnimation.Reset();
-                _engine.Sprites.Animations.Insert(BoostAnimation, this);
-                BoostAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
+                _engine.Sprites.Animations.Insert(BoosterAnimation, this);
+                BoosterAnimation.OnVisibilityChanged += (sender) => UpdateThrustAnimationPositions();
             }
 
             CenterInUniverse();
@@ -109,7 +109,7 @@ namespace Si.Engine.Sprite.Player._Superclass
         public override void Cleanup()
         {
             ThrusterAnimation?.QueueForDelete();
-            BoostAnimation?.QueueForDelete();
+            BoosterAnimation?.QueueForDelete();
             base.Cleanup();
         }
 
@@ -119,7 +119,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             if (Visable == false)
             {
                 if (ThrusterAnimation != null) ThrusterAnimation.Visable = false;
-                if (BoostAnimation != null) BoostAnimation.Visable = false;
+                if (BoosterAnimation != null) BoosterAnimation.Visable = false;
                 ShipEngineIdleSound?.Stop();
                 ShipEngineRoarSound?.Stop();
             }
@@ -176,23 +176,24 @@ namespace Si.Engine.Sprite.Player._Superclass
 
         private void UpdateThrustAnimationPositions()
         {
+            var reverseVector = PointingAngle.Rotation(SiMath.DegToRad(180)).Normalize();
+            var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(reverseVector, new SiVector(40, 40));
+
             if (ThrusterAnimation != null)
             {
                 if (Visable)
                 {
-                    var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(PointingAngle + SiMath.DegToRad(180), new SiVector(40, 40));
                     ThrusterAnimation.PointingAngle = PointingAngle;
                     ThrusterAnimation.Location = Location + pointBehind;
                 }
             }
 
-            if (BoostAnimation != null)
+            if (BoosterAnimation != null)
             {
                 if (Visable)
                 {
-                    var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(PointingAngle + SiMath.DegToRad(180), new SiVector(40, 40));
-                    BoostAnimation.PointingAngle = PointingAngle;
-                    BoostAnimation.Location = Location + pointBehind;
+                    BoosterAnimation.PointingAngle = PointingAngle;
+                    BoosterAnimation.Location = Location + pointBehind;
                 }
             }
         }

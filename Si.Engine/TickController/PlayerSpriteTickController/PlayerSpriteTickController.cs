@@ -217,6 +217,10 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     else _lateralVelocity -= _lateralVelocity > 0 ? velocityRampDown : -velocityRampDown;
                 }
 
+                if (_lateralVelocity > 0.8)
+                {
+                }
+
                 #endregion
 
                 #region Rotation.
@@ -242,9 +246,9 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
                     Sprite.ThrusterAnimation.Visable = (targetForwardAmount >= throttleFloor);
                 }
 
-                if (Sprite.BoostAnimation != null)
+                if (Sprite.BoosterAnimation != null)
                 {
-                    Sprite.BoostAnimation.Visable =
+                    Sprite.BoosterAnimation.Visable =
                         (targetForwardAmount >= throttleFloor)
                         && Engine.Input.IsKeyPressed(SiPlayerKey.SpeedBoost)
                         && _boostForwardVelocity > 0
@@ -259,7 +263,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
             Sprite.Throttle = 1 + _boostForwardVelocity;
 
             Sprite.MovementVector = (Sprite.MakeMovementVector() * _forwardVelocity) //Forward / Reverse
-                            + (Sprite.MakeMovementVector(Sprite.PointingAngle + SiMath.RADIANS_90) * _lateralVelocity);  //Lateral strafing.
+                + (Sprite.MakeMovementVector(Sprite.PointingAngle.Radians + SiMath.RADIANS_90) * _lateralVelocity);  //Lateral strafing.
 
             Sprite.PerformCollisionDetection(epoch);
 

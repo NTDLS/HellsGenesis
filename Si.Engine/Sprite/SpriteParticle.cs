@@ -46,7 +46,7 @@ namespace Si.Engine.Sprite
         /// <summary>
         /// Allow for a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
         /// </summary>
-        public SiAngle TravelAngle { get; set; } = new SiAngle();
+        public SiVector TravelAngle { get; set; } = new SiVector();
 
         public SpriteParticle(EngineCore engine, SiVector location, Size size, Color4? color = null)
             : base(engine)

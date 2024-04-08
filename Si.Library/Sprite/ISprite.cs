@@ -9,6 +9,6 @@ namespace Si.Library.Sprite
     {
         public SiVector Location { get; set; }
         public float RotationSpeed { get; set; }
-        public SiAngle PointingAngle { get; set; }
+        public SiVector PointingAngle { get; set; }
     }
 }
