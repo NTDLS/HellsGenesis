@@ -44,7 +44,7 @@ namespace Si.Engine.Sprite._Superclass
 
         #endregion
 
-        public SiTimeRenewableResources RenewableResources { get; set; } = new();
+        public SiRenewableResources RenewableResources { get; set; } = new();
         public InteractiveSpriteMetadata Metadata { get; set; }
         public List<WeaponBase> Weapons { get; private set; } = new();
 

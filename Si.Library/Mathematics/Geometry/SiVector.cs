@@ -656,6 +656,52 @@ namespace Si.Library.Mathematics.Geometry
 
         #endregion
 
+        #region Direction.
+
+        public float Radians
+        {
+            get => SiMath.CardinalToRad(X, Y);
+            set
+            {
+                var radians = value > 0 ? value % SiMath.RADS_IN_CIRCLE : (value + SiMath.RADS_IN_CIRCLE) % SiMath.RADS_IN_CIRCLE;
+
+                var cardinal = SiMath.RadToCardinal(radians);
+
+                //TODO: Should we normalize this? That would assume we are ONLY storing the angle.
+
+                X = cardinal.X;
+                Y = cardinal.Y;
+            }
+        }
+
+        public float Degrees
+        {
+            get => SiMath.CardinalToDeg(X, Y);
+            set
+            {
+                var degrees = value > 0 ? value % 360 : (value + 360) % 360;
+
+                var cardinal = SiMath.RadToCardinal(SiMath.DegToRad(degrees));
+
+                //TODO: Should we normalize this? That would assume we are ONLY storing the angle.
+
+                X = cardinal.X;
+                Y = cardinal.Y;
+            }
+        }
+
+        /// <summary>
+        /// Angle in degrees between [−180,180]
+        /// </summary>
+        public float DegreesSigned => (Degrees + 180) % 360 - 180;
+
+        /// <summary>
+        /// Angle in radians between [−3.14,3.14]
+        /// </summary>
+        public float RadiansSigned => (float)((Radians + Math.PI) % (Math.PI * 2) - Math.PI);
+
+        #endregion
+
         /// <summary>
         /// Returns the clone of this vector.
         /// </summary>

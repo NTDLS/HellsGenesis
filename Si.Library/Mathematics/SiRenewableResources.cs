@@ -5,14 +5,14 @@ namespace Si.Library.Mathematics
     /// <summary>
     /// Keeps track of a collection of time-renewable-resources such as "boost amount" or health.
     /// </summary>
-    public class SiTimeRenewableResources
+    public class SiRenewableResources
     {
-        #region class:TimeRenewableResource.
+        #region class:RenewableResource.
 
         /// <summary>
         /// Keeps track of time-renewable-resources such as "boost amount".
         /// </summary>
-        public class TimeRenewableResource
+        public class RenewableResource
         {
             /// <summary>
             /// When a resource reaches 0, it must renew bac to to this value before it can be used.
@@ -55,7 +55,7 @@ namespace Si.Library.Mathematics
             /// <param name="maxValue">The maximum value the resource can build to.</param>
             /// <param name="startingValue">The starting value of the resource.</param>
             /// <param name="RebuildRatePerSecond">The amount of resource to add per-second.</param>
-            public TimeRenewableResource(float maxValue, float startingValue, float rebuildRatePerSecond)
+            public RenewableResource(float maxValue, float startingValue, float rebuildRatePerSecond)
             {
                 MaxValue = maxValue;
                 AvailableResource = startingValue;
@@ -69,7 +69,7 @@ namespace Si.Library.Mathematics
             /// <param name="startingValue">The starting value of the resource.</param>
             /// <param name="RebuildRatePerSecond">The amount of resource to add per-second.</param>
             /// <param name="cooldownFloor"> When a resource reaches 0, it must renew bac to to this value before it can be used.</param>
-            public TimeRenewableResource(float maxValue, float startingValue, float rebuildRatePerSecond, float cooldownFloor)
+            public RenewableResource(float maxValue, float startingValue, float rebuildRatePerSecond, float cooldownFloor)
             {
                 MaxValue = maxValue;
                 AvailableResource = startingValue;
@@ -118,9 +118,9 @@ namespace Si.Library.Mathematics
 
         #endregion
 
-        public Dictionary<string, TimeRenewableResource> Resources { get; set; } = new();
+        public Dictionary<string, RenewableResource> Resources { get; set; } = new();
 
-        public void Create(string key, TimeRenewableResource renewableResource)
+        public void Create(string key, RenewableResource renewableResource)
             => Resources.Add(key.ToLower(), renewableResource);
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace Si.Library.Mathematics
         /// <param name="startingValue"></param>
         /// <param name="rebuildRatePerSecond"></param>
         public void Create(string key, float maxValue, float startingValue, float rebuildRatePerSecond)
-            => Resources.Add(key.ToLower(), new TimeRenewableResource(maxValue, startingValue, rebuildRatePerSecond));
+            => Resources.Add(key.ToLower(), new RenewableResource(maxValue, startingValue, rebuildRatePerSecond));
 
         /// <summary>
         /// Creates a new renwewable resources and adds it to the resource collection.
@@ -142,7 +142,7 @@ namespace Si.Library.Mathematics
         /// <param name="rebuildRatePerSecond"></param>
         /// <param name="cooldownFloor"> When a resource reaches 0, it must renew bac to to this value before it can be used.</param>
         public void Create(string key, float maxValue, float startingValue, float rebuildRatePerSecond, float cooldownFloor)
-            => Resources.Add(key.ToLower(), new TimeRenewableResource(maxValue, startingValue, rebuildRatePerSecond, cooldownFloor));
+            => Resources.Add(key.ToLower(), new RenewableResource(maxValue, startingValue, rebuildRatePerSecond, cooldownFloor));
 
         /// <summary>
         /// Gets the instance of the renewable resource.
@@ -150,7 +150,7 @@ namespace Si.Library.Mathematics
         /// <param name="key"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        public TimeRenewableResource Snapshot(string key) => Resources[key.ToLower()];
+        public RenewableResource Snapshot(string key) => Resources[key.ToLower()];
 
         /// <summary>
         /// Consumes a given amount of resource.
