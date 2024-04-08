@@ -50,7 +50,7 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 
         private void UpdateThrustAnimationPositions()
         {
-            var reverseVector = PointingAngle.Rotation(SiMath.DegToRad(180)).Normalize();
+            var reverseVector = PointingAngle.Normalize() * -1;
             var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(reverseVector, new SiVector(20, 20));
 
             if (ThrusterAnimation != null && ThrusterAnimation.Visable)

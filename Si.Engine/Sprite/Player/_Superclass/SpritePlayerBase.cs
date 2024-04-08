@@ -176,7 +176,7 @@ namespace Si.Engine.Sprite.Player._Superclass
 
         private void UpdateThrustAnimationPositions()
         {
-            var reverseVector = PointingAngle.Rotation(SiMath.DegToRad(180)).Normalize();
+            var reverseVector = PointingAngle.Normalize() * -1;
             var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(reverseVector, new SiVector(40, 40));
 
             if (ThrusterAnimation != null)
