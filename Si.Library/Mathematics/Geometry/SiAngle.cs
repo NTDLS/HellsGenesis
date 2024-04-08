@@ -7,77 +7,13 @@ namespace Si.Library.Mathematics.Geometry
     /// </summary>
     public class SiAngle
     {
-        public const float DEG_TO_RAD = (float)(Math.PI / 180.0);
-        public const float RAD_TO_DEG = (float)(180.0 / Math.PI);
-        public const float RADS_IN_CIRCLE = (float)(2 * Math.PI);
-
-        /// <summary>
-        /// 90 (looking right) degrees.... but in radians.
-        /// </summary>
-        public const float RADIANS_90 = 90 * DEG_TO_RAD;
-
-        /// <summary>
-        /// 270 degrees (looking left) .... but in radians.
-        /// </summary>
-        public const float RADIANS_270 = 270 * DEG_TO_RAD;
-
-        /// <summary>
-        /// Converts radians to degrees.
-        /// </summary>
-        /// <param name="radians"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Rad2Deg(float radians) => radians * RAD_TO_DEG;
-
-        /// <summary>
-        /// Converts an x,y to degrees.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float XyToDeg(float x, float y) => Rad2Deg((float)Math.Atan2(y, x));
-
-        /// <summary>
-        /// COnverts Degrees to radians.
-        /// </summary>
-        /// <param name="degrees"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Deg2Rad(float degrees) => degrees * SiVector.DEG_TO_RAD;
-
-        /// <summary>
-        /// Converts x,y to radians.
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float XyToRad(float x, float y) => (float)Math.Atan2(y, x);
-
-        /// <summary>
-        /// Converts radians to a normalized vector.
-        /// </summary>
-        /// <param name="radians"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector RadToVector(float radians) => new((float)Math.Cos(radians), (float)Math.Sin(radians));
-
-        /// <summary>
-        /// Converts degrees to a normalized vector.
-        /// </summary>
-        /// <param name="degrees"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector DegToVector(float degrees) => new((float)Math.Cos(degrees * RAD_TO_DEG), (float)Math.Sin(degrees * RAD_TO_DEG));
-
         /// <summary>
         /// Returns an SiAngle from degrees.
         /// </summary>
         /// <param name="degrees"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiAngle FromDeg(float degrees) => new SiAngle(Deg2Rad(degrees));
+        public static SiAngle FromDeg(float degrees) => new SiAngle(SiMath.DegToRad(degrees));
 
         /// <summary>
         /// Returns an SiAngle from radians.
@@ -115,12 +51,12 @@ namespace Si.Library.Mathematics.Geometry
         public SiAngle(float radians) => Radians = radians;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public SiAngle(float x, float y) => Degrees = Rad2Deg((float)Math.Atan2(y, x));
+        public SiAngle(float x, float y) => Degrees = SiMath.RadToDeg((float)Math.Atan2(y, x));
 
         public SiAngle(SiVector vector)
         {
             var directionVector = SiVector.Normalize(vector);
-            Degrees = Rad2Deg((float)Math.Atan2(directionVector.Y, directionVector.X));
+            Degrees = SiMath.RadToDeg((float)Math.Atan2(directionVector.Y, directionVector.X));
         }
 
         #endregion
@@ -235,19 +171,19 @@ namespace Si.Library.Mathematics.Geometry
         /// </summary>
         public float Radians
         {
-            get => Deg2Rad(_degrees);
+            get => SiMath.DegToRad(_degrees);
             set
             {
                 if (value < 0)
                 {
-                    value = (value + RADS_IN_CIRCLE) % RADS_IN_CIRCLE;
+                    value = (value + SiMath.RADS_IN_CIRCLE) % SiMath.RADS_IN_CIRCLE;
                 }
                 else
                 {
-                    value %= RADS_IN_CIRCLE;
+                    value %= SiMath.RADS_IN_CIRCLE;
                 }
 
-                _degrees = Rad2Deg(value);
+                _degrees = SiMath.RadToDeg(value);
             }
         }
     }

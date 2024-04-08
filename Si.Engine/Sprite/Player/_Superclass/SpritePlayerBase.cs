@@ -180,7 +180,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(PointingAngle + SiVector.DegToRad(180), new SiVector(40, 40));
+                    var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(PointingAngle + SiMath.DegToRad(180), new SiVector(40, 40));
                     ThrusterAnimation.PointingAngle = PointingAngle;
                     ThrusterAnimation.Location = Location + pointBehind;
                 }
@@ -190,7 +190,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             {
                 if (Visable)
                 {
-                    var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(PointingAngle + SiVector.DegToRad(180), new SiVector(40, 40));
+                    var pointBehind = SiVector.PointFromAngleAtDistanceInUnsignedDegrees(PointingAngle + SiMath.DegToRad(180), new SiVector(40, 40));
                     BoostAnimation.PointingAngle = PointingAngle;
                     BoostAnimation.Location = Location + pointBehind;
                 }

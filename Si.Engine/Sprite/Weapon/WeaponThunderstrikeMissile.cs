@@ -34,7 +34,7 @@ namespace Si.Engine.Sprite.Weapon
                 RoundQuantity--;
 
                 var basePosition = Owner.Location + SiVector.PointFromAngleAtDistanceInUnsignedDegrees(
-                    Owner.PointingAngle + SiVector.RADIANS_90 * (_toggle ? 1 : -1), new SiVector(10, 10));
+                    Owner.PointingAngle + SiMath.RADIANS_90 * (_toggle ? 1 : -1), new SiVector(10, 10));
 
                 _toggle = !_toggle;
 

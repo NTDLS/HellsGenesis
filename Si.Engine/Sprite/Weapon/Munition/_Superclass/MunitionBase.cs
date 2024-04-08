@@ -50,7 +50,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             float headingRadians = angle == null ? firedFrom.PointingAngle.Radians : (float)angle;
             if (weapon.Metadata.AngleVarianceDegrees > 0)
             {
-                var randomNumber = SiVector.DegToRad(SiRandom.Between(0, weapon.Metadata.AngleVarianceDegrees * 100.0f) / 100.0f);
+                var randomNumber = SiMath.DegToRad(SiRandom.Between(0, weapon.Metadata.AngleVarianceDegrees * 100.0f) / 100.0f);
                 headingRadians += (SiRandom.FlipCoin() ? 1 : -1) * randomNumber;
             }
 

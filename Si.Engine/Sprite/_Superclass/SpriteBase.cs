@@ -954,11 +954,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Rotate(SiVector.DegToRad(rotationAmountDegrees));
+                    Rotate(SiMath.DegToRad(rotationAmountDegrees));
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Rotate(-SiVector.DegToRad(rotationAmountDegrees));
+                    Rotate(-SiMath.DegToRad(rotationAmountDegrees));
                 }
 
                 return true;
@@ -980,11 +980,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Rotate(SiVector.DegToRad(rotationAmountDegrees));
+                    Rotate(SiMath.DegToRad(rotationAmountDegrees));
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Rotate(-SiVector.DegToRad(rotationAmountDegrees));
+                    Rotate(-SiMath.DegToRad(rotationAmountDegrees));
                 }
 
                 return true;
@@ -1004,7 +1004,7 @@ namespace Si.Engine.Sprite._Superclass
 
             if (PointingAngle.DegreesSigned.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
-                Rotate(-SiVector.DegToRad(rotationAmountDegrees));
+                Rotate(-SiMath.DegToRad(rotationAmountDegrees));
 
                 return true;
             }
@@ -1024,11 +1024,11 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (deltaAngle >= -varianceDegrees)
                 {
-                    Rotate(SiVector.DegToRad(rotationAmountDegrees));
+                    Rotate(SiMath.DegToRad(rotationAmountDegrees));
                 }
                 else if (deltaAngle < varianceDegrees)
                 {
-                    Rotate(-SiVector.DegToRad(rotationAmountDegrees));
+                    Rotate(-SiMath.DegToRad(rotationAmountDegrees));
                 }
 
                 RecalculateMovementVector();
@@ -1097,7 +1097,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns></returns>
         public float AngleToInUnsignedDegrees(SpriteBase atObj) => SiVector.AngleToInUnsignedDegrees(this, atObj);
 
-        public float AngleToInRadians(SpriteBase atObj) => SiVector.DegToRad(SiVector.AngleToInUnsignedDegrees(this, atObj));
+        public float AngleToInRadians(SpriteBase atObj) => SiMath.DegToRad(SiVector.AngleToInUnsignedDegrees(this, atObj));
 
         /// <summary>
         /// Calculates the angle in degrees to another object between 1-180 and -1-180

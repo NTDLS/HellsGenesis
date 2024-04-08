@@ -14,7 +14,7 @@ namespace Si.Engine.Sprite.Weapon.Munition
         {
             MaxSeekingObservationDistance = 1000;
             MaxSeekingObservationAngleDegrees = 20;
-            SeekingRotationRateRadians = SiVector.DegToRad(4);
+            SeekingRotationRateRadians = SiMath.DegToRad(4);
         }
     }
 }

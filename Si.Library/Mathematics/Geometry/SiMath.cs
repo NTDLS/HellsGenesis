@@ -1,4 +1,6 @@
-﻿namespace Si.Library.Mathematics.Geometry
+﻿using System.Runtime.CompilerServices;
+
+namespace Si.Library.Mathematics.Geometry
 {
     public static class SiMath
     {
@@ -42,6 +44,55 @@
          *      interface with libraries and APIs that require a specific unit of angle measurement.
         */
         public const float ZeroTolerance = 1e-6f;
+
+        public const float DEG_TO_RAD = (float)(Math.PI / 180.0);
+        public const float RAD_TO_DEG = (float)(180.0 / Math.PI);
+        public const float RADS_IN_CIRCLE = (float)(2 * Math.PI);
+
+        /// <summary>
+        /// 90 (looking right) degrees.... but in radians.
+        /// </summary>
+        public const float RADIANS_90 = 90 * DEG_TO_RAD;
+
+        /// <summary>
+        /// 270 degrees (looking left) .... but in radians.
+        /// </summary>
+        public const float RADIANS_270 = 270 * DEG_TO_RAD;
+
+        /// <summary>
+        /// Converts radians to degrees
+        /// </summary>
+        /// <param name="rad">Given radians to convert to degrees.</param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float RadToDeg(float radians) => radians * RAD_TO_DEG;
+
+        /// <summary>
+        /// Converts degrees to radians.
+        /// </summary>
+        /// <param name="deg">Given degrees to convert to radians.</param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float DegToRad(float degrees) => degrees * DEG_TO_RAD;
+
+        /// <summary>
+        /// Converts Cardinal x,y to degrees.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float CardinalToDeg(float x, float y) => RadToDeg((float)Math.Atan2(y, x));
+
+        /// <summary>
+        /// Converts Cardinal x,y to radians.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float CardinalToRad(float x, float y) => (float)Math.Atan2(y, x);
+
 
         /// <summary>
         /// Restrict a value to be within a specified range.Useful for keeping objects within boundaries.

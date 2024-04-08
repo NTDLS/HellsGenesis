@@ -9,6 +9,11 @@ namespace Si.Library.Mathematics.Geometry
     /// </summary>
     public partial class SiVector : IComparable<SiVector>
     {
+        public static readonly SiVector Zero = new();
+        public static readonly SiVector UnitX = new(1f, 0f);
+        public static readonly SiVector UnitY = new(0f, 1f);
+        public static readonly SiVector One = new(1f, 1f);
+
         public float X;
         public float Y;
 
@@ -43,6 +48,22 @@ namespace Si.Library.Mathematics.Geometry
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public SiAngle ToAngle() => SiAngle.FromVector(this);
+
+        /// <summary>
+        /// Returns an SiVector from a SiAngle.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector FromAngle(SiAngle angle) => new(angle);
+
+        /// <summary>
+        /// Returns a normailized SiAngle from an SiVector.
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiAngle ToAngle(SiVector vector) => new(vector);
 
         #endregion
 
@@ -196,25 +217,6 @@ namespace Si.Library.Mathematics.Geometry
 
         #region Static Helpers.
 
-        public static readonly SiVector Zero = new();
-        public static readonly SiVector UnitX = new(1f, 0f);
-        public static readonly SiVector UnitY = new(0f, 1f);
-        public static readonly SiVector One = new(1f, 1f);
-
-        public const float DEG_TO_RAD = (float)(Math.PI / 180.0);
-        public const float RAD_TO_DEG = (float)(180.0 / Math.PI);
-        public const float RADS_IN_CIRCLE = (float)(2 * Math.PI);
-
-        /// <summary>
-        /// 90 (looking right) degrees.... but in radians.
-        /// </summary>
-        public const float RADIANS_90 = 90 * DEG_TO_RAD;
-
-        /// <summary>
-        /// 270 degrees (looking left) .... but in radians.
-        /// </summary>
-        public const float RADIANS_270 = 270 * DEG_TO_RAD;
-
         #region AngleTo...Degrees (Signed and Unsigned).
 
         /// <summary>
@@ -297,7 +299,7 @@ namespace Si.Library.Mathematics.Geometry
         public static float AngleToInUnsignedDegrees(SiVector from, SiVector to)
         {
             var radians = (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
-            return (SiAngle.Rad2Deg(radians) + 360.0f) % 360.0f;
+            return (SiMath.RadToDeg(radians) + 360.0f) % 360.0f;
         }
 
         #endregion
@@ -327,37 +329,22 @@ namespace Si.Library.Mathematics.Geometry
         #endregion
 
         /// <summary>
-        /// Rotates the given vector by the given radians.
+        /// Returns a new vector which has been rotated by the given radians.
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="radians"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector Rotate(SiVector vector, float radians)
+        public static SiVector Rotation(SiVector vector, float radians)
         {
             float cosTheta = (float)Math.Cos(radians);
             float sinTheta = (float)Math.Sin(radians);
+
             return new SiVector(
                 vector.X * cosTheta - vector.Y * sinTheta,
                 vector.X * sinTheta + vector.Y * cosTheta
             );
         }
-
-        /// <summary>
-        /// Converts radians to degrees
-        /// </summary>
-        /// <param name="rad">Given radians to convert to degrees.</param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float RadToDeg(float radians) => radians * RAD_TO_DEG;
-
-        /// <summary>
-        /// Converts degrees to radians.
-        /// </summary>
-        /// <param name="deg">Given degrees to convert to radians.</param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float DegToRad(float degrees) => degrees * DEG_TO_RAD;
 
         /// <summary>
         /// Calculates a point at a given angle and a given distance.
@@ -677,12 +664,12 @@ namespace Si.Library.Mathematics.Geometry
         public SiVector Clone() => new SiVector(this);
 
         /// <summary>
-        /// Returns a new rotated vector by the given radians.
+        /// Returns a new vector which has been rotated by the given radians.
         /// </summary>
         /// <param name="radians"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public SiVector RotateClone(float radians) => Rotate(this, radians);
+        public SiVector Rotation(float radians) => Rotation(this, radians);
 
         /// <summary>
         /// Rotates the vector by the given radians.
