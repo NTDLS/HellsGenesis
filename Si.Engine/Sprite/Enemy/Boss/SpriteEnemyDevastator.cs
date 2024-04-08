@@ -119,7 +119,7 @@
         private float distanceToKeep = baseDistanceToKeep * (SiRandom.NextFloat() + 1);
         private const float baseFallbackDistance = 800;
         private float fallbackDistance;
-        private SiAngle fallToAngleRadians;
+        private SiVector fallToAngleRadians;
         private AIMode mode = AIMode.Approaching;
         private int roundsToFireBeforeTailing = 0;
         private int hpRemainingBeforeTailing = 0;
@@ -232,7 +232,7 @@
                 {
                     Velocity.ForwardVelocity = 1;
                     mode = AIMode.MovingToFallback;
-                    fallToAngleRadians = Direction + new SiAngle(180.0f + SiRandom.Between(0, 10)).Radians;
+                    fallToAngleRadians = Direction + new SiVector(180.0f + SiRandom.Between(0, 10)).Radians;
                     fallbackDistance = baseFallbackDistance * (SiRandom.NextFloat() + 1);
                 }
             }

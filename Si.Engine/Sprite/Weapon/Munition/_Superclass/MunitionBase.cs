@@ -63,7 +63,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             }
 
             Location = location ?? firedFrom.Location;
-            PointingAngle = new SiAngle(headingRadians);
+            PointingAngle = new SiVector(headingRadians);
             Speed = initialSpeed;
             MovementVector = PointingAngle * initialSpeed;
 

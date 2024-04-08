@@ -3,7 +3,6 @@ using Si.Engine.Sprite;
 using Si.Engine.Sprite.Weapon;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics.Geometry;
-using System.Numerics;
 
 namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
 {

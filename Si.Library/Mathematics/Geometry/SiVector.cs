@@ -21,6 +21,12 @@ namespace Si.Library.Mathematics.Geometry
 
         public SiVector() { }
 
+        public SiVector(float radians)
+        {
+            Radians = radians;
+        }
+
+
         public SiVector(float x, float y)
         {
             X = x;
@@ -46,36 +52,25 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RectangleF ToRectangleF() => new(X, Y, 1f, 1f);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public SiAngle ToAngle() => SiAngle.FromVector(this);
-
         /// <summary>
-        /// Returns an SiVector from a SiAngle.
+        /// Returns an SiVector from a SiVector.
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector FromAngle(SiAngle angle) => new(angle);
-
-        /// <summary>
-        /// Returns a normailized SiAngle from an SiVector.
-        /// </summary>
-        /// <param name="angle"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiAngle ToAngle(SiVector vector) => new(vector);
+        public static SiVector FromDegree(float angleInDegrees) => new(SiMath.DegToRad(angleInDegrees));
 
         #endregion
 
         #region Operator Overloads: Float first.
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator -(float modifier, SiVector original)
-           => new SiVector(modifier - original.X, modifier - original.Y);
+        public static SiVector operator -(float scalar, SiVector original)
+           => new SiVector(scalar - original.X, scalar - original.Y);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator +(float modifier, SiVector original)
-            => new SiVector(original.X + modifier, original.Y + modifier);
+        public static SiVector operator +(float scalar, SiVector original)
+            => new SiVector(original.X + scalar, original.Y + scalar);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SiVector operator *(float scaleFactor, SiVector original)
@@ -97,12 +92,12 @@ namespace Si.Library.Mathematics.Geometry
         #region Operator Overloads: Float Second.
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator -(SiVector original, float modifier)
-           => new SiVector(original.X - modifier, original.Y - modifier);
+        public static SiVector operator -(SiVector original, float scalar)
+           => new SiVector(original.X - scalar, original.Y - scalar);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector operator +(SiVector original, float modifier)
-            => new SiVector(original.X + modifier, original.Y + modifier);
+        public static SiVector operator +(SiVector original, float scalar)
+            => new SiVector(original.X + scalar, original.Y + scalar);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SiVector operator *(SiVector original, float scaleFactor)
@@ -353,7 +348,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="distance">The distance to the given angle the point should be at.</param>
         /// <returns>The calculated point at the given distance towards the given angle.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector PointFromAngleAtDistanceInUnsignedDegrees(SiAngle angle, SiVector distance)
+        public static SiVector PointFromAngleAtDistanceInUnsignedDegrees(SiVector angle, SiVector distance)
             => new SiVector((float)Math.Cos(angle.Radians) * distance.X, (float)Math.Sin(angle.Radians) * distance.Y);
 
         /// <summary>

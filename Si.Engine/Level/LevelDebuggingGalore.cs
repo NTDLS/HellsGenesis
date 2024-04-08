@@ -117,7 +117,7 @@ namespace Si.Engine.Level
 
             asteroid.Location = new SiVector(800, 800);
             asteroid.Speed = 1.0f;
-            asteroid.PointingAngle = SiAngle.FromDeg(-45);
+            asteroid.PointingAngle = SiVector.FromDegree(-45);
             asteroid.RecalculateMovementVector();
 
             asteroid.SetHullHealth(100);
@@ -140,7 +140,7 @@ namespace Si.Engine.Level
 
                     asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
                     asteroid.Speed = SiRandom.Variance(asteroid.Speed, 0.20f);
-                    asteroid.PointingAngle = SiAngle.FromDeg(-45);
+                    asteroid.PointingAngle = SiVector.FromDegree(-45);
                     asteroid.Throttle = 1;
                     asteroid.RecalculateMovementVector();
 

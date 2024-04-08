@@ -44,7 +44,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// <summary>
         /// Predicted direction after next call to ApplyMotion().
         /// </summary>
-        public SiAngle Direction { get; private set; }
+        public SiVector Direction { get; private set; }
 
         /// <summary>
         /// Predicted bounds after next call to ApplyMotion().
@@ -72,7 +72,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
             Sprite = sprite;
 
             //Assume the sprite is using rotation.
-            Direction = new SiAngle(sprite.PointingAngle.Radians + sprite.RotationSpeed * epoch);
+            Direction = new SiVector(sprite.PointingAngle.Radians + sprite.RotationSpeed * epoch);
 
             //Assuming the sprite is moving in the direction it is pointing.
             Velocity = Direction * Velocity.Magnitude();
