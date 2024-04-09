@@ -52,7 +52,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                     }
                 }
 
-                if (smallestAngle != null && Math.Abs((float)smallestAngle) < MaxSeekingObservationAngleDegrees && smallestAngle.IsNearZero())
+                if (smallestAngle != null && Math.Abs((float)smallestAngle) < MaxSeekingObservationAngleDegrees && !smallestAngle.IsNearZero())
                 {
                     RotateMovementVector(SeekingRotationRateRadians * (smallestAngle > 0 ? 1 : -1));
                 }
