@@ -93,7 +93,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
                 particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                 particle.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f);
                 particle.Speed *= SiRandom.Between(1, 3.5f);
-                particle.VectorType = ParticleVectorType.UseTravelAngle;
+                particle.VectorType = ParticleVectorType.Default;
             }
         }
 
@@ -121,8 +121,11 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
 
                 particle.CleanupMode = ParticleCleanupMode.FadeToBlack;
                 particle.FadeToBlackReductionAmount = 0.001f;
-                particle.Speed *= SiRandom.Between(1, 3.5f);
-                particle.VectorType = ParticleVectorType.UseNativeForwardAngle;
+
+                particle.VectorType = ParticleVectorType.FollowOrientation;
+                particle.Orientation.DegreesUnsigned = SiRandom.Between(0.0f, 359.0f);
+                particle.Speed = SiRandom.Between(2, 3.5f);
+                particle.RecalculateMovementVector();
             }
         }
     }

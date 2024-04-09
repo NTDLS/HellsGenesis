@@ -51,7 +51,7 @@ namespace Si.Engine.AI.Logistics
 
             public AIStateTransitionToEvasiveEscape(AIStateMachine machine)
             {
-                TargetAngle.Degrees = machine.Owner.PointingAngle.Degrees + 180;
+                TargetAngle.DegreesUnsigned = machine.Owner.Orientation.DegreesUnsigned + 180;
             }
         }
 
@@ -105,7 +105,7 @@ namespace Si.Engine.AI.Logistics
                 //The object is rotating away from the observed object.
                 case AIStateTransitionToDepart transitionToDepart:
                     //As we get closer, make the angle more agressive.
-                    var rotationRadians = new SiVector((1 - (distanceToObservedObject / _idealMinDistance)) * 2.0f).Radians;
+                    var rotationRadians = new SiVector((1 - (distanceToObservedObject / _idealMinDistance)) * 2.0f).RadiansSigned;
 
                     //Rotate as long as we are facing the observed object. If we are no longer facing, then depart.
                     if (Owner.RotateMovementVectorIfPointingAt(ObservedObject, rotationRadians * transitionToDepart.Rotation, transitionToDepart.VarianceAngle) == false)
@@ -137,7 +137,7 @@ namespace Si.Engine.AI.Logistics
                 //----------------------------------------------------------------------------------------------------------------------------------------------------
                 //The object is rotating agressively away from the observed object.
                 case AIStateTransitionToEvasiveEscape transitionToEvasiveEscape:
-                    if (Owner.RotateMovementVectorIfNotPointingAt(transitionToEvasiveEscape.TargetAngle.Degrees, transitionToEvasiveEscape.Rotation, transitionToEvasiveEscape.VarianceAngle) == false)
+                    if (Owner.RotateMovementVectorIfNotPointingAt(transitionToEvasiveEscape.TargetAngle.DegreesUnsigned, transitionToEvasiveEscape.Rotation, transitionToEvasiveEscape.VarianceAngle) == false)
                     {
                         ChangeState(new AIStateEvasiveEscape());
                     }

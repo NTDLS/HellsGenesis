@@ -40,13 +40,13 @@
         public enum ParticleVectorType
         {
             /// <summary>
-            /// Travel on the angle that is baked into the sprite Velocity.Angle.
+            /// The sprite will travel in the direction determined by it's MovementVector.
             /// </summary>
-            UseNativeForwardAngle,
+            Default,
             /// <summary>
-            /// Travel on an angle that is independent of the sprites Velocity.Angle.
+            /// The sprite will travel in the direction in which is is oriented.
             /// </summary>
-            UseTravelAngle
+            FollowOrientation
         }
 
         public enum SiRenderScaleOrder

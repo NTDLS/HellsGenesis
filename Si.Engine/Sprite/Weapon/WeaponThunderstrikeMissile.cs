@@ -2,6 +2,7 @@
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 
 namespace Si.Engine.Sprite.Weapon
@@ -33,8 +34,8 @@ namespace Si.Engine.Sprite.Weapon
                 _fireSound.Play();
                 RoundQuantity--;
 
-                var basePosition = Owner.Location + SiVector.PointFromAngleAtDistance(
-                    Owner.PointingAngle + SiMath.RADIANS_90 * (_toggle ? 1 : -1), new SiVector(10, 10));
+                var basePosition = Owner.Location
+                    + (Owner.Orientation + SiMath.RADIANS_90 * (_toggle ? 1 : -1)).PointFromAngleAtDistance(new SiVector(10, 10));
 
                 _toggle = !_toggle;
 

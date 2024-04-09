@@ -4,6 +4,7 @@ using Si.Engine.TickController._Superclass;
 using Si.GameEngine.Persistent;
 using Si.Library;
 using Si.Library.ExtensionMethods;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Diagnostics;
@@ -227,7 +228,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 float targetRotationDegrees = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.RotateCounterClockwise, SiPlayerKey.RotateClockwise) / throttleCap).Clamp(-1, 1);
 
-                Sprite.PointingAngle.Degrees += Engine.Settings.MaxPlayerRotationSpeedDegrees * targetRotationDegrees * epoch;
+                Sprite.Orientation.DegreesUnsigned += Engine.Settings.MaxPlayerRotationSpeedDegrees * targetRotationDegrees * epoch;
 
                 #endregion
 
@@ -263,7 +264,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
             Sprite.Throttle = 1 + _boostForwardVelocity;
 
             Sprite.MovementVector = (Sprite.MakeMovementVector() * _forwardVelocity) //Forward / Reverse
-                + (Sprite.MakeMovementVector(Sprite.PointingAngle.Radians + SiMath.RADIANS_90) * _lateralVelocity);  //Lateral strafing.
+                + (Sprite.MakeMovementVector(Sprite.Orientation.RadiansSigned + SiMath.RADIANS_90) * _lateralVelocity);  //Lateral strafing.
 
             Sprite.PerformCollisionDetection(epoch);
 

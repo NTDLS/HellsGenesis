@@ -2,6 +2,7 @@
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 
 namespace Si.Engine.Sprite.Weapon
@@ -35,7 +36,7 @@ namespace Si.Engine.Sprite.Weapon
                 {
                     for (int i = -15; i < 15; i++) // Create an initial spread so the bullets dont come from the same point.
                     {
-                        var location = Owner.Location + SiVector.PointFromAngleAtDistance(Owner.PointingAngle + SiMath.RADIANS_90, new SiVector(i, i));
+                        var location = Owner.Location + (Owner.Orientation + SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(i, i));
                         _engine.Sprites.Munitions.Add(this, location);
                     }
                     RoundQuantity--;

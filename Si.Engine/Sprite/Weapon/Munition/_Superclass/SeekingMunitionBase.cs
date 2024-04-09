@@ -1,5 +1,7 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
+using Si.Library.ExtensionMethods;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
@@ -26,18 +28,11 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             {
                 if (DistanceTo(_engine.Player.Sprite) < MaxSeekingObservationDistance)
                 {
-                    var deltaAngle = DeltaAngleDegrees(_engine.Player.Sprite);
+                    var deltaAngle = this.HeadingAngleToInSignedDegrees(_engine.Player.Sprite);
 
-                    if (Math.Abs((float)deltaAngle) < MaxSeekingObservationAngleDegrees)
+                    if (Math.Abs((float)deltaAngle) < MaxSeekingObservationAngleDegrees && !deltaAngle.IsNearZero())
                     {
-                        if (deltaAngle >= 0) //We might as well turn around clock-wise
-                        {
-                            PointingAngle += SeekingRotationRateRadians;
-                        }
-                        else if (deltaAngle < 0) //We might as well turn around counter clock-wise
-                        {
-                            PointingAngle -= SeekingRotationRateRadians;
-                        }
+                        RotateMovementVector(SeekingRotationRateRadians * (deltaAngle > 0 ? 1 : -1));
                     }
                 }
             }
@@ -49,8 +44,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                 {
                     if (DistanceTo(enemy) < MaxSeekingObservationDistance)
                     {
-                        var deltaAngle = DeltaAngleDegrees(enemy);
-
+                        var deltaAngle = this.HeadingAngleToInSignedDegrees(enemy);
                         if (smallestAngle == null || Math.Abs(deltaAngle) < Math.Abs((float)smallestAngle))
                         {
                             smallestAngle = deltaAngle;
@@ -58,16 +52,9 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
                     }
                 }
 
-                if (smallestAngle != null && Math.Abs((float)smallestAngle) < MaxSeekingObservationAngleDegrees)
+                if (smallestAngle != null && Math.Abs((float)smallestAngle) < MaxSeekingObservationAngleDegrees && smallestAngle.IsNearZero())
                 {
-                    if (smallestAngle >= 0) //We might as well turn around clock-wise
-                    {
-                        PointingAngle += SeekingRotationRateRadians;
-                    }
-                    else if (smallestAngle < 0) //We might as well turn around counter clock-wise
-                    {
-                        PointingAngle -= SeekingRotationRateRadians;
-                    }
+                    RotateMovementVector(SeekingRotationRateRadians * (smallestAngle > 0 ? 1 : -1));
                 }
             }
 

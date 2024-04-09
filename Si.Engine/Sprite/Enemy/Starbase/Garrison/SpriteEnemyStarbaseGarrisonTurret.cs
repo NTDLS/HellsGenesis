@@ -2,6 +2,7 @@
 using Si.Engine.Sprite;
 using Si.Engine.Sprite.Weapon;
 using Si.Library.ExtensionMethods;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 
 namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
@@ -27,31 +28,31 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
             var turretOffset = LocationRelativeToOwner - (OwnerSprite.Size / 2.0f);
 
             // Apply the rotated offsets to get the new turret location relative to the base sprite center.
-            Location = OwnerSprite.Location + turretOffset.Rotation(OwnerSprite.PointingAngle.Radians);
+            Location = OwnerSprite.Location + turretOffset.Rotation(OwnerSprite.Orientation.RadiansSigned);
 
             if (DistanceTo(_engine.Player.Sprite) < 1000)
             {
                 //Rotate the turret toward the player.
-                var deltaAngltToPlayer = DeltaAngleDegrees(_engine.Player.Sprite);
+                var deltaAngltToPlayer = this.HeadingAngleToInSignedDegrees(_engine.Player.Sprite);
                 if (deltaAngltToPlayer < 1)
                 {
-                    PointingAngle.Degrees -= 0.25f;
+                    Orientation.DegreesUnsigned -= 0.25f;
                 }
                 else if (deltaAngltToPlayer > 1)
                 {
-                    PointingAngle.Degrees += 0.25f;
+                    Orientation.DegreesUnsigned += 0.25f;
                 }
 
                 if (deltaAngltToPlayer.IsBetween(-10, 10))
                 {
                     if (FireToggler)
                     {
-                        var pointRight = Location + SiVector.PointFromAngleAtDistance(PointingAngle + SiMath.RADIANS_90, new SiVector(21, 21));
+                        var pointRight = Location + (Orientation + SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(21, 21));
                         FireToggler = !FireWeapon<WeaponLancer>(pointRight);
                     }
                     else
                     {
-                        var pointLeft = Location + SiVector.PointFromAngleAtDistance(PointingAngle - SiMath.RADIANS_90, new SiVector(21, 21));
+                        var pointLeft = Location + (Orientation + SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(21, 21));
                         FireToggler = FireWeapon<WeaponLancer>(pointLeft);
                     }
                 }

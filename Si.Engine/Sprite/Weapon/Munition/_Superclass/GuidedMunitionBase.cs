@@ -1,7 +1,9 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library.ExtensionMethods;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
+using System;
 
 namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 {
@@ -27,17 +29,11 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             {
                 if (LockedTarget.Visable)
                 {
-                    var deltaAngle = DeltaAngleDegrees(LockedTarget);
-                    if (deltaAngle.IsBetween(-MaxGuidedObservationAngleDegrees, MaxGuidedObservationAngleDegrees))
+                    var deltaAngle = this.HeadingAngleToInSignedDegrees(LockedTarget);
+
+                    if (Math.Abs((float)deltaAngle) < MaxGuidedObservationAngleDegrees && !deltaAngle.IsNearZero())
                     {
-                        if (deltaAngle >= 0) //We might as well turn around clock-wise
-                        {
-                            PointingAngle += GuidedRotationRateInDegrees;
-                        }
-                        else if (deltaAngle < 0) //We might as well turn around counter clock-wise
-                        {
-                            PointingAngle -= GuidedRotationRateInDegrees;
-                        }
+                        RotateMovementVector(GuidedRotationRateInDegrees * (deltaAngle > 0 ? 1 : -1));
                     }
                 }
             }

@@ -4,6 +4,7 @@ using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
@@ -47,7 +48,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             RadarDotSize = new SiVector(1, 1);
             SceneDistanceLimit = SiRandom.Between(weapon.Metadata.MunitionSceneDistanceLimit * 0.1f, weapon.Metadata.MunitionSceneDistanceLimit);
 
-            float headingRadians = angle == null ? firedFrom.PointingAngle.Radians : (float)angle;
+            float headingRadians = angle == null ? firedFrom.Orientation.RadiansSigned : (float)angle;
             if (weapon.Metadata.AngleVarianceDegrees > 0)
             {
                 var randomNumber = SiMath.DegToRad(SiRandom.Between(0, weapon.Metadata.AngleVarianceDegrees * 100.0f) / 100.0f);
@@ -63,9 +64,9 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             }
 
             Location = location ?? firedFrom.Location;
-            PointingAngle = new SiVector(headingRadians);
+            Orientation = new SiVector(headingRadians);
             Speed = initialSpeed;
-            MovementVector = PointingAngle * initialSpeed;
+            MovementVector = Orientation * initialSpeed;
 
             if (firedFrom is SpriteAttachment attachment)
             {

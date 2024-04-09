@@ -21,11 +21,8 @@ namespace Si.Engine.Sprite
         /// </summary>
         public float FadeToBlackReductionAmount { get; set; } = 0.01f;
 
-        public ParticleVectorType VectorType { get; set; } = ParticleVectorType.UseNativeForwardAngle;
-        /// <summary>
-        /// Allow for a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
-        /// </summary>
-        public SiVector TravelAngle { get; set; } = new SiVector();
+        public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Default;
+
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
 
         public SpriteGenericBitmap(EngineCore engine, SharpDX.Direct2D1.Bitmap bitmap)
@@ -42,19 +39,14 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
-            //Direction.Degrees += RotationSpeed * epoch;
+            Orientation.DegreesUnsigned += RotationSpeed * epoch;
 
-            if (VectorType == ParticleVectorType.UseTravelAngle)
+            if (VectorType == ParticleVectorType.FollowOrientation)
             {
-                //We use a seperate angle for the travel direction because we want the sprite to travel in a direction that is is not pointing.
-                //Location += TravelAngle * Speed * epoch;
+                RecalculateMovementVector(Orientation.RadiansSigned);
+            }
 
-                base.ApplyMotion(epoch, displacementVector);
-            }
-            else if (VectorType == ParticleVectorType.UseNativeForwardAngle)
-            {
-                base.ApplyMotion(epoch, displacementVector);
-            }
+            base.ApplyMotion(epoch, displacementVector);
 
             if (CleanupMode == ParticleCleanupMode.FadeToBlack)
             {

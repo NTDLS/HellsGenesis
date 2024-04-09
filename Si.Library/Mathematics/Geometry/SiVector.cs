@@ -23,7 +23,7 @@ namespace Si.Library.Mathematics.Geometry
 
         public SiVector(float radians)
         {
-            Radians = radians;
+            RadiansSigned = radians;
         }
 
 
@@ -227,117 +227,6 @@ namespace Si.Library.Mathematics.Geometry
 
         #region Static Helpers.
 
-        #region AngleTo...Degrees (Signed and Unsigned).
-
-        /// <summary>
-        /// Calculates the angle of one objects location to another location from 0 - 360.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The object to which the calculation is based.</param>
-        /// <returns>The calculated angle in the range of 0-360.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInUnsignedDegrees(ISprite from, ISprite to)
-            => AngleToInUnsignedDegrees(from.Location, to.Location);
-
-        /// <summary>
-        /// Calculates the angle of one objects location to another location from 1-180 to -1-180.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The object to which the calculation is based.</param>
-        /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInSignedDegrees(ISprite from, ISprite to)
-        {
-            var angle = AngleToInUnsignedDegrees(from.Location, to.Location);
-            if (angle > 180)
-            {
-                angle -= 180;
-                angle = 180 - angle;
-                angle *= -1;
-            }
-
-            return -angle;
-        }
-
-        /// <summary>
-        /// Calculates the angle of one objects location to another location from 1-180 to -1-180.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The point to which the calculation is based.</param>
-        /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInSignedDegrees(ISprite from, SiVector to)
-        {
-            var angle = AngleToInUnsignedDegrees(from.Location, to);
-            if (angle > 180)
-            {
-                angle -= 180;
-                angle = 180 - angle;
-                angle *= -1;
-            }
-
-            return -angle;
-        }
-
-        /// <summary>
-        /// Calculates the angle of one objects location to another location from 0 - 360.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The object to which the calculation is based.</param>
-        /// <returns>The calculated angle in the range of 0-360.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInUnsignedDegrees(SiVector from, ISprite to)
-            => AngleToInUnsignedDegrees(from, to.Location);
-
-        /// <summary>
-        /// Calculates the angle of one objects location to another location from 0 - 360.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The point to which the calculation is based.</param>
-        /// <returns>The calculated angle in the range of 0-360.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInUnsignedDegrees(ISprite from, SiVector to)
-            => AngleToInUnsignedDegrees(from.Location, to);
-
-        /// <summary>
-        /// Calculates the angle from one object to another, returns the degrees.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInUnsignedDegrees(SiVector from, SiVector to)
-        {
-            var radians = (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
-            return (SiMath.RadToDeg(radians) + 360.0f) % 360.0f;
-        }
-
-        #endregion
-
-        #region AngleTo...Radians (Signed and Unsigned).
-
-        /// <summary>
-        /// Calculates the angle from one object to another, returns the radians.
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInSignedRadians(SiVector from, SiVector to)
-            => (float)Math.Atan2(to.Y - from.Y, to.X - from.X);
-
-        /// <summary>
-        /// Calculate the angle between two points relative to the horizontal axis.
-        /// </summary>
-        /// <param name="point1"></param>
-        /// <param name="point2"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float AngleToInUnsignedRadians(SiVector point1, SiVector point2)
-            => (float)Math.Atan2(point2.Y - point1.Y, point2.X - point1.X);
-
-        #endregion
-
         /// <summary>
         /// Returns a new vector which has been rotated by the given radians.
         /// </summary>
@@ -355,189 +244,6 @@ namespace Si.Library.Mathematics.Geometry
                 vector.X * sinTheta + vector.Y * cosTheta
             );
         }
-
-        /// <summary>
-        /// Calculates a point at a given angle and a given distance.
-        /// </summary>
-        /// <param name="angle">The angle which the point should move to in the range of 0-259.</param>
-        /// <param name="distance">The distance to the given angle the point should be at.</param>
-        /// <returns>The calculated point at the given distance towards the given angle.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector PointFromAngleAtDistance(SiVector angle, SiVector distance)
-            => new SiVector((float)Math.Cos(angle.Radians) * distance.X, (float)Math.Sin(angle.Radians) * distance.Y);
-
-        /// <summary>
-        /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="at">The object to which the calculation is based.</param>
-        /// <param name="toleranceDegrees"></param>
-        /// <returns>True if the object is pointing away from the other given the constraints.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsPointingAway(ISprite from, ISprite at, float toleranceDegrees)
-        {
-            var deltaAngle = Math.Abs(DeltaAngleInUnsignedDegrees(from, at));
-            return deltaAngle < 180 + toleranceDegrees && deltaAngle > 180 - toleranceDegrees;
-        }
-
-        /// <summary>
-        /// Returns true if the object is pointing AWAY another, taking into account the tolerance in degrees.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="at">The object to which the calculation is based.</param>
-        /// <param name="toleranceDegrees"></param>
-        /// <param name="maxDistance"></param>
-        /// <returns>True if the object is pointing away from the other given the constraints.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsPointingAway(ISprite from, ISprite at, float toleranceDegrees, float maxDistance)
-            => IsPointingAway(from, at, toleranceDegrees) && DistanceTo(from, at) <= maxDistance;
-
-        /// <summary>
-        /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="at">The object to which the calculation is based.</param>
-        /// <param name="toleranceDegrees"></param>
-        /// <returns>True if the object is pointing at the other given the constraints.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsPointingAt(ISprite from, ISprite at, float toleranceDegrees)
-        {
-            var deltaAngle = Math.Abs(DeltaAngle(from, at));
-            return deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees;
-        }
-
-        /// <summary>
-        /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="at">The object to which the calculation is based.</param>
-        /// <param name="toleranceDegrees">The angle in degrees to consider the object to pointing at the other.</param>
-        /// <param name="maxDistance">The distance in consider the object to pointing at the other.</param>
-        /// <param name="offsetAngle">The offset in 0-360 degrees of the angle to calculate. For instance, 90 would tell if the right side of the object is pointing at the other.</param>
-        /// <returns>True if the object is pointing at the other given the constraints.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsPointingAt(ISprite from, ISprite at, float toleranceDegrees, float maxDistance, float offsetAngle = 0)
-        {
-            var deltaAngle = Math.Abs(DeltaAngleInUnsignedDegrees(from, at, offsetAngle));
-            if (deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees)
-            {
-                return DistanceTo(from, at) <= maxDistance;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Returns the delta angle from one object to another expressed in degrees from 180--180, positive figures indicate right (starboard) side and negative indicate left-hand (port) side of the object.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The object to which the calculation is based.</param>
-        /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
-        /// <returns>The calculated angle in the range of 180--180.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float DeltaAngle(ISprite from, ISprite to, float offsetAngle = 0)
-        {
-            var angle = DeltaAngleInUnsignedDegrees(from, to, offsetAngle);
-            if (angle > 180)
-            {
-                angle -= 180;
-                angle = 180 - angle;
-                angle *= -1;
-            }
-
-            return -angle;
-        }
-
-        /// <summary>
-        /// Returns the delta angle from one object to another expressed in degrees from 180--180, positive figures indicate right (starboard) side and negative indicate left-hand (port) side of the object.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="toLocation">The location to which the calculation is based.</param>
-        /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
-        /// <returns>The calculated angle in the range of 180--180.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float DeltaAngle(ISprite from, SiVector toLocation, float offsetAngle = 0)
-        {
-            var angle = DeltaAngleInUnsignedDegrees(from, toLocation, offsetAngle);
-            if (angle > 180)
-            {
-                angle -= 180;
-                angle = 180 - angle;
-                angle *= -1;
-            }
-
-            return -angle;
-        }
-
-        /// <summary>
-        /// Returns the delta angle from one object to another expressed in degrees from 0-360.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The object to which the calculation is based.</param>
-        /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
-        /// <returns>The calculated angle in the range of 0-360.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float DeltaAngleInUnsignedDegrees(ISprite from, ISprite to, float offsetAngle = 0)
-        {
-            float fromAngle = from.PointingAngle.Degrees + offsetAngle;
-
-            float angleTo = AngleToInUnsignedDegrees(from, to);
-
-            if (fromAngle < 0) fromAngle = 0 - fromAngle;
-            if (angleTo < 0)
-            {
-                angleTo = 0 - angleTo;
-            }
-
-            angleTo = fromAngle - angleTo;
-
-            if (angleTo < 0)
-            {
-                angleTo = 360.0f - Math.Abs(angleTo) % 360.0f;
-            }
-
-            return angleTo;
-        }
-
-        /// <summary>
-        /// Returns the delta angle from one object to another expressed in degrees from 0-360.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="toLocation">The location to which the calculation is based.</param>
-        /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
-        /// <returns>The calculated angle in the range of 0-360.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float DeltaAngleInUnsignedDegrees(ISprite from, SiVector toLocation, float offsetAngle = 0)
-        {
-            float fromAngle = from.PointingAngle.Degrees + offsetAngle;
-
-            float angleTo = AngleToInUnsignedDegrees(from, toLocation);
-
-            if (fromAngle < 0) fromAngle = 0 - fromAngle;
-            if (angleTo < 0)
-            {
-                angleTo = 0 - angleTo;
-            }
-
-            angleTo = fromAngle - angleTo;
-
-            if (angleTo < 0)
-            {
-                angleTo = 360.0f - Math.Abs(angleTo) % 360.0f;
-            }
-
-            return angleTo;
-        }
-
-        /// <summary>
-        /// Returns the distance from one object to another.
-        /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
-        /// <param name="to">The object to which the calculation is based.</param>
-        /// <returns>The calcuated distance from one object to the other.</returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float DistanceTo(ISprite from, ISprite to)
-            => DistanceTo(from.Location, to.Location);
 
         /// <summary>
         /// Calculates the euclidean distance between two points in a 2D space (slower and precisie, but not compatible with DistanceSquaredTo(...)).
@@ -668,33 +374,59 @@ namespace Si.Library.Mathematics.Geometry
 
         #region Direction.
 
-        public float Radians
+        public float RadiansUnsigned
         {
-            get => SiMath.CardinalToRad(X, Y);
+            get
+            {
+                var angle = RadiansSigned;
+                if (angle < 0)
+                {
+                    angle += 2 * (float)Math.PI; // Convert negative angles to positive by adding 2π
+                }
+                return angle;
+            }
             set
             {
                 var radians = value > 0 ? value % SiMath.RADS_IN_CIRCLE : (value + SiMath.RADS_IN_CIRCLE) % SiMath.RADS_IN_CIRCLE;
-
                 var cardinal = SiMath.RadToCardinal(radians);
-
-                //TODO: Should we normalize this? That would assume we are ONLY storing the angle.
-
                 X = cardinal.X;
                 Y = cardinal.Y;
             }
         }
 
-        public float Degrees
+        /// <summary>
+        /// Angle in radians between [−3.14,3.14]
+        /// </summary>
+        public float RadiansSigned
         {
-            get => SiMath.CardinalToDeg(X, Y);
+            get => SiMath.CardinalToRad(X, Y);
+            set
+            {
+                var radians = value > 0 ? value % SiMath.RADS_IN_CIRCLE : (value + SiMath.RADS_IN_CIRCLE) % SiMath.RADS_IN_CIRCLE;
+                var cardinal = SiMath.RadToCardinal(radians);
+                X = cardinal.X;
+                Y = cardinal.Y;
+            }
+        }
+
+        public float DegreesUnsigned
+        {
+            get
+            {
+                float angleRadians = SiMath.CardinalToRad(X, Y);
+
+                float angleDegrees = angleRadians * (180 / (float)Math.PI);
+                if (angleDegrees < 0)
+                {
+                    angleDegrees += 360;
+                }
+
+                return angleDegrees;
+            }
             set
             {
                 var degrees = value > 0 ? value % 360 : (value + 360) % 360;
-
                 var cardinal = SiMath.RadToCardinal(SiMath.DegToRad(degrees));
-
-                //TODO: Should we normalize this? That would assume we are ONLY storing the angle.
-
                 X = cardinal.X;
                 Y = cardinal.Y;
             }
@@ -703,12 +435,21 @@ namespace Si.Library.Mathematics.Geometry
         /// <summary>
         /// Angle in degrees between [−180,180]
         /// </summary>
-        public float DegreesSigned => (Degrees + 180) % 360 - 180;
-
-        /// <summary>
-        /// Angle in radians between [−3.14,3.14]
-        /// </summary>
-        public float RadiansSigned => (float)((Radians + Math.PI) % (Math.PI * 2) - Math.PI);
+        public float DegreesSigned
+        {
+            get
+            {
+                float angleRadians = SiMath.CardinalToRad(X, Y);
+                return angleRadians * (180 / (float)Math.PI);
+            }
+            set
+            {
+                var degrees = value > 0 ? value % 360 : (value + 360) % 360;
+                var cardinal = SiMath.RadToCardinal(SiMath.DegToRad(degrees));
+                X = cardinal.X;
+                Y = cardinal.Y;
+            }
+        }
 
         #endregion
 
@@ -817,7 +558,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="other"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public double DistanceTo(SiVector other) => DistanceTo(this, other);
+        public float DistanceTo(SiVector other) => DistanceTo(this, other);
 
         /// <summary>
         /// Calculates the distance squared between two points in a 2D space (faster and but not compatible with DistanceTo(...)).
@@ -825,22 +566,8 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="other"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public double DistanceSquaredTo(SiVector other) => DistanceSquaredTo(this, other);
+        public float DistanceSquaredTo(SiVector other) => DistanceSquaredTo(this, other);
 
-        /// <summary>
-        /// Calculate the angle between two points relative to the horizontal axis.
-        /// </summary>
-        /// <param name="point1"></param>
-        /// <param name="point2"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float AngleToInUnsignedRadians(SiVector point2) => AngleToInUnsignedRadians(this, point2);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float AngleToInUnsignedDegrees(SiVector point2) => AngleToInUnsignedDegrees(this, point2);
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float AngleToInSignedRadians(SiVector point2) => AngleToInSignedRadians(this, point2);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public SiVector Clamp(float minValue, float maxValue)
@@ -880,7 +607,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns>The calculated point at the given distance towards the given angle.</returns>
         public SiVector PointFromAngleAtDistance(SiVector distance)
         {
-            var direction = Normalize().Radians;
+            var direction = Normalize().RadiansSigned;
             return new SiVector((float)Math.Cos(direction) * distance.X, (float)Math.Sin(direction) * distance.Y);
         }
 
@@ -918,9 +645,9 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float DeltaAngleInUnsignedDegrees(SiVector toLocation, float offsetAngle = 0)
         {
-            float fromAngle = Degrees + offsetAngle;
+            float fromAngle = DegreesUnsigned + offsetAngle;
 
-            float angleTo = AngleToInUnsignedDegrees(toLocation);
+            float angleTo = this.AngleToInUnsignedDegrees(toLocation);
 
             if (fromAngle < 0) fromAngle = 0 - fromAngle;
             if (angleTo < 0)
@@ -1032,9 +759,9 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float DeltaAngleInUnsignedDegrees(ISprite to, float offsetAngle = 0)
         {
-            float fromAngle = Degrees + offsetAngle;
+            float fromAngle = DegreesUnsigned + offsetAngle;
 
-            float angleTo = AngleToInUnsignedDegrees(to.Location);
+            float angleTo = this.AngleToInUnsignedDegrees(to.Location);
 
             if (fromAngle < 0) fromAngle = 0 - fromAngle;
             if (angleTo < 0)

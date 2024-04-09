@@ -2,6 +2,7 @@
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 
 namespace Si.Engine.Sprite.Weapon
@@ -37,12 +38,14 @@ namespace Si.Engine.Sprite.Weapon
 
                 if (_toggle)
                 {
-                    var pointRight = Owner.Location + SiVector.PointFromAngleAtDistance(Owner.PointingAngle + SiMath.RADIANS_90, new SiVector(10, 10));
+                    var pointRight = Owner.Location
+                        + (Owner.Orientation + SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(10, 10));
                     _engine.Sprites.Munitions.Add(this, pointRight);
                 }
                 else
                 {
-                    var pointLeft = Owner.Location + SiVector.PointFromAngleAtDistance(Owner.PointingAngle - SiMath.RADIANS_90, new SiVector(10, 10));
+                    var pointLeft = Owner.Location
+                        + (Owner.Orientation - SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(10, 10));
                     _engine.Sprites.Munitions.Add(this, pointLeft);
                 }
 

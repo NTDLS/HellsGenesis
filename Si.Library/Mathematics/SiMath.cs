@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Si.Library.Mathematics.Geometry
+namespace Si.Library.Mathematics
 {
     public static class SiMath
     {
@@ -129,12 +129,12 @@ namespace Si.Library.Mathematics.Geometry
         /// <summary>
         /// Returns whether the value is near to one.
         /// </summary>
-        public static bool IsOne(float a) => IsZero(a - 1.0f);
+        public static bool IsOne(float a) => IsNearZero(a - 1.0f);
 
         /// <summary>
         /// Returns whether the value is near to zero.
         /// </summary>
-        public static bool IsZero(float a)
+        public static bool IsNearZero(float a)
             => Math.Abs(a) < ZeroTolerance;
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Si.Library.Mathematics.Geometry
         public static bool WithinEpsilon(float a, float b, float epsilon)
         {
             float num = a - b;
-            return ((-epsilon <= num) && (num <= epsilon));
+            return -epsilon <= num && num <= epsilon;
         }
 
         /// <summary>
@@ -281,9 +281,9 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="amount">Value between 0 and 1 indicating interpolation amount.</param>
         public static float SmoothStep(float amount)
         {
-            return (amount <= 0) ? 0
-                : (amount >= 1) ? 1
-                : amount * amount * (3 - (2 * amount));
+            return amount <= 0 ? 0
+                : amount >= 1 ? 1
+                : amount * amount * (3 - 2 * amount);
         }
 
         /// <summary>
@@ -295,9 +295,9 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="amount">Value between 0 and 1 indicating interpolation amount.</param>
         public static float SmootherStep(float amount)
         {
-            return (amount <= 0) ? 0
-                : (amount >= 1) ? 1
-                : amount * amount * amount * (amount * ((amount * 6) - 15) + 10);
+            return amount <= 0 ? 0
+                : amount >= 1 ? 1
+                : amount * amount * amount * (amount * (amount * 6 - 15) + 10);
         }
 
         /// <summary>
@@ -365,8 +365,8 @@ namespace Si.Library.Mathematics.Geometry
             var cx = x - centerX;
             var cy = y - centerY;
 
-            var componentX = (cx * cx) / (2 * sigmaX * sigmaX);
-            var componentY = (cy * cy) / (2 * sigmaY * sigmaY);
+            var componentX = cx * cx / (2 * sigmaX * sigmaX);
+            var componentY = cy * cy / (2 * sigmaY * sigmaY);
 
             return (float)(amplitude * Math.Exp(-(componentX + componentY)));
         }

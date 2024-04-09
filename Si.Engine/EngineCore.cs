@@ -143,7 +143,7 @@ namespace Si.Engine
         {
             try
             {
-                Rendering.RenderTargets.Use(o =>
+                Rendering.RenderTargets.Use((NTDLS.Semaphore.PessimisticCriticalResource<SiCriticalRenderTargets>.CriticalResourceDelegateWithVoidResult)(o =>
                 {
                     o.ScreenRenderTarget.BeginDraw();
                     o.IntermediateRenderTarget.BeginDraw();
@@ -174,15 +174,15 @@ namespace Si.Engine
                                 collision.Value.OverlapPolygon,
                                 Rendering.Materials.Colors.Cyan, 3);
 
-                            Rendering.DrawRectangleAt(o.IntermediateRenderTarget,
+                            Rendering.DrawRectangleAt((SharpDX.Direct2D1.RenderTarget)o.IntermediateRenderTarget,
                                 collision.Value.Body1.RawRenderBounds,
-                                collision.Value.Body1.Direction.Radians,
-                                Rendering.Materials.Colors.Red, 1, 1);
+                                collision.Value.Body1.Direction.RadiansSigned,
+                                Rendering.Materials.Colors.Red, (float)1, (float)1);
 
-                            Rendering.DrawRectangleAt(o.IntermediateRenderTarget,
+                            Rendering.DrawRectangleAt((SharpDX.Direct2D1.RenderTarget)o.IntermediateRenderTarget,
                                 collision.Value.Body2.RawRenderBounds,
-                                collision.Value.Body2.Direction.Radians,
-                                Rendering.Materials.Colors.LawnGreen, 1, 1);
+                                collision.Value.Body2.Direction.RadiansSigned,
+                                Rendering.Materials.Colors.LawnGreen, (float)1, (float)1);
                         }
                     }
                     #endregion
@@ -202,7 +202,7 @@ namespace Si.Engine
                     Sprites.RenderPostScaling(o.ScreenRenderTarget);
 
                     o.ScreenRenderTarget.EndDraw();
-                });
+                }));
             }
             catch
             {

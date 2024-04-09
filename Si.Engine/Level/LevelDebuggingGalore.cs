@@ -1,8 +1,9 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Engine.Sprite.Enemy.Peon;
+using Si.Engine.Sprite.Enemy.Debug;
 using Si.Library;
+using Si.Library.Mathematics;
 using Si.Library.Mathematics.Geometry;
 using System;
 using System.Linq;
@@ -71,8 +72,10 @@ namespace Si.Engine.Level
         {
             for (int i = 0; i < 1; i++)
             {
-                _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
+                //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
+
+            _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyDebug>();
 
             //var debug = _engine.Sprites.Debugs.Add(1000, 1000);
             //debug.Speed = 0.5f;
@@ -117,7 +120,7 @@ namespace Si.Engine.Level
 
             asteroid.Location = new SiVector(800, 800);
             asteroid.Speed = 1.0f;
-            asteroid.PointingAngle = SiVector.FromDegrees(-45);
+            asteroid.Orientation = SiVector.FromDegrees(-45);
             asteroid.RecalculateMovementVector();
 
             asteroid.SetHullHealth(100);
@@ -138,13 +141,13 @@ namespace Si.Engine.Level
 
                     asteroid.Location = new SiVector(totalXOffset - asteroidSize * col, totalYOffset - asteroidSize * row);
 
-                    asteroid.TravelAngle.Degrees = SiRandom.Variance(-45, 0.10f);
+                    asteroid.Orientation = SiVector.FromDegrees(SiRandom.Between(0, 359));
                     asteroid.Speed = SiRandom.Variance(asteroid.Speed, 0.20f);
-                    asteroid.PointingAngle = SiVector.FromDegrees(-45);
                     asteroid.Throttle = 1;
-                    asteroid.RecalculateMovementVector();
 
-                    asteroid.VectorType = ParticleVectorType.UseNativeForwardAngle;
+                    asteroid.RecalculateMovementVector(SiMath.DegToRad(SiRandom.Variance(-45, 0.10f)));
+                    asteroid.VectorType = ParticleVectorType.Default;
+
                     //asteroid.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
                     //asteroid.RotationSpeed = 0;
 

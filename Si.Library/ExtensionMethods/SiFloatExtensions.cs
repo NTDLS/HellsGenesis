@@ -1,7 +1,21 @@
-﻿namespace Si.Library.ExtensionMethods
+﻿using Si.Library.Mathematics;
+
+namespace Si.Library.ExtensionMethods
 {
     public static class SiFloatExtensions
     {
+        /// <summary>
+        /// Returns whether the value is near to zero.
+        /// </summary>
+        public static bool IsNearZero(this float value)
+            => SiMath.IsNearZero(value);
+
+        /// <summary>
+        /// Returns whether the value is near to zero.
+        /// </summary>
+        public static bool IsNearZero(this float? value)
+            => value == null ? true : SiMath.IsNearZero((float)value);
+
         /// <summary>
         /// Degrees 0-360 -> 0 to 180 (right) and 0 to -180 (left).
         /// </summary>

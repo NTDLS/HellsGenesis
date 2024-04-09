@@ -44,7 +44,7 @@ namespace Si.Engine.AI.Logistics
             }
             else
             {
-                Owner.PointingAngle.Radians += (_angleToAdd * epoch); //Just do loops.
+                Owner.Orientation.RadiansSigned += (_angleToAdd * epoch); //Just do loops.
 
                 if ((DateTime.UtcNow - _lastDecisionTime).TotalMilliseconds > _millisecndsBetweenDecisions) //Change directions from time to time.
                 {

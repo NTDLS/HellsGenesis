@@ -13,12 +13,12 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
             : base(engine)
         {
             SetImageAndLoadMetadata(@"Sprites\Enemy\Starbase\Garrison\Hull.png");
-            PointingAngle.Degrees = SiRandom.Between(0, 359);
+            Orientation.DegreesUnsigned = SiRandom.Between(0, 359);
         }
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
-            PointingAngle.Degrees += 0.005f;
+            Orientation.DegreesUnsigned += 0.005f;
             base.ApplyMotion(epoch, displacementVector);
         }
     }

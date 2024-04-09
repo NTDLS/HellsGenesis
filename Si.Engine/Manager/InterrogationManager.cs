@@ -508,7 +508,7 @@ namespace Si.Engine.Manager
 
                 if (baseSprite != null && targetSprite != null)
                 {
-                    var result = baseSprite.AngleToInUnsignedDegrees(targetSprite);
+                    var result = SiVectorSpriteExtensions.AngleToInUnsignedDegrees(baseSprite, targetSprite);
                     _debugForm.WriteLine($"AngleTo: {result:n4}", System.Drawing.Color.Black);
                 }
             });
@@ -539,7 +539,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.PointingAngle.Degrees = command.ParameterValue<float>("value");
+                    sprite.Orientation.DegreesUnsigned = command.ParameterValue<float>("value");
                 }
             });
         }

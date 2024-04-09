@@ -72,7 +72,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses
             Sprite = sprite;
 
             //Assume the sprite is using rotation.
-            Direction = new SiVector(sprite.PointingAngle.Radians + sprite.RotationSpeed * epoch);
+            Direction = new SiVector(sprite.Orientation.RadiansSigned + sprite.RotationSpeed * epoch);
 
             //Assuming the sprite is moving in the direction it is pointing.
             Velocity = Direction * Velocity.Magnitude();
@@ -96,22 +96,22 @@ namespace Si.GameEngine.Sprite.SupportingClasses
         /// <param name="otherObject"></param>
         /// <returns></returns>
         public bool IntersectsSAT(PredictedKinematicBody otherObject)
-            => SiSeparatingAxisTheorem.IntersectsRotated(Bounds, Direction.Radians,
-                otherObject.Bounds, otherObject.Direction.Radians);
+            => SiSeparatingAxisTheorem.IntersectsRotated(Bounds, Direction.RadiansSigned,
+                otherObject.Bounds, otherObject.Direction.RadiansSigned);
 
         public RectangleF GetOverlapRectangleSAT(PredictedKinematicBody otherObject)
-            => SiSeparatingAxisTheorem.GetOverlapRectangle(Bounds, Direction.Radians,
-                otherObject.Bounds, otherObject.Direction.Radians);
+            => SiSeparatingAxisTheorem.GetOverlapRectangle(Bounds, Direction.RadiansSigned,
+                otherObject.Bounds, otherObject.Direction.RadiansSigned);
 
         public RectangleF GetIntersectionBoundingBox(PredictedKinematicBody otherObject)
-            => SiSutherlandHodgmanPolygonIntersection.GetIntersectionBoundingBox(Bounds, Direction.Radians,
-                otherObject.Bounds, otherObject.Direction.Radians);
+            => SiSutherlandHodgmanPolygonIntersection.GetIntersectionBoundingBox(Bounds, Direction.RadiansSigned,
+                otherObject.Bounds, otherObject.Direction.RadiansSigned);
 
         public PointF[] GetIntersectedPolygon(PredictedKinematicBody otherObject)
-            => SiSutherlandHodgmanPolygonIntersection.GetIntersectedPolygon(Bounds, Direction.Radians,
-            otherObject.Bounds, otherObject.Direction.Radians);
+            => SiSutherlandHodgmanPolygonIntersection.GetIntersectedPolygon(Bounds, Direction.RadiansSigned,
+            otherObject.Bounds, otherObject.Direction.RadiansSigned);
 
         public PointF[] GetRotatedRectangleCorners()
-            => SiSeparatingAxisTheorem.GetRotatedRectangleCorners(Bounds, Direction.Radians).ToArray();
+            => SiSeparatingAxisTheorem.GetRotatedRectangleCorners(Bounds, Direction.RadiansSigned).ToArray();
     }
 }
