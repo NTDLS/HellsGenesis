@@ -50,24 +50,13 @@ namespace Si.Engine.Sprite
             Location = location.Clone();
 
             Color = color ?? engine.Rendering.Materials.Colors.White;
-            RotationSpeed = SiRandom.Between(1, 100) / 20.0f * SiRandom.PositiveOrNegative();
+            RotationSpeed = SiRandom.Between(0.01f, 0.09f) * SiRandom.PositiveOrNegative();
 
             Speed = SiRandom.Between(1.0f, 4.0f);
             Orientation.DegreesUnsigned = SiRandom.Between(0, 359);
             Throttle = 1;
 
             RecalculateMovementVector();
-
-            /*
-            Location = location.Clone();
-
-            Color = color ?? engine.Rendering.Materials.Colors.White;
-            Velocity.RotationSpeed = SiRandom.Between(1, 100) / 20.0f * SiRandom.PositiveOrNegative();
-            TravelAngle.Degrees = SiRandom.Between(0, 359);
-
-            Velocity.ForwardVelocity = 100;
-            Velocity.MaximumSpeed = SiRandom.Between(1.0f, 4.0f);
-             */
 
             _engine = engine;
         }
