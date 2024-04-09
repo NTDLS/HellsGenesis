@@ -1,7 +1,7 @@
 ﻿using SharpDX.Mathematics.Interop;
 using Si.Engine.Sprite._Superclass;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System.Drawing;
 using System.Linq;
 

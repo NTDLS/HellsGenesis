@@ -3,7 +3,7 @@ using SharpDX.Direct2D1;
 using Si.Engine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System.Drawing;
 using static Si.Library.SiConstants;
 
@@ -23,7 +23,6 @@ namespace Si.Engine.Sprite
         /// This should be expressed as a number between 0-1 with 0 being no reduxtion per frame and 1 being 100% reduction per frame.
         /// </summary>
         public float FadeToBlackReductionAmount { get; set; } = 0.01f;
-
         public ParticleColorType ColorType { get; set; } = ParticleColorType.SingleColor;
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Default;
         public ParticleShape Shape { get; set; } = ParticleShape.FilledEllipse;

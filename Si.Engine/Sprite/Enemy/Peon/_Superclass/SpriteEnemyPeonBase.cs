@@ -1,6 +1,6 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System;
 using System.Drawing;
 using static Si.Library.SiConstants;

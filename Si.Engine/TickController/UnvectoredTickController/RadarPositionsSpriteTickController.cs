@@ -2,7 +2,7 @@
 using Si.Engine.Manager;
 using Si.Engine.Sprite;
 using Si.Engine.TickController._Superclass;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

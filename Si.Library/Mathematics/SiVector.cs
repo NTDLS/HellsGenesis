@@ -2,10 +2,10 @@
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
-namespace Si.Library.Mathematics.Geometry
+namespace Si.Library.Mathematics
 {
     /// <summary>
-    /// 2d vector and associated halpers.
+    /// 2d vector.
     /// </summary>
     public partial class SiVector : IComparable<SiVector>
     {
@@ -19,7 +19,9 @@ namespace Si.Library.Mathematics.Geometry
 
         #region ~Ctor. 
 
-        public SiVector() { }
+        public SiVector()
+        {
+        }
 
         public SiVector(float radians)
         {
@@ -225,153 +227,6 @@ namespace Si.Library.Mathematics.Geometry
 
         #endregion
 
-        #region Static Helpers.
-
-        /// <summary>
-        /// Returns a new vector which has been rotated by the given radians.
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <param name="radians"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector Rotation(SiVector vector, float radians)
-        {
-            float cosTheta = (float)Math.Cos(radians);
-            float sinTheta = (float)Math.Sin(radians);
-
-            return new SiVector(
-                vector.X * cosTheta - vector.Y * sinTheta,
-                vector.X * sinTheta + vector.Y * cosTheta
-            );
-        }
-
-        /// <summary>
-        /// Calculates the euclidean distance between two points in a 2D space (slower and precisie, but not compatible with DistanceSquaredTo(...)).
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float DistanceTo(SiVector from, SiVector to)
-        {
-            var deltaX = Math.Pow(to.X - from.X, 2);
-            var deltaY = Math.Pow(to.Y - from.Y, 2);
-            return (float)Math.Sqrt(deltaY + deltaX);
-        }
-
-        /// <summary>
-        /// Calculates the distance squared between two points in a 2D space (faster and but not compatible with DistanceTo(...)).
-        /// </summary>
-        /// <param name="from"></param>
-        /// <param name="to"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float DistanceSquaredTo(SiVector from, SiVector to)
-        {
-            var deltaX = to.X - from.X;
-            var deltaY = to.Y - from.Y;
-            return deltaX * deltaX + deltaY * deltaY;
-        }
-
-        /// <summary>
-        /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector Normalize(SiVector vector)
-        {
-            var magnitude = (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
-            return new SiVector(vector.X / magnitude, vector.Y / magnitude);
-        }
-
-        /// <summary>
-        /// Determines whether the vector is normalized.
-        /// </summary>
-        public static bool IsNormalized(SiVector vector)
-            => SiMath.IsOne(vector.X * vector.X + vector.Y * vector.Y);
-
-        /// <summary>
-        /// Returns the X + Y;
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Sum(SiVector a) => a.X + a.Y;
-
-        /// <summary>
-        /// Returns the Abs(X) + Abs(Y);
-        /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float SumAbs(SiVector a) => Math.Abs(a.X) + Math.Abs(a.Y);
-
-        /// <summary>
-        /// Calculate the dot product of two vectors.This is useful for determining the angle between vectors or projecting one vector onto another.
-        /// </summary>
-        /// <altmember cref="LengthSquared"/>
-        /// <altmember cref="Magnitude"/>
-        /// <altmember cref="Magnitude"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Dot(SiVector v1, SiVector v2) => v1.X * v2.X + v1.Y * v2.Y;
-
-        /// <summary>
-        /// The length squared of a vector is the dot product of the vector with itself.
-        /// This is useful for determining the angle between vectors or projecting one vector onto another.
-        /// The length squared of a vector is the dot product of the vector with itself, and it's often used in optimizations where the actual
-        /// distance (magnitude) isn't necessary. Calculating the square root (as in the magnitude) is computationally expensive, so using
-        /// length squared can save resources when comparing distances or checking thresholds.
-        /// </summary>
-        /// <param name="v"></param>
-        /// <returns></returns>
-        public static float LengthSquared(SiVector v) => v.X * v.X + v.Y * v.Y;
-
-        /// <summary>
-        /// Gets the length of a vector from its tail to its head.
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        /// <altmember cref="LengthSquared"/>
-        /// <altmember cref="Magnitude"/>
-        /// [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float Magnitude(SiVector vector)
-            => (float)Math.Sqrt(vector.X * vector.X + vector.Y * vector.Y);
-
-        /// <summary>
-        /// Rotate a point around another point by a certain angle.
-        /// </summary>
-        /// <param name="pointToRotate"></param>
-        /// <param name="centerPoint"></param>
-        /// <param name="angleRadians"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector RotateAroundPoint(SiVector pointToRotate, SiVector centerPoint, float angleRadians)
-        {
-            var cosTheta = (float)Math.Cos(angleRadians);
-            var sinTheta = (float)Math.Sin(angleRadians);
-            var x = cosTheta * (pointToRotate.X - centerPoint.X) - sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X;
-            var y = sinTheta * (pointToRotate.X - centerPoint.X) + cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y;
-            return new SiVector(x, y);
-        }
-
-        /// <summary>
-        /// Reflect a vector off a surface.Useful for light reflections, bouncing effects, etc.
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <param name="normal"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector Reflect(SiVector vector, SiVector normal)
-        {
-            var dotProduct = Dot(vector, normal);
-            return new SiVector(vector.X - 2 * dotProduct * normal.X, vector.Y - 2 * dotProduct * normal.Y);
-        }
-
-        #endregion
-
         #region Direction.
 
         public float RadiansUnsigned
@@ -458,15 +313,8 @@ namespace Si.Library.Mathematics.Geometry
         /// </summary>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public SiVector Clone() => new SiVector(this);
-
-        /// <summary>
-        /// Returns a new vector which has been rotated by the given radians.
-        /// </summary>
-        /// <param name="radians"></param>
-        /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public SiVector Rotation(float radians) => Rotation(this, radians);
+        public SiVector Clone()
+            => new SiVector(X, Y);
 
         /// <summary>
         /// Rotates the vector by the given radians.
@@ -485,10 +333,10 @@ namespace Si.Library.Mathematics.Geometry
         }
 
         /// <summary>
-        /// Rotates the vector to the given radians.
+        /// Rotates the vector to the given radians while maintaining its length.
         /// </summary>
         /// <param name="angleRadians"></param>
-        public void PointTo(float angleRadians)
+        public void SetDirctionMaintainMagnitude(float angleRadians)
         {
             float magnitude = Magnitude();
             X = magnitude * (float)Math.Cos(angleRadians);
@@ -496,12 +344,22 @@ namespace Si.Library.Mathematics.Geometry
         }
 
         /// <summary>
-        /// Normalize a vector to have a length of 1 but maintain its direction. Useful for velocity or direction vectors.
+        /// Returns a normalized vector, with a length of 1 but maintain its direction. Useful for velocity or direction vectors.
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public SiVector Normalize() => Normalize(this);
+        public SiVector Normalize()
+        {
+            var magnitude = (float)Math.Sqrt(X * X + Y * Y);
+            return new SiVector(X / magnitude, Y / magnitude);
+        }
+
+        /// <summary>
+        /// Determines whether the vector is normalized.
+        /// </summary>
+        public bool IsNormalized()
+            => SiMath.IsOne(X * X + Y * Y);
 
         /// <summary>
         /// Calculate the dot product of two vectors.This is useful for determining the angle between vectors or projecting one vector onto another.
@@ -510,7 +368,8 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="b"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float Dot(SiVector b) => Dot(this, b);
+        public float Dot(SiVector vector)
+             => X * vector.X + Y * vector.Y;
 
         /// <summary>
         /// Gets the length of the a vector. This represents the distance from its tail (starting point) to its head (end point) in the vector space.
@@ -519,7 +378,8 @@ namespace Si.Library.Mathematics.Geometry
         /// </summary>
         /// <altmember cref="LengthSquared"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float Magnitude() => Magnitude(this);
+        public float Magnitude()
+            => (float)Math.Sqrt(X * X + Y * Y);
 
         /// <summary>
         /// The length squared of a vector is the dot product of the vector with itself.
@@ -532,7 +392,8 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="b"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float LengthSquared() => LengthSquared(this);
+        public float LengthSquared()
+            => X * X + Y * Y;
 
         /// <summary>
         /// Returns the X + Y;
@@ -541,16 +402,18 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="b"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float Sum() => Sum(this);
+        public float Sum()
+            => X + Y;
 
         /// <summary>
-        /// Returns the Abs(X) + Abs(Y);
+        /// Returns the Abs(X) + Abs(Y), useful for determining when a vector is non-zero.
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float SumAbs() => SumAbs(this);
+        public float SumAbs()
+            => Math.Abs(X) + Math.Abs(Y);
 
         /// <summary>
         /// Calculates the euclidean distance between two points in a 2D space (slower and precisie, but not compatible with DistanceSquaredTo(...)).
@@ -558,7 +421,12 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="other"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float DistanceTo(SiVector other) => DistanceTo(this, other);
+        public float DistanceTo(SiVector to)
+        {
+            var deltaX = Math.Pow(to.X - X, 2);
+            var deltaY = Math.Pow(to.Y - Y, 2);
+            return (float)Math.Sqrt(deltaY + deltaX);
+        }
 
         /// <summary>
         /// Calculates the distance squared between two points in a 2D space (faster and but not compatible with DistanceTo(...)).
@@ -566,8 +434,12 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="other"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float DistanceSquaredTo(SiVector other) => DistanceSquaredTo(this, other);
-
+        public float DistanceSquaredTo(SiVector to)
+        {
+            var deltaX = to.X - X;
+            var deltaY = to.Y - Y;
+            return deltaX * deltaX + deltaY * deltaY;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public SiVector Clamp(float minValue, float maxValue)
@@ -594,11 +466,6 @@ namespace Si.Library.Mathematics.Geometry
 
             return point;
         }
-
-        /// <summary>
-        /// Determines whether the vector is normalized.
-        /// </summary>
-        public bool IsNormalized() => SiMath.IsOne(X * X + Y * Y);
 
         /// <summary>
         /// Calculates a point at the normalized vector angle and a given distance. The instance vector will be normalized before calulation.

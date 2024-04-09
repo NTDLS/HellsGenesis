@@ -1,4 +1,4 @@
-﻿using Si.Library.Mathematics.Geometry;
+﻿using Si.Library.Mathematics;
 
 namespace Si.GameEngine.AI._Superclass
 {

@@ -1,6 +1,6 @@
 ﻿using SharpDX.DirectInput;
 using Si.Engine.Sprite.MenuItem;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

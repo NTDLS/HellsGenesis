@@ -1,5 +1,5 @@
 ﻿using Si.Engine.Sprite._Superclass;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System;
 
 namespace Si.Engine.Sprite.PowerUp._Superclass

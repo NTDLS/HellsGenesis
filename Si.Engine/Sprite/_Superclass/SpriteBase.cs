@@ -4,7 +4,6 @@ using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
-using Si.Library.Mathematics.Geometry;
 using Si.Library.Sprite;
 using System;
 using System.Collections.Generic;
@@ -948,7 +947,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             var radians = Location.AngleToInSignedRadians(toLocatipnOf);
 
-            MovementVector.PointTo(radians);
+            MovementVector.SetDirctionMaintainMagnitude(radians);
             Orientation = MovementVector.Normalize();
         }
 

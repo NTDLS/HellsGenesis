@@ -1,6 +1,6 @@
 ﻿using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 
 namespace Si.Engine.Sprite.PowerUp
 {

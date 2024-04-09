@@ -5,7 +5,6 @@ using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
-using Si.Library.Mathematics.Geometry;
 using System;
 using static Si.Library.SiConstants;
 

@@ -1,7 +1,7 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.GameEngine.AI._Superclass;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System;
 using static Si.Library.SiConstants;
 namespace Si.Engine.AI.Logistics

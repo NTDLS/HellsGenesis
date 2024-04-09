@@ -1,6 +1,6 @@
 ﻿using Si.Engine.Menu._Superclass;
 using Si.Engine.Sprite.MenuItem;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 
 namespace Si.Engine.Menu
 {

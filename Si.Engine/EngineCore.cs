@@ -8,7 +8,7 @@ using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.UnvectoredTickController;
 using Si.GameEngine.AI._Superclass;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using Si.Rendering;
 using System;
 using System.Drawing;

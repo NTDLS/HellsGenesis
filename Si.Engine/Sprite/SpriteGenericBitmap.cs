@@ -1,6 +1,6 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System;
 using static Si.Library.SiConstants;
 

@@ -1,7 +1,7 @@
 ﻿using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System;
 using System.Collections.Generic;
 

@@ -5,7 +5,6 @@ using Si.GameEngine.Persistent;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
-using Si.Library.Mathematics.Geometry;
 using System;
 using System.Diagnostics;
 using static Si.Library.SiConstants;

@@ -7,7 +7,7 @@ using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System.Collections.Concurrent;
 using System.Linq;
 using static Si.Library.SiConstants;

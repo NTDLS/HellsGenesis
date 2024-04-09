@@ -1,7 +1,7 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using Si.Engine.Menu._Superclass;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.MenuItem

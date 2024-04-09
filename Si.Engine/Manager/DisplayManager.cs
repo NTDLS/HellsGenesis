@@ -1,7 +1,6 @@
 ﻿using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
-using Si.Library.Mathematics.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

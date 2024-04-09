@@ -2,7 +2,7 @@
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Sprite._Superclass;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using Si.Rendering;
 using System;
 using System.Collections.Generic;

@@ -1,9 +1,58 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace Si.Library.Mathematics.Geometry
+namespace Si.Library.Mathematics
 {
     public static class SiVectorExtensions
     {
+
+        /// <summary>
+        /// Rotate a point around another point by a certain angle.
+        /// </summary>
+        /// <param name="pointToRotate"></param>
+        /// <param name="centerPoint"></param>
+        /// <param name="angleRadians"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector RotateAroundPoint(this SiVector pointToRotate, SiVector centerPoint, float angleRadians)
+        {
+            var cosTheta = (float)Math.Cos(angleRadians);
+            var sinTheta = (float)Math.Sin(angleRadians);
+            var x = cosTheta * (pointToRotate.X - centerPoint.X) - sinTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.X;
+            var y = sinTheta * (pointToRotate.X - centerPoint.X) + cosTheta * (pointToRotate.Y - centerPoint.Y) + centerPoint.Y;
+            return new SiVector(x, y);
+        }
+
+        /// <summary>
+        /// Reflect a vector off a surface.Useful for light reflections, bouncing effects, etc.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="normal"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector Reflect(this SiVector vector, SiVector normal)
+        {
+            var dotProduct = vector.Dot(normal);
+            return new SiVector(vector.X - 2 * dotProduct * normal.X, vector.Y - 2 * dotProduct * normal.Y);
+        }
+
+        /// <summary>
+        /// Returns a new vector which has been rotated by the given radians.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="radians"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector RotationOf(this SiVector vector, float radians)
+        {
+            float cosTheta = (float)Math.Cos(radians);
+            float sinTheta = (float)Math.Sin(radians);
+
+            return new SiVector(
+                vector.X * cosTheta - vector.Y * sinTheta,
+                vector.X * sinTheta + vector.Y * cosTheta
+            );
+        }
+
         /// <summary>
         /// Calculate the angle between two points in unsigned degrees.
         /// </summary>

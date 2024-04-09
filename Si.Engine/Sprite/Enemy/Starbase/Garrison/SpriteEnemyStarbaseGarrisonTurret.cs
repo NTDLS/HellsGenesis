@@ -3,7 +3,6 @@ using Si.Engine.Sprite;
 using Si.Engine.Sprite.Weapon;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
-using Si.Library.Mathematics.Geometry;
 
 namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
 {
@@ -28,7 +27,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
             var turretOffset = LocationRelativeToOwner - (OwnerSprite.Size / 2.0f);
 
             // Apply the rotated offsets to get the new turret location relative to the base sprite center.
-            Location = OwnerSprite.Location + turretOffset.Rotation(OwnerSprite.Orientation.RadiansSigned);
+            Location = OwnerSprite.Location + turretOffset.RotationOf(OwnerSprite.Orientation.RadiansSigned);
 
             if (DistanceTo(_engine.Player.Sprite) < 1000)
             {

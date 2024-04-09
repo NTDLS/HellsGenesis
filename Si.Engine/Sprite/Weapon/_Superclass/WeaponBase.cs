@@ -6,7 +6,7 @@ using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.GameEngine.Sprite.SupportingClasses.Metadata;
 using Si.Library.ExtensionMethods;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

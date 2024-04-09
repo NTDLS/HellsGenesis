@@ -1,7 +1,7 @@
 ﻿using NTDLS.DelegateThreadPooling;
 using Si.Engine.Core.Types;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using Si.Rendering;
 using System;
 using System.Threading;

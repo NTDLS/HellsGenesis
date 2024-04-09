@@ -1,7 +1,7 @@
 ﻿using Si.Library.Sprite;
 using System.Runtime.CompilerServices;
 
-namespace Si.Library.Mathematics.Geometry
+namespace Si.Library.Mathematics
 {
     public static class SiVectorSpriteExtensions
     {
@@ -106,7 +106,7 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPointingAway(this ISprite fromSprite, ISprite atSprite, float toleranceDegrees)
         {
-            var deltaAngle = Math.Abs(HeadingAngleToInUnsignedDegrees(fromSprite, atSprite));
+            var deltaAngle = Math.Abs(fromSprite.HeadingAngleToInUnsignedDegrees(atSprite));
             return deltaAngle < 180 + toleranceDegrees && deltaAngle > 180 - toleranceDegrees;
         }
 
@@ -120,7 +120,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <returns>True if the object is pointing away from the other given the constraints.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPointingAway(this ISprite fromSprite, ISprite atSprite, float toleranceDegrees, float maxDistance)
-            => IsPointingAway(fromSprite, atSprite, toleranceDegrees) && DistanceTo(fromSprite, atSprite) <= maxDistance;
+            => fromSprite.IsPointingAway(atSprite, toleranceDegrees) && fromSprite.DistanceTo(atSprite) <= maxDistance;
 
         /// <summary>
         /// Returns true if the sprite is pointing AT another sprite, taking into account the tolerance in degrees.
@@ -132,7 +132,7 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPointingAt(this ISprite fromSprite, ISprite atSprite, float toleranceDegrees)
         {
-            var deltaAngle = Math.Abs(HeadingAngleToInSignedDegrees(fromSprite, atSprite));
+            var deltaAngle = Math.Abs(fromSprite.HeadingAngleToInSignedDegrees(atSprite));
             return deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees;
         }
 
@@ -147,10 +147,10 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPointingAt(this ISprite fromSprite, ISprite atSprite, float toleranceDegrees, float maxDistance)
         {
-            var deltaAngle = Math.Abs(HeadingAngleToInUnsignedDegrees(fromSprite, atSprite));
+            var deltaAngle = Math.Abs(fromSprite.HeadingAngleToInUnsignedDegrees(atSprite));
             if (deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees)
             {
-                return DistanceTo(fromSprite, atSprite) <= maxDistance;
+                return fromSprite.DistanceTo(atSprite) <= maxDistance;
             }
 
             return false;
@@ -176,7 +176,7 @@ namespace Si.Library.Mathematics.Geometry
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float HeadingAngleToInSignedDegrees(this ISprite fromSprite, SiVector toLocation)
         {
-            var angle = HeadingAngleToInUnsignedDegrees(fromSprite, toLocation);
+            var angle = fromSprite.HeadingAngleToInUnsignedDegrees(toLocation);
             if (angle > 180)
             {
                 angle -= 180;
@@ -208,7 +208,7 @@ namespace Si.Library.Mathematics.Geometry
         {
             float fromAngle = fromSprite.Orientation.DegreesUnsigned;
 
-            float angleTo = AngleToInUnsignedDegrees(fromSprite, toLocation);
+            float angleTo = fromSprite.AngleToInUnsignedDegrees(toLocation);
 
             if (fromAngle < 0) fromAngle = 0 - fromAngle;
             if (angleTo < 0)

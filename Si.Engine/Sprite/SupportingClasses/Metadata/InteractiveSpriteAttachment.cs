@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System.Collections.Generic;
 
 namespace Si.GameEngine.Sprite.SupportingClasses.Metadata

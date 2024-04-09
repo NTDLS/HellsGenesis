@@ -1,6 +1,6 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 
 namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 {

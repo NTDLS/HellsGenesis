@@ -1,4 +1,4 @@
-﻿using Si.Library.Mathematics.Geometry;
+﻿using Si.Library.Mathematics;
 
 namespace Si.Engine.TickController._Superclass
 {

@@ -1,4 +1,4 @@
-﻿namespace Si.Library.Mathematics.Geometry
+﻿namespace Si.Library.Mathematics
 {
     public class NsRectangle
     {

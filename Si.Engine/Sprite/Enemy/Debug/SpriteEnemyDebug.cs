@@ -1,5 +1,5 @@
 ﻿using Si.Engine.Sprite.Enemy.Peon._Superclass;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 
 namespace Si.Engine.Sprite.Enemy.Debug
 {

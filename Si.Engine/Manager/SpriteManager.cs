@@ -11,7 +11,7 @@ using Si.GameEngine.TickController.UnvectoredTickController;
 using Si.GameEngine.TickController.VectoredTickController.Collidable;
 using Si.GameEngine.TickController.VectoredTickController.Uncollidable;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

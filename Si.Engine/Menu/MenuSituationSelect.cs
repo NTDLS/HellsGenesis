@@ -2,7 +2,7 @@
 using Si.Engine.Situation._Superclass;
 using Si.Engine.Sprite.MenuItem;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System.Linq;
 
 namespace Si.Engine.Menu

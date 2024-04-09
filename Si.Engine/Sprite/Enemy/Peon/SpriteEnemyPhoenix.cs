@@ -2,7 +2,7 @@
 using Si.Engine.Sprite.Enemy.Peon._Superclass;
 using Si.Engine.Sprite.Weapon;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System;
 using System.Linq;
 

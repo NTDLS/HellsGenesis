@@ -2,7 +2,7 @@
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
-using Si.Library.Mathematics.Geometry;
+using Si.Library.Mathematics;
 using System.IO;
 
 namespace Si.Engine.Sprite.Weapon.Munition
