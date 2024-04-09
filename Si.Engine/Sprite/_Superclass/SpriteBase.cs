@@ -946,7 +946,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             var radians = SiVector.AngleToInSignedRadians(Location, toLocatipnOf);
 
-            MovementVector.RotateTo(radians);
+            MovementVector.PointTo(radians);
             PointingAngle = MovementVector.Normalize();
         }
 

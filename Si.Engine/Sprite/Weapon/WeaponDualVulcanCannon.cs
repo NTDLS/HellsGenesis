@@ -33,11 +33,11 @@ namespace Si.Engine.Sprite.Weapon
 
                 if (RoundQuantity > 0)
                 {
-                    var pointRight = Owner.Location + SiVector.PointFromAngleAtDistanceInUnsignedDegrees(
+                    var pointRight = Owner.Location + SiVector.PointFromAngleAtDistance(
                         Owner.PointingAngle + SiMath.RADIANS_90, new SiVector(5, 5));
                     _engine.Sprites.Munitions.Add(this, pointRight);
 
-                    var pointLeft = Owner.Location + SiVector.PointFromAngleAtDistanceInUnsignedDegrees(
+                    var pointLeft = Owner.Location + SiVector.PointFromAngleAtDistance(
                         Owner.PointingAngle - SiMath.RADIANS_90, new SiVector(5, 5));
                     _engine.Sprites.Munitions.Add(this, pointLeft);
                 }

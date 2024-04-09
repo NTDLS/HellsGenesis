@@ -53,12 +53,29 @@ namespace Si.Library.Mathematics.Geometry
         public RectangleF ToRectangleF() => new(X, Y, 1f, 1f);
 
         /// <summary>
-        /// Returns an SiVector from a SiVector.
+        /// Returns an SiVector from an angle in degrees.
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector FromDegree(float angleInDegrees) => new(SiMath.DegToRad(angleInDegrees));
+        public static SiVector FromDegrees(float angleInDegrees) => new(SiMath.DegToRad(angleInDegrees));
+
+        /// <summary>
+        /// Returns an SiVector from an angle in degrees.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector FromRadians(float angleInRadians) => new(angleInRadians);
+
+        /// <summary>
+        /// Returns an SiVector from an angle in degrees.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static SiVector FromCardinal(float x, float y) => new(x, y);
+
 
         #endregion
 
@@ -175,10 +192,8 @@ namespace Si.Library.Mathematics.Geometry
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SiVector operator /(SiVector original, SiVector scaleFactor)
-        {
-            return scaleFactor.X == 0.0 && scaleFactor.Y == 0.0 ? One :
+            => scaleFactor.X == 0.0 && scaleFactor.Y == 0.0 ? One :
                 new SiVector(original.X / scaleFactor.X, original.Y / scaleFactor.Y);
-        }
 
         #endregion
 
@@ -348,7 +363,7 @@ namespace Si.Library.Mathematics.Geometry
         /// <param name="distance">The distance to the given angle the point should be at.</param>
         /// <returns>The calculated point at the given distance towards the given angle.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector PointFromAngleAtDistanceInUnsignedDegrees(SiVector angle, SiVector distance)
+        public static SiVector PointFromAngleAtDistance(SiVector angle, SiVector distance)
             => new SiVector((float)Math.Cos(angle.Radians) * distance.X, (float)Math.Sin(angle.Radians) * distance.Y);
 
         /// <summary>
@@ -732,7 +747,7 @@ namespace Si.Library.Mathematics.Geometry
         /// Rotates the vector to the given radians.
         /// </summary>
         /// <param name="angleRadians"></param>
-        public void RotateTo(float angleRadians)
+        public void PointTo(float angleRadians)
         {
             float magnitude = Magnitude();
             X = magnitude * (float)Math.Cos(angleRadians);
@@ -764,7 +779,6 @@ namespace Si.Library.Mathematics.Geometry
         /// <altmember cref="LengthSquared"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float Magnitude() => Magnitude(this);
-
 
         /// <summary>
         /// The length squared of a vector is the dot product of the vector with itself.
@@ -858,5 +872,186 @@ namespace Si.Library.Mathematics.Geometry
         /// Determines whether the vector is normalized.
         /// </summary>
         public bool IsNormalized() => SiMath.IsOne(X * X + Y * Y);
+
+        /// <summary>
+        /// Calculates a point at the normalized vector angle and a given distance. The instance vector will be normalized before calulation.
+        /// </summary>
+        /// <param name="distance">The distance to the given angle the point should be at.</param>
+        /// <returns>The calculated point at the given distance towards the given angle.</returns>
+        public SiVector PointFromAngleAtDistance(SiVector distance)
+        {
+            var direction = Normalize().Radians;
+            return new SiVector((float)Math.Cos(direction) * distance.X, (float)Math.Sin(direction) * distance.Y);
+        }
+
+        /// <summary>
+        /// Returns the delta angle from this to another expressed in degrees from 180--180, positive
+        /// figures indicate right (starboard) side and negative indicate left-hand (port) side of the object.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="toLocation">The location to which the calculation is based.</param>
+        /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object,
+        /// positive indicated right (starboard) side.</param>
+        /// <returns>The calculated angle in the range of 180--180.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float DeltaAngle(SiVector toLocation, float offsetAngle = 0)
+        {
+            var angle = DeltaAngleInUnsignedDegrees(toLocation, offsetAngle);
+            if (angle > 180)
+            {
+                angle -= 180;
+                angle = 180 - angle;
+                angle *= -1;
+            }
+
+            return -angle;
+        }
+
+        /// <summary>
+        /// Returns the delta angle from this vector to another expressed in degrees from 0-360.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="toLocation">The location to which the calculation is based.</param>
+        /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object,
+        /// positive indicated right (starboard) side.</param>
+        /// <returns>The calculated angle in the range of 0-360.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float DeltaAngleInUnsignedDegrees(SiVector toLocation, float offsetAngle = 0)
+        {
+            float fromAngle = Degrees + offsetAngle;
+
+            float angleTo = AngleToInUnsignedDegrees(toLocation);
+
+            if (fromAngle < 0) fromAngle = 0 - fromAngle;
+            if (angleTo < 0)
+            {
+                angleTo = 0 - angleTo;
+            }
+
+            angleTo = fromAngle - angleTo;
+
+            if (angleTo < 0)
+            {
+                angleTo = 360.0f - Math.Abs(angleTo) % 360.0f;
+            }
+
+            return angleTo;
+        }
+
+        #region Sprite Math.
+
+        /// <summary>
+        /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="at">The object to which the calculation is based.</param>
+        /// <param name="toleranceDegrees"></param>
+        /// <returns>True if the object is pointing away from the other given the constraints.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsPointingAway(ISprite at, float toleranceDegrees)
+        {
+            var deltaAngle = Math.Abs(DeltaAngleInUnsignedDegrees(at));
+            return deltaAngle < 180 + toleranceDegrees && deltaAngle > 180 - toleranceDegrees;
+        }
+
+        /// <summary>
+        /// Returns true if the object is pointing AWAY another, taking into account the tolerance in degrees.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="at">The object to which the calculation is based.</param>
+        /// <param name="toleranceDegrees"></param>
+        /// <param name="maxDistance"></param>
+        /// <returns>True if the object is pointing away from the other given the constraints.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsPointingAway(ISprite at, float toleranceDegrees, float maxDistance)
+            => IsPointingAway(at, toleranceDegrees) && DistanceTo(at.Location) <= maxDistance;
+
+        /// <summary>
+        /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="at">The object to which the calculation is based.</param>
+        /// <param name="toleranceDegrees"></param>
+        /// <returns>True if the object is pointing at the other given the constraints.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsPointingAt(ISprite at, float toleranceDegrees)
+        {
+            var deltaAngle = Math.Abs(DeltaAngle(at));
+            return deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees;
+        }
+
+        /// <summary>
+        /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="at">The object to which the calculation is based.</param>
+        /// <param name="toleranceDegrees">The angle in degrees to consider the object to pointing at the other.</param>
+        /// <param name="maxDistance">The distance in consider the object to pointing at the other.</param>
+        /// <param name="offsetAngle">The offset in 0-360 degrees of the angle to calculate. For instance, 90 would tell if the right side of the object is pointing at the other.</param>
+        /// <returns>True if the object is pointing at the other given the constraints.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool IsPointingAt(ISprite at, float toleranceDegrees, float maxDistance, float offsetAngle = 0)
+        {
+            var deltaAngle = Math.Abs(DeltaAngleInUnsignedDegrees(at, offsetAngle));
+            if (deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees)
+            {
+                return DistanceTo(at.Location) <= maxDistance;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the delta angle from one object to another expressed in degrees from 180--180, positive figures indicate right (starboard) side and negative indicate left-hand (port) side of the object.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="to">The object to which the calculation is based.</param>
+        /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
+        /// <returns>The calculated angle in the range of 180--180.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float DeltaAngle(ISprite to, float offsetAngle = 0)
+        {
+            var angle = DeltaAngleInUnsignedDegrees(to, offsetAngle);
+            if (angle > 180)
+            {
+                angle -= 180;
+                angle = 180 - angle;
+                angle *= -1;
+            }
+
+            return -angle;
+        }
+
+        /// <summary>
+        /// Returns the delta angle from one object to another expressed in degrees from 0-360.
+        /// </summary>
+        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="to">The object to which the calculation is based.</param>
+        /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
+        /// <returns>The calculated angle in the range of 0-360.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public float DeltaAngleInUnsignedDegrees(ISprite to, float offsetAngle = 0)
+        {
+            float fromAngle = Degrees + offsetAngle;
+
+            float angleTo = AngleToInUnsignedDegrees(to.Location);
+
+            if (fromAngle < 0) fromAngle = 0 - fromAngle;
+            if (angleTo < 0)
+            {
+                angleTo = 0 - angleTo;
+            }
+
+            angleTo = fromAngle - angleTo;
+
+            if (angleTo < 0)
+            {
+                angleTo = 360.0f - Math.Abs(angleTo) % 360.0f;
+            }
+
+            return angleTo;
+        }
+
+        #endregion
     }
 }
