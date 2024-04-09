@@ -45,16 +45,16 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             return sprite;
         }
 
-        public SpriteAttachment AddTypeOf(string typeName, SpriteBase owner, SiVector locationRelativeToOwner)
+        public SpriteAttachment AddTypeOf(string typeName, SpriteInteractiveBase owner, SiVector locationRelativeToOwner)
         {
-            var sprite = SpriteManager.CreateByTypeName(typeName);
+            var sprite = CreateSubtypeByName(typeName);
 
             sprite.ZOrder = owner.ZOrder + 1; //We want to make sure these go on top of the parent.
             sprite.OwnerUID = owner.UID;
             sprite.LocationRelativeToOwner = locationRelativeToOwner;
 
             SpriteManager.Add(sprite);
-            return sprite as SpriteAttachment;
+            return sprite;
         }
     }
 }

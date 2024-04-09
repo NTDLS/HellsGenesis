@@ -30,10 +30,10 @@ namespace Si.Engine.Sprite.Weapon
                 _fireSound.Play();
                 RoundQuantity--;
 
-                var basePosition = Owner.Location
-                    + (Owner.Orientation + SiMath.RADIANS_90 * (_toggle ? 1 : -1)).PointFromAngleAtDistance(new SiVector(10, 10));
+                var offset = Owner.Orientation.RotatedBy(SiMath.RADIANS_90 * (_toggle ? 1 : -1))
+                    .PointFromAngleAtDistance(new SiVector(10, 10));
 
-                _engine.Sprites.Munitions.Add(this, basePosition);
+                _engine.Sprites.Munitions.Add(this, Owner.Location + offset);
 
                 _toggle = !_toggle;
 

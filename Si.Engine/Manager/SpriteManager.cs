@@ -108,14 +108,6 @@ namespace Si.Engine.Manager
             return sprite;
         }
 
-        public SpriteBase CreateByTypeName(string typeName)
-        {
-            var type = SiReflection.GetTypeByName(typeName) ?? throw new ArgumentException($"Type with FullName '{typeName}' not found.");
-            object[] param = { _engine };
-            var sprite = (SpriteBase)Activator.CreateInstance(type, param);
-            return sprite;
-        }
-
         public void Add(SpriteBase item)
             => _engine.Events.Add(() => _collection.Add(item));
 

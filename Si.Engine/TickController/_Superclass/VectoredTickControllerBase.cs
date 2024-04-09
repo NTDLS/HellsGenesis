@@ -1,5 +1,6 @@
 ﻿using Si.Engine.Manager;
 using Si.Engine.Sprite._Superclass;
+using Si.Library;
 using Si.Library.Mathematics;
 using System;
 using System.Linq;
@@ -30,6 +31,14 @@ namespace Si.Engine.TickController._Superclass
         }
 
         public void QueueAllForDeletion() => SpriteManager.QueueAllForDeletionOfType<T>();
+
+        public T CreateSubtypeByName(string typeName)
+        {
+            var type = SiReflection.GetTypeByName(typeName) ?? throw new ArgumentException($"Type with FullName '{typeName}' not found.");
+            object[] param = { Engine };
+            var sprite = (T)Activator.CreateInstance(type, param);
+            return sprite;
+        }
 
         public void Add(T obj) => SpriteManager.Add(obj);
 

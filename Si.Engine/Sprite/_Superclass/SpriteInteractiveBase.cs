@@ -195,6 +195,54 @@ namespace Si.Engine.Sprite._Superclass
 
         #endregion
 
+        #region Attachments.
+
+        /// <summary>
+        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
+        /// </summary>
+        /// <returns></returns>
+        public SpriteAttachment Attach(string imagePath)
+        {
+            var attachment = _engine.Sprites.Attachments.Add(this, imagePath);
+            Attachments.Add(attachment);
+            return attachment;
+        }
+
+        /// <summary>
+        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
+        /// </summary>
+        /// <returns></returns>
+        public SpriteAttachment Attach<T>(string imagePath) where T : SpriteAttachment
+        {
+            var attachment = _engine.Sprites.Attachments.AddTypeOf<T>(this, imagePath);
+            Attachments.Add(attachment);
+            return attachment;
+        }
+
+        /// <summary>
+        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
+        /// </summary>
+        /// <returns></returns>
+        public SpriteAttachment AttachOfType<T>() where T : SpriteAttachment
+        {
+            var attachment = _engine.Sprites.Attachments.AddTypeOf<T>(this);
+            Attachments.Add(attachment);
+            return attachment;
+        }
+
+        /// <summary>
+        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
+        /// </summary>
+        /// <returns></returns>
+        public SpriteAttachment AttachOfType(string typeName, SiVector locationRelativeToOwner)
+        {
+            var attachment = _engine.Sprites.Attachments.AddTypeOf(typeName, this, locationRelativeToOwner);
+            Attachments.Add(attachment);
+            return attachment;
+        }
+
+        #endregion
+
         public override void Render(RenderTarget renderTarget)
         {
             base.Render(renderTarget);
@@ -334,7 +382,7 @@ namespace Si.Engine.Sprite._Superclass
             if (collisionNormal.Dot(relativeVelocity) < 0) // Sprites are moving towards each other
             {
                 var vA_prime = actionSpriteVelocity - (2 * massB / (massA + massB))
-                    * SiVector.Dot(actionSpriteVelocity - collideWithSpriteVelocity, collisionNormal) / collisionNormal.Magnitude() * collisionNormal;
+                    * (actionSpriteVelocity - collideWithSpriteVelocity).Dot(collisionNormal) / collisionNormal.Magnitude() * collisionNormal;
 
                 actionBody.Sprite.MovementVector = vA_prime * actionBody.Sprite.Throttle;
             }

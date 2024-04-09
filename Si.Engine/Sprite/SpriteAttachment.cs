@@ -1,10 +1,12 @@
 ﻿using Si.Engine.Sprite._Superclass;
+using Si.Library.Mathematics;
 
 namespace Si.Engine.Sprite
 {
     public class SpriteAttachment : SpriteInteractiveBase
     {
         private SpriteInteractiveBase _rootOwner = null;
+        public SiVector LocationRelativeToOwner { get; set; }
 
         public SpriteAttachment(EngineCore engine)
             : base(engine)

@@ -78,7 +78,6 @@ namespace Si.Library.Mathematics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static SiVector FromCardinal(float x, float y) => new(x, y);
 
-
         #endregion
 
         #region Operator Overloads: Float first.
@@ -104,7 +103,6 @@ namespace Si.Library.Mathematics
             }
             return new SiVector(scaleFactor / original.X, scaleFactor / original.Y);
         }
-
 
         #endregion
 
@@ -154,6 +152,7 @@ namespace Si.Library.Mathematics
 
         #region Operator Overloads: Vector -> Vector.
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(SiVector? left, SiVector? right)
         {
             if (ReferenceEquals(left, right))
@@ -169,6 +168,7 @@ namespace Si.Library.Mathematics
             return left.Equals(right);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(SiVector? left, SiVector? right)
             => !(left == right);
 
@@ -320,6 +320,7 @@ namespace Si.Library.Mathematics
         /// Rotates the vector by the given radians.
         /// </summary>
         /// <param name="angleRadians"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Rotate(float angleRadians)
         {
             var cosTheta = (float)Math.Cos(angleRadians);
@@ -336,6 +337,7 @@ namespace Si.Library.Mathematics
         /// Rotates the vector to the given radians while maintaining its length.
         /// </summary>
         /// <param name="angleRadians"></param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetDirctionMaintainMagnitude(float angleRadians)
         {
             float magnitude = Magnitude();
@@ -358,6 +360,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Determines whether the vector is normalized.
         /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsNormalized()
             => SiMath.IsOne(X * X + Y * Y);
 

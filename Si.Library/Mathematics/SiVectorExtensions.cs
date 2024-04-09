@@ -42,7 +42,7 @@ namespace Si.Library.Mathematics
         /// <param name="radians"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector RotationOf(this SiVector vector, float radians)
+        public static SiVector RotatedBy(this SiVector vector, float radians)
         {
             float cosTheta = (float)Math.Cos(radians);
             float sinTheta = (float)Math.Sin(radians);

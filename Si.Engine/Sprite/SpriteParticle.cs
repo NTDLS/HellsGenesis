@@ -52,9 +52,11 @@ namespace Si.Engine.Sprite
             Color = color ?? engine.Rendering.Materials.Colors.White;
             RotationSpeed = SiRandom.Between(1, 100) / 20.0f * SiRandom.PositiveOrNegative();
 
+            Speed = SiRandom.Between(1.0f, 4.0f);
             Orientation.DegreesUnsigned = SiRandom.Between(0, 359);
+            Throttle = 1;
 
-            MovementVector = Orientation * SiRandom.Between(1.0f, 4.0f);
+            RecalculateMovementVector();
 
             /*
             Location = location.Clone();

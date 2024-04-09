@@ -27,7 +27,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
             var turretOffset = LocationRelativeToOwner - (OwnerSprite.Size / 2.0f);
 
             // Apply the rotated offsets to get the new turret location relative to the base sprite center.
-            Location = OwnerSprite.Location + turretOffset.RotationOf(OwnerSprite.Orientation.RadiansSigned);
+            Location = OwnerSprite.Location + turretOffset.RotatedBy(OwnerSprite.Orientation.RadiansSigned);
 
             if (DistanceTo(_engine.Player.Sprite) < 1000)
             {
@@ -46,13 +46,13 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
                 {
                     if (FireToggler)
                     {
-                        var pointRight = Location + (Orientation + SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(21, 21));
-                        FireToggler = !FireWeapon<WeaponLancer>(pointRight);
+                        var pointRight = Orientation.RotatedBy(SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(21, 21));
+                        FireToggler = !FireWeapon<WeaponLancer>(Location + pointRight);
                     }
                     else
                     {
-                        var pointLeft = Location + (Orientation + SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(21, 21));
-                        FireToggler = FireWeapon<WeaponLancer>(pointLeft);
+                        var pointLeft = Orientation.RotatedBy(-SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(21, 21));
+                        FireToggler = FireWeapon<WeaponLancer>(Location + pointLeft);
                     }
                 }
             }
@@ -60,4 +60,3 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
         }
     }
 }
-

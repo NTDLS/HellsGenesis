@@ -35,8 +35,8 @@ namespace Si.Engine.Sprite.Weapon
                 _fireSound.Play();
                 RoundQuantity--;
 
-                var basePosition = Owner.Location
-                    + (Owner.Orientation + SiMath.RADIANS_90 * (_toggle ? 1 : -1)).PointFromAngleAtDistance(new SiVector(10, 10));
+                var offset = Owner.Orientation.RotatedBy(SiMath.RADIANS_90 * (_toggle ? 1 : -1))
+                    .PointFromAngleAtDistance(new SiVector(10, 10));
 
                 _toggle = !_toggle;
 
@@ -44,12 +44,12 @@ namespace Si.Engine.Sprite.Weapon
                 {
                     foreach (var weaponLock in LockedTargets.Where(o => o.LockType == Library.SiConstants.SiWeaponsLockType.Hard))
                     {
-                        _engine.Sprites.Munitions.AddLockedOnTo(this, weaponLock.Sprite, basePosition);
+                        _engine.Sprites.Munitions.AddLockedOnTo(this, weaponLock.Sprite, Owner.Location + offset);
                     }
                 }
                 else
                 {
-                    _engine.Sprites.Munitions.Add(this, basePosition);
+                    _engine.Sprites.Munitions.Add(this, Owner.Location + offset);
                 }
 
                 return true;

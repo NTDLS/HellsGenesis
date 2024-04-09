@@ -31,10 +31,20 @@ namespace Si.Engine.Sprite._Superclass
 
         #region Travel Vector.
 
+        private float _speed;
+
         /// <summary>
         /// The speed that this object can generally travel in any direction.
         /// </summary>
-        public float Speed { get; set; }
+        public float Speed
+        {
+            get => _speed;
+            set
+            {
+                _speed = value;
+                //RecalculateMovementVector(); //Seems like unneeded overhead.
+            }
+        }
 
         private SiVector _movementVector = new();
         /// <summary>
@@ -52,18 +62,29 @@ namespace Si.Engine.Sprite._Superclass
 
         private float _throttle = 1.0f;
         /// <summary>
-        /// Percentage of speed expressed as a decimal percentage from 0.0 (stopped) to 1000.0 (1000x the normal speed).
+        /// Percentage of speed expressed as a decimal percentage from 0.0 (stopped) to float.max.
+        /// Note that a throttle of 2.0 is twize the normal speed.
         /// </summary>
         public float Throttle
         {
             get => _throttle;
-            set => _throttle = value.Clamp(0, 1000);
+            set
+            {
+                _throttle = value.Clamp(0, float.MaxValue);
+                //RecalculateMovementVector(); //Seems like unneeded overhead.
+            }
         }
 
+
+        private float _maxThrottle = 1.0f;
         /// <summary>
         /// The general maximum throttle that can be applied. This can be considered the "boost" speed.
         /// </summary>
-        public float MaxThrottle { get; set; }
+        public float MaxThrottle
+        {
+            get => _maxThrottle;
+            set => _maxThrottle = value.Clamp(0, float.MaxValue);
+        }
 
         #endregion
 
@@ -87,7 +108,6 @@ namespace Si.Engine.Sprite._Superclass
         public string SpriteTag { get; set; }
         public uint UID { get; private set; } = SiSequenceGenerator.Next();
         public uint OwnerUID { get; set; }
-        public SiVector LocationRelativeToOwner { get; set; }
         public List<SpriteAttachment> Attachments { get; private set; } = new();
         public SiVector RadarDotSize { get; set; } = new SiVector(4, 4);
         public bool IsWithinCurrentScaledScreenBounds => _engine.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds);
@@ -678,50 +698,6 @@ namespace Si.Engine.Sprite._Superclass
                 + $"          Visible Bounds: {Bounds}\r\n";
         }
 
-        /// <summary>
-        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
-        /// </summary>
-        /// <returns></returns>
-        public SpriteAttachment Attach(string imagePath)
-        {
-            var attachment = _engine.Sprites.Attachments.Add(this, imagePath);
-            Attachments.Add(attachment);
-            return attachment;
-        }
-
-        /// <summary>
-        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
-        /// </summary>
-        /// <returns></returns>
-        public SpriteAttachment Attach<T>(string imagePath) where T : SpriteAttachment
-        {
-            var attachment = _engine.Sprites.Attachments.AddTypeOf<T>(this, imagePath);
-            Attachments.Add(attachment);
-            return attachment;
-        }
-
-        /// <summary>
-        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
-        /// </summary>
-        /// <returns></returns>
-        public SpriteAttachment AttachOfType<T>() where T : SpriteAttachment
-        {
-            var attachment = _engine.Sprites.Attachments.AddTypeOf<T>(this);
-            Attachments.Add(attachment);
-            return attachment;
-        }
-
-        /// <summary>
-        /// Creates a new sprite, adds it to the sprite collection but also adds it to the collection of another sprites children for automatic cleanup when parent is destroyed. 
-        /// </summary>
-        /// <returns></returns>
-        public SpriteAttachment AttachOfType(string typeName, SiVector locationRelativeToOwner)
-        {
-            var attachment = _engine.Sprites.Attachments.AddTypeOf(typeName, this, locationRelativeToOwner);
-            Attachments.Add(attachment);
-            return attachment;
-        }
-
         public void SetHullHealth(int points)
         {
             HullHealth = 0;
@@ -1117,11 +1093,11 @@ namespace Si.Engine.Sprite._Superclass
         }
 
 
-        public float DistanceTo(SpriteBase to) => SiVector.DistanceTo(Location, to.Location);
+        public float DistanceTo(SpriteBase to) => Location.DistanceTo(to.Location);
 
-        public float DistanceSquaredTo(SpriteBase to) => SiVector.DistanceSquaredTo(Location, to.Location);
+        public float DistanceSquaredTo(SpriteBase to) => Location.DistanceSquaredTo(to.Location);
 
-        public float DistanceTo(SiVector to) => SiVector.DistanceTo(Location, to);
+        public float DistanceTo(SiVector to) => Location.DistanceTo(to);
 
         /// <summary>
         /// Of the given sprites, returns the sprite that is the closest.
@@ -1136,7 +1112,7 @@ namespace Si.Engine.Sprite._Superclass
 
             foreach (var to in tos)
             {
-                var distance = SiVector.DistanceTo(Location, to.Location);
+                var distance = Location.DistanceTo(to.Location);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -1159,7 +1135,7 @@ namespace Si.Engine.Sprite._Superclass
 
             foreach (var to in tos)
             {
-                var distance = SiVector.DistanceTo(Location, to.Location);
+                var distance = Location.DistanceTo(to.Location);
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
