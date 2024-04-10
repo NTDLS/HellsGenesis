@@ -1195,7 +1195,8 @@ namespace Si.Engine.Sprite._Superclass
 
                 if (IsHighlighted)
                 {
-                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Orientation.RadiansSigned, _engine.Rendering.Materials.Colors.Red, 0, 1);
+                    _engine.Rendering.DrawRectangle(renderTarget, RawRenderBounds,
+                        _engine.Rendering.Materials.Colors.Red, 0, 1, Orientation.RadiansSigned);
                 }
             }
         }
@@ -1210,7 +1211,7 @@ namespace Si.Engine.Sprite._Superclass
             {
                 if (this is SpriteEnemyBase)
                 {
-                    _engine.Rendering.HollowTriangleAt(renderTarget, x, y, 3, 3, _engine.Rendering.Materials.Colors.OrangeRed);
+                    _engine.Rendering.DrawTriangle(renderTarget, x, y, 3, 3, _engine.Rendering.Materials.Colors.OrangeRed);
                 }
                 else if (this is MunitionBase)
                 {
@@ -1236,7 +1237,7 @@ namespace Si.Engine.Sprite._Superclass
                         size = 1;
                     }
 
-                    _engine.Rendering.FillEllipseAt(renderTarget, x, y, size, size, color);
+                    _engine.Rendering.DrawSolidEllipse(renderTarget, x, y, size, size, color);
                 }
             }
         }
@@ -1245,7 +1246,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             float angle = (float)(angleRadians == null ? Orientation.RadiansSigned : angleRadians);
 
-            _engine.Rendering.DrawBitmapAt(renderTarget, bitmap,
+            _engine.Rendering.DrawBitmap(renderTarget, bitmap,
                 RenderLocation.X - bitmap.Size.Width / 2.0f,
                 RenderLocation.Y - bitmap.Size.Height / 2.0f, angle);
         }

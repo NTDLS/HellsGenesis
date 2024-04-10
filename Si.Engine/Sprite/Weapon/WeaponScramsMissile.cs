@@ -2,6 +2,7 @@
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using System.Linq;
 
@@ -35,7 +36,7 @@ namespace Si.Engine.Sprite.Weapon
                 _fireSound.Play();
                 RoundQuantity--;
 
-                var offset = Owner.Orientation.RotatedBy(SiMath.RADIANS_90 * (_toggle ? 1 : -1)) * new SiVector(10, 10);
+                var offset = Owner.Orientation.RotatedBy(90.ToRadians().Invert(_toggle)) * new SiVector(10, 10);
 
                 _toggle = !_toggle;
 

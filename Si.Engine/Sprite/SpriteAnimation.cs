@@ -89,7 +89,7 @@ namespace Si.Engine.Sprite
                 _currentColumn * _frameSize.Width + _frameSize.Width,
                 _currentRow * _frameSize.Height + _frameSize.Height);
 
-            _engine.Rendering.DrawBitmapAt(
+            _engine.Rendering.DrawBitmap(
                 renderTarget,
                 _sheetImage,
                 RenderLocation.X - _frameSize.Width / 2.0f,

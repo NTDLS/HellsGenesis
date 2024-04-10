@@ -287,7 +287,7 @@ namespace Si.Engine.Manager
             {
                 var radarBgImage = _engine.Assets.GetBitmap(@"Sprites\RadarTransparent.png");
 
-                _engine.Rendering.DrawBitmapAt(renderTarget, radarBgImage,
+                _engine.Rendering.DrawBitmap(renderTarget, radarBgImage,
                     _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,
                     _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height, 0);
 
@@ -333,7 +333,7 @@ namespace Si.Engine.Manager
                     }
 
                     //Render player blip:
-                    _engine.Rendering.FillEllipseAt(
+                    _engine.Rendering.DrawSolidEllipse(
                         renderTarget,
                         _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + centerOfRadarX,
                         _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + centerOfRadarY,
@@ -366,7 +366,7 @@ namespace Si.Engine.Manager
                 var rawRectF = new RawRectangleF(natrualScreenBounds.Left, natrualScreenBounds.Top, natrualScreenBounds.Right, natrualScreenBounds.Bottom);
 
                 //Highlight the 1:1 frame
-                _engine.Rendering.DrawRectangleAt(renderTarget, rawRectF, 0, _engine.Rendering.Materials.Colors.Red, 0, 1);
+                _engine.Rendering.DrawRectangle(renderTarget, rawRectF, _engine.Rendering.Materials.Colors.Red, 0, 1, 0);
             }
         }
 

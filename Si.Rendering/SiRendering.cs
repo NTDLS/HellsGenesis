@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows.Forms;
 
 namespace Si.Rendering
@@ -109,18 +110,13 @@ namespace Si.Rendering
             });
         }
 
-        public void AddScreenShake(float intensity, float duration)
-        {
-            var screenShake = new ScreenShake
-            {
-                Intensity = intensity,
-                Duration = duration,
-            };
-
-            screenShake.Timer.Start();
-            _screenShakes.Add(screenShake);
-        }
-
+        /// <summary>
+        /// Transfers the image from one render target to the other with a scaling factor.
+        /// Also applies screen shake since this is just a hella convenient place to do it.
+        /// </summary>
+        /// <param name="intermediateRenderTarget"></param>
+        /// <param name="screenRenderTarget"></param>
+        /// <param name="scale"></param>
         public void TransferWithZoom(BitmapRenderTarget intermediateRenderTarget, RenderTarget screenRenderTarget, float scale)
         {
             var sourceRect = SiRenderingUtility.CalculateCenterCopyRectangle(intermediateRenderTarget.Size, scale);
@@ -161,22 +157,13 @@ namespace Si.Rendering
             }
         }
 
-        public SharpDX.Direct2D1.Bitmap BitmapStreamToD2DBitmap(Stream stream)
-        {
-            using var decoder = new BitmapDecoder(_wicFactory, stream, DecodeOptions.CacheOnLoad);
-            using var frame = decoder.GetFrame(0);
-            using var converter = new FormatConverter(_wicFactory);
-
-            converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA);
-
-            return RenderTargets.Use(o => SharpDX.Direct2D1.Bitmap.FromWicBitmap(o.ScreenRenderTarget, converter));
-        }
+        #region Rending: Bitmaps.
 
         /// <summary>
         /// Draws a bitmap at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
-        public void DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float x, float y, float angleRadians)
+        public void DrawBitmap(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float x, float y, float angleRadians)
         {
             if (angleRadians > 6.3)
             {
@@ -190,7 +177,7 @@ namespace Si.Rendering
         }
 
         /// Draws a bitmap from a specified location of a given size, to the the specified location.
-        public void DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap,
+        public void DrawBitmap(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap,
             float x, float y, float angleRadians, RawRectangleF sourceRect, Size2F destSize)
         {
             if (angleRadians > 6.3)
@@ -208,11 +195,15 @@ namespace Si.Rendering
         /// Draws a bitmap at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the bitmap.</returns>
-        public void DrawBitmapAt(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float x, float y)
+        public void DrawBitmap(RenderTarget renderTarget, SharpDX.Direct2D1.Bitmap bitmap, float x, float y)
         {
             var destRect = new RawRectangleF(x, y, (x + bitmap.PixelSize.Width), (y + bitmap.PixelSize.Height));
             renderTarget.DrawBitmap(bitmap, destRect, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
         }
+
+        #endregion
+
+        #region Rending: Text.
 
         public RawRectangleF GetTextRect(float x, float y, string text, SharpDX.DirectWrite.TextFormat format)
         {
@@ -232,7 +223,7 @@ namespace Si.Rendering
         /// Draws text at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the text.</returns>
-        public void DrawTextAt(RenderTarget renderTarget,
+        public void DrawText(RenderTarget renderTarget,
             float x, float y, float angleRadians, string text, SharpDX.DirectWrite.TextFormat format, SolidColorBrush brush)
         {
             using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, text, format, float.MaxValue, float.MaxValue);
@@ -243,12 +234,16 @@ namespace Si.Rendering
             // Create a rectangle that fits the text
             var destRect = new RawRectangleF(x, y, (x + textWidth), (y + textHeight));
 
-            //DrawRectangleAt(renderTarget, textRectangle, 0, Materials.Raw.Blue, 0, 1);
+            //DrawRectangle(renderTarget, textRectangle, 0, Materials.Raw.Blue, 0, 1);
 
             SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
             renderTarget.DrawText(text, format, destRect, brush);
             SiTransforms.PopTransform(renderTarget);
         }
+
+        #endregion
+
+        #region Rending: Lines.
 
         public void DrawLine(RenderTarget renderTarget,
             float startPointX, float startPointY, float endPointX, float endPointY,
@@ -260,11 +255,15 @@ namespace Si.Rendering
             renderTarget.DrawLine(startPoint, endPoint, brush, strokeWidth);
         }
 
+        #endregion
+
+        #region Rending: Ellipse.
+
         /// <summary>
         /// Draws a color filled ellipse at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public void FillEllipseAt(RenderTarget renderTarget, float x, float y,
+        public void DrawSolidEllipse(RenderTarget renderTarget, float x, float y,
             float radiusX, float radiusY, Color4 color, float angleRadians = 0)
         {
             var ellipse = new Ellipse()
@@ -291,7 +290,7 @@ namespace Si.Rendering
         /// Draws a color gradient filled ellipse at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public void FillEllipseAt(RenderTarget renderTarget, float x, float y,
+        public void DrawGradientEllipse(RenderTarget renderTarget, float x, float y,
             float radiusX, float radiusY, Color4 startColor, Color4 endColor, float angleRadians = 0)
         {
             var ellipse = new Ellipse()
@@ -333,7 +332,7 @@ namespace Si.Rendering
         /// Draws a hollow ellipse at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public void HollowEllipseAt(RenderTarget renderTarget, float x, float y,
+        public void DrawEllipse(RenderTarget renderTarget, float x, float y,
             float radiusX, float radiusY, Color4 color, float strokeWidth = 1, float angleRadians = 0)
         {
             var ellipse = new Ellipse()
@@ -356,7 +355,11 @@ namespace Si.Rendering
             SiTransforms.PopTransform(renderTarget);
         }
 
-        public void HollowTriangleAt(RenderTarget renderTarget, float x, float y,
+        #endregion
+
+        #region Rending: Triangle.
+
+        public void DrawTriangle(RenderTarget renderTarget, float x, float y,
             float height, float width, Color4 color, float strokeWidth = 1, float angleRadians = 0)
         {
             // Define the points for the triangle
@@ -397,6 +400,10 @@ namespace Si.Rendering
             SiTransforms.PopTransform(renderTarget);
         }
 
+        #endregion
+
+        #region Rending: Polygon.
+
         public void DrawPolygon(RenderTarget renderTarget, PointF[] points, RawColor4 color, float strokeWidth = 1.0f)
         {
             DrawPolygon(renderTarget, 0, 0, points, color, strokeWidth);
@@ -429,22 +436,24 @@ namespace Si.Rendering
             }
         }
 
+        #endregion
 
-
-        /// <summary>
-        /// Draws a rectangle at the specified location.
-        /// </summary>
-        /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, RawRectangleF destRect,
-            float angleRadians, RawColor4 color, float expand = 0, float strokeWidth = 1)
-            => DrawRectangleAt(renderTarget, 0, 0, destRect, angleRadians, color, expand, strokeWidth);
+        #region Rending: Rectangle.
 
         /// <summary>
         /// Draws a rectangle at the specified location.
         /// </summary>
         /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
-        public RawRectangleF DrawRectangleAt(RenderTarget renderTarget, float x, float y, RawRectangleF destRect,
-            float angleRadians, RawColor4 color, float expand = 0, float strokeWidth = 1)
+        public RawRectangleF DrawRectangle(RenderTarget renderTarget, RawRectangleF destRect,
+            RawColor4 color, float expand = 0, float strokeWidth = 1, float angleRadians = 0)
+            => DrawRectangle(renderTarget, 0, 0, destRect, color, expand, strokeWidth, angleRadians);
+
+        /// <summary>
+        /// Draws a rectangle at the specified location.
+        /// </summary>
+        /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
+        public RawRectangleF DrawRectangle(RenderTarget renderTarget, float x, float y, RawRectangleF destRect,
+            Color4 color, float expand = 0, float strokeWidth = 1, float angleRadians = 0)
         {
             if (expand != 0)
             {
@@ -470,27 +479,125 @@ namespace Si.Rendering
             return destRect;
         }
 
+        /// <summary>
+        /// Draws a rectangle at the specified location.
+        /// </summary>
+        /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
+        public RawRectangleF DrawSolidRectangle(RenderTarget renderTarget, RawRectangleF destRect,
+            RawColor4 color, float expand = 0, float angleRadians = 0)
+            => DrawSolidRectangle(renderTarget, 0, 0, destRect, color, expand, angleRadians);
+
+        public RawRectangleF DrawSolidRectangle(RenderTarget renderTarget, float x, float y, RawRectangleF destRect,
+            Color4 color, float expand = 0, float angleRadians = 0)
+        {
+            if (expand != 0)
+            {
+                destRect.Left -= expand;
+                destRect.Top -= expand;
+                destRect.Bottom += expand;
+                destRect.Right += expand;
+            }
+
+            if (x != 0 && y != 0)
+            {
+                destRect.Left += x;
+                destRect.Top += y;
+                destRect.Bottom += y;
+                destRect.Right += x;
+            }
+
+            SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
+            using var brush = new SolidColorBrush(renderTarget, color);
+            renderTarget.FillRectangle(destRect, brush);
+            SiTransforms.PopTransform(renderTarget);
+
+            return destRect;
+        }
+
+        /// <summary>
+        /// Draws a rectangle at the specified location.
+        /// </summary>
+        /// <returns>Returns the rectangle that was calculated to hold the Rectangle.</returns>
+        public RawRectangleF DrawGradientRectangle(RenderTarget renderTarget, RawRectangleF destRect,
+            Color4 startColor, Color4 endColor, float expand = 0, float angleRadians = 0)
+            => DrawGradientRectangle(renderTarget, 0, 0, destRect, startColor, endColor, expand, angleRadians);
+
+        public RawRectangleF DrawGradientRectangle(RenderTarget renderTarget, float x, float y, RawRectangleF destRect,
+            Color4 startColor, Color4 endColor, float expand = 0, float angleRadians = 0)
+        {
+            if (expand != 0)
+            {
+                destRect.Left -= expand;
+                destRect.Top -= expand;
+                destRect.Bottom += expand;
+                destRect.Right += expand;
+            }
+
+            if (x != 0 && y != 0)
+            {
+                destRect.Left += x;
+                destRect.Top += y;
+                destRect.Bottom += y;
+                destRect.Right += x;
+            }
+
+            SiTransforms.PushTransform(renderTarget, SiTransforms.CreateAngleTransform(destRect, angleRadians));
+
+            // Define start and end points for the gradient
+            var startPoint = new RawVector2(destRect.Left, destRect.Top);
+            var endPoint = new RawVector2(destRect.Left, destRect.Bottom);
+
+            // Create gradient stops
+            var gradientStops = new GradientStop[]
+            {
+                new GradientStop { Color = startColor, Position = 0.0f },
+                new GradientStop { Color = endColor, Position = 1.0f }
+            };
+
+            using (var gradientStopCollection = new GradientStopCollection(renderTarget, gradientStops, Gamma.Linear, ExtendMode.Clamp))
+
+            using (var linearGradientBrush = new LinearGradientBrush(renderTarget,
+                new LinearGradientBrushProperties
+                {
+                    StartPoint = startPoint,
+                    EndPoint = endPoint
+                }, gradientStopCollection))
+
+                renderTarget.FillRectangle(destRect, linearGradientBrush);
+            SiTransforms.PopTransform(renderTarget);
+
+            return destRect;
+        }
+
+        #endregion
+
         public List<SharpDX.Direct2D1.Bitmap> GenerateIrregularFragments(SharpDX.Direct2D1.Bitmap originalBitmap, int countOfFragments, int countOfVertices = 8)
             => SiBitmapFragmenter.GenerateIrregularFragments(this, originalBitmap, countOfFragments, countOfVertices);
 
         public List<SharpDX.Direct2D1.Bitmap> GenerateIrregularFragments(SharpDX.Direct2D1.Bitmap originalBitmap)
             => SiBitmapFragmenter.GenerateIrregularFragments(this, originalBitmap);
 
-        public RawMatrix3x2 GetScalingMatrix(float zoomFactor)
+        public void AddScreenShake(float intensity, float duration)
         {
-            // Calculate the new center point (assuming dimensions are known)
-            float centerX = _totalCanvasSize.Width / 2.0f;
-            float centerY = _totalCanvasSize.Height / 2.0f;
+            var screenShake = new ScreenShake
+            {
+                Intensity = intensity,
+                Duration = duration,
+            };
 
-            // Calculate the scaling transformation matrix
-            var scalingMatrix = new RawMatrix3x2(
-                zoomFactor, 0,
-                0, zoomFactor,
-                (centerX * (1.0f - zoomFactor)),
-                (centerY * (1.0f - zoomFactor))
-            );
+            screenShake.Timer.Start();
+            _screenShakes.Add(screenShake);
+        }
 
-            return scalingMatrix;
+        public SharpDX.Direct2D1.Bitmap BitmapStreamToD2DBitmap(Stream stream)
+        {
+            using var decoder = new BitmapDecoder(_wicFactory, stream, DecodeOptions.CacheOnLoad);
+            using var frame = decoder.GetFrame(0);
+            using var converter = new FormatConverter(_wicFactory);
+
+            converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA);
+
+            return RenderTargets.Use(o => SharpDX.Direct2D1.Bitmap.FromWicBitmap(o.ScreenRenderTarget, converter));
         }
     }
 }

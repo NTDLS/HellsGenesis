@@ -5,6 +5,30 @@ namespace Si.Library.ExtensionMethods
     public static class SiFloatExtensions
     {
         /// <summary>
+        /// Converts the given degrees to radians.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static float ToRadians(this float value) => SiMath.DegToRad(value);
+
+        /// <summary>
+        /// Converts the given radisn to degrees.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static float ToDegrees(this float value) => SiMath.RadToDeg(value);
+
+        /// <summary>
+        /// Multiplies the float by -1, inverting its sign, if the boolean is true.
+        /// </summary>
+        public static float Invert(this float value, bool shouldInvert) => shouldInvert ? value * -1 : value;
+
+        /// <summary>
+        /// Multiplies the float by -1, inverting its sign.
+        /// </summary>
+        public static float Invert(this float value) => value * -1;
+
+        /// <summary>
         /// Returns whether the value is near to zero.
         /// </summary>
         public static bool IsNearZero(this float value)

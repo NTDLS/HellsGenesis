@@ -73,7 +73,7 @@ namespace Si.Engine.Sprite
         {
             if (Visable)
             {
-                _engine.Rendering.DrawTextAt(renderTarget,
+                _engine.Rendering.DrawText(renderTarget,
                     RenderLocation.X,
                     RenderLocation.Y,
                     0, _text ?? string.Empty, Format, Color);

@@ -10,7 +10,6 @@ namespace Si.Rendering
 {
     internal static class SiBitmapFragmenter
     {
-
         /// <summary>
         /// Geenrates random fragments based on the size of the input image.
         /// </summary>

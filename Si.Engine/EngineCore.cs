@@ -165,24 +165,22 @@ namespace Si.Engine
                     {
                         foreach (var collision in Collisions.Detected)
                         {
-                            Rendering.DrawRectangleAt(o.IntermediateRenderTarget,
+                            Rendering.DrawRectangle(o.IntermediateRenderTarget,
                                 -Display.RenderWindowPosition.X, -Display.RenderWindowPosition.Y,
                                 collision.Value.OverlapRectangle.ToRawRectangleF(),
-                                0, Rendering.Materials.Colors.Orange, 1, 2);
+                                Rendering.Materials.Colors.Orange, 1, 2, 0);
 
                             Rendering.DrawPolygon(o.IntermediateRenderTarget, -Display.RenderWindowPosition.X, -Display.RenderWindowPosition.Y,
                                 collision.Value.OverlapPolygon,
                                 Rendering.Materials.Colors.Cyan, 3);
 
-                            Rendering.DrawRectangleAt((SharpDX.Direct2D1.RenderTarget)o.IntermediateRenderTarget,
+                            Rendering.DrawRectangle(o.IntermediateRenderTarget,
                                 collision.Value.Body1.RawRenderBounds,
-                                collision.Value.Body1.Direction.RadiansSigned,
-                                Rendering.Materials.Colors.Red, (float)1, (float)1);
+                                Rendering.Materials.Colors.Red, 1, 1, collision.Value.Body1.Direction.RadiansSigned);
 
-                            Rendering.DrawRectangleAt((SharpDX.Direct2D1.RenderTarget)o.IntermediateRenderTarget,
+                            Rendering.DrawRectangle(o.IntermediateRenderTarget,
                                 collision.Value.Body2.RawRenderBounds,
-                                collision.Value.Body2.Direction.RadiansSigned,
-                                Rendering.Materials.Colors.LawnGreen, (float)1, (float)1);
+                                Rendering.Materials.Colors.LawnGreen, 1, 1, collision.Value.Body2.Direction.RadiansSigned);
                         }
                     }
                     #endregion

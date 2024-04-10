@@ -340,7 +340,7 @@ namespace Si.Engine.Menu._Superclass
             var selectedItem = (from o in Items where o.Visable == true && o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
-                _engine.Rendering.DrawRectangleAt(renderTarget, selectedItem.RawBounds, 0, _engine.Rendering.Materials.Colors.Red, 2, 2);
+                _engine.Rendering.DrawRectangle(renderTarget, selectedItem.RawBounds, _engine.Rendering.Materials.Colors.Red, 2, 2, 0);
             }
         }
     }

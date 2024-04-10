@@ -28,6 +28,8 @@
         {
             FilledEllipse,
             HollowEllipse,
+            HollowRectangle,
+            FilledRectangle,
             Triangle
         }
 

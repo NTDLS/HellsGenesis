@@ -3,6 +3,7 @@ using SharpDX.XInput;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Enemy.Peon;
 using Si.Library;
+using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using System;
 using System.Collections.Generic;
@@ -391,7 +392,7 @@ namespace Si.Engine.Manager
                     asteroid.Speed = SiRandom.Variance(asteroid.Speed, 0.20f);
                     asteroid.Throttle = 1;
 
-                    asteroid.RecalculateMovementVector(SiMath.DegToRad(SiRandom.Variance(-45, 0.10f)));
+                    asteroid.RecalculateMovementVector(SiRandom.Variance(-45, 0.10f).ToRadians());
                     asteroid.VectorType = ParticleVectorType.Default;
 
                     //asteroid.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);

@@ -1,5 +1,6 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
+using SharpDX.Mathematics.Interop;
 using Si.Engine.Sprite._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -23,7 +24,7 @@ namespace Si.Engine.Sprite
         /// This should be expressed as a number between 0-1 with 0 being no reduxtion per frame and 1 being 100% reduction per frame.
         /// </summary>
         public float FadeToBlackReductionAmount { get; set; } = 0.01f;
-        public ParticleColorType ColorType { get; set; } = ParticleColorType.Solid;
+        public ParticleColorType Pattern { get; set; } = ParticleColorType.Solid;
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Default;
         public ParticleShape Shape { get; set; } = ParticleShape.FilledEllipse;
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
@@ -74,7 +75,7 @@ namespace Si.Engine.Sprite
 
             if (CleanupMode == ParticleCleanupMode.FadeToBlack)
             {
-                if (ColorType == ParticleColorType.Solid)
+                if (Pattern == ParticleColorType.Solid)
                 {
                     Color *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
 
@@ -84,7 +85,7 @@ namespace Si.Engine.Sprite
                         QueueForDelete();
                     }
                 }
-                else if (ColorType == ParticleColorType.Graident)
+                else if (Pattern == ParticleColorType.Graident)
                 {
                     GradientStartColor *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
                     GradientEndColor *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
@@ -113,30 +114,58 @@ namespace Si.Engine.Sprite
                 switch (Shape)
                 {
                     case ParticleShape.FilledEllipse:
-                        if (ColorType == ParticleColorType.Solid)
+                        if (Pattern == ParticleColorType.Solid)
                         {
-                            _engine.Rendering.FillEllipseAt(renderTarget,
+                            _engine.Rendering.DrawSolidEllipse(renderTarget,
                                 RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Orientation.DegreesUnsigned);
                         }
-                        else if (ColorType == ParticleColorType.Graident)
+                        else if (Pattern == ParticleColorType.Graident)
                         {
-                            _engine.Rendering.FillEllipseAt(renderTarget, RenderLocation.X, RenderLocation.Y,
+                            _engine.Rendering.DrawGradientEllipse(renderTarget, RenderLocation.X, RenderLocation.Y,
                                 Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)Orientation.DegreesUnsigned);
                         }
                         break;
                     case ParticleShape.HollowEllipse:
-                        _engine.Rendering.HollowEllipseAt(renderTarget,
+                        _engine.Rendering.DrawEllipse(renderTarget,
                             RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Orientation.DegreesUnsigned);
                         break;
+
+                    case ParticleShape.FilledRectangle:
+                        {
+                            var rect = new RawRectangleF(0, 0, Size.Width, Size.Height);
+
+                            if (Pattern == ParticleColorType.Solid)
+                            {
+                                _engine.Rendering.DrawSolidRectangle(renderTarget, RenderLocation.X - Size.Width / 2,
+                                    RenderLocation.Y - Size.Height / 2, rect, Color, 0, (float)Orientation.DegreesUnsigned);
+                            }
+                            else if (Pattern == ParticleColorType.Graident)
+                            {
+                                _engine.Rendering.DrawGradientRectangle(renderTarget, RenderLocation.X - Size.Width / 2,
+                                    RenderLocation.Y - Size.Height / 2, rect, GradientStartColor, GradientEndColor, 0, (float)Orientation.DegreesUnsigned);
+                            }
+                        }
+                        break;
+
+                    case ParticleShape.HollowRectangle:
+                        {
+                            var rect = new RawRectangleF(0, 0, Size.Width, Size.Height);
+                            _engine.Rendering.DrawRectangle(renderTarget, RenderLocation.X - Size.Width / 2,
+                                RenderLocation.Y - Size.Height / 2, rect, Color, 0, 1, (float)Orientation.DegreesUnsigned);
+
+                        }
+                        break;
+
                     case ParticleShape.Triangle:
-                        _engine.Rendering.HollowTriangleAt(renderTarget,
+                        _engine.Rendering.DrawTriangle(renderTarget,
                             RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Orientation.DegreesUnsigned);
                         break;
                 }
 
                 if (IsHighlighted)
                 {
-                    _engine.Rendering.DrawRectangleAt(renderTarget, RawRenderBounds, Orientation.RadiansSigned, _engine.Rendering.Materials.Colors.Red, 0, 1);
+                    _engine.Rendering.DrawRectangle(renderTarget, RawRenderBounds,
+                        _engine.Rendering.Materials.Colors.Red, 0, 1, Orientation.RadiansSigned);
                 }
             }
         }
