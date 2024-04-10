@@ -37,12 +37,12 @@ namespace Si.Engine.Sprite.Weapon
 
                 if (_toggle)
                 {
-                    var offsetRight = Owner.Orientation.RotatedBy(SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(10, 10));
+                    var offsetRight = Owner.Orientation.RotatedBy(SiMath.RADIANS_90) * new SiVector(10, 10);
                     _engine.Sprites.Munitions.Add(this, Owner.Location + offsetRight);
                 }
                 else
                 {
-                    var offsetLeft = Owner.Orientation.RotatedBy(-SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(10, 10));
+                    var offsetLeft = Owner.Orientation.RotatedBy(-SiMath.RADIANS_90) * new SiVector(10, 10);
                     _engine.Sprites.Munitions.Add(this, Owner.Location + offsetLeft);
                 }
 

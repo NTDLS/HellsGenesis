@@ -86,7 +86,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             {
                 var particle = AddAt(location, new Size(SiRandom.Between(1, 2), SiRandom.Between(1, 2)));
                 particle.Shape = ParticleShape.FilledEllipse;
-                particle.ColorType = ParticleColorType.SingleColor;
+                particle.ColorType = ParticleColorType.Solid;
                 //particle.GradientStartColor = SiRenderingUtility.GetRandomHotColor();
                 //particle.GradientEndColor = SiRenderingUtility.GetRandomHotColor();
                 particle.Color = SiRenderingUtility.GetRandomHotColor();

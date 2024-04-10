@@ -471,17 +471,6 @@ namespace Si.Library.Mathematics
         }
 
         /// <summary>
-        /// Calculates a point at the normalized vector angle and a given distance. The instance vector will be normalized before calulation.
-        /// </summary>
-        /// <param name="distance">The distance to the given angle the point should be at.</param>
-        /// <returns>The calculated point at the given distance towards the given angle.</returns>
-        public SiVector PointFromAngleAtDistance(SiVector distance)
-        {
-            var direction = Normalize().RadiansSigned;
-            return new SiVector((float)Math.Cos(direction) * distance.X, (float)Math.Sin(direction) * distance.Y);
-        }
-
-        /// <summary>
         /// Returns the delta angle from this to another expressed in degrees from 180--180, positive
         /// figures indicate right (starboard) side and negative indicate left-hand (port) side of the object.
         /// </summary>

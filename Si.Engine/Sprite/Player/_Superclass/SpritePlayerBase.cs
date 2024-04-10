@@ -176,7 +176,7 @@ namespace Si.Engine.Sprite.Player._Superclass
 
         private void UpdateThrustAnimationPositions()
         {
-            var pointBehind = (Orientation * -1).PointFromAngleAtDistance(new SiVector(40, 40));
+            var pointBehind = (Orientation * -1) * new SiVector(40, 40);
 
             if (ThrusterAnimation != null)
             {

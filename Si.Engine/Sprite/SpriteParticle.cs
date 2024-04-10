@@ -23,7 +23,7 @@ namespace Si.Engine.Sprite
         /// This should be expressed as a number between 0-1 with 0 being no reduxtion per frame and 1 being 100% reduction per frame.
         /// </summary>
         public float FadeToBlackReductionAmount { get; set; } = 0.01f;
-        public ParticleColorType ColorType { get; set; } = ParticleColorType.SingleColor;
+        public ParticleColorType ColorType { get; set; } = ParticleColorType.Solid;
         public ParticleVectorType VectorType { get; set; } = ParticleVectorType.Default;
         public ParticleShape Shape { get; set; } = ParticleShape.FilledEllipse;
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
@@ -74,7 +74,7 @@ namespace Si.Engine.Sprite
 
             if (CleanupMode == ParticleCleanupMode.FadeToBlack)
             {
-                if (ColorType == ParticleColorType.SingleColor)
+                if (ColorType == ParticleColorType.Solid)
                 {
                     Color *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
 
@@ -113,7 +113,7 @@ namespace Si.Engine.Sprite
                 switch (Shape)
                 {
                     case ParticleShape.FilledEllipse:
-                        if (ColorType == ParticleColorType.SingleColor)
+                        if (ColorType == ParticleColorType.Solid)
                         {
                             _engine.Rendering.FillEllipseAt(renderTarget,
                                 RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Orientation.DegreesUnsigned);

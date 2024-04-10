@@ -50,6 +50,11 @@ namespace Si.Library.Mathematics
         public const float RADS_IN_CIRCLE = (float)(2 * Math.PI);
 
         /// <summary>
+        /// 45 (looking right) degrees.... but in radians.
+        /// </summary>
+        public const float RADIANS_45 = 45 * DEG_TO_RAD;
+
+        /// <summary>
         /// 90 (looking right) degrees.... but in radians.
         /// </summary>
         public const float RADIANS_90 = 90 * DEG_TO_RAD;

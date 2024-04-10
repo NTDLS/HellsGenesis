@@ -1,6 +1,7 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Debug;
 using Si.Library;
 using Si.Library.Mathematics;
 using System;
@@ -73,9 +74,9 @@ namespace Si.Engine.Level
                 //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
-            //var debugEnemy = _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyDebug>();
-            //debugEnemy.Orientation = SiVector.FromDegrees(-45);
-            //debugEnemy.Location = new SiVector(1000, 1000);
+            var debugEnemy = _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyDebug>();
+            debugEnemy.Orientation = SiVector.FromDegrees(0);
+            debugEnemy.Location = new SiVector(1000, 1000);
 
             //var debug = _engine.Sprites.Debugs.Add(1000, 1000);
             //debug.Speed = 0.5f;

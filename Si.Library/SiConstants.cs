@@ -33,7 +33,7 @@
 
         public enum ParticleColorType
         {
-            SingleColor,
+            Solid,
             Graident
         }
 

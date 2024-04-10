@@ -46,12 +46,12 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
                 {
                     if (FireToggler)
                     {
-                        var pointRight = Orientation.RotatedBy(SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(21, 21));
+                        var pointRight = Orientation.RotatedBy(SiMath.RADIANS_90) * new SiVector(21, 21);
                         FireToggler = !FireWeapon<WeaponLancer>(Location + pointRight);
                     }
                     else
                     {
-                        var pointLeft = Orientation.RotatedBy(-SiMath.RADIANS_90).PointFromAngleAtDistance(new SiVector(21, 21));
+                        var pointLeft = Orientation.RotatedBy(-SiMath.RADIANS_90) * new SiVector(21, 21);
                         FireToggler = FireWeapon<WeaponLancer>(Location + pointLeft);
                     }
                 }
