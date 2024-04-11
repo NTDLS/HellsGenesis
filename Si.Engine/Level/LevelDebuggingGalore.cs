@@ -1,6 +1,7 @@
 ﻿using Si.Engine.Core.Types;
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Boss.Devastator;
 using Si.Engine.Sprite.Enemy.Debug;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -74,6 +75,8 @@ namespace Si.Engine.Level
             {
                 //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
+
+            _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyBossDevastator>();
 
             var debugEnemy = _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyDebug>();
             debugEnemy.Orientation = SiVector.FromDegrees(0);

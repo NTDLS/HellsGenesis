@@ -19,6 +19,23 @@ namespace Si.Engine.Sprite
             SetImageAndLoadMetadata(imagePath);
         }
 
+        public override void ApplyMotion(float epoch, SiVector displacementVector)
+        {
+            if (IsDeadOrExploded) return;
+
+            // Since the attachement BaseLocation is relative to the top-left corner of the base sprite, we need
+            // to get the position relative to the center of the base sprite image so that we can rotate around that.
+            var attachmentOffset = LocationRelativeToOwner - (OwnerSprite.Size / 2.0f);
+
+            // Apply the rotated offset to get the new attachment location relative to the base sprite center.
+            Location = OwnerSprite.Location + attachmentOffset.RotatedBy(OwnerSprite.Orientation.RadiansSigned);
+
+            //Make sure the attachment faces forwards.
+            Orientation = OwnerSprite.Orientation;
+
+            base.ApplyMotion(epoch, displacementVector);
+        }
+
         /// <summary>
         /// Gets and caches the root owner of this attachement.
         /// </summary>

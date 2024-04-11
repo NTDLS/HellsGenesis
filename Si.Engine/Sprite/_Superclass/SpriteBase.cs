@@ -1092,7 +1092,6 @@ namespace Si.Engine.Sprite._Superclass
             return results;
         }
 
-
         public float DistanceTo(SpriteBase to) => Location.DistanceTo(to.Location);
 
         public float DistanceSquaredTo(SpriteBase to) => Location.DistanceSquaredTo(to.Location);

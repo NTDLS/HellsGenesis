@@ -16,7 +16,7 @@ namespace Si.Engine.Sprite.Enemy.Debug
             SetImageAndLoadMetadata(@"Sprites\Enemy\Debug\Hull.png");
             Throttle = 0;
 
-            _particle1 = _engine.Sprites.Particles.AddAt(SiVector.Zero,  new Size(5, 5));
+            _particle1 = _engine.Sprites.Particles.AddAt(SiVector.Zero, new Size(5, 5));
             _particle1.Pattern = Library.SiConstants.ParticleColorType.Solid;
             _particle1.Color = _engine.Rendering.Materials.Colors.Red;
             _particle1.Shape = Library.SiConstants.ParticleShape.HollowEllipse;
@@ -40,7 +40,7 @@ namespace Si.Engine.Sprite.Enemy.Debug
             _particle3.RotationSpeed = 0.02f;
             _particle3.RecalculateMovementVector();
 
-            _particle4 = _engine.Sprites.Particles.AddAt(SiVector.Zero,  new Size(10, 10));
+            _particle4 = _engine.Sprites.Particles.AddAt(SiVector.Zero, new Size(10, 10));
             _particle4.Pattern = Library.SiConstants.ParticleColorType.Solid;
             _particle4.Color = _engine.Rendering.Materials.Colors.Cyan;
             _particle4.Shape = Library.SiConstants.ParticleShape.Triangle;

@@ -3,7 +3,7 @@
 namespace Si.Engine.Sprite.Enemy.Starbase._Superclass
 {
     /// <summary>
-    /// Base class for "Peon" enemies. These guys are basically all the same in theit functionality and animations.
+    /// Base class for "starbase" enemies.
     /// </summary>
     internal class SpriteEnemyStarbase : SpriteEnemyBase
     {

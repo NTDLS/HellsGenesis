@@ -1,4 +1,5 @@
-﻿using Si.Library.Sprite;
+﻿using Si.Library.ExtensionMethods;
+using Si.Library.Sprite;
 using System.Runtime.CompilerServices;
 
 namespace Si.Library.Mathematics
@@ -142,7 +143,7 @@ namespace Si.Library.Mathematics
         /// <param name="fromSprite">The object from which the calcualtion is based.</param>
         /// <param name="atSprite">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees">The angle in degrees to consider the object to pointing at the other.</param>
-        /// <param name="maxDistance">The distance in consider the object to pointing at the other.</param>
+        /// <param name="maxDistance">The distance in which the object to pointing at the other.</param>
         /// <returns>True if the object is pointing at the other given the constraints.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsPointingAt(this ISprite fromSprite, ISprite atSprite, float toleranceDegrees, float maxDistance)
@@ -151,6 +152,27 @@ namespace Si.Library.Mathematics
             if (deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees)
             {
                 return fromSprite.DistanceTo(atSprite) <= maxDistance;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Returns true if the sprite is pointing AT another sprite, taking into account the tolerance in degrees and min/max distance.
+        /// </summary>
+        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="atSprite">The object to which the calculation is based.</param>
+        /// <param name="toleranceDegrees">The angle in degrees to consider the object to pointing at the other.</param>
+        /// /// <param name="minDistance">The distance in which the object to pointing at the other.</param>
+        /// <param name="maxDistance">The distance in which the object to pointing at the other.</param>
+        /// <returns>True if the object is pointing at the other given the constraints.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsPointingAt(this ISprite fromSprite, ISprite atSprite, float toleranceDegrees, float minDistance, float maxDistance)
+        {
+            var deltaAngle = Math.Abs(fromSprite.HeadingAngleToInUnsignedDegrees(atSprite));
+            if (deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees)
+            {
+                return fromSprite.DistanceTo(atSprite).IsBetween(minDistance, maxDistance);
             }
 
             return false;

@@ -37,7 +37,6 @@ namespace Si.Engine.Sprite.Enemy.Peon
 
         private void IntermittentAiModeChange()
         {
-            /*
             if ((DateTime.UtcNow - _behaviorChangeTimestamp).TotalMilliseconds > _behaviorChangeDelayMilliseconds)
             {
                 _behaviorChangeTimestamp = DateTime.UtcNow;
@@ -56,7 +55,6 @@ namespace Si.Engine.Sprite.Enemy.Peon
                     SetCurrentAIController<AILogisticsHostileEngagement>();
                 }
             }
-            */
         }
 
         private void ApplyWeaponsLogic()

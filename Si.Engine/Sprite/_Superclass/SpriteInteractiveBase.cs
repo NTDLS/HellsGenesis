@@ -294,6 +294,10 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="displacementVector"></param>
         public virtual void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
+            foreach (var attachment in Attachments)
+            {
+                attachment.ApplyIntelligence(epoch, displacementVector);
+            }
         }
 
         /// <summary>

@@ -3,7 +3,7 @@
 namespace Si.Engine.Sprite.Enemy.Boss._Superclass
 {
     /// <summary>
-    /// Boss enemies are specialized enemy types, typically have destructible/moving components.
+    /// Base class for "starbase" enemies.
     /// </summary>
     internal class SpriteEnemyBossBase : SpriteEnemyBase
     {
@@ -11,6 +11,11 @@ namespace Si.Engine.Sprite.Enemy.Boss._Superclass
             : base(engine)
         {
             RecalculateMovementVector();
+        }
+
+        public override void Cleanup()
+        {
+            base.Cleanup();
         }
     }
 }

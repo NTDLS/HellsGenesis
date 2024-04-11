@@ -122,6 +122,8 @@ namespace Si.Engine.Sprite.Enemy._Superclass
                     weapon.ApplyIntelligence(epoch);
                 }
             }
+
+            base.ApplyIntelligence(epoch, displacementVector);
         }
     }
 }
