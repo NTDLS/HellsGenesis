@@ -26,7 +26,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         {
             var obj = new SpriteAttachment(Engine, imagePath)
             {
-                ZOrder = owner.ZOrder + 1, //We want to make sure these go on top of the parent.
+                Z = owner.Z + 1, //We want to make sure these go on top of the parent.
                 OwnerUID = owner.UID
             };
             SpriteManager.Add(obj);
@@ -38,7 +38,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             var sprite = SpriteManager.CreateByType<T>();
 
             if (imagePath != null) sprite.SetImage(imagePath);
-            sprite.ZOrder = owner.ZOrder + 1; //We want to make sure these go on top of the parent.
+            sprite.Z = owner.Z + 1; //We want to make sure these go on top of the parent.
             sprite.OwnerUID = owner.UID;
 
             SpriteManager.Add(sprite);
@@ -49,7 +49,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         {
             var sprite = CreateSubtypeByName(typeName);
 
-            sprite.ZOrder = owner.ZOrder + 1; //We want to make sure these go on top of the parent.
+            sprite.Z = owner.Z + 1; //We want to make sure these go on top of the parent.
             sprite.OwnerUID = owner.UID;
             sprite.LocationRelativeToOwner = locationRelativeToOwner;
 

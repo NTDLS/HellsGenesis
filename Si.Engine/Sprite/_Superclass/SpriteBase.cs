@@ -137,8 +137,6 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public SiRenderScaleOrder RenderScaleOrder { get; set; } = SiRenderScaleOrder.PreScale;
 
-        public int ZOrder { get; set; } = 0;
-
         /// <summary>
         /// The bounds of the sprite in the universe.
         /// </summary>
@@ -247,6 +245,9 @@ namespace Si.Engine.Sprite._Superclass
                 LocationChanged();
             }
         }
+
+        // The Z location. Given that this is a 2d engine, the Z order is just a render order.
+        public int Z { get; set; } = 0;
 
         private bool _isVisible = true;
         public bool Visable

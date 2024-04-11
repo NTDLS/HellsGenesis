@@ -278,7 +278,7 @@ namespace Si.Engine.Manager
 
         public void RenderPostScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            foreach (var sprite in _collection.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PostScale).OrderBy(o => o.ZOrder))
+            foreach (var sprite in _collection.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PostScale).OrderBy(o => o.Z))
             {
                 sprite.Render(renderTarget);
             }
@@ -349,7 +349,7 @@ namespace Si.Engine.Manager
         /// <returns></returns>
         public void RenderPreScaling(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            foreach (var sprite in _collection.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PreScale).OrderBy(o => o.ZOrder))
+            foreach (var sprite in _collection.Where(o => o.Visable == true && o.RenderScaleOrder == SiRenderScaleOrder.PreScale).OrderBy(o => o.Z))
             {
                 if (sprite.IsWithinCurrentScaledScreenBounds)
                 {

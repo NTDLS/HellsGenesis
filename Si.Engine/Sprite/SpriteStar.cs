@@ -20,7 +20,7 @@ namespace Si.Engine.Sprite
             X = SiRandom.Between(0, engine.Display.TotalCanvasSize.Width);
             Y = SiRandom.Between(0, engine.Display.TotalCanvasSize.Height);
 
-            ZOrder = int.MinValue + 1000;
+            Z = int.MinValue + 1000;
 
             Speed = 0.5f;
             RecalculateMovementVector();
