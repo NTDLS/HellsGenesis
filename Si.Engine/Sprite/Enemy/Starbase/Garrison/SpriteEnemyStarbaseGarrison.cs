@@ -12,12 +12,12 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
         public SpriteEnemyStarbaseGarrison(EngineCore engine)
             : base(engine, @"Sprites\Enemy\Starbase\Garrison\Hull.png")
         {
-            Orientation.DegreesUnsigned = SiRandom.Between(0, 359);
+            Orientation.Degrees = SiRandom.Between(0, 359);
         }
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
-            Orientation.DegreesUnsigned += 0.005f;
+            Orientation.Degrees += 0.005f;
             base.ApplyMotion(epoch, displacementVector);
         }
     }

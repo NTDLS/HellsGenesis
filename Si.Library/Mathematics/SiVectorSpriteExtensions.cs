@@ -228,7 +228,7 @@ namespace Si.Library.Mathematics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float HeadingAngleToInUnsignedDegrees(this ISprite fromSprite, SiVector toLocation)
         {
-            float fromAngle = fromSprite.Orientation.DegreesUnsigned;
+            float fromAngle = fromSprite.Orientation.Degrees;
 
             float angleTo = fromSprite.AngleToInUnsignedDegrees(toLocation);
 

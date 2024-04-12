@@ -394,7 +394,7 @@ namespace Si.Engine.Manager
                 fragment.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
                 fragment.VectorType = ParticleVectorType.Default;
 
-                fragment.Orientation.DegreesUnsigned = SiRandom.Between(0.0f, 359.0f);
+                fragment.Orientation.Degrees = SiRandom.Between(0.0f, 359.0f);
                 fragment.Speed = SiRandom.Between(1, 3.5f);
                 fragment.Throttle = 1;
                 fragment.RecalculateMovementVector();

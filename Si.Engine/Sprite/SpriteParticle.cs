@@ -54,7 +54,7 @@ namespace Si.Engine.Sprite
             RotationSpeed = SiRandom.Between(0.01f, 0.09f) * SiRandom.PositiveOrNegative();
 
             Speed = SiRandom.Between(1.0f, 4.0f);
-            Orientation.DegreesUnsigned = SiRandom.Between(0, 359);
+            Orientation.Degrees = SiRandom.Between(0, 359);
             Throttle = 1;
 
             RecalculateMovementVector();
@@ -64,7 +64,7 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
-            Orientation.DegreesUnsigned += RotationSpeed * epoch;
+            Orientation.Degrees += RotationSpeed * epoch;
 
             if (VectorType == ParticleVectorType.FollowOrientation)
             {
@@ -117,17 +117,17 @@ namespace Si.Engine.Sprite
                         if (Pattern == ParticleColorType.Solid)
                         {
                             _engine.Rendering.DrawSolidEllipse(renderTarget,
-                                RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Orientation.DegreesUnsigned);
+                                RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Orientation.Degrees);
                         }
                         else if (Pattern == ParticleColorType.Graident)
                         {
                             _engine.Rendering.DrawGradientEllipse(renderTarget, RenderLocation.X, RenderLocation.Y,
-                                Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)Orientation.DegreesUnsigned);
+                                Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)Orientation.Degrees);
                         }
                         break;
                     case ParticleShape.HollowEllipse:
                         _engine.Rendering.DrawEllipse(renderTarget,
-                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Orientation.DegreesUnsigned);
+                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Orientation.Degrees);
                         break;
 
                     case ParticleShape.FilledRectangle:
@@ -137,12 +137,12 @@ namespace Si.Engine.Sprite
                             if (Pattern == ParticleColorType.Solid)
                             {
                                 _engine.Rendering.DrawSolidRectangle(renderTarget, RenderLocation.X - Size.Width / 2,
-                                    RenderLocation.Y - Size.Height / 2, rect, Color, 0, (float)Orientation.DegreesUnsigned);
+                                    RenderLocation.Y - Size.Height / 2, rect, Color, 0, (float)Orientation.Degrees);
                             }
                             else if (Pattern == ParticleColorType.Graident)
                             {
                                 _engine.Rendering.DrawGradientRectangle(renderTarget, RenderLocation.X - Size.Width / 2,
-                                    RenderLocation.Y - Size.Height / 2, rect, GradientStartColor, GradientEndColor, 0, (float)Orientation.DegreesUnsigned);
+                                    RenderLocation.Y - Size.Height / 2, rect, GradientStartColor, GradientEndColor, 0, (float)Orientation.Degrees);
                             }
                         }
                         break;
@@ -151,14 +151,14 @@ namespace Si.Engine.Sprite
                         {
                             var rect = new RawRectangleF(0, 0, Size.Width, Size.Height);
                             _engine.Rendering.DrawRectangle(renderTarget, RenderLocation.X - Size.Width / 2,
-                                RenderLocation.Y - Size.Height / 2, rect, Color, 0, 1, (float)Orientation.DegreesUnsigned);
+                                RenderLocation.Y - Size.Height / 2, rect, Color, 0, 1, (float)Orientation.Degrees);
 
                         }
                         break;
 
                     case ParticleShape.Triangle:
                         _engine.Rendering.DrawTriangle(renderTarget,
-                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Orientation.DegreesUnsigned);
+                            RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, 1, (float)Orientation.Degrees);
                         break;
                 }
 

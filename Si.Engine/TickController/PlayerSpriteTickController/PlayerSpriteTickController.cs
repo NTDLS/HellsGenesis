@@ -227,7 +227,7 @@ namespace Si.Engine.TickController.PlayerSpriteTickController
 
                 float targetRotationDegrees = (Engine.Input.GetAnalogAxisValue(SiPlayerKey.RotateCounterClockwise, SiPlayerKey.RotateClockwise) / throttleCap).Clamp(-1, 1);
 
-                Sprite.Orientation.DegreesUnsigned += Engine.Settings.MaxPlayerRotationSpeedDegrees * targetRotationDegrees * epoch;
+                Sprite.Orientation.Degrees += Engine.Settings.MaxPlayerRotationSpeedDegrees * targetRotationDegrees * epoch;
 
                 #endregion
 

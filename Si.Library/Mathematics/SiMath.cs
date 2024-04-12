@@ -43,11 +43,33 @@ namespace Si.Library.Mathematics
          *      measurement and convert between units as needed for specific calculations, animations, or to
          *      interface with libraries and APIs that require a specific unit of angle measurement.
         */
-        public const float ZeroTolerance = 1e-6f;
 
-        public const float DEG_TO_RAD = (float)(Math.PI / 180.0);
-        public const float RAD_TO_DEG = (float)(180.0 / Math.PI);
-        public const float RADS_IN_CIRCLE = (float)(2 * Math.PI);
+
+        /// <summary>
+        /// A value specifying the approximation of π which is 180 degrees.
+        /// </summary>
+        public const float Pi = 3.14159265358979323846f;
+
+        /// <summary>
+        /// A value specifying the approximation of 2π which is 360 degrees.
+        /// </summary>
+        public const float TwoPi = 2.0f * Pi;
+
+        /// <summary>
+        /// A value specifying the approximation of π/2 which is 90 degrees.
+        /// </summary>
+        public const float PiOverTwo = Pi / 2.0f;
+
+        /// <summary>
+        /// A value specifying the approximation of π/4 which is 45 degrees.
+        /// </summary>
+        public const float PiOverFour = Pi / 4.0f;
+
+        public const float ZeroTolerance = 0.000001f;
+
+        public const float RadiansPerDegree = Pi / 180.0f;
+        public const float DegreesPerRadian = 180.0f / Pi;
+        public const float RadiansInCircle = Pi * 2.0f;
 
         /// <summary>
         /// Converts radians to degrees
@@ -55,7 +77,7 @@ namespace Si.Library.Mathematics
         /// <param name="rad">Given radians to convert to degrees.</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float RadToDeg(float radians) => radians * RAD_TO_DEG;
+        public static float RadToDeg(float radians) => radians * DegreesPerRadian;
 
         /// <summary>
         /// Converts degrees to radians.
@@ -63,7 +85,7 @@ namespace Si.Library.Mathematics
         /// <param name="deg">Given degrees to convert to radians.</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float DegToRad(float degrees) => degrees * DEG_TO_RAD;
+        public static float DegToRad(float degrees) => degrees * RadiansPerDegree;
 
         /// <summary>
         /// Converts cardinal x,y to degrees.
@@ -91,6 +113,17 @@ namespace Si.Library.Mathematics
         /// <returns></returns>
         public static (float X, float Y) RadToCardinal(float radians)
             => ((float)Math.Cos(radians), (float)Math.Sin(radians));
+
+        /// <summary>
+        /// Converts degrees to cardinal x,y.
+        /// </summary>
+        /// <param name="radians"></param>
+        /// <returns></returns>
+        public static (float X, float Y) DegToCardinal(float degrees)
+        {
+            var radians = degrees * RadiansPerDegree;
+            return ((float)Math.Cos(radians), (float)Math.Sin(radians));
+        }
 
         /// <summary>
         /// Restrict a value to be within a specified range.Useful for keeping objects within boundaries.
@@ -126,26 +159,6 @@ namespace Si.Library.Mathematics
         /// </summary>
         public static bool IsNearZero(float a)
             => Math.Abs(a) < ZeroTolerance;
-
-        /// <summary>
-        /// A value specifying the approximation of π which is 180 degrees.
-        /// </summary>
-        public const float Pi = (float)Math.PI;
-
-        /// <summary>
-        /// A value specifying the approximation of 2π which is 360 degrees.
-        /// </summary>
-        public const float TwoPi = (float)(2 * Math.PI);
-
-        /// <summary>
-        /// A value specifying the approximation of π/2 which is 90 degrees.
-        /// </summary>
-        public const float PiOverTwo = (float)(Math.PI / 2);
-
-        /// <summary>
-        /// A value specifying the approximation of π/4 which is 45 degrees.
-        /// </summary>
-        public const float PiOverFour = (float)(Math.PI / 4);
 
         /// <summary>
         /// Checks if a - b are almost equals within a float epsilon.

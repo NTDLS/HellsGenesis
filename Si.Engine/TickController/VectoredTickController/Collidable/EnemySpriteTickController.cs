@@ -35,7 +35,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Collidable
             SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
 
             obj.Location = Engine.Display.RandomOffScreenLocation();
-            obj.Orientation.DegreesUnsigned = SiRandom.Between(0, 359);
+            obj.Orientation.Degrees = SiRandom.Between(0, 359);
             obj.RecalculateMovementVector();
 
             obj.BeforeCreate();

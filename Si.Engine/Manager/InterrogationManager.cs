@@ -539,7 +539,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Orientation.DegreesUnsigned = command.ParameterValue<float>("value");
+                    sprite.Orientation.Degrees = command.ParameterValue<float>("value");
                 }
             });
         }

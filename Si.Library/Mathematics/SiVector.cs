@@ -6,6 +6,7 @@ namespace Si.Library.Mathematics
 {
     /// <summary>
     /// 2d vector.
+    /// Note that when the signed/unsigned is unspecified. it is unsigned (Degrees 0,360), Radians(0,2π), etc.
     /// </summary>
     public partial class SiVector : IComparable<SiVector>
     {
@@ -229,20 +230,23 @@ namespace Si.Library.Mathematics
 
         #region Direction.
 
-        public float RadiansUnsigned
+        /// <summary>
+        /// Angle in radians between [0,2π]
+        /// </summary>
+        public float Radians
         {
             get
             {
                 var angle = RadiansSigned;
                 if (angle < 0)
                 {
-                    angle += 2 * (float)Math.PI; // Convert negative angles to positive by adding 2π
+                    angle += 2.0f * SiMath.Pi; // Convert negative angles to positive by adding 2π
                 }
                 return angle;
             }
             set
             {
-                var radians = value > 0 ? value % SiMath.RADS_IN_CIRCLE : (value + SiMath.RADS_IN_CIRCLE) % SiMath.RADS_IN_CIRCLE;
+                var radians = value > 0.0f ? value % SiMath.RadiansInCircle : (value + SiMath.RadiansInCircle) % SiMath.RadiansInCircle;
                 var cardinal = SiMath.RadToCardinal(radians);
                 X = cardinal.X;
                 Y = cardinal.Y;
@@ -250,27 +254,30 @@ namespace Si.Library.Mathematics
         }
 
         /// <summary>
-        /// Angle in radians between [−3.14,3.14]
+        /// Angle in radians between [−π,+π]
         /// </summary>
         public float RadiansSigned
         {
             get => SiMath.CardinalToRad(X, Y);
             set
             {
-                var radians = value > 0 ? value % SiMath.RADS_IN_CIRCLE : (value + SiMath.RADS_IN_CIRCLE) % SiMath.RADS_IN_CIRCLE;
+                var radians = value > 0.0f ? value % SiMath.RadiansInCircle : (value + SiMath.RadiansInCircle) % SiMath.RadiansInCircle;
                 var cardinal = SiMath.RadToCardinal(radians);
                 X = cardinal.X;
                 Y = cardinal.Y;
             }
         }
 
-        public float DegreesUnsigned
+        /// <summary>
+        /// Angle in degrees between [−0,360]
+        /// </summary>
+        public float Degrees
         {
             get
             {
                 float angleRadians = SiMath.CardinalToRad(X, Y);
 
-                float angleDegrees = angleRadians * (180 / (float)Math.PI);
+                float angleDegrees = angleRadians * (180.0f / SiMath.Pi);
                 if (angleDegrees < 0)
                 {
                     angleDegrees += 360;
@@ -280,8 +287,8 @@ namespace Si.Library.Mathematics
             }
             set
             {
-                var degrees = value > 0 ? value % 360 : (value + 360) % 360;
-                var cardinal = SiMath.RadToCardinal(SiMath.DegToRad(degrees));
+                var degrees = value > 0.0f ? value % 360.0f : (value + 360.0f) % 360.0f;
+                var cardinal = SiMath.DegToCardinal(degrees);
                 X = cardinal.X;
                 Y = cardinal.Y;
             }
@@ -295,12 +302,12 @@ namespace Si.Library.Mathematics
             get
             {
                 float angleRadians = SiMath.CardinalToRad(X, Y);
-                return angleRadians * (180 / (float)Math.PI);
+                return angleRadians * (180.0f / SiMath.Pi);
             }
             set
             {
-                var degrees = value > 0 ? value % 360 : (value + 360) % 360;
-                var cardinal = SiMath.RadToCardinal(SiMath.DegToRad(degrees));
+                var degrees = value > 0.0f ? value % 360.0f : (value + 360.0f) % 360.0f;
+                var cardinal = SiMath.DegToCardinal(degrees);
                 X = cardinal.X;
                 Y = cardinal.Y;
             }
@@ -480,7 +487,7 @@ namespace Si.Library.Mathematics
         /// positive indicated right (starboard) side.</param>
         /// <returns>The calculated angle in the range of 180--180.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float DeltaAngle(SiVector toLocation, float offsetAngle = 0)
+        public float DeltaAngleInSignedDegrees(SiVector toLocation, float offsetAngle = 0)
         {
             var angle = DeltaAngleInUnsignedDegrees(toLocation, offsetAngle);
             if (angle > 180)
@@ -504,7 +511,7 @@ namespace Si.Library.Mathematics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float DeltaAngleInUnsignedDegrees(SiVector toLocation, float offsetAngle = 0)
         {
-            float fromAngle = DegreesUnsigned + offsetAngle;
+            float fromAngle = Degrees + offsetAngle;
 
             float angleTo = this.AngleToInUnsignedDegrees(toLocation);
 
@@ -562,7 +569,7 @@ namespace Si.Library.Mathematics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsPointingAt(ISprite at, float toleranceDegrees)
         {
-            var deltaAngle = Math.Abs(DeltaAngle(at));
+            var deltaAngle = Math.Abs(DeltaAngleInSignedDegrees(at));
             return deltaAngle < toleranceDegrees || deltaAngle > 360 - toleranceDegrees;
         }
 
@@ -595,7 +602,7 @@ namespace Si.Library.Mathematics
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
         /// <returns>The calculated angle in the range of 180--180.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public float DeltaAngle(ISprite to, float offsetAngle = 0)
+        public float DeltaAngleInSignedDegrees(ISprite to, float offsetAngle = 0)
         {
             var angle = DeltaAngleInUnsignedDegrees(to, offsetAngle);
             if (angle > 180)
@@ -618,7 +625,7 @@ namespace Si.Library.Mathematics
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public float DeltaAngleInUnsignedDegrees(ISprite to, float offsetAngle = 0)
         {
-            float fromAngle = DegreesUnsigned + offsetAngle;
+            float fromAngle = Degrees + offsetAngle;
 
             float angleTo = this.AngleToInUnsignedDegrees(to.Location);
 

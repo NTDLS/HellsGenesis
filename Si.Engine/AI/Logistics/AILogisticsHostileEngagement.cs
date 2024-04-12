@@ -51,7 +51,7 @@ namespace Si.Engine.AI.Logistics
 
             public AIStateTransitionToEvasiveEscape(AIStateMachine machine)
             {
-                TargetAngle.DegreesUnsigned = machine.Owner.Orientation.DegreesUnsigned + 180;
+                TargetAngle.Degrees = machine.Owner.Orientation.Degrees + 180;
             }
         }
 
@@ -137,7 +137,7 @@ namespace Si.Engine.AI.Logistics
                 //----------------------------------------------------------------------------------------------------------------------------------------------------
                 //The object is rotating agressively away from the observed object.
                 case AIStateTransitionToEvasiveEscape transitionToEvasiveEscape:
-                    if (Owner.RotateMovementVectorIfNotPointingAt(transitionToEvasiveEscape.TargetAngle.DegreesUnsigned, transitionToEvasiveEscape.Rotation, transitionToEvasiveEscape.VarianceAngle) == false)
+                    if (Owner.RotateMovementVectorIfNotPointingAt(transitionToEvasiveEscape.TargetAngle.Degrees, transitionToEvasiveEscape.Rotation, transitionToEvasiveEscape.VarianceAngle) == false)
                     {
                         ChangeState(new AIStateEvasiveEscape());
                     }

@@ -123,7 +123,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
                 particle.FadeToBlackReductionAmount = 0.001f;
                 particle.RotationSpeed = SiRandom.Between(-3f, 3f);
                 particle.VectorType = ParticleVectorType.FollowOrientation;
-                particle.Orientation.DegreesUnsigned = SiRandom.Between(0.0f, 359.0f);
+                particle.Orientation.Degrees = SiRandom.Between(0.0f, 359.0f);
                 particle.Speed = SiRandom.Between(2, 3.5f);
                 particle.RecalculateMovementVector();
             }

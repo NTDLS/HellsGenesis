@@ -162,7 +162,7 @@ namespace Si.Client
                         text.AppendLine($"Is Locked-on (Soft): {enemy.IsLockedOnSoft:n0}");
                         text.AppendLine($"Shield Points: {enemy.ShieldHealth:n0}");
                         text.AppendLine($"Speed: {enemy.Speed:n2}");
-                        text.AppendLine($"Angle: {enemy.Orientation.DegreesUnsigned:n2}° {enemy.Orientation:n2}");
+                        text.AppendLine($"Angle: {enemy.Orientation.Degrees:n2}° {enemy.Orientation:n2}");
                         //text.AppendLine($"Throttle Percent: {enemy.Velocity.ForwardVelocity:n2}");
 
                         if (enemy.CurrentAIController != null)

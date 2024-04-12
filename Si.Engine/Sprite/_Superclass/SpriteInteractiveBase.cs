@@ -107,7 +107,7 @@ namespace Si.Engine.Sprite._Superclass
         /// Number that defines how much motion a sprite is in.
         /// </summary>
         public float TotalVelocity
-            => Math.Abs(MovementVector.Sum()) + Math.Abs(RotationSpeed);
+            => MovementVector.SumAbs();
 
         /// <summary>
         /// The total velocity multiplied by the given mass, excpet for the mass is returned when the velocity is 0;
@@ -297,7 +297,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="displacementVector"></param>
         public virtual void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
-            foreach (var attachment in Attachments)
+            foreach (var attachment in Attachments.Where(o=>o.IsDeadOrExploded == false))
             {
                 attachment.ApplyIntelligence(epoch, displacementVector);
             }

@@ -39,7 +39,7 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
-            Orientation.DegreesUnsigned += RotationSpeed * epoch;
+            Orientation.Degrees += RotationSpeed * epoch;
 
             if (VectorType == ParticleVectorType.FollowOrientation)
             {

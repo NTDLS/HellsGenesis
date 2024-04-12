@@ -1154,15 +1154,12 @@ namespace Si.Engine.Sprite._Superclass
         public virtual void ApplyMotion(float epoch, SiVector displacementVector)
         {
             //Perform any auto-rotation.
-            Orientation.DegreesUnsigned += RotationSpeed * epoch;
-
-            //Be default, we keep the MovementVector following the direction the sprite is pointing.
-            //MovementVector = Direction * MovementVector.Length(); //This feel like a hack...
+            Orientation.Radians += RotationSpeed * epoch;
 
             //Move the sprite based on its vector.
             Location += MovementVector * epoch;
 
-            foreach (var attachment in Attachments)
+            foreach (var attachment in Attachments.Where(o => o.IsDeadOrExploded == false))
             {
                 attachment.ApplyMotion(epoch, displacementVector);
             }

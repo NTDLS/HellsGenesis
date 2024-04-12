@@ -57,7 +57,7 @@ namespace Si.Client.Forms
             UpsertVariable("Location (Render)", $"{sprite.RenderLocation}");
             UpsertVariable("Background Offset", $"{_engine.Display.RenderWindowPosition}");
             UpsertVariable("Angle", $"{sprite.Orientation:n2}");
-            UpsertVariable("Angle Degrees", $"{sprite.Orientation.DegreesUnsigned:n2}");
+            UpsertVariable("Angle Degrees", $"{sprite.Orientation.Degrees:n2}");
             UpsertVariable("Angle Degrees (Signed)", $"{sprite.Orientation.DegreesSigned:n2}");
             UpsertVariable("Angle Radians", $"{sprite.Orientation.RadiansSigned:n2}");
             UpsertVariable("Angle Radians (Signed)", $"{sprite.Orientation.RadiansSigned:n2}");

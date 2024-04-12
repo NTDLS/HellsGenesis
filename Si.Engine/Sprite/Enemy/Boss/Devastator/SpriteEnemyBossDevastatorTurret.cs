@@ -15,8 +15,6 @@ namespace Si.Engine.Sprite.Enemy.Boss.Devastator
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
-            if (IsDeadOrExploded) return;
-
             // Since the turret.BaseLocation is relative to the top-left corner of the base sprite, we need
             // to get the position relative to the center of the base sprite image so that we can rotate around that.
             var turretOffset = LocationRelativeToOwner - (Owner.Size / 2.0f);
@@ -30,11 +28,11 @@ namespace Si.Engine.Sprite.Enemy.Boss.Devastator
                 var deltaAngltToPlayer = this.HeadingAngleToInSignedDegrees(_engine.Player.Sprite);
                 if (deltaAngltToPlayer < 1)
                 {
-                    Orientation.DegreesUnsigned -= 1.5f;
+                    Orientation.Degrees -= 1.5f;
                 }
                 else if (deltaAngltToPlayer > 1)
                 {
-                    Orientation.DegreesUnsigned += 1.5f;
+                    Orientation.Degrees += 1.5f;
                 }
 
                 if (deltaAngltToPlayer.IsBetween(-10, 10))

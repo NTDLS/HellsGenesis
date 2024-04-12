@@ -17,7 +17,7 @@ namespace Si.Library.Sprite
         /// Number or radians to rotate the sprite Orientation along its center at each call to ApplyMotion().
         /// Negative for counter-clockwise, positive for clockwise.
         /// </summary>
-        public float RotationSpeed { get; set; }
+        //public float RotationSpeed { get; set; }
 
         /// <summary>
         /// The angle in which the sprite is pointing, note that this is NOT the travel angle.
