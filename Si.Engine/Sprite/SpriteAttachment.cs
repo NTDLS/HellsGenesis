@@ -8,11 +8,6 @@ namespace Si.Engine.Sprite
         private SpriteInteractiveBase _rootOwner = null;
         public SiVector LocationRelativeToOwner { get; set; }
 
-        public SpriteAttachment(EngineCore engine)
-            : base(engine)
-        {
-        }
-
         public SpriteAttachment(EngineCore engine, string imagePath)
             : base(engine)
         {
@@ -25,13 +20,13 @@ namespace Si.Engine.Sprite
 
             // Since the attachement BaseLocation is relative to the top-left corner of the base sprite, we need
             // to get the position relative to the center of the base sprite image so that we can rotate around that.
-            var attachmentOffset = LocationRelativeToOwner - (OwnerSprite.Size / 2.0f);
+            var attachmentOffset = LocationRelativeToOwner - (Owner.Size / 2.0f);
 
             // Apply the rotated offset to get the new attachment location relative to the base sprite center.
-            Location = OwnerSprite.Location + attachmentOffset.RotatedBy(OwnerSprite.Orientation.RadiansSigned);
+            Location = Owner.Location + attachmentOffset.RotatedBy(Owner.Orientation.RadiansSigned);
 
             //Make sure the attachment faces forwards.
-            Orientation = OwnerSprite.Orientation;
+            Orientation = Owner.Orientation;
 
             base.ApplyMotion(epoch, displacementVector);
         }
@@ -40,7 +35,7 @@ namespace Si.Engine.Sprite
         /// Gets and caches the root owner of this attachement.
         /// </summary>
         /// <returns></returns>
-        public SpriteInteractiveBase OwnerSprite
+        public SpriteInteractiveBase Owner
         {
             get
             {

@@ -8,11 +8,8 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
     internal class SpriteEnemyBossDevastatorLeftCannon : SpriteAttachment
     {
         public SpriteEnemyBossDevastatorLeftCannon(EngineCore engine)
-            : base(engine)
+            : base(engine, $@"Sprites\Enemy\Boss\Devastator\Cannon.Left.png")
         {
-            SetImageAndLoadMetadata($@"Sprites\Enemy\Boss\Devastator\Cannon.Left.png");
-
-            SetHullHealth(10);
         }
 
         public override void ApplyIntelligence(float epoch, SiVector displacementVector)

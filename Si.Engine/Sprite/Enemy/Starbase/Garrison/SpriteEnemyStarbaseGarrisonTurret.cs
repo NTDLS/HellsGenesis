@@ -11,11 +11,8 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
         public bool FireToggler { get; set; }
 
         public SpriteEnemyStarbaseGarrisonTurret(EngineCore engine)
-            : base(engine)
+            : base(engine, $@"Sprites\Enemy\Starbase\Garrison\Turret.png")
         {
-            SetImageAndLoadMetadata($@"Sprites\Enemy\Starbase\Garrison\Turret.png");
-
-            SetHullHealth(10);
         }
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
@@ -24,10 +21,10 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
 
             // Since the turret.BaseLocation is relative to the top-left corner of the base sprite, we need
             // to get the position relative to the center of the base sprite image so that we can rotate around that.
-            var turretOffset = LocationRelativeToOwner - (OwnerSprite.Size / 2.0f);
+            var turretOffset = LocationRelativeToOwner - (Owner.Size / 2.0f);
 
             // Apply the rotated offsets to get the new turret location relative to the base sprite center.
-            Location = OwnerSprite.Location + turretOffset.RotatedBy(OwnerSprite.Orientation.RadiansSigned);
+            Location = Owner.Location + turretOffset.RotatedBy(Owner.Orientation.RadiansSigned);
 
             if (DistanceTo(_engine.Player.Sprite) < 1000)
             {

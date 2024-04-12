@@ -10,9 +10,8 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
         // Other Names: Nexus, Forge, Bastion, Citadel, Spire, Stronghold, Enclave, Garrison, Fortress
 
         public SpriteEnemyStarbaseGarrison(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Enemy\Starbase\Garrison\Hull.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Enemy\Starbase\Garrison\Hull.png");
             Orientation.DegreesUnsigned = SiRandom.Between(0, 359);
         }
 

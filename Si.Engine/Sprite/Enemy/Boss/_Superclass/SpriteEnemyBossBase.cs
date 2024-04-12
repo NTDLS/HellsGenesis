@@ -7,9 +7,10 @@ namespace Si.Engine.Sprite.Enemy.Boss._Superclass
     /// </summary>
     internal class SpriteEnemyBossBase : SpriteEnemyBase
     {
-        public SpriteEnemyBossBase(EngineCore engine)
+        public SpriteEnemyBossBase(EngineCore engine, string imagePath)
             : base(engine)
         {
+            SetImageAndLoadMetadata(imagePath);
             RecalculateMovementVector();
         }
 

@@ -9,11 +9,8 @@ namespace Si.Engine.Sprite.Enemy.Boss.Devastator
         public bool FireToggler { get; set; }
 
         public SpriteEnemyBossDevastatorTurret(EngineCore engine)
-            : base(engine)
+            : base(engine, $@"Sprites\Enemy\Boss\Devastator\Turret.png")
         {
-            SetImageAndLoadMetadata($@"Sprites\Enemy\Boss\Devastator\Turret.png");
-
-            SetHullHealth(10);
         }
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
@@ -22,10 +19,10 @@ namespace Si.Engine.Sprite.Enemy.Boss.Devastator
 
             // Since the turret.BaseLocation is relative to the top-left corner of the base sprite, we need
             // to get the position relative to the center of the base sprite image so that we can rotate around that.
-            var turretOffset = LocationRelativeToOwner - (OwnerSprite.Size / 2.0f);
+            var turretOffset = LocationRelativeToOwner - (Owner.Size / 2.0f);
 
             // Apply the rotated offsets to get the new turret location relative to the base sprite center.
-            Location = OwnerSprite.Location + turretOffset.RotatedBy(OwnerSprite.Orientation.RadiansSigned);
+            Location = Owner.Location + turretOffset.RotatedBy(Owner.Orientation.RadiansSigned);
 
             if (DistanceTo(_engine.Player.Sprite) < 1000)
             {

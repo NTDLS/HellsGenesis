@@ -34,6 +34,16 @@
       "Type": "SpriteEnemyBossDevastatorTurret",
       "X": 35,
       "Y": 40
+    },
+    {
+      "Type": "SpriteEnemyBossDevastatorLeftJet",
+      "X": -40,
+      "Y": 24
+    },
+	{
+      "Type": "SpriteEnemyBossDevastatorRightJet",
+      "X": -40,
+      "Y": 57
     }
   ]  
 }

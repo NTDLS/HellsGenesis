@@ -8,9 +8,8 @@ namespace Si.Engine.Sprite.Enemy.Boss.Devastator
     internal class SpriteEnemyBossDevastator : SpriteEnemyBossBase
     {
         public SpriteEnemyBossDevastator(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Enemy\Boss\Devastator\Hull.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Enemy\Boss\Devastator\Hull.png");
             Orientation.DegreesUnsigned = SiRandom.Between(0, 359);
 
             AddAIController(new AILogisticsHostileEngagement(_engine, this, _engine.Player.Sprite));
