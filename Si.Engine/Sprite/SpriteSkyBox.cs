@@ -20,7 +20,6 @@ namespace Si.Engine.Sprite
 
             X = SiRandom.Between(0, engine.Display.TotalCanvasSize.Width);
             Y = SiRandom.Between(0, engine.Display.TotalCanvasSize.Height);
-
             Z = int.MinValue;
 
             Speed = 0.10f;

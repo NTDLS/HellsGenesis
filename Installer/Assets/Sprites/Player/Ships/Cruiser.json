@@ -10,12 +10,20 @@
   "CollisionDetection": true,
   "PrimaryWeapon":
   {
-	"Type": "WeaponDualVulcanCannon",
+	"Type": "WeaponBlunderbuss",
 	"MunitionCount": 2147483647
   },
   "Weapons": [
 	{
-	  "Type": "WeaponPhotonTorpedo",
+	  "Type": "WeaponBlunderbuss",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponDualVulcanCannon",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponFragMissile",
 	  "MunitionCount": 2147483647
 	},
 	{
@@ -23,7 +31,27 @@
 	  "MunitionCount": 2147483647
 	},
 	{
-	  "Type": "WeaponDualVulcanCannon",
+	  "Type": "WeaponPhotonTorpedo",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponPrecisionFragMissile",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponScattershot",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponScramsMissile",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponScuttleMissile",
+	  "MunitionCount": 2147483647
+	},
+	{
+	  "Type": "WeaponThunderstrikeMissile",
 	  "MunitionCount": 2147483647
 	},
 	{
@@ -32,3 +60,4 @@
 	}
 	]
 }
+

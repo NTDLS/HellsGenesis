@@ -5,6 +5,7 @@ using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.GameEngine.Sprite.SupportingClasses.Metadata;
+using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using System;
@@ -30,18 +31,11 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         public int RoundsFired { get; set; }
         public int RoundQuantity { get; set; }
 
-        public WeaponBase(EngineCore engine, string name, string soundPath, float soundVolume)
-        {
-            _engine = engine;
-            _fireSound = _engine.Assets.GetAudio(soundPath, soundVolume);
-            LoadMetadata(name);
-        }
-
-        public WeaponBase(EngineCore engine, SpriteInteractiveBase owner, string name, string soundPath, float soundVolume)
+        public WeaponBase(EngineCore engine, SpriteInteractiveBase owner, string name)
         {
             Owner = owner;
             _engine = engine;
-            _fireSound = _engine.Assets.GetAudio(soundPath, soundVolume);
+
             LoadMetadata(name);
         }
 
@@ -55,15 +49,62 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             var metadataJson = _engine.Assets.GetText($@"Sprites\Weapon\{weaponName}.json");
             Metadata = JsonConvert.DeserializeObject<WeaponMetadata>(metadataJson);
             Metadata.MunitionSceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
+
+            if (string.IsNullOrEmpty(Metadata.SoundPath) == false)
+            {
+                _fireSound = _engine.Assets.GetAudio(Metadata.SoundPath, Metadata.SoundVolume);
+            }
         }
 
-        public virtual MunitionBase CreateMunition(SiVector location = null, SpriteInteractiveBase lockedTarget = null)
+        public MunitionBase CreateMunition(SiVector location = null, SpriteInteractiveBase lockedTarget = null)
         {
             if (Owner == null)
             {
-                throw new ArgumentNullException("Weapon is not owned.");
+                throw new Exception("Weapon is not owned.");
             }
-            throw new Exception("Create munition should always be overridden by the owning weapon.");
+
+            string spritePath = null;
+
+            int? spriteCount = Metadata.SpritePaths?.Count();
+            if (spriteCount > 0)
+            {
+                spritePath = Metadata.SpritePaths[SiRandom.Between(0, ((int)spriteCount) - 1)];
+            }
+
+            switch (Metadata.MunitionType)
+            {
+                case MunitionType.Projectile:
+                    {
+                        var munition = new ProjectileMunitionBase(_engine, this, Owner, spritePath, location ?? Owner.Location);
+                        return munition;
+                    }
+                case MunitionType.Energy:
+                    {
+                        var munition = new EnergyMunitionBase(_engine, this, Owner, spritePath, location ?? Owner.Location);
+                        return munition;
+                    }
+                case MunitionType.Seeking:
+                    {
+                        var munition = new SeekingMunitionBase(_engine, this, Owner, spritePath, location ?? Owner.Location)
+                        {
+                            SeekingRotationRateRadians = Metadata.GuidanceRotation.ToRadians(),
+                            MaxSeekingObservationAngleDegrees = Metadata.GuidanceAngle,
+                            MaxSeekingObservationDistance = Metadata.GuidanceDistance
+                        };
+                        return munition;
+                    }
+                case MunitionType.Locking:
+                    {
+                        var munition = new LockingMunitionBase(_engine, this, Owner, spritePath, lockedTarget, location ?? Owner.Location)
+                        {
+                            GuidedRotationRateInRadians = Metadata.GuidanceRotation.ToRadians(),
+                            MaxGuidedObservationAngleDegrees = Metadata.GuidanceAngle
+                        };
+                        return munition;
+                    }
+                default:
+                    throw new Exception($"The weapon type {Metadata?.MunitionType} is not implemented.");
+            }
         }
 
         public class WeaponsLock
@@ -86,7 +127,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
 
                 foreach (var potentialTarget in potentialTargets)
                 {
-                    if (Metadata.CanLockOn && Owner.IsPointingAt(potentialTarget, Metadata.MaxLockOnAngle))
+                    if (Metadata.MunitionType == MunitionType.Locking && Owner.IsPointingAt(potentialTarget, Metadata.MaxLockOnAngle))
                     {
                         var distance = Owner.DistanceTo(potentialTarget);
                         if (distance.IsBetween(Metadata.MinLockDistance, Metadata.MaxLockDistance))
@@ -129,7 +170,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                 _engine.Player.Sprite.IsLockedOnSoft = false;
                 _engine.Player.Sprite.IsLockedOnHard = false;
 
-                if (Metadata.CanLockOn && Owner.IsPointingAt(_engine.Player.Sprite, Metadata.MaxLockOnAngle))
+                if (Metadata.MunitionType == MunitionType.Locking && Owner.IsPointingAt(_engine.Player.Sprite, Metadata.MaxLockOnAngle))
                 {
                     var distance = Owner.DistanceTo(_engine.Player.Sprite);
                     if (distance.IsBetween(Metadata.MinLockDistance, Metadata.MaxLockDistance))

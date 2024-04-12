@@ -131,9 +131,12 @@ namespace Si.Engine.Sprite._Superclass
         public void AddWeapon(string weaponTypeName, int munitionCount)
         {
             var weaponType = SiReflection.GetTypeByName(weaponTypeName);
+            if (weaponType == null)
+            {
+                throw new Exception($"The type '{weaponTypeName}' does not exist in the reflection cache.");
+            }
 
             var weapon = Weapons.Where(o => o.GetType() == weaponType).SingleOrDefault();
-
             if (weapon == null)
             {
                 weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _engine, this });

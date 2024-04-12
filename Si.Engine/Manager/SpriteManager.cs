@@ -109,7 +109,13 @@ namespace Si.Engine.Manager
         }
 
         public void Add(SpriteBase item)
-            => _engine.Events.Add(() => _collection.Add(item));
+        {
+            if (item == null)
+            {
+                throw new Exception("NULL sprites cannot be added to the manager.");
+            }
+            _engine.Events.Add(() => _collection.Add(item));
+        }
 
         public void HardDelete(SpriteBase item)
         {

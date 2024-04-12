@@ -5,16 +5,14 @@ using Si.Library.Mathematics;
 
 namespace Si.Engine.Sprite.Weapon
 {
-    internal class WeaponThunderstrikeMissile : WeaponBase
+    internal class WeaponScuttleMissile : WeaponBase
     {
-        static string Name { get; } = "Thunderstrike Missile";
+        static string Name { get; } = "Scuttle Missile";
 
         private bool _toggle = false;
 
-        public WeaponThunderstrikeMissile(EngineCore engine, SpriteInteractiveBase owner)
-            : base(engine, owner, Name)
-        {
-        }
+        public WeaponScuttleMissile(EngineCore engine, SpriteInteractiveBase owner)
+            : base(engine, owner, Name) { }
 
         public override bool Fire()
         {
@@ -24,14 +22,15 @@ namespace Si.Engine.Sprite.Weapon
                 RoundQuantity--;
 
                 var offset = Owner.Orientation.RotatedBy(90.ToRadians().Invert(_toggle)) * new SiVector(10, 10);
-                _toggle = !_toggle;
 
                 _engine.Sprites.Munitions.Add(this, Owner.Location + offset);
 
+                _toggle = !_toggle;
+
                 return true;
             }
-            return false;
 
+            return false;
         }
     }
 }

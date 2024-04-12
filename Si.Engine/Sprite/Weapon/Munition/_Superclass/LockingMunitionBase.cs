@@ -9,13 +9,13 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
     /// <summary>
     /// Guided munitions need to be locked onto a target before they are fired. They will adjust heading within given parameters to hit the locked target.
     /// </summary>
-    internal class GuidedMunitionBase : MunitionBase
+    internal class LockingMunitionBase : MunitionBase
     {
         public int MaxGuidedObservationAngleDegrees { get; set; } = 90;
-        public float GuidedRotationRateInDegrees { get; set; } = SiMath.DegToRad(3);
+        public float GuidedRotationRateInRadians { get; set; } = SiMath.DegToRad(3);
         public SpriteInteractiveBase LockedTarget { get; private set; }
 
-        public GuidedMunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath,
+        public LockingMunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath,
              SpriteInteractiveBase lockedTarget = null, SiVector location = null)
             : base(engine, weapon, firedFrom, imagePath, location)
         {
@@ -32,7 +32,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
                     if (Math.Abs((float)deltaAngle) < MaxGuidedObservationAngleDegrees && !deltaAngle.IsNearZero())
                     {
-                        RotateMovementVector(GuidedRotationRateInDegrees * (deltaAngle > 0 ? 1 : -1));
+                        RotateMovementVector(GuidedRotationRateInRadians * (deltaAngle > 0 ? 1 : -1));
                     }
                 }
             }

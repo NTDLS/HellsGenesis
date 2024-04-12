@@ -1,7 +1,5 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
-using Si.Engine.Sprite.Weapon.Munition;
-using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using System.Linq;
@@ -10,24 +8,14 @@ namespace Si.Engine.Sprite.Weapon
 {
     internal class WeaponScramsMissile : WeaponBase
     {
-        static string Name { get; } = "Guided Scrams Missile";
-        private const string soundPath = @"Sounds\Weapons\ScramsMissile.wav";
-        private const float soundVolumne = 0.4f;
+        static string Name { get; } = "Scrams Missile";
 
         private bool _toggle = false;
 
         public WeaponScramsMissile(EngineCore engine, SpriteInteractiveBase owner)
-            : base(engine, owner, Name, soundPath, soundVolumne)
+            : base(engine, owner, Name)
         {
         }
-
-        public WeaponScramsMissile(EngineCore engine)
-            : base(engine, Name, soundPath, soundVolumne)
-        {
-        }
-
-        public override MunitionBase CreateMunition(SiVector location = null, SpriteInteractiveBase lockedTarget = null)
-            => new MunitionGuidedFragMissile(_engine, this, Owner, lockedTarget, location);
 
         public override bool Fire()
         {

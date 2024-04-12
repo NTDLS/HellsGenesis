@@ -1,6 +1,10 @@
 {
   "Name": "Blunderbuss",
   "Description": "",
+  "MunitionType": "Projectile",
+  "SoundPath": "Sounds\\Weapons\\Blunderbuss.wav",
+  "SpritePaths": ["Sprites\\Weapon\\Blunderbuss.png"],
+  "SoundVolumne": 0.4,
   "Damage": 2,
   "Speed": 22.5,
   "FireDelayMilliseconds": 250,

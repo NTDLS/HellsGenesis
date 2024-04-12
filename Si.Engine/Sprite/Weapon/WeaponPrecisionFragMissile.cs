@@ -1,33 +1,21 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
-using Si.Engine.Sprite.Weapon.Munition;
-using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using System.Linq;
 
 namespace Si.Engine.Sprite.Weapon
 {
-    internal class WeaponGuidedFragMissile : WeaponBase
+    internal class WeaponPrecisionFragMissile : WeaponBase
     {
-        static string Name { get; } = "Guided Frag Missile";
-        private const string soundPath = @"Sounds\Weapons\GuidedFragMissile.wav";
-        private const float soundVolumne = 0.4f;
+        static string Name { get; } = "Precision Frag Missile";
 
         private bool _toggle = false;
 
-        public WeaponGuidedFragMissile(EngineCore engine, SpriteInteractiveBase owner)
-            : base(engine, owner, Name, soundPath, soundVolumne)
+        public WeaponPrecisionFragMissile(EngineCore engine, SpriteInteractiveBase owner)
+            : base(engine, owner, Name)
         {
         }
-
-        public WeaponGuidedFragMissile(EngineCore engine)
-            : base(engine, Name, soundPath, soundVolumne)
-        {
-        }
-
-        public override MunitionBase CreateMunition(SiVector location = null, SpriteInteractiveBase lockedTarget = null)
-            => new MunitionGuidedFragMissile(_engine, this, Owner, lockedTarget, location);
 
         public override bool Fire()
         {

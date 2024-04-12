@@ -1,5 +1,13 @@
 ﻿namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
 {
+    public enum MunitionType
+    {
+        Energy,     //These are going to be particle weapons.
+        Locking,    //These are munitions that lock on to a target.
+        Projectile, //These are conventional "bullet" type munitions.
+        Seeking     //Seeks to whatever target is in front of it - no locking.
+    }
+
     /// <summary>
     /// Contains sprite metadata.
     /// </summary>
@@ -7,6 +15,14 @@
     {
         public string Name { get; set; }
         public string Description { get; set; }
+
+        /// <summary>
+        /// If the sprite has an image, these are the paths to the bitmaps (be default, they are used at random)..
+        /// </summary>
+        public string[] SpritePaths { get; set; }
+
+        public string SoundPath { get; set; }
+        public float SoundVolume { get; set; } = 1.0f;
 
         /// <summary>
         /// The variance in degrees that the loaded munition will use for an initial heading angle.
@@ -24,12 +40,29 @@
 
         public int FireDelayMilliseconds { get; set; } = 100;
         public int Damage { get; set; } = 1;
-        public bool CanLockOn { get; set; } = false;
+
         public int MaxLockOnAngle { get; set; } = 10;
         public int MaxLocks { get; set; } = 1;
         public float MinLockDistance { get; set; } = 50;
         public float MaxLockDistance { get; set; } = 100;
         public bool ExplodesOnImpact { get; set; } = false;
 
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public MunitionType MunitionType { get; set; }
+
+        /// <summary>
+        /// The viewing angle that the munition will use for seeking/locking.
+        /// </summary>
+        public int GuidanceAngle { get; set; } = 20;
+
+        /// <summary>
+        /// The viewing distance that the munition will use for seeking/locking.
+        /// </summary>
+        public int GuidanceDistance { get; set; } = 20;
+
+        /// <summary>
+        /// Rate in degrees that the munition will rotate towards it target.
+        /// </summary>
+        public float GuidanceRotation { get; set; } = 0.25f;
     }
 }

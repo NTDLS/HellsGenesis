@@ -14,7 +14,7 @@
 	  "MunitionCount": 2147483647
 	},
 	{
-	  "Type": "WeaponThunderstrikeMissile",
+	  "Type": "WeaponSeekingThunderstrikeMissile",
 	  "MunitionCount": 2147483647
 	}
 	]
