@@ -77,7 +77,8 @@ namespace Si.Library.Mathematics
         /// <param name="rad">Given radians to convert to degrees.</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float RadToDeg(float radians) => radians * DegreesPerRadian;
+        public static float RadToDeg(float radians)
+            => radians * DegreesPerRadian;
 
         /// <summary>
         /// Converts degrees to radians.
@@ -85,7 +86,8 @@ namespace Si.Library.Mathematics
         /// <param name="deg">Given degrees to convert to radians.</param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float DegToRad(float degrees) => degrees * RadiansPerDegree;
+        public static float DegToRad(float degrees)
+            => degrees * RadiansPerDegree;
 
         /// <summary>
         /// Converts cardinal x,y to degrees.
@@ -94,7 +96,8 @@ namespace Si.Library.Mathematics
         /// <param name="y"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float CardinalToDeg(float x, float y) => RadToDeg((float)Math.Atan2(y, x));
+        public static float CardinalToDeg(float x, float y)
+            => RadToDeg((float)Math.Atan2(y, x));
 
         /// <summary>
         /// Converts cardinal x,y to radians.
@@ -103,8 +106,8 @@ namespace Si.Library.Mathematics
         /// <param name="y"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float CardinalToRad(float x, float y) => (float)Math.Atan2(y, x);
-
+        public static float CardinalToRad(float x, float y)
+            => (float)Math.Atan2(y, x);
 
         /// <summary>
         /// Converts radians to cardinal x,y.
@@ -133,9 +136,7 @@ namespace Si.Library.Mathematics
         /// <param name="max"></param>
         /// <returns></returns>
         public static float Clamp(float value, float min, float max)
-        {
-            return value < min ? min : value > max ? max : value;
-        }
+            => value < min ? min : value > max ? max : value;
 
         /// <summary>
         /// Interpolate between two points or values.Useful for animations, smoothing movements, or gradual transitions.
@@ -145,14 +146,13 @@ namespace Si.Library.Mathematics
         /// <param name="amount"></param>
         /// <returns></returns>
         public static float Lerp(float from, float to, float amount)
-        {
-            return (1 - amount) * from + amount * to;
-        }
+            => (1 - amount) * from + amount * to;
 
         /// <summary>
         /// Returns whether the value is near to one.
         /// </summary>
-        public static bool IsOne(float a) => IsNearZero(a - 1.0f);
+        public static bool IsOne(float a)
+            => IsNearZero(a - 1.0f);
 
         /// <summary>
         /// Returns whether the value is near to zero.
@@ -179,9 +179,7 @@ namespace Si.Library.Mathematics
         /// <param name="revolution">The value to convert.</param>
         /// <returns>The converted value.</returns>
         public static float RevolutionsToDegrees(float revolution)
-        {
-            return revolution * 360.0f;
-        }
+            => revolution * 360.0f;
 
         /// <summary>
         /// Converts revolutions to radians.
@@ -189,9 +187,7 @@ namespace Si.Library.Mathematics
         /// <param name="revolution">The value to convert.</param>
         /// <returns>The converted value.</returns>
         public static float RevolutionsToRadians(float revolution)
-        {
-            return revolution * TwoPi;
-        }
+            => revolution * TwoPi;
 
         /// <summary>
         /// Converts revolutions to gradians.
@@ -199,9 +195,7 @@ namespace Si.Library.Mathematics
         /// <param name="revolution">The value to convert.</param>
         /// <returns>The converted value.</returns>
         public static float RevolutionsToGradians(float revolution)
-        {
-            return revolution * 400.0f;
-        }
+            => revolution * 400.0f;
 
         /// <summary>
         /// Converts degrees to revolutions.
@@ -209,9 +203,7 @@ namespace Si.Library.Mathematics
         /// <param name="degree">The value to convert.</param>
         /// <returns>The converted value.</returns>
         public static float DegreesToRevolutions(float degree)
-        {
-            return degree / 360.0f;
-        }
+            => degree / 360.0f;
 
         /// <summary>
         /// Converts radians to revolutions.
@@ -219,9 +211,7 @@ namespace Si.Library.Mathematics
         /// <param name="radian">The value to convert.</param>
         /// <returns>The converted value.</returns>
         public static float RadiansToRevolutions(float radian)
-        {
-            return radian / TwoPi;
-        }
+            => radian / TwoPi;
 
         /// <summary>
         /// Converts radians to gradians.
@@ -229,9 +219,7 @@ namespace Si.Library.Mathematics
         /// <param name="radian">The value to convert.</param>
         /// <returns>The converted value.</returns>
         public static float RadiansToGradians(float radian)
-        {
-            return radian * (200.0f / Pi);
-        }
+            =>  radian * (200.0f / Pi);
 
         /// <summary>
         /// Converts gradians to revolutions.
@@ -239,9 +227,7 @@ namespace Si.Library.Mathematics
         /// <param name="gradian">The value to convert.</param>
         /// <returns>The converted value.</returns>
         public static float GradiansToRevolutions(float gradian)
-        {
-            return gradian / 400.0f;
-        }
+            =>  gradian / 400.0f;
 
         /// <summary>
         /// Converts gradians to degrees.
@@ -249,9 +235,7 @@ namespace Si.Library.Mathematics
         /// <param name="gradian">The value to convert.</param>
         /// <returns>The converted value.</returns>
         public static float GradiansToDegrees(float gradian)
-        {
-            return gradian * (9.0f / 10.0f);
-        }
+            =>gradian * (9.0f / 10.0f);
 
         /// <summary>
         /// Converts gradians to radians.
@@ -259,9 +243,7 @@ namespace Si.Library.Mathematics
         /// <param name="gradian">The value to convert.</param>
         /// <returns>The converted value.</returns>
         public static float GradiansToRadians(float gradian)
-        {
-            return gradian * (Pi / 200.0f);
-        }
+            =>  gradian * (Pi / 200.0f);
 
         /// <summary>
         /// Clamps the specified value.
@@ -271,9 +253,7 @@ namespace Si.Library.Mathematics
         /// <param name="max">The max.</param>
         /// <returns>The result of clamping a value between min and max</returns>
         public static int Clamp(int value, int min, int max)
-        {
-            return value < min ? min : value > max ? max : value;
-        }
+            => value < min ? min : value > max ? max : value;
 
         /// <summary>
         /// Performs smooth (cubic Hermite) interpolation between 0 and 1.
