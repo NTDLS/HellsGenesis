@@ -989,7 +989,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
         public bool RotateMovementVectorIfNotPointingAt(float toDegrees, float rotationAmountDegrees, float tolerance = 10)
         {
-            toDegrees = toDegrees.Degrees();
+            toDegrees = toDegrees.DenormalizeDegrees();
 
             if (Orientation.Degrees.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {

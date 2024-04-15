@@ -38,10 +38,10 @@ namespace Si.Engine.Sprite
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
-            //Orientation.Degrees = this.AngleToInUnsignedDegrees(_engine.Player.Sprite);
+            Orientation.Degrees += 0.1f;
 
+            var deltaAngleS = this.HeadingAngleToInSignedDegrees(_engine.Player.Sprite.Location);
             var deltaAngleU = this.HeadingAngleToInUnsignedDegrees(_engine.Player.Sprite);
-            var deltaAngleS = this.HeadingAngleToInSignedDegrees(_engine.Player.Sprite);
 
             System.Diagnostics.Debug.WriteLine($"U {deltaAngleU:n2}    S {deltaAngleS:n2}");
 

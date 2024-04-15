@@ -26,9 +26,9 @@ namespace Si.Library.Mathematics
 
         public SiVector(float radians)
         {
-            RadiansSigned = radians;
+            X = (float)Math.Cos(radians);
+            Y = (float)Math.Sin(radians);
         }
-
 
         public SiVector(float x, float y)
         {
@@ -47,10 +47,12 @@ namespace Si.Library.Mathematics
         #region Converters.
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RectangleF ToRectangleF(float width, float height) => new(X, Y, width, height);
+        public RectangleF ToRectangleF(float width, float height)
+            => new(X, Y, width, height);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public RectangleF ToRectangleF(SizeF size) => new(X, Y, size.Width, size.Height);
+        public RectangleF ToRectangleF(SizeF size)
+            => new(X, Y, size.Width, size.Height);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public RectangleF ToRectangleF() => new(X, Y, 1f, 1f);
@@ -61,7 +63,8 @@ namespace Si.Library.Mathematics
         /// <param name="vector"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector FromDegrees(float angleInDegrees) => new(SiMath.DegToRad(angleInDegrees));
+        public static SiVector FromDegrees(float angleInDegrees)
+            => new(SiMath.DegToRad(angleInDegrees));
 
         /// <summary>
         /// Returns an SiVector from an angle in degrees.
@@ -69,7 +72,8 @@ namespace Si.Library.Mathematics
         /// <param name="vector"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector FromRadians(float angleInRadians) => new(angleInRadians);
+        public static SiVector FromRadians(float angleInRadians)
+            => new(angleInRadians);
 
         /// <summary>
         /// Returns an SiVector from an angle in degrees.
@@ -77,7 +81,8 @@ namespace Si.Library.Mathematics
         /// <param name="vector"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static SiVector FromCardinal(float x, float y) => new(x, y);
+        public static SiVector FromCardinal(float x, float y)
+            => new(x, y);
 
         #endregion
 
@@ -246,7 +251,7 @@ namespace Si.Library.Mathematics
             }
             set
             {
-                var radians = value > 0.0f ? value % SiMath.RADS_IN_CIRCLE : (value + SiMath.RADS_IN_CIRCLE) % SiMath.RADS_IN_CIRCLE;
+                var radians = value > 0.0f ? value % SiMath.TwoPi : (value + SiMath.TwoPi) % SiMath.TwoPi;
                 var cardinal = SiMath.RadToCardinal(radians);
                 X = cardinal.X;
                 Y = cardinal.Y;
@@ -261,7 +266,7 @@ namespace Si.Library.Mathematics
             get => SiMath.CardinalToRad(X, Y);
             set
             {
-                var radians = value > 0.0f ? value % SiMath.RADS_IN_CIRCLE : (value + SiMath.RADS_IN_CIRCLE) % SiMath.RADS_IN_CIRCLE;
+                var radians = value > 0.0f ? value % SiMath.TwoPi : (value + SiMath.TwoPi) % SiMath.TwoPi;
                 var cardinal = SiMath.RadToCardinal(radians);
                 X = cardinal.X;
                 Y = cardinal.Y;

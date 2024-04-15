@@ -43,7 +43,7 @@ namespace Si.Library.ExtensionMethods
         /// <summary>
         /// Degrees 0-360 -> 0 to 180 (right) and 0 to -180 (left).
         /// </summary>
-        public static float DegreesSigned(this float value)
+        public static float NormalizeDegrees(this float value)
         {
             return (value + 180) % 360 - 180;
         }
@@ -53,7 +53,7 @@ namespace Si.Library.ExtensionMethods
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static float Degrees(this float value)
+        public static float DenormalizeDegrees(this float value)
         {
             return ((dynamic)value + 360) % 360;
         }

@@ -197,17 +197,7 @@ namespace Si.Library.Mathematics
         /// <returns>The calculated angle in the range of 180--180.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float HeadingAngleToInSignedDegrees(this ISprite fromSprite, SiVector toLocation)
-        {
-            var angle = fromSprite.HeadingAngleToInUnsignedDegrees(toLocation);
-            if (angle > 180)
-            {
-                angle -= 180;
-                angle = 180 - angle;
-                angle *= -1;
-            }
-
-            return angle;
-        }
+            => SiMath.RadToDeg(HeadingAngleToInSignedRadians(fromSprite, toLocation)).NormalizeDegrees();
 
         /// <summary>
         /// Returns the angle which would be requird to rotate a sprite to be pointing at another sprite.
@@ -227,25 +217,44 @@ namespace Si.Library.Mathematics
         /// <returns>The calculated angle in the range of 0-360.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float HeadingAngleToInUnsignedDegrees(this ISprite fromSprite, SiVector toLocation)
+            => SiMath.RadToDeg(HeadingAngleToInSignedRadians(fromSprite, toLocation)).DenormalizeDegrees();
+
+        /// <summary>
+        /// Calculate the angle (in signed radians [+π,-π] ) from one sprite current orientation to another position.
+        /// This is the core of all other varians of this function.
+        /// </summary>
+        /// <param name="fromSprite"></param>
+        /// <param name="toLocation"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static float HeadingAngleToInSignedRadians(this ISprite fromSprite, SiVector toLocation)
         {
-            float fromAngle = fromSprite.Orientation.Degrees;
+            // Subtracts the fromSprite's current location from toLocation, resulting
+            // in a vector that points from the sprite to the target location.
+            //Normalizes vector to remove the influence of distance on the angle calculation, focusing purely on the direction.
+            var toTarget = (toLocation - fromSprite.Location).Normalize();
 
-            float angleTo = fromSprite.AngleToInUnsignedDegrees(toLocation);
+            //  Calculates the dot product of the sprite's current orientation vector and the normalized target vector.
+            //  The dot product is a scalar that reflects the magnitude of the projection of one vector onto another and is calculated as:
+            //The result, dot, is used to determine the cosine of the angle between the two vectors because when both vectors are
+            //unit vectors(normalized), the dot product equals the cosine of the angle between them.
+            var dot = fromSprite.Orientation.Dot(toTarget);
 
-            if (fromAngle < 0) fromAngle = 0 - fromAngle;
-            if (angleTo < 0)
-            {
-                angleTo = 0 - angleTo;
-            }
+            //Determinant (Pseudo Cross Product in 2D) calculates the determinant of a 2x2 matrix formed by the components of the
+            //  fromSprite.Orientation and toTarget vectors. This value is equivalent to the z-component of the cross product of
+            //  the two vectors if they were extended into 3D by setting their z-components to 0.
+            //The determinant measures the area of the parallelogram formed by the two vectors and its sign indicates the
+            //  direction of the smallest rotation from the first vector to the second. A positive sign indicates a counter-clockwise
+            //  rotation, and a negative sign indicates a clockwise rotation.*/
+            var determinant = fromSprite.Orientation.X * toTarget.Y - fromSprite.Orientation.Y * toTarget.X;
 
-            angleTo = -(fromAngle - angleTo);
+            //Angle Calculation: Uses the Math.Atan2 function, which returns the angle in radians formed by the radius of a circle
+            //  and the x-axis, to compute the angle between the orientation of the sprite and the direction to the target.
+            //  The use of Math.Atan2(det, dot) effectively calculates this angle based on the sine (det) and cosine (dot) of
+            //  the angle, which can range from -π to π (-180 degrees to 180 degrees).
+            //This angle indicates how much fromSprite needs to rotate, and in which direction, to directly face toLocation.
 
-            if (angleTo < 0)
-            {
-                angleTo = 360.0f - Math.Abs(angleTo) % 360.0f;
-            }
-
-            return angleTo;
+            return (float)Math.Atan2(determinant, dot);
         }
 
         /// <summary>

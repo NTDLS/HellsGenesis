@@ -75,9 +75,9 @@ namespace Si.Engine.Level
                 //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
             }
 
-            //var debug = _engine.Sprites.Debugs.Add();
-            //debug.Orientation = SiVector.FromDegrees(-90);
-            //debug.Location = new SiVector(1000, 1000);
+            var debug = _engine.Sprites.Debugs.Add();
+            debug.Orientation = SiVector.FromDegrees(-90);
+            debug.Location = new SiVector(1000, 1000);
 
             _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyBossDevastator>();
 
