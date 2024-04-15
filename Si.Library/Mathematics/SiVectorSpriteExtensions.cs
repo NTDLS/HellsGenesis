@@ -23,7 +23,7 @@ namespace Si.Library.Mathematics
                 angle *= -1;
             }
 
-            return -angle;
+            return angle;
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Si.Library.Mathematics
                 angle *= -1;
             }
 
-            return -angle;
+            return angle;
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace Si.Library.Mathematics
                 angleTo = 0 - angleTo;
             }
 
-            angleTo = fromAngle - angleTo;
+            angleTo = -(fromAngle - angleTo);
 
             if (angleTo < 0)
             {

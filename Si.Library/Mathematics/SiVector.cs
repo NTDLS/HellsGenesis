@@ -246,7 +246,7 @@ namespace Si.Library.Mathematics
             }
             set
             {
-                var radians = value > 0.0f ? value % SiMath.RadiansInCircle : (value + SiMath.RadiansInCircle) % SiMath.RadiansInCircle;
+                var radians = value > 0.0f ? value % SiMath.RADS_IN_CIRCLE : (value + SiMath.RADS_IN_CIRCLE) % SiMath.RADS_IN_CIRCLE;
                 var cardinal = SiMath.RadToCardinal(radians);
                 X = cardinal.X;
                 Y = cardinal.Y;
@@ -261,7 +261,7 @@ namespace Si.Library.Mathematics
             get => SiMath.CardinalToRad(X, Y);
             set
             {
-                var radians = value > 0.0f ? value % SiMath.RadiansInCircle : (value + SiMath.RadiansInCircle) % SiMath.RadiansInCircle;
+                var radians = value > 0.0f ? value % SiMath.RADS_IN_CIRCLE : (value + SiMath.RADS_IN_CIRCLE) % SiMath.RADS_IN_CIRCLE;
                 var cardinal = SiMath.RadToCardinal(radians);
                 X = cardinal.X;
                 Y = cardinal.Y;
@@ -363,6 +363,9 @@ namespace Si.Library.Mathematics
             var magnitude = (float)Math.Sqrt(X * X + Y * Y);
             return new SiVector(X / magnitude, Y / magnitude);
         }
+
+        public float OrientationInRadians()
+            => (float)Math.Atan2(Y, X);
 
         /// <summary>
         /// Determines whether the vector is normalized.

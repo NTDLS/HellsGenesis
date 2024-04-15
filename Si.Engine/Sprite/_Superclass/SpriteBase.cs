@@ -1,5 +1,6 @@
 ﻿using SharpDX.Mathematics.Interop;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Boss.Devastator;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -913,19 +914,19 @@ namespace Si.Engine.Sprite._Superclass
         public void RotateMovementVector(float radians)
         {
             MovementVector.Rotate(radians);
-            Orientation = MovementVector.Normalize();
+            Orientation.Radians = MovementVector.OrientationInRadians();
             RotationChanged();
         }
 
         /// <summary>
         /// Instantly points a sprite at another by rotating the movement vector and then recalculates the PointingAngle.
         /// </summary>
-        public void RotateMovementVector(SiVector toLocatipnOf)
+        public void RotateMovementVector(SiVector toLocationOf)
         {
-            var radians = Location.AngleToInSignedRadians(toLocatipnOf);
+            var radians = Location.AngleToInSignedRadians(toLocationOf);
 
             MovementVector.SetDirctionMaintainMagnitude(radians);
-            Orientation = MovementVector.Normalize();
+            Orientation.Radians = MovementVector.OrientationInRadians();
         }
 
         /// <summary>
@@ -937,15 +938,15 @@ namespace Si.Engine.Sprite._Superclass
         {
             var deltaAngle = this.HeadingAngleToInUnsignedDegrees(obj);
 
-            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
+            if (deltaAngle > varianceDegrees)
             {
-                if (deltaAngle >= -varianceDegrees)
-                {
-                    RotateMovementVector(SiMath.DegToRad(rotationAmountDegrees));
-                }
-                else if (deltaAngle < varianceDegrees)
+                if (deltaAngle >= 180)
                 {
                     RotateMovementVector(-SiMath.DegToRad(rotationAmountDegrees));
+                }
+                else
+                {
+                    RotateMovementVector(+SiMath.DegToRad(rotationAmountDegrees));
                 }
 
                 return true;
@@ -953,6 +954,7 @@ namespace Si.Engine.Sprite._Superclass
 
             return false;
         }
+
 
         /// <summary>
         /// Rotates the objects movement vector by the specified amount if it not pointing at the target
@@ -963,15 +965,15 @@ namespace Si.Engine.Sprite._Superclass
         {
             var deltaAngle = this.HeadingAngleToInUnsignedDegrees(toLocation);
 
-            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees) == false)
+            if (deltaAngle > varianceDegrees)
             {
-                if (deltaAngle >= -varianceDegrees)
-                {
-                    RotateMovementVector(SiMath.DegToRad(rotationAmountDegrees));
-                }
-                else if (deltaAngle < varianceDegrees)
+                if (deltaAngle >= 180)
                 {
                     RotateMovementVector(-SiMath.DegToRad(rotationAmountDegrees));
+                }
+                else
+                {
+                    RotateMovementVector(SiMath.DegToRad(rotationAmountDegrees));
                 }
 
                 return true;
@@ -987,9 +989,9 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
         public bool RotateMovementVectorIfNotPointingAt(float toDegrees, float rotationAmountDegrees, float tolerance = 10)
         {
-            toDegrees = toDegrees.DegreesNormalized();
+            toDegrees = toDegrees.Degrees();
 
-            if (Orientation.DegreesSigned.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
+            if (Orientation.Degrees.IsBetween(toDegrees - tolerance, toDegrees + tolerance) == false)
             {
                 RotateMovementVector(-SiMath.DegToRad(rotationAmountDegrees));
 
@@ -1005,17 +1007,17 @@ namespace Si.Engine.Sprite._Superclass
         /// <returns>Returns TRUE if rotation occurs, returns FALSE if the object is not pointing in the given direction.
         public bool RotateMovementVectorIfPointingAt(SpriteBase obj, float rotationAmountDegrees, float varianceDegrees = 10)
         {
-            var deltaAngle = this.HeadingAngleToInUnsignedDegrees(obj);
+            var deltaAngle = this.HeadingAngleToInSignedDegrees(obj);
 
-            if (deltaAngle.IsBetween(-varianceDegrees, varianceDegrees))
+            if (deltaAngle.IsNotBetween(0, varianceDegrees))
             {
-                if (deltaAngle >= -varianceDegrees)
-                {
-                    RotateMovementVector(SiMath.DegToRad(rotationAmountDegrees));
-                }
-                else if (deltaAngle < varianceDegrees)
+                if (deltaAngle >= 0)
                 {
                     RotateMovementVector(-SiMath.DegToRad(rotationAmountDegrees));
+                }
+                else
+                {
+                    RotateMovementVector(SiMath.DegToRad(rotationAmountDegrees));
                 }
 
                 RecalculateMovementVector();
@@ -1156,8 +1158,12 @@ namespace Si.Engine.Sprite._Superclass
             //Perform any auto-rotation.
             Orientation.Radians += RotationSpeed * epoch;
 
-            //Move the sprite based on its vector.
-            Location += MovementVector * epoch;
+            if (this is not SpriteEnemyBossDevastator)
+            {
+                //Move the sprite based on its vector.
+                Location += MovementVector * epoch;
+            }
+
 
             foreach (var attachment in Attachments.Where(o => o.IsDeadOrExploded == false))
             {
