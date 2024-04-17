@@ -26,8 +26,8 @@ namespace Si.Engine.Manager
     /// </summary>
     public class SpriteManager : IDisposable
     {
-        public delegate void CollectionAccessor(List<SpriteBase> sprites);
-        public delegate T CollectionAccessorT<T>(List<SpriteBase> sprites);
+        public delegate void CollectionAccessor(SpriteBase[] sprites);
+        public delegate T CollectionAccessorT<T>(SpriteBase[] sprites);
 
         private readonly EngineCore _engine;
         private SiVector _radarScale;
@@ -35,7 +35,6 @@ namespace Si.Engine.Manager
 
         public bool RenderRadar { get; set; } = false;
 
-        //private readonly OptimisticCriticalResource<List<SpriteBase>> _collection = new();
         private readonly List<SpriteBase> _collection = new();
 
         #region Sprite Tick Controllerss.
@@ -75,7 +74,7 @@ namespace Si.Engine.Manager
 
         public SpriteBase[] Visible() => _collection.Where(o => o.Visable == true).ToArray();
 
-        public List<SpriteBase> All() => _collection.ToList();
+        public SpriteBase[] All() => _collection.ToArray();
 
         public List<SpritePlayerBase> AllVisiblePlayers
         {
@@ -92,7 +91,7 @@ namespace Si.Engine.Manager
         /// </summary>
         /// <param name="collectionAccessor"></param>
         public void DebugOnlyAccess(CollectionAccessor collectionAccessor)
-            => collectionAccessor(_collection);
+            => collectionAccessor(All());
 
         public void QueueAllForDeletionOfType<T>() where T : SpriteBase
             => OfType<T>().ForEach(c => c.QueueForDelete());
@@ -150,7 +149,7 @@ namespace Si.Engine.Manager
         }
 
         public T[] GetSpritesByTag<T>(string name) where T : SpriteBase
-            => _collection.Where(o => o.SpriteTag == name).ToList() as T[];
+            => _collection.Where(o => o.SpriteTag == name).ToArray() as T[];
 
         public T GetSingleSpriteByTag<T>(string name) where T : SpriteBase
             => _collection.Where(o => o.SpriteTag == name).SingleOrDefault() as T;
@@ -181,7 +180,7 @@ namespace Si.Engine.Manager
         public PredictedKinematicBody[] VisibleColliadblePredictiveMove(float epoch)
             => _engine.Sprites.VisibleColliadble().Select(o => new PredictedKinematicBody(o, _engine.Display.RenderWindowPosition, epoch)).ToArray();
 
-        public List<SpriteBase> VisibleOfTypes(Type[] types)
+        public SpriteBase[] VisibleOfTypes(Type[] types)
         {
             var result = new List<SpriteBase>();
             foreach (var type in types)
@@ -189,7 +188,7 @@ namespace Si.Engine.Manager
                 result.AddRange(_collection.Where(o => o.Visable == true && type.IsAssignableFrom(o.GetType())));
             }
 
-            return result;
+            return result.ToArray();
         }
 
         public void QueueAllForDeletionByTag(string name)
@@ -214,7 +213,7 @@ namespace Si.Engine.Manager
             }
         }
 
-        public List<SpriteBase> Intersections(SpriteBase with)
+        public SpriteBase[] Intersections(SpriteBase with)
         {
             var objs = new List<SpriteBase>();
 
@@ -228,13 +227,13 @@ namespace Si.Engine.Manager
                     }
                 }
             }
-            return objs;
+            return objs.ToArray();
         }
 
-        public List<SpriteBase> Intersections(float x, float y, float width, float height)
+        public SpriteBase[] Intersections(float x, float y, float width, float height)
             => Intersections(new SiVector(x, y), new SiVector(width, height));
 
-        public List<SpriteBase> Intersections(SiVector location, SiVector size)
+        public SpriteBase[] Intersections(SiVector location, SiVector size)
         {
             var objs = new List<SpriteBase>();
 
@@ -245,10 +244,10 @@ namespace Si.Engine.Manager
                     objs.Add(obj);
                 }
             }
-            return objs;
+            return objs.ToArray();
         }
 
-        public List<SpriteBase> RenderLocationIntersectionsEvenInvisible(SiVector location, SiVector size)
+        public SpriteBase[] RenderLocationIntersectionsEvenInvisible(SiVector location, SiVector size)
         {
             var objs = new List<SpriteBase>();
 
@@ -259,10 +258,10 @@ namespace Si.Engine.Manager
                     objs.Add(obj);
                 }
             }
-            return objs;
+            return objs.ToArray();
         }
 
-        public List<SpriteBase> RenderLocationIntersections(SiVector location, SiVector size)
+        public SpriteBase[] RenderLocationIntersections(SiVector location, SiVector size)
         {
             var objs = new List<SpriteBase>();
 
@@ -273,7 +272,7 @@ namespace Si.Engine.Manager
                     objs.Add(obj);
                 }
             }
-            return objs;
+            return objs.ToArray();
         }
 
         public SpritePlayerBase AddPlayer(SpritePlayerBase sprite)
