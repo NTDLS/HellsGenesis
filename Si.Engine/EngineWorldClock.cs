@@ -1,9 +1,13 @@
 ﻿using NTDLS.DelegateThreadPooling;
 using Si.Engine.Core.Types;
+using Si.Engine.Manager;
+using Si.Engine.TickController._Superclass;
+using Si.GameEngine.TickController.VectoredTickController.Uncollidable;
 using Si.Library;
 using Si.Library.Mathematics;
 using Si.Rendering;
 using System;
+using System.Reflection;
 using System.Threading;
 using static Si.Library.SiConstants;
 
@@ -143,6 +147,7 @@ namespace Si.Engine
             threadPoolTracker.Enqueue(() => _engine.Sprites.Enemies.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Particles.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.GenericSprites.ExecuteWorldClockTick(epoch, displacementVector));
+            threadPoolTracker.Enqueue(() => _engine.Sprites.Attachments.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Munitions.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.Stars.ExecuteWorldClockTick(epoch, displacementVector));
             threadPoolTracker.Enqueue(() => _engine.Sprites.SkyBoxes.ExecuteWorldClockTick(epoch, displacementVector));

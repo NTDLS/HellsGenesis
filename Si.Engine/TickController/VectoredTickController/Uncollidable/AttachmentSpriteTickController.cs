@@ -4,6 +4,8 @@ using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics;
+using System.Linq;
+using System.Net.Mail;
 
 namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
 {
@@ -16,9 +18,10 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
 
         public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)
         {
-            foreach (var attachment in Visible())
+            foreach (var attachment in Visible().Where(o => o.IsDeadOrExploded == false))
             {
                 attachment.ApplyMotion(epoch, displacementVector);
+                attachment.ApplyIntelligence(epoch, displacementVector);
             }
         }
 

@@ -1163,12 +1163,6 @@ namespace Si.Engine.Sprite._Superclass
                 //Move the sprite based on its vector.
                 Location += MovementVector * epoch;
             }
-
-
-            foreach (var attachment in Attachments.Where(o => o.IsDeadOrExploded == false))
-            {
-                attachment.ApplyMotion(epoch, displacementVector);
-            }
         }
 
         public virtual void VelocityChanged() { }
