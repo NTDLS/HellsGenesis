@@ -1158,11 +1158,8 @@ namespace Si.Engine.Sprite._Superclass
             //Perform any auto-rotation.
             Orientation.Radians += RotationSpeed * epoch;
 
-            if (this is not SpriteEnemyBossDevastator) //TODO: REMOVE DEBUG CODE
-            {
-                //Move the sprite based on its vector.
-                Location += MovementVector * epoch;
-            }
+            //Move the sprite based on its vector.
+            Location += MovementVector * epoch;
         }
 
         public virtual void VelocityChanged() { }

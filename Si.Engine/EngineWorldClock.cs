@@ -1,9 +1,17 @@
 ﻿using NTDLS.DelegateThreadPooling;
+using SharpDX.XInput;
 using Si.Engine.Core.Types;
+using Si.Engine.Manager;
+using Si.Engine.Sprite._Superclass;
+using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics;
 using Si.Rendering;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using System.Threading;
 using static Si.Library.SiConstants;
 
@@ -21,8 +29,24 @@ namespace Si.Engine
 
         private readonly DelegateThreadPool _worldClockThreadPool;
 
+        private struct TickControllerMethod
+        {
+            public object Controller;
+            public MethodInfo Method;
+
+            public TickControllerMethod(object controller, MethodInfo method)
+            {
+                Controller = controller;
+                Method = method;
+            }
+        }
+
+        private readonly List<TickControllerMethod> _vectoredTickControllers = new();
+        private readonly List<TickControllerMethod> _unvectoredTickControllers = new();
+
         public EngineWorldClock(EngineCore engine)
         {
+            _engine = engine;
             _worldClockThreadPool = new(engine.Settings.WorldClockThreads);
 
             engine.OnShutdown += (sender) =>
@@ -30,8 +54,40 @@ namespace Si.Engine
                 _worldClockThreadPool.Stop();
             };
 
-            _engine = engine;
             _graphicsThread = new Thread(GraphicsThreadProc);
+
+            #region Cache vectored and unvectored tick controller methods.
+
+            var spriteManagerType = typeof(SpriteManager);
+            var properties = spriteManagerType.GetProperties();
+
+            foreach (var property in properties)
+            {
+                var propertyType = property.PropertyType;
+
+                if (SiReflection.IsAssignableToGenericType(propertyType, typeof(VectoredTickControllerBase<>))
+                    || SiReflection.IsAssignableToGenericType(propertyType, typeof(VectoredCollidableTickControllerBase<>)))
+                {
+                    var method = propertyType.GetMethod("ExecuteWorldClockTick");
+                    if (method != null)
+                    {
+                        var instance = property.GetValue(_engine.Sprites);
+
+                        _vectoredTickControllers.Add(new TickControllerMethod(instance, method));
+                    }
+                }
+                else if (SiReflection.IsAssignableToGenericType(propertyType, typeof(UnvectoredTickControllerBase<>)))
+                {
+                    var method = propertyType.GetMethod("ExecuteWorldClockTick");
+                    if (method != null)
+                    {
+                        var instance = property.GetValue(_engine.Sprites);
+                        _unvectoredTickControllers.Add(new TickControllerMethod(instance, method));
+                    }
+                }
+            }
+
+            #endregion
         }
 
         #region Start / Stop / Pause.
@@ -140,17 +196,13 @@ namespace Si.Engine
             //Create a collection of threads so we can wait on the ones that we start.
             var threadPoolTracker = _worldClockThreadPool.CreateQueueStateTracker();
 
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Enemies.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Particles.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.GenericSprites.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Attachments.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Munitions.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Stars.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.SkyBoxes.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Animations.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.TextBlocks.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Powerups.ExecuteWorldClockTick(epoch, displacementVector));
-            threadPoolTracker.Enqueue(() => _engine.Sprites.Debugs.ExecuteWorldClockTick(epoch, displacementVector));
+            //Enqueue each vectored tick controller for a thread.
+            var vectoredParameters = new object[] { epoch, displacementVector };
+            foreach (var vectored in _vectoredTickControllers)
+            {
+                threadPoolTracker.Enqueue(() =>
+                    vectored.Method.Invoke(vectored.Controller, vectoredParameters));
+            }
 
             //Wait on all enqueued threads to complete.
             if (!SiUtility.TryAndIgnore(threadPoolTracker.WaitForCompletion))
@@ -158,7 +210,18 @@ namespace Si.Engine
                 return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
             }
 
-            _engine.Sprites.RadarPositions.ExecuteWorldClockTick();
+            //After all vectored tick controllers have executed, run the unvectored tick controllers.
+            foreach (var vectored in _unvectoredTickControllers)
+            {
+                threadPoolTracker.Enqueue(() =>
+                    vectored.Method.Invoke(vectored.Controller, null));
+            }
+
+            //Wait on all enqueued threads to complete.
+            if (!SiUtility.TryAndIgnore(threadPoolTracker.WaitForCompletion))
+            {
+                return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
+            }
 
             _engine.Sprites.HardDeleteAllQueuedDeletions();
 

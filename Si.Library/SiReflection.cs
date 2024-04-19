@@ -9,6 +9,15 @@ namespace Si.Library
         private static readonly PessimisticCriticalResource<Dictionary<string, PropertyInfo>> _staticPropertyCache = new();
         private static readonly PessimisticCriticalResource<Dictionary<Type, List<Type>>> _subClassesOfCache = new();
 
+        public static bool IsAssignableToGenericType(Type givenType, Type genericType)
+        {
+            return givenType.GetInterfaces()
+                .Any(it => it.IsGenericType && it.GetGenericTypeDefinition() == genericType)
+                || givenType.BaseType != null && (givenType.BaseType.IsGenericType &&
+                                                   givenType.BaseType.GetGenericTypeDefinition() == genericType ||
+                                                   IsAssignableToGenericType(givenType.BaseType, genericType));
+        }
+
         public static IEnumerable<Type> GetSubClassesOf<T>()
         {
             var cached = _subClassesOfCache.Use(o =>

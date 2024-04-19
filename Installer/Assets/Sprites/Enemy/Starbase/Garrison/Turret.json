@@ -5,7 +5,7 @@
   "Shields": 0,
   "Bounty": 50,
   "OrientationType": "Independent",
-  "PositionType": "FixedToParent",
+  "PositionType": "FixedToOwner",
   "Weapons": [
 	{
 	  "Type": "WeaponVulcanCannon",

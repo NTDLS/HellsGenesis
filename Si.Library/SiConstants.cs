@@ -4,15 +4,36 @@
     {
         public static string FriendlyName = "Strikeforce Infinite";
 
+        /// <summary>
+        /// Determines the behaivior of a attachment sprite's position.
+        /// </summary>
         public enum AttachmentPositionType
         {
-            FixedToParent,
+            /// <summary>
+            /// The attached sprite's position will automatically stay at a fixed position on the owner sprite, even when the owner moves and rotates.
+            /// Managed in ApplyMotion().
+            /// </summary>
+            FixedToOwner,
+
+            /// <summary>
+            /// The attached sprite's position will not be automatically managed by ApplyMotion().
+            /// </summary>
             Independent
         }
 
+        /// <summary>
+        /// Determines the behaivior of a attachment sprite's orientation.
+        /// </summary>
         public enum AttachmentOrientationType
         {
-            FixedToParent,
+            /// <summary>
+            /// The attached sprite should always face the direction of the owner sprite. Managed in ApplyMotion().
+            /// </summary>
+            FixedToOwner,
+
+            /// <summary>
+            /// The attached sprite's orientation will not be automatically managed by ApplyMotion().
+            /// </summary>
             Independent
         }
 
