@@ -47,6 +47,5 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
 
             base.ApplyIntelligence(epoch, displacementVector);
         }
-
     }
 }
