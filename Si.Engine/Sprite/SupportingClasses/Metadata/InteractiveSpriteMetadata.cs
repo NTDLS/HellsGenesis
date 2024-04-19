@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using static Si.Library.SiConstants;
 
 namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
 {
@@ -9,6 +10,9 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
     {
         public string Name { get; set; }
         public string Description { get; set; }
+
+        public AttachmentOrientationType OrientationType { get; set; } = AttachmentOrientationType.FixedToParent;
+        public AttachmentPositionType PositionType { get; set; } = AttachmentPositionType.FixedToParent;
 
         public float Speed { get; set; } = 1f;
         public float MaxThrottle { get; set; } = 0f;

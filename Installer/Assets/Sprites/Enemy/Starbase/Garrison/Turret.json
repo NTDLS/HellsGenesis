@@ -4,6 +4,8 @@
   "Mass": 15,
   "Shields": 0,
   "Bounty": 50,
+  "OrientationType": "Independent",
+  "PositionType": "FixedToParent",
   "Weapons": [
 	{
 	  "Type": "WeaponVulcanCannon",
@@ -14,7 +16,7 @@
 	  "MunitionCount": 2147483647
 	},
 	{
-	  "Type": "WeaponSeekingThunderstrikeMissile",
+	  "Type": "WeaponThunderstrikeMissile",
 	  "MunitionCount": 2147483647
 	}
 	]

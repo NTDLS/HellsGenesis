@@ -4,6 +4,18 @@
     {
         public static string FriendlyName = "Strikeforce Infinite";
 
+        public enum AttachmentPositionType
+        {
+            FixedToParent,
+            Independent
+        }
+
+        public enum AttachmentOrientationType
+        {
+            FixedToParent,
+            Independent
+        }
+
         public enum SiEngineInitilizationType
         {
             Play,

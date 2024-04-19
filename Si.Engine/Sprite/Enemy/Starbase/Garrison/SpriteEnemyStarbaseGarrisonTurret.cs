@@ -15,15 +15,8 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
         {
         }
 
-        public override void ApplyMotion(float epoch, SiVector displacementVector)
+        public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
-            // Since the turret.BaseLocation is relative to the top-left corner of the base sprite, we need
-            // to get the position relative to the center of the base sprite image so that we can rotate around that.
-            var turretOffset = LocationRelativeToOwner - (Owner.Size / 2.0f);
-
-            // Apply the rotated offsets to get the new turret location relative to the base sprite center.
-            Location = Owner.Location + turretOffset.RotatedBy(Owner.Orientation.RadiansSigned);
-
             if (DistanceTo(_engine.Player.Sprite) < 1000)
             {
                 //Rotate the turret toward the player.
@@ -51,7 +44,9 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
                     }
                 }
             }
-            base.ApplyMotion(epoch, displacementVector);
+
+            base.ApplyIntelligence(epoch, displacementVector);
         }
+
     }
 }

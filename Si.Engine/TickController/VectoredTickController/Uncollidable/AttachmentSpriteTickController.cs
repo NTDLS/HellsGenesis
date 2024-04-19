@@ -5,7 +5,6 @@ using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library.Mathematics;
 using System.Linq;
-using System.Net.Mail;
 
 namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
 {
@@ -54,7 +53,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
 
             sprite.Z = owner.Z + 1; //We want to make sure these go on top of the parent.
             sprite.OwnerUID = owner.UID;
-            sprite.LocationRelativeToOwner = locationRelativeToOwner;
+            sprite.LocationRelativeToOwner = locationRelativeToOwner.Clone();
 
             SpriteManager.Add(sprite);
             return sprite;

@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite._Superclass
 {
@@ -87,6 +89,15 @@ namespace Si.Engine.Sprite._Superclass
             {
                 AttachOfType(attachment.Type, attachment.LocationRelativeToOwner);
             }
+
+            if (this is SpriteAttachment attach)
+            {
+                attach.OrientationType = Metadata.OrientationType;
+                attach.PositionType = Metadata.PositionType;
+            }
+
+            //public AttachmentOrientationType OrientationType { get; set; } = AttachmentOrientationType.FixedToParent;
+            //public AttachmentPositionType PositionType { get; set; } = AttachmentPositionType.FixedToParent;
 
             if (this is SpritePlayerBase player)
             {
