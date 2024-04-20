@@ -5,9 +5,8 @@ namespace Si.Engine.Sprite.Player
     internal class SpriteCruiserPlayer : SpritePlayerBase
     {
         public SpriteCruiserPlayer(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Player\Ships\Cruiser.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Player\Ships\Cruiser.png");
         }
     }
 }

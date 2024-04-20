@@ -8,6 +8,18 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
     /// </summary>
     public class InteractiveSpriteMetadata
     {
+        #region Animation.
+
+        public int FrameWidth { get; set; }
+        public int FrameHeight { get; set; }
+        public float FramesPerSecond { get; set; }
+
+        public bool DeleteAfterPlay { get; set; }
+        public SiAnimationReplayMode ReplyMode { get; set; }
+        public int ReplayDelayMilliseconds { get; set; }
+
+        #endregion
+
         public string Name { get; set; }
         public string Description { get; set; }
 

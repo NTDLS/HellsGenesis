@@ -240,10 +240,12 @@ namespace Si.Engine
             SiReflection.BuildReflectionCacheOfType<SpriteBase>();
             SiReflection.BuildReflectionCacheOfType<AIStateMachine>();
 
-            if (Settings.PreCacheAllAssets)
+            //if (Settings.PreCacheAllAssets)
             {
-                textBlock.SetTextAndCenterXY("Building asset cache...");
-                Assets.PreCacheAllAssets(percentTextBlock);
+                //textBlock.SetTextAndCenterXY("Building asset cache...");
+                //Assets.PreCacheAllAssets(percentTextBlock);
+                textBlock.SetTextAndCenterXY("Building sprite cache...");
+                Sprites.PreCacheAll(percentTextBlock);
                 //loadingSprite.QueueForDelete();
                 //loadingEvent.QueueForDeletion();
             }

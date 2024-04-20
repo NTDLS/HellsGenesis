@@ -5,9 +5,8 @@ namespace Si.Engine.Sprite.Player
     internal class SpriteSerpentPlayer : SpritePlayerBase
     {
         public SpriteSerpentPlayer(EngineCore engine)
-            : base(engine)
+            : base(engine, @$"Sprites\Player\Ships\Serpent.png")
         {
-            SetImageAndLoadMetadata(@$"Sprites\Player\Ships\Serpent.png");
         }
     }
 }

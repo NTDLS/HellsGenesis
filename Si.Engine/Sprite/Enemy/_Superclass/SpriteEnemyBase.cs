@@ -14,8 +14,8 @@ namespace Si.Engine.Sprite.Enemy._Superclass
     /// </summary>
     public class SpriteEnemyBase : SpriteInteractiveShipBase
     {
-        public SpriteEnemyBase(EngineCore engine)
-                : base(engine)
+        public SpriteEnemyBase(EngineCore engine, string imagePath)
+                : base(engine, imagePath)
         {
             RecalculateMovementVector();
 

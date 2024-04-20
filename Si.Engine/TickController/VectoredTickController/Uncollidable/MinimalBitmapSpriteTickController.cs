@@ -7,11 +7,11 @@ using Si.Library.Mathematics;
 namespace Si.GameEngine.TickController.VectoredTickController.Collidable
 {
     /// <summary>
-    /// These are just generic bitmap sprites.
+    /// These are just minimal non-collidable, non interactive, generic bitmap sprites.
     /// </summary>
-    public class GenericSpriteTickController : VectoredCollidableTickControllerBase<SpriteGenericBitmap>
+    public class MinimalBitmapSpriteTickController : VectoredCollidableTickControllerBase<SpriteMinimalBitmap>
     {
-        public GenericSpriteTickController(EngineCore engine, SpriteManager manager)
+        public MinimalBitmapSpriteTickController(EngineCore engine, SpriteManager manager)
             : base(engine, manager)
         {
         }
@@ -20,9 +20,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Collidable
         {
             foreach (var sprite in Visible())
             {
-                sprite.ApplyIntelligence(epoch, displacementVector);
                 sprite.ApplyMotion(epoch, displacementVector);
-                sprite.PerformCollisionDetection(epoch);
             }
         }
     }

@@ -1,6 +1,5 @@
 ﻿using SharpDX.Mathematics.Interop;
 using Si.Engine.Sprite.Enemy._Superclass;
-using Si.Engine.Sprite.Enemy.Boss.Devastator;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -291,6 +290,8 @@ namespace Si.Engine.Sprite._Superclass
             SpriteTag = spriteTag;
             IsHighlighted = _engine.Settings.HighlightAllSprites;
         }
+
+
 
         /// <summary>
         /// Sets the movement vector in the direction of the sprite taking into accoun the speed and throttle percentage.

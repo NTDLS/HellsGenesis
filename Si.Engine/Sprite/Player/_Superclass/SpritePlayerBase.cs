@@ -4,8 +4,6 @@ using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.Mathematics;
-using System;
-using System.Drawing;
 using System.Linq;
 using static Si.Library.SiConstants;
 
@@ -38,8 +36,8 @@ namespace Si.Engine.Sprite.Player._Superclass
         public WeaponBase PrimaryWeapon { get; private set; }
         public WeaponBase SelectedSecondaryWeapon { get; private set; }
 
-        public SpritePlayerBase(EngineCore engine)
-            : base(engine)
+        public SpritePlayerBase(EngineCore engine, string imagePath)
+            : base(engine, imagePath)
         {
             OnHit += SpritePlayer_OnHit;
 
@@ -67,13 +65,7 @@ namespace Si.Engine.Sprite.Player._Superclass
 
             if (ThrusterAnimation == null || ThrusterAnimation.IsQueuedForDeletion == true)
             {
-                var playMode = new SpriteAnimation.PlayMode()
-                {
-                    Replay = SiAnimationReplayMode.LoopedPlay,
-                    DeleteSpriteAfterPlay = false,
-                    ReplayDelay = new TimeSpan(0)
-                };
-                ThrusterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png", new Size(32, 32), 100, playMode)
+                ThrusterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png")
                 {
                     SpriteTag = "PlayerForwardThrust",
                     Visable = false,
@@ -86,13 +78,7 @@ namespace Si.Engine.Sprite.Player._Superclass
 
             if (BoosterAnimation == null || BoosterAnimation.IsQueuedForDeletion == true)
             {
-                var playMode = new SpriteAnimation.PlayMode()
-                {
-                    Replay = SiAnimationReplayMode.LoopedPlay,
-                    DeleteSpriteAfterPlay = false,
-                    ReplayDelay = new TimeSpan(0)
-                };
-                BoosterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
+                BoosterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png")
                 {
                     SpriteTag = "PlayerForwardThrust",
                     Visable = false,

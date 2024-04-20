@@ -5,7 +5,6 @@ using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics;
-using System.Drawing;
 using System.IO;
 
 namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
@@ -37,12 +36,14 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             SpriteManager.Add(animation);
         }
 
-        public SpriteAnimation Add(string imageFrames, Size frameSize, float framesPerSecond, SpriteAnimation.PlayMode playMode = null)
+        /*
+        public SpriteAnimation Add(string imageFrames)
         {
-            SpriteAnimation obj = new SpriteAnimation(Engine, imageFrames, frameSize, framesPerSecond, playMode);
+            SpriteAnimation obj = new SpriteAnimation(Engine, imageFrames);
             SpriteManager.Add(obj);
             return obj;
         }
+        */
 
         /// <summary>
         /// Small explosion for a objecting hitting another.
@@ -56,7 +57,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
                 int assetCount = 2;
                 int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
-                var animation = Add(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(66, 66), 50);
+                var animation = Add(Path.Combine(assetPath, $"{selectedAssetIndex}.png"));
                 animation.Location = positionOf.Location.Clone();
             }
             else
@@ -65,7 +66,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
                 int assetCount = 4;
                 int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
-                var animation = Add(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(22, 22), 50);
+                var animation = Add(Path.Combine(assetPath, $"{selectedAssetIndex}.png"));
                 animation.Location = positionOf.Location.Clone();
             }
         }
@@ -80,7 +81,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             int assetCount = 6;
             int selectedAssetIndex = SiRandom.Between(0, assetCount - 1);
 
-            var animation = Add(Path.Combine(assetPath, $"{selectedAssetIndex}.png"), new Size(256, 256), 50);
+            var animation = Add(Path.Combine(assetPath, $"{selectedAssetIndex}.png"));
             animation.Location = PositionOf.Location.Clone();
         }
     }

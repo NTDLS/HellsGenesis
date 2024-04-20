@@ -5,9 +5,8 @@ namespace Si.Engine.Sprite.Player
     internal class SpriteDebugPlayer : SpritePlayerBase
     {
         public SpriteDebugPlayer(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Player\Ships\Debug.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Player\Ships\Debug.png");
         }
     }
 }

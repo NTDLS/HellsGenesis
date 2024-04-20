@@ -5,9 +5,8 @@ namespace Si.Engine.Sprite.Player
     internal class SpriteReaverPlayer : SpritePlayerBase
     {
         public SpriteReaverPlayer(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Player\Ships\Reaver.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Player\Ships\Reaver.png");
         }
     }
 }

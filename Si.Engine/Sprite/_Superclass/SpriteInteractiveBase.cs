@@ -47,13 +47,26 @@ namespace Si.Engine.Sprite._Superclass
         public InteractiveSpriteMetadata Metadata { get; set; }
         public List<WeaponBase> Weapons { get; private set; } = new();
 
-        public SpriteInteractiveBase(EngineCore engine, string name = "")
-            : base(engine, name)
+        public SpriteInteractiveBase(EngineCore engine, string imagePath)
+            : base(engine)
         {
             _engine = engine;
 
             _lockedOnImage = _engine.Assets.GetBitmap(@"Sprites\Weapon\Locked On.png");
             _lockedOnSoftImage = _engine.Assets.GetBitmap(@"Sprites\Weapon\Locked Soft.png");
+
+            SetImageAndLoadMetadata(imagePath);
+        }
+
+        public SpriteInteractiveBase(EngineCore engine, Bitmap bitmap)
+            : base(engine)
+        {
+            _engine = engine;
+
+            _lockedOnImage = _engine.Assets.GetBitmap(@"Sprites\Weapon\Locked On.png");
+            _lockedOnSoftImage = _engine.Assets.GetBitmap(@"Sprites\Weapon\Locked Soft.png");
+
+            SetImage(bitmap);
         }
 
         /// <summary>
@@ -61,14 +74,14 @@ namespace Si.Engine.Sprite._Superclass
         /// from a .json file in the same path with the same name as the sprite image.
         /// </summary>
         /// <param name="spriteImagePath"></param>
-        public void SetImageAndLoadMetadata(string spriteImagePath)
+        private void SetImageAndLoadMetadata(string spriteImagePath)
         {
-            SetImage(spriteImagePath);
+            Metadata = _engine.Assets.GetMetaData<InteractiveSpriteMetadata>(spriteImagePath);
 
-            string metadataFile = $"{Path.GetDirectoryName(spriteImagePath)}\\{Path.GetFileNameWithoutExtension(spriteImagePath)}.json";
-            var metadataJson = _engine.Assets.GetText(metadataFile);
-
-            Metadata = JsonConvert.DeserializeObject<InteractiveSpriteMetadata>(metadataJson);
+            if (this is not SpriteAnimation)
+            {
+                SetImage(spriteImagePath);
+            }
 
             // Set standard variables here:
             Speed = Metadata.Speed;
@@ -92,6 +105,19 @@ namespace Si.Engine.Sprite._Superclass
             {
                 attach.OrientationType = Metadata.OrientationType;
                 attach.PositionType = Metadata.PositionType;
+            }
+
+            if (this is SpriteAnimation ani)
+            {
+                ani.SetImage(spriteImagePath);
+                ani.FramesPerSecond = Metadata.FramesPerSecond;
+                ani.SetSize(new System.Drawing.Size(Metadata.FrameWidth, Metadata.FrameHeight));
+                ani.SetPlayMode(new SpriteAnimation.PlayMode
+                {
+                    DeleteSpriteAfterPlay = Metadata.DeleteAfterPlay,
+                    ReplyMode = Metadata.ReplyMode,
+                    ReplayDelay = new TimeSpan(0, 0, 0, 0, Metadata.ReplayDelayMilliseconds)
+                });
             }
 
             //public AttachmentOrientationType OrientationType { get; set; } = AttachmentOrientationType.FixedToParent;

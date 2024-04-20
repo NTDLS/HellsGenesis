@@ -130,8 +130,8 @@
 
         public enum SiAnimationReplayMode
         {
-            SinglePlay,
-            LoopedPlay
+            Single,
+            Infinite
         };
 
         public enum SiDamageType

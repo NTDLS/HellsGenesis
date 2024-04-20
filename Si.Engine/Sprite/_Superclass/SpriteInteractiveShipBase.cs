@@ -16,8 +16,14 @@ namespace Si.Engine.Sprite._Superclass
         public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
         public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
 
-        public SpriteInteractiveShipBase(EngineCore engine, string name = "")
-            : base(engine, name)
+        public SpriteInteractiveShipBase(EngineCore engine, string imagePath)
+            : base(engine, imagePath)
+        {
+            _engine = engine;
+        }
+
+        public SpriteInteractiveShipBase(EngineCore engine, SharpDX.Direct2D1.Bitmap bitmap)
+            : base(engine, bitmap)
         {
             _engine = engine;
         }

@@ -1,4 +1,5 @@
-﻿using NTDLS.DelegateThreadPooling;
+﻿using Newtonsoft.Json;
+using NTDLS.DelegateThreadPooling;
 using NTDLS.Semaphore;
 using SharpCompress.Archives;
 using SharpCompress.Common;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Si.Engine.Manager
 {
@@ -43,6 +45,28 @@ namespace Si.Engine.Manager
         public void Dispose()
         {
             _archive.Dispose();
+        }
+
+        public T GetMetaData<T>(string spriteImagePath) where T : class
+        {
+            string metadataFile = $"{Path.GetDirectoryName(spriteImagePath)}\\{Path.GetFileNameWithoutExtension(spriteImagePath)}.json";
+
+            string key = $"meta:{metadataFile.ToLower()}";
+
+            var cached = _collection.Read(o =>
+            {
+                o.TryGetValue(key, out object value);
+                return value as T;
+            });
+
+            if (cached != null)
+            {
+                return cached;
+            }
+
+            var metadata = JsonConvert.DeserializeObject<T>(GetText(metadataFile));
+            _collection.Write(o => o.Add(key, metadata));
+            return metadata;
         }
 
         /// <summary>
@@ -200,6 +224,7 @@ namespace Si.Engine.Manager
                         break;
                     case ".png":
                     case ".bmp":
+                        threadPoolTracker.Enqueue(() => GetBitmap(entry.Key), () => Interlocked.Increment(ref statusIndex));
                         threadPoolTracker.Enqueue(() => GetBitmap(entry.Key), () => Interlocked.Increment(ref statusIndex));
                         break;
                     case ".wav":

@@ -1,6 +1,7 @@
 ﻿using SharpCompress;
 using SharpDX.Mathematics.Interop;
 using Si.Engine.Menu;
+using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
@@ -15,6 +16,7 @@ using Si.Library.Mathematics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Manager
@@ -41,7 +43,8 @@ namespace Si.Engine.Manager
 
         public AnimationSpriteTickController Animations { get; private set; }
         public AttachmentSpriteTickController Attachments { get; private set; }
-        public GenericSpriteTickController GenericSprites { get; private set; }
+        public InteractiveBitmapSpriteTickController InteractiveBitmaps { get; private set; }
+        public MinimalBitmapSpriteTickController GenericBitmaps { get; private set; }
         public MunitionSpriteTickController Munitions { get; private set; }
         public DebugSpriteTickController Debugs { get; private set; }
         public EnemySpriteTickController Enemies { get; private set; }
@@ -62,7 +65,8 @@ namespace Si.Engine.Manager
             Attachments = new AttachmentSpriteTickController(_engine, this);
             Debugs = new DebugSpriteTickController(_engine, this);
             Enemies = new EnemySpriteTickController(_engine, this);
-            GenericSprites = new GenericSpriteTickController(_engine, this);
+            InteractiveBitmaps = new InteractiveBitmapSpriteTickController(_engine, this);
+            GenericBitmaps = new MinimalBitmapSpriteTickController(_engine, this);
             Munitions = new MunitionSpriteTickController(_engine, this);
             Particles = new ParticleSpriteTickController(_engine, this);
             Powerups = new PowerupSpriteTickController(_engine, this);
@@ -387,7 +391,7 @@ namespace Si.Engine.Manager
 
             foreach (var fragmentImage in fragmentImages)
             {
-                var fragment = _engine.Sprites.GenericSprites.AddAt(fragmentImage, sprite);
+                var fragment = _engine.Sprites.GenericBitmaps.AddAt(fragmentImage, sprite);
                 fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
                 fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f); //TODO: Can we implement this?
                 fragment.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
@@ -397,6 +401,46 @@ namespace Si.Engine.Manager
                 fragment.Speed = SiRandom.Between(1, 3.5f);
                 fragment.Throttle = 1;
                 fragment.RecalculateMovementVector();
+            }
+        }
+
+        public void PreCacheAll(SpriteTextBlock statusBlock)
+        {
+            //Reflect all sprites, and new them up. This will allow us to build a metadta cache of the correct type.
+            //Also, the metadata needs to be cached in a desearalized way.
+
+
+            // Get all types in the current assembly
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Type baseType = typeof(SpriteBase);
+            List<Type> derivedTypes = new List<Type>();
+
+            foreach (Type type in assembly.GetTypes())
+            {
+                if (baseType.IsAssignableFrom(type) && type != baseType)
+                {
+                    // Check if the constructor parameter is of type EngineCore
+                    ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(EngineCore) });
+                    if (constructor != null)
+                    {
+                        derivedTypes.Add(type);
+                    }
+                }
+            }
+
+            // Create instances of derived types
+            foreach (Type type in derivedTypes)
+            {
+                object instance = Activator.CreateInstance(type, _engine);
+
+                if (instance is SpriteAttachment attachment)
+                {
+                    attachment.QueueForDelete();
+                }
+
+                //Why are these ↑ being added to the sprite collection?? Because loading the metadata causes them to create attachments.... :/
+
+                //Console.WriteLine($"Created instance of {type.Name}");
             }
         }
     }

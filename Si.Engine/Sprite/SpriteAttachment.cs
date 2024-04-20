@@ -20,9 +20,8 @@ namespace Si.Engine.Sprite
         public AttachmentPositionType PositionType { get; set; } = AttachmentPositionType.FixedToOwner;
 
         public SpriteAttachment(EngineCore engine, string imagePath)
-            : base(engine)
+            : base(engine, imagePath)
         {
-            SetImageAndLoadMetadata(imagePath);
         }
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)
@@ -61,7 +60,7 @@ namespace Si.Engine.Sprite
                     do
                     {
                         _rootOwner = _engine.Sprites.GetSpriteByOwner<SpriteInteractiveBase>(_rootOwner.OwnerUID);
-                    } while (_rootOwner.OwnerUID != 0);
+                    } while (_rootOwner != null && _rootOwner.OwnerUID != 0);
                 }
                 return _rootOwner;
             }

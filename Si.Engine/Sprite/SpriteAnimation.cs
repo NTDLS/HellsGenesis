@@ -11,23 +11,23 @@ namespace Si.Engine.Sprite
 {
     public class SpriteAnimation : SpriteInteractiveBase
     {
-        private readonly SharpDX.Direct2D1.Bitmap _sheetImage;
-        private readonly int _frameCount;
+        private SharpDX.Direct2D1.Bitmap _sheetImage;
+        private int _frameCount;
         private int _currentFrame = 0;
         private int _currentRow = 0;
         private int _currentColumn = 0;
         private Size _frameSize;
-        private readonly int _rows;
-        private readonly int _columns;
-        private readonly int _frameDelayMilliseconds = 10;
+        private int _rows;
+        private int _columns;
+        private int _frameDelayMilliseconds = 10;
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
-        private readonly PlayMode _playMode;
+        private PlayMode _playMode;
 
         public class PlayMode
         {
             private SiAnimationReplayMode _replay;
 
-            public SiAnimationReplayMode Replay
+            public SiAnimationReplayMode ReplyMode
             {
                 get
                 {
@@ -35,7 +35,7 @@ namespace Si.Engine.Sprite
                 }
                 set
                 {
-                    if (value == SiAnimationReplayMode.LoopedPlay)
+                    if (value == SiAnimationReplayMode.Infinite)
                     {
                         DeleteSpriteAfterPlay = false;
                     }
@@ -47,29 +47,43 @@ namespace Si.Engine.Sprite
             public bool DeleteSpriteAfterPlay;
         }
 
-        public SpriteAnimation(EngineCore engine, string spriteSheetFileName, Size frameSize, float framesPerSecond, PlayMode playMode = null)
-            : base(engine)
+        public SpriteAnimation(EngineCore engine, string spriteSheetFileName)
+            : base(engine, spriteSheetFileName)
         {
-            _frameDelayMilliseconds = (int)((1.0f / framesPerSecond) * 1000.0f);
+            Location = SiVector.Zero;
+            AdvanceImage();
+        }
 
+        public void SetPlayMode(PlayMode playMode)
+        {
             _playMode = playMode != null ? playMode : new PlayMode() //Create a default playmode.
             {
                 DeleteSpriteAfterPlay = true,
-                Replay = SiAnimationReplayMode.SinglePlay,
+                ReplyMode = SiAnimationReplayMode.Single,
                 ReplayDelay = new TimeSpan(0, 0, 0, 0, _frameDelayMilliseconds)
             };
+        }
 
-            _sheetImage = _engine.Assets.GetBitmap(spriteSheetFileName);
+        public float FramesPerSecond
+        {
+            set
+            {
+                _frameDelayMilliseconds = (int)((1.0f / value) * 1000.0f);
+            }
+        }
 
-            SetSize(frameSize);
-            _frameSize = (Size)frameSize;
+        public new void SetImage(string imagePath)
+        {
+            _sheetImage = _engine.Assets.GetBitmap(imagePath);
+        }
+
+        public new void SetSize(Size frameSize)
+        {
+            base.SetSize(frameSize);
+            _frameSize = frameSize;
             _rows = (int)(_sheetImage.Size.Height / ((Size)frameSize).Height);
             _columns = (int)(_sheetImage.Size.Width / ((Size)frameSize).Width);
             _frameCount = _rows * _columns;
-
-            Location = new SiVector(0, 0);
-
-            AdvanceImage();
         }
 
         public void Reset()
@@ -122,7 +136,7 @@ namespace Si.Engine.Sprite
                         return;
                     }
 
-                    if (_playMode.Replay == SiAnimationReplayMode.LoopedPlay)
+                    if (_playMode.ReplyMode == SiAnimationReplayMode.Infinite)
                     {
                         _currentFrame = 0;
                         _currentColumn = 0;

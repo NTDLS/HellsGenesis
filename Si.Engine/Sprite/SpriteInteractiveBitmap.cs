@@ -6,7 +6,10 @@ using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite
 {
-    public class SpriteGenericBitmap : SpriteInteractiveBase
+    /// <summary>
+    /// These are generic collidable, interactive bitmap sprites. They can take damage and even shoot back.
+    /// </summary>
+    public class SpriteInteractiveBitmap : SpriteInteractiveBase
     {
         /// <summary>
         /// The max travel distance from the creation x,y before the sprite is automatically deleted.
@@ -25,16 +28,15 @@ namespace Si.Engine.Sprite
 
         public ParticleCleanupMode CleanupMode { get; set; } = ParticleCleanupMode.None;
 
-        public SpriteGenericBitmap(EngineCore engine, SharpDX.Direct2D1.Bitmap bitmap)
-            : base(engine)
+
+        public SpriteInteractiveBitmap(EngineCore engine, string imagePath)
+            : base(engine, imagePath)
         {
-            SetImage(bitmap);
         }
 
-        public SpriteGenericBitmap(EngineCore engine, string imagePath)
-            : base(engine)
+        public SpriteInteractiveBitmap(EngineCore engine, SharpDX.Direct2D1.Bitmap bitmap)
+            : base(engine, bitmap)
         {
-            SetImageAndLoadMetadata(imagePath);
         }
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)

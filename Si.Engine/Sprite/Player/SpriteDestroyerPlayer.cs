@@ -5,9 +5,8 @@ namespace Si.Engine.Sprite.Player
     internal class SpriteDestroyerPlayer : SpritePlayerBase
     {
         public SpriteDestroyerPlayer(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Player\Ships\Destroyer.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Player\Ships\Destroyer.png");
         }
     }
 }

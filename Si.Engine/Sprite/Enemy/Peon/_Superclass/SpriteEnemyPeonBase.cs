@@ -2,7 +2,6 @@
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Library.Mathematics;
 using System;
-using System.Drawing;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Enemy.Peon._Superclass
@@ -15,8 +14,8 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         public SpriteAnimation ThrusterAnimation { get; internal set; }
         public SpriteAnimation BoosterAnimation { get; internal set; }
 
-        public SpriteEnemyPeonBase(EngineCore engine)
-            : base(engine)
+        public SpriteEnemyPeonBase(EngineCore engine, string imagePath)
+            : base(engine, imagePath)
         {
             RecalculateMovementVector();
 
@@ -24,19 +23,19 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 
             var playMode = new SpriteAnimation.PlayMode()
             {
-                Replay = SiAnimationReplayMode.LoopedPlay,
+                ReplyMode = SiAnimationReplayMode.Infinite,
                 DeleteSpriteAfterPlay = false,
                 ReplayDelay = new TimeSpan(0)
             };
 
-            ThrusterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png", new Size(32, 32), 100, playMode)
+            ThrusterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png")
             {
                 OwnerUID = UID
             };
             ThrusterAnimation.Reset();
             _engine.Sprites.Animations.Insert(ThrusterAnimation, this);
 
-            BoosterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png", new Size(32, 32), 100, playMode)
+            BoosterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png")
             {
                 OwnerUID = UID
             };

@@ -5,9 +5,8 @@ namespace Si.Engine.Sprite.Enemy.Peon
     internal class SpriteEnemySerf : SpriteEnemyPeonBase
     {
         public SpriteEnemySerf(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Enemy\Peon\Serf\Hull.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Enemy\Peon\Serf\Hull.png");
         }
     }
 }

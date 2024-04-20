@@ -14,10 +14,8 @@ namespace Si.Engine.Sprite.Enemy.Peon
         private float _behaviorChangeDelayMilliseconds = 0;
 
         public SpriteEnemyPhoenix(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Enemy\Peon\Phoenix\Hull.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Enemy\Peon\Phoenix\Hull.png");
-
             AddAIController(new AILogisticsHostileEngagement(_engine, this, _engine.Player.Sprite));
             AddAIController(new AILogisticsTaunt(_engine, this, _engine.Player.Sprite));
             AddAIController(new AILogisticsMeander(_engine, this, _engine.Player.Sprite));

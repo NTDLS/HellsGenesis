@@ -1,0 +1,8 @@
+{
+  "FrameHeight": 32,
+  "FrameWidth": 32,
+  "FramesPerSecond": 100,
+  "DeleteAfterPlay": "false",
+  "ReplyMode": "Infinite",
+  "ReplayDelayMilliseconds": 10
+}

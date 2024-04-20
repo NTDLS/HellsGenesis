@@ -11,9 +11,8 @@ namespace Si.Engine.Sprite.Enemy.Debug
     internal class SpriteEnemyDebug : SpriteEnemyPeonBase
     {
         public SpriteEnemyDebug(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Enemy\Debug\Hull.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Enemy\Debug\Hull.png");
             Throttle = 0;
 
             _particle1 = _engine.Sprites.Particles.AddAt(SiVector.Zero, new Size(5, 5));

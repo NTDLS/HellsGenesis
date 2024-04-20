@@ -1,16 +1,12 @@
 ﻿using NTDLS.DelegateThreadPooling;
-using SharpDX.XInput;
 using Si.Engine.Core.Types;
 using Si.Engine.Manager;
-using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController._Superclass;
 using Si.Library;
 using Si.Library.Mathematics;
 using Si.Rendering;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using static Si.Library.SiConstants;
@@ -58,32 +54,31 @@ namespace Si.Engine
 
             #region Cache vectored and unvectored tick controller methods.
 
-            var spriteManagerType = typeof(SpriteManager);
-            var properties = spriteManagerType.GetProperties();
+            var properties = typeof(SpriteManager).GetProperties();
 
             foreach (var property in properties)
             {
-                var propertyType = property.PropertyType;
-
-                if (SiReflection.IsAssignableToGenericType(propertyType, typeof(VectoredTickControllerBase<>))
-                    || SiReflection.IsAssignableToGenericType(propertyType, typeof(VectoredCollidableTickControllerBase<>)))
+                if (SiReflection.IsAssignableToGenericType(property.PropertyType, typeof(VectoredTickControllerBase<>))
+                    || SiReflection.IsAssignableToGenericType(property.PropertyType, typeof(VectoredCollidableTickControllerBase<>)))
                 {
-                    var method = propertyType.GetMethod("ExecuteWorldClockTick");
-                    if (method != null)
-                    {
-                        var instance = property.GetValue(_engine.Sprites);
+                    var method = property.PropertyType.GetMethod("ExecuteWorldClockTick")
+                        ?? throw new Exception("VectoredTickController must contain ExecuteWorldClockTick");
 
-                        _vectoredTickControllers.Add(new TickControllerMethod(instance, method));
-                    }
+                    var instance = property.GetValue(_engine.Sprites)
+                        ?? throw new Exception($"Sprite manager must contain property [{property.Name}] and it must not bu NULL.");
+
+                    _vectoredTickControllers.Add(new TickControllerMethod(instance, method));
+
                 }
-                else if (SiReflection.IsAssignableToGenericType(propertyType, typeof(UnvectoredTickControllerBase<>)))
+                else if (SiReflection.IsAssignableToGenericType(property.PropertyType, typeof(UnvectoredTickControllerBase<>)))
                 {
-                    var method = propertyType.GetMethod("ExecuteWorldClockTick");
-                    if (method != null)
-                    {
-                        var instance = property.GetValue(_engine.Sprites);
-                        _unvectoredTickControllers.Add(new TickControllerMethod(instance, method));
-                    }
+                    var method = property.PropertyType.GetMethod("ExecuteWorldClockTick")
+                        ?? throw new Exception("VectoredTickController must contain ExecuteWorldClockTick");
+
+                    var instance = property.GetValue(_engine.Sprites)
+                        ?? throw new Exception($"Sprite manager must contain property [{property.Name}] and it must not bu NULL.");
+
+                    _unvectoredTickControllers.Add(new TickControllerMethod(instance, method));
                 }
             }
 

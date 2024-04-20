@@ -5,9 +5,8 @@ namespace Si.Engine.Sprite.Player
     internal class SpriteDreadnaughtPlayer : SpritePlayerBase
     {
         public SpriteDreadnaughtPlayer(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Player\Ships\Dreadnaught.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Player\Ships\Dreadnaught.png");
         }
     }
 }

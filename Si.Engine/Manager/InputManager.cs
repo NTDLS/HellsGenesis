@@ -379,7 +379,7 @@ namespace Si.Engine.Manager
             {
                 for (int col = 0; col < colCount; col++)
                 {
-                    var asteroid = _engine.Sprites.GenericSprites.Add($@"Sprites\Asteroid\{SiRandom.Between(0, 0)}.png");
+                    var asteroid = _engine.Sprites.InteractiveBitmaps.Add($@"Sprites\Asteroid\{SiRandom.Between(0, 0)}.png");
 
                     var asteroidSize = asteroid.Size.Width + asteroid.Size.Height;
 
@@ -435,7 +435,7 @@ namespace Si.Engine.Manager
             {
                 _engine.Sprites.QueueAllForDeletionByTag("DEBUG_ASTEROID");
 
-                var asteroid = _engine.Sprites.GenericSprites.Add($@"Sprites\Asteroid\{SiRandom.Between(0, 0)}.png");
+                var asteroid = _engine.Sprites.InteractiveBitmaps.Add($@"Sprites\Asteroid\{SiRandom.Between(0, 0)}.png");
 
                 asteroid.SpriteTag = "DEBUG_ASTEROID";
                 asteroid.Location = _engine.Player.Sprite.Location + new SiVector(100, 100);

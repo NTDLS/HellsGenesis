@@ -5,9 +5,8 @@ namespace Si.Engine.Sprite.Enemy.Peon
     internal class SpriteEnemyMinnow : SpriteEnemyPeonBase
     {
         public SpriteEnemyMinnow(EngineCore engine)
-            : base(engine)
+            : base(engine, @"Sprites\Enemy\Peon\Minnow\Hull.png")
         {
-            SetImageAndLoadMetadata(@"Sprites\Enemy\Peon\Minnow\Hull.png");
         }
     }
 }
