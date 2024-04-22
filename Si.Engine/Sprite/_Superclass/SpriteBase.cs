@@ -339,6 +339,12 @@ namespace Si.Engine.Sprite._Superclass
         {
             _readyForDeletion = true;
             Visable = false;
+
+            foreach (var attachment in Attachments)
+            {
+                attachment.QueueForDelete();
+            }
+
             OnQueuedForDelete?.Invoke(this);
         }
 
@@ -1031,9 +1037,9 @@ namespace Si.Engine.Sprite._Superclass
 
         public virtual void Explode()
         {
-            foreach (var attachments in Attachments)
+            foreach (var attachment in Attachments)
             {
-                attachments.Explode();
+                attachment.Explode();
             }
 
             IsDeadOrExploded = true;

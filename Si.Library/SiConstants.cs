@@ -4,6 +4,14 @@
     {
         public static string FriendlyName = "Strikeforce Infinite";
 
+        public enum MunitionType
+        {
+            Energy,     //These are going to be particle weapons.
+            Locking,    //These are munitions that lock on to a target.
+            Projectile, //These are conventional "bullet" type munitions.
+            Seeking     //Seeks to whatever target is in front of it - no locking.
+        }
+
         /// <summary>
         /// Determines the behaivior of a attachment sprite's position.
         /// </summary>

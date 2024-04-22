@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Si.Engine.Manager
 {
@@ -26,6 +25,7 @@ namespace Si.Engine.Manager
         private readonly OptimisticCriticalResource<Dictionary<string, object>> _collection = new();
         private readonly IArchive _archive = null;
         private readonly Dictionary<string, IArchiveEntry> _entryHashes;
+        public Dictionary<string, IArchiveEntry> Enrites => _entryHashes;
 
         public AssetManager(EngineCore engine)
         {
@@ -49,8 +49,7 @@ namespace Si.Engine.Manager
 
         public T GetMetaData<T>(string spriteImagePath) where T : class
         {
-            string metadataFile = $"{Path.GetDirectoryName(spriteImagePath)}\\{Path.GetFileNameWithoutExtension(spriteImagePath)}.json";
-
+            string metadataFile = $"{spriteImagePath}.json";
             string key = $"meta:{metadataFile.ToLower()}";
 
             var cached = _collection.Read(o =>
@@ -223,8 +222,8 @@ namespace Si.Engine.Manager
                         threadPoolTracker.Enqueue(() => GetText(entry.Key), () => Interlocked.Increment(ref statusIndex));
                         break;
                     case ".png":
+                    case ".jpg":
                     case ".bmp":
-                        threadPoolTracker.Enqueue(() => GetBitmap(entry.Key), () => Interlocked.Increment(ref statusIndex));
                         threadPoolTracker.Enqueue(() => GetBitmap(entry.Key), () => Interlocked.Increment(ref statusIndex));
                         break;
                     case ".wav":

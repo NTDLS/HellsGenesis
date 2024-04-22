@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json;
-using Si.Engine.Sprite._Superclass;
+﻿using Si.Engine.Sprite._Superclass;
 using Si.GameEngine.Sprite.SupportingClasses.Metadata;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 using System;
-using System.IO;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite
@@ -47,12 +45,27 @@ namespace Si.Engine.Sprite
         {
             var metadata = _engine.Assets.GetMetaData<InteractiveSpriteMetadata>(spriteImagePath);
 
-            SetImage(spriteImagePath);
-
             // Set standard variables here:
             Speed = metadata.Speed;
             Throttle = metadata.Throttle;
             MaxThrottle = metadata.MaxThrottle;
+
+            if (this is SpriteAnimation ani)
+            {
+                ani.SetImage(spriteImagePath);
+                ani.FramesPerSecond = metadata.FramesPerSecond;
+                ani.SetSize(new System.Drawing.Size(metadata.FrameWidth, metadata.FrameHeight));
+                ani.SetPlayMode(new SpriteAnimation.PlayMode
+                {
+                    DeleteSpriteAfterPlay = metadata.DeleteAfterPlay,
+                    ReplyMode = metadata.ReplyMode,
+                    ReplayDelay = new TimeSpan(0, 0, 0, 0, metadata.ReplayDelayMilliseconds)
+                });
+            }
+            else
+            {
+                SetImage(spriteImagePath);
+            }
         }
 
         public override void ApplyMotion(float epoch, SiVector displacementVector)

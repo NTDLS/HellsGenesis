@@ -1,6 +1,7 @@
 ﻿using SharpDX.DirectInput;
 using SharpDX.XInput;
 using Si.Engine.Sprite.Enemy._Superclass;
+using Si.Engine.Sprite.Enemy.Boss.Devastator;
 using Si.Engine.Sprite.Enemy.Peon;
 using Si.Library;
 using Si.Library.ExtensionMethods;
@@ -472,6 +473,12 @@ namespace Si.Engine.Manager
             else if (key == Keys.F6)
             {
                 _engine.Sprites.Particles.ParticleCloud(500, _engine.Player.Sprite);
+            }
+            else if (key == Keys.F7)
+            {
+                var enemy = _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyBossDevastator>();
+                enemy.Orientation = SiVector.FromDegrees(-90);
+                enemy.Location = new SiVector(1000, 1000);
             }
         }
     }

@@ -113,6 +113,13 @@ namespace Si.Engine.Manager
 
         public void Add(SpriteBase item)
         {
+            if (_engine.IsInitializing == true)
+            {
+                //When the engine is initialzing, we do all kinds of pre-caching.
+                //We want to make sure that none of these new classes make it to the sprite collection.
+                return;
+            }
+
             if (item == null)
             {
                 throw new Exception("NULL sprites cannot be added to the manager.");
@@ -406,21 +413,16 @@ namespace Si.Engine.Manager
 
         public void PreCacheAll(SpriteTextBlock statusBlock)
         {
-            //Reflect all sprites, and new them up. This will allow us to build a metadta cache of the correct type.
-            //Also, the metadata needs to be cached in a desearalized way.
-
-
-            // Get all types in the current assembly
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            Type baseType = typeof(SpriteBase);
-            List<Type> derivedTypes = new List<Type>();
+            var assembly = Assembly.GetExecutingAssembly();
+            var baseType = typeof(SpriteBase);
+            var derivedTypes = new List<Type>();
 
             foreach (Type type in assembly.GetTypes())
             {
                 if (baseType.IsAssignableFrom(type) && type != baseType)
                 {
                     // Check if the constructor parameter is of type EngineCore
-                    ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(EngineCore) });
+                    var constructor = type.GetConstructor([typeof(EngineCore)]);
                     if (constructor != null)
                     {
                         derivedTypes.Add(type);
@@ -431,16 +433,19 @@ namespace Si.Engine.Manager
             // Create instances of derived types
             foreach (Type type in derivedTypes)
             {
-                object instance = Activator.CreateInstance(type, _engine);
+                //Creating the instance of the sprite loads and caches the metadata and images.
+                dynamic instance = Activator.CreateInstance(type, _engine);
+                instance.QueueForDelete();
+            }
 
-                if (instance is SpriteAttachment attachment)
-                {
-                    attachment.QueueForDelete();
-                }
+            //Pre-cache animations:
+            //Animations do not have their own classes, so we need to look for them in the assets and load them.
+            var animations = _engine.Assets.Enrites.Select(o => o.Value.Key)
+                .Where(o => o.ToLower().StartsWith(@"sprites/animation/") && o.ToLower().EndsWith(@".png")).ToList();
 
-                //Why are these ↑ being added to the sprite collection?? Because loading the metadata causes them to create attachments.... :/
-
-                //Console.WriteLine($"Created instance of {type.Name}");
+            foreach (var animation in animations)
+            {
+                Animations.Add(animation).QueueForDelete();
             }
         }
     }

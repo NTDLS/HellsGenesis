@@ -1,7 +1,6 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
-using Si.Engine.Sprite._Superclass;
 using Si.Library.Mathematics;
 using System;
 using System.Drawing;
@@ -9,7 +8,7 @@ using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite
 {
-    public class SpriteAnimation : SpriteInteractiveBase
+    public class SpriteAnimation : SpriteMinimalBitmap
     {
         private SharpDX.Direct2D1.Bitmap _sheetImage;
         private int _frameCount;

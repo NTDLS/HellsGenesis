@@ -10,6 +10,44 @@ namespace Si.Library
         public delegate void TryAndIgnoreProc();
         public delegate T TryAndIgnoreProc<T>();
 
+        public delegate void DebugPrintDurationProc();
+        public delegate T DebugPrintDurationProc<T>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void DebugPrintDuration(string displayName, DebugPrintDurationProc func)
+        {
+#if DEBUG
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+            func();
+            stopwatch.Stop();
+
+            Debug.WriteLine($"{displayName}\t{stopwatch.ElapsedMilliseconds:n0}");
+#else
+            func();
+#endif
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T? DebugPrintDuration<T>(string displayName, DebugPrintDurationProc<T> func)
+        {
+#if DEBUG
+            var stopwatch = new Stopwatch();
+
+            stopwatch.Start();
+            var result = func();
+            stopwatch.Stop();
+
+            Debug.WriteLine($"{displayName}\t{stopwatch.ElapsedMilliseconds:n0}");
+
+            return result;
+#else
+            return func();
+#endif
+        }
+
+
         public static int GreaterOf(int one, int two) => (one > two) ? one : two;
         public static int LesserOf(int one, int two) => (one < two) ? one : two;
         public static uint GreaterOf(uint one, uint two) => (one > two) ? one : two;

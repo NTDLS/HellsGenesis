@@ -33,6 +33,7 @@ namespace Si.Engine
         public SiEngineInitilizationType ExecutionType { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
+        public bool IsInitializing { get; private set; } = false;
 
         #endregion
 
@@ -240,10 +241,12 @@ namespace Si.Engine
             SiReflection.BuildReflectionCacheOfType<SpriteBase>();
             SiReflection.BuildReflectionCacheOfType<AIStateMachine>();
 
+            IsInitializing = true;
+
             //if (Settings.PreCacheAllAssets)
             {
-                //textBlock.SetTextAndCenterXY("Building asset cache...");
-                //Assets.PreCacheAllAssets(percentTextBlock);
+                textBlock.SetTextAndCenterXY("Building asset cache...");
+                Assets.PreCacheAllAssets(percentTextBlock);
                 textBlock.SetTextAndCenterXY("Building sprite cache...");
                 Sprites.PreCacheAll(percentTextBlock);
                 //loadingSprite.QueueForDelete();
@@ -254,6 +257,8 @@ namespace Si.Engine
             percentTextBlock.QueueForDelete();
 
             OnInitialization?.Invoke(this);
+
+            IsInitializing = false;
 
             if (ExecutionType == SiEngineInitilizationType.Play)
             {

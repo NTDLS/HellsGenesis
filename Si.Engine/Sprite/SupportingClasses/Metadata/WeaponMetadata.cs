@@ -1,13 +1,9 @@
-﻿namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
-{
-    public enum MunitionType
-    {
-        Energy,     //These are going to be particle weapons.
-        Locking,    //These are munitions that lock on to a target.
-        Projectile, //These are conventional "bullet" type munitions.
-        Seeking     //Seeks to whatever target is in front of it - no locking.
-    }
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using static Si.Library.SiConstants;
 
+namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
+{
     /// <summary>
     /// Contains sprite metadata.
     /// </summary>
@@ -47,7 +43,7 @@
         public float MaxLockDistance { get; set; } = 100;
         public bool ExplodesOnImpact { get; set; } = false;
 
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        [JsonConverter(typeof(StringEnumConverter))]
         public MunitionType MunitionType { get; set; }
 
         /// <summary>

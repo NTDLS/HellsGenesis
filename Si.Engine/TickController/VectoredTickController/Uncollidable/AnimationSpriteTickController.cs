@@ -25,6 +25,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             }
         }
 
+
         /// <summary>
         /// Creates an animation on top of another sprite.
         /// </summary>

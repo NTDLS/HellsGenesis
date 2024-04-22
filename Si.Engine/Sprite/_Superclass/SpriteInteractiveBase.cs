@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using SharpDX.Direct2D1;
+﻿using SharpDX.Direct2D1;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.SupportingClasses;
 using Si.Engine.Sprite.Weapon._Superclass;
@@ -10,7 +9,6 @@ using Si.Library;
 using Si.Library.Mathematics;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 namespace Si.Engine.Sprite._Superclass
@@ -78,10 +76,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             Metadata = _engine.Assets.GetMetaData<InteractiveSpriteMetadata>(spriteImagePath);
 
-            if (this is not SpriteAnimation)
-            {
-                SetImage(spriteImagePath);
-            }
+            SetImage(spriteImagePath);
 
             // Set standard variables here:
             Speed = Metadata.Speed;
@@ -106,22 +101,6 @@ namespace Si.Engine.Sprite._Superclass
                 attach.OrientationType = Metadata.OrientationType;
                 attach.PositionType = Metadata.PositionType;
             }
-
-            if (this is SpriteAnimation ani)
-            {
-                ani.SetImage(spriteImagePath);
-                ani.FramesPerSecond = Metadata.FramesPerSecond;
-                ani.SetSize(new System.Drawing.Size(Metadata.FrameWidth, Metadata.FrameHeight));
-                ani.SetPlayMode(new SpriteAnimation.PlayMode
-                {
-                    DeleteSpriteAfterPlay = Metadata.DeleteAfterPlay,
-                    ReplyMode = Metadata.ReplyMode,
-                    ReplayDelay = new TimeSpan(0, 0, 0, 0, Metadata.ReplayDelayMilliseconds)
-                });
-            }
-
-            //public AttachmentOrientationType OrientationType { get; set; } = AttachmentOrientationType.FixedToParent;
-            //public AttachmentPositionType PositionType { get; set; } = AttachmentPositionType.FixedToParent;
 
             if (this is SpritePlayerBase player)
             {
@@ -316,13 +295,14 @@ namespace Si.Engine.Sprite._Superclass
         {
             _engine.Events.Add(() =>
             {
-                _engine.Sprites.Animations.AddRandomExplosionAt(this);
-                _engine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this);
-                _engine.Sprites.CreateFragmentsOf(this);
-                _engine.Rendering.AddScreenShake(4, 800);
-                _engine.Audio.PlayRandomExplosion();
+                SiUtility.DebugPrintDuration($"{GetType().Name}\tAddRandomExplosionAt", () => _engine.Sprites.Animations.AddRandomExplosionAt(this));
+                SiUtility.DebugPrintDuration($"{GetType().Name}\tParticleBlastAt", () => _engine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this));
+                SiUtility.DebugPrintDuration($"{GetType().Name}\tCreateFragmentsOf", () => _engine.Sprites.CreateFragmentsOf(this));
+                SiUtility.DebugPrintDuration($"{GetType().Name}\tAddScreenShake", () => _engine.Rendering.AddScreenShake(4, 800));
+                //SiUtility.DebugPrintDuration($"{GetType().Name}\tPlayRandomExplosion", () => _engine.Audio.PlayRandomExplosion());
             });
-            base.Explode();
+
+            SiUtility.DebugPrintDuration($"{GetType().Name}\tExplode", () => base.Explode());
         }
 
         /// <summary>

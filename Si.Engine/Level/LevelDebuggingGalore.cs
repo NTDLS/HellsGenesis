@@ -79,7 +79,9 @@ namespace Si.Engine.Level
             debug.Orientation = SiVector.FromDegrees(-90);
             debug.Location = new SiVector(1000, 1000);
 
-            _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyBossDevastator>();
+            var enemy = _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyBossDevastator>();
+            enemy.Orientation = SiVector.FromDegrees(-90);
+            enemy.Location = new SiVector(1000, 1000);
 
             //var debugEnemy = _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyDebug>();
             //debugEnemy.Orientation = SiVector.FromDegrees(0);
