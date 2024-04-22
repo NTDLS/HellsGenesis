@@ -3,6 +3,7 @@ using Si.Engine.EngineLibrary;
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
 using Si.Engine.Menu;
+using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.UnvectoredTickController;
@@ -219,42 +220,19 @@ namespace Si.Engine
             //Sprites.ResetPlayer();
             _worldClock.Start();
 
-            /*
-            var loadingSprite = Sprites.GenericSprites.CreateFromImagePath(@"Sprites\Loading.png");
-            loadingSprite.CenterInUniverse();
 
-            var loadingEvent = Events.Add(10, (sender, parameter) =>
-            {
-                loadingSprite.Velocity.ForwardAngle.Degrees -= 0.1f;
-            }, SiDefermentEventMode.Recurring );
-            */
-
-            var textBlock = Sprites.TextBlocks.Add(Rendering.TextFormats.Loading,
+            var loadingHeader = Sprites.TextBlocks.Add(Rendering.TextFormats.Loading,
                 Rendering.Materials.Brushes.Red, new SiVector(100, 100), true);
 
-            textBlock.SetTextAndCenterXY("Building cache...");
-
-            var percentTextBlock = Sprites.TextBlocks.Add(Rendering.TextFormats.Loading,
-                Rendering.Materials.Brushes.Red, new SiVector(textBlock.X, textBlock.Y + 50), true);
-
-            textBlock.SetTextAndCenterXY("Building reflection cache...");
-            SiReflection.BuildReflectionCacheOfType<SpriteBase>();
-            SiReflection.BuildReflectionCacheOfType<AIStateMachine>();
+            var loadingDetail = Sprites.TextBlocks.Add(Rendering.TextFormats.Loading,
+                Rendering.Materials.Brushes.Red, new SiVector(loadingHeader.X, loadingHeader.Y + 50), true);
 
             IsInitializing = true;
 
-            //if (Settings.PreCacheAllAssets)
-            {
-                textBlock.SetTextAndCenterXY("Building asset cache...");
-                Assets.PreCacheAllAssets(percentTextBlock);
-                textBlock.SetTextAndCenterXY("Building sprite cache...");
-                Sprites.PreCacheAll(percentTextBlock);
-                //loadingSprite.QueueForDelete();
-                //loadingEvent.QueueForDeletion();
-            }
+            HydrateCache(loadingHeader, loadingDetail);
 
-            textBlock.QueueForDelete();
-            percentTextBlock.QueueForDelete();
+            loadingHeader.QueueForDelete();
+            loadingDetail.QueueForDelete();
 
             OnInitialization?.Invoke(this);
 
@@ -270,6 +248,21 @@ namespace Si.Engine
                 Sprites.SkyBoxes.AddAtCenterUniverse();
 
                 Events.Add(1, () => Menus.Show(new MenuStartNewGame(this)));
+            }
+        }
+
+        private void HydrateCache(SpriteTextBlock loadingHeader, SpriteTextBlock loadingDetail)
+        {
+            loadingHeader.SetTextAndCenterXY("Hydrating cache...");
+
+            loadingHeader.SetTextAndCenterXY("Hydrating reflection cache...");
+            SiReflection.BuildReflectionCacheOfType<SpriteBase>();
+            SiReflection.BuildReflectionCacheOfType<AIStateMachine>();
+
+            if (Settings.PreCacheAllAssets)
+            {
+                Assets.HydrateCache(loadingHeader, loadingDetail);
+                Sprites.HydrateCache(loadingHeader, loadingDetail);
             }
         }
 

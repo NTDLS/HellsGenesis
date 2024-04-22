@@ -411,14 +411,21 @@ namespace Si.Engine.Manager
             }
         }
 
-        public void PreCacheAll(SpriteTextBlock statusBlock)
+        public void HydrateCache(SpriteTextBlock loadingHeader, SpriteTextBlock loadingDetail)
         {
+            float statusIndex = 0;
+            loadingHeader.SetTextAndCenterXY("Hydrating sprite cache...");
+
             var assembly = Assembly.GetExecutingAssembly();
             var baseType = typeof(SpriteBase);
             var derivedTypes = new List<Type>();
 
-            foreach (Type type in assembly.GetTypes())
+            var allTypes = assembly.GetTypes();
+
+            foreach (var type in allTypes)
             {
+                loadingDetail.SetTextAndCenterX($"{statusIndex++ / allTypes.Length * 100.0:n0}%");
+
                 if (baseType.IsAssignableFrom(type) && type != baseType)
                 {
                     // Check if the constructor parameter is of type EngineCore
@@ -430,23 +437,26 @@ namespace Si.Engine.Manager
                 }
             }
 
+            statusIndex = 0;
+            loadingHeader.SetTextAndCenterXY("Hydrating animation cache...");
+
             // Create instances of derived types
-            foreach (Type type in derivedTypes)
+            foreach (var type in derivedTypes)
             {
                 //Creating the instance of the sprite loads and caches the metadata and images.
                 dynamic instance = Activator.CreateInstance(type, _engine);
+
+                loadingDetail.SetTextAndCenterX($"{statusIndex++ / derivedTypes.Count * 100.0:n0}%");
                 instance.QueueForDelete();
             }
 
             //Pre-cache animations:
             //Animations do not have their own classes, so we need to look for them in the assets and load them.
             var animations = _engine.Assets.Enrites.Select(o => o.Value.Key)
-                .Where(o => o.ToLower().StartsWith(@"sprites/animation/") && o.ToLower().EndsWith(@".png")).ToList();
+                .Where(o => o.StartsWith(@"sprites/animation/", StringComparison.CurrentCultureIgnoreCase)
+                && o.EndsWith(@".png", StringComparison.CurrentCultureIgnoreCase)).ToList();
 
-            foreach (var animation in animations)
-            {
-                Animations.Add(animation).QueueForDelete();
-            }
+            animations.ForEach(o => Animations.Add(o).QueueForDelete());
         }
     }
 }

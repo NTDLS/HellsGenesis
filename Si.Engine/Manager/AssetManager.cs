@@ -49,7 +49,7 @@ namespace Si.Engine.Manager
 
         public T GetMetaData<T>(string spriteImagePath) where T : class
         {
-            string metadataFile = $"{spriteImagePath}.json";
+            string metadataFile = $"{spriteImagePath}.json".Replace('\\', '/'); ;
             string key = $"meta:{metadataFile.ToLower()}";
 
             var cached = _collection.Read(o =>
@@ -112,7 +112,7 @@ namespace Si.Engine.Manager
 
         public string GetText(string path, string defaultText = "")
         {
-            path = path.ToLower();
+            path = path.ToLower().Replace('\\', '/');
 
             var cached = _collection.Read(o =>
             {
@@ -138,7 +138,7 @@ namespace Si.Engine.Manager
 
         public SiAudioClip GetAudio(string path)
         {
-            path = path.ToLower();
+            path = path.ToLower().Replace('\\', '/');
 
             var cached = _collection.Read(o =>
             {
@@ -153,13 +153,14 @@ namespace Si.Engine.Manager
             using var stream = GetCompressedStream(path);
             var result = new SiAudioClip(stream, 1, false);
             _collection.Write(o => o.TryAdd(path, result));
+
             stream.Close();
             return result;
         }
 
         public SiAudioClip GetAudio(string path, float initialVolumne, bool loopForever = false)
         {
-            path = path.ToLower();
+            path = path.ToLower().Replace('\\', '/');
 
             var cached = _collection.Read(o =>
             {
@@ -185,7 +186,7 @@ namespace Si.Engine.Manager
 
         public SharpDX.Direct2D1.Bitmap GetBitmap(string path)
         {
-            path = path.ToLower();
+            path = path.ToLower().Replace('\\', '/');
 
             var cached = _collection.Read(o =>
             {
@@ -204,8 +205,10 @@ namespace Si.Engine.Manager
             return bitmap;
         }
 
-        public void PreCacheAllAssets(SpriteTextBlock statusBlock)
+        public void HydrateCache(SpriteTextBlock loadingHeader, SpriteTextBlock loadingDetail)
         {
+            loadingHeader.SetTextAndCenterXY("Hydrating asset cache...");
+
             using var archive = ArchiveFactory.Open(_assetPackagePath);
             using var dtp = new DelegateThreadPool(Environment.ProcessorCount * 4);
             var threadPoolTracker = dtp.CreateQueueStateTracker();
@@ -237,11 +240,11 @@ namespace Si.Engine.Manager
 
             threadPoolTracker.WaitForCompletion(10, () =>
             {
-                statusBlock.SetTextAndCenterX($"{statusIndex / statusEntryCount * 100.0:n0}%");
+                loadingDetail.SetTextAndCenterX($"{statusIndex / statusEntryCount * 100.0:n0}%");
                 return true;
             });
 
-            statusBlock.SetTextAndCenterX($"100%");
+            loadingDetail.SetTextAndCenterX($"100%");
         }
 
         private string GetCompressedText(string path)

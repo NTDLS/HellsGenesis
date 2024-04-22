@@ -299,7 +299,7 @@ namespace Si.Engine.Sprite._Superclass
                 SiUtility.DebugPrintDuration($"{GetType().Name}\tParticleBlastAt", () => _engine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this));
                 SiUtility.DebugPrintDuration($"{GetType().Name}\tCreateFragmentsOf", () => _engine.Sprites.CreateFragmentsOf(this));
                 SiUtility.DebugPrintDuration($"{GetType().Name}\tAddScreenShake", () => _engine.Rendering.AddScreenShake(4, 800));
-                //SiUtility.DebugPrintDuration($"{GetType().Name}\tPlayRandomExplosion", () => _engine.Audio.PlayRandomExplosion());
+                SiUtility.DebugPrintDuration($"{GetType().Name}\tPlayRandomExplosion", () => _engine.Audio.PlayRandomExplosion());
             });
 
             SiUtility.DebugPrintDuration($"{GetType().Name}\tExplode", () => base.Explode());
