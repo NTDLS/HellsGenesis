@@ -69,7 +69,7 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Sets the sprites image, sets speed, shields, adds attachements and weapons
+        /// Sets the sprites image, sets speed, shields, adds attachments and weapons
         /// from a .json file in the same path with the same name as the sprite image.
         /// </summary>
         /// <param name="spriteImagePath"></param>

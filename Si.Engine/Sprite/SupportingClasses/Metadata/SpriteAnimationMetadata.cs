@@ -2,7 +2,7 @@
 
 namespace Si.Engine.Sprite.SupportingClasses.Metadata
 {
-    internal struct SpriteAnimationMetadata
+    internal class SpriteAnimationMetadata
     {
         public SpriteAnimationMetadata() { }
 

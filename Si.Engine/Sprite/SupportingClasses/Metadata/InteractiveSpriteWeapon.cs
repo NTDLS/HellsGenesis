@@ -2,7 +2,7 @@
 
 namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
 {
-    public struct InteractiveSpriteWeapon
+    public class InteractiveSpriteWeapon
     {
         public InteractiveSpriteWeapon() { }
 

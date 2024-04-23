@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
 {
-    public struct InteractiveSpriteAttachment
+    public class InteractiveSpriteAttachment
     {
         public InteractiveSpriteAttachment() { }
 

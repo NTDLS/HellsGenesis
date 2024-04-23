@@ -1,6 +1,6 @@
 ﻿namespace Si.Engine.Sprite.SupportingClasses.Metadata
 {
-    internal struct SpriteMinimalBitmapMetadata
+    internal class SpriteMinimalBitmapMetadata
     {
         public SpriteMinimalBitmapMetadata() { }
 

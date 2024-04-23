@@ -3,7 +3,6 @@
   "Description": "TODO: Add a description",
   "MunitionDetection": true,
   "Speed": 2.0,
-  "MaxThrottle": 0.0,
   "Mass": 200,
   "Hull": 200,
   "Shields": 100,

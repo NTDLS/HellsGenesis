@@ -7,7 +7,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
     /// <summary>
     /// Contains sprite metadata.
     /// </summary>
-    public struct WeaponMetadata
+    public class WeaponMetadata
     {
         public WeaponMetadata() { }
 
