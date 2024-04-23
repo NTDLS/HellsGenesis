@@ -11,7 +11,6 @@ namespace Si.Engine.Sprite._Superclass._Root
         public void RotatePointingDirection(float radians)
         {
             Orientation.Rotate(radians);
-            RotationChanged();
         }
 
         /// <summary>
@@ -21,7 +20,6 @@ namespace Si.Engine.Sprite._Superclass._Root
         {
             MovementVector.Rotate(radians);
             Orientation.Radians = MovementVector.OrientationInRadians();
-            RotationChanged();
         }
 
         /// <summary>
@@ -31,7 +29,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         {
             var radians = Location.AngleToInSignedRadians(toLocationOf);
 
-            MovementVector.SetDirctionMaintainMagnitude(radians);
+            MovementVector.SetDirectionMaintainMagnitude(radians);
             Orientation.Radians = MovementVector.OrientationInRadians();
         }
 
@@ -39,7 +37,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// Rotates the objects movement vector by the specified amount if it not pointing at the target
         ///     angle (with given tolerance) then recalculates PointingAngle.
         /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specified range.</returns>
         public bool RotateMovementVectorIfNotPointingAt(SpriteBase obj, float rotationAmountDegrees, float varianceDegrees = 10)
         {
             var deltaAngle = this.HeadingAngleToInUnsignedDegrees(obj);
@@ -66,7 +64,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// Rotates the objects movement vector by the specified amount if it not pointing at the target
         /// angle (with given tolerance) then recalculates the PointingAngle.
         /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specified range.</returns>
         public bool RotateMovementVectorIfNotPointingAt(SiVector toLocation, float rotationAmountDegrees, float varianceDegrees = 10)
         {
             var deltaAngle = this.HeadingAngleToInUnsignedDegrees(toLocation);
@@ -92,7 +90,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// Rotates the objects movement vector by the specified amount if it not pointing at the target angle
         /// (with given tolerance) then recalculates the PointingAngle.
         /// </summary>
-        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specifid range.</returns>
+        /// <returns>Returns TRUE if rotation occurs, returns FALSE if object is already in the specified range.</returns>
         public bool RotateMovementVectorIfNotPointingAt(float toDegrees, float rotationAmountDegrees, float tolerance = 10)
         {
             toDegrees = toDegrees.DenormalizeDegrees();

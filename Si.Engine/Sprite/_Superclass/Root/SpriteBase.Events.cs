@@ -16,7 +16,6 @@ namespace Si.Engine.Sprite._Superclass._Root
         public delegate void ExplodeEvent(SpriteBase sender);
         public event ExplodeEvent OnExplode;
 
-        public virtual void VelocityChanged() { }
         public virtual void VisibilityChanged() { }
         public virtual void LocationChanged() { }
         public virtual void RotationChanged() { }

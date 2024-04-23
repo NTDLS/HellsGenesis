@@ -10,6 +10,9 @@ namespace Si.Library.Mathematics
     /// </summary>
     public partial class SiVector : IComparable<SiVector>
     {
+        public delegate void OnChange(SiVector vector);
+        public event OnChange? OnChangeEvent;
+
         public static readonly SiVector Zero = new();
         public static readonly SiVector UnitOfX = new(1f, 0f);
         public static readonly SiVector UnitOfY = new(0f, 1f);
@@ -255,6 +258,7 @@ namespace Si.Library.Mathematics
                 var cardinal = SiMath.RadToCardinal(radians);
                 X = cardinal.X;
                 Y = cardinal.Y;
+                OnChangeEvent?.Invoke(this);
             }
         }
 
@@ -270,6 +274,7 @@ namespace Si.Library.Mathematics
                 var cardinal = SiMath.RadToCardinal(radians);
                 X = cardinal.X;
                 Y = cardinal.Y;
+                OnChangeEvent?.Invoke(this);
             }
         }
 
@@ -296,6 +301,7 @@ namespace Si.Library.Mathematics
                 var cardinal = SiMath.DegToCardinal(degrees);
                 X = cardinal.X;
                 Y = cardinal.Y;
+                OnChangeEvent?.Invoke(this);
             }
         }
 
@@ -315,6 +321,7 @@ namespace Si.Library.Mathematics
                 var cardinal = SiMath.DegToCardinal(degrees);
                 X = cardinal.X;
                 Y = cardinal.Y;
+                OnChangeEvent?.Invoke(this);
             }
         }
 
@@ -343,6 +350,8 @@ namespace Si.Library.Mathematics
 
             X = x;
             Y = y;
+
+            OnChangeEvent?.Invoke(this);
         }
 
         /// <summary>
@@ -350,11 +359,12 @@ namespace Si.Library.Mathematics
         /// </summary>
         /// <param name="angleRadians"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void SetDirctionMaintainMagnitude(float angleRadians)
+        public void SetDirectionMaintainMagnitude(float angleRadians)
         {
             float magnitude = Magnitude();
             X = magnitude * (float)Math.Cos(angleRadians);
             Y = magnitude * (float)Math.Sin(angleRadians);
+            OnChangeEvent?.Invoke(this);
         }
 
         /// <summary>
@@ -392,7 +402,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Gets the length of the a vector. This represents the distance from its tail (starting point) to its head (end point) in the vector space.
         /// It provides a measure of how "long" the vector is in the specified direction.
-        /// The length also serves as the vector magnatude.
+        /// The length also serves as the vector magnitude.
         /// </summary>
         /// <altmember cref="LengthSquared"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -434,7 +444,7 @@ namespace Si.Library.Mathematics
             => Math.Abs(X) + Math.Abs(Y);
 
         /// <summary>
-        /// Calculates the euclidean distance between two points in a 2D space (slower and precisie, but not compatible with DistanceSquaredTo(...)).
+        /// Calculates the Euclidean distance between two points in a 2D space (slower and precise, but not compatible with DistanceSquaredTo(...)).
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -489,7 +499,7 @@ namespace Si.Library.Mathematics
         /// Returns the delta angle from this to another expressed in degrees from 180--180, positive
         /// figures indicate right (starboard) side and negative indicate left-hand (port) side of the object.
         /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="from">The object from which the calculation is based.</param>
         /// <param name="toLocation">The location to which the calculation is based.</param>
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object,
         /// positive indicated right (starboard) side.</param>
@@ -511,7 +521,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns the delta angle from this vector to another expressed in degrees from 0-360.
         /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="from">The object from which the calculation is based.</param>
         /// <param name="toLocation">The location to which the calculation is based.</param>
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object,
         /// positive indicated right (starboard) side.</param>
@@ -544,7 +554,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
         /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="from">The object from which the calculation is based.</param>
         /// <param name="at">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees"></param>
         /// <returns>True if the object is pointing away from the other given the constraints.</returns>
@@ -558,7 +568,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns true if the object is pointing AWAY another, taking into account the tolerance in degrees.
         /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="from">The object from which the calculation is based.</param>
         /// <param name="at">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees"></param>
         /// <param name="maxDistance"></param>
@@ -570,7 +580,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
         /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="from">The object from which the calculation is based.</param>
         /// <param name="at">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees"></param>
         /// <returns>True if the object is pointing at the other given the constraints.</returns>
@@ -584,7 +594,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns true if the object is pointing AT another, taking into account the tolerance in degrees.
         /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="from">The object from which the calculation is based.</param>
         /// <param name="at">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees">The angle in degrees to consider the object to pointing at the other.</param>
         /// <param name="maxDistance">The distance in consider the object to pointing at the other.</param>
@@ -605,7 +615,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns the delta angle from one object to another expressed in degrees from 180--180, positive figures indicate right (starboard) side and negative indicate left-hand (port) side of the object.
         /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="from">The object from which the calculation is based.</param>
         /// <param name="to">The object to which the calculation is based.</param>
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
         /// <returns>The calculated angle in the range of 180--180.</returns>
@@ -626,7 +636,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns the delta angle from one object to another expressed in degrees from 0-360.
         /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="from">The object from which the calculation is based.</param>
         /// <param name="to">The object to which the calculation is based.</param>
         /// <param name="offsetAngle">-90 degrees would be looking off the left-hand (port) side of the object, positive indicated right (starboard) side.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>

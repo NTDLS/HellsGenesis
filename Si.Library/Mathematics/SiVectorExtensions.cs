@@ -69,7 +69,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Calculate the angle between two points in signed degrees.
         /// </summary>
-        /// <param name="from">The object from which the calcualtion is based.</param>
+        /// <param name="from">The object from which the calculation is based.</param>
         /// <param name="to">The point to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

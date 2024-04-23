@@ -30,19 +30,10 @@ namespace Si.Engine.Sprite._Superclass._Root
             }
         }
 
-        private SiVector _movementVector = new();
         /// <summary>
         /// Omni-directional velocity.
         /// </summary>
-        public SiVector MovementVector
-        {
-            get => _movementVector;
-            set
-            {
-                _movementVector = value;
-                VelocityChanged();
-            }
-        }
+        public SiVector MovementVector { get; set; } = new();
 
         private float _throttle = 1.0f;
         /// <summary>
@@ -58,7 +49,6 @@ namespace Si.Engine.Sprite._Superclass._Root
                 //RecalculateMovementVector(); //Seems like unneeded overhead.
             }
         }
-
 
         private float _maxThrottle = 1.0f;
         /// <summary>
@@ -79,13 +69,24 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// </summary>
         public float RotationSpeed { get; set; } = 0;
 
+
+        private SiVector _orientation;
         /// <summary>
         /// The angle in which the sprite is pointing, note that this is NOT the travel angle.
         /// The travel angle is baked into the MovementVector. If you need the movement vector
         /// to follow this direction angle then call RecalculateMovementVector() after modifying
         /// the PointingAngle.
         /// </summary>
-        public SiVector Orientation { get; set; } = new();
+        public SiVector Orientation
+        {
+            get => _orientation;
+            set
+            {
+                _orientation = value;
+                _orientation.OnChangeEvent += (SiVector vector) => RotationChanged();
+                RotationChanged();
+            }
+        }
 
         public SharpDX.Direct2D1.Bitmap GetImage() => _image;
         public string SpriteTag { get; set; }

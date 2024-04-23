@@ -9,7 +9,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Calculates the angle of one sprite location to another sprite location in signed degrees.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toSprite">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 1-180 to -1-180.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -29,7 +29,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Calculates the angle of one sprite location to another sprite location in unsigned degrees.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toSprite">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -39,7 +39,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Calculates the angle of one sprite location to another sprite location in signed radians.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toSprite">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0 though +π and -π though 0.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -49,7 +49,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Calculates the angle of one sprite location to another sprite location in unsigned radians.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toSprite">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0 though 2*π.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -59,7 +59,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Calculates the angle of one sprite location to sprite location from 1-180 to -1-180.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toLocation">The point to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-180 to -180-0.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,7 +79,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Calculates the angle of one location to a sprite location.
         /// </summary>
-        /// <param name="fromLocation">The object from which the calcualtion is based.</param>
+        /// <param name="fromLocation">The object from which the calculation is based.</param>
         /// <param name="toSprite">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -89,7 +89,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Calculates the angle of one sprite location to another location from 0 - 360.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toLocation">The point to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -100,7 +100,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns true if the sprite is pointing AT another sprite, taking into account the tolerance in degrees.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="atSprite">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees"></param>
         /// <returns>True if the object is pointing away from the other given the constraints.</returns>
@@ -114,7 +114,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns true if the sprite is pointing AWAY another sprite, taking into account the tolerance in degrees.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="atSprite">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees"></param>
         /// <param name="maxDistance"></param>
@@ -126,7 +126,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns true if the sprite is pointing AT another sprite, taking into account the tolerance in degrees.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="atSprite">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees"></param>
         /// <returns>True if the object is pointing at the other given the constraints.</returns>
@@ -140,7 +140,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns true if the sprite is pointing AT another sprite, taking into account the tolerance in degrees and max distance.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="atSprite">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees">The angle in degrees to consider the object to pointing at the other.</param>
         /// <param name="maxDistance">The distance in which the object to pointing at the other.</param>
@@ -160,7 +160,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns true if the sprite is pointing AT another sprite, taking into account the tolerance in degrees and min/max distance.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="atSprite">The object to which the calculation is based.</param>
         /// <param name="toleranceDegrees">The angle in degrees to consider the object to pointing at the other.</param>
         /// /// <param name="minDistance">The distance in which the object to pointing at the other.</param>
@@ -182,7 +182,7 @@ namespace Si.Library.Mathematics
         /// Returns the angle which would be requird to rotate a sprite to be pointing at another sprite.
         /// positive figures indicate right (starboard) side and negative indicate left-hand (port) side of the object.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toSprite">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 180--180.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -192,7 +192,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns the angle which would be requird to rotate a sprite to to be pointing at a given location.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toLocation">The location to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 180--180.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -202,7 +202,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns the angle which would be requird to rotate a sprite to be pointing at another sprite.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toSprite">The object to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -212,7 +212,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns the angle which would be requird to rotate a sprite to be pointing at a given location.
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toLocation">The location to which the calculation is based.</param>
         /// <returns>The calculated angle in the range of 0-360.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -260,7 +260,7 @@ namespace Si.Library.Mathematics
         /// <summary>
         /// Returns the distance from one sprite to another
         /// </summary>
-        /// <param name="fromSprite">The object from which the calcualtion is based.</param>
+        /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toSprite">The object to which the calculation is based.</param>
         /// <returns>The calcuated distance from one object to the other.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

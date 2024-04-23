@@ -24,6 +24,7 @@ namespace Si.Engine.Sprite._Superclass._Root
 
             SpriteTag = spriteTag;
             IsHighlighted = _engine.Settings.HighlightAllSprites;
+            Orientation = new SiVector();
         }
 
         public void QueueForDelete()
