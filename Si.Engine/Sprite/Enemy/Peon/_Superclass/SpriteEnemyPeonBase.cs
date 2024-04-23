@@ -1,8 +1,6 @@
-﻿using Si.Engine.Sprite._Superclass;
+﻿using Si.Engine.Sprite._Superclass._SpriteBase;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Library.Mathematics;
-using System;
-using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 {
@@ -20,13 +18,6 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
             RecalculateMovementVector();
 
             OnVisibilityChanged += EnemyBase_OnVisibilityChanged;
-
-            var playMode = new SpriteAnimation.PlayMode()
-            {
-                ReplyMode = SiAnimationReplayMode.Infinite,
-                DeleteSpriteAfterPlay = false,
-                ReplayDelay = new TimeSpan(0)
-            };
 
             ThrusterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png")
             {

@@ -1,4 +1,5 @@
 ﻿using SharpDX.Direct2D1;
+using Si.Engine.Sprite._Superclass._SpriteBase;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.SupportingClasses;
 using Si.Engine.Sprite.Weapon._Superclass;
@@ -42,7 +43,7 @@ namespace Si.Engine.Sprite._Superclass
         #endregion
 
         public SiRenewableResources RenewableResources { get; set; } = new();
-        public InteractiveSpriteMetadata Metadata { get; set; }
+        public InteractiveSpriteMetadata Metadata { get; private set; }
         public List<WeaponBase> Weapons { get; private set; } = new();
 
         public SpriteInteractiveBase(EngineCore engine, string imagePath)
@@ -86,14 +87,20 @@ namespace Si.Engine.Sprite._Superclass
             SetHullHealth(Metadata.Hull);
             SetShieldHealth(Metadata.Shields);
 
-            foreach (var weapon in Metadata.Weapons)
+            if (Metadata.Weapons != null)
             {
-                AddWeapon(weapon.Type, weapon.MunitionCount);
+                foreach (var weapon in Metadata.Weapons)
+                {
+                    AddWeapon(weapon.Type, weapon.MunitionCount);
+                }
             }
 
-            foreach (var attachment in Metadata.Attachments)
+            if (Metadata.Attachments != null)
             {
-                AttachOfType(attachment.Type, attachment.LocationRelativeToOwner);
+                foreach (var attachment in Metadata.Attachments)
+                {
+                    AttachOfType(attachment.Type, attachment.LocationRelativeToOwner);
+                }
             }
 
             if (this is SpriteAttachment attach)
@@ -135,7 +142,7 @@ namespace Si.Engine.Sprite._Superclass
             {
                 return Metadata.Mass;
             }
-            return TotalVelocity * Metadata?.Mass ?? 1;
+            return TotalVelocity * Metadata.Mass;
         }
 
         #region Weapons selection and evaluation.
@@ -295,14 +302,14 @@ namespace Si.Engine.Sprite._Superclass
         {
             _engine.Events.Add(() =>
             {
-                SiUtility.DebugPrintDuration($"{GetType().Name}\tAddRandomExplosionAt", () => _engine.Sprites.Animations.AddRandomExplosionAt(this));
-                SiUtility.DebugPrintDuration($"{GetType().Name}\tParticleBlastAt", () => _engine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this));
-                SiUtility.DebugPrintDuration($"{GetType().Name}\tCreateFragmentsOf", () => _engine.Sprites.CreateFragmentsOf(this));
-                SiUtility.DebugPrintDuration($"{GetType().Name}\tAddScreenShake", () => _engine.Rendering.AddScreenShake(4, 800));
-                SiUtility.DebugPrintDuration($"{GetType().Name}\tPlayRandomExplosion", () => _engine.Audio.PlayRandomExplosion());
+                _engine.Sprites.Animations.AddRandomExplosionAt(this);
+                _engine.Sprites.Particles.ParticleBlastAt(SiRandom.Between(200, 800), this);
+                _engine.Sprites.CreateFragmentsOf(this);
+                _engine.Rendering.AddScreenShake(4, 800);
+                _engine.Audio.PlayRandomExplosion();
             });
 
-            SiUtility.DebugPrintDuration($"{GetType().Name}\tExplode", () => base.Explode());
+            base.Explode();
         }
 
         /// <summary>
@@ -321,7 +328,7 @@ namespace Si.Engine.Sprite._Superclass
         /// </summary>
         public virtual void PerformCollisionDetection(float epoch)
         {
-            if (Metadata?.CollisionDetection != true)
+            if (!Metadata.CollisionDetection)
             {
                 return;
             }

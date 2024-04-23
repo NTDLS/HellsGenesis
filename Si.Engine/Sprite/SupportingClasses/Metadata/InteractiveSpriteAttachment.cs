@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
 {
-    public class InteractiveSpriteAttachment
+    public struct InteractiveSpriteAttachment
     {
+        public InteractiveSpriteAttachment() { }
+
         public string Type { get; set; }
         public float X { get; set; }
         public float Y { get; set; }

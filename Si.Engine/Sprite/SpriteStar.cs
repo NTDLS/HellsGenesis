@@ -1,4 +1,4 @@
-﻿using Si.Engine.Sprite._Superclass;
+﻿using Si.Engine.Sprite._Superclass._SpriteBase;
 using Si.Library;
 using Si.Library.Mathematics;
 using System.IO;

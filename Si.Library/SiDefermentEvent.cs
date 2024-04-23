@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// Allows for deferred events to be injected into the engine. We use this so that we can defer 
-    /// tasks without sleeping and so we can inject into the sprites durring the world clock logic.
+    /// tasks without sleeping and so we can inject into the sprites during the world clock logic.
     /// </summary>
     public class SiDefermentEvent
     {

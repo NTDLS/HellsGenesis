@@ -4,7 +4,7 @@ using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
 using Si.Engine.Menu;
 using Si.Engine.Sprite;
-using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite._Superclass._SpriteBase;
 using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.UnvectoredTickController;
 using Si.GameEngine.AI._Superclass;
@@ -220,12 +220,11 @@ namespace Si.Engine
             //Sprites.ResetPlayer();
             _worldClock.Start();
 
-
             var loadingHeader = Sprites.TextBlocks.Add(Rendering.TextFormats.Loading,
                 Rendering.Materials.Brushes.Red, new SiVector(100, 100), true);
 
             var loadingDetail = Sprites.TextBlocks.Add(Rendering.TextFormats.Loading,
-                Rendering.Materials.Brushes.Red, new SiVector(loadingHeader.X, loadingHeader.Y + 50), true);
+                Rendering.Materials.Brushes.Green, new SiVector(loadingHeader.X, loadingHeader.Y + 50), true);
 
             IsInitializing = true;
 
@@ -253,9 +252,9 @@ namespace Si.Engine
 
         private void HydrateCache(SpriteTextBlock loadingHeader, SpriteTextBlock loadingDetail)
         {
-            loadingHeader.SetTextAndCenterXY("Hydrating cache...");
+            loadingHeader.SetTextAndCenterX("Hydrating cache...");
 
-            loadingHeader.SetTextAndCenterXY("Hydrating reflection cache...");
+            loadingHeader.SetTextAndCenterX("Hydrating reflection cache...");
             SiReflection.BuildReflectionCacheOfType<SpriteBase>();
             SiReflection.BuildReflectionCacheOfType<AIStateMachine>();
 

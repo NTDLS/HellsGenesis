@@ -3,6 +3,7 @@ using SharpDX.Mathematics.Interop;
 using Si.Engine.Menu;
 using Si.Engine.Sprite;
 using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite._Superclass._SpriteBase;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.PowerUp._Superclass;
@@ -22,9 +23,9 @@ using static Si.Library.SiConstants;
 namespace Si.Engine.Manager
 {
     /// <summary>
-    /// Contains the collection of all sprites and their factories. This class stringently controlls access to the internal collection
-    ///     only allowing insertsions and deletions from it to occur within events so that it can be safely assumes that the collection
-    ///     can be enummerated in the world clock controllers without fear of collection modification durring enumeration.
+    /// Contains the collection of all sprites and their factories. This class stringently controls access to the internal collection
+    ///     only allowing insertion and deletions from it to occur within events so that it can be safely assumes that the collection
+    ///     can be enumerated in the world clock controllers without fear of collection modification during enumeration.
     /// </summary>
     public class SpriteManager : IDisposable
     {
@@ -115,7 +116,7 @@ namespace Si.Engine.Manager
         {
             if (_engine.IsInitializing == true)
             {
-                //When the engine is initialzing, we do all kinds of pre-caching.
+                //When the engine is initializing, we do all kinds of pre-caching.
                 //We want to make sure that none of these new classes make it to the sprite collection.
                 return;
             }
@@ -179,14 +180,14 @@ namespace Si.Engine.Manager
 
         //Probably faster than VisibleDamagable<T>().
         public SpriteInteractiveBase[] VisibleDamagable()
-            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata?.MunitionDetection == true).ToArray();
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata.MunitionDetection == true).ToArray();
 
         public T[] VisibleColliadble<T>() where T : class
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata.CollisionDetection).Select(o => o as T).ToArray();
 
         //Probably faster than VisibleColliadble<T>().
         public SpriteInteractiveBase[] VisibleColliadble()
-            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata?.CollisionDetection == true).ToArray();
+            => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visable && o.Metadata.CollisionDetection == true).ToArray();
 
         public PredictedKinematicBody[] VisibleColliadblePredictiveMove(float epoch)
             => _engine.Sprites.VisibleColliadble().Select(o => new PredictedKinematicBody(o, _engine.Display.RenderWindowPosition, epoch)).ToArray();
@@ -414,7 +415,7 @@ namespace Si.Engine.Manager
         public void HydrateCache(SpriteTextBlock loadingHeader, SpriteTextBlock loadingDetail)
         {
             float statusIndex = 0;
-            loadingHeader.SetTextAndCenterXY("Hydrating sprite cache...");
+            loadingHeader.SetTextAndCenterX("Hydrating sprite cache...");
 
             var assembly = Assembly.GetExecutingAssembly();
             var baseType = typeof(SpriteBase);
@@ -438,7 +439,7 @@ namespace Si.Engine.Manager
             }
 
             statusIndex = 0;
-            loadingHeader.SetTextAndCenterXY("Hydrating animation cache...");
+            loadingHeader.SetTextAndCenterX("Hydrating animation cache...");
 
             // Create instances of derived types
             foreach (var type in derivedTypes)

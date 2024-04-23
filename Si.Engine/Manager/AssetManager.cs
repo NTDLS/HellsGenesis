@@ -47,7 +47,7 @@ namespace Si.Engine.Manager
             _archive.Dispose();
         }
 
-        public T GetMetaData<T>(string spriteImagePath) where T : class
+        public T GetMetaData<T>(string spriteImagePath)
         {
             string metadataFile = $"{spriteImagePath}.json".Replace('\\', '/'); ;
             string key = $"meta:{metadataFile.ToLower()}";
@@ -55,12 +55,12 @@ namespace Si.Engine.Manager
             var cached = _collection.Read(o =>
             {
                 o.TryGetValue(key, out object value);
-                return value as T;
+                return value;
             });
 
             if (cached != null)
             {
-                return cached;
+                return (T)cached;
             }
 
             var metadata = JsonConvert.DeserializeObject<T>(GetText(metadataFile));
@@ -207,7 +207,7 @@ namespace Si.Engine.Manager
 
         public void HydrateCache(SpriteTextBlock loadingHeader, SpriteTextBlock loadingDetail)
         {
-            loadingHeader.SetTextAndCenterXY("Hydrating asset cache...");
+            loadingHeader.SetTextAndCenterX("Hydrating asset cache...");
 
             using var archive = ArchiveFactory.Open(_assetPackagePath);
             using var dtp = new DelegateThreadPool(Environment.ProcessorCount * 4);

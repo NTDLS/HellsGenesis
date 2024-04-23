@@ -13,7 +13,7 @@
         }
 
         /// <summary>
-        /// Determines the behaivior of a attachment sprite's position.
+        /// Determines the behavior of a attachment sprite's position.
         /// </summary>
         public enum AttachmentPositionType
         {
@@ -30,7 +30,7 @@
         }
 
         /// <summary>
-        /// Determines the behaivior of a attachment sprite's orientation.
+        /// Determines the behavior of a attachment sprite's orientation.
         /// </summary>
         public enum AttachmentOrientationType
         {

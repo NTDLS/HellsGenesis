@@ -26,7 +26,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
         protected SiAudioClip _fireSound;
 
-        public WeaponMetadata Metadata { get; set; }
+        public WeaponMetadata Metadata { get; private set; }
         public List<WeaponsLock> LockedTargets { get; set; } = new();
         public int RoundsFired { get; set; }
         public int RoundQuantity { get; set; }
@@ -40,15 +40,13 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         }
 
         /// <summary>
-        /// Sets the sprites image, sets speed, shields, adds attachements and weapons
-        /// from a .json file in the same path with the same name as the sprite image.
+        /// Sets the sprites images and loads other weapon related metadata.
         /// </summary>
         /// <param name="spriteImagePath"></param>
         public void LoadMetadata(string weaponName)
         {
             var metadataJson = _engine.Assets.GetText($@"Sprites\Weapon\{weaponName}.json");
             Metadata = JsonConvert.DeserializeObject<WeaponMetadata>(metadataJson);
-            Metadata.MunitionSceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
 
             if (string.IsNullOrEmpty(Metadata.SoundPath) == false)
             {
@@ -103,7 +101,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                         return munition;
                     }
                 default:
-                    throw new Exception($"The weapon type {Metadata?.MunitionType} is not implemented.");
+                    throw new Exception($"The weapon type {Metadata.MunitionType} is not implemented.");
             }
         }
 

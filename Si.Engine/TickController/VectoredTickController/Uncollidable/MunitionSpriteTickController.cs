@@ -2,6 +2,7 @@
 using Si.Engine;
 using Si.Engine.Manager;
 using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite._Superclass._SpriteBase;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;

@@ -7,8 +7,10 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
     /// <summary>
     /// Contains sprite metadata.
     /// </summary>
-    public class WeaponMetadata
+    public struct WeaponMetadata
     {
+        public WeaponMetadata() { }
+
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -31,7 +33,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
         /// <summary>
         /// The distance from the total canvas that the munition will be allowed to travel before it is deleted.
         /// </summary>
-        public float MunitionSceneDistanceLimit { get; set; }
+        //public float MunitionSceneDistanceLimit;
         public float Speed { get; set; } = 25;
 
         public int FireDelayMilliseconds { get; set; } = 100;

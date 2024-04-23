@@ -1,4 +1,5 @@
 ﻿using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite._Superclass._SpriteBase;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.Weapon._Superclass;
@@ -45,7 +46,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
             Weapon = weapon;
             RadarDotSize = new SiVector(1, 1);
-            SceneDistanceLimit = SiRandom.Between(weapon.Metadata.MunitionSceneDistanceLimit * 0.1f, weapon.Metadata.MunitionSceneDistanceLimit);
+            SceneDistanceLimit = _engine.Settings.MunitionSceneDistanceLimit;
 
             float headingRadians = angle == null ? firedFrom.Orientation.RadiansSigned : (float)angle;
             if (weapon.Metadata.AngleVarianceDegrees > 0)

@@ -1,7 +1,7 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using SharpDX.Mathematics.Interop;
-using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite._Superclass._SpriteBase;
 using Si.Library.Mathematics;
 using System.Drawing;
 using static Si.Library.SiConstants;

@@ -1,6 +1,7 @@
 ﻿using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
+using Si.Engine.Sprite.SupportingClasses.Metadata;
 using Si.Library.Mathematics;
 using System;
 using System.Drawing;
@@ -15,14 +16,13 @@ namespace Si.Engine.Sprite
         private int _currentFrame = 0;
         private int _currentRow = 0;
         private int _currentColumn = 0;
-        private Size _frameSize;
         private int _rows;
         private int _columns;
-        private int _frameDelayMilliseconds = 10;
+        private int _frameDelayMilliseconds;
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
         private PlayMode _playMode;
 
-        public class PlayMode
+        private struct PlayMode
         {
             private SiAnimationReplayMode _replay;
 
@@ -47,30 +47,40 @@ namespace Si.Engine.Sprite
         }
 
         public SpriteAnimation(EngineCore engine, string spriteSheetFileName)
-            : base(engine, spriteSheetFileName)
+            : base(engine)
         {
-            Location = SiVector.Zero;
-            AdvanceImage();
-        }
+            Location = new SiVector();
 
-        public void SetPlayMode(PlayMode playMode)
-        {
-            _playMode = playMode != null ? playMode : new PlayMode() //Create a default playmode.
+            var metadata = _engine.Assets.GetMetaData<SpriteAnimationMetadata>(spriteSheetFileName);
+
+            Speed = metadata.Speed;
+            Throttle = metadata.Throttle;
+            MaxThrottle = metadata.MaxThrottle;
+
+            SetImage(spriteSheetFileName);
+            FramesPerSecond = metadata.FramesPerSecond;
+            SetSize(new Size(metadata.FrameWidth, metadata.FrameHeight));
+
+            _playMode = new PlayMode
             {
-                DeleteSpriteAfterPlay = true,
-                ReplyMode = SiAnimationReplayMode.Single,
-                ReplayDelay = new TimeSpan(0, 0, 0, 0, _frameDelayMilliseconds)
+                DeleteSpriteAfterPlay = metadata.DeleteAfterPlay,
+                ReplyMode = metadata.ReplyMode,
+                ReplayDelay = new TimeSpan(0, 0, 0, 0, metadata.ReplayDelayMilliseconds)
             };
+
+            AdvanceImage();
         }
 
         public float FramesPerSecond
         {
-            set
-            {
-                _frameDelayMilliseconds = (int)((1.0f / value) * 1000.0f);
-            }
+            set => _frameDelayMilliseconds = (int)((1.0f / value) * 1000.0f);
+            get => (int)(1.0f / (_frameDelayMilliseconds / 1000.0f));
         }
 
+        /// <summary>
+        /// We want to get the entire animation sheet and reserve the base.image for the individual slices set by AdvanceImage().
+        /// </summary>
+        /// <param name="imagePath"></param>
         public new void SetImage(string imagePath)
         {
             _sheetImage = _engine.Assets.GetBitmap(imagePath);
@@ -79,7 +89,7 @@ namespace Si.Engine.Sprite
         public new void SetSize(Size frameSize)
         {
             base.SetSize(frameSize);
-            _frameSize = frameSize;
+
             _rows = (int)(_sheetImage.Size.Height / ((Size)frameSize).Height);
             _columns = (int)(_sheetImage.Size.Width / ((Size)frameSize).Width);
             _frameCount = _rows * _columns;
@@ -97,19 +107,19 @@ namespace Si.Engine.Sprite
         public override void Render(RenderTarget renderTarget)
         {
             var sourceRect = new RawRectangleF(
-                _currentColumn * _frameSize.Width,
-                _currentRow * _frameSize.Height,
-                _currentColumn * _frameSize.Width + _frameSize.Width,
-                _currentRow * _frameSize.Height + _frameSize.Height);
+                _currentColumn * Size.Width,
+                _currentRow * Size.Height,
+                _currentColumn * Size.Width + Size.Width,
+                _currentRow * Size.Height + Size.Height);
 
             _engine.Rendering.DrawBitmap(
                 renderTarget,
                 _sheetImage,
-                RenderLocation.X - _frameSize.Width / 2.0f,
-                RenderLocation.Y - _frameSize.Height / 2.0f,
+                RenderLocation.X - Size.Width / 2.0f,
+                RenderLocation.Y - Size.Height / 2.0f,
                 Orientation.RadiansSigned,
                 sourceRect,
-                new Size2F(_frameSize.Width, _frameSize.Height)
+                new Size2F(Size.Width, Size.Height)
             );
         }
 

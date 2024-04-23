@@ -1,6 +1,6 @@
 ﻿using Si.Engine.Interrogation;
 using Si.Engine.Interrogation._Superclass;
-using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite._Superclass._SpriteBase;
 using Si.Library;
 using Si.Library.Mathematics;
 using Si.Rendering;

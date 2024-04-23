@@ -1,5 +1,5 @@
 ﻿using Si.Engine;
-using Si.Engine.Sprite._Superclass;
+using Si.Engine.Sprite._Superclass._SpriteBase;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Library.Sprite;
 using System;

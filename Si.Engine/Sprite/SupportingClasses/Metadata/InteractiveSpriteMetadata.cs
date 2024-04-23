@@ -6,8 +6,10 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
     /// <summary>
     /// Contains sprite metadata.
     /// </summary>
-    public class InteractiveSpriteMetadata
+    public struct InteractiveSpriteMetadata
     {
+        public InteractiveSpriteMetadata() { }
+
         #region Animation.
 
         public int FrameWidth { get; set; }

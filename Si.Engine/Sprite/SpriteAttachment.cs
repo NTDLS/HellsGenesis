@@ -10,12 +10,12 @@ namespace Si.Engine.Sprite
         public SiVector LocationRelativeToOwner { get; set; }
 
         /// <summary>
-        /// Determines the behaivior of a attachment sprite's orientation. By default, it is fixed to owner.
+        /// Determines the behavior of a attachment sprite's orientation. By default, it is fixed to owner.
         /// </summary>
         public AttachmentOrientationType OrientationType { get; set; } = AttachmentOrientationType.FixedToOwner;
 
         /// <summary>
-        /// Determines the behaivior of a attachment sprite's position. By default, it is fixed to owner.
+        /// Determines the behavior of a attachment sprite's position. By default, it is fixed to owner.
         /// </summary>
         public AttachmentPositionType PositionType { get; set; } = AttachmentPositionType.FixedToOwner;
 
