@@ -4,7 +4,7 @@ using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
 using Si.Engine.Menu;
 using Si.Engine.Sprite;
-using Si.Engine.Sprite._Superclass._SpriteBase;
+using Si.Engine.Sprite._Superclass._Root;
 using Si.Engine.TickController.PlayerSpriteTickController;
 using Si.Engine.TickController.UnvectoredTickController;
 using Si.GameEngine.AI._Superclass;
@@ -130,7 +130,7 @@ namespace Si.Engine
 
         public void ResetGame()
         {
-            Sprites.TextBlocks.PlayerStatsText.Visable = false;
+            Sprites.TextBlocks.PlayerStatsText.Visible = false;
             Situations.End();
             Sprites.QueueDeletionOfActionSprites();
         }

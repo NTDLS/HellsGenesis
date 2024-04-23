@@ -1,4 +1,4 @@
-﻿using Si.Engine.Sprite._Superclass._SpriteBase;
+﻿using Si.Engine.Sprite._Superclass._Root;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Library.Mathematics;
 
@@ -42,12 +42,12 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         {
             var pointBehind = (Orientation * -1) * new SiVector(20, 20);
 
-            if (ThrusterAnimation != null && ThrusterAnimation.Visable)
+            if (ThrusterAnimation != null && ThrusterAnimation.Visible)
             {
                 ThrusterAnimation.Orientation = Orientation;
                 ThrusterAnimation.Location = Location + pointBehind;
             }
-            if (BoosterAnimation != null && BoosterAnimation.Visable)
+            if (BoosterAnimation != null && BoosterAnimation.Visible)
             {
                 BoosterAnimation.Orientation = Orientation;
                 BoosterAnimation.Location = Location + pointBehind;
@@ -58,11 +58,11 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
         {
             if (ThrusterAnimation != null)
             {
-                ThrusterAnimation.Visable = false;
+                ThrusterAnimation.Visible = false;
             }
             if (BoosterAnimation != null)
             {
-                BoosterAnimation.Visable = false;
+                BoosterAnimation.Visible = false;
             }
         }
 
@@ -76,11 +76,11 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 
             if (ThrusterAnimation != null)
             {
-                ThrusterAnimation.Visable = MovementVector.Sum() > 0;
+                ThrusterAnimation.Visible = MovementVector.Sum() > 0;
             }
             if (BoosterAnimation != null)
             {
-                BoosterAnimation.Visable = Throttle > 0;
+                BoosterAnimation.Visible = Throttle > 0;
             }
         }
 

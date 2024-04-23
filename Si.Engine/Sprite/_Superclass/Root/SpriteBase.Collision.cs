@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace Si.Engine.Sprite._Superclass._SpriteBase
+namespace Si.Engine.Sprite._Superclass._Root
 {
     /// <summary>
     /// Represents a single item that can be rendered to the screen. All on-screen objects are derived from this class.
@@ -299,7 +299,7 @@ namespace Si.Engine.Sprite._Superclass._SpriteBase
         /// <returns></returns>
         public bool IntersectsAABB(SpriteBase otherObject)
         {
-            if (Visable && otherObject.Visable && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
+            if (Visible && otherObject.Visible && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
             {
                 return Bounds.IntersectsWith(otherObject.Bounds);
             }
@@ -308,7 +308,7 @@ namespace Si.Engine.Sprite._Superclass._SpriteBase
 
         public bool IntersectsWithTrajectory(SpriteBase otherObject)
         {
-            if (Visable && otherObject.Visable)
+            if (Visible && otherObject.Visible)
             {
                 var previousPosition = otherObject.Location;
 
@@ -333,7 +333,7 @@ namespace Si.Engine.Sprite._Superclass._SpriteBase
         /// <returns></returns>
         public bool IntersectsAABB(SpriteBase otherObject, SiVector sizeAdjust)
         {
-            if (Visable && otherObject.Visable && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
+            if (Visible && otherObject.Visible && !IsQueuedForDeletion && !otherObject.IsQueuedForDeletion)
             {
                 var alteredHitBox = new RectangleF(
                     otherObject.Bounds.X - (sizeAdjust.X / 2.0f),

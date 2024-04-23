@@ -1,6 +1,6 @@
 ﻿using Si.Engine.Interrogation;
 using Si.Engine.Interrogation._Superclass;
-using Si.Engine.Sprite._Superclass._SpriteBase;
+using Si.Engine.Sprite._Superclass._Root;
 using Si.Library;
 using Si.Library.Mathematics;
 using Si.Rendering;
@@ -319,7 +319,7 @@ namespace Si.Engine.Manager
 
             var sprite = SiReflection.CreateInstanceFromTypeName<SpriteBase>(typeName, new[] { _engine });
             sprite.Location = new SiVector(x, y);
-            sprite.Visable = true;
+            sprite.Visible = true;
 
             _engine.Sprites.Add(sprite);
 
@@ -623,7 +623,7 @@ namespace Si.Engine.Manager
                 var sprite = o.Where(o => o.UID == uid).FirstOrDefault();
                 if (sprite != null)
                 {
-                    sprite.Visable = command.ParameterValue<bool>("state");
+                    sprite.Visible = command.ParameterValue<bool>("state");
                 }
             });
         }

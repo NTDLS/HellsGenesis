@@ -1,5 +1,5 @@
 ﻿using Si.Engine;
-using Si.Engine.Sprite._Superclass._SpriteBase;
+using Si.Engine.Sprite._Superclass._Root;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Library.Sprite;
 using System;
@@ -48,7 +48,7 @@ namespace Si.Client.Forms
             UpsertVariable("Owner UID", $"{sprite.OwnerUID:n0}");
             UpsertVariable("Name", $"{sprite.GetType().Name}");
             UpsertVariable("Tag", $"{sprite.SpriteTag:n0}");
-            UpsertVariable("Is Visable?", $"{sprite.Visable:n0}");
+            UpsertVariable("Is Visible?", $"{sprite.Visible:n0}");
             UpsertVariable("Size", $"{sprite.Size:n0}");
             UpsertVariable("Bounds", $"{sprite.Bounds:n0}");
             UpsertVariable("Ready for Delete?", $"{sprite.IsQueuedForDeletion}");

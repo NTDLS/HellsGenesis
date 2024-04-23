@@ -20,7 +20,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
             RecalculateMovementVector();
 
             RadarPositionIndicator = _engine.Sprites.RadarPositions.Add();
-            RadarPositionIndicator.Visable = false;
+            RadarPositionIndicator.Visible = false;
 
             RadarPositionText = _engine.Sprites.TextBlocks.CreateRadarPosition(
                 engine.Rendering.TextFormats.RadarPositionIndicator,

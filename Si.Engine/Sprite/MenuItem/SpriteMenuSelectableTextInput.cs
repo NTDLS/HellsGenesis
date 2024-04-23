@@ -17,7 +17,7 @@ namespace Si.Engine.Sprite.MenuItem
             : base(engine, menu, format, color, location)
         {
             ItemType = SiMenuItemType.SelectableTextInput;
-            Visable = true;
+            Visible = true;
             CharacterLimit = characterLimit;
         }
 

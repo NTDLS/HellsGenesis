@@ -1,7 +1,7 @@
 ﻿using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using SharpDX.Mathematics.Interop;
-using Si.Engine.Sprite._Superclass._SpriteBase;
+using Si.Engine.Sprite._Superclass._Root;
 using Si.Library.Mathematics;
 using System.Drawing;
 using static Si.Library.SiConstants;
@@ -71,7 +71,7 @@ namespace Si.Engine.Sprite
 
         public override void Render(RenderTarget renderTarget)
         {
-            if (Visable)
+            if (Visible)
             {
                 _engine.Rendering.DrawText(renderTarget,
                     RenderLocation.X,

@@ -44,7 +44,7 @@ namespace Si.Engine.Sprite.MenuItem
         {
             ItemType = SiMenuItemType.Undefined;
             Menu = menu;
-            Visable = true;
+            Visible = true;
         }
     }
 }

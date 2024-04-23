@@ -1,5 +1,5 @@
 ﻿using Si.Engine.Sprite._Superclass;
-using Si.Engine.Sprite._Superclass._SpriteBase;
+using Si.Engine.Sprite._Superclass._Root;
 using Si.GameEngine.AI._Superclass;
 using Si.Library;
 using Si.Library.Mathematics;

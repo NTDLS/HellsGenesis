@@ -1,5 +1,5 @@
 ﻿using SharpDX.Direct2D1;
-using Si.Engine.Sprite._Superclass._SpriteBase;
+using Si.Engine.Sprite._Superclass._Root;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.SupportingClasses;
 using Si.Engine.Sprite.Weapon._Superclass;
@@ -271,7 +271,7 @@ namespace Si.Engine.Sprite._Superclass
         {
             base.Render(renderTarget);
 
-            if (Visable)
+            if (Visible)
             {
                 if (_lockedOnImage != null && IsLockedOnHard)
                 {

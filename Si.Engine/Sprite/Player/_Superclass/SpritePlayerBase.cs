@@ -1,6 +1,6 @@
 ﻿using Si.Audio;
 using Si.Engine.Sprite._Superclass;
-using Si.Engine.Sprite._Superclass._SpriteBase;
+using Si.Engine.Sprite._Superclass._Root;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
@@ -69,7 +69,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                 ThrusterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png")
                 {
                     SpriteTag = "PlayerForwardThrust",
-                    Visable = false,
+                    Visible = false,
                     OwnerUID = UID
                 };
                 //ThrustAnimation.Reset();
@@ -82,7 +82,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                 BoosterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png")
                 {
                     SpriteTag = "PlayerForwardThrust",
-                    Visable = false,
+                    Visible = false,
                     OwnerUID = UID
                 };
                 //BoostAnimation.Reset();
@@ -103,10 +103,10 @@ namespace Si.Engine.Sprite.Player._Superclass
         public override void VisibilityChanged()
         {
             UpdateThrustAnimationPositions();
-            if (Visable == false)
+            if (Visible == false)
             {
-                if (ThrusterAnimation != null) ThrusterAnimation.Visable = false;
-                if (BoosterAnimation != null) BoosterAnimation.Visable = false;
+                if (ThrusterAnimation != null) ThrusterAnimation.Visible = false;
+                if (BoosterAnimation != null) BoosterAnimation.Visible = false;
                 ShipEngineIdleSound?.Stop();
                 ShipEngineRoarSound?.Stop();
             }
@@ -167,7 +167,7 @@ namespace Si.Engine.Sprite.Player._Superclass
 
             if (ThrusterAnimation != null)
             {
-                if (Visable)
+                if (Visible)
                 {
                     ThrusterAnimation.Orientation = Orientation;
                     ThrusterAnimation.Location = Location + pointBehind;
@@ -176,7 +176,7 @@ namespace Si.Engine.Sprite.Player._Superclass
 
             if (BoosterAnimation != null)
             {
-                if (Visable)
+                if (Visible)
                 {
                     BoosterAnimation.Orientation = Orientation;
                     BoosterAnimation.Location = Location + pointBehind;

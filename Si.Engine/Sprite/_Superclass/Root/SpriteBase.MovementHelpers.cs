@@ -1,7 +1,7 @@
 ﻿using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
 
-namespace Si.Engine.Sprite._Superclass._SpriteBase
+namespace Si.Engine.Sprite._Superclass._Root
 {
     public partial class SpriteBase
     {

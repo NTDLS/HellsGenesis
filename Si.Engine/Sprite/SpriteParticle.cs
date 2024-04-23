@@ -109,7 +109,7 @@ namespace Si.Engine.Sprite
 
         public override void Render(RenderTarget renderTarget)
         {
-            if (Visable)
+            if (Visible)
             {
                 switch (Shape)
                 {

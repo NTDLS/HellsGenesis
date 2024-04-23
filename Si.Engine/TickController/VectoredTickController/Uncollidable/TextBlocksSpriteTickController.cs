@@ -20,14 +20,14 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             : base(engine, manager)
         {
             PlayerStatsText = Add(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.WhiteSmoke, new SiVector(5, 5), true);
-            PlayerStatsText.Visable = false;
+            PlayerStatsText.Visible = false;
             DebugText = Add(engine.Rendering.TextFormats.RealtimePlayerStats, engine.Rendering.Materials.Brushes.Cyan, new SiVector(5, PlayerStatsText.Y + 100), true);
 
             //We have to create this ahead of time because we cant create pause text when paused since sprires are created via events.
             PausedText = Add(engine.Rendering.TextFormats.LargeBlocker,
                     engine.Rendering.Materials.Brushes.Red, new SiVector(100, 100), true, "PausedText", "Paused");
 
-            PausedText.Visable = false;
+            PausedText.Visible = false;
         }
 
         public override void ExecuteWorldClockTick(float epoch, SiVector displacementVector)

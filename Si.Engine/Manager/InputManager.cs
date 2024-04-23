@@ -459,7 +459,7 @@ namespace Si.Engine.Manager
                     frag.Y += SiRandom.Between(-200, 200);
 
                     frag.SetImage(bitmap);
-                    frag.Visable = true;
+                    frag.Visible = true;
 
                     //bitmaps.
                 }

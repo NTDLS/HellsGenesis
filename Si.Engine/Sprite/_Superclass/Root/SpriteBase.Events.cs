@@ -1,6 +1,6 @@
 ﻿using static Si.Library.SiConstants;
 
-namespace Si.Engine.Sprite._Superclass._SpriteBase
+namespace Si.Engine.Sprite._Superclass._Root
 {
     public partial class SpriteBase
     {
@@ -15,5 +15,10 @@ namespace Si.Engine.Sprite._Superclass._SpriteBase
 
         public delegate void ExplodeEvent(SpriteBase sender);
         public event ExplodeEvent OnExplode;
+
+        public virtual void VelocityChanged() { }
+        public virtual void VisibilityChanged() { }
+        public virtual void LocationChanged() { }
+        public virtual void RotationChanged() { }
     }
 }

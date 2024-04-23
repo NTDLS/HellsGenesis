@@ -1,13 +1,43 @@
 ﻿using Si.Engine.Sprite.Weapon.Munition._Superclass;
+using Si.Library.Mathematics;
 using static Si.Library.SiConstants;
 
-namespace Si.Engine.Sprite._Superclass._SpriteBase
+namespace Si.Engine.Sprite._Superclass._Root
 {
     public partial class SpriteBase
     {
         public void ReviveDeadOrExploded()
         {
             IsDeadOrExploded = false;
+        }
+
+        /// <summary>
+        /// Allows for the testing of hits from a munition, 
+        /// </summary>
+        /// <param name="munition">The munition object that is being tested for.</param>
+        /// <param name="hitTestPosition">The position to test for hit.</param>
+        /// <returns></returns>
+        public virtual bool TryMunitionHit(MunitionBase munition, SiVector hitTestPosition)
+        {
+            if (IntersectsAABB(hitTestPosition))
+            {
+                Hit(munition);
+                if (HullHealth <= 0)
+                {
+                    Explode();
+                }
+                return true;
+            }
+            return false;
+        }
+
+        public virtual void MunitionHit(MunitionBase munition)
+        {
+            Hit(munition);
+            if (HullHealth <= 0)
+            {
+                Explode();
+            }
         }
 
         /// <summary>

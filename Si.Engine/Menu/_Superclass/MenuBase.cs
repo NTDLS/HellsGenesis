@@ -27,7 +27,7 @@ namespace Si.Engine.Menu._Superclass
         }
 
         public List<SpriteMenuItem> VisibleSelectableItems() =>
-            Items.Where(o => o.Visable == true
+            Items.Where(o => o.Visible == true
             && (o.ItemType == SiMenuItemType.SelectableItem || o.ItemType == SiMenuItemType.SelectableTextInput)).ToList();
 
         #region Events.
@@ -332,12 +332,12 @@ namespace Si.Engine.Menu._Superclass
 
         public void Render(SharpDX.Direct2D1.RenderTarget renderTarget)
         {
-            foreach (var item in Items.Where(o => o.Visable == true))
+            foreach (var item in Items.Where(o => o.Visible == true))
             {
                 item.Render(renderTarget);
             }
 
-            var selectedItem = (from o in Items where o.Visable == true && o.Selected == true select o).FirstOrDefault();
+            var selectedItem = (from o in Items where o.Visible == true && o.Selected == true select o).FirstOrDefault();
             if (selectedItem != null)
             {
                 _engine.Rendering.DrawRectangle(renderTarget, selectedItem.RawBounds, _engine.Rendering.Materials.Colors.Red, 2, 2, 0);

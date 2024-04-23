@@ -1,5 +1,5 @@
 ﻿using Si.Engine.Manager;
-using Si.Engine.Sprite._Superclass._SpriteBase;
+using Si.Engine.Sprite._Superclass._Root;
 using Si.Library.Mathematics;
 using System;
 using System.Linq;

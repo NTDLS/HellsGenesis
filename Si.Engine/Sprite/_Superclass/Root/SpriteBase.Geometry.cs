@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Si.Engine.Sprite._Superclass._SpriteBase
+namespace Si.Engine.Sprite._Superclass._Root
 {
     public partial class SpriteBase
     {
