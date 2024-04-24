@@ -3,5 +3,5 @@
   "FrameWidth": 128,
   "FramesPerSecond": 30,
   "DeleteAfterPlay": "true",
-  "ReplyMode": "Single"
+  "PlayMode": "Single"
 }

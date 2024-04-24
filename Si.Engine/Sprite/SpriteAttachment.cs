@@ -7,6 +7,7 @@ namespace Si.Engine.Sprite
     public class SpriteAttachment : SpriteInteractiveBase
     {
         private SpriteInteractiveBase _rootOwner = null;
+        private SpriteInteractiveBase _owner = null;
         public SiVector LocationRelativeToOwner { get; set; }
 
         /// <summary>
@@ -28,28 +29,28 @@ namespace Si.Engine.Sprite
         {
             if (PositionType == AttachmentPositionType.FixedToOwner)
             {
-                // Since the attachement BaseLocation is relative to the top-left corner of the base sprite, we need
+                // Since the attachment BaseLocation is relative to the top-left corner of the base sprite, we need
                 // to get the position relative to the center of the base sprite image so that we can rotate around that.
-                var attachmentOffset = LocationRelativeToOwner - (Owner.Size / 2.0f);
+                var attachmentOffset = LocationRelativeToOwner - (RootOwner.Size / 2.0f);
 
                 // Apply the rotated offset to get the new attachment location relative to the base sprite center.
-                Location = Owner.Location + attachmentOffset.RotatedBy(Owner.Orientation.RadiansSigned);
+                Location = RootOwner.Location + attachmentOffset.RotatedBy(RootOwner.Orientation.RadiansSigned);
             }
 
             if (OrientationType == AttachmentOrientationType.FixedToOwner)
             {
                 //Make sure the attachment faces forwards.
-                Orientation = Owner.Orientation.Clone();
+                Orientation = RootOwner.Orientation.Clone();
             }
 
             base.ApplyMotion(epoch, displacementVector);
         }
 
         /// <summary>
-        /// Gets and caches the root owner of this attachement.
+        /// Gets and caches the root owner of this attachment.
         /// </summary>
         /// <returns></returns>
-        public SpriteInteractiveBase Owner
+        public SpriteInteractiveBase RootOwner
         {
             get
             {
@@ -63,6 +64,19 @@ namespace Si.Engine.Sprite
                     } while (_rootOwner != null && _rootOwner.OwnerUID != 0);
                 }
                 return _rootOwner;
+            }
+        }
+
+        /// <summary>
+        /// Gets and caches the root owner of this attachment.
+        /// </summary>
+        /// <returns></returns>
+        public SpriteInteractiveBase Owner
+        {
+            get
+            {
+                _owner ??= _engine.Sprites.GetSpriteByOwner<SpriteInteractiveBase>(OwnerUID);
+                return _owner;
             }
         }
     }

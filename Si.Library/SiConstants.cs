@@ -131,14 +131,24 @@
         {
             Undefined,
             Title,
-            Textblock,
+            TextBlock,
             SelectableItem,
             SelectableTextInput
         }
 
-        public enum SiAnimationReplayMode
+        public enum SiAnimationPlayMode
         {
+            /// <summary>
+            /// The animation will be played once and can be replayed by calling Play().
+            /// </summary>
             Single,
+            /// <summary>
+            /// The animation will be played once then will be deleted.
+            /// </summary>
+            DeleteAfterPlay,
+            /// <summary>
+            /// The animation will loop until manually deleted or hidden.
+            /// </summary>
             Infinite
         };
 

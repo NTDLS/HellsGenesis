@@ -14,7 +14,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
 
         public override void ApplyIntelligence(float epoch, SiVector displacementVector)
         {
-            Visible = !Owner.MovementVector.Magnitude().IsNearZero();
+            Visible = !RootOwner.MovementVector.Magnitude().IsNearZero();
             base.ApplyIntelligence(epoch, displacementVector);
         }
     }

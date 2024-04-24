@@ -3,5 +3,5 @@
   "FrameWidth": 512,
   "FramesPerSecond": 50,
   "DeleteAfterPlay": "true",
-  "ReplyMode": "Single"
+  "PlayMode": "Single"
 }

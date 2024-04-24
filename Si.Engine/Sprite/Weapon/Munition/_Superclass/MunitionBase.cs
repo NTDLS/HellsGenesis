@@ -71,7 +71,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             if (firedFrom is SpriteAttachment attachment)
             {
                 //If we are firing from an attachment, get the type of the root owner.
-                firedFrom = attachment.Owner;
+                firedFrom = attachment.RootOwner;
             }
 
             if (firedFrom is SpriteEnemyBase)

@@ -17,10 +17,10 @@ namespace Si.Engine.Sprite.Enemy.Boss.Devastator
         {
             // Since the turret.BaseLocation is relative to the top-left corner of the base sprite, we need
             // to get the position relative to the center of the base sprite image so that we can rotate around that.
-            var turretOffset = LocationRelativeToOwner - (Owner.Size / 2.0f);
+            var turretOffset = LocationRelativeToOwner - (RootOwner.Size / 2.0f);
 
             // Apply the rotated offsets to get the new turret location relative to the base sprite center.
-            Location = Owner.Location + turretOffset.RotatedBy(Owner.Orientation.RadiansSigned);
+            Location = RootOwner.Location + turretOffset.RotatedBy(RootOwner.Orientation.RadiansSigned);
 
             if (DistanceTo(_engine.Player.Sprite) < 1000)
             {

@@ -103,7 +103,7 @@ namespace Si.Engine.Menu._Superclass
             var item = new SpriteMenuItem(_engine, this, _engine.Rendering.TextFormats.MenuGeneral, _engine.Rendering.Materials.Brushes.LawnGreen, location)
             {
                 Text = text,
-                ItemType = SiMenuItemType.Textblock
+                ItemType = SiMenuItemType.TextBlock
             };
             AddMenuItem(item);
             return item;

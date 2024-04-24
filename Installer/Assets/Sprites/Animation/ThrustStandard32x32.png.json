@@ -3,6 +3,5 @@
   "FrameWidth": 32,
   "FramesPerSecond": 100,
   "DeleteAfterPlay": "false",
-  "ReplyMode": "Infinite",
-  "ReplayDelayMilliseconds": 10
+  "PlayMode": "Infinite"
 }

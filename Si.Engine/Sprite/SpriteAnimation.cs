@@ -20,31 +20,8 @@ namespace Si.Engine.Sprite
         private int _columns;
         private int _frameDelayMilliseconds;
         private DateTime _lastFrameChange = DateTime.Now.AddSeconds(-60);
-        private PlayMode _playMode;
 
-        private struct PlayMode
-        {
-            private SiAnimationReplayMode _replay;
-
-            public SiAnimationReplayMode ReplyMode
-            {
-                get
-                {
-                    return _replay;
-                }
-                set
-                {
-                    if (value == SiAnimationReplayMode.Infinite)
-                    {
-                        DeleteSpriteAfterPlay = false;
-                    }
-                    _replay = value;
-                }
-            }
-
-            public TimeSpan ReplayDelay;
-            public bool DeleteSpriteAfterPlay;
-        }
+        public SiAnimationPlayMode PlayMode { get; private set; }
 
         public SpriteAnimation(EngineCore engine, string spriteSheetFileName)
             : base(engine)
@@ -61,12 +38,7 @@ namespace Si.Engine.Sprite
             FramesPerSecond = metadata.FramesPerSecond;
             SetSize(new Size(metadata.FrameWidth, metadata.FrameHeight));
 
-            _playMode = new PlayMode
-            {
-                DeleteSpriteAfterPlay = metadata.DeleteAfterPlay,
-                ReplyMode = metadata.ReplyMode,
-                ReplayDelay = new TimeSpan(0, 0, 0, 0, metadata.ReplayDelayMilliseconds)
-            };
+            PlayMode = metadata.PlayMode;
 
             AdvanceImage();
         }
@@ -90,12 +62,12 @@ namespace Si.Engine.Sprite
         {
             base.SetSize(frameSize);
 
-            _rows = (int)(_sheetImage.Size.Height / ((Size)frameSize).Height);
-            _columns = (int)(_sheetImage.Size.Width / ((Size)frameSize).Width);
+            _rows = (int)(_sheetImage.Size.Height / frameSize.Height);
+            _columns = (int)(_sheetImage.Size.Width / frameSize.Width);
             _frameCount = _rows * _columns;
         }
 
-        public void Reset()
+        public void Play()
         {
             _currentFrame = 0;
             _currentRow = 0;
@@ -139,18 +111,23 @@ namespace Si.Engine.Sprite
 
                 if (_currentFrame == _frameCount)
                 {
-                    if (_playMode.DeleteSpriteAfterPlay)
+                    switch (PlayMode)
                     {
-                        QueueForDelete();
-                        return;
+                        case SiAnimationPlayMode.DeleteAfterPlay:
+                            //Delete the animation sprite.
+                            QueueForDelete();
+                            break;
+                        case SiAnimationPlayMode.Infinite:
+                            //Reset the frame, but retain the _lastFrameChange.
+                            _currentFrame = 0;
+                            _currentColumn = 0;
+                            _currentRow = 0;
+                            break;
+                        case SiAnimationPlayMode.Single:
+                            //Nothing to do unless the player calls Play() again.
+                            break;
                     }
 
-                    if (_playMode.ReplyMode == SiAnimationReplayMode.Infinite)
-                    {
-                        _currentFrame = 0;
-                        _currentColumn = 0;
-                        _currentRow = 0;
-                    }
                     return;
                 }
             }

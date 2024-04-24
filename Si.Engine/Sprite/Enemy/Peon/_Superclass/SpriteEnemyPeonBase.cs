@@ -5,7 +5,7 @@ using Si.Library.Mathematics;
 namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 {
     /// <summary>
-    /// Base class for "Peon" enemies. These guys are basically all the same in theit functionality and animations.
+    /// Base class for "Peon" enemies. These guys are basically all the same in their functionality and animations.
     /// </summary>
     internal class SpriteEnemyPeonBase : SpriteEnemyBase
     {
@@ -21,16 +21,16 @@ namespace Si.Engine.Sprite.Enemy.Peon._Superclass
 
             ThrusterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustStandard32x32.png")
             {
+                Visible = false,
                 OwnerUID = UID
             };
-            ThrusterAnimation.Reset();
             _engine.Sprites.Animations.Insert(ThrusterAnimation, this);
 
             BoosterAnimation = new SpriteAnimation(_engine, @"Sprites\Animation\ThrustBoost32x32.png")
             {
+                Visible = false,
                 OwnerUID = UID
             };
-            BoosterAnimation.Reset();
             _engine.Sprites.Animations.Insert(BoosterAnimation, this);
 
             UpdateThrustAnimationPositions();

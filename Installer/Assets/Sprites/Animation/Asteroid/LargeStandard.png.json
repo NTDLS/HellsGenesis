@@ -3,5 +3,5 @@
   "FrameWidth": 241,
   "FramesPerSecond": 30,
   "DeleteAfterPlay": "false",
-  "ReplyMode": "Infinite"
+  "PlayMode": "Infinite"
 }
