@@ -18,6 +18,6 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NTDLS.Semaphore" Version="3.3.0" />
+    <PackageReference Include="NTDLS.Semaphore" Version="3.4.2" />
   </ItemGroup>
 </Project>

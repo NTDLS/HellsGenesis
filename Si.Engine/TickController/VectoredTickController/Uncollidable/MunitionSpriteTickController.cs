@@ -56,7 +56,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
                 var objectsEnemyCanHit = interactiveSprites.Where(o => o is SpritePlayerBase).ToArray();
 
                 //Create a collection of threads so we can wait on the ones that we start.
-                var threadPoolTracker = _munitionTraversalThreadPool.CreateQueueStateTracker();
+                var threadPoolTracker = _munitionTraversalThreadPool.CreateChildQueue();
 
                 var hitObjects = new ConcurrentBag<MunitionObjectHit>();
 

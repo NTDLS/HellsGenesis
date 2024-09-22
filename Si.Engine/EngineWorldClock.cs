@@ -189,7 +189,7 @@ namespace Si.Engine
             var displacementVector = _engine.Player.ExecuteWorldClockTick(epoch);
 
             //Create a collection of threads so we can wait on the ones that we start.
-            var threadPoolTracker = _worldClockThreadPool.CreateQueueStateTracker();
+            var threadPoolTracker = _worldClockThreadPool.CreateChildQueue();
 
             //Enqueue each vectored tick controller for a thread.
             var vectoredParameters = new object[] { epoch, displacementVector };

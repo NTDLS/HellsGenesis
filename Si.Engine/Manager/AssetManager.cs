@@ -211,7 +211,7 @@ namespace Si.Engine.Manager
 
             using var archive = ArchiveFactory.Open(_assetPackagePath);
             using var dtp = new DelegateThreadPool(Environment.ProcessorCount * 4);
-            var threadPoolTracker = dtp.CreateQueueStateTracker();
+            var threadPoolTracker = dtp.CreateChildQueue();
 
             int statusIndex = 0;
             float statusEntryCount = archive.Entries.Count();
@@ -222,15 +222,15 @@ namespace Si.Engine.Manager
                 {
                     case ".json":
                     case ".txt":
-                        threadPoolTracker.Enqueue(() => GetText(entry.Key), () => Interlocked.Increment(ref statusIndex));
+                        threadPoolTracker.Enqueue(() => GetText(entry.Key), (object o) => Interlocked.Increment(ref statusIndex));
                         break;
                     case ".png":
                     case ".jpg":
                     case ".bmp":
-                        threadPoolTracker.Enqueue(() => GetBitmap(entry.Key), () => Interlocked.Increment(ref statusIndex));
+                        threadPoolTracker.Enqueue(() => GetBitmap(entry.Key), (object o) => Interlocked.Increment(ref statusIndex));
                         break;
                     case ".wav":
-                        threadPoolTracker.Enqueue(() => GetAudio(entry.Key), () => Interlocked.Increment(ref statusIndex));
+                        threadPoolTracker.Enqueue(() => GetAudio(entry.Key), (object o) => Interlocked.Increment(ref statusIndex));
                         break;
                     default:
                         Interlocked.Increment(ref statusIndex);
@@ -238,7 +238,7 @@ namespace Si.Engine.Manager
                 }
             }
 
-            threadPoolTracker.WaitForCompletion(10, () =>
+            threadPoolTracker.WaitForCompletion(TimeSpan.FromSeconds(10), () =>
             {
                 loadingDetail.SetTextAndCenterX($"{statusIndex / statusEntryCount * 100.0:n0}%");
                 return true;

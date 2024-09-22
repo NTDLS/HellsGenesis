@@ -38,9 +38,9 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NTDLS.DelegateThreadPooling" Version="1.2.13" />
-    <PackageReference Include="NTDLS.Semaphore" Version="3.3.0" />
-    <PackageReference Include="SharpCompress" Version="0.36.0" />
+    <PackageReference Include="NTDLS.DelegateThreadPooling" Version="1.4.8" />
+    <PackageReference Include="NTDLS.Semaphore" Version="3.4.2" />
+    <PackageReference Include="SharpCompress" Version="0.38.0" />
     <PackageReference Include="SharpDX" Version="4.2.0" />
     <PackageReference Include="SharpDX.Direct2D1" Version="4.2.0" />
     <PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
