@@ -24,14 +24,14 @@ namespace Si.Engine.Sprite.Weapon
                 RoundQuantity--;
 
                 var offset = Owner.Orientation.RotatedBy(90.ToRadians().Invert(_toggle)) * new SiVector(10, 10);
-                _toggle = !_toggle;
-
                 _engine.Sprites.Munitions.Add(this, Owner.Location + offset);
+
+                _toggle = !_toggle;
 
                 return true;
             }
-            return false;
 
+            return false;
         }
     }
 }

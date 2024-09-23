@@ -42,8 +42,8 @@ namespace Si.Engine.Sprite.Weapon
 
                 return true;
             }
-            return false;
 
+            return false;
         }
     }
 }
