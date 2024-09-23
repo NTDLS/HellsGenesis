@@ -22,13 +22,13 @@ namespace Si.Engine.Menu
             float offsetX = currentScaledScreenBounds.X + 40;
             float offsetY = currentScaledScreenBounds.Y + 100;
 
-            var itemTitle = AddTitleItem(new SiVector(offsetX, offsetY), "Whats the Situation?");
+            var itemTitle = AddTitleItem(new SiVector(offsetX, offsetY), "What's the Situation?");
             itemTitle.X = offsetX + 200;
             itemTitle.Y = offsetY - itemTitle.Size.Height;
 
             offsetY += itemTitle.Height;
 
-            _situationBlurb = AddTextblock(new SiVector(offsetX, offsetY), "");
+            _situationBlurb = AddTextBlock(new SiVector(offsetX, offsetY), "");
             _situationBlurb.X = offsetX + 300;
             _situationBlurb.Y = offsetY - _situationBlurb.Size.Height;
 

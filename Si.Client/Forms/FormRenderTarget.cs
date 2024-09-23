@@ -55,7 +55,7 @@ namespace Si.Client
             };
             Controls.Add(drawingSurface);
 
-            _engine = new EngineCore(drawingSurface, SiEngineInitilizationType.Play);
+            _engine = new EngineCore(drawingSurface, SiEngineInitializationType.Play);
 
             _engine.EnableDebugging(new FormInterrogation(_engine));
 
@@ -279,7 +279,7 @@ namespace Si.Client
 
             if (e.KeyCode == Keys.Escape)
             {
-                //We do not want the escape key to inturrupt menus.
+                //We do not want the escape key to interrupt menus.
                 if (_engine.Menus.Current?.HandlesEscape() != true)
                 {
                     _engine.Pause();
@@ -297,7 +297,7 @@ namespace Si.Client
             }
         }
 
-        protected override void OnPaintBackground(PaintEventArgs pevent)
+        protected override void OnPaintBackground(PaintEventArgs paintEventArgs)
         {
             // Prevent background painting to avoid flickering
         }

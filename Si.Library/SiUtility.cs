@@ -102,7 +102,7 @@ namespace Si.Library
         }
 
         /// <summary>
-        /// We didnt need that exception! Did we?... DID WE?!
+        /// We didn't need that exception! Did we?... DID WE?!
         /// </summary>
         public static T? TryAndIgnore<T>(TryAndIgnoreProc<T> func)
         {

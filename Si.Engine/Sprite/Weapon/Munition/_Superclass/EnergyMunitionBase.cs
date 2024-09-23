@@ -5,7 +5,7 @@ using Si.Library.Mathematics;
 namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 {
     /// <summary>
-    /// Energy munitions just go straight - for now.... still thinkning this one out.
+    /// Energy munitions just go straight - for now.... still thinking this one out.
     /// </summary>
     internal class EnergyMunitionBase : MunitionBase
     {

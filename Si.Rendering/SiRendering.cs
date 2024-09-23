@@ -26,8 +26,8 @@ namespace Si.Rendering
         }
 
         public PessimisticCriticalResource<SiCriticalRenderTargets> RenderTargets { get; private set; } = new();
-        public SiPrecreatedMaterials Materials { get; private set; }
-        public SiPrecreatedTextFormats TextFormats { get; private set; }
+        public SiPreCreatedMaterials Materials { get; private set; }
+        public SiPreCreatedTextFormats TextFormats { get; private set; }
 
         private readonly List<ScreenShake> _screenShakes = new();
         private readonly SharpDX.Direct2D1.Factory _direct2dFactory = new(FactoryType.SingleThreaded);
@@ -42,7 +42,7 @@ namespace Si.Rendering
             _totalCanvasSize = totalCanvasSize;
 
             var presentOptions = PresentOptions.Immediately;
-            var antialiasMode = AntialiasMode.Aliased;
+            var antiAliasMode = AntialiasMode.Aliased;
 
             if (settings.VerticalSync == true)
             {
@@ -51,7 +51,7 @@ namespace Si.Rendering
 
             if (settings.AntiAliasing == true)
             {
-                antialiasMode = AntialiasMode.PerPrimitive;
+                antiAliasMode = AntialiasMode.PerPrimitive;
             }
 
             var windowRenderProperties = new HwndRenderTargetProperties()
@@ -59,7 +59,7 @@ namespace Si.Rendering
                 PresentOptions = presentOptions,
                 Hwnd = drawingSurface.Handle,
                 PixelSize = new Size2(_drawingSurfaceSize.Width, _drawingSurfaceSize.Height)
-                //PixelSize = new Size2(engine.Display.NatrualScreenSize.Width, engine.Display.NatrualScreenSize.Height)
+                //PixelSize = new Size2(engine.Display.NaturalScreenSize.Width, engine.Display.NaturalScreenSize.Height)
             };
 
             var renderTargetProperties = new RenderTargetProperties
@@ -69,7 +69,7 @@ namespace Si.Rendering
                 Type = RenderTargetType.Hardware
             };
 
-            //The intermediate render target is much larger than the redner target window. We create this
+            //The intermediate render target is much larger than the render target window. We create this
             //  larger render target so that we can zoom-out when we want to see more of the universe.
             var intermediateRenderTargetSize = new Size2F(_totalCanvasSize.Width, _totalCanvasSize.Height);
 
@@ -77,14 +77,14 @@ namespace Si.Rendering
             {
                 ScreenRenderTarget = new WindowRenderTarget(_direct2dFactory, renderTargetProperties, windowRenderProperties)
                 {
-                    AntialiasMode = antialiasMode
+                    AntialiasMode = antiAliasMode
                 }
             };
 
             renderTargets.IntermediateRenderTarget = new BitmapRenderTarget(
                 renderTargets.ScreenRenderTarget, CompatibleRenderTargetOptions.None, intermediateRenderTargetSize)
             {
-                AntialiasMode = antialiasMode
+                AntialiasMode = antiAliasMode
             };
 
             RenderTargets.Use(o =>
@@ -93,8 +93,8 @@ namespace Si.Rendering
                 o.IntermediateRenderTarget = renderTargets.IntermediateRenderTarget;
             });
 
-            Materials = new SiPrecreatedMaterials(renderTargets.ScreenRenderTarget);
-            TextFormats = new SiPrecreatedTextFormats(_directWriteFactory);
+            Materials = new SiPreCreatedMaterials(renderTargets.ScreenRenderTarget);
+            TextFormats = new SiPreCreatedTextFormats(_directWriteFactory);
 
             SiTransforms.RegisterRenderTarget(renderTargets.ScreenRenderTarget);
             SiTransforms.RegisterRenderTarget(renderTargets.IntermediateRenderTarget);
@@ -125,9 +125,9 @@ namespace Si.Rendering
 
             foreach (var screenShake in _screenShakes)
             {
-                var totalElapsedScreenshakeTime = ((double)screenShake.Timer.ElapsedTicks / (double)Stopwatch.Frequency) * 1000.0;
+                var totalElapsedScreenShakeTime = ((double)screenShake.Timer.ElapsedTicks / (double)Stopwatch.Frequency) * 1000.0;
 
-                var percentComplete = (float)(totalElapsedScreenshakeTime / screenShake.Duration);
+                var percentComplete = (float)(totalElapsedScreenShakeTime / screenShake.Duration);
                 if (percentComplete >= 1)
                 {
                     screenShake.Timer.Stop();
@@ -212,7 +212,7 @@ namespace Si.Rendering
 
         public SizeF GetTextSize(string text, SharpDX.DirectWrite.TextFormat format)
         {
-            //We have to check the size with some ending characters becuase TextLayout() seems to want to trim the text before calculating the metrics.
+            //We have to check the size with some ending characters because TextLayout() seems to want to trim the text before calculating the metrics.
             using var textLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, $"[{text}]", format, float.MaxValue, float.MaxValue);
             using var spacerLayout = new SharpDX.DirectWrite.TextLayout(_directWriteFactory, "[]", format, float.MaxValue, float.MaxValue);
             return new SizeF(textLayout.Metrics.Width - spacerLayout.Metrics.Width, textLayout.Metrics.Height);

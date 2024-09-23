@@ -52,7 +52,7 @@
             tabPageDebug = new System.Windows.Forms.TabPage();
             checkBoxEnableSpriteInterrogation = new System.Windows.Forms.CheckBox();
             checkBoxHighlightAllSprites = new System.Windows.Forms.CheckBox();
-            checkBoxHighlightNatrualBounds = new System.Windows.Forms.CheckBox();
+            checkBoxHighlightNaturalBounds = new System.Windows.Forms.CheckBox();
             tabPageAdvanced = new System.Windows.Forms.TabPage();
             checkBoxPreCacheAllAssets = new System.Windows.Forms.CheckBox();
             tabPageAudio = new System.Windows.Forms.TabPage();
@@ -270,7 +270,7 @@
             // 
             tabPageDebug.Controls.Add(checkBoxEnableSpriteInterrogation);
             tabPageDebug.Controls.Add(checkBoxHighlightAllSprites);
-            tabPageDebug.Controls.Add(checkBoxHighlightNatrualBounds);
+            tabPageDebug.Controls.Add(checkBoxHighlightNaturalBounds);
             tabPageDebug.Location = new System.Drawing.Point(4, 24);
             tabPageDebug.Name = "tabPageDebug";
             tabPageDebug.Size = new System.Drawing.Size(542, 304);
@@ -298,15 +298,15 @@
             checkBoxHighlightAllSprites.Text = "Highlight all sprites?";
             checkBoxHighlightAllSprites.UseVisualStyleBackColor = true;
             // 
-            // checkBoxHighlightNatrualBounds
+            // checkBoxHighlightNaturalBounds
             // 
-            checkBoxHighlightNatrualBounds.AutoSize = true;
-            checkBoxHighlightNatrualBounds.Location = new System.Drawing.Point(13, 13);
-            checkBoxHighlightNatrualBounds.Name = "checkBoxHighlightNatrualBounds";
-            checkBoxHighlightNatrualBounds.Size = new System.Drawing.Size(164, 19);
-            checkBoxHighlightNatrualBounds.TabIndex = 1;
-            checkBoxHighlightNatrualBounds.Text = "Highlight natrual bounds?";
-            checkBoxHighlightNatrualBounds.UseVisualStyleBackColor = true;
+            checkBoxHighlightNaturalBounds.AutoSize = true;
+            checkBoxHighlightNaturalBounds.Location = new System.Drawing.Point(13, 13);
+            checkBoxHighlightNaturalBounds.Name = "checkBoxHighlightNaturalBounds";
+            checkBoxHighlightNaturalBounds.Size = new System.Drawing.Size(164, 19);
+            checkBoxHighlightNaturalBounds.TabIndex = 1;
+            checkBoxHighlightNaturalBounds.Text = "Highlight natural bounds?";
+            checkBoxHighlightNaturalBounds.UseVisualStyleBackColor = true;
             // 
             // tabPageAdvanced
             // 
@@ -422,7 +422,7 @@
         private System.Windows.Forms.TabPage tabPageDebug;
         private System.Windows.Forms.CheckBox checkBoxEnableSpriteInterrogation;
         private System.Windows.Forms.CheckBox checkBoxHighlightAllSprites;
-        private System.Windows.Forms.CheckBox checkBoxHighlightNatrualBounds;
+        private System.Windows.Forms.CheckBox checkBoxHighlightNaturalBounds;
         private System.Windows.Forms.TabPage tabPageAdvanced;
         private System.Windows.Forms.CheckBox checkBoxPreCacheAllAssets;
         private System.Windows.Forms.Label labelGraphicsAdapter;

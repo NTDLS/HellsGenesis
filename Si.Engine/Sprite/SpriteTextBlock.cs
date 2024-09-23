@@ -53,20 +53,20 @@ namespace Si.Engine.Sprite
         public void SetTextAndCenterXY(string text)
         {
             Text = text;
-            X = _engine.Display.NatrualScreenSize.Width / 2 - Size.Width / 2;
-            Y = _engine.Display.NatrualScreenSize.Height / 2 - Size.Height / 2;
+            X = _engine.Display.NaturalScreenSize.Width / 2 - Size.Width / 2;
+            Y = _engine.Display.NaturalScreenSize.Height / 2 - Size.Height / 2;
         }
 
         public void SetTextAndCenterY(string text)
         {
             Text = text;
-            Y = _engine.Display.NatrualScreenSize.Height / 2 - Size.Height / 2;
+            Y = _engine.Display.NaturalScreenSize.Height / 2 - Size.Height / 2;
         }
 
         public void SetTextAndCenterX(string text)
         {
             Text = text;
-            X = _engine.Display.NatrualScreenSize.Width / 2 - Size.Width / 2;
+            X = _engine.Display.NaturalScreenSize.Width / 2 - Size.Width / 2;
         }
 
         public override void Render(RenderTarget renderTarget)

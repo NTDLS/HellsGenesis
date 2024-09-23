@@ -105,7 +105,7 @@ namespace Si.Engine.AI.Logistics
                 //----------------------------------------------------------------------------------------------------------------------------------------------------
                 //The object is rotating away from the observed object.
                 case AIStateTransitionToDepart transitionToDepart:
-                    //As we get closer, make the angle more agressive.
+                    //As we get closer, make the angle more aggressive.
                     var rotationRadians = new SiVector((1 - (distanceToObservedObject / _idealMinDistance)) * 2.0f).RadiansSigned;
 
                     //Rotate as long as we are facing the observed object. If we are no longer facing, then depart.
@@ -120,7 +120,7 @@ namespace Si.Engine.AI.Logistics
                 //----------------------------------------------------------------------------------------------------------------------------------------------------
                 //The object is moving away from the observed object.
                 case AIStateDeparting departing:
-                    //Onve we are sufficiently far away, we turn back.
+                    //Once we are sufficiently far away, we turn back.
                     if (Owner.DistanceTo(ObservedObject) > _idealMaxDistance)
                     {
                         ChangeState(new AIStateTransitionToApproach());
@@ -136,7 +136,7 @@ namespace Si.Engine.AI.Logistics
                     }
                     break;
                 //----------------------------------------------------------------------------------------------------------------------------------------------------
-                //The object is rotating agressively away from the observed object.
+                //The object is rotating aggressively away from the observed object.
                 case AIStateTransitionToEvasiveEscape transitionToEvasiveEscape:
                     if (Owner.RotateMovementVectorIfNotPointingAt(transitionToEvasiveEscape.TargetAngle.Degrees, transitionToEvasiveEscape.Rotation, transitionToEvasiveEscape.VarianceAngle) == false)
                     {
@@ -158,7 +158,7 @@ namespace Si.Engine.AI.Logistics
                     }
                     else if (distanceToObservedObject < _idealMinDistance)
                     {
-                        //The observed object got close again, agressively transition away again.
+                        //The observed object got close again, aggressively transition away again.
                         ChangeState(new AIStateTransitionToEvasiveEscape(this));
                     }
                     break;

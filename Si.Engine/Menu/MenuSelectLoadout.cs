@@ -32,7 +32,7 @@ namespace Si.Engine.Menu
 
             offsetY += itemTitle.Height;
 
-            _shipBlurb = AddTextblock(new SiVector(offsetX, offsetY), "");
+            _shipBlurb = AddTextBlock(new SiVector(offsetX, offsetY), "");
             _shipBlurb.X = offsetX + 250;
             _shipBlurb.Y = offsetY - _shipBlurb.Size.Height;
 

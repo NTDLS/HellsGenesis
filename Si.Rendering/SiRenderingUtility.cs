@@ -25,7 +25,7 @@ namespace Si.Rendering
         }
 
         /// <summary>
-        /// RGB Fom HSL (hue,saturationlightness).
+        /// RGB from HSL (hue, saturation, lightness).
         /// </summary>
         /// <param name="hue"></param>
         /// <param name="saturation"></param>

@@ -51,7 +51,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             var munitions = VisibleOfType<MunitionBase>();
             if (munitions.Count() != 0)
             {
-                var interactiveSprites = SpriteManager.VisibleDamagable();
+                var interactiveSprites = SpriteManager.VisibleDamageable();
                 var objectsPlayerCanHit = interactiveSprites.Where(o => o is not SpritePlayerBase).ToArray();
                 var objectsEnemyCanHit = interactiveSprites.Where(o => o is SpritePlayerBase).ToArray();
 

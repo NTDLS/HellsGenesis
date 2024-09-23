@@ -19,7 +19,7 @@ using static Si.Library.SiConstants;
 namespace Si.Engine
 {
     /// <summary>
-    /// The core game engine. Containd the controllers and managers.
+    /// The core game engine. Contained the controllers and managers.
     /// </summary>
     public class EngineCore
     {
@@ -31,7 +31,7 @@ namespace Si.Engine
 
         #region Public properties.
 
-        public SiEngineInitilizationType ExecutionType { get; private set; }
+        public SiEngineInitializationType ExecutionType { get; private set; }
 
         public bool IsRunning { get; private set; } = false;
         public bool IsInitializing { get; private set; } = false;
@@ -72,10 +72,10 @@ namespace Si.Engine
         #endregion
 
         /// <summary>
-        /// Initializes a new instace of the game engine.
+        /// Initializes a new instance of the game engine.
         /// </summary>
         /// <param name="drawingSurface">The window that the game will be rendered to.</param>
-        public EngineCore(Control drawingSurface, SiEngineInitilizationType executionType)
+        public EngineCore(Control drawingSurface, SiEngineInitializationType executionType)
         {
             ExecutionType = executionType;
 
@@ -150,7 +150,7 @@ namespace Si.Engine
                     o.ScreenRenderTarget.BeginDraw();
                     o.IntermediateRenderTarget.BeginDraw();
 
-                    if (ExecutionType == SiEngineInitilizationType.Play)
+                    if (ExecutionType == SiEngineInitializationType.Play)
                     {
                         o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Black);
                     }
@@ -237,7 +237,7 @@ namespace Si.Engine
 
             IsInitializing = false;
 
-            if (ExecutionType == SiEngineInitilizationType.Play)
+            if (ExecutionType == SiEngineInitializationType.Play)
             {
                 if (Settings.PlayMusic)
                 {

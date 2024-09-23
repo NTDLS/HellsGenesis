@@ -20,17 +20,17 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
             if (DistanceTo(_engine.Player.Sprite) < 1000)
             {
                 //Rotate the turret toward the player.
-                var deltaAngltToPlayer = this.HeadingAngleToInSignedDegrees(_engine.Player.Sprite);
-                if (deltaAngltToPlayer < 1)
+                var deltaAngleToPlayer = this.HeadingAngleToInSignedDegrees(_engine.Player.Sprite);
+                if (deltaAngleToPlayer < 1)
                 {
                     Orientation.Degrees -= 0.25f;
                 }
-                else if (deltaAngltToPlayer > 1)
+                else if (deltaAngleToPlayer > 1)
                 {
                     Orientation.Degrees += 0.25f;
                 }
 
-                if (deltaAngltToPlayer.IsBetween(-10, 10))
+                if (deltaAngleToPlayer.IsBetween(-10, 10))
                 {
                     if (FireToggler)
                     {

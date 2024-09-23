@@ -18,7 +18,7 @@
         public bool WriteTraceData { get; set; }
 
         /// <summary>
-        /// If true, text logs will be flused at every write. This ensures that the log file is always up-to-date on disk.
+        /// If true, text logs will be flushed at every write. This ensures that the log file is always up-to-date on disk.
         /// </summary>
         public bool FlushLog { get; set; }
 

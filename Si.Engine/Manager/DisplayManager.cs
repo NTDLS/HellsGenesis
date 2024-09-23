@@ -35,10 +35,8 @@ namespace Si.Engine.Manager
         public float SpeedOrientedFrameScalingFactor()
         {
 #if DEBUG
-            return 1.0f;
+            return 1.0f; //Juts disabled because it makes it hard to debug collisions. 
 #endif
-
-
             float weightedThrottlePercent = (
                 (_engine.Player.Sprite.MovementVector.Magnitude() / _engine.Player.Sprite.Speed) * 0.8f //80% of zoom is standard velocity
                  + (_engine.Player.Sprite.Throttle <= 1 ? 1 : _engine.Player.Sprite.Throttle / _engine.Player.Sprite.MaxThrottle) * 0.2f //20% of the zoom will be the "boost".
@@ -50,7 +48,7 @@ namespace Si.Engine.Manager
         public float BaseDrawScale => 100.0f / _engine.Settings.OverdrawScale / 100.0f;
 
         /// <summary>
-        /// The number of extra pixles to draw beyond the NatrualScreenSize.
+        /// The number of extra pixels to draw beyond the NaturalScreenSize.
         /// </summary>
         public Size OverdrawSize { get; private set; }
 
@@ -68,16 +66,16 @@ namespace Si.Engine.Manager
         /// <summary>
         /// The size of the screen with no scaling.
         /// </summary>
-        public Size NatrualScreenSize { get; private set; }
+        public Size NaturalScreenSize { get; private set; }
 
         /// <summary>
         /// The bounds of the screen with no scaling.
         /// </summary>
-        public RectangleF NatrualScreenBounds =>
-            new RectangleF(OverdrawSize.Width / 2.0f, OverdrawSize.Height / 2.0f, NatrualScreenSize.Width, NatrualScreenSize.Height);
+        public RectangleF NaturalScreenBounds =>
+            new RectangleF(OverdrawSize.Width / 2.0f, OverdrawSize.Height / 2.0f, NaturalScreenSize.Width, NaturalScreenSize.Height);
 
         /// <summary>
-        /// The total bounds of the drawing surface (canvas) natrual + overdraw (with no scaling).
+        /// The total bounds of the drawing surface (canvas) natural + overdraw (with no scaling).
         /// </summary>
         public RectangleF TotalCanvasBounds => new RectangleF(0, 0, TotalCanvasSize.Width, TotalCanvasSize.Height);
 
@@ -122,7 +120,7 @@ namespace Si.Engine.Manager
                 );
         }
 
-        //TODO: Tesr and fix this.
+        //TODO: Test and fix this.
         public SiVector RandomOffScreenLocation(int minOffscreenDistance = 100, int maxOffscreenDistance = 500)
         {
             if (SiRandom.FlipCoin())
@@ -161,18 +159,18 @@ namespace Si.Engine.Manager
         {
             _engine = engine;
             DrawingSurface = drawingSurface;
-            NatrualScreenSize = new Size(drawingSurface.Width, drawingSurface.Height);
+            NaturalScreenSize = new Size(drawingSurface.Width, drawingSurface.Height);
 
             Screen = Screen.FromHandle(drawingSurface.Handle);
 
-            int totalSizeX = (int)(NatrualScreenSize.Width * _engine.Settings.OverdrawScale);
-            int totalSizeY = (int)(NatrualScreenSize.Height * _engine.Settings.OverdrawScale);
+            int totalSizeX = (int)(NaturalScreenSize.Width * _engine.Settings.OverdrawScale);
+            int totalSizeY = (int)(NaturalScreenSize.Height * _engine.Settings.OverdrawScale);
 
             if (totalSizeX % 2 != 0) totalSizeX++;
             if (totalSizeY % 2 != 0) totalSizeY++;
 
             TotalCanvasSize = new Size(totalSizeX, totalSizeY);
-            OverdrawSize = new Size(totalSizeX - NatrualScreenSize.Width, totalSizeY - NatrualScreenSize.Height);
+            OverdrawSize = new Size(totalSizeX - NaturalScreenSize.Width, totalSizeY - NaturalScreenSize.Height);
             CenterCanvas = new SiVector(TotalCanvasSize.Width / 2.0f, TotalCanvasSize.Height / 2.0f);
 
             TotalCanvasDiagonal = (float)Math.Sqrt(TotalCanvasSize.Width * TotalCanvasSize.Width + TotalCanvasSize.Height * TotalCanvasSize.Height);
@@ -180,22 +178,22 @@ namespace Si.Engine.Manager
 
         public SiQuadrant GetQuadrant(float x, float y)
         {
-            var coord = new Point((int)(x / NatrualScreenSize.Width), (int)(y / NatrualScreenSize.Height));
+            var coordinates = new Point((int)(x / NaturalScreenSize.Width), (int)(y / NaturalScreenSize.Height));
 
-            if (Quadrants.ContainsKey(coord) == false)
+            if (Quadrants.ContainsKey(coordinates) == false)
             {
                 var absoluteBounds = new Rectangle(
-                    NatrualScreenSize.Width * coord.X,
-                    NatrualScreenSize.Height * coord.Y,
-                    NatrualScreenSize.Width,
-                    NatrualScreenSize.Height);
+                    NaturalScreenSize.Width * coordinates.X,
+                    NaturalScreenSize.Height * coordinates.Y,
+                    NaturalScreenSize.Width,
+                    NaturalScreenSize.Height);
 
-                var quad = new SiQuadrant(coord, absoluteBounds);
+                var quad = new SiQuadrant(coordinates, absoluteBounds);
 
-                Quadrants.Add(coord, quad);
+                Quadrants.Add(coordinates, quad);
             }
 
-            return Quadrants[coord];
+            return Quadrants[coordinates];
         }
     }
 }

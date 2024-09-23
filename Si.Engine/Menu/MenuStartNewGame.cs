@@ -29,31 +29,31 @@ namespace Si.Engine.Menu
 
             offsetY += 50;
 
-            helpItem = AddTextblock(new SiVector(offsetX, offsetY), "Forward and Rotate with <W>, <A> and <S>.");
+            helpItem = AddTextBlock(new SiVector(offsetX, offsetY), "Forward and Rotate with <W>, <A> and <S>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = AddTextblock(new SiVector(offsetX, offsetY), "Strafe with <LEFT> and <RIGHT> arrows.");
+            helpItem = AddTextBlock(new SiVector(offsetX, offsetY), "Strafe with <LEFT> and <RIGHT> arrows.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = AddTextblock(new SiVector(offsetX, offsetY), "Surge Drive with <SHIFT>.");
+            helpItem = AddTextBlock(new SiVector(offsetX, offsetY), "Surge Drive with <SHIFT>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 5;
 
-            helpItem = AddTextblock(new SiVector(offsetX, offsetY), "Fire primary with <SPACE>.");
+            helpItem = AddTextBlock(new SiVector(offsetX, offsetY), "Fire primary with <SPACE>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
-            helpItem = AddTextblock(new SiVector(offsetX, offsetY), "Fire secondary with <CTRL>.");
+            helpItem = AddTextBlock(new SiVector(offsetX, offsetY), "Fire secondary with <CTRL>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
-            helpItem = AddTextblock(new SiVector(offsetX, offsetY), "Change weapons with <Q> and <E>.");
+            helpItem = AddTextBlock(new SiVector(offsetX, offsetY), "Change weapons with <Q> and <E>.");
             helpItem.X -= helpItem.Size.Width / 2;
             offsetY += helpItem.Size.Height + 10;
 
-            //helpItem = AddTextblock(new SiPoint(offsetX, offsetY), "Change speed with <UP> and <DOWN> arrows.");
+            //helpItem = AddTextBlock(new SiPoint(offsetX, offsetY), "Change speed with <UP> and <DOWN> arrows.");
             //helpItem.X -= helpItem.Size.Width / 2;
             //offsetY += helpItem.Size.Height + 10;
 

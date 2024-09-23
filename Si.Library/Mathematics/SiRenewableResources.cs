@@ -124,7 +124,7 @@ namespace Si.Library.Mathematics
             => Resources.Add(key.ToLower(), renewableResource);
 
         /// <summary>
-        /// Creates a new renwewable resources and adds it to the resource collection.
+        /// Creates a new renewable resources and adds it to the resource collection.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="maxValue"></param>
@@ -134,7 +134,7 @@ namespace Si.Library.Mathematics
             => Resources.Add(key.ToLower(), new RenewableResource(maxValue, startingValue, rebuildRatePerSecond));
 
         /// <summary>
-        /// Creates a new renwewable resources and adds it to the resource collection.
+        /// Creates a new renewable resources and adds it to the resource collection.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="maxValue"></param>
@@ -182,7 +182,7 @@ namespace Si.Library.Mathematics
         public float ObserveRaw(string key) => Resources[key.ToLower()].RawAvailableResource;
 
         /// <summary>
-        /// Accumulates new resources given each resources newable rate.
+        /// Accumulates new resources given each resources renewal rate.
         /// </summary>
         public void RenewAllResources(float epoch)
         {

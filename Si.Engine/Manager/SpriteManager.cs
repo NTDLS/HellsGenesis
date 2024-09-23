@@ -175,22 +175,22 @@ namespace Si.Engine.Manager
         public T[] VisibleOfType<T>() where T : SpriteBase
             => _collection.OfType<T>().Where(o => o.Visible).ToArray();
 
-        public T[] VisibleDamagable<T>() where T : class
+        public T[] VisibleDamageable<T>() where T : class
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visible && o.Metadata.MunitionDetection).Select(o => o as T).ToArray();
 
-        //Probably faster than VisibleDamagable<T>().
-        public SpriteInteractiveBase[] VisibleDamagable()
+        //Probably faster than VisibleDamageable<T>().
+        public SpriteInteractiveBase[] VisibleDamageable()
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visible && o.Metadata.MunitionDetection == true).ToArray();
 
-        public T[] VisibleColliadble<T>() where T : class
+        public T[] VisibleCollidable<T>() where T : class
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visible && o.Metadata.CollisionDetection).Select(o => o as T).ToArray();
 
-        //Probably faster than VisibleColliadble<T>().
-        public SpriteInteractiveBase[] VisibleColliadble()
+        //Probably faster than VisibleCollidable<T>().
+        public SpriteInteractiveBase[] VisibleCollidable()
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visible && o.Metadata.CollisionDetection == true).ToArray();
 
-        public PredictedKinematicBody[] VisibleColliadblePredictiveMove(float epoch)
-            => _engine.Sprites.VisibleColliadble().Select(o => new PredictedKinematicBody(o, _engine.Display.RenderWindowPosition, epoch)).ToArray();
+        public PredictedKinematicBody[] VisibleCollidablePredictiveMove(float epoch)
+            => _engine.Sprites.VisibleCollidable().Select(o => new PredictedKinematicBody(o, _engine.Display.RenderWindowPosition, epoch)).ToArray();
 
         public SpriteBase[] VisibleOfTypes(Type[] types)
         {
@@ -227,7 +227,7 @@ namespace Si.Engine.Manager
 
         public SpriteBase[] Intersections(SpriteBase with)
         {
-            var objs = new List<SpriteBase>();
+            var objects = new List<SpriteBase>();
 
             foreach (var obj in _collection.Where(o => o.Visible == true))
             {
@@ -235,11 +235,11 @@ namespace Si.Engine.Manager
                 {
                     if (obj.IntersectsAABB(with.Location, new SiVector(with.Size.Width, with.Size.Height)))
                     {
-                        objs.Add(obj);
+                        objects.Add(obj);
                     }
                 }
             }
-            return objs.ToArray();
+            return objects.ToArray();
         }
 
         public SpriteBase[] Intersections(float x, float y, float width, float height)
@@ -247,44 +247,44 @@ namespace Si.Engine.Manager
 
         public SpriteBase[] Intersections(SiVector location, SiVector size)
         {
-            var objs = new List<SpriteBase>();
+            var objects = new List<SpriteBase>();
 
             foreach (var obj in _collection.Where(o => o.Visible == true))
             {
                 if (obj.IntersectsAABB(location, size))
                 {
-                    objs.Add(obj);
+                    objects.Add(obj);
                 }
             }
-            return objs.ToArray();
+            return objects.ToArray();
         }
 
         public SpriteBase[] RenderLocationIntersectionsEvenInvisible(SiVector location, SiVector size)
         {
-            var objs = new List<SpriteBase>();
+            var objects = new List<SpriteBase>();
 
             foreach (var obj in _collection)
             {
                 if (obj.RenderLocationIntersectsAABB(location, size))
                 {
-                    objs.Add(obj);
+                    objects.Add(obj);
                 }
             }
-            return objs.ToArray();
+            return objects.ToArray();
         }
 
         public SpriteBase[] RenderLocationIntersections(SiVector location, SiVector size)
         {
-            var objs = new List<SpriteBase>();
+            var objects = new List<SpriteBase>();
 
             foreach (var obj in _collection.Where(o => o.Visible == true))
             {
                 if (obj.RenderLocationIntersectsAABB(location, size))
                 {
-                    objs.Add(obj);
+                    objects.Add(obj);
                 }
             }
-            return objs.ToArray();
+            return objects.ToArray();
         }
 
         public SpritePlayerBase AddPlayer(SpritePlayerBase sprite)
@@ -305,8 +305,8 @@ namespace Si.Engine.Manager
                 var radarBgImage = _engine.Assets.GetBitmap(@"Sprites\RadarTransparent.png");
 
                 _engine.Rendering.DrawBitmap(renderTarget, radarBgImage,
-                    _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width,
-                    _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height, 0);
+                    _engine.Display.NaturalScreenSize.Width - radarBgImage.Size.Width,
+                    _engine.Display.NaturalScreenSize.Height - radarBgImage.Size.Height, 0);
 
                 float radarDistance = 8;
 
@@ -325,8 +325,8 @@ namespace Si.Engine.Manager
                     float centerOfRadarY = (int)(radarBgImage.Size.Height / 2.0f) - 2.0f; //Subtract half the dot size.
 
                     _radarOffset = new SiVector(
-                            _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _engine.Player.Sprite.X * _radarScale.X),
-                            _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _engine.Player.Sprite.Y * _radarScale.Y)
+                            _engine.Display.NaturalScreenSize.Width - radarBgImage.Size.Width + (centerOfRadarX - _engine.Player.Sprite.X * _radarScale.X),
+                            _engine.Display.NaturalScreenSize.Height - radarBgImage.Size.Height + (centerOfRadarY - _engine.Player.Sprite.Y * _radarScale.Y)
                         );
 
                     //Render radar:
@@ -336,10 +336,10 @@ namespace Si.Engine.Manager
                         int x = (int)(_radarOffset.X + sprite.Location.X * _radarScale.X);
                         int y = (int)(_radarOffset.Y + sprite.Location.Y * _radarScale.Y);
 
-                        if (x > _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width
-                            && x < _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
-                            && y > _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height
-                            && y < _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
+                        if (x > _engine.Display.NaturalScreenSize.Width - radarBgImage.Size.Width
+                            && x < _engine.Display.NaturalScreenSize.Width - radarBgImage.Size.Width + radarBgImage.Size.Width
+                            && y > _engine.Display.NaturalScreenSize.Height - radarBgImage.Size.Height
+                            && y < _engine.Display.NaturalScreenSize.Height - radarBgImage.Size.Height + radarBgImage.Size.Height
                             )
                         {
                             if ((sprite is SpritePlayerBase || sprite is SpriteEnemyBase || sprite is MunitionBase || sprite is SpritePowerupBase) && sprite.Visible == true)
@@ -352,8 +352,8 @@ namespace Si.Engine.Manager
                     //Render player blip:
                     _engine.Rendering.DrawSolidEllipse(
                         renderTarget,
-                        _engine.Display.NatrualScreenSize.Width - radarBgImage.Size.Width + centerOfRadarX,
-                        _engine.Display.NatrualScreenSize.Height - radarBgImage.Size.Height + centerOfRadarY,
+                        _engine.Display.NaturalScreenSize.Width - radarBgImage.Size.Width + centerOfRadarX,
+                        _engine.Display.NaturalScreenSize.Height - radarBgImage.Size.Height + centerOfRadarY,
                         2, 2, _engine.Rendering.Materials.Colors.Green);
                 }
             }
@@ -377,10 +377,10 @@ namespace Si.Engine.Manager
             _engine.Player.Sprite?.Render(renderTarget);
             _engine.Menus.Render(renderTarget);
 
-            if (_engine.Settings.HighlightNatrualBounds)
+            if (_engine.Settings.HighlightNaturalBounds)
             {
-                var natrualScreenBounds = _engine.Display.NatrualScreenBounds;
-                var rawRectF = new RawRectangleF(natrualScreenBounds.Left, natrualScreenBounds.Top, natrualScreenBounds.Right, natrualScreenBounds.Bottom);
+                var naturalScreenBounds = _engine.Display.NaturalScreenBounds;
+                var rawRectF = new RawRectangleF(naturalScreenBounds.Left, naturalScreenBounds.Top, naturalScreenBounds.Right, naturalScreenBounds.Bottom);
 
                 //Highlight the 1:1 frame
                 _engine.Rendering.DrawRectangle(renderTarget, rawRectF, _engine.Rendering.Materials.Colors.Red, 0, 1, 0);
@@ -453,7 +453,7 @@ namespace Si.Engine.Manager
 
             //Pre-cache animations:
             //Animations do not have their own classes, so we need to look for them in the assets and load them.
-            var animations = _engine.Assets.Enrites.Select(o => o.Value.Key)
+            var animations = _engine.Assets.Entries.Select(o => o.Value.Key)
                 .Where(o => o.StartsWith(@"sprites/animation/", StringComparison.CurrentCultureIgnoreCase)
                 && o.EndsWith(@".png", StringComparison.CurrentCultureIgnoreCase)).ToList();
 

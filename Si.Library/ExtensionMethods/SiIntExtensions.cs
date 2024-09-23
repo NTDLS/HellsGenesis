@@ -10,7 +10,7 @@ namespace Si.Library.ExtensionMethods
         public static float ToRadians(this int value) => SiMath.DegToRad(value);
 
         /// <summary>
-        /// Converts the given radisn to degrees.
+        /// Converts the given radian to degrees.
         /// </summary>
         public static float ToDegrees(this int value) => SiMath.RadToDeg(value);
 

@@ -32,7 +32,7 @@ namespace Si.Engine.Manager
             "Display-RenderWindowPosition-CenterOn|spriteUID:Required:Numeric|Centers the background offset on a given sprite.",
 
             "Engine-HighlightAll|state:Required:Boolean|Highlights all visible sprites.",
-            "Engine-Pause|state:Required:Boolean|Pauses and unpauses the engine.",
+            "Engine-Pause|state:Required:Boolean|Pauses and un-pauses the engine.",
 
             "Sprite-Create|typeName:Required:String,x:Required:Numeric,y:Required:Numeric|Creates a sprite at the given position.",
             "Sprite-ListTypes||Lists all sprite types.",
@@ -254,10 +254,10 @@ namespace Si.Engine.Manager
                   $"          Background Offset: {_engine.Display.RenderWindowPosition}\r\n"
                 + $"            Base Draw Scale: {_engine.Display.BaseDrawScale:n4}\r\n"
                 + $"              Overdraw Size: {_engine.Display.OverdrawSize}\r\n"
-                + $"        Natrual Screen Size: {_engine.Display.NatrualScreenSize}\r\n"
+                + $"        Natural Screen Size: {_engine.Display.NaturalScreenSize}\r\n"
                 + $"          Total Canvas Size: {_engine.Display.TotalCanvasSize}\r\n"
                 + $"        Total Canvas Bounds: {_engine.Display.TotalCanvasBounds}\r\n"
-                + $"      Natrual Screen Bounds: {_engine.Display.NatrualScreenBounds}\r\n"
+                + $"      Natural Screen Bounds: {_engine.Display.NaturalScreenBounds}\r\n"
                 + $" Speed Frame Scaling Factor: {_engine.Display.SpeedOrientedFrameScalingFactor():n4}";
             _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }

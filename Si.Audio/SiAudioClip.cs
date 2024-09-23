@@ -11,21 +11,21 @@ namespace Si.Audio
         private readonly XAudio2 _xaudio = new();
         private readonly WaveFormat _waveFormat;
         private readonly AudioBuffer _buffer;
-        private readonly SoundStream _soundstream;
+        private readonly SoundStream _soundStream;
         private SourceVoice? _singleSourceVoice;
         private bool _loopForever;
         private bool _isPlaying = false; //Only applicable when _loopForever == false;
         private bool _isFading;
-        public float InitialVolumne { get; private set; }
+        public float InitialVolume { get; private set; }
 
-        public void SetVolume(float volumne)
+        public void SetVolume(float volume)
         {
-            _singleSourceVoice?.SetVolume(volumne);
+            _singleSourceVoice?.SetVolume(volume);
         }
 
-        public void SetInitialVolumne(float volumne)
+        public void SetInitialVolume(float volume)
         {
-            InitialVolumne = volumne;
+            InitialVolume = volume;
         }
 
         public void SetLoopForever(bool loopForever)
@@ -33,20 +33,20 @@ namespace Si.Audio
             _loopForever = loopForever;
         }
 
-        public SiAudioClip(Stream stream, float initialVolumne = 1, bool loopForever = false)
+        public SiAudioClip(Stream stream, float initialVolume = 1, bool loopForever = false)
         {
             _loopForever = loopForever;
-            InitialVolumne = initialVolumne;
+            InitialVolume = initialVolume;
 
             _ = new MasteringVoice(_xaudio); //Yes, this is required.
 
-            _soundstream = new SoundStream(stream);
+            _soundStream = new SoundStream(stream);
 
-            _waveFormat = _soundstream.Format;
+            _waveFormat = _soundStream.Format;
             _buffer = new AudioBuffer
             {
-                Stream = _soundstream.ToDataStream(),
-                AudioBytes = (int)_soundstream.Length,
+                Stream = _soundStream.ToDataStream(),
+                AudioBytes = (int)_soundStream.Length,
                 Flags = BufferFlags.EndOfStream,
             };
 
@@ -67,15 +67,15 @@ namespace Si.Audio
                         if (_isFading)
                         {
                             _isFading = false;
-                            _singleSourceVoice?.SetVolume(InitialVolumne);
+                            _singleSourceVoice?.SetVolume(InitialVolume);
                         }
 
                         return;
                     }
 
                     _singleSourceVoice = new SourceVoice(_xaudio, _waveFormat, true);
-                    _singleSourceVoice.SubmitSourceBuffer(_buffer, _soundstream.DecodedPacketsInfo);
-                    _singleSourceVoice.SetVolume(InitialVolumne);
+                    _singleSourceVoice.SubmitSourceBuffer(_buffer, _soundStream.DecodedPacketsInfo);
+                    _singleSourceVoice.SetVolume(InitialVolume);
                     _singleSourceVoice.Start();
                     _isPlaying = true;
                     return;
@@ -83,8 +83,8 @@ namespace Si.Audio
             }
 
             var sourceVoice = new SourceVoice(_xaudio, _waveFormat, true);
-            sourceVoice.SubmitSourceBuffer(_buffer, _soundstream.DecodedPacketsInfo);
-            sourceVoice.SetVolume(InitialVolumne);
+            sourceVoice.SubmitSourceBuffer(_buffer, _soundStream.DecodedPacketsInfo);
+            sourceVoice.SetVolume(InitialVolume);
             sourceVoice.Start();
         }
 
@@ -99,17 +99,17 @@ namespace Si.Audio
 
         private void FadeThread()
         {
-            float volumne;
+            float volume;
 
             if (_singleSourceVoice != null)
             {
-                _singleSourceVoice.GetVolume(out volumne);
+                _singleSourceVoice.GetVolume(out volume);
 
-                while (_isFading && volumne > 0)
+                while (_isFading && volume > 0)
                 {
-                    volumne -= 0.25f;
-                    volumne = volumne < 0 ? 0 : volumne;
-                    _singleSourceVoice.SetVolume(volumne);
+                    volume -= 0.25f;
+                    volume = volume < 0 ? 0 : volume;
+                    _singleSourceVoice.SetVolume(volume);
                     Thread.Sleep(100);
                 }
                 Stop();

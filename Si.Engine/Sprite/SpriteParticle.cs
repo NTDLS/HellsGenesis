@@ -21,7 +21,7 @@ namespace Si.Engine.Sprite
         /// <summary>
         /// The amount of brightness to reduce the color by each time the particle is rendered.
         /// This is ignored unless the CleanupModeOption is FadeToBlack.
-        /// This should be expressed as a number between 0-1 with 0 being no reduxtion per frame and 1 being 100% reduction per frame.
+        /// This should be expressed as a number between 0-1 with 0 being no reduction per frame and 1 being 100% reduction per frame.
         /// </summary>
         public float FadeToBlackReductionAmount { get; set; } = 0.01f;
         public ParticleColorType Pattern { get; set; } = ParticleColorType.Solid;
@@ -35,11 +35,11 @@ namespace Si.Engine.Sprite
         public Color4 Color { get; set; }
 
         /// <summary>
-        /// The color of the particle when ColorType == Graident;
+        /// The color of the particle when ColorType == Gradient;
         /// </summary>
         public Color4 GradientStartColor { get; set; }
         /// <summary>
-        /// The color of the particle when ColorType == Graident;
+        /// The color of the particle when ColorType == Gradient;
         /// </summary>
         public Color4 GradientEndColor { get; set; }
 
@@ -85,7 +85,7 @@ namespace Si.Engine.Sprite
                         QueueForDelete();
                     }
                 }
-                else if (Pattern == ParticleColorType.Graident)
+                else if (Pattern == ParticleColorType.Gradient)
                 {
                     GradientStartColor *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
                     GradientEndColor *= 1 - (float)FadeToBlackReductionAmount; // Gradually darken the particle color.
@@ -119,7 +119,7 @@ namespace Si.Engine.Sprite
                             _engine.Rendering.DrawSolidEllipse(renderTarget,
                                 RenderLocation.X, RenderLocation.Y, Size.Width, Size.Height, Color, (float)Orientation.Degrees);
                         }
-                        else if (Pattern == ParticleColorType.Graident)
+                        else if (Pattern == ParticleColorType.Gradient)
                         {
                             _engine.Rendering.DrawGradientEllipse(renderTarget, RenderLocation.X, RenderLocation.Y,
                                 Size.Width, Size.Height, GradientStartColor, GradientEndColor, (float)Orientation.Degrees);
@@ -139,7 +139,7 @@ namespace Si.Engine.Sprite
                                 _engine.Rendering.DrawSolidRectangle(renderTarget, RenderLocation.X - Size.Width / 2,
                                     RenderLocation.Y - Size.Height / 2, rect, Color, 0, (float)Orientation.Degrees);
                             }
-                            else if (Pattern == ParticleColorType.Graident)
+                            else if (Pattern == ParticleColorType.Gradient)
                             {
                                 _engine.Rendering.DrawGradientRectangle(renderTarget, RenderLocation.X - Size.Width / 2,
                                     RenderLocation.Y - Size.Height / 2, rect, GradientStartColor, GradientEndColor, 0, (float)Orientation.Degrees);

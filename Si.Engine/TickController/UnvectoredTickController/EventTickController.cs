@@ -12,7 +12,7 @@ namespace Si.Engine.TickController.UnvectoredTickController
         private readonly PessimisticCriticalResource<List<SiDefermentEvent>> _collection = new();
 
         /// <summary>
-        /// Delegate for the event exection callback.
+        /// Delegate for the event execution callback.
         /// </summary>
         /// <typeparam name="T">Type of the parameter for the event.</typeparam>
         /// <param name="parameter">An object passed by the user code</param>
@@ -59,7 +59,7 @@ namespace Si.Engine.TickController.UnvectoredTickController
         /// <param name="parameter">An object that will be passed to the execution callback.</param>
         /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
         /// <param name="eventMode">Whether the event is one time or recurring.</param>
-        /// <param name="threadModel">Wheter the event callback is run synchronous or asynchronous.</param>
+        /// <param name="threadModel">Whether the event callback is run synchronous or asynchronous.</param>
         /// <returns></returns>
         public SiDefermentEvent Add(int timeoutMilliseconds, SiDefermentExecuteCallback executionCallback, object parameter,
             SiDefermentEventMode eventMode = SiDefermentEventMode.OneTime,
@@ -79,7 +79,7 @@ namespace Si.Engine.TickController.UnvectoredTickController
         /// <param name="timeoutMilliseconds">Time until the event is fired.</param>
         /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
         /// <param name="eventMode">Whether the event is one time or recurring.</param>
-        /// <param name="threadModel">Wheter the event callback is run synchronous or asynchronous.</param>
+        /// <param name="threadModel">Whether the event callback is run synchronous or asynchronous.</param>
         /// <returns></returns>
         public SiDefermentEvent Add(int timeoutMilliseconds, SiDefermentExecuteCallback executionCallback,
             SiDefermentEventMode eventMode = SiDefermentEventMode.OneTime,

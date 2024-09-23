@@ -8,7 +8,6 @@
 
         public SiAssertException(string message)
             : base($"Assert exception: {message}.")
-
         {
         }
     }

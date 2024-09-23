@@ -21,7 +21,7 @@ namespace Si.Engine.Sprite
         /// <summary>
         /// The amount of brightness to reduce the color by each time the particle is rendered.
         /// This is ignored unless the CleanupModeOption is FadeToBlack.
-        /// This should be expressed as a number between 0-1 with 0 being no reduxtion per frame and 1 being 100% reduction per frame.
+        /// This should be expressed as a number between 0-1 with 0 being no reduction per frame and 1 being 100% reduction per frame.
         /// </summary>
         public float FadeToBlackReductionAmount { get; set; } = 0.01f;
 

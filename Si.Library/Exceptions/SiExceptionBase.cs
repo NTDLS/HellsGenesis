@@ -9,7 +9,6 @@
 
         public SiExceptionBase(string? message)
             : base(message)
-
         {
         }
     }

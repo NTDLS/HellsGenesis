@@ -12,7 +12,7 @@ namespace Si.Rendering
 
         public static void RegisterRenderTarget(RenderTarget renderTarget)
         {
-            //I add the render target to the dictonary here because I dont wan't to checkeach time I render a frame.
+            //I add the render target to the dictonary here because I don't wan't to checkeach time I render a frame.
             _transformStack.Add(renderTarget, new Stack<Matrix3x2>());
         }
 

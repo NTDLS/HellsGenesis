@@ -131,7 +131,7 @@ namespace Si.Engine.Sprite._Superclass
             => MovementVector.SumAbs();
 
         /// <summary>
-        /// The total velocity multiplied by the given mass, excpet for the mass is returned when the velocity is 0;
+        /// The total velocity multiplied by the given mass, except for the mass is returned when the velocity is 0;
         /// </summary>
         /// <param name="mass"></param>
         /// <returns></returns>
@@ -313,7 +313,7 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Provides a way to make decisions about the sprite that do not necessirily have anyhting to do with movement.
+        /// Provides a way to make decisions about the sprite that do not necessarily have anything to do with movement.
         /// </summary>
         /// <param name="epoch"></param>
         /// <param name="displacementVector"></param>
@@ -335,18 +335,18 @@ namespace Si.Engine.Sprite._Superclass
 
             //HEY PAT!
             // - [] This function (PerformCollisionDetection) is called before ApplyMotion().
-            // - [] _engine.Collisions.Colliadbles contains all objects that have CollisionDetection enabled.
+            // - [] _engine.Collisions.Collidables contains all objects that have CollisionDetection enabled.
             // - [] Each element in collidables[] has a Position property which is the location where
             //      the sprite will be AFTER the next call to ApplyMotion() (e.g. the sprite has not
             //      yet moved but this will tell you where it will be when it next moves).
             //      We should? be able to use this to detect a collision and back each of the sprites
             //      velocities off... right?
             // - [x] Note that thisCollidable also contains the predicted location after the move.
-            // - [] How the hell do we handle collateral collisions? Please tell me we dont have to iterate.... 
+            // - [] How the hell do we handle collateral collisions? Please tell me we don't have to iterate.... 
             // - [x] Turns out a big problem is going to be that each colliding sprite will have two seperate handlers.
             //      this might make it difficult.... not sure yet.
             // - [x] I think we need to determine the angle of the "collider" and do the bounce math on that.
-            // - [x] I added sprite mass, velocity and momemtium. This should help us determine whos gonna get moved and by what amount.
+            // - [x] I added sprite mass, velocity and momentum. This should help us determine who's gonna get moved and by what amount.
             // - [x] One issue we have is that if a sprite is moving away from the collision, then this code
             //      will reverse that and move the sprite into the collision causing them to overlap and become stuck.
 
@@ -354,7 +354,7 @@ namespace Si.Engine.Sprite._Superclass
 
             var thisCollidable = new PredictedKinematicBody(this, _engine.Display.RenderWindowPosition, epoch);
 
-            foreach (var other in _engine.Collisions.Colliadbles)
+            foreach (var other in _engine.Collisions.Collidables)
             {
                 if (thisCollidable.Sprite == other.Sprite || _engine.Collisions.IsAlreadyHandled(thisCollidable.Sprite, other.Sprite))
                 {
@@ -374,12 +374,12 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Chanegs the movement vector of two sprites involved in a collision.
+        /// Changes the movement vector of two sprites involved in a collision.
         /// </summary>
         /// <param name="collisionPair"></param>
         public void RespondToCollisions(OverlappingKinematicBodyPair collisionPair)
         {
-            //We have to save the movement vectors because the calle to sssssss is going to change then.
+            //We have to save the movement vectors because the calls to sssssss is going to change then.
             var originalSprite1Velocity = collisionPair.Body1.Sprite.MovementVector;
             var originalSprite2Velocity = collisionPair.Body2.Sprite.MovementVector;
 
@@ -388,7 +388,7 @@ namespace Si.Engine.Sprite._Superclass
         }
 
         /// <summary>
-        /// Chanegs the movement vector of the action sprite in response to a collision with collideWithSprite.
+        /// Changes the movement vector of the action sprite in response to a collision with collideWithSprite.
         /// </summary>
         /// <param name="actionBody">The sprite which will have its movement vector modified in response to the collision.</param>
         /// <param name="actionSpriteVelocity">The movement vector of the actionSprite</param>

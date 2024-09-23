@@ -77,7 +77,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         }
 
         /// <summary>
-        /// Creates a random number of blasts consiting of "hot" colored particles at a given location.
+        /// Creates a random number of blasts consisting of "hot" colored particles at a given location.
         /// </summary>
         /// <param name="maxParticleCount"></param>
         /// <param name="at"></param>

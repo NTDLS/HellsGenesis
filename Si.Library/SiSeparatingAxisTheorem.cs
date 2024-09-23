@@ -12,7 +12,7 @@ namespace Si.Library
     public class SiSeparatingAxisTheorem
     {
         /// <summary>
-        /// Returns an aproximation of the overlap area for two rotated rectangles.
+        /// Returns an approximation of the overlap area for two rotated rectangles.
         /// This is the axis-Aligned Bounding Box (AABB) of the overlap of the AABBs of the rotated rectangles,
         /// not the actual overlap of the rotated rectangles themselves.
         ///
@@ -41,8 +41,8 @@ namespace Si.Library
         }
 
         /// <summary>
-        /// Determines if two (non-axis-aligned) rectangles interset using Separating Axis Theorem (SAT).
-        /// This allows us to determine if a rotated rectangle interescts another rotated rectangle.
+        /// Determines if two (non-axis-aligned) rectangles interest using Separating Axis Theorem (SAT).
+        /// This allows us to determine if a rotated rectangle intersects another rotated rectangle.
         /// </summary>
         /// <param name="bounds1"></param>
         /// <param name="angleRadians1"></param>

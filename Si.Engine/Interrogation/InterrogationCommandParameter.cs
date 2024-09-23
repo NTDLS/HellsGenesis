@@ -32,7 +32,7 @@ namespace Si.Engine.Interrogation
                 {
                     if (bool.TryParse(value, out var validatedValue) == false)
                     {
-                        throw new Exception($"Could not convert value '{value}' for '{prototype.Name}' to booelan.");
+                        throw new Exception($"Could not convert value '{value}' for '{prototype.Name}' to boolean.");
                     }
                     RawValue = validatedValue;
                 }

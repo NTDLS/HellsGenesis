@@ -25,17 +25,17 @@ namespace Si.Engine.Sprite.Enemy.Boss.Devastator
             if (DistanceTo(_engine.Player.Sprite) < 1000)
             {
                 //Rotate the turret toward the player.
-                var deltaAngltToPlayer = this.HeadingAngleToInSignedDegrees(_engine.Player.Sprite);
-                if (deltaAngltToPlayer < 1)
+                var deltaAngleToPlayer = this.HeadingAngleToInSignedDegrees(_engine.Player.Sprite);
+                if (deltaAngleToPlayer < 1)
                 {
                     Orientation.Degrees -= 1.5f;
                 }
-                else if (deltaAngltToPlayer > 1)
+                else if (deltaAngleToPlayer > 1)
                 {
                     Orientation.Degrees += 1.5f;
                 }
 
-                if (deltaAngltToPlayer.IsBetween(-10, 10))
+                if (deltaAngleToPlayer.IsBetween(-10, 10))
                 {
                     if (FireToggler)
                     {

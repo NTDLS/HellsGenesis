@@ -12,7 +12,7 @@ namespace Si.Engine.AI.Logistics
     internal class AILogisticsMeander : AIStateMachine
     {
         private DateTime _lastDecisionTime = DateTime.UtcNow;
-        private readonly float _millisecndsBetweenDecisions = SiRandom.Between(2000, 10000);
+        private readonly float _millisecondsBetweenDecisions = SiRandom.Between(2000, 10000);
         private float _angleToAdd = SiRandom.Between(0.004f, 0.006f);
         private readonly float _varianceAngleForTravel = SiRandom.Between(5, 15);
         private readonly float _idealMaxDistance = SiRandom.Variance(8000, 0.20f);
@@ -47,7 +47,7 @@ namespace Si.Engine.AI.Logistics
             {
                 Owner.Orientation.RadiansSigned += (_angleToAdd * epoch); //Just do loops.
 
-                if ((DateTime.UtcNow - _lastDecisionTime).TotalMilliseconds > _millisecndsBetweenDecisions) //Change directions from time to time.
+                if ((DateTime.UtcNow - _lastDecisionTime).TotalMilliseconds > _millisecondsBetweenDecisions) //Change directions from time to time.
                 {
                     _angleToAdd = SiRandom.Between(0.004f, 0.006f);
                     if (SiRandom.PercentChance(50))

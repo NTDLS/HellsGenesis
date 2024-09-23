@@ -11,7 +11,7 @@ namespace Si.Rendering
     internal static class SiBitmapFragmenter
     {
         /// <summary>
-        /// Geenrates random fragments based on the size of the input image.
+        /// Generates random fragments based on the size of the input image.
         /// </summary>
         /// <param name="rendering"></param>
         /// <param name="originalBitmap"></param>

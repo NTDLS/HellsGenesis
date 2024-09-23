@@ -176,7 +176,7 @@ namespace Si.Engine.Manager
                 _engine.Input.KeyStateChangedHard(SiPlayerKey.Escape, keyboardState.IsPressed(Key.Escape));
             }
 
-            //I beleive that this information may be taxing to gather.
+            //I believe that this information may be taxing to gather.
             //Regardless we don't typically need is to require any code that uses it to enable it.
             if (_collectDetailedKeyInformation)
             {

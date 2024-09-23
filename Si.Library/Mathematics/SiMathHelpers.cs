@@ -3,7 +3,7 @@
     public static class SiMAthHelpers
     {
         /// <summary>
-        /// Returns a unique value for a given pait of numbers regardless of their order.
+        /// Returns a unique value for a given pair of numbers regardless of their order.
         /// </summary>
         /// <param name="k1"></param>
         /// <param name="k2"></param>

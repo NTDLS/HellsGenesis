@@ -153,7 +153,7 @@ namespace Si.Engine.Sprite.Player._Superclass
         {
             if (ShieldHealth < _engine.Settings.MaxShieldHealth && ShieldHealth + pointsToAdd >= _engine.Settings.MaxShieldHealth)
             {
-                ShieldMaxSound.Play(); //If we didnt have full shields but now we do, tell the player.
+                ShieldMaxSound.Play(); //If we didn't have full shields but now we do, tell the player.
             }
 
             base.AddShieldHealth(pointsToAdd);
@@ -210,7 +210,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                 }
             }
 
-            //This is the hit that took us under the treshold.
+            //This is the hit that took us under the threshold.
             if (HullHealth < 100 && HullHealth + damageAmount > 100)
             {
                 IntegrityLowSound.Play();
@@ -245,7 +245,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                 {
                     if (previousWeapon == null)
                     {
-                        return SelectLastAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the end.
+                        return SelectLastAvailableUsableSecondaryWeapon(); //No suitable weapon found after the current one. Go back to the end.
                     }
                     SelectedSecondaryWeapon = previousWeapon;
                     return previousWeapon;
@@ -254,7 +254,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                 previousWeapon = weapon;
             }
 
-            return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
+            return SelectFirstAvailableUsableSecondaryWeapon(); //No suitable weapon found after the current one. Go back to the beginning.
         }
 
         public WeaponBase SelectNextAvailableUsableSecondaryWeapon()
@@ -275,7 +275,7 @@ namespace Si.Engine.Sprite.Player._Superclass
                 }
             }
 
-            return SelectFirstAvailableUsableSecondaryWeapon(); //No sutible weapon found after the current one. Go back to the beginning.
+            return SelectFirstAvailableUsableSecondaryWeapon(); //No suitable weapon found after the current one. Go back to the beginning.
         }
 
         public WeaponBase SelectFirstAvailableUsableSecondaryWeapon()

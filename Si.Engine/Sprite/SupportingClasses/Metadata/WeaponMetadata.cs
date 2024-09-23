@@ -27,7 +27,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
         /// </summary>
         public float AngleVarianceDegrees { get; set; } = 0;
         /// <summary>
-        /// The variance expressed in decimal percentage that determines the loaded munitions initial velovity.
+        /// The variance expressed in decimal percentage that determines the loaded munitions initial velocity.
         /// </summary>
         public float SpeedVariancePercent { get; set; } = 0;
         /// <summary>

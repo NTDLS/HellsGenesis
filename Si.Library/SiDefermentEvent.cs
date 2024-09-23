@@ -20,7 +20,7 @@
         public bool IsQueuedForDeletion { get; private set; } = false;
 
         /// <summary>
-        /// Delegate for the event exection callback.
+        /// Delegate for the event execution callback.
         /// </summary>
         /// <param name="core">Engine core</param>
         /// <param name="sender">The event that is being triggered</param>
@@ -28,7 +28,7 @@
         public delegate void SiDefermentExecuteCallback(SiDefermentEvent sender, object? parameter);
 
         /// <summary>
-        /// Delegate for the event exection callback.
+        /// Delegate for the event execution callback.
         /// </summary>
         public delegate void SiDefermentSimpleExecuteCallback();
 
@@ -51,7 +51,7 @@
         /// <param name="parameter">An object that will be passed to the execution callback.</param>
         /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
         /// <param name="eventMode">Whether the event is one time or recurring.</param>
-        /// <param name="threadModel">Wheter the event callback is run synchronous or asynchronous.</param>
+        /// <param name="threadModel">Whether the event callback is run synchronous or asynchronous.</param>
         public SiDefermentEvent(int timeoutMilliseconds, object parameter, SiDefermentExecuteCallback executionCallback,
             SiDefermentEventMode eventMode = SiDefermentEventMode.OneTime,
             SiDefermentEventThreadModel threadModel = SiDefermentEventThreadModel.Synchronous)

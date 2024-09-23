@@ -25,7 +25,7 @@ namespace Si.Engine.Manager
         private readonly OptimisticCriticalResource<Dictionary<string, object>> _collection = new();
         private readonly IArchive _archive = null;
         private readonly Dictionary<string, IArchiveEntry> _entryHashes;
-        public Dictionary<string, IArchiveEntry> Enrites => _entryHashes;
+        public Dictionary<string, IArchiveEntry> Entries => _entryHashes;
 
         public AssetManager(EngineCore engine)
         {
@@ -158,7 +158,7 @@ namespace Si.Engine.Manager
             return result;
         }
 
-        public SiAudioClip GetAudio(string path, float initialVolumne, bool loopForever = false)
+        public SiAudioClip GetAudio(string path, float initialVolume, bool loopForever = false)
         {
             path = path.ToLower().Replace('\\', '/');
 
@@ -166,7 +166,7 @@ namespace Si.Engine.Manager
             {
                 if (o.TryGetValue(path, out object value))
                 {
-                    ((SiAudioClip)value).SetInitialVolumne(initialVolumne);
+                    ((SiAudioClip)value).SetInitialVolume(initialVolume);
                     ((SiAudioClip)value).SetLoopForever(loopForever);
                     return (SiAudioClip)value;
                 }
@@ -178,7 +178,7 @@ namespace Si.Engine.Manager
             }
 
             using var stream = GetCompressedStream(path);
-            var result = new SiAudioClip(stream, initialVolumne, loopForever);
+            var result = new SiAudioClip(stream, initialVolume, loopForever);
             _collection.Write(o => o.TryAdd(path, result));
             stream.Close();
             return result;

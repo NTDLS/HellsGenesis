@@ -107,8 +107,8 @@ namespace Si.Engine
         {
             _isPaused = !_isPaused;
 
-            _engine.Sprites.TextBlocks.PausedText.X = _engine.Display.NatrualScreenSize.Width / 2 - _engine.Sprites.TextBlocks.PausedText.Size.Width / 2;
-            _engine.Sprites.TextBlocks.PausedText.Y = _engine.Display.NatrualScreenSize.Height / 2 - _engine.Sprites.TextBlocks.PausedText.Size.Height / 2;
+            _engine.Sprites.TextBlocks.PausedText.X = _engine.Display.NaturalScreenSize.Width / 2 - _engine.Sprites.TextBlocks.PausedText.Size.Width / 2;
+            _engine.Sprites.TextBlocks.PausedText.Y = _engine.Display.NaturalScreenSize.Height / 2 - _engine.Sprites.TextBlocks.PausedText.Size.Height / 2;
             _engine.Sprites.TextBlocks.PausedText.Visible = _isPaused;
         }
 
@@ -157,7 +157,7 @@ namespace Si.Engine
                 //  then spin for the difference between how long we wanted it to take.
                 while (_engine.Display.FrameCounter.ElapsedMicroseconds - elapsedFrameTime < targetTimePerFrameMicroseconds - elapsedFrameTime)
                 {
-                    if (_engine.Settings.YeildRemainingFrameTime) Thread.Yield();
+                    if (_engine.Settings.YieldRemainingFrameTime) Thread.Yield();
                 }
 
                 if (_isPaused) Thread.Yield();
@@ -171,11 +171,11 @@ namespace Si.Engine
         private SiVector ExecuteWorldClockTick(float epoch)
         {
             //This is where we execute the world clock for each type of object.
-            //Note that this function does employ threads but I DO NOT beleive it is necessary for performance.
+            //Note that this function does employ threads but I DO NOT believe it is necessary for performance.
             //
             //The idea is that sprites are created in Events.ExecuteWorldClockTick(), input is snapshotted,
-            //  the player is moved (so we have a displacment vector) and then we should be free to do all
-            //  other operations in paralell with the exception of deleting sprites that are queued for deletion -
+            //  the player is moved (so we have a displacement vector) and then we should be free to do all
+            //  other operations in parallel with the exception of deleting sprites that are queued for deletion -
             //  which is why we do that after the threads have completed.
 
             _engine.Collisions.Reset(epoch);

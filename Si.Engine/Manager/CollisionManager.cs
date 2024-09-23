@@ -19,7 +19,7 @@ namespace Si.Engine.Manager
         private readonly EngineCore _engine;
         public Dictionary<string, OverlappingKinematicBodyPair> Detected { get; private set; } = new();
 
-        public PredictedKinematicBody[] Colliadbles { get; private set; }
+        public PredictedKinematicBody[] Collidables { get; private set; }
 
         public CollisionManager(EngineCore engine)
         {
@@ -35,7 +35,7 @@ namespace Si.Engine.Manager
                 //We are just adding these here for demonstration purposes. This is probably over the top
                 // and we DEFINITELY do not need GetIntersectionBoundingBox() AND GetIntersectedPolygon().
                 //
-                // Q: Also note that this is just the collision for predicted1→predicted2, which I am thinkning might be different??
+                // Q: Also note that this is just the collision for predicted1→predicted2, which I am thinking might be different??
                 // A: I tested it, they are definitely different.
                 //https://github.com/NTDLS/StrikeforceInfinite/wiki/Collision-Detection-Issues
                 OverlapRectangle = body1.GetIntersectionBoundingBox(body2),
@@ -59,7 +59,7 @@ namespace Si.Engine.Manager
 
         public void Reset(float epoch)
         {
-            Colliadbles = _engine.Sprites.VisibleColliadblePredictiveMove(epoch);
+            Collidables = _engine.Sprites.VisibleCollidablePredictiveMove(epoch);
             Detected.Clear();
         }
 

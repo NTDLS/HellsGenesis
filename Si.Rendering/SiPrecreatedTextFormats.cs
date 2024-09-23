@@ -2,7 +2,7 @@
 
 namespace Si.Rendering
 {
-    public class SiPrecreatedTextFormats
+    public class SiPreCreatedTextFormats
     {
         public TextFormat MenuGeneral { get; private set; }
         public TextFormat MenuTitle { get; private set; }
@@ -13,7 +13,7 @@ namespace Si.Rendering
         public TextFormat RealtimePlayerStats { get; private set; }
         public TextFormat Loading { get; private set; }
 
-        public SiPrecreatedTextFormats(Factory factory)
+        public SiPreCreatedTextFormats(Factory factory)
         {
             //Digital-7 Mono
 

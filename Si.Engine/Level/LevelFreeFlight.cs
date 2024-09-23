@@ -12,7 +12,7 @@ namespace Si.Engine.Level
         public LevelFreeFlight(EngineCore engine)
             : base(engine,
                   "Free Flight",
-                  "Theres nothing in this quadrant or the next that will threaten us.")
+                  "There's nothing in this quadrant or the next that will threaten us.")
         {
             TotalWaves = 5;
         }

@@ -27,7 +27,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         public List<SpriteBase> FindReverseCollisionsAlongMovementVector(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object after it has been moved and tests each location
-            ///     betwwen where it ended up and where it should have come from given its movement vector.
+            ///     between where it ended up and where it should have come from given its movement vector.
 
             var collisions = new List<SpriteBase>();
 
@@ -76,7 +76,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         public SpriteBase FindFirstReverseCollisionAlongMovementVectorAABB(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object after it has been moved and tests each location
-            ///     betwwen where it ended up and where it should have come from given its movement vector.
+            ///     between where it ended up and where it should have come from given its movement vector.
 
             //Get the starting position of the sprite before it was last moved.
             var hitTestPosition = new SiVector(Location - (MovementVector * epoch));
@@ -127,7 +127,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         public List<SpriteBase> FindForwardCollisionsAlongMovementVectorAABB(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object before it has been moved and tests each location
-            ///     betwwen where it is and where it will end up given its movement vector.
+            ///     between where it is and where it will end up given its movement vector.
 
             var collisions = new List<SpriteBase>();
 
@@ -176,7 +176,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         public SpriteBase FindFirstForwardCollisionAlongMovementVectorAABB(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object before it has been moved and tests each location
-            ///     betwwen where it is and where it will end up given its movement vector.
+            ///     between where it is and where it will end up given its movement vector.
 
             var hitTestPosition = new SiVector(Location);
             var destinationPoint = new SiVector(Location + (MovementVector * epoch));

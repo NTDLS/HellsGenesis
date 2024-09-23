@@ -36,12 +36,12 @@ namespace Si.Engine.Sprite.SupportingClasses
         public PredictedKinematicBody Body2 { get; private set; }
 
         /// <summary>
-        /// The overlapping rectangle of the two sprites. This is mostly for concept - I dont know what to do with it yet.
+        /// The overlapping rectangle of the two sprites. This is mostly for concept - I don't know what to do with it yet.
         /// </summary>
         public RectangleF OverlapRectangle { get; set; }
 
         /// <summary>
-        /// The overlapping polygon of the two sprites. This is mostly for concept - I dont know what to do with it yet.
+        /// The overlapping polygon of the two sprites. This is mostly for concept - I don't know what to do with it yet.
         /// </summary>
         public PointF[] OverlapPolygon { get; set; }
 

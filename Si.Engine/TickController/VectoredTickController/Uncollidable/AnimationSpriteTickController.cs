@@ -73,7 +73,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         }
 
         /// <summary>
-        /// Fairly large firey explosion.
+        /// Fairly large fiery explosion.
         /// </summary>
         /// <param name="PositionOf"></param>
         public void AddRandomExplosionAt(SpriteBase PositionOf)

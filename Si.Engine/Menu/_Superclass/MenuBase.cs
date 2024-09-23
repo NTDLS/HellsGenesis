@@ -98,7 +98,7 @@ namespace Si.Engine.Menu._Superclass
             return item;
         }
 
-        public SpriteMenuItem AddTextblock(SiVector location, string text)
+        public SpriteMenuItem AddTextBlock(SiVector location, string text)
         {
             var item = new SpriteMenuItem(_engine, this, _engine.Rendering.TextFormats.MenuGeneral, _engine.Rendering.Materials.Brushes.LawnGreen, location)
             {
@@ -171,7 +171,7 @@ namespace Si.Engine.Menu._Superclass
 
             if ((DateTime.UtcNow - _lastInputHandled).TotalMilliseconds < 200)
             {
-                return; //We have to keep the menues from going crazy.
+                return; //We have to keep the menus from going crazy.
             }
 
             if (_engine.Input.IsKeyPressed(SiPlayerKey.Enter))
@@ -184,7 +184,7 @@ namespace Si.Engine.Menu._Superclass
                 if (selectedItem != null)
                 {
                     //Menu executions may block execution if run in the same thread. For example, the menu execution may be looking to remove all
-                    //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
+                    //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuExecution is the same
                     //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
 
                     _engine.Events.Add(() =>
@@ -202,8 +202,8 @@ namespace Si.Engine.Menu._Superclass
 
                 _lastInputHandled = DateTime.UtcNow;
 
-                //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
-                //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
+                //Menu executions may block execution if run in the same thread. For example, the menu execution may be looking to remove all
+                //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuExecution is the same
                 //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                 //  
                 _engine.Events.Add(() =>
@@ -262,8 +262,8 @@ namespace Si.Engine.Menu._Superclass
                         {
                             _engine.Audio.Click.Play();
 
-                            //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
-                            //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
+                            //Menu executions may block execution if run in the same thread. For example, the menu execution may be looking to remove all
+                            //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuExecution is the same
                             //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                             //  
                             _engine.Events.Add(() => OnSelectionChanged?.Invoke(selectedItem));
@@ -319,8 +319,8 @@ namespace Si.Engine.Menu._Superclass
                         {
                             _engine.Audio.Click.Play();
 
-                            //Menu executions may block execution if run in the same thread. For example, the menu executin may be looking to remove all
-                            //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuexecution is the same
+                            //Menu executions may block execution if run in the same thread. For example, the menu execution may be looking to remove all
+                            //  items from the screen and wait for them to be removed. Problem is, the same thread that calls the menuExecution is the same
                             //  one that removes items from the screen, therefor the "while(itemsExist)" loop would never finish.
                             //  
                             _engine.Events.Add(() => OnSelectionChanged?.Invoke(selectedItem));

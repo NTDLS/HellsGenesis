@@ -179,7 +179,7 @@ namespace Si.Library.Mathematics
         }
 
         /// <summary>
-        /// Returns the angle which would be requird to rotate a sprite to be pointing at another sprite.
+        /// Returns the angle which would be required to rotate a sprite to be pointing at another sprite.
         /// positive figures indicate right (starboard) side and negative indicate left-hand (port) side of the object.
         /// </summary>
         /// <param name="fromSprite">The object from which the calculation is based.</param>
@@ -190,7 +190,7 @@ namespace Si.Library.Mathematics
             => fromSprite.HeadingAngleToInSignedDegrees(toSprite.Location);
 
         /// <summary>
-        /// Returns the angle which would be requird to rotate a sprite to to be pointing at a given location.
+        /// Returns the angle which would be required to rotate a sprite to to be pointing at a given location.
         /// </summary>
         /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toLocation">The location to which the calculation is based.</param>
@@ -200,7 +200,7 @@ namespace Si.Library.Mathematics
             => SiMath.RadToDeg(HeadingAngleToInSignedRadians(fromSprite, toLocation)).NormalizeDegrees();
 
         /// <summary>
-        /// Returns the angle which would be requird to rotate a sprite to be pointing at another sprite.
+        /// Returns the angle which would be required to rotate a sprite to be pointing at another sprite.
         /// </summary>
         /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toSprite">The object to which the calculation is based.</param>
@@ -210,7 +210,7 @@ namespace Si.Library.Mathematics
             => fromSprite.HeadingAngleToInUnsignedDegrees(toSprite.Location);
 
         /// <summary>
-        /// Returns the angle which would be requird to rotate a sprite to be pointing at a given location.
+        /// Returns the angle which would be required to rotate a sprite to be pointing at a given location.
         /// </summary>
         /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toLocation">The location to which the calculation is based.</param>
@@ -221,7 +221,7 @@ namespace Si.Library.Mathematics
 
         /// <summary>
         /// Calculate the angle (in signed radians [+π,-π] ) from one sprite current orientation to another position.
-        /// This is the core of all other varians of this function.
+        /// This is the core of all other variants of this function.
         /// </summary>
         /// <param name="fromSprite"></param>
         /// <param name="toLocation"></param>
@@ -262,7 +262,7 @@ namespace Si.Library.Mathematics
         /// </summary>
         /// <param name="fromSprite">The object from which the calculation is based.</param>
         /// <param name="toSprite">The object to which the calculation is based.</param>
-        /// <returns>The calcuated distance from one object to the other.</returns>
+        /// <returns>The calculated distance from one object to the other.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float DistanceTo(this ISprite fromSprite, ISprite toSprite)
             => fromSprite.Location.DistanceTo(toSprite.Location);

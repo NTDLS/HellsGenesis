@@ -11,7 +11,7 @@ namespace Si.Library
         public int MunitionTraversalThreads { get; set; } = SiUtility.LesserOf(Environment.ProcessorCount * 2, 16);
         public int WorldClockThreads { get; set; } = 10;
         public bool EnableSpriteInterrogation { get; set; } = false;
-        public bool HighlightNatrualBounds { get; set; } = false;
+        public bool HighlightNaturalBounds { get; set; } = false;
         public bool HighlightAllSprites { get; set; } = false;
         public bool HighlightCollisions { get; set; } = false;
 
@@ -45,22 +45,22 @@ namespace Si.Library
         public int DeltaFrameTargetStarCount { get; set; } = 200;
 
         /// <summary>
-        /// After the frame has been generated, if it takes less time than the framerate - yeild the time instead of rending the next frame too early.
+        /// After the frame has been generated, if it takes less time than the framerate - yield the time instead of rending the next frame too early.
         /// this is really just an effort to keep epoch time reasonably close to frame time.
         /// </summary>
-        public bool YeildRemainingFrameTime { get; set; } = false;
+        public bool YieldRemainingFrameTime { get; set; } = false;
         public bool VerticalSync { get; set; } = false;
         public bool AntiAliasing { get; set; } = true;
 
         /// <summary>
-        /// Ensure that the average framerate is within sane limits. This is especially important for vSync since we want to make sure a frame is availbele for the GPU.
+        /// Ensure that the average framerate is within sane limits. This is especially important for vSync since we want to make sure a frame is available for the GPU.
         /// </summary>
         public bool FineTuneFramerate { get; set; } = true;
         public float TargetFrameRate { get; set; } = 70;
         public float MunitionSceneDistanceLimit { get; set; } = 2500; //The distance from the scene that a munition can travel before it is cleaned up.
 
         /// <summary>
-        /// How much larger than the screen (NatrualScreenSize) that we will make the canvas so we can zoom-out. (2 = 2x larger than screen.).
+        /// How much larger than the screen (NaturalScreenSize) that we will make the canvas so we can zoom-out. (2 = 2x larger than screen.).
         /// </summary>
         public float OverdrawScale { get; set; } = 1.5f;
     }

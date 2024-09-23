@@ -27,7 +27,7 @@ namespace Si.Client
             checkBoxEnableVerticalSync.Checked = settings.VerticalSync;
             checkBoxAutoZoomWhenMoving.Checked = settings.EnableSpeedScaleFactoring;
             checkBoxHighlightAllSprites.Checked = settings.HighlightAllSprites;
-            checkBoxHighlightNatrualBounds.Checked = settings.HighlightNatrualBounds;
+            checkBoxHighlightNaturalBounds.Checked = settings.HighlightNaturalBounds;
             checkBoxEnableSpriteInterrogation.Checked = settings.EnableSpriteInterrogation;
             checkBoxPreCacheAllAssets.Checked = settings.PreCacheAllAssets;
             textBoxTargetFrameRate.Text = $"{settings.TargetFrameRate:n0}";
@@ -130,7 +130,7 @@ namespace Si.Client
                 settings.VerticalSync = checkBoxEnableVerticalSync.Checked;
                 settings.EnableSpeedScaleFactoring = checkBoxAutoZoomWhenMoving.Checked;
                 settings.HighlightAllSprites = checkBoxHighlightAllSprites.Checked;
-                settings.HighlightNatrualBounds = checkBoxHighlightNatrualBounds.Checked;
+                settings.HighlightNaturalBounds = checkBoxHighlightNaturalBounds.Checked;
                 settings.EnableSpriteInterrogation = checkBoxEnableSpriteInterrogation.Checked;
                 settings.PreCacheAllAssets = checkBoxPreCacheAllAssets.Checked;
 

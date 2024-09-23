@@ -45,7 +45,7 @@
             Independent
         }
 
-        public enum SiEngineInitilizationType
+        public enum SiEngineInitializationType
         {
             Play,
             Edit
@@ -77,7 +77,7 @@
         public enum ParticleColorType
         {
             Solid,
-            Graident
+            Gradient
         }
 
         public enum ParticleVectorType
