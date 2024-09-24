@@ -183,7 +183,7 @@ namespace Si.Engine.Sprite._Superclass
             var weapon = GetWeaponOfType<T>();
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceOf<T>([ _engine, this ]).EnsureNotNull();
+                weapon = SiReflection.CreateInstanceOf<T>([_engine, this]).EnsureNotNull();
                 weapon.RoundQuantity += munitionCount;
                 Weapons.Add(weapon);
             }

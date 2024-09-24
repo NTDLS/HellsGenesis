@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using NTDLS.Helpers;
-using NTDLS.Semaphore;
 using Si.Engine.EngineLibrary;
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
