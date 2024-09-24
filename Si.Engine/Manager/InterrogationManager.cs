@@ -30,8 +30,12 @@ namespace Si.Engine.Manager
             "Display-RenderWindowPosition-Get||Gets the current background offset.",
             "Display-RenderWindowPosition-Set|x:Required:Numeric,y:Required:Numeric|Sets the current background offset.",
             "Display-RenderWindowPosition-CenterOn|spriteUID:Required:Numeric|Centers the background offset on a given sprite.",
+            "Display-HighlightNaturalBounds|state:Required:Boolean|Enables or disables visible bounds of the 1:1 zoom factor.",
+            "Display-FineTuneFramerate|state:Required:Boolean|Enables or disables fine-tuning of the set framerate.",
+            "Display-SpeedZoomScaling|state:Required:Boolean|Enables or disables the speed scale factoring.",
+            "Display-HighlightCollisions|state:Required:Boolean|Highlights all collisions for collidable sprites.",
+            "Display-HighlightAll|state:Required:Boolean|Highlights all visible sprites.",
 
-            "Engine-HighlightAll|state:Required:Boolean|Highlights all visible sprites.",
             "Engine-Pause|state:Required:Boolean|Pauses and un-pauses the engine.",
 
             "Sprite-Create|typeName:Required:String,x:Required:Numeric,y:Required:Numeric|Creates a sprite at the given position.",
@@ -262,7 +266,31 @@ namespace Si.Engine.Manager
             _debugForm.WriteLine(infoText, System.Drawing.Color.Black);
         }
 
-        public void CommandHandler_Engine_HighlightAll(InterrogationCommand command)
+        public void CommandHandler_Display_SpeedZoomScaling(InterrogationCommand command)
+        {
+            var state = command.ParameterValue<bool>("state");
+            _engine.Settings.EnableSpeedScaleFactoring = state;
+        }
+
+        public void CommandHandler_Display_HighlightNaturalBounds(InterrogationCommand command)
+        {
+            var state = command.ParameterValue<bool>("state");
+            _engine.Settings.HighlightNaturalBounds = state;
+        }
+
+        public void CommandHandler_Display_FineTuneFramerate(InterrogationCommand command)
+        {
+            var state = command.ParameterValue<bool>("state");
+            _engine.Settings.FineTuneFramerate = state;
+        }
+
+        public void CommandHandler_Display_HighlightCollisions(InterrogationCommand command)
+        {
+            var state = command.ParameterValue<bool>("state");
+            _engine.Settings.HighlightCollisions = state;
+        }
+
+        public void CommandHandler_Display_HighlightAll(InterrogationCommand command)
         {
             var state = command.ParameterValue<bool>("state");
             _engine.Settings.HighlightAllSprites = state;

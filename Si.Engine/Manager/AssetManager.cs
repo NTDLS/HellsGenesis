@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using static NTDLS.DelegateThreadPooling.DelegateThreadPool;
 
 namespace Si.Engine.Manager
 {
@@ -137,36 +138,14 @@ namespace Si.Engine.Manager
             }
         }
 
-        public SiAudioClip GetAudio(string path)
+        public SiAudioClip GetAudio(string path, float initialVolume = 1, bool loopForever = false)
         {
             path = path.ToLower().Replace('\\', '/');
 
+            var cacheKey = $"{path}:{initialVolume}:{loopForever}";
             var cached = _collection.Read(o =>
             {
-                o.TryGetValue(path, out object? value);
-                return value as SiAudioClip;
-            });
-
-            if (cached != null)
-            {
-                return cached;
-            }
-
-            using var stream = GetCompressedStream(path);
-            var result = new SiAudioClip(stream, 1, false);
-            _collection.Write(o => o.TryAdd(path, result));
-
-            stream.Close();
-            return result;
-        }
-
-        public SiAudioClip GetAudio(string path, float initialVolume, bool loopForever = false)
-        {
-            path = path.ToLower().Replace('\\', '/');
-
-            var cached = _collection.Read(o =>
-            {
-                if (o.TryGetValue(path, out object? value))
+                if (o.TryGetValue(cacheKey, out object? value))
                 {
                     ((SiAudioClip)value).SetInitialVolume(initialVolume);
                     ((SiAudioClip)value).SetLoopForever(loopForever);
@@ -174,6 +153,7 @@ namespace Si.Engine.Manager
                 }
                 return null;
             });
+
             if (cached != null)
             {
                 return cached;
@@ -181,7 +161,7 @@ namespace Si.Engine.Manager
 
             using var stream = GetCompressedStream(path);
             var result = new SiAudioClip(stream, initialVolume, loopForever);
-            _collection.Write(o => o.TryAdd(path, result));
+            _collection.Write(o => o.TryAdd(cacheKey, result));
             stream.Close();
             return result;
         }
@@ -212,7 +192,7 @@ namespace Si.Engine.Manager
             loadingHeader.SetTextAndCenterX("Hydrating asset cache...");
 
             using var archive = ArchiveFactory.Open(_assetPackagePath);
-            using var dtp = new DelegateThreadPool(Environment.ProcessorCount * 4);
+            using var dtp = new DelegateThreadPool(Environment.ProcessorCount);
             var threadPoolTracker = dtp.CreateChildQueue();
 
             int statusIndex = 0;
@@ -224,15 +204,15 @@ namespace Si.Engine.Manager
                 {
                     case ".json":
                     case ".txt":
-                        threadPoolTracker.Enqueue(() => GetText(entry.Key), (object o) => Interlocked.Increment(ref statusIndex));
+                        threadPoolTracker.Enqueue(() => GetText(entry.Key), (QueueItemState<object> o) => Interlocked.Increment(ref statusIndex));
                         break;
                     case ".png":
                     case ".jpg":
                     case ".bmp":
-                        threadPoolTracker.Enqueue(() => GetBitmap(entry.Key), (object o) => Interlocked.Increment(ref statusIndex));
+                        threadPoolTracker.Enqueue(() => GetBitmap(entry.Key), (QueueItemState<object> o) => Interlocked.Increment(ref statusIndex));
                         break;
                     case ".wav":
-                        threadPoolTracker.Enqueue(() => GetAudio(entry.Key), (object o) => Interlocked.Increment(ref statusIndex));
+                        threadPoolTracker.Enqueue(() => GetAudio(entry.Key), (QueueItemState<object> o) => Interlocked.Increment(ref statusIndex));
                         break;
                     default:
                         Interlocked.Increment(ref statusIndex);
@@ -240,7 +220,7 @@ namespace Si.Engine.Manager
                 }
             }
 
-            threadPoolTracker.WaitForCompletion(TimeSpan.FromSeconds(10), () =>
+            threadPoolTracker.WaitForCompletion(TimeSpan.FromSeconds(60), () =>
             {
                 loadingDetail.SetTextAndCenterX($"{statusIndex / statusEntryCount * 100.0:n0}%");
                 return true;

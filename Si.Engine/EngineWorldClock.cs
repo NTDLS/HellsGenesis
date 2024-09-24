@@ -22,7 +22,7 @@ namespace Si.Engine
         private bool _shutdown = false;
         private bool _isPaused = false;
         private readonly Thread _graphicsThread;
-        private TrackableQueue<TickControllerMethod>? _threadPoolTracker = null;
+        private readonly TrackableQueue<TickControllerMethod>? _worldClockSubPool;
 
         private readonly DelegateThreadPool _worldClockThreadPool;
 
@@ -56,7 +56,7 @@ namespace Si.Engine
             if (_engine.Settings.MultithreadedWorldClock)
             {
                 //Create a collection of threads so we can wait on the ones that we start.
-                _threadPoolTracker ??= _worldClockThreadPool.CreateChildQueue<TickControllerMethod>();
+                _worldClockSubPool ??= _worldClockThreadPool.CreateChildQueue<TickControllerMethod>();
             }
 
             #region Cache vectored and unvectored tick controller methods.
@@ -202,16 +202,16 @@ namespace Si.Engine
 
             //Enqueue each vectored tick controller for a thread.
             var vectoredParameters = new object[] { epoch, displacementVector };
-            if (_threadPoolTracker != null)
+            if (_worldClockSubPool != null)
             {
                 foreach (var vectored in _vectoredTickControllers)
                 {
-                    _threadPoolTracker.Enqueue(vectored,
+                    _worldClockSubPool.Enqueue(vectored,
                         (TickControllerMethod p) => p.Method.Invoke(p.Controller, vectoredParameters));
                 }
 
                 //Wait on all enqueued threads to complete.
-                if (!SiUtility.TryAndIgnore(_threadPoolTracker.WaitForCompletion))
+                if (!SiUtility.TryAndIgnore(_worldClockSubPool.WaitForCompletion))
                 {
                     return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
                 }
@@ -225,16 +225,16 @@ namespace Si.Engine
             }
 
             //After all vectored tick controllers have executed, run the unvectored tick controllers.
-            if (_threadPoolTracker != null)
+            if (_worldClockSubPool != null)
             {
                 foreach (var unvectored in _unvectoredTickControllers)
                 {
-                    _threadPoolTracker.Enqueue(unvectored,
+                    _worldClockSubPool.Enqueue(unvectored,
                         (TickControllerMethod p) => p.Method.Invoke(p.Controller, null));
                 }
 
                 //Wait on all enqueued threads to complete.
-                if (!SiUtility.TryAndIgnore(_threadPoolTracker.WaitForCompletion))
+                if (!SiUtility.TryAndIgnore(_worldClockSubPool.WaitForCompletion))
                 {
                     return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
                 }

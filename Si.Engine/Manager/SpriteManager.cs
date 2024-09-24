@@ -401,7 +401,7 @@ namespace Si.Engine.Manager
                 var fragment = _engine.Sprites.GenericBitmaps.AddAt(fragmentImage, sprite);
                 fragment.CleanupMode = ParticleCleanupMode.DistanceOffScreen;
                 fragment.FadeToBlackReductionAmount = SiRandom.Between(0.001f, 0.01f); //TODO: Can we implement this?
-                fragment.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-1.5f, -0.4f) : SiRandom.Between(0.4f, 1.5f);
+                fragment.RotationSpeed = SiRandom.FlipCoin() ? SiRandom.Between(-0.05f, -0.02f) : SiRandom.Between(0.02f, 0.05f);
                 fragment.VectorType = ParticleVectorType.Default;
 
                 fragment.Orientation.Degrees = SiRandom.Between(0.0f, 359.0f);
