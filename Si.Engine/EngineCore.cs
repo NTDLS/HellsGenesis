@@ -157,7 +157,7 @@ namespace Si.Engine
                 {
                     if (o.ScreenRenderTarget != null && o.IntermediateRenderTarget != null)
                     {
-                        o.ScreenRenderTarget.BeginDraw();
+                        o.IntermediateRenderTarget.BeginDraw();
 
                         if (ExecutionType == SiEngineInitializationType.Play)
                         {
@@ -196,10 +196,9 @@ namespace Si.Engine
                         }
                         #endregion
 
-
                         o.IntermediateRenderTarget.EndDraw();
 
-                        o.IntermediateRenderTarget.BeginDraw();
+                        o.ScreenRenderTarget.BeginDraw();
 
                         if (Settings.EnableSpeedScaleFactoring)
                         {
