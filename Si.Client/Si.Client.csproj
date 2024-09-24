@@ -16,10 +16,16 @@
     <AssemblyName>Si.Client</AssemblyName>
     <RootNamespace>Si.Client</RootNamespace>
     <StartupObject>Si.Client.Program</StartupObject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="StrikeforceInfinite.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NTDLS.Helpers" Version="1.2.9" />
   </ItemGroup>
 
   <ItemGroup>

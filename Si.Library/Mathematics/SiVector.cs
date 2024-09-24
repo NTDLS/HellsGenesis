@@ -6,7 +6,7 @@ namespace Si.Library.Mathematics
 {
     /// <summary>
     /// 2d vector.
-    /// Note that when the signed/unsigned is unspecified. it is unsigned (Degrees 0,360), Radians(0,2π), etc.
+    /// Note that when the signed/unsigned is unspecified, it is unsigned (Degrees 0,360), Radians(0,2π), etc.
     /// </summary>
     public partial class SiVector : IComparable<SiVector>
     {

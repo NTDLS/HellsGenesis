@@ -20,15 +20,28 @@ namespace Si.Client
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            if (args.Length == 0 || args.Where(o => o.ToLower() == "/nosplash").Any() == false)
+            Screen? screen = null;
+
+            if (args.Any(o => o.Equals("/nosplash", StringComparison.InvariantCultureIgnoreCase)) == false)
             {
-                using var form = new FormStartup();
-                if (form.ShowDialog() == DialogResult.Cancel) return;
+                using var formStartup = new FormStartup();
+                if (formStartup.ShowDialog() == DialogResult.OK)
+                {
+                    screen = formStartup.CurrentScreen;
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                screen = Screen.FromPoint(Cursor.Position);
             }
 
             try
             {
-                Application.Run(new FormRenderTarget());
+                Application.Run(new FormRenderTarget(screen));
             }
             catch (Exception ex)
             {

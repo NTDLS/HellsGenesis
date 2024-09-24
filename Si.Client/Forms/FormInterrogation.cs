@@ -79,12 +79,12 @@ namespace Si.Client.Forms
 
             _engine = engine;
 
-            Shown += (object sender, EventArgs e) => textBoxCommand.Focus();
+            Shown += (object? sender, EventArgs e) => textBoxCommand.Focus();
 
             textBoxCommand.KeyUp += TextBoxCommand_KeyUp;
             listViewCommands.MouseDoubleClick += ListViewCommands_MouseDoubleClick;
 
-            FormClosing += (object sender, FormClosingEventArgs e) =>
+            FormClosing += (object? sender, FormClosingEventArgs e) =>
             {
                 engine.Debug.ToggleVisibility();
                 e.Cancel = true;
@@ -103,7 +103,7 @@ namespace Si.Client.Forms
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void TextBoxCommand_LostFocus(object sender, EventArgs e)
+        private void TextBoxCommand_LostFocus(object? sender, EventArgs e)
         {
             if ((DateTime.UtcNow - _lastTabKeyTimestamp).TotalMilliseconds < 100)
             {
@@ -111,7 +111,7 @@ namespace Si.Client.Forms
             }
         }
 
-        private void ListViewCommands_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void ListViewCommands_MouseDoubleClick(object? sender, MouseEventArgs e)
         {
             if (listViewCommands.SelectedItems.Count > 0)
             {
@@ -120,7 +120,7 @@ namespace Si.Client.Forms
             }
         }
 
-        private void TextBoxCommand_KeyUp(object sender, KeyEventArgs e)
+        private void TextBoxCommand_KeyUp(object? sender, KeyEventArgs e)
         {
             if (textBoxCommand.Text.Length == 0 && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down))
             {
@@ -160,7 +160,7 @@ namespace Si.Client.Forms
             }
         }
 
-        private void ButtonExecute_Click(object sender, EventArgs e)
+        private void ButtonExecute_Click(object? sender, EventArgs e)
         {
             var command = textBoxCommand.Text.Trim();
             textBoxCommand.Text = "";

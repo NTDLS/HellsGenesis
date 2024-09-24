@@ -1,4 +1,5 @@
-﻿using Si.Engine;
+﻿using Si.Client.Hardware;
+using Si.Engine;
 using Si.Rendering;
 using System;
 using System.Linq;
@@ -10,9 +11,12 @@ namespace Si.Client
     {
         private const int MAX_RESOLUTIONS = 32;
 
-        public FormSettings()
+        private Screen _screen;
+
+        public FormSettings(Screen screen)
         {
             InitializeComponent();
+            _screen = screen;
         }
 
         private void FormSettings_Load(object sender, EventArgs e)
@@ -23,7 +27,7 @@ namespace Si.Client
 
             checkBoxFineTuneFrameRate.Checked = settings.FineTuneFramerate;
             checkBoxPlayMusic.Checked = settings.PlayMusic;
-            checkBoxEnableAntiAliasing.Checked = settings.EnableSpeedScaleFactoring;
+            checkBoxEnableAntiAliasing.Checked = settings.AntiAliasing;
             checkBoxEnableVerticalSync.Checked = settings.VerticalSync;
             checkBoxAutoZoomWhenMoving.Checked = settings.EnableSpeedScaleFactoring;
             checkBoxHighlightAllSprites.Checked = settings.HighlightAllSprites;
@@ -35,13 +39,23 @@ namespace Si.Client
             textBoxInitialFrameStarCount.Text = $"{settings.InitialFrameStarCount:n0}";
             textBoxDeltaFrameTargetStarCount.Text = $"{settings.DeltaFrameTargetStarCount:n0}";
 
+            if (checkBoxEnableVerticalSync.Checked)
+            {
+                checkBoxFineTuneFrameRate.Checked = false;
+
+                checkBoxFineTuneFrameRate.Enabled = false;
+                textBoxTargetFrameRate.Enabled = false;
+
+                textBoxTargetFrameRate.Text = Display.GetControlMonitorRefreshRate(this).ToString();
+            }
+
             trackBarResolution.Minimum = 1;
             trackBarResolution.Maximum = MAX_RESOLUTIONS;
 
             for (int i = 0; i < MAX_RESOLUTIONS + 1; i++)
             {
-                int baseX = Screen.PrimaryScreen.Bounds.Width - (int)((float)Screen.PrimaryScreen.Bounds.Width * (1.0 - ((float)i / (float)MAX_RESOLUTIONS)));
-                int baseY = Screen.PrimaryScreen.Bounds.Height - (int)((float)Screen.PrimaryScreen.Bounds.Height * (1.0 - ((float)i / (float)MAX_RESOLUTIONS)));
+                int baseX = _screen.Bounds.Width - (int)((float)_screen.Bounds.Width * (1.0 - ((float)i / (float)MAX_RESOLUTIONS)));
+                int baseY = _screen.Bounds.Height - (int)((float)_screen.Bounds.Height * (1.0 - ((float)i / (float)MAX_RESOLUTIONS)));
 
                 if ((baseX % 2) != 0) baseX++;
                 if ((baseY % 2) != 0) baseY++;
@@ -75,15 +89,15 @@ namespace Si.Client
             }
         }
 
-        private void TrackBarResolution_Scroll(object sender, EventArgs e)
+        private void TrackBarResolution_Scroll(object? sender, EventArgs e)
         {
-            int baseX = Screen.PrimaryScreen.Bounds.Width;
-            int baseY = Screen.PrimaryScreen.Bounds.Height;
+            int baseX = _screen.Bounds.Width;
+            int baseY = _screen.Bounds.Height;
 
             if (trackBarResolution.Value < MAX_RESOLUTIONS)
             {
-                baseX = Screen.PrimaryScreen.Bounds.Width - (int)((float)Screen.PrimaryScreen.Bounds.Width * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
-                baseY = Screen.PrimaryScreen.Bounds.Height - (int)((float)Screen.PrimaryScreen.Bounds.Height * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
+                baseX = _screen.Bounds.Width - (int)((float)_screen.Bounds.Width * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
+                baseY = _screen.Bounds.Height - (int)((float)_screen.Bounds.Height * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
 
                 if ((baseX % 2) != 0) baseX++;
                 if ((baseY % 2) != 0) baseY++;
@@ -126,8 +140,8 @@ namespace Si.Client
 
                 settings.FineTuneFramerate = checkBoxFineTuneFrameRate.Checked;
                 settings.PlayMusic = checkBoxPlayMusic.Checked;
-                settings.EnableSpeedScaleFactoring = checkBoxEnableAntiAliasing.Checked;
                 settings.VerticalSync = checkBoxEnableVerticalSync.Checked;
+                settings.AntiAliasing = checkBoxEnableAntiAliasing.Checked;
                 settings.EnableSpeedScaleFactoring = checkBoxAutoZoomWhenMoving.Checked;
                 settings.HighlightAllSprites = checkBoxHighlightAllSprites.Checked;
                 settings.HighlightNaturalBounds = checkBoxHighlightNaturalBounds.Checked;
@@ -139,8 +153,8 @@ namespace Si.Client
                 settings.InitialFrameStarCount = GetAndValidate(textBoxInitialFrameStarCount, 0, 1000, "Initial frame star count");
                 settings.DeltaFrameTargetStarCount = GetAndValidate(textBoxDeltaFrameTargetStarCount, 0, 1000, "Delta-frame target star count");
 
-                int baseX = Screen.PrimaryScreen.Bounds.Width - (int)((float)Screen.PrimaryScreen.Bounds.Width * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
-                int baseY = Screen.PrimaryScreen.Bounds.Height - (int)((float)Screen.PrimaryScreen.Bounds.Height * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
+                int baseX = _screen.Bounds.Width - (int)((float)_screen.Bounds.Width * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
+                int baseY = _screen.Bounds.Height - (int)((float)_screen.Bounds.Height * (1.0 - ((float)trackBarResolution.Value / (float)MAX_RESOLUTIONS)));
                 settings.Resolution = new System.Drawing.Size(baseX, baseY);
 
                 settings.FullScreen = (trackBarResolution.Value == MAX_RESOLUTIONS);
@@ -160,6 +174,18 @@ namespace Si.Client
             {
                 MessageBox.Show(ex.Message, "Strikeforce Infinite", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+        }
+
+        private void CheckBoxEnableVerticalSync_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxEnableVerticalSync.Checked)
+            {
+                checkBoxFineTuneFrameRate.Checked = false;
+                textBoxTargetFrameRate.Text = Display.GetControlMonitorRefreshRate(this).ToString();
+            }
+
+            checkBoxFineTuneFrameRate.Enabled = !checkBoxEnableVerticalSync.Checked;
+            textBoxTargetFrameRate.Enabled = !checkBoxEnableVerticalSync.Checked;
         }
     }
 }

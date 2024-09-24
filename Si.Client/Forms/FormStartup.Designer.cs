@@ -44,7 +44,7 @@ namespace Si.Client
             buttonSettings.TabIndex = 2;
             buttonSettings.Text = "Settings";
             buttonSettings.UseVisualStyleBackColor = true;
-            buttonSettings.Click += buttonSettings_Click;
+            buttonSettings.Click += ButtonSettings_Click;
             // 
             // buttonStart
             // 
@@ -54,7 +54,7 @@ namespace Si.Client
             buttonStart.TabIndex = 0;
             buttonStart.Text = "Start";
             buttonStart.UseVisualStyleBackColor = true;
-            buttonStart.Click += buttonStart_Click;
+            buttonStart.Click += ButtonStart_Click;
             // 
             // buttonExit
             // 
@@ -64,7 +64,7 @@ namespace Si.Client
             buttonExit.TabIndex = 1;
             buttonExit.Text = "Exit";
             buttonExit.UseVisualStyleBackColor = true;
-            buttonExit.Click += buttonExit_Click;
+            buttonExit.Click += ButtonExit_Click;
             // 
             // FormStartup
             // 

@@ -47,6 +47,7 @@
 
         public enum SiEngineInitializationType
         {
+            None,
             Play,
             Edit
         }

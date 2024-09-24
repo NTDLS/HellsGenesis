@@ -31,18 +31,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSettings));
             tabControl1 = new System.Windows.Forms.TabControl();
             tabPageDisplay = new System.Windows.Forms.TabPage();
-            checkBoxEnableAntiAliasing = new System.Windows.Forms.CheckBox();
             labelGraphicsAdapter = new System.Windows.Forms.Label();
             comboBoxGraphicsAdapter = new System.Windows.Forms.ComboBox();
             trackBarResolution = new System.Windows.Forms.TrackBar();
-            checkBoxAutoZoomWhenMoving = new System.Windows.Forms.CheckBox();
             labelResolutionLabel = new System.Windows.Forms.Label();
             labelResolution = new System.Windows.Forms.Label();
             tabPageDisplayAdvanced = new System.Windows.Forms.TabPage();
+            checkBoxEnableAntiAliasing = new System.Windows.Forms.CheckBox();
             checkBoxFineTuneFrameRate = new System.Windows.Forms.CheckBox();
             checkBoxEnableVerticalSync = new System.Windows.Forms.CheckBox();
             labelInitialStarCount = new System.Windows.Forms.Label();
             labelFrameTargetStarCount = new System.Windows.Forms.Label();
+            checkBoxAutoZoomWhenMoving = new System.Windows.Forms.CheckBox();
             textBoxDeltaFrameTargetStarCount = new System.Windows.Forms.TextBox();
             textBoxInitialFrameStarCount = new System.Windows.Forms.TextBox();
             label2 = new System.Windows.Forms.Label();
@@ -83,11 +83,9 @@
             // 
             // tabPageDisplay
             // 
-            tabPageDisplay.Controls.Add(checkBoxEnableAntiAliasing);
             tabPageDisplay.Controls.Add(labelGraphicsAdapter);
             tabPageDisplay.Controls.Add(comboBoxGraphicsAdapter);
             tabPageDisplay.Controls.Add(trackBarResolution);
-            tabPageDisplay.Controls.Add(checkBoxAutoZoomWhenMoving);
             tabPageDisplay.Controls.Add(labelResolutionLabel);
             tabPageDisplay.Controls.Add(labelResolution);
             tabPageDisplay.Location = new System.Drawing.Point(4, 24);
@@ -97,16 +95,6 @@
             tabPageDisplay.TabIndex = 0;
             tabPageDisplay.Text = "Display";
             tabPageDisplay.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxEnableAntiAliasing
-            // 
-            checkBoxEnableAntiAliasing.AutoSize = true;
-            checkBoxEnableAntiAliasing.Location = new System.Drawing.Point(15, 176);
-            checkBoxEnableAntiAliasing.Name = "checkBoxEnableAntiAliasing";
-            checkBoxEnableAntiAliasing.Size = new System.Drawing.Size(136, 19);
-            checkBoxEnableAntiAliasing.TabIndex = 3;
-            checkBoxEnableAntiAliasing.Text = "Enable Anti-aliasing?";
-            checkBoxEnableAntiAliasing.UseVisualStyleBackColor = true;
             // 
             // labelGraphicsAdapter
             // 
@@ -134,16 +122,6 @@
             trackBarResolution.Size = new System.Drawing.Size(223, 45);
             trackBarResolution.TabIndex = 1;
             // 
-            // checkBoxAutoZoomWhenMoving
-            // 
-            checkBoxAutoZoomWhenMoving.AutoSize = true;
-            checkBoxAutoZoomWhenMoving.Location = new System.Drawing.Point(15, 151);
-            checkBoxAutoZoomWhenMoving.Name = "checkBoxAutoZoomWhenMoving";
-            checkBoxAutoZoomWhenMoving.Size = new System.Drawing.Size(168, 19);
-            checkBoxAutoZoomWhenMoving.TabIndex = 2;
-            checkBoxAutoZoomWhenMoving.Text = "Auto-zoom when moving?";
-            checkBoxAutoZoomWhenMoving.UseVisualStyleBackColor = true;
-            // 
             // labelResolutionLabel
             // 
             labelResolutionLabel.AutoSize = true;
@@ -164,10 +142,12 @@
             // 
             // tabPageDisplayAdvanced
             // 
+            tabPageDisplayAdvanced.Controls.Add(checkBoxEnableAntiAliasing);
             tabPageDisplayAdvanced.Controls.Add(checkBoxFineTuneFrameRate);
             tabPageDisplayAdvanced.Controls.Add(checkBoxEnableVerticalSync);
             tabPageDisplayAdvanced.Controls.Add(labelInitialStarCount);
             tabPageDisplayAdvanced.Controls.Add(labelFrameTargetStarCount);
+            tabPageDisplayAdvanced.Controls.Add(checkBoxAutoZoomWhenMoving);
             tabPageDisplayAdvanced.Controls.Add(textBoxDeltaFrameTargetStarCount);
             tabPageDisplayAdvanced.Controls.Add(textBoxInitialFrameStarCount);
             tabPageDisplayAdvanced.Controls.Add(label2);
@@ -181,6 +161,16 @@
             tabPageDisplayAdvanced.TabIndex = 1;
             tabPageDisplayAdvanced.Text = "Display (Advanced)";
             tabPageDisplayAdvanced.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEnableAntiAliasing
+            // 
+            checkBoxEnableAntiAliasing.AutoSize = true;
+            checkBoxEnableAntiAliasing.Location = new System.Drawing.Point(17, 138);
+            checkBoxEnableAntiAliasing.Name = "checkBoxEnableAntiAliasing";
+            checkBoxEnableAntiAliasing.Size = new System.Drawing.Size(136, 19);
+            checkBoxEnableAntiAliasing.TabIndex = 5;
+            checkBoxEnableAntiAliasing.Text = "Enable Anti-aliasing?";
+            checkBoxEnableAntiAliasing.UseVisualStyleBackColor = true;
             // 
             // checkBoxFineTuneFrameRate
             // 
@@ -201,6 +191,7 @@
             checkBoxEnableVerticalSync.TabIndex = 2;
             checkBoxEnableVerticalSync.Text = "Enable Vertical-Sync?";
             checkBoxEnableVerticalSync.UseVisualStyleBackColor = true;
+            checkBoxEnableVerticalSync.CheckedChanged += CheckBoxEnableVerticalSync_CheckedChanged;
             // 
             // labelInitialStarCount
             // 
@@ -220,19 +211,29 @@
             labelFrameTargetStarCount.TabIndex = 32;
             labelFrameTargetStarCount.Text = "Delta-frame star count:";
             // 
+            // checkBoxAutoZoomWhenMoving
+            // 
+            checkBoxAutoZoomWhenMoving.AutoSize = true;
+            checkBoxAutoZoomWhenMoving.Location = new System.Drawing.Point(17, 113);
+            checkBoxAutoZoomWhenMoving.Name = "checkBoxAutoZoomWhenMoving";
+            checkBoxAutoZoomWhenMoving.Size = new System.Drawing.Size(168, 19);
+            checkBoxAutoZoomWhenMoving.TabIndex = 4;
+            checkBoxAutoZoomWhenMoving.Text = "Auto-zoom when moving?";
+            checkBoxAutoZoomWhenMoving.UseVisualStyleBackColor = true;
+            // 
             // textBoxDeltaFrameTargetStarCount
             // 
             textBoxDeltaFrameTargetStarCount.Location = new System.Drawing.Point(230, 138);
             textBoxDeltaFrameTargetStarCount.Name = "textBoxDeltaFrameTargetStarCount";
             textBoxDeltaFrameTargetStarCount.Size = new System.Drawing.Size(133, 23);
-            textBoxDeltaFrameTargetStarCount.TabIndex = 6;
+            textBoxDeltaFrameTargetStarCount.TabIndex = 8;
             // 
             // textBoxInitialFrameStarCount
             // 
             textBoxInitialFrameStarCount.Location = new System.Drawing.Point(230, 86);
             textBoxInitialFrameStarCount.Name = "textBoxInitialFrameStarCount";
             textBoxInitialFrameStarCount.Size = new System.Drawing.Size(133, 23);
-            textBoxInitialFrameStarCount.TabIndex = 5;
+            textBoxInitialFrameStarCount.TabIndex = 7;
             // 
             // label2
             // 
@@ -257,7 +258,7 @@
             textBoxOverdrawScale.Location = new System.Drawing.Point(230, 34);
             textBoxOverdrawScale.Name = "textBoxOverdrawScale";
             textBoxOverdrawScale.Size = new System.Drawing.Size(133, 23);
-            textBoxOverdrawScale.TabIndex = 4;
+            textBoxOverdrawScale.TabIndex = 6;
             // 
             // textBoxTargetFrameRate
             // 

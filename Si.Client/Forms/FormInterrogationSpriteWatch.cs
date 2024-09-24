@@ -27,7 +27,7 @@ namespace Si.Client.Forms
             splitContainerBody.Panel2Collapsed = true;
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object? sender, EventArgs e)
         {
             UpdateWatch();
         }
@@ -38,6 +38,10 @@ namespace Si.Client.Forms
             listViewVariables.SuspendLayout();
 
             var sprite = _sprite as SpriteBase;
+            if (sprite == null)
+            {
+                return;
+            }
 
             if (sprite is SpriteEnemyBase enemy)
             {
@@ -93,7 +97,7 @@ namespace Si.Client.Forms
             }
         }
 
-        private ListViewItem FindItemByName(string name)
+        private ListViewItem? FindItemByName(string name)
         {
             foreach (ListViewItem item in listViewVariables.Items)
             {

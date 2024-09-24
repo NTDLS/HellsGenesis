@@ -22,6 +22,7 @@ namespace Si.Engine
         private bool _shutdown = false;
         private bool _isPaused = false;
         private readonly Thread _graphicsThread;
+        private TrackableQueue<TickControllerMethod> _threadPoolTracker = null;
 
         private readonly DelegateThreadPool _worldClockThreadPool;
 
@@ -51,6 +52,12 @@ namespace Si.Engine
             };
 
             _graphicsThread = new Thread(GraphicsThreadProc);
+
+            if (_engine.Settings.MultithreadedWorldClock)
+            {
+                //Create a collection of threads so we can wait on the ones that we start.
+                _threadPoolTracker ??= _worldClockThreadPool.CreateChildQueue<TickControllerMethod>();
+            }
 
             #region Cache vectored and unvectored tick controller methods.
 
@@ -151,13 +158,16 @@ namespace Si.Engine
                 _engine.Debug.ProcessCommand();
                 _engine.RenderEverything();
 
-                var elapsedFrameTime = _engine.Display.FrameCounter.ElapsedMicroseconds;
-
-                // Enforce the framerate by figuring out how long it took to render the frame,
-                //  then spin for the difference between how long we wanted it to take.
-                while (_engine.Display.FrameCounter.ElapsedMicroseconds - elapsedFrameTime < targetTimePerFrameMicroseconds - elapsedFrameTime)
+                if (_engine.Settings.VerticalSync == false)
                 {
-                    if (_engine.Settings.YieldRemainingFrameTime) Thread.Yield();
+                    var elapsedFrameTime = _engine.Display.FrameCounter.ElapsedMicroseconds;
+
+                    // Enforce the framerate by figuring out how long it took to render the frame,
+                    //  then spin for the difference between how long we wanted it to take.
+                    while (_engine.Display.FrameCounter.ElapsedMicroseconds - elapsedFrameTime < targetTimePerFrameMicroseconds - elapsedFrameTime)
+                    {
+                        if (_engine.Settings.YieldRemainingFrameTime) Thread.Yield();
+                    }
                 }
 
                 if (_isPaused) Thread.Yield();
@@ -170,6 +180,8 @@ namespace Si.Engine
 
         private SiVector ExecuteWorldClockTick(float epoch)
         {
+            _engine.Settings.MultithreadedWorldClock = false;
+
             //This is where we execute the world clock for each type of object.
             //Note that this function does employ threads but I DO NOT believe it is necessary for performance.
             //
@@ -188,34 +200,51 @@ namespace Si.Engine
 
             var displacementVector = _engine.Player.ExecuteWorldClockTick(epoch);
 
-            //Create a collection of threads so we can wait on the ones that we start.
-            var threadPoolTracker = _worldClockThreadPool.CreateChildQueue();
-
             //Enqueue each vectored tick controller for a thread.
             var vectoredParameters = new object[] { epoch, displacementVector };
-            foreach (var vectored in _vectoredTickControllers)
+            if (_engine.Settings.MultithreadedWorldClock)
             {
-                threadPoolTracker.Enqueue(() =>
-                    vectored.Method.Invoke(vectored.Controller, vectoredParameters));
-            }
+                foreach (var vectored in _vectoredTickControllers)
+                {
+                    _threadPoolTracker.Enqueue(vectored,
+                        (TickControllerMethod p) => p.Method.Invoke(p.Controller, vectoredParameters));
+                }
 
-            //Wait on all enqueued threads to complete.
-            if (!SiUtility.TryAndIgnore(threadPoolTracker.WaitForCompletion))
+                //Wait on all enqueued threads to complete.
+                if (!SiUtility.TryAndIgnore(_threadPoolTracker.WaitForCompletion))
+                {
+                    return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
+                }
+            }
+            else
             {
-                return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
+                foreach (var vectored in _vectoredTickControllers)
+                {
+                    vectored.Method.Invoke(vectored.Controller, vectoredParameters);
+                }
             }
 
             //After all vectored tick controllers have executed, run the unvectored tick controllers.
-            foreach (var vectored in _unvectoredTickControllers)
+            if (_engine.Settings.MultithreadedWorldClock)
             {
-                threadPoolTracker.Enqueue(() =>
-                    vectored.Method.Invoke(vectored.Controller, null));
-            }
+                foreach (var unvectored in _unvectoredTickControllers)
+                {
+                    _threadPoolTracker.Enqueue(unvectored,
+                        (TickControllerMethod p) => p.Method.Invoke(p.Controller, null));
+                }
 
-            //Wait on all enqueued threads to complete.
-            if (!SiUtility.TryAndIgnore(threadPoolTracker.WaitForCompletion))
+                //Wait on all enqueued threads to complete.
+                if (!SiUtility.TryAndIgnore(_threadPoolTracker.WaitForCompletion))
+                {
+                    return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
+                }
+            }
+            else
             {
-                return displacementVector; //This is kind of an exception, it likely means that the engine is shutting down - so just return.
+                foreach (var vectored in _unvectoredTickControllers)
+                {
+                    vectored.Method.Invoke(vectored.Controller, null);
+                }
             }
 
             _engine.Sprites.HardDeleteAllQueuedDeletions();

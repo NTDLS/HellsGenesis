@@ -1,4 +1,5 @@
 using Si.Client.Forms;
+using Si.Client.Hardware;
 using Si.Engine;
 using Si.Engine.Sprite._Superclass._Root;
 using Si.Engine.Sprite.Enemy._Superclass;
@@ -25,28 +26,26 @@ namespace Si.Client
         {
             InitializeComponent();
 
+            var drawingSurface = new Control();
+            Controls.Add(drawingSurface);
+            _engine = new EngineCore(drawingSurface, SiEngineInitializationType.None);
+        }
+
+        public FormRenderTarget(Screen screen)
+        {
+            InitializeComponent();
+
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque | ControlStyles.ResizeRedraw | ControlStyles.UserPaint, true);
 
             var settings = EngineCore.LoadSettings();
 
-            if (settings.AlwaysOnTop)
-            {
-                TopMost = true;
-            }
-
             if (settings.FullScreen)
             {
-                FormBorderStyle = FormBorderStyle.None;
-                Width = Screen.PrimaryScreen.Bounds.Width;
-                Height = Screen.PrimaryScreen.Bounds.Height;
-                ShowInTaskbar = true;
-                //TopMost = true; This is a total pain for debugging.
-                WindowState = FormWindowState.Maximized;
+                this.SetFullScreenOnMonitor(screen);
             }
             else
             {
-                ClientSize = settings.Resolution;
-                StartPosition = FormStartPosition.CenterScreen;
+                this.CenterFormOnScreen(screen, settings.Resolution);
             }
 
             var drawingSurface = new Control
@@ -67,17 +66,17 @@ namespace Si.Client
                 });
             };
 
-            Shown += (object sender, EventArgs e)
+            Shown += (object? sender, EventArgs e)
                 => _engine.StartEngine();
 
             FormClosed += (sender, e)
                 => _engine.ShutdownEngine();
 
-            drawingSurface.MouseEnter += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
-            drawingSurface.MouseLeave += (object sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
+            drawingSurface.MouseEnter += (object? sender, EventArgs e) => { if (_fullScreen) { Cursor.Hide(); } };
+            drawingSurface.MouseLeave += (object? sender, EventArgs e) => { if (_fullScreen) { Cursor.Show(); } };
 
-            drawingSurface.GotFocus += (object sender, EventArgs e) => _engine.Display.SetIsDrawingSurfaceFocused(true);
-            drawingSurface.LostFocus += (object sender, EventArgs e) => _engine.Display.SetIsDrawingSurfaceFocused(false);
+            drawingSurface.GotFocus += (object? sender, EventArgs e) => _engine.Display.SetIsDrawingSurfaceFocused(true);
+            drawingSurface.LostFocus += (object? sender, EventArgs e) => _engine.Display.SetIsDrawingSurfaceFocused(false);
 
             drawingSurface.KeyUp += FormRenderTarget_KeyUp;
 
@@ -89,7 +88,7 @@ namespace Si.Client
         }
 
         #region Debug interactions.
-        private void FormRenderTarget_MouseMove(object sender, MouseEventArgs e)
+        private void FormRenderTarget_MouseMove(object? sender, MouseEventArgs e)
         {
             float x = e.X + _engine.Display.OverdrawSize.Width / 2;
             float y = e.Y + _engine.Display.OverdrawSize.Height / 2;
@@ -116,7 +115,7 @@ namespace Si.Client
             }
         }
 
-        private void FormRenderTarget_MouseDown(object sender, MouseEventArgs e)
+        private void FormRenderTarget_MouseDown(object? sender, MouseEventArgs e)
         {
             float x = e.X + _engine.Display.OverdrawSize.Width / 2;
             float y = e.Y + _engine.Display.OverdrawSize.Height / 2;
@@ -180,7 +179,7 @@ namespace Si.Client
             }
         }
 
-        private void Menu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void Menu_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
             if (sender == null) return;
             var menu = (ContextMenuStrip)sender;
@@ -273,7 +272,7 @@ namespace Si.Client
 
         #endregion
 
-        private void FormRenderTarget_KeyUp(object sender, KeyEventArgs e)
+        private void FormRenderTarget_KeyUp(object? sender, KeyEventArgs e)
         {
             _engine.Input.HandleSingleKeyPress(e.KeyCode);
 

@@ -17,9 +17,9 @@ namespace Si.Library
 
         public Size Resolution { get; set; }
 
+        public bool MultithreadedWorldClock { get; set; } = true;
         public bool PreCacheAllAssets { get; set; } = true;
         public bool FullScreen { get; set; }
-        public bool AlwaysOnTop { get; set; }
 
         public bool PlayMusic { get; set; } = true;
 
