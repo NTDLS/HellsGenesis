@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NTDLS.DelegateThreadPooling;
+using NTDLS.Helpers;
 using NTDLS.Semaphore;
 using SharpCompress.Archives;
 using SharpCompress.Common;
@@ -23,7 +24,7 @@ namespace Si.Engine.Manager
 
         private readonly EngineCore _engine;
         private readonly OptimisticCriticalResource<Dictionary<string, object>> _collection = new();
-        private readonly IArchive _archive = null;
+        private readonly IArchive? _archive = null;
         private readonly Dictionary<string, IArchiveEntry> _entryHashes;
         public Dictionary<string, IArchiveEntry> Entries => _entryHashes;
 
@@ -39,12 +40,12 @@ namespace Si.Engine.Manager
                 }
             });
 
-            _entryHashes = _archive.Entries.ToDictionary(item => item.Key.ToLower(), item => item);
+            _entryHashes = _archive.Entries.ToDictionary(item => item.Key.EnsureNotNull().ToLower(), item => item);
         }
 
         public void Dispose()
         {
-            _archive.Dispose();
+            _archive?.Dispose();
         }
 
         public T GetMetaData<T>(string spriteImagePath)
@@ -54,7 +55,7 @@ namespace Si.Engine.Manager
 
             var cached = _collection.Read(o =>
             {
-                o.TryGetValue(key, out object value);
+                o.TryGetValue(key, out var value);
                 return value;
             });
 
@@ -63,8 +64,8 @@ namespace Si.Engine.Manager
                 return (T)cached;
             }
 
-            var metadata = JsonConvert.DeserializeObject<T>(GetText(metadataFile));
-            _collection.Write(o => o.Add(key, metadata));
+            var metadata = JsonConvert.DeserializeObject<T>(GetText(metadataFile)).EnsureNotNull();
+            _collection.Write(o => o.Add(key, metadata ?? throw new NullReferenceException()));
             return metadata;
         }
 
@@ -116,7 +117,7 @@ namespace Si.Engine.Manager
 
             var cached = _collection.Read(o =>
             {
-                o.TryGetValue(path, out object value);
+                o.TryGetValue(path, out object? value);
                 return value as string;
             });
             if (cached != null)
@@ -142,9 +143,10 @@ namespace Si.Engine.Manager
 
             var cached = _collection.Read(o =>
             {
-                o.TryGetValue(path, out object value);
-                return (SiAudioClip)value;
+                o.TryGetValue(path, out object? value);
+                return value as SiAudioClip;
             });
+
             if (cached != null)
             {
                 return cached;
@@ -164,7 +166,7 @@ namespace Si.Engine.Manager
 
             var cached = _collection.Read(o =>
             {
-                if (o.TryGetValue(path, out object value))
+                if (o.TryGetValue(path, out object? value))
                 {
                     ((SiAudioClip)value).SetInitialVolume(initialVolume);
                     ((SiAudioClip)value).SetLoopForever(loopForever);
@@ -190,8 +192,8 @@ namespace Si.Engine.Manager
 
             var cached = _collection.Read(o =>
             {
-                o.TryGetValue(path, out object value);
-                return (SharpDX.Direct2D1.Bitmap)value;
+                o.TryGetValue(path, out object? value);
+                return value as SharpDX.Direct2D1.Bitmap;
             });
 
             if (cached != null)
@@ -218,7 +220,7 @@ namespace Si.Engine.Manager
 
             foreach (var entry in archive.Entries)
             {
-                switch (Path.GetExtension(entry.Key).ToLower())
+                switch (Path.GetExtension(entry.Key.EnsureNotNull()).ToLower())
                 {
                     case ".json":
                     case ".txt":

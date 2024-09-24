@@ -16,7 +16,7 @@ namespace Si.Engine.Menu
     {
         private readonly SpriteMenuItem _shipBlurb;
         private Timer _animationTimer;
-        private SpritePlayerBase _selectedSprite;
+        private SpritePlayerBase? _selectedSprite;
 
         public MenuSelectLoadout(EngineCore engine)
             : base(engine)
@@ -123,7 +123,7 @@ namespace Si.Engine.Menu
             }
         }
 
-        private void PlayerLoadoutMenu_Tick(object sender)
+        private void PlayerLoadoutMenu_Tick(object? sender)
         {
             _selectedSprite?.RotatePointingDirection(0.01f);
         }

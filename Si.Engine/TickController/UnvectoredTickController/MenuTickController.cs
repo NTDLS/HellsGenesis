@@ -10,8 +10,8 @@ namespace Si.Engine.TickController.UnvectoredTickController
         public delegate void CollectionAccessor(List<MenuBase> sprites);
         public delegate T CollectionAccessorT<T>(List<MenuBase> sprites);
 
-        private MenuBase _current = null;
-        public MenuBase Current { get => _current; }
+        private MenuBase? _current = null;
+        public MenuBase? Current { get => _current; }
 
         public MenuTickController(EngineCore engine)
             : base(engine) { }
@@ -24,7 +24,7 @@ namespace Si.Engine.TickController.UnvectoredTickController
             _current = menu;
         }
 
-        public void Unload(MenuBase menu)
+        public void Unload(MenuBase? menu)
         {
             if (_current == menu)
             {

@@ -28,20 +28,20 @@ namespace Si.GameEngine.AI._Superclass
         /// <summary>
         /// The current state that the AI is in.
         /// </summary>
-        public AIState CurrentState { get; private set; }
+        public AIState? CurrentState { get; private set; }
 
         #region Events.
 
         /// <summary>
         /// Fired when the state is changed through a call to ChangeState().
         /// </summary>
-        public event StateChanged OnStateChanged;
+        public event StateChanged? OnStateChanged;
         public delegate void StateChanged(AIStateMachine sender);
 
         /// <summary>
         /// Fired when the engine wants the sprite to make a decision based on the current AI state.
         /// </summary>
-        public event ApplyIntelligenceProc OnApplyIntelligence;
+        public event ApplyIntelligenceProc? OnApplyIntelligence;
         public delegate void ApplyIntelligenceProc(float epoch, SiVector displacementVector, AIState state);
 
         #endregion
@@ -61,7 +61,10 @@ namespace Si.GameEngine.AI._Superclass
 
         void IAIController.ApplyIntelligence(float epoch, SiVector displacementVector)
         {
-            OnApplyIntelligence?.Invoke(epoch, displacementVector, CurrentState);
+            if (CurrentState != null)
+            {
+                OnApplyIntelligence?.Invoke(epoch, displacementVector, CurrentState);
+            }
         }
 
         /// <summary>

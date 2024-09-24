@@ -1,4 +1,5 @@
-﻿using Si.Engine.Sprite._Superclass;
+﻿using NTDLS.Helpers;
+using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite._Superclass._Root;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Player._Superclass;
@@ -32,7 +33,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
         /// <param name="imagePath">The image for the munition.</param>
         /// <param name="location">The optional location for the munition to originate from (if not specified, we'll use the location of the firedFrom sprite).</param>
         /// <param name="angle">>The optional angle for the munition to travel on (if not specified, we'll use the angle of the firedFrom sprite).</param>
-        public MunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string imagePath, SiVector location = null, float? angle = null)
+        public MunitionBase(EngineCore engine, WeaponBase weapon, SpriteInteractiveBase firedFrom, string? imagePath, SiVector? location = null, float? angle = null)
             : base(engine)
         {
             if (imagePath != null)
@@ -43,6 +44,8 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
             {
                 //The image is likely being set in the derived class.
             }
+
+            weapon.Metadata.EnsureNotNull();
 
             Weapon = weapon;
             RadarDotSize = new SiVector(1, 1);
@@ -110,7 +113,7 @@ namespace Si.Engine.Sprite.Weapon.Munition._Superclass
 
         public override void Explode()
         {
-            if (Weapon != null && Weapon.Metadata.ExplodesOnImpact)
+            if (Weapon != null && Weapon.Metadata?.ExplodesOnImpact == true)
             {
                 HitExplosion();
             }

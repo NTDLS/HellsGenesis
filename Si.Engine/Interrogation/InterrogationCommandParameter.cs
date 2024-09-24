@@ -7,9 +7,9 @@ namespace Si.Engine.Interrogation
     public class InterrogationCommandParameter
     {
         public InterrogationCommandParameterPrototype Prototype { get; private set; }
-        public object RawValue { get; private set; }
+        public object? RawValue { get; private set; }
 
-        public InterrogationCommandParameter(InterrogationCommandParameterPrototype prototype, string value)
+        public InterrogationCommandParameter(InterrogationCommandParameterPrototype prototype, string? value)
         {
             Prototype = prototype;
             RawValue = value;

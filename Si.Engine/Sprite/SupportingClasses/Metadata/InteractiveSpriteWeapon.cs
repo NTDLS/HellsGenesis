@@ -6,9 +6,8 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
     {
         public InteractiveSpriteWeapon() { }
 
-        public string Type { get; set; }
+        public string? Type { get; set; }
         public int MunitionCount { get; set; }
-
 
         public InteractiveSpriteWeapon(Type type, int munitionCount)
         {

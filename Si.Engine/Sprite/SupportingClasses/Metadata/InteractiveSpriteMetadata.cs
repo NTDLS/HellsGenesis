@@ -10,8 +10,8 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
     {
         public InteractiveSpriteMetadata() { }
 
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         public AttachmentOrientationType OrientationType { get; set; } = AttachmentOrientationType.FixedToOwner;
         public AttachmentPositionType PositionType { get; set; } = AttachmentPositionType.FixedToOwner;
@@ -33,7 +33,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
         /// <summary>
         /// Used for the players "primary weapon slot".
         /// </summary>
-        public InteractiveSpriteWeapon PrimaryWeapon { get; set; }
+        public InteractiveSpriteWeapon? PrimaryWeapon { get; set; }
         public List<InteractiveSpriteAttachment> Attachments { get; set; } = new();
         public List<InteractiveSpriteWeapon> Weapons { get; set; } = new();
     }

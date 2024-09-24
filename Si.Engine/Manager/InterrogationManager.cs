@@ -314,6 +314,11 @@ namespace Si.Engine.Manager
         public void CommandHandler_Sprite_Create(InterrogationCommand command)
         {
             var typeName = command.ParameterValue<string>("typeName");
+            if (typeName == null)
+            {
+                return;
+            }
+
             var x = command.ParameterValue<uint>("x");
             var y = command.ParameterValue<uint>("y");
 
@@ -340,6 +345,11 @@ namespace Si.Engine.Manager
         public void CommandHandler_Sprite_Player_Reflect_Set(InterrogationCommand command)
         {
             var propertyName = command.ParameterValue<string>("property");
+            if (propertyName == null)
+            {
+                return;
+            }
+
             var propertyValue = command.ParameterValue("value", string.Empty);
 
             var reflectionType = _engine.Player.Sprite.GetType();
@@ -380,6 +390,11 @@ namespace Si.Engine.Manager
         public void CommandHandler_Sprite_Reflect_Set(InterrogationCommand command)
         {
             var propertyName = command.ParameterValue<string>("property");
+            if (propertyName == null)
+            {
+                return;
+            }
+
             var propertyValue = command.ParameterValue("value", string.Empty);
 
             _engine.Sprites.DebugOnlyAccess(o =>

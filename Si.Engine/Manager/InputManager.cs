@@ -32,7 +32,7 @@ namespace Si.Engine.Manager
         /// <summary>
         /// Any string that was typed by the user. Must enable via a call to CollectDetailedKeyInformation().
         /// </summary>
-        public string TypedString { get; private set; }
+        public string? TypedString { get; private set; }
 
         /// <summary>
         /// Contains a list of keys that have been pressed and then released (cycled).
@@ -408,7 +408,7 @@ namespace Si.Engine.Manager
         {
             if (key == Keys.Oem3)
             {
-                _engine.Debug.ToggleVisibility();
+                _engine.Debug?.ToggleVisibility();
             }
 
             else if (key == Keys.P)

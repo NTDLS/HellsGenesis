@@ -35,7 +35,7 @@ namespace Si.Engine.Sprite.Enemy._Superclass
 
         #region Artificial Intelligence.
 
-        public IAIController CurrentAIController { get; set; }
+        public IAIController? CurrentAIController { get; set; }
         private readonly Dictionary<Type, IAIController> _aiControllers = new();
 
         public void AddAIController(IAIController controller)

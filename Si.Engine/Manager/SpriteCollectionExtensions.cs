@@ -11,7 +11,7 @@ namespace Si.GameEngine.Manager
             var result = new List<T>();
             foreach (var type in types)
             {
-                result.AddRange(sprites.Where(o => type.IsAssignableFrom(o.GetType())));
+                result.AddRange(sprites.Where(o => o != null && type.IsAssignableFrom(o.GetType())));
             }
 
             return result;

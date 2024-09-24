@@ -18,7 +18,7 @@ namespace Si.Engine.Sprite.Weapon
         {
             if (CanFire)
             {
-                _fireSound.Play();
+                _fireSound?.Play();
 
                 if (RoundQuantity > 0)
                 {

@@ -1,4 +1,5 @@
-﻿using Si.Engine;
+﻿using NTDLS.Helpers;
+using Si.Engine;
 using Si.Engine.Manager;
 using Si.Engine.Sprite.PowerUp._Superclass;
 using Si.Engine.TickController._Superclass;
@@ -26,7 +27,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
         public T AddAt<T>(float x, float y) where T : SpritePowerupBase
         {
             object[] param = { Engine };
-            var obj = (SpritePowerupBase)Activator.CreateInstance(typeof(T), param);
+            var obj = (SpritePowerupBase)Activator.CreateInstance(typeof(T), param).EnsureNotNull();
             obj.Location = new SiVector(x, y);
             SpriteManager.Add(obj);
             return (T)obj;

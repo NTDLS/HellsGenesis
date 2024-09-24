@@ -1,4 +1,5 @@
-﻿using Si.Engine.Manager;
+﻿using NTDLS.Helpers;
+using Si.Engine.Manager;
 using Si.Engine.Sprite._Superclass._Root;
 using Si.Library;
 using Si.Library.Mathematics;
@@ -20,7 +21,7 @@ namespace Si.Engine.TickController._Superclass
         public T[] Visible() => SpriteManager.VisibleOfType<T>();
         public T[] All() => SpriteManager.OfType<T>();
         public subType[] OfType<subType>() where subType : T => SpriteManager.OfType<subType>();
-        public T ByTag(string name) => SpriteManager.VisibleOfType<T>().Where(o => o.SpriteTag == name).FirstOrDefault();
+        public T? ByTag(string name) => SpriteManager.VisibleOfType<T>().FirstOrDefault(o => o.SpriteTag == name);
 
         public virtual void ExecuteWorldClockTick(float epoch, SiVector displacementVector) { }
 
@@ -36,7 +37,7 @@ namespace Si.Engine.TickController._Superclass
         {
             var type = SiReflection.GetTypeByName(typeName) ?? throw new ArgumentException($"Type with FullName '{typeName}' not found.");
             object[] param = { Engine };
-            var sprite = (T)Activator.CreateInstance(type, param);
+            var sprite = (T)Activator.CreateInstance(type, param).EnsureNotNull();
             return sprite;
         }
 
@@ -44,7 +45,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T Add(string bitmapPath, SiVector location)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath).EnsureNotNull();
             obj.Location = location.Clone();
             SpriteManager.Add(obj);
             return obj;
@@ -52,7 +53,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T Add(string bitmapPath, float x, float y)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath).EnsureNotNull();
             obj.X = x;
             obj.Y = y;
             SpriteManager.Add(obj);
@@ -61,7 +62,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T AddAtCenterScreen()
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine).EnsureNotNull();
             obj.Location = Engine.Display.CenterOfCurrentScreen;
             SpriteManager.Add(obj);
             return obj;
@@ -69,7 +70,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T AddAtCenterScreen(string bitmapPath)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath).EnsureNotNull();
             obj.Location = Engine.Display.CenterOfCurrentScreen;
             SpriteManager.Add(obj);
             return obj;
@@ -77,7 +78,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T AddAtCenterUniverse()
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine).EnsureNotNull();
             obj.X = Engine.Display.TotalCanvasSize.Width / 2;
             obj.Y = Engine.Display.TotalCanvasSize.Height / 2;
 
@@ -87,7 +88,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T AddAtCenterUniverse(string bitmapPath)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath).EnsureNotNull();
             obj.X = Engine.Display.TotalCanvasSize.Width / 2;
             obj.Y = Engine.Display.TotalCanvasSize.Height / 2;
 
@@ -97,7 +98,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T Add(float x, float y)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine).EnsureNotNull();
             obj.X = x;
             obj.Y = y;
             SpriteManager.Add(obj);
@@ -106,7 +107,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T Add(SiVector location)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine).EnsureNotNull();
             obj.Location = location.Clone();
             SpriteManager.Add(obj);
             return obj;
@@ -114,7 +115,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T AddAt(SpriteBase locationOf)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine).EnsureNotNull();
             obj.Location = locationOf.Location.Clone();
             SpriteManager.Add(obj);
             return obj;
@@ -122,7 +123,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T AddAt(SiVector location)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine).EnsureNotNull();
             obj.Location = location.Clone();
             SpriteManager.Add(obj);
             return obj;
@@ -130,7 +131,7 @@ namespace Si.Engine.TickController._Superclass
 
         public T AddAt(SharpDX.Direct2D1.Bitmap bitmap, SpriteBase locationOf)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmap);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmap).EnsureNotNull();
             obj.Location = locationOf.Location.Clone();
             SpriteManager.Add(obj);
             return obj;
@@ -138,33 +139,33 @@ namespace Si.Engine.TickController._Superclass
 
         public T Add()
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine).EnsureNotNull();
             SpriteManager.Add(obj);
             return obj;
         }
 
         public T Add(string bitmapPath)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath).EnsureNotNull();
             SpriteManager.Add(obj);
             return obj;
         }
 
         public T Add(SharpDX.Direct2D1.Bitmap bitmap)
         {
-            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmap);
+            T obj = (T)Activator.CreateInstance(typeof(T), Engine, bitmap).EnsureNotNull();
             SpriteManager.Add(obj);
             return obj;
         }
 
         public T Create()
         {
-            return (T)Activator.CreateInstance(typeof(T), Engine);
+            return (T)Activator.CreateInstance(typeof(T), Engine).EnsureNotNull();
         }
 
         public T Create(string bitmapPath)
         {
-            return (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath);
+            return (T)Activator.CreateInstance(typeof(T), Engine, bitmapPath).EnsureNotNull();
         }
     }
 }

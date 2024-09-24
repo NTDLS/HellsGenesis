@@ -1,10 +1,12 @@
-﻿using Si.Audio;
+﻿using NTDLS.Helpers;
+using Si.Audio;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite._Superclass._Root;
 using Si.Engine.Sprite.Weapon._Superclass;
 using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library;
 using Si.Library.Mathematics;
+using System;
 using System.Linq;
 using static Si.Library.SiConstants;
 
@@ -34,8 +36,8 @@ namespace Si.Engine.Sprite.Player._Superclass
         public int MaxShieldPoints { get; set; }
         public SpriteAnimation ThrusterAnimation { get; private set; }
         public SpriteAnimation BoosterAnimation { get; private set; }
-        public WeaponBase PrimaryWeapon { get; private set; }
-        public WeaponBase SelectedSecondaryWeapon { get; private set; }
+        public WeaponBase? PrimaryWeapon { get; private set; }
+        public WeaponBase? SelectedSecondaryWeapon { get; private set; }
 
         public SpritePlayerBase(EngineCore engine, string imagePath)
             : base(engine, imagePath)
@@ -117,13 +119,13 @@ namespace Si.Engine.Sprite.Player._Superclass
 
         public string GetLoadoutHelpText()
         {
-            string weaponName = SiReflection.GetStaticPropertyValue(Metadata.PrimaryWeapon.Type, "Name");
+            string weaponName = SiReflection.GetStaticPropertyValue(Metadata.PrimaryWeapon?.Type ?? throw new NullReferenceException(), "Name");
             string primaryWeapon = $"{weaponName} x{Metadata.PrimaryWeapon.MunitionCount}";
 
             string secondaryWeapons = string.Empty;
             foreach (var weapon in Metadata.Weapons)
             {
-                weaponName = SiReflection.GetStaticPropertyValue(weapon.Type, "Name");
+                weaponName = SiReflection.GetStaticPropertyValue(weapon.Type.EnsureNotNull(), "Name");
                 secondaryWeapons += $"{weaponName} x{weapon.MunitionCount}\n{new string(' ', 20)}";
             }
 
@@ -235,9 +237,9 @@ namespace Si.Engine.Sprite.Player._Superclass
             PrimaryWeapon.RoundQuantity = munitionCount;
         }
 
-        public WeaponBase SelectPreviousAvailableUsableSecondaryWeapon()
+        public WeaponBase? SelectPreviousAvailableUsableSecondaryWeapon()
         {
-            WeaponBase previousWeapon = null;
+            WeaponBase? previousWeapon = null;
 
             foreach (var weapon in Weapons)
             {
@@ -257,7 +259,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             return SelectFirstAvailableUsableSecondaryWeapon(); //No suitable weapon found after the current one. Go back to the beginning.
         }
 
-        public WeaponBase SelectNextAvailableUsableSecondaryWeapon()
+        public WeaponBase? SelectNextAvailableUsableSecondaryWeapon()
         {
             bool selectNextWeapon = false;
 
@@ -278,7 +280,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             return SelectFirstAvailableUsableSecondaryWeapon(); //No suitable weapon found after the current one. Go back to the beginning.
         }
 
-        public WeaponBase SelectFirstAvailableUsableSecondaryWeapon()
+        public WeaponBase? SelectFirstAvailableUsableSecondaryWeapon()
         {
             var existingWeapon = (from o in Weapons where o.RoundQuantity > 0 select o).FirstOrDefault();
             if (existingWeapon != null)
@@ -292,7 +294,7 @@ namespace Si.Engine.Sprite.Player._Superclass
             return SelectedSecondaryWeapon;
         }
 
-        public WeaponBase SelectLastAvailableUsableSecondaryWeapon()
+        public WeaponBase? SelectLastAvailableUsableSecondaryWeapon()
         {
             var existingWeapon = (from o in Weapons where o.RoundQuantity > 0 select o).LastOrDefault();
             if (existingWeapon != null)

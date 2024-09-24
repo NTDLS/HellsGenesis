@@ -19,7 +19,7 @@ namespace Si.Engine.Manager
         private readonly EngineCore _engine;
         public Dictionary<string, OverlappingKinematicBodyPair> Detected { get; private set; } = new();
 
-        public PredictedKinematicBody[] Collidables { get; private set; }
+        public PredictedKinematicBody[] Collidables { get; private set; } = new PredictedKinematicBody[0];
 
         public CollisionManager(EngineCore engine)
         {

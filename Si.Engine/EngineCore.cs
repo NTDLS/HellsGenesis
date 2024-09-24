@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using NTDLS.Helpers;
+using NTDLS.Semaphore;
 using Si.Engine.EngineLibrary;
 using Si.Engine.Interrogation._Superclass;
 using Si.Engine.Manager;
@@ -45,7 +47,7 @@ namespace Si.Engine
         public SpriteManager Sprites { get; private set; } //Also contains all of the sprite tick controllers.
         public AudioManager Audio { get; private set; }
         public AssetManager Assets { get; private set; }
-        public InterrogationManager Debug { get; private set; }
+        public InterrogationManager? Debug { get; private set; }
         public CollisionManager Collisions { get; private set; }
 
         #endregion
@@ -64,10 +66,10 @@ namespace Si.Engine
         #region Events.
 
         public delegate void InitializationEvent(EngineCore engine);
-        public event InitializationEvent OnInitialization;
+        public event InitializationEvent? OnInitialization;
 
         public delegate void ShutdownEvent(EngineCore engine);
-        public event ShutdownEvent OnShutdown;
+        public event ShutdownEvent? OnShutdown;
 
         #endregion
 
@@ -110,17 +112,24 @@ namespace Si.Engine
             {
                 var defaultSettings = new SiEngineSettings();
 
-                int x = (int)(Screen.PrimaryScreen.Bounds.Width * 0.75);
-                int y = (int)(Screen.PrimaryScreen.Bounds.Height * 0.75);
-                if (x % 2 != 0) x++;
-                if (y % 2 != 0) y++;
+                int x = 1024;
+                int y = 768;
+
+                if (Screen.PrimaryScreen != null)
+                {
+                    x = (int)(Screen.PrimaryScreen.Bounds.Width * 0.75);
+                    y = (int)(Screen.PrimaryScreen.Bounds.Height * 0.75);
+                    if (x % 2 != 0) x++;
+                    if (y % 2 != 0) y++;
+                }
+
                 defaultSettings.Resolution = new Size(x, y);
 
                 engineSettingsText = JsonConvert.SerializeObject(defaultSettings, Formatting.Indented);
                 AssetManager.PutUserText("Engine.Settings.json", engineSettingsText);
             }
 
-            return JsonConvert.DeserializeObject<SiEngineSettings>(engineSettingsText);
+            return JsonConvert.DeserializeObject<SiEngineSettings>(engineSettingsText).EnsureNotNull();
         }
 
         public static void SaveSettings(SiEngineSettings settings)
@@ -145,63 +154,66 @@ namespace Si.Engine
         {
             try
             {
-                Rendering.RenderTargets.Use((NTDLS.Semaphore.PessimisticCriticalResource<SiCriticalRenderTargets>.CriticalResourceDelegateWithVoidResult)(o =>
+                Rendering.RenderTargets.Use((o =>
                 {
-                    o.ScreenRenderTarget.BeginDraw();
-                    o.IntermediateRenderTarget.BeginDraw();
-
-                    if (ExecutionType == SiEngineInitializationType.Play)
+                    if (o.ScreenRenderTarget != null && o.IntermediateRenderTarget != null)
                     {
-                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Black);
-                    }
-                    else
-                    {
-                        o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.EditorBackground);
-                    }
+                        o.ScreenRenderTarget.BeginDraw();
+                        o.IntermediateRenderTarget.BeginDraw();
 
-                    Sprites.RenderPreScaling(o.IntermediateRenderTarget);
-
-                    #region Render Collisions.
-
-                    if (Settings.HighlightCollisions)
-                    {
-                        foreach (var collision in Collisions.Detected)
+                        if (ExecutionType == SiEngineInitializationType.Play)
                         {
-                            Rendering.DrawRectangle(o.IntermediateRenderTarget,
-                                -Display.RenderWindowPosition.X, -Display.RenderWindowPosition.Y,
-                                collision.Value.OverlapRectangle.ToRawRectangleF(),
-                                Rendering.Materials.Colors.Orange, 1, 2, 0);
-
-                            Rendering.DrawPolygon(o.IntermediateRenderTarget, -Display.RenderWindowPosition.X, -Display.RenderWindowPosition.Y,
-                                collision.Value.OverlapPolygon,
-                                Rendering.Materials.Colors.Cyan, 3);
-
-                            Rendering.DrawRectangle(o.IntermediateRenderTarget,
-                                collision.Value.Body1.RawRenderBounds,
-                                Rendering.Materials.Colors.Red, 1, 1, collision.Value.Body1.Direction.RadiansSigned);
-
-                            Rendering.DrawRectangle(o.IntermediateRenderTarget,
-                                collision.Value.Body2.RawRenderBounds,
-                                Rendering.Materials.Colors.LawnGreen, 1, 1, collision.Value.Body2.Direction.RadiansSigned);
+                            o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.Black);
                         }
+                        else
+                        {
+                            o.IntermediateRenderTarget.Clear(Rendering.Materials.Colors.EditorBackground);
+                        }
+
+                        Sprites.RenderPreScaling(o.IntermediateRenderTarget);
+
+                        #region Render Collisions.
+
+                        if (Settings.HighlightCollisions)
+                        {
+                            foreach (var collision in Collisions.Detected)
+                            {
+                                Rendering.DrawRectangle(o.IntermediateRenderTarget,
+                                    -Display.RenderWindowPosition.X, -Display.RenderWindowPosition.Y,
+                                    collision.Value.OverlapRectangle.ToRawRectangleF(),
+                                    Rendering.Materials.Colors.Orange, 1, 2, 0);
+
+                                Rendering.DrawPolygon(o.IntermediateRenderTarget, -Display.RenderWindowPosition.X, -Display.RenderWindowPosition.Y,
+                                    collision.Value.OverlapPolygon,
+                                    Rendering.Materials.Colors.Cyan, 3);
+
+                                Rendering.DrawRectangle(o.IntermediateRenderTarget,
+                                    collision.Value.Body1.RawRenderBounds,
+                                    Rendering.Materials.Colors.Red, 1, 1, collision.Value.Body1.Direction.RadiansSigned);
+
+                                Rendering.DrawRectangle(o.IntermediateRenderTarget,
+                                    collision.Value.Body2.RawRenderBounds,
+                                    Rendering.Materials.Colors.LawnGreen, 1, 1, collision.Value.Body2.Direction.RadiansSigned);
+                            }
+                        }
+                        #endregion
+
+
+                        o.IntermediateRenderTarget.EndDraw();
+
+                        if (Settings.EnableSpeedScaleFactoring)
+                        {
+                            Rendering.TransferWithZoom(o.IntermediateRenderTarget, o.ScreenRenderTarget, (float)Display.SpeedOrientedFrameScalingFactor());
+                        }
+                        else
+                        {
+                            Rendering.TransferWithZoom(o.IntermediateRenderTarget, o.ScreenRenderTarget, (float)Display.BaseDrawScale);
+                        }
+
+                        Sprites.RenderPostScaling(o.ScreenRenderTarget);
+
+                        o.ScreenRenderTarget.EndDraw();
                     }
-                    #endregion
-
-
-                    o.IntermediateRenderTarget.EndDraw();
-
-                    if (Settings.EnableSpeedScaleFactoring)
-                    {
-                        Rendering.TransferWithZoom(o.IntermediateRenderTarget, o.ScreenRenderTarget, (float)Display.SpeedOrientedFrameScalingFactor());
-                    }
-                    else
-                    {
-                        Rendering.TransferWithZoom(o.IntermediateRenderTarget, o.ScreenRenderTarget, (float)Display.BaseDrawScale);
-                    }
-
-                    Sprites.RenderPostScaling(o.ScreenRenderTarget);
-
-                    o.ScreenRenderTarget.EndDraw();
                 }));
             }
             catch

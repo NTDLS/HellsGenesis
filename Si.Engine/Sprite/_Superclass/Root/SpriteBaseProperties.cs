@@ -69,8 +69,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// </summary>
         public float RotationSpeed { get; set; } = 0;
 
-
-        private SiVector _orientation;
+        private SiVector _orientation = new SiVector();
         /// <summary>
         /// The angle in which the sprite is pointing, note that this is NOT the travel angle.
         /// The travel angle is baked into the MovementVector. If you need the movement vector
@@ -88,7 +87,7 @@ namespace Si.Engine.Sprite._Superclass._Root
             }
         }
 
-        public SharpDX.Direct2D1.Bitmap GetImage() => _image;
+        public SharpDX.Direct2D1.Bitmap? GetImage() => _image;
         public string SpriteTag { get; set; }
         public uint UID { get; private set; } = SiSequenceGenerator.Next();
         public uint OwnerUID { get; set; }

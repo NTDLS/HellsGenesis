@@ -1,4 +1,5 @@
-﻿using SharpDX;
+﻿using NTDLS.Helpers;
+using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Mathematics.Interop;
 using Si.Engine.Sprite.SupportingClasses.Metadata;
@@ -11,7 +12,7 @@ namespace Si.Engine.Sprite
 {
     public class SpriteAnimation : SpriteMinimalBitmap
     {
-        private SharpDX.Direct2D1.Bitmap _sheetImage;
+        private SharpDX.Direct2D1.Bitmap? _sheetImage;
         private int _frameCount;
         private int _currentFrame = 0;
         private int _currentRow = 0;
@@ -62,6 +63,8 @@ namespace Si.Engine.Sprite
         {
             base.SetSize(frameSize);
 
+            _sheetImage.EnsureNotNull();
+
             _rows = (int)(_sheetImage.Size.Height / frameSize.Height);
             _columns = (int)(_sheetImage.Size.Width / frameSize.Width);
             _frameCount = _rows * _columns;
@@ -86,7 +89,7 @@ namespace Si.Engine.Sprite
 
             _engine.Rendering.DrawBitmap(
                 renderTarget,
-                _sheetImage,
+                _sheetImage ?? throw new NullReferenceException(),
                 RenderLocation.X - Size.Width / 2.0f,
                 RenderLocation.Y - Size.Height / 2.0f,
                 Orientation.RadiansSigned,

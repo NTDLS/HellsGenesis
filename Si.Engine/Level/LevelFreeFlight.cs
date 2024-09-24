@@ -24,7 +24,7 @@ namespace Si.Engine.Level
             AddSingleFireEvent(500, FirstShowPlayerCallback);
         }
 
-        private void FirstShowPlayerCallback(SiDefermentEvent sender, object refObj)
+        private void FirstShowPlayerCallback(SiDefermentEvent sender, object? refObj)
         {
             _engine.Player.ResetAndShow();
         }

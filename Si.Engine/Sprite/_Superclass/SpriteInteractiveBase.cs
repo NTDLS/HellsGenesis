@@ -1,4 +1,5 @@
-﻿using SharpDX.Direct2D1;
+﻿using NTDLS.Helpers;
+using SharpDX.Direct2D1;
 using Si.Engine.Sprite._Superclass._Root;
 using Si.Engine.Sprite.Player._Superclass;
 using Si.Engine.Sprite.SupportingClasses;
@@ -43,10 +44,11 @@ namespace Si.Engine.Sprite._Superclass
         #endregion
 
         public SiRenewableResources RenewableResources { get; set; } = new();
-        public InteractiveSpriteMetadata Metadata { get; private set; }
+        private InteractiveSpriteMetadata? _metadata = null;
+        public InteractiveSpriteMetadata Metadata => _metadata ?? throw new NullReferenceException();
         public List<WeaponBase> Weapons { get; private set; } = new();
 
-        public SpriteInteractiveBase(EngineCore engine, string imagePath)
+        public SpriteInteractiveBase(EngineCore engine, string? imagePath)
             : base(engine)
         {
             _engine = engine;
@@ -54,7 +56,10 @@ namespace Si.Engine.Sprite._Superclass
             _lockedOnImage = _engine.Assets.GetBitmap(@"Sprites\Weapon\Locked On.png");
             _lockedOnSoftImage = _engine.Assets.GetBitmap(@"Sprites\Weapon\Locked Soft.png");
 
-            SetImageAndLoadMetadata(imagePath);
+            if (imagePath != null)
+            {
+                SetImageAndLoadMetadata(imagePath);
+            }
         }
 
         public SpriteInteractiveBase(EngineCore engine, Bitmap bitmap)
@@ -75,7 +80,7 @@ namespace Si.Engine.Sprite._Superclass
         /// <param name="spriteImagePath"></param>
         private void SetImageAndLoadMetadata(string spriteImagePath)
         {
-            Metadata = _engine.Assets.GetMetaData<InteractiveSpriteMetadata>(spriteImagePath);
+            _metadata = _engine.Assets.GetMetaData<InteractiveSpriteMetadata>(spriteImagePath);
 
             SetImage(spriteImagePath);
 
@@ -91,7 +96,7 @@ namespace Si.Engine.Sprite._Superclass
             {
                 foreach (var weapon in Metadata.Weapons)
                 {
-                    AddWeapon(weapon.Type, weapon.MunitionCount);
+                    AddWeapon(weapon.Type.EnsureNotNull(), weapon.MunitionCount);
                 }
             }
 
@@ -111,8 +116,11 @@ namespace Si.Engine.Sprite._Superclass
 
             if (this is SpritePlayerBase player)
             {
-                player.SetPrimaryWeapon(Metadata.PrimaryWeapon.Type, Metadata.PrimaryWeapon.MunitionCount);
-                player.SelectFirstAvailableUsableSecondaryWeapon();
+                if (Metadata?.PrimaryWeapon?.Type != null)
+                {
+                    player.SetPrimaryWeapon(Metadata.PrimaryWeapon.Type, Metadata.PrimaryWeapon.MunitionCount);
+                    player.SelectFirstAvailableUsableSecondaryWeapon();
+                }
             }
         }
 
@@ -160,7 +168,7 @@ namespace Si.Engine.Sprite._Superclass
             var weapon = Weapons.Where(o => o.GetType() == weaponType).SingleOrDefault();
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, new object[] { _engine, this });
+                weapon = SiReflection.CreateInstanceFromType<WeaponBase>(weaponType, [_engine, this]).EnsureNotNull();
                 weapon.RoundQuantity += munitionCount;
                 Weapons.Add(weapon);
             }
@@ -175,7 +183,7 @@ namespace Si.Engine.Sprite._Superclass
             var weapon = GetWeaponOfType<T>();
             if (weapon == null)
             {
-                weapon = SiReflection.CreateInstanceOf<T>(new object[] { _engine, this });
+                weapon = SiReflection.CreateInstanceOf<T>([ _engine, this ]).EnsureNotNull();
                 weapon.RoundQuantity += munitionCount;
                 Weapons.Add(weapon);
             }
@@ -212,9 +220,9 @@ namespace Si.Engine.Sprite._Superclass
             return weapon?.Fire(location) == true;
         }
 
-        public WeaponBase GetWeaponOfType<T>() where T : WeaponBase
+        public WeaponBase? GetWeaponOfType<T>() where T : WeaponBase
         {
-            return (from o in Weapons where o.GetType() == typeof(T) select o).FirstOrDefault();
+            return Weapons.OfType<T>().FirstOrDefault();
         }
 
         #endregion

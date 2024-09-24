@@ -22,11 +22,13 @@ namespace Si.Engine.Sprite.PowerUp
         {
             if (IntersectsAABB(_engine.Player.Sprite))
             {
+                /*
                 _engine.Player.Sprite.PrimaryWeapon.RoundQuantity += PowerupAmount;
                 if (_engine.Player.Sprite.SelectedSecondaryWeapon != null)
                 {
                     _engine.Player.Sprite.SelectedSecondaryWeapon.RoundQuantity += PowerupAmount;
                 }
+                */
                 Explode();
             }
             else if (AgeInMilliseconds > TimeToLive)

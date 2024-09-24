@@ -50,6 +50,7 @@ namespace Si.Engine.Sprite.SupportingClasses
             Key = key;
             Body1 = sprite1;
             Body2 = sprite2;
+            OverlapPolygon = new PointF[0];
         }
     }
 }

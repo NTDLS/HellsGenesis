@@ -8,7 +8,7 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
     {
         public InteractiveSpriteAttachment() { }
 
-        public string Type { get; set; }
+        public string Type { get; set; } = string.Empty;
         public float X { get; set; }
         public float Y { get; set; }
 

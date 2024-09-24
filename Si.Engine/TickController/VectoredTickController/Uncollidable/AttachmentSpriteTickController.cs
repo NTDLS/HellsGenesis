@@ -25,7 +25,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             }
         }
 
-        public SpriteAttachment Add(SpriteBase owner, string imagePath = null)
+        public SpriteAttachment Add(SpriteBase owner, string? imagePath = null)
         {
             var obj = new SpriteAttachment(Engine, imagePath)
             {
@@ -36,7 +36,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Uncollidable
             return obj;
         }
 
-        public SpriteAttachment AddTypeOf<T>(SpriteBase owner, string imagePath = null) where T : SpriteAttachment
+        public SpriteAttachment AddTypeOf<T>(SpriteBase owner, string? imagePath = null) where T : SpriteAttachment
         {
             var sprite = SpriteManager.CreateByType<T>();
 

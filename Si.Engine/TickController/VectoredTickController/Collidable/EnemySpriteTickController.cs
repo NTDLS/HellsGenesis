@@ -1,4 +1,5 @@
-﻿using Si.Engine;
+﻿using NTDLS.Helpers;
+using Si.Engine;
 using Si.Engine.Manager;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.TickController._Superclass;
@@ -32,7 +33,7 @@ namespace Si.GameEngine.TickController.VectoredTickController.Collidable
         public T AddTypeOf<T>() where T : SpriteEnemyBase
         {
             object[] param = { Engine };
-            SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param);
+            SpriteEnemyBase obj = (SpriteEnemyBase)Activator.CreateInstance(typeof(T), param).EnsureNotNull();
 
             obj.Location = Engine.Display.RandomOffScreenLocation();
             obj.Orientation.Degrees = SiRandom.Between(0, 359);

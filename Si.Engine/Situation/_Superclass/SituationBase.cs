@@ -13,7 +13,7 @@ namespace Si.Engine.Situation._Superclass
         protected EngineCore _engine;
         protected List<SiDefermentEvent> Events = new();
 
-        public LevelBase CurrentLevel { get; protected set; }
+        public LevelBase? CurrentLevel { get; protected set; }
         private int _currentLevelIndex = 0;
 
         public string Name { get; set; }

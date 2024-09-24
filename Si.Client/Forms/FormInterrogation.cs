@@ -1,4 +1,5 @@
-﻿using Si.Engine;
+﻿using NTDLS.Helpers;
+using Si.Engine;
 using Si.Engine.Interrogation._Superclass;
 using Si.Library.Sprite;
 using System;
@@ -21,7 +22,7 @@ namespace Si.Client.Forms
 
         private void FormDebug_Load(object sender, EventArgs e)
         {
-            foreach (var command in _engine.Debug.CommandParser.Commands.OrderBy(o => o.Name))
+            foreach (var command in _engine.Debug.EnsureNotNull().CommandParser.Commands.OrderBy(o => o.Name))
             {
                 var item = new ListViewItem(command.Name);
 
@@ -86,7 +87,7 @@ namespace Si.Client.Forms
 
             FormClosing += (object? sender, FormClosingEventArgs e) =>
             {
-                engine.Debug.ToggleVisibility();
+                engine.Debug.EnsureNotNull().ToggleVisibility();
                 e.Cancel = true;
             };
 
@@ -170,7 +171,7 @@ namespace Si.Client.Forms
                 _commandHistory.Add(command);
                 _commandHistoryIndex = _commandHistory.Count;
 
-                _engine.Debug.EnqueueCommand(command);
+                _engine.Debug.EnsureNotNull().EnqueueCommand(command);
             }
         }
 

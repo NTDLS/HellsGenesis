@@ -31,7 +31,7 @@ namespace Si.Engine.Interrogation
             return (T)Convert.ChangeType(parameter.RawValue, typeof(T));
         }
 
-        public T ParameterValue<T>(string parameterName)
+        public T? ParameterValue<T>(string parameterName)
         {
             var parameter = Parameters.Where(o => o.Prototype.Name.ToLower() == parameterName.ToLower()).FirstOrDefault();
             if (parameter == null)

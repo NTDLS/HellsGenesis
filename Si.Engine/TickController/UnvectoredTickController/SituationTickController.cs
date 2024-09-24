@@ -8,7 +8,7 @@ namespace Si.Engine.TickController.UnvectoredTickController
     public class SituationTickController : UnvectoredTickControllerBase<SituationBase>
     {
         private readonly EngineCore _engine;
-        public SituationBase CurrentSituation { get; private set; }
+        public SituationBase? CurrentSituation { get; private set; }
 
         public SituationTickController(EngineCore engine)
             : base(engine)

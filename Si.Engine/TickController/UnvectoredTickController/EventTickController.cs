@@ -61,7 +61,7 @@ namespace Si.Engine.TickController.UnvectoredTickController
         /// <param name="eventMode">Whether the event is one time or recurring.</param>
         /// <param name="threadModel">Whether the event callback is run synchronous or asynchronous.</param>
         /// <returns></returns>
-        public SiDefermentEvent Add(int timeoutMilliseconds, SiDefermentExecuteCallback executionCallback, object parameter,
+        public SiDefermentEvent Add(int timeoutMilliseconds, SiDefermentExecuteCallback executionCallback, object? parameter,
             SiDefermentEventMode eventMode = SiDefermentEventMode.OneTime,
             SiDefermentEventThreadModel threadModel = SiDefermentEventThreadModel.Synchronous)
         {
@@ -157,7 +157,7 @@ namespace Si.Engine.TickController.UnvectoredTickController
             return _collection.Use(o =>
             {
                 var obj = new SiDefermentEvent(timeoutMilliseconds,
-                    (SiDefermentEvent sender, object refObj) =>
+                    (SiDefermentEvent sender, object? refObj) =>
                 {
                     executionCallback(parameter);
                 });

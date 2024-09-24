@@ -20,7 +20,7 @@ namespace Si.Engine.Sprite.Weapon
         {
             if (CanFire)
             {
-                _fireSound.Play();
+                _fireSound?.Play();
                 RoundQuantity--;
 
                 var offset = Owner.Orientation.RotatedBy(90.ToRadians().Invert(_toggle)) * new SiVector(10, 10);

@@ -38,12 +38,11 @@ namespace Si.Engine.Sprite._Superclass._Root
                 {
                     _engine.Rendering.DrawTriangle(renderTarget, x, y, 3, 3, _engine.Rendering.Materials.Colors.OrangeRed);
                 }
-                else if (this is MunitionBase)
+                else if (this is MunitionBase munition)
                 {
                     float size;
                     RawColor4 color;
 
-                    var munition = this as MunitionBase;
                     if (munition.FiredFromType == SiFiredFromType.Enemy)
                     {
                         color = _engine.Rendering.Materials.Colors.Red;
@@ -53,7 +52,7 @@ namespace Si.Engine.Sprite._Superclass._Root
                         color = _engine.Rendering.Materials.Colors.Green;
                     }
 
-                    if (munition.Weapon.Metadata.ExplodesOnImpact)
+                    if (munition.Weapon.Metadata?.ExplodesOnImpact == true)
                     {
                         size = 2;
                     }

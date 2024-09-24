@@ -14,9 +14,9 @@
         public DebugCommandParameterType CommandParameterType { get; private set; }
         public bool IsRequired { get; private set; }
 
-        public string DefaultValue { get; private set; }
+        public string? DefaultValue { get; private set; }
 
-        public InterrogationCommandParameterPrototype(string name, bool isRequired, string defaultValue, DebugCommandParameterType commandParameterType)
+        public InterrogationCommandParameterPrototype(string name, bool isRequired, string? defaultValue, DebugCommandParameterType commandParameterType)
         {
             Name = name;
             IsRequired = isRequired;

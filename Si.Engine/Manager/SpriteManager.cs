@@ -1,4 +1,5 @@
-﻿using SharpCompress;
+﻿using NTDLS.Helpers;
+using SharpCompress;
 using SharpDX.Mathematics.Interop;
 using Si.Engine.Menu;
 using Si.Engine.Sprite;
@@ -33,8 +34,8 @@ namespace Si.Engine.Manager
         public delegate T CollectionAccessorT<T>(SpriteBase[] sprites);
 
         private readonly EngineCore _engine;
-        private SiVector _radarScale;
-        private SiVector _radarOffset;
+        private SiVector? _radarScale;
+        private SiVector? _radarOffset;
 
         public bool RenderRadar { get; set; } = false;
 
@@ -107,9 +108,7 @@ namespace Si.Engine.Manager
 
         public T CreateByType<T>() where T : SpriteBase
         {
-            object[] param = { _engine };
-            var sprite = Activator.CreateInstance(typeof(T), param) as T;
-            return sprite;
+            return (T)Activator.CreateInstance(typeof(T), [_engine]).EnsureNotNull();
         }
 
         public void Add(SpriteBase item)
@@ -160,13 +159,13 @@ namespace Si.Engine.Manager
             Animations.QueueAllForDeletion();
         }
 
-        public T[] GetSpritesByTag<T>(string name) where T : SpriteBase
+        public T[]? GetSpritesByTag<T>(string name) where T : SpriteBase
             => _collection.Where(o => o.SpriteTag == name).ToArray() as T[];
 
-        public T GetSingleSpriteByTag<T>(string name) where T : SpriteBase
+        public T? GetSingleSpriteByTag<T>(string name) where T : SpriteBase
             => _collection.Where(o => o.SpriteTag == name).SingleOrDefault() as T;
 
-        public T GetSpriteByOwner<T>(uint ownerUID) where T : SpriteBase
+        public T? GetSpriteByOwner<T>(uint ownerUID) where T : SpriteBase
             => _collection.Where(o => o.UID == ownerUID).SingleOrDefault() as T;
 
         public T[] OfType<T>() where T : SpriteBase
@@ -175,14 +174,14 @@ namespace Si.Engine.Manager
         public T[] VisibleOfType<T>() where T : SpriteBase
             => _collection.OfType<T>().Where(o => o.Visible).ToArray();
 
-        public T[] VisibleDamageable<T>() where T : class
+        public T?[] VisibleDamageable<T>() where T : class
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visible && o.Metadata.MunitionDetection).Select(o => o as T).ToArray();
 
         //Probably faster than VisibleDamageable<T>().
         public SpriteInteractiveBase[] VisibleDamageable()
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visible && o.Metadata.MunitionDetection == true).ToArray();
 
-        public T[] VisibleCollidable<T>() where T : class
+        public T?[] VisibleCollidable<T>() where T : class
             => _collection.OfType<SpriteInteractiveBase>().Where(o => o.Visible && o.Metadata.CollisionDetection).Select(o => o as T).ToArray();
 
         //Probably faster than VisibleCollidable<T>().
@@ -445,7 +444,7 @@ namespace Si.Engine.Manager
             foreach (var type in derivedTypes)
             {
                 //Creating the instance of the sprite loads and caches the metadata and images.
-                dynamic instance = Activator.CreateInstance(type, _engine);
+                dynamic instance = Activator.CreateInstance(type, _engine).EnsureNotNull();
 
                 loadingDetail.SetTextAndCenterX($"{statusIndex++ / derivedTypes.Count * 100.0:n0}%");
                 instance.QueueForDelete();
@@ -453,8 +452,8 @@ namespace Si.Engine.Manager
 
             //Pre-cache animations:
             //Animations do not have their own classes, so we need to look for them in the assets and load them.
-            var animations = _engine.Assets.Entries.Select(o => o.Value.Key)
-                .Where(o => o.StartsWith(@"sprites/animation/", StringComparison.CurrentCultureIgnoreCase)
+            var animations = _engine.Assets.Entries.Select(o => o.Value.Key.EnsureNotNull())
+                .Where(o => o != null && o.StartsWith(@"sprites/animation/", StringComparison.CurrentCultureIgnoreCase)
                 && o.EndsWith(@".png", StringComparison.CurrentCultureIgnoreCase)).ToList();
 
             animations.ForEach(o => Animations.Add(o).QueueForDelete());

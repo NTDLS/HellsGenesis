@@ -38,13 +38,13 @@ namespace Si.Engine.Level
             _engine.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void FirstShowPlayerCallback(SiDefermentEvent sender, object refObj)
+        private void FirstShowPlayerCallback(SiDefermentEvent sender, object? refObj)
         {
             _engine.Player.ResetAndShow();
             AddSingleFireEvent(SiRandom.Between(0, 800), AddFreshEnemiesCallback);
         }
 
-        private void AddFreshEnemiesCallback(SiDefermentEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(SiDefermentEvent sender, object? refObj)
         {
             if (_engine.Sprites.OfType<SpriteEnemyBase>().Count() == 0)
             {

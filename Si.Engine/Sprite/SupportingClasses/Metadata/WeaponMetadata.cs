@@ -11,15 +11,15 @@ namespace Si.GameEngine.Sprite.SupportingClasses.Metadata
     {
         public WeaponMetadata() { }
 
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         /// <summary>
         /// If the sprite has an image, these are the paths to the bitmaps (be default, they are used at random)..
         /// </summary>
-        public string[] SpritePaths { get; set; }
+        public string[] SpritePaths { get; set; } = new string[0];
 
-        public string SoundPath { get; set; }
+        public string? SoundPath { get; set; }
         public float SoundVolume { get; set; } = 1.0f;
 
         /// <summary>

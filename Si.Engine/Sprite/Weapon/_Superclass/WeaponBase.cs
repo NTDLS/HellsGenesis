@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using NTDLS.Helpers;
 using Si.Audio;
 using Si.Engine.Sprite._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
@@ -24,9 +25,9 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         protected EngineCore _engine;
         protected SpriteInteractiveBase Owner { get; private set; }
         protected DateTime _lastFired = DateTime.Now.AddMinutes(-5);
-        protected SiAudioClip _fireSound;
+        protected SiAudioClip? _fireSound;
 
-        public WeaponMetadata Metadata { get; private set; }
+        public WeaponMetadata? Metadata { get; private set; }
         public List<WeaponsLock> LockedTargets { get; set; } = new();
         public int RoundsFired { get; set; }
         public int RoundQuantity { get; set; }
@@ -48,22 +49,22 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             var metadataJson = _engine.Assets.GetText($@"Sprites\Weapon\{weaponName}.json");
             Metadata = JsonConvert.DeserializeObject<WeaponMetadata>(metadataJson);
 
-            if (string.IsNullOrEmpty(Metadata.SoundPath) == false)
+            if (string.IsNullOrEmpty(Metadata?.SoundPath) == false)
             {
                 _fireSound = _engine.Assets.GetAudio(Metadata.SoundPath, Metadata.SoundVolume);
             }
         }
 
-        public MunitionBase CreateMunition(SiVector location = null, SpriteInteractiveBase lockedTarget = null)
+        public MunitionBase CreateMunition(SiVector? location = null, SpriteInteractiveBase? lockedTarget = null)
         {
             if (Owner == null)
             {
                 throw new Exception("Weapon is not owned.");
             }
 
-            string spritePath = null;
+            string? spritePath = null;
 
-            int? spriteCount = Metadata.SpritePaths?.Count();
+            int? spriteCount = Metadata.EnsureNotNull().SpritePaths.Length;
             if (spriteCount > 0)
             {
                 spritePath = Metadata.SpritePaths[SiRandom.Between(0, ((int)spriteCount) - 1)];
@@ -109,13 +110,20 @@ namespace Si.Engine.Sprite.Weapon._Superclass
         {
             public float Distance { get; set; }
             public SpriteInteractiveBase Sprite { get; set; }
-
             public SiWeaponsLockType LockType { get; set; }
+
+            public WeaponsLock(SpriteInteractiveBase sprite, float distance)
+            {
+                Sprite = sprite;
+                Distance = distance;
+            }
         }
 
         public virtual void ApplyIntelligence(float epoch)
         {
             //We're just doing "locked on" magic here.
+
+            Metadata.EnsureNotNull();
 
             LockedTargets.Clear();
 
@@ -130,11 +138,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                         var distance = Owner.DistanceTo(potentialTarget);
                         if (distance.IsBetween(Metadata.MinLockDistance, Metadata.MaxLockDistance))
                         {
-                            LockedTargets.Add(new WeaponsLock()
-                            {
-                                Sprite = potentialTarget,
-                                Distance = Owner.DistanceTo(potentialTarget)
-                            });
+                            LockedTargets.Add(new WeaponsLock(potentialTarget, Owner.DistanceTo(potentialTarget)));
                         }
                     }
                 }
@@ -176,10 +180,8 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                         _engine.Player.Sprite.IsLockedOnHard = true;
                         _engine.Player.Sprite.IsLockedOnSoft = false;
 
-                        LockedTargets.Add(new WeaponsLock()
+                        LockedTargets.Add(new WeaponsLock(_engine.Player.Sprite, Owner.DistanceTo(_engine.Player.Sprite))
                         {
-                            Sprite = _engine.Player.Sprite,
-                            Distance = Owner.DistanceTo(_engine.Player.Sprite),
                             LockType = SiWeaponsLockType.Hard
                         });
                     }
@@ -198,7 +200,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             {
                 RoundsFired++;
                 RoundQuantity--;
-                _fireSound.Play();
+                _fireSound?.Play();
                 _engine.Sprites.Munitions.Add(this, location);
 
                 return true;
@@ -218,7 +220,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
             {
                 RoundsFired++;
                 RoundQuantity--;
-                _fireSound.Play();
+                _fireSound?.Play();
                 _engine.Sprites.Munitions.Add(this);
 
                 return true;
@@ -238,6 +240,7 @@ namespace Si.Engine.Sprite.Weapon._Superclass
                 bool result = false;
                 if (RoundQuantity > 0)
                 {
+                    Metadata.EnsureNotNull();
                     result = (DateTime.Now - _lastFired).TotalMilliseconds > Metadata.FireDelayMilliseconds;
                     if (result)
                     {

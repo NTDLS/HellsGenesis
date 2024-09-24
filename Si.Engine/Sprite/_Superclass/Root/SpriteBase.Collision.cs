@@ -65,7 +65,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// Returns the first collision (if any) the sprite made on is current movement vector.
         /// </summary>
         /// <returns></returns>
-        public SpriteBase FindFirstReverseCollisionAlongMovementVectorAABB(float epoch)
+        public SpriteBase? FindFirstReverseCollisionAlongMovementVectorAABB(float epoch)
             => FindFirstReverseCollisionAlongMovementVectorAABB(_engine.Sprites.Visible(), epoch);
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public SpriteBase FindFirstReverseCollisionAlongMovementVectorAABB(SpriteBase[] objectsThatCanBeHit, float epoch)
+        public SpriteBase? FindFirstReverseCollisionAlongMovementVectorAABB(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object after it has been moved and tests each location
             ///     between where it ended up and where it should have come from given its movement vector.
@@ -165,7 +165,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// Returns the first collision (if any) the sprite will make on is current movement vector.
         /// </summary>
         /// <returns></returns>
-        public SpriteBase FindFirstForwardCollisionAlongMovementVectorAABB(float epoch)
+        public SpriteBase? FindFirstForwardCollisionAlongMovementVectorAABB(float epoch)
             => FindFirstForwardCollisionAlongMovementVectorAABB(_engine.Sprites.Visible(), epoch);
 
         /// <summary>
@@ -173,7 +173,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// </summary>
         /// <param name="objectsThatCanBeHit"></param>
         /// <returns></returns>
-        public SpriteBase FindFirstForwardCollisionAlongMovementVectorAABB(SpriteBase[] objectsThatCanBeHit, float epoch)
+        public SpriteBase? FindFirstForwardCollisionAlongMovementVectorAABB(SpriteBase[] objectsThatCanBeHit, float epoch)
         {
             /// Takes the position of an object before it has been moved and tests each location
             ///     between where it is and where it will end up given its movement vector.
@@ -218,7 +218,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// <param name="distance">Distance to detect collisions.</param>
         /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
         /// <returns></returns>
-        public List<SpriteBase> FindCollisionsAlongDistanceVectorAABB(float distance, SiVector angle = null)
+        public List<SpriteBase> FindCollisionsAlongDistanceVectorAABB(float distance, SiVector? angle = null)
             => FindCollisionsAlongDistanceVectorAABB(_engine.Sprites.Visible(), distance, angle);
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// <param name="distance">Distance to detect collisions.</param>
         /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
         /// <returns></returns>
-        public List<SpriteBase> FindCollisionsAlongDistanceVectorAABB(SpriteBase[] objectsThatCanBeHit, float distance, SiVector angle = null)
+        public List<SpriteBase> FindCollisionsAlongDistanceVectorAABB(SpriteBase[] objectsThatCanBeHit, float distance, SiVector? angle = null)
         {
             var collisions = new List<SpriteBase>();
 
@@ -257,7 +257,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// <param name="distance">Distance to detect collisions.</param>
         /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
         /// <returns></returns>
-        public SpriteBase FindFirstCollisionAlongDistanceVectorAABB(float distance, SiVector angle = null)
+        public SpriteBase? FindFirstCollisionAlongDistanceVectorAABB(float distance, SiVector? angle = null)
             => FindFirstCollisionAlongDistanceVectorAABB(_engine.Sprites.Visible(), distance, angle);
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// <param name="distance">Distance to detect collisions.</param>
         /// <param name="angle">Optional angle for detection, if not specified then the sprites forward angle is used.</param>
         /// <returns></returns>
-        public SpriteBase FindFirstCollisionAlongDistanceVectorAABB(SpriteBase[] objectsThatCanBeHit, float distance, SiVector angle = null)
+        public SpriteBase? FindFirstCollisionAlongDistanceVectorAABB(SpriteBase[] objectsThatCanBeHit, float distance, SiVector? angle = null)
         {
             var hitTestPosition = new SiVector(Location);
             var directionVector = angle ?? Orientation;

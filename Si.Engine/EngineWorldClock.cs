@@ -22,7 +22,7 @@ namespace Si.Engine
         private bool _shutdown = false;
         private bool _isPaused = false;
         private readonly Thread _graphicsThread;
-        private TrackableQueue<TickControllerMethod> _threadPoolTracker = null;
+        private TrackableQueue<TickControllerMethod>? _threadPoolTracker = null;
 
         private readonly DelegateThreadPool _worldClockThreadPool;
 
@@ -155,7 +155,7 @@ namespace Si.Engine
 
                 if (!_isPaused) ExecuteWorldClockTick(epoch);
 
-                _engine.Debug.ProcessCommand();
+                _engine.Debug?.ProcessCommand();
                 _engine.RenderEverything();
 
                 if (_engine.Settings.VerticalSync == false)
@@ -202,7 +202,7 @@ namespace Si.Engine
 
             //Enqueue each vectored tick controller for a thread.
             var vectoredParameters = new object[] { epoch, displacementVector };
-            if (_engine.Settings.MultithreadedWorldClock)
+            if (_threadPoolTracker != null)
             {
                 foreach (var vectored in _vectoredTickControllers)
                 {
@@ -225,7 +225,7 @@ namespace Si.Engine
             }
 
             //After all vectored tick controllers have executed, run the unvectored tick controllers.
-            if (_engine.Settings.MultithreadedWorldClock)
+            if (_threadPoolTracker != null)
             {
                 foreach (var unvectored in _unvectoredTickControllers)
                 {
@@ -252,7 +252,7 @@ namespace Si.Engine
             return displacementVector;
         }
 
-        private void UpdateStatusText(SiDefermentEvent sender, object refObj)
+        private void UpdateStatusText(SiDefermentEvent sender, object? refObj)
         {
             if (_engine.Situations?.CurrentSituation?.State == SiSituationState.Started)
             {
@@ -265,14 +265,25 @@ namespace Si.Engine
 
                 float boostRebuildPercent = boost.RawAvailableResource / boost.CooldownFloor * 100.0f;
 
-                _engine.Sprites.TextBlocks.PlayerStatsText.Text =
+                string playerStatsText =
                       $" Situation: {situation}\r\n"
                     + $"      Hull: {player.HullHealth:n0} (Shields: {player.ShieldHealth:n0}) | Bounty: ${player.Metadata.Bounty}\r\n"
                     + $"     Surge: {boost.RawAvailableResource / _engine.Settings.MaxPlayerBoostAmount * 100.0:n1}%"
-                    + (boost.IsCoolingDown ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n"
-                    + $"Pri-Weapon: {player.PrimaryWeapon?.Metadata.Name} x{player.PrimaryWeapon?.RoundQuantity:n0}\r\n"
-                    + $"Sec-Weapon: {player.SelectedSecondaryWeapon?.Metadata.Name} x{player.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n"
-                    + $"{_engine.Display.FrameCounter.AverageFrameRate:n2}fps";
+                    + (boost.IsCoolingDown ? $" (RECHARGING: {boostRebuildPercent:n1}%)" : string.Empty) + "\r\n";
+
+                if (player.PrimaryWeapon?.Metadata != null)
+                {
+                    playerStatsText += $"Pri-Weapon: {player.PrimaryWeapon.Metadata.Name} x{player.PrimaryWeapon?.RoundQuantity:n0}\r\n";
+                }
+                if (player.SelectedSecondaryWeapon?.Metadata != null)
+                {
+                    playerStatsText += $"Sec-Weapon: {player.SelectedSecondaryWeapon?.Metadata.Name} x{player.SelectedSecondaryWeapon?.RoundQuantity:n0}\r\n";
+                }
+
+                playerStatsText += $"{_engine.Display.FrameCounter.AverageFrameRate:n2}fps";
+
+                _engine.Sprites.TextBlocks.PlayerStatsText.Text = playerStatsText;
+
             }
 
             //_engine.Sprites.DebugText.Text = "Anything we need to know about?";

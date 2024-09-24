@@ -13,7 +13,7 @@ namespace Si.Engine.Sprite._Superclass._Root
     {
         protected EngineCore _engine;
 
-        private SharpDX.Direct2D1.Bitmap _image;
+        private SharpDX.Direct2D1.Bitmap? _image;
         private bool _readyForDeletion;
         private SiVector _location = new();
         private Size _size;

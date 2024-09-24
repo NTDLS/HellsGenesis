@@ -1,4 +1,5 @@
-﻿using Si.Engine.Sprite.Weapon.Munition._Superclass;
+﻿using NTDLS.Helpers;
+using Si.Engine.Sprite.Weapon.Munition._Superclass;
 using Si.Library.Mathematics;
 using static Si.Library.SiConstants;
 
@@ -72,7 +73,10 @@ namespace Si.Engine.Sprite._Superclass._Root
         /// <returns></returns>
         public virtual void Hit(MunitionBase munition)
         {
-            Hit(munition.Weapon.Metadata.Damage);
+            if (munition.Weapon?.Metadata != null)
+            {
+                Hit(munition.Weapon.Metadata.Damage);
+            }
         }
 
         public virtual void Explode()

@@ -52,7 +52,7 @@
         /// <param name="executionCallback">The callback function that will be called when the timeout expires.</param>
         /// <param name="eventMode">Whether the event is one time or recurring.</param>
         /// <param name="threadModel">Whether the event callback is run synchronous or asynchronous.</param>
-        public SiDefermentEvent(int timeoutMilliseconds, object parameter, SiDefermentExecuteCallback executionCallback,
+        public SiDefermentEvent(int timeoutMilliseconds, object? parameter, SiDefermentExecuteCallback executionCallback,
             SiDefermentEventMode eventMode = SiDefermentEventMode.OneTime,
             SiDefermentEventThreadModel threadModel = SiDefermentEventThreadModel.Synchronous)
         {

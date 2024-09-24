@@ -6,8 +6,8 @@ namespace Si.Engine.Sprite.SupportingClasses.Metadata
     {
         public SpriteAnimationMetadata() { }
 
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         public float Speed { get; set; } = 1f;
         public float MaxThrottle { get; set; } = 0f;

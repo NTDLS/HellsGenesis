@@ -1,14 +1,15 @@
 ﻿using Si.Engine.Sprite._Superclass;
 using Si.Library.Mathematics;
+using System;
 using static Si.Library.SiConstants;
 
 namespace Si.Engine.Sprite
 {
     public class SpriteAttachment : SpriteInteractiveBase
     {
-        private SpriteInteractiveBase _rootOwner = null;
-        private SpriteInteractiveBase _owner = null;
-        public SiVector LocationRelativeToOwner { get; set; }
+        private SpriteInteractiveBase? _rootOwner = null;
+        private SpriteInteractiveBase? _owner = null;
+        public SiVector? LocationRelativeToOwner { get; set; }
 
         /// <summary>
         /// Determines the behavior of a attachment sprite's orientation. By default, it is fixed to owner.
@@ -20,7 +21,7 @@ namespace Si.Engine.Sprite
         /// </summary>
         public AttachmentPositionType PositionType { get; set; } = AttachmentPositionType.FixedToOwner;
 
-        public SpriteAttachment(EngineCore engine, string imagePath)
+        public SpriteAttachment(EngineCore engine, string? imagePath)
             : base(engine, imagePath)
         {
         }
@@ -29,12 +30,15 @@ namespace Si.Engine.Sprite
         {
             if (PositionType == AttachmentPositionType.FixedToOwner)
             {
-                // Since the attachment BaseLocation is relative to the top-left corner of the base sprite, we need
-                // to get the position relative to the center of the base sprite image so that we can rotate around that.
-                var attachmentOffset = LocationRelativeToOwner - (RootOwner.Size / 2.0f);
+                if (LocationRelativeToOwner != null)
+                {
+                    // Since the attachment BaseLocation is relative to the top-left corner of the base sprite, we need
+                    // to get the position relative to the center of the base sprite image so that we can rotate around that.
+                    var attachmentOffset = LocationRelativeToOwner - (RootOwner.Size / 2.0f);
 
-                // Apply the rotated offset to get the new attachment location relative to the base sprite center.
-                Location = RootOwner.Location + attachmentOffset.RotatedBy(RootOwner.Orientation.RadiansSigned);
+                    // Apply the rotated offset to get the new attachment location relative to the base sprite center.
+                    Location = RootOwner.Location + attachmentOffset.RotatedBy(RootOwner.Orientation.RadiansSigned);
+                }
             }
 
             if (OrientationType == AttachmentOrientationType.FixedToOwner)
@@ -63,7 +67,7 @@ namespace Si.Engine.Sprite
                         _rootOwner = _engine.Sprites.GetSpriteByOwner<SpriteInteractiveBase>(_rootOwner.OwnerUID);
                     } while (_rootOwner != null && _rootOwner.OwnerUID != 0);
                 }
-                return _rootOwner;
+                return _rootOwner ?? throw new Exception("Attachment must have a root owner.");
             }
         }
 
@@ -76,7 +80,7 @@ namespace Si.Engine.Sprite
             get
             {
                 _owner ??= _engine.Sprites.GetSpriteByOwner<SpriteInteractiveBase>(OwnerUID);
-                return _owner;
+                return _owner ?? throw new Exception("Attachment must have a root owner.");
             }
         }
     }

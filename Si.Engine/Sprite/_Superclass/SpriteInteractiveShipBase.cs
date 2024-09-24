@@ -13,8 +13,8 @@ namespace Si.Engine.Sprite._Superclass
     public class SpriteInteractiveShipBase : SpriteInteractiveBase
     {
         private readonly Dictionary<string, WeaponBase> _droneWeaponsCache = new();
-        public SpriteRadarPositionIndicator RadarPositionIndicator { get; protected set; }
-        public SpriteRadarPositionTextBlock RadarPositionText { get; protected set; }
+        public SpriteRadarPositionIndicator? RadarPositionIndicator { get; protected set; }
+        public SpriteRadarPositionTextBlock? RadarPositionText { get; protected set; }
 
         public SpriteInteractiveShipBase(EngineCore engine, string imagePath)
             : base(engine, imagePath)
@@ -73,7 +73,7 @@ namespace Si.Engine.Sprite._Superclass
 
         public void FixRadarPositionIndicator()
         {
-            if (RadarPositionIndicator != null)
+            if (RadarPositionIndicator != null && RadarPositionText != null)
             {
                 if (_engine.Display.GetCurrentScaledScreenBounds().IntersectsWith(RenderBounds, -50) == false)
                 {
@@ -104,11 +104,8 @@ namespace Si.Engine.Sprite._Superclass
 
         public override void Cleanup()
         {
-            if (RadarPositionIndicator != null)
-            {
-                RadarPositionIndicator.QueueForDelete();
-                RadarPositionText.QueueForDelete();
-            }
+            RadarPositionIndicator?.QueueForDelete();
+            RadarPositionText?.QueueForDelete();
 
             base.Cleanup();
         }

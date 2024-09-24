@@ -1,4 +1,5 @@
-﻿using NTDLS.Semaphore;
+﻿using NTDLS.Helpers;
+using NTDLS.Semaphore;
 using System.Reflection;
 
 namespace Si.Library
@@ -42,7 +43,7 @@ namespace Si.Library
             return allTypes;
         }
 
-        public static string? GetStaticPropertyValue(string typeName, string propertyName)
+        public static string GetStaticPropertyValue(string typeName, string propertyName)
         {
             string key = $"[{typeName}].[{propertyName}]";
 
@@ -66,32 +67,32 @@ namespace Si.Library
             if (propertyInfo != null)
             {
                 _staticPropertyCache.Use(o => o.TryAdd(key, propertyInfo));
-                return propertyInfo.GetValue(null) as string;
+                return propertyInfo.GetValue(null) as string ?? string.Empty;
             }
 
-            throw new Exception("Static property not found.");
+            throw new Exception("Static property not found: {typeName}->{propertyName}.");
         }
 
-        public static T? CreateInstanceFromType<T>(Type type, object[] constructorArgs)
+        public static T CreateInstanceFromType<T>(Type type, object[] constructorArgs)
         {
-            return (T?)Activator.CreateInstance(type, constructorArgs);
+            return (T)Activator.CreateInstance(type, constructorArgs).EnsureNotNull();
         }
 
-        public static T? CreateInstanceFromType<T>(Type type)
+        public static T CreateInstanceFromType<T>(Type type)
         {
-            return (T?)Activator.CreateInstance(type);
+            return (T)Activator.CreateInstance(type).EnsureNotNull();
         }
 
-        public static T? CreateInstanceFromTypeName<T>(string typeName, object[] constructorArgs)
+        public static T CreateInstanceFromTypeName<T>(string typeName, object[] constructorArgs)
         {
-            var type = GetTypeByName(typeName) ?? throw new Exception("Type not found.");
-            return (T?)Activator.CreateInstance(type, constructorArgs);
+            var type = GetTypeByName(typeName);
+            return (T)Activator.CreateInstance(type, constructorArgs).EnsureNotNull();
         }
 
-        public static T? CreateInstanceFromTypeName<T>(string typeName)
+        public static T CreateInstanceFromTypeName<T>(string typeName)
         {
-            var type = GetTypeByName(typeName) ?? throw new Exception("Type not found.");
-            return (T?)Activator.CreateInstance(type);
+            var type = GetTypeByName(typeName);
+            return (T)Activator.CreateInstance(type).EnsureNotNull();
         }
 
         public static bool DoesTypeExist(string typeName)
@@ -99,7 +100,7 @@ namespace Si.Library
             return GetTypeByName(typeName) != null;
         }
 
-        public static Type? GetTypeByName(string typeName)
+        public static Type GetTypeByName(string typeName)
         {
             var cached = _typeCache.Use(o =>
             {
@@ -122,7 +123,7 @@ namespace Si.Library
                 }
             }
 
-            return null;
+            throw new Exception($"Type not found: {typeName}");
         }
 
         /// <summary>

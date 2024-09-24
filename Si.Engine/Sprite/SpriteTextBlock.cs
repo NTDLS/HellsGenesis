@@ -11,7 +11,7 @@ namespace Si.Engine.Sprite
     public class SpriteTextBlock : SpriteBase
     {
         private Size _size = Size.Empty;
-        private string _text;
+        private string _text = string.Empty;
 
         #region Properties.
 

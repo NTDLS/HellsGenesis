@@ -36,7 +36,7 @@ namespace Si.Engine.Interrogation
                         }
 
                         bool isRequired = commandParameterParts[1].Trim().ToLower() == "required";
-                        string defaultValue = null;
+                        string? defaultValue = null;
 
                         if (isRequired == false && commandParameterParts[1].Contains('='))
                         {

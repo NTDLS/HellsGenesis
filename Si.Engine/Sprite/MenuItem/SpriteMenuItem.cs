@@ -14,7 +14,7 @@ namespace Si.Engine.Sprite.MenuItem
         /// <summary>
         /// User object associated with the menu item.
         /// </summary>
-        public object UserData { get; set; }
+        public object? UserData { get; set; }
         public MenuBase Menu { get; private set; }
 
         private bool _selected = false;
@@ -35,7 +35,7 @@ namespace Si.Engine.Sprite.MenuItem
             }
         }
 
-        public string Key { get; set; }
+        public string Key { get; set; } = string.Empty;
 
         public SiMenuItemType ItemType { get; set; }
 

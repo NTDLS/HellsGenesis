@@ -32,12 +32,12 @@ namespace Si.Engine.Level
             _engine.Player.Sprite.AddShieldHealth(10);
         }
 
-        private void FirstShowPlayerCallback(SiDefermentEvent sender, object refObj)
+        private void FirstShowPlayerCallback(SiDefermentEvent sender, object? refObj)
         {
             _engine.Player.ResetAndShow();
         }
 
-        private void AddFreshEnemiesCallback(SiDefermentEvent sender, object refObj)
+        private void AddFreshEnemiesCallback(SiDefermentEvent sender, object? refObj)
         {
             if (_engine.Sprites.OfType<SpriteEnemyBase>().Count() == 0)
             {
@@ -60,7 +60,7 @@ namespace Si.Engine.Level
             }
         }
 
-        private void AddEnemyCallback(SiDefermentEvent sender, object refObj)
+        private void AddEnemyCallback(SiDefermentEvent sender, object? refObj)
         {
             _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyPhoenix>();
         }

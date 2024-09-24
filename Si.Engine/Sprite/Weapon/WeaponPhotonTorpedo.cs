@@ -21,7 +21,7 @@ namespace Si.Engine.Sprite.Weapon
             if (CanFire)
             {
                 _engine.Rendering.AddScreenShake(4, 100);
-                _fireSound.Play();
+                _fireSound?.Play();
                 RoundQuantity--;
 
                 if (_toggle)

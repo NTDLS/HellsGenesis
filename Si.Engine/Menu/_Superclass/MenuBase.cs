@@ -23,7 +23,7 @@ namespace Si.Engine.Menu._Superclass
 
         public T MenuItemByKey<T>(string key) where T : SpriteMenuItem
         {
-            return Items.Where(o => o.Key == key).First() as T;
+            return (T)Items.First(o => o.Key == key);
         }
 
         public List<SpriteMenuItem> VisibleSelectableItems() =>
@@ -37,7 +37,7 @@ namespace Si.Engine.Menu._Superclass
         /// The player moved the selection cursor.
         /// </summary>
         /// <param name="item"></param>
-        public event SelectionChangedEvent OnSelectionChanged;
+        public event SelectionChangedEvent? OnSelectionChanged;
 
         public void InvokeSelectionChanged(SpriteMenuItem item) => OnSelectionChanged?.Invoke(item);
 
@@ -51,7 +51,7 @@ namespace Si.Engine.Menu._Superclass
         /// The player hit enter to select the currently highlighted menu item.
         /// </summary>
         /// <param name="item"></param>
-        public event ExecuteSelectionEvent OnExecuteSelection;
+        public event ExecuteSelectionEvent? OnExecuteSelection;
 
         /// <summary>
         /// The player has hit the escape key.
@@ -62,14 +62,14 @@ namespace Si.Engine.Menu._Superclass
         /// The player has hit the escape key.
         /// </summary>
         /// <param name="item"></param>
-        public event EscapeEvent OnEscape;
+        public event EscapeEvent? OnEscape;
 
         public delegate void CleanupEvent();
         /// <summary>
         /// Called when the menu is being destroyed. This is a good place to cleanup.
         /// </summary>
         /// <param name="item"></param>
-        public event CleanupEvent OnCleanup;
+        public event CleanupEvent? OnCleanup;
 
         #endregion
 
@@ -162,7 +162,7 @@ namespace Si.Engine.Menu._Superclass
                     return;
                 }
 
-                if (_engine.Input.TypedString.Length > 0)
+                if (_engine.Input.TypedString?.Length > 0)
                 {
                     _engine.Audio.Click.Play();
                     selectedTextInput.Append(_engine.Input.TypedString);
