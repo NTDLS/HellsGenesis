@@ -9,7 +9,7 @@ namespace Si.GameEngine.Sprite.Enemy.Starbase.Garrison
     {
         public override void ApplyMotion(float epoch, SiVector displacementVector)
         {
-            Orientation.Degrees += 0.005f;
+            //Orientation.Degrees += 0.005f;
             base.ApplyMotion(epoch, displacementVector);
         }
     }

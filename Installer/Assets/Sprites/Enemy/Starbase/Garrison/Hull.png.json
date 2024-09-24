@@ -1,6 +1,6 @@
 {
   "Description": "→ Garrison ←\nTODO: Add a description\n",
-  "MunitionDetection": false,
+  "MunitionDetection": true,
   "Speed": 0.0,
   "MaxThrottle": 0.0,
   "Mass": 200,

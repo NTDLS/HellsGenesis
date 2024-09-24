@@ -2,6 +2,7 @@
 using Si.Engine.Level._Superclass;
 using Si.Engine.Sprite.Enemy._Superclass;
 using Si.Engine.Sprite.Enemy.Peon;
+using Si.GameEngine.Sprite.Enemy.Starbase.Garrison;
 using Si.Library;
 using Si.Library.ExtensionMethods;
 using Si.Library.Mathematics;
@@ -90,7 +91,7 @@ namespace Si.Engine.Level
             //debug.Location = new SiVector(900, 900);
             //debug.MovementVector = debug.CalculateMovementVector();
 
-            //_engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
+            _engine.Sprites.Enemies.AddTypeOf<SpriteEnemyStarbaseGarrison>();
 
             //AddAsteroidField(new SiVector(), 8, 8);
 
